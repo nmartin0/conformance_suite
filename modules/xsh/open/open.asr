@@ -1,0 +1,151 @@
+# XSH open()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Error tests arrange for exactly one error condition to apply, because
+# XSH 2.3 lets an implementation report any one of several that apply.
+# Tests run as root in many environments, so none relies on EACCES.
+
+assertion  XSH.open.001
+anchor     functions/open.html#DESCRIPTION/O_CREAT
+class      required
+since      1988
+says       With O_CREAT, a path that does not exist is created as a regular
+           file.
+test       t/001-creat-creates.c
+
+assertion  XSH.open.002
+anchor     functions/open.html#DESCRIPTION/O_CREAT
+class      required
+since      1988
+says       With O_CREAT, the new file's permission bits are the mode
+           argument with the bits set in the file mode creation mask
+           cleared.
+note       The run directory must not carry default ACLs, which some
+           systems apply instead of the umask.
+test       t/002-creat-umask.c
+
+assertion  XSH.open.003
+anchor     functions/open.html#ERRORS/EEXIST
+anchor     functions/open.html#RETURN VALUE
+class      required
+since      1988
+says       With O_CREAT and O_EXCL, an existing file makes open() return -1
+           with EEXIST, and the file is not modified.
+test       t/003-excl-exists.c
+
+assertion  XSH.open.004
+anchor     functions/open.html#DESCRIPTION/O_EXCL
+anchor     functions/open.html#RETURN VALUE
+class      required
+since      2001
+says       With O_CREAT and O_EXCL, a path naming a symbolic link fails with
+           EEXIST even when the link's target does not exist, and nothing is
+           created.
+test       t/004-excl-symlink.c
+
+assertion  XSH.open.005
+anchor     functions/open.html#ERRORS/ENOENT
+class      required
+since      1988
+says       Without O_CREAT, a path that does not exist fails with ENOENT.
+test       t/005-enoent.c
+
+assertion  XSH.open.006
+anchor     functions/open.html#ERRORS/ENOENT
+class      required
+since      1988
+says       An empty path fails with ENOENT.
+test       t/006-empty-path.c
+
+assertion  XSH.open.007
+anchor     functions/open.html#DESCRIPTION/O_TRUNC
+class      required
+since      1988
+says       O_TRUNC on an existing regular file opened O_WRONLY truncates it
+           to length 0 and leaves its mode unchanged.
+test       t/007-trunc.c
+
+assertion  XSH.open.008
+anchor     functions/open.html#DESCRIPTION/O_APPEND
+class      required
+since      1988
+says       With O_APPEND, each write goes to the end of the file even after
+           the offset is moved elsewhere.
+test       t/008-append.c
+
+assertion  XSH.open.009
+anchor     functions/open.html#DESCRIPTION
+class      required
+since      2008
+says       Without O_CLOEXEC, FD_CLOEXEC is clear on the new descriptor.
+test       t/009-cloexec-clear.c
+
+assertion  XSH.open.010
+anchor     functions/open.html#DESCRIPTION/O_CLOEXEC
+class      required
+since      2008
+says       With O_CLOEXEC, FD_CLOEXEC is set on the new descriptor.
+test       t/010-cloexec-set.c
+
+assertion  XSH.open.011
+anchor     functions/open.html#DESCRIPTION
+class      required
+since      2024
+says       Without O_CLOFORK, FD_CLOFORK is clear on the new descriptor.
+uses       XBD.fcntl.h.002
+test       t/011-clofork-clear.c
+
+assertion  XSH.open.012
+anchor     functions/open.html#DESCRIPTION/O_CLOFORK
+class      required
+since      2024
+says       With O_CLOFORK, FD_CLOFORK is set on the new descriptor.
+uses       XBD.fcntl.h.002 XBD.fcntl.h.005
+test       t/012-clofork-set.c
+
+assertion  XSH.open.013
+anchor     functions/open.html#DESCRIPTION/O_DIRECTORY
+class      required
+since      2008
+says       With O_DIRECTORY, a path that resolves to a non-directory fails
+           with ENOTDIR.
+test       t/013-directory-enotdir.c
+
+assertion  XSH.open.014
+anchor     functions/open.html#ERRORS/ENOTDIR
+class      required
+since      1988
+says       A path whose prefix names an existing non-directory fails with
+           ENOTDIR (tested with O_CREAT, so ENOENT cannot also apply).
+test       t/014-prefix-enotdir.c
+
+assertion  XSH.open.015
+anchor     functions/open.html#ERRORS/EISDIR
+class      required
+since      1988
+says       Opening a directory O_WRONLY or O_RDWR fails with EISDIR.
+test       t/015-eisdir.c
+
+assertion  XSH.open.016
+anchor     functions/open.html#DESCRIPTION/O_NOFOLLOW
+class      required
+since      2008
+says       With O_NOFOLLOW, a path naming a symbolic link fails with ELOOP.
+test       t/016-nofollow.c
+
+assertion  XSH.open.017
+anchor     functions/open.html#ERRORS/ENAMETOOLONG
+class      required
+says       A final component longer than {NAME_MAX} fails with ENAMETOOLONG
+           (tested with O_CREAT in an existing directory, so ENOENT cannot
+           also apply).
+note       "since" left out: unconditional only once _POSIX_NO_TRUNC had
+           to be other than -1; that edition is still to be confirmed.
+test       t/017-enametoolong.c
+
+assertion  XSH.open.018
+anchor     functions/open.html#DESCRIPTION
+class      required
+since      1988
+says       The new file offset is at the beginning of the file.
+test       t/018-offset-start.c

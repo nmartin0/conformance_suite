@@ -1,0 +1,12 @@
+assertion  ST.uses.001
+says       When an assertion's own prerequisite PASSes, its test runs.
+uses       ST.sh.001
+test       t/001-pass.c
+expect     PASS
+
+assertion  ST.uses.002
+says       When an assertion's own prerequisite FAILs, it is UNRESOLVED
+           without running.
+uses       ST.sh.002
+test       t/002-pass.c
+expect     UNRESOLVED

@@ -1,0 +1,13 @@
+# XSH 2.6 File Descriptor Allocation
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The rule is stated once, here, for every function that allocates a
+# descriptor. Each function gets its own assertion in this module.
+
+assertion  XSH.2.6-file-descriptor-allocation.001
+anchor     functions/V2_chap02.html#2.6
+class      required
+since      1988
+says       open() returns the lowest-numbered descriptor that is not open
+           in the calling process.
+test       t/001-open-lowest.c

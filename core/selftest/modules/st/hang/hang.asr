@@ -1,0 +1,6 @@
+assertion  ST.hang.001
+says       A test that hangs is UNRESOLVED after its timeout, and its child
+           process does not survive (it would leave a marker file).
+test       t/001-hang.c
+timeout    1
+expect     UNRESOLVED

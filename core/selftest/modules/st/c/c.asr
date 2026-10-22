@@ -1,0 +1,66 @@
+# Harness self-tests for C tests. "expect" is the code the driver must log.
+assertion  ST.c.001
+says       A test that reports PASS and exits 0 is PASS.
+test       t/001-pass.c
+expect     PASS
+
+assertion  ST.c.002
+says       A failed check in the test phase is FAIL.
+test       t/002-fail.c
+expect     FAIL
+
+assertion  ST.c.003
+says       A failed check in the setup phase is UNRESOLVED.
+test       t/003-setup-fail.c
+expect     UNRESOLVED
+
+assertion  ST.c.004
+says       A crash in the test phase is FAIL.
+test       t/004-test-crash.c
+expect     FAIL
+
+assertion  ST.c.005
+says       A crash in the setup phase is UNRESOLVED.
+test       t/005-setup-crash.c
+expect     UNRESOLVED
+
+assertion  ST.c.006
+says       Exiting without a result is UNINITIATED.
+test       t/006-no-result.c
+expect     UNINITIATED
+
+assertion  ST.c.007
+says       Reporting PASS but exiting non-zero is FAIL.
+test       t/007-pass-bad-exit.c
+expect     FAIL
+
+assertion  ST.c.008
+says       Reporting two results is UNRESOLVED.
+test       t/008-two-results.c
+expect     UNRESOLVED
+
+assertion  ST.c.009
+says       A test that does not compile is UNINITIATED.
+test       t/009-build-fail.c
+expect     UNINITIATED
+
+assertion  ST.c.010
+says       A result naming another assertion is UNRESOLVED.
+test       t/010-wrong-id.c
+expect     UNRESOLVED
+
+assertion  ST.c.011
+says       An invalid result code is UNRESOLVED.
+test       t/011-bad-code.c
+expect     UNRESOLVED
+
+assertion  ST.c.012
+says       A forked child that calls pc_fail does not write a result; the
+           parent's own result stands.
+test       t/012-child-report.c
+expect     PASS
+
+assertion  ST.c.013
+says       pc_expect_err fails on a wrong errno.
+test       t/013-expect-err.c
+expect     FAIL

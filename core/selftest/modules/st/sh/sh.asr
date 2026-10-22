@@ -1,0 +1,24 @@
+assertion  ST.sh.001
+says       A shell test reporting PASS is PASS.
+test       t/001-pass.sh
+expect     PASS
+
+assertion  ST.sh.002
+says       pc_fail in the test phase is FAIL.
+test       t/002-fail.sh
+expect     FAIL
+
+assertion  ST.sh.003
+says       pc_fail in the setup phase is UNRESOLVED.
+test       t/003-setup-fail.sh
+expect     UNRESOLVED
+
+assertion  ST.sh.004
+says       A shell test exiting without a result is UNINITIATED.
+test       t/004-no-result.sh
+expect     UNINITIATED
+
+assertion  ST.sh.005
+says       A function shadowing printf cannot corrupt the helper's output.
+test       t/005-shadow-printf.sh
+expect     PASS

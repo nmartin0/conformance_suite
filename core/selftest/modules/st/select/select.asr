@@ -1,0 +1,32 @@
+assertion  ST.select.001
+says       A conditional assertion whose option is not claimed is UNSUPPORTED.
+when       NEVER
+test       t/unused.c
+expect     UNSUPPORTED
+
+assertion  ST.select.002
+says       An unmet "needs" is UNRESOLVED.
+needs      nosuchthing
+test       t/unused.c
+expect     UNRESOLVED
+
+assertion  ST.select.003
+says       An assertion with no test is UNTESTED.
+expect     UNTESTED
+
+assertion  ST.select.004
+says       An untestable assertion is UNTESTED, with its reason.
+class      untestable
+reason     planted
+expect     UNTESTED
+
+assertion  ST.select.005
+says       A missing test file is UNINITIATED.
+test       t/does-not-exist.c
+expect     UNINITIATED
+
+assertion  ST.select.006
+says       An alternative that is claimed satisfies "A|B".
+when       NEVER|BASE
+test       t/006-alt-pass.c
+expect     PASS

@@ -1,0 +1,32 @@
+# XCU true
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# XCU 1.4 Utility Description Defaults: "Not used." for STDOUT means
+# standard output shall not be written; for STDERR, that standard error
+# shall not be used. XCU 1.6: true and false must also be reachable
+# through the exec family, so every test checks both the way the shell
+# runs the name and a direct exec.
+
+assertion  XCU.true.001
+anchor     utilities/true.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.6
+class      required
+since      1992
+says       true exits with status zero.
+test       t/001-status.sh
+
+assertion  XCU.true.002
+anchor     utilities/true.html#STDOUT
+anchor     utilities/V3_chap01.html#1.6
+class      required
+since      1992
+says       true writes nothing to standard output.
+test       t/002-no-stdout.sh
+
+assertion  XCU.true.003
+anchor     utilities/true.html#STDERR
+anchor     utilities/V3_chap01.html#1.6
+class      required
+since      1992
+says       true writes nothing to standard error.
+test       t/003-no-stderr.sh

@@ -1,0 +1,29 @@
+# XCU false
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# As for true: each test checks both the way the shell runs the name and
+# a direct exec (XCU 1.6), and "Not used." follows XCU 1.4.
+
+assertion  XCU.false.001
+anchor     utilities/false.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.6
+class      required
+since      1992
+says       false exits with a status from 1 to 125 inclusive.
+test       t/001-status.sh
+
+assertion  XCU.false.002
+anchor     utilities/false.html#STDOUT
+anchor     utilities/V3_chap01.html#1.6
+class      required
+since      1992
+says       false writes nothing to standard output.
+test       t/002-no-stdout.sh
+
+assertion  XCU.false.003
+anchor     utilities/false.html#STDERR
+anchor     utilities/V3_chap01.html#1.6
+class      required
+since      1992
+says       false writes nothing to standard error.
+test       t/003-no-stderr.sh

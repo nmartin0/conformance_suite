@@ -1,0 +1,36 @@
+# XSH close()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# XSH.close.002 relies on the lowest-descriptor rule, hence "uses" in
+# MODULE: if that rule fails, these results would mean nothing.
+
+assertion  XSH.close.001
+anchor     functions/close.html#RETURN VALUE
+class      required
+since      1988
+says       close() of an open regular-file descriptor, with no signal and
+           no I/O error, returns 0.
+test       t/001-returns-zero.c
+
+assertion  XSH.close.002
+anchor     functions/close.html#DESCRIPTION
+class      required
+since      1988
+says       A closed descriptor is available again: the next open() returns
+           that same number.
+test       t/002-reused.c
+
+assertion  XSH.close.003
+anchor     functions/close.html#DESCRIPTION
+class      required
+since      1988
+says       After close(), the descriptor is no longer open (fcntl F_GETFD
+           fails with EBADF).
+test       t/003-deallocated.c
+
+assertion  XSH.close.004
+anchor     functions/close.html#ERRORS/EBADF
+class      required
+since      1988
+says       close() of a descriptor that is not open returns -1 with EBADF.
+test       t/004-ebadf.c

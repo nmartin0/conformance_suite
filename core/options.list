@@ -1,0 +1,47 @@
+# options.list - option codes and the <unistd.h> macro that claims each.
+#
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Source: XBD 1.8.1 Codes and XBD <unistd.h> "Constants for Options and
+# Option Groups" (POSIX.1-2024). Codes that are not single options are left
+# out: CX, OB, OF, OH (legends), MC1 (shorthand for a combination, written
+# as an expression in assertions), MX/MXC/MXX (IEC 60559, claimed through
+# the C compiler, handled separately later).
+#
+# The pseudo-code BASE means "no option": always claimed.
+#
+# gen/gen_probe.py turns this file into core/probe_options.h.
+#
+# code  macro
+ADV	_POSIX_ADVISORY_INFO
+CD	_POSIX2_C_DEV
+CPT	_POSIX_CPUTIME
+DC	_POSIX_DEVICE_CONTROL
+FR	_POSIX2_FORT_RUN
+FSC	_POSIX_FSYNC
+IP6	_POSIX_IPV6
+ML	_POSIX_MEMLOCK
+MLR	_POSIX_MEMLOCK_RANGE
+MSG	_POSIX_MESSAGE_PASSING
+PIO	_POSIX_PRIORITIZED_IO
+PS	_POSIX_PRIORITY_SCHEDULING
+RPI	_POSIX_THREAD_ROBUST_PRIO_INHERIT
+RPP	_POSIX_THREAD_ROBUST_PRIO_PROTECT
+RS	_POSIX_RAW_SOCKETS
+SD	_POSIX2_SW_DEV
+SHM	_POSIX_SHARED_MEMORY_OBJECTS
+SIO	_POSIX_SYNCHRONIZED_IO
+SPN	_POSIX_SPAWN
+SS	_POSIX_SPORADIC_SERVER
+TCT	_POSIX_THREAD_CPUTIME
+TPI	_POSIX_THREAD_PRIO_INHERIT
+TPP	_POSIX_THREAD_PRIO_PROTECT
+TPS	_POSIX_THREAD_PRIORITY_SCHEDULING
+TSA	_POSIX_THREAD_ATTR_STACKADDR
+TSH	_POSIX_THREAD_PROCESS_SHARED
+TSP	_POSIX_THREAD_SPORADIC_SERVER
+TSS	_POSIX_THREAD_ATTR_STACKSIZE
+TYM	_POSIX_TYPED_MEMORY_OBJECTS
+UP	_POSIX2_UPE
+UU	_XOPEN_UUCP
+XSI	_XOPEN_UNIX

@@ -1,0 +1,48 @@
+# XBD <fcntl.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Compile-time checks that the header defines what it must. Mutation for
+# these needs a deliberately incomplete header set; that arrives with the
+# Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.fcntl.h.001
+anchor     basedefs/fcntl.h.html#DESCRIPTION/FD_CLOEXEC
+class      required
+since      1988
+says       <fcntl.h> defines FD_CLOEXEC, usable in #if.
+test       t/001-fd-cloexec.c
+nomutant   compile-time presence check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.002
+anchor     basedefs/fcntl.h.html#DESCRIPTION/FD_CLOFORK
+class      required
+since      2024
+says       <fcntl.h> defines FD_CLOFORK, usable in #if.
+test       t/002-fd-clofork.c
+nomutant   compile-time presence check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.003
+anchor     basedefs/fcntl.h.html#DESCRIPTION/FD_CLOFORK
+class      required
+since      2024
+says       The file descriptor flags FD_CLOEXEC and FD_CLOFORK are
+           bitwise-distinct.
+uses       XBD.fcntl.h.001 XBD.fcntl.h.002
+test       t/003-fd-flags-distinct.c
+nomutant   compile-time value check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.004
+anchor     basedefs/fcntl.h.html#DESCRIPTION/O_CLOEXEC
+class      required
+since      2008
+says       <fcntl.h> defines O_CLOEXEC, usable in #if.
+test       t/004-o-cloexec.c
+nomutant   compile-time presence check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.005
+anchor     basedefs/fcntl.h.html#DESCRIPTION/O_CLOFORK
+class      required
+since      2024
+says       <fcntl.h> defines O_CLOFORK, usable in #if.
+test       t/005-o-clofork.c
+nomutant   compile-time presence check; needs the Tier 0 header mutants
