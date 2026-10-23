@@ -335,8 +335,9 @@ says       Unlocking a segment whose last byte is the largest off_t,
            inside a lock with l_len 0, unlocks from the segment's start
            to the end: the bytes before stay locked and the bytes after
            (to any offset) are free.
-note       The largest off_t is found by doubling, assuming only that
-           off_t is a signed integer type.
+note       The largest off_t is computed without signed overflow,
+           assuming only that off_t is a signed integer type with no
+           padding bits.
 test       t/036-unlock-to-max.c
 
 assertion  XSH.fcntl.037

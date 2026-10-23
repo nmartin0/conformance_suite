@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.lseek.012
  * MUTANT    lseek.hole_at_offset
+ * MUTANT    lseek.noop
  */
 #include "pc.h"
 #include <errno.h>

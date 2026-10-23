@@ -66,17 +66,18 @@ assertion  XSH.lseek.008
 anchor     functions/lseek.html#ERRORS/EINVAL
 anchor     functions/lseek.html#RETURN VALUE
 class      required
-since      1988
-says       A resulting offset that would be negative, for a regular
-           file, fails with EINVAL and leaves the offset unchanged
-           (SEEK_SET -1 and SEEK_CUR past the start).
+since      2001
+says       A resulting offset that would be negative fails with EINVAL
+           and leaves the offset unchanged: for a regular file (SEEK_SET
+           -1 and SEEK_CUR past the start) and for a directory.
 test       t/008-negative.c
 
 assertion  XSH.lseek.009
 anchor     functions/lseek.html#ERRORS/ESPIPE
 class      required
-since      1988
+since      2001
 says       lseek() on a pipe, a FIFO or a socket fails with ESPIPE.
+note       Pipes and FIFOs since 1988; sockets since Issue 6.
 test       t/009-espipe.c
 
 assertion  XSH.lseek.010
@@ -94,8 +95,9 @@ since      2001
 says       A resulting offset too large for off_t fails with EOVERFLOW
            and leaves the offset unchanged (SEEK_CUR of the largest
            off_t from offset 1).
-note       The largest off_t is found by doubling, assuming only a
-           signed integer type.
+note       The largest off_t is computed without signed overflow,
+           assuming only that off_t is a signed integer type with no
+           padding bits.
 test       t/011-eoverflow.c
 
 assertion  XSH.lseek.012

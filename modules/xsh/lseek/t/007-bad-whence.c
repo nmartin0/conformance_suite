@@ -5,6 +5,7 @@
  * ASSERTION XSH.lseek.007
  * MUTANT    lseek.bad_whence_ok
  * MUTANT    lseek.error_moves_offset
+ * MUTANT    lseek.einval_as_eoverflow
  */
 #include "pc.h"
 #include <errno.h>

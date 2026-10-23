@@ -66,6 +66,8 @@ static off_t faulty(const char *m, int fd, off_t off, int whence)
 		whence = SEEK_SET;
 	if (IS("negative_ok") && whence == SEEK_SET && off < 0)
 		off = 0;
+	if (IS("negative_cur_ok") && whence == SEEK_CUR && cur != -1 && cur + off < 0)
+		return f(fd, 0, SEEK_SET);
 #ifdef SEEK_HOLE
 	if (IS("hole_at_offset") && whence == SEEK_HOLE &&
 	    fstat(fd, &st) == 0 && off < st.st_size)

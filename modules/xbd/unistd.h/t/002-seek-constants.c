@@ -13,7 +13,7 @@ int main(void)
 	pc_begin("XBD.unistd.h.002");
 	pc_test();
 #if !defined(SEEK_SET) || !defined(SEEK_CUR) || !defined(SEEK_END)
-	pc_fail("<unistd.h> does not define SEEK_SET, SEEK_CUR and SEEK_END as macros");
+	pc_unresolved("SEEK_SET, SEEK_CUR or SEEK_END missing (XBD.unistd.h.003)");
 #elif !defined(SEEK_HOLE) || !defined(SEEK_DATA)
 	pc_fail("<unistd.h> does not define SEEK_HOLE and SEEK_DATA as macros");
 #else

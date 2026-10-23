@@ -73,11 +73,12 @@ O.3 **`lseek()` reports EINVAL where EOVERFLOW is required.**
   in off_t fails with EOVERFLOW; EINVAL is for a bad whence or a
   negative result. The offset maximum of an open file description is the
   largest off_t (XSH `open`).
-- Linux: the kernel's offset check rejects anything above the file
-  system's maximum file size with EINVAL, so both an off_t overflow
-  (SEEK_CUR of the largest off_t from offset 1) and SEEK_SET to the
-  largest off_t give EINVAL (ext4, Linux 6.18). Only the overflow case is
-  asserted.
+- Linux: SEEK_CUR of the largest off_t from offset 1 gives EINVAL with
+  the offset unchanged (ext4, Linux 6.18); the sum most likely wraps
+  negative inside the kernel, which then reports a negative offset.
+  SEEK_SET to the largest off_t also gives EINVAL (above the file
+  system's maximum size); that case is arguably a permitted extra error
+  and is not asserted.
 - Comp: kernel. Kind: long-standing. Observe: XSH.lseek.011.
 - Src: posixcheck run, glibc and musl alike.
 

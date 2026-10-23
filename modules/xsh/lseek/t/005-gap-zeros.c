@@ -19,6 +19,7 @@ int main(void)
 	pc_make_file("f", "0123456789");
 	fd = open("f", O_RDWR);
 	pc_check(fd >= 0, "cannot open f");
+	pc_require_space();
 	pc_test();
 	pc_check(lseek(fd, 14, SEEK_SET) == 14, "lseek to 14 failed");
 	pc_check(write(fd, "E", 1) == 1, "write at 14 failed");
