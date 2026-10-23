@@ -38,6 +38,8 @@ by the named assertion.
 | XSH.dup.012 to .015 | UNINITIATED (glibc) | `dup3()` exists but is not declared under the strict build | 11.1 |
 | XSH.pipe.007 to .010 | UNINITIATED (glibc) | `pipe2()` exists but is not declared under the strict build | 11.1 |
 | XBD.fcntl.h.008 (XSH.fcntl.016 blocked) | FAIL | glibc: `F_OWNER_PID`/`F_OWNER_PGRP` are enum constants only, never macros; musl 1.2.4: they and `struct f_owner_ex` need `_GNU_SOURCE` | O.2 |
+| XBD.unistd.h.002 (XSH.lseek.012 to .014 blocked) | FAIL (glibc) | `SEEK_HOLE`/`SEEK_DATA` need `_GNU_SOURCE`; with it, the tests pass | 1.12 |
+| XSH.lseek.011 | FAIL | `lseek()` gives EINVAL, not EOVERFLOW, when the result overflows `off_t` | O.3 |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or
@@ -64,6 +66,19 @@ O.2 **`F_OWNER_PID` / `F_OWNER_PGRP` are not macros in glibc; hidden in musl.**
 - Comp: glibc, musl. Kind: missing-2024. Observe: XBD.fcntl.h.008.
 - Src: posixcheck run; /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h,
   /usr/include/x86_64-linux-musl/fcntl.h.
+
+O.3 **`lseek()` reports EINVAL where EOVERFLOW is required.**
+- POSIX (`lseek`, ERRORS): a resulting offset that cannot be represented
+  in off_t fails with EOVERFLOW; EINVAL is for a bad whence or a
+  negative result. The offset maximum of an open file description is the
+  largest off_t (XSH `open`).
+- Linux: the kernel's offset check rejects anything above the file
+  system's maximum file size with EINVAL, so both an off_t overflow
+  (SEEK_CUR of the largest off_t from offset 1) and SEEK_SET to the
+  largest off_t give EINVAL (ext4, Linux 6.18). Only the overflow case is
+  asserted.
+- Comp: kernel. Kind: long-standing. Observe: XSH.lseek.011.
+- Src: posixcheck run, glibc and musl alike.
 
 ## Things the strict build changes
 

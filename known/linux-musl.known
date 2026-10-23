@@ -7,3 +7,4 @@ XBD.fcntl.h.005    FAIL         linux*    1.1: no O_CLOFORK
 XSH.open.044       FAIL         linux*    O.1: EISDIR for O_CREAT "new/"
 XSH.open.045       FAIL         linux*    O.1: EISDIR for O_CREAT "file/"
 XBD.fcntl.h.008    FAIL         linux*    O.2: F_OWNER_*, struct f_owner_ex only with _GNU_SOURCE
+XSH.lseek.011      FAIL         linux*    O.3: EINVAL, not EOVERFLOW, for an off_t overflow

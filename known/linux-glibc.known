@@ -20,3 +20,5 @@ XSH.pipe.008       UNINITIATED  linux*    11.1: pipe2() not declared under the s
 XSH.pipe.009       UNINITIATED  linux*    11.1: pipe2() not declared under the strict build
 XSH.pipe.010       UNINITIATED  linux*    11.1: pipe2() not declared under the strict build
 XBD.fcntl.h.008    FAIL         linux*    O.2: F_OWNER_* only an enum, f_owner_ex extension-only
+XSH.lseek.011      FAIL         linux*    O.3: EINVAL, not EOVERFLOW, for an off_t overflow
+XBD.unistd.h.002   FAIL         linux*    1.12: SEEK_HOLE/SEEK_DATA need _GNU_SOURCE

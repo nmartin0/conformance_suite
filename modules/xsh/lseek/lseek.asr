@@ -1,0 +1,137 @@
+# XSH lseek()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.lseek.001
+anchor     functions/lseek.html#DESCRIPTION
+anchor     functions/lseek.html#RETURN VALUE
+class      required
+since      1988
+says       lseek(fd, off, SEEK_SET) sets the offset to off and returns
+           it: the next read starts there.
+test       t/001-seek-set.c
+
+assertion  XSH.lseek.002
+anchor     functions/lseek.html#DESCRIPTION
+anchor     functions/lseek.html#RETURN VALUE
+class      required
+since      1988
+says       lseek(fd, off, SEEK_CUR) adds off (positive or negative) to
+           the current offset and returns the result.
+test       t/002-seek-cur.c
+
+assertion  XSH.lseek.003
+anchor     functions/lseek.html#DESCRIPTION
+anchor     functions/lseek.html#RETURN VALUE
+class      required
+since      1988
+says       lseek(fd, off, SEEK_END) sets the offset to the file size
+           plus off and returns it.
+test       t/003-seek-end.c
+
+assertion  XSH.lseek.004
+anchor     functions/lseek.html#DESCRIPTION
+class      required
+since      1988
+says       lseek() may set the offset beyond the end of file, and doing
+           so does not change the file's size.
+test       t/004-beyond-eof.c
+
+assertion  XSH.lseek.005
+anchor     functions/lseek.html#DESCRIPTION
+class      required
+since      1988
+says       After seeking beyond the end of file and writing, the bytes
+           of the gap read as zeros.
+test       t/005-gap-zeros.c
+
+assertion  XSH.lseek.006
+anchor     functions/lseek.html#DESCRIPTION
+class      required
+since      1988
+says       lseek() sets the offset of the open file description: a
+           duplicate descriptor reads from the new offset.
+test       t/006-shared-offset.c
+
+assertion  XSH.lseek.007
+anchor     functions/lseek.html#ERRORS/EINVAL
+anchor     functions/lseek.html#RETURN VALUE
+class      required
+since      1988
+says       An invalid whence fails with EINVAL and leaves the offset
+           unchanged.
+note       Uses whence 12345, which no known system defines.
+test       t/007-bad-whence.c
+
+assertion  XSH.lseek.008
+anchor     functions/lseek.html#ERRORS/EINVAL
+anchor     functions/lseek.html#RETURN VALUE
+class      required
+since      1988
+says       A resulting offset that would be negative, for a regular
+           file, fails with EINVAL and leaves the offset unchanged
+           (SEEK_SET -1 and SEEK_CUR past the start).
+test       t/008-negative.c
+
+assertion  XSH.lseek.009
+anchor     functions/lseek.html#ERRORS/ESPIPE
+class      required
+since      1988
+says       lseek() on a pipe, a FIFO or a socket fails with ESPIPE.
+test       t/009-espipe.c
+
+assertion  XSH.lseek.010
+anchor     functions/lseek.html#ERRORS/EBADF
+class      required
+since      1988
+says       lseek() on a descriptor that is not open fails with EBADF.
+test       t/010-ebadf.c
+
+assertion  XSH.lseek.011
+anchor     functions/lseek.html#ERRORS/EOVERFLOW
+anchor     functions/lseek.html#RETURN VALUE
+class      required
+since      2001
+says       A resulting offset too large for off_t fails with EOVERFLOW
+           and leaves the offset unchanged (SEEK_CUR of the largest
+           off_t from offset 1).
+note       The largest off_t is found by doubling, assuming only a
+           signed integer type.
+test       t/011-eoverflow.c
+
+assertion  XSH.lseek.012
+anchor     functions/lseek.html#DESCRIPTION/SEEK_HOLE
+anchor     functions/lseek.html#RETURN VALUE
+class      required
+since      2024
+says       On a file of non-zero bytes, SEEK_HOLE from an offset inside
+           the file returns the file size: the only hole is the virtual
+           one at the end.
+note       SEEK_HOLE and SEEK_DATA are new in Issue 8; blocked when
+           XBD.unistd.h.002 fails.
+uses       XBD.unistd.h.002
+test       t/012-seek-hole.c
+
+assertion  XSH.lseek.013
+anchor     functions/lseek.html#DESCRIPTION/SEEK_DATA
+anchor     functions/lseek.html#RETURN VALUE
+class      required
+since      2024
+says       On a file of non-zero bytes, SEEK_DATA from an offset inside
+           the file returns that offset.
+note       SEEK_HOLE and SEEK_DATA are new in Issue 8; blocked when
+           XBD.unistd.h.002 fails.
+uses       XBD.unistd.h.002
+test       t/013-seek-data.c
+
+assertion  XSH.lseek.014
+anchor     functions/lseek.html#DESCRIPTION/SEEK_HOLE
+anchor     functions/lseek.html#ERRORS/ENXIO
+anchor     functions/lseek.html#RETURN VALUE
+class      required
+since      2024
+says       SEEK_HOLE and SEEK_DATA with an offset at or beyond the file
+           size fail with ENXIO and leave the offset unchanged.
+note       SEEK_HOLE and SEEK_DATA are new in Issue 8; blocked when
+           XBD.unistd.h.002 fails.
+uses       XBD.unistd.h.002
+test       t/014-hole-data-enxio.c

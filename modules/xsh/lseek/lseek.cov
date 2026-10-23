@@ -1,0 +1,28 @@
+# lseek.cov - every requirement unit on functions/lseek.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:a814ba3f        XSH.lseek.006
+DESCRIPTION:38aeb793        XSH.lseek.001
+DESCRIPTION:99ab9951        XSH.lseek.002
+DESCRIPTION:70b03085        XSH.lseek.003
+DESCRIPTION:86916b93        partial XSH.lseek.012  # a real (sparse) hole inside the file not tested
+DESCRIPTION:99710e27        XSH.lseek.014
+DESCRIPTION:16a86f47        partial XSH.lseek.013  # skipping a real hole to the next data not tested
+DESCRIPTION:773443db        partial XSH.lseek.014  # offset beyond the last data but within the size (a trailing hole) not tested
+DESCRIPTION:6d88744e        XBD.unistd.h.002
+DESCRIPTION:48099487        none  a definition
+DESCRIPTION:fc84ae56        XSH.lseek.012
+DESCRIPTION:78a56528        impl  lseek() on devices that cannot seek (documentation)
+DESCRIPTION:653fa1c0        none  undefined
+DESCRIPTION:42d9257d        XSH.lseek.004
+DESCRIPTION:9ce92cf2        XSH.lseek.005
+DESCRIPTION:24360501        XSH.lseek.004
+DESCRIPTION:ed4b8aa2        none  unspecified
+DESCRIPTION:8fc6241b        none  unspecified
+RETURN_VALUE:42d78062       XSH.lseek.001 XSH.lseek.002 XSH.lseek.003
+RETURN_VALUE:465a0f15       XSH.lseek.007 XSH.lseek.008 XSH.lseek.011 XSH.lseek.014
+ERRORS:d7fbc4e5             XSH.lseek.010
+ERRORS:0d935eb5             partial XSH.lseek.007 XSH.lseek.008  # block special files and directories not tested
+ERRORS:a0b79274             partial XSH.lseek.014  # SEEK_DATA beyond the last data inside the size not tested
+ERRORS:ba905c13             XSH.lseek.011
+ERRORS:e7a26498             XSH.lseek.009
