@@ -74,16 +74,20 @@ static void two(long a_ms, long b_ms, pid_t *a, pid_t *b)
 		pc_unresolved("fork failed");
 	if (*b == 0) {
 		struct timespec ts = { b_ms / 1000, (b_ms % 1000) * 1000000L };
+		(void)close(p[0]);
 		if (setpgid(0, 0) != 0)
 			_exit(9);
 		(void)write(p[1], "g", 1);
+		(void)close(p[1]);
 		while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
 			;
 		_exit(2);
 	}
+	(void)close(p[1]);	/* so that a dead b gives end of file */
 	(void)setpgid(*b, *b);	/* also from the parent, to close the race */
 	if (read(p[0], &c, 1) != 1)
 		pc_unresolved("child b did not start");
+	(void)close(p[0]);
 	*a = child(a_ms, 1);
 }
 

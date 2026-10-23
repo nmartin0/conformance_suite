@@ -25,7 +25,7 @@ int main(void)
 	if (c == -1)
 		pc_unresolved("fork failed");
 	if (c == 0)
-		pthread_exit(NULL);
+		pthread_exit((void *)1);	/* the value must not become the status */
 	pc_check(waitpid(c, &st, 0) == c, "waitpid failed");
 	pc_check(st == 0, "status %#x, expected 0", st);
 	pc_pass();

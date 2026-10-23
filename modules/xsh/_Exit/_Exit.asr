@@ -14,12 +14,15 @@ test       t/001-status-bits.c
 assertion  XSH._Exit.002
 anchor     functions/_Exit.html#DESCRIPTION
 anchor     functions/waitid.html#DESCRIPTION
+anchor     basedefs/signal.h.html#DESCRIPTION
 class      required
 since      2008
 says       The full status value given to _exit() is available from
            waitid(): si_status is 0x1234 for _exit(0x1234).
-note       The full value through waitid() and SIGCHLD's siginfo_t was
-           specified in Issue 7.
+note       Added by Austin Group defect 594 in POSIX.1-2008 Technical
+           Corrigendum 2 (2016); before that only the low 8 bits were
+           required. XBD <signal.h> says si_status is not limited to 8
+           bits.
 test       t/002-waitid-full.c
 
 assertion  XSH._Exit.003
@@ -35,17 +38,19 @@ assertion  XSH._Exit.004
 anchor     functions/_Exit.html#DESCRIPTION
 class      required
 since      1988
-says       _exit() does not call functions registered with atexit() or
-           at_quick_exit().
+says       _exit() does not call functions registered with atexit().
 test       t/004-no-handlers.c
 
 assertion  XSH._Exit.005
 anchor     functions/_Exit.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       _exit() does not flush open streams: data written with
            fputs() to a fully buffered file stream, without fflush(),
            does not reach the file.
+note       In Issue 6 whether streams were flushed was implementation-
+           defined; 'not flushed' came with Issue 7 (interpretation
+           1003.1-2001 #085).
 test       t/005-no-flush.c
 
 assertion  XSH._Exit.006
@@ -62,8 +67,9 @@ assertion  XSH._Exit.007
 anchor     functions/_Exit.html#DESCRIPTION
 class      required
 since      1988
-says       When a child terminates, SIGCHLD is sent to its parent
-           (caught here).
+says       When a child terminates, SIGCHLD is sent to its parent: with
+           SIGCHLD caught and blocked, sigtimedwait() accepts it within
+           10 s.
 nomutant   SIGCHLD generation at exit is kernel behaviour
 test       t/007-sigchld.c
 
@@ -72,8 +78,10 @@ anchor     functions/_Exit.html#DESCRIPTION
 class      required
 since      1988
 says       A terminated child stays a zombie until its parent obtains
-           its status: its process ID still exists before the wait, and
-           is gone after it.
+           its status: once waitid(WNOWAIT) shows it has terminated, its
+           process ID still exists (kill() with signal 0 succeeds), and
+           after the wait it is gone (ESRCH, or EPERM if the ID was
+           reused).
 nomutant   zombie lifetime is kernel behaviour
 test       t/008-zombie.c
 
@@ -83,22 +91,28 @@ class      conditional
 when       XSI
 since      2001
 says       XSI: with SIGCHLD set to SIG_IGN in the parent, a terminating
-           child's status is discarded, and a wait() blocked for it
-           fails with ECHILD.
+           child's status is discarded: a wait() blocked for it fails
+           with ECHILD, and the child's process ID is gone at once (no
+           zombie).
 nomutant   status discarding is kernel behaviour
+note       XSH 2.12 states this unshaded, while 2.4.3 and the
+           consequences list shade it XSI (standard issue SI-9); the
+           test follows the shading.
 test       t/009-sigchld-ignored.c
 
 assertion  XSH._Exit.010
 anchor     functions/_Exit.html#DESCRIPTION
 class      required
-since      1988
+since      2001
 says       When a process's exit orphans a process group that has a
            stopped member, each process in that group is sent SIGHUP and
            SIGCONT; the stopped member receives both (in either order,
            since delivery order of pending signals is unspecified).
-note       The group is made in a child: the stopped grandchild's group
-           loses its last outside parent in the session when the child
-           exits.
+note       A child stays in the test's group and its own child, in a new
+           group, stops; the group's only parent in the session is then
+           the child, and its exit orphans the group. This avoids
+           depending on whether a zombie still counts as a group member
+           (Q-4). Before 2001 this came with the job control option.
 nomutant   the signals to an orphaned process group come from the kernel
 test       t/010-orphaned-group.c
 
@@ -106,10 +120,11 @@ assertion  XSH._Exit.011
 anchor     functions/_Exit.html#DESCRIPTION
 class      required
 since      2001
-says       Threads ended by _exit() run neither their cancellation
-           cleanup handlers nor their thread-specific data destructors.
-nomutant   other threads' cleanup cannot be triggered from a preload
-           library
+says       Threads ended by _exit(), the calling thread and another one,
+           run neither their cancellation cleanup handlers nor their
+           thread-specific data destructors.
+nomutant   a preload cannot reach the application's cleanup stacks or
+           keys
 test       t/011-no-cleanup.c
 
 assertion  XSH._Exit.012
@@ -118,5 +133,27 @@ class      required
 since      2001
 says       _exit() calls no registered signal handlers: a pending,
            blocked signal with a handler is not delivered as the process
-           ends.
+           ends, and no caught signal (SIGTERM, SIGHUP, SIGUSR2,
+           SIGABRT) is raised.
 test       t/012-no-signal-handlers.c
+
+assertion  XSH._Exit.013
+anchor     functions/_Exit.html#DESCRIPTION
+class      required
+since      2024
+says       _exit() does not call functions registered with
+           at_quick_exit().
+note       at_quick_exit() is new in Issue 8.
+test       t/013-no-quick-exit-handlers.c
+
+assertion  XSH._Exit.014
+anchor     functions/_Exit.html#DESCRIPTION
+anchor     basedefs/signal.h.html#DESCRIPTION
+class      required
+since      2008
+says       The full status value given to _exit() is in the siginfo_t
+           passed to a SIGCHLD handler: si_status is 0x1234 for
+           _exit(0x1234).
+note       Added with XSH._Exit.002's rule (defect 594, TC2). Linux keeps
+           only 8 bits here too (O.6).
+test       t/014-sigchld-full.c

@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
 			_exit(1);
 		}
 		pc_check(waitpid(c, &st, 0) == c, "waitpid failed");
+		if (how == 2 && WIFEXITED(st) && WEXITSTATUS(st) == 9)
+			pc_unresolved("execv of %s failed", argv[0]);
 		if (how < 3)
 			pc_check(st == 0, "status %#x, expected 0 (%s)", st,
 			    how == 0 ? "_exit(0)" : how == 1 ? "exit(0)" : "return 0 from main");

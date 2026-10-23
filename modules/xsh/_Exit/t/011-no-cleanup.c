@@ -18,7 +18,7 @@
 
 static int report_fd = -1;
 static pthread_key_t key;
-static volatile int ready;
+static int ready_fd = -1;
 
 static void cleanup(void *arg)
 {
@@ -37,7 +37,7 @@ static void *worker(void *arg)
 	(void)arg;
 	(void)pthread_setspecific(key, &key);
 	pthread_cleanup_push(cleanup, NULL);
-	ready = 1;
+	(void)write(ready_fd, "r", 1);
 	for (;;)
 		(void)sleep(1);
 	pthread_cleanup_pop(0);
@@ -51,6 +51,8 @@ static int reap(pid_t pid)
 
 	if (waitpid(pid, &st, 0) != pid)
 		pc_unresolved("waitpid failed");
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
+		pc_unresolved("the child could not set up");
 	return st;
 }
 
@@ -65,26 +67,33 @@ static pid_t spawn(void)
 
 int main(void)
 {
-	int p[2], st;
+	int p[2], q[2], st;
 	pid_t c;
 	char ch;
 
 	pc_begin("XSH._Exit.011");
-	pc_check(pipe(p) == 0, "pipe failed");
+	pc_check(pipe(p) == 0 && pipe(q) == 0, "pipe failed");
 	report_fd = p[1];
 	pc_test();
 	c = spawn();
 	if (c == 0) {
 		pthread_t th;
+		char r;
 		(void)close(p[0]);
+		ready_fd = q[1];
 		if (pthread_key_create(&key, destructor) != 0 ||
+		    pthread_setspecific(key, &key) != 0 ||
 		    pthread_create(&th, NULL, worker, NULL) != 0)
 			_exit(99);
-		while (!ready)
-			;
+		/* The calling thread has a value and a cleanup handler too. */
+		pthread_cleanup_push(cleanup, NULL);
+		if (read(q[0], &r, 1) != 1)
+			_exit(99);
 		_exit(0);
+		pthread_cleanup_pop(0);
 	}
 	(void)close(p[1]);
+	(void)close(q[1]);
 	st = reap(c);
 	pc_check(WIFEXITED(st) && WEXITSTATUS(st) == 0, "the child failed (%#x)", st);
 	pc_check(read(p[0], &ch, 1) == 0, "a cleanup handler or destructor ran ('%c')", ch);

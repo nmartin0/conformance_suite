@@ -73,6 +73,7 @@ int main(void)
 	pc_check(r == c, "wait() returned %ld, the child is %ld", (long)r, (long)c);
 	pc_check(now_ms() - t0 >= 400, "wait() returned before the child exited");
 	pc_check(WIFEXITED(st), "WIFEXITED is false for a child that called _exit()");
+	pc_check(!WIFSIGNALED(st), "WIFSIGNALED is also true for an exited child");
 	pc_check(WEXITSTATUS(st) == 42, "WEXITSTATUS is %d, expected 42", WEXITSTATUS(st));
 	pc_pass();
 }

@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (264 assertions):
+- Modules (279 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -63,15 +63,20 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     selection (any, one, own group, other group), WNOHANG, WUNTRACED,
     WCONTINUED, EINTR, ECHILD, EINVAL, consumption, SIGCHLD clearing,
     reparenting, last-thread exit.
-  - `xsh/_Exit` (12): status bits (wait and waitid), _exit/_Exit
-    equivalence, no handlers or flushing, descriptors closed, SIGCHLD,
-    zombies, XSI SIGCHLD ignored, orphaned process groups, no thread
-    cleanup.
+  - `xsh/_Exit` (14): status bits (wait, waitid, SIGCHLD siginfo),
+    _exit/_Exit equivalence, no atexit or at_quick_exit handlers, no
+    flushing, descriptors closed, SIGCHLD, zombies, XSI SIGCHLD ignored
+    (no zombie), orphaned process groups, no thread cleanup, no signal
+    handlers.
+  - `xsh/exit` (13): status bits, atexit order, handlers registered
+    during exit, repeated registration, no at_quick_exit handlers, a
+    handler that does not return, flushing (after the handlers), stream
+    offset synced, SIGCHLD, EXIT_SUCCESS/EXIT_FAILURE.
   - `xbd/unistd.h` (2): POSIX_CLOSE_RESTART, SEEK_*; `xbd/fcntl.h` now 8.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).
 - `ci/lint.py`: traceability and anchor checks; `ci/mutate.sh`: mutation
-  checks (355 mutants); `ci/catalog.py`: shared parser.
+  checks (379 mutants); `ci/catalog.py`: shared parser.
 - `analysis/analyze.py`: load, runs, verdict, failures, matrix, diff,
   coverage, html, calibrate (checks a reference run against
   `known/*.known`, its expected failures).
@@ -83,10 +88,10 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   into requirement units (every normative sentence, list item, table row
   and struct member; XCU 1.4 default sections), identified by section and
   hash. Each module's `<page>.cov` accounts for every unit; lint requires
-  the file. Current six modules: 264 units, 30 asserted, 13 partial, 104
-  classified (app/impl/optional/none/untestable), 117 todo, 0
-  unaccounted. Whole standard: about 42,900 units on reference pages
-  (XSH 25,368; XCU 14,527; XBD 3,029) plus the chapters.
+  the file. All 17 modules: 1,032 units, 331 asserted, 71 partial, 235
+  classified (app/impl/optional/none/untestable), 395 todo, 0
+  unaccounted. Whole standard: about 43,200 units on reference pages
+  (XSH 25,482; XCU 14,615; XBD 3,117) plus the chapters.
 - An independent review of every classification (34 findings: hidden
   testable requirements, overstated coverage, units the extractor missed)
   was applied.

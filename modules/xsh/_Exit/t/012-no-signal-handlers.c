@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH._Exit.012
  * MUTANT    _Exit.calls_atexit
+ * MUTANT    _Exit.unblocks
+ * MUTANT    _Exit.raises
  */
 #include "pc.h"
 #include <errno.h>
@@ -24,7 +26,17 @@ static void on_usr1(int sig)
 	(void)write(report_fd, "s", 1);
 }
 
-/* Registered with atexit(): if _exit() wrongly ran it, the signal would arrive. */
+/* Caught and unblocked: an _exit() that signals the process itself shows. */
+static void on_other(int sig)
+{
+	(void)sig;
+	(void)write(report_fd, "o", 1);
+}
+
+/*
+ * Registered with atexit(): only links this test to the atexit case
+ * (XSH._Exit.004); if _exit() wrongly ran it, SIGUSR1 would arrive.
+ */
 static void unblock(void)
 {
 	sigset_t s;
@@ -40,6 +52,8 @@ static int reap(pid_t pid)
 
 	if (waitpid(pid, &st, 0) != pid)
 		pc_unresolved("waitpid failed");
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
+		pc_unresolved("the child could not set up");
 	return st;
 }
 
@@ -75,11 +89,17 @@ int main(void)
 		if (sigaction(SIGUSR1, &sa, NULL) != 0 || sigprocmask(SIG_BLOCK, &s, NULL) != 0 ||
 		    raise(SIGUSR1) != 0 || atexit(unblock) != 0)
 			_exit(99);
+		sa.sa_handler = on_other;
+		if (sigaction(SIGTERM, &sa, NULL) != 0 || sigaction(SIGHUP, &sa, NULL) != 0 ||
+		    sigaction(SIGUSR2, &sa, NULL) != 0 || sigaction(SIGABRT, &sa, NULL) != 0)
+			_exit(99);
 		_exit(0);
 	}
 	(void)close(p[1]);
 	st = reap(c);
 	pc_check(WIFEXITED(st) && WEXITSTATUS(st) == 0, "the child failed (%#x)", st);
-	pc_check(read(p[0], &ch, 1) == 0, "a signal handler ran during _exit()");
+	if (read(p[0], &ch, 1) == 1)
+		pc_fail("a signal handler ran during _exit() (%s)",
+		    ch == 's' ? "the blocked, pending SIGUSR1 was delivered" : "a caught signal was raised");
 	pc_pass();
 }

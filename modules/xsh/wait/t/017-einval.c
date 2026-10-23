@@ -57,6 +57,18 @@ static long now_ms(void)
 	return t.tv_sec * 1000L + t.tv_nsec / 1000000L;
 }
 
+/* The bit used as invalid; it must not be one of the standard flags. */
+#define BADBIT 0x400000
+#if (BADBIT & (WNOHANG | WUNTRACED)) != 0
+#error "BADBIT overlaps a standard waitpid() option"
+#endif
+#if defined(WCONTINUED) && (BADBIT & WCONTINUED) != 0
+#error "BADBIT overlaps WCONTINUED"
+#endif
+#if (BADBIT & (WEXITED | WSTOPPED | WNOWAIT)) != 0
+#error "BADBIT overlaps a waitid() option"
+#endif
+
 int main(void)
 {
 	pid_t c;
@@ -65,7 +77,15 @@ int main(void)
 	pc_begin("XSH.wait.017");
 	c = child(1000, 0);
 	pc_test();
-	pc_expect_err(waitpid(c, &st, WNOHANG | 0x400000), EINVAL, "waitpid() with an invalid option bit");
-	(void)waitpid(c, &st, 0);
+	{
+		long r = waitpid(c, &st, WNOHANG | BADBIT);
+		int e = errno;
+
+		(void)kill(c, SIGKILL);
+		(void)waitpid(c, NULL, 0);
+		errno = e;
+		pc_expect_err(r, EINVAL,
+		    "waitpid() with option bit 0x400000 (accepted; an implementation extension could define it)");
+	}
 	pc_pass();
 }

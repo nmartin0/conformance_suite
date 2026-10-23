@@ -39,11 +39,11 @@ DESCRIPTION:2c90116e        XSH.wait.011
 DESCRIPTION:ba5eed7a        XSH.wait.012
 DESCRIPTION:9f1061fe        none  unspecified
 DESCRIPTION:eb090dee        none  unspecified
-DESCRIPTION:d450a798        XSH.wait.011
+DESCRIPTION:d450a798        XSH.wait.011  # stopped and exited cases under WUNTRACED
 DESCRIPTION:f1b4e03c        todo  XSI: with WUNTRACED and WCONTINUED, exactly one macro is true for each kind of status
-DESCRIPTION:361ebea8        partial XSH.wait.005 XSH.wait.013  # exited and signalled cases; not exhaustive
-DESCRIPTION:e1a235b8        partial XSH.wait.012  # the continued case only
-DESCRIPTION:409aa261        todo  implementations that queue SIGCHLD: the reaped child's SIGCHLD goes, others stay (needs two children)
+DESCRIPTION:361ebea8        partial XSH.wait.001 XSH.wait.005 XSH.wait.011  # exited and signalled; stopped and continued in d450a798, e1a235b8
+DESCRIPTION:e1a235b8        XSH.wait.012  # the continued case: only WIFCONTINUED is true
+DESCRIPTION:409aa261        partial XSH.wait.019  # one child: its SIGCHLD goes; other children's SIGCHLD staying (fe2c3112) needs two
 DESCRIPTION:fe2c3112        todo  as above: another child's pending SIGCHLD stays pending
 DESCRIPTION:80a943b1        XSH.wait.019
 DESCRIPTION:132d20f9        none  unspecified
@@ -52,7 +52,7 @@ DESCRIPTION:c408557a        untestable  a negative requirement about non-standar
 DESCRIPTION:2504d3ce        none  implementation-defined interpretation
 DESCRIPTION:5c618760        XSH.wait.020
 RETURN_VALUE:a2a7b909       XSH.wait.001 XSH.wait.006
-RETURN_VALUE:65d2ef79       XSH.wait.014
+RETURN_VALUE:65d2ef79       partial XSH.wait.014  # wait() only; waitpid() is ERRORS:22cfa580.2
 RETURN_VALUE:e4581ad4       XSH.wait.010
 RETURN_VALUE:d0365a78       XSH.wait.015
 ERRORS:d8e95e25             XSH.wait.015

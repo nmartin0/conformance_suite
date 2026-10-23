@@ -1,0 +1,134 @@
+# XSH exit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Each test ends a child with exit() and judges from the parent.
+
+assertion  XSH.exit.001
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      1988
+says       Only the low 8 bits of the status given to exit() are seen
+           through waitpid() (0x1234 gives 0x34), and exit() does not
+           return to its caller.
+test       t/001-status-bits.c
+
+assertion  XSH.exit.002
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      2008
+says       The full status value given to exit() is available from
+           waitid(): si_status is 0x1234 for exit(0x1234).
+note       Specified in Issue 7. Linux keeps only 8 bits (O.6), as for
+           _exit() in XSH._Exit.002.
+test       t/002-waitid-full.c
+
+assertion  XSH.exit.003
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      1988
+says       exit() calls the functions registered with atexit() in the
+           reverse order of their registration (registered a, b, c:
+           called c, b, a).
+test       t/003-reverse-order.c
+
+assertion  XSH.exit.004
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      1999
+says       A function registered with atexit() while exit() is calling
+           the handlers is called after the handler that registered it,
+           and before the handlers registered earlier that have not run
+           yet (registered x, then a; a registers b: called a, b, x).
+note       b is called after a because a had already been called when b
+           was registered; b comes before x by the general reverse-order
+           rule, which the exception does not touch.
+test       t/004-registered-during-exit.c
+
+assertion  XSH.exit.005
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      2001
+says       A function registered with atexit() three times is called
+           three times by exit(), each in its place in the reverse
+           order (registered h, o, h, h: called h, h, o, h).
+test       t/005-as-many-times.c
+
+assertion  XSH.exit.006
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      2017
+says       exit() does not call functions registered with
+           at_quick_exit(), while it does call those registered with
+           atexit().
+note       at_quick_exit() came from ISO C11, in Issue 7 TC2 (2016) or
+           Issue 8; the year is approximate.
+test       t/006-no-quick-exit-handlers.c
+
+assertion  XSH.exit.007
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      2008
+says       If a function registered with atexit() does not return (it
+           calls _exit(7)), the remaining registered functions are not
+           called and the rest of exit() processing is not done:
+           buffered stream data is not flushed, and the status is 7.
+test       t/007-handler-not-returning.c
+
+assertion  XSH.exit.008
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      1988
+says       exit() flushes open streams with unwritten buffered data:
+           text written with fputs() to a fully buffered file stream,
+           and to standard output redirected to a file, reaches the
+           file without fflush().
+test       t/008-flushes.c
+
+assertion  XSH.exit.009
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      1988
+says       exit() flushes streams after calling the atexit() functions:
+           with "S" buffered on an append-mode stream, a handler that
+           writes "H" to the file through another descriptor in append
+           mode leaves the file as "HS".
+test       t/009-flush-after-handlers.c
+
+assertion  XSH.exit.010
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      2008
+says       For a seekable input stream that is the active handle and not
+           at end of file, exit() sets the offset of the open file
+           description to the stream's position: after reading 2 bytes
+           of an 8192-byte file through a 4096-byte buffer, the shared
+           offset is 2, not 4096.
+note       glibc is reported not to do this (research 6.1).
+test       t/010-offset-synced.c
+
+assertion  XSH.exit.011
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      2008
+says       After exit(5) the parent receives SIGCHLD with si_code
+           CLD_EXITED, si_pid the child's ID and si_status 5, and can
+           then collect status 5 with waitpid().
+test       t/011-sigchld.c
+
+assertion  XSH.exit.012
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      2008
+says       The full status value given to exit() is in the siginfo_t
+           passed to a SIGCHLD handler: si_status is 0x1234 for
+           exit(0x1234).
+note       Linux keeps only 8 bits here too (O.6).
+test       t/012-sigchld-full.c
+
+assertion  XSH.exit.013
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      1988
+says       exit(EXIT_SUCCESS) gives exit status 0 and exit(EXIT_FAILURE)
+           a non-zero exit status.
+test       t/013-exit-macros.c

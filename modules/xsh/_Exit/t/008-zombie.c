@@ -45,13 +45,18 @@ int main(void)
 	if (c == 0)
 		_exit(0);
 	{
-		struct timespec ts = { 0, 300000000 };
-		(void)nanosleep(&ts, NULL);	/* the child has exited by now */
+		/* Returns once the child has terminated, leaving it waitable. */
+		siginfo_t si;
+		memset(&si, 0, sizeof si);
+		if (waitid(P_PID, (id_t)c, &si, WEXITED | WNOWAIT) != 0)
+			pc_unresolved("waitid(WNOWAIT) failed: %s", pc_errname(errno));
 	}
 	pc_check(kill(c, 0) == 0, "the terminated, unwaited child does not exist (%s)", pc_errname(errno));
 	st = reap(c);
 	(void)st;
 	errno = 0;
-	pc_check(kill(c, 0) == -1 && errno == ESRCH, "the child still exists after its status was obtained");
+	/* EPERM is accepted too: the ID may have been reused by then. */
+	pc_check(kill(c, 0) == -1 && (errno == ESRCH || errno == EPERM),
+	    "the child still exists after its status was obtained");
 	pc_pass();
 }

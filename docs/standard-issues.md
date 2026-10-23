@@ -19,6 +19,13 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-5 | true APPLICATION USAGE on "--" vs XCU 1.4 and false | conflict | (todo in true.cov, false.cov) |
 | SI-6 | fork() still resets XSI interval timers, removed in Issue 8 | defect | (todo in fork.cov) |
 | SI-7 | fork() process-shared lock item lacks TSH shading | editorial | XSH.fork.014 |
+| SI-8 | wait(): DESCRIPTION requires discarding SIGCHLD, RATIONALE treats it as optional | conflict | XSH.wait.019 |
+| SI-9 | XSH 2.12 unshaded vs XSI shading elsewhere: SIG_IGN/SA_NOCLDWAIT discard status | conflict | XSH._Exit.009 |
+| SI-10 | `<signal.h>` CHANGE HISTORY: SA_NOCLDWAIT moved to Base, still XSI-shaded | editorial | (SA_NOCLDWAIT todo in _Exit.cov) |
+| SI-11 | wait() RETURN VALUE: WNOHANG sentence lacks "shall", overlapping conditions | editorial | XSH.wait.010 |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
+| Q-4 | is a zombie still a group member for "orphaned process group"? | question | XSH._Exit.010 (avoids it) |
+| Q-5 | wait(): "if the implementation queues SIGCHLD" vs XSH 2.4.1 | question | XSH.wait.019 (both readings agree) |
+| Q-6 | wait(): when is "another child's status available"? | question | (not tested) |

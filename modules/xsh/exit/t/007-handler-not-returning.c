@@ -1,0 +1,101 @@
+/*
+ * A handler that does not return ends exit() processing.
+ * Copyright (c) 2026 Nicholas Martin. All rights reserved.
+ *
+ * ASSERTION XSH.exit.007
+ * MUTANT    exit.forward_order
+ * MUTANT    exit.flush_first
+ */
+#include "pc.h"
+#include <errno.h>
+#include <fcntl.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <unistd.h>
+
+/* Waits for pid and returns its raw status; anything odd is UNRESOLVED. */
+static int reap(pid_t pid)
+{
+	int st;
+
+	if (waitpid(pid, &st, 0) != pid)
+		pc_unresolved("waitpid failed");
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
+		pc_unresolved("the child could not set up");
+	return st;
+}
+
+static pid_t spawn(void)
+{
+	pid_t r = fork();
+
+	if (r == -1)
+		pc_unresolved("fork failed");
+	return r;
+}
+
+/* The child's exit handlers record their names here, in call order. */
+static int trace_fd = -1;
+
+static void mark(const char *s)
+{
+	(void)write(trace_fd, s, strlen(s));
+}
+
+/* Reads what the child recorded, up to end of file. */
+static void collect(int fd, char *buf, size_t size)
+{
+	size_t n = 0;
+	ssize_t r;
+
+	while (n < size - 1 && (r = read(fd, buf + n, size - 1 - n)) > 0)
+		n += (size_t)r;
+	buf[n] = '\0';
+}
+
+static void rest(void) { mark("r"); }
+
+static void stop(void)
+{
+	mark("s");
+	_exit(7);
+}
+
+int main(void)
+{
+	int p[2], st;
+	pid_t c;
+	char buf[16];
+
+	pc_begin("XSH.exit.007");
+	pc_make_file("f", "");
+	pc_check(pipe(p) == 0, "pipe failed");
+	pc_test();
+	c = spawn();
+	if (c == 0) {
+		static char sbuf[4096];
+		FILE *f = fopen("f", "w");
+
+		trace_fd = p[1];
+		(void)close(p[0]);
+		if (f == NULL || setvbuf(f, sbuf, _IOFBF, sizeof sbuf) != 0)
+			_exit(99);
+		if (atexit(rest) != 0 || atexit(stop) != 0)
+			_exit(99);
+		(void)fputs("unflushed", f);
+		exit(0);
+	}
+	(void)close(p[1]);
+	st = reap(c);
+	collect(p[0], buf, sizeof buf);
+	pc_check(WIFEXITED(st), "the child did not exit normally (%#x)", st);
+	pc_check(WEXITSTATUS(st) != 99, "the child could not set up");
+	pc_check(strcmp(buf, "s") == 0, "handlers called as \"%s\", expected \"s\"", buf);
+	pc_check(WEXITSTATUS(st) == 7, "exit status %d, expected the handler's 7", WEXITSTATUS(st));
+	pc_check(pc_file_size("f") == 0, "the stream was flushed after a handler that did not return");
+	pc_pass();
+}

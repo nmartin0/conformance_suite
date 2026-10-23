@@ -34,14 +34,24 @@ static pid_t spawn(void)
 	return r;
 }
 
+static void on_alarm(int sig)
+{
+	(void)sig;
+}
+
 int main(void)
 {
+	struct sigaction sa;
 	pid_t c;
-	int st;
+	int st, r, e;
 
 	pc_begin("XSH._Exit.009");
-	signal(SIGCHLD, SIG_IGN);
-	alarm(10);
+	memset(&sa, 0, sizeof sa);
+	sigemptyset(&sa.sa_mask);
+	sa.sa_handler = SIG_IGN;
+	pc_check(sigaction(SIGCHLD, &sa, NULL) == 0, "sigaction(SIGCHLD, SIG_IGN) failed");
+	sa.sa_handler = on_alarm;	/* no SA_RESTART: a stuck wait() gives EINTR */
+	pc_check(sigaction(SIGALRM, &sa, NULL) == 0, "sigaction(SIGALRM) failed");
 	pc_test();
 	c = spawn();
 	if (c == 0) {
@@ -49,8 +59,18 @@ int main(void)
 		(void)nanosleep(&ts, NULL);	/* the parent is blocked in wait() by then */
 		_exit(0);
 	}
+	alarm(10);
 	errno = 0;
-	pc_check(wait(&st) == -1 && errno == ECHILD,
-	    "wait() for a child whose status is discarded did not fail with ECHILD (%s)", pc_errname(errno));
+	r = wait(&st);
+	e = errno;
+	alarm(0);
+	if (r == -1 && e == EINTR)
+		pc_fail("wait() still blocked 10 s after the child's exit");
+	pc_check(r == -1 && e == ECHILD,
+	    "wait() for a child whose status is discarded did not fail with ECHILD (%s)", pc_errname(e));
+	/* No zombie: the child's lifetime ended at once. */
+	errno = 0;
+	pc_check(kill(c, 0) == -1 && (errno == ESRCH || errno == EPERM),
+	    "the child still exists after it terminated with SIGCHLD ignored");
 	pc_pass();
 }

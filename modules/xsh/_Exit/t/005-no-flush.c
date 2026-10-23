@@ -24,6 +24,8 @@ static int reap(pid_t pid)
 
 	if (waitpid(pid, &st, 0) != pid)
 		pc_unresolved("waitpid failed");
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
+		pc_unresolved("the child could not set up");
 	return st;
 }
 

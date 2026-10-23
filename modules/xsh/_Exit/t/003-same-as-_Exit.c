@@ -31,6 +31,8 @@ static int reap(pid_t pid)
 
 	if (waitpid(pid, &st, 0) != pid)
 		pc_unresolved("waitpid failed");
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
+		pc_unresolved("the child could not set up");
 	return st;
 }
 
@@ -64,8 +66,10 @@ int main(void)
 			_Exit(17);
 		}
 		st = reap(c);
-		pc_check(WIFEXITED(st) && WEXITSTATUS(st) == 17, "%s gave status %#x, expected 17",
+		pc_check(WIFEXITED(st), "%s did not end the process normally (wait status %#x)",
 		    how ? "_Exit(17)" : "_exit(17)", st);
+		pc_check(WEXITSTATUS(st) == 17, "%s gave exit status %d, expected 17",
+		    how ? "_Exit(17)" : "_exit(17)", WEXITSTATUS(st));
 	}
 	(void)close(p[1]);
 	pc_check(read(p[0], &ch, 1) == 0, "an atexit() handler ran");

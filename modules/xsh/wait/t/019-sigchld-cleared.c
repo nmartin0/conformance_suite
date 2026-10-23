@@ -64,15 +64,35 @@ int main(void)
 	int st;
 
 	pc_begin("XSH.wait.019");
+	{
+		/*
+		 * Caught, not SIG_DFL: a blocked signal whose action is to
+		 * ignore may be discarded at generation (XSH 2.4.1). Installed
+		 * before the fork (changing it after is unspecified, 2.4.3).
+		 */
+		struct sigaction sa;
+
+		memset(&sa, 0, sizeof sa);
+		sa.sa_handler = on_alarm;
+		sigemptyset(&sa.sa_mask);
+		pc_check(sigaction(SIGCHLD, &sa, NULL) == 0, "sigaction failed");
+	}
 	sigemptyset(&s);
 	sigaddset(&s, SIGCHLD);
 	pc_check(sigprocmask(SIG_BLOCK, &s, NULL) == 0, "sigprocmask failed");
 	c = child(0, 0);
 	{
-		struct timespec ts = { 0, 300000000 };
-		(void)nanosleep(&ts, NULL);
+		struct timespec ts = { 0, 10000000 };
+		int i;
+
+		for (i = 0; i < 500; i++) {
+			pc_check(sigpending(&s) == 0, "sigpending failed");
+			if (sigismember(&s, SIGCHLD) == 1)
+				break;
+			(void)nanosleep(&ts, NULL);
+		}
 	}
-	pc_check(sigpending(&s) == 0 && sigismember(&s, SIGCHLD) == 1, "SIGCHLD is not pending");
+	pc_check(sigismember(&s, SIGCHLD) == 1, "SIGCHLD is not pending within 5 s");
 	pc_test();
 	pc_check(wait(&st) == c, "wait() failed");
 	pc_check(sigpending(&s) == 0, "sigpending failed");

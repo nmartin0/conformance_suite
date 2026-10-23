@@ -70,6 +70,7 @@ int main(void)
 	r = wait(&st);
 	pc_check(r == -1, "wait() returned %ld instead of being interrupted", (long)r);
 	pc_check(errno == EINTR, "errno %s, expected EINTR", pc_errname(errno));
+	(void)kill(c, SIGKILL);
 	(void)waitpid(c, &st, 0);
 	pc_pass();
 }

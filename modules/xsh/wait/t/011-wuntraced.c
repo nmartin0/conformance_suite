@@ -86,6 +86,10 @@ int main(void)
 	pc_check(WSTOPSIG(st) == SIGSTOP, "WSTOPSIG is %d, expected SIGSTOP (%d)", WSTOPSIG(st), SIGSTOP);
 	pc_check(!WIFEXITED(st) && !WIFSIGNALED(st), "another status macro is also true");
 	(void)kill(c, SIGCONT);
-	(void)waitpid(c, &st, 0);
+	/* The exit, collected with WUNTRACED too: only WIFEXITED is true. */
+	pc_check(waitpid(c, &st, WUNTRACED) == c, "waitpid(WUNTRACED) did not report the exit (%s)",
+	    pc_errname(errno));
+	pc_check(WIFEXITED(st) && !WIFSIGNALED(st) && !WIFSTOPPED(st),
+	    "status %#x of an exited child: expected only WIFEXITED", st);
 	pc_pass();
 }

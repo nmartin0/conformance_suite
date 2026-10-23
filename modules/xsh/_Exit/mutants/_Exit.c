@@ -9,6 +9,7 @@
  */
 #define _GNU_SOURCE 1
 #include <dlfcn.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,6 +39,15 @@ _Noreturn static void faulty(exit_fn real, int status)
 		(void)fflush(NULL);
 	if (IS("status_wrong"))
 		status ^= 1;
+	if (IS("unblocks")) {
+		sigset_t none;
+		sigemptyset(&none);
+		(void)sigprocmask(SIG_SETMASK, &none, NULL);	/* pending signals arrive */
+	}
+	if (IS("raises"))
+		(void)raise(SIGTERM);
+	if (IS("calls_quick"))
+		quick_exit(status);	/* runs at_quick_exit() handlers */
 	real(status);
 	for (;;)
 		;

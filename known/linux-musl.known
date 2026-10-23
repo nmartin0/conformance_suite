@@ -12,3 +12,6 @@ XSH.read.021       FAIL         linux*    O.4: EINVAL, not ENOTCONN, on an uncon
 XSH.write.022      FAIL         linux*    1.4: pwrite() with O_APPEND appends, ignoring the offset
 XSH.wait.019       FAIL         linux*    O.5: a blocked, pending SIGCHLD stays pending after wait()
 XSH._Exit.002      FAIL         linux*    O.6: waitid() si_status has only the low 8 bits
+XSH.exit.002       FAIL         linux*    O.6: waitid() si_status has only the low 8 bits
+XSH.exit.012       FAIL         linux*    O.6: SIGCHLD si_status has only the low 8 bits
+XSH._Exit.014      FAIL         linux*    O.6: SIGCHLD si_status has only the low 8 bits

@@ -18,7 +18,8 @@ assertion  XSH.wait.002
 anchor     functions/wait.html#DESCRIPTION
 class      required
 since      1988
-says       When a child has already terminated, wait() returns at once.
+says       When a child has already terminated (its SIGCHLD is pending),
+           wait() returns its status at once, within 300 ms.
 test       t/002-wait-immediate.c
 
 assertion  XSH.wait.003
@@ -108,7 +109,11 @@ class      conditional
 when       XSI
 since      2001
 says       XSI: waitpid() with WCONTINUED reports a child continued by
-           SIGCONT from a stop: WIFCONTINUED is true.
+           SIGCONT from a stop: WIFCONTINUED is true and WIFEXITED,
+           WIFSIGNALED and WIFSTOPPED are false.
+note       The child must stay alive after it is continued: new status
+           replaces the continued status (XSH 2.12), so a child that
+           exits at once may rightly be reported as exited.
 test       t/012-wcontinued.c
 
 assertion  XSH.wait.013
@@ -142,7 +147,8 @@ anchor     functions/wait.html#ERRORS/ECHILD
 class      required
 since      1988
 says       waitpid() for a process that is not a child of the caller
-           (its parent) fails with ECHILD.
+           (its parent) fails with ECHILD, while the caller has a live
+           child, so that only the not-a-child condition applies.
 test       t/016-echild-not-child.c
 
 assertion  XSH.wait.017
@@ -171,7 +177,10 @@ says       With SIGCHLD blocked, a wait() that returns a child's status
            available.
 note       Applies to implementations that do not queue SIGCHLD; one
            that queues it must discard the SIGCHLD for that child, which
-           looks the same here.
+           looks the same here. SIGCHLD is caught, not left at SIG_DFL,
+           so that it must stay pending while blocked (XSH 2.4.1). The
+           RATIONALE speaks of discarding as if optional; the
+           DESCRIPTION says shall (standard issue SI-8).
 test       t/019-sigchld-cleared.c
 
 assertion  XSH.wait.020

@@ -44,7 +44,8 @@ by the named assertion.
 | XSH.write.022 | FAIL | `pwrite()` on an `O_APPEND` descriptor appends instead of writing at the offset | 1.4 |
 | XSH.fork.018 | UNINITIATED (glibc) | `_Fork()` exists but is not declared under the strict build | 2.10 |
 | XSH.wait.019 | FAIL | with SIGCHLD blocked, `wait()` leaves the pending SIGCHLD pending after reporting the only child | O.5 |
-| XSH._Exit.002 | FAIL | `waitid()` reports only the low 8 bits of the exit status in `si_status` | O.6 |
+| XSH._Exit.002, XSH.exit.002 | FAIL | `waitid()` reports only the low 8 bits of the exit status in `si_status` | O.6 |
+| XSH.exit.012, XSH._Exit.014 | FAIL | the same 8 bits in the siginfo_t passed to a SIGCHLD handler | O.6 |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or
@@ -103,16 +104,24 @@ O.5 **`wait()` does not clear a pending, blocked SIGCHLD.**
 - Linux: SIGCHLD is not queued (one pending instance), and it stays
   pending after wait() reaps the only child; a later sigwait() or
   unblock still delivers it.
+- Evidence that both of wait()'s SIGCHLD paragraphs fail it: Linux does not
+  queue SIGCHLD (two children exiting while it is blocked leave one
+  acceptable SIGCHLD), and the leftover signal's si_pid is the reaped
+  child's. The RATIONALE's wording (standard issue SI-8) does not change
+  the requirement.
 - Comp: kernel. Kind: long-standing. Observe: XSH.wait.019.
 - Src: posixcheck run, glibc and musl alike.
 
 O.6 **`waitid()` gives only 8 bits of the exit status.**
-- POSIX (`_Exit`, `exit`): only the low 8 bits of the status are seen
-  through wait() and waitpid(), but the full value is available from
-  waitid() and in the siginfo_t for SIGCHLD (since Issue 7).
+- POSIX (`_Exit`, `exit`, XBD `<signal.h>`): only the low 8 bits of the
+  status are seen through wait() and waitpid(), but the full value is
+  available from waitid() and in the siginfo_t for SIGCHLD (Austin Group
+  defect 594, in POSIX.1-2008 TC2, 2016).
 - Linux: the kernel keeps only the low 8 bits of the exit code, so
-  `_exit(0x1234)` gives si_status 0x34 from waitid().
-- Comp: kernel. Kind: long-standing. Observe: XSH._Exit.002.
+  `_exit(0x1234)` or `exit(0x1234)` gives si_status 0x34 from waitid()
+  and in a SIGCHLD handler's siginfo_t.
+- Comp: kernel. Kind: long-standing. Observe: XSH._Exit.002,
+  XSH.exit.002, XSH.exit.012, XSH._Exit.014.
 - Src: posixcheck run, glibc and musl alike.
 
 ## Things the strict build changes
@@ -661,6 +670,10 @@ Main source pages:
 - Comp: glibc. Fixed: **2.42**, so 2.39 is affected and the os-test column will not show it.
 - Observe: `fopen` a 10 kB file, `fgetc` once, `fflush`/`fclose`, then `lseek(fd, 0, SEEK_CUR)` on a dup'd fd returns 4096 or more instead of 1.
 - Src: glibc NEWS 2.42 bug list, https://raw.githubusercontent.com/bminor/glibc/master/NEWS
+- posixcheck: `exit()` is a different path. With glibc 2.39, XSH.exit.010
+  (2 bytes read of 8192 through a 4096-byte buffer, then exit()) finds the
+  shared offset at 2, as required; musl too. The fclose()/fflush() case is
+  for the stdio module.
 
 6.2 **EOF stickiness (glibc < 2.28).**
 - Before 2.28, glibc returned new data after EOF had been set. "All stdio functions now treat end-of-file as a sticky condition" since **2.28**.

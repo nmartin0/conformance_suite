@@ -30,6 +30,8 @@ static int reap(pid_t pid)
 
 	if (waitpid(pid, &st, 0) != pid)
 		pc_unresolved("waitpid failed");
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
+		pc_unresolved("the child could not set up");
 	return st;
 }
 
@@ -55,13 +57,13 @@ int main(void)
 	c = spawn();
 	if (c == 0) {
 		(void)close(p[0]);
-		if (atexit(handler) != 0 || at_quick_exit(handler) != 0)
+		if (atexit(handler) != 0)
 			_exit(99);
 		_exit(0);
 	}
 	(void)close(p[1]);
 	st = reap(c);
 	pc_check(WIFEXITED(st) && WEXITSTATUS(st) == 0, "the child failed (%#x)", st);
-	pc_check(read(p[0], &ch, 1) == 0, "a registered exit handler ran");
+	pc_check(read(p[0], &ch, 1) == 0, "a function registered with atexit() ran");
 	pc_pass();
 }

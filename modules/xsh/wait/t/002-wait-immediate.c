@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.wait.002
  * MUTANT    wait.status_garbage
+ * MUTANT    wait.slow_when_ready
  */
 #include "pc.h"
 #include <errno.h>
@@ -65,10 +66,32 @@ int main(void)
 
 	pc_begin("XSH.wait.002");
 	guard(10);
-	c = child(0, 3);
 	{
-		struct timespec ts = { 0, 500000000 };
-		(void)nanosleep(&ts, NULL);	/* the child is gone by now */
+		/*
+		 * SIGCHLD caught (so it stays pending while blocked) and
+		 * blocked: once it is pending the child has terminated and its
+		 * status is available.
+		 */
+		struct sigaction sa;
+		sigset_t set, pend;
+		struct timespec ts = { 0, 10000000 };
+		int i;
+
+		memset(&sa, 0, sizeof sa);
+		sa.sa_handler = on_alarm;
+		sigemptyset(&sa.sa_mask);
+		pc_check(sigaction(SIGCHLD, &sa, NULL) == 0, "sigaction failed");
+		sigemptyset(&set);
+		sigaddset(&set, SIGCHLD);
+		pc_check(sigprocmask(SIG_BLOCK, &set, NULL) == 0, "sigprocmask failed");
+		c = child(0, 3);
+		for (i = 0; i < 500; i++) {
+			pc_check(sigpending(&pend) == 0, "sigpending failed");
+			if (sigismember(&pend, SIGCHLD) == 1)
+				break;
+			(void)nanosleep(&ts, NULL);
+		}
+		pc_check(i < 500, "no SIGCHLD from the child within 5 s");
 	}
 	pc_test();
 	t0 = now_ms();

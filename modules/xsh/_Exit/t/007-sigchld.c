@@ -45,26 +45,35 @@ static pid_t spawn(void)
 int main(void)
 {
 	struct sigaction sa;
+	struct timespec limit = { 10, 0 };
+	sigset_t set;
+	siginfo_t si;
 	pid_t c;
-	int st;
+	int st, r;
 
 	pc_begin("XSH._Exit.007");
+	/*
+	 * Caught, so that a blocked SIGCHLD must stay pending (a blocked
+	 * signal whose action is to ignore may be discarded, XSH 2.4.1);
+	 * blocked, so that it is accepted with sigtimedwait() instead of
+	 * interrupting the wait.
+	 */
 	memset(&sa, 0, sizeof sa);
 	sa.sa_handler = on_chld;
 	sigemptyset(&sa.sa_mask);
 	pc_check(sigaction(SIGCHLD, &sa, NULL) == 0, "sigaction failed");
+	sigemptyset(&set);
+	sigaddset(&set, SIGCHLD);
+	pc_check(sigprocmask(SIG_BLOCK, &set, NULL) == 0, "sigprocmask failed");
 	pc_test();
 	c = spawn();
 	if (c == 0)
 		_exit(0);
+	memset(&si, 0, sizeof si);
+	r = sigtimedwait(&set, &si, &limit);
+	pc_check(r == SIGCHLD, "no SIGCHLD within 10 s of the child's _exit() (%s)",
+	    r == -1 ? pc_errname(errno) : "another signal");
 	st = reap(c);
 	(void)st;
-	{
-		struct timespec ts = { 0, 10000000 };
-		int i;
-		for (i = 0; i < 100 && !got; i++)
-			(void)nanosleep(&ts, NULL);
-	}
-	pc_check(got, "SIGCHLD was not delivered to the parent");
 	pc_pass();
 }

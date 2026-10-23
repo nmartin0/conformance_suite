@@ -57,7 +57,11 @@ static long now_ms(void)
 	return t.tv_sec * 1000L + t.tv_nsec / 1000000L;
 }
 
-/* A child that stops itself with SIGSTOP, then exits 0 once continued. */
+/*
+ * A child that stops itself with SIGSTOP and, once continued, waits to be
+ * killed. It must not exit by itself: new status replaces the continued
+ * status (XSH 2.12), so an early exit would be reported instead.
+ */
 static pid_t stopper(void)
 {
 	pid_t r = fork();
@@ -66,7 +70,8 @@ static pid_t stopper(void)
 		pc_unresolved("fork failed");
 	if (r == 0) {
 		(void)raise(SIGSTOP);
-		_exit(0);
+		for (;;)
+			(void)pause();
 	}
 	return r;
 }
@@ -80,12 +85,20 @@ int main(void)
 	guard(10);
 	pc_test();
 	c = stopper();
-	pc_check(waitpid(c, &st, WUNTRACED) == c && WIFSTOPPED(st), "the child did not stop");
+	if (waitpid(c, &st, WUNTRACED) != c || !WIFSTOPPED(st)) {
+		(void)kill(c, SIGKILL);
+		pc_unresolved("the child did not stop");
+	}
 	pc_check(kill(c, SIGCONT) == 0, "kill(SIGCONT) failed");
-	pc_check(waitpid(c, &st, WCONTINUED) == c, "waitpid(WCONTINUED) did not report the continued child (%s)",
-	    pc_errname(errno));
-	pc_check(WIFCONTINUED(st) || WIFEXITED(st), "status %#x is neither continued nor exited", st);
-	pc_check(WIFCONTINUED(st), "WIFCONTINUED is false (the exit was reported instead)");
-	(void)waitpid(c, &st, 0);
+	if (waitpid(c, &st, WCONTINUED) != c) {
+		int e = errno;
+		(void)kill(c, SIGKILL);
+		pc_fail("waitpid(WCONTINUED) did not report the continued child (%s)", pc_errname(e));
+	}
+	(void)kill(c, SIGKILL);
+	(void)waitpid(c, NULL, 0);
+	pc_check(WIFCONTINUED(st), "WIFCONTINUED is false for status %#x", st);
+	pc_check(!WIFEXITED(st) && !WIFSIGNALED(st) && !WIFSTOPPED(st),
+	    "status %#x of a continued child also satisfies another macro", st);
 	pc_pass();
 }
