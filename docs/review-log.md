@@ -36,6 +36,7 @@ what came of it. Standard issues a review found are in
 | mkdir, rmdir | `xsh/mkdir`, `xsh/rmdir` | 10 findings: S_ISGID inherited in setgid directories, EBUSY for open directories, {LINK_MAX}-safe time loops, dot-files, trailing slashes, EILSEQ; chapter 4 anchors fixed suite-wide | (mkdir fixes) |
 | chmod, fchmod | `xsh/chmod`, `xsh/fchmod` | 9 findings: S_ISGID refused with EPERM (BSD) accepted, non-member group chosen at run time, set-ID bits set and cleared, inherited descriptors, O_SEARCH descriptors; "." made searchable in setup suite-wide | (chmod fixes) |
 | chown, fchown, lchown | `xsh/chown`, `xsh/fchown`, `xsh/lchown` | 11 findings: BSD group inheritance (files prepared by the privileged parent), groups chosen at run time, real changes for S_ISUID/S_ISGID clearing, no partial change on EPERM, lchown restriction rules; SI-53 corrected; the ENOENT overlap (Q-8) made disputed suite-wide | (chown fixes) |
+| access, faccessat | `xsh/access` | 9 findings: real/effective IDs set apart with two non-zero IDs (privilege no longer decides), directory searches and faccessat(..., 0) with the IDs apart, real/effective group IDs (020), the group class (019), privileged execute and search rules with a privilege precondition, run-time groups, F_OK at mode 0 and permissions through a link, errno read after the call; `faccessat.search_checked` stays unverified until a system passes XSH.access.018 | (access fixes) |
 
 The shared copy of the standard-issues report is the Claude Doc at
 https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF; it is kept in step with

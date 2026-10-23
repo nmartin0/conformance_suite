@@ -129,6 +129,32 @@ static int verdict(int r, int e1, int e2)
 	return errno == e1 || errno == e2 ? 0 : 2;
 }
 
+/*
+ * The n-th group ID (n from 0) of 2 or more that is none of this process's
+ * real, effective or supplementary group IDs, nor 65534 (the unprivileged
+ * child's group). Children inherit the supplementary list, so they are not
+ * in it either.
+ */
+static gid_t foreign_gid(int n)
+{
+	gid_t g[1024];
+	int k = getgroups(1024, g), i;
+	gid_t c;
+
+	if (k < 0)
+		pc_unresolved("getgroups failed: %s", pc_errname(errno));
+	for (c = 2; c < 60000; c++) {
+		if (c == 65534 || c == getgid() || c == getegid())
+			continue;
+		for (i = 0; i < k && g[i] != c; i++)
+			;
+		if (i == k && n-- == 0)
+			return c;
+	}
+	pc_unresolved("no free group ID found");
+	return 0;
+}
+
 /* A file of the test's own with exactly these permission bits. */
 static void file_mode(const char *path, mode_t mode)
 {
@@ -142,12 +168,6 @@ static void file_mode(const char *path, mode_t mode)
 
 static int child(void)
 {
-	gid_t g[256];
-	int n = getgroups(256, g), i;
-
-	for (i = 0; i < n; i++)
-		if (g[i] == 1 || g[i] == 0)
-			return 3;
 	EXPECT_OK(10, access("c/a", R_OK));
 	EXPECT_EACCES(11, access("c/a", W_OK));
 	EXPECT_EACCES(12, access("c/b", R_OK));
@@ -160,16 +180,18 @@ int main(void)
 	pc_searchable();
 	{
 		int r;
+		gid_t g;
+
 		if (geteuid() != 0)
 			pc_unresolved("needs root to create a file of another user and group");
+		g = foreign_gid(0);
 		pc_make_dir("c");
 		file_mode("c/a", 0604);
 		file_mode("c/b", 0640);
-		pc_check(chown("c/a", 0, 1) == 0 && chown("c/b", 0, 1) == 0, "chown failed");
+		pc_check(chown("c/a", 0, g) == 0 && chown("c/b", 0, g) == 0, "chown failed");
 		pc_test();
 		r = unprivileged(child);
-		if (r == 3)
-			pc_unresolved("the child is in group 0 or 1 here (supplementary groups kept)");
+		pc_check(r != 3, "the child could not prepare its file");
 		pc_check(r == 0, "an access() check of the other bits (check %d of the child went wrong)", r);
 	}
 	pc_pass();

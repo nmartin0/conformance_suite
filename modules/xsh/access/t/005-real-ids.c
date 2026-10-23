@@ -5,6 +5,7 @@
  * ASSERTION XSH.access.005
  * MUTANT    access.uses_effective
  * MUTANT    faccessat.eaccess_ignored
+ * MUTANT    faccessat.uses_effective
  */
 #include "pc.h"
 #include <errno.h>
@@ -129,11 +130,61 @@ static int verdict(int r, int e1, int e2)
 	return errno == e1 || errno == e2 ? 0 : 2;
 }
 
+/*
+ * The n-th group ID (n from 0) of 2 or more that is none of this process's
+ * real, effective or supplementary group IDs, nor 65534 (the unprivileged
+ * child's group). Children inherit the supplementary list, so they are not
+ * in it either.
+ */
+static gid_t foreign_gid(int n)
+{
+	gid_t g[1024];
+	int k = getgroups(1024, g), i;
+	gid_t c;
+
+	if (k < 0)
+		pc_unresolved("getgroups failed: %s", pc_errname(errno));
+	for (c = 2; c < 60000; c++) {
+		if (c == 65534 || c == getgid() || c == getegid())
+			continue;
+		for (i = 0; i < k && g[i] != c; i++)
+			;
+		if (i == k && n-- == 0)
+			return c;
+	}
+	pc_unresolved("no free group ID found");
+	return 0;
+}
+
 /* A file of the test's own with exactly these permission bits. */
 static void file_mode(const char *path, mode_t mode)
 {
 	pc_make_file(path, "x");
 	pc_check(chmod(path, mode) == 0, "chmod(%s) failed: %s", path, pc_errname(errno));
+}
+
+/* In the child: check number n gives the expected result, else return n. */
+#define EXPECT_OK(n, call) do { if ((call) != 0) return (n); } while (0)
+#define EXPECT_EACCES(n, call) do { if ((call) != -1 || errno != EACCES) return (n); } while (0)
+
+#define UA ((uid_t)65534)
+#define UB ((uid_t)65533)
+
+static int child(void)
+{
+	EXPECT_OK(10, access("fA", R_OK));
+	EXPECT_EACCES(11, access("fB", R_OK));
+	EXPECT_OK(12, faccessat(AT_FDCWD, "fA", R_OK, 0));
+	EXPECT_EACCES(13, faccessat(AT_FDCWD, "fB", R_OK, 0));
+	EXPECT_EACCES(14, faccessat(AT_FDCWD, "fA", R_OK, AT_EACCESS));
+	EXPECT_OK(15, faccessat(AT_FDCWD, "fB", R_OK, AT_EACCESS));
+	EXPECT_OK(16, access("sA/g", F_OK));
+	EXPECT_EACCES(17, access("sB/g", F_OK));
+	EXPECT_OK(18, faccessat(AT_FDCWD, "sA/g", F_OK, 0));
+	EXPECT_EACCES(19, faccessat(AT_FDCWD, "sB/g", F_OK, 0));
+	EXPECT_EACCES(20, faccessat(AT_FDCWD, "sA/g", F_OK, AT_EACCESS));
+	EXPECT_OK(21, faccessat(AT_FDCWD, "sB/g", F_OK, AT_EACCESS));
+	return 0;
 }
 
 int main(void)
@@ -145,39 +196,29 @@ int main(void)
 
 		if (geteuid() != 0 || getuid() != 0)
 			pc_unresolved("needs appropriate privileges to set real and effective IDs apart");
-		file_mode("f", 0600);
 		pc_check(chmod(".", 0711) == 0, "chmod failed");
+		file_mode("fA", 0600);
+		file_mode("fB", 0600);
+		pc_make_dir("sA");
+		pc_make_dir("sB");
+		pc_make_file("sA/g", "x");
+		pc_make_file("sB/g", "x");
+		pc_check(chmod("sA", 0700) == 0 && chmod("sB", 0700) == 0, "chmod failed");
+		pc_check(chown("fA", UA, 65534) == 0 && chown("sA", UA, 65534) == 0 && chown("fB", UB, 65534) == 0 &&
+			 chown("sB", UB, 65534) == 0, "chown failed: %s", pc_errname(errno));
 		pc_test();
 		kid = fork();
 		pc_check(kid != -1, "fork failed");
 		if (kid == 0) {
-			if (setreuid(0, 65534) != 0)
+			if (setgid(65534) != 0 || setreuid(UA, UB) != 0 || getuid() != UA || geteuid() != UB)
 				_exit(99);
-			if (access("f", R_OK) != 0)
-				_exit(10);
-			if (faccessat(AT_FDCWD, "f", R_OK, AT_EACCESS) != -1 || errno != EACCES)
-				_exit(11);
-			_exit(0);
+			_exit(child());
 		}
-		pc_check(waitpid(kid, &st, 0) == kid && WIFEXITED(st), "the first child did not exit");
+		pc_check(waitpid(kid, &st, 0) == kid && WIFEXITED(st), "the child did not exit");
 		if (WEXITSTATUS(st) == 99)
-			pc_unresolved("setreuid(0, 65534) failed");
-		pc_check(WEXITSTATUS(st) == 0, "with real 0 and effective 65534, check %d went wrong", WEXITSTATUS(st));
-		kid = fork();
-		pc_check(kid != -1, "fork failed");
-		if (kid == 0) {
-			if (setreuid(65534, 0) != 0)
-				_exit(99);
-			if (access("f", R_OK) != -1 || errno != EACCES)
-				_exit(20);
-			if (faccessat(AT_FDCWD, "f", R_OK, AT_EACCESS) != 0)
-				_exit(21);
-			_exit(0);
-		}
-		pc_check(waitpid(kid, &st, 0) == kid && WIFEXITED(st), "the second child did not exit");
-		if (WEXITSTATUS(st) == 99)
-			pc_unresolved("setreuid(65534, 0) failed");
-		pc_check(WEXITSTATUS(st) == 0, "with real 65534 and effective 0, check %d went wrong", WEXITSTATUS(st));
+			pc_unresolved("setreuid(%d, %d) failed", (int)UA, (int)UB);
+		pc_check(WEXITSTATUS(st) == 0, "with real user ID %d and effective %d, check %d went wrong", (int)UA, (int)UB,
+			 WEXITSTATUS(st));
 	}
 	pc_pass();
 }

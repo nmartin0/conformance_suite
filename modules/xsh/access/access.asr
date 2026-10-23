@@ -7,8 +7,10 @@ class      required
 since      1988
 says       For an unprivileged process and a file it owns: with mode 0400,
            R_OK succeeds and W_OK, X_OK and R_OK|W_OK fail with EACCES;
-           with mode 0700, R_OK|W_OK|X_OK succeeds; F_OK succeeds for
-           both.
+           with mode 0700, R_OK|W_OK|X_OK succeeds; with mode 0444, R_OK
+           through a symbolic link to it succeeds and W_OK fails with EACCES
+           (the target's bits decide); F_OK succeeds at every mode, 0
+           included.
 test       t/001-owner-bits.c
 
 assertion  XSH.access.002
@@ -26,8 +28,9 @@ anchor     basedefs/V1_chap04.html#4.7
 class      required
 since      1988
 says       For an unprivileged process and a file owned by another user and
-           a group it is not in: with mode 0604, R_OK succeeds and W_OK
-           fails with EACCES; with mode 0640, R_OK fails with EACCES.
+           a group it is not in (chosen at run time): with mode 0604, R_OK
+           succeeds and W_OK fails with EACCES; with mode 0640, R_OK fails
+           with EACCES.
 needs      root
 test       t/003-other-class.c
 
@@ -36,9 +39,10 @@ anchor     functions/access.html#DESCRIPTION
 class      required
 since      1988
 says       With appropriate privileges, access() of a mode 0 file for R_OK and
-           W_OK succeeds; X_OK succeeds for a file with an execute bit
-           (mode 0100); for the mode 0 file X_OK may succeed or fail with
-           EACCES.
+           W_OK succeeds; X_OK succeeds for files whose only execute bit is
+           the group's (mode 0010) or the others' (mode 0001), and for a
+           mode 0 directory (search permission); for the mode 0 file X_OK
+           may succeed or fail with EACCES.
 needs      root
 test       t/004-privileged.c
 
@@ -47,13 +51,16 @@ anchor     functions/access.html#DESCRIPTION
 class      conditional
 when       XSI
 since      2008
-says       For a process with real user ID 0 and effective user ID 65534,
-           access() of a mode 0600 file owned by 0 for R_OK succeeds and
-           faccessat(..., AT_EACCESS) fails with EACCES; with real user ID
-           65534 and effective 0 the results are reversed.
+says       For a process with real user ID A and effective user ID B (both
+           non-zero, so no appropriate privileges), with files fA and fB of
+           mode 0600 owned by A and B and directories sA and sB of mode 0700
+           owned by A and B: access() and faccessat(AT_FDCWD, ..., 0) give
+           R_OK on fA and F_OK on sA/g, and EACCES for fB and sB/g;
+           faccessat(..., AT_EACCESS) gives the reverse.
 needs      root
 note       setreuid() (XSI) sets the IDs apart, so the test runs only on
-           XSI systems as root.
+           XSI systems as root; both IDs are non-zero, so appropriate
+           privileges cannot decide.
 test       t/005-real-ids.c
 
 assertion  XSH.access.006
@@ -168,3 +175,29 @@ says       For an unprivileged process, faccessat(fd, "f", F_OK, 0) succeeds
 note       O_SEARCH itself is a header item (Tier 0); without it this
            test is UNRESOLVED.
 test       t/018-faccessat-search.c
+
+assertion  XSH.access.019
+anchor     basedefs/V1_chap04.html#4.7
+class      required
+since      1988
+says       For an unprivileged process whose group ID is the file's group
+           and whose user ID is not the owner: with mode 0604, R_OK fails
+           with EACCES (the group class is checked alone); with mode 0040,
+           R_OK succeeds.
+needs      root
+test       t/019-group-class.c
+
+assertion  XSH.access.020
+anchor     functions/access.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2008
+says       For an unprivileged process with real group ID GA and effective
+           group ID GB (neither among its supplementary groups), and files
+           of mode 0040 owned by another user in groups GA and GB: access()
+           gives R_OK on the GA file and EACCES on the GB file;
+           faccessat(..., AT_EACCESS) gives the reverse.
+needs      root
+note       setregid() (XSI) sets the group IDs apart, so the test runs
+           only on XSI systems as root.
+test       t/020-real-gid.c

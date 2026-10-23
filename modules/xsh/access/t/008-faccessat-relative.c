@@ -128,6 +128,32 @@ static int verdict(int r, int e1, int e2)
 	return errno == e1 || errno == e2 ? 0 : 2;
 }
 
+/*
+ * The n-th group ID (n from 0) of 2 or more that is none of this process's
+ * real, effective or supplementary group IDs, nor 65534 (the unprivileged
+ * child's group). Children inherit the supplementary list, so they are not
+ * in it either.
+ */
+static gid_t foreign_gid(int n)
+{
+	gid_t g[1024];
+	int k = getgroups(1024, g), i;
+	gid_t c;
+
+	if (k < 0)
+		pc_unresolved("getgroups failed: %s", pc_errname(errno));
+	for (c = 2; c < 60000; c++) {
+		if (c == 65534 || c == getgid() || c == getegid())
+			continue;
+		for (i = 0; i < k && g[i] != c; i++)
+			;
+		if (i == k && n-- == 0)
+			return c;
+	}
+	pc_unresolved("no free group ID found");
+	return 0;
+}
+
 /* A file of the test's own with exactly these permission bits. */
 static void file_mode(const char *path, mode_t mode)
 {
@@ -139,7 +165,7 @@ int main(void)
 {
 	pc_begin("XSH.access.008");
 	{
-		int fd, efd;
+		int fd, efd, r, e;
 
 		pc_make_dir("d");
 		pc_make_dir("e");
@@ -148,7 +174,9 @@ int main(void)
 		efd = dir_fd("e");
 		pc_make_file("g", "decoy");
 		pc_test();
-		pc_check(faccessat(fd, "f", F_OK, 0) == 0, "faccessat(d, f) failed: %s", pc_errname(errno));
+		r = faccessat(fd, "f", F_OK, 0);
+		e = errno;
+		pc_check(r == 0, "faccessat(d, f) failed: %s", pc_errname(e));
 		pc_expect_err(faccessat(efd, "g", F_OK, 0), ENOENT, "faccessat(e, g) (g exists only in the working directory)");
 	}
 	pc_pass();

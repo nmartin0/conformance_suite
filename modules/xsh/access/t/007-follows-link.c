@@ -128,6 +128,32 @@ static int verdict(int r, int e1, int e2)
 	return errno == e1 || errno == e2 ? 0 : 2;
 }
 
+/*
+ * The n-th group ID (n from 0) of 2 or more that is none of this process's
+ * real, effective or supplementary group IDs, nor 65534 (the unprivileged
+ * child's group). Children inherit the supplementary list, so they are not
+ * in it either.
+ */
+static gid_t foreign_gid(int n)
+{
+	gid_t g[1024];
+	int k = getgroups(1024, g), i;
+	gid_t c;
+
+	if (k < 0)
+		pc_unresolved("getgroups failed: %s", pc_errname(errno));
+	for (c = 2; c < 60000; c++) {
+		if (c == 65534 || c == getgid() || c == getegid())
+			continue;
+		for (i = 0; i < k && g[i] != c; i++)
+			;
+		if (i == k && n-- == 0)
+			return c;
+	}
+	pc_unresolved("no free group ID found");
+	return 0;
+}
+
 /* A file of the test's own with exactly these permission bits. */
 static void file_mode(const char *path, mode_t mode)
 {
@@ -139,11 +165,15 @@ int main(void)
 {
 	pc_begin("XSH.access.007");
 	{
+		int r, e;
+
 		pc_make_file("f", "x");
 		pc_make_symlink("f", "sl");
 		pc_make_symlink("nowhere", "dl");
 		pc_test();
-		pc_check(access("sl", F_OK) == 0, "access(link to a file) failed: %s", pc_errname(errno));
+		r = access("sl", F_OK);
+		e = errno;
+		pc_check(r == 0, "access(link to a file) failed: %s", pc_errname(e));
 		pc_expect_err(access("dl", F_OK), ENOENT, "access(dangling link)");
 	}
 	pc_pass();

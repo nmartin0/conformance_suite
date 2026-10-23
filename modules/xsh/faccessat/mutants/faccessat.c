@@ -68,6 +68,8 @@ int faccessat(int fd, const char *path, int amode, int flag)
 		return fail(EBADF);
 	if (IS("eaccess_ignored"))
 		flag &= ~AT_EACCESS;
+	if (IS("uses_effective"))
+		flag |= AT_EACCESS;
 	if (IS("search_checked") && fd != AT_FDCWD && path[0] != '/' && fstat(fd, &st) == 0 && S_ISDIR(st.st_mode) &&
 	    !(st.st_mode & 0111))
 		return fail(EACCES);

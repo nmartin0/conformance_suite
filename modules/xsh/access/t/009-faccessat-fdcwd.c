@@ -129,6 +129,32 @@ static int verdict(int r, int e1, int e2)
 	return errno == e1 || errno == e2 ? 0 : 2;
 }
 
+/*
+ * The n-th group ID (n from 0) of 2 or more that is none of this process's
+ * real, effective or supplementary group IDs, nor 65534 (the unprivileged
+ * child's group). Children inherit the supplementary list, so they are not
+ * in it either.
+ */
+static gid_t foreign_gid(int n)
+{
+	gid_t g[1024];
+	int k = getgroups(1024, g), i;
+	gid_t c;
+
+	if (k < 0)
+		pc_unresolved("getgroups failed: %s", pc_errname(errno));
+	for (c = 2; c < 60000; c++) {
+		if (c == 65534 || c == getgid() || c == getegid())
+			continue;
+		for (i = 0; i < k && g[i] != c; i++)
+			;
+		if (i == k && n-- == 0)
+			return c;
+	}
+	pc_unresolved("no free group ID found");
+	return 0;
+}
+
 /* A file of the test's own with exactly these permission bits. */
 static void file_mode(const char *path, mode_t mode)
 {
@@ -141,16 +167,21 @@ int main(void)
 	pc_begin("XSH.access.009");
 	{
 		char cwd[PATH_MAX], p[PATH_MAX + 8];
-		int bad;
+		int bad, r, e;
 
 		file_mode("f", 0644);
 		if (getcwd(cwd, sizeof cwd) == NULL)
 			pc_unresolved("getcwd failed: %s", pc_errname(errno));
-		snprintf(p, sizeof p, "%s/f", cwd);
+		if (snprintf(p, sizeof p, "%s/f", cwd) >= (int)sizeof p)
+			pc_unresolved("the working directory's name is too long");
 		bad = pc_lowest_free_fd();
 		pc_test();
-		pc_check(faccessat(AT_FDCWD, "f", R_OK, 0) == 0, "faccessat(AT_FDCWD) failed: %s", pc_errname(errno));
-		pc_check(faccessat(bad, p, R_OK, 0) == 0, "faccessat(closed fd, absolute) failed: %s", pc_errname(errno));
+		r = faccessat(AT_FDCWD, "f", R_OK, 0);
+		e = errno;
+		pc_check(r == 0, "faccessat(AT_FDCWD) failed: %s", pc_errname(e));
+		r = faccessat(bad, p, R_OK, 0);
+		e = errno;
+		pc_check(r == 0, "faccessat(closed fd, absolute) failed: %s", pc_errname(e));
 	}
 	pc_pass();
 }

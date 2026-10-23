@@ -130,6 +130,32 @@ static int verdict(int r, int e1, int e2)
 	return errno == e1 || errno == e2 ? 0 : 2;
 }
 
+/*
+ * The n-th group ID (n from 0) of 2 or more that is none of this process's
+ * real, effective or supplementary group IDs, nor 65534 (the unprivileged
+ * child's group). Children inherit the supplementary list, so they are not
+ * in it either.
+ */
+static gid_t foreign_gid(int n)
+{
+	gid_t g[1024];
+	int k = getgroups(1024, g), i;
+	gid_t c;
+
+	if (k < 0)
+		pc_unresolved("getgroups failed: %s", pc_errname(errno));
+	for (c = 2; c < 60000; c++) {
+		if (c == 65534 || c == getgid() || c == getegid())
+			continue;
+		for (i = 0; i < k && g[i] != c; i++)
+			;
+		if (i == k && n-- == 0)
+			return c;
+	}
+	pc_unresolved("no free group ID found");
+	return 0;
+}
+
 /* A file of the test's own with exactly these permission bits. */
 static void file_mode(const char *path, mode_t mode)
 {
@@ -156,6 +182,13 @@ static int child(void)
 		return 3;
 	EXPECT_OK(15, access("c/f", R_OK | W_OK | X_OK));
 	EXPECT_OK(16, access("c/f", F_OK));
+	if (chmod("c/f", 0444) != 0 || symlink("f", "c/l") != 0)
+		return 3;
+	EXPECT_OK(17, access("c/l", R_OK));
+	EXPECT_EACCES(18, access("c/l", W_OK));
+	if (chmod("c/f", 0) != 0)
+		return 3;
+	EXPECT_OK(19, access("c/f", F_OK));
 	return 0;
 }
 
