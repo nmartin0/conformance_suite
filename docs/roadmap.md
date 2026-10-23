@@ -17,13 +17,13 @@ verified; this file is the plan. Update both when a step finishes.
 - Processes: `fork`, `wait`, `_Exit`, `exit`, `exec`.
 - Signals (in progress): `sigaction`, `kill`, `raise`, `pthread_sigmask`/`sigprocmask`,
   `sigpending`, `sigsuspend`, `sigwait`, `sigtimedwait`/`sigwaitinfo`, `sigqueue`,
-  `alarm`, `pause`.
+  `alarm`, `pause`, `<signal.h>`.
 - Utilities: `true`, `false`.
 - Every module reviewed independently; findings applied.
 
 ## Next
 
-1. **Signals**: (the signal functions done) `<signal.h>`, the XSH 2.4
+1. **Signals**: (the signal functions and `<signal.h>` done) the XSH 2.4
    rules (generation and delivery, default actions, signal-safe
    functions, interrupted functions and SA_RESTART).
 2. **Your OS**: run the suite on the OS under development as soon as it can

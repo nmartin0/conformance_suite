@@ -107,6 +107,12 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     EPERM; alarm firing, cancelling, rescheduling, not stacking; pause()
     through handlers, termination and ignored signals.
   - `xbd/unistd.h` (2): POSIX_CLOSE_RESTART, SEEK_*; `xbd/fcntl.h` now 8.
+  - `xbd/signal.h` (29): SIG_DFL/SIG_ERR/SIG_IGN, the types it defines,
+    sigevent, sigval, the realtime range against {RTSIG_MAX}, _SC_NSIG and
+    {NSIG_MAX}, SIG2STR_MAX, every required signal (by edition, and XSI),
+    sigaction, stack_t, ucontext_t, siginfo_t members and types (checked
+    with _Generic), SIG_BLOCK and the SA_ and SS_ constants, the si_code
+    constants, and every function's prototype.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).
 - `ci/lint.py`: traceability, anchor and `since` checks; `ci/mutate.sh`: mutation

@@ -53,6 +53,9 @@ by the named assertion.
 | XSH.kill.012 | FAIL | kill(-1, sig) does not signal the sender | 2.2 |
 | XSH.sigaction.021 | INSPECT | sigqueue() does not queue SIGUSR1 even with SA_SIGINFO (disputed, SI-24) | O.11 (withdrawn) |
 | XSH.sigqueue.005 | NOTINUSE (musl) | sysconf(_SC_SIGQUEUE_MAX) is -1 (no definite limit, which is allowed); glibc reports RLIMIT_SIGPENDING | - |
+| XBD.signal.h.006 | FAIL (glibc) | the realtime range is 31 signals but {RTSIG_MAX} is 32 | O.12 |
+| XBD.signal.h.007 | FAIL | no `_SC_NSIG` (nor `NSIG_MAX`) | 1.24 |
+| XBD.signal.h.008, .028 | FAIL, UNINITIATED | no `SIG2STR_MAX`, `sig2str()` or `str2sig()` | 3.1 |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or
@@ -180,6 +183,16 @@ O.11 **Withdrawn: sigqueue() not queuing signals below SIGRTMIN is not a deviati
   SI-24), so Linux's behaviour (realtime signals only) is a reasonable
   reading. XSH.sigaction.021 is `disputed`: its FAIL is logged as INSPECT.
 - Src: posixcheck review.
+
+O.12 **glibc: SIGRTMIN..SIGRTMAX holds one signal fewer than {RTSIG_MAX}.**
+- POSIX (`<signal.h>`): the range SIGRTMIN through SIGRTMAX includes at
+  least {RTSIG_MAX} signal numbers.
+- glibc: `RTSIG_MAX` and sysconf(_SC_RTSIG_MAX) are 32, the kernel's count
+  of realtime signals, but glibc keeps the first two (32 and 33) for its
+  own use, so SIGRTMIN is 34 and the range 34..64 has 31 numbers. musl
+  reports 30 from sysconf() for its range of 30, which is consistent.
+- Comp: glibc. Kind: long-standing. Observe: XBD.signal.h.006.
+- Src: posixcheck run.
 
 ## Things the strict build changes
 
