@@ -193,8 +193,10 @@ class      conditional
 when       MSG
 since      2001
 says       A message queue descriptor open in the parent works in the child (it
-           receives a message the parent sent), and O_NONBLOCK set by the
-           child with mq_setattr() is seen by the parent's mq_getattr().
+           receives a message the parent sent), O_NONBLOCK set by the child
+           with mq_setattr() is seen by the parent's mq_getattr(), and after
+           the child's mq_close() the parent's descriptor still sends and
+           receives.
 nomutant   The description is shared by the system; no interposed
            function stands between.
 test       t/020-mq-shared.c
@@ -204,8 +206,8 @@ anchor     functions/fork.html#DESCRIPTION
 class      conditional
 when       XSI
 since      2001
-says       After the parent raises an XSI semaphore from 0 to 1 with SEM_UNDO, a
-           child that exits leaves semval 1.
+says       With an XSI semaphore set to 5 and raised by the parent to 6 with
+           SEM_UNDO, a child that exits leaves semval 6.
 nomutant   semadj values live in the system; no interposed function
            stands between.
 test       t/021-semadj-not-inherited.c

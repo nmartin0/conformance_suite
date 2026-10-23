@@ -1,5 +1,5 @@
 /*
- * _exit() detaches XSI shared memory: shm_nattch drops.
+ * _exit() detaches XSI shared memory: shm_nattch drops by one.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH._Exit.016
@@ -57,9 +57,13 @@ int main(void)
 		pid_t kid;
 		char c;
 
+		pc_check(pipe(p) == 0 && pipe(g) == 0, "pipe failed");
 		id = shmget(IPC_PRIVATE, 4096, IPC_CREAT | 0600);
 		pc_check(id != -1, "shmget failed: %s", pc_errname(errno));
-		pc_check(pipe(p) == 0 && pipe(g) == 0, "pipe failed");
+		if (shmat(id, NULL, 0) == (void *)-1) {
+			(void)shmctl(id, IPC_RMID, NULL);
+			pc_unresolved("shmat failed: %s", pc_errname(errno));
+		}
 		pc_test();
 		kid = fork();
 		if (kid == -1) {
@@ -67,16 +71,14 @@ int main(void)
 			pc_unresolved("fork failed: %s", pc_errname(errno));
 		}
 		if (kid == 0) {
-			if (shmat(id, NULL, 0) == (void *)-1)
-				_exit(99);
 			(void)write(p[1], "a", 1);
 			(void)read(g[0], &c, 1);
 			_exit(0);
 		}
-		if (read(p[0], &c, 1) != 1 || shmctl(id, IPC_STAT, &ds) != 0 || ds.shm_nattch != 1) {
+		if (read(p[0], &c, 1) != 1 || shmctl(id, IPC_STAT, &ds) != 0 || ds.shm_nattch != 2) {
 			(void)kill(kid, SIGKILL);
 			(void)shmctl(id, IPC_RMID, NULL);
-			pc_unresolved("the child could not attach the segment");
+			pc_unresolved("the segment is not attached twice (shm_nattch %lu)", (unsigned long)ds.shm_nattch);
 		}
 		(void)write(g[1], "g", 1);
 		(void)waitpid(kid, &st, 0);
@@ -84,7 +86,7 @@ int main(void)
 		st = shmctl(id, IPC_STAT, &ds);
 		(void)shmctl(id, IPC_RMID, NULL);
 		pc_check(st == 0, "shmctl(IPC_STAT) failed: %s", pc_errname(errno));
-		pc_check(ds.shm_nattch == 0, "shm_nattch is %lu after the child's _exit()", (unsigned long)ds.shm_nattch);
+		pc_check(ds.shm_nattch == 1, "shm_nattch is %lu after the child's _exit(), expected 1", (unsigned long)ds.shm_nattch);
 	}
 	pc_pass();
 }

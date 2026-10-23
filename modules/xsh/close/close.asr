@@ -134,9 +134,11 @@ assertion  XSH.close.014
 anchor     functions/close.html#DESCRIPTION
 class      required
 since      2008
-says       aio_write() of 64 KiB then close() of its descriptor: unless
-           aio_error() reports ECANCELED, it reports 0 and aio_return()
-           64 KiB, and the file holds the data (within 3 s).
+says       With two aio_write() calls of 100000 bytes each queued on a full pipe
+           and a thread draining the pipe, close() of the write end returns
+           (within 10 s), and each operation then either reports ECANCELED or completes:
+           aio_error() 0 and aio_return() 100000 (within 10 s).
+timeout    30
 nomutant   The I/O completes in the system; no interposed function
            stands between.
 test       t/014-aio-completes.c

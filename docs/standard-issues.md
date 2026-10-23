@@ -109,3 +109,5 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-28 | fflush(NULL) and input streams | question | XSH.fflush.011 |
 | Q-29 | "not already at EOF" | question | XSH.fflush.004 |
 | Q-30 | fflush(): position after discarding pushback | question | XSH.fflush.005 |
+| Q-31 | other waiters after the last child | question | XSH._Exit.020 |
+| Q-32 | aio at exit | question | XSH._Exit.019 |

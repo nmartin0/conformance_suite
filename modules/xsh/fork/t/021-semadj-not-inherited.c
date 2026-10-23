@@ -57,6 +57,10 @@ int main(void)
 
 		id = semget(IPC_PRIVATE, 1, IPC_CREAT | 0600);
 		pc_check(id != -1, "semget failed: %s", pc_errname(errno));
+		if (semctl(id, 0, SETVAL, 5) != 0) {
+			(void)semctl(id, 0, IPC_RMID);
+			pc_unresolved("semctl(SETVAL) failed: %s", pc_errname(errno));
+		}
 		op.sem_num = 0;
 		op.sem_op = 1;
 		op.sem_flg = SEM_UNDO;
@@ -75,7 +79,7 @@ int main(void)
 		(void)waitpid(kid, &st, 0);
 		v = semctl(id, 0, GETVAL);
 		(void)semctl(id, 0, IPC_RMID);
-		pc_check(v == 1, "semval is %d after the child's exit, expected 1", v);
+		pc_check(v == 6, "semval is %d after the child's exit, expected 6", v);
 	}
 	pc_pass();
 }

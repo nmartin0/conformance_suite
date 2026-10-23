@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (923 assertions):
+- Modules (924 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -63,7 +63,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     selection (any, one, own group, other group), WNOHANG, WUNTRACED,
     WCONTINUED, EINTR, ECHILD, EINVAL, consumption, SIGCHLD clearing,
     reparenting, last-thread exit.
-  - `xsh/_Exit` (19): status bits (wait, waitid, SIGCHLD siginfo),
+  - `xsh/_Exit` (20): status bits (wait, waitid, SIGCHLD siginfo),
     _exit/_Exit equivalence, no atexit or at_quick_exit handlers, no
     flushing, descriptors closed, SIGCHLD, zombies, XSI SIGCHLD ignored
     (no zombie), orphaned process groups, no thread cleanup, no signal

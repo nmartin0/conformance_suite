@@ -75,7 +75,7 @@ int main(void)
 			_exit(buf[0] == 0 ? 0 : 1);
 		}
 		pc_check(write(p[1], "data", 4) == 4, "write failed");
-		for (i = 0; i < 300 && (e = aio_error(&cb)) == EINPROGRESS; i++)
+		for (i = 0; i < 1000 && (e = aio_error(&cb)) == EINPROGRESS; i++)
 			sleep_ms(10);
 		(void)write(q[1], "g", 1);
 		pc_check(waitpid(kid, &st, 0) == kid && WIFEXITED(st), "the child did not exit");

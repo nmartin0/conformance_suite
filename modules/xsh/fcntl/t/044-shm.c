@@ -65,8 +65,10 @@ int main(void)
 		pc_check(fcntl(fd, F_GETFD) == FD_CLOEXEC, "F_GETFD does not report FD_CLOEXEC");
 		pc_check(fcntl(fd, F_SETFD, 0) == 0 && fcntl(fd, F_GETFD) == 0, "FD_CLOEXEC could not be cleared");
 		low = fd + 10;
+		if (fcntl(low, F_GETFD) != -1)
+			pc_unresolved("descriptor %d is in use", low);
 		d = fcntl(fd, F_DUPFD, low);
-		pc_check(d >= low, "F_DUPFD returned %d, below %d", d, low);
+		pc_check(d == low, "F_DUPFD returned %d, not the lowest free descriptor %d", d, low);
 		pc_check((fcntl(fd, F_GETFL) & O_ACCMODE) == O_RDWR, "F_GETFL does not report O_RDWR");
 	}
 	pc_pass();

@@ -69,8 +69,10 @@ int main(void)
 		kid = fork();
 		if (kid == -1)
 			pc_unresolved("fork failed: %s", pc_errname(errno));
-		if (kid == 0)
+		if (kid == 0) {
+			sleep_ms(300);	/* the parent is blocked in waitpid() when the child ends */
 			_exit(3);
+		}
 		while ((r = waitpid(kid, &st, 0)) == -1 && errno == EINTR)
 			;
 		pc_check(r == -1, "waitpid() returned the child's status (%#x): it was kept", (unsigned)st);

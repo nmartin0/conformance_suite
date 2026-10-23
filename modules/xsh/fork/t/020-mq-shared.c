@@ -52,7 +52,7 @@ int main(void)
 	pc_begin("XSH.fork.020");
 	{
 		struct mq_attr at, now;
-		char name[64];
+		char name[64], buf[16];
 		mqd_t q;
 		pid_t kid;
 		int st;
@@ -71,19 +71,22 @@ int main(void)
 		if (kid == -1)
 			pc_unresolved("fork failed: %s", pc_errname(errno));
 		if (kid == 0) {
-			char buf[16];
 			struct mq_attr nb;
 			if (mq_receive(q, buf, sizeof buf, NULL) != 2 || memcmp(buf, "hi", 2) != 0)
 				_exit(10);
 			memset(&nb, 0, sizeof nb);
 			nb.mq_flags = O_NONBLOCK;
-			_exit(mq_setattr(q, &nb, NULL) == 0 ? 0 : 11);
+			if (mq_setattr(q, &nb, NULL) != 0)
+				_exit(11);
+			_exit(mq_close(q) == 0 ? 0 : 12);
 		}
 		pc_check(waitpid(kid, &st, 0) == kid && WIFEXITED(st), "the child did not exit");
 		pc_check(WEXITSTATUS(st) != 10, "the child could not receive through the inherited descriptor");
-		pc_check(WEXITSTATUS(st) == 0, "mq_setattr() failed in the child");
+		pc_check(WEXITSTATUS(st) == 0, "mq_setattr() or mq_close() failed in the child (%d)", WEXITSTATUS(st));
 		pc_check(mq_getattr(q, &now) == 0, "mq_getattr failed");
 		pc_check(now.mq_flags & O_NONBLOCK, "O_NONBLOCK set by the child is not seen by the parent");
+		pc_check(mq_send(q, "ok", 2, 0) == 0, "the parent's descriptor no longer sends after the child's mq_close()");
+		pc_check(mq_receive(q, buf, sizeof buf, NULL) == 2, "the parent's descriptor no longer receives");
 	}
 	pc_pass();
 }

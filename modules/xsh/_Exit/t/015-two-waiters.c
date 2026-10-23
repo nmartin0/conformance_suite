@@ -53,11 +53,13 @@ struct res {
 };
 
 static struct res res[2];
+static int ready[2];
 
 static void *waiter(void *a)
 {
 	struct res *x = a;
 
+	(void)write(ready[1], "w", 1);
 	while ((x->r = waitpid(-1, &x->st, 0)) == -1 && errno == EINTR)
 		;
 	x->e = x->r == -1 ? errno : 0;
@@ -70,18 +72,27 @@ int main(void)
 	{
 		pthread_t t[2];
 		pid_t kid;
-		int i, got_pid = 0, got_echild = 0;
+		int i, go[2], got_pid = 0, got_echild = 0;
+		char c;
 
+		pc_check(pipe(ready) == 0 && pipe(go) == 0, "pipe failed");
 		pc_test();
 		kid = fork();
 		if (kid == -1)
 			pc_unresolved("fork failed: %s", pc_errname(errno));
 		if (kid == 0) {
-			sleep_ms(300);
+			(void)read(go[0], &c, 1);
 			_exit(5);
 		}
 		for (i = 0; i < 2; i++)
-			pc_check(pthread_create(&t[i], NULL, waiter, &res[i]) == 0, "pthread_create failed");
+			if (pthread_create(&t[i], NULL, waiter, &res[i]) != 0) {
+				(void)kill(kid, SIGKILL);
+				pc_unresolved("pthread_create failed");
+			}
+		for (i = 0; i < 2; i++)
+			(void)read(ready[0], &c, 1);
+		sleep_ms(200);
+		(void)write(go[1], "g", 1);
 		for (i = 0; i < 2; i++)
 			pc_check(pthread_join(t[i], NULL) == 0, "pthread_join failed");
 		for (i = 0; i < 2; i++) {
@@ -90,8 +101,10 @@ int main(void)
 			else if (res[i].r == -1 && res[i].e == ECHILD)
 				got_echild++;
 		}
-		pc_check(got_pid == 1 && got_echild == 1, "the threads got: %ld (%s), %ld (%s)", (long)res[0].r,
+
+		pc_check(got_pid == 1, "%d threads got the child's status: %ld (%s), %ld (%s)", got_pid, (long)res[0].r,
 			 pc_errname(res[0].e), (long)res[1].r, pc_errname(res[1].e));
+		(void)got_echild;
 	}
 	pc_pass();
 }

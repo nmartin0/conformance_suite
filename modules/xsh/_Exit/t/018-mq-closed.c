@@ -56,7 +56,7 @@ int main(void)
 		char name[64];
 		mqd_t q;
 		pid_t kid;
-		int st, r;
+		int st = 0, r;
 
 		snprintf(name, sizeof name, "/pc-mqx-%ld", (long)getpid());
 		(void)mq_unlink(name);
@@ -65,23 +65,19 @@ int main(void)
 		at.mq_msgsize = 16;
 		q = mq_open(name, O_RDWR | O_CREAT | O_EXCL, 0600, &at);
 		pc_check(q != (mqd_t)-1, "mq_open failed: %s", pc_errname(errno));
+		(void)mq_unlink(name);
 		memset(&ev, 0, sizeof ev);
 		ev.sigev_notify = SIGEV_NONE;
 		pc_test();
 		kid = fork();
-		if (kid == -1) {
-			(void)mq_unlink(name);
+		if (kid == -1)
 			pc_unresolved("fork failed: %s", pc_errname(errno));
-		}
-		if (kid == 0) {
-			mqd_t c = mq_open(name, O_RDWR);
-			_exit(c != (mqd_t)-1 && mq_notify(c, &ev) == 0 ? 0 : 99);
-		}
+		if (kid == 0)
+			_exit(mq_notify(q, &ev) == 0 ? 0 : 99);
 		(void)waitpid(kid, &st, 0);
-		r = mq_notify(q, &ev);
-		(void)mq_unlink(name);
 		if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
 			pc_unresolved("the child could not register for notification");
+		r = mq_notify(q, &ev);
 		pc_check(r == 0, "mq_notify() after the child's exit failed: %s", pc_errname(errno));
 	}
 	pc_pass();

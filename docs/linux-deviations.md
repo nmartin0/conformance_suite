@@ -66,8 +66,9 @@ by the named assertion.
 | XSH.rename.014 | FAIL | `rename(dir, "new/")` succeeds | O.21 |
 | XSH.futimens.024 | FAIL (musl) | `futimens(AT_FDCWD, t)` gives EFAULT, not EBADF | O.22 |
 | XSH.psiginfo.007 | FAIL (glibc) | `psiginfo()` leaves the error indicator of stderr clear when the write fails | O.23 |
-| XSH._Exit.019 | FAIL (glibc) | an `aio_write()` outstanding at `_exit()` never reaches the file | O.24 |
+| XSH._Exit.019 | INSPECT (glibc) | an `aio_write()` outstanding at `_exit()` never reaches the file (disputed, Q-32) | O.24 |
 | XSH.close.014 | FAIL (glibc) | an `aio_write()` outstanding at `close()` fails with EBADF | O.25 |
+| XSH.close.014 | FAIL (musl) | `close()` with two writes queued on the descriptor never returns | O.30 |
 | XSH.futimens.025 | FAIL (musl) | O_SEARCH (O_PATH) descriptors still get the search check | O.18 |
 | XSH.fflush.005 | FAIL (glibc) | `fflush()` of an input stream with a pushed-back byte sets the offset to the read-ahead end minus the pushback (4095 for a 1 MiB file, not 1) | O.26 |
 | XSH.fclose.003, .010, .011 | FAIL (glibc) | `fclose()` of a seekable input or update stream leaves the offset where read-ahead left it | O.27 |
@@ -368,24 +369,38 @@ O.23 **glibc: psiginfo() does not set stderr's error indicator on failure.**
 - Comp: glibc. Kind: long-standing. Observe: XSH.psiginfo.007.
 - Src: posixcheck run.
 
-O.24 **glibc: asynchronous I/O outstanding at _exit() is lost.**
-- POSIX (`_exit`, Consequences of Process Termination): asynchronous I/O
-  operations that are not canceled complete as if _exit() had not yet
-  occurred; only their signal notifications are suppressed.
+O.24 **glibc: asynchronous I/O outstanding at _exit() is dropped (disputed).**
+- POSIX (`_exit`, Consequences of Process Termination): operations not
+  canceled complete as if _exit() had not occurred; which operations may
+  be canceled is implementation-defined.
 - glibc 2.39: aio is done by helper threads inside the process; _exit()
-  ends them with the process, so a 64 KiB aio_write() started just before
-  _exit() never reaches the file (aio_cancel() is not called either).
-  musl completes the write.
-- Comp: glibc. Kind: design (user-space aio). Observe: XSH._Exit.019.
+  ends them with it, so a 64 KiB aio_write() started just before _exit()
+  never reaches the file (0 bytes every time). Nothing outside the process
+  can tell this from a cancellation, and glibc does not document it as
+  one. musl usually completes 64 KiB but truncates larger writes the same
+  way.
+- Comp: glibc (and musl for large writes). Kind: design (user-space aio).
+  Observe: XSH._Exit.019 (disputed, Q-32).
 - Src: posixcheck run.
 
 O.25 **glibc: asynchronous I/O outstanding at close() fails with EBADF.**
-- POSIX (`close`, DESCRIPTION): an I/O operation that is not canceled
-  completes as if close() had not yet occurred.
-- glibc 2.39: the helper thread issues the write after the descriptor is
-  closed, so aio_error() reports EBADF. musl's close() waits for the
-  descriptor's outstanding operations.
+- POSIX (`close`, DESCRIPTION): operations that are not canceled complete
+  as if close() had blocked until they did.
+- glibc 2.39: with two aio_write() calls queued on a full pipe, close()
+  returns and one of them (glibc serializes per descriptor) fails with
+  EBADF, which is neither completion nor cancellation.
 - Comp: glibc. Kind: design (user-space aio). Observe: XSH.close.014.
+- Src: posixcheck run.
+
+O.30 **musl: close() with two aio writes queued never returns.**
+- POSIX (`close`, DESCRIPTION): close() may cancel outstanding operations
+  or wait for them, and returns.
+- musl 1.2.4: with two aio_write() calls queued on a full pipe (a thread
+  draining it), the first completes, the second's thread waits on an
+  internal lock, and close() (in aio_cancel()) waits for it for ever.
+  With a single queued write musl cancels it (ECANCELED); a single
+  200000-byte write instead reports success with a short count (65536).
+- Comp: musl. Kind: long-standing. Observe: XSH.close.014.
 - Src: posixcheck run.
 
 O.26 **glibc: fflush() of an input stream with pushback sets the wrong offset.**

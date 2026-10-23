@@ -124,6 +124,8 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-28 | XSH `fflush()`: does fflush(NULL) set the offsets of input streams? | Question | Low | Disputed (XSH.fflush.011) |
 | Q-29 | XSH `fflush()`/`fclose()`/`exit()`: what "not already at EOF" means | Question | Low | Tests use a 1 MiB file (both readings met) |
 | Q-30 | XSH `fflush()`: where does reading resume after pushback is discarded? | Question | Low | Only the discard is checked (XSH.fflush.005) |
+| Q-31 | XSH `_exit()`: what happens to the other threads waiting for the last child? | Question | Low | Disputed (XSH._Exit.020) |
+| Q-32 | XSH `_exit()`: asynchronous I/O at exit cannot be observed | Question | Low | Disputed (XSH._Exit.019) |
 
 ## Entries
 
@@ -1035,6 +1037,18 @@ is unclear.
 - **Where:** XSH `fflush()`, DESCRIPTION; XSH `ungetc()`.
 - **Question:** fflush() of an input stream sets the offset to the stream's position and discards pushed-back bytes "without further changing the file offset". With "01" read and 'x' pushed back (position 1), must the next read return '1' (the byte at the new offset), or may it resume where the stream was before the pushback ('2', as glibc does)? ungetc() keeps ISO C's rule for reading the pushed-back bytes but does not say what discarding them does to the position.
 - **posixcheck meanwhile:** XSH.fflush.005 checks the offset and that the discarded byte is not read, not which byte comes next.
+
+### Q-31: _exit(): the other waiting threads once the last child is reaped
+
+- **Where:** XSH `_exit()`, Consequences of Process Termination; XSH 2.12.
+- **Question:** when several threads of the parent are blocked in wait() or waitpid() for a child that exits, one of them obtains the status. Only the XSI case (SIGCHLD ignored or SA_NOCLDWAIT) then says a waiter with no remaining children fails with ECHILD. In the ordinary case, must the other threads fail with ECHILD once no children remain, or may they stay blocked? wait()'s ERRORS suggest ECHILD, but the text does not say so.
+- **posixcheck meanwhile:** XSH._Exit.015 requires that exactly one thread gets the status; XSH._Exit.020 (the other gets ECHILD) is `disputed`.
+
+### Q-32: _exit(): completing or canceling outstanding asynchronous I/O
+
+- **Where:** XSH `_exit()`, Consequences of Process Termination.
+- **Question:** operations not canceled at exit "complete as if _exit() had not yet occurred" and their signal notifications are suppressed, while which operations are canceled is implementation-defined (and "cancelable" is defined only through aio_cancel()). After the process is gone, a dropped write cannot be told from a canceled one, and the suppression of a signal to a process that no longer exists cannot be observed. Is a write that never reaches the file conforming if the implementation documents that it cancels such writes? Should the text say which operations an implementation may cancel at exit?
+- **posixcheck meanwhile:** XSH._Exit.019 is `disputed`: a short file is logged as INSPECT.
 
 ## Tracking
 

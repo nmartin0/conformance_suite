@@ -268,7 +268,7 @@ static int child(void)
 		return 3;
 	v[0] = ts(1200000000, 0);
 	v[1] = ts(1200000000, 0);
-	return utimensat(dfd, "f", v, 0) == 0 ? 0 : 10;
+	return utimensat(dfd, "f", v, 0) == 0 ? 0 : 10 + (errno < 86 ? errno : 86);
 #endif
 }
 
@@ -284,6 +284,10 @@ int main(void)
 		r = unprivileged(child);
 		if (r == 96)
 			pc_unresolved("<fcntl.h> does not define O_SEARCH");
+		if (r == 3)
+			pc_unresolved("the child could not prepare its files");
+		if (r >= 10)
+			pc_fail("utimensat() through an O_SEARCH descriptor failed with %s", pc_errname(r - 10));
 		pc_check(r != 3, "the child could not prepare its file");
 		pc_check(r == 0, "utimensat() through an O_SEARCH descriptor: check %d went wrong", r);
 	}

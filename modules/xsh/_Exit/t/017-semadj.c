@@ -52,11 +52,15 @@ int main(void)
 	pc_begin("XSH._Exit.017");
 	{
 		struct sembuf op;
-		int id, st, v;
-		pid_t kid;
+		int id, st = 0, v;
+		pid_t kid, w;
 
 		id = semget(IPC_PRIVATE, 1, IPC_CREAT | 0600);
 		pc_check(id != -1, "semget failed: %s", pc_errname(errno));
+		if (semctl(id, 0, SETVAL, 5) != 0) {
+			(void)semctl(id, 0, IPC_RMID);
+			pc_unresolved("semctl(SETVAL) failed: %s", pc_errname(errno));
+		}
 		pc_test();
 		kid = fork();
 		if (kid == -1) {
@@ -69,12 +73,12 @@ int main(void)
 			op.sem_flg = SEM_UNDO;
 			_exit(semop(id, &op, 1) == 0 ? 0 : 99);
 		}
-		(void)waitpid(kid, &st, 0);
+		w = waitpid(kid, &st, 0);
 		v = semctl(id, 0, GETVAL);
 		(void)semctl(id, 0, IPC_RMID);
-		if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
-			pc_unresolved("semop failed in the child");
-		pc_check(v == 0, "semval is %d after the child's _exit(), expected 0", v);
+		if (w != kid || (WIFEXITED(st) && WEXITSTATUS(st) == 99))
+			pc_unresolved("the child could not run semop()");
+		pc_check(v == 5, "semval is %d after the child's _exit(), expected 5", v);
 	}
 	pc_pass();
 }

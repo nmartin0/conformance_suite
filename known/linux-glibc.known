@@ -66,7 +66,7 @@ XSH.fchmod.007     UNRESOLVED   linux*    1.7: glibc lacks O_SEARCH
 XSH.psiginfo.007   FAIL         linux*    O.23: psiginfo() leaves the error indicator of stderr clear
 XSH.opendir.012    UNRESOLVED   linux*    1.7: glibc lacks O_SEARCH
 XSH.futimens.025   UNRESOLVED   linux*    1.7: glibc lacks O_SEARCH
-XSH._Exit.019      FAIL         linux*    O.24: asynchronous I/O outstanding at _exit() is lost
+XSH._Exit.019      INSPECT      linux*    O.24 (disputed, Q-32): asynchronous I/O outstanding at _exit() is dropped
 XSH.close.014      FAIL         linux*    O.25: asynchronous I/O fails with EBADF after close()
 XSH.fflush.005     FAIL         linux*    O.26: fflush() of an input stream with pushback sets the wrong offset
 XSH.fflush.011     INSPECT      linux*    Q-28 (disputed): fflush(NULL) does not sync input streams

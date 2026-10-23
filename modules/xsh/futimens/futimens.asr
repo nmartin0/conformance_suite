@@ -261,5 +261,6 @@ says       For an unprivileged process, utimensat() with given times of "f"
            relative to a descriptor opened O_SEARCH on its own directory
            whose permissions were then changed to deny search succeeds.
 note       O_SEARCH itself is a header item (Tier 0); without it this
-           test is UNRESOLVED.
+           test is UNRESOLVED. No reference system passes it, so its
+           planted fault is unverified.
 test       t/025-search-fd.c

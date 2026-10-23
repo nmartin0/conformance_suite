@@ -225,8 +225,9 @@ anchor     functions/sigaction.html#DESCRIPTION
 class      conditional
 when       XSI
 since      2001
-says       With SIGCHLD caught with SA_NOCLDWAIT, after a child exits,
-           waitpid() for it (retried after EINTR) fails with ECHILD and the
+says       With SIGCHLD caught with SA_NOCLDWAIT, a waitpid() for a child
+           (retried after EINTR) that is blocked when the child exits 300 ms
+           later fails with ECHILD and the
            process ID names no process (no zombie is left).
 note       SI-9 and SI-10: the behaviour is marked XSI in most places;
            the assertion follows that.

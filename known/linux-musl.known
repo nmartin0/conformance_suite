@@ -53,3 +53,4 @@ XSH.futimens.025   FAIL         linux*    O.18: O_SEARCH (O_PATH) descriptors st
 XSH.fflush.011     INSPECT      linux*    Q-28 (disputed): fflush(NULL) does not sync input streams
 XSH.fflush.013     FAIL         linux*    O.28: fflush() of a full fmemopen() stream succeeds silently
 XSH.fclose.012     FAIL         linux*    O.28: fclose() of a full fmemopen() stream succeeds silently
+XSH.close.014      FAIL         linux*    O.30: close() with two aio writes queued never returns

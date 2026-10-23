@@ -1,5 +1,5 @@
 /*
- * Asynchronous writes not canceled at _exit() still complete, without their signal.
+ * Asynchronous writes not canceled at _exit() still complete.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH._Exit.019
@@ -69,8 +69,7 @@ int main(void)
 			cb.aio_fildes = fd;
 			cb.aio_buf = buf;
 			cb.aio_nbytes = sizeof buf;
-			cb.aio_sigevent.sigev_notify = SIGEV_SIGNAL;
-			cb.aio_sigevent.sigev_signo = SIGUSR1;
+			cb.aio_sigevent.sigev_notify = SIGEV_NONE;
 			if (aio_write(&cb) != 0)
 				_exit(98);
 			_exit(0);
@@ -78,8 +77,7 @@ int main(void)
 		pc_check(waitpid(kid, &st, 0) == kid, "waitpid failed");
 		if (WIFEXITED(st) && WEXITSTATUS(st) >= 98)
 			pc_unresolved("the child could not start the write (%d)", WEXITSTATUS(st));
-		pc_check(WIFEXITED(st) && WEXITSTATUS(st) == 0, "the child did not exit with 0 (status %#x): a signal was not suppressed",
-			 (unsigned)st);
+		pc_check(WIFEXITED(st) && WEXITSTATUS(st) == 0, "the child did not exit with 0 (status %#x)", (unsigned)st);
 		for (i = 0; i < 300; i++) {
 			if (stat("f", &sb) == 0 && sb.st_size == 65536)
 				break;
