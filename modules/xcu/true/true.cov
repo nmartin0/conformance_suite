@@ -1,0 +1,19 @@
+# true.cov - every requirement unit on utilities/true.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sections listed as "None.", "Not used." or "Default." take their meaning
+# from XCU 1.4 Utility Description Defaults.
+
+DESCRIPTION:09881317        XCU.true.001
+OPTIONS:eb724aff            todo  low priority: the page's usage notes expect a first "--" to be accepted and discarded
+OPERANDS:eb724aff           none  no operands need be supported
+STDIN:3f472296              todo  standard input is not read (offset of a seekable stdin is unchanged)
+INPUT_FILES:eb724aff        none  no input files
+ENVIRONMENT_VARIABLES:eb724aff  todo  run with odd LANG, LC_ALL, LC_MESSAGES, NLSPATH: same status, no output
+ASYNCHRONOUS_EVENTS:d92f27bd  todo  XCU 1.4 default: an inherited ignored signal stays ignored, a default one acts as default; exec repeatedly under a signal flood and check every status
+STDOUT:3f472296             XCU.true.002
+STDERR:3f472296             XCU.true.003
+OUTPUT_FILES:eb724aff       todo  creates or modifies no files (run in an empty directory)
+EXTENDED_DESCRIPTION:eb724aff  none  nothing further
+EXIT_STATUS:8d4b79e3        XCU.true.001
+CONSEQUENCES_OF_ERRORS:eb724aff  none  no errors are possible

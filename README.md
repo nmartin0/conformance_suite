@@ -121,10 +121,24 @@ Volumes: `xbd` (Base Definitions, including headers such as `xbd/fcntl.h`),
    `modules/xsh/<function>/mutants/<function>.c`; for a utility, a file
    `modules/xcu/<utility>/mutants/<name>.sh` defining functions that shadow
    it (and, for the exec path, a broken copy first on `PATH`).
-5. Run `ci/lint.py --standard <your copy>` and `ci/mutate.sh`: every mutant
-   must be CAUGHT. Then have someone review the test against the passage.
+5. Account for every unit on the page in `<page>.cov` (`ci/coverage.py
+   --stub`), then run `ci/lint.py --standard <your copy>`,
+   `ci/coverage.py --standard <your copy>` and `ci/mutate.sh` (with gcc and
+   musl-gcc): every mutant must be CAUGHT. Then have someone review the test
+   and the classification against the passage.
 
 ## CI tools (off-system)
 
-    ci/lint.py --standard ~/susv5-html   # traceability and anchors
-    ci/mutate.sh --sh dash               # every declared fault is caught
+    ci/lint.py --standard ~/susv5-html       # traceability and anchors
+    ci/mutate.sh --sh dash [--cc musl-gcc]   # every declared fault is caught
+    ci/coverage.py --standard ~/susv5-html   # every requirement accounted for
+
+`ci/coverage.py` splits each page of your copy of the standard into
+requirement units (every sentence of the normative sections, list items,
+table rows and struct members, each tagged shall/unspec/item/stmt/row/
+member for triage) and checks the module's `<page>.cov`, which says for each
+unit (by section and hash, never its text) which assertions cover it, or why
+none can (`app`, `impl`, `optional`, `none`, `untestable`), or that it is a
+known gap (`todo`). `--show MODULE` prints the units with their text on your
+terminal; `--stub MODULE` lists unaccounted ones; `--total` sizes the whole
+standard.

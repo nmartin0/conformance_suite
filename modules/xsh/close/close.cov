@@ -1,0 +1,37 @@
+# close.cov - every requirement unit on functions/close.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:a4297955        XSH.close.002 XSH.close.003
+DESCRIPTION:2b44e75e        todo  a process-owned fcntl lock is released when any descriptor for the file closes (second process observes)
+DESCRIPTION:4f9a7adc        todo  interrupted close(): outcomes are unspecified, but with POSIX_CLOSE_RESTART 0 "EINTR and still open" must not occur; a lingering socket can block close()
+DESCRIPTION:6b2de19f        todo  environment: make close() fail with EIO (FUSE flush error); the descriptor must then be closed (F_GETFD gives EBADF)
+DESCRIPTION:dbeab421        todo  after EINPROGRESS the peer still receives the lingering data (that the process cannot track it further is untestable)
+DESCRIPTION:2c9491ce        todo  data left in a FIFO is gone once every descriptor is closed (reopen and read)
+DESCRIPTION:82d60129        todo  freeing is observable: an OFD lock is released at the last close of the description; a FIFO reader sees end of file
+DESCRIPTION:3d92f1e3        todo  an unlinked file's space is freed at last close (statvfs; noisy)
+DESCRIPTION:be540c60        todo  XSI: last close of a pseudo-terminal manager sends SIGHUP to the controlling process (needs pty)
+DESCRIPTION:ec0c4eec        todo  outstanding asynchronous I/O completes as if close() waited (AIO)
+DESCRIPTION:21c830fa        todo  a mapped file's contents persist after its last close
+DESCRIPTION:e890df8d        todo  SHM: an unlinked, unmapped shared memory object is removed at last close
+DESCRIPTION:c267d852        todo  closing a socket's last descriptor destroys it (peer sees end of file)
+DESCRIPTION:1c5e9523        todo  SO_LINGER with unsent data makes close() block up to the linger time
+DESCRIPTION:f914458b        todo  posix_close() (new in POSIX.1-2024) behaves as close()
+DESCRIPTION:7407390c        todo  posix_close(fd, 0) never fails with EINTR
+DESCRIPTION:f20a5d55        todo  posix_close() with POSIX_CLOSE_RESTART
+DESCRIPTION:2f968c7a        todo  posix_close() with an invalid flag still closes the descriptor
+RETURN_VALUE:f1dcca7a       XSH.close.001 XSH.close.004
+ERRORS:eadbe42e             XSH.close.004
+ERRORS:b93f2121             todo  interrupt a lingering socket close() with a caught signal: if closed, errno is EINPROGRESS; if EINTR, still open
+ERRORS:3c3c9462             optional
+ERRORS:eae567a3             optional
+ERRORS:47d8655d             optional
+ERRORS:f6ad8e9a             todo  three rules: no EAGAIN/EWOULDBLOCK; no EINTR from close() when POSIX_CLOSE_RESTART is 0; none from posix_close(); split into assertions
+
+# --- units without "shall" ---
+DESCRIPTION:538ae072        XSH.close.003  # defines "deallocate"; the reuse is what the test checks
+DESCRIPTION:5712131a        none  unspecified
+DESCRIPTION:a84249ff        none  unspecified
+DESCRIPTION:72489c1e        none  a permission
+DESCRIPTION:199a9893        todo  aio_write then close(): an operation not canceled still completes (data in the file, aio_return reports it)
+DESCRIPTION:8b89d5fb        none  a permission
+DESCRIPTION:7c593a43        impl  which outstanding I/O close() cancels (documentation)

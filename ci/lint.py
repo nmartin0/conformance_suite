@@ -63,6 +63,9 @@ for m in mods:
             err(where, f"missing '{key}'")
     if not m.assertions:
         err(where, "module has no assertions")
+    if not (m.dir / (page + ".cov")).is_file():
+        err(where, f"no {page}.cov: classify every requirement unit "
+                   f"(ci/coverage.py --stub {m.path})")
 
     used_tests = {}
     prefix = f"{vol}.{page}."

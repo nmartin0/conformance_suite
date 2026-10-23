@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
-# usage: ci/mutate.sh [--sh SHELL] [ID-pattern]
+# usage: ci/mutate.sh [--sh SHELL] [--cc CC] [ID-pattern]
 #
 # Runs off-system on a Linux or BSD machine with LD_PRELOAD. For each test
 # that declares MUTANT lines (ci/lint.py --list-mutants):
@@ -17,10 +17,12 @@
 set -u
 here=$(cd "$(dirname "$0")/.." && pwd)
 sh=sh
+cc=
 pattern='*'
 while [ $# -gt 0 ]; do
 	case $1 in
 	--sh) sh=$2; shift 2 ;;
+	--cc) cc=$2; shift 2 ;;
 	*) pattern=$1; shift ;;
 	esac
 done
@@ -37,13 +39,12 @@ note_of() { # results-dir id: the note logged for id
 }
 
 run() { # results-dir id [mutant]
-	if [ $# -eq 3 ]; then
-		"$sh" "$here/posixcheck.sh" --no-selftest --results "$1" \
-		    --only "$2" --mutant "$3" >/dev/null 2>&1
-	else
-		"$sh" "$here/posixcheck.sh" --no-selftest --results "$1" \
-		    --only "$2" >/dev/null 2>&1
-	fi
+	set -- "$@"
+	r=$1 id=$2
+	if [ $# -eq 3 ]; then set -- --mutant "$3"; else set --; fi
+	if [ -n "$cc" ]; then set -- "$@" --cc "$cc"; fi
+	"$sh" "$here/posixcheck.sh" --no-selftest --results "$r" --only "$id" \
+	    "$@" >/dev/null 2>&1
 }
 
 caught=0 missed=0 unchecked=0 n=0 last=

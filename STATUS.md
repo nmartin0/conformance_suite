@@ -42,6 +42,17 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   checks (48 mutants); `ci/catalog.py`: shared parser.
 - `analysis/analyze.py`: load, runs, verdict, failures, matrix, diff,
   coverage, html.
+- `ci/coverage.py`: splits each page of the user's copy of the standard
+  into requirement units (every normative sentence, list item, table row
+  and struct member; XCU 1.4 default sections), identified by section and
+  hash. Each module's `<page>.cov` accounts for every unit; lint requires
+  the file. Current six modules: 264 units, 30 asserted, 13 partial, 104
+  classified (app/impl/optional/none/untestable), 117 todo, 0
+  unaccounted. Whole standard: about 42,900 units on reference pages
+  (XSH 25,368; XCU 14,527; XBD 3,029) plus the chapters.
+- An independent review of every classification (34 findings: hidden
+  testable requirements, overstated coverage, units the extractor missed)
+  was applied.
 
 ## Verified (on Linux x86_64, glibc, in the development container)
 
@@ -49,6 +60,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   and posh, each with gcc and clang. (ksh93 exposed a driver bug: a bare
   `|` in `${x%%|*}` is pattern alternation there. Fixed by quoting.)
 - As root and as an unprivileged user: same results.
+- With musl (musl-gcc): same verdicts as glibc.
 - Results: all PASS except FD_CLOFORK/O_CLOFORK, which this glibc lacks
   (2 FAIL, 3 blocked), matching os-test's published findings.
 - Mutation: 46 of 48 mutants caught, 0 missed. The 2 O_CLOFORK mutants
@@ -64,18 +76,21 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
 ## Not yet verified
 
+- Every result so far comes from one kernel (Linux 6.18 in the container).
 - Any BSD, macOS or illumos run. The mutation shims use LD_PRELOAD and
   `-ldl` (set `PC_MUTANT_LDFLAGS=` on the BSDs, where dlsym is in libc).
 
 ## Next
 
-1. Run on FreeBSD, NetBSD, OpenBSD (VMs), then macOS and illumos; triage
-   with `analyze.py matrix`.
+1. Run on FreeBSD, NetBSD, OpenBSD under QEMU (no KVM here, so software
+   emulation), then macOS and illumos; triage with `analyze.py matrix`.
+   Waiting on images from the user: the BSD download sites are blocked
+   from the development container.
 2. `gen/`: the spec-model generator (parse the HTML into declarations,
    options and anchors with paragraph hashes), then Tier 0 header tests
    for every header, with header mutants.
-3. Completeness checker: count requirement sentences per page vs.
-   assertions, so coverage has a denominator.
+3. Turn the `todo` units of open, close and fcntl.h into assertions
+   (`ci/coverage.py --show MODULE` lists them).
 4. More open()/close() assertions the review listed: O_CREAT on an
    existing file, EISDIR for O_CREAT on a directory, trailing slashes,
    ELOOP on a symlink loop, O_SEARCH/O_EXEC, FIFO ENXIO, timestamps,
