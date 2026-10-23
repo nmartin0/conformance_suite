@@ -63,6 +63,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-49 | str2sig(): "a string containing" | editorial | (not tested) |
 | SI-50 | <stdio.h>: dprintf() prototype lacks its semicolon | editorial | (gen/specmodel.py) |
 | SI-51 | <float.h>: unclosed paragraphs in the HTML edition | editorial (HTML) | (gen/specmodel.py) |
+| SI-52 | rename(): trailing slash on a new directory name | inconsistency | XSH.rename.014 |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |

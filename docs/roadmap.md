@@ -24,7 +24,7 @@ verified; this file is the plan. Update both when a step finishes.
   header's macros, types, structures, functions and variables, generated
   from the user's copy under `build/`; about 3,350 checks.
 - Files and directories (in progress): `stat`/`lstat`/`fstatat`, `fstat`,
-  `link`/`linkat`, `unlink`/`unlinkat`.
+  `link`/`linkat`, `unlink`/`unlinkat`, `rename`/`renameat`.
 - Utilities: `true`, `false`.
 - Every module reviewed independently; findings applied.
 
@@ -41,8 +41,7 @@ verified; this file is the plan. Update both when a step finishes.
 4. **Header mutants for Tier 0**, and Tier 0 for the prose-only headers
    (`<stdint.h>`, `<float.h>` and the like) that `gen/specmodel.py` does
    not yet read.
-5. **Files and directories** (remaining): `rename`,
-   `mkdir`/`rmdir`, `opendir`/`readdir`, `chmod`/`chown`, `utimensat`,
+5. **Files and directories** (remaining): `mkdir`/`rmdir`, `opendir`/`readdir`, `chmod`/`chown`, `utimensat`,
    `access`, `truncate`, `umask`.
 6. **Remaining todos** in the done modules (`ci/coverage.py --show MODULE`
    lists them): unprivileged EACCES cases, pseudo-terminal cases,

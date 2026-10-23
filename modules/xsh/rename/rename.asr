@@ -1,0 +1,283 @@
+# XSH rename() and renameat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.rename.001
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      1988
+says       rename("f", "g") returns 0; afterwards f does not exist and g is
+           the same file (st_dev, st_ino, contents, st_nlink 1).
+test       t/001-new-name.c
+
+assertion  XSH.rename.002
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      1988
+says       rename("f", "g") with g an existing regular file returns 0; g then
+           names f's file (its st_ino and contents) and f is gone.
+test       t/002-replace.c
+
+assertion  XSH.rename.003
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      1988
+says       When rename() replaces g, a descriptor open on the old g still
+           reads its contents, and fstat() of it reports st_nlink 0.
+note       Run the suite on a local file system: on NFS, removing an
+           open file renames it instead (silly rename).
+test       t/003-replaced-open.c
+
+assertion  XSH.rename.004
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      2008
+says       rename("f", "f2") with f2 a second link to f, and rename("f",
+           "f"), return 0 and change nothing: both names remain, st_nlink
+           stays 2.
+test       t/004-same-file.c
+
+assertion  XSH.rename.005
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      2001
+says       rename("sl", "s2") with sl a symbolic link to f renames the link:
+           s2 is a symbolic link with sl's st_ino, and f keeps its name
+           and contents.
+test       t/005-old-symlink.c
+
+assertion  XSH.rename.006
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      2001
+says       rename("f", "sl") with sl a symbolic link to t removes the link and
+           puts f in its place; t keeps its name and contents.
+test       t/006-new-symlink.c
+
+assertion  XSH.rename.007
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      1988
+says       rename("d", "p/e") of a directory holding a file returns 0; p/e is
+           then the directory (its st_ino), the file is p/e/f, and d is
+           gone.
+test       t/007-directory.c
+
+assertion  XSH.rename.008
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      1988
+says       rename("d", "e") with e an empty directory returns 0; e is then d's
+           directory and d is gone.
+test       t/008-onto-empty-dir.c
+
+assertion  XSH.rename.009
+anchor     functions/rename.html#ERRORS/EEXIST
+class      required
+since      1988
+says       rename("d", "e") with e a directory holding a file fails with
+           EEXIST or ENOTEMPTY; both directories are unchanged.
+test       t/009-nonempty.c
+
+assertion  XSH.rename.010
+anchor     functions/rename.html#ERRORS
+class      required
+since      1988
+says       rename("f", "d") with f a regular file and d a directory fails with
+           EISDIR; rename("d", "g") with g a regular file fails with
+           ENOTDIR; nothing changes.
+test       t/010-type-mismatch.c
+
+assertion  XSH.rename.011
+anchor     functions/rename.html#ERRORS/EINVAL
+class      required
+since      1988
+says       rename("d", "d/s/x"), moving a directory under itself, fails with
+           EINVAL and changes nothing.
+test       t/011-ancestor.c
+
+assertion  XSH.rename.012
+anchor     functions/rename.html#ERRORS/EINVAL
+class      required
+since      2008
+says       rename("d/.", "x"), rename("d/..", "x") and rename("f", "d/.")
+           fail with EINVAL, d being a directory that is not the working
+           directory and is not otherwise in use.
+test       t/012-dot.c
+
+assertion  XSH.rename.013
+anchor     functions/rename.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       rename("f", "nf/") with nf not existing, rename("f", "g/") with g a
+           regular file, and rename("f/", "x") all fail with ENOTDIR; f and
+           g are unchanged and nothing is created.
+test       t/013-file-slash.c
+
+assertion  XSH.rename.014
+anchor     functions/rename.html#DESCRIPTION
+class      disputed
+since      2008
+says       rename("d", "nd/"), with d a directory and nd not existing, fails
+           (the new name ends in a slash but does not resolve to an
+           existing directory) and d keeps its name.
+note       disputed (SI-52): rename() says it shall fail, but XBD 4.16
+           resolves a trailing slash on a directory entry about to be
+           created for a directory, no error number covers the case, and
+           mkdir("nd/") is allowed.
+test       t/014-dir-slash-new.c
+
+assertion  XSH.rename.015
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      1988
+says       After rename("d1/fN", "d2/fN"), stat() reports later st_mtim and
+           st_ctim for both d1 and d2 (the test renames a fresh file every
+           10 ms for up to 3 s until the times move).
+timeout    20
+test       t/015-times.c
+
+assertion  XSH.rename.016
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      2008
+says       renameat(fd1, "f", fd2, "g"), with fd1 open on d1 and fd2 on d2,
+           moves d1/f to d2/g; files named f and g in the working directory
+           are untouched.
+test       t/016-renameat-relative.c
+
+assertion  XSH.rename.017
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      2008
+says       renameat(AT_FDCWD, "f", AT_FDCWD, "g") renames f to g as rename()
+           does; AT_FDCWD for one path and a directory descriptor for the
+           other also works.
+test       t/017-renameat-fdcwd.c
+
+assertion  XSH.rename.018
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      2008
+says       renameat() with absolute old and new paths succeeds whatever oldfd
+           and newfd are: descriptors that are not open, or open on a
+           regular file.
+test       t/018-renameat-absolute.c
+
+assertion  XSH.rename.019
+anchor     functions/rename.html#ERRORS/ENOENT
+class      required
+since      1988
+says       rename() fails with ENOENT when old does not exist, when old or new
+           is the empty string, and when new's directory does not exist;
+           nothing is created and f keeps its name.
+test       t/019-enoent.c
+
+assertion  XSH.rename.020
+anchor     functions/rename.html#ERRORS/ENOTDIR
+class      required
+since      1988
+says       rename("f/x", "g") and rename("e", "f/y"), with f a regular file,
+           fail with ENOTDIR.
+test       t/020-enotdir-prefix.c
+
+assertion  XSH.rename.021
+anchor     functions/rename.html#ERRORS
+class      required
+since      2001
+says       rename() fails with ELOOP when old's or new's prefix goes through a
+           loop of symbolic links (a -> b, b -> a).
+test       t/021-eloop.c
+
+assertion  XSH.rename.022
+anchor     functions/rename.html#ERRORS
+class      required
+since      1988
+says       rename("f", name) with the last component of name longer than
+           {NAME_MAX} bytes fails with ENAMETOOLONG and f keeps its name.
+test       t/022-enametoolong.c
+
+assertion  XSH.rename.023
+anchor     functions/rename.html#ERRORS
+class      required
+since      2008
+says       renameat() with a relative path and its descriptor not open
+           (oldfd for old, or newfd for new) fails with EBADF.
+test       t/023-renameat-ebadf.c
+
+assertion  XSH.rename.024
+anchor     functions/rename.html#ERRORS
+class      required
+since      2008
+says       renameat() with a relative path and its descriptor open on a
+           regular file (oldfd for old, or newfd for new) fails with
+           ENOTDIR.
+test       t/024-renameat-enotdir.c
+
+assertion  XSH.rename.025
+anchor     functions/rename.html#ERRORS/EACCES
+class      required
+since      1988
+says       For a process without appropriate privileges, rename() of its own
+           file into a directory that denies write permission, out of one
+           that does (w/f to c/g), and through a directory that denies
+           search permission all fail with EACCES; nothing moves.
+test       t/025-eacces.c
+
+assertion  XSH.rename.026
+anchor     functions/rename.html#ERRORS/EACCES
+class      required
+since      2008
+says       For a process without appropriate privileges, renameat(fd, "f",
+           AT_FDCWD, "c/g"), with d/f its own file, fails with EACCES when
+           fd was opened O_RDONLY on d and d's permissions were then changed
+           to deny search (d stays writable).
+test       t/026-renameat-eacces-fd.c
+
+assertion  XSH.rename.027
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      2008
+says       For a process without appropriate privileges, renameat(fd, "f",
+           AT_FDCWD, "c/g") succeeds when fd was opened with O_SEARCH on a
+           writable directory d whose permissions were then changed to
+           deny search.
+note       O_SEARCH itself is a header item (Tier 0); without it this
+           test is UNRESOLVED.
+test       t/027-renameat-search.c
+
+assertion  XSH.rename.028
+anchor     functions/rename.html#ERRORS/EPERM
+class      conditional
+when       XSI
+since      2001
+says       In a directory with S_ISVTX set and write permission for all,
+           owned by another user, rename() of a file owned by another user
+           that the process cannot write (mode 0644) fails with EPERM or
+           EACCES for a process without appropriate privileges, and the
+           file keeps its name.
+needs      root
+test       t/028-sticky-old.c
+
+assertion  XSH.rename.029
+anchor     functions/rename.html#ERRORS/EPERM
+class      conditional
+when       XSI
+since      2001
+says       In a directory with S_ISVTX set and write permission for all,
+           owned by another user, rename() of the process's own file onto a
+           file owned by another user that the process cannot write (mode
+           0644) fails with EPERM or EACCES for a process without
+           appropriate privileges, and that file is unchanged.
+needs      root
+test       t/029-sticky-new.c
+
+assertion  XSH.rename.030
+anchor     basedefs/V1_chap04.html#tag_04_05
+class      conditional
+when       XSI
+since      2001
+says       In a directory with S_ISVTX set and write permission for all,
+           owned by another user, a process without appropriate privileges
+           can rename() a file it owns.
+needs      root
+test       t/030-sticky-owner.c

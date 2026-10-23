@@ -60,8 +60,10 @@ by the named assertion.
 | XSH.abort.006 | INSPECT (musl) | abort() with SIGABRT caught but blocked ends the process without the handler (disputed, Q-21) | - |
 | XSH.psiginfo.002 | FAIL (musl) | psignal(sig, "") writes ": " | O.15 |
 | XSH.psiginfo.003 | INSPECT (glibc) | psiginfo() adds the sender to the description (disputed, Q-19) | - |
-| XSH.fstatat.013, XSH.link.021, XSH.unlink.021 | UNRESOLVED (glibc), FAIL (musl) | glibc does not define `O_SEARCH`; musl's O_SEARCH (O_PATH) descriptors still get the search check | 1.7, O.18 |
+| XSH.fstatat.013, XSH.link.021, XSH.unlink.021, XSH.rename.027 | UNRESOLVED (glibc), FAIL (musl) | glibc does not define `O_SEARCH`; musl's O_SEARCH (O_PATH) descriptors still get the search check | 1.7, O.18 |
 | XSH.link.019 | INSPECT | `fs.protected_hardlinks` refuses a link to another user's readable file with EPERM (disputed, Q-24) | O.19 |
+| XSH.rename.012 | FAIL | a final dot or dot-dot gives EBUSY; EINVAL required | O.20 |
+| XSH.rename.014 | INSPECT | `rename(dir, "new/")` succeeds (disputed, SI-52) | - |
 | XSH.unlink.005, .010 | FAIL | `unlink()`/`unlinkat(fd, dir, 0)` of a directory give EISDIR; EPERM required | 1.17 |
 | XSH.sig2str.001 to .006 | UNINITIATED | no sig2str() or str2sig() | 3.1 |
 | XBD.signal.h.007 | FAIL | no `_SC_NSIG` (nor `NSIG_MAX`) | 1.24 |
@@ -300,7 +302,7 @@ O.18 **musl: an O_SEARCH descriptor still gets the search check.**
   for an unprivileged process. glibc does not define O_SEARCH at all
   (1.7), so the test is UNRESOLVED there.
 - Comp: kernel with musl. Kind: long-standing. Observe: XSH.fstatat.013,
-  XSH.link.021, XSH.unlink.021.
+  XSH.link.021, XSH.unlink.021, XSH.rename.027.
 - Src: posixcheck run.
 
 O.19 **Linux: link() of another user's file fails with EPERM (protected hard links).**
@@ -315,6 +317,16 @@ O.19 **Linux: link() of another user's file fails with EPERM (protected hard lin
   Observe: XSH.link.019 (disputed: the standard does not say what access
   may be required, Q-24).
 - Src: posixcheck run; kernel documentation of `protected_hardlinks`.
+
+O.20 **Linux: rename() with a final dot or dot-dot gives EBUSY, not EINVAL.**
+- POSIX (`rename`, ERRORS): [EINVAL] when either pathname's final
+  component is dot or dot-dot. [EBUSY] is only for a directory in use by
+  the system or another process.
+- Linux: rename("d/.", "x"), rename("d/..", "x") and rename("f", "d/.")
+  fail with EBUSY even when d is not in use (not the working directory of
+  any process, not a mount point).
+- Comp: kernel. Kind: long-standing. Observe: XSH.rename.012.
+- Src: posixcheck run.
 
 ## Things the strict build changes
 
