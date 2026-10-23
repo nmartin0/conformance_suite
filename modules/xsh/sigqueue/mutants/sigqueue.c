@@ -91,6 +91,28 @@ int sigqueue(pid_t pid, int sig, const union sigval value)
 
 	if (m == NULL)
 		return real_sigqueue(pid, sig, v);
+	if (IS("waits_stopped") && pid != getpid() && sig > 0) {
+		r = real_sigqueue(pid, sig, v);
+		(void)sleep(2);	/* waits as if for delivery */
+		return r;
+	}
+	if (IS("drops_plain") && sig > 0) {
+		struct sigaction o;
+		if (sigaction(sig, NULL, &o) == 0 && !(o.sa_flags & SA_SIGINFO) && o.sa_handler != SIG_DFL &&
+		    o.sa_handler != SIG_IGN)
+			return 0;	/* not sent at all without SA_SIGINFO */
+	}
+	if (IS("eagain_sticky")) {
+		static int full;
+		if (full) {
+			errno = EAGAIN;
+			return -1;	/* the queue is never seen to empty again */
+		}
+		r = real_sigqueue(pid, sig, v);
+		if (r == -1 && errno == EAGAIN)
+			full = 1;
+		return r;
+	}
 	if (IS("einval_accepted") && (sig < 0 || sig > 64))
 		return 0;
 	if (IS("drops") && sig != 0 && pid != getpid())

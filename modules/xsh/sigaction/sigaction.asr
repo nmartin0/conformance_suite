@@ -219,3 +219,15 @@ says       With SA_RESETHAND and SA_SIGINFO, SA_SIGINFO is clear in the action
 nomutant   the kernel resets the action; a wrapper cannot make it keep
            the flag
 test       t/023-resethand-siginfo.c
+
+assertion  XSH.sigaction.024
+anchor     functions/sigaction.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       With SIGCHLD caught with SA_NOCLDWAIT, after a child exits,
+           waitpid() for it (retried after EINTR) fails with ECHILD: no
+           status is kept and no zombie is left.
+note       SI-9 and SI-10: the behaviour is marked XSI in most places;
+           the assertion follows that.
+test       t/024-nocldwait.c

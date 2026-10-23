@@ -123,3 +123,14 @@ note       The DESCRIPTION says the size is ignored with SS_DISABLE, but
            the ENOMEM condition has no exception for it (standard issue
            SI-47); a FAIL is logged as INSPECT.
 test       t/011-disable-size-ignored.c
+
+assertion  XSH.sigaltstack.012
+anchor     functions/sigaltstack.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2008
+says       After the main thread sets an alternate stack, a new thread's
+           sigaltstack(NULL, &old) reports SS_DISABLE, and its SIGUSR1
+           handler (SA_ONSTACK) does not run on the main thread's
+           stack.
+test       t/012-per-thread.c

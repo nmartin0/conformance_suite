@@ -93,6 +93,13 @@ static unsigned left(void)
 	return (unsigned)it.it_value.tv_sec + (it.it_value.tv_usec > 0);
 }
 
+static void *alarm_thread(void *a)
+{
+	(void)sleep(1);
+	(void)pthread_kill(*(pthread_t *)a, SIGALRM);
+	return NULL;
+}
+
 unsigned alarm(unsigned sec)
 {
 	REAL(alarm, unsigned (*)(unsigned));
@@ -101,6 +108,18 @@ unsigned alarm(unsigned sec)
 
 	if (m == NULL)
 		return real_alarm(sec);
+	if (IS("thread_directed") && sec > 0) {
+		/* the signal goes to the calling thread, not to the process */
+		static pthread_t caller;
+		static unsigned secs;
+		pthread_t t;
+		caller = pthread_self();
+		secs = sec;
+		if (pthread_create(&t, NULL, alarm_thread, &caller) == 0)
+			(void)pthread_detach(t);
+		(void)secs;
+		return 0;
+	}
 	if (IS("cancel_ignored") && sec == 0)
 		return left();
 	if (IS("no_reschedule") && left() != 0)

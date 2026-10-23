@@ -73,3 +73,14 @@ note       sigpending() is async-signal-safe; the handler blocks
            pending.
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/005-pending-while-queued.c
+
+assertion  XSH.2.4.2-realtime-signals.006
+anchor     functions/V2_chap02.html#2.4.2
+class      required
+since      2008
+says       A timer created with SIGEV_SIGNAL, SIGRTMIN and sigev_value 4242
+           runs the SIGRTMIN handler (SA_SIGINFO) when it expires, with
+           si_code SI_TIMER and si_value 4242 (within 3 s).
+nomutant   The value travels through the kernel's timer; no interposed
+           function stands between them.
+test       t/006-timer-handler.c

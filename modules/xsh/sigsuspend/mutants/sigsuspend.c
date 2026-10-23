@@ -82,6 +82,11 @@ static __attribute__((unused)) int take(int sig, siginfo_t *info)
 	return real_sigtimedwait(&one, info, &zero) == sig;
 }
 
+static void wake(int s)
+{
+	(void)s;
+}
+
 int sigsuspend(const sigset_t *mask)
 {
 	REAL(sigsuspend, int (*)(const sigset_t *));
@@ -91,6 +96,29 @@ int sigsuspend(const sigset_t *mask)
 
 	if (m == NULL)
 		return real_sigsuspend(mask);
+	if (IS("ignored_wakes")) {
+		/* ignored signals are caught for the wait, so they end it */
+		static struct sigaction old[32];
+		struct sigaction c;
+		int s, r2;
+		memset(&c, 0, sizeof c);
+		c.sa_handler = wake;
+		sigemptyset(&c.sa_mask);
+		for (s = 1; s < 32; s++) {
+			old[s].sa_handler = SIG_ERR;
+			if (s == SIGKILL || s == SIGSTOP)
+				continue;
+			if (sigaction(s, NULL, &old[s]) == 0 && old[s].sa_handler == SIG_IGN)
+				(void)sigaction(s, &c, NULL);
+			else
+				old[s].sa_handler = SIG_ERR;
+		}
+		r2 = real_sigsuspend(mask);
+		for (s = 1; s < 32; s++)
+			if (old[s].sa_handler == SIG_IGN)
+				(void)sigaction(s, &old[s], NULL);
+		return r2;
+	}
 	if (IS("no_wait")) {
 		errno = EINTR;
 		return -1;

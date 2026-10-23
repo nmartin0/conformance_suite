@@ -65,6 +65,7 @@ by the named assertion.
 | XSH.rename.012 | FAIL | a final dot or dot-dot gives EBUSY; EINVAL required | O.20 |
 | XSH.rename.014 | FAIL | `rename(dir, "new/")` succeeds | O.21 |
 | XSH.futimens.024 | FAIL (musl) | `futimens(AT_FDCWD, t)` gives EFAULT, not EBADF | O.22 |
+| XSH.psiginfo.007 | FAIL (glibc) | `psiginfo()` leaves the error indicator of stderr clear when the write fails | O.23 |
 | XSH.chown.008 | INSPECT | `chown(f, -1, -1)` by a non-owner succeeds (disputed, Q-25) | - |
 | XSH.unlink.005, .010 | FAIL | `unlink()`/`unlinkat(fd, dir, 0)` of a directory give EISDIR; EPERM required | 1.17 |
 | XSH.sig2str.001 to .006 | UNINITIATED | no sig2str() or str2sig() | 3.1 |
@@ -349,6 +350,14 @@ O.22 **musl: futimens(AT_FDCWD, t) gives EFAULT, not EBADF.**
   path, so the kernel takes AT_FDCWD and reports EFAULT for the path.
   glibc reports EBADF.
 - Comp: musl. Kind: long-standing. Observe: XSH.futimens.024.
+- Src: posixcheck run.
+
+O.23 **glibc: psiginfo() does not set stderr's error indicator on failure.**
+- POSIX (`psiginfo`, DESCRIPTION): on error psiginfo() and psignal() set
+  the error indicator of the stream stderr points to, and set errno.
+- glibc 2.39: with descriptor 2 closed, psiginfo() sets errno (EBADF) but
+  ferror(stderr) stays 0; psignal() sets both. musl sets both.
+- Comp: glibc. Kind: long-standing. Observe: XSH.psiginfo.007.
 - Src: posixcheck run.
 
 ## Things the strict build changes

@@ -52,6 +52,12 @@ int killpg(pid_t pgrp, int sig)
 
 	if (m == NULL)
 		return real_killpg(pgrp, sig);
+	if (IS("esrch_hidden") || IS("eperm_hidden")) {
+		int r = real_killpg(pgrp, sig);
+		if (r == -1 && ((IS("esrch_hidden") && errno == ESRCH) || (IS("eperm_hidden") && errno == EPERM)))
+			return 0;
+		return r;
+	}
 	if (IS("leader_only"))
 		return kill(pgrp, sig);
 	if (IS("drops") && sig != 0 && sig != SIGKILL && pgrp != getpgrp())

@@ -65,3 +65,12 @@ uses       XSH.psiginfo.001
 note       A siginfo_t made by hand with si_signo SIGUSR2 and si_code
            SI_USER is used.
 test       t/006-psiginfo-errno-orientation.c
+
+assertion  XSH.psiginfo.007
+anchor     functions/psiginfo.html#DESCRIPTION
+class      required
+since      2008
+says       With file descriptor 2 closed, psiginfo() of a received SIGUSR1's
+           siginfo_t sets the error indicator of stderr and a non-zero
+           errno.
+test       t/007-info-error.c

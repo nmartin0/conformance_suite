@@ -14,7 +14,7 @@ DESCRIPTION:0a4804d1        XSH.kill.006
 DESCRIPTION:c5e775f1        XSH.kill.011 XSH.kill.013  # within the session, and not outside it
 DESCRIPTION:e095ccc8        impl  extra restrictions (documentation)
 DESCRIPTION:beb375c4        none  a permission; it is what would let extended security give ESRCH in XSH.kill.009
-DESCRIPTION:9cdab055        todo  pid 0 or -1 with only some targets permitted: kill() succeeds, and only the permitted ones get it
+DESCRIPTION:9cdab055        partial XSH.kill.016  # pid 0; pid -1 would reach every process of the test user on the machine
 DESCRIPTION:676e8f87        XSH.kill.009
 RETURN_VALUE:105a0976       XSH.kill.001 XSH.kill.002 XSH.kill.003
 RETURN_VALUE:ce1869b1       XSH.kill.007 XSH.kill.008 XSH.kill.009

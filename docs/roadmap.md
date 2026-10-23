@@ -23,16 +23,22 @@ verified; this file is the plan. Update both when a step finishes.
 - Spec model and Tier 0 (`gen/specmodel.py`, `gen/tier0.py`): every
   header's macros, types, structures, functions and variables, generated
   from the user's copy under `build/`; about 3,350 checks.
-- Files and directories (in progress): `stat`/`lstat`/`fstatat`, `fstat`,
+- Files and directories: `stat`/`lstat`/`fstatat`, `fstat`,
   `link`/`linkat`, `unlink`/`unlinkat`, `rename`/`renameat`, `mkdir`/`mkdirat`, `rmdir`,
-  `chmod`/`fchmodat`, `fchmod`, `chown`/`fchownat`, `fchown`, `lchown`, `access`/`faccessat`.
+  `chmod`/`fchmodat`, `fchmod`, `chown`/`fchownat`, `fchown`, `lchown`, `access`/`faccessat`,
+  `truncate`, `ftruncate`, `umask`, `futimens`/`utimensat`/`utimes`, and the directory
+  streams (`opendir`/`fdopendir`, `readdir`/`readdir_r`, `closedir`, `rewinddir`, `dirfd`,
+  `seekdir`, `telldir`, `scandir`/`alphasort`).
 - Utilities: `true`, `false`.
 - Every module reviewed independently; findings applied.
 
 ## Next
 
-1. **Signals** (remaining): the signal todos (`ci/coverage.py --show`
-   lists them).
+1. **Signals** (remaining): the few signal todos left (`ci/coverage.py
+   --show` lists them): machine-dependent SIGILL/SIGFPE/SIGTRAP codes,
+   `<stdatomic.h>` in handlers, signal() from several threads, the
+   disputed SIGCHLD/SIGURG/SIGWINCH queue case (SI-24), the sigaction
+   member checks that belong to Tier 0.
 2. **Your OS**: run the suite on the OS under development as soon as it can
    run a POSIX shell and a C compiler (or cross-compiled tests with a
    small runner). Results are judged by `analyze.py` on another machine.

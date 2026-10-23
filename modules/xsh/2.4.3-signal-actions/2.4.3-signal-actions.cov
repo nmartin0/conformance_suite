@@ -53,13 +53,13 @@
 2.4.3:95273a75              impl  SI_USER for raise() and abort() (documentation)
 2.4.3:3b06dc7b              XSH.sigaction.006 XSH.sigtimedwait.001
 2.4.3:be0c52f0              XSH.2.4.2-realtime-signals.001
-2.4.3:c4238c01              todo  SI_ASYNCIO with aio
-2.4.3:717394fd              todo  SI_MESGQ with mq_notify() (MSG)
+2.4.3:c4238c01              XSH.2.4.3-signal-actions.018
+2.4.3:717394fd              XSH.2.4.3-signal-actions.017
 2.4.3:2235ee57              none  a cross-reference
-2.4.3:2b5eeffe              partial XSH.2.4.3-signal-actions.015  # SEGV_ACCERR so far; the other signal-specific codes are todo
+2.4.3:2b5eeffe              partial XSH.2.4.3-signal-actions.015 XSH.2.4.3-signal-actions.020  # SEGV_ACCERR, SEGV_MAPERR and the SIGBUS codes; SIGILL, SIGFPE and SIGTRAP codes are machine-dependent and todo
 2.4.3:b66352f8              XSH.sigaction.006 XSH.sigtimedwait.001 XSH.sigtimedwait.004 XSH.sigqueue.001
-2.4.3:b093bc3d              partial XSH.2.4.3-signal-actions.015 XSH._Exit.014  # si_addr for SIGSEGV and si_status for SIGCHLD; si_pid and si_uid for SIGCHLD are todo
-2.4.3:a6c200e0              partial XSH.sigtimedwait.001 XSH.2.4.2-realtime-signals.001  # SI_QUEUE and SI_TIMER; SI_ASYNCIO and SI_MESGQ todo
+2.4.3:b093bc3d              XSH.2.4.3-signal-actions.015 XSH.2.4.3-signal-actions.019 XSH.2.4.3-signal-actions.020 XSH._Exit.014
+2.4.3:a6c200e0              XSH.sigtimedwait.001 XSH.2.4.2-realtime-signals.001 XSH.2.4.3-signal-actions.017 XSH.2.4.3-signal-actions.018
 2.4.3:a9d141ce              none  undefined
 2.4.3:5ae07797              none  undefined
 2.4.3:1195cf87              XSH.sigaction.018

@@ -64,3 +64,14 @@ says       With SIGUSR1 and SIGUSR2 blocked in two threads and a
            accept it.
 uses       XSH.sigpending.002
 test       t/006-process-pending.c
+
+assertion  XSH.sigsuspend.007
+anchor     functions/sigsuspend.html#DESCRIPTION
+class      required
+since      1988
+says       With SIGUSR1 ignored and SIGUSR2 caught and blocked, sigsuspend()
+           with an empty mask stays suspended when a child sends SIGUSR1,
+           and returns after the child then sends SIGUSR2 (300 ms later),
+           its handler having run.
+timeout    20
+test       t/007-ignored.c

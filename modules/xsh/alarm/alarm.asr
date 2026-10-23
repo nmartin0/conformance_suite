@@ -43,3 +43,13 @@ says       After alarm(2) and then alarm(1), one SIGALRM comes about 1 s
            have fired.
 uses       XSH.sigtimedwait.002 XSH.sigtimedwait.005
 test       t/004-not-stacked.c
+
+assertion  XSH.alarm.005
+anchor     functions/alarm.html#DESCRIPTION
+class      required
+since      2001
+says       With SIGALRM blocked in the main thread and caught, after alarm(1)
+           in the main thread the handler runs in a second thread that does
+           not block SIGALRM (within 3 s).
+timeout    20
+test       t/005-to-process.c

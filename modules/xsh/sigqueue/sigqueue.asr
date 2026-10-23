@@ -71,3 +71,20 @@ says       A process running as user 65534 that queues SIGRTMIN to its parent
            (user 0) fails with EPERM, and nothing is delivered.
 needs      root
 test       t/007-eperm.c
+
+assertion  XSH.sigqueue.008
+anchor     functions/sigqueue.html#DESCRIPTION
+class      required
+since      2008
+says       sigqueue() of SIGRTMIN to a child stopped by SIGSTOP returns 0
+           within 500 ms.
+test       t/008-stopped.c
+
+assertion  XSH.sigqueue.009
+anchor     functions/sigqueue.html#DESCRIPTION
+class      required
+since      2008
+says       With SIGRTMIN caught by a one-argument handler (no SA_SIGINFO) and
+           blocked, two sigqueue() calls to the process itself succeed, and
+           on unblocking the handler runs at least once.
+test       t/009-without-siginfo.c

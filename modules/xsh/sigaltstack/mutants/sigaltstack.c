@@ -54,6 +54,20 @@ int sigaltstack(const stack_t *ss, stack_t *oss)
 
 	if (m == NULL)
 		return real_sigaltstack(ss, oss);
+	if (IS("process_wide")) {
+		/* one alternate stack for the whole process, as last set */
+		static stack_t g;
+		static int set;
+		if (ss != NULL && !(ss->ss_flags & SS_DISABLE)) {
+			g = *ss;
+			set = 1;
+		}
+		if (ss == NULL && oss != NULL && set) {
+			*oss = g;
+			oss->ss_flags = 0;
+			return 0;
+		}
+	}
 	if (IS("ss_ignored") && ss != NULL)
 		ss = NULL;
 	if (IS("disable_ignored") && ss != NULL && (ss->ss_flags & SS_DISABLE))

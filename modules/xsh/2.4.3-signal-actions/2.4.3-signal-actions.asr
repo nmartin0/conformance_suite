@@ -189,3 +189,50 @@ note       A sample of the 2.4.3 list, not every function; the handler
            sig_atomic_t objects. The test is single-threaded.
 nomutant   a fault would have to be specific to calls made from handlers
 test       t/016-async-signal-safe.c
+
+assertion  XSH.2.4.3-signal-actions.017
+anchor     functions/V2_chap02.html#2.4.3
+class      conditional
+when       MSG
+since      2008
+says       With mq_notify() asking for SIGRTMIN with sigev_value 77, a message
+           sent to the empty queue runs the SIGRTMIN handler (SA_SIGINFO)
+           with si_code SI_MESGQ and si_value 77 (within 3 s).
+nomutant   The notification comes from the message queue implementation;
+           no interposed function stands between.
+test       t/017-si-mesgq.c
+
+assertion  XSH.2.4.3-signal-actions.018
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2008
+says       An aio_write() of 5 bytes with SIGEV_SIGNAL, SIGRTMIN and
+           sigev_value 88 runs the SIGRTMIN handler (SA_SIGINFO) on
+           completion with si_code SI_ASYNCIO and si_value 88 (within
+           3 s).
+nomutant   The completion signal comes from the I/O implementation; no
+           interposed function stands between.
+test       t/018-si-asyncio.c
+
+assertion  XSH.2.4.3-signal-actions.019
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2008
+says       When a child exits with status 7, the SIGCHLD handler (SA_SIGINFO)
+           gets si_code CLD_EXITED, si_pid the child's process ID, si_uid
+           the real user ID and si_status 7.
+nomutant   The siginfo_t is filled by the kernel at the child's exit; no
+           interposed function stands between.
+test       t/019-sigchld-info.c
+
+assertion  XSH.2.4.3-signal-actions.020
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2008
+says       A read of a page just unmapped gives a SIGSEGV whose siginfo_t has
+           si_code SEGV_MAPERR and si_addr in that page; a read of the
+           second page of a two-page shared mapping of a file cut to one
+           page gives a SIGBUS whose si_code is BUS_ADRERR or BUS_OBJERR.
+nomutant   The faults are raised by the hardware and kernel; no
+           interposed function stands between.
+test       t/020-fault-codes.c

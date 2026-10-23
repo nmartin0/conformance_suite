@@ -165,6 +165,8 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact)
 			a.sa_flags &= ~SA_ONSTACK;
 		if (IS("onstack_always"))
 			a.sa_flags |= SA_ONSTACK;
+		if (IS("nocldwait_ignored") && sig == SIGCHLD)
+			a.sa_flags &= ~SA_NOCLDWAIT;
 		if (sig > 0 && sig < 65) {
 			int caught = (a.sa_flags & SA_SIGINFO) ||
 			    (a.sa_handler != SIG_DFL && a.sa_handler != SIG_IGN);

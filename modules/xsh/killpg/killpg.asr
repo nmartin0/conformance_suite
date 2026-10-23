@@ -24,3 +24,23 @@ says       killpg() with signal 0 on the caller's own process group returns 0
 note       The caller's group under pcexec holds only the test's own
            processes.
 test       t/002-null-einval.c
+
+assertion  XSH.killpg.003
+anchor     functions/killpg.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       killpg(pgrp, 0) and killpg(pgrp, SIGUSR1), with pgrp the process ID
+           of a reaped child that led no group, fail with ESRCH.
+test       t/003-esrch.c
+
+assertion  XSH.killpg.004
+anchor     functions/killpg.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A process running as user 65534 that calls killpg() for a group
+           whose only member runs as root fails with EPERM, and the member
+           does not get the signal.
+needs      root
+test       t/004-eperm.c

@@ -65,3 +65,14 @@ says       After sigwaitinfo() takes the only occurrence of a blocked SIGUSR1,
            fails with EAGAIN.
 uses       XSH.sigpending.001
 test       t/007-pending-reset.c
+
+assertion  XSH.sigtimedwait.008
+anchor     functions/sigtimedwait.html#DESCRIPTION
+class      required
+since      2008
+says       With SIGRTMIN blocked, sigqueue() to the process itself fails with
+           EAGAIN once the queue is full ({SIGQUEUE_MAX}, if at most
+           100000); after every queued instance is accepted with
+           sigtimedwait() (zero timeout), sigqueue() succeeds again.
+timeout    120
+test       t/008-queue-again.c
