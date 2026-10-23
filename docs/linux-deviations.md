@@ -37,6 +37,7 @@ by the named assertion.
 | XSH.open.045 | FAIL | `open("file/", O_CREAT...)` gives EISDIR; ENOTDIR required | O.1 |
 | XSH.dup.012 to .015 | UNINITIATED (glibc) | `dup3()` exists but is not declared under the strict build | 11.1 |
 | XSH.pipe.007 to .010 | UNINITIATED (glibc) | `pipe2()` exists but is not declared under the strict build | 11.1 |
+| XBD.fcntl.h.008 (XSH.fcntl.016 blocked) | FAIL | glibc: `F_OWNER_PID`/`F_OWNER_PGRP` are enum constants only, never macros; musl 1.2.4: they and `struct f_owner_ex` need `_GNU_SOURCE` | O.2 |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or
@@ -49,6 +50,21 @@ O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - Comp: kernel. Kind: long-standing. Observe: XSH.open.044, XSH.open.045.
 - Src: posixcheck run, Linux 6.18, glibc and musl alike.
 
+O.2 **`F_OWNER_PID` / `F_OWNER_PGRP` are not macros in glibc; hidden in musl.**
+- POSIX (Issue 8 `<fcntl.h>`): defines F_GETOWN_EX, F_SETOWN_EX, the
+  symbolic constants F_OWNER_PID and F_OWNER_PGRP, and struct f_owner_ex.
+  A symbolic constant is a macro (XBD 3.363); it may also be an
+  enumeration constant, but not only that.
+- glibc 2.39: F_OWNER_* are members of `enum __pid_type` with no macro,
+  even with `_GNU_SOURCE`; F_GETOWN_EX and struct f_owner_ex need
+  `_GNU_SOURCE`.
+- musl 1.2.4: F_GETOWN_EX is always defined, but F_OWNER_* and struct
+  f_owner_ex only with `_GNU_SOURCE`.
+- Behaviour is fine: with `_GNU_SOURCE`, XSH.fcntl.016 passes on musl.
+- Comp: glibc, musl. Kind: missing-2024. Observe: XBD.fcntl.h.008.
+- Src: posixcheck run; /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h,
+  /usr/include/x86_64-linux-musl/fcntl.h.
+
 ## Things the strict build changes
 
 Tests are compiled with `-D_POSIX_C_SOURCE=202405L` (or
@@ -58,7 +74,9 @@ interface that glibc does implement can still fail to compile in a test.
 That is a real conformance failure (a conforming application cannot see
 the interface), but it is a header problem, not a missing behaviour. The
 log note says which; to see whether the behaviour itself works, rerun the
-module with `--cc 'cc -D_GNU_SOURCE'` on a reference system only.
+module with a compiler wrapper that adds `-D_GNU_SOURCE` (for example a
+two-line script `exec cc -D_GNU_SOURCE "$@"` passed as `--cc`), on a
+reference system only.
 
 ---
 

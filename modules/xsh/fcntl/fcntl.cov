@@ -1,0 +1,162 @@
+# fcntl.cov - every requirement unit on functions/fcntl.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+# --- general ---
+DESCRIPTION:ea164e5c        none  introduces the commands
+DESCRIPTION:4670c0f3        none  names the argument
+DESCRIPTION:ce09a50e        none  introduces the list
+
+# --- descriptor duplication ---
+DESCRIPTION:3909ae5a        XSH.fcntl.001 XSH.fcntl.004
+DESCRIPTION:e1b96e0c        partial XSH.fcntl.002  # sharing locks not tested
+DESCRIPTION:9e344391        partial XSH.fcntl.003  # FD_CLOFORK not tested
+DESCRIPTION:6b561d31        XSH.fcntl.004
+DESCRIPTION:f3766032        todo  F_DUPFD_CLOFORK sets FD_CLOFORK (needs F_DUPFD_CLOFORK)
+
+# --- descriptor flags ---
+DESCRIPTION:bb7c1796        XSH.fcntl.007
+DESCRIPTION:f1d3ecd8        XSH.fcntl.007
+DESCRIPTION:cab3aac2        XSH.fcntl.007
+DESCRIPTION:c29e1a17        partial XSH.fcntl.008  # exec only; the posix_spawn() image: xsh/posix_spawn
+DESCRIPTION:f42222df        todo  FD_CLOFORK: the child of fork() does not have the descriptor (needs FD_CLOFORK)
+
+# --- file status flags ---
+DESCRIPTION:57893f6f        XSH.fcntl.009
+DESCRIPTION:2f54b967        XSH.fcntl.009
+DESCRIPTION:358781b4        XSH.fcntl.010
+DESCRIPTION:74da09f2        none  a permission
+DESCRIPTION:e16186e2        XSH.fcntl.010
+DESCRIPTION:a227e486        XSH.fcntl.011
+DESCRIPTION:1f0a88b2        none  unspecified
+DESCRIPTION:2d9b690f        none  unspecified
+
+# --- socket owner ---
+DESCRIPTION:86aba10b        XSH.fcntl.012
+DESCRIPTION:5d311467        XSH.fcntl.012
+DESCRIPTION:6e68ffa5        none  unspecified
+DESCRIPTION:d464479f        partial XSH.fcntl.012  # atomicity not tested
+DESCRIPTION:5d311467.2      XSH.fcntl.012
+DESCRIPTION:6e68ffa5.2      none  unspecified
+DESCRIPTION:d495a43a        XSH.fcntl.016
+DESCRIPTION:489027c4        XSH.fcntl.016
+DESCRIPTION:9b67c460        XSH.fcntl.016
+DESCRIPTION:6e68ffa5.3      none  unspecified
+DESCRIPTION:7d25f60d        XSH.fcntl.016
+DESCRIPTION:4e98de77        XSH.fcntl.016
+DESCRIPTION:9d4a90c9        partial XSH.fcntl.016  # recorded and reported back; SIGURG delivery not tested
+DESCRIPTION:177f40d9        partial XSH.fcntl.016  # recorded and reported back; SIGURG delivery not tested
+DESCRIPTION:6e68ffa5.4      none  unspecified
+DESCRIPTION:c22c6bf3        todo  SIGURG delivery honours kill() permissions (needs out-of-band data on a TCP socket and a second user)
+DESCRIPTION:a3943da8        none  a permission
+DESCRIPTION:aeeaaf1c        todo  owner process exits: no SIGURG to a later process with the same ID (hard to arrange ID reuse; may stay untestable)
+
+# --- record locking: commands ---
+DESCRIPTION:2673b486        none  introduces the lock commands
+DESCRIPTION:dbffb805        XSH.fcntl.017  # every lock test uses a regular file
+DESCRIPTION:3513622d        XSH.fcntl.017
+DESCRIPTION:3069c368        XSH.fcntl.017
+DESCRIPTION:74745698        XSH.fcntl.018
+DESCRIPTION:0e93a433        XSH.fcntl.017
+DESCRIPTION:a3bf88eb        XSH.fcntl.019 XSH.fcntl.020 XSH.fcntl.031
+DESCRIPTION:c2f873cf        none  cross-reference to <fcntl.h>
+DESCRIPTION:4bee4aaf        XSH.fcntl.021
+DESCRIPTION:8e83f5eb        XSH.fcntl.022
+DESCRIPTION:c27377d4        XSH.fcntl.023
+DESCRIPTION:50e0d695        XSH.fcntl.023
+DESCRIPTION:5a56c6df        XSH.fcntl.038
+DESCRIPTION:3069c368.2      XSH.fcntl.038
+DESCRIPTION:74745698.2      XSH.fcntl.038
+DESCRIPTION:eafa591c        XSH.fcntl.037
+DESCRIPTION:020a6301        XSH.fcntl.037 XSH.fcntl.043
+DESCRIPTION:c2f873cf.2      none  cross-reference to <fcntl.h>
+DESCRIPTION:4bee4aaf.2      XSH.fcntl.039
+DESCRIPTION:2bad9224        todo  F_OFD_SETLKW waits for a blocking lock to go (as XSH.fcntl.022)
+DESCRIPTION:c27377d4.2      XSH.fcntl.042
+DESCRIPTION:50e0d695.2      XSH.fcntl.042
+DESCRIPTION:3cddcaae        none  a permission
+DESCRIPTION:7c979778        impl  extra commands are named F_* (Tier 0 namespace check)
+
+# --- record locking: semantics ---
+DESCRIPTION:719def1a        XSH.fcntl.019
+DESCRIPTION:690609e9        partial XSH.fcntl.019  # shared process-owned lock against an exclusive OFD lock not tested
+DESCRIPTION:0440a67b        partial XSH.fcntl.039 XSH.fcntl.041  # shared OFD lock blocking exclusive locks not tested separately
+DESCRIPTION:f56ddc47        XSH.fcntl.024
+DESCRIPTION:3dd793bb        XSH.fcntl.020 XSH.fcntl.041
+DESCRIPTION:0373fff2        XSH.fcntl.039 XSH.fcntl.041
+DESCRIPTION:b2004111        XSH.fcntl.024
+DESCRIPTION:f05d049b        none  describes the structure
+DESCRIPTION:54e0cff6        XSH.fcntl.029
+DESCRIPTION:064cfdbd        none  definition; the ranges are tested by XSH.fcntl.025
+DESCRIPTION:57545657        XSH.fcntl.026
+DESCRIPTION:e7055f59        partial XSH.fcntl.034  # F_GETLK and F_SETLKW input l_pid not tested; the OFD half is an application rule
+DESCRIPTION:dafe5db2        XSH.fcntl.017
+DESCRIPTION:aad52d63        XSH.fcntl.017
+DESCRIPTION:bc3c9bc6        XSH.fcntl.017
+DESCRIPTION:38ce2ce7        XSH.fcntl.017 XSH.fcntl.029
+DESCRIPTION:d3403553        XSH.fcntl.017 XSH.fcntl.029
+DESCRIPTION:d35fddba        XSH.fcntl.017
+DESCRIPTION:a3a7e6b8        XSH.fcntl.017 XSH.fcntl.037 XSH.fcntl.038
+DESCRIPTION:3064981a        todo  F_SETLKW blocked on a SEEK_END lock; extend the file while waiting; the locked range is the one at call time
+DESCRIPTION:40c1376f        todo  as above, also moving the offset (SEEK_CUR) while blocked
+DESCRIPTION:5a7fd5dd        XSH.fcntl.025
+DESCRIPTION:6c5745db        XSH.fcntl.026
+DESCRIPTION:ba6f2de3        XSH.fcntl.027 XSH.fcntl.030
+DESCRIPTION:8d13f72d        XSH.fcntl.027
+DESCRIPTION:fa41cd9d        XSH.fcntl.028
+DESCRIPTION:f12dc4e3        none  restates the lock semantics tested by XSH.fcntl.019 and XSH.fcntl.020
+DESCRIPTION:d8777d3b        XSH.fcntl.031
+DESCRIPTION:cbee3f18        XSH.fcntl.021 XSH.fcntl.041
+DESCRIPTION:3ae716a0        XSH.fcntl.043
+DESCRIPTION:c51e1521        partial XSH.fcntl.039 XSH.fcntl.041  # the blocking (F_OFD_SETLKW) half not tested
+DESCRIPTION:37dbfcf0        XSH.fcntl.033 XSH.close.005
+DESCRIPTION:3851a9a1        XSH.fcntl.032
+DESCRIPTION:b39a4566        partial XSH.close.007  # removal through process exit or FD_CLOEXEC not tested
+DESCRIPTION:96b5c3d6        XSH.fcntl.040
+DESCRIPTION:ccf2b682        none  explanation
+DESCRIPTION:c7873eff        todo  two processes each holding a lock and waiting for the other's: if the system detects it, EDEADLK (conditional)
+DESCRIPTION:c4ed822a        none  a permission
+DESCRIPTION:1e235270        none  unspecified
+DESCRIPTION:b20aaeee        XSH.fcntl.036
+DESCRIPTION:7f692437        XSH.fcntl.031 XSH.fcntl.043
+DESCRIPTION:d8ca7803        todo  SHM: fcntl() on a shared memory object (F_GETFD, F_DUPFD) behaves as for a regular file
+DESCRIPTION:cebd5785        none  unspecified
+
+# --- RETURN VALUE ---
+RETURN_VALUE:720cc824       none  introduces the list
+RETURN_VALUE:ef5fddae       XSH.fcntl.001
+RETURN_VALUE:ef5fddae.2     XSH.fcntl.004
+RETURN_VALUE:ef5fddae.3     todo  F_DUPFD_CLOFORK returns a new descriptor (needs F_DUPFD_CLOFORK)
+RETURN_VALUE:1f194b0e       XSH.fcntl.007
+RETURN_VALUE:0c964427       XSH.fcntl.007
+RETURN_VALUE:cc140501       XSH.fcntl.007
+RETURN_VALUE:f62b9a8c       XSH.fcntl.009
+RETURN_VALUE:0c964427.2     XSH.fcntl.009
+RETURN_VALUE:cc140501.2     XSH.fcntl.010
+RETURN_VALUE:cc140501.3     XSH.fcntl.018
+RETURN_VALUE:cc140501.4     XSH.fcntl.017 XSH.fcntl.035
+RETURN_VALUE:cc140501.5     XSH.fcntl.022
+RETURN_VALUE:cc140501.6     XSH.fcntl.038
+RETURN_VALUE:cc140501.7     XSH.fcntl.037
+RETURN_VALUE:cc140501.8     todo  F_OFD_SETLKW success value (with the waiting test)
+RETURN_VALUE:e043f12f       XSH.fcntl.012
+RETURN_VALUE:cc140501.9     XSH.fcntl.012
+RETURN_VALUE:cc140501.10    XSH.fcntl.016
+RETURN_VALUE:cc140501.11    XSH.fcntl.016
+RETURN_VALUE:ce1869b1       XSH.fcntl.014
+
+# --- ERRORS: shall fail ---
+ERRORS:ba58486c             XSH.fcntl.021
+ERRORS:0b80bcdf             XSH.fcntl.039 XSH.fcntl.041
+ERRORS:7fd01444             XSH.fcntl.014 XSH.fcntl.024
+ERRORS:c593940e             XSH.fcntl.023 XSH.fcntl.042
+ERRORS:ae513b16             partial XSH.fcntl.005 XSH.fcntl.015 XSH.fcntl.030  # F_SETOWN_EX invalid type or negative pid not tested
+ERRORS:6fc2fee8             XSH.fcntl.006
+ERRORS:726ddaef             todo  environment: exhaust the system lock table (if the system has a limit)
+ERRORS:c808741d             todo  32-bit off_t: F_GETLK of a lock whose start does not fit (conditional)
+ERRORS:14c47cf9             todo  F_SETLK with l_start near the largest off_t and l_len making the end overflow
+ERRORS:f864a3dd             XSH.fcntl.013
+
+# --- ERRORS: may fail ---
+ERRORS:dc02b217             optional
+ERRORS:4b10987b             optional
+ERRORS:8dc3ffaa             optional

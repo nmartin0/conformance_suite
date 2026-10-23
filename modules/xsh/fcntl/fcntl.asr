@@ -1,0 +1,421 @@
+# XSH fcntl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Error tests arrange for exactly one error condition (XSH 2.3).
+
+assertion  XSH.fcntl.001
+anchor     functions/fcntl.html#DESCRIPTION/F_DUPFD
+class      required
+since      1988
+says       F_DUPFD returns the lowest free descriptor not less than arg:
+           with a free slot below arg, an open one at arg and a free one
+           above, it returns the one above.
+test       t/001-dupfd-lowest-from-arg.c
+
+assertion  XSH.fcntl.002
+anchor     functions/fcntl.html#DESCRIPTION/F_DUPFD
+class      required
+since      1988
+says       The descriptor F_DUPFD returns refers to the same open file
+           description: offset and file status flags (O_APPEND) are
+           shared.
+test       t/002-dupfd-shares.c
+
+assertion  XSH.fcntl.003
+anchor     functions/fcntl.html#DESCRIPTION/F_DUPFD
+class      required
+since      1988
+says       F_DUPFD clears FD_CLOEXEC on the new descriptor, even when it
+           is set on the original.
+test       t/003-dupfd-cloexec-clear.c
+
+assertion  XSH.fcntl.004
+anchor     functions/fcntl.html#DESCRIPTION/F_DUPFD_CLOEXEC
+class      required
+since      2008
+says       F_DUPFD_CLOEXEC returns the lowest free descriptor not less
+           than arg, with FD_CLOEXEC set.
+test       t/004-dupfd-cloexec.c
+
+assertion  XSH.fcntl.005
+anchor     functions/fcntl.html#ERRORS/EINVAL
+class      required
+since      1988
+says       F_DUPFD with a negative arg, or one not less than {OPEN_MAX},
+           fails with EINVAL.
+note       The {OPEN_MAX} case is skipped (with a note) when
+           sysconf(_SC_OPEN_MAX) is indeterminate or not below INT_MAX.
+test       t/005-dupfd-einval.c
+
+assertion  XSH.fcntl.006
+anchor     functions/fcntl.html#ERRORS/EMFILE
+class      required
+since      1988
+says       F_DUPFD fails with EMFILE when no descriptor at or above arg
+           is free, even though lower ones are (arg is the last slot
+           below the lowered RLIMIT_NOFILE, and it is in use).
+test       t/006-dupfd-emfile.c
+
+assertion  XSH.fcntl.007
+anchor     functions/fcntl.html#DESCRIPTION/F_GETFD
+anchor     functions/fcntl.html#DESCRIPTION/F_SETFD
+class      required
+since      1988
+says       F_SETFD sets FD_CLOEXEC on one descriptor only: F_GETFD shows
+           it there (a non-negative value) and not on a duplicate of the
+           same open file description.
+test       t/007-fd-flags-per-descriptor.c
+
+assertion  XSH.fcntl.008
+anchor     functions/fcntl.html#DESCRIPTION/F_SETFD
+class      required
+since      1988
+says       A descriptor with FD_CLOEXEC set is closed in the new process
+           image after a successful exec; one without it stays open.
+note       The test runs itself again through execv() with its own path
+           (argv[0]).
+test       t/008-cloexec-exec.c
+
+assertion  XSH.fcntl.009
+anchor     functions/fcntl.html#DESCRIPTION/F_GETFL
+class      required
+since      1988
+says       F_GETFL returns a non-negative value whose O_ACCMODE bits
+           give the access mode and which includes the status flags set
+           at open (O_APPEND).
+test       t/009-getfl.c
+
+assertion  XSH.fcntl.010
+anchor     functions/fcntl.html#DESCRIPTION/F_SETFL
+anchor     functions/fcntl.html#DESCRIPTION/F_GETFL
+class      required
+since      1988
+says       F_SETFL changes the file status flags of the open file
+           description: a duplicate sees the change, another open of the
+           same file does not.
+test       t/010-setfl-description.c
+
+assertion  XSH.fcntl.011
+anchor     functions/fcntl.html#DESCRIPTION/F_SETFL
+class      required
+since      1988
+says       F_SETFL ignores access-mode and file-creation bits in arg: an
+           O_RDONLY descriptor stays read-only, O_TRUNC truncates
+           nothing, and O_CLOEXEC does not set FD_CLOEXEC.
+note       O_CLOEXEC counts as a file creation flag since Issue 7.
+test       t/011-setfl-ignores.c
+
+assertion  XSH.fcntl.012
+anchor     functions/fcntl.html#DESCRIPTION/F_SETOWN
+anchor     functions/fcntl.html#DESCRIPTION/F_GETOWN
+class      required
+since      2001
+says       On a socket, F_SETOWN with the process ID makes F_GETOWN
+           return it; with minus the process group ID, F_GETOWN returns
+           that negative value; with 0, F_GETOWN returns 0.
+test       t/012-setown-getown.c
+
+assertion  XSH.fcntl.013
+anchor     functions/fcntl.html#ERRORS/ESRCH
+class      required
+since      2001
+says       F_SETOWN with the process ID of a process that no longer
+           exists fails with ESRCH.
+note       The ID is that of a child already reaped; reuse of that ID in
+           the next instant would make the test UNRESOLVED-worthy noise,
+           not a FAIL, so it is checked with kill() first.
+test       t/013-setown-esrch.c
+
+assertion  XSH.fcntl.014
+anchor     functions/fcntl.html#ERRORS/EBADF
+class      required
+since      1988
+says       fcntl() on a descriptor that is not open fails with EBADF
+           (F_GETFD, F_GETFL and F_DUPFD).
+test       t/014-ebadf.c
+
+assertion  XSH.fcntl.015
+anchor     functions/fcntl.html#ERRORS/EINVAL
+class      required
+since      1988
+says       fcntl() with a cmd value the implementation does not define
+           fails with EINVAL.
+note       Uses 0x7ffffff0, which no known system defines;
+           implementations may define extra commands, all named F_*.
+test       t/015-bad-cmd.c
+
+assertion  XSH.fcntl.016
+anchor     functions/fcntl.html#DESCRIPTION/F_SETOWN_EX
+anchor     functions/fcntl.html#DESCRIPTION/F_GETOWN_EX
+class      required
+since      2024
+says       On a socket, F_SETOWN_EX with type F_OWNER_PID and the
+           process ID, or F_OWNER_PGRP and the process group ID, is
+           reported back by F_GETOWN_EX with the same type and pid; pid
+           0 is reported as pid 0.
+uses       XBD.fcntl.h.008
+test       t/016-owner-ex.c
+
+assertion  XSH.fcntl.017
+anchor     functions/fcntl.html#DESCRIPTION/F_GETLK
+anchor     functions/fcntl.html#DESCRIPTION/l_pid
+class      required
+since      1988
+says       F_GETLK in another process reports a blocking write lock set
+           with F_SETLK: l_type F_WRLCK, l_whence SEEK_SET, the lock's
+           l_start and l_len, and l_pid the holder's process ID.
+test       t/017-getlk-reports.c
+
+assertion  XSH.fcntl.018
+anchor     functions/fcntl.html#DESCRIPTION/F_GETLK
+class      required
+since      1988
+says       When nothing blocks the described lock, F_GETLK sets l_type
+           to F_UNLCK and leaves l_whence, l_start, l_len and l_pid as
+           they were.
+test       t/018-getlk-none.c
+
+assertion  XSH.fcntl.019
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      1988
+says       A shared (read) lock does not block another process's shared
+           lock on the same bytes but does block its exclusive (write)
+           lock.
+test       t/019-shared-locks.c
+
+assertion  XSH.fcntl.020
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      1988
+says       An exclusive (write) lock blocks another process's shared and
+           exclusive locks on any byte it covers.
+test       t/020-exclusive-lock.c
+
+assertion  XSH.fcntl.021
+anchor     functions/fcntl.html#DESCRIPTION/F_SETLK
+anchor     functions/fcntl.html#ERRORS/EACCES
+class      required
+since      1988
+says       F_SETLK of a lock that another process's lock blocks returns
+           -1 at once with EACCES or EAGAIN.
+test       t/021-setlk-conflict.c
+
+assertion  XSH.fcntl.022
+anchor     functions/fcntl.html#DESCRIPTION/F_SETLKW
+class      required
+since      1988
+says       F_SETLKW of a blocked lock waits until the other process's
+           lock goes away, then succeeds.
+note       The holder keeps its lock for 1 s; the call must take at
+           least 0.5 s.
+test       t/022-setlkw-waits.c
+
+assertion  XSH.fcntl.023
+anchor     functions/fcntl.html#DESCRIPTION/F_SETLKW
+anchor     functions/fcntl.html#ERRORS/EINTR
+class      required
+since      1988
+says       A caught signal (without SA_RESTART) interrupts a waiting
+           F_SETLKW: it returns -1 with EINTR and the lock is not set.
+test       t/023-setlkw-eintr.c
+
+assertion  XSH.fcntl.024
+anchor     functions/fcntl.html#DESCRIPTION
+anchor     functions/fcntl.html#ERRORS/EBADF
+class      required
+since      1988
+says       A shared lock on a descriptor not open for reading, or an
+           exclusive lock on one not open for writing, fails with EBADF.
+test       t/024-lock-modes.c
+
+assertion  XSH.fcntl.025
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      1988
+says       A lock with positive l_len covers bytes l_start through
+           l_start+l_len-1 and no others.
+test       t/025-range-positive.c
+
+assertion  XSH.fcntl.026
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      2001
+says       A lock with negative l_len covers bytes l_start+l_len through
+           l_start-1.
+test       t/026-range-negative.c
+
+assertion  XSH.fcntl.027
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      1988
+says       A lock with l_len 0 extends to the largest file offset,
+           including bytes beyond the current end of file, and may start
+           beyond the end of file.
+test       t/027-range-to-end.c
+
+assertion  XSH.fcntl.028
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      1988
+says       A lock with l_whence SEEK_SET, l_start 0 and l_len 0 locks
+           the whole file.
+test       t/028-whole-file.c
+
+assertion  XSH.fcntl.029
+anchor     functions/fcntl.html#DESCRIPTION
+anchor     functions/fcntl.html#DESCRIPTION/l_whence
+class      required
+since      1988
+says       l_start is measured from the current offset with SEEK_CUR and
+           from the end of file with SEEK_END; F_GETLK reports such
+           locks with l_whence SEEK_SET and the absolute start.
+test       t/029-whence.c
+
+assertion  XSH.fcntl.030
+anchor     functions/fcntl.html#DESCRIPTION
+anchor     functions/fcntl.html#ERRORS/EINVAL
+class      required
+since      1988
+says       A lock that would start before the beginning of the file
+           fails with EINVAL (SEEK_SET with l_start -1).
+test       t/030-before-start.c
+
+assertion  XSH.fcntl.031
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      1988
+says       A process's new lock replaces its own existing lock on the
+           same bytes (shared becomes exclusive), and unlocking part of
+           a locked range leaves the rest locked.
+test       t/031-replace-split.c
+
+assertion  XSH.fcntl.032
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      1988
+says       Process-owned locks are not inherited by a child: the child's
+           attempt to lock the same bytes fails as for any other
+           process.
+test       t/032-not-inherited.c
+
+assertion  XSH.fcntl.033
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      1988
+says       A process's locks are removed when it terminates: after the
+           holder exits, another process can set a conflicting lock.
+test       t/033-released-at-exit.c
+
+assertion  XSH.fcntl.034
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      1988
+says       On input to F_SETLK the l_pid member is ignored: a lock
+           request with an arbitrary l_pid succeeds and the lock is
+           reported with the caller's process ID.
+test       t/034-pid-ignored.c
+
+assertion  XSH.fcntl.035
+anchor     functions/fcntl.html#DESCRIPTION/F_SETLK
+anchor     functions/fcntl.html#RETURN VALUE
+class      required
+since      1988
+says       Unlocking bytes that are not locked succeeds (F_SETLK with
+           F_UNLCK returns a value other than -1).
+test       t/035-unlock-unlocked.c
+
+assertion  XSH.fcntl.036
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      2008
+says       Unlocking a segment whose last byte is the largest off_t,
+           inside a lock with l_len 0, unlocks from the segment's start
+           to the end: the bytes before stay locked and the bytes after
+           (to any offset) are free.
+note       The largest off_t is computed assuming a two's complement
+           signed off_t of 64 or 32 bits.
+test       t/036-unlock-to-max.c
+
+assertion  XSH.fcntl.037
+anchor     functions/fcntl.html#DESCRIPTION/F_OFD_SETLK
+anchor     functions/fcntl.html#DESCRIPTION/l_pid
+class      required
+since      2024
+says       An OFD-owned write lock set with F_OFD_SETLK (l_pid 0) blocks
+           another process's process-owned lock, and F_GETLK there
+           reports it with l_pid (pid_t)-1.
+note       Needs F_OFD_*; blocked when XBD.fcntl.h.006 fails.
+uses       XBD.fcntl.h.006
+test       t/037-ofd-seen.c
+
+assertion  XSH.fcntl.038
+anchor     functions/fcntl.html#DESCRIPTION/F_OFD_GETLK
+class      required
+since      2024
+says       F_OFD_GETLK (l_pid 0 on input) changes only l_type, to
+           F_UNLCK, when nothing blocks; when another process's process-
+           owned lock blocks, it reports that lock with the holder's
+           process ID.
+note       Needs F_OFD_*; blocked when XBD.fcntl.h.006 fails.
+uses       XBD.fcntl.h.006
+test       t/038-ofd-getlk.c
+
+assertion  XSH.fcntl.039
+anchor     functions/fcntl.html#DESCRIPTION
+anchor     functions/fcntl.html#ERRORS/EAGAIN
+class      required
+since      2024
+says       OFD-owned locks conflict between open file descriptions even
+           in one process: an exclusive OFD lock through one open blocks
+           an OFD lock through another open of the same file, and
+           F_OFD_SETLK fails at once with EAGAIN.
+note       Needs F_OFD_*; blocked when XBD.fcntl.h.006 fails.
+uses       XBD.fcntl.h.006
+test       t/039-ofd-between-descriptions.c
+
+assertion  XSH.fcntl.040
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      2024
+says       An OFD-owned lock belongs to the open file description,
+           whichever process holds a descriptor for it: a child using
+           the inherited descriptor can change the lock, while a new
+           open in the child is blocked.
+note       Needs F_OFD_*; blocked when XBD.fcntl.h.006 fails.
+uses       XBD.fcntl.h.006
+test       t/040-ofd-shared-description.c
+
+assertion  XSH.fcntl.041
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      2024
+says       Within one process, a process-owned lock blocks an OFD-owned
+           lock on the same bytes (F_OFD_SETLK fails with EAGAIN), and
+           an OFD-owned lock blocks a process-owned one (F_SETLK fails
+           with EACCES or EAGAIN).
+note       Needs F_OFD_*; blocked when XBD.fcntl.h.006 fails.
+uses       XBD.fcntl.h.006
+test       t/041-ofd-vs-process.c
+
+assertion  XSH.fcntl.042
+anchor     functions/fcntl.html#DESCRIPTION/F_OFD_SETLKW
+anchor     functions/fcntl.html#ERRORS/EINTR
+class      required
+since      2024
+says       A caught signal (without SA_RESTART) interrupts a waiting
+           F_OFD_SETLKW: -1 with EINTR, and no lock is set.
+note       Needs F_OFD_*; blocked when XBD.fcntl.h.006 fails.
+uses       XBD.fcntl.h.006
+test       t/042-ofd-setlkw-eintr.c
+
+assertion  XSH.fcntl.043
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      2024
+says       A new OFD lock replaces the description's own lock on the
+           same bytes (shared becomes exclusive), and unlocking part of
+           it leaves the rest locked.
+note       Needs F_OFD_*; blocked when XBD.fcntl.h.006 fails.
+uses       XBD.fcntl.h.006
+test       t/043-ofd-replace-split.c

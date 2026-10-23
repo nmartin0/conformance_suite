@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (102 assertions):
+- Modules (146 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -42,11 +42,15 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     OFD-lock and pipe description lifetime, sockets, posix_close().
   - `xsh/dup` (15): dup(), dup2(), dup3().
   - `xsh/pipe` (10): pipe(), pipe2().
-  - `xbd/unistd.h` (1): POSIX_CLOSE_RESTART; `xbd/fcntl.h` now 7.
+  - `xsh/fcntl` (43): F_DUPFD/F_DUPFD_CLOEXEC, descriptor and status
+    flags, exec and FD_CLOEXEC, socket owner (F_SETOWN, F_SETOWN_EX),
+    process-owned record locks (conflicts, ranges, whence, waiting,
+    EINTR, inheritance, exit), OFD-owned locks.
+  - `xbd/unistd.h` (1): POSIX_CLOSE_RESTART; `xbd/fcntl.h` now 8.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).
 - `ci/lint.py`: traceability and anchor checks; `ci/mutate.sh`: mutation
-  checks (138 mutants); `ci/catalog.py`: shared parser.
+  checks (211 mutants); `ci/catalog.py`: shared parser.
 - `analysis/analyze.py`: load, runs, verdict, failures, matrix, diff,
   coverage, html, calibrate (checks a reference run against
   `known/*.known`, its expected failures).
@@ -114,7 +118,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
 4. open(): O_SEARCH/O_EXEC (after the fcntl.h header checks), EACCES
    cases (unprivileged user), O_SYNC, pseudo-terminal cases, environment
    cases (ENOSPC, EROFS, ENFILE). close(): posix_close(), locks, FIFO and
-   socket cases. Then fcntl, read/write, lseek.
+   socket cases. Then read/write, lseek.
 5. `xcu/getconf`: cross-check getconf against sysconf/confstr.
 6. Controller script: copy the tree to a VM over ssh, set PC_TREE to the
    tree's hash, run, copy results back.
