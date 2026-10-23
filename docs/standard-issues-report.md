@@ -117,6 +117,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-25 | XSH `chown()`: chown(-1, -1) of another user's file | Question | Low | Disputed (XSH.chown.008) |
 | Q-26 | XSH `truncate()`/`ftruncate()`: does the file size limit apply when shrinking? | Question | Low | Only growth tested |
 | Q-27 | XSH `futimens()`: "write access to the file" for a descriptor | Question | Low | Requires the file's permission (XSH.futimens.021) |
+| Q-28 | XSH `fflush()`: does fflush(NULL) set the offsets of input streams? | Question | Low | Disputed (XSH.fflush.011) |
 
 ## Entries
 
@@ -978,6 +979,12 @@ is unclear.
 - **Where:** XSH `futimens()`, DESCRIPTION (who may set the current time) and [EACCES].
 - **Question:** for futimens(fd, NULL), is "write access to the file" decided by the file's permission bits, or by whether fd is open for writing? The Linux man page has long said the kernel checks the descriptor; Linux 6.18 decides by the file's permissions. The sentence on the O_SEARCH check also says "the function" where only utimensat() can be meant.
 - **posixcheck meanwhile:** XSH.futimens.021 requires success for a read-only descriptor of a file the process may write.
+
+### Q-28: fflush(NULL) and the input-stream offset rule
+
+- **Where:** XSH `fflush()`, DESCRIPTION.
+- **Question:** the page gives two behaviours: writing an output stream's unwritten data (from ISO C), and, as a POSIX addition, setting a seekable input stream's file offset to the stream's position. For a null pointer, fflush() performs "this flushing action on all streams for which the behavior is defined above". Does that include the input-stream rule, so that fflush(NULL) sets every seekable input stream's offset, or only the flushing of output, as in ISO C? Neither glibc nor musl touches input streams for fflush(NULL), though both do for fflush(stream).
+- **posixcheck meanwhile:** XSH.fflush.011 is `disputed`: an untouched offset is logged as INSPECT.
 
 ## Tracking
 

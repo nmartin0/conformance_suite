@@ -1,0 +1,18 @@
+# fflush.cov - every requirement unit on functions/fflush.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:eacca521     XSH.fflush.001 XSH.fflush.002 XSH.fflush.003
+DESCRIPTION:f9f6852b     XSH.fflush.004 XSH.fflush.005
+DESCRIPTION:a942fc8d     XSH.fflush.006 XSH.fflush.011
+RETURN_VALUE:07b95237    XSH.fflush.001 XSH.fflush.007
+ERRORS:bebb7770          XSH.fflush.009
+ERRORS:b88d9b94          XSH.fflush.007
+ERRORS:38d3d1f2          todo  needs a file system whose maximum file size can be reached
+ERRORS:44f9e858          partial XSH.fflush.010  # EFBIG; the XSI SIGXFSZ is not checked here (see XSH.write)
+ERRORS:399b8ebf          todo  needs a stream whose offset maximum is below the largest off_t (a 32-bit build without large-file support)
+ERRORS:a89df42a          XSH.fflush.012
+ERRORS:6d4a6aff          todo  needs a pseudo-terminal and an orphaned background process group
+ERRORS:35f64052          untestable  no portable way to make open_memstream() run out of memory
+ERRORS:5f5513df          partial XSH.fflush.013  # the fmemopen() buffer; a full device is an environment case
+ERRORS:060d5689          XSH.fflush.008
+ERRORS:01ce82ab          optional

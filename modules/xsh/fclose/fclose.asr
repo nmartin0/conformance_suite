@@ -1,0 +1,80 @@
+# XSH fclose()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fclose.001
+anchor     functions/fclose.html#DESCRIPTION
+class      required
+since      1988
+says       With "hello" buffered in an output stream, fclose() returns 0 and the
+           file holds "hello".
+test       t/001-flushes.c
+
+assertion  XSH.fclose.002
+anchor     functions/fclose.html#DESCRIPTION
+class      required
+since      1988
+says       After fclose() of a stream, its descriptor (from fileno()) is no longer
+           open.
+test       t/002-closes-fd.c
+
+assertion  XSH.fclose.003
+anchor     functions/fclose.html#DESCRIPTION
+class      required
+since      2008
+says       For a file "0123456789" read through a stream (the active handle) with
+           one fgetc(), after fclose() a duplicate of the descriptor taken
+           before the call has offset 1.
+test       t/003-input-offset.c
+
+assertion  XSH.fclose.004
+anchor     functions/fclose.html#DESCRIPTION
+class      required
+since      2008
+says       With data buffered in an output stream and the file's times set to
+           2001-09-09, after fclose() st_mtim is later than that and st_ctim
+           later than before the call.
+test       t/004-times.c
+
+assertion  XSH.fclose.005
+anchor     functions/fclose.html#ERRORS/EBADF
+class      required
+since      2001
+says       With data buffered in a stream whose descriptor was closed,
+           fclose() returns EOF with errno EBADF.
+test       t/005-ebadf.c
+
+assertion  XSH.fclose.006
+anchor     functions/fclose.html#ERRORS/EPIPE
+class      required
+since      2001
+says       With SIGPIPE blocked and data buffered in a stream on a pipe whose read
+           end is closed, fclose() returns EOF with errno EPIPE, and SIGPIPE
+           is pending.
+test       t/006-epipe.c
+
+assertion  XSH.fclose.007
+anchor     functions/fclose.html#DESCRIPTION
+class      required
+since      2001
+says       When fclose() of a stream on a pipe with no reader fails (EPIPE), the
+           stream's descriptor is closed all the same.
+test       t/007-closed-on-error.c
+
+assertion  XSH.fclose.008
+anchor     functions/fclose.html#ERRORS/EINTR
+class      required
+since      2001
+says       With a stream on a full pipe (blocking) holding 1000 buffered bytes,
+           a SIGALRM caught without SA_RESTART 200 ms into fclose() makes it
+           return EOF with errno EINTR.
+timeout    20
+test       t/008-eintr.c
+
+assertion  XSH.fclose.009
+anchor     functions/fclose.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       With a pipe filled to capacity and O_NONBLOCK set on its write
+           end, fclose() of a stream on that end holding 1000 buffered bytes
+           returns EOF with errno EAGAIN.
+test       t/009-eagain.c

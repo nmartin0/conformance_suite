@@ -102,3 +102,4 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-25 | chown(-1, -1) of another user's file | question | XSH.chown.008 |
 | Q-26 | truncate(): file size limit when shrinking | question | XSH.truncate.007 |
 | Q-27 | futimens(): write access of file or descriptor | question | XSH.futimens.021 |
+| Q-28 | fflush(NULL) and input streams | question | XSH.fflush.011 |

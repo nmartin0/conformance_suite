@@ -1,0 +1,122 @@
+# XSH fflush()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fflush.001
+anchor     functions/fflush.html#DESCRIPTION
+class      required
+since      1988
+says       With "hello" written to a fully buffered output stream, fflush()
+           returns 0 and the file then holds "hello".
+test       t/001-writes.c
+
+assertion  XSH.fflush.002
+anchor     functions/fflush.html#DESCRIPTION
+class      required
+since      1988
+says       With a file "0123456789" opened "r+", after fseek() to 2 and fputs("ab"),
+           fflush() returns 0 and the file holds "01ab456789".
+test       t/002-update-stream.c
+
+assertion  XSH.fflush.003
+anchor     functions/fflush.html#DESCRIPTION
+class      required
+since      2008
+says       With data buffered in an output stream and the file's times set to
+           2001-09-09, fflush() leaves st_mtim later than that and st_ctim
+           later than before the call.
+test       t/003-times.c
+
+assertion  XSH.fflush.004
+anchor     functions/fflush.html#DESCRIPTION
+class      required
+since      2008
+says       For a file "0123456789" read through a stream opened "r", after one
+           fgetc(), fflush() returns 0 and the descriptor's offset is 1.
+test       t/004-input-offset.c
+
+assertion  XSH.fflush.005
+anchor     functions/fflush.html#DESCRIPTION
+class      required
+since      2008
+says       For a file "0123456789" read through a stream, after fgetc() twice and
+           ungetc('x'), fflush() leaves the descriptor's offset at the
+           stream's position 1, and the next fgetc() returns '1', not
+           'x'.
+test       t/005-input-pushback.c
+
+assertion  XSH.fflush.006
+anchor     functions/fflush.html#DESCRIPTION
+class      required
+since      1988
+says       With data buffered in two output streams, fflush(NULL) returns 0 and
+           both files hold their data.
+test       t/006-null.c
+
+assertion  XSH.fflush.007
+anchor     functions/fflush.html#ERRORS/EBADF
+class      required
+since      2001
+says       With data buffered in a stream whose descriptor was closed,
+           fflush() returns EOF, sets errno to EBADF and the stream's error
+           indicator.
+test       t/007-ebadf.c
+
+assertion  XSH.fflush.008
+anchor     functions/fflush.html#ERRORS/EPIPE
+class      required
+since      2001
+says       With SIGPIPE blocked and data buffered in a stream on a pipe whose read
+           end is closed, fflush() returns EOF with errno EPIPE, and SIGPIPE
+           is pending.
+test       t/008-epipe.c
+
+assertion  XSH.fflush.009
+anchor     functions/fflush.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       With a pipe filled to capacity and O_NONBLOCK set on its write end,
+           fflush() of a stream on that end holding 4096 buffered bytes
+           returns EOF with errno EAGAIN.
+test       t/009-eagain.c
+
+assertion  XSH.fflush.010
+anchor     functions/fflush.html#ERRORS/EFBIG
+class      required
+since      2024
+says       In a child whose soft RLIMIT_FSIZE is 4096 bytes (SIGXFSZ ignored),
+           fflush() of a stream holding 8192 buffered bytes returns EOF with
+           errno EFBIG.
+test       t/010-efbig.c
+
+assertion  XSH.fflush.011
+anchor     functions/fflush.html#DESCRIPTION
+class      disputed
+since      2008
+says       With one character read from a seekable input stream, fflush(NULL)
+           returns 0 and the stream's descriptor offset is 1.
+note       disputed (Q-28): fflush(NULL) performs "this flushing action"
+           on all streams for which the behaviour is defined above;
+           whether that includes the input-stream offset rule, which ISO
+           C does not have, is open, and neither reference C library
+           does it.
+test       t/011-null-input.c
+
+assertion  XSH.fflush.012
+anchor     functions/fflush.html#ERRORS/EINTR
+class      required
+since      2001
+says       With a stream on a full pipe (blocking) holding 1000 buffered bytes,
+           a SIGALRM caught without SA_RESTART 200 ms into fflush() makes it
+           return EOF with errno EINTR.
+timeout    20
+test       t/012-eintr.c
+
+assertion  XSH.fflush.013
+anchor     functions/fflush.html#ERRORS/ENOSPC
+class      required
+since      2008
+says       For a stream from fmemopen() on a 4-byte buffer opened "w" and given
+           a 64-byte buffer of its own with setvbuf(), after fputs() of 10
+           bytes fflush() returns EOF with errno ENOSPC (where fputs()
+           itself already fails, the assertion is UNRESOLVED).
+test       t/013-enospc-fmemopen.c
