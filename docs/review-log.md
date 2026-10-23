@@ -29,6 +29,9 @@ what came of it. Standard issues a review found are in
 | `<signal.h>` | `xbd/signal.h` | 16 test findings, 5 standard issues (SI-39 to SI-41, Q-16, SI-10 extended): member types by _Generic, constant expressions, SIGURG split | 913b32b |
 | XSH 2.4 | the four 2.4 modules | 19 test findings, 6 standard issues (SI-42 to SI-44, Q-17, Q-18, SI-30 extended): deadlines instead of hangs, atomics, 16 faults planted | d55daf8 |
 | remaining signal functions | sigset functions, `signal`, `sigaltstack`, `psiginfo`, `sig2str`, `killpg`, `abort` | 21 test findings, 6 standard issues (SI-47 to SI-49, Q-20 to Q-23); O.13 and O.14 corrected; O.16 found | a9561a4 |
+| spec model and Tier 0 | `gen/specmodel.py`, `gen/tier0.py` and their output | about 380 names the model missed, IP6 and TSA+TSS labels, the Encryption Option Group, structure and array checks that could not fail, value checks; the model now audits itself; SI-51 | 5b311b7 |
+| stat, fstat | `xsh/fstatat`, `xsh/fstat` | 13 findings: trailing slashes through lstat(), absolute paths with bad descriptors, permission cases run unprivileged, /dev/null dropped; O.18 found | a6eebc7 |
+| link, unlink | `xsh/link`, `xsh/unlink` | 9 findings: directory cases only unprivileged, isolated EACCES, sticky rule per XBD 4.5, link.019 disputed (Q-24), new cases | c1b0b65 |
 
 The shared copy of the standard-issues report is the Claude Doc at
 https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF; it is kept in step with
