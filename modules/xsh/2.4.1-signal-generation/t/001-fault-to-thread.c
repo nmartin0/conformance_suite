@@ -10,7 +10,7 @@
 #include <pthread.h>
 #include <setjmp.h>
 #include <signal.h>
-#include <stdarg.h>
+#include <stdatomic.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,9 +41,10 @@ static void catch_info(int sig, void (*fn)(int, siginfo_t *, void *))
 	pc_check(sigaction(sig, &sa, NULL) == 0, "sigaction(%d) failed", sig);
 }
 
+/* Sets SIG_DFL or SIG_IGN (or a plain handler) with sigaction(). */
 static void set_action(int sig, void (*fn)(int))
 {
-	pc_check(signal(sig, fn) != SIG_ERR, "signal(%d) failed", sig);
+	catch_sig(sig, fn);
 }
 
 static void mask(int how, int sig)
@@ -73,16 +74,87 @@ static void sleep_ms(long ms)
 		;
 }
 
-/* Reaps c, retrying on EINTR; returns the status. */
-static int reap(pid_t c, int opts)
+/* Children made here are killed when the test exits, however it ends. */
+static pid_t kids[16];
+static int nkids;
+
+static void kill_kids(void)
 {
-	int st = 0;
+	int i;
+
+	for (i = 0; i < nkids; i++)
+		if (kids[i] > 0) {
+			(void)kill(kids[i], SIGKILL);
+			(void)kill(kids[i], SIGCONT);
+		}
+}
+
+static void track(pid_t c)
+{
+	if (nkids == 0)
+		(void)atexit(kill_kids);
+	if (nkids < 16)
+		kids[nkids++] = c;
+}
+
+static void kill_child(pid_t c)
+{
+	(void)kill(c, SIGKILL);
+	(void)kill(c, SIGCONT);
+	while (waitpid(c, NULL, 0) == -1 && errno == EINTR)
+		;
+}
+
+/*
+ * Waits up to ms for a status change of c that opts select (WUNTRACED
+ * adds stops); 1 with *st set, or 0 if none came in time.
+ */
+static int wait_by(pid_t c, int opts, long ms, int *st)
+{
+	long waited;
 	pid_t r;
 
-	while ((r = waitpid(c, &st, opts)) == -1 && errno == EINTR)
-		;
-	pc_check(r == c, "waitpid failed: %s", pc_errname(errno));
+	for (waited = 0; waited <= ms; waited += 10) {
+		r = waitpid(c, st, opts | WNOHANG);
+		if (r == c)
+			return 1;
+		if (r == -1 && errno != EINTR)
+			pc_check(0, "waitpid failed: %s", pc_errname(errno));
+		sleep_ms(10);
+	}
+	return 0;
+}
+
+/* The status of c once it ends (or stops); FAIL if neither within 10 s. */
+static int end_of(pid_t c, const char *what)
+{
+	int st = 0;
+
+	if (!wait_by(c, WUNTRACED, 10000, &st)) {
+		kill_child(c);
+		pc_check(0, "%s: the child did not end within 10 s", what);
+	}
+	if (WIFSTOPPED(st))
+		kill_child(c);
 	return st;
+}
+
+/* Waits until c is stopped by sig; FAIL (child killed) otherwise. */
+static void await_stop(pid_t c, int sig)
+{
+	int st = 0;
+
+	if (!wait_by(c, WUNTRACED, 10000, &st)) {
+		kill_child(c);
+		pc_check(0, "the child was not stopped within 10 s");
+	}
+	if (!WIFSTOPPED(st)) {
+		pc_check(0, "the child ended (status %#x) instead of stopping", st);
+	}
+	if (WSTOPSIG(st) != sig) {
+		kill_child(c);
+		pc_check(0, "the child was stopped by %d, expected %d", WSTOPSIG(st), sig);
+	}
 }
 
 /* Reads one byte from fd within ms milliseconds: the byte, or -1. */
@@ -107,10 +179,24 @@ static int read_within(int fd, long ms)
 	return -1;
 }
 
+/* Waits (no deadline: the driver's limit covers a hang) for c's 'a'. */
+static void started(int fd, pid_t c)
+{
+	char ch = 0;
+	ssize_t k;
+
+	while ((k = read(fd, &ch, 1)) == -1 && errno == EINTR)
+		;
+	if (k != 1 || ch != 'a') {
+		kill_child(c);
+		pc_unresolved("the child did not start (%c)", k == 1 ? ch : '-');
+	}
+}
+
 /*
- * Runs fn in a child (its own process group) and returns the child's
- * pid; report[0] is the read end of a pipe whose write end the child has
- * as fd report[1].
+ * Runs fn in a child (in the test's process group, which is not orphaned)
+ * and returns its pid; report[0] is the read end of a pipe whose write end
+ * the child has as fd report[1].
  */
 static pid_t child(void (*fn)(int), int report[2])
 {
@@ -121,10 +207,10 @@ static pid_t child(void (*fn)(int), int report[2])
 	pc_check(c != -1, "fork failed");
 	if (c == 0) {
 		(void)close(report[0]);
-		(void)setpgid(0, 0);
 		fn(report[1]);
 		_exit(0);
 	}
+	track(c);
 	(void)close(report[1]);
 	return c;
 }
@@ -134,46 +220,27 @@ static void say(int fd, char ch)
 	(void)write(fd, &ch, 1);
 }
 
-/* Waits until c is stopped (WUNTRACED); FAIL if it ends instead. */
-static void await_stop(pid_t c, int sig)
-{
-	int st = reap(c, WUNTRACED);
-
-	pc_check(WIFSTOPPED(st), "the child was not stopped (status %#x)", st);
-	pc_check(WSTOPSIG(st) == sig, "the child was stopped by %d, expected %d", WSTOPSIG(st), sig);
-}
-
-static void kill_child(pid_t c)
-{
-	(void)kill(c, SIGKILL);
-	(void)kill(c, SIGCONT);
-	(void)waitpid(c, NULL, 0);
-}
-
 static _Thread_local volatile sig_atomic_t hit;
 static _Thread_local sigjmp_buf env;
-static volatile int code;
-static void *volatile addr;
+static atomic_int bus;
 
-static void on_segv(int sig, siginfo_t *si, void *uc)
+static void on_fault(int sig)
 {
-	(void)sig;
-	(void)uc;
+	if (sig == SIGBUS)
+		atomic_store(&bus, 1);
 	hit = 1;
-	code = si->si_code;
-	addr = si->si_addr;
 	siglongjmp(env, 1);
 }
 
 static char *page;
-static volatile int b_hit = -1;
+static atomic_int b_hit = -1;
 
 static void *writer(void *arg)
 {
 	(void)arg;
 	if (sigsetjmp(env, 1) == 0)
 		page[16] = 1;	/* faults */
-	b_hit = hit;
+	atomic_store(&b_hit, hit);
 	return NULL;
 }
 
@@ -184,13 +251,13 @@ int main(void)
 	pc_begin("XSH.2.4.1-signal-generation.001");
 	page = mmap(NULL, 4096, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	pc_check(page != MAP_FAILED, "mmap failed");
-	catch_info(SIGSEGV, on_segv);
+	catch_sig(SIGSEGV, on_fault);
+	catch_sig(SIGBUS, on_fault);
 	pc_test();
 	pc_check(pthread_create(&b, NULL, writer, NULL) == 0, "pthread_create failed");
 	(void)pthread_join(b, NULL);
-	pc_check(b_hit == 1, "the SIGSEGV handler did not run in the thread that faulted");
-	pc_check(hit == 0, "the SIGSEGV handler ran in the main thread");
-	pc_check(code == SEGV_ACCERR, "si_code is %d, expected SEGV_ACCERR", code);
-	pc_check(addr == (void *)(page + 16), "si_addr is %p, expected %p", addr, (void *)(page + 16));
+	pc_check(!atomic_load(&bus), "the write to a read-only page gave SIGBUS, not SIGSEGV (XSH 2.8.3.3)");
+	pc_check(atomic_load(&b_hit) == 1, "the fault's handler did not run in the thread that faulted");
+	pc_check(hit == 0, "the fault's handler ran in the main thread");
 	pc_pass();
 }

@@ -59,6 +59,8 @@ int kill(pid_t pid, int sig)
 		return real(pid, sig);
 	if (IS("einval_accepted") && !valid(sig))
 		return 0;
+	if (IS("self_to_calling_thread") && pid == getpid() && sig > 0)
+		return pthread_kill(pthread_self(), sig) == 0 ? 0 : -1;	/* to the thread, not the process */
 	if (IS("drops") && sig != 0 && sig != SIGKILL && pid > 0 && pid != getpid())
 		return 0;
 	if (IS("null_sends") && sig == 0)

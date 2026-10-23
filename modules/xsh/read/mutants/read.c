@@ -10,6 +10,7 @@
 #define _GNU_SOURCE 1
 #include <dlfcn.h>
 #include <errno.h>
+#include <signal.h>
 #include <fcntl.h>
 #include <poll.h>
 #include <stdlib.h>
@@ -61,6 +62,11 @@ static int nothing_ready(int fd)
 	return poll(&p, 1, 0) == 0;
 }
 
+static void cont_catcher(int sig)
+{
+	(void)sig;
+}
+
 ssize_t read(int fd, void *buf, size_t n)
 {
 	read_fn f = real_read();
@@ -69,6 +75,14 @@ ssize_t read(int fd, void *buf, size_t n)
 	int k, fl, e;
 	ssize_t r;
 
+	if (IS("eintr_after_cont")) {
+		/* a SIGCONT catcher without SA_RESTART: a stop and continue interrupts the call */
+		struct sigaction a;
+		memset(&a, 0, sizeof a);
+		a.sa_handler = cont_catcher;
+		sigemptyset(&a.sa_mask);
+		(void)sigaction(SIGCONT, &a, NULL);
+	}
 	if (m == NULL)
 		return f(fd, buf, n);
 	k = kind(fd);

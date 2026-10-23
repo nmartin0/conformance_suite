@@ -37,22 +37,22 @@ anchor     functions/V2_chap02.html#2.4.3
 class      required
 since      2024
 says       A process that sends itself SIGCHLD, SIGURG and SIGWINCH at SIG_DFL
-           carries on unaffected.
+           carries on unaffected (it is neither stopped nor ended).
 note       SIGWINCH is new in Issue 8; SIGCHLD and SIGURG have ignored
-           by default for longer.
-nomutant   decided by the kernel; a user-space shim cannot plant it
+           by default for longer. The dfl_as_catcher fault is caught
+           through the sleep the child is in when the signals come.
 test       t/004-default-ignore.c
 
 assertion  XSH.2.4.3-signal-actions.005
 anchor     functions/V2_chap02.html#2.4.3
 class      required
 since      2001
-says       A child (in its own process group, which is not orphaned) that sends
-           itself SIGSTOP, SIGTSTP, SIGTTIN or SIGTTOU at SIG_DFL is
-           stopped by it (seen with WUNTRACED), and does not go on until
-           continued.
-note       The child's group is not orphaned: its parent, in the same
-           session, is in a different group.
+says       A child (in the test's process group, which is not orphaned) that
+           sends itself SIGSTOP, SIGTSTP, SIGTTIN or SIGTTOU at SIG_DFL is
+           stopped by it (seen with WUNTRACED), does not go on while
+           stopped (300 ms), and goes on after SIGCONT.
+note       The group is not orphaned: the test's parent is in another
+           group of the same session.
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/005-default-stop.c
 
@@ -61,8 +61,9 @@ anchor     functions/V2_chap02.html#2.4.3
 class      required
 since      2001
 says       A caught SIGUSR1 sent to a stopped child is not handled while it is
-           stopped (300 ms), and is handled once SIGCONT continues it; a
-           SIGKILL sent to the stopped child terminates it.
+           stopped (300 ms); SIGCONT continues it, and the handler runs
+           before the child goes on from where it stopped; a SIGKILL sent
+           to the child when stopped again terminates it.
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/006-stopped-holds-signals.c
 
@@ -82,11 +83,11 @@ assertion  XSH.2.4.3-signal-actions.008
 anchor     functions/V2_chap02.html#2.4.3
 class      required
 since      2024
-says       With SIGURG and SIGWINCH caught, blocked and pending, setting each
-           action to SIG_DFL makes it no longer pending (they stay
-           blocked).
+says       With SIGCHLD, SIGURG and SIGWINCH caught, blocked and pending,
+           setting each action to SIG_DFL makes it no longer pending (they
+           stay blocked).
+uses       XSH.sigpending.001
 note       SIGWINCH is new in Issue 8.
-nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/008-dfl-discards-pending.c
 
 assertion  XSH.2.4.3-signal-actions.009
@@ -96,7 +97,7 @@ since      1988
 says       With SIGUSR1 caught, blocked and pending, setting its action to
            SIG_IGN makes it no longer pending: after a handler is installed
            again and SIGUSR1 unblocked, the handler does not run.
-nomutant   decided by the kernel; a user-space shim cannot plant it
+uses       XSH.sigpending.001
 test       t/009-ign-discards-pending.c
 
 assertion  XSH.2.4.3-signal-actions.010
@@ -107,9 +108,13 @@ says       With SIGRTMIN caught (SA_SIGINFO) and blocked, sigqueue() is called
            until it fails with EAGAIN; after SIGRTMIN is set to SIG_IGN and
            caught again, it is not pending and sigqueue() succeeds
            again.
+uses       XSH.sigpending.001 XSH.sigqueue.001
 timeout    120
-note       Skipped as NOTINUSE when {SIGQUEUE_MAX} is indeterminate, and
-           UNRESOLVED above 1000000 (as XSH.sigqueue.005).
+note       When {SIGQUEUE_MAX} is indeterminate the queue is filled
+           until EAGAIN, up to 1000000 (UNRESOLVED if never). The test
+           briefly exhausts the queue limit, which on Linux is per user,
+           so the re-queue is tried a few times in case another process
+           took the freed slots.
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/010-ign-releases-queue.c
 
@@ -129,6 +134,8 @@ since      1988
 says       A loop counting to a limit, interrupted by a caught SIGALRM, goes on
            from where it was after the handler returns and reaches the
            limit, with its local state intact.
+note       A weak check: almost any system passes; it guards against
+           gross faults in returning from handlers.
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/012-resume-after-handler.c
 
@@ -137,8 +144,8 @@ anchor     functions/V2_chap02.html#2.4.3
 class      required
 since      2008
 says       In a child with two threads, a SIGSTOP sent with pthread_kill() to
-           the second thread stops the whole child: its main thread makes
-           no progress until SIGCONT.
+           the second thread stops the whole child (within 10 s): its main
+           thread makes no progress until SIGCONT.
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/013-thread-stop-whole-process.c
 
@@ -151,3 +158,17 @@ says       In a child with two threads, SIGUSR1 at SIG_DFL sent with
            SIGUSR1.
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/014-thread-terminate-whole-process.c
+
+assertion  XSH.2.4.3-signal-actions.015
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2008
+says       A write to a page mapped PROT_READ gives a SIGSEGV whose siginfo_t
+           has si_signo SIGSEGV, si_code SEGV_ACCERR and si_addr inside that
+           page.
+note       si_addr may be inaccurate on some systems (<signal.h>), so
+           any address within the page is accepted. The handler records
+           what it saw in volatile sig_atomic_t objects and leaves with
+           siglongjmp().
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/015-segv-siginfo.c

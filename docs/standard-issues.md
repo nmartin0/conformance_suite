@@ -41,7 +41,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-27 | raise() ERRORS vs its pthread_kill() equivalence (sig 0, unsupported) | conflict | XSH.raise.003 |
 | SI-28 | kill() CHANGE HISTORY: "calling" process where the receiver is meant | editorial | XSH.kill.014 |
 | SI-29 | kill(): "a signal" vs "that signal" for the pid cases | editorial | (not tested) |
-| SI-30 | killpg() missing from the generating-function lists | editorial | XSH.pthread_sigmask.011 |
+| SI-30 | killpg() (and in two 2.4.3 sentences pthread_kill()) missing from the generating-function lists | editorial | XSH.pthread_sigmask.011 |
 | SI-31 | pthread_sigmask(): no-EINTR sentence covers sigprocmask() | editorial | (not tested) |
 | SI-32 | sigwaitinfo()/sigtimedwait(): wait ends on a caught signal, but [EINTR] is may-fail | editorial | (not tested) |
 | SI-33 | sigwait(): leftover "if the implementation supports queued signals" | editorial | XSH.sigwait.003 |
@@ -53,6 +53,9 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-39 | <signal.h> si_code table: option spans opened but not closed | editorial | XBD.signal.h.024 |
 | SI-40 | <limits.h>: {NSIG_MAX} has no minimum | editorial | XBD.signal.h.007 |
 | SI-41 | <signal.h>: SIGRTMIN/SIGRTMAX "declared"; non-overlap without "shall" | editorial | XBD.signal.h.006 |
+| SI-42 | XSH 2.4.3: si_addr still the faulting instruction's address | editorial | XSH.2.4.3-signal-actions.015 |
+| SI-43 | XSH 2.4.3 SIG_DFL: queued-values sentence's scope and wording | editorial | XSH.2.4.3-signal-actions.010 |
+| SI-44 | XSH 2.4.1: a sigwait() thread has the signal "delivered" | editorial | XSH.sigwait.006 |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
@@ -69,3 +72,5 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-14 | alarm(): may SIGALRM come early? | question | XSH.alarm.001 |
 | Q-15 | pause()/sigsuspend(): delivery to the calling thread? | question | XSH.sigsuspend.006 |
 | Q-16 | {RTSIG_MAX}: the range's size or a lower bound? | question | XBD.signal.h.006 |
+| Q-17 | 2.4.2: kill() occurrences vs sigqueue() FIFO order | question | XSH.2.4.2-realtime-signals.004 |
+| Q-18 | 2.4.1/2.4.3: SIGCONT and stopped processes | question | XSH.2.4.3-signal-actions.006 |

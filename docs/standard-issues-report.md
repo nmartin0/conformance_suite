@@ -68,6 +68,9 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-39 | XBD `<signal.h>` si_code table: option spans opened but not closed | Defect (editorial) | Low | Only the TRAP_ codes as XSI (XBD.signal.h.024) |
 | SI-40 | XBD `<limits.h>`: {NSIG_MAX} has no minimum | Defect (editorial) | Low | XBD.signal.h.007 |
 | SI-41 | XBD `<signal.h>`: SIGRTMIN/SIGRTMAX "declared"; non-overlap without "shall" | Defect (editorial) | Low | Treats non-overlap as required (XBD.signal.h.006) |
+| SI-42 | XSH 2.4.3: si_addr still the faulting instruction's address | Defect (editorial) | Low | Follows `<signal.h>` (XSH.2.4.3-signal-actions.015) |
+| SI-43 | XSH 2.4.3 SIG_DFL: queued-values sentence's scope and wording | Defect (editorial) | Low | SIG_IGN case only (XSH.2.4.3-signal-actions.010) |
+| SI-44 | XSH 2.4.1: a sigwait() thread has the signal "delivered" | Defect (editorial) | Low | XSH.sigwait.006 |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -84,6 +87,8 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-14 | XSH `alarm()`: may SIGALRM come early? | Question | Low | Treats early as FAIL (XSH.alarm.001) |
 | Q-15 | XSH `pause()`/`sigsuspend()`: delivery to the calling thread? | Question | Low | Directs the signal at the waiter (XSH.sigsuspend.006) |
 | Q-16 | XBD `<limits.h>`/`<signal.h>`: {RTSIG_MAX} the range's size or a lower bound? | Question | Low | Checks the lower bound (XBD.signal.h.006) |
+| Q-17 | XSH 2.4.2: kill() occurrences vs sigqueue() FIFO order | Question | Low | FIFO among sigqueue() ones only (XSH.2.4.2-realtime-signals.004) |
+| Q-18 | XSH 2.4.1/2.4.3: SIGCONT and stopped processes | Question | Low | SIGCONT at SIG_DFL (XSH.2.4.3-signal-actions.006) |
 
 ## Entries
 
@@ -458,7 +463,8 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **What the text says:** generating these signals while blocked is undefined unless they come from another process or from kill(), pthread_kill(), raise() or sigqueue().
 - **Why it is a problem:** killpg() (XSI, equivalent to kill() with a negative pid) is left out, so killpg() to the caller's own group is undefined while the same kill() is not.
 - **posixcheck meanwhile:** XSH.pthread_sigmask.011 uses kill().
-- **Suggested change:** add killpg() to both lists (editorial).
+- **Related:** two more 2.4.3 sentences (behaviour after ignoring SIGFPE, SIGILL, SIGSEGV or SIGBUS, and after a normal return from their handlers) exempt only signals from kill(), sigqueue() and raise(), leaving out pthread_kill() as well as killpg(), although the multithreaded handler rule and pthread_sigmask() include pthread_kill().
+- **Suggested change:** add killpg() to both lists, and pthread_kill() and killpg() to the two 2.4.3 sentences (editorial).
 
 ### SI-31: the no-EINTR sentence covers sigprocmask(), which returns no error codes
 
@@ -547,6 +553,30 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **Why it is a problem:** macros are defined, not declared; and the non-overlap statement is worded as a fact, so it is unclear whether it is a requirement.
 - **posixcheck meanwhile:** XBD.signal.h.006 treats non-overlap as required.
 - **Suggested change:** "shall define", and "shall not overlap" (editorial).
+
+### SI-42: XSH 2.4.3: si_addr still described as the faulting instruction's address
+
+- **Where:** XSH 2.4.3, the siginfo_t member table; XBD `<signal.h>`.
+- **What the text says:** 2.4.3 describes si_addr as the address of the faulting instruction; `<signal.h>` (changed by Defect 1775) gives it as the address that caused the fault, which for SIGSEGV and SIGBUS is the faulting memory reference.
+- **Why it is a problem:** the two descriptions differ for memory faults, and only one of them was updated.
+- **posixcheck meanwhile:** XSH.2.4.3-signal-actions.015 follows `<signal.h>` (an address inside the page written).
+- **Suggested change:** align 2.4.3 with `<signal.h>` (editorial).
+
+### SI-43: XSH 2.4.3 SIG_DFL: the queued-values sentence's scope and wording
+
+- **Where:** XSH 2.4.3, SIG_DFL and SIG_IGN.
+- **What the text says:** under SIG_DFL, after the rule that setting SIG_DFL discards a pending default-ignored signal, any queued values pending are discarded and their resources "returned to the system for other use"; under SIG_IGN the same idea is worded "made available to queue other signals".
+- **Why it is a problem:** it is unclear whether the SIG_DFL sentence applies only to the default-ignored case just before it, or to any signal set to SIG_DFL (a blocked, pending SIGRTMIN, say); and the two wordings differ for what is meant to be the same effect.
+- **posixcheck meanwhile:** only the SIG_IGN case is tested (XSH.2.4.3-signal-actions.010).
+- **Suggested change:** tie the sentence to the case before it and use one wording (editorial).
+
+### SI-44: XSH 2.4.1: a thread in sigwait() is said to have a signal "delivered"
+
+- **Where:** XSH 2.4.1.
+- **What the text says:** signals generated for the process are delivered to exactly one thread that is in a sigwait() call for the signal or has not blocked it.
+- **Why it is a problem:** by 2.4.1's own definitions a thread in sigwait() accepts the signal; it is not delivered.
+- **posixcheck meanwhile:** XSH.sigwait.006 tests that only one waiter returns.
+- **Suggested change:** "delivered to or accepted by exactly one of those threads" (editorial).
 
 ## Questions to raise
 
@@ -698,6 +728,18 @@ is unclear.
 - **Where:** XBD `<limits.h>` ({RTSIG_MAX}); XBD `<signal.h>` (SIGRTMIN, SIGRTMAX).
 - **Question:** `<limits.h>` describes {RTSIG_MAX} as the maximum number of realtime signals reserved for application use; `<signal.h>` says the range reserved for application use includes at least {RTSIG_MAX} numbers. Together they make the range exactly {RTSIG_MAX} long. Is that intended, or is one of them meant loosely?
 - **posixcheck meanwhile:** XBD.signal.h.006 checks only the lower bound (at least {RTSIG_MAX}).
+
+### Q-17: Are kill()-generated occurrences ordered with sigqueue() ones?
+
+- **Where:** XSH 2.4.2.
+- **Question:** occurrences generated by sigqueue() and other value-carrying functions are said to be queued in FIFO order (a statement without "shall"); whether kill() queues an occurrence is implementation-defined, and nothing orders such an occurrence relative to the sigqueue() ones. Is the FIFO statement a requirement, and does it cover a queued kill() occurrence?
+- **posixcheck meanwhile:** XSH.2.4.2-realtime-signals.004 requires FIFO order only among the sigqueue() occurrences and lets an SI_USER one come anywhere.
+
+### Q-18: SIGCONT and stopped processes in 2.4.3
+
+- **Where:** XSH 2.4.1 and 2.4.3.
+- **Question:** 2.4.3 says a stopped process gets no further signals until continued, naming only SIGKILL as an exception, though 2.4.1 makes SIGCONT continue the process whatever its action; the "continue" leg of the rule that a signal delivered to a thread continues the whole process can never apply, since continuing happens at generation; and the rule that pending unblocked signals are handled before execution resumes sits under SIG_DFL, so its order is unstated when SIGCONT is caught or ignored. Is the order meant to hold whatever SIGCONT's action?
+- **posixcheck meanwhile:** XSH.2.4.3-signal-actions.006 uses SIGCONT at SIG_DFL.
 
 ## Tracking
 

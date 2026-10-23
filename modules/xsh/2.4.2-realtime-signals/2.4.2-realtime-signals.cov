@@ -34,6 +34,6 @@
 2.4.2:95f8638b              none  a statement
 2.4.2:3abce07e              XSH.2.4.2-realtime-signals.002
 2.4.2:5b4e3c10              partial XSH.2.4.2-realtime-signals.002  # a new thread; the attributes given by sigev_notify_attributes are todo
-2.4.2:7fb14375              todo  the notification thread is detached when the attributes are NULL
+2.4.2:7fb14375              untestable  detachment cannot be observed without undefined behaviour (joining or detaching a detached thread)
 2.4.2:2a4339a7              none  undefined
 2.4.2:df1697cd              impl  the notification thread's signal mask (documentation)

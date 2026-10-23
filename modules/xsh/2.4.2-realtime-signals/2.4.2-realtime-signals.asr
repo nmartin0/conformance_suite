@@ -6,9 +6,13 @@ anchor     functions/V2_chap02.html#2.4.2
 class      required
 since      2008
 says       A timer created with SIGEV_SIGNAL, SIGRTMIN (SA_SIGINFO set) and
-           sigev_value 99 generates SIGRTMIN when it expires, accepted with
-           si_code SI_TIMER and si_value 99.
-nomutant   decided by the kernel; a user-space shim cannot plant it
+           sigev_value 99 generates SIGRTMIN when it expires (accepted
+           within 5 s), with si_code SI_TIMER and si_value 99.
+uses       XSH.sigtimedwait.005
+note       CLOCK_REALTIME is used: timer_create() support for
+           CLOCK_MONOTONIC is unconditional only in Issue 8.
+nomutant   the fault would be in timer_create(), which has no module
+           (and so no shim) yet
 test       t/001-sigev-signal.c
 
 assertion  XSH.2.4.2-realtime-signals.002
@@ -17,31 +21,42 @@ class      required
 since      2008
 says       A timer created with SIGEV_THREAD (attributes NULL) calls
            sigev_notify_function with sigev_value (a pointer) when it
-           expires, in a thread other than the main thread.
-nomutant   the notification thread is made by the system
+           expires (within 5 s), in a thread other than the main
+           thread.
+note       CLOCK_REALTIME is used: timer_create() support for
+           CLOCK_MONOTONIC is unconditional only in Issue 8.
+nomutant   the fault would be in timer_create(), which has no module
+           (and so no shim) yet
 test       t/002-sigev-thread.c
 
 assertion  XSH.2.4.2-realtime-signals.003
 anchor     functions/V2_chap02.html#2.4.2
 class      required
 since      2008
-says       A timer created with SIGEV_NONE generates no signal when it
-           expires (none of SIGRTMIN, SIGALRM pending 300 ms after), and
-           timer_gettime() then shows it disarmed.
-nomutant   decided by the kernel; a user-space shim cannot plant it
+says       A timer created with SIGEV_NONE (sigev_signo SIGRTMIN) generates no
+           signal when it expires: 400 ms after arming it for 100 ms,
+           neither SIGRTMIN nor SIGALRM is pending (by sigpending() and by a
+           zero-timeout sigtimedwait()).
+uses       XSH.sigpending.001
+note       CLOCK_REALTIME is used: timer_create() support for
+           CLOCK_MONOTONIC is unconditional only in Issue 8.
+nomutant   the fault would be in timer_create(), which has no module
+           (and so no shim) yet
 test       t/003-sigev-none.c
 
 assertion  XSH.2.4.2-realtime-signals.004
 anchor     functions/V2_chap02.html#2.4.2
 class      required
 since      2008
-says       With SIGRTMIN blocked (SA_SIGINFO set) and values 1 and 2 queued by
-           sigqueue(), a kill() of SIGRTMIN does not disturb them: the
-           first two accepted are SI_QUEUE with values 1 and 2.
-uses       XSH.sigtimedwait.001
-note       Linux queues kill()-generated realtime signals too, after the
-           earlier ones, which is allowed.
-nomutant   decided by the kernel; a user-space shim cannot plant it
+says       With SIGRTMIN blocked (SA_SIGINFO set), values 1 and 2 queued by
+           sigqueue() and then a kill() of SIGRTMIN, every occurrence is
+           accepted (sigtimedwait(), 5 s then none left): the SI_QUEUE ones
+           are values 1 and 2 in that order; an SI_USER one may come
+           anywhere.
+uses       XSH.sigqueue.001 XSH.sigtimedwait.001
+note       Whether the kill() occurrence is queued, and where, is not
+           specified; only the occurrences sigqueue() made must stay in
+           FIFO order (standard question Q-17).
 test       t/004-kill-keeps-queue.c
 
 assertion  XSH.2.4.2-realtime-signals.005
@@ -52,6 +67,7 @@ says       With SIGRTMIN caught with SA_SIGINFO and two values queued while
            blocked, on unblocking the first handler call still sees
            SIGRTMIN pending (one more queued), and after the second call it
            is not pending.
+uses       XSH.sigpending.001 XSH.sigqueue.001
 note       sigpending() is async-signal-safe; the handler blocks
            SIGRTMIN while it runs, so the second occurrence waits
            pending.

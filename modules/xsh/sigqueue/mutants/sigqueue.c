@@ -95,6 +95,8 @@ int sigqueue(pid_t pid, int sig, const union sigval value)
 		return 0;
 	if (IS("drops") && sig != 0 && pid != getpid())
 		return 0;
+	if (IS("as_kill") && sig > 0)
+		return kill(pid, sig);	/* no value, no queuing */
 	if (IS("null_sends") && sig == 0)
 		sig = SIGRTMIN;
 	if (IS("value_lost"))

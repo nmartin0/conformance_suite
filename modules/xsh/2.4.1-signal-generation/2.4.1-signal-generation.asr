@@ -7,11 +7,11 @@ class      required
 since      2008
 says       A write by a second thread to a page mapped PROT_READ generates
            SIGSEGV for that thread: its handler runs in that thread (seen
-           through a thread-local flag), not in the main thread, with
-           si_code SEGV_ACCERR and si_addr the address written.
+           through a thread-local flag), not in the main thread.
 note       Memory protection makes the SIGSEGV required (XSH 2.8.3.3).
            The handler leaves with siglongjmp(), which is async-signal-
-           safe; returning normally from it would be undefined.
+           safe; returning normally from it would be undefined. A SIGBUS
+           instead is reported as a FAIL with its own message.
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/001-fault-to-thread.c
 
@@ -22,7 +22,8 @@ since      2008
 says       With SIGUSR1 blocked in the main thread and unblocked in a second
            thread, kill() of SIGUSR1 to the process runs the handler once,
            in the second thread.
-nomutant   decided by the kernel; a user-space shim cannot plant it
+note       The handler and the threads share only lock-free atomic
+           objects, which handlers in a multithreaded process may use.
 test       t/002-process-to-one-thread.c
 
 assertion  XSH.2.4.1-signal-generation.003
@@ -30,13 +31,13 @@ anchor     functions/V2_chap02.html#2.4.1
 class      required
 since      2008
 says       With SIGUSR1 blocked in both threads, a SIGUSR1 sent to the
-           process stays pending (the handler does not run within 300 ms);
-           when the second thread unblocks it, the handler runs in that
-           thread.
+           process stays pending (the handler does not run within 300 ms,
+           and the second thread sees it pending); when the second thread
+           unblocks it, the handler runs in that thread before
+           pthread_sigmask() returns.
+uses       XSH.sigpending.001
 note       pthread_sigmask() delivers at least one pending, unblocked
-           signal before it returns, so the second thread sees its
-           handler has run.
-nomutant   decided by the kernel; a user-space shim cannot plant it
+           signal before it returns.
 test       t/003-stays-pending-process.c
 
 assertion  XSH.2.4.1-signal-generation.004
@@ -46,8 +47,6 @@ since      2008
 says       With SIGUSR1 blocked (and SIGUSR2 not), a thread created with
            pthread_create() and the child of fork() each start with SIGUSR1
            blocked and SIGUSR2 not blocked.
-nomutant   the mask a thread or child starts with is set by the kernel
-           and the thread library
 test       t/004-mask-inherited.c
 
 assertion  XSH.2.4.1-signal-generation.005
@@ -57,16 +56,18 @@ since      1988
 says       A SIGUSR1 sent while blocked with handler A installed, then
            delivered after the action is changed to handler B, runs B and
            not A.
-nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/005-action-at-delivery.c
 
 assertion  XSH.2.4.1-signal-generation.006
 anchor     functions/V2_chap02.html#2.4.1
 class      required
 since      2001
-says       With SIGCONT and SIGTSTP caught and blocked, SIGCONT sent to the
-           process stays pending until SIGTSTP is sent; then SIGCONT is no
-           longer pending and SIGTSTP is.
+says       With SIGCONT and the stop signals caught and blocked: for each of
+           SIGTSTP, SIGTTIN and SIGTTOU, a SIGCONT pending on the process
+           (from kill()) and one pending on the thread (from pthread_kill())
+           are each discarded when that stop signal is sent to the process,
+           which leaves the stop signal pending.
+uses       XSH.sigpending.001
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/006-stop-discards-cont.c
 
@@ -75,8 +76,11 @@ anchor     functions/V2_chap02.html#2.4.1
 class      required
 since      2001
 says       With SIGTSTP, SIGTTIN, SIGTTOU and SIGCONT caught and blocked, the
-           three stop signals sent to the process are pending until SIGCONT
-           is sent; then none of them is pending and SIGCONT is.
+           three stop signals pending on the process (from kill()), and
+           again pending on the thread (from pthread_kill()), are all
+           discarded when SIGCONT is sent to the process, which leaves
+           SIGCONT pending.
+uses       XSH.sigpending.001
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/007-cont-discards-stop.c
 
@@ -85,7 +89,7 @@ anchor     functions/V2_chap02.html#2.4.1
 class      required
 since      2001
 says       A child that ignores SIGCONT and stops itself with SIGSTOP is
-           continued by a SIGCONT sent to it.
+           continued by a SIGCONT sent to it (within 10 s).
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/008-cont-ignored.c
 
@@ -98,3 +102,14 @@ says       A child that catches and blocks SIGCONT and stops itself with
            pending, and its handler runs once the child unblocks it.
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/009-cont-blocked.c
+
+assertion  XSH.2.4.1-signal-generation.010
+anchor     functions/V2_chap02.html#2.4.1
+class      required
+since      2008
+says       A SIGUSR1 sent with pthread_kill() to the calling thread, which
+           blocks it, is pending until its action is set to SIG_IGN, which
+           discards it; a SIGUSR2 sent the same way is accepted by
+           sigwait() in that thread.
+uses       XSH.sigpending.001
+test       t/010-thread-pending.c

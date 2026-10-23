@@ -106,8 +106,8 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     delivery to self before return, EAGAIN at {SIGQUEUE_MAX}, EINVAL,
     EPERM; alarm firing, cancelling, rescheduling, not stacking; pause()
     through handlers, termination and ignored signals.
-  - XSH 2.4 signal concepts: `xsh/2.4.1-signal-generation` (9),
-    `xsh/2.4.2-realtime-signals` (5), `xsh/2.4.3-signal-actions` (14),
+  - XSH 2.4 signal concepts: `xsh/2.4.1-signal-generation` (10),
+    `xsh/2.4.2-realtime-signals` (5), `xsh/2.4.3-signal-actions` (15),
     `xsh/2.4.4-signal-effects` (3): which thread gets a signal, pending
     and blocked signals, inherited masks, stop and SIGCONT interplay,
     sigevent notification, queues under kill() and SIG_IGN, default
@@ -197,8 +197,8 @@ anything.
 ## Issues in the standard
 
 `docs/standard-issues-report.md` is the full write-up of conflicts,
-mistakes and unclear points found in POSIX.1-2024 (SI-1 to SI-41, Q-1 to
-Q-16 so far), for The Austin Group; `docs/standard-issues.md` indexes them
+mistakes and unclear points found in POSIX.1-2024 (SI-1 to SI-44, Q-1 to
+Q-18 so far), for The Austin Group; `docs/standard-issues.md` indexes them
 by assertion. A shared copy: https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 Reviews should report any new ones; add them to both files.
 

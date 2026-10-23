@@ -16,7 +16,7 @@
 2.4.3:3d73ee6f              XSH.2.4.3-signal-actions.007
 2.4.3:0cbdc9c5              XSH.2.4.3-signal-actions.004
 2.4.3:cc97bcaf              XSH.2.4.3-signal-actions.008
-2.4.3:1d6e9b2c              none  no required signal ignores by default and is queued
+2.4.3:1d6e9b2c              todo  SIGCHLD, SIGURG or SIGWINCH queued with SA_SIGINFO, then set to SIG_DFL (realtime queuing outside SIGRTMIN-SIGRTMAX is disputed, SI-24)
 2.4.3:6f1276f9              XSH.2.4.3-signal-actions.006
 2.4.3:6dafb991              none  a may-statement (XSI)
 2.4.3:9c325a90              none  a heading
@@ -56,9 +56,9 @@
 2.4.3:c4238c01              todo  SI_ASYNCIO with aio
 2.4.3:717394fd              todo  SI_MESGQ with mq_notify() (MSG)
 2.4.3:2235ee57              none  a cross-reference
-2.4.3:2b5eeffe              partial XSH.2.4.1-signal-generation.001 XSH.exit.012  # SEGV_ACCERR and CLD_EXITED so far
+2.4.3:2b5eeffe              partial XSH.2.4.3-signal-actions.015  # SEGV_ACCERR so far; the other signal-specific codes are todo
 2.4.3:b66352f8              XSH.sigaction.006 XSH.sigtimedwait.001 XSH.sigtimedwait.004 XSH.sigqueue.001
-2.4.3:b093bc3d              partial XSH.2.4.1-signal-generation.001 XSH._Exit.014  # si_addr for SIGSEGV, si_pid and si_status for SIGCHLD
+2.4.3:b093bc3d              partial XSH.2.4.3-signal-actions.015 XSH._Exit.014  # si_addr for SIGSEGV and si_status for SIGCHLD; si_pid and si_uid for SIGCHLD are todo
 2.4.3:a6c200e0              partial XSH.sigtimedwait.001 XSH.2.4.2-realtime-signals.001  # SI_QUEUE and SI_TIMER; SI_ASYNCIO and SI_MESGQ todo
 2.4.3:a9d141ce              none  undefined
 2.4.3:5ae07797              none  undefined
@@ -80,5 +80,5 @@
 2.4.3:0e043a03              impl  additional async-signal-safe interfaces (documentation)
 2.4.3:20fc47b5              untestable  every function interrupted by every handler
 2.4.3:23c67b0c              none  a cross-reference
-2.4.3:9b12cdca              app
-2.4.3:0fbd3f42              partial XSH.2.4.3-signal-actions.013 XSH.2.4.3-signal-actions.014  # terminate and stop; continue is todo
+2.4.3:9b12cdca              todo  a handler that saves, sets and restores errno while the main program is in a call that sets errno
+2.4.3:0fbd3f42              partial XSH.2.4.3-signal-actions.013 XSH.2.4.3-signal-actions.014  # terminate and stop; the continue leg cannot arise (a stopped process is continued when SIGCONT is generated, not delivered)

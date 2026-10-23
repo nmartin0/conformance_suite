@@ -6,8 +6,8 @@ anchor     functions/V2_chap02.html#2.4.4
 class      required
 since      1988
 says       A child blocked in read() on an empty pipe that gets SIGTERM at
-           SIG_DFL is terminated by it; read() does not return.
-nomutant   decided by the kernel; a user-space shim cannot plant it
+           SIG_DFL is terminated by it (within 10 s); read() does not
+           return.
 test       t/001-terminate-no-return.c
 
 assertion  XSH.2.4.4-signal-effects.002
@@ -17,16 +17,16 @@ since      2001
 says       A child blocked in read() on an empty pipe is stopped with SIGSTOP
            and continued with SIGCONT; read() goes on waiting and, when a
            byte is written, returns it (not -1/EINTR).
-nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/002-stop-continue.c
 
 assertion  XSH.2.4.4-signal-effects.003
 anchor     functions/V2_chap02.html#2.4.4
 class      required
-since      1988
-says       A child blocked in read() on an empty pipe, with SIGUSR1 ignored and
-           SIGUSR2 caught but blocked, is sent both; read() goes on waiting
-           and returns the byte written afterwards, and the SIGUSR2 handler
-           has not run by then.
-nomutant   decided by the kernel; a user-space shim cannot plant it
+since      2024
+says       A child blocked in read() on an empty pipe, with SIGUSR1 at SIG_IGN,
+           SIGCHLD and SIGWINCH at SIG_DFL (ignored by default) and SIGUSR2
+           caught but blocked, is sent all four; read() goes on waiting and
+           returns the byte written afterwards, and the SIGUSR2 handler has
+           not run by then.
+note       SIGWINCH is new in Issue 8.
 test       t/003-ignored-blocked-no-effect.c

@@ -10,7 +10,7 @@
 #include <pthread.h>
 #include <setjmp.h>
 #include <signal.h>
-#include <stdarg.h>
+#include <stdatomic.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,9 +41,10 @@ static void catch_info(int sig, void (*fn)(int, siginfo_t *, void *))
 	pc_check(sigaction(sig, &sa, NULL) == 0, "sigaction(%d) failed", sig);
 }
 
+/* Sets SIG_DFL or SIG_IGN (or a plain handler) with sigaction(). */
 static void set_action(int sig, void (*fn)(int))
 {
-	pc_check(signal(sig, fn) != SIG_ERR, "signal(%d) failed", sig);
+	catch_sig(sig, fn);
 }
 
 static void mask(int how, int sig)
@@ -73,16 +74,87 @@ static void sleep_ms(long ms)
 		;
 }
 
-/* Reaps c, retrying on EINTR; returns the status. */
-static int reap(pid_t c, int opts)
+/* Children made here are killed when the test exits, however it ends. */
+static pid_t kids[16];
+static int nkids;
+
+static void kill_kids(void)
 {
-	int st = 0;
+	int i;
+
+	for (i = 0; i < nkids; i++)
+		if (kids[i] > 0) {
+			(void)kill(kids[i], SIGKILL);
+			(void)kill(kids[i], SIGCONT);
+		}
+}
+
+static void track(pid_t c)
+{
+	if (nkids == 0)
+		(void)atexit(kill_kids);
+	if (nkids < 16)
+		kids[nkids++] = c;
+}
+
+static void kill_child(pid_t c)
+{
+	(void)kill(c, SIGKILL);
+	(void)kill(c, SIGCONT);
+	while (waitpid(c, NULL, 0) == -1 && errno == EINTR)
+		;
+}
+
+/*
+ * Waits up to ms for a status change of c that opts select (WUNTRACED
+ * adds stops); 1 with *st set, or 0 if none came in time.
+ */
+static int wait_by(pid_t c, int opts, long ms, int *st)
+{
+	long waited;
 	pid_t r;
 
-	while ((r = waitpid(c, &st, opts)) == -1 && errno == EINTR)
-		;
-	pc_check(r == c, "waitpid failed: %s", pc_errname(errno));
+	for (waited = 0; waited <= ms; waited += 10) {
+		r = waitpid(c, st, opts | WNOHANG);
+		if (r == c)
+			return 1;
+		if (r == -1 && errno != EINTR)
+			pc_check(0, "waitpid failed: %s", pc_errname(errno));
+		sleep_ms(10);
+	}
+	return 0;
+}
+
+/* The status of c once it ends (or stops); FAIL if neither within 10 s. */
+static int end_of(pid_t c, const char *what)
+{
+	int st = 0;
+
+	if (!wait_by(c, WUNTRACED, 10000, &st)) {
+		kill_child(c);
+		pc_check(0, "%s: the child did not end within 10 s", what);
+	}
+	if (WIFSTOPPED(st))
+		kill_child(c);
 	return st;
+}
+
+/* Waits until c is stopped by sig; FAIL (child killed) otherwise. */
+static void await_stop(pid_t c, int sig)
+{
+	int st = 0;
+
+	if (!wait_by(c, WUNTRACED, 10000, &st)) {
+		kill_child(c);
+		pc_check(0, "the child was not stopped within 10 s");
+	}
+	if (!WIFSTOPPED(st)) {
+		pc_check(0, "the child ended (status %#x) instead of stopping", st);
+	}
+	if (WSTOPSIG(st) != sig) {
+		kill_child(c);
+		pc_check(0, "the child was stopped by %d, expected %d", WSTOPSIG(st), sig);
+	}
 }
 
 /* Reads one byte from fd within ms milliseconds: the byte, or -1. */
@@ -107,10 +179,24 @@ static int read_within(int fd, long ms)
 	return -1;
 }
 
+/* Waits (no deadline: the driver's limit covers a hang) for c's 'a'. */
+static void started(int fd, pid_t c)
+{
+	char ch = 0;
+	ssize_t k;
+
+	while ((k = read(fd, &ch, 1)) == -1 && errno == EINTR)
+		;
+	if (k != 1 || ch != 'a') {
+		kill_child(c);
+		pc_unresolved("the child did not start (%c)", k == 1 ? ch : '-');
+	}
+}
+
 /*
- * Runs fn in a child (its own process group) and returns the child's
- * pid; report[0] is the read end of a pipe whose write end the child has
- * as fd report[1].
+ * Runs fn in a child (in the test's process group, which is not orphaned)
+ * and returns its pid; report[0] is the read end of a pipe whose write end
+ * the child has as fd report[1].
  */
 static pid_t child(void (*fn)(int), int report[2])
 {
@@ -121,10 +207,10 @@ static pid_t child(void (*fn)(int), int report[2])
 	pc_check(c != -1, "fork failed");
 	if (c == 0) {
 		(void)close(report[0]);
-		(void)setpgid(0, 0);
 		fn(report[1]);
 		_exit(0);
 	}
+	track(c);
 	(void)close(report[1]);
 	return c;
 }
@@ -134,33 +220,20 @@ static void say(int fd, char ch)
 	(void)write(fd, &ch, 1);
 }
 
-/* Waits until c is stopped (WUNTRACED); FAIL if it ends instead. */
-static void await_stop(pid_t c, int sig)
-{
-	int st = reap(c, WUNTRACED);
-
-	pc_check(WIFSTOPPED(st), "the child was not stopped (status %#x)", st);
-	pc_check(WSTOPSIG(st) == sig, "the child was stopped by %d, expected %d", WSTOPSIG(st), sig);
-}
-
-static void kill_child(pid_t c)
-{
-	(void)kill(c, SIGKILL);
-	(void)kill(c, SIGCONT);
-	(void)waitpid(c, NULL, 0);
-}
-
 static void kid(int fd)
 {
 	static const int sigs[] = { SIGTSTP, SIGTTIN, SIGTTOU };
+	struct sigaction sa;
 	int i;
 
 	if (setsid() == -1) {
 		say(fd, 'S');
 		_exit(99);
 	}
+	memset(&sa, 0, sizeof sa);
+	sa.sa_handler = SIG_DFL;
 	for (i = 0; i < 3; i++) {
-		(void)signal(sigs[i], SIG_DFL);
+		(void)sigaction(sigs[i], &sa, NULL);
 		(void)kill(getpid(), sigs[i]);
 	}
 	say(fd, 'a');	/* not stopped */
@@ -170,7 +243,8 @@ static void kid(int fd)
 
 int main(void)
 {
-	int rep[2], ch, st;
+	int rep[2], ch = -1, st = 0, stopped = 0;
+	long waited;
 	pid_t c;
 
 	pc_begin("XSH.2.4.3-signal-actions.007");
@@ -183,20 +257,37 @@ int main(void)
 		kid(rep[1]);
 		_exit(0);
 	}
+	track(c);
 	(void)close(rep[1]);
-	ch = read_within(rep[0], 3000);
+	/* Either the byte comes, or the child stops early (the fault). */
+	for (waited = 0; waited < 10000 && ch == -1 && !stopped; waited += 20) {
+		ch = read_within(rep[0], 0);
+		if (ch == -1 && waitpid(c, &st, WUNTRACED | WNOHANG) == c)
+			stopped = 1;
+		if (ch == -1 && !stopped)
+			sleep_ms(20);
+	}
+	if (stopped)	/* the 'a' may have come just before the stop was seen */
+		ch = read_within(rep[0], 0);
 	if (ch == 'S') {
 		kill_child(c);
 		pc_unresolved("setsid() failed in the child");
 	}
 	if (ch != 'a') {
-		st = reap(c, WUNTRACED | WNOHANG);
 		kill_child(c);
-		pc_check(ch == 'a', "the child in an orphaned group was stopped by a terminal stop signal (status %#x)", st);
+		pc_check(0, stopped && WIFSTOPPED(st) ? "the child in an orphaned group was stopped by signal %d"
+		    : "the child in an orphaned group did not go on within 10 s (status %#x)",
+		    stopped && WIFSTOPPED(st) ? WSTOPSIG(st) : st);
 	}
-	await_stop(c, SIGSTOP);
+	if (stopped) {	/* already stopped: it must be the SIGSTOP after 'a' */
+		if (!WIFSTOPPED(st) || WSTOPSIG(st) != SIGSTOP) {
+			kill_child(c);
+			pc_check(0, "the child was stopped by %d after going on", WIFSTOPPED(st) ? WSTOPSIG(st) : 0);
+		}
+	} else
+		await_stop(c, SIGSTOP);
 	pc_check(kill(c, SIGCONT) == 0, "kill failed");
-	ch = read_within(rep[0], 3000);
+	ch = read_within(rep[0], 10000);
 	kill_child(c);
 	pc_check(ch == 'b', "the child was not continued");
 	pc_pass();

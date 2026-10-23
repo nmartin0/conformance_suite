@@ -93,6 +93,11 @@ static void trampoline(int sig)
 		w.sa_handler(sig);
 }
 
+static void empty_catcher(int sig)
+{
+	(void)sig;
+}
+
 int sigaction(int sig, const struct sigaction *act, struct sigaction *oact)
 {
 	const char *m = mutant();
@@ -111,6 +116,16 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact)
 	}
 	if (IS("act_ignored") && act != NULL)
 		act = NULL;
+	if (act != NULL && !(act->sa_flags & SA_SIGINFO) &&
+	    ((IS("ign_as_catcher") && act->sa_handler == SIG_IGN) ||
+	    (IS("dfl_as_catcher") && act->sa_handler == SIG_DFL &&
+	    (sig == SIGCHLD || sig == SIGURG || sig == SIGWINCH)))) {
+		/* "ignores" with an empty handler (no SA_RESTART) */
+		a = *act;
+		a.sa_handler = empty_catcher;
+		a.sa_flags &= ~SA_RESTART;
+		return real_sigaction()(sig, &a, oact);
+	}
 	if (IS("kill_in_mask_einval") && act != NULL &&
 	    (sigismember(&act->sa_mask, SIGKILL) == 1 || sigismember(&act->sa_mask, SIGSTOP) == 1)) {
 		errno = EINVAL;
@@ -195,4 +210,43 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact)
 			oact->sa_flags = 0;
 	}
 	return r;
+}
+
+/*
+ * signal() does not go through sigaction() in every C library, so the
+ * catcher faults also stand in for it.
+ */
+static void (*stand_in(const char *name, int sig, void (*fn)(int)))(int)
+{
+	void (*(*real)(int, void (*)(int)))(int);
+	const char *m = mutant();
+	struct sigaction a, old;
+
+	if (!IS("ign_as_catcher") && !IS("dfl_as_catcher")) {
+		real = (void (*(*)(int, void (*)(int)))(int))dlsym(RTLD_NEXT, name);
+		return real == NULL ? SIG_ERR : real(sig, fn);
+	}
+	memset(&a, 0, sizeof a);
+	a.sa_handler = fn;
+	sigemptyset(&a.sa_mask);
+	a.sa_flags = SA_RESTART;
+	if (sigaction(sig, &a, &old) != 0)
+		return SIG_ERR;
+	return old.sa_handler;
+}
+
+void (*signal(int sig, void (*fn)(int)))(int)
+{
+	return stand_in("signal", sig, fn);
+}
+
+/* glibc maps signal() to one of these, depending on the feature macros */
+void (*__sysv_signal(int sig, void (*fn)(int)))(int)
+{
+	return stand_in("__sysv_signal", sig, fn);
+}
+
+void (*bsd_signal(int sig, void (*fn)(int)))(int)
+{
+	return stand_in("bsd_signal", sig, fn);
 }
