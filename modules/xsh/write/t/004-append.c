@@ -21,8 +21,8 @@ int main(void)
 	fd = open("f", O_RDWR | O_APPEND);
 	pc_check(fd >= 0, "cannot open f");
 	pc_require_space();
-	pc_test();
 	pc_check(lseek(fd, 1, SEEK_SET) == 1, "lseek failed");
+	pc_test();
 	pc_check(write(fd, "AB", 2) == 2, "write failed");
 	pc_check(lseek(fd, 0, SEEK_CUR) == 6, "the offset is %ld, expected the end 6",
 	    (long)lseek(fd, 0, SEEK_CUR));

@@ -10,10 +10,11 @@
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/socket.h>
 
 int main(void)
 {
-	int p[2], fl;
+	int p[2], sv[2], fl;
 	char c;
 
 	pc_begin("XSH.read.023");
@@ -21,7 +22,12 @@ int main(void)
 	pc_check(write(p[1], "d", 1) == 1, "write failed");
 	fl = fcntl(p[0], F_GETFL);
 	pc_check(fl != -1 && fcntl(p[0], F_SETFL, fl | O_NONBLOCK) == 0, "cannot set O_NONBLOCK");
+	pc_check(socketpair(AF_UNIX, SOCK_STREAM, 0, sv) == 0, "socketpair failed");
+	pc_check(send(sv[1], "s", 1, 0) == 1, "send failed");
+	fl = fcntl(sv[0], F_GETFL);
+	pc_check(fl != -1 && fcntl(sv[0], F_SETFL, fl | O_NONBLOCK) == 0, "cannot set O_NONBLOCK");
 	pc_test();
 	pc_check(read(p[0], &c, 1) == 1 && c == 'd', "non-blocking read() of a pipe with data failed");
+	pc_check(read(sv[0], &c, 1) == 1 && c == 's', "non-blocking read() of a socket with data failed");
 	pc_pass();
 }

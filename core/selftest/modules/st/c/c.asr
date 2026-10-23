@@ -75,3 +75,9 @@ assertion  ST.c.015
 says       A test starts with only descriptors 0, 1 and 2 open.
 test       t/015-clean-fds.c
 expect     PASS
+
+assertion  ST.c.016
+says       A test starts with every signal at its default action and none
+           blocked, even when the driver inherited them ignored or blocked.
+test       t/016-clean-signals.c
+expect     PASS

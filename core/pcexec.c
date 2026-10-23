@@ -302,6 +302,20 @@ int main(int argc, char **argv)
 		(void)setpgid(0, 0);
 		sa.sa_handler = SIG_DFL;
 		(void)sigaction(SIGALRM, &sa, NULL);
+		{
+			/*
+			 * Tests start with no signal blocked and every signal at
+			 * its default action: an ignored signal would otherwise
+			 * be inherited across exec from whoever ran the driver.
+			 */
+			sigset_t none;
+			int s;
+			sa.sa_handler = SIG_DFL;
+			for (s = 1; s < 128; s++)
+				(void)sigaction(s, &sa, NULL);	/* fails harmlessly past the last */
+			sigemptyset(&none);
+			(void)sigprocmask(SIG_SETMASK, &none, NULL);
+		}
 		if (chdir(work) != 0)
 			_exit(126);
 		(void)umask(022);

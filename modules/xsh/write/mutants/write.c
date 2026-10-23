@@ -155,6 +155,22 @@ ssize_t write(int fd, const void *buf, size_t n)
 	if (IS("no_mtime") && k == 'r')
 		(void)fstat(fd, &st0);
 	r = f(fd, buf, n);
+	while (r == -1 && errno == EINTR && IS("eintr_restarts"))
+		r = f(fd, buf, n);
+	if (IS("eintr_restarts") && r > 0 && (size_t)r < n && k == 'p') {
+		/* Keeps going after a partial write instead of returning it. */
+		size_t done = (size_t)r;
+		for (;;) {
+			if (done >= n)
+				break;
+			r = f(fd, (const char *)buf + done, n - done);
+			if (r > 0)
+				done += (size_t)r;
+			else if (!(r == -1 && errno == EINTR))
+				break;
+		}
+		r = (ssize_t)done;
+	}
 	e = errno;
 	if (r == -1) {
 		if (IS("nonblock_partial_small") && e == EAGAIN && k == 'p' &&
@@ -175,8 +191,18 @@ ssize_t write(int fd, const void *buf, size_t n)
 			return (ssize_t)n;
 		if (IS("efbig_as_enospc") && e == EFBIG)
 			e = ENOSPC;
+		if (IS("sigxfsz_discarded") && e == EFBIG) {
+			/* Throws away a pending SIGXFSZ, as if never generated. */
+			sigset_t s;
+			struct timespec z = { 0, 0 };
+			sigemptyset(&s);
+			sigaddset(&s, SIGXFSZ);
+			(void)sigtimedwait(&s, NULL, &z);
+		}
 		if (IS("epipe_as_eio") && e == EPIPE)
 			e = EIO;
+		if (IS("notconn_ok") && (e == ENOTCONN || e == ECONNRESET))
+			return (ssize_t)n;
 		errno = e;
 		return -1;
 	}

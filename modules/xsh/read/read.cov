@@ -18,9 +18,9 @@ DESCRIPTION:4fca1688        XSH.read.006
 DESCRIPTION:db6a1bad        XSH.read.007 XSH.read.020
 DESCRIPTION:a6463407        XSH.read.008 XSH.read.009
 DESCRIPTION:40e001c5        none  introduces the other cases
-DESCRIPTION:7e0799c9        todo  O_NONBLOCK read of a terminal with no input gives EAGAIN (needs a pseudo-terminal)
+DESCRIPTION:7e0799c9        partial XSH.read.019  # sockets; terminals need a pseudo-terminal
 DESCRIPTION:c02beb9e        todo  blocking read of a terminal waits for input (needs a pseudo-terminal)
-DESCRIPTION:6caa80e0        XSH.read.023
+DESCRIPTION:6caa80e0        XSH.read.023  # the socket half
 DESCRIPTION:a63f16ba        none  explanation
 DESCRIPTION:5a4e0770        XSH.read.005
 DESCRIPTION:aa174986        none  example
@@ -30,9 +30,9 @@ DESCRIPTION:69aca9ee        XSH.read.002 XSH.read.010
 DESCRIPTION:dd3d832c        XSH.read.010  # the pipe case; the others are permissions
 DESCRIPTION:66889380        none  example
 DESCRIPTION:33718d69        XSH.read.011
-DESCRIPTION:aa45518e        todo  a read interrupted after some data returns the count (pseudo-terminal or a slow socket peer)
+DESCRIPTION:aa45518e        todo  a read interrupted after some data returns the count (needs a pseudo-terminal)
 DESCRIPTION:034a673b        todo  only reachable where the offset maximum is below the largest file size (32-bit off_t)
-DESCRIPTION:5dd51659        partial XSH.read.018  # equivalence with recv() for out-of-band and message boundaries not tested
+DESCRIPTION:5dd51659        partial XSH.read.018  # equivalence with recv() for out-of-band data and message boundaries not tested
 DESCRIPTION:29dda4b3        untestable  synchronized I/O completion is not observable without power-loss testing
 DESCRIPTION:aa314506        untestable  synchronized I/O completion is not observable without power-loss testing
 DESCRIPTION:00a97dea        none  unspecified

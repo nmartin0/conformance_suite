@@ -13,12 +13,23 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <signal.h>
-#include <sys/time.h>
 
 #ifdef F_OFD_SETLK
+static volatile sig_atomic_t fired;
+static int rescue_cfd = -1;
+
+/*
+ * Re-arms itself; after two alarms it lets the holder go, so an F_SETLKW
+ * that wrongly restarted returns (and the test FAILs) instead of hanging.
+ */
 static void on_alarm(int sig)
 {
 	(void)sig;
+	if (++fired >= 2 && rescue_cfd >= 0) {
+		(void)close(rescue_cfd);
+		rescue_cfd = -1;
+	}
+	alarm(1);
 }
 
 /* Fill a struct flock. */
@@ -165,13 +176,11 @@ int main(void)
 		pc_check(sigprocmask(SIG_UNBLOCK, &s, NULL) == 0, "cannot unblock SIGALRM");
 	}
 	pc_test();
-	{
-		/* Repeats, so a signal that lands before the wait still interrupts it. */
-		struct itimerval it = { { 1, 0 }, { 1, 0 } };
-		pc_check(setitimer(ITIMER_REAL, &it, NULL) == 0, "setitimer failed");
-	}
+	rescue_cfd = hold_ctl;
+	alarm(1);	/* re-armed by the handler */
 	fl = lk(F_WRLCK, SEEK_SET, 0, 10);
 	pc_expect_err(fcntl(fd, F_OFD_SETLKW, &fl), EINTR, "F_OFD_SETLKW interrupted by SIGALRM");
+	rescue_cfd = -1;	/* the holder is released below */
 	release_holder();
 	pc_check(!blocked(F_WRLCK, 0, 10), "the interrupted F_OFD_SETLKW left a lock");
 	pc_pass();

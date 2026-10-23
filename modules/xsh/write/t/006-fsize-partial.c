@@ -67,7 +67,10 @@ static struct outcome limited_write(const char *path, int flags, rlim_t limit,
 		_exit(write(p[1], &o, sizeof o) == (ssize_t)sizeof o ? 0 : 2);
 	}
 	(void)close(p[1]);
-	if (waitpid(pid, &st, 0) != pid || !WIFEXITED(st) || WEXITSTATUS(st) != 0 ||
+	if (waitpid(pid, &st, 0) == pid && WIFSIGNALED(st) && WTERMSIG(st) == SIGXFSZ)
+		pc_fail("the writer was killed by SIGXFSZ although it %s the signal",
+		    catch_xfsz ? "caught" : "ignored");
+	if (!WIFEXITED(st) || WEXITSTATUS(st) != 0 ||
 	    read(p[0], &o, sizeof o) != (ssize_t)sizeof o)
 		pc_unresolved("the writing child could not run its write");
 	return o;

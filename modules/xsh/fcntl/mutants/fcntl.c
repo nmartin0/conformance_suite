@@ -154,6 +154,8 @@ static int lock_fault(const char *m, int fd, int cmd, struct flock *fl)
 			return 0;
 	}
 	r = f(fd, cmd, &w);
+	while (r == -1 && errno == EINTR && IS("setlkw_restarts"))
+		r = f(fd, cmd, &w);
 	e = errno;
 	if (r == -1) {
 		if (IS("setlk_conflict_ok") && (e == EAGAIN || e == EACCES))

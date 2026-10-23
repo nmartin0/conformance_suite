@@ -3,7 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.write.008
- * MUTANT    write.sigxfsz_blocked
+ * MUTANT    write.sigxfsz_discarded
  */
 #include "pc.h"
 #include <sys/wait.h>
@@ -61,13 +61,23 @@ static struct outcome limited_write(const char *path, int flags, rlim_t limit,
 		if (setrlimit(RLIMIT_FSIZE, &rl) != 0)
 			_exit(2);
 		memset(buf, 'x', sizeof buf);
-		o.r = (long)write(fd, buf, n);
-		o.e = errno;
-		o.xfsz = got_xfsz;
+		{
+			/* Blocked, so "generated" can be checked as pending. */
+			sigset_t s, pend;
+			sigemptyset(&s);
+			sigaddset(&s, SIGXFSZ);
+			(void)sigprocmask(SIG_BLOCK, &s, NULL);
+			o.r = (long)write(fd, buf, n);
+			o.e = errno;
+			o.xfsz = sigpending(&pend) == 0 && sigismember(&pend, SIGXFSZ) == 1;
+		}
 		_exit(write(p[1], &o, sizeof o) == (ssize_t)sizeof o ? 0 : 2);
 	}
 	(void)close(p[1]);
-	if (waitpid(pid, &st, 0) != pid || !WIFEXITED(st) || WEXITSTATUS(st) != 0 ||
+	if (waitpid(pid, &st, 0) == pid && WIFSIGNALED(st) && WTERMSIG(st) == SIGXFSZ)
+		pc_fail("the writer was killed by SIGXFSZ although it %s the signal",
+		    catch_xfsz ? "caught" : "ignored");
+	if (!WIFEXITED(st) || WEXITSTATUS(st) != 0 ||
 	    read(p[0], &o, sizeof o) != (ssize_t)sizeof o)
 		pc_unresolved("the writing child could not run its write");
 	return o;

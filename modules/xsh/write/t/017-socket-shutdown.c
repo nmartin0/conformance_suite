@@ -4,7 +4,6 @@
  *
  * ASSERTION XSH.write.017
  * MUTANT    write.epipe_as_eio
- * MUTANT    write.sigpipe_suppressed
  */
 #include "pc.h"
 #include <errno.h>
@@ -37,6 +36,6 @@ int main(void)
 	pc_check(sigaction(SIGPIPE, &sa, NULL) == 0, "sigaction failed");
 	pc_test();
 	pc_expect_err(write(sv[0], "x", 1), EPIPE, "write() on a socket shut down for writing");
-	pc_check(got_pipe, "SIGPIPE was not sent");
+	(void)got_pipe;	/* SIGPIPE is required only once the socket is no longer connected (026) */
 	pc_pass();
 }

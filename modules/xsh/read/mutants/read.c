@@ -16,6 +16,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/time.h>
+#include <stdio.h>
 #include <unistd.h>
 
 typedef ssize_t (*read_fn)(int, void *, size_t);
@@ -117,7 +118,12 @@ ssize_t read(int fd, void *buf, size_t n)
 	if (IS("no_atime") && k == 'r')
 		(void)fstat(fd, &st0);
 	r = f(fd, buf, n);
+	while (r == -1 && errno == EINTR && IS("eintr_restarts"))
+		r = f(fd, buf, n);	/* as if SA_RESTART were always on */
 	e = errno;
+	if (r >= 0 && IS("eisdir_as_einval") && k == 'o' && fstat(fd, &st0) == 0 &&
+	    S_ISDIR(st0.st_mode))
+		fprintf(stderr, "pcmutant: cannot plant read.eisdir_as_einval here\n");
 	if (r == -1) {
 		if (IS("eintr_as_eagain") && e == EINTR)
 			e = EAGAIN;

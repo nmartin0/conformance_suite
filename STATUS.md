@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (210 assertions):
+- Modules (212 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -51,7 +51,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   - `xsh/read` (23): regular files, EOF, zero length, unwritten bytes,
     pipes and FIFOs (EOF, EAGAIN, blocking, partial, EINTR), sockets
     (EAGAIN, ENOTCONN, ECONNRESET), atime, pread().
-  - `xsh/write` (25): offsets, growth, zero length, O_APPEND (also two
+  - `xsh/write` (27): offsets, growth, zero length, O_APPEND (also two
     processes at once), RLIMIT_FSIZE (partial, EFBIG, SIGXFSZ), EINTR
     before and after data, {PIPE_BUF} atomicity with four writers,
     non-blocking pipes, EPIPE and SIGPIPE, sockets, mtime, pwrite().
@@ -59,7 +59,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).
 - `ci/lint.py`: traceability and anchor checks; `ci/mutate.sh`: mutation
-  checks (301 mutants); `ci/catalog.py`: shared parser.
+  checks (307 mutants); `ci/catalog.py`: shared parser.
 - `analysis/analyze.py`: load, runs, verdict, failures, matrix, diff,
   coverage, html, calibrate (checks a reference run against
   `known/*.known`, its expected failures).
@@ -85,6 +85,12 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   functions, adding -Werror=implicit-function-declaration where that
   helps (gcc only warns by default, which let a test link against glibc's
   undeclared dup3()). Self-test ST.c.014 guards this.
+- Tests start with only descriptors 0-2 open, no signal blocked and
+  every signal at its default action (pcexec; self-tests ST.c.015,
+  ST.c.016), whatever the driver's shell inherited.
+- Interrupt tests use alarm() re-armed in the handler (setitimer() was
+  removed in Issue 8); after two alarms the handler unblocks a call that
+  wrongly restarted, so it FAILs instead of timing out.
 
 - Driver and tests under dash, bash --posix, busybox sh, ksh93, mksh, yash
   and posh, each with gcc and clang. (ksh93 exposed a driver bug: a bare

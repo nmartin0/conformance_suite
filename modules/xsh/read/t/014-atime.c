@@ -32,6 +32,6 @@ int main(void)
 	pc_test();
 	pc_check(read(fd, buf, sizeof buf) == 4, "read failed");
 	pc_check(fstat(fd, &st) == 0, "fstat failed");
-	pc_check(st.st_atim.tv_sec > ts[0].tv_sec, "the access time was not updated");
+	pc_check(st.st_atim.tv_sec > ts[0].tv_sec, "the access time was not updated (is the file system mounted noatime or atime=off?)");
 	pc_pass();
 }

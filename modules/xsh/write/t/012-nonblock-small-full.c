@@ -13,18 +13,37 @@
 #include <string.h>
 #include <unistd.h>
 #include <signal.h>
-#include <sys/time.h>
 #include <stdlib.h>
 
 static volatile sig_atomic_t fired;
+static unsigned period;
+/*
+ * After two alarms the handler unblocks a call that wrongly restarted
+ * instead of failing with EINTR, so the test can FAIL rather than time
+ * out: it writes to rescue_wfd, reads from rescue_rfd, or closes
+ * rescue_cfd (all async-signal-safe).
+ */
+static int rescue_wfd = -1, rescue_rfd = -1, rescue_cfd = -1;
 
 static void on_alarm(int sig)
 {
+	static char junk[65536];
 	(void)sig;
-	fired = 1;
+	fired++;
+	if (fired >= 2) {
+		if (rescue_wfd >= 0)
+			(void)write(rescue_wfd, junk, 64);
+		if (rescue_rfd >= 0)
+			(void)read(rescue_rfd, junk, sizeof junk);
+		if (rescue_cfd >= 0) {
+			(void)close(rescue_cfd);
+			rescue_cfd = -1;
+		}
+	}
+	alarm(period);
 }
 
-/* A caught, repeating SIGALRM (no SA_RESTART) that interrupts blocked calls. */
+/* A caught SIGALRM (no SA_RESTART), unblocked, that interrupts blocked calls. */
 static void catch_alarm(void)
 {
 	struct sigaction sa;
@@ -39,14 +58,11 @@ static void catch_alarm(void)
 	pc_check(sigprocmask(SIG_UNBLOCK, &s, NULL) == 0, "cannot unblock SIGALRM");
 }
 
+/* SIGALRM every secs seconds (alarm() re-armed by the handler). */
 static void start_timer(unsigned secs)
 {
-	struct itimerval it;
-
-	it.it_interval.tv_sec = secs;
-	it.it_interval.tv_usec = 0;
-	it.it_value = it.it_interval;
-	pc_check(setitimer(ITIMER_REAL, &it, NULL) == 0, "setitimer failed");
+	period = secs;
+	alarm(secs);
 }
 
 /* Fill the pipe completely (setup): non-blocking writes until EAGAIN. */
@@ -66,8 +82,23 @@ static long fill(int w)
 	return total;
 }
 
+/* {PIPE_BUF}: from <limits.h>, else from fpathconf() on the pipe. */
+static long pipe_buf(int fd)
+{
+#ifdef PIPE_BUF
+	(void)fd;
+	return PIPE_BUF;
+#else
+	long v = fpathconf(fd, _PC_PIPE_BUF);
+	if (v <= 0)
+		pc_unresolved("{PIPE_BUF} is indeterminate");
+	return v;
+#endif
+}
+
 int main(void)
 {
+	long pb;
 	int p[2], fl;
 	long total, after = 0;
 	char *buf;
@@ -75,8 +106,9 @@ int main(void)
 
 	pc_begin("XSH.write.012");
 	pc_check(pipe(p) == 0, "pipe failed");
+	pb = pipe_buf(p[1]);
 	total = fill(p[1]);
-	buf = calloc(1, (size_t)total + PIPE_BUF);
+	buf = calloc(1, (size_t)total + pb);
 	pc_check(buf != NULL, "out of memory");
 	pc_check(read(p[0], buf, 10) == 10, "cannot read 10 bytes out");
 	fl = fcntl(p[0], F_GETFL);
@@ -84,8 +116,8 @@ int main(void)
 	catch_alarm();
 	start_timer(5);
 	pc_test();
-	r = write(p[1], buf, PIPE_BUF);
-	if (r == PIPE_BUF) {
+	r = write(p[1], buf, pb);
+	if (r == pb) {
 		/* There was room after all: nothing to judge. */
 		pc_unresolved("the pipe had room for {PIPE_BUF} bytes after 10 were read");
 	}

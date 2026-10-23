@@ -26,8 +26,9 @@ assertion  XSH.read.003
 anchor     functions/read.html#DESCRIPTION
 class      required
 since      1988
-says       read() with nbyte 0 on a valid descriptor returns 0 and
-           changes nothing (the offset stays).
+says       read() with nbyte 0 on a valid descriptor returns 0 and has
+           no other result: the offset and the access time stay as they
+           were.
 test       t/003-zero.c
 
 assertion  XSH.read.004
@@ -124,31 +125,38 @@ says       A successful read() of more than 0 bytes marks the file's
            access time for update.
 note       The access time is first set before the modification time, so
            a relatime mount updates it too. A file system mounted
-           noatime fails this.
+           noatime (ZFS atime=off) fails this, rightly: XBD 4.12
+           requires the update.
 test       t/014-atime.c
 
 assertion  XSH.read.015
 anchor     functions/read.html#DESCRIPTION/pread
 class      required
-since      2001
+since      2008
 says       pread() reads at the given offset and leaves the file offset
            unchanged.
+note       pread() was part of the XSI option until Issue 7 moved it to
+           the base.
 test       t/015-pread.c
 
 assertion  XSH.read.016
 anchor     functions/read.html#DESCRIPTION/pread
 anchor     functions/read.html#ERRORS/ESPIPE
 class      required
-since      2001
+since      2008
 says       pread() on a pipe fails with ESPIPE.
+note       pread() was part of the XSI option until Issue 7 moved it to
+           the base.
 test       t/016-pread-espipe.c
 
 assertion  XSH.read.017
 anchor     functions/read.html#ERRORS/EINVAL
 class      required
-since      2001
+since      2008
 says       pread() on a regular file with a negative offset fails with
            EINVAL and leaves the file offset unchanged.
+note       pread() was part of the XSI option until Issue 7 moved it to
+           the base.
 test       t/017-pread-einval.c
 
 assertion  XSH.read.018
@@ -156,7 +164,7 @@ anchor     functions/read.html#DESCRIPTION
 class      required
 since      2001
 says       read() on a connected stream socket returns the data the peer
-           sent, as recv() with no flags would.
+           sent.
 test       t/018-socket.c
 
 assertion  XSH.read.019
@@ -191,13 +199,16 @@ since      2001
 says       read() on a TCP socket whose peer reset the connection
            (closed with SO_LINGER 0) fails with ECONNRESET.
 note       Uses TCP over the loopback interface; UNRESOLVED when that is
-           unavailable.
+           unavailable. After a reset the socket is no longer connected
+           but ENOTCONN is for a socket never connected, so only
+           ECONNRESET applies.
 test       t/022-econnreset.c
 
 assertion  XSH.read.023
 anchor     functions/read.html#DESCRIPTION
 class      required
 since      1988
-says       O_NONBLOCK makes no difference when data is available: a non-
-           blocking read() of a pipe holding data returns it.
+says       O_NONBLOCK makes no difference when data is available: non-
+           blocking reads of a pipe and of a stream socket holding data
+           return it.
 test       t/023-nonblock-data.c
