@@ -118,3 +118,25 @@ says       An open file description is freed only when its last descriptor
            leaves the pipe with a writer (a non-blocking read gives EAGAIN);
            closing the last gives the reader end of file.
 test       t/012-pipe-description.c
+
+assertion  XSH.close.013
+anchor     functions/close.html#DESCRIPTION
+class      required
+since      2008
+says       After the only descriptor of a file mapped MAP_SHARED is closed, the
+           mapping still reads the file's data, a change through it is in
+           the file after munmap(), and reopening reads the change.
+nomutant   close() cannot be made to drop a mapping it does not own; no
+           planted fault applies.
+test       t/013-mapping-persists.c
+
+assertion  XSH.close.014
+anchor     functions/close.html#DESCRIPTION
+class      required
+since      2008
+says       aio_write() of 64 KiB then close() of its descriptor: unless
+           aio_error() reports ECANCELED, it reports 0 and aio_return()
+           64 KiB, and the file holds the data (within 3 s).
+nomutant   The I/O completes in the system; no interposed function
+           stands between.
+test       t/014-aio-completes.c

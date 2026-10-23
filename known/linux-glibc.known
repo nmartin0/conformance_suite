@@ -64,3 +64,7 @@ XSH.chown.021      UNRESOLVED   linux*    1.7: glibc lacks O_SEARCH
 XSH.access.018     UNRESOLVED   linux*    1.7: glibc lacks O_SEARCH
 XSH.fchmod.007     UNRESOLVED   linux*    1.7: glibc lacks O_SEARCH
 XSH.psiginfo.007   FAIL         linux*    O.23: psiginfo() leaves the error indicator of stderr clear
+XSH.opendir.012    UNRESOLVED   linux*    1.7: glibc lacks O_SEARCH
+XSH.futimens.025   UNRESOLVED   linux*    1.7: glibc lacks O_SEARCH
+XSH._Exit.019      FAIL         linux*    O.24: asynchronous I/O outstanding at _exit() is lost
+XSH.close.014      FAIL         linux*    O.25: asynchronous I/O fails with EBADF after close()

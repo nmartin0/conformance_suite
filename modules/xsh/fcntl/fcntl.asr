@@ -425,3 +425,13 @@ says       A new OFD lock replaces the description's own lock on the
 note       Needs F_OFD_*; blocked when XBD.fcntl.h.006 fails.
 uses       XBD.fcntl.h.006
 test       t/043-ofd-replace-split.c
+
+assertion  XSH.fcntl.044
+anchor     functions/fcntl.html#DESCRIPTION
+class      conditional
+when       SHM
+since      2001
+says       For a shared memory object's descriptor, F_GETFD and F_SETFD set and
+           read FD_CLOEXEC, F_DUPFD returns the lowest free descriptor not
+           below the argument, and F_GETFL reports O_RDWR.
+test       t/044-shm.c

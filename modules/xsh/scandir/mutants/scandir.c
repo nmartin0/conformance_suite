@@ -99,6 +99,8 @@ int scandir(const char *dir, struct dirent ***nl, int (*sel)(const struct dirent
 		errno = ENOENT;
 	if (r == -1 && IS("long_as_enoent") && errno == ENAMETOOLONG)
 		errno = ENOENT;
+	if (r == -1 && IS("eloop_as_enoent") && errno == ELOOP)
+		errno = ENOENT;
 	if (r == -1 && IS("eacces_as_enoent") && errno == EACCES)
 		errno = ENOENT;
 	if (r > 1 && IS("unsorted")) {

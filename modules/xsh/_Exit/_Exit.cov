@@ -15,23 +15,23 @@ DESCRIPTION:f5ef103e        none  introduces the consequences
 DESCRIPTION:7e061f95        none  a note on shading
 DESCRIPTION:f1602dcb        none  a note on shading
 DESCRIPTION:553cfb29        partial XSH._Exit.006  # descriptors only; directory streams, conversion and catalog descriptors not tested
-DESCRIPTION:28e9e3d4        partial XSH._Exit.009  # SIG_IGN only; todo: SA_NOCLDWAIT
+DESCRIPTION:28e9e3d4        XSH._Exit.009 XSH.sigaction.024
 DESCRIPTION:80a7e0e2        XSH._Exit.009  # no zombie: kill() gives ESRCH at once
 DESCRIPTION:a5c569b1        impl  SIGCHLD with SA_NOCLDWAIT (documentation)
-DESCRIPTION:710a93cd        partial XSH._Exit.009  # SIG_IGN only; todo: SA_NOCLDWAIT
+DESCRIPTION:710a93cd        XSH._Exit.009 XSH.sigaction.024
 DESCRIPTION:0176c377        none  introduces the next items
 DESCRIPTION:1b06962c        XSH._Exit.001
 DESCRIPTION:9d6fce63        XSH._Exit.008
 DESCRIPTION:3cdff533        XSH._Exit.008
 DESCRIPTION:24fba22c        XSH._Exit.008
-DESCRIPTION:b4c0132d        todo  two threads blocked in wait(): one gets the status (see XSH 2.12)
+DESCRIPTION:b4c0132d        XSH._Exit.015
 DESCRIPTION:6040b728        XSH._Exit.007
 DESCRIPTION:08c0d4dd        XSH.wait.020  # the grandchild lives on
 DESCRIPTION:c0cd31f3        none  explanation
 DESCRIPTION:18888d7e        XSH.wait.020
 DESCRIPTION:bbd69ccc        XSH.wait.020
-DESCRIPTION:49edcc41        todo  XSI: shmat() then exit; shm_nattch drops by one
-DESCRIPTION:209dbd23        todo  XSI: semop() with SEM_UNDO then exit; semval is adjusted
+DESCRIPTION:49edcc41        XSH._Exit.016
+DESCRIPTION:209dbd23        XSH._Exit.017
 DESCRIPTION:0966a8f4        todo  a controlling process's exit sends SIGHUP to the foreground group (needs a pseudo-terminal)
 DESCRIPTION:e5c0ec67        todo  the terminal is released and can be acquired again (needs a pseudo-terminal)
 DESCRIPTION:a69949ea        XSH._Exit.010
@@ -41,9 +41,9 @@ DESCRIPTION:1d74f6ec        untestable  ML: no interface reports whether memory 
 DESCRIPTION:39f7e815        untestable  ML: no interface reports whether memory is locked
 DESCRIPTION:7856bd94        untestable  unmapping at destruction is not observable after the process is gone
 DESCRIPTION:e22a7718        todo  TYM: typed memory objects at exit; no reference system has the option
-DESCRIPTION:b8bcb068        todo  MSG: an mq descriptor open at exit is closed (mq_notify registration released)
+DESCRIPTION:b8bcb068        XSH._Exit.018
 DESCRIPTION:f4efbe90        none  a permission
-DESCRIPTION:31dda5a6        todo  an aio_write() outstanding at _exit() still completes, without its signal
+DESCRIPTION:31dda5a6        XSH._Exit.019
 DESCRIPTION:6a4a5b80        none  a permission
 DESCRIPTION:6a96306b        impl  which outstanding I/O is cancelled (documentation)
 DESCRIPTION:2934dfe9        XSH._Exit.011

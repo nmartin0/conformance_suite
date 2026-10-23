@@ -252,3 +252,14 @@ since      2008
 says       futimens(AT_FDCWD, t) fails with EBADF (AT_FDCWD is not a file
            descriptor).
 test       t/024-futimens-fdcwd.c
+
+assertion  XSH.futimens.025
+anchor     functions/futimens.html#DESCRIPTION
+class      required
+since      2008
+says       For an unprivileged process, utimensat() with given times of "f"
+           relative to a descriptor opened O_SEARCH on its own directory
+           whose permissions were then changed to deny search succeeds.
+note       O_SEARCH itself is a header item (Tier 0); without it this
+           test is UNRESOLVED.
+test       t/025-search-fd.c

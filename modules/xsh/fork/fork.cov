@@ -13,7 +13,7 @@ DESCRIPTION:12ea4a36        none  a permission
 DESCRIPTION:49716d6e        todo  catopen() descriptor still usable in the child (needs a message catalog)
 DESCRIPTION:e4318bcb        XSH.fork.007
 DESCRIPTION:2ab2387d        XSH.fork.008
-DESCRIPTION:ba89fac7        todo  XSI: semop() with SEM_UNDO in the parent; the child's exit does not undo it
+DESCRIPTION:ba89fac7        XSH.fork.021
 DESCRIPTION:4a91755d        XSH.fcntl.032
 DESCRIPTION:411c7918        XSH.fork.009
 DESCRIPTION:be04c9ba        none  refers to XSI interval timers, which Issue 8 removed: see SI-6
@@ -26,9 +26,9 @@ DESCRIPTION:e9ec502c        XSH.fork.010
 DESCRIPTION:95a3ad10        todo  PS: SCHED_FIFO or SCHED_RR policy and priority inherited (needs privileges)
 DESCRIPTION:5692be32        impl  other policies' settings across fork() (documentation)
 DESCRIPTION:b3391a83        XSH.fork.012
-DESCRIPTION:7a3f4dd7        todo  MSG: an open message queue descriptor works in the child
-DESCRIPTION:f22ed8d6        todo  MSG: the child's descriptor shares the parent's queue description (O_NONBLOCK via mq_setattr seen by both)
-DESCRIPTION:6a4d89fd        todo  an aio_read() pending in the parent does not complete into the child's memory
+DESCRIPTION:7a3f4dd7        XSH.fork.020
+DESCRIPTION:f22ed8d6        XSH.fork.020
+DESCRIPTION:6a4d89fd        XSH.fork.023
 DESCRIPTION:20d3bd47        none  undefined
 DESCRIPTION:e2f672d5        XSH.fork.013
 DESCRIPTION:ae133f47        XSH.fork.013
@@ -36,7 +36,7 @@ DESCRIPTION:8b2f2d8f        app
 DESCRIPTION:0300f6f0        XSH.fork.014
 DESCRIPTION:6fa05145        none  undefined
 DESCRIPTION:522973b9        XSH.fork.015
-DESCRIPTION:1e3a1d4c        todo  TCT: the child's thread CPU-time clock starts at zero
+DESCRIPTION:1e3a1d4c        XSH.fork.022
 DESCRIPTION:e2825544        partial XSH.fork.017  # a sample of attributes; more to add (nice value, real and saved IDs, controlling terminal)
 DESCRIPTION:b56ee184        none  unspecified
 DESCRIPTION:1ffbb226        XSH.fork.019

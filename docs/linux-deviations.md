@@ -66,6 +66,9 @@ by the named assertion.
 | XSH.rename.014 | FAIL | `rename(dir, "new/")` succeeds | O.21 |
 | XSH.futimens.024 | FAIL (musl) | `futimens(AT_FDCWD, t)` gives EFAULT, not EBADF | O.22 |
 | XSH.psiginfo.007 | FAIL (glibc) | `psiginfo()` leaves the error indicator of stderr clear when the write fails | O.23 |
+| XSH._Exit.019 | FAIL (glibc) | an `aio_write()` outstanding at `_exit()` never reaches the file | O.24 |
+| XSH.close.014 | FAIL (glibc) | an `aio_write()` outstanding at `close()` fails with EBADF | O.25 |
+| XSH.futimens.025 | FAIL (musl) | O_SEARCH (O_PATH) descriptors still get the search check | O.18 |
 | XSH.chown.008 | INSPECT | `chown(f, -1, -1)` by a non-owner succeeds (disputed, Q-25) | - |
 | XSH.unlink.005, .010 | FAIL | `unlink()`/`unlinkat(fd, dir, 0)` of a directory give EISDIR; EPERM required | 1.17 |
 | XSH.sig2str.001 to .006 | UNINITIATED | no sig2str() or str2sig() | 3.1 |
@@ -358,6 +361,26 @@ O.23 **glibc: psiginfo() does not set stderr's error indicator on failure.**
 - glibc 2.39: with descriptor 2 closed, psiginfo() sets errno (EBADF) but
   ferror(stderr) stays 0; psignal() sets both. musl sets both.
 - Comp: glibc. Kind: long-standing. Observe: XSH.psiginfo.007.
+- Src: posixcheck run.
+
+O.24 **glibc: asynchronous I/O outstanding at _exit() is lost.**
+- POSIX (`_exit`, Consequences of Process Termination): asynchronous I/O
+  operations that are not canceled complete as if _exit() had not yet
+  occurred; only their signal notifications are suppressed.
+- glibc 2.39: aio is done by helper threads inside the process; _exit()
+  ends them with the process, so a 64 KiB aio_write() started just before
+  _exit() never reaches the file (aio_cancel() is not called either).
+  musl completes the write.
+- Comp: glibc. Kind: design (user-space aio). Observe: XSH._Exit.019.
+- Src: posixcheck run.
+
+O.25 **glibc: asynchronous I/O outstanding at close() fails with EBADF.**
+- POSIX (`close`, DESCRIPTION): an I/O operation that is not canceled
+  completes as if close() had not yet occurred.
+- glibc 2.39: the helper thread issues the write after the descriptor is
+  closed, so aio_error() reports EBADF. musl's close() waits for the
+  descriptor's outstanding operations.
+- Comp: glibc. Kind: design (user-space aio). Observe: XSH.close.014.
 - Src: posixcheck run.
 
 ## Things the strict build changes

@@ -76,3 +76,15 @@ since      2008
 says       For an unprivileged process, scandir() of its own directory with
            mode 0300 returns -1 with errno EACCES.
 test       t/008-scandir-eacces.c
+
+assertion  XSH.alphasort.009
+anchor     functions/alphasort.html#ERRORS/ELOOP
+class      disputed
+since      2008
+says       scandir("a", ...), with a -> b and b -> a, returns -1 with errno
+           ELOOP.
+note       disputed (SI-55): the [ENOENT] entry speaks of a component
+           that names no existing directory, which a regular file (or a
+           loop of links) also meets, so XSH 2.3 lets ENOENT be reported
+           too; every reference system reports the more specific error.
+test       t/009-scandir-eloop.c

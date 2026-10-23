@@ -11,7 +11,7 @@ DESCRIPTION:82d60129        XSH.close.007 XSH.close.012
 DESCRIPTION:3d92f1e3        todo  an unlinked file's space is freed at last close (statvfs; noisy)
 DESCRIPTION:be540c60        todo  XSI: last close of a pseudo-terminal manager sends SIGHUP to the controlling process (needs pty)
 DESCRIPTION:ec0c4eec        todo  outstanding asynchronous I/O completes as if close() waited (AIO)
-DESCRIPTION:21c830fa        todo  a mapped file's contents persist after its last close
+DESCRIPTION:21c830fa        partial XSH.close.013  # a mapped file; a mapped shared memory object is not checked
 DESCRIPTION:e890df8d        todo  SHM: an unlinked, unmapped shared memory object is removed at last close
 DESCRIPTION:c267d852        XSH.close.008
 DESCRIPTION:1c5e9523        todo  SO_LINGER with unsent data makes close() block up to the linger time
@@ -32,6 +32,6 @@ DESCRIPTION:538ae072        XSH.close.003  # defines "deallocate"; the reuse is 
 DESCRIPTION:5712131a        none  unspecified
 DESCRIPTION:a84249ff        none  unspecified
 DESCRIPTION:72489c1e        none  a permission
-DESCRIPTION:199a9893        todo  aio_write then close(): an operation not canceled still completes (data in the file, aio_return reports it)
+DESCRIPTION:199a9893        XSH.close.014
 DESCRIPTION:8b89d5fb        none  a permission
 DESCRIPTION:7c593a43        impl  which outstanding I/O close() cancels (documentation)

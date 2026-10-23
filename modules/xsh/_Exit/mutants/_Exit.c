@@ -48,6 +48,14 @@ _Noreturn static void faulty(exit_fn real, int status)
 		(void)raise(SIGTERM);
 	if (IS("calls_quick"))
 		quick_exit(status);	/* runs at_quick_exit() handlers */
+	if (IS("lingers")) {
+		/* a helper inherits the process's resources and lives on a while */
+		pid_t g = fork();
+		if (g == 0) {
+			(void)sleep(2);
+			real(0);
+		}
+	}
 	real(status);
 	for (;;)
 		;

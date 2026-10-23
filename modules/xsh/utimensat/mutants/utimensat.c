@@ -126,6 +126,9 @@ int utimensat(int fd, const char *path, const struct timespec times[2], int flag
 		flag |= AT_SYMLINK_NOFOLLOW;
 	if (IS("ignores_fd") && path != NULL && path[0] != '/')
 		fd = AT_FDCWD;
+	if (IS("search_checked") && fd != AT_FDCWD && path != NULL && path[0] != '/' && fstat(fd, &st) == 0 &&
+	    S_ISDIR(st.st_mode) && !(st.st_mode & 0111))
+		return fail(EACCES);	/* checks search even through an O_SEARCH descriptor */
 	if (IS("checks_fd") && fd != AT_FDCWD && fstat(fd, &st) != 0)
 		return fail(EBADF);
 	if ((IS("bad_fd_as_cwd") || IS("file_fd_as_cwd")) && fd != AT_FDCWD && path != NULL && path[0] != '/') {
