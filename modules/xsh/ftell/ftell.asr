@@ -1,0 +1,65 @@
+# XSH ftell(), ftello()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.ftell.001
+anchor     functions/ftell.html#RETURN VALUE
+class      required
+since      1988
+says       On a stream reading "0123456789", ftell() is 0, then 3 after three
+           reads, 7 after fseek(f, 7, SEEK_SET); on a "w" stream it is 5 after
+           fputs("hello") (still buffered); on an "a" stream on a 4-byte file
+           it is 6 after fputs("xy").
+test       t/001-position.c
+
+assertion  XSH.ftell.002
+anchor     functions/ftell.html#DESCRIPTION
+class      required
+says       With errno set to ERANGE, a successful ftell() on a file stream
+           leaves errno ERANGE.
+note       The change history does not say which edition added this, so
+           "since" is left out.
+test       t/002-errno-kept.c
+
+assertion  XSH.ftell.003
+anchor     functions/ftell.html#DESCRIPTION
+class      required
+since      2001
+says       ftello() is 3 after three reads of a file stream; after fseeko(f,
+           (off_t)1 << 33, SEEK_SET) it is 2^33 (when off_t has more than 33
+           bits).
+test       t/003-ftello.c
+
+assertion  XSH.ftell.004
+anchor     functions/ftell.html#ERRORS/ESPIPE
+class      required
+since      1988
+says       ftell() and ftello() on streams from fdopen() of a pipe's read end and
+           of a FIFO opened O_RDONLY|O_NONBLOCK return -1 with errno
+           ESPIPE.
+test       t/004-espipe-pipe.c
+
+assertion  XSH.ftell.005
+anchor     functions/ftell.html#ERRORS/ESPIPE
+class      required
+since      2001
+says       ftell() on a stream from fdopen() of one end of an AF_UNIX
+           socketpair() returns -1 with errno ESPIPE.
+note       Issue 6 added sockets to this error.
+test       t/005-espipe-socket.c
+
+assertion  XSH.ftell.006
+anchor     functions/ftell.html#ERRORS/EBADF
+class      required
+since      1988
+says       On a stream reading a file whose descriptor has been closed with
+           close() after one read, ftell() returns -1 with errno EBADF.
+test       t/006-ebadf.c
+
+assertion  XSH.ftell.007
+anchor     functions/ftell.html#ERRORS/EOVERFLOW
+class      required
+since      2001
+says       Where off_t is wider than long: after fseeko() to (off_t)LONG_MAX + 10
+           on a file stream, ftell() returns -1 with errno EOVERFLOW. Otherwise
+           NOTINUSE.
+test       t/007-eoverflow.c

@@ -1,0 +1,166 @@
+# XSH fseek(), fseeko()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fseek.001
+anchor     functions/fseek.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream reading "0123456789": fseek(f, 5, SEEK_SET) returns 0 and
+           the next read returns '5'; then fseek(f, -2, SEEK_CUR) (from 6)
+           returns 0 and the read returns '4'; fseek(f, -1, SEEK_END) returns
+           0 and the read returns '9'.
+test       t/001-whence.c
+
+assertion  XSH.fseek.002
+anchor     functions/fseek.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream read to its end (feof() true), fseek(f, 0, SEEK_SET)
+           returns 0, feof() is then 0 and the next read returns the first
+           byte; fseek(f, 0, SEEK_END) after reaching the end again also
+           clears it.
+test       t/002-clears-eof.c
+
+assertion  XSH.fseek.003
+anchor     functions/fseek.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream opened "r+" on "0123456789": fputc('X') (at 0),
+           fseek(f, 0, SEEK_CUR), then a read returns '1'; a read of '2',
+           fseek(f, 0, SEEK_CUR), fputc('Y') and fclose() leave "X12Y456789".
+test       t/003-update-switch.c
+
+assertion  XSH.fseek.004
+anchor     functions/fseek.html#DESCRIPTION
+class      required
+says       With fflush() the last operation (or the last but an ftell()):
+           on a "w" stream after fputs("abcdef") and fflush(), fseek(f, 2,
+           SEEK_SET) leaves lseek(fileno(f), 0, SEEK_CUR) at 2; on an "r"
+           stream after one read and fflush(), fseek(f, 7, SEEK_SET) leaves it
+           at 7; and with an ftell() between the fflush() and fseek(f, 3,
+           SEEK_SET), at 3.
+note       A CX statement; the change history does not say which edition
+           added it, so "since" is left out.
+test       t/004-after-fflush.c
+
+assertion  XSH.fseek.005
+anchor     functions/fseek.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream opened "r+" on "abc", fseek(f, 10, SEEK_SET) returns 0;
+           after fputc('Z') and fclose() the file is 11 bytes: "abc", seven
+           zero bytes, then 'Z'.
+test       t/005-gap.c
+
+assertion  XSH.fseek.006
+anchor     functions/fseek.html#DESCRIPTION
+class      required
+since      2001
+says       On a "w" stream on an existing file (last changed 2 s before), after
+           fputs("abc") with the data still buffered, fseek(f, 0, SEEK_SET)
+           returns 0, the file then holds "abc", and its last data
+           modification and status change times are later than before.
+test       t/006-writes-pending.c
+
+assertion  XSH.fseek.007
+anchor     functions/fseek.html#DESCRIPTION
+class      required
+since      2024
+says       On a stream from fmemopen(buf, 64, "w") with its default buffering,
+           after fputs("abc") with the data still buffered (not yet in buf),
+           fseek(f, 0, SEEK_SET) returns 0 and buf then begins "abc".
+note       Austin Group defect 1225 (Issue 8).
+test       t/007-memory-stream.c
+
+assertion  XSH.fseek.008
+anchor     functions/fseek.html#DESCRIPTION
+class      required
+since      2001
+says       fseeko() with SEEK_SET, SEEK_CUR and SEEK_END behaves as in
+           XSH.fseek.001; on an "r+" stream fseeko(f, (off_t)1 << 33, SEEK_SET)
+           returns 0 and ftello() then returns 2^33 (when off_t has more than
+           33 bits).
+test       t/008-fseeko.c
+
+assertion  XSH.fseek.009
+anchor     functions/fseek.html#ERRORS/EINVAL
+class      required
+since      1988
+says       On an "r+" stream at position 1 with a byte of output pending,
+           fseek(f, -5, SEEK_CUR) returns -1 with errno EINVAL.
+note       The ERRORS preamble makes these failures required only when
+           the stream is unbuffered or its buffer needed to be flushed;
+           the test leaves output pending so that it is.
+test       t/009-einval-negative.c
+
+assertion  XSH.fseek.010
+anchor     functions/fseek.html#ERRORS/EINVAL
+class      required
+since      1988
+says       On an "r+" stream with a byte of output pending, fseek() with a
+           whence that is none of SEEK_SET, SEEK_CUR and SEEK_END returns -1
+           with errno EINVAL.
+note       The ERRORS preamble makes these failures required only when
+           the stream is unbuffered or its buffer needed to be flushed;
+           the test leaves output pending so that it is.
+test       t/010-einval-whence.c
+
+assertion  XSH.fseek.011
+anchor     functions/fseek.html#ERRORS/ESPIPE
+class      required
+since      1988
+says       On a stream from fdopen() of a pipe's write end (the read end kept
+           open) with a byte of output pending, fseek(f, 0, SEEK_SET) returns
+           -1 with errno ESPIPE.
+note       The ERRORS preamble makes these failures required only when
+           the stream is unbuffered or its buffer needed to be flushed;
+           the test leaves output pending so that it is.
+test       t/011-espipe.c
+
+assertion  XSH.fseek.012
+anchor     functions/fseek.html#ERRORS/EBADF
+class      required
+since      1988
+says       On a "w" stream with output pending whose descriptor has been closed
+           with close(), fseek(f, 0, SEEK_SET) returns -1 with errno EBADF and
+           the stream's error indicator set.
+note       The error indicator is set because the write that fseek()
+           must do fails (DESCRIPTION).
+test       t/012-ebadf.c
+
+assertion  XSH.fseek.013
+anchor     functions/fseek.html#ERRORS/EFBIG
+class      required
+since      2024
+says       In a child with RLIMIT_FSIZE 100 and SIGXFSZ blocked, on a "w" stream
+           with 200 bytes pending, fseek(f, 0, SEEK_SET) returns -1 with errno
+           EFBIG, the error indicator is set, and SIGXFSZ is pending (when
+           XSI).
+note       Austin Group defect 1669 (Issue 8) made the error base; the
+           signal is XSI and checked only there.
+test       t/013-efbig.c
+
+assertion  XSH.fseek.014
+anchor     functions/fseek.html#ERRORS/EINVAL
+class      disputed
+since      2024
+says       On a stream from fmemopen(buf, 10, "r"), fseek(f, 11, SEEK_SET) returns
+           -1 with errno EINVAL.
+note       disputed (Q-35): the ERRORS preamble requires the failures
+           only when an underlying lseek() or write() is invoked, which
+           a memory stream has none of, yet this error names fmemopen()
+           streams; a FAIL is logged as INSPECT. fmemopen()'s own page
+           also requires the failure.
+test       t/014-memory-beyond-end.c
+
+assertion  XSH.fseek.015
+anchor     functions/fseek.html#ERRORS/EOVERFLOW
+class      required
+since      2001
+says       Where off_t is wider than long: on an "r+" stream with output pending
+           at fseeko() position LONG_MAX, fseek(f, 10, SEEK_CUR) returns -1
+           with errno EOVERFLOW. Otherwise NOTINUSE.
+note       The ERRORS preamble makes these failures required only when
+           the stream is unbuffered or its buffer needed to be flushed;
+           the test leaves output pending so that it is.
+test       t/015-eoverflow.c

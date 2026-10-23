@@ -39,6 +39,8 @@ by the named assertion.
 | XSH.fopen.032, XSH.fdopen.009 | FAIL (glibc) | sysconf(_SC_STREAM_MAX) is 16, but any number of streams can be opened | O.31 |
 | XSH.fopen.032, XSH.fdopen.009 | NOTINUSE (musl) | sysconf(_SC_STREAM_MAX) is -1 (indeterminate, which is allowed) | - |
 | XSH.fdopen.005 | FAIL (glibc) | `fdopen()` ignores 'e': FD_CLOEXEC is not set | O.32 |
+| XSH.fseek.004 | FAIL (glibc) | after fflush() of an input stream, fseek() within the read buffer leaves the descriptor at the end of the read-ahead | O.33 |
+| XSH.fseek.015, XSH.ftell.007 | NOTINUSE | long is as wide as off_t (LP64) | - |
 | XSH.fopen.034 | NOTINUSE | any byte but slash and NUL can be in a name, so EILSEQ never arises | - |
 | XSH.dup.012 to .015 | UNINITIATED (glibc) | `dup3()` exists but is not declared under the strict build | 11.1 |
 | XSH.pipe.007 to .010 | UNINITIATED (glibc) | `pipe2()` exists but is not declared under the strict build | 11.1 |
@@ -426,6 +428,18 @@ O.32 **glibc: fdopen() ignores 'e'.**
   (its fopen() does handle 'e'). musl sets the flag.
 - Comp: glibc. Kind: Issue 8 feature not implemented. Observe:
   XSH.fdopen.005.
+- Src: posixcheck run.
+
+O.33 **glibc: fseek() after fflush() does not set the descriptor's offset.**
+- POSIX (`fseek`, DESCRIPTION, CX): when the most recent operation on a
+  stream (other than ftell()) is fflush(), fseek() adjusts the offset of
+  the underlying open file description to the new position.
+- glibc 2.39: fflush() of an input stream sets the offset to the stream's
+  position (1 after one read) but keeps the buffer; the following
+  fseek(f, 7, SEEK_SET) lands inside the buffer and makes no lseek(), so
+  the offset stays at the end of the read-ahead (10 for a 10-byte file,
+  4096 for a large one). musl gives 7. Output streams are right.
+- Comp: glibc. Kind: long-standing. Observe: XSH.fseek.004.
 - Src: posixcheck run.
 
 O.26 **glibc: fflush() of an input stream with pushback sets the wrong offset.**

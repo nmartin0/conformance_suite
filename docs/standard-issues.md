@@ -113,3 +113,4 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-32 | aio at exit | question | XSH._Exit.019 |
 | Q-33 | setvbuf modes against implementation-defined support | question | XSH.setvbuf.003, XSH.setvbuf.004, XSH.setvbuf.006 |
 | Q-34 | ungetc limit omits fflush() | question | none (permission) |
+| Q-35 | fseek() ERRORS preamble | question | XSH.fseek.014 |

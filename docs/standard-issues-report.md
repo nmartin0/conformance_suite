@@ -128,6 +128,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-32 | XSH `_exit()`: asynchronous I/O at exit cannot be observed | Question | Low | Disputed (XSH._Exit.019) |
 | Q-33 | XSH `setvbuf()`: each mode is required, but support is implementation-defined | Question | Medium | Disputed (XSH.setvbuf.003, .004, .006) |
 | Q-34 | XSH `ungetc()`: the limit on repeated pushback omits fflush() | Question | Low | Not tested (permission) |
+| Q-35 | XSH `fseek()`: the ERRORS preamble against errors that need no lseek() or write() | Question | Medium | Disputed (XSH.fseek.014) |
 
 ## Entries
 
@@ -1063,6 +1064,12 @@ is unclear.
 - **Where:** XSH `ungetc()`, DESCRIPTION.
 - **Question:** a successful fflush() discards pushed-back bytes, like the file-positioning functions (a CX addition, Austin Group defect 87). But the sentence allowing ungetc() to fail after too many calls names only an intervening read or file-positioning operation, not fflush(). After fflush() has discarded the pushback, may ungetc() still fail because of the calls made before it? The two sentences should probably name the same operations.
 - **posixcheck meanwhile:** the permission is not tested. XSH.ungetc.010 checks that fflush() discards the byte.
+
+### Q-35: fseek(): the conditions in the ERRORS preamble
+
+- **Where:** XSH `fseek()`, ERRORS.
+- **Question:** the "shall fail" list applies only when the stream is unbuffered or its buffer needed to be flushed, and the call invokes an underlying lseek() or write(). Read literally, a buffered stream with nothing to flush need not fail with EINVAL for an invalid whence or a negative position, or with ESPIPE on a pipe. Yet the same list names conditions that involve neither call: an fmemopen() position beyond the end of the buffer (EINVAL) and open_memstream() running out of memory (ENOMEM). Is the preamble meant to restrict only the errors that come from lseek() and write() (EAGAIN, EFBIG, EINTR, EIO, ENOSPC, EPIPE)? Should EINVAL and ESPIPE be required whatever the buffer state, as ISO C's "a request that cannot be satisfied" suggests?
+- **posixcheck meanwhile:** XSH.fseek.009 to .012 leave output pending so that the preamble holds. XSH.fseek.014 (fmemopen() beyond the end) is `disputed`.
 
 ## Tracking
 

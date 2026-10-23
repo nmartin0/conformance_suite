@@ -1,0 +1,12 @@
+# ftell.cov - every requirement unit on functions/ftell.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:1e655e33     XSH.ftell.001
+DESCRIPTION:a0734182     XSH.ftell.002
+DESCRIPTION:ab7f3c05     XSH.ftell.003
+RETURN_VALUE:b0a6e76e    partial XSH.ftell.001 XSH.ftell.003  # bytes; open_wmemstream() positions in wide characters are not checked
+RETURN_VALUE:a1fd067c    XSH.ftell.004 XSH.ftell.005 XSH.ftell.006
+ERRORS:e2015850          XSH.ftell.006
+ERRORS:7ea7d621          XSH.ftell.007
+ERRORS:e13a87d4          none  not observable with a 64-bit off_t
+ERRORS:ed3fed0f          XSH.ftell.004 XSH.ftell.005
