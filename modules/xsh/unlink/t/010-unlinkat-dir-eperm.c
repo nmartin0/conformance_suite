@@ -125,22 +125,33 @@ static void long_name(char *buf, size_t size)
 	buf[max + 1] = '\0';
 }
 
+/* In the child: the call on a directory, in a directory the child may write. */
+static int child(void)
+{
+	int r = unlinkat(AT_FDCWD, "c/d", 0);
+
+	if (r == 0)
+		return 1;
+	return errno == EPERM ? 0 : 2;
+}
+
 int main(void)
 {
 	pc_begin("XSH.unlink.010");
 	{
-		int r;
-
-		pc_make_dir("d");
+		pc_make_dir("c");
+		pc_make_dir("c/d");
+		pc_check(chmod("c", 0777) == 0, "chmod failed");
 		pc_test();
-		r = unlinkat(AT_FDCWD, "d", 0);
-		if (r == 0) {
-			pc_check(geteuid() == 0, "unlinkat() of a directory succeeded without privileges");
-			pc_note("unlinkat(d, 0) of a directory succeeded (privileged)");
-		} else {
-			pc_check(errno == EPERM, "unlinkat(d, 0): errno %s, expected EPERM", pc_errname(errno));
-			pc_check(exists("d"), "the directory is gone after a failed unlinkat()");
+		switch (unprivileged(child)) {
+		case 0:
+			break;
+		case 1:
+			pc_fail("unlinkat(c/d, 0) of a directory succeeded without privileges");
+		default:
+			pc_fail("unlinkat(c/d, 0) of a directory did not fail with EPERM");
 		}
+		pc_check(exists("c/d"), "the directory is gone after a failed unlinkat()");
 	}
 	pc_pass();
 }

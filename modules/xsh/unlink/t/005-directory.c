@@ -1,5 +1,5 @@
 /*
- * unlink() of a directory fails with EPERM unless privileged.
+ * unlink() of a directory fails with EPERM without privileges.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.unlink.005
@@ -125,22 +125,34 @@ static void long_name(char *buf, size_t size)
 	buf[max + 1] = '\0';
 }
 
+
+/* In the child: the call on a directory, in a directory the child may write. */
+static int child(void)
+{
+	int r = unlink("c/d");
+
+	if (r == 0)
+		return 1;
+	return errno == EPERM ? 0 : 2;
+}
+
 int main(void)
 {
 	pc_begin("XSH.unlink.005");
 	{
-		int r;
-
-		pc_make_dir("d");
+		pc_make_dir("c");
+		pc_make_dir("c/d");
+		pc_check(chmod("c", 0777) == 0, "chmod failed");
 		pc_test();
-		r = unlink("d");
-		if (r == 0) {
-			pc_check(geteuid() == 0, "unlink() of a directory succeeded without privileges");
-			pc_note("unlink() of a directory succeeded (privileged)");
-		} else {
-			pc_check(errno == EPERM, "unlink() of a directory: errno %s, expected EPERM", pc_errname(errno));
-			pc_check(exists("d"), "the directory is gone after a failed unlink()");
+		switch (unprivileged(child)) {
+		case 0:
+			break;
+		case 1:
+			pc_fail("unlink() of a directory succeeded without privileges");
+		default:
+			pc_fail("unlink() of a directory did not fail with EPERM");
 		}
+		pc_check(exists("c/d"), "the directory is gone after a failed unlink()");
 	}
 	pc_pass();
 }

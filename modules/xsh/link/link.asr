@@ -25,8 +25,8 @@ class      required
 since      1988
 says       After link() puts a new entry in directory d, stat() reports a
            later st_ctim for the file and later st_mtim and st_ctim for d
-           (the test links again every 10 ms for up to 3 s until the
-           times move).
+           (the test links a fresh file every 10 ms for up to 3 s until
+           the times move, so no file needs many links).
 timeout    20
 test       t/003-times.c
 
@@ -70,9 +70,10 @@ assertion  XSH.link.008
 anchor     functions/link.html#DESCRIPTION
 class      required
 since      1988
-says       link("f", "e") with e an existing file, and link("f", "dl") with dl
-           a dangling symbolic link, fail with EEXIST; e keeps its
-           contents and f's st_nlink stays 1.
+says       link("f", path2) fails with EEXIST when path2 is an existing file,
+           a dangling symbolic link, a directory, or a symbolic link to a
+           directory; nothing is replaced, nothing is created inside the
+           directory, and f's st_nlink stays 1.
 test       t/008-eexist.c
 
 assertion  XSH.link.009
@@ -106,9 +107,12 @@ assertion  XSH.link.012
 anchor     functions/link.html#ERRORS/EPERM
 class      required
 since      1988
-says       link("d", "d2") with d a directory fails with EPERM; only a process
-           with appropriate privileges, on an implementation that
-           supports it, may succeed.
+says       For a process without appropriate privileges, link("c/d", "c/d2")
+           with c/d a directory fails with EPERM (whether privileged
+           processes may link directories is not tested).
+note       Privileges are dropped to user 65534 when the suite runs as
+           root; a non-root process that still holds privileges
+           (capabilities, Solaris privileges) may see this FAIL.
 test       t/012-directory.c
 
 assertion  XSH.link.013
@@ -125,6 +129,9 @@ class      required
 since      1988
 says       link() fails with ENAMETOOLONG when the last component of path2,
            or of path1, is longer than {NAME_MAX} bytes.
+note       For path1 the over-long name also names no existing file
+           (ENOENT), but XBD 4.16 makes an over-long component an error
+           of its own, which every system reports as ENAMETOOLONG.
 test       t/014-enametoolong.c
 
 assertion  XSH.link.015
@@ -159,20 +166,61 @@ anchor     functions/link.html#ERRORS/EACCES
 class      required
 since      2008
 says       For a process without appropriate privileges, linkat(fd, "f",
-           AT_FDCWD, "g", 0) fails with EACCES when fd was opened O_RDONLY
-           on a directory whose permissions were then changed to deny
-           search.
+           AT_FDCWD, "c/g", 0), with c writable by it and d/f its own file,
+           fails with EACCES when fd was opened O_RDONLY on d and d's
+           permissions were then changed to deny search.
 test       t/018-linkat-eacces-fd.c
 
 assertion  XSH.link.019
 anchor     functions/link.html#DESCRIPTION
+class      disputed
+since      1988
+says       A process without appropriate privileges that links a file it
+           does not own but may read (mode 0644) into a directory it may
+           write either succeeds or, if the implementation requires more
+           access to the file, fails with EACCES.
+needs      root
+note       disputed (Q-24): the standard does not say what access to the
+           existing file an implementation may require, or whether a
+           security policy may refuse with EPERM; Linux
+           (fs.protected_hardlinks) and FreeBSD
+           (security.bsd.hardlink_check_uid) refuse with EPERM.
+test       t/019-other-users-file.c
+
+assertion  XSH.link.020
+anchor     functions/link.html#DESCRIPTION
 class      required
 since      1988
-says       A process without appropriate privileges can link() a file it
-           does not own but may read (mode 0644) into a directory it may
-           write; an implementation that requires access to the file gets
-           it from the read permission.
-needs      root
-note       Linux with fs.protected_hardlinks=1 (the usual default)
-           refuses this with EPERM.
-test       t/019-other-users-file.c
+says       link("sl", "g"), with sl a symbolic link to f, succeeds, and g is
+           then a second name of either sl (the link itself) or f (which
+           one is implementation-defined).
+test       t/020-symlink.c
+
+assertion  XSH.link.021
+anchor     functions/link.html#DESCRIPTION
+class      required
+since      2008
+says       For a process without appropriate privileges, linkat(fd, "f",
+           AT_FDCWD, "c/g", 0) succeeds when fd was opened with O_SEARCH on
+           d and d's permissions were then changed to deny search.
+note       O_SEARCH itself is a header item (Tier 0); without it this
+           test is UNRESOLVED.
+test       t/021-linkat-search.c
+
+assertion  XSH.link.022
+anchor     functions/link.html#DESCRIPTION
+class      required
+since      2008
+says       linkat() with absolute path1 and path2 succeeds whatever fd1 and
+           fd2 are: descriptors that are not open, or open on a regular
+           file.
+test       t/022-linkat-absolute.c
+
+assertion  XSH.link.023
+anchor     functions/link.html#ERRORS/ENOENT
+class      required
+since      2008
+says       linkat(AT_FDCWD, "dl", AT_FDCWD, "g", AT_SYMLINK_FOLLOW), with dl a
+           symbolic link to a name that does not exist, fails with ENOENT
+           and creates nothing.
+test       t/023-follow-dangling.c

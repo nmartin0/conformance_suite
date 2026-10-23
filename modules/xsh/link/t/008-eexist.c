@@ -5,6 +5,7 @@
  * ASSERTION XSH.link.008
  * MUTANT    link.eexist_replaces
  * MUTANT    link.eexist_as_eperm
+ * MUTANT    link.into_dir
  */
 #include "pc.h"
 #include <errno.h>
@@ -135,10 +136,15 @@ int main(void)
 		pc_make_file("f", "f");
 		pc_make_file("e", "e");
 		pc_make_symlink("nowhere", "dl");
+		pc_make_dir("d");
+		pc_make_symlink("d", "sd");
 		pc_test();
 		pc_expect_err(link("f", "e"), EEXIST, "link(f, existing file)");
 		pc_expect_err(link("f", "dl"), EEXIST, "link(f, dangling symbolic link)");
+		pc_expect_err(link("f", "d"), EEXIST, "link(f, directory)");
+		pc_expect_err(link("f", "sd"), EEXIST, "link(f, symbolic link to a directory)");
 		pc_check(pc_file_equals("e", "e"), "the existing file was replaced");
+		pc_check(!exists("d/f"), "link() made a name inside the directory");
 		st = lst("f");
 		pc_check(st.st_nlink == 1, "st_nlink %lu after the failed links", (unsigned long)st.st_nlink);
 		st = lst("dl");

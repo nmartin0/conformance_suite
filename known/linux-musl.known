@@ -37,4 +37,6 @@ XSH.abort.006      INSPECT      linux*    Q-21 (disputed): abort() skips a block
 XSH.unlink.005     FAIL         linux*    1.17: unlink() of a directory gives EISDIR
 XSH.unlink.010     FAIL         linux*    1.17: unlinkat() of a directory without AT_REMOVEDIR gives EISDIR
 XSH.fstatat.013    FAIL         linux*    O.18: O_SEARCH (O_PATH) descriptors still get the search check
-XSH.link.019       FAIL         linux*    O.19: fs.protected_hardlinks refuses links to other users' files with EPERM
+XSH.link.019       INSPECT      linux*    Q-24 (disputed): fs.protected_hardlinks refuses links to other users' files with EPERM
+XSH.link.021       FAIL         linux*    O.18: O_SEARCH (O_PATH) descriptors still get the search check
+XSH.unlink.021     FAIL         linux*    O.18: O_SEARCH (O_PATH) descriptors still get the search check

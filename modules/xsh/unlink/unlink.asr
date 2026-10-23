@@ -22,18 +22,21 @@ anchor     functions/unlink.html#DESCRIPTION
 class      required
 since      1988
 says       After unlink() of the only name of a file that is open, the name
-           is gone when unlink() returns, but the descriptor still reads
-           and writes the file's contents.
+           is gone when unlink() returns and fstat() of the descriptor
+           reports st_nlink 0, but the descriptor still reads and writes
+           the file's contents.
+note       Run the suite on a local file system: on NFS, removing an
+           open file renames it instead (silly rename).
 test       t/003-open-file-kept.c
 
 assertion  XSH.unlink.004
 anchor     functions/unlink.html#DESCRIPTION
 class      required
 since      1988
-says       After unlink() of one of two names of a file in directory d,
+says       After unlink() of one of several names of a file in directory d,
            stat() reports later st_mtim and st_ctim for d and a later
-           st_ctim for the file (the test removes another name every
-           10 ms for up to 3 s until the times move).
+           st_ctim for the file (the test removes another name every 10
+           ms, up to 300 names or {LINK_MAX}, until the times move).
 timeout    20
 test       t/004-times.c
 
@@ -41,9 +44,13 @@ assertion  XSH.unlink.005
 anchor     functions/unlink.html#ERRORS/EPERM
 class      required
 since      1988
-says       unlink("d") with d an empty directory fails with EPERM and d
-           remains; only a process with appropriate privileges, on an
-           implementation that supports it, may succeed.
+says       For a process without appropriate privileges, unlink("c/d") with
+           c/d an empty directory fails with EPERM and c/d remains
+           (whether privileged processes may unlink directories is not
+           tested).
+note       Privileges are dropped to user 65534 when the suite runs as
+           root; a non-root process that still holds privileges may see
+           this FAIL.
 test       t/005-directory.c
 
 assertion  XSH.unlink.006
@@ -82,9 +89,9 @@ assertion  XSH.unlink.010
 anchor     functions/unlink.html#ERRORS/EPERM
 class      required
 since      2008
-says       unlinkat(AT_FDCWD, "d", 0) with d an empty directory fails with
-           EPERM and d remains, unless the process has appropriate
-           privileges and the implementation supports it.
+says       For a process without appropriate privileges, unlinkat(AT_FDCWD,
+           "c/d", 0) with c/d an empty directory fails with EPERM and c/d
+           remains.
 test       t/010-unlinkat-dir-eperm.c
 
 assertion  XSH.unlink.011
@@ -118,6 +125,9 @@ class      required
 since      1988
 says       unlink() of a name longer than {NAME_MAX} bytes fails with
            ENAMETOOLONG.
+note       The name also names no existing file (ENOENT), but XBD 4.16
+           makes an over-long component an error of its own, which every
+           system reports as ENAMETOOLONG.
 test       t/014-enametoolong.c
 
 assertion  XSH.unlink.015
@@ -153,8 +163,9 @@ when       XSI
 since      2001
 says       In a directory with S_ISVTX set and write permission for all,
            owned by another user, unlink() of a file owned by another user
-           fails with EPERM or EACCES for a process without appropriate
-           privileges, and the file remains.
+           that the process cannot write (mode 0644) fails with EPERM or
+           EACCES for a process without appropriate privileges, and the
+           file remains.
 needs      root
 test       t/018-sticky.c
 
@@ -166,3 +177,33 @@ says       For a process without appropriate privileges, unlinkat(fd, "f",
            0) fails with EACCES when fd was opened O_RDONLY on a writable
            directory whose permissions were then changed to deny search.
 test       t/019-unlinkat-eacces-fd.c
+
+assertion  XSH.unlink.020
+anchor     basedefs/V1_chap04.html#tag_04_05
+class      conditional
+when       XSI
+since      2001
+says       In a directory with S_ISVTX set and write permission for all,
+           owned by another user, a process without appropriate privileges
+           can unlink() a file it owns.
+needs      root
+test       t/020-sticky-owner.c
+
+assertion  XSH.unlink.021
+anchor     functions/unlink.html#DESCRIPTION
+class      required
+since      2008
+says       For a process without appropriate privileges, unlinkat(fd, "f", 0)
+           succeeds when fd was opened with O_SEARCH on a writable
+           directory whose permissions were then changed to deny search.
+note       O_SEARCH itself is a header item (Tier 0); without it this
+           test is UNRESOLVED.
+test       t/021-unlinkat-search.c
+
+assertion  XSH.unlink.022
+anchor     functions/unlink.html#DESCRIPTION
+class      required
+since      2008
+says       unlinkat() with an absolute path removes that file whatever fd is:
+           a descriptor that is not open, or one open on a regular file.
+test       t/022-unlinkat-absolute.c

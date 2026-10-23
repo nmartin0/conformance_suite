@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.unlink.003
  * MUTANT    unlink.truncates
+ * MUTANT    unlink.noop
  */
 #include "pc.h"
 #include <errno.h>
@@ -129,6 +130,7 @@ int main(void)
 {
 	pc_begin("XSH.unlink.003");
 	{
+		struct stat st;
 		char buf[16] = "";
 		int fd;
 
@@ -138,6 +140,7 @@ int main(void)
 		pc_test();
 		pc_check(unlink("f") == 0, "unlink failed: %s", pc_errname(errno));
 		pc_check(!exists("f"), "the name still exists after unlink() returned");
+		pc_check(fstat(fd, &st) == 0 && st.st_nlink == 0, "fstat() of the open file does not report st_nlink 0");
 		pc_check(pread(fd, buf, sizeof buf - 1, 0) == 10, "pread from the unlinked file did not return 10 bytes");
 		pc_check(strcmp(buf, "still here") == 0, "read \"%s\" from the unlinked file", buf);
 		pc_check(pwrite(fd, "S", 1, 0) == 1, "pwrite to the unlinked file failed: %s", pc_errname(errno));

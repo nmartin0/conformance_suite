@@ -10,6 +10,7 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -103,6 +104,11 @@ int unlinkat(int fd, const char *path, int flag)
 		return real_unlinkat(fd, path, flag);
 	if (IS("ignores_fd") && path[0] != '/')
 		fd = AT_FDCWD;
+	if (IS("checks_fd") && fd != AT_FDCWD && fstat(fd, &st) != 0)
+		return fail(EBADF);
+	if (IS("search_checked") && fd != AT_FDCWD && path[0] != '/' && fstat(fd, &st) == 0 && S_ISDIR(st.st_mode) &&
+	    !(st.st_mode & 0111))
+		return fail(EACCES);
 	if (IS("removedir_ignored"))
 		flag &= ~AT_REMOVEDIR;
 	if (IS("removedir_noop") && (flag & AT_REMOVEDIR))

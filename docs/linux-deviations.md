@@ -60,8 +60,8 @@ by the named assertion.
 | XSH.abort.006 | INSPECT (musl) | abort() with SIGABRT caught but blocked ends the process without the handler (disputed, Q-21) | - |
 | XSH.psiginfo.002 | FAIL (musl) | psignal(sig, "") writes ": " | O.15 |
 | XSH.psiginfo.003 | INSPECT (glibc) | psiginfo() adds the sender to the description (disputed, Q-19) | - |
-| XSH.fstatat.013 | UNRESOLVED (glibc), FAIL (musl) | glibc does not define `O_SEARCH`; musl's O_SEARCH (O_PATH) descriptors still get the search check | 1.7, O.18 |
-| XSH.link.019 | FAIL | `fs.protected_hardlinks` refuses a link to another user's readable file with EPERM | O.19 |
+| XSH.fstatat.013, XSH.link.021, XSH.unlink.021 | UNRESOLVED (glibc), FAIL (musl) | glibc does not define `O_SEARCH`; musl's O_SEARCH (O_PATH) descriptors still get the search check | 1.7, O.18 |
+| XSH.link.019 | INSPECT | `fs.protected_hardlinks` refuses a link to another user's readable file with EPERM (disputed, Q-24) | O.19 |
 | XSH.unlink.005, .010 | FAIL | `unlink()`/`unlinkat(fd, dir, 0)` of a directory give EISDIR; EPERM required | 1.17 |
 | XSH.sig2str.001 to .006 | UNINITIATED | no sig2str() or str2sig() | 3.1 |
 | XBD.signal.h.007 | FAIL | no `_SC_NSIG` (nor `NSIG_MAX`) | 1.24 |
@@ -299,7 +299,8 @@ O.18 **musl: an O_SEARCH descriptor still gets the search check.**
   directory's mode denies search, fstatat(fd, "f", ...) fails with EACCES
   for an unprivileged process. glibc does not define O_SEARCH at all
   (1.7), so the test is UNRESOLVED there.
-- Comp: kernel with musl. Kind: long-standing. Observe: XSH.fstatat.013.
+- Comp: kernel with musl. Kind: long-standing. Observe: XSH.fstatat.013,
+  XSH.link.021, XSH.unlink.021.
 - Src: posixcheck run.
 
 O.19 **Linux: link() of another user's file fails with EPERM (protected hard links).**
@@ -311,7 +312,8 @@ O.19 **Linux: link() of another user's file fails with EPERM (protected hard lin
   may both read and write; otherwise link() and linkat() fail with EPERM.
   Setting the sysctl to 0 restores the POSIX behaviour.
 - Comp: kernel (configuration). Kind: deliberate (security hardening).
-  Observe: XSH.link.019.
+  Observe: XSH.link.019 (disputed: the standard does not say what access
+  may be required, Q-24).
 - Src: posixcheck run; kernel documentation of `protected_hardlinks`.
 
 ## Things the strict build changes

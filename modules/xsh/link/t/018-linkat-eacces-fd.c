@@ -137,7 +137,7 @@ static int dfd = -1;
 
 static int child(void)
 {
-	return verdict(linkat(dfd, "f", AT_FDCWD, "g", 0), EACCES, EACCES);
+	return verdict(linkat(dfd, "f", AT_FDCWD, "c/g", 0), EACCES, EACCES);
 }
 
 int main(void)
@@ -145,9 +145,12 @@ int main(void)
 	pc_begin("XSH.link.018");
 	{
 		pc_make_dir("d");
+		pc_make_dir("c");
 		pc_make_file("d/f", "x");
+		if (geteuid() == 0)
+			pc_check(chown("d/f", 65534, 65534) == 0, "chown failed");
 		dfd = dir_fd("d");
-		pc_check(chmod("d", 0600) == 0, "chmod failed");
+		pc_check(chmod("d", 0600) == 0 && chmod("c", 0777) == 0, "chmod failed");
 		pc_test();
 		switch (unprivileged(child)) {
 		case 0:

@@ -86,3 +86,4 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-21 | abort(): caught but blocked SIGABRT: must the handler run? | question | XSH.abort.006 (disputed) |
 | Q-22 | <signal.h>: MINSIGSTKSZ constant vs CPU-dependent frames | question | XSH.sigaltstack.010 |
 | Q-23 | signal(): return value after failed calls or sigaction() | question | XSH.signal.001 |
+| Q-24 | link(): what access to the existing file may be required, and with which error | question | XSH.link.019 |

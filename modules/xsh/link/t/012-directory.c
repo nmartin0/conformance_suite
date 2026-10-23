@@ -1,5 +1,5 @@
 /*
- * link() of a directory fails with EPERM unless privileged.
+ * link() of a directory fails with EPERM without privileges.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.link.012
@@ -126,22 +126,33 @@ static void long_name(char *buf, size_t size)
 	buf[max + 1] = '\0';
 }
 
+/* In the child: the call on a directory, in a directory the child may write. */
+static int child(void)
+{
+	int r = link("c/d", "c/d2");
+
+	if (r == 0)
+		return 1;
+	return errno == EPERM ? 0 : 2;
+}
+
 int main(void)
 {
 	pc_begin("XSH.link.012");
 	{
-		int r;
-
-		pc_make_dir("d");
+		pc_make_dir("c");
+		pc_make_dir("c/d");
+		pc_check(chmod("c", 0777) == 0, "chmod failed");
 		pc_test();
-		r = link("d", "d2");
-		if (r == 0) {
-			pc_check(geteuid() == 0, "link() of a directory succeeded without privileges");
-			pc_note("link() of a directory succeeded (privileged)");
-			pc_check(exists("d2"), "link() returned 0 but d2 does not exist");
-			(void)unlink("d2");
-		} else
-			pc_check(errno == EPERM, "link() of a directory: errno %s, expected EPERM", pc_errname(errno));
+		switch (unprivileged(child)) {
+		case 0:
+			break;
+		case 1:
+			pc_fail("link() of a directory succeeded without privileges");
+		default:
+			pc_fail("link() of a directory did not fail with EPERM");
+		}
+		pc_check(!exists("c/d2"), "a failed link() created c/d2");
 	}
 	pc_pass();
 }

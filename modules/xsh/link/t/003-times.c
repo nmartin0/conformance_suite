@@ -130,23 +130,24 @@ int main(void)
 	pc_begin("XSH.link.003");
 	{
 		struct stat f0, d0, f1, d1;
-		char name[32];
+		char name[32], to[32];
 		int i, moved = 0;
 
-		pc_make_file("f", "x");
 		pc_make_dir("d");
-		f0 = lst("f");
-		d0 = lst("d");
 		pc_test();
 		for (i = 0; i < 300 && !moved; i++) {
+			snprintf(name, sizeof name, "f%d", i);
+			snprintf(to, sizeof to, "d/g%d", i);
+			pc_make_file(name, "x");
+			f0 = lst(name);
+			d0 = lst("d");
 			sleep_ms(10);
-			snprintf(name, sizeof name, "d/g%d", i);
-			pc_check(link("f", name) == 0, "link(f, %s) failed: %s", name, pc_errname(errno));
-			f1 = lst("f");
+			pc_check(link(name, to) == 0, "link(%s, %s) failed: %s", name, to, pc_errname(errno));
+			f1 = lst(name);
 			d1 = lst("d");
-			moved = ts_cmp(d1.st_mtim, d0.st_mtim) > 0;
+			moved = ts_cmp(d1.st_mtim, d0.st_mtim) > 0 && ts_cmp(f1.st_ctim, f0.st_ctim) > 0;
 		}
-		pc_check(moved, "the directory's st_mtim did not move in 3 s of links");
+		pc_check(ts_cmp(d1.st_mtim, d0.st_mtim) > 0, "the directory's st_mtim did not move in 3 s of links");
 		pc_check(ts_cmp(d1.st_ctim, d0.st_ctim) > 0, "the directory's st_ctim did not move");
 		pc_check(ts_cmp(f1.st_ctim, f0.st_ctim) > 0, "the file's st_ctim did not move");
 	}

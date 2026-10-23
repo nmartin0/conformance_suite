@@ -101,6 +101,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-21 | XSH `abort()`: caught but blocked SIGABRT: must the handler run? | Question | Low | Disputed (XSH.abort.006) |
 | Q-22 | XBD `<signal.h>`: MINSIGSTKSZ constant vs CPU-dependent frames | Question | Medium | XSH.sigaltstack.010 FAILs on AVX-512 |
 | Q-23 | XSH `signal()`: return value after failed calls or sigaction() | Question | Low | Successful calls only (XSH.signal.001) |
+| Q-24 | XSH `link()`: what access to the existing file may be required, and with which error | Question | Medium | Disputed (XSH.link.019) |
 
 ## Entries
 
@@ -838,6 +839,12 @@ is unclear.
 - **Where:** XSH `signal()`, RETURN VALUE.
 - **Question:** signal() returns the value of func for the most recent call to signal() for the signal. A failed call, or a sigaction() in between, is not mentioned. Is the most recent successful call meant (as ISO C has it), and what is returned after sigaction() changed the action?
 - **posixcheck meanwhile:** XSH.signal.001 uses successful signal() calls only.
+
+### Q-24: link(): what "permission to access the existing file" may an implementation require?
+
+- **Where:** XSH `link()`, DESCRIPTION and ERRORS ([EACCES]).
+- **Question:** the implementation may require that the calling process has permission to access the existing file, and [EACCES] covers the case where it lacks that permission. "Access" is not defined: is read permission enough, or may an implementation demand ownership, or read and write permission? And when a security policy refuses (Linux `fs.protected_hardlinks`, FreeBSD `security.bsd.hardlink_check_uid`), is EPERM an allowed additional error, or must the error be [EACCES] (XSH 2.3 forbids a different error number for a condition the page describes)?
+- **posixcheck meanwhile:** XSH.link.019 is `disputed`: linking another user's readable file must succeed or fail with EACCES; EPERM is logged as INSPECT.
 
 ## Tracking
 

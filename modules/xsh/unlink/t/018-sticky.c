@@ -146,7 +146,7 @@ int main(void)
 			pc_unresolved("needs root to create files of another user");
 		pc_make_dir("t");
 		pc_make_file("t/f", "x");
-		pc_check(chmod("t", 01777) == 0 && chmod("t/f", 0666) == 0, "chmod failed");
+		pc_check(chmod("t", 01777) == 0 && chmod("t/f", 0644) == 0, "chmod failed");
 		pc_test();
 		switch (unprivileged(child)) {
 		case 0:

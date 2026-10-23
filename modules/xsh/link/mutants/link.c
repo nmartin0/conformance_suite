@@ -10,6 +10,7 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -122,6 +123,14 @@ int link(const char *path1, const char *path2)
 		(void)close(out);
 		return 0;
 	}
+	if (IS("into_dir") && stat(path2, &st) == 0 && S_ISDIR(st.st_mode)) {
+		/* links into the directory, as cp or mv would */
+		const char *base = strrchr(path1, '/');
+		snprintf(b2, sizeof b2, "%s/%s", path2, base ? base + 1 : path1);
+		return real_link(path1, b2);
+	}
+	if (IS("symlink_fails") && lstat(path1, &st) == 0 && S_ISLNK(st.st_mode))
+		return fail(EPERM);
 	if (IS("eexist_replaces") && lstat(path2, &st) == 0)
 		(void)unlink(path2);
 	if (IS("slash1_ignored") && has_slash_end(path1))

@@ -10,6 +10,7 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -111,6 +112,12 @@ int unlink(const char *path)
 		r = real_unlink(target);
 		if (IS("follows"))
 			return r;
+	}
+	if (IS("sticky_refuses_owner")) {
+		struct stat d;
+		const char *dd = dir_of(path, dbuf, sizeof dbuf);
+		if (stat(dd, &d) == 0 && (d.st_mode & S_ISVTX) && d.st_uid != geteuid())
+			return fail(EPERM);
 	}
 	if (IS("truncates"))
 		(void)truncate(path, 0);

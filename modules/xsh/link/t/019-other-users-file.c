@@ -1,5 +1,5 @@
 /*
- * link() of another user's readable file succeeds.
+ * link() of another user's readable file.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.link.019
@@ -125,37 +125,28 @@ static void long_name(char *buf, size_t size)
 	buf[max + 1] = '\0';
 }
 
-/* 0: failed with one of the expected errors; 1: succeeded; 2: another errno. */
-static int verdict(int r, int e1, int e2)
-{
-	if (r == 0)
-		return 1;
-	return errno == e1 || errno == e2 ? 0 : 2;
-}
-
 static int child(void)
 {
-	return link("f", "c/g") == 0 ? 0 : (errno == EPERM ? 3 : 2);
+	if (link("f", "c/g") == 0)
+		return 0;
+	return errno == EACCES ? 0 : errno == EPERM ? 3 : 2;
 }
 
 int main(void)
 {
 	pc_begin("XSH.link.019");
 	{
+		int r;
+
 		if (geteuid() != 0)
 			pc_unresolved("needs root to create a file of another user");
 		pc_make_file("f", "x");
 		pc_make_dir("c");
 		pc_check(chmod("f", 0644) == 0 && chmod("c", 0777) == 0, "chmod failed");
 		pc_test();
-		switch (unprivileged(child)) {
-		case 0:
-			break;
-		case 3:
-			pc_fail("link() of another user's readable file failed with EPERM");
-		default:
-			pc_fail("link() of another user's readable file failed");
-		}
+		r = unprivileged(child);
+		pc_check(r != 3, "link() of another user's readable file failed with EPERM");
+		pc_check(r == 0, "link() of another user's readable file failed with another error");
 	}
 	pc_pass();
 }

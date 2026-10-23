@@ -132,17 +132,21 @@ int main(void)
 		struct stat f0, d0, f1, d1;
 		char name[32];
 		int i, moved = 0;
+		long nl;
 
 		pc_make_dir("d");
 		pc_make_file("d/f", "x");
-		for (i = 0; i < 300; i++) {
+		nl = pathconf("d/f", _PC_LINK_MAX);
+		if (nl < 0 || nl > 301)
+			nl = 301;
+		for (i = 0; i < nl - 1; i++) {
 			snprintf(name, sizeof name, "d/g%d", i);
 			pc_check(link("d/f", name) == 0, "link failed: %s", pc_errname(errno));
 		}
 		f0 = lst("d/f");
 		d0 = lst("d");
 		pc_test();
-		for (i = 0; i < 300 && !moved; i++) {
+		for (i = 0; i < nl - 1 && !moved; i++) {
 			sleep_ms(10);
 			snprintf(name, sizeof name, "d/g%d", i);
 			pc_check(unlink(name) == 0, "unlink(%s) failed: %s", name, pc_errname(errno));

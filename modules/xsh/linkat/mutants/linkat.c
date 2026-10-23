@@ -10,6 +10,7 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -110,6 +111,11 @@ int linkat(int fd1, const char *path1, int fd2, const char *path2, int flag)
 		fd2 = AT_FDCWD;
 	if (IS("fdcwd_ebadf") && (fd1 == AT_FDCWD || fd2 == AT_FDCWD))
 		return fail(EBADF);
+	if (IS("checks_fd") && ((fd1 != AT_FDCWD && fstat(fd1, &st) != 0) || (fd2 != AT_FDCWD && fstat(fd2, &st) != 0)))
+		return fail(EBADF);	/* checks fd even for an absolute path */
+	if (IS("search_checked") && fd1 != AT_FDCWD && path1[0] != '/' && fstat(fd1, &st) == 0 && S_ISDIR(st.st_mode) &&
+	    !(st.st_mode & 0111))
+		return fail(EACCES);
 	if (IS("bad_fd_as_cwd") || IS("file_fd_as_cwd")) {
 		if (fd1 != AT_FDCWD && path1[0] != '/' && (fstat(fd1, &st) != 0 || !S_ISDIR(st.st_mode)))
 			fd1 = AT_FDCWD;
