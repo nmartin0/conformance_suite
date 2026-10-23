@@ -46,88 +46,188 @@ static const char *mutant_of(const char *prefix)
 	if (real_##fn == NULL) real_##fn = (__typeof__(fn) *)dlsym(RTLD_NEXT, #fn)
 
 #include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+/* One stream with a byte pushed back through this shim, for the faults that need to know. */
+static FILE *pend_f, *eof_f;
+static int pend_c = EOF, pend_n;
+
+static int real_ungetc_(int c, FILE *f)
+{
+	REAL(ungetc);
+	return real_ungetc(c, f);
+}
 
 int ungetc(int c, FILE *f)
 {
-	REAL(ungetc);
 	const char *m = mutant_of("ungetc.");
-	static int held = EOF;
 	int r;
 
 	if (m == NULL)
-		return real_ungetc(c, f);
+		return real_ungetc_(c, f);
 	if (IS("noop"))
 		return (unsigned char)c;
 	if (IS("returns_eof") && c != EOF) {
-		(void)real_ungetc(c, f);
+		(void)real_ungetc_(c, f);
 		return EOF;
 	}
 	if (IS("eof_accepted") && c == EOF)
-		return real_ungetc(0xff, f);
+		return real_ungetc_(0xff, f);
+	if (IS("eof_discards") && c == EOF && pend_f == f && pend_n > 0) {
+		(void)fgetc(f);	/* the pending byte is lost */
+		return EOF;
+	}
+	if (IS("eof_clears_indicator") && c == EOF) {
+		clearerr(f);
+		return EOF;
+	}
 	if (IS("no_convert") && c != EOF) {
-		(void)real_ungetc(c, f);
+		(void)real_ungetc_(c, f);
 		return c;
 	}
-	if (IS("fifo_order") && c != EOF) {
+	if (IS("fifo_order") && c != EOF && pend_f == f && pend_n > 0) {
 		/* the second byte goes under the first */
-		if (held == EOF) {
-			held = (unsigned char)c;
-			return real_ungetc(c, f);
-		}
-		r = fgetc(f);
-		if (r == EOF)
+		int first = fgetc(f);
+		if (first == EOF || real_ungetc_(c, f) == EOF || real_ungetc_(first, f) == EOF)
 			return EOF;
-		if (real_ungetc(c, f) == EOF || real_ungetc(r, f) == EOF)
-			return EOF;
-		held = EOF;
+		pend_n = 2;
 		return (unsigned char)c;
 	}
+	if (IS("keeps_eof") && c != EOF && feof(f))
+		eof_f = f;
 	if (IS("writes_through") && c != EOF) {
 		long pos = ftell(f);
-		r = real_ungetc(c, f);
+		r = real_ungetc_(c, f);
 		if (pos > 0) {
 			unsigned char b = (unsigned char)c;
 			(void)pwrite(fileno(f), &b, 1, pos - 1);	/* into the file itself */
 		}
 		return r;
 	}
-	if (IS("keeps_eof") && c != EOF) {
-		int at_end = feof(f);
-		r = real_ungetc(c, f);
-		if (at_end && r != EOF) {
-			/* the byte is pushed back but still reported as end of file */
-			(void)fgetc(f);
-			return r;
-		}
-		return r;
+	r = real_ungetc_(c, f);
+	if (r != EOF && c != EOF) {
+		if (pend_f != f)
+			pend_n = 0;
+		pend_f = f;
+		pend_c = (unsigned char)c;
+		pend_n++;
 	}
-	if (IS("position_kept") && c != EOF) {
-		/* the byte is not pushed back; the read position moves instead */
-		long pos = ftell(f);
-		if (pos > 0 && fseek(f, pos - 1, SEEK_SET) == 0)
-			return (unsigned char)c;
-		return real_ungetc(c, f);
-	}
-	if (IS("survives_seek") && c != EOF) {
-		held = (unsigned char)c;
-		return real_ungetc(c, f);
-	}
-	return real_ungetc(c, f);
+	return r;
 }
 
-/* ungetc.survives_seek: a positioning call that keeps a pending byte. */
+/* Reading a byte uses up pushback; the faults keep their books here. */
+int fgetc(FILE *f)
+{
+	REAL(fgetc);
+	const char *m = mutant_of("ungetc.");
+	int c = real_fgetc(f);
+
+	if (m != NULL && f == pend_f && pend_n > 0)
+		pend_n--;
+	if (f == eof_f)
+		eof_f = NULL;
+	return c;
+}
+
+int feof(FILE *f)
+{
+	REAL(feof);
+	const char *m = mutant_of("ungetc.");
+
+	if (IS("keeps_eof") && f == eof_f)
+		return 1;	/* the indicator still reads as set after the pushback */
+	return real_feof(f);
+}
+
+long ftell(FILE *f)
+{
+	REAL(ftell);
+	const char *m = mutant_of("ungetc.");
+	long r = real_ftell(f);
+
+	if (r >= 0 && IS("position_kept") && f == pend_f && pend_n > 0)
+		return r + pend_n;	/* not decremented by the pushback */
+	if (r >= 0 && IS("position_not_restored") && f == pend_f && pend_n == 0 && pend_c != EOF)
+		return r - 1;	/* still decremented after the byte was read */
+	return r;
+}
+
+/* Puts the pending byte back after a positioning call that should have discarded it. */
+static void keep_pending(FILE *f, int was)
+{
+	if (was > 0 && f == pend_f && pend_c != EOF) {
+		(void)real_ungetc_(pend_c, f);
+		pend_n = 1;
+	}
+}
+
 int fseek(FILE *f, long off, int whence)
 {
 	REAL(fseek);
 	const char *m = mutant_of("ungetc.");
-	int r = real_fseek(f, off, whence);
+	int was = f == pend_f ? pend_n : 0, r;
 
-	if (IS("survives_seek") && r == 0) {
-		extern int ungetc(int, FILE *);
-		static __typeof__(ungetc) *ru;
-		if (ru == NULL)
-			ru = (__typeof__(ungetc) *)dlsym(RTLD_NEXT, "ungetc");
-		(void)ru('Z', f);
-	}
+	if (IS("seekcur_noop") && whence == SEEK_CUR && off == 0 && was > 0)
+		return 0;	/* a seek to where the stream is skipped, the pushback kept */
+	if (IS("seekcur_from_kept") && whence == SEEK_CUR && was > 0)
+		off += was;	/* counts from the position before the pushback */
+	r = real_fseek(f, off, whence);
+	if (r == 0 && f == pend_f)
+		pend_n = 0;
+	if (r == 0 && IS("survives_seek"))
+		keep_pending(f, was);
+	return r;
+}
+
+int fseeko(FILE *f, off_t off, int whence)
+{
+	REAL(fseeko);
+	const char *m = mutant_of("ungetc.");
+	int was = f == pend_f ? pend_n : 0, r = real_fseeko(f, off, whence);
+
+	if (r == 0 && f == pend_f)
+		pend_n = 0;
+	if (r == 0 && IS("survives_fseeko"))
+		keep_pending(f, was);
+	return r;
+}
+
+int fsetpos(FILE *f, const fpos_t *pos)
+{
+	REAL(fsetpos);
+	const char *m = mutant_of("ungetc.");
+	int was = f == pend_f ? pend_n : 0, r = real_fsetpos(f, pos);
+
+	if (r == 0 && f == pend_f)
+		pend_n = 0;
+	if (r == 0 && IS("survives_fsetpos"))
+		keep_pending(f, was);
+	return r;
+}
+
+void rewind(FILE *f)
+{
+	REAL(rewind);
+	const char *m = mutant_of("ungetc.");
+	int was = f == pend_f ? pend_n : 0;
+
+	real_rewind(f);
+	if (f == pend_f)
+		pend_n = 0;
+	if (IS("survives_rewind"))
+		keep_pending(f, was);
+}
+
+int fflush(FILE *f)
+{
+	REAL(fflush);
+	const char *m = mutant_of("ungetc.");
+	int was = f != NULL && f == pend_f ? pend_n : 0, r = real_fflush(f);
+
+	if (r == 0 && f != NULL && f == pend_f)
+		pend_n = 0;
+	if (r == 0 && f != NULL && IS("survives_fflush"))
+		keep_pending(f, was);
 	return r;
 }

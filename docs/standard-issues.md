@@ -111,3 +111,5 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-30 | fflush(): position after discarding pushback | question | XSH.fflush.005 |
 | Q-31 | other waiters after the last child | question | XSH._Exit.020 |
 | Q-32 | aio at exit | question | XSH._Exit.019 |
+| Q-33 | setvbuf modes against implementation-defined support | question | XSH.setvbuf.003, XSH.setvbuf.004, XSH.setvbuf.006 |
+| Q-34 | ungetc limit omits fflush() | question | none (permission) |

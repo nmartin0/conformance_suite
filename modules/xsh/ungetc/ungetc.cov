@@ -3,13 +3,13 @@
 
 DESCRIPTION:2c6623e4     XSH.ungetc.001 XSH.ungetc.008
 DESCRIPTION:f6f55916     XSH.ungetc.002
-DESCRIPTION:0a98d4f1     partial XSH.ungetc.003  # fseek(), fsetpos(), rewind() and fflush(); fseeko() is not checked
+DESCRIPTION:0a98d4f1     XSH.ungetc.003 XSH.ungetc.009 XSH.ungetc.010 XSH.ungetc.011
 DESCRIPTION:d3baffe9     XSH.ungetc.004
-DESCRIPTION:7a3e7c30     XSH.ungetc.001 XSH.ungetc.003
-DESCRIPTION:27ffdc8f     none  permission for the implementation
-DESCRIPTION:6ce3428e     XSH.ungetc.005
+DESCRIPTION:7a3e7c30     XSH.ungetc.001 XSH.ungetc.003 XSH.ungetc.006 XSH.ungetc.012
+DESCRIPTION:27ffdc8f     none  permission for the implementation (it names no fflush(); Q-34)
+DESCRIPTION:6ce3428e     XSH.ungetc.005  # unchanged: the next read, a pending byte and the end-of-file indicator
 DESCRIPTION:3a921966     XSH.ungetc.006
-DESCRIPTION:539e1ced     XSH.ungetc.007
-DESCRIPTION:e7f019e9     XSH.ungetc.007
+DESCRIPTION:539e1ced     XSH.ungetc.007 XSH.ungetc.011 XSH.ungetc.013  # the value after a call at position 0 is unspecified and not checked
+DESCRIPTION:e7f019e9     XSH.ungetc.007 XSH.ungetc.012 XSH.ungetc.013
 RETURN_VALUE:8233d903    XSH.ungetc.001 XSH.ungetc.008
 RETURN_VALUE:1c6ddc6f    XSH.ungetc.005

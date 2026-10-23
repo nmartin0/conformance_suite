@@ -126,6 +126,8 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-30 | XSH `fflush()`: where does reading resume after pushback is discarded? | Question | Low | Only the discard is checked (XSH.fflush.005) |
 | Q-31 | XSH `_exit()`: what happens to the other threads waiting for the last child? | Question | Low | Disputed (XSH._Exit.020) |
 | Q-32 | XSH `_exit()`: asynchronous I/O at exit cannot be observed | Question | Low | Disputed (XSH._Exit.019) |
+| Q-33 | XSH `setvbuf()`: each mode is required, but support is implementation-defined | Question | Medium | Disputed (XSH.setvbuf.003, .004, .006) |
+| Q-34 | XSH `ungetc()`: the limit on repeated pushback omits fflush() | Question | Low | Not tested (permission) |
 
 ## Entries
 
@@ -1049,6 +1051,18 @@ is unclear.
 - **Where:** XSH `_exit()`, Consequences of Process Termination.
 - **Question:** operations not canceled at exit "complete as if _exit() had not yet occurred" and their signal notifications are suppressed, while which operations are canceled is implementation-defined (and "cancelable" is defined only through aio_cancel()). After the process is gone, a dropped write cannot be told from a canceled one, and the suppression of a signal to a process that no longer exists cannot be observed. Is a write that never reaches the file conforming if the implementation documents that it cancels such writes? Should the text say which operations an implementation may cancel at exit?
 - **posixcheck meanwhile:** XSH._Exit.019 is `disputed`: a short file is logged as INSPECT.
+
+### Q-33: setvbuf(): required buffering modes against implementation-defined support
+
+- **Where:** XSH `setvbuf()`, DESCRIPTION and RETURN VALUE; XSH 2.5.
+- **Question:** setvbuf() says each of _IOFBF, _IOLBF and _IONBF shall cause that kind of buffering, and that a request that cannot be honoured makes it return non-zero. XSH 2.5 (following ISO C) makes support for the buffering characteristics implementation-defined. Together these appear to let an implementation refuse any mode, or accept it and buffer some other way. Must an accepted _IONBF stream send each byte at once and an accepted _IOLBF stream send each line at its newline? Is setvbuf() still permitted after an unsuccessful call, given that the text mentions this only as an allowance for applications?
+- **posixcheck meanwhile:** XSH.setvbuf.001 checks only that data arrives intact under each accepted mode and notes refusals. XSH.setvbuf.003, .004 and .006 check the observable effect of an accepted mode and are `disputed`: a FAIL is logged as INSPECT, and a refusal is UNRESOLVED.
+
+### Q-34: ungetc(): the limit on repeated pushback and fflush()
+
+- **Where:** XSH `ungetc()`, DESCRIPTION.
+- **Question:** a successful fflush() discards pushed-back bytes, like the file-positioning functions (a CX addition, Austin Group defect 87). But the sentence allowing ungetc() to fail after too many calls names only an intervening read or file-positioning operation, not fflush(). After fflush() has discarded the pushback, may ungetc() still fail because of the calls made before it? The two sentences should probably name the same operations.
+- **posixcheck meanwhile:** the permission is not tested. XSH.ungetc.010 checks that fflush() discards the byte.
 
 ## Tracking
 

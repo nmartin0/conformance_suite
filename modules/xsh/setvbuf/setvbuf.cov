@@ -1,14 +1,14 @@
 # setvbuf.cov - every requirement unit on functions/setvbuf.html.
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
-DESCRIPTION:fcefc786     app
-DESCRIPTION:dc0ba25d     XSH.setvbuf.001
-DESCRIPTION:749f64f3     partial XSH.setvbuf.001  # accepted; full buffering's effect is implementation-defined in ISO C
-DESCRIPTION:86102fb6     partial XSH.setvbuf.001 XSH.setvbuf.004  # accepted, and a newline sends the line (disputed)
-DESCRIPTION:acb9b64f     partial XSH.setvbuf.001 XSH.setvbuf.003  # accepted, and output goes at once (disputed)
-DESCRIPTION:53faae51     none  permission for the implementation
+DESCRIPTION:fcefc786     app  # XSH.setvbuf.006 checks a call after an unsuccessful one (disputed, Q-33)
+DESCRIPTION:dc0ba25d     partial XSH.setvbuf.001 XSH.setvbuf.003 XSH.setvbuf.004  # each mode is accepted or refused, and data arrives intact; the buffering itself is disputed (Q-33)
+DESCRIPTION:749f64f3     partial XSH.setvbuf.001  # data arrives intact; when a full buffer is sent is not checked
+DESCRIPTION:86102fb6     partial XSH.setvbuf.001 XSH.setvbuf.004  # data intact, and a newline sends the line (disputed, Q-33)
+DESCRIPTION:acb9b64f     partial XSH.setvbuf.001 XSH.setvbuf.003  # data intact, and output goes at once (disputed, Q-33)
+DESCRIPTION:53faae51     none  permission for the implementation (XSH.setvbuf.005 checks a caller's array is not used past size)
 DESCRIPTION:0a3f9812     none  unspecified
 DESCRIPTION:3831a005     none  a reference
-RETURN_VALUE:928fd98b    XSH.setvbuf.001
-RETURN_VALUE:2c04bd95    XSH.setvbuf.002
+RETURN_VALUE:928fd98b    XSH.setvbuf.001 XSH.setvbuf.005
+RETURN_VALUE:2c04bd95    partial XSH.setvbuf.002 XSH.setvbuf.006  # an invalid type; a request that cannot be honoured is not provoked
 ERRORS:685da7ae          optional

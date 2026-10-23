@@ -1,9 +1,11 @@
 /*
- * fseek(), fsetpos(), rewind() and fflush() discard pushed-back bytes.
+ * fseek(), fsetpos() and rewind() discard pushed-back bytes.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.ungetc.003
  * MUTANT    ungetc.survives_seek
+ * MUTANT    ungetc.survives_fsetpos
+ * MUTANT    ungetc.survives_rewind
  */
 #include "pc.h"
 #include <errno.h>
@@ -114,6 +116,9 @@ static struct stat via_fd(const char *path, int flags)
 	return st;
 }
 
+/* After pc_test(): a step that is not under test gives UNRESOLVED, not FAIL. */
+#define NEED(cond, ...) do { if (!(cond)) pc_unresolved(__VA_ARGS__); } while (0)
+
 static long slurp(const char *path, char *buf, size_t size)
 {
 	int fd = open(path, O_RDONLY);
@@ -127,13 +132,32 @@ static long slurp(const char *path, char *buf, size_t size)
 	return n;
 }
 
-/* A stream reading path (created in setup with s). */
+/* A stream on path (created in setup) in mode. */
+static FILE *open_as(const char *path, const char *mode)
+{
+	FILE *f = fopen(path, mode);
+
+	NEED(f != NULL, "fopen(%s, %s) failed: %s", path, mode, pc_errname(errno));
+	return f;
+}
+
 static FILE *reader(const char *path)
 {
-	FILE *f = fopen(path, "r");
+	return open_as(path, "r");
+}
 
-	pc_check(f != NULL, "fopen(%s) failed: %s", path, pc_errname(errno));
-	return f;
+/* Reads one byte that must be want (a precondition). */
+static void read_byte(FILE *f, int want)
+{
+	int c = fgetc(f);
+
+	NEED(c == want, "a read returned %#x, expected %#x", (unsigned)c, (unsigned)want);
+}
+
+/* Pushes back c, which must succeed (a precondition). */
+static void push(FILE *f, int c)
+{
+	NEED(ungetc(c, f) == (unsigned char)c, "ungetc(%#x) failed", (unsigned)c);
 }
 
 int main(void)
@@ -147,21 +171,20 @@ int main(void)
 		pc_make_file("f", "0123");
 		pc_test();
 		f = reader("f");
-		pc_check(fgetpos(f, &start) == 0, "fgetpos failed");
-		pc_check(fgetc(f) == '0' && ungetc('Z', f) == 'Z', "fgetc or ungetc failed");
-		pc_check(fseek(f, 1, SEEK_SET) == 0, "fseek failed");
+		NEED(fgetpos(f, &start) == 0, "fgetpos failed");
+		read_byte(f, '0');
+		push(f, 'Z');
+		NEED(fseek(f, 1, SEEK_SET) == 0, "fseek failed");
 		r = fgetc(f);
 		pc_check(r == '1', "after fseek() the read gave %#x, expected '1'", (unsigned)r);
-		pc_check(ungetc('Z', f) == 'Z' && fsetpos(f, &start) == 0, "ungetc or fsetpos failed");
+		push(f, 'Z');
+		NEED(fsetpos(f, &start) == 0, "fsetpos failed");
 		r = fgetc(f);
 		pc_check(r == '0', "after fsetpos() the read gave %#x, expected '0'", (unsigned)r);
-		pc_check(ungetc('Z', f) == 'Z', "ungetc failed");
+		push(f, 'Z');
 		rewind(f);
 		r = fgetc(f);
 		pc_check(r == '0', "after rewind() the read gave %#x, expected '0'", (unsigned)r);
-		pc_check(ungetc('Z', f) == 'Z' && fflush(f) == 0, "ungetc or fflush failed");
-		r = fgetc(f);
-		pc_check(r != 'Z', "after fflush() the discarded 'Z' was read");
 	}
 	pc_pass();
 }

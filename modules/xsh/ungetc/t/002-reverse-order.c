@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.ungetc.002
  * MUTANT    ungetc.fifo_order
+ * MUTANT    ungetc.position_kept
  */
 #include "pc.h"
 #include <errno.h>
@@ -114,6 +115,9 @@ static struct stat via_fd(const char *path, int flags)
 	return st;
 }
 
+/* After pc_test(): a step that is not under test gives UNRESOLVED, not FAIL. */
+#define NEED(cond, ...) do { if (!(cond)) pc_unresolved(__VA_ARGS__); } while (0)
+
 static long slurp(const char *path, char *buf, size_t size)
 {
 	int fd = open(path, O_RDONLY);
@@ -127,13 +131,32 @@ static long slurp(const char *path, char *buf, size_t size)
 	return n;
 }
 
-/* A stream reading path (created in setup with s). */
+/* A stream on path (created in setup) in mode. */
+static FILE *open_as(const char *path, const char *mode)
+{
+	FILE *f = fopen(path, mode);
+
+	NEED(f != NULL, "fopen(%s, %s) failed: %s", path, mode, pc_errname(errno));
+	return f;
+}
+
 static FILE *reader(const char *path)
 {
-	FILE *f = fopen(path, "r");
+	return open_as(path, "r");
+}
 
-	pc_check(f != NULL, "fopen(%s) failed: %s", path, pc_errname(errno));
-	return f;
+/* Reads one byte that must be want (a precondition). */
+static void read_byte(FILE *f, int want)
+{
+	int c = fgetc(f);
+
+	NEED(c == want, "a read returned %#x, expected %#x", (unsigned)c, (unsigned)want);
+}
+
+/* Pushes back c, which must succeed (a precondition). */
+static void push(FILE *f, int c)
+{
+	NEED(ungetc(c, f) == (unsigned char)c, "ungetc(%#x) failed", (unsigned)c);
 }
 
 int main(void)
@@ -141,15 +164,19 @@ int main(void)
 	pc_begin("XSH.ungetc.002");
 	{
 		FILE *f;
+		long p;
 		int a, b, c;
 
 		pc_make_file("f", "0123");
 		pc_test();
 		f = reader("f");
-		pc_check(fgetc(f) == '0' && fgetc(f) == '1', "fgetc failed");
+		read_byte(f, '0');
+		read_byte(f, '1');
 		pc_check(ungetc('a', f) == 'a', "the first ungetc() failed");
 		if (ungetc('b', f) == EOF)
 			pc_notinuse("only one byte of push-back here");
+		p = ftell(f);
+		pc_check(p == 0, "ftell() after two pushbacks is %ld, expected 0", p);
 		a = fgetc(f);
 		b = fgetc(f);
 		c = fgetc(f);

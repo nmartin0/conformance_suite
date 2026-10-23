@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.ungetc.005
  * MUTANT    ungetc.eof_accepted
+ * MUTANT    ungetc.eof_discards
+ * MUTANT    ungetc.eof_clears_indicator
  */
 #include "pc.h"
 #include <errno.h>
@@ -114,6 +116,9 @@ static struct stat via_fd(const char *path, int flags)
 	return st;
 }
 
+/* After pc_test(): a step that is not under test gives UNRESOLVED, not FAIL. */
+#define NEED(cond, ...) do { if (!(cond)) pc_unresolved(__VA_ARGS__); } while (0)
+
 static long slurp(const char *path, char *buf, size_t size)
 {
 	int fd = open(path, O_RDONLY);
@@ -127,13 +132,32 @@ static long slurp(const char *path, char *buf, size_t size)
 	return n;
 }
 
-/* A stream reading path (created in setup with s). */
+/* A stream on path (created in setup) in mode. */
+static FILE *open_as(const char *path, const char *mode)
+{
+	FILE *f = fopen(path, mode);
+
+	NEED(f != NULL, "fopen(%s, %s) failed: %s", path, mode, pc_errname(errno));
+	return f;
+}
+
 static FILE *reader(const char *path)
 {
-	FILE *f = fopen(path, "r");
+	return open_as(path, "r");
+}
 
-	pc_check(f != NULL, "fopen(%s) failed: %s", path, pc_errname(errno));
-	return f;
+/* Reads one byte that must be want (a precondition). */
+static void read_byte(FILE *f, int want)
+{
+	int c = fgetc(f);
+
+	NEED(c == want, "a read returned %#x, expected %#x", (unsigned)c, (unsigned)want);
+}
+
+/* Pushes back c, which must succeed (a precondition). */
+static void push(FILE *f, int c)
+{
+	NEED(ungetc(c, f) == (unsigned char)c, "ungetc(%#x) failed", (unsigned)c);
 }
 
 int main(void)
@@ -146,11 +170,20 @@ int main(void)
 		pc_make_file("f", "0123");
 		pc_test();
 		f = reader("f");
-		pc_check(fgetc(f) == '0', "fgetc failed");
+		read_byte(f, '0');
 		r = ungetc(EOF, f);
 		pc_check(r == EOF, "ungetc(EOF) returned %d", r);
 		r = fgetc(f);
 		pc_check(r == '1', "the next read returned %#x, expected '1'", (unsigned)r);
+		push(f, 'Z');
+		pc_check(ungetc(EOF, f) == EOF, "ungetc(EOF) with a byte pending did not return EOF");
+		r = fgetc(f);
+		pc_check(r == 'Z', "ungetc(EOF) discarded the pending byte (the read gave %#x)", (unsigned)r);
+		while (fgetc(f) != EOF)
+			;
+		NEED(feof(f), "the end-of-file indicator is not set at the end");
+		pc_check(ungetc(EOF, f) == EOF, "ungetc(EOF) at end of file did not return EOF");
+		pc_check(feof(f), "ungetc(EOF) cleared the end-of-file indicator");
 	}
 	pc_pass();
 }

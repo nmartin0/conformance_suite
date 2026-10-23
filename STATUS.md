@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (924 assertions):
+- Modules (931 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -135,8 +135,8 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   - stdio: `xsh/fflush` (16) and `xsh/fclose` (13): output and update
     streams, the input-stream offset rule (1 MiB files), pushback,
     fflush(NULL), timestamps, and the errors (EBADF, EPIPE with SIGPIPE,
-    EAGAIN, EFBIG, EINTR, ENOSPC for fmemopen()); `xsh/ungetc` (8);
-    `xsh/setvbuf` (4).
+    EAGAIN, EFBIG, EINTR, ENOSPC for fmemopen()); `xsh/ungetc` (13);
+    `xsh/setvbuf` (6).
   - `xbd/unistd.h` (2): POSIX_CLOSE_RESTART, SEEK_*; `xbd/fcntl.h` now 8.
   - `xbd/signal.h` (30): SIG_DFL/SIG_ERR/SIG_IGN, the types it defines,
     sigevent, sigval, the realtime range against {RTSIG_MAX}, _SC_NSIG and
@@ -147,7 +147,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).
 - `ci/lint.py`: traceability, anchor and `since` checks; `ci/mutate.sh`: mutation
-  checks (1228 mutants); `ci/catalog.py`: shared parser.
+  checks (1245 mutants); `ci/catalog.py`: shared parser.
 - `analysis/analyze.py`: load, runs, verdict, failures, matrix, diff,
   coverage, html, calibrate (checks a reference run against
   `known/*.known`, its expected failures).

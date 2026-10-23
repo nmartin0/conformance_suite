@@ -54,11 +54,11 @@ int setvbuf(FILE *f, char *buf, int type, size_t size)
 
 	if (m == NULL)
 		return real_setvbuf(f, buf, type, size);
-	if (IS("fails"))
-		return -1;
 	if (IS("any_type") && type != _IOFBF && type != _IOLBF && type != _IONBF)
 		return 0;
-	if (IS("ignores_type"))
+	if (IS("ignores_type") && (type == _IOFBF || type == _IOLBF || type == _IONBF))
 		return real_setvbuf(f, NULL, _IOFBF, 65536);
+	if (IS("lies_size") && buf != NULL)
+		return real_setvbuf(f, buf, type, size * 2);	/* uses more of the caller's array than it has */
 	return real_setvbuf(f, buf, type, size);
 }

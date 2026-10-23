@@ -16,19 +16,19 @@ class      required
 since      1988
 says       On a stream reading "0123", after fgetc() twice, ungetc('a') then
            ungetc('b'): if the second succeeds (only one byte is
-           guaranteed), the next reads return 'b', 'a', then '2'.
+           guaranteed), ftell() is then 0 (decremented by each call) and the
+           next reads return 'b', 'a', then '2'.
 test       t/002-reverse-order.c
 
 assertion  XSH.ungetc.003
 anchor     functions/ungetc.html#DESCRIPTION
 class      required
-since      2008
+since      1988
 says       On a stream reading "0123", a byte pushed back with ungetc() after
            reading '0' is not returned after fseek(f, 1, SEEK_SET) (the read
            gives '1'), after fsetpos() to the position saved before the
-           read of '0' (the read gives '0'), after rewind() (the read gives
-           '0'), or after fflush() (the read does not give it; which
-           byte follows is open, Q-30).
+           read of '0' (the read gives '0'), or after rewind() (the read
+           gives '0').
 test       t/003-positioning-discards.c
 
 assertion  XSH.ungetc.004
@@ -43,8 +43,9 @@ assertion  XSH.ungetc.005
 anchor     functions/ungetc.html#DESCRIPTION
 class      required
 since      1988
-says       On a stream reading "0123" after a read of '0', ungetc(EOF) returns
-           EOF and the next read returns '1'.
+says       ungetc(EOF) returns EOF and changes nothing: after a read of '0' from
+           "0123" the next read returns '1'; with 'Z' pushed back the next
+           read still returns 'Z'; at end of file feof() stays true.
 test       t/005-eof-fails.c
 
 assertion  XSH.ungetc.006
@@ -71,3 +72,54 @@ since      1988
 says       After a read from a stream, ungetc(0x1ff) returns 0xff and the next
            read returns 0xff.
 test       t/008-converted.c
+
+assertion  XSH.ungetc.009
+anchor     functions/ungetc.html#DESCRIPTION
+class      required
+since      2001
+says       On a stream reading "0123", after a read of '0' and ungetc('Z'),
+           fseeko(f, 1, SEEK_SET) makes the next read return '1'.
+test       t/009-fseeko-discards.c
+
+assertion  XSH.ungetc.010
+anchor     functions/ungetc.html#DESCRIPTION
+class      required
+since      2008
+says       On a stream reading "0123", after a read of '0' and ungetc('Z'), a
+           successful fflush() makes the next read return a byte other than
+           'Z' (which byte is open, Q-30).
+note       Added by POSIX.1-2008 TC1 (Austin Group defect 87);
+           XSH.fflush.005 checks the offset too.
+test       t/010-fflush-discards.c
+
+assertion  XSH.ungetc.011
+anchor     functions/ungetc.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream reading "0123", after two reads and ungetc('Z') (position
+           1), fseek(f, 0, SEEK_CUR) discards the byte and the next read
+           returns '1'; repeated with fseek(f, 1, SEEK_CUR) the read returns
+           '2'.
+note       Austin Group defect 701 (Issue 8) made explicit that SEEK_CUR
+           counts from the position after the pushback.
+test       t/011-seek-current.c
+
+assertion  XSH.ungetc.012
+anchor     functions/ungetc.html#DESCRIPTION
+class      required
+since      1988
+says       On a new stream reading "0123", ungetc('Z') returns 'Z', the next read
+           returns 'Z', ftell() is then 0, and the read after returns '0'.
+note       The position between the ungetc() and the read is unspecified
+           at 0 and not checked.
+test       t/012-at-start.c
+
+assertion  XSH.ungetc.013
+anchor     functions/ungetc.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream opened "r+" on "0123": after a read of '0', ungetc('Z'),
+           a read of 'Z', fseek(f, 0, SEEK_CUR) and fputc('W'), the file holds
+           "0W23"; on a fresh one, after a read of '0', ungetc('Z'),
+           fseek(f, 0, SEEK_CUR) and fputc('W'), it holds "W123".
+test       t/013-update-stream.c

@@ -2,12 +2,16 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
 assertion  XSH.setvbuf.001
-anchor     functions/setvbuf.html#RETURN VALUE
+anchor     functions/setvbuf.html#DESCRIPTION
 class      required
 since      1988
-says       setvbuf() returns 0 for _IOFBF, _IOLBF and _IONBF, each on a newly
-           opened stream, with a buffer of the caller's and with a null
-           buffer.
+says       For each of _IOFBF, _IOLBF and _IONBF, with a buffer of the caller's
+           and with a null buffer, a new stream that setvbuf() accepts (a
+           refusal is allowed and noted) carries 1000 bytes written with
+           fputc() and fputs() to the file intact by fclose().
+nomutant   Data arriving intact is the library's ordinary behaviour; a
+           fault that broke it would break every stdio test, and the
+           mode-specific faults are caught by 003 to 006.
 test       t/001-modes.c
 
 assertion  XSH.setvbuf.002
@@ -24,9 +28,10 @@ class      disputed
 since      1988
 says       On a stream set _IONBF, after fputc('a') and fputs("bc") (no fflush()),
            the file holds "abc".
-note       disputed: ISO C makes the support of the buffering
-           characteristics implementation-defined (intended to appear as
-           soon as possible), so a FAIL is logged as INSPECT.
+note       disputed (Q-33): setvbuf() says each mode shall cause that
+           buffering, but XSH 2.5 and ISO C make support for the
+           buffering characteristics implementation-defined; a FAIL is
+           logged as INSPECT.
 test       t/003-unbuffered.c
 
 assertion  XSH.setvbuf.004
@@ -35,8 +40,31 @@ class      disputed
 since      1988
 says       On a stream set _IOLBF (with a 256-byte buffer), after fputs("ab\n")
            (no fflush()), the file holds "ab\n".
-note       disputed: ISO C makes the support of the buffering
-           characteristics implementation-defined (characters are
-           intended to be transmitted at a newline), so a FAIL is logged
-           as INSPECT.
+note       disputed (Q-33): setvbuf() says each mode shall cause that
+           buffering, but XSH 2.5 and ISO C make support for the
+           buffering characteristics implementation-defined; a FAIL is
+           logged as INSPECT.
 test       t/004-line.c
+
+assertion  XSH.setvbuf.005
+anchor     functions/setvbuf.html#DESCRIPTION
+class      required
+since      1988
+says       With setvbuf(f, g + 16, _IOFBF, 16) on a 64-byte array g filled with
+           '#' (accepted), after 100 bytes are written and the stream is
+           closed, g[0..15] and g[32..63] are still '#', and the file holds
+           the 100 bytes.
+test       t/005-own-buffer-size.c
+
+assertion  XSH.setvbuf.006
+anchor     functions/setvbuf.html#DESCRIPTION
+class      disputed
+since      1988
+says       On a new stream, after setvbuf() with an invalid type fails,
+           setvbuf(_IONBF) returns 0 and fputc('q') then reaches the file
+           without a flush.
+note       disputed (Q-33): setvbuf() says each mode shall cause that
+           buffering, but XSH 2.5 and ISO C make support for the
+           buffering characteristics implementation-defined; a FAIL is
+           logged as INSPECT.
+test       t/006-after-failed-call.c
