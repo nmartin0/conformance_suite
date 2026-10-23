@@ -41,6 +41,7 @@ by the named assertion.
 | XBD.unistd.h.002 (XSH.lseek.012 to .014 blocked) | FAIL (glibc) | `SEEK_HOLE`/`SEEK_DATA` need `_GNU_SOURCE`; with it, the tests pass | 1.12 |
 | XSH.lseek.011 | FAIL | `lseek()` gives EINVAL, not EOVERFLOW, when the result overflows `off_t` | O.3 |
 | XSH.read.021 | FAIL | `read()`/`recv()` on an unconnected `AF_UNIX` stream socket gives EINVAL; ENOTCONN required (TCP is right) | O.4 |
+| XSH.write.022 | FAIL | `pwrite()` on an `O_APPEND` descriptor appends instead of writing at the offset | 1.4 |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or

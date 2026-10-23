@@ -1,0 +1,230 @@
+# XSH write(), pwrite()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Error tests arrange for exactly one error condition (XSH 2.3).
+
+assertion  XSH.write.001
+anchor     functions/write.html#DESCRIPTION
+anchor     functions/write.html#RETURN VALUE
+class      required
+since      1988
+says       write() to a regular file writes nbyte bytes at the file
+           offset, returns nbyte, advances the offset, and the data
+           reads back.
+test       t/001-regular.c
+
+assertion  XSH.write.002
+anchor     functions/write.html#DESCRIPTION
+class      required
+since      1988
+says       Writing past the end of a regular file sets its length to the
+           position of the last byte written plus one.
+test       t/002-extends.c
+
+assertion  XSH.write.003
+anchor     functions/write.html#DESCRIPTION
+class      required
+since      1988
+says       write() of 0 bytes to a regular file returns 0 and changes
+           nothing (size, contents, offset).
+test       t/003-zero.c
+
+assertion  XSH.write.004
+anchor     functions/write.html#DESCRIPTION/O_APPEND
+class      required
+since      1988
+says       With O_APPEND, every write() goes to the end of the file
+           whatever the offset was, and leaves the offset at the new
+           end.
+test       t/004-append.c
+
+assertion  XSH.write.005
+anchor     functions/write.html#DESCRIPTION/O_APPEND
+class      required
+since      1988
+says       O_APPEND moves the offset and writes with no modification in
+           between: two processes, each with its own open of the file,
+           appending 500 records each lose or overwrite none of them.
+note       Each record is 10 bytes naming its writer and number; the
+           file must end up with all 1000, each intact.
+test       t/005-append-atomic.c
+
+assertion  XSH.write.006
+anchor     functions/write.html#DESCRIPTION
+class      required
+since      1988
+says       A write() that would pass the process's file size limit
+           (RLIMIT_FSIZE) writes only the bytes that fit and returns
+           their number.
+test       t/006-fsize-partial.c
+
+assertion  XSH.write.007
+anchor     functions/write.html#ERRORS/EFBIG
+class      required
+since      1988
+says       A write() with no room left under the file size limit fails
+           with EFBIG (SIGXFSZ ignored).
+note       SIGXFSZ is ignored so that, on XSI systems, the signal does
+           not end the test.
+test       t/007-fsize-efbig.c
+
+assertion  XSH.write.008
+anchor     functions/write.html#ERRORS/EFBIG
+anchor     functions/write.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       XSI: a write() that fails because of the file size limit also
+           generates SIGXFSZ for the thread.
+test       t/008-sigxfsz.c
+
+assertion  XSH.write.009
+anchor     functions/write.html#DESCRIPTION
+anchor     functions/write.html#ERRORS/EINTR
+class      required
+since      1988
+says       A blocking write() to a full pipe interrupted by a caught
+           signal (without SA_RESTART) before writing anything returns
+           -1 with EINTR.
+test       t/009-eintr.c
+
+assertion  XSH.write.010
+anchor     functions/write.html#DESCRIPTION
+class      required
+since      1988
+says       A blocking write() interrupted by a caught signal after
+           writing some data returns the number of bytes written (a 1
+           MiB write to an empty pipe nobody reads).
+test       t/010-eintr-partial.c
+
+assertion  XSH.write.011
+anchor     functions/write.html#DESCRIPTION
+class      required
+since      1988
+says       Writes of {PIPE_BUF} bytes or fewer to a pipe are not
+           interleaved: four processes writing 200 records of {PIPE_BUF}
+           bytes each into one pipe, every record reaches the reader in
+           one piece.
+note       Each record is filled with one byte naming its writer; the
+           reader checks every {PIPE_BUF}-byte block is uniform.
+test       t/011-pipe-buf-atomic.c
+
+assertion  XSH.write.012
+anchor     functions/write.html#DESCRIPTION
+anchor     functions/write.html#ERRORS/EAGAIN
+class      required
+since      1988
+says       A non-blocking write() of {PIPE_BUF} bytes or fewer to a pipe
+           without room for all of them transfers nothing and fails with
+           EAGAIN (pipe filled, then 10 bytes read out).
+test       t/012-nonblock-small-full.c
+
+assertion  XSH.write.013
+anchor     functions/write.html#DESCRIPTION
+class      required
+since      1988
+says       A non-blocking write() of {PIPE_BUF} bytes or fewer to a pipe
+           with room transfers everything and returns the count.
+test       t/013-nonblock-small-room.c
+
+assertion  XSH.write.014
+anchor     functions/write.html#DESCRIPTION
+anchor     functions/write.html#ERRORS/EAGAIN
+class      required
+since      1988
+says       A non-blocking write() of more than {PIPE_BUF} bytes
+           transfers at least {PIPE_BUF} bytes to an empty pipe and
+           returns the count, and fails with EAGAIN when the pipe is
+           full.
+test       t/014-nonblock-large.c
+
+assertion  XSH.write.015
+anchor     functions/write.html#ERRORS/EPIPE
+class      required
+since      1988
+says       write() to a pipe with no reader fails with EPIPE and sends
+           SIGPIPE to the thread (caught here).
+test       t/015-epipe.c
+
+assertion  XSH.write.016
+anchor     functions/write.html#DESCRIPTION
+class      required
+since      2001
+says       write() on a connected stream socket sends the data to the
+           peer, as send() with no flags would.
+test       t/016-socket.c
+
+assertion  XSH.write.017
+anchor     functions/write.html#ERRORS/EPIPE
+class      required
+since      2001
+says       write() on a stream socket shut down for writing fails with
+           EPIPE and sends SIGPIPE (caught here).
+test       t/017-socket-shutdown.c
+
+assertion  XSH.write.018
+anchor     functions/write.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       write() on a non-blocking stream socket whose buffers are
+           full fails with EAGAIN or EWOULDBLOCK.
+test       t/018-socket-nonblock.c
+
+assertion  XSH.write.019
+anchor     functions/write.html#ERRORS/EBADF
+class      required
+since      1988
+says       write() fails with EBADF on a descriptor that is not open,
+           and on one open only for reading.
+test       t/019-ebadf.c
+
+assertion  XSH.write.020
+anchor     functions/write.html#DESCRIPTION
+class      required
+since      1988
+says       A successful write() of more than 0 bytes updates the file's
+           modification and status change times.
+note       Takes about 2 s: the times are compared across a pause longer
+           than a coarse timestamp resolution.
+test       t/020-times.c
+
+assertion  XSH.write.021
+anchor     functions/write.html#DESCRIPTION/pwrite
+class      required
+since      2001
+says       pwrite() writes at the given offset and leaves the file
+           offset unchanged.
+test       t/021-pwrite.c
+
+assertion  XSH.write.022
+anchor     functions/write.html#DESCRIPTION/pwrite
+class      required
+since      2008
+says       pwrite() writes at the given offset even when O_APPEND is
+           set, and leaves the file offset unchanged.
+note       Linux appends instead (docs/linux-deviations.md 1.4).
+test       t/022-pwrite-append.c
+
+assertion  XSH.write.023
+anchor     functions/write.html#DESCRIPTION/pwrite
+anchor     functions/write.html#ERRORS/ESPIPE
+class      required
+since      2001
+says       pwrite() on a pipe fails with ESPIPE.
+test       t/023-pwrite-espipe.c
+
+assertion  XSH.write.024
+anchor     functions/write.html#ERRORS/EINVAL
+class      required
+since      2001
+says       pwrite() on a regular file with a negative offset fails with
+           EINVAL, writes nothing and leaves the file offset unchanged.
+test       t/024-pwrite-einval.c
+
+assertion  XSH.write.025
+anchor     functions/write.html#DESCRIPTION
+class      required
+since      1988
+says       A later write() to the same bytes replaces the earlier data,
+           and reads return the latest data.
+test       t/025-overwrite.c

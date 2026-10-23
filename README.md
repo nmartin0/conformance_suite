@@ -123,6 +123,10 @@ Volumes: `xbd` (Base Definitions, including headers such as `xbd/fcntl.h`),
    Never copy test code from another suite.
 2. Arrange for exactly one error condition to apply: XSH 2.3 lets an
    implementation report any one of several that apply.
+   Lowering a limit with `setrlimit()` also limits the test itself: keep
+   RLIMIT_NOFILE above every open descriptor, and run anything under a
+   lowered RLIMIT_FSIZE in a child that reports over a pipe, since the
+   result file is subject to it too.
 3. Write `t/NNN-slug.c` (or `.sh`): `pc_begin`, setup, `pc_test`, checks,
    `pc_pass`. Put `ASSERTION <id>` and one or more `MUTANT <name>` lines
    in the header comment.

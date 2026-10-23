@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (184 assertions):
+- Modules (210 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -51,11 +51,15 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   - `xsh/read` (23): regular files, EOF, zero length, unwritten bytes,
     pipes and FIFOs (EOF, EAGAIN, blocking, partial, EINTR), sockets
     (EAGAIN, ENOTCONN, ECONNRESET), atime, pread().
+  - `xsh/write` (25): offsets, growth, zero length, O_APPEND (also two
+    processes at once), RLIMIT_FSIZE (partial, EFBIG, SIGXFSZ), EINTR
+    before and after data, {PIPE_BUF} atomicity with four writers,
+    non-blocking pipes, EPIPE and SIGPIPE, sockets, mtime, pwrite().
   - `xbd/unistd.h` (2): POSIX_CLOSE_RESTART, SEEK_*; `xbd/fcntl.h` now 8.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).
 - `ci/lint.py`: traceability and anchor checks; `ci/mutate.sh`: mutation
-  checks (264 mutants); `ci/catalog.py`: shared parser.
+  checks (301 mutants); `ci/catalog.py`: shared parser.
 - `analysis/analyze.py`: load, runs, verdict, failures, matrix, diff,
   coverage, html, calibrate (checks a reference run against
   `known/*.known`, its expected failures).
@@ -123,7 +127,9 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
 4. open(): O_SEARCH/O_EXEC (after the fcntl.h header checks), EACCES
    cases (unprivileged user), O_SYNC, pseudo-terminal cases, environment
    cases (ENOSPC, EROFS, ENFILE). close(): posix_close(), locks, FIFO and
-   socket cases. Then write().
+   socket cases. The file-descriptor group (open, close, dup, pipe,
+   fcntl, lseek, read, write) is done; next come processes (fork, exec,
+   wait, exit), then signals.
 5. `xcu/getconf`: cross-check getconf against sysconf/confstr.
 6. Controller script: copy the tree to a VM over ssh, set PC_TREE to the
    tree's hash, run, copy results back.
