@@ -50,6 +50,7 @@ by the named assertion.
 | XSH.exec.044, XSH.exec.045 (046, 047 blocked) | FAIL (musl) | execvp()/execlp() give ENOEXEC instead of running sh | O.8 |
 | XSH.exec.043 | FAIL (musl) | sysconf(_SC_ARG_MAX) is 131072, below the kernel's limit, so the exec succeeds | O.9 |
 | XSH.sigaction.023 | FAIL | SA_RESETHAND leaves SA_SIGINFO set | O.10 |
+| XSH.kill.005 | FAIL | kill(-1, sig) does not signal the sender | 2.2 |
 | XSH.sigaction.021 | INSPECT | sigqueue() does not queue SIGUSR1 even with SA_SIGINFO (disputed, SI-24) | O.11 (withdrawn) |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
@@ -516,8 +517,8 @@ Main source pages:
 - POSIX: send to all processes the caller may signal, excluding only an unspecified set of system processes.
 - Linux: the caller is excluded.
 - Comp: kernel. Kind: deliberate.
-- Observe: dangerous to test. Run it in a PID namespace or container.
-- Src: https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/kill.2 (NOTES)
+- Observe: XSH.kill.005, made safe by sending SIGURG (default action: ignore) as user 65534 from a privileged run.
+- Src: https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/kill.2 (NOTES); posixcheck run, glibc and musl alike.
 
 2.3 **The nice value is per-thread, not per-process.**
 - POSIX: the nice value is a process attribute shared by all threads, for `nice`, `setpriority` and `getpriority`.

@@ -1,0 +1,30 @@
+# XSH raise()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.raise.001
+anchor     functions/raise.html#DESCRIPTION
+class      required
+since      1988
+says       raise(SIGUSR1) with a handler returns 0, after the handler has run
+           and returned.
+note       If the handler runs, raise() waits for it; whether it must
+           run before raise() returns is standard question Q-11.
+test       t/001-handler-before-return.c
+
+assertion  XSH.raise.002
+anchor     functions/raise.html#DESCRIPTION
+class      required
+since      2001
+says       raise() in a thread sends the signal to that thread: the handler
+           runs in the calling thread, and when the caller has the signal
+           blocked it stays pending for that thread, not delivered to
+           another thread that has it unblocked.
+test       t/002-calling-thread.c
+
+assertion  XSH.raise.003
+anchor     functions/raise.html#ERRORS/EINVAL
+class      required
+since      2001
+says       raise() with signal number 100000 returns a non-zero value and sets
+           errno to EINVAL.
+test       t/003-einval.c

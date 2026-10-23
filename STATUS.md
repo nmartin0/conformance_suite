@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (360 assertions):
+- Modules (383 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -86,6 +86,13 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     kill() and sigqueue(), SA_NOCLDSTOP, SA_ONSTACK, SA_RESETHAND,
     SA_RESTART, SA_NODEFER, the handler's mask, signal() round trip,
     EINVAL, queuing with SA_SIGINFO, SIG_IGN.
+  - `xsh/kill` (11): to a process, to the own and another group, to all
+    (pid -1, as an unprivileged user), the null signal, delivery before
+    return, permissions (same user, EPERM, SIGCONT within the session),
+    EINVAL, ESRCH. `xsh/pthread_sigmask` (9): SIG_BLOCK, SIG_UNBLOCK,
+    SIG_SETMASK, oset and queries, delivery on unblocking, SIGKILL and
+    SIGSTOP, EINVAL returned, sigprocmask(), per-thread masks.
+    `xsh/raise` (3): waits for the handler, thread-directed, EINVAL.
   - `xbd/unistd.h` (2): POSIX_CLOSE_RESTART, SEEK_*; `xbd/fcntl.h` now 8.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).

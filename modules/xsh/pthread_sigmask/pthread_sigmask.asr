@@ -1,0 +1,82 @@
+# XSH pthread_sigmask()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.pthread_sigmask.001
+anchor     functions/pthread_sigmask.html#DESCRIPTION
+class      required
+since      2001
+says       pthread_sigmask(SIG_BLOCK) makes the mask the union of the old mask
+           (SIGUSR1) and the set (SIGUSR2).
+test       t/001-block.c
+
+assertion  XSH.pthread_sigmask.002
+anchor     functions/pthread_sigmask.html#DESCRIPTION
+class      required
+since      2001
+says       pthread_sigmask(SIG_UNBLOCK) removes the set (SIGUSR1) from the mask
+           and leaves the rest (SIGUSR2) blocked.
+test       t/002-unblock.c
+
+assertion  XSH.pthread_sigmask.003
+anchor     functions/pthread_sigmask.html#DESCRIPTION
+class      required
+since      2001
+says       pthread_sigmask(SIG_SETMASK) makes the mask exactly the set
+           (SIGUSR2), dropping what was blocked before (SIGUSR1).
+test       t/003-setmask.c
+
+assertion  XSH.pthread_sigmask.004
+anchor     functions/pthread_sigmask.html#DESCRIPTION
+class      required
+since      2001
+says       With oset, pthread_sigmask() stores the mask in effect before the
+           call (SIGUSR1 blocked, SIGUSR2 not); with a null set the mask is
+           unchanged whatever how is (even an invalid value).
+test       t/004-oset.c
+
+assertion  XSH.pthread_sigmask.005
+anchor     functions/pthread_sigmask.html#DESCRIPTION
+class      required
+since      2001
+says       When pthread_sigmask() unblocks a pending signal (SIGUSR1, raised
+           while blocked), its handler runs before pthread_sigmask()
+           returns.
+test       t/005-deliver-on-unblock.c
+
+assertion  XSH.pthread_sigmask.006
+anchor     functions/pthread_sigmask.html#DESCRIPTION
+class      required
+since      2001
+says       Blocking SIGKILL and SIGSTOP (with SIGUSR1) succeeds, but neither is
+           then in the mask; SIGUSR1 is.
+nomutant   the kernel keeps SIGKILL and SIGSTOP out of the mask
+test       t/006-kill-stop.c
+
+assertion  XSH.pthread_sigmask.007
+anchor     functions/pthread_sigmask.html#ERRORS/EINVAL
+class      required
+since      2001
+says       pthread_sigmask() with a set and an invalid how returns EINVAL (the
+           error number itself, not -1) and does not change the mask.
+test       t/007-einval.c
+
+assertion  XSH.pthread_sigmask.008
+anchor     functions/pthread_sigmask.html#DESCRIPTION
+class      required
+since      1988
+says       In a single-threaded process sigprocmask() changes the mask as
+           pthread_sigmask() does (SIG_BLOCK, SIG_UNBLOCK, SIG_SETMASK,
+           oset), and with an invalid how returns -1 with errno EINVAL.
+test       t/008-sigprocmask.c
+
+assertion  XSH.pthread_sigmask.009
+anchor     functions/pthread_sigmask.html#DESCRIPTION
+class      required
+since      2001
+says       A mask change in one thread (blocking SIGUSR1) does not change
+           another thread's mask, and a new thread starts with its
+           creator's mask.
+note       A new thread's initial mask comes from pthread_create(); it
+           is checked here only as a precondition of the per-thread
+           check.
+test       t/009-per-thread.c

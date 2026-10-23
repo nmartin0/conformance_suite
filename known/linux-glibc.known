@@ -33,3 +33,4 @@ XSH._Exit.014      FAIL         linux*    O.6: SIGCHLD si_status has only the lo
 XSH.exec.028       FAIL         linux*    O.7: the thread CPU-time clock is not reset by exec
 XSH.sigaction.023  FAIL         linux*    O.10: SA_RESETHAND does not clear SA_SIGINFO
 XSH.sigaction.021  INSPECT      linux*    SI-24 (disputed): sigqueue() does not queue signals below SIGRTMIN
+XSH.kill.005       FAIL         linux*    2.2: kill(-1, sig) does not signal the calling process

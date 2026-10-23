@@ -15,14 +15,14 @@ verified; this file is the plan. Update both when a step finishes.
 - File descriptors: `open`, `close`, `dup`, `pipe`, `fcntl`, `lseek`,
   `read`, `write`, `<fcntl.h>`, `<unistd.h>` (part).
 - Processes: `fork`, `wait`, `_Exit`, `exit`, `exec`.
-- Signals (in progress): `sigaction`.
+- Signals (in progress): `sigaction`, `kill`, `raise`, `pthread_sigmask`/`sigprocmask`.
 - Utilities: `true`, `false`.
 - Every module reviewed independently; findings applied.
 
 ## Next
 
-1. **Signals**: (`sigaction` done) `kill`, `raise`, `sigprocmask` and
-   `pthread_sigmask`, `sigpending`, `sigsuspend`, `sigwait` and
+1. **Signals**: (`sigaction`, `kill`, `raise` and the mask functions done)
+   `sigpending`, `sigsuspend`, `sigwait` and
    `sigtimedwait`, `sigqueue`, `alarm`, `pause`, `<signal.h>`, the XSH 2.4
    rules (generation and delivery, default actions, signal-safe
    functions, interrupted functions and SA_RESTART).

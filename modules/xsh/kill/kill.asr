@@ -1,0 +1,109 @@
+# XSH kill()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.kill.001
+anchor     functions/kill.html#DESCRIPTION
+class      required
+since      1988
+says       kill() with a child's process ID sends the signal to it (the
+           child's handler runs) and returns 0.
+test       t/001-to-pid.c
+
+assertion  XSH.kill.002
+anchor     functions/kill.html#DESCRIPTION
+class      required
+since      1988
+says       kill() with signal 0 returns 0 for an existing child and sends no
+           signal; for a process ID that no longer exists it fails with
+           ESRCH.
+note       A reaped child's process ID is assumed not to be reused
+           within the test.
+test       t/002-null-signal.c
+
+assertion  XSH.kill.003
+anchor     functions/kill.html#DESCRIPTION
+class      required
+since      1988
+says       kill(0, sig) sends the signal to every process in the sender's
+           process group, the sender included (two children in the group
+           and the sender each get it once), and not to a child in another
+           group.
+test       t/003-own-group.c
+
+assertion  XSH.kill.004
+anchor     functions/kill.html#DESCRIPTION
+class      required
+since      1988
+says       kill(-pgid, sig) sends the signal to every process in process
+           group pgid (a child that leads it and its own child get it), and
+           not to processes outside it (a child in the sender's group, the
+           sender).
+test       t/004-other-group.c
+
+assertion  XSH.kill.005
+anchor     functions/kill.html#DESCRIPTION
+class      required
+since      1988
+says       kill(-1, sig) from a process running as user 65534 sends the
+           signal to every process it has permission to signal: another
+           process of that user gets it, and so does the sender.
+needs      root
+note       Run as an unprivileged user (65534), with SIGURG, whose
+           default action is to ignore it, so other processes of that
+           user are not harmed. The text excludes only an unspecified
+           set of system processes, not the sender.
+test       t/005-all.c
+
+assertion  XSH.kill.006
+anchor     functions/kill.html#DESCRIPTION
+class      required
+since      1988
+says       kill(getpid(), SIGUSR1) with SIGUSR1 unblocked runs its handler
+           before kill() returns.
+test       t/006-self-before-return.c
+
+assertion  XSH.kill.007
+anchor     functions/kill.html#ERRORS/EINVAL
+class      required
+since      1988
+says       kill() with signal number -1 or 100000 fails with EINVAL.
+test       t/007-einval.c
+
+assertion  XSH.kill.008
+anchor     functions/kill.html#ERRORS/ESRCH
+class      required
+since      1988
+says       kill() for the process ID of a reaped child, and for that number as
+           a process group (-pid), fails with ESRCH.
+note       A reaped child's process ID is assumed not to be reused
+           within the test.
+test       t/008-esrch.c
+
+assertion  XSH.kill.009
+anchor     functions/kill.html#ERRORS/EPERM
+class      required
+since      1988
+says       A process running as user 65534 that signals a process of user 0
+           (its parent) fails with EPERM, and the signal is not sent.
+needs      root
+test       t/009-eperm.c
+
+assertion  XSH.kill.010
+anchor     functions/kill.html#DESCRIPTION
+class      required
+since      1988
+says       A process running as user 65534 may signal another process whose
+           real and saved user IDs are 65534: kill() returns 0 and the
+           signal arrives.
+needs      root
+test       t/010-same-user.c
+
+assertion  XSH.kill.011
+anchor     functions/kill.html#DESCRIPTION
+class      required
+since      1988
+says       A process running as user 65534 may send SIGCONT to a process of
+           user 0 in the same session (its parent): kill() returns 0 and
+           the parent's SIGCONT handler runs.
+needs      root
+test       t/011-sigcont-session.c
