@@ -1,0 +1,32 @@
+# XSH 2.4.4 Signal Effects on Other Functions
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.2.4.4-signal-effects.001
+anchor     functions/V2_chap02.html#2.4.4
+class      required
+since      1988
+says       A child blocked in read() on an empty pipe that gets SIGTERM at
+           SIG_DFL is terminated by it; read() does not return.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/001-terminate-no-return.c
+
+assertion  XSH.2.4.4-signal-effects.002
+anchor     functions/V2_chap02.html#2.4.4
+class      required
+since      2001
+says       A child blocked in read() on an empty pipe is stopped with SIGSTOP
+           and continued with SIGCONT; read() goes on waiting and, when a
+           byte is written, returns it (not -1/EINTR).
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/002-stop-continue.c
+
+assertion  XSH.2.4.4-signal-effects.003
+anchor     functions/V2_chap02.html#2.4.4
+class      required
+since      1988
+says       A child blocked in read() on an empty pipe, with SIGUSR1 ignored and
+           SIGUSR2 caught but blocked, is sent both; read() goes on waiting
+           and returns the byte written afterwards, and the SIGUSR2 handler
+           has not run by then.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/003-ignored-blocked-no-effect.c

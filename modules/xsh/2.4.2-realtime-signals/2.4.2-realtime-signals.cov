@@ -1,0 +1,39 @@
+# 2.4.2-realtime-signals.cov - every requirement unit in XSH 2.4.2.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+2.4.2:6b8ce4a5              none  an introduction
+2.4.2:4abd2cac              none  a statement
+2.4.2:d8488ecd              XBD.signal.h.003
+2.4.2:3f9ac264              XBD.signal.h.003
+2.4.2:2ea46376              XBD.signal.h.003
+2.4.2:0b904599              XBD.signal.h.003
+2.4.2:06958c02              XBD.signal.h.003
+2.4.2:b9c77a3e              XBD.signal.h.003
+2.4.2:7b488c27              none  a statement
+2.4.2:6a6ab8f3              none  introduces the list
+2.4.2:c473a6c7              XSH.2.4.2-realtime-signals.003
+2.4.2:ea01db27              XSH.2.4.2-realtime-signals.001
+2.4.2:9efb9271              XSH.2.4.2-realtime-signals.001
+2.4.2:ef5b95a9              none  unspecified
+2.4.2:7f2ca983              XSH.2.4.2-realtime-signals.002
+2.4.2:93d613ff              impl  additional notification mechanisms (documentation)
+2.4.2:541d366c              none  a statement
+2.4.2:85d2577f              partial XSH.2.4.2-realtime-signals.001  # accepted; delivery to a handler with sigev_value is todo
+2.4.2:4c0cc494              XBD.signal.h.005
+2.4.2:b2eb274f              XBD.signal.h.005
+2.4.2:a740ecc1              XBD.signal.h.005
+2.4.2:5e820254              XSH.2.4.2-realtime-signals.001 XSH.2.4.2-realtime-signals.002
+2.4.2:9b038c8f              XSH.sigaction.020 XSH.sigtimedwait.001 XSH.2.4.2-realtime-signals.001
+2.4.2:dcbe63e4              XSH.sigtimedwait.001
+2.4.2:3cc3fe53              none  unspecified
+2.4.2:025a507f              XSH.2.4.2-realtime-signals.004
+2.4.2:ba3381c5              XSH.sigqueue.004
+2.4.2:c91b45b9              none  a statement
+2.4.2:f157abc0              XSH.2.4.2-realtime-signals.005
+2.4.2:a7c4bb09              XSH.2.4.2-realtime-signals.005 XSH.sigtimedwait.007
+2.4.2:95f8638b              none  a statement
+2.4.2:3abce07e              XSH.2.4.2-realtime-signals.002
+2.4.2:5b4e3c10              partial XSH.2.4.2-realtime-signals.002  # a new thread; the attributes given by sigev_notify_attributes are todo
+2.4.2:7fb14375              todo  the notification thread is detached when the attributes are NULL
+2.4.2:2a4339a7              none  undefined
+2.4.2:df1697cd              impl  the notification thread's signal mask (documentation)

@@ -1,0 +1,84 @@
+# 2.4.3-signal-actions.cov - every requirement unit in XSH 2.4.3.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+2.4.3:aa48f8c7              none  a statement
+2.4.3:cf53e1d6              XSH.exec.014
+2.4.3:b4ea2497              none  introduces the list
+2.4.3:f537ef5b              none  a heading
+2.4.3:8b7d42aa              none  a cross-reference
+2.4.3:a80115d7              XSH.2.4.3-signal-actions.003
+2.4.3:55c3b51a              partial XSH.2.4.3-signal-actions.001 XSH.2.4.3-signal-actions.002 XSH.2.4.3-signal-actions.003  # the status shows the signal; the _exit() effects (descriptors closed, SIGCHLD) are todo
+2.4.3:0063e9fe              impl  core images and other actions (documentation)
+2.4.3:6c3f8149              XSH.2.4.3-signal-actions.005
+2.4.3:8d7e2295              XSH.sigaction.007 XSH.sigaction.008
+2.4.3:3367ae58              XSH.2.4.3-signal-actions.006
+2.4.3:39f2d6b5              XSH.2.4.3-signal-actions.007
+2.4.3:3d73ee6f              XSH.2.4.3-signal-actions.007
+2.4.3:0cbdc9c5              XSH.2.4.3-signal-actions.004
+2.4.3:cc97bcaf              XSH.2.4.3-signal-actions.008
+2.4.3:1d6e9b2c              none  no required signal ignores by default and is queued
+2.4.3:6f1276f9              XSH.2.4.3-signal-actions.006
+2.4.3:6dafb991              none  a may-statement (XSI)
+2.4.3:9c325a90              none  a heading
+2.4.3:8dc52c36              XSH.2.4.3-signal-actions.011 XSH.sigaction.022
+2.4.3:19806e57              none  undefined
+2.4.3:c7af23bf              XSH.sigaction.018
+2.4.3:837fb240              XSH.2.4.3-signal-actions.009
+2.4.3:3960b216              none  unspecified (the XSI case is tested under _Exit())
+2.4.3:d1822f1b              XSH.2.4.3-signal-actions.010
+2.4.3:3e4ffcb6              none  a heading
+2.4.3:8105b95d              XSH.sigaction.004 XSH.sigaction.005
+2.4.3:72c986c6              XSH.2.4.3-signal-actions.012
+2.4.3:2418a65d              XSH.sigaction.004
+2.4.3:94696401              XSH.sigaction.004
+2.4.3:fe361ead              XSH.sigaction.004
+2.4.3:c8597541              XSH.sigaction.005
+2.4.3:94696401.2            XSH.sigaction.005
+2.4.3:fe361ead.2            XSH.sigaction.005
+2.4.3:cd06ef28              XSH.sigaction.005
+2.4.3:e36a2d43              XSH.sigaction.005
+2.4.3:4f6f2171              none  describes the parameters
+2.4.3:8b279ddc              XBD.signal.h.021
+2.4.3:faedf438              XBD.signal.h.021
+2.4.3:9783b843              XBD.signal.h.021
+2.4.3:04be90f5              XBD.signal.h.021
+2.4.3:632d25e1              XBD.signal.h.021
+2.4.3:d2d2b772              XBD.signal.h.021
+2.4.3:cc8626d5              XBD.signal.h.021
+2.4.3:8a47f15c              XSH.sigaction.005
+2.4.3:febc2a8b              XSH.sigaction.005
+2.4.3:6aa3784e              XSH.sigaction.006 XSH.sigtimedwait.004
+2.4.3:11dc0cdc              none  introduces the list
+2.4.3:dc7db9f4              XSH.sigtimedwait.004
+2.4.3:95273a75              impl  SI_USER for raise() and abort() (documentation)
+2.4.3:3b06dc7b              XSH.sigaction.006 XSH.sigtimedwait.001
+2.4.3:be0c52f0              XSH.2.4.2-realtime-signals.001
+2.4.3:c4238c01              todo  SI_ASYNCIO with aio
+2.4.3:717394fd              todo  SI_MESGQ with mq_notify() (MSG)
+2.4.3:2235ee57              none  a cross-reference
+2.4.3:2b5eeffe              partial XSH.2.4.1-signal-generation.001 XSH.exit.012  # SEGV_ACCERR and CLD_EXITED so far
+2.4.3:b66352f8              XSH.sigaction.006 XSH.sigtimedwait.001 XSH.sigtimedwait.004 XSH.sigqueue.001
+2.4.3:b093bc3d              partial XSH.2.4.1-signal-generation.001 XSH._Exit.014  # si_addr for SIGSEGV, si_pid and si_status for SIGCHLD
+2.4.3:a6c200e0              partial XSH.sigtimedwait.001 XSH.2.4.2-realtime-signals.001  # SI_QUEUE and SI_TIMER; SI_ASYNCIO and SI_MESGQ todo
+2.4.3:a9d141ce              none  undefined
+2.4.3:5ae07797              none  undefined
+2.4.3:1195cf87              XSH.sigaction.018
+2.4.3:261d0278              none  unspecified
+2.4.3:ff0c3657              none  introduces the list
+2.4.3:75b3d223              none  part of an undefined-behaviour rule
+2.4.3:9e2ccd73              none  part of an undefined-behaviour rule
+2.4.3:2a2a8781              none  undefined
+2.4.3:810495cb              app
+2.4.3:56937603              app
+2.4.3:3d48a482              todo  each listed function behaves as specified when called from a handler
+2.4.3:a7c521f1              none  a statement
+2.4.3:c203acc8              none  a statement
+2.4.3:7de80f04              todo  the async-signal-safe function list
+2.4.3:0d5550a1              todo  the async-signal-safe function list
+2.4.3:29025a52              todo  <stdatomic.h> functions in handlers
+2.4.3:b8eb4ed4              none  a statement
+2.4.3:0e043a03              impl  additional async-signal-safe interfaces (documentation)
+2.4.3:20fc47b5              untestable  every function interrupted by every handler
+2.4.3:23c67b0c              none  a cross-reference
+2.4.3:9b12cdca              app
+2.4.3:0fbd3f42              partial XSH.2.4.3-signal-actions.013 XSH.2.4.3-signal-actions.014  # terminate and stop; continue is todo

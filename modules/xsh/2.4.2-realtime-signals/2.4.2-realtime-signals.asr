@@ -1,0 +1,59 @@
+# XSH 2.4.2 Realtime Signal Generation and Delivery
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.2.4.2-realtime-signals.001
+anchor     functions/V2_chap02.html#2.4.2
+class      required
+since      2008
+says       A timer created with SIGEV_SIGNAL, SIGRTMIN (SA_SIGINFO set) and
+           sigev_value 99 generates SIGRTMIN when it expires, accepted with
+           si_code SI_TIMER and si_value 99.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/001-sigev-signal.c
+
+assertion  XSH.2.4.2-realtime-signals.002
+anchor     functions/V2_chap02.html#2.4.2
+class      required
+since      2008
+says       A timer created with SIGEV_THREAD (attributes NULL) calls
+           sigev_notify_function with sigev_value (a pointer) when it
+           expires, in a thread other than the main thread.
+nomutant   the notification thread is made by the system
+test       t/002-sigev-thread.c
+
+assertion  XSH.2.4.2-realtime-signals.003
+anchor     functions/V2_chap02.html#2.4.2
+class      required
+since      2008
+says       A timer created with SIGEV_NONE generates no signal when it
+           expires (none of SIGRTMIN, SIGALRM pending 300 ms after), and
+           timer_gettime() then shows it disarmed.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/003-sigev-none.c
+
+assertion  XSH.2.4.2-realtime-signals.004
+anchor     functions/V2_chap02.html#2.4.2
+class      required
+since      2008
+says       With SIGRTMIN blocked (SA_SIGINFO set) and values 1 and 2 queued by
+           sigqueue(), a kill() of SIGRTMIN does not disturb them: the
+           first two accepted are SI_QUEUE with values 1 and 2.
+uses       XSH.sigtimedwait.001
+note       Linux queues kill()-generated realtime signals too, after the
+           earlier ones, which is allowed.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/004-kill-keeps-queue.c
+
+assertion  XSH.2.4.2-realtime-signals.005
+anchor     functions/V2_chap02.html#2.4.2
+class      required
+since      2008
+says       With SIGRTMIN caught with SA_SIGINFO and two values queued while
+           blocked, on unblocking the first handler call still sees
+           SIGRTMIN pending (one more queued), and after the second call it
+           is not pending.
+note       sigpending() is async-signal-safe; the handler blocks
+           SIGRTMIN while it runs, so the second occurrence waits
+           pending.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/005-pending-while-queued.c

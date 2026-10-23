@@ -1,0 +1,153 @@
+# XSH 2.4.3 Signal Actions
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.2.4.3-signal-actions.001
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2001
+says       A child that sends itself each of SIGABRT, SIGALRM, SIGBUS, SIGFPE, SIGHUP, SIGILL, SIGINT, SIGKILL, SIGPIPE, SIGQUIT, SIGSEGV, SIGTERM, SIGUSR1, SIGUSR2 at SIG_DFL
+           is terminated, and wait() reports termination by that
+           signal.
+note       RLIMIT_CORE is set to 0 so that the A signals make no core
+           files.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/001-default-terminate.c
+
+assertion  XSH.2.4.3-signal-actions.002
+anchor     functions/V2_chap02.html#2.4.3
+class      conditional
+when       XSI
+since      2001
+says       On XSI systems, a child that sends itself each of SIGSYS, SIGTRAP, SIGVTALRM, SIGXCPU, SIGXFSZ
+           at SIG_DFL is terminated by that signal.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/002-default-terminate-xsi.c
+
+assertion  XSH.2.4.3-signal-actions.003
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2008
+says       A child that sends itself SIGRTMIN, and another SIGRTMAX, at SIG_DFL
+           is terminated by that signal.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/003-default-terminate-rt.c
+
+assertion  XSH.2.4.3-signal-actions.004
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2024
+says       A process that sends itself SIGCHLD, SIGURG and SIGWINCH at SIG_DFL
+           carries on unaffected.
+note       SIGWINCH is new in Issue 8; SIGCHLD and SIGURG have ignored
+           by default for longer.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/004-default-ignore.c
+
+assertion  XSH.2.4.3-signal-actions.005
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2001
+says       A child (in its own process group, which is not orphaned) that sends
+           itself SIGSTOP, SIGTSTP, SIGTTIN or SIGTTOU at SIG_DFL is
+           stopped by it (seen with WUNTRACED), and does not go on until
+           continued.
+note       The child's group is not orphaned: its parent, in the same
+           session, is in a different group.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/005-default-stop.c
+
+assertion  XSH.2.4.3-signal-actions.006
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2001
+says       A caught SIGUSR1 sent to a stopped child is not handled while it is
+           stopped (300 ms), and is handled once SIGCONT continues it; a
+           SIGKILL sent to the stopped child terminates it.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/006-stopped-holds-signals.c
+
+assertion  XSH.2.4.3-signal-actions.007
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2001
+says       A child that makes itself a session leader (so its process group is
+           orphaned) and sends itself SIGTSTP, SIGTTIN and SIGTTOU at SIG_DFL
+           is not stopped by any of them; SIGSTOP still stops it.
+note       setsid() puts the child in a new session and group; the
+           parent is in another session, so the group is orphaned.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/007-orphaned-no-stop.c
+
+assertion  XSH.2.4.3-signal-actions.008
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2024
+says       With SIGURG and SIGWINCH caught, blocked and pending, setting each
+           action to SIG_DFL makes it no longer pending (they stay
+           blocked).
+note       SIGWINCH is new in Issue 8.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/008-dfl-discards-pending.c
+
+assertion  XSH.2.4.3-signal-actions.009
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      1988
+says       With SIGUSR1 caught, blocked and pending, setting its action to
+           SIG_IGN makes it no longer pending: after a handler is installed
+           again and SIGUSR1 unblocked, the handler does not run.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/009-ign-discards-pending.c
+
+assertion  XSH.2.4.3-signal-actions.010
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2008
+says       With SIGRTMIN caught (SA_SIGINFO) and blocked, sigqueue() is called
+           until it fails with EAGAIN; after SIGRTMIN is set to SIG_IGN and
+           caught again, it is not pending and sigqueue() succeeds
+           again.
+timeout    120
+note       Skipped as NOTINUSE when {SIGQUEUE_MAX} is indeterminate, and
+           UNRESOLVED above 1000000 (as XSH.sigqueue.005).
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/010-ign-releases-queue.c
+
+assertion  XSH.2.4.3-signal-actions.011
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      1988
+says       A process that ignores SIGUSR1, SIGTERM and SIGINT and sends itself
+           each carries on unaffected.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/011-ignored-no-effect.c
+
+assertion  XSH.2.4.3-signal-actions.012
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      1988
+says       A loop counting to a limit, interrupted by a caught SIGALRM, goes on
+           from where it was after the handler returns and reaches the
+           limit, with its local state intact.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/012-resume-after-handler.c
+
+assertion  XSH.2.4.3-signal-actions.013
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2008
+says       In a child with two threads, a SIGSTOP sent with pthread_kill() to
+           the second thread stops the whole child: its main thread makes
+           no progress until SIGCONT.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/013-thread-stop-whole-process.c
+
+assertion  XSH.2.4.3-signal-actions.014
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2008
+says       In a child with two threads, SIGUSR1 at SIG_DFL sent with
+           pthread_kill() to the second thread terminates the whole child by
+           SIGUSR1.
+nomutant   decided by the kernel; a user-space shim cannot plant it
+test       t/014-thread-terminate-whole-process.c
