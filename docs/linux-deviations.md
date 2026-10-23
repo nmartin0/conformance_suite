@@ -69,9 +69,10 @@ by the named assertion.
 | XSH._Exit.019 | FAIL (glibc) | an `aio_write()` outstanding at `_exit()` never reaches the file | O.24 |
 | XSH.close.014 | FAIL (glibc) | an `aio_write()` outstanding at `close()` fails with EBADF | O.25 |
 | XSH.futimens.025 | FAIL (musl) | O_SEARCH (O_PATH) descriptors still get the search check | O.18 |
-| XSH.fflush.005 | FAIL (glibc) | `fflush()` of an input stream with a pushed-back character sets the offset 8 bytes too far (9, not 1) | O.26 |
-| XSH.fclose.003 | FAIL (glibc) | `fclose()` of a seekable input stream leaves the offset where read-ahead left it | O.27 |
-| XSH.fflush.013 | FAIL (musl) | `fflush()` of an `fmemopen()` stream holding more than fits drops the rest and returns 0 | O.28 |
+| XSH.fflush.005 | FAIL (glibc) | `fflush()` of an input stream with a pushed-back byte sets the offset to the read-ahead end minus the pushback (4095 for a 1 MiB file, not 1) | O.26 |
+| XSH.fclose.003, .010, .011 | FAIL (glibc) | `fclose()` of a seekable input or update stream leaves the offset where read-ahead left it | O.27 |
+| XSH.fflush.013, XSH.fclose.012 | FAIL (musl) | `fflush()`/`fclose()` of an `fmemopen()` stream holding more than fits drop the rest and return 0 | O.28 |
+| XSH.fflush.013, XSH.fclose.012 | FAIL (glibc) | the same calls return EOF but leave errno unset (ENOSPC required) | O.29 |
 | XSH.fflush.011 | INSPECT | neither library syncs input streams for `fflush(NULL)` (disputed, Q-28) | - |
 | XSH.chown.008 | INSPECT | `chown(f, -1, -1)` by a non-owner succeeds (disputed, Q-25) | - |
 | XSH.unlink.005, .010 | FAIL | `unlink()`/`unlinkat(fd, dir, 0)` of a directory give EISDIR; EPERM required | 1.17 |
@@ -388,13 +389,15 @@ O.25 **glibc: asynchronous I/O outstanding at close() fails with EBADF.**
 - Src: posixcheck run.
 
 O.26 **glibc: fflush() of an input stream with pushback sets the wrong offset.**
-- POSIX (`fflush`, DESCRIPTION, CX): for a seekable input stream the file
-  offset is set to the stream's position, and pushed-back characters are
-  discarded without changing the offset further.
-- glibc 2.39: for "0123456789" read twice with fgetc() and then
-  ungetc('x') (stream position 1), fflush() leaves the offset at 9 and the
-  next fgetc() returns '3'. Without pushback the offset is right. musl is
-  right.
+- POSIX (`fflush`, DESCRIPTION, CX): for a seekable input stream not at
+  end of file, the file offset is set to the stream's position, and
+  pushed-back bytes are discarded without changing the offset further.
+- glibc 2.39: with a 1 MiB file read twice with fgetc() and then
+  ungetc('x') (stream position 1), fflush() sets the offset to the end of
+  the read-ahead minus the pushback count (4095), ignoring the unread
+  buffered bytes; the next fgetc() returns '2'. It happens only when the
+  pushed-back byte differs from the one read (ungetc('1') gives 1).
+  Without pushback the offset is right. musl gives 1.
 - Comp: glibc. Kind: long-standing. Observe: XSH.fflush.005.
 - Src: posixcheck run.
 
@@ -402,17 +405,30 @@ O.27 **glibc: fclose() of an input stream does not set the file offset.**
 - POSIX (`fclose`, DESCRIPTION, CX): if the stream is the active handle and
   the file is seekable and not at EOF, the offset of the open file
   description is set to the stream's position.
-- glibc 2.39: after one fgetc() on a 10-byte file, a duplicate descriptor
-  sees offset 10 (where read-ahead left it) after fclose(). musl sets 1.
-- Comp: glibc. Kind: long-standing. Observe: XSH.fclose.003.
+- glibc 2.39: after one fgetc() on a 1 MiB file, a duplicate descriptor
+  sees offset 4096 (where read-ahead left it) after fclose(), for "r" and
+  for "r+" streams, with or without a pushed-back byte. musl sets 1.
+  (glibc bugzilla 12724 is believed to be the upstream record.)
+- Comp: glibc. Kind: long-standing. Observe: XSH.fclose.003, .010, .011.
 - Src: posixcheck run.
 
 O.28 **musl: fflush() of a full fmemopen() stream succeeds silently.**
 - POSIX (`fflush`, ERRORS): [ENOSPC] when there is no free space in the
   buffer used by fmemopen().
 - musl 1.2.4: with 10 bytes buffered for a 4-byte memory buffer, fflush()
-  returns 0 and the excess is lost. (glibc already fails the fputs().)
-- Comp: musl. Kind: long-standing. Observe: XSH.fflush.013.
+  and fclose() return 0 and the excess is lost.
+- Comp: musl. Kind: long-standing. Observe: XSH.fflush.013, XSH.fclose.012.
+- Src: posixcheck run.
+
+O.29 **glibc: fflush() of a full fmemopen() stream leaves errno unset.**
+- POSIX (`fflush`, `fclose`, RETURN VALUE and ERRORS): on failure errno is
+  set; [ENOSPC] when there is no free space in the buffer used by
+  fmemopen().
+- glibc 2.39: with 10 bytes buffered (16 KiB stream buffer) for a 4-byte
+  memory buffer, fflush() and fclose() return EOF but errno stays 0. (With
+  a stream buffer under 128 bytes glibc writes through at once, and the
+  fputs() fails instead, also without errno.)
+- Comp: glibc. Kind: long-standing. Observe: XSH.fflush.013, XSH.fclose.012.
 - Src: posixcheck run.
 
 ## Things the strict build changes

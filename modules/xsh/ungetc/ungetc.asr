@@ -1,0 +1,73 @@
+# XSH ungetc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.ungetc.001
+anchor     functions/ungetc.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream reading "0123", after fgetc() returns '0', ungetc('Z')
+           returns 'Z', the next fgetc() returns 'Z' and the one after
+           returns '1'.
+test       t/001-pushback.c
+
+assertion  XSH.ungetc.002
+anchor     functions/ungetc.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream reading "0123", after fgetc() twice, ungetc('a') then
+           ungetc('b'): if the second succeeds (only one byte is
+           guaranteed), the next reads return 'b', 'a', then '2'.
+test       t/002-reverse-order.c
+
+assertion  XSH.ungetc.003
+anchor     functions/ungetc.html#DESCRIPTION
+class      required
+since      2008
+says       On a stream reading "0123", a byte pushed back with ungetc() after
+           reading '0' is not returned after fseek(f, 1, SEEK_SET) (the read
+           gives '1'), after fsetpos() to the position saved before the
+           read of '0' (the read gives '0'), after rewind() (the read gives
+           '0'), or after fflush() (the read does not give it; which
+           byte follows is open, Q-30).
+test       t/003-positioning-discards.c
+
+assertion  XSH.ungetc.004
+anchor     functions/ungetc.html#DESCRIPTION
+class      required
+since      1988
+says       After a read of '0' from a stream opened "r+" on "0123", ungetc('Z')
+           and fclose(), the file still holds "0123".
+test       t/004-storage-unchanged.c
+
+assertion  XSH.ungetc.005
+anchor     functions/ungetc.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream reading "0123" after a read of '0', ungetc(EOF) returns
+           EOF and the next read returns '1'.
+test       t/005-eof-fails.c
+
+assertion  XSH.ungetc.006
+anchor     functions/ungetc.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream read to its end (feof() true), ungetc('x') clears the
+           end-of-file indicator and the next read returns 'x'.
+test       t/006-clears-eof.c
+
+assertion  XSH.ungetc.007
+anchor     functions/ungetc.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream reading "0123", after two reads ftell() is 2; after
+           ungetc('Z') it is 1; after the pushed-back byte is read it is 2
+           again.
+test       t/007-position.c
+
+assertion  XSH.ungetc.008
+anchor     functions/ungetc.html#RETURN VALUE
+class      required
+since      1988
+says       After a read from a stream, ungetc(0x1ff) returns 0xff and the next
+           read returns 0xff.
+test       t/008-converted.c

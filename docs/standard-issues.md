@@ -66,7 +66,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-52 | rename(): no error number for a directory renamed to "new/" | omission | XSH.rename.014 |
 | SI-53 | lchown()/fchown(): ERRORS out of step with chown() | inconsistency | XSH.lchown.003 |
 | SI-54 | truncate(): [EFBIG] names a "SIGFSZ" signal | editorial | XSH.truncate.008 |
-| SI-55 | opendir(): ENOENT overlaps ENOTDIR | inconsistency | XSH.opendir.008 |
+| SI-55 | opendir(): ENOENT overlaps ENOTDIR | inconsistency | XSH.opendir.008, .011, XSH.alphasort.006, .009 |
 | SI-56 | ftruncate(): unspecified file types vs required EINVAL | inconsistency | XSH.ftruncate.010 |
 | SI-57 | truncate(): out of step with ftruncate() | inconsistency | XSH.truncate.006 |
 | SI-58 | umask(): only permission bits used vs other bits implementation-defined | inconsistency | XSH.umask.003 |
@@ -78,6 +78,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-64 | <signal.h>: si_code values stated, not required | ambiguity | XSH.2.4.3-signal-actions.020 |
 | SI-65 | SIGBUS past a mapping's end has no si_code | omission | XSH.2.4.3-signal-actions.021 |
 | SI-66 | SI_MESGQ shading | editorial | XSH.2.4.3-signal-actions.017 |
+| SI-67 | fflush(): stale RATIONALE | inconsistency | XSH.fflush.004 |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
@@ -106,3 +107,5 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-26 | truncate(): file size limit when shrinking | question | XSH.truncate.007 |
 | Q-27 | futimens(): write access of file or descriptor | question | XSH.futimens.021 |
 | Q-28 | fflush(NULL) and input streams | question | XSH.fflush.011 |
+| Q-29 | "not already at EOF" | question | XSH.fflush.004 |
+| Q-30 | fflush(): position after discarding pushback | question | XSH.fflush.005 |

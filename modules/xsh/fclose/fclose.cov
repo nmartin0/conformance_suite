@@ -5,7 +5,7 @@ DESCRIPTION:8a1d53b2     XSH.fclose.001 XSH.fclose.002
 DESCRIPTION:b2ca10b5     partial XSH.fclose.001 XSH.fclose.003  # written data; discarded input is seen only through the offset
 DESCRIPTION:bbf42f37     partial XSH.fclose.007  # the descriptor is released after a failure; buffer disassociation is not observable
 DESCRIPTION:5641d9b8     untestable  deallocation is not observable portably
-DESCRIPTION:611be75e     XSH.fclose.003
+DESCRIPTION:611be75e     partial XSH.fclose.003 XSH.fclose.010 XSH.fclose.011  # one handle, "r" and "r+", with and without pushback; several handles are not checked
 DESCRIPTION:2b3c71bc     XSH.fclose.004
 DESCRIPTION:2084e635     XSH.fclose.002 XSH.fclose.007
 DESCRIPTION:599ab1c0     none  undefined
@@ -13,11 +13,11 @@ RETURN_VALUE:fe34bfa3    XSH.fclose.001 XSH.fclose.005
 ERRORS:bebb7770          XSH.fclose.009
 ERRORS:b88d9b94          XSH.fclose.005
 ERRORS:38d3d1f2          todo  needs a file system whose maximum file size can be reached
-ERRORS:44f9e858          todo  as XSH.fflush.010, with fclose()
+ERRORS:44f9e858          partial XSH.fclose.013  # EFBIG; the XSI SIGXFSZ is not checked here (see XSH.write)
 ERRORS:399b8ebf          todo  needs a stream whose offset maximum is below the largest off_t (a 32-bit build without large-file support)
 ERRORS:c667297a          XSH.fclose.008
 ERRORS:6d4a6aff          todo  needs a pseudo-terminal and an orphaned background process group
-ERRORS:35f64052          untestable  no portable way to make open_memstream() run out of memory
-ERRORS:5f5513df          todo  as XSH.fflush.013, with fclose()
+ERRORS:35f64052          todo  open_memstream() under a small RLIMIT_AS in a child (XSI)
+ERRORS:5f5513df          partial XSH.fclose.012  # the fmemopen() buffer; a full device is an environment case
 ERRORS:060d5689          XSH.fclose.006
 ERRORS:01ce82ab          optional

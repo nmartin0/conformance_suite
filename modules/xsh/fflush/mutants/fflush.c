@@ -50,12 +50,12 @@ static const char *mutant_of(const char *prefix)
 #include <stdio_ext.h>
 #include <time.h>
 
-/* Readable, not writable: an input stream (by its descriptor's mode). */
+/* A stream whose last operation was input (or that can only read). */
 static int input_only(FILE *f)
 {
 	int fl = fcntl(fileno(f), F_GETFL);
 
-	return fl != -1 && (fl & O_ACCMODE) == O_RDONLY;
+	return fl != -1 && ((fl & O_ACCMODE) == O_RDONLY || __freading(f));
 }
 
 int fflush(FILE *f)
@@ -71,6 +71,15 @@ int fflush(FILE *f)
 		return 0;
 	if (IS("null_noop") && f == NULL)
 		return 0;
+	if (IS("null_success_on_error") && f == NULL) {
+		(void)real_fflush(NULL);
+		return 0;	/* hides a failing stream */
+	}
+	if (IS("always_seeks") && f != NULL && input_only(f) && feof(f) && fstat(fileno(f), &st) == 0) {
+		r = real_fflush(f);
+		(void)lseek(fileno(f), st.st_size, SEEK_SET);	/* sets the stream's position even at end of file */
+		return r;
+	}
 	if (IS("no_input_sync") && f != NULL && input_only(f))
 		return 0;
 	if (IS("keeps_pushback") && f != NULL && input_only(f)) {
@@ -98,7 +107,7 @@ int fflush(FILE *f)
 				(void)lseek(fd, saved[fd], SEEK_SET);
 		return r;
 	}
-	if (IS("times_kept") && f != NULL && fstat(fileno(f), &st) == 0) {
+	if (IS("mtime_kept") && f != NULL && fstat(fileno(f), &st) == 0) {
 		struct timespec v[2];
 		r = real_fflush(f);
 		v[0] = st.st_atim;

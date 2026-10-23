@@ -16,7 +16,6 @@
 #include <signal.h>
 #include <sys/mman.h>
 #include <sys/resource.h>
-#include <sys/time.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/un.h>
@@ -118,10 +117,33 @@ static struct stat via_fd(const char *path, int flags)
 	return st;
 }
 
-/* A new file f holding s (setup). */
+/* After pc_test(): a step the implementation may refuse gives UNRESOLVED, not FAIL. */
+#define NEED(cond, ...) do { if (!(cond)) pc_unresolved(__VA_ARGS__); } while (0)
+
+/* A new file path holding s (setup). */
 static void make(const char *path, const char *s)
 {
 	pc_make_file(path, s);
+}
+
+#define BIG (1L << 20)
+
+/* A new file of BIG bytes, byte i being '0' + i % 10 (setup). */
+static void make_big(const char *path)
+{
+	static char blk[10000];
+	long i, done = 0;
+	int fd = open(path, O_WRONLY | O_CREAT | O_EXCL, 0644);
+
+	pc_check(fd >= 0, "open(%s) failed: %s", path, pc_errname(errno));
+	for (i = 0; i < (long)sizeof blk; i++)
+		blk[i] = (char)('0' + i % 10);
+	while (done < BIG) {
+		long n = BIG - done < (long)sizeof blk ? BIG - done : (long)sizeof blk;
+		pc_check(write(fd, blk, (size_t)n) == n, "write failed: %s", pc_errname(errno));
+		done += n;
+	}
+	pc_check(close(fd) == 0, "close failed");
 }
 
 /* The file's contents (at most size - 1 bytes). */
@@ -143,14 +165,13 @@ static off_t offset(int fd)
 	return lseek(fd, 0, SEEK_CUR);
 }
 
-/* Gives f a fully buffered 16 KiB buffer of the test's own (sizes passed
-   with a null buffer may be ignored). */
+/* Gives f a fully buffered 16 KiB buffer of the test's own; a refusal is UNRESOLVED. */
 static void full(FILE *f)
 {
 	char *b = malloc(16384);
 
-	pc_check(f != NULL && b != NULL, "no stream or no memory");
-	pc_check(setvbuf(f, b, _IOFBF, 16384) == 0, "setvbuf failed");
+	NEED(f != NULL && b != NULL, "no stream or no memory: %s", pc_errname(errno));
+	NEED(setvbuf(f, b, _IOFBF, 16384) == 0, "setvbuf(_IOFBF, 16384) was refused");
 }
 
 /* A stream on path in mode, fully buffered. */
@@ -158,9 +179,17 @@ static FILE *open_full(const char *path, const char *mode)
 {
 	FILE *f = fopen(path, mode);
 
-	pc_check(f != NULL, "fopen(%s, %s) failed: %s", path, mode, pc_errname(errno));
+	NEED(f != NULL, "fopen(%s, %s) failed: %s", path, mode, pc_errname(errno));
 	full(f);
 	return f;
+}
+
+/* The regular file behind f is still empty: the data written is buffered. */
+static void still_buffered(FILE *f)
+{
+	struct stat st;
+
+	NEED(fstat(fileno(f), &st) == 0 && st.st_size == 0, "the stream did not buffer the data (the file has it already)");
 }
 
 /* Sets the file's st_mtim and st_atim to 2001-09-09 through fd. */
@@ -170,7 +199,7 @@ static void old_times(int fd)
 
 	v[0].tv_sec = v[1].tv_sec = 1000000000;
 	v[0].tv_nsec = v[1].tv_nsec = 0;
-	pc_check(futimens(fd, v) == 0, "futimens failed: %s", pc_errname(errno));
+	NEED(futimens(fd, v) == 0, "futimens failed: %s", pc_errname(errno));
 }
 
 static int sigpipe_pending(void)
@@ -189,6 +218,46 @@ static void block_sigpipe(void)
 	pc_check(sigprocmask(SIG_BLOCK, &one, NULL) == 0, "sigprocmask failed");
 }
 
+/* Fills the pipe completely (setup): non-blocking writes until EAGAIN; leaves O_NONBLOCK set. */
+static void fill(int w)
+{
+	static char blk[4096];
+	int fl = fcntl(w, F_GETFL);
+	ssize_t r;
+
+	pc_check(fl != -1 && fcntl(w, F_SETFL, fl | O_NONBLOCK) == 0, "cannot set O_NONBLOCK");
+	while ((r = write(w, blk, sizeof blk)) > 0)
+		;
+	while ((r = write(w, blk, 1)) > 0)
+		;
+	pc_check(r == -1 && errno == EAGAIN, "could not fill the pipe");
+}
+
+/* SIGALRM, caught without SA_RESTART and re-armed each second; from the
+   second one on it drains rescue_rfd so a restarted write can finish. */
+static volatile sig_atomic_t fired;
+static int rescue_rfd = -1;
+
+static void on_alarm(int s)
+{
+	static char junk[65536];
+
+	(void)s;
+	if (++fired >= 2 && rescue_rfd >= 0)
+		(void)read(rescue_rfd, junk, sizeof junk);
+	(void)alarm(1);
+}
+
+static void catch_alarm(void)
+{
+	struct sigaction sa;
+
+	memset(&sa, 0, sizeof sa);
+	sa.sa_handler = on_alarm;
+	sigemptyset(&sa.sa_mask);
+	pc_check(sigaction(SIGALRM, &sa, NULL) == 0, "sigaction failed");
+}
+
 int main(void)
 {
 	pc_begin("XSH.fflush.001");
@@ -199,7 +268,8 @@ int main(void)
 
 		pc_test();
 		f = open_full("f", "w");
-		pc_check(fputs("hello", f) >= 0, "fputs failed");
+		NEED(fputs("hello", f) >= 0, "fputs failed");
+		still_buffered(f);
 		r = fflush(f);
 		pc_check(r == 0, "fflush() returned %d (%s)", r, pc_errname(errno));
 		pc_check(slurp("f", buf, sizeof buf) == 5 && strcmp(buf, "hello") == 0, "the file holds \"%s\"", buf);

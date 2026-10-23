@@ -5,8 +5,8 @@ assertion  XSH.fclose.001
 anchor     functions/fclose.html#DESCRIPTION
 class      required
 since      1988
-says       With "hello" buffered in an output stream, fclose() returns 0 and the
-           file holds "hello".
+says       With "hello" buffered in an output stream (the file still empty),
+           fclose() returns 0 and the file holds "hello".
 test       t/001-flushes.c
 
 assertion  XSH.fclose.002
@@ -21,18 +21,22 @@ assertion  XSH.fclose.003
 anchor     functions/fclose.html#DESCRIPTION
 class      required
 since      2008
-says       For a file "0123456789" read through a stream (the active handle) with
-           one fgetc(), after fclose() a duplicate of the descriptor taken
-           before the call has offset 1.
+says       For a 1 MiB file read through a stream (the active handle) with one
+           fgetc(), after fclose() a duplicate of the descriptor taken before
+           the call has offset 1.
+note       The file is 1 MiB, so after one read the stream is not at end
+           of file whichever way "not already at EOF" is read (the end-
+           of-file indicator or the descriptor's offset; Q-29).
 test       t/003-input-offset.c
 
 assertion  XSH.fclose.004
 anchor     functions/fclose.html#DESCRIPTION
 class      required
-since      2008
+since      1988
 says       With data buffered in an output stream and the file's times set to
-           2001-09-09, after fclose() st_mtim is later than that and st_ctim
-           later than before the call.
+           2001-09-09, after fclose() (2.1 s later) st_mtim is later than that
+           and st_ctim later than before the call.
+timeout    20
 test       t/004-times.c
 
 assertion  XSH.fclose.005
@@ -65,8 +69,9 @@ anchor     functions/fclose.html#ERRORS/EINTR
 class      required
 since      2001
 says       With a stream on a full pipe (blocking) holding 1000 buffered bytes,
-           a SIGALRM caught without SA_RESTART 200 ms into fclose() makes it
-           return EOF with errno EINTR.
+           a SIGALRM caught without SA_RESTART 1 s into fclose() makes it
+           return EOF with errno EINTR (later alarms drain the pipe, so an
+           implementation that restarts finishes and is reported).
 timeout    20
 test       t/008-eintr.c
 
@@ -78,3 +83,45 @@ says       With a pipe filled to capacity and O_NONBLOCK set on its write
            end, fclose() of a stream on that end holding 1000 buffered bytes
            returns EOF with errno EAGAIN.
 test       t/009-eagain.c
+
+assertion  XSH.fclose.010
+anchor     functions/fclose.html#DESCRIPTION
+class      required
+since      2008
+says       For a 1 MiB file opened "r+" with one fgetc(), after fclose() a
+           duplicate of the descriptor taken before the call has offset 1.
+note       The file is 1 MiB, so after one read the stream is not at end
+           of file whichever way "not already at EOF" is read (the end-
+           of-file indicator or the descriptor's offset; Q-29).
+test       t/010-update-input.c
+
+assertion  XSH.fclose.011
+anchor     functions/fclose.html#DESCRIPTION
+class      required
+since      2008
+says       For a 1 MiB file read through a stream with fgetc() twice and then
+           ungetc('x') (stream position 1), after fclose() a duplicate of the
+           descriptor has offset 1.
+note       The file is 1 MiB, so after one read the stream is not at end
+           of file whichever way "not already at EOF" is read (the end-
+           of-file indicator or the descriptor's offset; Q-29).
+test       t/011-pushback-offset.c
+
+assertion  XSH.fclose.012
+anchor     functions/fclose.html#ERRORS/ENOSPC
+class      required
+since      2008
+says       For a stream from fmemopen() on a 4-byte buffer opened "w" and given
+           a 16 KiB buffer of its own, after fputs() of 10 bytes fclose()
+           returns EOF with errno ENOSPC (where fputs() itself already
+           fails, the assertion is UNRESOLVED).
+test       t/012-enospc-fmemopen.c
+
+assertion  XSH.fclose.013
+anchor     functions/fclose.html#ERRORS/EFBIG
+class      required
+since      2024
+says       In a child whose soft RLIMIT_FSIZE is 4096 bytes (SIGXFSZ ignored),
+           fclose() of a stream holding 8192 buffered bytes returns EOF with
+           errno EFBIG.
+test       t/013-efbig.c

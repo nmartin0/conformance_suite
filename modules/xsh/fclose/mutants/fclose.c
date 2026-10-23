@@ -62,7 +62,7 @@ int fclose(FILE *f)
 	fl = fcntl(fd, F_GETFL);
 	if (IS("no_flush"))
 		__fpurge(f);	/* buffered output is dropped */
-	if (IS("no_input_sync") && fl != -1 && (fl & O_ACCMODE) == O_RDONLY) {
+	if (IS("no_input_sync") && fl != -1 && ((fl & O_ACCMODE) == O_RDONLY || __freading(f))) {
 		off_t at = lseek(fd, 0, SEEK_CUR);
 		int d = dup(fd);
 		r = real_fclose(f);
@@ -72,7 +72,7 @@ int fclose(FILE *f)
 		}
 		return r;
 	}
-	if (IS("times_kept") && fstat(fd, &st) == 0) {
+	if (IS("mtime_kept") && fstat(fd, &st) == 0) {
 		struct timespec v[2];
 		int d = dup(fd);
 		r = real_fclose(f);

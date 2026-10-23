@@ -93,6 +93,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-64 | XBD `<signal.h>`: whether the listed si_code values are required | Defect (ambiguity) | Low | SEGV_ACCERR, SEGV_MAPERR disputed (XSH.2.4.3-signal-actions.015, .020) |
 | SI-65 | XBD `<signal.h>`: no si_code for SIGBUS past the end of a mapped object | Defect (omission) | Low | Code not checked (XSH.2.4.3-signal-actions.021) |
 | SI-66 | XBD `<signal.h>`: SI_MESGQ not shaded MSG | Defect (editorial) | Low | Test is MSG-conditional (XSH.2.4.3-signal-actions.017) |
+| SI-67 | XSH `fflush()`: RATIONALE says the input-stream offset rule is not mandated | Defect (inconsistency) | Low | DESCRIPTION followed (XSH.fflush.004) |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -121,6 +122,8 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-26 | XSH `truncate()`/`ftruncate()`: does the file size limit apply when shrinking? | Question | Low | Only growth tested |
 | Q-27 | XSH `futimens()`: "write access to the file" for a descriptor | Question | Low | Requires the file's permission (XSH.futimens.021) |
 | Q-28 | XSH `fflush()`: does fflush(NULL) set the offsets of input streams? | Question | Low | Disputed (XSH.fflush.011) |
+| Q-29 | XSH `fflush()`/`fclose()`/`exit()`: what "not already at EOF" means | Question | Low | Tests use a 1 MiB file (both readings met) |
+| Q-30 | XSH `fflush()`: where does reading resume after pushback is discarded? | Question | Low | Only the discard is checked (XSH.fflush.005) |
 
 ## Entries
 
@@ -786,6 +789,14 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **posixcheck meanwhile:** the SI_MESGQ assertion is conditional on MSG.
 - **Suggested change:** shade SI_MESGQ MSG in `<signal.h>` too, or unshade it in 2.4.3 (editorial).
 
+### SI-67: fflush(): the RATIONALE contradicts the input-stream offset rule
+
+- **Where:** XSH `fflush()`, RATIONALE and DESCRIPTION.
+- **What the text says:** the RATIONALE says that repositioning the file descriptor after fflush() on streams open for reading is not mandated, because buffered data may make the position impractical to determine. Since Issue 7 (Interpretation 1003.1-2001 #002), the DESCRIPTION requires the offset of a seekable input stream not at end of file to be set to the stream's position.
+- **Why it is a problem:** the informative text says the opposite of the normative text, which invites implementations to skip the rule (as glibc does in part, O.26).
+- **posixcheck meanwhile:** the DESCRIPTION is followed (XSH.fflush.004, .005, .016).
+- **Suggested change:** rewrite the RATIONALE to explain the Issue 7 rule (editorial).
+
 ## Questions to raise
 
 These are consistent as written, but the intent or the fit with practice
@@ -1012,6 +1023,18 @@ is unclear.
 - **Where:** XSH `fflush()`, DESCRIPTION.
 - **Question:** the page gives two behaviours: writing an output stream's unwritten data (from ISO C), and, as a POSIX addition, setting a seekable input stream's file offset to the stream's position. For a null pointer, fflush() performs "this flushing action on all streams for which the behavior is defined above". Does that include the input-stream rule, so that fflush(NULL) sets every seekable input stream's offset, or only the flushing of output, as in ISO C? Neither glibc nor musl touches input streams for fflush(NULL), though both do for fflush(stream).
 - **posixcheck meanwhile:** XSH.fflush.011 is `disputed`: an untouched offset is logged as INSPECT.
+
+### Q-29: "If the file is not already at EOF": the stream's indicator or the file offset?
+
+- **Where:** XSH `fflush()`, `fclose()` and `exit()` (the input-stream offset rule); XSH 2.5.1.
+- **Question:** the offset rule applies "if the file is not already at EOF". Does that mean the stream's end-of-file indicator (XSH 2.5.1 speaks of feof() being true), or the underlying file offset being at the end of the file? After one read of a small file, read-ahead has usually taken the whole file: the indicator is clear but the descriptor is at the end, so the two readings give different answers.
+- **posixcheck meanwhile:** the tests read a 1 MiB file, so both readings require the rule; XSH.fflush.015 checks that a stream whose indicator is set is left alone.
+
+### Q-30: fflush(): the stream's position after pushed-back bytes are discarded
+
+- **Where:** XSH `fflush()`, DESCRIPTION; XSH `ungetc()`.
+- **Question:** fflush() of an input stream sets the offset to the stream's position and discards pushed-back bytes "without further changing the file offset". With "01" read and 'x' pushed back (position 1), must the next read return '1' (the byte at the new offset), or may it resume where the stream was before the pushback ('2', as glibc does)? ungetc() keeps ISO C's rule for reading the pushed-back bytes but does not say what discarding them does to the position.
+- **posixcheck meanwhile:** XSH.fflush.005 checks the offset and that the discarded byte is not read, not which byte comes next.
 
 ## Tracking
 

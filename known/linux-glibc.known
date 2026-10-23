@@ -70,5 +70,8 @@ XSH._Exit.019      FAIL         linux*    O.24: asynchronous I/O outstanding at 
 XSH.close.014      FAIL         linux*    O.25: asynchronous I/O fails with EBADF after close()
 XSH.fflush.005     FAIL         linux*    O.26: fflush() of an input stream with pushback sets the wrong offset
 XSH.fflush.011     INSPECT      linux*    Q-28 (disputed): fflush(NULL) does not sync input streams
-XSH.fflush.013     UNRESOLVED   linux*    glibc's fmemopen() stream fails the fputs() at once
+XSH.fflush.013     FAIL         linux*    O.29: fflush() of a full fmemopen() stream leaves errno unset
+XSH.fclose.012     FAIL         linux*    O.29: fclose() of a full fmemopen() stream leaves errno unset
+XSH.fclose.010     FAIL         linux*    O.27: fclose() of an update stream does not set the offset
+XSH.fclose.011     FAIL         linux*    O.27: fclose() with pushback does not set the offset
 XSH.fclose.003     FAIL         linux*    O.27: fclose() of an input stream does not set the offset

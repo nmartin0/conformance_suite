@@ -1,0 +1,42 @@
+# XSH setvbuf()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.setvbuf.001
+anchor     functions/setvbuf.html#RETURN VALUE
+class      required
+since      1988
+says       setvbuf() returns 0 for _IOFBF, _IOLBF and _IONBF, each on a newly
+           opened stream, with a buffer of the caller's and with a null
+           buffer.
+test       t/001-modes.c
+
+assertion  XSH.setvbuf.002
+anchor     functions/setvbuf.html#RETURN VALUE
+class      required
+since      1988
+says       setvbuf() on a new stream with a type that is none of _IOFBF, _IOLBF
+           and _IONBF returns a non-zero value.
+test       t/002-bad-type.c
+
+assertion  XSH.setvbuf.003
+anchor     functions/setvbuf.html#DESCRIPTION
+class      disputed
+since      1988
+says       On a stream set _IONBF, after fputc('a') and fputs("bc") (no fflush()),
+           the file holds "abc".
+note       disputed: ISO C makes the support of the buffering
+           characteristics implementation-defined (intended to appear as
+           soon as possible), so a FAIL is logged as INSPECT.
+test       t/003-unbuffered.c
+
+assertion  XSH.setvbuf.004
+anchor     functions/setvbuf.html#DESCRIPTION
+class      disputed
+since      1988
+says       On a stream set _IOLBF (with a 256-byte buffer), after fputs("ab\n")
+           (no fflush()), the file holds "ab\n".
+note       disputed: ISO C makes the support of the buffering
+           characteristics implementation-defined (characters are
+           intended to be transmitted at a newline), so a FAIL is logged
+           as INSPECT.
+test       t/004-line.c
