@@ -47,6 +47,8 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-18 | XSH exec: "regular" image file against EACCES for other file types | Conflict | Low | Assumes directories are not run (XSH.exec.036) |
 | SI-19 | XSH exec, [EINVAL]: a file with "privileges" | Defect (editorial) | Low | Not tested |
 | SI-20 | XSH exec: inherited-attribute list | Defect (editorial) | Low | Tests the thread's mask (XSH.exec.018) |
+| SI-21 | XSH `sigaction()`, SA_RESETHAND: the SIGILL/SIGTRAP note against the reset rule | Conflict | Low | Follows the normative rule; no assertion |
+| SI-22 | XSH `sigaction()`: is the signal blocked during an SA_RESETHAND handler? | Conflict | Low | Not tested |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -332,6 +334,41 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
   XSH.exec.025 the limits.
 - **Suggested change:** drop the file size limit and the process signal
   mask from the process list, and make it the process's pending signals.
+
+### SI-21: the SA_RESETHAND note on SIGILL and SIGTRAP contradicts the rule it annotates
+
+- **Where:** XSH `sigaction()`, DESCRIPTION, SA_RESETHAND, and the note
+  inside it; the typographical conventions in the front matter.
+- **What the text says:** with SA_RESETHAND the action is reset to SIG_DFL
+  on entry to the handler, and without it the action is not modified on
+  entry. A note inside the item says SIGILL and SIGTRAP cannot be reset
+  this way and that the system silently enforces it.
+- **Why it is a problem:** notes inside normative text are informative
+  (front matter, typographical conventions), so the note cannot make an
+  exception, yet it describes a restriction the normative rule does not
+  have: read normatively, SIGILL and SIGTRAP must be reset like any other
+  signal. Either the note is a requirement in the wrong form, or it is
+  stale (it comes from older systems).
+- **Practice:** Linux resets SIGILL and SIGTRAP like other signals.
+- **posixcheck meanwhile:** follows the normative rule; no assertion about
+  SIGILL or SIGTRAP.
+- **Suggested change:** make the exception normative (and say whether the
+  call fails or the flag is ignored), or delete the note.
+
+### SI-22: is the signal blocked during an SA_RESETHAND handler?
+
+- **Where:** XSH `sigaction()`, DESCRIPTION: SA_RESETHAND, SA_NODEFER, and
+  the paragraph on the mask installed for a handler.
+- **What the text says:** (1) under SA_NODEFER, if that flag is not set the
+  signal is always added to the thread's mask on entry; (2) the paragraph
+  on the handler's mask adds the signal unless SA_NODEFER *or SA_RESETHAND*
+  is set; (3) under SA_RESETHAND, sigaction() may behave as if SA_NODEFER
+  were also set.
+- **Why it is a problem:** for a handler installed with SA_RESETHAND and
+  without SA_NODEFER, (1) requires the signal to be blocked, (2) says it is
+  not, and (3) makes it optional.
+- **posixcheck meanwhile:** not tested.
+- **Suggested change:** keep (3), and qualify (1) and (2) to match it.
 
 ## Questions to raise
 

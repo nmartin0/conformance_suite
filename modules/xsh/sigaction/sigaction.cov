@@ -1,0 +1,58 @@
+# sigaction.cov - every requirement unit on functions/sigaction.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:a0e4c251        XSH.sigaction.001 XSH.sigaction.002
+DESCRIPTION:950dedd0        XSH.sigaction.019  # values outside <signal.h> fail
+DESCRIPTION:6eb14fb2        none  introduces the structure
+DESCRIPTION:014523e0        todo  Tier 0 header check (generator): sa_handler member; used by every test here
+DESCRIPTION:70898c0a        todo  Tier 0 header check (generator): sa_mask member; behaviour in XSH.sigaction.014
+DESCRIPTION:cbee66ec        todo  Tier 0 header check (generator): sa_flags member
+DESCRIPTION:35e6ff38        todo  Tier 0 header check (generator): sa_sigaction member; behaviour in XSH.sigaction.005
+DESCRIPTION:ed817e4c        app
+DESCRIPTION:0e74f0e7        XSH.sigaction.002
+DESCRIPTION:c6ce0ceb        XSH.sigaction.001 XSH.sigaction.002
+DESCRIPTION:528b18da        XSH.sigaction.001
+DESCRIPTION:6364adb8        XSH.sigaction.003
+DESCRIPTION:05a5e9a8        XSH.sigaction.004
+DESCRIPTION:beb431fa        XSH.sigaction.005
+DESCRIPTION:e51e8101        none  introduces the flags
+DESCRIPTION:4a6c8144        none  introduces the flags
+DESCRIPTION:c2a3e47b        XSH.sigaction.008  # the stop half; XSI: continued children not tested
+DESCRIPTION:aa8316ee        partial XSH.sigaction.007  # stops; the XSI continue case is a permission
+DESCRIPTION:a9ff2fad        XSH.sigaction.008 XSH.sigaction.011
+DESCRIPTION:49faa940        XSH.sigaction.009
+DESCRIPTION:d14d9e8d        XSH.sigaction.009
+DESCRIPTION:6ad043db        XSH.sigaction.010
+DESCRIPTION:27e89355        none  an informative note, and it contradicts the normative reset rule (standard issue SI-21)
+DESCRIPTION:128d9d16        none  a permission
+DESCRIPTION:12d586ba        none  defines interruptible functions; restart behaviour in XSH.sigaction.012
+DESCRIPTION:8feda725        partial XSH.sigaction.012  # read() on a pipe; other interruptible functions (wait, nanosleep's timeout rule) not tested
+DESCRIPTION:861fd488        none  unspecified timeout after restart
+DESCRIPTION:a37d8162        partial XSH.sigaction.013  # read() on a pipe only
+DESCRIPTION:ae28d531        XSH.sigaction.004
+DESCRIPTION:da6faf49        app
+DESCRIPTION:4ae42cdc        XSH.sigaction.005
+DESCRIPTION:493a8f01        partial XSH.sigaction.005 XSH.sigaction.006  # siginfo_t checked; the ucontext_t argument is not
+DESCRIPTION:64d620fd        app
+DESCRIPTION:7d127c39        XSH.sigaction.005
+DESCRIPTION:361f354f        impl  si_errno contents (documentation)
+DESCRIPTION:84529522        XSH.sigaction.005 XSH.sigaction.006
+DESCRIPTION:51fe74ac        none  unspecified
+DESCRIPTION:8acc376c        todo  XSI: SA_NOCLDWAIT for SIGCHLD: no zombie, wait() gives ECHILD (see SI-9, SI-10)
+DESCRIPTION:52bd6a24        XSH.sigaction.015
+DESCRIPTION:cef50a3d        XSH.sigaction.014
+DESCRIPTION:d145eb0e        XSH.sigaction.014
+DESCRIPTION:496560d9        partial XSH.sigaction.014 XSH.sigaction.015  # the SA_RESETHAND case conflicts with cef50a3d and 128d9d16 (standard issue SI-22); not tested
+DESCRIPTION:87d7406f        XSH.sigaction.014
+DESCRIPTION:fc73fc86        XSH.sigaction.016  # reset by exec: XSH.exec.016
+DESCRIPTION:fca3d5b6        none  unspecified
+DESCRIPTION:fc40c235        XSH.sigaction.017
+DESCRIPTION:befe2ef6        XSH.sigaction.018
+DESCRIPTION:07d0d247        none  unspecified
+DESCRIPTION:2cf19668        partial XSH.sigaction.004  # the one-argument call; queuing without SA_SIGINFO is implementation-defined
+DESCRIPTION:119802ee        XSH.sigaction.020 XSH.sigaction.021
+DESCRIPTION:29870b4e        XSH.sigaction.006
+DESCRIPTION:580d352e        none  unspecified
+RETURN_VALUE:fc04a869       XSH.sigaction.018 XSH.sigaction.019
+ERRORS:e605906a             XSH.sigaction.018 XSH.sigaction.019
+ERRORS:9ba08332             optional

@@ -32,6 +32,8 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-18 | exec: "regular, executable file" vs EACCES for unsupported file types | conflict | XSH.exec.036 |
 | SI-19 | exec EINVAL: a file "has appropriate privileges" | editorial | (not tested) |
 | SI-20 | exec inherited list: file size limit twice, a "process signal mask" | editorial | XSH.exec.018, XSH.exec.025 |
+| SI-21 | sigaction() SA_RESETHAND: informative SIGILL/SIGTRAP note contradicts the reset rule | conflict | (sigaction.cov) |
+| SI-22 | sigaction(): signal blocked during an SA_RESETHAND handler? three statements disagree | conflict | (sigaction.cov) |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |

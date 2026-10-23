@@ -31,3 +31,5 @@ XSH.exit.002       FAIL         linux*    O.6: waitid() si_status has only the l
 XSH.exit.012       FAIL         linux*    O.6: SIGCHLD si_status has only the low 8 bits
 XSH._Exit.014      FAIL         linux*    O.6: SIGCHLD si_status has only the low 8 bits
 XSH.exec.028       FAIL         linux*    O.7: the thread CPU-time clock is not reset by exec
+XSH.sigaction.010  FAIL         linux*    O.10: SA_RESETHAND does not clear SA_SIGINFO
+XSH.sigaction.021  FAIL         linux*    O.11: sigqueue() does not queue signals below SIGRTMIN
