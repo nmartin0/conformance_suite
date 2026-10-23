@@ -64,6 +64,7 @@ by the named assertion.
 | XSH.link.019 | INSPECT | `fs.protected_hardlinks` refuses a link to another user's readable file with EPERM (disputed, Q-24) | O.19 |
 | XSH.rename.012 | FAIL | a final dot or dot-dot gives EBUSY; EINVAL required | O.20 |
 | XSH.rename.014 | FAIL | `rename(dir, "new/")` succeeds | O.21 |
+| XSH.futimens.024 | FAIL (musl) | `futimens(AT_FDCWD, t)` gives EFAULT, not EBADF | O.22 |
 | XSH.chown.008 | INSPECT | `chown(f, -1, -1)` by a non-owner succeeds (disputed, Q-25) | - |
 | XSH.unlink.005, .010 | FAIL | `unlink()`/`unlinkat(fd, dir, 0)` of a directory give EISDIR; EPERM required | 1.17 |
 | XSH.sig2str.001 to .006 | UNINITIATED | no sig2str() or str2sig() | 3.1 |
@@ -341,6 +342,15 @@ O.21 **Linux: rename() of a directory to "new/" succeeds.**
 - Comp: kernel. Kind: long-standing. Observe: XSH.rename.014.
 - Src: posixcheck run.
 
+O.22 **musl: futimens(AT_FDCWD, t) gives EFAULT, not EBADF.**
+- POSIX (`futimens`, ERRORS): [EBADF] when fd is not a valid file
+  descriptor; AT_FDCWD is not one.
+- musl 1.2.4: futimens() passes the descriptor to utimensat() with a null
+  path, so the kernel takes AT_FDCWD and reports EFAULT for the path.
+  glibc reports EBADF.
+- Comp: musl. Kind: long-standing. Observe: XSH.futimens.024.
+- Src: posixcheck run.
+
 ## Things the strict build changes
 
 Tests are compiled with `-D_POSIX_C_SOURCE=202405L` (or
@@ -605,6 +615,7 @@ Main source pages:
 - POSIX: a process with *write access to the file* may set both timestamps to now.
 - Linux: `futimens()` checks whether the *file descriptor's access mode* allows writing. A non-owner who has write permission but opened O_RDONLY gets EACCES.
 - Comp: kernel. Kind: long-standing.
+- Observed here: on Linux 6.18 a non-owner with write permission and an O_RDONLY descriptor succeeds (XSH.futimens.021 passes), so the man page's BUGS note does not hold for this kernel.
 - Src: https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/utimensat.2 (BUGS)
 
 1.19 **mmap partial page beyond EOF keeps written data.**

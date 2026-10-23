@@ -69,7 +69,10 @@ int utimes(const char *path, const struct timeval times[2])
 
 	if (m == NULL)
 		return real_utimes(path, times);
-	if (IS("noop") || (IS("null_ignored") && times == NULL) || (IS("missing_ok") && stat(path, &st) != 0))
+	if (IS("noop") || (IS("null_ignored") && times == NULL) || (IS("missing_ok") && stat(path, &st) != 0 && errno == ENOENT))
+		return 0;
+	if (IS("einval_accepted") && times != NULL && (times[0].tv_usec < 0 || times[0].tv_usec >= 1000000 ||
+						  times[1].tv_usec < 0 || times[1].tv_usec >= 1000000))
 		return 0;
 	if (IS("swaps") && times != NULL) {
 		v[0] = times[1];

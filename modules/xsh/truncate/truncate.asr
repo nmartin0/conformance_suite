@@ -4,7 +4,7 @@
 assertion  XSH.truncate.001
 anchor     functions/truncate.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       truncate("f", 4) of a 10-byte file returns 0; the file is then 4
            bytes long and holds the first 4 bytes.
 test       t/001-shrink.c
@@ -12,15 +12,16 @@ test       t/001-shrink.c
 assertion  XSH.truncate.002
 anchor     functions/truncate.html#DESCRIPTION
 class      required
-since      2001
-says       truncate("f", 10) of a 3-byte file makes it 10 bytes long; bytes 3
-           to 9 read as zero.
+since      2008
+says       truncate("f", 10) of a 3-byte file makes it 10 bytes long, bytes 3
+           to 9 reading as zero; after truncate("f", 1) and truncate("f",
+           10) again, bytes 1 to 9 read as zero, not the old data.
 test       t/002-extend.c
 
 assertion  XSH.truncate.003
 anchor     functions/truncate.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       A descriptor open on f with its offset at 8 still has offset 8 after
            truncate("f", 2) (lseek(fd, 0, SEEK_CUR) returns 8).
 test       t/003-offsets-kept.c
@@ -28,7 +29,7 @@ test       t/003-offsets-kept.c
 assertion  XSH.truncate.004
 anchor     functions/truncate.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       After truncate(), stat() reports later st_mtim and st_ctim (the test
            truncates to alternating lengths every 10 ms for up to 3 s until
            they move).
@@ -38,7 +39,7 @@ test       t/004-times.c
 assertion  XSH.truncate.005
 anchor     functions/truncate.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       truncate("sl", 2), with sl a symbolic link to a 10-byte file f, makes
            f 2 bytes long.
 test       t/005-follows-link.c
@@ -46,34 +47,34 @@ test       t/005-follows-link.c
 assertion  XSH.truncate.006
 anchor     functions/truncate.html#ERRORS
 class      required
-since      2001
-says       truncate("f", -1) fails with EINVAL and leaves f's size; truncate()
-           of a FIFO fails with EINVAL; truncate() of a directory fails with
-           EISDIR.
+since      2008
+says       truncate("f", -1) fails with EINVAL; truncate() of a directory fails
+           with EISDIR.
 test       t/006-einval-eisdir.c
 
 assertion  XSH.truncate.007
 anchor     functions/truncate.html#ERRORS/EFBIG
 class      required
-since      2001
-says       With RLIMIT_FSIZE set to 4096 bytes (and SIGXFSZ ignored),
-           truncate("f", 8192) fails with EFBIG and the size is unchanged.
+since      2024
+says       In a process whose soft RLIMIT_FSIZE is 4096 bytes (with SIGXFSZ
+           blocked), truncate("f", 4096) succeeds and truncate("f", 4097)
+           fails with EFBIG.
 test       t/007-efbig.c
 
 assertion  XSH.truncate.008
 anchor     functions/truncate.html#DESCRIPTION
 class      conditional
 when       XSI
-since      2001
-says       With RLIMIT_FSIZE set to 4096 bytes and SIGXFSZ caught,
-           truncate("f", 8192) fails and a SIGXFSZ is delivered to the
-           thread.
+since      2008
+says       In a process whose soft RLIMIT_FSIZE is 4096 bytes, with SIGXFSZ
+           blocked, a truncate("f", 8192) that fails leaves SIGXFSZ pending
+           (generated for the thread).
 test       t/008-sigxfsz.c
 
 assertion  XSH.truncate.009
 anchor     functions/truncate.html#ERRORS
 class      required
-since      2001
+since      2008
 says       truncate() fails with ENOENT for a missing name and the empty
            string, ENOTDIR for "f/" with f a regular file, and ELOOP for a
            loop of symbolic links (a -> b, b -> a).
@@ -82,7 +83,7 @@ test       t/009-path-errors.c
 assertion  XSH.truncate.010
 anchor     functions/truncate.html#ERRORS
 class      disputed
-since      2001
+since      2008
 says       truncate() of a name longer than {NAME_MAX} bytes fails with
            ENAMETOOLONG.
 note       disputed (Q-8): the name also names no existing file, so
@@ -93,9 +94,16 @@ test       t/010-enametoolong.c
 assertion  XSH.truncate.011
 anchor     functions/truncate.html#ERRORS/EACCES
 class      required
-since      2001
+since      2008
 says       For a process without appropriate privileges, truncate() of its own
            file with mode 0444 fails with EACCES, and so does truncate()
-           through a directory that denies search permission; neither file
-           changes size.
+           through a directory that denies search permission.
 test       t/011-eacces.c
+
+assertion  XSH.truncate.012
+anchor     functions/truncate.html#ERRORS/EINVAL
+class      required
+since      2024
+says       truncate() of a FIFO and of a socket bound to a name fails with
+           EINVAL.
+test       t/012-einval-type.c

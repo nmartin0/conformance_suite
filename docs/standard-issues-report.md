@@ -81,6 +81,15 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-52 | XSH `rename()`: no error number for a directory renamed to "new/" | Defect (omission) | Low | Any error accepted (XSH.rename.014) |
 | SI-53 | XSH `chown()`/`fchown()`/`lchown()`: ERRORS out of step with each other | Defect (inconsistency) | Low | chown() rules applied |
 | SI-54 | XSH `truncate()`: [EFBIG] names a "SIGFSZ" signal | Defect (editorial) | Low | Read as SIGXFSZ (XSH.truncate.008) |
+| SI-55 | XSH `opendir()`/`scandir()`: [ENOENT] overlaps [ENOTDIR] and [ELOOP] | Defect (inconsistency) | Low | ENOTDIR cases disputed (XSH.opendir.008, XSH.alphasort.006) |
+| SI-56 | XSH `ftruncate()`: "unspecified" for other file types contradicts the required [EINVAL] | Defect (inconsistency) | Low | Disputed (XSH.ftruncate.010) |
+| SI-57 | XSH `truncate()`: no "file unaffected on failure", and weaker wording than `ftruncate()` | Defect (inconsistency) | Low | No check of the file after a failure |
+| SI-58 | XSH `umask()`: "only the permission bits" vs "other bits implementation-defined" | Defect (inconsistency) | Low | Only S_ISVTX is tested beyond the permission bits |
+| SI-59 | XSH `futimens()` page: `utimes()` errors written in terms of tv_nsec; XSI shading incomplete | Defect (editorial) | Low | utimes() errors read through "equivalent to utimensat()" |
+| SI-60 | XSH `utimes()`: "rounding towards the nearest second" vs XBD 4.12 | Defect (inconsistency) | Low | Accepts 1 s either way (XSH.futimens.018) |
+| SI-61 | XSH `*at()` functions: [EACCES] for fd's directory is not limited to relative paths | Defect (omission) | Low | Absolute paths ignore fd (e.g. XSH.futimens.007) |
+| SI-62 | XSH `readdir()`: RATIONALE says `fpathconf()` with _SC_NAME_MAX | Defect (editorial) | Low | None needed |
+| SI-63 | XSH `alphasort()`/`scandir()`: RETURN VALUE wording | Defect (editorial) | Low | None needed |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -106,6 +115,8 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-23 | XSH `signal()`: return value after failed calls or sigaction() | Question | Low | Successful calls only (XSH.signal.001) |
 | Q-24 | XSH `link()`: what access to the existing file may be required, and with which error | Question | Medium | Disputed (XSH.link.019) |
 | Q-25 | XSH `chown()`: chown(-1, -1) of another user's file | Question | Low | Disputed (XSH.chown.008) |
+| Q-26 | XSH `truncate()`/`ftruncate()`: does the file size limit apply when shrinking? | Question | Low | Only growth tested |
+| Q-27 | XSH `futimens()`: "write access to the file" for a descriptor | Question | Low | Requires the file's permission (XSH.futimens.021) |
 
 ## Entries
 
@@ -675,6 +686,78 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **posixcheck meanwhile:** the entry is read as SIGXFSZ (XSH.truncate.008).
 - **Suggested change:** replace "SIGFSZ" with "SIGXFSZ" (editorial).
 
+### SI-55: opendir()/scandir(): [ENOENT] is worded so that it overlaps [ENOTDIR]
+
+- **Where:** XSH `opendir()` and `alphasort()` (scandir()), ERRORS, [ENOENT] and [ENOTDIR].
+- **What the text says:** [ENOENT] applies when a component of the name does not name an existing *directory* (other pages say "an existing file"). [ENOTDIR] applies when a component names an existing file that is not a directory.
+- **Why it is a problem:** a regular file named as the directory, or a loop of symbolic links, also "does not name an existing directory", so [ENOENT] applies alongside [ENOTDIR] (and [ELOOP]) every time, and XSH 2.3 lets either be reported. The more specific errors become impossible to require. fdopendir()'s [EBADF] ("not open for reading") also covers an O_SEARCH descriptor only by implication.
+- **posixcheck meanwhile:** XSH.opendir.008 and XSH.alphasort.006 are `disputed`; ENOENT there is logged as INSPECT.
+- **Suggested change:** use "does not name an existing file" in [ENOENT], as the other pathname pages do.
+
+### SI-56: ftruncate(): the DESCRIPTION leaves other file types unspecified, ERRORS requires EINVAL
+
+- **Where:** XSH `ftruncate()`, DESCRIPTION and ERRORS ([EINVAL]).
+- **What the text says:** the DESCRIPTION leaves the result unspecified when the descriptor is open for writing on a file that is neither a regular file nor a shared memory object. Since Defect 1381, [EINVAL] says ftruncate() shall fail for a file on which the operation is not possible, naming a pipe, FIFO or socket.
+- **Why it is a problem:** for a pipe or socket open for writing, one sentence makes the outcome unspecified and the other requires EINVAL. Defect 1381 appears to have left the older sentence in place.
+- **posixcheck meanwhile:** XSH.ftruncate.010 (pipe and socket) is `disputed`; the negative-length case (XSH.ftruncate.005) stays required.
+- **Suggested change:** limit the "unspecified" sentence to file types the ERRORS section does not cover, or drop it.
+
+### SI-57: truncate(): out of step with ftruncate() on failures and on wording
+
+- **Where:** XSH `truncate()` and `ftruncate()`, DESCRIPTION.
+- **What the text says:** ftruncate() says that when it fails the file is unaffected; truncate() has no such sentence, so XSH 2.3 ("the action requested may have been partially performed") applies to it. truncate() also states the effects of shrinking and extending as plain statements ("is discarded", "appears as if zero-filled") where ftruncate() uses "shall", and ftruncate() speaks of the "seek pointer" where truncate() says "file offset".
+- **Why it is a problem:** the two functions do the same thing to a file, yet a failed truncate() may leave it partly changed, and the normative force of its effects reads weaker. The difference looks unintended.
+- **posixcheck meanwhile:** the truncate() tests do not examine the file after a failure; the ftruncate() tests do.
+- **Suggested change:** give truncate() ftruncate()'s sentence on failures and its "shall" wording; say "file offset" in both (editorial).
+
+### SI-58: umask(): only the permission bits are used, yet other bits have implementation-defined meaning
+
+- **Where:** XSH `umask()`, DESCRIPTION and RATIONALE.
+- **What the text says:** only the file permission bits of cmask shall be used; then (after the XSI-shaded S_ISVTX clause) the meaning of the other bits is implementation-defined. The RATIONALE says the second clause lets historical implementations use extra bits.
+- **Why it is a problem:** the first clause forbids using any other bit and the second allows it. The RETURN VALUE's round-trip rule ("including any unspecified use of those bits") supports the second reading.
+- **posixcheck meanwhile:** the round trip is tested with S_ISUID, S_ISGID and S_ISVTX set (XSH.umask.004); only S_ISVTX is required to be ignored (XSH.umask.003, .005).
+- **Suggested change:** say that only the permission bits are used *to clear bits of new files' modes*, and that other bits have implementation-defined meaning.
+
+### SI-59: futimens() page: utimes()'s errors are given in tv_nsec terms, and its XSI shading covers only the SYNOPSIS
+
+- **Where:** XSH `futimens()` (also utimensat(), utimes()), DESCRIPTION and ERRORS.
+- **What the text says:** the ERRORS lists that apply to utimes() describe [EINVAL], [EACCES] and [EPERM] by the tv_nsec fields, UTIME_NOW and UTIME_OMIT, which a timeval does not have. Only utimes()'s SYNOPSIS line is XSI-shaded; its DESCRIPTION paragraph and the "utimes() shall fail" lead-ins are not.
+- **Why it is a problem:** for utimes() the conditions can only be read through the sentence making it equivalent to utimensat(); in particular nothing says an out-of-range tv_usec gives EINVAL. The missing shading makes XSI-only text look like Base text.
+- **posixcheck meanwhile:** XSH.futimens.023 requires EINVAL for tv_usec 1000000 and -1 (XSI); utimes() assertions are conditional on XSI.
+- **Suggested change:** state the utimes() conditions in timeval terms (tv_usec, a null times argument) and shade all utimes() text XSI.
+
+### SI-60: utimes(): rounding to the nearest second conflicts with XBD 4.12
+
+- **Where:** XSH `futimens()` page (utimes() paragraph); XBD 4.12 File Times Update.
+- **What the text says:** utimes() is accurate to the microsecond and rounding towards the nearest second may occur. XBD 4.12 says a timestamp shall be set to the greatest value the file system supports that is not greater than the value asked for, and that resolution is no coarser than one second.
+- **Why it is a problem:** rounding to the nearest second can give a time later than the one asked for, which XBD 4.12 forbids; and with sub-second resolution required, no rounding to seconds should be needed.
+- **posixcheck meanwhile:** XSH.futimens.018 accepts times up to 1 s either side.
+- **Suggested change:** drop the rounding clause, or say "towards zero" (truncation), which agrees with XBD 4.12.
+
+### SI-61: *at() functions: the fd search [EACCES] is not limited to relative paths
+
+- **Where:** XSH `faccessat()`, `fchmodat()`, `fchownat()`, `fstatat()`, `linkat()`, `mkdirat()`, `mkfifoat()`, `mknodat()`, `openat()`, `readlinkat()`, `renameat()`, `symlinkat()`, `unlinkat()`, `utimensat()`, ERRORS.
+- **What the text says:** each lists [EACCES] when fd's open file description is not O_SEARCH and fd's directory does not permit searches. The neighbouring [EBADF] and [ENOTDIR] entries are limited to paths that are not absolute; this one is not.
+- **Why it is a problem:** read literally, an absolute path with fd open on a directory that denies search shall fail, though the DESCRIPTIONs say fd is used only for relative paths.
+- **posixcheck meanwhile:** absolute paths are required to ignore fd (for example XSH.futimens.007 with a closed descriptor).
+- **Suggested change:** add "the path argument is not an absolute path and" to each [EACCES] entry, as for [EBADF].
+
+### SI-62: readdir(): RATIONALE names _SC_NAME_MAX for fpathconf()
+
+- **Where:** XSH `readdir()`, RATIONALE (the readdir_r() buffer size).
+- **What the text says:** it refers to fpathconf() with _SC_NAME_MAX.
+- **Why it is a problem:** fpathconf() takes _PC_ names; _SC_ names belong to sysconf(), and there is no _SC_NAME_MAX.
+- **posixcheck meanwhile:** nothing depends on it.
+- **Suggested change:** _PC_NAME_MAX (editorial).
+
+### SI-63: alphasort()/scandir(): RETURN VALUE wording
+
+- **Where:** XSH `alphasort()` page, RETURN VALUE.
+- **What the text says:** alphasort() compares the name of the directory entry d1 points to with "the directory" d2 points to. scandir() returns -1 on failure, but the RETURN VALUE does not say errno is set, though ERRORS lists "shall fail" errors.
+- **Why it is a problem:** d2 points to a directory entry, not a directory; and every other pathname function's RETURN VALUE says errno is set.
+- **posixcheck meanwhile:** scandir() errors are required with errno set (XSH.alphasort.005 to .008).
+- **Suggested change:** "the directory entry pointed to by d2"; "return -1 and set errno to indicate the error" (editorial).
+
 ## Questions to raise
 
 These are consistent as written, but the intent or the fit with practice
@@ -883,6 +966,18 @@ is unclear.
 - **Question:** [EPERM] applies when "the effective user ID does not match the owner of the file". With owner (uid_t)-1 and group (gid_t)-1 nothing is changed (and st_ctim need not be marked). Must the call still fail with EPERM for a process that is not the owner, or may it succeed as a no-op, as Linux does?
 - **Also:** Linux not only returns 0 but marks st_ctim of the other user's file for update, so the call is not quite a no-op there.
 - **posixcheck meanwhile:** XSH.chown.008 is `disputed`: success is logged as INSPECT.
+
+### Q-26: truncate()/ftruncate(): does the file size limit apply to a shrink that stays above it?
+
+- **Where:** XSH `truncate()` and `ftruncate()`, DESCRIPTION and [EFBIG].
+- **Question:** the request fails if it "would cause the file size to exceed" the soft limit, and [EFBIG] applies when the length "exceeds the file size limit". Shrinking a 10000-byte file to 8000 bytes under a 4096-byte limit leaves it above the limit. Must that fail, as a literal reading says, or does the limit apply only to growth, as write() and every reference system (which succeed) treat it?
+- **posixcheck meanwhile:** only growth beyond the limit is tested (XSH.truncate.007, XSH.ftruncate.008).
+
+### Q-27: futimens(): is write access the file's permission or the descriptor's mode?
+
+- **Where:** XSH `futimens()`, DESCRIPTION (who may set the current time) and [EACCES].
+- **Question:** for futimens(fd, NULL), is "write access to the file" decided by the file's permission bits, or by whether fd is open for writing? The Linux man page has long said the kernel checks the descriptor; Linux 6.18 decides by the file's permissions. The sentence on the O_SEARCH check also says "the function" where only utimensat() can be meant.
+- **posixcheck meanwhile:** XSH.futimens.021 requires success for a read-only descriptor of a file the process may write.
 
 ## Tracking
 

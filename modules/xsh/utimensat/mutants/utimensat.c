@@ -75,8 +75,10 @@ int utimensat(int fd, const char *path, const struct timespec times[2], int flag
 	}
 	given = times != NULL && !(v[0].tv_nsec == UTIME_NOW && v[1].tv_nsec == UTIME_NOW) &&
 		!(v[0].tv_nsec == UTIME_OMIT && v[1].tv_nsec == UTIME_OMIT);
-	if (IS("noop") || (IS("missing_ok") && fstatat(fd, path, &st, 0) != 0))
+	if (IS("noop") || (IS("missing_ok") && fstatat(fd, path, &st, 0) != 0 && errno == ENOENT))
 		return 0;
+	if (IS("dir_slash_refused") && path != NULL && path[0] != '\0' && path[strlen(path) - 1] == '/')
+		return fail(ENOTDIR);
 	if (IS("null_ignored") && times == NULL)
 		return 0;
 	if (IS("swaps") && times != NULL) {
@@ -89,6 +91,19 @@ int utimensat(int fd, const char *path, const struct timespec times[2], int flag
 		for (i = 0; i < 2; i++)
 			if (v[i].tv_nsec >= 0 && v[i].tv_nsec < 999999999L)
 				v[i].tv_nsec++;
+	}
+	if (IS("drops_ns") && times != NULL) {
+		int i;
+		for (i = 0; i < 2; i++)
+			if (v[i].tv_nsec >= 0 && v[i].tv_nsec < 1000000000L)
+				v[i].tv_nsec -= v[i].tv_nsec % 1000;	/* keeps microseconds only */
+	}
+	if (IS("max_nsec_rejected") && times != NULL && (v[0].tv_nsec == 999999999L || v[1].tv_nsec == 999999999L))
+		return fail(EINVAL);
+	if (IS("any_now_ok") && given && (v[0].tv_nsec == UTIME_NOW || v[1].tv_nsec == UTIME_NOW) &&
+	    fstatat(fd, path, &st, flag) == 0 && st.st_uid != geteuid() && geteuid() != 0) {
+		v[0].tv_nsec = v[1].tv_nsec = UTIME_NOW;	/* treats any UTIME_NOW as the write-access case */
+		return real_utimensat(fd, path, v, flag);
 	}
 	if (IS("now_ignored") && times != NULL) {
 		int i;
@@ -118,8 +133,8 @@ int utimensat(int fd, const char *path, const struct timespec times[2], int flag
 		if ((IS("bad_fd_as_cwd") && !ok) || (IS("file_fd_as_cwd") && ok && !S_ISDIR(st.st_mode)))
 			fd = AT_FDCWD;
 	}
-	if (IS("perm_owner_only") && !given && fstatat(fd, path, &st, flag) == 0 && st.st_uid != geteuid() &&
-	    geteuid() != 0)
+	if (IS("perm_owner_only") && !given && !(times != NULL && v[0].tv_nsec == UTIME_OMIT) &&
+	    fstatat(fd, path, &st, flag) == 0 && st.st_uid != geteuid() && geteuid() != 0)
 		return fail(EACCES);	/* write access no longer enough */
 	if (IS("omit_checked") && times != NULL && !given && v[0].tv_nsec == UTIME_OMIT &&
 	    fstatat(fd, path, &st, flag) == 0 && st.st_uid != geteuid() && geteuid() != 0)

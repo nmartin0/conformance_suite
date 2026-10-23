@@ -8,7 +8,7 @@ DESCRIPTION:e0c4dd82     partial XSH.futimens.001  # nanoseconds are passed thro
 DESCRIPTION:3e57be16     none  the argument's form
 DESCRIPTION:a92846a4     XSH.futimens.001 XSH.futimens.003 XSH.futimens.006
 DESCRIPTION:cbc2c565     XSH.futimens.001
-DESCRIPTION:c1380109     partial XSH.futimens.001 XSH.futimens.006  # not later than the time given and less than 2 s earlier; the file system's own resolution is not known
+DESCRIPTION:c1380109     partial XSH.futimens.001 XSH.futimens.006  # within 100 ns where the file system keeps sub-microsecond times, else within 1 s; the exact resolution is not known ({_PC_TIMESTAMP_RESOLUTION} is missing in the reference libcs)
 DESCRIPTION:17622457     XSH.futimens.002
 DESCRIPTION:fa1c3e80     XSH.futimens.003
 DESCRIPTION:3cd6cf0e     XSH.futimens.002 XSH.futimens.003
@@ -17,22 +17,22 @@ DESCRIPTION:b67a8f29     XSH.futimens.007
 DESCRIPTION:696636e6     XSH.futimens.017
 DESCRIPTION:80de69f9     todo  an O_SEARCH descriptor of a directory that denies search (as XSH.access.018)
 DESCRIPTION:10b11b7d     XSH.futimens.001 XSH.futimens.007
-DESCRIPTION:9336556e     XSH.futimens.010 XSH.futimens.011
+DESCRIPTION:9336556e     XSH.futimens.010 XSH.futimens.011 XSH.futimens.021
 DESCRIPTION:adc25665     XSH.futimens.010 XSH.futimens.013
-DESCRIPTION:25cb9d73     XSH.futimens.012
+DESCRIPTION:25cb9d73     XSH.futimens.012 XSH.futimens.021
 DESCRIPTION:b5d6f2b9     none  how flag is built
 DESCRIPTION:56b0588b     XSH.futimens.008
 DESCRIPTION:c70b1f36     XSH.futimens.005
-DESCRIPTION:2a8f82fe     partial XSH.futimens.018 XSH.futimens.019 XSH.futimens.020  # setting times, NULL, permissions and path errors; not every utimensat() rule
+DESCRIPTION:2a8f82fe     partial XSH.futimens.018 XSH.futimens.019 XSH.futimens.020 XSH.futimens.023  # setting times, NULL, permissions, path and range errors; not every utimensat() rule
 RETURN_VALUE:5cb75ebf    XSH.futimens.001 XSH.futimens.006 XSH.futimens.018
 RETURN_VALUE:73bdf30d    XSH.futimens.009 XSH.futimens.014
-RETURN_VALUE:ec449291    XSH.futimens.009 XSH.futimens.010 XSH.futimens.011
-ERRORS:7925e805          XSH.futimens.011 XSH.futimens.019
+RETURN_VALUE:ec449291    XSH.futimens.009 XSH.futimens.010 XSH.futimens.011 XSH.futimens.021
+ERRORS:7925e805          XSH.futimens.011 XSH.futimens.019 XSH.futimens.021
 ERRORS:42003ad8          XSH.futimens.009
 ERRORS:06cbab76          todo  needs a tv_sec beyond what the file system can hold, which varies by file system
 ERRORS:0b9c6081          XSH.futimens.010 XSH.futimens.019
 ERRORS:c955fd69          todo  needs a read-only file system (an environment case)
-ERRORS:15c72736          XSH.futimens.016
+ERRORS:15c72736          XSH.futimens.016 XSH.futimens.024
 ERRORS:222666a3          XSH.futimens.017
 ERRORS:0d30acd6          XSH.futimens.016
 ERRORS:dc6c136c          XSH.futimens.016
@@ -40,7 +40,7 @@ ERRORS:51b9265e          XSH.futimens.017
 ERRORS:f39d7871          XSH.futimens.014
 ERRORS:681b232a          XSH.futimens.015
 ERRORS:83c37763          XSH.futimens.014 XSH.futimens.020
-ERRORS:df8daa9c          XSH.futimens.014 XSH.futimens.020
+ERRORS:df8daa9c          XSH.futimens.014 XSH.futimens.020 XSH.futimens.022
 ERRORS:811d61dd          optional
 ERRORS:c7f415ad          optional
 ERRORS:41158299          optional

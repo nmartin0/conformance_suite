@@ -53,6 +53,8 @@ static int fail(int e)
 	return -1;
 }
 
+static mode_t last_cmask;
+
 mode_t umask(mode_t cmask)
 {
 	REAL(umask);
@@ -73,8 +75,21 @@ mode_t umask(mode_t cmask)
 		extra = cmask & S_ISVTX;
 		return old;
 	}
+	if (IS("sticky_default"))
+		cmask |= 022;	/* a default that the caller cannot clear */
+	last_cmask = cmask;
 	old = real_umask(cmask);
 	if (IS("returns_new"))
 		return cmask;
 	return old;
+}
+
+int mkdir(const char *path, mode_t mode)
+{
+	REAL(mkdir);
+	const char *m = mutant_of("umask.");
+
+	if (IS("applies_svtx"))
+		mode &= ~(last_cmask & S_ISVTX);	/* clears S_ISVTX as the mask says */
+	return real_mkdir(path, mode);
 }

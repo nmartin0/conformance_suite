@@ -6,6 +6,7 @@
  * MUTANT    utimensat.perm_owner_only
  * MUTANT    utimensat.eperm_as_eacces
  * MUTANT    futimens.eperm_as_eacces
+ * MUTANT    utimensat.any_now_ok
  */
 #include "pc.h"
 #include <errno.h>
@@ -61,14 +62,19 @@ static void pc_searchable(void)
 {
 	if (geteuid() == 0 && chmod(".", 0711) != 0)
 		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
+	/* A file no one may read: the child can open it only with privileges. */
+	pc_make_file(".pc-priv", "");
+	if (chmod(".pc-priv", 0) != 0)
+		pc_unresolved("chmod(.pc-priv) failed: %s", pc_errname(errno));
 }
 
 /*
  * Run fn in a child that has no appropriate privileges: when the test runs
  * as root, the child takes user and group 65534 (the working directory is
  * made searchable for it; relative paths need nothing above it). Returns
- * what fn returns (0 to 98); a child that cannot drop privileges, or that
- * dies, makes the test UNRESOLVED.
+ * what fn returns (0 to 96); a child that cannot drop privileges, that
+ * still has them (it can read the mode 0 file .pc-priv, as with a
+ * capability), or that dies, makes the test UNRESOLVED.
  */
 static int unprivileged(int (*fn)(void))
 {
@@ -83,11 +89,18 @@ static int unprivileged(int (*fn)(void))
 			_exit(99);
 		if (geteuid() == 0)
 			_exit(99);
+		{
+			int pfd = open(".pc-priv", O_RDONLY);
+			if (pfd >= 0)
+				_exit(97);
+		}
 		_exit(fn());
 	}
 	while (waitpid(kid, &st, 0) == -1)
 		if (errno != EINTR)
 			pc_unresolved("waitpid failed: %s", pc_errname(errno));
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 97)
+		pc_unresolved("the child still has appropriate privileges (it can read a mode 0 file)");
 	if (!WIFEXITED(st) || WEXITSTATUS(st) == 99)
 		pc_unresolved("the unprivileged child could not run (status %#x)", (unsigned)st);
 	return WEXITSTATUS(st);
@@ -153,14 +166,33 @@ static long long ns_diff(struct timespec a, struct timespec b)
 }
 
 /*
- * The timestamp was set from want: not later than want, and less than 2 s
- * earlier (the coarsest timestamp resolution of common file systems).
+ * Whether this file system keeps timestamps finer than a microsecond, as
+ * seen from a new file's st_mtim (setup; a nanosecond clock gives a
+ * multiple of 1000 only rarely, which merely loosens the check).
+ */
+static int fine_ns = -1;
+
+static void probe_resolution(void)
+{
+	struct stat st;
+
+	pc_make_file(".pc-res", "");
+	pc_check(lstat(".pc-res", &st) == 0, "lstat failed: %s", pc_errname(errno));
+	fine_ns = st.st_mtim.tv_nsec % 1000 != 0;
+}
+
+/*
+ * The timestamp was set from want: not later than want and less than 1 s
+ * earlier (XBD 4.12: resolution no coarser than a second); within 100 ns
+ * where the file system keeps sub-microsecond times.
  */
 static int set_from(struct timespec got, struct timespec want)
 {
 	long long d = ns_diff(want, got);
 
-	return d >= 0 && d < 2000000000LL;
+	if (fine_ns == -1)
+		probe_resolution();
+	return d >= 0 && d < (fine_ns ? 100 : 1000000000LL);
 }
 
 static struct timespec now(void)
@@ -174,7 +206,21 @@ static struct timespec now(void)
 /* The timestamp was set to the current time, read between before and after. */
 static int set_now(struct timespec got, struct timespec before, struct timespec after)
 {
-	return ns_diff(after, got) >= 0 && ns_diff(got, before) > -2000000000LL;
+	return ns_diff(after, got) >= 0 && ns_diff(got, before) > -1000000000LL;
+}
+
+/*
+ * Setup: the file system's clock is not ahead of this process's (as with a
+ * remote file system's server), else times set to "now" look late.
+ */
+static void clock_agrees(void)
+{
+	struct stat st;
+
+	pc_make_file(".pc-clock", "");
+	pc_check(lstat(".pc-clock", &st) == 0, "lstat failed: %s", pc_errname(errno));
+	if (ns_diff(st.st_mtim, now()) > 0)
+		pc_unresolved("the file system's clock is ahead of the process's clock");
 }
 
 /* 0: failed with the expected error; 1: succeeded; 10 + errno: another errno. */
@@ -182,21 +228,11 @@ static int verdict(int r, int e)
 {
 	if (r == 0)
 		return 1;
-	return errno == e ? 0 : 10 + errno % 80;
+	return errno == e ? 0 : 10 + (errno < 86 ? errno : 86);
 }
 
 #define OLD_A 1000000000
 #define OLD_M 1100000000
-
-/* Give path the old, known times (setup: no planted fault applies). */
-static void old_times(const char *path, int flag)
-{
-	struct timespec v[2];
-
-	v[0] = ts(OLD_A, 0);
-	v[1] = ts(OLD_M, 0);
-	pc_check(utimensat(AT_FDCWD, path, v, flag) == 0, "setting old times on %s failed: %s", path, pc_errname(errno));
-}
 
 static int kept_old(const char *path)
 {
@@ -206,10 +242,27 @@ static int kept_old(const char *path)
 	       st.st_mtim.tv_nsec == 0;
 }
 
-static int child(void)
+/*
+ * Setup only: give path the old, known times; a file system that cannot
+ * keep them exactly makes the test UNRESOLVED.
+ */
+static void old_times(const char *path)
 {
 	struct timespec v[2];
-	int fd, x;
+
+	v[0] = ts(OLD_A, 0);
+	v[1] = ts(OLD_M, 0);
+	pc_check(utimensat(AT_FDCWD, path, v, 0) == 0, "setting old times on %s failed: %s", path, pc_errname(errno));
+	if (!kept_old(path))
+		pc_unresolved("the file system does not keep the times 1000000000 and 1100000000 exactly");
+}
+
+static int child(void)
+{
+	static const long mix[3][2] = { { 0, 0 }, { UTIME_NOW, UTIME_OMIT }, { UTIME_NOW, 0 } };
+	struct timespec v[2], m;
+	struct stat st;
+	int fd, x, i;
 
 	if (utimensat(AT_FDCWD, "c/w", NULL, 0) != 0)
 		return 10;
@@ -217,14 +270,23 @@ static int child(void)
 	v[1] = ts(0, UTIME_NOW);
 	if (utimensat(AT_FDCWD, "c/w", v, 0) != 0)
 		return 11;
+	if (stat("c/w", &st) != 0)
+		return 3;
+	m = st.st_mtim;
+	for (i = 0; i < 3; i++) {
+		v[0] = ts(1200000000, mix[i][0]);
+		v[1] = ts(1200000000, mix[i][1]);
+		if ((x = verdict(utimensat(AT_FDCWD, "c/w", v, 0), EPERM)) != 0)
+			return x == 1 ? 1 : 12 + i;
+		if (stat("c/w", &st) != 0 || ts_cmp(st.st_mtim, m) != 0)
+			return 20 + i;
+	}
 	v[0] = ts(1200000000, 0);
 	v[1] = ts(1200000000, 0);
-	if ((x = verdict(utimensat(AT_FDCWD, "c/w", v, 0), EPERM)) != 0)
-		return x == 1 ? 1 : 12;
 	if ((fd = open("c/w", O_WRONLY)) < 0)
 		return 3;
 	if ((x = verdict(futimens(fd, v), EPERM)) != 0)
-		return x == 1 ? 1 : 13;
+		return x == 1 ? 1 : 15;
 	return 0;
 }
 
@@ -240,8 +302,10 @@ int main(void)
 		pc_make_file("c/w", "x");
 		pc_make_file("c/r", "x");
 		pc_check(chmod("c/w", 0666) == 0 && chmod("c/r", 0644) == 0, "chmod failed");
-		old_times("c/w", 0);
-		old_times("c/r", 0);
+		if (lst("c/w").st_uid == 65534)
+			pc_unresolved("files root creates here belong to user 65534 (a root-squashing file system)");
+		old_times("c/w");
+		old_times("c/r");
 		pc_test();
 		r = unprivileged(child);
 		pc_check(r != 3, "the child could not prepare its file");

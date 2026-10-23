@@ -5,9 +5,11 @@ assertion  XSH.futimens.001
 anchor     functions/futimens.html#DESCRIPTION
 class      required
 since      2008
-says       utimensat(AT_FDCWD, "f", t, 0) with t[0] = 1000000000.123456789 and
-           t[1] = 1100000000.987654321 returns 0, and st_atim and st_mtim are
-           then not later than t[0] and t[1] and less than 2 s earlier.
+says       utimensat(AT_FDCWD, "f", t, 0) with t[0] = 1000000000.123456999 and
+           t[1] = 1100000000.999999999 returns 0, and st_atim and st_mtim are
+           then not later than t[0] and t[1] and less than 1 s earlier
+           (within 100 ns where the file system keeps sub-microsecond
+           times).
 test       t/001-set-times.c
 
 assertion  XSH.futimens.002
@@ -15,8 +17,9 @@ anchor     functions/futimens.html#DESCRIPTION
 class      required
 since      2008
 says       With t[0].tv_nsec = UTIME_NOW (tv_sec 12345) and t[1] a fixed time,
-           utimensat() sets st_atim to the current time and st_mtim from
-           t[1]; with both UTIME_NOW, both are set to the current time.
+           utimensat() sets st_atim of f1 to the current time and st_mtim
+           from t[1]; with both UTIME_NOW, both times of f2 are set to the
+           current time.
 test       t/002-utime-now.c
 
 assertion  XSH.futimens.003
@@ -24,27 +27,27 @@ anchor     functions/futimens.html#DESCRIPTION
 class      required
 since      2008
 says       With t[0].tv_nsec = UTIME_OMIT (tv_sec 12345), utimensat() leaves
-           st_atim as it was and sets st_mtim from t[1]; with t[1] omitted
-           instead, st_mtim stays and st_atim is set.
+           st_atim of f1 as it was and sets st_mtim from t[1]; with t[1]
+           omitted instead, st_mtim of f2 stays and st_atim is set.
 test       t/003-utime-omit.c
 
 assertion  XSH.futimens.004
 anchor     functions/futimens.html#DESCRIPTION
 class      required
 since      2008
-says       utimensat(AT_FDCWD, "f", NULL, 0) and futimens(fd, NULL) set st_atim
-           and st_mtim to the current time.
+says       utimensat(AT_FDCWD, "f1", NULL, 0) and futimens(fd, NULL), fd open
+           on f2, set st_atim and st_mtim to the current time.
 test       t/004-null-times.c
 
 assertion  XSH.futimens.005
 anchor     functions/futimens.html#DESCRIPTION
 class      required
 since      2008
-says       After utimensat() with fixed times, st_ctim is later than before (the
-           test repeats the call every 10 ms for up to 3 s until it moves).
-timeout    20
-nomutant   An interposed function cannot keep st_ctim from moving: no
-           planted fault can undo a change of status.
+says       After utimensat() with fixed times, after utimensat() with both
+           UTIME_NOW, and after futimens() with fixed times, st_ctim is
+           later than before (each call is repeated every 10 ms for up to
+           3 s until it moves).
+timeout    40
 test       t/005-ctime.c
 
 assertion  XSH.futimens.006
@@ -52,7 +55,8 @@ anchor     functions/futimens.html#DESCRIPTION
 class      required
 since      2008
 says       futimens(fd, t), with fd open read-only on f, returns 0 and sets
-           st_atim and st_mtim from t[0] and t[1].
+           st_atim and st_mtim from t[0] and t[1] (to within 100 ns where
+           the file system keeps sub-microsecond times, else 1 s).
 test       t/006-futimens.c
 
 assertion  XSH.futimens.007
@@ -68,19 +72,21 @@ assertion  XSH.futimens.008
 anchor     functions/futimens.html#DESCRIPTION
 class      required
 since      2008
-says       With sl a symbolic link to f, utimensat(AT_FDCWD, "sl", t, 0) sets
-           f's times and leaves the link's st_mtim (its st_atim may be
-           marked by the resolution itself); with AT_SYMLINK_NOFOLLOW it sets
-           the link's own times and leaves f's.
+says       With sl1 and sl2 symbolic links to f1 and f2:
+           utimensat(AT_FDCWD, "sl1", t, 0) sets f1's times and leaves sl1's
+           st_mtim (its st_atim may be marked by the resolution itself);
+           utimensat(AT_FDCWD, "sl2", t, AT_SYMLINK_NOFOLLOW) sets sl2's own
+           times and leaves f2's; with AT_SYMLINK_NOFOLLOW a regular file f3
+           still gets its times.
 test       t/008-symlinks.c
 
 assertion  XSH.futimens.009
 anchor     functions/futimens.html#ERRORS/EINVAL
 class      required
 since      2008
-says       utimensat() and futimens() with a tv_nsec of 1000000000 or -1 (and
-           not UTIME_NOW or UTIME_OMIT) in either member fail with EINVAL,
-           and the times stay as they were.
+says       utimensat() and futimens() fail with EINVAL, and the times stay, for
+           t = {x.1000000000, x.0}, {x.0, x.-1}, {UTIME_OMIT, x.-1} and
+           {UTIME_NOW, x.1000000000}.
 test       t/009-einval-nsec.c
 
 assertion  XSH.futimens.010
@@ -89,8 +95,9 @@ class      required
 since      2008
 says       For an unprivileged process and a file of another user that it may
            write (mode 0666): utimensat() with a null times argument, and
-           with both tv_nsec UTIME_NOW, succeeds; with given times it fails
-           with EPERM and the times stay; futimens() with given times on a
+           with both tv_nsec UTIME_NOW, succeeds; with given times, with
+           {UTIME_NOW, UTIME_OMIT} and with {UTIME_NOW, a time} it fails
+           with EPERM and st_mtim stays; futimens() with given times on a
            descriptor open for writing fails with EPERM.
 needs      root
 test       t/010-write-access.c
@@ -120,9 +127,11 @@ assertion  XSH.futimens.013
 anchor     functions/futimens.html#DESCRIPTION
 class      required
 since      2008
-says       For an unprivileged process and a file it owns with mode 0444,
-           utimensat() with given times and futimens() on a read-only
-           descriptor succeed and set the times.
+says       For an unprivileged process and a file it owns with mode 0000,
+           utimensat() with given times succeeds and sets them, and
+           futimens() on a read-only descriptor of its own mode 0444 file
+           does; utimensat() of its own FIFO succeeds without blocking.
+timeout    20
 test       t/013-owner.c
 
 assertion  XSH.futimens.014
@@ -130,8 +139,9 @@ anchor     functions/futimens.html#ERRORS
 class      required
 since      2008
 says       utimensat() with given times fails with ENOENT for a missing name
-           and the empty string, ENOTDIR for "f/" with f a regular file, and
-           ELOOP for a loop of symbolic links.
+           and the empty string, with ENOTDIR for "f/" with f a regular file
+           and for "sl/" with sl a link to f, and with ELOOP for a loop of
+           symbolic links; for "d/" with d a directory it succeeds.
 test       t/014-path-errors.c
 
 assertion  XSH.futimens.015
@@ -150,8 +160,9 @@ anchor     functions/futimens.html#ERRORS
 class      required
 since      2008
 says       futimens() of a descriptor that is not open fails with EBADF;
-           utimensat() with a relative path fails with EBADF when fd is not
-           open and with ENOTDIR when fd is open on a regular file.
+           utimensat() with a relative path fails with EBADF
+           when fd is not open and with ENOTDIR when fd is open on a regular
+           file.
 test       t/016-fd-errors.c
 
 assertion  XSH.futimens.017
@@ -169,10 +180,10 @@ anchor     functions/futimens.html#DESCRIPTION
 class      conditional
 when       XSI
 since      2001
-says       utimes("f", tv) with tv[0] = 1000000000 s 250000 us and tv[1] =
+says       utimes("f1", tv) with tv[0] = 1000000000 s 250000 us and tv[1] =
            1100000000 s 750000 us returns 0 and sets st_atim and st_mtim to
-           within 1 s of those times (utimes() may round to the second);
-           utimes("f", NULL) sets both to the current time.
+           within 1 s of those times (utimes() may round to the nearest
+           second); utimes("f2", NULL) sets both to the current time.
 test       t/018-utimes.c
 
 assertion  XSH.futimens.019
@@ -191,7 +202,52 @@ assertion  XSH.futimens.020
 anchor     functions/futimens.html#ERRORS
 class      conditional
 when       XSI
-since      2001
+since      2008
 says       utimes() fails with ENOENT for a missing name and the empty string,
            and ENOTDIR for "f/" with f a regular file.
 test       t/020-utimes-paths.c
+
+assertion  XSH.futimens.021
+anchor     functions/futimens.html#DESCRIPTION
+class      required
+since      2008
+says       For an unprivileged process: futimens(fd, NULL) and futimens() with
+           both UTIME_NOW succeed for a descriptor open for writing on
+           another user's mode 0666 file, and futimens(fd, NULL) for a
+           read-only descriptor of it (write access is to the file); for a read-only descriptor of
+           another user's mode 0644 file futimens(fd, NULL) fails with
+           EACCES and both UTIME_OMIT succeeds, the times staying.
+needs      root
+test       t/021-futimens-perm.c
+
+assertion  XSH.futimens.022
+anchor     functions/futimens.html#ERRORS
+class      disputed
+since      2008
+says       utimensat() with given times of "f/x", with f a regular file, fails
+           with ENOTDIR.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
+test       t/022-enotdir-prefix.c
+
+assertion  XSH.futimens.023
+anchor     functions/futimens.html#ERRORS
+class      conditional
+when       XSI
+since      2001
+says       utimes() with tv_usec 1000000 or -1 in either member fails with
+           EINVAL and the times stay.
+note       utimes()'s errors are written in terms of tv_nsec, which a
+           timeval does not have (SI-59); the EINVAL for an out-of-range
+           tv_usec follows from utimes() being equivalent to
+           utimensat().
+test       t/023-utimes-usec.c
+
+assertion  XSH.futimens.024
+anchor     functions/futimens.html#ERRORS
+class      required
+since      2008
+says       futimens(AT_FDCWD, t) fails with EBADF (AT_FDCWD is not a file
+           descriptor).
+test       t/024-futimens-fdcwd.c

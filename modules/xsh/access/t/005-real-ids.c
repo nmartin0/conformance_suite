@@ -60,14 +60,19 @@ static void pc_searchable(void)
 {
 	if (geteuid() == 0 && chmod(".", 0711) != 0)
 		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
+	/* A file no one may read: the child can open it only with privileges. */
+	pc_make_file(".pc-priv", "");
+	if (chmod(".pc-priv", 0) != 0)
+		pc_unresolved("chmod(.pc-priv) failed: %s", pc_errname(errno));
 }
 
 /*
  * Run fn in a child that has no appropriate privileges: when the test runs
  * as root, the child takes user and group 65534 (the working directory is
  * made searchable for it; relative paths need nothing above it). Returns
- * what fn returns (0 to 98); a child that cannot drop privileges, or that
- * dies, makes the test UNRESOLVED.
+ * what fn returns (0 to 96); a child that cannot drop privileges, that
+ * still has them (it can read the mode 0 file .pc-priv, as with a
+ * capability), or that dies, makes the test UNRESOLVED.
  */
 static int unprivileged(int (*fn)(void))
 {
@@ -82,11 +87,18 @@ static int unprivileged(int (*fn)(void))
 			_exit(99);
 		if (geteuid() == 0)
 			_exit(99);
+		{
+			int pfd = open(".pc-priv", O_RDONLY);
+			if (pfd >= 0)
+				_exit(97);
+		}
 		_exit(fn());
 	}
 	while (waitpid(kid, &st, 0) == -1)
 		if (errno != EINTR)
 			pc_unresolved("waitpid failed: %s", pc_errname(errno));
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 97)
+		pc_unresolved("the child still has appropriate privileges (it can read a mode 0 file)");
 	if (!WIFEXITED(st) || WEXITSTATUS(st) == 99)
 		pc_unresolved("the unprivileged child could not run (status %#x)", (unsigned)st);
 	return WEXITSTATUS(st);
@@ -197,6 +209,7 @@ int main(void)
 		if (geteuid() != 0 || getuid() != 0)
 			pc_unresolved("needs appropriate privileges to set real and effective IDs apart");
 		pc_check(chmod(".", 0711) == 0, "chmod failed");
+		file_mode(".pc-priv", 0);
 		file_mode("fA", 0600);
 		file_mode("fB", 0600);
 		pc_make_dir("sA");
@@ -212,11 +225,15 @@ int main(void)
 		if (kid == 0) {
 			if (setgid(65534) != 0 || setreuid(UA, UB) != 0 || getuid() != UA || geteuid() != UB)
 				_exit(99);
+			if (open(".pc-priv", O_RDONLY) >= 0)
+				_exit(97);
 			_exit(child());
 		}
 		pc_check(waitpid(kid, &st, 0) == kid && WIFEXITED(st), "the child did not exit");
 		if (WEXITSTATUS(st) == 99)
 			pc_unresolved("setreuid(%d, %d) failed", (int)UA, (int)UB);
+		if (WEXITSTATUS(st) == 97)
+			pc_unresolved("the child still has appropriate privileges (it can read a mode 0 file)");
 		pc_check(WEXITSTATUS(st) == 0, "with real user ID %d and effective %d, check %d went wrong", (int)UA, (int)UB,
 			 WEXITSTATUS(st));
 	}

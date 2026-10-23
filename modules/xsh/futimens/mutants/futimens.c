@@ -73,6 +73,8 @@ int futimens(int fd, const struct timespec times[2])
 		return 0;
 	if (IS("bad_ok") && fcntl(fd, F_GETFD) == -1)
 		return 0;
+	if (IS("fdcwd_as_cwd") && fd == AT_FDCWD)
+		return utimensat(AT_FDCWD, ".", times, 0);	/* sets the working directory's times */
 	if (times != NULL) {
 		v[0] = times[0];
 		v[1] = times[1];
@@ -85,6 +87,20 @@ int futimens(int fd, const struct timespec times[2])
 		return 0;
 	if (IS("needs_write") && times != NULL && geteuid() != 0 && fstat(fd, &st) == 0 && !(st.st_mode & S_IWUSR))
 		return fail(EPERM);
+	{
+		int both_now = times == NULL || (v[0].tv_nsec == UTIME_NOW && v[1].tv_nsec == UTIME_NOW);
+		int both_omit = times != NULL && v[0].tv_nsec == UTIME_OMIT && v[1].tv_nsec == UTIME_OMIT;
+		int other = geteuid() != 0 && fstat(fd, &st) == 0 && st.st_uid != geteuid();
+
+		if (IS("perm_owner_only") && both_now && other)
+			return fail(EACCES);	/* write access no longer enough */
+		if (IS("omit_checked") && both_omit && other)
+			return fail(EPERM);
+		if (IS("null_unchecked") && times == NULL && other) {
+			r = real_futimens(fd, NULL);
+			return r == -1 && errno == EACCES ? 0 : r;	/* reports success without the access */
+		}
+	}
 	r = real_futimens(fd, times != NULL ? v : NULL);
 	if (r == -1 && IS("eperm_as_eacces") && errno == EPERM)
 		errno = EACCES;

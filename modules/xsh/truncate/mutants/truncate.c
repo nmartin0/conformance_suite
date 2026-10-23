@@ -69,13 +69,20 @@ int truncate(const char *path, off_t length)
 		length++;
 	if (IS("negative_ok") && length < 0)
 		return 0;
+	if (IS("special_ok") && stat(path, &st) == 0 && (S_ISFIFO(st.st_mode) || S_ISSOCK(st.st_mode)))
+		return 0;
+	if (IS("limit_off_by_one")) {
+		struct rlimit rl;
+		if (getrlimit(RLIMIT_FSIZE, &rl) == 0 && rl.rlim_cur != RLIM_INFINITY && (rlim_t)length >= rl.rlim_cur)
+			return fail(EFBIG);	/* refuses a length equal to the limit */
+	}
 	if (IS("limit_ignored") || IS("no_signal")) {
 		struct rlimit rl, save;
 		if (getrlimit(RLIMIT_FSIZE, &save) == 0 && save.rlim_cur != RLIM_INFINITY && (rlim_t)length > save.rlim_cur) {
 			if (IS("no_signal"))
 				return fail(EFBIG);	/* refuses, but raises no signal */
 			rl = save;
-			rl.rlim_cur = RLIM_INFINITY;
+			rl.rlim_cur = save.rlim_max;
 			(void)setrlimit(RLIMIT_FSIZE, &rl);
 			r = real_truncate(path, length);
 			(void)setrlimit(RLIMIT_FSIZE, &save);

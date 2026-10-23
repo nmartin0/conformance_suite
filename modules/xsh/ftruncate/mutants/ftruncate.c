@@ -71,6 +71,13 @@ int ftruncate(int fd, off_t length)
 		return 0;
 	if (IS("bad_ok") && fcntl(fd, F_GETFD) == -1)
 		return 0;
+	if (IS("narrow_length"))
+		length = (off_t)(unsigned int)length;	/* keeps only 32 bits */
+	if (IS("limit_off_by_one")) {
+		struct rlimit rl;
+		if (getrlimit(RLIMIT_FSIZE, &rl) == 0 && rl.rlim_cur != RLIM_INFINITY && (rlim_t)length >= rl.rlim_cur)
+			return fail(EFBIG);
+	}
 	if (IS("readonly_ok") && (fcntl(fd, F_GETFL) & O_ACCMODE) == O_RDONLY)
 		return 0;
 	if (IS("pipe_ok") && fstat(fd, &st) == 0 && (S_ISFIFO(st.st_mode) || S_ISSOCK(st.st_mode)))
@@ -86,7 +93,7 @@ int ftruncate(int fd, off_t length)
 			if (IS("no_signal"))
 				return fail(EFBIG);
 			rl = save;
-			rl.rlim_cur = RLIM_INFINITY;
+			rl.rlim_cur = save.rlim_max;
 			(void)setrlimit(RLIMIT_FSIZE, &rl);
 			r = real_ftruncate(fd, length);
 			(void)setrlimit(RLIMIT_FSIZE, &save);

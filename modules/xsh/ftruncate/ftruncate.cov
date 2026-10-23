@@ -2,7 +2,7 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
 DESCRIPTION:9dce5957     XSH.ftruncate.004
-DESCRIPTION:92ca5211     XSH.ftruncate.001
+DESCRIPTION:92ca5211     XSH.ftruncate.001 XSH.ftruncate.002 XSH.ftruncate.011
 DESCRIPTION:02fa2ab8     XSH.ftruncate.001
 DESCRIPTION:16980623     XSH.ftruncate.001
 DESCRIPTION:8f49ee60     XSH.ftruncate.001
@@ -10,7 +10,7 @@ DESCRIPTION:ed0a2a48     XSH.ftruncate.002
 DESCRIPTION:bbda7775     XSH.ftruncate.003
 DESCRIPTION:c24fa804     XSH.ftruncate.004 XSH.ftruncate.005 XSH.ftruncate.008
 DESCRIPTION:796fa704     XSH.ftruncate.008 XSH.ftruncate.009
-DESCRIPTION:45f86149     none  unspecified
+DESCRIPTION:45f86149     none  unspecified (but see SI-56 and XSH.ftruncate.010)
 DESCRIPTION:964ebc28     XSH.ftruncate.006
 DESCRIPTION:1e58d087     partial XSH.ftruncate.007  # a mapped regular file; a mapped shared memory object is not shrunk
 DESCRIPTION:031bdc40     XSH.ftruncate.007
@@ -21,5 +21,5 @@ ERRORS:0b909ae5          todo  needs a length beyond the file system's maximum f
 ERRORS:8fd3c9e5          XSH.ftruncate.008 XSH.ftruncate.009
 ERRORS:487f1736          todo  needs an open file description whose offset maximum is below the largest off_t (a 32-bit build without large-file support)
 ERRORS:f423d78f          untestable
-ERRORS:b6d568d0          XSH.ftruncate.005
+ERRORS:b6d568d0          XSH.ftruncate.005 XSH.ftruncate.010
 ERRORS:4751aad6          untestable

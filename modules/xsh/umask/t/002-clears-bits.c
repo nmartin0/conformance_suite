@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.umask.002
  * MUTANT    umask.noop
+ * MUTANT    umask.sticky_default
  */
 #include "pc.h"
 #include <errno.h>
@@ -60,14 +61,19 @@ static void pc_searchable(void)
 {
 	if (geteuid() == 0 && chmod(".", 0711) != 0)
 		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
+	/* A file no one may read: the child can open it only with privileges. */
+	pc_make_file(".pc-priv", "");
+	if (chmod(".pc-priv", 0) != 0)
+		pc_unresolved("chmod(.pc-priv) failed: %s", pc_errname(errno));
 }
 
 /*
  * Run fn in a child that has no appropriate privileges: when the test runs
  * as root, the child takes user and group 65534 (the working directory is
  * made searchable for it; relative paths need nothing above it). Returns
- * what fn returns (0 to 98); a child that cannot drop privileges, or that
- * dies, makes the test UNRESOLVED.
+ * what fn returns (0 to 96); a child that cannot drop privileges, that
+ * still has them (it can read the mode 0 file .pc-priv, as with a
+ * capability), or that dies, makes the test UNRESOLVED.
  */
 static int unprivileged(int (*fn)(void))
 {
@@ -82,11 +88,18 @@ static int unprivileged(int (*fn)(void))
 			_exit(99);
 		if (geteuid() == 0)
 			_exit(99);
+		{
+			int pfd = open(".pc-priv", O_RDONLY);
+			if (pfd >= 0)
+				_exit(97);
+		}
 		_exit(fn());
 	}
 	while (waitpid(kid, &st, 0) == -1)
 		if (errno != EINTR)
 			pc_unresolved("waitpid failed: %s", pc_errname(errno));
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 97)
+		pc_unresolved("the child still has appropriate privileges (it can read a mode 0 file)");
 	if (!WIFEXITED(st) || WEXITSTATUS(st) == 99)
 		pc_unresolved("the unprivileged child could not run (status %#x)", (unsigned)st);
 	return WEXITSTATUS(st);
@@ -127,7 +140,7 @@ static int verdict(int r, int e1, int e2)
 {
 	if (r == 0)
 		return 1;
-	return errno == e1 || errno == e2 ? 0 : 10 + errno % 80;
+	return errno == e1 || errno == e2 ? 0 : 10 + (errno < 86 ? errno : 86);
 }
 
 /* The file's whole contents (at most size - 1 bytes) and its length. */
@@ -144,29 +157,94 @@ static long slurp(const char *path, char *buf, size_t size)
 	return n;
 }
 
-static volatile sig_atomic_t got_xfsz;
+/*
+ * Run fn in a child whose soft RLIMIT_FSIZE is LIMIT bytes, with SIGXFSZ
+ * blocked (where it exists) so that exceeding the limit cannot kill it.
+ * Returns what fn returns (0 to 96); a child that cannot set the limit
+ * makes the test UNRESOLVED.
+ */
+#define LIMIT 4096
 
-static void on_xfsz(int sig)
+static int limited(int (*fn)(void))
 {
-	(void)sig;
-	got_xfsz = 1;
+	pid_t kid;
+	int st;
+
+	kid = fork();
+	if (kid == -1)
+		pc_unresolved("fork failed: %s", pc_errname(errno));
+	if (kid == 0) {
+		struct rlimit rl;
+#ifdef SIGXFSZ
+		sigset_t set;
+
+		sigemptyset(&set);
+		sigaddset(&set, SIGXFSZ);
+		if (sigprocmask(SIG_BLOCK, &set, NULL) != 0)
+			_exit(98);
+#endif
+		if (getrlimit(RLIMIT_FSIZE, &rl) != 0 || (rl.rlim_max != RLIM_INFINITY && rl.rlim_max < LIMIT))
+			_exit(98);
+		rl.rlim_cur = LIMIT;
+		if (setrlimit(RLIMIT_FSIZE, &rl) != 0)
+			_exit(98);
+		_exit(fn());
+	}
+	while (waitpid(kid, &st, 0) == -1)
+		if (errno != EINTR)
+			pc_unresolved("waitpid failed: %s", pc_errname(errno));
+	if (!WIFEXITED(st) || WEXITSTATUS(st) == 98)
+		pc_unresolved("the child could not set a file size limit (status %#x)", (unsigned)st);
+	return WEXITSTATUS(st);
+}
+
+#ifdef SIGXFSZ
+static int xfsz_pending(void)
+{
+	sigset_t set;
+
+	return sigpending(&set) == 0 && sigismember(&set, SIGXFSZ) == 1;
+}
+#endif
+
+/* A socket bound to path (setup). */
+static void make_socket(const char *path)
+{
+	struct sockaddr_un sa;
+	int s = socket(AF_UNIX, SOCK_STREAM, 0);
+
+	pc_check(s >= 0, "socket failed: %s", pc_errname(errno));
+	memset(&sa, 0, sizeof sa);
+	sa.sun_family = AF_UNIX;
+	snprintf(sa.sun_path, sizeof sa.sun_path, "%s", path);
+	pc_check(bind(s, (struct sockaddr *)&sa, sizeof sa) == 0, "bind(%s) failed: %s", path, pc_errname(errno));
 }
 
 int main(void)
 {
 	pc_begin("XSH.umask.002");
 	{
-		int fd;
+		static const mode_t masks[2] = { 027, 0 };
+		static const unsigned want[2][3] = { { 0640, 0750, 0640 }, { 0666, 0777, 0666 } };
+		char f[16], d[16], p[16];
+		int fd, i;
 
 		pc_test();
-		(void)umask(027);
-		fd = open("f", O_WRONLY | O_CREAT | O_EXCL, 0666);
-		pc_check(fd >= 0, "open failed: %s", pc_errname(errno));
-		pc_check(mkdir("d", 0777) == 0, "mkdir failed: %s", pc_errname(errno));
-		pc_check(mkfifo("p", 0666) == 0, "mkfifo failed: %s", pc_errname(errno));
-		pc_check((lst("f").st_mode & 07777) == 0640, "the file has bits %#o", (unsigned)(lst("f").st_mode & 07777));
-		pc_check((lst("d").st_mode & 0777) == 0750, "the directory has bits %#o", (unsigned)(lst("d").st_mode & 0777));
-		pc_check((lst("p").st_mode & 07777) == 0640, "the FIFO has bits %#o", (unsigned)(lst("p").st_mode & 07777));
+		for (i = 0; i < 2; i++) {
+			snprintf(f, sizeof f, "f%d", i);
+			snprintf(d, sizeof d, "d%d", i);
+			snprintf(p, sizeof p, "p%d", i);
+			(void)umask(masks[i]);
+			fd = open(f, O_WRONLY | O_CREAT | O_EXCL, 0666);
+			if (fd < 0 || mkdir(d, 0777) != 0 || mkfifo(p, 0666) != 0)
+				pc_unresolved("could not create the files: %s", pc_errname(errno));
+			pc_check((lst(f).st_mode & 07777) == want[i][0], "under umask(%#o) the file has bits %#o", (unsigned)masks[i],
+				 (unsigned)(lst(f).st_mode & 07777));
+			pc_check((lst(d).st_mode & 0777) == want[i][1], "under umask(%#o) the directory has bits %#o",
+				 (unsigned)masks[i], (unsigned)(lst(d).st_mode & 0777));
+			pc_check((lst(p).st_mode & 07777) == want[i][2], "under umask(%#o) the FIFO has bits %#o", (unsigned)masks[i],
+				 (unsigned)(lst(p).st_mode & 07777));
+		}
 	}
 	pc_pass();
 }

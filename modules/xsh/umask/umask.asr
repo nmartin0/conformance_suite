@@ -15,7 +15,11 @@ class      required
 since      1988
 says       Under umask(027), open(..., O_CREAT, 0666) makes a file with bits
            0640, mkdir(..., 0777) a directory with 0750, and mkfifo(...,
-           0666) a FIFO with 0640.
+           0666) a FIFO with 0640; under umask(0) the same calls give 0666,
+           0777 and 0666.
+note       A default ACL on the working directory replaces the mask (XBD
+           4.5 allows additional access control mechanisms); run the
+           suite where none is set.
 test       t/002-clears-bits.c
 
 assertion  XSH.umask.003
@@ -30,7 +34,20 @@ test       t/003-svtx-ignored.c
 assertion  XSH.umask.004
 anchor     functions/umask.html#RETURN VALUE
 class      required
-since      2008
-says       After umask(0751), old = umask(0); umask(old); a further umask(022)
-           returns 0751.
+since      2024
+says       After umask(0751 | S_ISUID | S_ISGID | S_ISVTX) (S_ISVTX where
+           defined), old = umask(0) and
+           umask(old), a further umask(0) returns permission bits 0751, and
+           open(..., O_CREAT, 0777) and mkdir(..., 0777) give the same modes
+           as before the round trip.
 test       t/004-round-trip.c
+
+assertion  XSH.umask.005
+anchor     functions/umask.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       Under umask(01022), mkdir(..., 01777) makes a directory with bits
+           01755 (S_ISVTX ignored in the mask; mkdir() keeps S_ISVTX of mode
+           on XSI systems, XSH.mkdir.003).
+test       t/005-svtx-not-applied.c
