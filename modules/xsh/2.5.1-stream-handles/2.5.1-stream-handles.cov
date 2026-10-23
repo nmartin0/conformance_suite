@@ -1,0 +1,47 @@
+# 2.5.1-stream-handles.cov - XSH 2.5.1 Interaction of File Descriptors and Standard I/O Streams.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Most of the section is rules for applications; the one requirement on the
+# implementation is the guarantee (bcc6ce84) that holds when they are kept.
+
+2.5.1:2bcadd82    none  an introduction
+2.5.1:2432e928    none  states the CX status
+2.5.1:f65bd5dc    none  a definition
+2.5.1:f8158686    none  a definition
+2.5.1:9c8f5bd8    none  a definition
+2.5.1:860b3d31    none  examples
+2.5.1:d7e06762    none  examples
+2.5.1:ba577820    none  a definition
+2.5.1:83394831    none  a definition
+2.5.1:fc174445    none  a definition
+2.5.1:ee5fb316    app
+2.5.1:5df8c0b9    none  undefined
+2.5.1:1f4e97d9    none  a definition; freopen() with a null filename is implementation-defined
+2.5.1:bda513bf    none  examples
+2.5.1:e3f18b59    app
+2.5.1:5be10115    none  a definition
+2.5.1:9f58bb6b    app
+2.5.1:f1fde3f4    none  a definition
+2.5.1:147afd89    none  a definition (XSH 2.5.1 tests 008 to 010 use two processes)
+2.5.1:d5e59121    none  a note
+2.5.1:3d225a2c    app
+2.5.1:56dd94cb    app
+2.5.1:11d98680    XSH.2.5.1-stream-handles.009 XSH.2.5.1-stream-handles.010  # the handle is never accessed in a child that only calls _exit() or an exec function: pending data is not written twice
+2.5.1:dcfdad7a    none  a rule for applications
+2.5.1:c906a3d1    none  a rule for applications
+2.5.1:2f1a7a61    XSH.2.5.1-stream-handles.001 XSH.2.5.1-stream-handles.002 XSH.2.5.1-stream-handles.007  # descriptors used with no action between
+2.5.1:ccb42771    none  a rule for applications
+2.5.1:8cba4c48    XSH.2.5.1-stream-handles.004
+2.5.1:0016e27b    XSH.2.5.1-stream-handles.005  # disputed (Q-33)
+2.5.1:d20b7423    app
+2.5.1:3bc67232    none  only input could be affected, and whether input is seen exactly once is implementation-defined
+2.5.1:4689d88f    app
+2.5.1:10da59ab    none  a heading
+2.5.1:f7fa686f    app
+2.5.1:efedf7d9    none  undefined
+2.5.1:8f2c50d1    none  examples
+2.5.1:b55a3b0d    XSH.2.5.1-stream-handles.010
+2.5.1:bcc6ce84    partial XSH.2.5.1-stream-handles.001 XSH.2.5.1-stream-handles.002 XSH.2.5.1-stream-handles.003 XSH.2.5.1-stream-handles.004 XSH.2.5.1-stream-handles.005 XSH.2.5.1-stream-handles.006 XSH.2.5.1-stream-handles.007 XSH.2.5.1-stream-handles.008 XSH.2.5.1-stream-handles.009 XSH.2.5.1-stream-handles.010 XSH.2.5.1-stream-handles.011  # writes to files through descriptors, dup(), fdopen(), fork() and exec; pipes, sockets and popen() streams are not checked
+2.5.1:c372259b    none  implementation-defined
+2.5.1:c5015c0b    none  a definition
+2.5.1:183acb3c    none  a definition

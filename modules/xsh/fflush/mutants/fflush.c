@@ -69,6 +69,28 @@ int fflush(FILE *f)
 		return real_fflush(f);
 	if (IS("noop") && f != NULL && !input_only(f))
 		return 0;
+	if (IS("cached_offset") && f != NULL && !input_only(f)) {
+		/* writes from where this stream last left the file, as if no other handle had moved it */
+		static FILE *cf[16];
+		static off_t co[16];
+		int i, k = -1, r;
+
+		for (i = 0; i < 16; i++)
+			if (cf[i] == f)
+				k = i;
+		if (k >= 0)
+			(void)lseek(fileno(f), co[k], SEEK_SET);
+		r = real_fflush(f);
+		if (k < 0)
+			for (i = 0; i < 16 && k < 0; i++)
+				if (cf[i] == NULL)
+					k = i;
+		if (k >= 0) {
+			cf[k] = f;
+			co[k] = lseek(fileno(f), 0, SEEK_CUR);
+		}
+		return r;
+	}
 	if (IS("null_noop") && f == NULL)
 		return 0;
 	if (IS("null_success_on_error") && f == NULL) {

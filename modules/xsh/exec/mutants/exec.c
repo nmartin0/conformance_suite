@@ -107,6 +107,9 @@ static void before(const char *m)
 	int fd, sig;
 	struct sigaction sa;
 
+	if (IS("flushes_streams"))
+		(void)fflush(NULL);	/* writes the old image's buffered data */
+
 	for (fd = 3; fd < 1024; fd++) {
 		int fl = fcntl(fd, F_GETFD);
 		if (fl == -1)
