@@ -8,11 +8,13 @@
  */
 #define _GNU_SOURCE 1
 #include <dlfcn.h>
+#include <pthread.h>
 #include <errno.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -59,6 +61,15 @@ static __attribute__((unused)) int highest_pending(const sigset_t *set)
 	return 0;
 }
 
+/* The highest-numbered pending signal of any kind, or 0. */
+static __attribute__((unused)) int highest_any(void)
+{
+	sigset_t all;
+
+	sigfillset(&all);
+	return highest_pending(&all);
+}
+
 /* Takes one pending occurrence of sig without waiting; 0 if none. */
 static __attribute__((unused)) int take(int sig, siginfo_t *info)
 {
@@ -87,6 +98,26 @@ int sigsuspend(const sigset_t *mask)
 	if (IS("mask_ignored")) {
 		sigemptyset(&none);
 		mask = &none;
+	}
+	if (IS("mask_union")) {
+		/* adds the new mask to the old one instead of replacing it */
+		int s;
+		(void)sigprocmask(SIG_BLOCK, NULL, &none);
+		for (s = 1; s < 65; s++)
+			if (sigismember(mask, s) == 1)
+				sigaddset(&none, s);
+		mask = &none;
+	}
+	if (IS("reject_unblockable") && (sigismember(mask, SIGKILL) == 1 || sigismember(mask, SIGSTOP) == 1)) {
+		errno = EINVAL;
+		return -1;
+	}
+	if (IS("steals_pending")) {
+		/* moves process-pending signals the mask blocks onto this thread */
+		int s;
+		for (s = 1; s < 65; s++)
+			if (sigismember(mask, s) == 1 && take(s, NULL))
+				(void)pthread_kill(pthread_self(), s);
 	}
 	r = real_sigsuspend(mask);
 	if (IS("mask_not_restored"))

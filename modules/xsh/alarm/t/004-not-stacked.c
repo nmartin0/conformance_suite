@@ -1,9 +1,10 @@
 /*
- * Alarms are not stacked: only one SIGALRM is generated.
+ * Alarms are not stacked: a replaced request does not fire.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.alarm.004
  * MUTANT    alarm.stacked
+ * MUTANT    alarm.no_reschedule
  */
 #include "pc.h"
 #include <errno.h>
@@ -88,6 +89,63 @@ static void reap_sender(pid_t c)
 		;
 }
 
+/*
+ * A child that sends sig to this process after ms milliseconds and then
+ * every `every' ms, until stop_sender() kills it (so a signal sent before
+ * the caller started waiting cannot leave it waiting for ever).
+ */
+static pid_t send_repeat(int sig, long ms, long every)
+{
+	pid_t parent = getpid(), c = fork();
+
+	if (c == -1)
+		pc_unresolved("fork failed");
+	if (c == 0) {
+		struct timespec ts;
+		ts.tv_sec = ms / 1000;
+		ts.tv_nsec = (ms % 1000) * 1000000L;
+		for (;;) {
+			while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
+				;
+			if (kill(parent, sig) != 0)
+				_exit(0);
+			ts.tv_sec = every / 1000;
+			ts.tv_nsec = (every % 1000) * 1000000L;
+		}
+	}
+	return c;
+}
+
+static void stop_sender(pid_t c)
+{
+	(void)kill(c, SIGKILL);
+	reap_sender(c);
+}
+
+/* A watchdog: a caught SIGALRM after s seconds sets watchdog_fired. */
+static volatile sig_atomic_t watchdog_fired;
+
+static void on_watchdog(int sig)
+{
+	(void)sig;
+	watchdog_fired = 1;
+}
+
+static void watchdog(unsigned s)
+{
+	catch_sig(SIGALRM, on_watchdog);
+	(void)alarm(s);
+}
+
+/* Waits for a byte on fd (a child saying it is about to block). */
+static void await_ready(int fd)
+{
+	char ch;
+
+	if (read(fd, &ch, 1) != 1)
+		pc_unresolved("the child did not start");
+}
+
 /* Waits up to ms for SIGALRM (blocked); returns the delay in ms, or -1. */
 static long await_alrm(long t0, long ms)
 {
@@ -103,15 +161,17 @@ static long await_alrm(long t0, long ms)
 
 int main(void)
 {
-	long t0;
+	long t0, dt;
 
 	pc_begin("XSH.alarm.004");
 	block(SIGALRM);
 	pc_test();
 	t0 = now_ms();
+	(void)alarm(2);
 	(void)alarm(1);
-	(void)alarm(1);
-	pc_check(await_alrm(t0, 10000) != -1, "no SIGALRM");
-	pc_check(await_alrm(t0, 2000) == -1, "a second SIGALRM came: alarms were stacked");
+	dt = await_alrm(t0, 10000);
+	pc_check(dt != -1, "no SIGALRM");
+	pc_check(dt >= 990 && dt < 1900, "SIGALRM came %ld ms after alarm(1), expected about 1 s", dt);
+	pc_check(await_alrm(now_ms(), 2500) == -1, "a second SIGALRM came: the replaced alarm(2) request still fired");
 	pc_pass();
 }

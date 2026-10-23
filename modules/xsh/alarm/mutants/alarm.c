@@ -8,11 +8,13 @@
  */
 #define _GNU_SOURCE 1
 #include <dlfcn.h>
+#include <pthread.h>
 #include <errno.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -57,6 +59,15 @@ static __attribute__((unused)) int highest_pending(const sigset_t *set)
 		if (sigismember(set, s) == 1 && sigismember(&p, s) == 1)
 			return s;
 	return 0;
+}
+
+/* The highest-numbered pending signal of any kind, or 0. */
+static __attribute__((unused)) int highest_any(void)
+{
+	sigset_t all;
+
+	sigfillset(&all);
+	return highest_pending(&all);
 }
 
 /* Takes one pending occurrence of sig without waiting; 0 if none. */
@@ -106,15 +117,28 @@ unsigned alarm(unsigned sec)
 		return r;
 	}
 	if (IS("stacked") && sec > 0 && left() != 0) {
-		/* the earlier alarm still goes off too, from a helper */
-		pid_t me = getpid(), c = fork();
+		/*
+		 * The replaced request still goes off at its own time, sent by a
+		 * grandchild (its parent exits at once and is reaped here).
+		 */
+		struct itimerval it;
+		pid_t me = getpid(), c;
+		(void)getitimer(ITIMER_REAL, &it);
+		c = fork();
 		if (c == 0) {
-			struct timespec ts = { (time_t)sec, 300000000L };
-			while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
-				;
-			(void)kill(me, SIGALRM);
+			if (fork() == 0) {
+				struct timespec ts;
+				ts.tv_sec = it.it_value.tv_sec;
+				ts.tv_nsec = it.it_value.tv_usec * 1000L;
+				while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
+					;
+				(void)kill(me, SIGALRM);
+			}
 			_exit(0);
 		}
+		if (c > 0)
+			while (waitpid(c, NULL, 0) == -1 && errno == EINTR)
+				;
 	}
 	r = real_alarm(sec);
 	if (IS("returns_zero"))

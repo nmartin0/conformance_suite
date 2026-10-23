@@ -4,16 +4,17 @@
 assertion  XSH.sigwait.001
 anchor     functions/sigwait.html#DESCRIPTION
 class      required
-since      2008
-says       With SIGUSR1 blocked and pending, sigwait() on a set holding it
-           returns 0 with *sig set to SIGUSR1, the signal is no longer
-           pending, and its handler does not run.
+since      2001
+says       With SIGUSR1 and SIGUSR2 blocked and pending, sigwait() on a set
+           holding only SIGUSR1 returns 0 with *sig set to SIGUSR1; SIGUSR1
+           is no longer pending, SIGUSR2 still is, and no handler runs.
+uses       XSH.sigpending.001
 test       t/001-takes-pending.c
 
 assertion  XSH.sigwait.002
 anchor     functions/sigwait.html#DESCRIPTION
 class      required
-since      2008
+since      2001
 says       With nothing pending, sigwait() returns only after a signal in the
            set, sent 300 ms later, becomes pending.
 test       t/002-waits.c
@@ -24,6 +25,7 @@ class      required
 since      2008
 says       With two occurrences of SIGRTMIN queued by sigqueue() (SA_SIGINFO
            set), sigwait() takes one and the other is still pending.
+uses       XSH.sigqueue.001 XSH.sigpending.001
 test       t/003-queued-remain.c
 
 assertion  XSH.sigwait.004
@@ -39,9 +41,8 @@ anchor     functions/sigwait.html#DESCRIPTION
 class      required
 since      2008
 says       With two threads in sigwait() for SIGUSR1, pthread_kill() to the
-           second makes it return with SIGUSR1, and the first goes on
-           waiting.
-nomutant   which thread a directed signal wakes is decided by the kernel
+           second makes it return with SIGUSR1 (within 2 s), and the first
+           goes on waiting.
 test       t/005-thread-directed.c
 
 assertion  XSH.sigwait.006
@@ -50,5 +51,4 @@ class      required
 since      2008
 says       With two threads in sigwait() for SIGUSR1, one SIGUSR1 sent to the
            process returns exactly one of them.
-nomutant   which waiting thread gets a signal is decided by the kernel
 test       t/006-one-waiter.c

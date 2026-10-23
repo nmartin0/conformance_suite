@@ -5,6 +5,7 @@
  * ASSERTION XSH.sigtimedwait.004
  * MUTANT    sigtimedwait.zero_fails
  * MUTANT    sigtimedwait.info_lost
+ * MUTANT    sigtimedwait.any_pending
  */
 #include "pc.h"
 #include <errno.h>
@@ -89,21 +90,81 @@ static void reap_sender(pid_t c)
 		;
 }
 
+/*
+ * A child that sends sig to this process after ms milliseconds and then
+ * every `every' ms, until stop_sender() kills it (so a signal sent before
+ * the caller started waiting cannot leave it waiting for ever).
+ */
+static pid_t send_repeat(int sig, long ms, long every)
+{
+	pid_t parent = getpid(), c = fork();
+
+	if (c == -1)
+		pc_unresolved("fork failed");
+	if (c == 0) {
+		struct timespec ts;
+		ts.tv_sec = ms / 1000;
+		ts.tv_nsec = (ms % 1000) * 1000000L;
+		for (;;) {
+			while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
+				;
+			if (kill(parent, sig) != 0)
+				_exit(0);
+			ts.tv_sec = every / 1000;
+			ts.tv_nsec = (every % 1000) * 1000000L;
+		}
+	}
+	return c;
+}
+
+static void stop_sender(pid_t c)
+{
+	(void)kill(c, SIGKILL);
+	reap_sender(c);
+}
+
+/* A watchdog: a caught SIGALRM after s seconds sets watchdog_fired. */
+static volatile sig_atomic_t watchdog_fired;
+
+static void on_watchdog(int sig)
+{
+	(void)sig;
+	watchdog_fired = 1;
+}
+
+static void watchdog(unsigned s)
+{
+	catch_sig(SIGALRM, on_watchdog);
+	(void)alarm(s);
+}
+
+/* Waits for a byte on fd (a child saying it is about to block). */
+static void await_ready(int fd)
+{
+	char ch;
+
+	if (read(fd, &ch, 1) != 1)
+		pc_unresolved("the child did not start");
+}
+
 int main(void)
 {
-	sigset_t s = set_of(SIGUSR1, 0);
+	sigset_t s = set_of(SIGUSR1, 0), p;
 	struct timespec zero = { 0, 0 };
 	siginfo_t si;
 	int r;
 
 	pc_begin("XSH.sigtimedwait.004");
 	block(SIGUSR1);
-	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
+	block(SIGUSR2);
+	pc_check(kill(getpid(), SIGUSR2) == 0 && kill(getpid(), SIGUSR1) == 0, "kill failed");
 	memset(&si, 0, sizeof si);
 	pc_test();
 	r = sigtimedwait(&s, &si, &zero);
 	pc_check(r == SIGUSR1, "sigtimedwait() gave %d (%s) with SIGUSR1 pending", r, r == -1 ? pc_errname(errno) : "");
 	pc_check(si.si_signo == SIGUSR1, "si_signo is %d", si.si_signo);
 	pc_check(si.si_code == SI_USER, "si_code is %d, expected SI_USER", si.si_code);
+	pc_check(si.si_pid == getpid(), "si_pid is %ld, expected %ld", (long)si.si_pid, (long)getpid());
+	pc_check(sigpending(&p) == 0 && sigismember(&p, SIGUSR2) == 1, "SIGUSR2, not in the set, is no longer pending");
 	pc_pass();
 }

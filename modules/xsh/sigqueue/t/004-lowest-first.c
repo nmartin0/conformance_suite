@@ -87,6 +87,63 @@ static void reap_sender(pid_t c)
 		;
 }
 
+/*
+ * A child that sends sig to this process after ms milliseconds and then
+ * every `every' ms, until stop_sender() kills it (so a signal sent before
+ * the caller started waiting cannot leave it waiting for ever).
+ */
+static pid_t send_repeat(int sig, long ms, long every)
+{
+	pid_t parent = getpid(), c = fork();
+
+	if (c == -1)
+		pc_unresolved("fork failed");
+	if (c == 0) {
+		struct timespec ts;
+		ts.tv_sec = ms / 1000;
+		ts.tv_nsec = (ms % 1000) * 1000000L;
+		for (;;) {
+			while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
+				;
+			if (kill(parent, sig) != 0)
+				_exit(0);
+			ts.tv_sec = every / 1000;
+			ts.tv_nsec = (every % 1000) * 1000000L;
+		}
+	}
+	return c;
+}
+
+static void stop_sender(pid_t c)
+{
+	(void)kill(c, SIGKILL);
+	reap_sender(c);
+}
+
+/* A watchdog: a caught SIGALRM after s seconds sets watchdog_fired. */
+static volatile sig_atomic_t watchdog_fired;
+
+static void on_watchdog(int sig)
+{
+	(void)sig;
+	watchdog_fired = 1;
+}
+
+static void watchdog(unsigned s)
+{
+	catch_sig(SIGALRM, on_watchdog);
+	(void)alarm(s);
+}
+
+/* Waits for a byte on fd (a child saying it is about to block). */
+static void await_ready(int fd)
+{
+	char ch;
+
+	if (read(fd, &ch, 1) != 1)
+		pc_unresolved("the child did not start");
+}
+
 static volatile sig_atomic_t order[2], n;
 
 static void hi(int sig, siginfo_t *si, void *uc)
@@ -117,7 +174,15 @@ int main(void)
 	pc_check(sigqueue(getpid(), SIGRTMIN + 2, v) == 0 && sigqueue(getpid(), SIGRTMIN + 1, v) == 0, "sigqueue failed");
 	pc_test();
 	pc_check(pthread_sigmask(SIG_UNBLOCK, &s, NULL) == 0, "pthread_sigmask failed");
-	pc_check(n == 2, "%d deliveries, expected 2", (int)n);
+	pc_check(n >= 1, "nothing was delivered on unblocking");
+	{
+		/* the second may come after pthread_sigmask() returns */
+		struct timespec step = { 0, 10000000 };
+		int i;
+		for (i = 0; i < 100 && n < 2; i++)
+			(void)nanosleep(&step, NULL);
+	}
+	pc_check(n == 2, "%d deliveries within 1 s, expected 2", (int)n);
 	pc_check(order[0] == SIGRTMIN + 1, "SIGRTMIN+%d was delivered first, expected SIGRTMIN+1", (int)order[0] - SIGRTMIN);
 	pc_pass();
 }

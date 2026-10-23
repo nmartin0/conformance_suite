@@ -5,9 +5,12 @@ assertion  XSH.sigtimedwait.001
 anchor     functions/sigtimedwait.html#DESCRIPTION
 class      required
 since      2008
-says       sigwaitinfo() on a SIGRTMIN queued by sigqueue() with value 77
-           returns SIGRTMIN and stores si_signo SIGRTMIN, si_code SI_QUEUE
-           and si_value.sival_int 77.
+says       With SIGRTMIN (SA_SIGINFO set) queued twice by sigqueue(), with
+           values 77 then 78, sigwaitinfo() returns SIGRTMIN with si_signo
+           SIGRTMIN, si_code SI_QUEUE, si_pid and si_uid the caller's
+           process ID and real user ID, and si_value 77; a second call
+           returns the value 78.
+uses       XSH.sigqueue.001
 test       t/001-info.c
 
 assertion  XSH.sigtimedwait.002
@@ -16,7 +19,7 @@ class      required
 since      2008
 says       With nothing pending, sigtimedwait() with a 300 ms timeout returns
            -1 with errno EAGAIN, no earlier than 300 ms after the call
-           (CLOCK_MONOTONIC).
+           (CLOCK_MONOTONIC, in whole milliseconds).
 test       t/002-timeout.c
 
 assertion  XSH.sigtimedwait.003
@@ -31,9 +34,10 @@ assertion  XSH.sigtimedwait.004
 anchor     functions/sigtimedwait.html#DESCRIPTION
 class      required
 since      2008
-says       With SIGUSR1 blocked and pending, sigtimedwait() with a zero
-           timeout returns SIGUSR1 with si_signo SIGUSR1 and si_code
-           SI_USER, as sigwaitinfo() would.
+says       With SIGUSR1 and SIGUSR2 blocked and pending, sigtimedwait() on a
+           set holding only SIGUSR1, with a zero timeout, returns SIGUSR1
+           with si_signo SIGUSR1, si_code SI_USER and si_pid the caller's,
+           as sigwaitinfo() would; SIGUSR2 stays pending.
 test       t/004-pending-zero.c
 
 assertion  XSH.sigtimedwait.005
@@ -59,4 +63,5 @@ since      2008
 says       After sigwaitinfo() takes the only occurrence of a blocked SIGUSR1,
            SIGUSR1 is no longer pending, and a zero-timeout sigtimedwait()
            fails with EAGAIN.
+uses       XSH.sigpending.001
 test       t/007-pending-reset.c

@@ -89,6 +89,63 @@ static void reap_sender(pid_t c)
 		;
 }
 
+/*
+ * A child that sends sig to this process after ms milliseconds and then
+ * every `every' ms, until stop_sender() kills it (so a signal sent before
+ * the caller started waiting cannot leave it waiting for ever).
+ */
+static pid_t send_repeat(int sig, long ms, long every)
+{
+	pid_t parent = getpid(), c = fork();
+
+	if (c == -1)
+		pc_unresolved("fork failed");
+	if (c == 0) {
+		struct timespec ts;
+		ts.tv_sec = ms / 1000;
+		ts.tv_nsec = (ms % 1000) * 1000000L;
+		for (;;) {
+			while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
+				;
+			if (kill(parent, sig) != 0)
+				_exit(0);
+			ts.tv_sec = every / 1000;
+			ts.tv_nsec = (every % 1000) * 1000000L;
+		}
+	}
+	return c;
+}
+
+static void stop_sender(pid_t c)
+{
+	(void)kill(c, SIGKILL);
+	reap_sender(c);
+}
+
+/* A watchdog: a caught SIGALRM after s seconds sets watchdog_fired. */
+static volatile sig_atomic_t watchdog_fired;
+
+static void on_watchdog(int sig)
+{
+	(void)sig;
+	watchdog_fired = 1;
+}
+
+static void watchdog(unsigned s)
+{
+	catch_sig(SIGALRM, on_watchdog);
+	(void)alarm(s);
+}
+
+/* Waits for a byte on fd (a child saying it is about to block). */
+static void await_ready(int fd)
+{
+	char ch;
+
+	if (read(fd, &ch, 1) != 1)
+		pc_unresolved("the child did not start");
+}
+
 /* A child that reports the siginfo_t of the first SIGRTMIN it gets. */
 static int kw = -1;
 
@@ -136,15 +193,21 @@ static pid_t rt_kid(int p[2])
 
 int main(void)
 {
-	int p[2], ready[2];
-	char b[64], ch;
+	int p[2], ready[2], life[2], r1, e1, r2, e2;
+	char b[64];
 	union sigval v;
-	pid_t c, leader, member;
+	pid_t c, leader;
+	ssize_t k;
 
 	pc_begin("XSH.sigqueue.002");
-	pc_check(pipe(p) == 0 && pipe(ready) == 0, "pipe failed");
+	pc_check(pipe(p) == 0, "pipe failed");
 	c = rt_kid(p);
-	/* A leader that leaves a member behind in its group, then exits. */
+	/*
+	 * A leader that leaves a member behind in its own group, then exits.
+	 * The member lives until the lifeline closes, which is when this
+	 * process ends, however it ends.
+	 */
+	pc_check(pipe(ready) == 0 && pipe(life) == 0, "pipe failed");
 	leader = fork();
 	pc_check(leader != -1, "fork failed");
 	if (leader == 0) {
@@ -153,35 +216,36 @@ int main(void)
 			_exit(99);
 		m = fork();
 		if (m == 0) {
+			char ch;
+			(void)close(life[1]);
 			(void)write(ready[1], "r", 1);
-			for (;;)
-				(void)pause();
+			(void)read(life[0], &ch, 1);
+			_exit(0);
 		}
 		_exit(m == -1 ? 99 : 0);
 	}
 	(void)close(ready[1]);
-	pc_check(read(ready[0], &ch, 1) == 1, "the group member did not start");
+	(void)close(life[0]);
+	await_ready(ready[0]);
 	pc_check(waitpid(leader, NULL, 0) == leader, "waitpid failed");
-	member = -leader;	/* the group lives on */
 	v.sival_int = 1;
 	pc_test();
+	r1 = sigqueue(c, 0, v);
+	e1 = errno;
+	r2 = sigqueue(leader, 0, v);
+	e2 = errno;
 	{
-		int r = sigqueue(c, 0, v), e = errno;
 		int fl = fcntl(p[0], F_GETFL);
 		struct timespec ts = { 0, 300000000 };
-		ssize_t k;
 		(void)nanosleep(&ts, NULL);
 		(void)fcntl(p[0], F_SETFL, fl | O_NONBLOCK);
 		k = read(p[0], b, sizeof b);
-		(void)kill(c, SIGKILL);
-		(void)waitpid(c, NULL, 0);
-		pc_check(r == 0, "sigqueue(child, 0) failed: %s", pc_errname(e));
-		pc_check(k <= 0, "sigqueue(child, 0) sent a signal");
 	}
-	{
-		int r = sigqueue(leader, 0, v), e = errno;
-		(void)kill(member, SIGKILL);
-		pc_check(r == -1 && e == ESRCH, "sigqueue(<exited leader>, 0) gave %d (%s), expected ESRCH", r, pc_errname(e));
-	}
+	(void)kill(c, SIGKILL);
+	(void)waitpid(c, NULL, 0);
+	(void)kill(-leader, SIGKILL);
+	pc_check(r1 == 0, "sigqueue(child, 0) failed: %s", pc_errname(e1));
+	pc_check(k <= 0, "sigqueue(child, 0) sent a signal");
+	pc_check(r2 == -1 && e2 == ESRCH, "sigqueue(<exited leader>, 0) gave %d (%s), expected ESRCH", r2, pc_errname(e2));
 	pc_pass();
 }

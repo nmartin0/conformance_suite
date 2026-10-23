@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.sigwait.005
+ * MUTANT    sigwait.not_cleared
  */
 #include "pc.h"
 #include <errno.h>
@@ -87,6 +88,63 @@ static void reap_sender(pid_t c)
 		;
 }
 
+/*
+ * A child that sends sig to this process after ms milliseconds and then
+ * every `every' ms, until stop_sender() kills it (so a signal sent before
+ * the caller started waiting cannot leave it waiting for ever).
+ */
+static pid_t send_repeat(int sig, long ms, long every)
+{
+	pid_t parent = getpid(), c = fork();
+
+	if (c == -1)
+		pc_unresolved("fork failed");
+	if (c == 0) {
+		struct timespec ts;
+		ts.tv_sec = ms / 1000;
+		ts.tv_nsec = (ms % 1000) * 1000000L;
+		for (;;) {
+			while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
+				;
+			if (kill(parent, sig) != 0)
+				_exit(0);
+			ts.tv_sec = every / 1000;
+			ts.tv_nsec = (every % 1000) * 1000000L;
+		}
+	}
+	return c;
+}
+
+static void stop_sender(pid_t c)
+{
+	(void)kill(c, SIGKILL);
+	reap_sender(c);
+}
+
+/* A watchdog: a caught SIGALRM after s seconds sets watchdog_fired. */
+static volatile sig_atomic_t watchdog_fired;
+
+static void on_watchdog(int sig)
+{
+	(void)sig;
+	watchdog_fired = 1;
+}
+
+static void watchdog(unsigned s)
+{
+	catch_sig(SIGALRM, on_watchdog);
+	(void)alarm(s);
+}
+
+/* Waits for a byte on fd (a child saying it is about to block). */
+static void await_ready(int fd)
+{
+	char ch;
+
+	if (read(fd, &ch, 1) != 1)
+		pc_unresolved("the child did not start");
+}
+
 static volatile int got[2] = { 0, 0 };
 
 static void *waiter(void *arg)
@@ -102,7 +160,8 @@ static void *waiter(void *arg)
 int main(void)
 {
 	pthread_t t[2];
-	struct timespec ts = { 0, 200000000 };
+	struct timespec ts = { 0, 200000000 }, step = { 0, 10000000 };
+	int i;
 
 	pc_begin("XSH.sigwait.005");
 	block(SIGUSR1);
@@ -111,9 +170,11 @@ int main(void)
 	    pthread_create(&t[1], NULL, waiter, (void *)1L) == 0, "pthread_create failed");
 	(void)nanosleep(&ts, NULL);	/* both are waiting */
 	pc_check(pthread_kill(t[1], SIGUSR1) == 0, "pthread_kill failed");
+	for (i = 0; i < 200 && !got[1]; i++)
+		(void)nanosleep(&step, NULL);
+	pc_check(got[1] == 1, "the thread the signal was sent to did not return within 2 s");
 	(void)pthread_join(t[1], NULL);
 	(void)nanosleep(&ts, NULL);
-	pc_check(got[1] == 1, "the thread the signal was sent to did not return");
 	pc_check(got[0] == 0, "the other waiting thread returned too");
 	pc_check(pthread_kill(t[0], SIGUSR1) == 0, "pthread_kill failed");
 	(void)pthread_join(t[0], NULL);

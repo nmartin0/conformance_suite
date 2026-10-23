@@ -8,11 +8,13 @@
  */
 #define _GNU_SOURCE 1
 #include <dlfcn.h>
+#include <pthread.h>
 #include <errno.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -59,6 +61,15 @@ static __attribute__((unused)) int highest_pending(const sigset_t *set)
 	return 0;
 }
 
+/* The highest-numbered pending signal of any kind, or 0. */
+static __attribute__((unused)) int highest_any(void)
+{
+	sigset_t all;
+
+	sigfillset(&all);
+	return highest_pending(&all);
+}
+
 /* Takes one pending occurrence of sig without waiting; 0 if none. */
 static __attribute__((unused)) int take(int sig, siginfo_t *info)
 {
@@ -81,6 +92,10 @@ int sigwait(const sigset_t *set, int *sig)
 		return real_sigwait(set, sig);
 	if (IS("no_wait") && highest_pending(set) == 0)
 		return EINTR;
+	if (IS("any_pending") && (h = highest_any()) != 0 && take(h, NULL)) {
+		*sig = h;	/* takes a pending signal outside set */
+		return 0;
+	}
 	if (IS("highest_first") && (h = highest_pending(set)) != 0 && take(h, NULL)) {
 		*sig = h;
 		return 0;

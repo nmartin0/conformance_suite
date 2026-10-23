@@ -44,6 +44,12 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-30 | killpg() missing from the generating-function lists | editorial | XSH.pthread_sigmask.011 |
 | SI-31 | pthread_sigmask(): no-EINTR sentence covers sigprocmask() | editorial | (not tested) |
 | SI-32 | sigwaitinfo()/sigtimedwait(): wait ends on a caught signal, but [EINTR] is may-fail | editorial | (not tested) |
+| SI-33 | sigwait(): leftover "if the implementation supports queued signals" | editorial | XSH.sigwait.003 |
+| SI-34 | sigwait(): implementation-defined remainder sentence overlaps the queued-signal rule | editorial | XSH.sigwait.003 |
+| SI-35 | sigqueue(): "the pending, unblocked signal" vs kill()'s "at least one" | editorial | XSH.sigqueue.003 |
+| SI-36 | sigtimedwait() RATIONALE: a "value" argument that does not exist | editorial | (not tested) |
+| SI-37 | sigtimedwait() CHANGE HISTORY: RETURN VALUE named for an ERRORS sentence | editorial | (not tested) |
+| SI-38 | alarm() SEE ALSO: empty link to itself | editorial | (not tested) |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
@@ -57,3 +63,5 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-11 | raise()/pthread_kill(): delivery before return (raise() settled by its own rule) | question | XSH.raise.001 |
 | Q-12 | kill() with the most negative pid_t | question | (not tested) |
 | Q-13 | alarm(): rounding of the seconds returned | question | XSH.alarm.002, XSH.alarm.003 |
+| Q-14 | alarm(): may SIGALRM come early? | question | XSH.alarm.001 |
+| Q-15 | pause()/sigsuspend(): delivery to the calling thread? | question | XSH.sigsuspend.006 |

@@ -461,6 +461,54 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **posixcheck meanwhile:** the interrupted case is not tested (the unit is `partial`; [EINTR] is `optional`).
 - **Suggested change:** "...until one or more signals in set become pending or, if the implementation detects the [EINTR] condition, until it is interrupted by an unblocked, caught signal" (editorial).
 
+### SI-33: sigwait(): "if the implementation supports queued signals" is left over
+
+- **Where:** XSH `sigwait()`, DESCRIPTION.
+- **What the text says:** the rule that the rest of a signal's queue stays queued is conditional on the implementation supporting queued signals.
+- **Why it is a problem:** queued signals have been part of the Base since Issue 7 (the CHANGE HISTORY says the Realtime Signals Extension functionality moved to the Base), so the condition is always true and suggests an option that no longer exists (compare SI-25).
+- **posixcheck meanwhile:** XSH.sigwait.003 tests the rule unconditionally.
+- **Suggested change:** delete the condition (editorial).
+
+### SI-34: sigwait(): the implementation-defined remainder sentence overlaps the queued-signal rule
+
+- **Where:** XSH `sigwait()`, DESCRIPTION; XSH 2.4.1.
+- **What the text says:** with several pending instances of one signal number before the call, it is implementation-defined whether any remain pending after a successful return; the next sentence requires the remainder of a queue to stay queued.
+- **Why it is a problem:** read literally, the first sentence also covers queued instances, which the second sentence settles the other way. XSH 2.4.1 avoids this by limiting the implementation-defined case to circumstances other than those in which queuing is required.
+- **posixcheck meanwhile:** XSH.sigwait.003 follows the queued-signal rule; the unit for the first sentence is `impl`.
+- **Suggested change:** add the same limit to the first sentence (editorial).
+
+### SI-35: sigqueue(): "the pending, unblocked signal" does not say which
+
+- **Where:** XSH `sigqueue()`, DESCRIPTION; XSH `kill()`, DESCRIPTION.
+- **What the text says:** when the signal is generated for the sender, either it or "at least the pending, unblocked signal" is delivered to the calling thread before sigqueue() returns. kill() says "at least one pending unblocked signal".
+- **Why it is a problem:** the definite article points at a signal that has not been identified; kill()'s wording is what is meant.
+- **posixcheck meanwhile:** XSH.sigqueue.003 tests the case where the queued signal is the only one pending.
+- **Suggested change:** use kill()'s wording (editorial).
+
+### SI-36: sigtimedwait() RATIONALE names a "value" argument that does not exist
+
+- **Where:** XSH `sigtimedwait()`, RATIONALE (informative).
+- **What the text says:** sigwaitinfo() is said to return the queued value "in the value argument", and not to return it when "the value argument" is NULL.
+- **Why it is a problem:** the parameter is `info`, and it carries si_signo and si_code as well as the value.
+- **posixcheck meanwhile:** nothing to test.
+- **Suggested change:** say "in the siginfo_t structure pointed to by info" (editorial).
+
+### SI-37: sigtimedwait() CHANGE HISTORY: wording restored to the wrong section
+
+- **Where:** XSH `sigtimedwait()`, CHANGE HISTORY (Issue 6, XSH/TC2/D6/130).
+- **What the text says:** the entry says wording was restored in the RETURN VALUE section, and quotes the sentence that an implementation should only check for the error when no signal is pending and it is necessary to wait.
+- **Why it is a problem:** that sentence is under [EINVAL] in ERRORS, not in RETURN VALUE.
+- **posixcheck meanwhile:** nothing to test.
+- **Suggested change:** name the ERRORS section (editorial).
+
+### SI-38: alarm() SEE ALSO starts with an empty link to itself
+
+- **Where:** XSH `alarm()`, SEE ALSO (HTML edition).
+- **What the text says:** the first entry is the page's own name, linked to "#".
+- **Why it is a problem:** a page does not list itself; the entry looks left over from an edit.
+- **posixcheck meanwhile:** nothing to test.
+- **Suggested change:** delete the entry (editorial).
+
 ## Questions to raise
 
 These are consistent as written, but the intent or the fit with practice
@@ -593,6 +641,18 @@ is unclear.
 - **Where:** XSH `alarm()`, RETURN VALUE.
 - **Question:** a previous request with time left returns a non-zero value that is the number of seconds until it would have fired. The time left is rarely a whole number of seconds and no rounding is stated. With under a second left only rounding up gives a non-zero value; is rounding up (or to nearest, but at least 1) the intent for every fraction?
 - **posixcheck meanwhile:** XSH.alarm.002 expects 1 with under a second left (the only non-zero value of at most 1); XSH.alarm.003 accepts 8 to 10 for about 9 seconds left.
+
+### Q-14: May alarm() deliver SIGALRM early?
+
+- **Where:** XSH `alarm()`, DESCRIPTION and RATIONALE; XSH `sleep()`, RATIONALE.
+- **Question:** the DESCRIPTION generates SIGALRM after the given number of realtime seconds have elapsed. The RATIONALE notes that historical systems fire up to a second early and calls not firing early only the "most appropriate" choice. Is an early SIGALRM nonconforming, as the DESCRIPTION reads?
+- **posixcheck meanwhile:** XSH.alarm.001 treats an early signal as a FAIL, with 10 ms tolerance for clock granularity.
+
+### Q-15: pause() and sigsuspend(): delivery to which thread?
+
+- **Where:** XSH `pause()` and `sigsuspend()`, DESCRIPTION.
+- **Question:** both suspend the calling thread until delivery of a signal whose action is to run a handler or terminate the process, without saying the signal is delivered to the calling thread. Read literally, a process-directed signal handled by another thread ends the wait. Implementations end it only for delivery to the calling thread; should the text say so?
+- **posixcheck meanwhile:** the tests are single-threaded, or (XSH.sigsuspend.006) direct the signal at the waiting thread.
 
 ## Tracking
 

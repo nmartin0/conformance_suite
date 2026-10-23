@@ -5,8 +5,9 @@ assertion  XSH.pause.001
 anchor     functions/pause.html#DESCRIPTION
 class      required
 since      1988
-says       pause() returns after a caught signal (sent 200 ms later) has run
-           its handler, with -1 and errno EINTR.
+says       pause() returns after a caught signal (sent from 200 ms on, again
+           every 200 ms until pause() returns) has run its handler, with -1
+           and errno EINTR.
 test       t/001-eintr.c
 
 assertion  XSH.pause.002
@@ -15,13 +16,13 @@ class      required
 since      1988
 says       A process in pause() that gets SIGTERM at SIG_DFL ends by that
            signal; pause() does not return.
-nomutant   termination is done by the kernel
 test       t/002-terminates.c
 
 assertion  XSH.pause.003
 anchor     functions/pause.html#DESCRIPTION
 class      required
 since      1988
-says       An ignored signal (SIGUSR2 at SIG_IGN, sent first) does not end
-           pause(); it returns only after the caught SIGUSR1 sent later.
+says       An ignored signal (SIGUSR2 at SIG_IGN, sent at 100 ms) does not end
+           pause(); it returns only after the caught SIGUSR1 (sent from
+           500 ms on, again every 200 ms).
 test       t/003-ignored.c

@@ -1,10 +1,11 @@
 /*
- * sigwaitinfo() fills in si_signo, si_code and the queued value.
+ * sigwaitinfo() fills in siginfo_t and takes queued values in order.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.sigtimedwait.001
  * MUTANT    sigtimedwait.info_lost
  * MUTANT    sigtimedwait.value_lost
+ * MUTANT    sigtimedwait.lifo
  */
 #include "pc.h"
 #include <errno.h>
@@ -89,6 +90,63 @@ static void reap_sender(pid_t c)
 		;
 }
 
+/*
+ * A child that sends sig to this process after ms milliseconds and then
+ * every `every' ms, until stop_sender() kills it (so a signal sent before
+ * the caller started waiting cannot leave it waiting for ever).
+ */
+static pid_t send_repeat(int sig, long ms, long every)
+{
+	pid_t parent = getpid(), c = fork();
+
+	if (c == -1)
+		pc_unresolved("fork failed");
+	if (c == 0) {
+		struct timespec ts;
+		ts.tv_sec = ms / 1000;
+		ts.tv_nsec = (ms % 1000) * 1000000L;
+		for (;;) {
+			while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
+				;
+			if (kill(parent, sig) != 0)
+				_exit(0);
+			ts.tv_sec = every / 1000;
+			ts.tv_nsec = (every % 1000) * 1000000L;
+		}
+	}
+	return c;
+}
+
+static void stop_sender(pid_t c)
+{
+	(void)kill(c, SIGKILL);
+	reap_sender(c);
+}
+
+/* A watchdog: a caught SIGALRM after s seconds sets watchdog_fired. */
+static volatile sig_atomic_t watchdog_fired;
+
+static void on_watchdog(int sig)
+{
+	(void)sig;
+	watchdog_fired = 1;
+}
+
+static void watchdog(unsigned s)
+{
+	catch_sig(SIGALRM, on_watchdog);
+	(void)alarm(s);
+}
+
+/* Waits for a byte on fd (a child saying it is about to block). */
+static void await_ready(int fd)
+{
+	char ch;
+
+	if (read(fd, &ch, 1) != 1)
+		pc_unresolved("the child did not start");
+}
+
 static void hi(int sig, siginfo_t *si, void *uc)
 {
 	(void)sig;
@@ -100,7 +158,7 @@ int main(void)
 {
 	sigset_t s = set_of(SIGRTMIN, 0);
 	struct sigaction sa;
-	siginfo_t si;
+	siginfo_t si, si2;
 	union sigval v;
 	int r;
 
@@ -113,12 +171,19 @@ int main(void)
 	block(SIGRTMIN);
 	v.sival_int = 77;
 	pc_check(sigqueue(getpid(), SIGRTMIN, v) == 0, "sigqueue failed");
+	v.sival_int = 78;
+	pc_check(sigqueue(getpid(), SIGRTMIN, v) == 0, "sigqueue failed");
 	memset(&si, 0, sizeof si);
+	memset(&si2, 0, sizeof si2);
 	pc_test();
 	r = sigwaitinfo(&s, &si);
 	pc_check(r == SIGRTMIN, "sigwaitinfo() returned %d, expected SIGRTMIN", r);
 	pc_check(si.si_signo == SIGRTMIN, "si_signo is %d", si.si_signo);
 	pc_check(si.si_code == SI_QUEUE, "si_code is %d, expected SI_QUEUE", si.si_code);
-	pc_check(si.si_value.sival_int == 77, "si_value is %d, expected 77", si.si_value.sival_int);
+	pc_check(si.si_pid == getpid(), "si_pid is %ld, expected %ld", (long)si.si_pid, (long)getpid());
+	pc_check(si.si_uid == getuid(), "si_uid is %ld, expected %ld", (long)si.si_uid, (long)getuid());
+	pc_check(si.si_value.sival_int == 77, "si_value is %d, expected 77 (the first value queued)", si.si_value.sival_int);
+	r = sigwaitinfo(&s, &si2);
+	pc_check(r == SIGRTMIN && si2.si_value.sival_int == 78, "the second sigwaitinfo() gave %d with value %d, expected 78", r, si2.si_value.sival_int);
 	pc_pass();
 }

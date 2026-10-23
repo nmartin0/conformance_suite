@@ -8,11 +8,13 @@
  */
 #define _GNU_SOURCE 1
 #include <dlfcn.h>
+#include <pthread.h>
 #include <errno.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -59,6 +61,15 @@ static __attribute__((unused)) int highest_pending(const sigset_t *set)
 	return 0;
 }
 
+/* The highest-numbered pending signal of any kind, or 0. */
+static __attribute__((unused)) int highest_any(void)
+{
+	sigset_t all;
+
+	sigfillset(&all);
+	return highest_pending(&all);
+}
+
 /* Takes one pending occurrence of sig without waiting; 0 if none. */
 static __attribute__((unused)) int take(int sig, siginfo_t *info)
 {
@@ -69,6 +80,34 @@ static __attribute__((unused)) int take(int sig, siginfo_t *info)
 	sigemptyset(&one);
 	sigaddset(&one, sig);
 	return real_sigtimedwait(&one, info, &zero) == sig;
+}
+
+/*
+ * The faults that pick a signal themselves: any_pending takes one outside
+ * set; lifo hands out the last value queued first. 0 if neither applies.
+ */
+static int pick(const char *m, const sigset_t *set, siginfo_t *info)
+{
+	int h;
+
+	if (IS("highest_first") && (h = highest_pending(set)) != 0 && take(h, info))
+		return h;
+	if (IS("any_pending") && (h = highest_any()) != 0 && take(h, info))
+		return h;
+	if (IS("lifo") && (h = highest_pending(set)) != 0) {
+		siginfo_t q[64];
+		int n = 0, i;
+		while (n < 64 && take(h, &q[n]))
+			n++;
+		if (n == 0)
+			return 0;
+		for (i = 0; i < n - 1; i++)
+			(void)sigqueue(getpid(), h, q[i].si_value);
+		if (info != NULL)
+			*info = q[n - 1];
+		return h;
+	}
+	return 0;
 }
 
 static int after(const char *m, int r, siginfo_t *info)
@@ -92,7 +131,7 @@ int sigwaitinfo(const sigset_t *set, siginfo_t *info)
 
 	if (m == NULL)
 		return real_sigwaitinfo(set, info);
-	if (IS("highest_first") && (h = highest_pending(set)) != 0 && take(h, info))
+	if ((h = pick(m, set, info)) != 0)
 		return h;
 	return after(m, real_sigwaitinfo(set, info), info);
 }
@@ -107,8 +146,6 @@ int sigtimedwait(const sigset_t *set, siginfo_t *info, const struct timespec *to
 	if (m == NULL || to == NULL)
 		return after(m, real_sigtimedwait(set, info, to), info);
 	t = *to;
-	if (IS("einval_accepted") && (t.tv_nsec < 0 || t.tv_nsec >= 1000000000L))
-		t = zero;
 	if (IS("short_wait"))
 		t.tv_nsec /= 2, t.tv_sec /= 2;
 	if (IS("zero_fails") && t.tv_sec == 0 && t.tv_nsec == 0) {
@@ -117,7 +154,7 @@ int sigtimedwait(const sigset_t *set, siginfo_t *info, const struct timespec *to
 	}
 	if (IS("timeout_ignored") && t.tv_sec == 0 && t.tv_nsec == 0)
 		t.tv_nsec = 200000000L;
-	if (IS("highest_first") && (h = highest_pending(set)) != 0 && take(h, info))
+	if ((h = pick(m, set, info)) != 0)
 		return h;
 	if (IS("no_wake")) {
 		/* sleeps out the whole timeout before looking */

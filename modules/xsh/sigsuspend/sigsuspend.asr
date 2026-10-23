@@ -16,34 +16,51 @@ anchor     functions/sigsuspend.html#DESCRIPTION
 class      required
 since      1988
 says       With nothing pending, sigsuspend() does not return until a caught
-           signal sent 300 ms later is delivered.
+           signal sent 300 ms later is delivered (a 5 s SIGALRM watchdog
+           turns a missed wakeup into a FAIL).
 test       t/002-waits.c
 
 assertion  XSH.sigsuspend.003
 anchor     functions/sigsuspend.html#DESCRIPTION
 class      required
 since      1988
-says       While sigsuspend() waits with a mask that blocks SIGUSR2, a
+says       The mask before the call blocks SIGUSR1 and SIGUSR2. While
+           sigsuspend() waits with a mask that blocks only SIGUSR2, a
            SIGUSR2 sent first stays pending and a later SIGUSR1 ends the
-           wait; SIGUSR2 is delivered only after the old mask (nothing
-           blocked) is back.
+           wait; SIGUSR2 is handled only once the test unblocks it after
+           the call. A 5 s SIGALRM watchdog turns a wait that SIGUSR1
+           cannot end into a FAIL.
 test       t/003-mask-during.c
 
 assertion  XSH.sigsuspend.004
 anchor     functions/sigsuspend.html#DESCRIPTION
 class      required
 since      1988
-says       A thread in sigsuspend() that gets a signal whose action is to
-           terminate (SIGTERM at SIG_DFL) does not return: the process
-           ends by that signal.
-nomutant   termination is done by the kernel
+says       A process in sigsuspend() that gets a signal whose action is to
+           terminate (SIGTERM at SIG_DFL, blocked outside the call) does
+           not return: it ends by that signal.
 test       t/004-terminates.c
 
 assertion  XSH.sigsuspend.005
 anchor     functions/sigsuspend.html#DESCRIPTION
 class      required
 since      1988
-says       sigsuspend() with every signal in its mask still lets SIGKILL
-           through: the waiting process is killed.
-nomutant   the kernel keeps SIGKILL out of the mask
-test       t/005-kill-unblockable.c
+says       sigsuspend() with every signal but a pending, caught SIGUSR1 in its
+           mask (SIGKILL and SIGSTOP included) waits without error and
+           returns -1/EINTR after the handler. A child in sigsuspend() with
+           every signal in the mask is still stopped by SIGSTOP (seen with
+           WUNTRACED) and killed by SIGKILL.
+test       t/005-unblockable.c
+
+assertion  XSH.sigsuspend.006
+anchor     functions/sigsuspend.html#DESCRIPTION
+class      required
+since      2008
+says       With SIGUSR1 and SIGUSR2 blocked in two threads and a
+           process-directed SIGUSR2 pending, the main thread's
+           sigsuspend() with only SIGUSR2 in the mask (ended by a
+           pthread_kill() of SIGUSR1) leaves SIGUSR2 pending on the
+           process: the other thread still sees it in sigpending() and can
+           accept it.
+uses       XSH.sigpending.002
+test       t/006-process-pending.c

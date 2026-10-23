@@ -89,6 +89,63 @@ static void reap_sender(pid_t c)
 		;
 }
 
+/*
+ * A child that sends sig to this process after ms milliseconds and then
+ * every `every' ms, until stop_sender() kills it (so a signal sent before
+ * the caller started waiting cannot leave it waiting for ever).
+ */
+static pid_t send_repeat(int sig, long ms, long every)
+{
+	pid_t parent = getpid(), c = fork();
+
+	if (c == -1)
+		pc_unresolved("fork failed");
+	if (c == 0) {
+		struct timespec ts;
+		ts.tv_sec = ms / 1000;
+		ts.tv_nsec = (ms % 1000) * 1000000L;
+		for (;;) {
+			while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
+				;
+			if (kill(parent, sig) != 0)
+				_exit(0);
+			ts.tv_sec = every / 1000;
+			ts.tv_nsec = (every % 1000) * 1000000L;
+		}
+	}
+	return c;
+}
+
+static void stop_sender(pid_t c)
+{
+	(void)kill(c, SIGKILL);
+	reap_sender(c);
+}
+
+/* A watchdog: a caught SIGALRM after s seconds sets watchdog_fired. */
+static volatile sig_atomic_t watchdog_fired;
+
+static void on_watchdog(int sig)
+{
+	(void)sig;
+	watchdog_fired = 1;
+}
+
+static void watchdog(unsigned s)
+{
+	catch_sig(SIGALRM, on_watchdog);
+	(void)alarm(s);
+}
+
+/* Waits for a byte on fd (a child saying it is about to block). */
+static void await_ready(int fd)
+{
+	char ch;
+
+	if (read(fd, &ch, 1) != 1)
+		pc_unresolved("the child did not start");
+}
+
 static volatile sig_atomic_t ran;
 
 static void h(int sig)
@@ -105,12 +162,12 @@ int main(void)
 	pc_begin("XSH.pause.001");
 	catch_sig(SIGUSR1, h);
 	pc_test();
-	c = send_later(SIGUSR1, 200);
+	c = send_repeat(SIGUSR1, 200, 200);
 	r = pause();
 	e = errno;
-	got = ran;	/* before the wait below, which a late signal could interrupt */
-	reap_sender(c);
-	pc_check(got == 1, "pause() returned before the handler ran");
+	got = ran;	/* before stopping the sender, which a late signal could interrupt */
+	stop_sender(c);
+	pc_check(got >= 1, "pause() returned before the handler ran");
 	pc_check(r == -1, "pause() returned %d, expected -1", r);
 	pc_check(e == EINTR, "errno is %s, expected EINTR", pc_errname(e));
 	pc_pass();

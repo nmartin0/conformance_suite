@@ -6,6 +6,7 @@
  * MUTANT    sigwait.wrong_sig
  * MUTANT    sigwait.not_cleared
  * MUTANT    sigwait.returns_minus1
+ * MUTANT    sigwait.any_pending
  */
 #include "pc.h"
 #include <errno.h>
@@ -90,6 +91,63 @@ static void reap_sender(pid_t c)
 		;
 }
 
+/*
+ * A child that sends sig to this process after ms milliseconds and then
+ * every `every' ms, until stop_sender() kills it (so a signal sent before
+ * the caller started waiting cannot leave it waiting for ever).
+ */
+static pid_t send_repeat(int sig, long ms, long every)
+{
+	pid_t parent = getpid(), c = fork();
+
+	if (c == -1)
+		pc_unresolved("fork failed");
+	if (c == 0) {
+		struct timespec ts;
+		ts.tv_sec = ms / 1000;
+		ts.tv_nsec = (ms % 1000) * 1000000L;
+		for (;;) {
+			while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
+				;
+			if (kill(parent, sig) != 0)
+				_exit(0);
+			ts.tv_sec = every / 1000;
+			ts.tv_nsec = (every % 1000) * 1000000L;
+		}
+	}
+	return c;
+}
+
+static void stop_sender(pid_t c)
+{
+	(void)kill(c, SIGKILL);
+	reap_sender(c);
+}
+
+/* A watchdog: a caught SIGALRM after s seconds sets watchdog_fired. */
+static volatile sig_atomic_t watchdog_fired;
+
+static void on_watchdog(int sig)
+{
+	(void)sig;
+	watchdog_fired = 1;
+}
+
+static void watchdog(unsigned s)
+{
+	catch_sig(SIGALRM, on_watchdog);
+	(void)alarm(s);
+}
+
+/* Waits for a byte on fd (a child saying it is about to block). */
+static void await_ready(int fd)
+{
+	char ch;
+
+	if (read(fd, &ch, 1) != 1)
+		pc_unresolved("the child did not start");
+}
+
 static volatile sig_atomic_t ran;
 
 static void h(int sig)
@@ -105,13 +163,16 @@ int main(void)
 
 	pc_begin("XSH.sigwait.001");
 	catch_sig(SIGUSR1, h);
+	catch_sig(SIGUSR2, h);
 	block(SIGUSR1);
-	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
+	block(SIGUSR2);
+	pc_check(kill(getpid(), SIGUSR2) == 0 && kill(getpid(), SIGUSR1) == 0, "kill failed");
 	pc_test();
 	r = sigwait(&s, &sig);
 	pc_check(r == 0, "sigwait() returned %d, expected 0", r);
-	pc_check(sig == SIGUSR1, "sigwait() stored %d, expected SIGUSR1", sig);
+	pc_check(sig == SIGUSR1, "sigwait() stored %d, expected SIGUSR1 (the only signal in the set)", sig);
 	pc_check(sigpending(&p) == 0 && sigismember(&p, SIGUSR1) != 1, "SIGUSR1 is still pending after sigwait()");
-	pc_check(ran == 0, "the handler ran for a signal accepted by sigwait()");
+	pc_check(sigismember(&p, SIGUSR2) == 1, "SIGUSR2, not in the set, is no longer pending");
+	pc_check(ran == 0, "a handler ran during sigwait()");
 	pc_pass();
 }
