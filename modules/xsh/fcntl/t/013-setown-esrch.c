@@ -28,6 +28,8 @@ int main(void)
 	if (kill(pid, 0) == 0 || errno != ESRCH)
 		pc_unresolved("process ID %ld was reused", (long)pid);
 	pc_test();
+	if (fcntl(sv[0], F_SETOWN, (int)pid) == 0 && kill(pid, 0) == 0)
+		pc_unresolved("process ID %ld was reused during the test", (long)pid);
 	pc_expect_err(fcntl(sv[0], F_SETOWN, (int)pid), ESRCH,
 	    "fcntl(F_SETOWN, <process that has exited>)");
 	pc_pass();

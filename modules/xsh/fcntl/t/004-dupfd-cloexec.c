@@ -20,10 +20,12 @@ int main(void)
 	fd = open("f", O_RDONLY);
 	pc_check(fd >= 0, "cannot open f");
 	arg = pc_lowest_free_fd() + 3;
-	pc_check(fcntl(arg, F_GETFD) == -1, "slot %d is not free", arg);
+	pc_check(fcntl(fd, F_DUPFD, arg) == arg, "cannot place a descriptor at %d", arg);
+	pc_check(fcntl(arg + 1, F_GETFD) == -1, "slot %d is not free", arg + 1);
 	pc_test();
 	d = fcntl(fd, F_DUPFD_CLOEXEC, arg);
-	pc_check(d == arg, "F_DUPFD_CLOEXEC with arg %d returned %d", arg, d);
+	pc_check(d == arg + 1, "F_DUPFD_CLOEXEC with arg %d (in use) returned %d, expected %d",
+	    arg, d, arg + 1);
 	f = fcntl(d, F_GETFD);
 	pc_check(f != -1 && (f & FD_CLOEXEC), "FD_CLOEXEC clear on the new descriptor");
 	pc_pass();

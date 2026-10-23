@@ -27,8 +27,14 @@ static struct flock lk(int type, int whence, off_t start, off_t len)
 }
 
 /*
+ * Set when F_GETLK is what the test checks: then an F_GETLK failure in the
+ * probe is FAIL; otherwise the probe only observes and it is UNRESOLVED.
+ */
+static int getlk_under_test;
+
+/*
  * Another process asks F_GETLK about *q on "f" and the answer comes back
- * in *q. Failures of the probe itself are UNRESOLVED.
+ * in *q.
  */
 static void probe(struct flock *q)
 {
@@ -43,15 +49,21 @@ static void probe(struct flock *q)
 	if (pid == 0) {
 		struct flock a = *q;
 		fd = open("f", O_RDWR);
-		if (fd < 0 || fcntl(fd, F_GETLK, &a) != 0)
+		if (fd < 0)
 			_exit(2);
+		if (fcntl(fd, F_GETLK, &a) != 0)
+			_exit(3);
 		if (write(p[1], &a, sizeof a) != (ssize_t)sizeof a)
 			_exit(2);
 		_exit(0);
 	}
 	(void)close(p[1]);
-	if (waitpid(pid, &st, 0) != pid || !WIFEXITED(st) || WEXITSTATUS(st) != 0)
-		pc_unresolved("probe: F_GETLK in the other process failed");
+	if (waitpid(pid, &st, 0) != pid || !WIFEXITED(st))
+		pc_unresolved("probe: the other process did not finish");
+	if (WEXITSTATUS(st) == 3 && getlk_under_test)
+		pc_fail("F_GETLK failed in the other process");
+	if (WEXITSTATUS(st) != 0)
+		pc_unresolved("probe: the other process could not ask F_GETLK");
 	if (read(p[0], q, sizeof *q) != (ssize_t)sizeof *q)
 		pc_unresolved("probe: no answer");
 	(void)close(p[0]);
@@ -66,7 +78,7 @@ static int blocked(int type, off_t start, off_t len)
 	return q.l_type != F_UNLCK;
 }
 
-static int hold_ctl = -1;
+static int hold_ctl = -1, hold_done = -1;
 static pid_t hold_pid;
 
 /*
@@ -75,10 +87,10 @@ static pid_t hold_pid;
  */
 static void holder(int type, off_t start, off_t len, unsigned secs)
 {
-	int sp[2], cp[2];
+	int sp[2], cp[2], dp[2];
 	char c;
 
-	if (pipe(sp) != 0 || pipe(cp) != 0)
+	if (pipe(sp) != 0 || pipe(cp) != 0 || pipe(dp) != 0)
 		pc_unresolved("holder: pipe failed");
 	hold_pid = fork();
 	if (hold_pid == -1)
@@ -90,15 +102,22 @@ static void holder(int type, off_t start, off_t len, unsigned secs)
 		(void)close(cp[1]);
 		c = fd >= 0 && fcntl(fd, F_SETLK, &fl) == 0 ? 'y' : 'n';
 		(void)write(sp[1], &c, 1);
-		if (secs)
+		(void)close(dp[0]);
+		if (secs) {
 			sleep(secs);
-		else
+			/* Says it is letting go, then releases the lock. */
+			fl.l_type = F_UNLCK;
+			(void)write(dp[1], "r", 1);
+			(void)fcntl(fd, F_SETLK, &fl);
+		} else
 			(void)read(cp[0], &c, 1);	/* until the parent lets go */
 		_exit(0);
 	}
 	(void)close(sp[1]);
 	(void)close(cp[0]);
+	(void)close(dp[1]);
 	hold_ctl = cp[1];
+	hold_done = dp[0];
 	if (read(sp[0], &c, 1) != 1 || c != 'y')
 		pc_unresolved("holder: could not take its lock");
 	(void)close(sp[0]);
@@ -120,6 +139,7 @@ int main(void)
 	fd = open("f", O_RDWR);
 	pc_check(fd >= 0, "cannot open f");
 	pc_check(lseek(fd, 5, SEEK_SET) == 5, "lseek failed");
+	getlk_under_test = 1;
 	pc_test();
 	fl = lk(F_WRLCK, SEEK_CUR, 2, 1);
 	pc_expect_ok(fcntl(fd, F_SETLK, &fl), "F_SETLK SEEK_CUR +2 (byte 7)");

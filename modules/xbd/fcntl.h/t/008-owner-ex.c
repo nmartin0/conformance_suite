@@ -15,7 +15,7 @@ int main(void)
 #if !defined(F_GETOWN_EX) || !defined(F_SETOWN_EX)
 	pc_fail("<fcntl.h> does not define F_GETOWN_EX and F_SETOWN_EX");
 #elif !defined(F_OWNER_PID) || !defined(F_OWNER_PGRP)
-	pc_fail("<fcntl.h> does not define F_OWNER_PID and F_OWNER_PGRP");
+	pc_fail("<fcntl.h> does not define F_OWNER_PID and F_OWNER_PGRP as macros");
 #else
 	{
 		struct f_owner_ex o;
@@ -23,6 +23,7 @@ int main(void)
 		o.pid = 0;
 		(void)o;
 	}
+	pc_check(F_OWNER_PID != F_OWNER_PGRP, "F_OWNER_PID and F_OWNER_PGRP are equal");
 	pc_pass();
 #endif
 }

@@ -110,6 +110,12 @@ static int lock_fault(const char *m, int fd, int cmd, struct flock *fl)
 		return 0;
 	if (IS("setlk_rd_as_wr") && w.l_type == F_RDLCK)
 		w.l_type = F_WRLCK;
+	if (IS("setlk_wr_as_rd") && w.l_type == F_WRLCK)
+		w.l_type = F_RDLCK;
+	if (IS("neg_len_abs") && w.l_len < 0)
+		w.l_len = -w.l_len;	/* locks after l_start instead of before */
+	if (IS("setlkw_no_wait") && cmd == F_SETLKW && w.l_type != F_UNLCK)
+		return 0;
 	if (IS("setlkw_as_setlk"))
 		cmd = F_SETLK;
 	if (IS("setlk_spurious_eagain") && w.l_type == F_WRLCK) {

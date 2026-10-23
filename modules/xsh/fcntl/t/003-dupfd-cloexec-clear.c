@@ -18,6 +18,7 @@ int main(void)
 	pc_make_file("f", "x");
 	fd = open("f", O_RDONLY | O_CLOEXEC);
 	pc_check(fd >= 0, "cannot open f");
+	pc_check((fcntl(fd, F_GETFD) & FD_CLOEXEC) != 0, "FD_CLOEXEC is not set on the original");
 	pc_test();
 	d = fcntl(fd, F_DUPFD, 0);
 	pc_expect_ok(d, "fcntl(F_DUPFD, 0)");

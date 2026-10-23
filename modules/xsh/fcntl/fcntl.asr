@@ -41,8 +41,9 @@ assertion  XSH.fcntl.005
 anchor     functions/fcntl.html#ERRORS/EINVAL
 class      required
 since      1988
-says       F_DUPFD with a negative arg, or one not less than {OPEN_MAX},
-           fails with EINVAL.
+says       F_DUPFD with a negative arg fails with EINVAL; with arg equal
+           to {OPEN_MAX} it fails with EINVAL or EMFILE (both conditions
+           apply).
 note       The {OPEN_MAX} case is skipped (with a note) when
            sysconf(_SC_OPEN_MAX) is indeterminate or not below INT_MAX.
 test       t/005-dupfd-einval.c
@@ -137,7 +138,7 @@ test       t/014-ebadf.c
 assertion  XSH.fcntl.015
 anchor     functions/fcntl.html#ERRORS/EINVAL
 class      required
-since      1988
+since      2001
 says       fcntl() with a cmd value the implementation does not define
            fails with EINVAL.
 note       Uses 0x7ffffff0, which no known system defines;
@@ -207,8 +208,9 @@ class      required
 since      1988
 says       F_SETLKW of a blocked lock waits until the other process's
            lock goes away, then succeeds.
-note       The holder keeps its lock for 1 s; the call must take at
-           least 0.5 s.
+note       The holder keeps its lock for 1 s and writes to a pipe just
+           before releasing it; F_SETLKW must not succeed before that
+           byte is there. The waiting time is only noted.
 test       t/022-setlkw-waits.c
 
 assertion  XSH.fcntl.023
@@ -328,13 +330,13 @@ test       t/035-unlock-unlocked.c
 assertion  XSH.fcntl.036
 anchor     functions/fcntl.html#DESCRIPTION
 class      required
-since      2008
+since      2001
 says       Unlocking a segment whose last byte is the largest off_t,
            inside a lock with l_len 0, unlocks from the segment's start
            to the end: the bytes before stay locked and the bytes after
            (to any offset) are free.
-note       The largest off_t is computed assuming a two's complement
-           signed off_t of 64 or 32 bits.
+note       The largest off_t is found by doubling, assuming only that
+           off_t is a signed integer type.
 test       t/036-unlock-to-max.c
 
 assertion  XSH.fcntl.037
@@ -380,8 +382,10 @@ class      required
 since      2024
 says       An OFD-owned lock belongs to the open file description,
            whichever process holds a descriptor for it: a child using
-           the inherited descriptor can change the lock, while a new
-           open in the child is blocked.
+           the inherited descriptor can change the lock (here to
+           shared), a new open in the child then gets a shared lock but
+           not an exclusive one (EAGAIN), and the lock survives the
+           child closing its copy.
 note       Needs F_OFD_*; blocked when XBD.fcntl.h.006 fails.
 uses       XBD.fcntl.h.006
 test       t/040-ofd-shared-description.c

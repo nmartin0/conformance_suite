@@ -77,12 +77,12 @@ DESCRIPTION:3cddcaae        none  a permission
 DESCRIPTION:7c979778        impl  extra commands are named F_* (Tier 0 namespace check)
 
 # --- record locking: semantics ---
-DESCRIPTION:719def1a        XSH.fcntl.019
+DESCRIPTION:719def1a        partial XSH.fcntl.019 XSH.fcntl.040  # shared OFD locks from other descriptions: only one case (040)
 DESCRIPTION:690609e9        partial XSH.fcntl.019  # shared process-owned lock against an exclusive OFD lock not tested
-DESCRIPTION:0440a67b        partial XSH.fcntl.039 XSH.fcntl.041  # shared OFD lock blocking exclusive locks not tested separately
+DESCRIPTION:0440a67b        partial XSH.fcntl.040  # a shared OFD lock blocks an exclusive OFD lock from another description; against an exclusive process-owned lock not tested
 DESCRIPTION:f56ddc47        XSH.fcntl.024
-DESCRIPTION:3dd793bb        XSH.fcntl.020 XSH.fcntl.041
-DESCRIPTION:0373fff2        XSH.fcntl.039 XSH.fcntl.041
+DESCRIPTION:3dd793bb        partial XSH.fcntl.020 XSH.fcntl.041  # against a shared OFD lock not tested
+DESCRIPTION:0373fff2        partial XSH.fcntl.037 XSH.fcntl.039 XSH.fcntl.041  # exclusive against exclusive OFD lock across descriptions not tested
 DESCRIPTION:b2004111        XSH.fcntl.024
 DESCRIPTION:f05d049b        none  describes the structure
 DESCRIPTION:54e0cff6        XSH.fcntl.029
@@ -116,7 +116,7 @@ DESCRIPTION:ccf2b682        none  explanation
 DESCRIPTION:c7873eff        todo  two processes each holding a lock and waiting for the other's: if the system detects it, EDEADLK (conditional)
 DESCRIPTION:c4ed822a        none  a permission
 DESCRIPTION:1e235270        none  unspecified
-DESCRIPTION:b20aaeee        XSH.fcntl.036
+DESCRIPTION:b20aaeee        partial XSH.fcntl.036  # the result is also what a plain unlock gives on most systems
 DESCRIPTION:7f692437        XSH.fcntl.031 XSH.fcntl.043
 DESCRIPTION:d8ca7803        todo  SHM: fcntl() on a shared memory object (F_GETFD, F_DUPFD) behaves as for a regular file
 DESCRIPTION:cebd5785        none  unspecified
@@ -147,9 +147,9 @@ RETURN_VALUE:ce1869b1       XSH.fcntl.014
 # --- ERRORS: shall fail ---
 ERRORS:ba58486c             XSH.fcntl.021
 ERRORS:0b80bcdf             XSH.fcntl.039 XSH.fcntl.041
-ERRORS:7fd01444             XSH.fcntl.014 XSH.fcntl.024
+ERRORS:7fd01444             partial XSH.fcntl.014 XSH.fcntl.024  # EBADF for F_SETLKW and the OFD commands not tested
 ERRORS:c593940e             XSH.fcntl.023 XSH.fcntl.042
-ERRORS:ae513b16             partial XSH.fcntl.005 XSH.fcntl.015 XSH.fcntl.030  # F_SETOWN_EX invalid type or negative pid not tested
+ERRORS:ae513b16             partial XSH.fcntl.005 XSH.fcntl.015 XSH.fcntl.030  # F_DUPFD_CLOEXEC ranges, F_SETOWN_EX type or pid, and other invalid lock data not tested
 ERRORS:6fc2fee8             XSH.fcntl.006
 ERRORS:726ddaef             todo  environment: exhaust the system lock table (if the system has a limit)
 ERRORS:c808741d             todo  32-bit off_t: F_GETLK of a lock whose start does not fit (conditional)

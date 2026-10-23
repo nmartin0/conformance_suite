@@ -17,9 +17,9 @@ int main(void)
 
 	pc_begin("XSH.fcntl.009");
 	pc_make_file("f", "x");
-	pc_test();
 	fd = open("f", O_RDWR | O_APPEND);
-	pc_expect_ok(fd, "open(\"f\", O_RDWR|O_APPEND)");
+	pc_check(fd >= 0, "cannot open f O_RDWR|O_APPEND");
+	pc_test();
 	fl = fcntl(fd, F_GETFL);
 	pc_check(fl >= 0, "F_GETFL returned %d", fl);
 	pc_check((fl & O_ACCMODE) == O_RDWR, "access mode %#x, expected O_RDWR", fl & O_ACCMODE);

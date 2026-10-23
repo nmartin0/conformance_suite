@@ -71,9 +71,13 @@ assertion  XBD.fcntl.h.008
 anchor     basedefs/fcntl.h.html#DESCRIPTION/F_GETOWN_EX
 class      required
 since      2024
-says       <fcntl.h> defines F_GETOWN_EX, F_SETOWN_EX, F_OWNER_PID and
-           F_OWNER_PGRP, and struct f_owner_ex with members type and pid.
-note       A missing struct member makes the test UNINITIATED (build
-           failure); glibc gives all of this only with _GNU_SOURCE.
+says       <fcntl.h> defines F_GETOWN_EX and F_SETOWN_EX, the macros
+           F_OWNER_PID and F_OWNER_PGRP with different values, and
+           struct f_owner_ex with members type and pid.
+note       A symbolic constant is a macro (XBD 3.363); an enumeration
+           constant alone does not do. A missing struct member makes the
+           test UNINITIATED. glibc 2.39 has F_OWNER_* only as
+           enumeration constants; musl 1.2.4 defines them and the struct
+           only with _GNU_SOURCE (docs/linux-deviations.md O.2).
 test       t/008-owner-ex.c
 nomutant   compile-time presence check; needs the Tier 0 header mutants
