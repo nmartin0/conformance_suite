@@ -34,6 +34,7 @@ what came of it. Standard issues a review found are in
 | link, unlink | `xsh/link`, `xsh/unlink` | 9 findings: directory cases only unprivileged, isolated EACCES, sticky rule per XBD 4.5, link.019 disputed (Q-24), new cases | c1b0b65 |
 | rename | `xsh/rename` | 7 findings: the trailing-slash rule is required (XBD 4.16 footnote), so SI-52 narrowed and O.21 found; clean dot cases; dot-dot after a move; mixed absolute and relative paths | (rename fixes) |
 | mkdir, rmdir | `xsh/mkdir`, `xsh/rmdir` | 10 findings: S_ISGID inherited in setgid directories, EBUSY for open directories, {LINK_MAX}-safe time loops, dot-files, trailing slashes, EILSEQ; chapter 4 anchors fixed suite-wide | (mkdir fixes) |
+| chmod, fchmod | `xsh/chmod`, `xsh/fchmod` | 9 findings: S_ISGID refused with EPERM (BSD) accepted, non-member group chosen at run time, set-ID bits set and cleared, inherited descriptors, O_SEARCH descriptors; "." made searchable in setup suite-wide | (chmod fixes) |
 
 The shared copy of the standard-issues report is the Claude Doc at
 https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF; it is kept in step with

@@ -49,6 +49,18 @@ static int ts_cmp(struct timespec a, struct timespec b)
 #endif
 
 /*
+ * Setup for unprivileged(): when run as root, make the working directory
+ * searchable for the child (relative paths need nothing above it). It is
+ * called right after pc_begin(), in the setup phase, so no planted fault
+ * applies to it.
+ */
+static void pc_searchable(void)
+{
+	if (geteuid() == 0 && chmod(".", 0711) != 0)
+		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
+}
+
+/*
  * Run fn in a child that has no appropriate privileges: when the test runs
  * as root, the child takes user and group 65534 (the working directory is
  * made searchable for it; relative paths need nothing above it). Returns
@@ -60,8 +72,6 @@ static int unprivileged(int (*fn)(void))
 	pid_t kid;
 	int st;
 
-	if (geteuid() == 0 && chmod(".", 0711) != 0)
-		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
 	kid = fork();
 	if (kid == -1)
 		pc_unresolved("fork failed: %s", pc_errname(errno));
@@ -141,23 +151,31 @@ static int verdict(int r, int e1, int e2)
 	return errno == e1 || errno == e2 ? 0 : 2;
 }
 
+static int rootfd = -1;
+
 static int child(void)
 {
-	int fd = open("f", O_RDWR);
+	int fd = open("f", O_RDWR), v;
 
 	if (fd < 0)
 		return 99;
-	return verdict(fchmod(fd, 0777), EPERM, EPERM);
+	if ((v = verdict(fchmod(fd, 0777), EPERM, EPERM)) != 0)
+		return v;
+	/* a descriptor opened by the privileged parent: the caller's IDs decide */
+	return verdict(fchmod(rootfd, 0777), EPERM, EPERM);
 }
 
 int main(void)
 {
 	pc_begin("XSH.fchmod.005");
+	pc_searchable();
 	{
 		if (geteuid() != 0)
 			pc_unresolved("needs root to create a file of another user");
 		pc_make_file("f", "x");
 		pc_check(chmod("f", 0666) == 0, "chmod failed");
+		rootfd = open("f", O_RDWR);
+		pc_check(rootfd >= 0, "open failed: %s", pc_errname(errno));
 		pc_test();
 		switch (unprivileged(child)) {
 		case 0:

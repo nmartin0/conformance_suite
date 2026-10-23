@@ -52,6 +52,18 @@ static int ts_cmp(struct timespec a, struct timespec b)
 #endif
 
 /*
+ * Setup for unprivileged(): when run as root, make the working directory
+ * searchable for the child (relative paths need nothing above it). It is
+ * called right after pc_begin(), in the setup phase, so no planted fault
+ * applies to it.
+ */
+static void pc_searchable(void)
+{
+	if (geteuid() == 0 && chmod(".", 0711) != 0)
+		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
+}
+
+/*
  * Run fn in a child that has no appropriate privileges: when the test runs
  * as root, the child takes user and group 65534 (the working directory is
  * made searchable for it; relative paths need nothing above it). Returns
@@ -63,8 +75,6 @@ static int unprivileged(int (*fn)(void))
 	pid_t kid;
 	int st;
 
-	if (geteuid() == 0 && chmod(".", 0711) != 0)
-		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
 	kid = fork();
 	if (kid == -1)
 		pc_unresolved("fork failed: %s", pc_errname(errno));
@@ -152,7 +162,10 @@ int main(void)
 		int i, r;
 
 		pc_make_file("f", "x");
+		pc_make_dir("d");
 		pc_test();
+		pc_check(chmod("d", 0750) == 0, "chmod(d, 0750) failed: %s", pc_errname(errno));
+		pc_check(bits("d") == 0750, "after chmod(d, 0750) the bits are %#o", bits("d"));
 		for (i = 0; i < 5; i++) {
 			r = chmod("f", m[i]);
 			pc_check(r == 0, "chmod(f, %#o) returned %d (%s)", (unsigned)m[i], r, pc_errname(errno));

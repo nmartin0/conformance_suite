@@ -85,7 +85,9 @@ int chmod(const char *path, mode_t mode)
 	if (IS("no_follow") && lstat(path, &st) == 0 && S_ISLNK(st.st_mode))
 		return 0;	/* as if the link itself were changed */
 	if (IS("owner_ignored") && stat(path, &st) == 0 && st.st_uid != geteuid())
-		return 0;	/* reports success without the right to change it */
+		return geteuid() == 0 ? fail(EPERM) : 0;	/* gets the owner rule backwards */
+	if (IS("keeps_setid") && stat(path, &st) == 0)
+		mode |= st.st_mode & (S_ISUID | S_ISGID);
 	if (IS("ctime_kept"))
 		return 0;	/* reports success but marks nothing for update */
 	if (IS("slash_ignored") && has_slash_end(path) && strlen(path) < sizeof b) {

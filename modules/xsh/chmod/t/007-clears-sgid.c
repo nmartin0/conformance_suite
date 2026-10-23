@@ -1,5 +1,5 @@
 /*
- * chmod() by a non-member clears S_ISGID on a regular file.
+ * chmod() by a non-member does not leave S_ISGID set.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.chmod.007
@@ -48,6 +48,18 @@ static int ts_cmp(struct timespec a, struct timespec b)
 #endif
 
 /*
+ * Setup for unprivileged(): when run as root, make the working directory
+ * searchable for the child (relative paths need nothing above it). It is
+ * called right after pc_begin(), in the setup phase, so no planted fault
+ * applies to it.
+ */
+static void pc_searchable(void)
+{
+	if (geteuid() == 0 && chmod(".", 0711) != 0)
+		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
+}
+
+/*
  * Run fn in a child that has no appropriate privileges: when the test runs
  * as root, the child takes user and group 65534 (the working directory is
  * made searchable for it; relative paths need nothing above it). Returns
@@ -59,8 +71,6 @@ static int unprivileged(int (*fn)(void))
 	pid_t kid;
 	int st;
 
-	if (geteuid() == 0 && chmod(".", 0711) != 0)
-		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
 	kid = fork();
 	if (kid == -1)
 		pc_unresolved("fork failed: %s", pc_errname(errno));
@@ -140,43 +150,61 @@ static int verdict(int r, int e1, int e2)
 	return errno == e1 || errno == e2 ? 0 : 2;
 }
 
+static gid_t other;
+
 static int child(void)
 {
 	gid_t g[256];
 	int n = getgroups(256, g), i;
-	struct stat st;
 
 	for (i = 0; i < n; i++)
-		if (g[i] == 1)
+		if (g[i] == other)
 			return 3;
-	if (getegid() == 1)
+	if (getegid() == other)
 		return 3;
 	if (chmod("f", 02755) != 0)
-		return 1;
-	if (stat("f", &st) != 0)
-		return 1;
-	return (st.st_mode & 07777) == 0755 ? 0 : 2;
+		return errno == EPERM ? 4 : 10 + errno % 80;
+	return 0;
 }
 
 int main(void)
 {
 	pc_begin("XSH.chmod.007");
+	pc_searchable();
 	{
+		struct stat st;
+		gid_t g[256];
+		int n, i, r;
+
 		if (geteuid() != 0)
 			pc_unresolved("needs root to give a file an owner and a foreign group");
+		/* a group the child is not in: it keeps root's supplementary groups */
+		n = getgroups(256, g);
+		for (other = 2; other < 1000; other++) {
+			for (i = 0; i < n && g[i] != other; i++)
+				;
+			if (i == n && other != getegid() && other != 65534)
+				break;
+		}
 		pc_make_file("f", "x");
-		/* owner 65534 (the child), group 1: not the child's effective group */
-		pc_check(chown("f", 65534, 1) == 0, "chown failed: %s", pc_errname(errno));
+		pc_check(chmod("f", 0755) == 0, "chmod failed");
+		pc_check(chown("f", 65534, other) == 0, "chown failed: %s", pc_errname(errno));
+		pc_check(stat("f", &st) == 0, "stat failed");
+		if (st.st_uid != 65534 || st.st_gid != other)
+			pc_unresolved("the file system did not take owner 65534 and group %ld", (long)other);
 		pc_test();
-		switch (unprivileged(child)) {
-		case 0:
-			break;
-		case 3:
-			pc_unresolved("group 1 is one of the child's supplementary groups here");
-		case 1:
-			pc_fail("chmod() by the owner failed: %s", "see the test output");
-		default:
-			pc_fail("S_ISGID was kept: the bits are %#o", bits("f"));
+		r = unprivileged(child);
+		if (r == 3)
+			pc_unresolved("group %ld is one of the child's groups after all", (long)other);
+		pc_check(stat("f", &st) == 0, "stat failed");
+		if (r == 4) {
+			pc_check((st.st_mode & 07777) == 0755, "chmod() failed with EPERM but changed the mode to %#o",
+				 (unsigned)(st.st_mode & 07777));
+			pc_note("chmod() refused S_ISGID with EPERM");
+		} else {
+			pc_check(r == 0, "chmod() by the owner failed: %s", pc_errname(r >= 10 ? r - 10 : 0));
+			pc_check(!(st.st_mode & S_ISGID), "S_ISGID was kept: the bits are %#o", (unsigned)(st.st_mode & 07777));
+			pc_check((st.st_mode & 0777) == 0755, "the permission bits are %#o", (unsigned)(st.st_mode & 0777));
 		}
 	}
 	pc_pass();

@@ -7,7 +7,7 @@ class      required
 since      1988
 says       chmod("f", m) returns 0 and leaves the permission bits exactly m,
            for m = 0, 0644, 0777, 0400 and 0070 in turn (the umask does not
-           apply).
+           apply); chmod() of a directory to 0750 works the same way.
 test       t/001-sets-bits.c
 
 assertion  XSH.chmod.002
@@ -60,10 +60,13 @@ anchor     functions/chmod.html#DESCRIPTION
 class      required
 since      1988
 says       For a process without appropriate privileges that owns a regular
-           file whose group is not the process's effective or a
-           supplementary group, chmod("f", 02755) succeeds and leaves
-           S_ISGID clear (bits 0755).
+           file whose group is neither its effective group nor one of its
+           supplementary groups, chmod("f", 02755) either succeeds with
+           S_ISGID clear (bits 0755) or fails with EPERM leaving the mode
+           unchanged; S_ISGID is never set.
 needs      root
+note       XSH 2.3 lets an implementation refuse with EPERM (the BSDs
+           do) instead of clearing the bit.
 nomutant   the kernel clears the bit; a preload library cannot keep it
 test       t/007-clears-sgid.c
 
@@ -92,6 +95,8 @@ says       fchmodat(AT_FDCWD, "sl", 0600, AT_SYMLINK_NOFOLLOW), with sl a
            symbolic link to f, either succeeds or fails with EOPNOTSUPP;
            either way f's bits are unchanged. On a regular file the flag
            has no effect: the bits change.
+note       When the call succeeds the link's own bits cannot be checked:
+           lstat() leaves them unspecified.
 test       t/010-fchmodat-nofollow.c
 
 assertion  XSH.chmod.011
@@ -174,3 +179,22 @@ says       For a process without appropriate privileges, fchmodat(fd, "f",
 note       O_SEARCH itself is a header item (Tier 0); without it this
            test is UNRESOLVED.
 test       t/019-fchmodat-search.c
+
+assertion  XSH.chmod.020
+anchor     functions/chmod.html#DESCRIPTION
+class      required
+since      1988
+says       A process without appropriate privileges that owns a regular file
+           can set S_ISUID with chmod("f", 04755) (or the system ignores the
+           bit, which is allowed) and, once set, chmod("f", 0755) clears it;
+           the permission bits are 0755 both times.
+test       t/020-setid-bits.c
+
+assertion  XSH.chmod.021
+anchor     functions/chmod.html#DESCRIPTION
+class      required
+since      1988
+says       With appropriate privileges, chmod() of a file owned by another
+           user (65534) succeeds and sets the bits.
+needs      root
+test       t/021-privileged-other.c

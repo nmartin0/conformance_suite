@@ -49,6 +49,18 @@ static int ts_cmp(struct timespec a, struct timespec b)
 #endif
 
 /*
+ * Setup for unprivileged(): when run as root, make the working directory
+ * searchable for the child (relative paths need nothing above it). It is
+ * called right after pc_begin(), in the setup phase, so no planted fault
+ * applies to it.
+ */
+static void pc_searchable(void)
+{
+	if (geteuid() == 0 && chmod(".", 0711) != 0)
+		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
+}
+
+/*
  * Run fn in a child that has no appropriate privileges: when the test runs
  * as root, the child takes user and group 65534 (the working directory is
  * made searchable for it; relative paths need nothing above it). Returns
@@ -60,8 +72,6 @@ static int unprivileged(int (*fn)(void))
 	pid_t kid;
 	int st;
 
-	if (geteuid() == 0 && chmod(".", 0711) != 0)
-		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
 	kid = fork();
 	if (kid == -1)
 		pc_unresolved("fork failed: %s", pc_errname(errno));
@@ -151,11 +161,13 @@ static int child(void)
 int main(void)
 {
 	pc_begin("XSH.chmod.018");
+	pc_searchable();
 	{
 		pc_make_dir("d");
 		pc_make_file("d/f", "x");
 		if (geteuid() == 0)
 			pc_check(chown("d/f", 65534, 65534) == 0, "chown failed");
+		pc_check(chmod("d/f", 0644) == 0, "chmod failed");
 		dfd = dir_fd("d");
 		pc_check(chmod("d", 0600) == 0, "chmod failed");
 		pc_test();
@@ -167,6 +179,8 @@ int main(void)
 		default:
 			pc_fail("fchmodat() through a descriptor of a directory without search permission failed with the wrong error");
 		}
+		pc_check(fchmod(dfd, 0700) == 0, "fchmod failed");
+		pc_check(bits("d/f") == 0644, "a failed fchmodat() changed the mode to %#o", bits("d/f"));
 	}
 	pc_pass();
 }

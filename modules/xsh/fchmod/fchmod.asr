@@ -40,8 +40,9 @@ anchor     functions/fchmod.html#ERRORS/EPERM
 class      required
 since      1988
 says       For a process without appropriate privileges, fchmod() of a file
-           it does not own, open for reading and writing (mode 0666),
-           fails with EPERM and the mode is unchanged.
+           it does not own (mode 0666) fails with EPERM, both through a
+           descriptor it opened for reading and writing and through one the
+           privileged parent opened; the mode is unchanged.
 needs      root
 test       t/005-eperm.c
 
@@ -53,3 +54,13 @@ since      2001
 says       fchmod(fd, 0600) of a shared memory object (created 0640) succeeds
            and fstat() then reports read and write bits 0600.
 test       t/006-shm.c
+
+assertion  XSH.fchmod.007
+anchor     functions/fchmod.html#ERRORS
+class      required
+since      2008
+says       fchmod(fd, 0750), with fd opened on a directory with O_SEARCH (an
+           open descriptor), succeeds and sets the directory's bits.
+note       O_SEARCH itself is a header item (Tier 0); without it this
+           test is UNRESOLVED.
+test       t/007-search-fd.c

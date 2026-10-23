@@ -49,6 +49,18 @@ static int ts_cmp(struct timespec a, struct timespec b)
 #endif
 
 /*
+ * Setup for unprivileged(): when run as root, make the working directory
+ * searchable for the child (relative paths need nothing above it). It is
+ * called right after pc_begin(), in the setup phase, so no planted fault
+ * applies to it.
+ */
+static void pc_searchable(void)
+{
+	if (geteuid() == 0 && chmod(".", 0711) != 0)
+		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
+}
+
+/*
  * Run fn in a child that has no appropriate privileges: when the test runs
  * as root, the child takes user and group 65534 (the working directory is
  * made searchable for it; relative paths need nothing above it). Returns
@@ -60,8 +72,6 @@ static int unprivileged(int (*fn)(void))
 	pid_t kid;
 	int st;
 
-	if (geteuid() == 0 && chmod(".", 0711) != 0)
-		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
 	kid = fork();
 	if (kid == -1)
 		pc_unresolved("fork failed: %s", pc_errname(errno));
@@ -135,6 +145,7 @@ static int child(void)
 int main(void)
 {
 	pc_begin("XSH.link.021");
+	pc_searchable();
 	{
 #ifndef O_SEARCH
 		pc_unresolved("<fcntl.h> does not define O_SEARCH");
