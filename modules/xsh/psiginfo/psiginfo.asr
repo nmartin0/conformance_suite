@@ -37,13 +37,11 @@ assertion  XSH.psiginfo.004
 anchor     functions/psiginfo.html#DESCRIPTION
 class      required
 since      2008
-says       With errno set to EINTR and standard error not yet oriented,
-           successful psignal() and psiginfo() calls leave errno EINTR and
-           fwide(stderr, 0) still 0.
+says       With errno set to EINTR and standard error not yet oriented, a
+           successful psignal() leaves errno EINTR and fwide(stderr, 0)
+           still 0.
 uses       XSH.psiginfo.001
-note       A siginfo_t made by hand with si_signo and si_code SI_USER is
-           used for psiginfo().
-test       t/004-errno-orientation.c
+test       t/004-psignal-errno-orientation.c
 
 assertion  XSH.psiginfo.005
 anchor     functions/psiginfo.html#DESCRIPTION
@@ -55,3 +53,15 @@ uses       XSH.psiginfo.001
 note       pc_note() writes to standard error, so nothing is written
            there while fd 2 is closed.
 test       t/005-error.c
+
+assertion  XSH.psiginfo.006
+anchor     functions/psiginfo.html#DESCRIPTION
+class      required
+since      2008
+says       With errno set to EINTR and standard error not yet oriented, a
+           successful psiginfo() leaves errno EINTR and fwide(stderr, 0)
+           still 0.
+uses       XSH.psiginfo.001
+note       A siginfo_t made by hand with si_signo SIGUSR2 and si_code
+           SI_USER is used.
+test       t/006-psiginfo-errno-orientation.c

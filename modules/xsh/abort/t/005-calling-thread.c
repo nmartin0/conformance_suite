@@ -19,6 +19,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <wchar.h>
 
@@ -53,7 +54,7 @@ static int end_of(pid_t c)
 		if (r == c)
 			return st;
 		if (r == -1 && errno != EINTR)
-			pc_check(0, "waitpid failed: %s", pc_errname(errno));
+			pc_unresolved("waitpid failed: %s", pc_errname(errno));
 		sleep_ms(10);
 	}
 	(void)kill(c, SIGKILL);
@@ -66,7 +67,13 @@ static int end_of(pid_t c)
 static const int table[] = {
 	SIGABRT, SIGALRM, SIGBUS, SIGCHLD, SIGCONT, SIGFPE, SIGHUP, SIGILL, SIGINT,
 	SIGKILL, SIGPIPE, SIGQUIT, SIGSEGV, SIGSTOP, SIGTERM, SIGTSTP, SIGTTIN,
-	SIGTTOU, SIGUSR1, SIGUSR2, SIGURG, SIGWINCH,
+	SIGTTOU, SIGUSR1, SIGUSR2,
+#ifdef SIGURG
+	SIGURG,
+#endif
+#ifdef SIGWINCH
+	SIGWINCH,
+#endif
 #ifdef SIGSYS
 	SIGSYS,
 #endif
@@ -86,7 +93,13 @@ static const int table[] = {
 static const char *const table_name[] = {
 	"ABRT", "ALRM", "BUS", "CHLD", "CONT", "FPE", "HUP", "ILL", "INT",
 	"KILL", "PIPE", "QUIT", "SEGV", "STOP", "TERM", "TSTP", "TTIN",
-	"TTOU", "USR1", "USR2", "URG", "WINCH",
+	"TTOU", "USR1", "USR2",
+#ifdef SIGURG
+	"URG",
+#endif
+#ifdef SIGWINCH
+	"WINCH",
+#endif
 #ifdef SIGSYS
 	"SYS",
 #endif
@@ -110,7 +123,8 @@ static pid_t run(void (*fn)(void))
 {
 	pid_t c = fork();
 
-	pc_check(c != -1, "fork failed");
+	if (c == -1)
+		pc_unresolved("fork failed");
 	if (c == 0) {
 		struct rlimit rl = { 0, 0 };
 		(void)setrlimit(RLIMIT_CORE, &rl);	/* no core files */
@@ -126,6 +140,8 @@ static void expect_sigabrt(int st, const char *what)
 	pc_check(WIFSIGNALED(st) && WTERMSIG(st) == SIGABRT, "%s: status %#x, expected termination by SIGABRT", what, st);
 }
 
+#define BLOCK_IN_B 0
+
 static _Thread_local int is_b;
 
 static void h(int sig)
@@ -136,8 +152,16 @@ static void h(int sig)
 
 static void *caller(void *arg)
 {
+	sigset_t s;
+
 	(void)arg;
 	is_b = 1;
+	if (BLOCK_IN_B) {
+		/* abort() must override this block */
+		sigemptyset(&s);
+		sigaddset(&s, SIGABRT);
+		(void)pthread_sigmask(SIG_BLOCK, &s, NULL);
+	}
 	abort();
 	return NULL;
 }

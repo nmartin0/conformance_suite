@@ -56,10 +56,21 @@ _Noreturn void abort(void)
 		_exit(1);
 	if (IS("returns"))
 		_exit(10);	/* stands for returning: the tests' children exit 10 then */
-	if (IS("respects_block") || IS("respects_ignore")) {
-		/* sends SIGABRT once, as raise() would, and stops there */
+	if (IS("handler_then_exit")) {
+		/* a handler that returns ends the call with an ordinary exit */
 		(void)raise(SIGABRT);
 		_exit(0);
+	}
+	if (IS("respects_block")) {
+		sigset_t cur;
+		(void)sigprocmask(SIG_BLOCK, NULL, &cur);
+		if (sigismember(&cur, SIGABRT) == 1)
+			_exit(0);	/* a blocked SIGABRT stays pending */
+	}
+	if (IS("respects_ignore")) {
+		struct sigaction cur;
+		if (sigaction(SIGABRT, NULL, &cur) == 0 && cur.sa_handler == SIG_IGN)
+			_exit(0);	/* an ignored SIGABRT has no effect */
 	}
 	if (IS("to_process")) {
 		(void)kill(getpid(), SIGABRT);	/* to the process, not the thread */

@@ -18,6 +18,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <wchar.h>
 
@@ -52,7 +53,7 @@ static int end_of(pid_t c)
 		if (r == c)
 			return st;
 		if (r == -1 && errno != EINTR)
-			pc_check(0, "waitpid failed: %s", pc_errname(errno));
+			pc_unresolved("waitpid failed: %s", pc_errname(errno));
 		sleep_ms(10);
 	}
 	(void)kill(c, SIGKILL);
@@ -65,7 +66,13 @@ static int end_of(pid_t c)
 static const int table[] = {
 	SIGABRT, SIGALRM, SIGBUS, SIGCHLD, SIGCONT, SIGFPE, SIGHUP, SIGILL, SIGINT,
 	SIGKILL, SIGPIPE, SIGQUIT, SIGSEGV, SIGSTOP, SIGTERM, SIGTSTP, SIGTTIN,
-	SIGTTOU, SIGUSR1, SIGUSR2, SIGURG, SIGWINCH,
+	SIGTTOU, SIGUSR1, SIGUSR2,
+#ifdef SIGURG
+	SIGURG,
+#endif
+#ifdef SIGWINCH
+	SIGWINCH,
+#endif
 #ifdef SIGSYS
 	SIGSYS,
 #endif
@@ -85,7 +92,13 @@ static const int table[] = {
 static const char *const table_name[] = {
 	"ABRT", "ALRM", "BUS", "CHLD", "CONT", "FPE", "HUP", "ILL", "INT",
 	"KILL", "PIPE", "QUIT", "SEGV", "STOP", "TERM", "TSTP", "TTIN",
-	"TTOU", "USR1", "USR2", "URG", "WINCH",
+	"TTOU", "USR1", "USR2",
+#ifdef SIGURG
+	"URG",
+#endif
+#ifdef SIGWINCH
+	"WINCH",
+#endif
 #ifdef SIGSYS
 	"SYS",
 #endif
@@ -114,14 +127,15 @@ static void make_alt(void)
 	pc_check(alt != NULL, "malloc failed");
 }
 
+/* Address arithmetic as integers: comparing unrelated pointers is undefined. */
 static int on_alt(const void *p)
 {
-	const char *c = p;
+	uintptr_t c = (uintptr_t)p, a = (uintptr_t)alt;
 
-	return c >= alt && c < alt + altsz;
+	return c >= a && c < a + altsz;
 }
 
-static __attribute__((unused)) void catch_onstack(int sig, void (*fn)(int))
+static void catch_onstack(int sig, void (*fn)(int))
 {
 	struct sigaction sa;
 
@@ -149,7 +163,8 @@ int main(int argc, char **argv)
 	ss.ss_flags = 0;
 	pc_test();
 	c = fork();
-	pc_check(c != -1, "fork failed");
+	if (c == -1)
+		pc_unresolved("fork failed");
 	if (c == 0) {
 		char *args[3];
 		args[0] = argv[0];

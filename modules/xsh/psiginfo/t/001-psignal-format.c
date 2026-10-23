@@ -21,6 +21,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <wchar.h>
 
@@ -55,7 +56,7 @@ static int end_of(pid_t c)
 		if (r == c)
 			return st;
 		if (r == -1 && errno != EINTR)
-			pc_check(0, "waitpid failed: %s", pc_errname(errno));
+			pc_unresolved("waitpid failed: %s", pc_errname(errno));
 		sleep_ms(10);
 	}
 	(void)kill(c, SIGKILL);
@@ -68,7 +69,13 @@ static int end_of(pid_t c)
 static const int table[] = {
 	SIGABRT, SIGALRM, SIGBUS, SIGCHLD, SIGCONT, SIGFPE, SIGHUP, SIGILL, SIGINT,
 	SIGKILL, SIGPIPE, SIGQUIT, SIGSEGV, SIGSTOP, SIGTERM, SIGTSTP, SIGTTIN,
-	SIGTTOU, SIGUSR1, SIGUSR2, SIGURG, SIGWINCH,
+	SIGTTOU, SIGUSR1, SIGUSR2,
+#ifdef SIGURG
+	SIGURG,
+#endif
+#ifdef SIGWINCH
+	SIGWINCH,
+#endif
 #ifdef SIGSYS
 	SIGSYS,
 #endif
@@ -88,7 +95,13 @@ static const int table[] = {
 static const char *const table_name[] = {
 	"ABRT", "ALRM", "BUS", "CHLD", "CONT", "FPE", "HUP", "ILL", "INT",
 	"KILL", "PIPE", "QUIT", "SEGV", "STOP", "TERM", "TSTP", "TTIN",
-	"TTOU", "USR1", "USR2", "URG", "WINCH",
+	"TTOU", "USR1", "USR2",
+#ifdef SIGURG
+	"URG",
+#endif
+#ifdef SIGWINCH
+	"WINCH",
+#endif
 #ifdef SIGSYS
 	"SYS",
 #endif
@@ -115,11 +128,11 @@ static const char *capture(void (*fn)(void))
 	int p[2], saved;
 	ssize_t k, n = 0;
 
-	pc_check(pipe(p) == 0, "pipe failed");
-	saved = dup(2);
-	pc_check(saved != -1, "dup failed");
+	if (pipe(p) != 0 || (saved = dup(2)) == -1)
+		pc_unresolved("pipe or dup failed");
 	(void)fflush(stderr);
-	pc_check(dup2(p[1], 2) == 2, "dup2 failed");
+	if (dup2(p[1], 2) != 2)
+		pc_unresolved("dup2 failed");
 	fn();
 	(void)fflush(stderr);
 	(void)dup2(saved, 2);

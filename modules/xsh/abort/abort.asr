@@ -43,4 +43,20 @@ says       In a child where a second thread calls abort(), the SIGABRT handler
            before), not in the main thread.
 note       The handler reads a thread-local int last written before the
            signal and leaves with _exit(), both allowed in a handler.
+           Where a signal sent to the process goes to the sending thread
+           when it can, a process-directed abort() passes too; the
+           mutant shows the check works on Linux.
 test       t/005-calling-thread.c
+
+assertion  XSH.abort.006
+anchor     functions/abort.html#DESCRIPTION
+class      disputed
+since      2008
+says       In a child where a second thread that blocks SIGABRT (caught)
+           calls abort(), the SIGABRT handler runs, in that thread.
+note       Whether overriding the block means the caught SIGABRT is
+           delivered to its handler, or only that the process still
+           terminates, is not clear (standard question Q-21); musl
+           terminates without running the handler. A FAIL is logged as
+           INSPECT.
+test       t/006-blocked-handler.c

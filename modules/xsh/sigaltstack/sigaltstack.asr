@@ -8,8 +8,7 @@ when       XSI
 since      2001
 says       With an alternate stack set by sigaltstack() (returning 0) and
            SIGUSR1 caught with SA_ONSTACK, the handler's local variables lie
-           within the stack's range, and sigaltstack(NULL, &o) inside the
-           handler reports SS_ONSTACK.
+           within the stack's range.
 test       t/001-runs-on-alt.c
 
 assertion  XSH.sigaltstack.002
@@ -20,8 +19,8 @@ since      2001
 says       A first sigaltstack(&a, &o) reports SS_DISABLE in o; a second
            sigaltstack(&b, &o) reports a's ss_sp and ss_size with ss_flags
            not SS_DISABLE.
-note       The first call's report assumes no alternate stack before it:
-           pcexec starts each test without one (exec leaves none).
+note       Setup makes sure no alternate stack is set at start-up (some
+           runtimes install one); the test is UNRESOLVED if one is.
 test       t/002-oss.c
 
 assertion  XSH.sigaltstack.003
@@ -46,11 +45,12 @@ assertion  XSH.sigaltstack.005
 anchor     functions/sigaltstack.html#ERRORS/EINVAL
 class      conditional
 when       XSI
-since      2024
+since      2008
 says       sigaltstack() with ss_flags SS_ONSTACK fails with EINVAL.
-note       Issue 8 (Defect 1187) added SS_ONSTACK to the EINVAL
-           condition. Linux accepts it as if it were 0 (docs/linux-
-           deviations.md O.13).
+note       Issue 7 required EINVAL for any flag but SS_DISABLE; Issue 8
+           (Defect 1187) narrowed that to SS_ONSTACK or invalid flags,
+           so SS_ONSTACK is rejected in both. Linux accepts it as if it
+           were 0 (docs/linux-deviations.md O.13).
 test       t/005-einval-onstack.c
 
 assertion  XSH.sigaltstack.006
@@ -60,9 +60,10 @@ when       XSI
 since      2001
 says       sigaltstack() with ss_flags 0x4000 (neither SS_DISABLE nor
            SS_ONSTACK) fails with EINVAL.
-note       0x4000 is not SS_ONSTACK or SS_DISABLE here (checked in
-           setup); a system that gives it a meaning of its own makes the
-           test UNRESOLVED.
+note       Setup makes sure 0x4000 is not SS_ONSTACK or SS_DISABLE.
+           Since Issue 8 an implementation may define flags of its own;
+           one that uses 0x4000 for such a flag would FAIL here, and the
+           result needs a look.
 test       t/006-einval-flags.c
 
 assertion  XSH.sigaltstack.007
@@ -72,7 +73,6 @@ when       XSI
 since      2001
 says       Inside a handler running on the alternate stack, sigaltstack() with a
            new stack fails with EPERM.
-uses       XSH.sigaltstack.001
 test       t/007-eperm.c
 
 assertion  XSH.sigaltstack.008
@@ -84,3 +84,42 @@ says       A process with an alternate stack that execs itself finds, in the new
            image, sigaltstack(NULL, &o) reporting SS_DISABLE.
 nomutant   the new image's state is set by exec in the kernel
 test       t/008-exec-none.c
+
+assertion  XSH.sigaltstack.009
+anchor     functions/sigaltstack.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       In a handler running on the alternate stack, sigaltstack(NULL, &o)
+           reports SS_ONSTACK in o.ss_flags.
+note       The page says ss_flags may contain SS_ONSTACK or SS_DISABLE,
+           which leaves reporting them unclear (standard question Q-20);
+           a FAIL is logged as INSPECT.
+test       t/009-reports-onstack.c
+
+assertion  XSH.sigaltstack.010
+anchor     functions/sigaltstack.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A child with an alternate stack of MINSIGSTKSZ bytes and a trivial
+           SIGUSR1 handler declared SA_ONSTACK runs the handler and exits
+           normally.
+note       MINSIGSTKSZ is the minimum stack size for a signal handler.
+           On x86-64 with AVX-512 the kernel's signal frame is larger
+           than glibc's and musl's MINSIGSTKSZ of 2048 (docs/linux-
+           deviations.md O.16).
+nomutant   the signal frame is built by the kernel
+test       t/010-minsigstksz.c
+
+assertion  XSH.sigaltstack.011
+anchor     functions/sigaltstack.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       sigaltstack() with ss_flags SS_DISABLE, ss_sp NULL and ss_size 0
+           succeeds and disables the stack.
+note       The DESCRIPTION says the size is ignored with SS_DISABLE, but
+           the ENOMEM condition has no exception for it (standard issue
+           SI-47); a FAIL is logged as INSPECT.
+test       t/011-disable-size-ignored.c

@@ -70,6 +70,9 @@ while read -r id mutant; do
 	fi
 	run "$work/m.$n" "$id" "$mutant"
 	got=$(code_of "$work/m.$n" "$id")
+	if [ "$got" = INSPECT ]; then
+		case $(note_of "$work/m.$n" "$id") in disputed*) ;; *) got="INSPECT (not disputed)" ;; esac
+	fi
 	if [ "$got" != FAIL ] && [ "$got" != INSPECT ] &&
 	    grep -q 'pcmutant: cannot plant' "$work/m.$n/out/$id.txt" 2>/dev/null; then
 		printf 'UNCHECKED %-40s %-28s fault cannot be planted here\n' "$id" "$mutant"

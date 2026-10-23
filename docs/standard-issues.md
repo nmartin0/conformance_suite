@@ -58,6 +58,9 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-44 | XSH 2.4.1: a sigwait() thread has the signal "delivered" | editorial | XSH.sigwait.006 |
 | SI-45 | sigaddset() etc.: "shall" vs "should"; effects without "shall" | editorial | XSH.sigaddset.001, XSH.sigdelset.001 |
 | SI-46 | sigaltstack(): "in some implementations ... shall" | editorial | (impl) |
+| SI-47 | sigaltstack(): ENOMEM has no exception for SS_DISABLE | editorial | XSH.sigaltstack.011 (disputed) |
+| SI-48 | signal(): the errno rule is not CX-shaded | editorial | XSH.signal.006 |
+| SI-49 | str2sig(): "a string containing" | editorial | (not tested) |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
@@ -77,3 +80,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-17 | 2.4.2: kill() occurrences vs sigqueue() FIFO order | question | XSH.2.4.2-realtime-signals.004 |
 | Q-18 | 2.4.1/2.4.3: SIGCONT and stopped processes | question | XSH.2.4.3-signal-actions.006 |
 | Q-19 | psiginfo(): may the description carry siginfo_t details? | question | XSH.psiginfo.003 (disputed) |
+| Q-20 | sigaltstack(): must oss report SS_ONSTACK/SS_DISABLE? | question | XSH.sigaltstack.009 (disputed) |
+| Q-21 | abort(): caught but blocked SIGABRT: must the handler run? | question | XSH.abort.006 (disputed) |
+| Q-22 | <signal.h>: MINSIGSTKSZ constant vs CPU-dependent frames | question | XSH.sigaltstack.010 |
+| Q-23 | signal(): return value after failed calls or sigaction() | question | XSH.signal.001 |

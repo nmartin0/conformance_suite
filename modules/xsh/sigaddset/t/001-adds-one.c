@@ -22,6 +22,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <wchar.h>
 
@@ -56,7 +57,7 @@ static int end_of(pid_t c)
 		if (r == c)
 			return st;
 		if (r == -1 && errno != EINTR)
-			pc_check(0, "waitpid failed: %s", pc_errname(errno));
+			pc_unresolved("waitpid failed: %s", pc_errname(errno));
 		sleep_ms(10);
 	}
 	(void)kill(c, SIGKILL);
@@ -69,7 +70,13 @@ static int end_of(pid_t c)
 static const int table[] = {
 	SIGABRT, SIGALRM, SIGBUS, SIGCHLD, SIGCONT, SIGFPE, SIGHUP, SIGILL, SIGINT,
 	SIGKILL, SIGPIPE, SIGQUIT, SIGSEGV, SIGSTOP, SIGTERM, SIGTSTP, SIGTTIN,
-	SIGTTOU, SIGUSR1, SIGUSR2, SIGURG, SIGWINCH,
+	SIGTTOU, SIGUSR1, SIGUSR2,
+#ifdef SIGURG
+	SIGURG,
+#endif
+#ifdef SIGWINCH
+	SIGWINCH,
+#endif
 #ifdef SIGSYS
 	SIGSYS,
 #endif
@@ -89,7 +96,13 @@ static const int table[] = {
 static const char *const table_name[] = {
 	"ABRT", "ALRM", "BUS", "CHLD", "CONT", "FPE", "HUP", "ILL", "INT",
 	"KILL", "PIPE", "QUIT", "SEGV", "STOP", "TERM", "TSTP", "TTIN",
-	"TTOU", "USR1", "USR2", "URG", "WINCH",
+	"TTOU", "USR1", "USR2",
+#ifdef SIGURG
+	"URG",
+#endif
+#ifdef SIGWINCH
+	"WINCH",
+#endif
 #ifdef SIGSYS
 	"SYS",
 #endif
@@ -118,12 +131,12 @@ int main(void)
 		pc_check(sigemptyset(&s) == 0, "sigemptyset failed");
 		pc_test();
 		r1 = sigaddset(&s, SIGUSR1);
-		r2 = sigaddset(&s, SIGRTMAX);
+		r2 = sigaddset(&s, SIGTERM);
 		pc_check(r1 == 0 && r2 == 0, "sigaddset() returned %d and %d", r1, r2);
 		pc_check(sigismember(&s, SIGUSR1) == 1, "SIGUSR1 was not added");
-		pc_check(sigismember(&s, SIGRTMAX) == 1, "SIGRTMAX was not added");
+		pc_check(sigismember(&s, SIGTERM) == 1, "SIGTERM was not added");
 		for (i = 0; i < NTABLE; i++)
-			if (table[i] != SIGUSR1)
+			if (table[i] != SIGUSR1 && table[i] != SIGTERM)
 				pc_check(sigismember(&s, table[i]) == 0, "SIG%s is in the set too", table_name[i]);
 	}
 	pc_pass();

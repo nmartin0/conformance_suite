@@ -6,7 +6,8 @@ anchor     functions/sig2str.html#DESCRIPTION
 class      required
 since      2024
 says       For every signal in the <signal.h> table, sig2str() returns 0 and
-           stores the macro's name without the SIG prefix.
+           stores the macro's name without the SIG prefix, in fewer than
+           SIG2STR_MAX bytes with its null byte.
 note       Neither glibc 2.39 nor musl has sig2str() or str2sig()
            (docs/linux-deviations.md 3.1), so the test does not build
            there (UNINITIATED).
@@ -52,7 +53,7 @@ assertion  XSH.sig2str.005
 anchor     functions/sig2str.html#DESCRIPTION
 class      required
 since      2024
-says       str2sig("10")-style decimal strings for SIGUSR1 and SIGRTMIN store
+says       str2sig() of the decimal strings for SIGUSR1 and SIGRTMIN stores
            those numbers; and for every signal from 1 to SIGRTMAX for which
            sig2str() succeeds, str2sig() of its result stores that
            number.

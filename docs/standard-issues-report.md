@@ -73,6 +73,9 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-44 | XSH 2.4.1: a sigwait() thread has the signal "delivered" | Defect (editorial) | Low | XSH.sigwait.006 |
 | SI-45 | XSH `sigaddset()` etc.: "shall" vs "should" for initialising sets; effects without "shall" | Defect (editorial) | Low | Treats the effects as required |
 | SI-46 | XSH `sigaltstack()`: "in some implementations ... shall" | Defect (editorial) | Low | Classified impl |
+| SI-47 | XSH `sigaltstack()`: ENOMEM has no exception for SS_DISABLE | Defect (editorial) | Low | Disputed (XSH.sigaltstack.011) |
+| SI-48 | XSH `signal()`: the errno rule is not CX-shaded | Defect (editorial) | Low | XSH.signal.006 |
+| SI-49 | XSH `str2sig()`: "a string containing" | Defect (editorial) | Low | Plain names and numbers only |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -92,6 +95,10 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-17 | XSH 2.4.2: kill() occurrences vs sigqueue() FIFO order | Question | Low | FIFO among sigqueue() ones only (XSH.2.4.2-realtime-signals.004) |
 | Q-18 | XSH 2.4.1/2.4.3: SIGCONT and stopped processes | Question | Low | SIGCONT at SIG_DFL (XSH.2.4.3-signal-actions.006) |
 | Q-19 | XSH `psiginfo()`: may the description carry siginfo_t details? | Question | Low | Disputed (XSH.psiginfo.003) |
+| Q-20 | XSH `sigaltstack()`: must oss report SS_ONSTACK/SS_DISABLE? | Question | Low | Disputed (XSH.sigaltstack.009) |
+| Q-21 | XSH `abort()`: caught but blocked SIGABRT: must the handler run? | Question | Low | Disputed (XSH.abort.006) |
+| Q-22 | XBD `<signal.h>`: MINSIGSTKSZ constant vs CPU-dependent frames | Question | Medium | XSH.sigaltstack.010 FAILs on AVX-512 |
+| Q-23 | XSH `signal()`: return value after failed calls or sigaction() | Question | Low | Successful calls only (XSH.signal.001) |
 
 ## Entries
 
@@ -597,6 +604,30 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **posixcheck meanwhile:** the unit is classified `impl`.
 - **Suggested change:** "In some implementations, a signal ... executes on the alternate stack ...", or make it implementation-defined (editorial).
 
+### SI-47: sigaltstack(): ENOMEM has no exception for SS_DISABLE
+
+- **Where:** XSH `sigaltstack()`, DESCRIPTION and ERRORS.
+- **What the text says:** with SS_DISABLE, ss_sp and ss_size are ignored; ENOMEM is required when the size of the alternate stack area is below MINSIGSTKSZ, without exception.
+- **Why it is a problem:** a call that disables the stack with ss_size 0 may be read as requiring ENOMEM, contradicting "ignored".
+- **posixcheck meanwhile:** XSH.sigaltstack.011 is `disputed` (expects success); XSH.sigaltstack.003 disables with a valid size.
+- **Suggested change:** limit ENOMEM to calls that enable a stack (editorial).
+
+### SI-48: signal(): the errno rule is not marked as an extension to ISO C
+
+- **Where:** XSH `signal()`, DESCRIPTION.
+- **What the text says:** a successful signal() shall not change errno; the sentence is unshaded.
+- **Why it is a problem:** ISO C does not require this (library functions may set errno even on success unless their description says otherwise), so the requirement is a POSIX extension and should carry CX shading like the page's other additions.
+- **posixcheck meanwhile:** XSH.signal.006 tests it (since 2008).
+- **Suggested change:** shade the sentence CX (editorial).
+
+### SI-49: str2sig(): "a string containing" a name or number
+
+- **Where:** XSH `str2sig()`, DESCRIPTION.
+- **What the text says:** str2sig() recognizes a string containing the name of a table signal, "RTMIN+n" with n a decimal representation, or a decimal representation of a signal number.
+- **Why it is a problem:** "containing" could be read as matching a substring ("xINTx"), and nothing says whether leading zeros, a plus sign or white space are accepted in the numbers.
+- **posixcheck meanwhile:** the tests use plain names and shortest decimal numbers only.
+- **Suggested change:** "a string that is the name ...", and say which decimal forms are accepted (editorial).
+
 ## Questions to raise
 
 These are consistent as written, but the intent or the fit with practice
@@ -765,6 +796,30 @@ is unclear.
 - **Where:** XSH `psiginfo()`.
 - **Question:** psiginfo() writes the message, ": " and "the signal description string associated with ... the signal indicated by pinfo". glibc adds the cause and sender (for example "(Signal sent by kill() 759 0)") after the description. Is the description meant to be the same string psignal() writes for that signal number, or may it carry what the siginfo_t says?
 - **posixcheck meanwhile:** XSH.psiginfo.003 is `disputed`: it expects psignal()'s line, and a difference is logged as INSPECT.
+
+### Q-20: Must sigaltstack() report SS_ONSTACK and SS_DISABLE in oss?
+
+- **Where:** XSH `sigaltstack()`, DESCRIPTION.
+- **Question:** the oss ss_flags member "may contain" SS_ONSTACK (the process is executing on the stack) or SS_DISABLE. Is reporting the state required, with "may" only meaning that one value or neither applies? The SS_ONSTACK description also speaks of the process, while the stack is per thread (compare SI-26).
+- **posixcheck meanwhile:** XSH.sigaltstack.009 (SS_ONSTACK reported inside the handler) is `disputed`; XSH.sigaltstack.002 and .003 require SS_DISABLE to be reported.
+
+### Q-21: abort() with SIGABRT caught but blocked: must the handler run?
+
+- **Where:** XSH `abort()`, DESCRIPTION.
+- **Question:** abort() overrides blocking or ignoring SIGABRT, and terminates the process unless a SIGABRT it generates is caught and the handler does not return. When SIGABRT is caught but blocked, is the handler required to run (glibc), or is terminating without it (musl) also overriding the block?
+- **posixcheck meanwhile:** XSH.abort.006 is `disputed` (expects the handler to run).
+
+### Q-22: How can MINSIGSTKSZ be a compile-time constant when the signal frame size depends on the CPU?
+
+- **Where:** XBD `<signal.h>`; XSH `sigaltstack()`.
+- **Question:** MINSIGSTKSZ is a symbolic constant (an integer constant expression) giving the minimum stack size for a signal handler, but on current hardware the frame the system builds depends on the CPU (vector registers such as AVX-512), known only at run time. Should MINSIGSTKSZ and SIGSTKSZ be allowed to be run-time values, or should a sysconf() name be added? (Check the Austin Group tracker for an existing report.)
+- **posixcheck meanwhile:** XSH.sigaltstack.010 expects a handler to run on a stack of exactly MINSIGSTKSZ bytes; it FAILs on x86-64 Linux with AVX-512 (docs/linux-deviations.md O.16).
+
+### Q-23: signal()'s return value: the most recent call, or the most recent successful one?
+
+- **Where:** XSH `signal()`, RETURN VALUE.
+- **Question:** signal() returns the value of func for the most recent call to signal() for the signal. A failed call, or a sigaction() in between, is not mentioned. Is the most recent successful call meant (as ISO C has it), and what is returned after sigaction() changed the action?
+- **posixcheck meanwhile:** XSH.signal.001 uses successful signal() calls only.
 
 ## Tracking
 

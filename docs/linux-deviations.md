@@ -55,7 +55,9 @@ by the named assertion.
 | XSH.sigqueue.005 | NOTINUSE (musl) | sysconf(_SC_SIGQUEUE_MAX) is -1 (no definite limit, which is allowed); glibc reports RLIMIT_SIGPENDING | - |
 | XBD.signal.h.006 | FAIL (glibc) | the realtime range is 31 signals but {RTSIG_MAX} is 32 | O.12 |
 | XSH.sigaltstack.005 | FAIL (glibc) | sigaltstack() accepts SS_ONSTACK in ss_flags | O.13 |
-| XSH.psiginfo.004 | FAIL (glibc) | psignal()/psiginfo() orient stderr | O.14 |
+| XSH.psiginfo.004 | FAIL (glibc) | psignal() orients stderr | O.14 |
+| XSH.sigaltstack.010 | FAIL (AVX-512 CPUs) | a handler does not fit in MINSIGSTKSZ bytes | O.16 |
+| XSH.abort.006 | INSPECT (musl) | abort() with SIGABRT caught but blocked ends the process without the handler (disputed, Q-21) | - |
 | XSH.psiginfo.002 | FAIL (musl) | psignal(sig, "") writes ": " | O.15 |
 | XSH.psiginfo.003 | INSPECT (glibc) | psiginfo() adds the sender to the description (disputed, Q-19) | - |
 | XSH.sig2str.001 to .006 | UNINITIATED | no sig2str() or str2sig() | 3.1 |
@@ -201,20 +203,22 @@ O.12 **glibc: SIGRTMIN..SIGRTMAX holds one signal fewer than {RTSIG_MAX}.**
 - Src: posixcheck run.
 
 O.13 **sigaltstack() accepts SS_ONSTACK in ss_flags.**
-- POSIX (Issue 8 `sigaltstack`, ERRORS, Defect 1187): ss_flags with
-  SS_ONSTACK (or any bit other than SS_DISABLE) fails with EINVAL.
+- POSIX (`sigaltstack`, ERRORS): ss_flags with SS_ONSTACK fails with
+  EINVAL. Issue 7 required EINVAL for any flag other than SS_DISABLE;
+  Issue 8 (Defect 1187) narrowed that to SS_ONSTACK or invalid flags, so
+  SS_ONSTACK is rejected under both.
 - Linux: the kernel treats SS_ONSTACK like 0 (kept for old programs) and
   sets the stack; glibc passes the call through. musl checks the flags
   itself and fails with EINVAL, as required.
-- Comp: kernel (glibc builds). Kind: long-standing; the EINVAL rule is new
-  in Issue 8. Observe: XSH.sigaltstack.005.
+- Comp: kernel (glibc builds). Kind: long-standing (nonconforming since
+  Issue 7 at least). Observe: XSH.sigaltstack.005.
 - Src: posixcheck run.
 
-O.14 **glibc: psignal() and psiginfo() give stderr a byte orientation.**
+O.14 **glibc: psignal() gives stderr a byte orientation.**
 - POSIX (`psiginfo`): these functions shall not change the orientation of
   the standard error stream.
-- glibc: after psignal() or psiginfo() on an unoriented stderr,
-  fwide(stderr, 0) is negative. musl leaves it unoriented.
+- glibc: after psignal() on an unoriented stderr, fwide(stderr, 0) is
+  negative; psiginfo() leaves it unoriented, as does musl.
 - Comp: glibc. Kind: long-standing. Observe: XSH.psiginfo.004.
 - Src: posixcheck run.
 
@@ -225,6 +229,19 @@ O.15 **musl: psignal() with an empty message writes a leading ": ".**
   right. glibc is right in both cases.
 - Comp: musl. Kind: long-standing. Observe: XSH.psiginfo.002.
 - Src: posixcheck run.
+
+O.16 **MINSIGSTKSZ is too small for the signal frame on x86-64 with AVX-512.**
+- POSIX (`sigaltstack`): MINSIGSTKSZ is the minimum stack size for a signal
+  handler.
+- Linux: glibc and musl define MINSIGSTKSZ as 2048, but on CPUs with
+  AVX-512 the kernel's signal frame is larger, so a trivial handler on an
+  alternate stack of exactly MINSIGSTKSZ bytes gets SIGSEGV. glibc 2.34
+  and later give the run-time value through sysconf(_SC_MINSIGSTKSZ), and
+  make MINSIGSTKSZ use it under _DYNAMIC_STACK_SIZE_SOURCE or _GNU_SOURCE,
+  not in the strict build.
+- Comp: kernel with glibc and musl. Kind: depends on the CPU. Observe:
+  XSH.sigaltstack.010 (standard question Q-22).
+- Src: posixcheck run (this machine has AVX-512).
 
 ## Things the strict build changes
 

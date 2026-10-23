@@ -57,6 +57,8 @@ int sigaddset(sigset_t *set, int signo)
 		return 0;
 	if (IS("wrong_bit"))
 		return real_sigaddset(set, signo == SIGUSR1 ? SIGUSR2 : signo);
+	if (IS("rt_wrong_bit") && signo > SIGRTMIN && signo <= SIGRTMAX)
+		return real_sigaddset(set, signo - 1);
 	if (IS("clears_others"))
 		(void)sigemptyset(set);
 	r = real_sigaddset(set, signo);

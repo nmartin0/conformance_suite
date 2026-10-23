@@ -20,6 +20,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <wchar.h>
 
@@ -54,7 +55,7 @@ static int end_of(pid_t c)
 		if (r == c)
 			return st;
 		if (r == -1 && errno != EINTR)
-			pc_check(0, "waitpid failed: %s", pc_errname(errno));
+			pc_unresolved("waitpid failed: %s", pc_errname(errno));
 		sleep_ms(10);
 	}
 	(void)kill(c, SIGKILL);
@@ -67,7 +68,13 @@ static int end_of(pid_t c)
 static const int table[] = {
 	SIGABRT, SIGALRM, SIGBUS, SIGCHLD, SIGCONT, SIGFPE, SIGHUP, SIGILL, SIGINT,
 	SIGKILL, SIGPIPE, SIGQUIT, SIGSEGV, SIGSTOP, SIGTERM, SIGTSTP, SIGTTIN,
-	SIGTTOU, SIGUSR1, SIGUSR2, SIGURG, SIGWINCH,
+	SIGTTOU, SIGUSR1, SIGUSR2,
+#ifdef SIGURG
+	SIGURG,
+#endif
+#ifdef SIGWINCH
+	SIGWINCH,
+#endif
 #ifdef SIGSYS
 	SIGSYS,
 #endif
@@ -87,7 +94,13 @@ static const int table[] = {
 static const char *const table_name[] = {
 	"ABRT", "ALRM", "BUS", "CHLD", "CONT", "FPE", "HUP", "ILL", "INT",
 	"KILL", "PIPE", "QUIT", "SEGV", "STOP", "TERM", "TSTP", "TTIN",
-	"TTOU", "USR1", "USR2", "URG", "WINCH",
+	"TTOU", "USR1", "USR2",
+#ifdef SIGURG
+	"URG",
+#endif
+#ifdef SIGWINCH
+	"WINCH",
+#endif
 #ifdef SIGSYS
 	"SYS",
 #endif
@@ -106,22 +119,34 @@ static const char *const table_name[] = {
 };
 #define NTABLE ((int)(sizeof table / sizeof table[0]))
 
+/* str2sig() of str: the return value, with *n set (or left at -7). */
+static int s2n(const char *str, int *n)
+{
+	*n = -7;
+	return str2sig(str, n);
+}
+
 int main(void)
 {
 	pc_begin("XSH.sig2str.004");
 	{
-		int i, n;
+		static const char *const rt[] = { "RTMIN", "RTMAX", "RTMIN+1", "RTMAX-1" };
+		int want[4], i, n, r;
 
+		want[0] = SIGRTMIN;
+		want[1] = SIGRTMAX;
+		want[2] = SIGRTMIN + 1;
+		want[3] = SIGRTMAX - 1;
 		pc_test();
 		for (i = 0; i < NTABLE; i++) {
-			n = -7;
-			pc_check(str2sig(table_name[i], &n) == 0, "str2sig(\"%s\") failed", table_name[i]);
+			r = s2n(table_name[i], &n);
+			pc_check(r == 0, "str2sig(\"%s\") returned %d", table_name[i], r);
 			pc_check(n == table[i], "str2sig(\"%s\") stored %d, expected %d", table_name[i], n, table[i]);
 		}
-		pc_check(str2sig("RTMIN", &n) == 0 && n == SIGRTMIN, "str2sig(\"RTMIN\") gave %d", n);
-		pc_check(str2sig("RTMAX", &n) == 0 && n == SIGRTMAX, "str2sig(\"RTMAX\") gave %d", n);
-		pc_check(str2sig("RTMIN+1", &n) == 0 && n == SIGRTMIN + 1, "str2sig(\"RTMIN+1\") gave %d", n);
-		pc_check(str2sig("RTMAX-1", &n) == 0 && n == SIGRTMAX - 1, "str2sig(\"RTMAX-1\") gave %d", n);
+		for (i = 0; i < 4; i++) {
+			r = s2n(rt[i], &n);
+			pc_check(r == 0 && n == want[i], "str2sig(\"%s\") returned %d and stored %d, expected %d", rt[i], r, n, want[i]);
+		}
 	}
 	pc_pass();
 }

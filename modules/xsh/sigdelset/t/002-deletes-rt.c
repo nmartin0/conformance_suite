@@ -1,10 +1,9 @@
 /*
- * psignal() and psiginfo() keep errno and leave stderr unoriented.
+ * sigdelset() removes realtime signals.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
- * ASSERTION XSH.psiginfo.004
- * MUTANT    psiginfo.errno_clobbered
- * MUTANT    psiginfo.orients_wide
+ * ASSERTION XSH.sigdelset.002
+ * MUTANT    sigdelset.no_effect
  */
 #include "pc.h"
 #include <errno.h>
@@ -20,6 +19,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <wchar.h>
 
@@ -54,7 +54,7 @@ static int end_of(pid_t c)
 		if (r == c)
 			return st;
 		if (r == -1 && errno != EINTR)
-			pc_check(0, "waitpid failed: %s", pc_errname(errno));
+			pc_unresolved("waitpid failed: %s", pc_errname(errno));
 		sleep_ms(10);
 	}
 	(void)kill(c, SIGKILL);
@@ -67,7 +67,13 @@ static int end_of(pid_t c)
 static const int table[] = {
 	SIGABRT, SIGALRM, SIGBUS, SIGCHLD, SIGCONT, SIGFPE, SIGHUP, SIGILL, SIGINT,
 	SIGKILL, SIGPIPE, SIGQUIT, SIGSEGV, SIGSTOP, SIGTERM, SIGTSTP, SIGTTIN,
-	SIGTTOU, SIGUSR1, SIGUSR2, SIGURG, SIGWINCH,
+	SIGTTOU, SIGUSR1, SIGUSR2,
+#ifdef SIGURG
+	SIGURG,
+#endif
+#ifdef SIGWINCH
+	SIGWINCH,
+#endif
 #ifdef SIGSYS
 	SIGSYS,
 #endif
@@ -87,7 +93,13 @@ static const int table[] = {
 static const char *const table_name[] = {
 	"ABRT", "ALRM", "BUS", "CHLD", "CONT", "FPE", "HUP", "ILL", "INT",
 	"KILL", "PIPE", "QUIT", "SEGV", "STOP", "TERM", "TSTP", "TTIN",
-	"TTOU", "USR1", "USR2", "URG", "WINCH",
+	"TTOU", "USR1", "USR2",
+#ifdef SIGURG
+	"URG",
+#endif
+#ifdef SIGWINCH
+	"WINCH",
+#endif
 #ifdef SIGSYS
 	"SYS",
 #endif
@@ -106,66 +118,17 @@ static const char *const table_name[] = {
 };
 #define NTABLE ((int)(sizeof table / sizeof table[0]))
 
-/* Runs fn with stderr redirected to a pipe; returns what was written. */
-static char out[512];
-
-static const char *capture(void (*fn)(void))
-{
-	int p[2], saved;
-	ssize_t k, n = 0;
-
-	pc_check(pipe(p) == 0, "pipe failed");
-	saved = dup(2);
-	pc_check(saved != -1, "dup failed");
-	(void)fflush(stderr);
-	pc_check(dup2(p[1], 2) == 2, "dup2 failed");
-	fn();
-	(void)fflush(stderr);
-	(void)dup2(saved, 2);
-	(void)close(saved);
-	(void)close(p[1]);
-	while (n < (ssize_t)sizeof out - 1 && (k = read(p[0], out + n, sizeof out - 1 - (size_t)n)) > 0)
-		n += k;
-	(void)close(p[0]);
-	out[n] = '\0';
-	return out;
-}
-
-/* 1 if s is "<prefix><non-empty text without newline>\n". */
-static int one_line(const char *s, const char *prefix)
-{
-	size_t n = strlen(prefix), len = strlen(s);
-
-	if (strncmp(s, prefix, n) != 0 || len < n + 2 || s[len - 1] != '\n')
-		return 0;
-	return memchr(s + n, '\n', len - n - 1) == NULL;
-}
-
-static siginfo_t si;
-static volatile int e1, e2;
-
-static void both(void)
-{
-	errno = EINTR;
-	psignal(SIGUSR2, "pc");
-	e1 = errno;
-	errno = EINTR;
-	psiginfo(&si, "pc");
-	e2 = errno;
-}
-
 int main(void)
 {
-	pc_begin("XSH.psiginfo.004");
-	memset(&si, 0, sizeof si);
-	si.si_signo = SIGUSR2;
-	si.si_code = SI_USER;
-	if (fwide(stderr, 0) != 0)
-		pc_unresolved("standard error is already oriented");
-	pc_test();
-	(void)capture(both);
-	pc_check(e1 == EINTR, "psignal() changed errno to %s", pc_errname(e1));
-	pc_check(e2 == EINTR, "psiginfo() changed errno to %s", pc_errname(e2));
-	pc_check(fwide(stderr, 0) == 0, "standard error has been given an orientation");
+	pc_begin("XSH.sigdelset.002");
+	{
+		sigset_t s;
+
+		pc_check(sigfillset(&s) == 0, "sigfillset failed");
+		pc_test();
+		pc_check(sigdelset(&s, SIGRTMIN) == 0 && sigdelset(&s, SIGRTMAX) == 0, "sigdelset() failed");
+		pc_check(sigismember(&s, SIGRTMIN) == 0 && sigismember(&s, SIGRTMAX) == 0, "a realtime signal was not removed");
+		pc_check(SIGRTMIN + 1 >= SIGRTMAX || sigismember(&s, SIGRTMIN + 1) == 1, "SIGRTMIN+1 was removed too");
+	}
 	pc_pass();
 }

@@ -5,8 +5,18 @@ assertion  XSH.sigaddset.001
 anchor     functions/sigaddset.html#DESCRIPTION
 class      required
 since      1988
-says       On an empty set, sigaddset() of SIGUSR1, then of SIGRTMAX, returns 0
+says       On an empty set, sigaddset() of SIGUSR1, then of SIGTERM, returns 0
            each time; afterwards those two are members and no other table
            signal is.
 uses       XSH.sigismember.001
 test       t/001-adds-one.c
+
+assertion  XSH.sigaddset.002
+anchor     functions/sigaddset.html#DESCRIPTION
+class      required
+since      2008
+says       On an empty set, sigaddset() of SIGRTMIN and of SIGRTMAX returns 0
+           and makes each a member, and SIGRTMIN+1 stays out (when it is
+           below SIGRTMAX).
+uses       XSH.sigismember.001
+test       t/002-adds-rt.c

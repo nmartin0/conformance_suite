@@ -1,23 +1,23 @@
 # sigaltstack.cov - every requirement unit on functions/sigaltstack.html.
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
-DESCRIPTION:8834fc6f        none  an introduction
-DESCRIPTION:d859b884        XSH.sigaltstack.001
+DESCRIPTION:8834fc6f        todo  for the current thread: a second thread sees SS_DISABLE and its handler does not run on the first thread's stack
+DESCRIPTION:d859b884        XSH.sigaltstack.001 XSH.sigaltstack.010
 DESCRIPTION:50371838        XSH.sigaltstack.001
 DESCRIPTION:10736e12        none  a statement
-DESCRIPTION:35c30315        XSH.sigaltstack.003
+DESCRIPTION:35c30315        XSH.sigaltstack.003 XSH.sigaltstack.011
 DESCRIPTION:a1bf436c        XSH.sigaltstack.001
 DESCRIPTION:056ac8df        none  a statement
 DESCRIPTION:9ecd475e        none  a statement
 DESCRIPTION:be81469e        XSH.sigaltstack.002
 DESCRIPTION:7a8262e6        XSH.sigaltstack.002
 DESCRIPTION:b3a29cd0        none  introduces the list
-DESCRIPTION:4cd0aeda        XSH.sigaltstack.001
+DESCRIPTION:4cd0aeda        XSH.sigaltstack.009
 DESCRIPTION:b94febc2        XSH.sigaltstack.007
-DESCRIPTION:04e9b8b0        partial XSH.sigaltstack.005  # setting it is rejected; that the system never lets a process change it otherwise is not observable
+DESCRIPTION:04e9b8b0        app
 DESCRIPTION:f930cd4f        XSH.sigaltstack.002 XSH.sigaltstack.003
 DESCRIPTION:2b7d4e49        none  a statement
-DESCRIPTION:4e1b753c        partial XSH.sigaltstack.004  # the size boundary; running a handler on exactly MINSIGSTKSZ is todo
+DESCRIPTION:4e1b753c        XSH.sigaltstack.010
 DESCRIPTION:7c928f11        app
 DESCRIPTION:dc2d1caa        XBD.signal.h.018
 DESCRIPTION:2652404c        XSH.sigaltstack.008

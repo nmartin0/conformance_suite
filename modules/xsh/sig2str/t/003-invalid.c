@@ -19,6 +19,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <wchar.h>
 
@@ -53,7 +54,7 @@ static int end_of(pid_t c)
 		if (r == c)
 			return st;
 		if (r == -1 && errno != EINTR)
-			pc_check(0, "waitpid failed: %s", pc_errname(errno));
+			pc_unresolved("waitpid failed: %s", pc_errname(errno));
 		sleep_ms(10);
 	}
 	(void)kill(c, SIGKILL);
@@ -66,7 +67,13 @@ static int end_of(pid_t c)
 static const int table[] = {
 	SIGABRT, SIGALRM, SIGBUS, SIGCHLD, SIGCONT, SIGFPE, SIGHUP, SIGILL, SIGINT,
 	SIGKILL, SIGPIPE, SIGQUIT, SIGSEGV, SIGSTOP, SIGTERM, SIGTSTP, SIGTTIN,
-	SIGTTOU, SIGUSR1, SIGUSR2, SIGURG, SIGWINCH,
+	SIGTTOU, SIGUSR1, SIGUSR2,
+#ifdef SIGURG
+	SIGURG,
+#endif
+#ifdef SIGWINCH
+	SIGWINCH,
+#endif
 #ifdef SIGSYS
 	SIGSYS,
 #endif
@@ -86,7 +93,13 @@ static const int table[] = {
 static const char *const table_name[] = {
 	"ABRT", "ALRM", "BUS", "CHLD", "CONT", "FPE", "HUP", "ILL", "INT",
 	"KILL", "PIPE", "QUIT", "SEGV", "STOP", "TERM", "TSTP", "TTIN",
-	"TTOU", "USR1", "USR2", "URG", "WINCH",
+	"TTOU", "USR1", "USR2",
+#ifdef SIGURG
+	"URG",
+#endif
+#ifdef SIGWINCH
+	"WINCH",
+#endif
 #ifdef SIGSYS
 	"SYS",
 #endif
@@ -105,16 +118,44 @@ static const char *const table_name[] = {
 };
 #define NTABLE ((int)(sizeof table / sizeof table[0]))
 
+/*
+ * sig2str() into a buffer with a guard area after SIG2STR_MAX bytes, so a
+ * name longer than SIG2STR_MAX is a FAIL, not an overflow of the test's
+ * own buffer.
+ */
+#define GUARD 64
+static char buf[SIG2STR_MAX + GUARD];
+
+static int s2s(int sig)
+{
+	int r, i;
+
+	memset(buf, 0x5a, sizeof buf);
+	r = sig2str(sig, buf);
+	if (r == 0) {
+		pc_check(memchr(buf, '\0', SIG2STR_MAX) != NULL, "sig2str(%d) wrote a name of SIG2STR_MAX bytes or more", sig);
+		for (i = SIG2STR_MAX; i < SIG2STR_MAX + GUARD; i++)
+			pc_check(buf[i] == 0x5a, "sig2str(%d) wrote past SIG2STR_MAX bytes", sig);
+	} else
+		buf[0] = '\0';
+	return r;
+}
+
 int main(void)
 {
 	pc_begin("XSH.sig2str.003");
 	{
-		char buf[SIG2STR_MAX];
+		int r1, e1, r2, e2;
 
-		pc_check(kill(getpid(), -1) == -1 && kill(getpid(), 100000) == -1, "kill() accepts the invalid numbers");
+		r1 = kill(getpid(), -1);
+		e1 = errno;
+		r2 = kill(getpid(), 100000);
+		e2 = errno;
+		if (!(r1 == -1 && e1 == EINVAL && r2 == -1 && e2 == EINVAL))
+			pc_unresolved("kill() does not reject -1 and 100000 with EINVAL");
 		pc_test();
-		pc_check(sig2str(-1, buf) == -1, "sig2str(-1) did not return -1");
-		pc_check(sig2str(100000, buf) == -1, "sig2str(100000) did not return -1");
+		pc_check(s2s(-1) == -1, "sig2str(-1) did not return -1");
+		pc_check(s2s(100000) == -1, "sig2str(100000) did not return -1");
 	}
 	pc_pass();
 }

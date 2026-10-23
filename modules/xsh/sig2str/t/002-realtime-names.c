@@ -20,6 +20,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <wchar.h>
 
@@ -54,7 +55,7 @@ static int end_of(pid_t c)
 		if (r == c)
 			return st;
 		if (r == -1 && errno != EINTR)
-			pc_check(0, "waitpid failed: %s", pc_errname(errno));
+			pc_unresolved("waitpid failed: %s", pc_errname(errno));
 		sleep_ms(10);
 	}
 	(void)kill(c, SIGKILL);
@@ -67,7 +68,13 @@ static int end_of(pid_t c)
 static const int table[] = {
 	SIGABRT, SIGALRM, SIGBUS, SIGCHLD, SIGCONT, SIGFPE, SIGHUP, SIGILL, SIGINT,
 	SIGKILL, SIGPIPE, SIGQUIT, SIGSEGV, SIGSTOP, SIGTERM, SIGTSTP, SIGTTIN,
-	SIGTTOU, SIGUSR1, SIGUSR2, SIGURG, SIGWINCH,
+	SIGTTOU, SIGUSR1, SIGUSR2,
+#ifdef SIGURG
+	SIGURG,
+#endif
+#ifdef SIGWINCH
+	SIGWINCH,
+#endif
 #ifdef SIGSYS
 	SIGSYS,
 #endif
@@ -87,7 +94,13 @@ static const int table[] = {
 static const char *const table_name[] = {
 	"ABRT", "ALRM", "BUS", "CHLD", "CONT", "FPE", "HUP", "ILL", "INT",
 	"KILL", "PIPE", "QUIT", "SEGV", "STOP", "TERM", "TSTP", "TTIN",
-	"TTOU", "USR1", "USR2", "URG", "WINCH",
+	"TTOU", "USR1", "USR2",
+#ifdef SIGURG
+	"URG",
+#endif
+#ifdef SIGWINCH
+	"WINCH",
+#endif
 #ifdef SIGSYS
 	"SYS",
 #endif
@@ -106,18 +119,44 @@ static const char *const table_name[] = {
 };
 #define NTABLE ((int)(sizeof table / sizeof table[0]))
 
+/*
+ * sig2str() into a buffer with a guard area after SIG2STR_MAX bytes, so a
+ * name longer than SIG2STR_MAX is a FAIL, not an overflow of the test's
+ * own buffer.
+ */
+#define GUARD 64
+static char buf[SIG2STR_MAX + GUARD];
+
+static int s2s(int sig)
+{
+	int r, i;
+
+	memset(buf, 0x5a, sizeof buf);
+	r = sig2str(sig, buf);
+	if (r == 0) {
+		pc_check(memchr(buf, '\0', SIG2STR_MAX) != NULL, "sig2str(%d) wrote a name of SIG2STR_MAX bytes or more", sig);
+		for (i = SIG2STR_MAX; i < SIG2STR_MAX + GUARD; i++)
+			pc_check(buf[i] == 0x5a, "sig2str(%d) wrote past SIG2STR_MAX bytes", sig);
+	} else
+		buf[0] = '\0';
+	return r;
+}
+
 int main(void)
 {
 	pc_begin("XSH.sig2str.002");
 	{
-		char buf[SIG2STR_MAX], a[32], b[32];
-		int s, mid = (SIGRTMIN + SIGRTMAX) / 2;
+		char a[32], b[32];
+		int s, r, mid = (SIGRTMIN + SIGRTMAX) / 2;
 
 		pc_test();
-		pc_check(sig2str(SIGRTMIN, buf) == 0 && strcmp(buf, "RTMIN") == 0, "sig2str(SIGRTMIN) gave \"%s\"", buf);
-		pc_check(sig2str(SIGRTMAX, buf) == 0 && strcmp(buf, "RTMAX") == 0, "sig2str(SIGRTMAX) gave \"%s\"", buf);
+		r = s2s(SIGRTMIN);
+		pc_check(r == 0 && strcmp(buf, "RTMIN") == 0, "sig2str(SIGRTMIN) gave %d, \"%s\"", r, buf);
+		r = s2s(SIGRTMAX);
+		pc_check(r == 0 && strcmp(buf, "RTMAX") == 0, "sig2str(SIGRTMAX) gave %d, \"%s\"", r, buf);
 		for (s = SIGRTMIN + 1; s < SIGRTMAX; s++) {
-			pc_check(sig2str(s, buf) == 0, "sig2str(SIGRTMIN+%d) failed", s - SIGRTMIN);
+			r = s2s(s);
+			pc_check(r == 0, "sig2str(SIGRTMIN+%d) failed", s - SIGRTMIN);
 			(void)snprintf(a, sizeof a, "RTMIN+%d", s - SIGRTMIN);
 			(void)snprintf(b, sizeof b, "RTMAX-%d", SIGRTMAX - s);
 			if (s <= mid)

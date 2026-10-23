@@ -56,7 +56,7 @@ static void faulty(const char *m, int sig, const char *msg)
 		return;
 	if (IS("orients_wide"))
 		(void)fwide(stderr, 1);
-	if (msg != NULL && (*msg != '\0' || IS("prefix_always")))
+	if (msg != NULL && (*msg != '\0' || IS("prefix_always") || IS("empty_as_message")))
 		n = snprintf(buf, sizeof buf, IS("no_separator") ? "%s%s%s" : "%s: %s%s", msg, d, IS("no_newline") ? "" : "\n");
 	else if (IS("prefix_always"))
 		n = snprintf(buf, sizeof buf, ": %s\n", d);
@@ -74,7 +74,7 @@ static void faulty(const char *m, int sig, const char *msg)
 
 static int handles(const char *m)
 {
-	return IS("silent") || IS("no_separator") || IS("no_newline") || IS("prefix_always") ||
+	return IS("silent") || IS("no_separator") || IS("no_newline") || IS("prefix_always") || IS("empty_as_message") ||
 	    IS("orients_wide") || IS("errno_clobbered") || IS("error_hidden");
 }
 
@@ -101,6 +101,11 @@ void psiginfo(const siginfo_t *si, const char *msg)
 
 	if (m == NULL) {
 		real_psiginfo(si, msg);
+		return;
+	}
+	if (IS("info_errno_clobbered")) {
+		real_psiginfo(si, msg);
+		errno = ENOENT;
 		return;
 	}
 	if (IS("info_wrong_signal")) {

@@ -44,7 +44,8 @@ verified; this file is the plan. Update both when a step finishes.
 6. **Remaining todos** in the done modules (`ci/coverage.py --show MODULE`
    lists them): unprivileged EACCES cases, pseudo-terminal cases,
    environment cases (ENOSPC, EROFS, ENFILE), SA_NOCLDWAIT.
-7. **stdio**: buffering, the XSH 2.5.1 handle rules, `fflush` and `fclose`
+7. **stdio**: buffering, the XSH 2.5.1 handle rules, the XSH 2.5.2 wide-stream
+   rule for psignal() and psiginfo(), `fflush` and `fclose`
    offset rules (glibc 2.39 and musl both miss the input case).
 8. **Threads**: `pthread_create`, joins, cancellation, mutexes, condition
    variables, thread-specific data.

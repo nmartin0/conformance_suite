@@ -6,7 +6,15 @@ anchor     functions/sigfillset.html#DESCRIPTION
 class      required
 since      1988
 says       sigfillset() on an empty set returns 0, and then every table
-           signal and every signal from SIGRTMIN to SIGRTMAX is a
-           member.
+           signal is a member.
 uses       XSH.sigismember.001
 test       t/001-includes-all.c
+
+assertion  XSH.sigfillset.002
+anchor     functions/sigfillset.html#DESCRIPTION
+class      required
+since      2008
+says       After sigfillset() on an empty set, every signal from SIGRTMIN to
+           SIGRTMAX is a member.
+uses       XSH.sigismember.001
+test       t/002-includes-rt.c

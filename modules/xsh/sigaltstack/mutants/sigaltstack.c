@@ -68,7 +68,13 @@ int sigaltstack(const stack_t *ss, stack_t *oss)
 		n.ss_flags = 0;
 		ss = &n;
 	}
+	if (IS("disable_checks_size") && ss != NULL && (ss->ss_flags & SS_DISABLE) && ss->ss_size < (size_t)MINSIGSTKSZ) {
+		errno = ENOMEM;
+		return -1;
+	}
 	r = real_sigaltstack(ss, oss);
+	if (r == 0 && oss != NULL && ss != NULL && IS("oss_reports_new"))
+		*oss = *ss;
 	if (r == -1 && IS("eperm_hidden") && errno == EPERM)
 		r = 0;
 	if (r == 0 && oss != NULL && IS("oss_zeroed"))
