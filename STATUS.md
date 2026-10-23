@@ -147,6 +147,13 @@ not distributed. `RULES.md` lists the rules that keep it within the
 standard's terms and other projects' licenses; read it before adding
 anything.
 
+## Issues in the standard
+
+`docs/standard-issues.md` indexes conflicts, mistakes and unclear points
+found in POSIX.1-2024 (SI-1 to SI-5, Q-1, Q-2 so far); the full write-up
+for The Austin Group is https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
+Reviews should report any new ones.
+
 ## Open decisions
 
 - Since which edition XSH.open.017 (ENAMETOOLONG for a long component) is

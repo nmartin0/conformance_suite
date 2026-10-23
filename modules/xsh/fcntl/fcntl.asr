@@ -46,6 +46,7 @@ says       F_DUPFD with a negative arg fails with EINVAL; with arg equal
            apply).
 note       The {OPEN_MAX} case is skipped (with a note) when
            sysconf(_SC_OPEN_MAX) is indeterminate or not below INT_MAX.
+           See SI-4.
 test       t/005-dupfd-einval.c
 
 assertion  XSH.fcntl.006

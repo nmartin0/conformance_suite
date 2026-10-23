@@ -156,7 +156,7 @@ since      2008
 says       pread() on a regular file with a negative offset fails with
            EINVAL and leaves the file offset unchanged.
 note       pread() was part of the XSI option until Issue 7 moved it to
-           the base.
+           the base. See SI-3.
 test       t/017-pread-einval.c
 
 assertion  XSH.read.018

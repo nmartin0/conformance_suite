@@ -162,6 +162,7 @@ since      2001
 says       write() on a stream socket shut down for writing fails with
            EPIPE (SIGPIPE, which the standard requires only for a socket
            no longer connected, is caught but not checked).
+note       See Q-1.
 test       t/017-socket-shutdown.c
 
 assertion  XSH.write.018
@@ -222,6 +223,7 @@ class      required
 since      2008
 says       pwrite() on a regular file with a negative offset fails with
            EINVAL, writes nothing and leaves the file offset unchanged.
+note       See SI-3.
 test       t/024-pwrite-einval.c
 
 assertion  XSH.write.025
@@ -238,6 +240,7 @@ class      required
 since      2001
 says       write() on a stream socket that is no longer connected (its peer
            closed) fails with EPIPE and sends SIGPIPE to the thread.
+note       SOCK_SEQPACKET is left out: see SI-2.
 test       t/026-socket-peer-closed.c
 
 assertion  XSH.write.027
@@ -250,6 +253,7 @@ says       write() on a stream socket that was never connected fails with
 note       write()'s list gives ECONNRESET with the wording of "not
            connected", while send(), which write() equals for sockets,
            gives ENOTCONN; this looks like an editorial merge in the
-           standard, so either error is accepted.
+           standard, so either error is accepted. See SI-1
+           (docs/standard-issues.md).
 test       t/027-socket-unconnected.c
 

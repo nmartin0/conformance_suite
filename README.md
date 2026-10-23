@@ -108,7 +108,8 @@ Waivers (`waivers/*.waiver`) are applied here, never on the system.
     ci/                  lint.py, mutate.sh (off-system)
     analysis/            analyze.py (off-system)
     gen/                 generators run on a development machine
-    docs/                known deviations of reference systems
+    docs/                known deviations of reference systems; issues
+                         found in the standard itself (standard-issues.md)
     known/               expected non-PASS results on reference systems
     profiles/  waivers/
 

@@ -97,7 +97,7 @@ says       A resulting offset too large for off_t fails with EOVERFLOW
            off_t from offset 1).
 note       The largest off_t is computed without signed overflow,
            assuming only that off_t is a signed integer type with no
-           padding bits.
+           padding bits. See Q-2.
 test       t/011-eoverflow.c
 
 assertion  XSH.lseek.012
