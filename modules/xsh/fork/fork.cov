@@ -1,0 +1,48 @@
+# fork.cov - every requirement unit on functions/fork.html (fork, _Fork).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d4fb8d1d        XSH.fork.001
+DESCRIPTION:dda66273        partial XSH.fork.017  # "exact copy": the attributes listed in XSH.fork.017 and the other tests
+DESCRIPTION:78dd6307        XSH.fork.002
+DESCRIPTION:40453cc3        XSH.fork.003
+DESCRIPTION:710980f0        XSH.fork.002
+DESCRIPTION:4cecbee3        XSH.fork.004 XSH.fork.005
+DESCRIPTION:1600a6a0        XSH.fork.004
+DESCRIPTION:de3a37cb        XSH.fork.006
+DESCRIPTION:12ea4a36        none  a permission
+DESCRIPTION:49716d6e        todo  catopen() descriptor still usable in the child (needs a message catalog)
+DESCRIPTION:e4318bcb        XSH.fork.007
+DESCRIPTION:2ab2387d        XSH.fork.008
+DESCRIPTION:ba89fac7        todo  XSI: semop() with SEM_UNDO in the parent; the child's exit does not undo it
+DESCRIPTION:4a91755d        XSH.fcntl.032
+DESCRIPTION:411c7918        XSH.fork.009
+DESCRIPTION:be04c9ba        todo  refers to XSI interval timers, which Issue 8 removed: see SI-6; nothing to test
+DESCRIPTION:3bda263f        XSH.fork.016
+DESCRIPTION:f9108152        todo  ML: mlockall() in the parent; the child's locked memory is not locked (needs privileges)
+DESCRIPTION:9ab1ebfc        XSH.fork.010 XSH.fork.011
+DESCRIPTION:9c004330        XSH.fork.010
+DESCRIPTION:59c68356        XSH.fork.010
+DESCRIPTION:e9ec502c        XSH.fork.010
+DESCRIPTION:95a3ad10        todo  PS: SCHED_FIFO or SCHED_RR policy and priority inherited (needs privileges)
+DESCRIPTION:5692be32        impl  other policies' settings across fork() (documentation)
+DESCRIPTION:b3391a83        XSH.fork.012
+DESCRIPTION:7a3f4dd7        todo  MSG: an open message queue descriptor works in the child
+DESCRIPTION:f22ed8d6        todo  MSG: the child's descriptor shares the parent's queue description (O_NONBLOCK via mq_setattr seen by both)
+DESCRIPTION:6a4d89fd        todo  an aio_read() pending in the parent does not complete into the child's memory
+DESCRIPTION:20d3bd47        none  undefined
+DESCRIPTION:e2f672d5        XSH.fork.013
+DESCRIPTION:ae133f47        XSH.fork.013
+DESCRIPTION:8b2f2d8f        app
+DESCRIPTION:0300f6f0        XSH.fork.014
+DESCRIPTION:6fa05145        none  undefined
+DESCRIPTION:522973b9        XSH.fork.015
+DESCRIPTION:1e3a1d4c        todo  TCT: the child's thread CPU-time clock starts at zero
+DESCRIPTION:e2825544        partial XSH.fork.017  # a sample of attributes; more to add (nice value, real and saved IDs, controlling terminal)
+DESCRIPTION:b56ee184        none  unspecified
+DESCRIPTION:1ffbb226        XSH.fork.003 XSH.fork.010  # parent and child run alternately, each waiting on the other
+DESCRIPTION:ac4c4f85        partial XSH.fork.018  # async-signal safety of _Fork() not tested
+RETURN_VALUE:166c3859       XSH.fork.001
+RETURN_VALUE:cf25f380       XSH.fork.001
+RETURN_VALUE:7c2be8bc       todo  environment: a fork() that fails must create no child (needs a process limit; RLIMIT_NPROC is not POSIX)
+ERRORS:480be767             todo  environment: reach {CHILD_MAX} or the system process limit (needs a dedicated user or VM)
+ERRORS:b03247c6             optional

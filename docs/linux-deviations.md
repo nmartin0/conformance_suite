@@ -42,6 +42,7 @@ by the named assertion.
 | XSH.lseek.011 | FAIL | `lseek()` gives EINVAL, not EOVERFLOW, when the result overflows `off_t` | O.3 |
 | XSH.read.021 | FAIL | `read()`/`recv()` on an unconnected `AF_UNIX` stream socket gives EINVAL; ENOTCONN required (TCP is right) | O.4 |
 | XSH.write.022 | FAIL | `pwrite()` on an `O_APPEND` descriptor appends instead of writing at the offset | 1.4 |
+| XSH.fork.018 | UNINITIATED (glibc) | `_Fork()` exists but is not declared under the strict build | 2.10 |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or

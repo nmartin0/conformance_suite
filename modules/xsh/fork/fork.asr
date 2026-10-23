@@ -1,0 +1,176 @@
+# XSH fork(), _Fork()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Children report by exit status; the parent judges.
+
+assertion  XSH.fork.001
+anchor     functions/fork.html#DESCRIPTION
+anchor     functions/fork.html#RETURN VALUE
+class      required
+since      1988
+says       fork() creates a process: it returns 0 in the child and the
+           child's process ID (positive) in the parent, and both carry
+           on from the call.
+test       t/001-returns.c
+
+assertion  XSH.fork.002
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      1988
+says       The child has a process ID of its own, different from the
+           parent's, and its parent process ID is the parent's process
+           ID.
+test       t/002-ids.c
+
+assertion  XSH.fork.003
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      1988
+says       The child's process ID is not the ID of any active process
+           group: right after fork() there is no process group with that
+           ID.
+test       t/003-not-a-group.c
+
+assertion  XSH.fork.004
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      1988
+says       The child has copies of the parent's descriptors, each
+           referring to the same open file description: an lseek() in
+           the child moves the parent's offset.
+test       t/004-descriptors.c
+
+assertion  XSH.fork.005
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      2024
+says       A descriptor with FD_CLOFORK set is not in the child; one
+           without it is.
+note       Blocked when XBD.fcntl.h.002 (FD_CLOFORK) fails.
+uses       XBD.fcntl.h.002
+test       t/005-clofork.c
+
+assertion  XSH.fork.006
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      1988
+says       The child has its own copy of the parent's open directory
+           streams: readdir() works on a stream the parent opened.
+test       t/006-dirstream.c
+
+assertion  XSH.fork.007
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      1988
+says       In the child, times() starts again: tms_cutime and tms_cstime
+           are 0, and tms_utime is below the CPU time the parent had
+           used.
+note       The parent first uses about 0.3 s of CPU and reaps a child
+           that did too.
+test       t/007-times.c
+
+assertion  XSH.fork.008
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      1988
+says       A pending alarm() in the parent is cancelled in the child:
+           alarm(0) there returns 0.
+test       t/008-alarm.c
+
+assertion  XSH.fork.009
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      1988
+says       The child starts with no pending signals, even when a signal
+           is pending in the parent.
+test       t/009-pending.c
+
+assertion  XSH.fork.010
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      2001
+says       A MAP_PRIVATE mapping is kept in the child with the parent's
+           data from before fork(); after fork(), each process's changes
+           to it are visible only to itself.
+nomutant   a copy-on-write fault cannot be planted from a preload
+           library
+test       t/010-map-private.c
+
+assertion  XSH.fork.011
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      2001
+says       A MAP_SHARED mapping is kept in the child: a change the child
+           makes is seen by the parent.
+nomutant   the mapping is kernel state that a preload fault cannot
+           remove
+test       t/011-map-shared.c
+
+assertion  XSH.fork.012
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      2008
+says       Per-process timers made with timer_create() are not
+           inherited: a timer the parent armed does not signal the
+           child.
+test       t/012-timer.c
+
+assertion  XSH.fork.013
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      2001
+says       The child of a multi-threaded process has only the thread
+           that called fork(): another parent thread that keeps counting
+           does not run in the child.
+nomutant   extra threads in the child cannot be planted from a preload
+           library
+test       t/013-single-thread.c
+
+assertion  XSH.fork.014
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      2001
+says       A process-shared mutex held by the parent is not held by the
+           child: unlocking that error-checking mutex in the child fails
+           with EPERM.
+nomutant   mutex ownership cannot be planted from a preload library
+test       t/014-pshared-mutex.c
+
+assertion  XSH.fork.015
+anchor     functions/fork.html#DESCRIPTION
+class      conditional
+when       CPT
+since      2001
+says       CPT: the child's CPU-time clock starts at zero: just after
+           fork() it reads less than the CPU time the parent had used.
+note       The parent first uses about 0.3 s of CPU.
+test       t/015-cputime.c
+
+assertion  XSH.fork.016
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      2001
+says       A named semaphore open in the parent is open in the child:
+           the child's sem_post() releases the parent's sem_wait().
+nomutant   the semaphore handle cannot be closed from a preload library
+test       t/016-semaphore.c
+
+assertion  XSH.fork.017
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      1988
+says       Other process attributes are the same in the child: the
+           umask, the working directory, the signal mask, ignored
+           signals, the environment, RLIMIT_NOFILE, the process group
+           and the session.
+test       t/017-same-state.c
+
+assertion  XSH.fork.018
+anchor     functions/fork.html#DESCRIPTION/_Fork
+class      required
+since      2024
+says       _Fork() creates a child as fork() does but does not run
+           handlers registered with pthread_atfork(), which fork() runs.
+note       _Fork() is new in Issue 8; a library that does not declare it
+           makes the test UNINITIATED (build failure).
+test       t/018-_Fork.c
