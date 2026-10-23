@@ -453,6 +453,14 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **posixcheck meanwhile:** not tested (the calls do not block).
 - **Suggested change:** "shall not fail with [EINTR]" (editorial).
 
+### SI-32: sigwaitinfo() and sigtimedwait() end the wait on a caught signal, but [EINTR] is only a may-fail error
+
+- **Where:** XSH `sigtimedwait()` (which also defines sigwaitinfo()), DESCRIPTION and ERRORS.
+- **What the text says:** with nothing in the set pending, the thread is suspended until a signal in the set becomes pending or until it is interrupted by an unblocked, caught signal; [EINTR] for that interruption is listed under "may fail", and whether it is used must be documented.
+- **Why it is a problem:** the description ends the wait on the interruption, but an implementation that does not fail with [EINTR] has nothing left to return: no signal from the set was selected, and no other outcome is given. The likely intent is that such an implementation resumes the wait (as with SA_RESTART), which the description does not allow as written.
+- **posixcheck meanwhile:** the interrupted case is not tested (the unit is `partial`; [EINTR] is `optional`).
+- **Suggested change:** "...until one or more signals in set become pending or, if the implementation detects the [EINTR] condition, until it is interrupted by an unblocked, caught signal" (editorial).
+
 ## Questions to raise
 
 These are consistent as written, but the intent or the fit with practice
@@ -579,6 +587,12 @@ is unclear.
 - **Where:** XSH `kill()`, DESCRIPTION (pid below -1: the group whose ID is the absolute value of pid); RATIONALE.
 - **Question:** the absolute value of the most negative pid_t cannot be represented. Is ESRCH required (what most systems give), EINVAL, or is the result unspecified? The RATIONALE only mentions extensions for large values.
 - **posixcheck meanwhile:** not tested.
+
+### Q-13: How does alarm() round the seconds it returns?
+
+- **Where:** XSH `alarm()`, RETURN VALUE.
+- **Question:** a previous request with time left returns a non-zero value that is the number of seconds until it would have fired. The time left is rarely a whole number of seconds and no rounding is stated. With under a second left only rounding up gives a non-zero value; is rounding up (or to nearest, but at least 1) the intent for every fraction?
+- **posixcheck meanwhile:** XSH.alarm.002 expects 1 with under a second left (the only non-zero value of at most 1); XSH.alarm.003 accepts 8 to 10 for about 9 seconds left.
 
 ## Tracking
 

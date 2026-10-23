@@ -1,0 +1,19 @@
+# sigqueue.cov - every requirement unit on functions/sigqueue.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:df778152        XSH.sigqueue.001
+DESCRIPTION:5a3509d6        XSH.sigqueue.002
+DESCRIPTION:36ad0c77        XSH.sigqueue.002
+DESCRIPTION:cdd0c748        partial XSH.sigqueue.007  # only the unprivileged-to-root case
+DESCRIPTION:8ab3c07b        partial XSH.sigqueue.001  # returns before the receiver handles it (the test reads the report afterwards)
+DESCRIPTION:37e8259a        XSH.sigqueue.001 XSH.sigqueue.004
+DESCRIPTION:318417c5        todo  at least one SIGRTMIN without SA_SIGINFO
+DESCRIPTION:69715711        XSH.sigqueue.003
+DESCRIPTION:2db0827f        XSH.sigqueue.004
+DESCRIPTION:30e3ae87        none  unspecified
+RETURN_VALUE:2598581e       XSH.sigqueue.001
+RETURN_VALUE:7a13bdcb       XSH.sigqueue.006
+ERRORS:b7a765dd             XSH.sigqueue.005
+ERRORS:1399ecd7             XSH.sigqueue.006
+ERRORS:ab8157c2             XSH.sigqueue.007
+ERRORS:25f5141b             XSH.sigqueue.002

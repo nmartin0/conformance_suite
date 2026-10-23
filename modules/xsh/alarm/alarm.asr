@@ -1,0 +1,39 @@
+# XSH alarm()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.alarm.001
+anchor     functions/alarm.html#DESCRIPTION
+class      required
+since      1988
+says       alarm(1) returns 0 (no earlier alarm) and SIGALRM is generated no
+           earlier than 1 s later (accepted within 10 s).
+note       Scheduling delays may hold the signal back, so only the lower
+           bound is tight.
+test       t/001-fires.c
+
+assertion  XSH.alarm.002
+anchor     functions/alarm.html#DESCRIPTION
+class      required
+since      1988
+says       alarm(0) after alarm(1) returns 1 (rounded up seconds left, at most
+           1) and no SIGALRM comes in the next 2 s.
+note       alarm() returns a non-zero value for an alarm with time
+           remaining; with under a second left that is 1.
+test       t/002-cancel.c
+
+assertion  XSH.alarm.003
+anchor     functions/alarm.html#DESCRIPTION
+class      required
+since      1988
+says       After alarm(10) and a 1 s pause, alarm(2) returns the seconds left
+           on the first alarm (8 to 10) and SIGALRM comes about 2 s later,
+           not 10 s.
+test       t/003-reschedule.c
+
+assertion  XSH.alarm.004
+anchor     functions/alarm.html#DESCRIPTION
+class      required
+since      1988
+says       alarm(1) twice in a row generates one SIGALRM, not two: after the
+           first is accepted, none follows within 2 s.
+test       t/004-not-stacked.c

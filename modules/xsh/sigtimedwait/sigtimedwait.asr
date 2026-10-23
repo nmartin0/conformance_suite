@@ -1,0 +1,62 @@
+# XSH sigtimedwait() and sigwaitinfo()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.sigtimedwait.001
+anchor     functions/sigtimedwait.html#DESCRIPTION
+class      required
+since      2008
+says       sigwaitinfo() on a SIGRTMIN queued by sigqueue() with value 77
+           returns SIGRTMIN and stores si_signo SIGRTMIN, si_code SI_QUEUE
+           and si_value.sival_int 77.
+test       t/001-info.c
+
+assertion  XSH.sigtimedwait.002
+anchor     functions/sigtimedwait.html#ERRORS/EAGAIN
+class      required
+since      2008
+says       With nothing pending, sigtimedwait() with a 300 ms timeout returns
+           -1 with errno EAGAIN, no earlier than 300 ms after the call
+           (CLOCK_MONOTONIC).
+test       t/002-timeout.c
+
+assertion  XSH.sigtimedwait.003
+anchor     functions/sigtimedwait.html#DESCRIPTION
+class      required
+since      2008
+says       With nothing pending, sigtimedwait() with a zero timeout returns -1
+           with EAGAIN at once (within 100 ms).
+test       t/003-zero-timeout.c
+
+assertion  XSH.sigtimedwait.004
+anchor     functions/sigtimedwait.html#DESCRIPTION
+class      required
+since      2008
+says       With SIGUSR1 blocked and pending, sigtimedwait() with a zero
+           timeout returns SIGUSR1 with si_signo SIGUSR1 and si_code
+           SI_USER, as sigwaitinfo() would.
+test       t/004-pending-zero.c
+
+assertion  XSH.sigtimedwait.005
+anchor     functions/sigtimedwait.html#DESCRIPTION
+class      required
+since      2008
+says       sigtimedwait() with a 10 s timeout returns SIGUSR1 soon after it is
+           sent (300 ms into the wait), not at the timeout.
+test       t/005-wakes.c
+
+assertion  XSH.sigtimedwait.006
+anchor     functions/sigtimedwait.html#DESCRIPTION
+class      required
+since      2008
+says       With SIGRTMIN+2 and then SIGRTMIN+1 pending, sigwaitinfo() on both
+           returns SIGRTMIN+1 first.
+test       t/006-lowest-rt.c
+
+assertion  XSH.sigtimedwait.007
+anchor     functions/sigtimedwait.html#DESCRIPTION
+class      required
+since      2008
+says       After sigwaitinfo() takes the only occurrence of a blocked SIGUSR1,
+           SIGUSR1 is no longer pending, and a zero-timeout sigtimedwait()
+           fails with EAGAIN.
+test       t/007-pending-reset.c

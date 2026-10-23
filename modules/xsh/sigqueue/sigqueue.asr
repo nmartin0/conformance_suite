@@ -1,0 +1,71 @@
+# XSH sigqueue()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.sigqueue.001
+anchor     functions/sigqueue.html#DESCRIPTION
+class      required
+since      2008
+says       sigqueue() to a child with SA_SIGINFO on SIGRTMIN returns 0, and the
+           child's handler gets si_code SI_QUEUE, si_value.sival_int 4321
+           and si_pid the sender's process ID.
+test       t/001-value.c
+
+assertion  XSH.sigqueue.002
+anchor     functions/sigqueue.html#ERRORS/ESRCH
+class      required
+since      2008
+says       sigqueue() with signal 0 returns 0 for a live child and sends it
+           nothing; for the ID of an exited group leader whose group lives
+           on (an ID that cannot be reused yet) it fails with ESRCH.
+test       t/002-null.c
+
+assertion  XSH.sigqueue.003
+anchor     functions/sigqueue.html#DESCRIPTION
+class      required
+since      2008
+says       In a single-threaded process, sigqueue(getpid(), SIGRTMIN) with
+           SIGRTMIN unblocked and caught runs the handler before sigqueue()
+           returns.
+test       t/003-self-before-return.c
+
+assertion  XSH.sigqueue.004
+anchor     functions/sigqueue.html#DESCRIPTION
+class      required
+since      2008
+says       With SIGRTMIN+2 and then SIGRTMIN+1 queued while blocked, unblocking
+           both at once delivers SIGRTMIN+1 first.
+note       Each handler's sa_mask blocks both signals: without that, the
+           second signal is delivered on top of the first handler before
+           it runs, so the handler bodies run in the reverse order,
+           which conforms.
+nomutant   the delivery order is the kernel's
+test       t/004-lowest-first.c
+
+assertion  XSH.sigqueue.005
+anchor     functions/sigqueue.html#ERRORS/EAGAIN
+class      required
+since      2008
+says       Queuing SIGRTMIN to the caller (blocked, SA_SIGINFO set) with
+           sigqueue() fails with EAGAIN no later than the attempt after
+           {SIGQUEUE_MAX} signals are queued.
+timeout    120
+note       {SIGQUEUE_MAX} from sysconf(); over 1000000 the test is
+           UNRESOLVED. A system-wide limit may make it fail earlier,
+           which is allowed.
+test       t/005-eagain.c
+
+assertion  XSH.sigqueue.006
+anchor     functions/sigqueue.html#ERRORS/EINVAL
+class      required
+since      2008
+says       sigqueue() with signal number -1 or 100000 fails with EINVAL.
+test       t/006-einval.c
+
+assertion  XSH.sigqueue.007
+anchor     functions/sigqueue.html#ERRORS/EPERM
+class      required
+since      2008
+says       A process running as user 65534 that queues SIGRTMIN to its parent
+           (user 0) fails with EPERM, and nothing is delivered.
+needs      root
+test       t/007-eperm.c

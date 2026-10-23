@@ -1,0 +1,29 @@
+# XSH sigpending()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.sigpending.001
+anchor     functions/sigpending.html#DESCRIPTION
+class      required
+since      1988
+says       sigpending() returns 0 and reports a blocked signal sent to the
+           process (SIGUSR1) as pending; an unblocked, caught signal
+           already delivered (SIGUSR2) and a signal never sent (SIGTERM)
+           are not in the set.
+test       t/001-blocked-pending.c
+
+assertion  XSH.sigpending.002
+anchor     functions/sigpending.html#DESCRIPTION
+class      required
+since      2008
+says       A blocked signal sent to one thread with pthread_kill() is in that
+           thread's sigpending() set and not in another thread's; a
+           blocked signal sent to the process is in both.
+test       t/002-thread.c
+
+assertion  XSH.sigpending.003
+anchor     functions/sigpending.html#DESCRIPTION
+class      required
+since      1988
+says       After a pending, blocked SIGUSR1 is unblocked and delivered, a
+           later sigpending() no longer reports it.
+test       t/003-after-delivery.c

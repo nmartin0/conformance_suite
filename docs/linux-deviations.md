@@ -52,6 +52,7 @@ by the named assertion.
 | XSH.sigaction.023 | FAIL | SA_RESETHAND leaves SA_SIGINFO set | O.10 |
 | XSH.kill.012 | FAIL | kill(-1, sig) does not signal the sender | 2.2 |
 | XSH.sigaction.021 | INSPECT | sigqueue() does not queue SIGUSR1 even with SA_SIGINFO (disputed, SI-24) | O.11 (withdrawn) |
+| XSH.sigqueue.005 | NOTINUSE (musl) | sysconf(_SC_SIGQUEUE_MAX) is -1 (no definite limit, which is allowed); glibc reports RLIMIT_SIGPENDING | - |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or

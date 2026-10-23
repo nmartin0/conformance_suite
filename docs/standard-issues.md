@@ -43,6 +43,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-29 | kill(): "a signal" vs "that signal" for the pid cases | editorial | (not tested) |
 | SI-30 | killpg() missing from the generating-function lists | editorial | XSH.pthread_sigmask.011 |
 | SI-31 | pthread_sigmask(): no-EINTR sentence covers sigprocmask() | editorial | (not tested) |
+| SI-32 | sigwaitinfo()/sigtimedwait(): wait ends on a caught signal, but [EINTR] is may-fail | editorial | (not tested) |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
@@ -55,3 +56,4 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-10 | execvp() sh fallback when argv[0] is a null pointer | question | (not tested) |
 | Q-11 | raise()/pthread_kill(): delivery before return (raise() settled by its own rule) | question | XSH.raise.001 |
 | Q-12 | kill() with the most negative pid_t | question | (not tested) |
+| Q-13 | alarm(): rounding of the seconds returned | question | XSH.alarm.002, XSH.alarm.003 |

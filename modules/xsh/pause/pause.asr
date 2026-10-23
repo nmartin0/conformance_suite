@@ -1,0 +1,27 @@
+# XSH pause()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.pause.001
+anchor     functions/pause.html#DESCRIPTION
+class      required
+since      1988
+says       pause() returns after a caught signal (sent 200 ms later) has run
+           its handler, with -1 and errno EINTR.
+test       t/001-eintr.c
+
+assertion  XSH.pause.002
+anchor     functions/pause.html#DESCRIPTION
+class      required
+since      1988
+says       A process in pause() that gets SIGTERM at SIG_DFL ends by that
+           signal; pause() does not return.
+nomutant   termination is done by the kernel
+test       t/002-terminates.c
+
+assertion  XSH.pause.003
+anchor     functions/pause.html#DESCRIPTION
+class      required
+since      1988
+says       An ignored signal (SIGUSR2 at SIG_IGN, sent first) does not end
+           pause(); it returns only after the caught SIGUSR1 sent later.
+test       t/003-ignored.c

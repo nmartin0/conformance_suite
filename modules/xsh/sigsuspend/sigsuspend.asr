@@ -1,0 +1,49 @@
+# XSH sigsuspend()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.sigsuspend.001
+anchor     functions/sigsuspend.html#DESCRIPTION
+class      required
+since      1988
+says       sigsuspend() with an empty mask, while SIGUSR1 is blocked and
+           pending, runs the handler, then returns -1 with errno EINTR,
+           and the mask is again the one before the call (SIGUSR1
+           blocked).
+test       t/001-handler-restores.c
+
+assertion  XSH.sigsuspend.002
+anchor     functions/sigsuspend.html#DESCRIPTION
+class      required
+since      1988
+says       With nothing pending, sigsuspend() does not return until a caught
+           signal sent 300 ms later is delivered.
+test       t/002-waits.c
+
+assertion  XSH.sigsuspend.003
+anchor     functions/sigsuspend.html#DESCRIPTION
+class      required
+since      1988
+says       While sigsuspend() waits with a mask that blocks SIGUSR2, a
+           SIGUSR2 sent first stays pending and a later SIGUSR1 ends the
+           wait; SIGUSR2 is delivered only after the old mask (nothing
+           blocked) is back.
+test       t/003-mask-during.c
+
+assertion  XSH.sigsuspend.004
+anchor     functions/sigsuspend.html#DESCRIPTION
+class      required
+since      1988
+says       A thread in sigsuspend() that gets a signal whose action is to
+           terminate (SIGTERM at SIG_DFL) does not return: the process
+           ends by that signal.
+nomutant   termination is done by the kernel
+test       t/004-terminates.c
+
+assertion  XSH.sigsuspend.005
+anchor     functions/sigsuspend.html#DESCRIPTION
+class      required
+since      1988
+says       sigsuspend() with every signal in its mask still lets SIGKILL
+           through: the waiting process is killed.
+nomutant   the kernel keeps SIGKILL out of the mask
+test       t/005-kill-unblockable.c

@@ -95,6 +95,17 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     SIGSTOP, EINVAL returned, queries with any how (2024), sigprocmask(),
     per-thread masks, SIGSEGV and others sent while blocked.
     `xsh/raise` (3): waits for the handler, thread-directed, EINVAL.
+  - `xsh/sigpending` (3), `xsh/sigsuspend` (5), `xsh/sigwait` (6),
+    `xsh/sigtimedwait` (7, with sigwaitinfo()), `xsh/sigqueue` (7),
+    `xsh/alarm` (4), `xsh/pause` (3): the pending set per thread and
+    after delivery; sigsuspend()'s mask during and after the wait,
+    termination, SIGKILL; selecting and clearing, queued remainders,
+    lowest realtime signal first, thread-directed and single-waiter
+    returns; siginfo_t and values, timeouts on CLOCK_MONOTONIC, zero
+    timeouts; values and SI_QUEUE to another process, the null signal,
+    delivery to self before return, EAGAIN at {SIGQUEUE_MAX}, EINVAL,
+    EPERM; alarm firing, cancelling, rescheduling, not stacking; pause()
+    through handlers, termination and ignored signals.
   - `xbd/unistd.h` (2): POSIX_CLOSE_RESTART, SEEK_*; `xbd/fcntl.h` now 8.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).
@@ -173,8 +184,8 @@ anything.
 ## Issues in the standard
 
 `docs/standard-issues-report.md` is the full write-up of conflicts,
-mistakes and unclear points found in POSIX.1-2024 (SI-1 to SI-31, Q-1 to
-Q-12 so far), for The Austin Group; `docs/standard-issues.md` indexes them
+mistakes and unclear points found in POSIX.1-2024 (SI-1 to SI-32, Q-1 to
+Q-13 so far), for The Austin Group; `docs/standard-issues.md` indexes them
 by assertion. A shared copy: https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 Reviews should report any new ones; add them to both files.
 
