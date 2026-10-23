@@ -1,0 +1,30 @@
+# fdopen.cov - every requirement unit on functions/fdopen.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:b678d7a4     XSH.fdopen.001
+DESCRIPTION:c2f07d0f     app
+DESCRIPTION:e508043d     XSH.fdopen.001 XSH.fdopen.002 XSH.fdopen.008
+DESCRIPTION:bd719f89     none  undefined
+DESCRIPTION:87c3be50     partial XSH.fdopen.001 XSH.fdopen.008  # reading with "r" and update with "r+"; that "r" cannot write is not checked
+DESCRIPTION:715cf151     XSH.fdopen.003
+DESCRIPTION:cf85c900     partial XSH.fdopen.002  # writing with "w"; "w+" and write-only are not checked
+DESCRIPTION:95bfaff3     XSH.fdopen.002
+DESCRIPTION:715cf151.2   XSH.fdopen.003
+DESCRIPTION:cf85c900.2   todo  the 'a' modes
+DESCRIPTION:475191fe     none  unspecified
+DESCRIPTION:56f08bf4     XSH.fdopen.004
+DESCRIPTION:dd75632f     XSH.fdopen.005 XSH.fdopen.006
+DESCRIPTION:e9a6198b     none  permission for the implementation
+DESCRIPTION:ad462060     app
+DESCRIPTION:d51dee7a     XSH.fdopen.001
+DESCRIPTION:9ddaa6b5     XSH.fdopen.007
+DESCRIPTION:58ec2786     none  permission for the implementation
+DESCRIPTION:574b18d2     none  unspecified
+DESCRIPTION:6a68cc6f     none  unspecified
+DESCRIPTION:cfee171a     none  not observable with a 64-bit off_t
+RETURN_VALUE:65a733e4    XSH.fdopen.001 XSH.fdopen.009
+ERRORS:e214d1ec          XSH.fdopen.009
+ERRORS:8f957e38          optional
+ERRORS:580e71ed          optional
+ERRORS:e2d4be0e          optional
+ERRORS:62c332e6          optional

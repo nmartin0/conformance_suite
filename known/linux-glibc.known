@@ -75,3 +75,8 @@ XSH.fclose.012     FAIL         linux*    O.29: fclose() of a full fmemopen() st
 XSH.fclose.010     FAIL         linux*    O.27: fclose() of an update stream does not set the offset
 XSH.fclose.011     FAIL         linux*    O.27: fclose() with pushback does not set the offset
 XSH.fclose.003     FAIL         linux*    O.27: fclose() of an input stream does not set the offset
+XSH.fopen.027      FAIL         linux*    O.1: EISDIR for fopen("file/", "w")
+XSH.fopen.028      FAIL         linux*    O.1: EISDIR for fopen("new/", "w")
+XSH.fopen.032      FAIL         linux*    O.31: {STREAM_MAX} is 16 but not enforced
+XSH.fdopen.005     FAIL         linux*    O.32: fdopen() ignores 'e'
+XSH.fdopen.009     FAIL         linux*    O.31: {STREAM_MAX} is 16 but not enforced

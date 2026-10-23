@@ -35,6 +35,11 @@ by the named assertion.
 | XBD.unistd.h.001 (XSH.close.009, .010 blocked) | FAIL (glibc) | no `posix_close()` / `POSIX_CLOSE_RESTART` | 1.3 |
 | XSH.open.044 | FAIL | `open("new/", O_CREAT...)` gives EISDIR; ENOENT or ENOTDIR required | O.1 |
 | XSH.open.045 | FAIL | `open("file/", O_CREAT...)` gives EISDIR; ENOTDIR required | O.1 |
+| XSH.fopen.027, .028 | FAIL | `fopen("file/", "w")` and `fopen("new/", "w")` give EISDIR (the O_CREAT open beneath) | O.1 |
+| XSH.fopen.032, XSH.fdopen.009 | FAIL (glibc) | sysconf(_SC_STREAM_MAX) is 16, but any number of streams can be opened | O.31 |
+| XSH.fopen.032, XSH.fdopen.009 | NOTINUSE (musl) | sysconf(_SC_STREAM_MAX) is -1 (indeterminate, which is allowed) | - |
+| XSH.fdopen.005 | FAIL (glibc) | `fdopen()` ignores 'e': FD_CLOEXEC is not set | O.32 |
+| XSH.fopen.034 | NOTINUSE | any byte but slash and NUL can be in a name, so EILSEQ never arises | - |
 | XSH.dup.012 to .015 | UNINITIATED (glibc) | `dup3()` exists but is not declared under the strict build | 11.1 |
 | XSH.pipe.007 to .010 | UNINITIATED (glibc) | `pipe2()` exists but is not declared under the strict build | 11.1 |
 | XBD.fcntl.h.008 (XSH.fcntl.016 blocked) | FAIL | glibc: `F_OWNER_PID`/`F_OWNER_PGRP` are enum constants only, never macros; musl 1.2.4: they and `struct f_owner_ex` need `_GNU_SOURCE` | O.2 |
@@ -81,7 +86,7 @@ by the named assertion.
 | XBD.signal.h.007 | FAIL | no `_SC_NSIG` (nor `NSIG_MAX`) | 1.24 |
 | XBD.signal.h.008, .028 | FAIL, UNINITIATED | no `SIG2STR_MAX`, `sig2str()` or `str2sig()` | 3.1 |
 
-O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
+O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR (and so does `fopen()` with "w" or "a").**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or
   more slashes after a non-slash character fails with ENOENT or ENOTDIR,
   and ENOENT is not allowed when the name without the slashes exists.
@@ -89,7 +94,8 @@ O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - Linux: the kernel's last-component lookup rejects any O_CREAT path with
   a trailing slash with EISDIR, whether the name is missing or a regular
   file. Nothing is created, so only the errno is wrong.
-- Comp: kernel. Kind: long-standing. Observe: XSH.open.044, XSH.open.045.
+- Comp: kernel. Kind: long-standing. Observe: XSH.open.044, XSH.open.045,
+  XSH.fopen.027, XSH.fopen.028.
 - Src: posixcheck run, Linux 6.18, glibc and musl alike.
 
 O.2 **`F_OWNER_PID` / `F_OWNER_PGRP` are not macros in glibc; hidden in musl.**
@@ -401,6 +407,25 @@ O.30 **musl: close() with two aio writes queued never returns.**
   With a single queued write musl cancels it (ECANCELED); a single
   200000-byte write instead reports success with a short count (65536).
 - Comp: musl. Kind: long-standing. Observe: XSH.close.014.
+- Src: posixcheck run.
+
+O.31 **glibc: sysconf(_SC_STREAM_MAX) reports a limit that is not enforced.**
+- POSIX (`fopen`, `fdopen`, ERRORS; XBD `<limits.h>`): with {STREAM_MAX}
+  streams open, fopen() and fdopen() shall fail with EMFILE, and sysconf()
+  gives the value a system actually supports (or -1 when it is
+  indeterminate, as musl reports).
+- glibc 2.39: sysconf(_SC_STREAM_MAX) returns FOPEN_MAX (16), yet streams
+  are limited only by descriptors and memory, so the 17th fopen() succeeds.
+- Comp: glibc. Kind: long-standing. Observe: XSH.fopen.032, XSH.fdopen.009.
+- Src: posixcheck run.
+
+O.32 **glibc: fdopen() ignores 'e'.**
+- POSIX (`fdopen`, DESCRIPTION; Issue 8): with 'e' in mode, fdopen() sets
+  FD_CLOEXEC on the descriptor.
+- glibc 2.39: fdopen(fd, "re") returns a stream and leaves FD_CLOEXEC clear
+  (its fopen() does handle 'e'). musl sets the flag.
+- Comp: glibc. Kind: Issue 8 feature not implemented. Observe:
+  XSH.fdopen.005.
 - Src: posixcheck run.
 
 O.26 **glibc: fflush() of an input stream with pushback sets the wrong offset.**

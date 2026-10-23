@@ -1,0 +1,341 @@
+# XSH fopen()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fopen.001
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      1988
+says       fopen("f", "r") on a file holding "abc" returns a stream whose reads
+           return 'a', 'b', 'c' and then EOF, and the file is unchanged.
+test       t/001-read.c
+
+assertion  XSH.fopen.002
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      1988
+says       fopen("f", "w") on a file holding "abcdef" leaves it empty; after
+           fputs("XY") and fclose() it holds "XY".
+test       t/002-write-truncates.c
+
+assertion  XSH.fopen.003
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      1988
+says       fopen("n1", "w"), fopen("n2", "a"), fopen("n3", "w+") and
+           fopen("n4", "a+") each create the missing file, and data written
+           with fputs() is in it after fclose().
+test       t/003-create.c
+
+assertion  XSH.fopen.004
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      1988
+says       On a file holding "abc" opened with "a", a write after
+           fseek(f, 0, SEEK_SET) goes to the end; after another descriptor
+           appends "Q", the next write goes after that: fputs("Z"),
+           fflush(), a write of "Q" through another descriptor, fseek(f, 1,
+           SEEK_SET), fputs("Y") and fclose() leave "abcZQY". With "a+" a
+           write after reading the first byte also goes to the end.
+test       t/004-append.c
+
+assertion  XSH.fopen.005
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      1988
+says       With "r+" on "abcd": a read of 'a', fseek(f, 0, SEEK_CUR), fputc('X')
+           and fclose() leave "aXcd". With "w+": fputs("hello"), rewind() and
+           reads return "hello". With "a+" on "abcd": fputs("Z"), rewind()
+           and reads return "abcdZ".
+test       t/005-update.c
+
+assertion  XSH.fopen.006
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2008
+says       For "r", "w", "a", "r+", "w+" and "a+", fcntl(F_GETFL) on the
+           stream's descriptor gives access mode O_RDONLY, O_WRONLY, O_WRONLY,
+           O_RDWR, O_RDWR and O_RDWR, O_APPEND exactly for the 'a' modes, and
+           none of O_NONBLOCK, O_SYNC and O_DSYNC (no other flags).
+note       Interpretation 1003.1-2001 #159 (Issue 7) made the open()
+           flags explicit.
+test       t/006-open-flags.c
+
+assertion  XSH.fopen.007
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2001
+says       Each of "rb", "wb", "ab", "rb+", "r+b", "wb+", "w+b", "ab+" and "a+b"
+           gives the same access mode and O_APPEND as the mode without 'b',
+           and bytes 0x0d 0x0a 0x00 0x1a written with "wb" read back
+           unchanged with "rb".
+test       t/007-binary.c
+
+assertion  XSH.fopen.008
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2024
+says       The descriptors of streams opened with "re", "we", "ae", "r+e",
+           "re+" and "w+e" have FD_CLOEXEC set; those opened with "r", "w",
+           "a" and "r+" have it clear.
+note       Austin Group defect 411 added 'e'. Atomicity (no window for
+           another thread's fork) is not observable here.
+test       t/008-cloexec.c
+
+assertion  XSH.fopen.009
+anchor     functions/fopen.html#ERRORS/EEXIST
+class      required
+since      2024
+says       On an existing file holding "abc", fopen() with "wx", "w+x", "ax" and
+           "a+x" each returns a null pointer with errno EEXIST, and the file
+           still holds "abc".
+note       Austin Group defects 411 and 1524. ISO C has 'x' for "w"
+           only; POSIX adds "a".
+test       t/009-exclusive-exists.c
+
+assertion  XSH.fopen.010
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2024
+says       fopen() with "wx" and "ax" on missing names creates the files; the
+           streams' descriptors have access mode O_WRONLY, O_APPEND only for
+           "ax", and data written is in the files after fclose().
+test       t/010-exclusive-new.c
+
+assertion  XSH.fopen.011
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2024
+says       With "l" a symbolic link to the missing name "target", fopen("l",
+           "wx") returns a null pointer with errno EEXIST and "target" is not
+           created (O_EXCL is in the open() flags).
+test       t/011-exclusive-symlink.c
+
+assertion  XSH.fopen.012
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2008
+says       With umask 0, files created by "w", "a+" and "wx" have permission
+           bits 0666; with umask 027, files created by "w" and "wx" have
+           0640.
+note       Interpretation 1003.1-2001 #025 (Issue 7) fixed the creation
+           mode; 'x' and its permission rule are 2024.
+test       t/012-creation-mode.c
+
+assertion  XSH.fopen.013
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2024
+says       Each of "rb+", "r+b", "re+", "r+e", "wxe", "wex", "w+x" and "wx+" is
+           accepted, and each gives the access mode, O_APPEND and
+           FD_CLOEXEC its characters call for.
+note       ISO C lists "rb+" and "r+b" only; POSIX allows any order (a
+           CX addition with 'e' and 'x').
+test       t/013-any-order.c
+
+assertion  XSH.fopen.014
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      1988
+says       For streams opened with "r" on an empty file, and with "w" and "a+",
+           ferror() and feof() both return 0.
+test       t/014-indicators-clear.c
+
+assertion  XSH.fopen.015
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2001
+says       For streams opened with "r", "w" and "a+", fwide(f, 0) returns 0.
+note       The encoding rule and the initial conversion state are not
+           observable apart from orientation.
+test       t/015-orientation.c
+
+assertion  XSH.fopen.016
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2001
+says       After fopen("d/n", "w") and fopen("d/m", "a") create files (2 s after
+           the directory was last changed), each new file's last data access,
+           modification and status change times, and the directory's last
+           modification and status change times, are later than the
+           directory's times before.
+test       t/016-create-times.c
+
+assertion  XSH.fopen.017
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2001
+says       fopen("f", "w") on an existing non-empty file, 2 s after it was last
+           changed, leaves its last data modification and status change
+           times later than before.
+test       t/017-truncate-times.c
+
+assertion  XSH.fopen.018
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2008
+says       With descriptor k the lowest not in use (found by opening and closing
+           a file), fileno() of a stream opened by fopen() is k.
+note       The descriptor is allocated as if by open(), which takes the
+           lowest available (XSH 2.6).
+test       t/018-lowest-descriptor.c
+
+assertion  XSH.fopen.019
+anchor     functions/fopen.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       On a stream opened with "w" on a pseudo-terminal's slave device,
+           fputs("ab\n") without fflush() makes "ab" readable from the
+           master within 2 s.
+note       Conditional on XSI only for posix_openpt(), the portable way
+           to get a terminal. A terminal can be determined to be
+           interactive, so its stream is line buffered or unbuffered;
+           either sends the line.
+test       t/019-interactive-buffering.c
+
+assertion  XSH.fopen.020
+anchor     functions/fopen.html#DESCRIPTION
+class      disputed
+since      1988
+says       On a stream opened with "w" on a regular file, after fputs("ab\n")
+           and fputc('c') (no fflush()), the file is still empty; after
+           fclose() it holds "ab\nc".
+note       disputed (Q-33): fully buffered output is meant to go as a
+           block when the buffer fills, but XSH 2.5 and ISO C make
+           support for the buffering characteristics implementation-
+           defined; a FAIL is logged as INSPECT.
+test       t/020-file-buffering.c
+
+assertion  XSH.fopen.021
+anchor     functions/fopen.html#ERRORS/ENOENT
+class      required
+since      1988
+says       fopen("missing", "r") and fopen("missing", "r+") return a null pointer
+           with errno ENOENT, and nothing named "missing" is created.
+test       t/021-enoent.c
+
+assertion  XSH.fopen.022
+anchor     functions/fopen.html#ERRORS/ENOENT
+class      required
+since      1988
+says       fopen("nodir/f", m) for m "w", "a" and "r", and fopen("", m) for m
+           "r" and "w", return a null pointer with errno ENOENT.
+test       t/022-enoent-prefix.c
+
+assertion  XSH.fopen.023
+anchor     functions/fopen.html#ERRORS/EACCES
+class      required
+since      1988
+says       Without appropriate privileges: "r" on a file of mode 0222, "w", "a"
+           and "r+" on a file of mode 0444, "w" for a new file in a
+           directory of mode 0555, and "r" on a file in a directory of mode
+           0666 (no search permission) each return a null pointer with errno
+           EACCES; no file is created in the 0555 directory.
+test       t/023-eacces.c
+
+assertion  XSH.fopen.024
+anchor     functions/fopen.html#ERRORS/EISDIR
+class      required
+since      1988
+says       fopen("d", m) on a directory "d" for each m of "w", "a", "r+", "w+"
+           and "a+" returns a null pointer with errno EISDIR.
+test       t/024-eisdir.c
+
+assertion  XSH.fopen.025
+anchor     functions/fopen.html#ERRORS/ENOTDIR
+class      required
+since      1988
+says       With "f" a regular file, fopen("f/x", m) for m "r", "w" and "a"
+           returns a null pointer with errno ENOTDIR.
+test       t/025-enotdir-prefix.c
+
+assertion  XSH.fopen.026
+anchor     functions/fopen.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       With "f" a regular file, fopen("f/", "r") returns a null pointer with
+           errno ENOTDIR (not ENOENT).
+note       In Issue 7 by TC1; the ENOENT exclusion is from defect 822
+           (TC2).
+test       t/026-trailing-slash-read.c
+
+assertion  XSH.fopen.027
+anchor     functions/fopen.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       With "f" a regular file holding "abc", fopen("f/", "w") and fopen("f/",
+           "a") return a null pointer with errno ENOTDIR (not ENOENT), and
+           the file still holds "abc".
+note       As XSH.open.045: Linux gives EISDIR for any O_CREAT path
+           ending in a slash (docs/linux-deviations.md O.1).
+test       t/027-trailing-slash-write.c
+
+assertion  XSH.fopen.028
+anchor     functions/fopen.html#ERRORS/ENOENT
+class      required
+since      2008
+says       fopen("new/", "w") returns a null pointer with errno ENOENT or ENOTDIR,
+           and nothing named "new" is created.
+note       As XSH.open.044: Linux gives EISDIR (docs/linux-deviations.md
+           O.1).
+test       t/028-trailing-slash-new.c
+
+assertion  XSH.fopen.029
+anchor     functions/fopen.html#ERRORS/ELOOP
+class      required
+since      2001
+says       With "a" a symbolic link to "b" and "b" a link to "a", fopen("a", "r")
+           and fopen("a", "w") return a null pointer with errno ELOOP.
+note       Issue 6 made ELOOP a required error.
+test       t/029-eloop.c
+
+assertion  XSH.fopen.030
+anchor     functions/fopen.html#ERRORS/ENAMETOOLONG
+class      required
+since      1988
+says       With {PATH_MAX} from pathconf(".", _PC_PATH_MAX) bounded, a pathname
+           of {PATH_MAX} + 1 bytes made of "./" components ending in an
+           existing file's name makes fopen() with "r" and "w" return a null
+           pointer with errno ENAMETOOLONG.
+test       t/030-path-max.c
+
+assertion  XSH.fopen.031
+anchor     functions/fopen.html#ERRORS/EMFILE
+class      required
+since      1988
+says       With RLIMIT_NOFILE lowered so that every allowed descriptor is open,
+           fopen("f", "r") and fopen("n", "w") return a null pointer with
+           errno EMFILE, and "n" is not created.
+test       t/031-emfile.c
+
+assertion  XSH.fopen.032
+anchor     functions/fopen.html#ERRORS/EMFILE
+class      required
+since      2008
+says       With {STREAM_MAX} from sysconf() bounded and {STREAM_MAX} streams
+           open (counting stdin, stdout and stderr), fopen("s", "r") returns
+           a null pointer with errno EMFILE.
+note       SD5-XSH-ERN-149 (Issue 7) made this a required error. Opening
+           more than the reported limit is the failure.
+test       t/032-stream-max.c
+
+assertion  XSH.fopen.033
+anchor     functions/fopen.html#ERRORS/EINTR
+class      required
+since      1988
+says       fopen("p", "r") on a FIFO with no writer blocks; a SIGALRM caught 1 s
+           later (handler installed without SA_RESTART) makes it return a
+           null pointer with errno EINTR. A child that opens the FIFO for
+           writing after 4 s ends the wait if it did not fail.
+test       t/033-eintr.c
+
+assertion  XSH.fopen.034
+anchor     functions/fopen.html#ERRORS/EILSEQ
+class      required
+since      2024
+says       fopen() with "w" on the name made of bytes 0xff 0xfe 'n' either
+           succeeds (the name can be created: NOTINUSE) or returns a null
+           pointer with errno EILSEQ.
+note       Austin Group defect 293 added EILSEQ. Other errors are
+           possible in principle; none applies to this name here.
+test       t/034-eilseq.c

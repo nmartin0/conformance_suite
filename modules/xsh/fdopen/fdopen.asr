@@ -1,0 +1,85 @@
+# XSH fdopen()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fdopen.001
+anchor     functions/fdopen.html#DESCRIPTION
+class      required
+since      1988
+says       With fd open O_RDONLY on "0123" and lseek(fd, 2, SEEK_SET),
+           fdopen(fd, "r") returns a stream whose fileno() is fd, whose
+           ftell() is 2 and whose first read returns '2'.
+test       t/001-associates.c
+
+assertion  XSH.fdopen.002
+anchor     functions/fdopen.html#DESCRIPTION
+class      required
+since      1988
+says       With fd open O_RDWR on "abcdef" at offset 3, after fdopen(fd, "w") the
+           file is still 6 bytes; fputs("Z") and fclose() leave "abcZef".
+test       t/002-no-truncate.c
+
+assertion  XSH.fdopen.003
+anchor     functions/fdopen.html#DESCRIPTION
+class      required
+since      2024
+says       With descriptors open O_RDWR|O_APPEND, streams from fdopen() with
+           "r", "r+", "w" and "w+" leave O_APPEND set, and a write through the
+           "w" stream after fseek(f, 0, SEEK_SET) goes to the end.
+note       Austin Group defect 1526 (Issue 8) stated it.
+test       t/003-append-kept.c
+
+assertion  XSH.fdopen.004
+anchor     functions/fdopen.html#DESCRIPTION
+class      required
+since      2024
+says       With fd open O_RDWR on an existing file, fdopen(fd, "wx") and
+           fdopen(fd2, "r+x") succeed, and a write through the first reaches
+           the file.
+note       Austin Group defects 411 and 1526.
+test       t/004-exclusive-ignored.c
+
+assertion  XSH.fdopen.005
+anchor     functions/fdopen.html#DESCRIPTION
+class      required
+since      2024
+says       With descriptors that have FD_CLOEXEC clear, fdopen() with "re",
+           "we" and "r+e" sets it.
+note       Austin Group defects 411 and 1526.
+test       t/005-cloexec-set.c
+
+assertion  XSH.fdopen.006
+anchor     functions/fdopen.html#DESCRIPTION
+class      required
+since      2024
+says       fdopen() with "r" and "w" leaves FD_CLOEXEC clear on a descriptor
+           that has it clear, and set on one opened with O_CLOEXEC.
+note       Austin Group defects 411 and 1526.
+test       t/006-cloexec-unchanged.c
+
+assertion  XSH.fdopen.007
+anchor     functions/fdopen.html#DESCRIPTION
+class      required
+since      1988
+says       With fd open O_RDONLY at the end of a file, and fd2 open O_WRONLY,
+           streams from fdopen(fd, "r") and fdopen(fd2, "w") have ferror()
+           and feof() both 0.
+test       t/007-indicators-clear.c
+
+assertion  XSH.fdopen.008
+anchor     functions/fdopen.html#DESCRIPTION
+class      required
+since      1988
+says       With fd open O_RDWR on "abcd", the stream from fdopen(fd, "r+")
+           reads 'a'; after fseek(f, 0, SEEK_CUR), fputc('X') and fclose()
+           the file holds "aXcd".
+test       t/008-update.c
+
+assertion  XSH.fdopen.009
+anchor     functions/fdopen.html#ERRORS/EMFILE
+class      required
+since      2008
+says       With {STREAM_MAX} from sysconf() bounded and {STREAM_MAX} streams
+           open (counting stdin, stdout and stderr), fdopen() on a new
+           descriptor returns a null pointer with errno EMFILE.
+note       SD5-XSH-ERN-149 (Issue 7) added this error.
+test       t/009-stream-max.c

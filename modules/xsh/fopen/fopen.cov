@@ -1,0 +1,66 @@
+# fopen.cov - every requirement unit on functions/fopen.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:2176ffdc     XSH.fopen.001 XSH.fopen.003
+DESCRIPTION:e2e7a711     app
+DESCRIPTION:67dc0f9c     none  unspecified
+DESCRIPTION:dc6a6828     XSH.fopen.001 XSH.fopen.002 XSH.fopen.004
+DESCRIPTION:bd719f89     none  undefined
+DESCRIPTION:d0d0c02a     XSH.fopen.001
+DESCRIPTION:0fff0fb6     XSH.fopen.002 XSH.fopen.003
+DESCRIPTION:d3455d1b     XSH.fopen.003 XSH.fopen.004
+DESCRIPTION:1c9d76c4     XSH.fopen.013
+DESCRIPTION:4df390fa     XSH.fopen.007
+DESCRIPTION:6d913ef1     partial XSH.fopen.008  # the flag is set; that it is set atomically is not observable here
+DESCRIPTION:ac312d9d     partial XSH.fopen.009 XSH.fopen.010 XSH.fopen.012  # fails if the file exists, creates it with the usual permissions; the implementation-defined exclusive access and "cannot be created" are not checked
+DESCRIPTION:d58ab52a     none  implementation-defined
+DESCRIPTION:791b604a     none  an informative note
+DESCRIPTION:1e8040fa     none  an informative note
+DESCRIPTION:acb7dcca     none  an informative note
+DESCRIPTION:65971546     XSH.fopen.005
+DESCRIPTION:66051afb     XSH.fopen.021 XSH.fopen.023
+DESCRIPTION:f9d70671     XSH.fopen.004
+DESCRIPTION:4975a949     XSH.fopen.005
+DESCRIPTION:71e0cc9a     app
+DESCRIPTION:dc8775a6     partial XSH.fopen.019 XSH.fopen.020  # a terminal (XSI) and a regular file; the regular file is disputed (Q-33)
+DESCRIPTION:9ddaa6b5     XSH.fopen.014
+DESCRIPTION:b72d1d45     XSH.fopen.016
+DESCRIPTION:3d661d9a     XSH.fopen.012
+DESCRIPTION:df4803b7     XSH.fopen.017
+DESCRIPTION:5177aa95     partial XSH.fopen.015  # the orientation; the encoding rule and conversion state are not observable apart from it
+DESCRIPTION:a9ece70a     XSH.fopen.006 XSH.fopen.018
+DESCRIPTION:4eeb3121     XSH.fopen.006 XSH.fopen.021
+DESCRIPTION:8bcf45a5     XSH.fopen.002 XSH.fopen.003 XSH.fopen.006
+DESCRIPTION:86b777bd     XSH.fopen.003 XSH.fopen.004 XSH.fopen.006
+DESCRIPTION:22e0b89a     XSH.fopen.005 XSH.fopen.006
+DESCRIPTION:54258964     XSH.fopen.003 XSH.fopen.005 XSH.fopen.006
+DESCRIPTION:11be33be     XSH.fopen.003 XSH.fopen.004 XSH.fopen.006
+DESCRIPTION:8ea73ca1     XSH.fopen.008 XSH.fopen.013
+DESCRIPTION:eb326967     XSH.fopen.009 XSH.fopen.011
+DESCRIPTION:68edb10e     none  implementation-specific flags
+DESCRIPTION:fc7a536f     partial XSH.fopen.006  # O_NONBLOCK, O_SYNC and O_DSYNC are clear; other flags have no portable test
+RETURN_VALUE:10eb3dd8    XSH.fopen.001
+RETURN_VALUE:cea1ed56    XSH.fopen.021 XSH.fopen.022 XSH.fopen.024
+ERRORS:ea48a2f8          XSH.fopen.023
+ERRORS:dbd50578          XSH.fopen.009 XSH.fopen.011
+ERRORS:71352c7e          XSH.fopen.034
+ERRORS:4c65b45d          XSH.fopen.033
+ERRORS:5175da26          XSH.fopen.024
+ERRORS:2543cacb          XSH.fopen.029
+ERRORS:62ac5ce0          XSH.fopen.031
+ERRORS:e49a6cf7          XSH.fopen.032
+ERRORS:038c0e60          partial XSH.fopen.030  # a long pathname; a long intermediate result of symbolic link resolution is not checked
+ERRORS:68f07062          todo  environment: the system-wide file table
+ERRORS:d9b86fb1          XSH.fopen.021 XSH.fopen.022
+ERRORS:18322c4a          XSH.fopen.026 XSH.fopen.027 XSH.fopen.028
+ERRORS:f9e46133          todo  environment: a full file system
+ERRORS:41a787c9          XSH.fopen.025 XSH.fopen.026 XSH.fopen.027
+ERRORS:308e4aeb          todo  environment: a device special file with no device
+ERRORS:018d9a79          todo  environment: a file too large for a 32-bit off_t
+ERRORS:0788f248          todo  environment: a read-only file system
+ERRORS:1d629fcc          optional
+ERRORS:d94eec8f          optional
+ERRORS:2ff9ca59          optional
+ERRORS:77f7aff8          optional
+ERRORS:5a3b118c          optional
+ERRORS:025a63c2          optional
