@@ -1,0 +1,36 @@
+# XSH umask()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.umask.001
+anchor     functions/umask.html#DESCRIPTION
+class      required
+since      1988
+says       After umask(022), umask(027) returns 022 and a second umask(077)
+           returns 027.
+test       t/001-returns-previous.c
+
+assertion  XSH.umask.002
+anchor     functions/umask.html#DESCRIPTION
+class      required
+since      1988
+says       Under umask(027), open(..., O_CREAT, 0666) makes a file with bits
+           0640, mkdir(..., 0777) a directory with 0750, and mkfifo(...,
+           0666) a FIFO with 0640.
+test       t/002-clears-bits.c
+
+assertion  XSH.umask.003
+anchor     functions/umask.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       umask(01077) then umask(022) returns a value with S_ISVTX clear and
+           permission bits 077.
+test       t/003-svtx-ignored.c
+
+assertion  XSH.umask.004
+anchor     functions/umask.html#RETURN VALUE
+class      required
+since      2008
+says       After umask(0751), old = umask(0); umask(old); a further umask(022)
+           returns 0751.
+test       t/004-round-trip.c

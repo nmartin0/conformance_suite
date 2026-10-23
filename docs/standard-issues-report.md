@@ -80,6 +80,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-51 | XBD `<float.h>`: unclosed paragraphs in the HTML edition | Defect (editorial, HTML) | Low | Generator repairs it |
 | SI-52 | XSH `rename()`: no error number for a directory renamed to "new/" | Defect (omission) | Low | Any error accepted (XSH.rename.014) |
 | SI-53 | XSH `chown()`/`fchown()`/`lchown()`: ERRORS out of step with each other | Defect (inconsistency) | Low | chown() rules applied |
+| SI-54 | XSH `truncate()`: [EFBIG] names a "SIGFSZ" signal | Defect (editorial) | Low | Read as SIGXFSZ (XSH.truncate.008) |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -665,6 +666,14 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **Why it is a problem:** lchown() is stricter about EINVAL than the chown() it is equivalent to; lchown() leaves out the restricted-chown case; and chown()'s "or", read literally, makes even a privileged process that does not own the file fail with EPERM, where lchown()'s "and" has the intended meaning.
 - **posixcheck meanwhile:** lchown() is tested with chown()'s rules (XSH.lchown.003, XSH.lchown.007); privileged chown() of another user's file is required to work (XSH.chown.001); lchown()'s EINVAL entry is classified as implementation-defined.
 - **Suggested change:** give all three pages chown()'s [EPERM] with "and" for the owner case and the restricted case as a second sentence; make lchown()'s [EINVAL] a "may fail" error; split fchown()'s [EINVAL] entry and add the RETURN VALUE sentence (editorial).
+
+### SI-54: truncate(): [EFBIG] names a "SIGFSZ" signal
+
+- **Where:** XSH `truncate()`, ERRORS, the [EFBIG] entry for the file size limit.
+- **What the text says:** the XSI-shaded sentence says a "SIGFSZ" signal shall also be generated for the thread.
+- **Why it is a problem:** no signal of that name exists. The DESCRIPTION of the same page, and the matching [EFBIG] entry of ftruncate(), name SIGXFSZ, the signal `<signal.h>` defines for exceeding the file size limit.
+- **posixcheck meanwhile:** the entry is read as SIGXFSZ (XSH.truncate.008).
+- **Suggested change:** replace "SIGFSZ" with "SIGXFSZ" (editorial).
 
 ## Questions to raise
 

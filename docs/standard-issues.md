@@ -65,6 +65,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-51 | <float.h>: unclosed paragraphs in the HTML edition | editorial (HTML) | (gen/specmodel.py) |
 | SI-52 | rename(): no error number for a directory renamed to "new/" | omission | XSH.rename.014 |
 | SI-53 | lchown()/fchown(): ERRORS out of step with chown() | inconsistency | XSH.lchown.003 |
+| SI-54 | truncate(): [EFBIG] names a "SIGFSZ" signal | editorial | XSH.truncate.008 |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |

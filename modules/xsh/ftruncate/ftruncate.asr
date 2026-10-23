@@ -1,0 +1,80 @@
+# XSH ftruncate()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.ftruncate.001
+anchor     functions/ftruncate.html#DESCRIPTION
+class      required
+since      1992
+says       ftruncate(fd, 4) of a 10-byte file leaves it 4 bytes long holding the
+           first 4 bytes; ftruncate(fd, 8) then makes it 8 bytes, bytes 4 to
+           7 reading as zero.
+test       t/001-shrink-extend.c
+
+assertion  XSH.ftruncate.002
+anchor     functions/ftruncate.html#DESCRIPTION
+class      required
+since      1992
+says       With the descriptor's offset at 8, ftruncate(fd, 2) leaves the
+           offset at 8.
+test       t/002-offset-kept.c
+
+assertion  XSH.ftruncate.003
+anchor     functions/ftruncate.html#DESCRIPTION
+class      required
+since      1992
+says       After ftruncate(), fstat() reports later st_mtim and st_ctim (the
+           test truncates to alternating lengths every 10 ms for up to 3 s
+           until they move).
+timeout    20
+test       t/003-times.c
+
+assertion  XSH.ftruncate.004
+anchor     functions/ftruncate.html#ERRORS
+class      required
+since      1992
+says       ftruncate() of a descriptor open only for reading fails with EBADF or
+           EINVAL and the file is unaffected; ftruncate() of a descriptor that
+           is not open fails with EBADF or EINVAL.
+test       t/004-not-writable.c
+
+assertion  XSH.ftruncate.005
+anchor     functions/ftruncate.html#ERRORS
+class      required
+since      1992
+says       ftruncate(fd, -1) fails with EINVAL and leaves the size; ftruncate()
+           of the write end of a pipe and of a socket fails with EINVAL.
+test       t/005-einval.c
+
+assertion  XSH.ftruncate.006
+anchor     functions/ftruncate.html#DESCRIPTION
+class      conditional
+when       SHM
+since      2001
+says       ftruncate(fd, 8192) of a new shared memory object succeeds and
+           fstat() reports st_size 8192.
+test       t/006-shm.c
+
+assertion  XSH.ftruncate.007
+anchor     functions/ftruncate.html#DESCRIPTION
+class      required
+since      2001
+says       After ftruncate() shrinks a mapped two-page file to one page, a
+           reference to the second page delivers SIGBUS.
+test       t/007-sigbus.c
+
+assertion  XSH.ftruncate.008
+anchor     functions/ftruncate.html#ERRORS/EFBIG
+class      required
+since      1992
+says       With RLIMIT_FSIZE set to 4096 bytes (and SIGXFSZ ignored),
+           ftruncate(fd, 8192) fails with EFBIG and the size is unchanged.
+test       t/008-efbig.c
+
+assertion  XSH.ftruncate.009
+anchor     functions/ftruncate.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       With RLIMIT_FSIZE set to 4096 bytes and SIGXFSZ caught,
+           ftruncate(fd, 8192) fails and a SIGXFSZ is delivered.
+test       t/009-sigxfsz.c

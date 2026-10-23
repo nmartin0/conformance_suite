@@ -1,0 +1,26 @@
+# truncate.cov - every requirement unit on functions/truncate.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:a5e1c4e1     XSH.truncate.001 XSH.truncate.002 XSH.truncate.005
+DESCRIPTION:0119ad78     XSH.truncate.001
+DESCRIPTION:32eb7b05     XSH.truncate.002
+DESCRIPTION:61483956     app
+DESCRIPTION:796fa704     XSH.truncate.007 XSH.truncate.008
+DESCRIPTION:911c4c3d     XSH.truncate.003
+DESCRIPTION:afcf3509     XSH.truncate.004
+RETURN_VALUE:0af43523    XSH.truncate.001
+RETURN_VALUE:d0365a78    XSH.truncate.006 XSH.truncate.009
+ERRORS:e0a1d02b          XSH.truncate.011
+ERRORS:0b909ae5          todo  needs a length beyond the file system's maximum file size, which varies by file system
+ERRORS:c61893ac          XSH.truncate.007 XSH.truncate.008
+ERRORS:f423d78f          untestable
+ERRORS:ec7f0b85          partial XSH.truncate.006  # a negative length and a FIFO; sockets cannot be named portably by truncate()'s path
+ERRORS:4751aad6          untestable
+ERRORS:16da75d7          XSH.truncate.006
+ERRORS:f39d7871          XSH.truncate.009
+ERRORS:681b232a          XSH.truncate.010
+ERRORS:83c37763          XSH.truncate.009
+ERRORS:df8daa9c          XSH.truncate.009
+ERRORS:403d4c4a          todo  needs a read-only file system (an environment case)
+ERRORS:811d61dd          optional
+ERRORS:c7f415ad          optional

@@ -1,0 +1,15 @@
+# umask.cov - every requirement unit on functions/umask.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:cc017612     XSH.umask.001
+DESCRIPTION:b240fdd2     partial XSH.umask.003  # only S_ISVTX is checked among the bits outside the permission bits
+DESCRIPTION:14defdd7     XSH.umask.003
+DESCRIPTION:d5e5c708     XSH.umask.002
+DESCRIPTION:246d0792     partial XSH.umask.002  # open(), mkdir() and mkfifo(); creat() and the *at() forms are not checked
+DESCRIPTION:3e42d455     todo  mknod() and mknodat() under the mask
+DESCRIPTION:2808b99e     todo  mq_open() under the mask
+DESCRIPTION:ee07785e     todo  sem_open() under the mask
+DESCRIPTION:dbfef908     XSH.umask.002
+RETURN_VALUE:c0981865    XSH.umask.001
+RETURN_VALUE:a83d8775    XSH.umask.003
+RETURN_VALUE:f4d4e380    XSH.umask.004
