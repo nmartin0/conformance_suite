@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.pthread_sigmask.006
+ * MUTANT    pthread_sigmask.kill_stop_error
+ * MUTANT    pthread_sigmask.oset_shows_kill
  */
 #include "pc.h"
 #include <errno.h>

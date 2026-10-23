@@ -38,6 +38,11 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-24 | queuing with SA_SIGINFO outside SIGRTMIN-SIGRTMAX: sigaction/2.4.2/sigqueue vs <signal.h> | conflict | XSH.sigaction.021 (disputed) |
 | SI-25 | sigaction() SA_NOCLDSTOP: "if the implementation supports SIGCHLD" | editorial | XSH.sigaction.007 |
 | SI-26 | sigaction(): SA_ONSTACK and handler mask worded per process | editorial | XSH.sigaction.009, XSH.sigaction.014 |
+| SI-27 | raise() ERRORS vs its pthread_kill() equivalence (sig 0, unsupported) | conflict | XSH.raise.003 |
+| SI-28 | kill() CHANGE HISTORY: "calling" process where the receiver is meant | editorial | XSH.kill.014 |
+| SI-29 | kill(): "a signal" vs "that signal" for the pid cases | editorial | (not tested) |
+| SI-30 | killpg() missing from the generating-function lists | editorial | XSH.pthread_sigmask.011 |
+| SI-31 | pthread_sigmask(): no-EINTR sentence covers sigprocmask() | editorial | (not tested) |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
@@ -48,4 +53,5 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-8 | XSH 2.3: ENAMETOOLONG/ENOTDIR always overlap ENOENT for lookups | question | XSH.exec.038, XSH.exec.041 |
 | Q-9 | exec E2BIG: which {ARG_MAX} when sysconf() under-reports | question | XSH.exec.043 |
 | Q-10 | execvp() sh fallback when argv[0] is a null pointer | question | (not tested) |
-| Q-11 | raise(): must the signal be delivered before it returns? | question | (sigaction tests use kill()) |
+| Q-11 | raise()/pthread_kill(): delivery before return (raise() settled by its own rule) | question | XSH.raise.001 |
+| Q-12 | kill() with the most negative pid_t | question | (not tested) |

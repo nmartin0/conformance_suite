@@ -73,11 +73,12 @@ int main(void)
 	pthread_t t;
 
 	pc_begin("XSH.pthread_sigmask.009");
-	pc_test();
 	pc_check(pthread_sigmask(SIG_BLOCK, &b, NULL) == 0, "pthread_sigmask failed");
+	pc_test();
 	pc_check(pthread_create(&t, NULL, worker, NULL) == 0, "pthread_create failed");
 	pc_check(pthread_join(t, NULL) == 0, "pthread_join failed");
-	pc_check(inherited == 1, "the new thread did not start with its creator's mask (SIGUSR2)");
+	if (inherited != 1)
+		pc_unresolved("the new thread did not start with its creator's mask (a pthread_create() matter)");
 	pc_check(other_blocked == 1, "the thread could not block SIGUSR1 in its own mask");
 	pc_check(!blocked(SIGUSR1), "blocking SIGUSR1 in another thread changed this thread's mask");
 	pc_pass();

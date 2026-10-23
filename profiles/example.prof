@@ -2,7 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # Lines are "key value". Keys:
-#   have NAME    the environment provides NAME, satisfying "needs NAME"
+#   have NAME [VALUE]  the environment provides NAME, satisfying "needs NAME";
+#                      a VALUE reaches the tests as PC_HAVE_<NAME>
+#
+# Names in use:
+#   have kill_uid U    a user ID no process uses, for XSH.kill.005: it sends
+#                      kill(-1, SIGURG) as that user, which reaches every
+#                      process of that user on the machine
 #
 # Planned names (tests do not use them yet):
 #   have faultdev   a scratch disk that fails chosen sectors on command
@@ -10,3 +16,4 @@
 #   have uid2       a second unprivileged user, named by "user2"
 #
 # have faultdev
+# have kill_uid 2000000123

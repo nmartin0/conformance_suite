@@ -53,6 +53,11 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-24 | XSH `sigaction()`, 2.4.2, `sigqueue()` against `<signal.h>`: queuing outside the realtime range | Conflict | Medium | 021 disputed (INSPECT) |
 | SI-25 | XSH `sigaction()`, SA_NOCLDSTOP: "if the implementation supports SIGCHLD" | Defect (editorial) | Low | Treats SIGCHLD as mandatory |
 | SI-26 | XSH `sigaction()`: SA_ONSTACK and the handler mask speak of the process | Defect (editorial) | Low | Reads them per thread |
+| SI-27 | XSH `raise()` ERRORS against its pthread_kill() equivalence | Conflict | Low | Uses an invalid number (XSH.raise.003) |
+| SI-28 | XSH `kill()` CHANGE HISTORY: "calling" process for the receiving one | Defect (editorial) | Low | Follows the DESCRIPTION (XSH.kill.014) |
+| SI-29 | XSH `kill()`: "a signal" against "that signal" in the pid cases | Defect (editorial) | Low | Not tested |
+| SI-30 | XSH `pthread_sigmask()`, 2.4.3: killpg() missing from the generating functions | Defect (editorial) | Low | Uses kill() |
+| SI-31 | XSH `pthread_sigmask()`: no-EINTR sentence covers sigprocmask() | Defect (editorial) | Low | Not tested |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -63,7 +68,8 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-8 | XSH 2.3: ENAMETOOLONG/ENOTDIR always meet ENOENT for lookups | Question | Medium | Accepts ENOENT too (XSH.exec.038, 041) |
 | Q-9 | XSH exec [E2BIG]: which {ARG_MAX} | Question | Low | Uses sysconf()'s value (XSH.exec.043) |
 | Q-10 | XSH `execvp()` sh fallback when argv[0] is null | Question | Low | Not tested |
-| Q-11 | XSH `raise()`: delivery before return | Question | Low | Uses kill(getpid()) instead |
+| Q-11 | XSH `raise()`/`pthread_kill()`: delivery before return | Question | Low | raise() answered by its own rule (XSH.raise.001); pthread_kill() open |
+| Q-12 | XSH `kill()` with the most negative pid_t | Question | Low | Not tested |
 
 ## Entries
 
@@ -407,6 +413,46 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **posixcheck meanwhile:** reads both as the receiving thread (XSH.sigaction.009, 014).
 - **Suggested change:** "delivered to the receiving thread on that stack"; add pthread_sigmask() to the list (editorial).
 
+### SI-27: raise()'s errors do not match its pthread_kill() equivalence
+
+- **Where:** XSH `raise()`, DESCRIPTION (equivalent to pthread_kill(pthread_self(), sig)) and ERRORS; XSH `pthread_kill()`, ERRORS.
+- **What the text says:** raise() fails with EINVAL for an invalid signal number. pthread_kill() may fail with EINVAL for signal 0 and shall fail for a non-zero invalid *or unsupported* number.
+- **Why it is a problem:** if the two are equivalent, raise(0) may fail and raise() of an unsupported number must fail; raise()'s own list allows neither.
+- **posixcheck meanwhile:** XSH.raise.003 uses a number that is invalid on every system (100000).
+- **Suggested change:** give raise() the same error entries as pthread_kill(), or refer to them.
+
+### SI-28: kill()'s CHANGE HISTORY names the wrong process
+
+- **Where:** XSH `kill()`, CHANGE HISTORY, Issue 6.
+- **What the text says:** the saved set-user-ID of the calling process is checked in place of its effective user ID.
+- **Why it is a problem:** the DESCRIPTION compares the sender's real or effective user ID with the *receiving* process's real or saved set-user-ID; the sender's saved ID plays no part.
+- **posixcheck meanwhile:** follows the DESCRIPTION (XSH.kill.014).
+- **Suggested change:** "the saved set-user-ID of the receiving process" (editorial).
+
+### SI-29: kill()'s permission wording differs between pid values
+
+- **Where:** XSH `kill()`, DESCRIPTION, the paragraphs for pid 0, pid -1 and pid below -1.
+- **What the text says:** for pid 0 and below -1, the processes for which the sender has permission to send *a* signal; for -1, permission to send *that* signal.
+- **Why it is a problem:** permission depends on the signal (the SIGCONT session rule), so for kill(0, SIGCONT) to a group member of another user, "a signal" reads as excluding it and "that signal" as including it.
+- **posixcheck meanwhile:** not tested.
+- **Suggested change:** "that signal" in all three (editorial).
+
+### SI-30: killpg() is missing from the lists of signal-generating functions
+
+- **Where:** XSH `pthread_sigmask()`, DESCRIPTION (SIGFPE, SIGILL, SIGSEGV and SIGBUS generated while blocked); XSH 2.4.3 (functions whose signal makes handler behaviour defined).
+- **What the text says:** generating these signals while blocked is undefined unless they come from another process or from kill(), pthread_kill(), raise() or sigqueue().
+- **Why it is a problem:** killpg() (XSI, equivalent to kill() with a negative pid) is left out, so killpg() to the caller's own group is undefined while the same kill() is not.
+- **posixcheck meanwhile:** XSH.pthread_sigmask.011 uses kill().
+- **Suggested change:** add killpg() to both lists (editorial).
+
+### SI-31: the no-EINTR sentence covers sigprocmask(), which returns no error codes
+
+- **Where:** XSH `pthread_sigmask()`, ERRORS.
+- **What the text says:** these functions shall not return an error code of [EINTR].
+- **Why it is a problem:** sigprocmask() returns -1 and sets errno; it returns no error code, so the sentence says nothing about it as worded.
+- **posixcheck meanwhile:** not tested (the calls do not block).
+- **Suggested change:** "shall not fail with [EINTR]" (editorial).
+
 ## Questions to raise
 
 These are consistent as written, but the intent or the fit with practice
@@ -526,6 +572,13 @@ is unclear.
 - **Where:** XSH `raise()`, DESCRIPTION; XSH `pthread_kill()`; XSH `kill()`.
 - **Question:** kill() to the calling process requires at least one unblocked pending signal to be delivered before it returns. raise() only says that, if a handler is called, raise() does not return before the handler does, and is equivalent to pthread_kill() on the calling thread, which has no delivery-before-return rule. Is a raise() that returns before the handler runs (the handler running later) conforming? ISO C expects the handler to run within raise().
 - **posixcheck meanwhile:** tests that check a handler ran right away use kill(getpid(), sig).
+- **Update:** raise() itself is settled by its own rule that it does not return until after a handler it causes has returned: for an unblocked, caught signal that handler will run, so it must run before raise() returns (XSH.raise.001). The question stays for pthread_kill() to the calling thread.
+
+### Q-12: kill() with the most negative pid_t?
+
+- **Where:** XSH `kill()`, DESCRIPTION (pid below -1: the group whose ID is the absolute value of pid); RATIONALE.
+- **Question:** the absolute value of the most negative pid_t cannot be represented. Is ESRCH required (what most systems give), EINVAL, or is the result unspecified? The RATIONALE only mentions extensions for large values.
+- **posixcheck meanwhile:** not tested.
 
 ## Tracking
 

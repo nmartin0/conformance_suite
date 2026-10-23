@@ -4,7 +4,6 @@
  *
  * ASSERTION XSH.kill.002
  * MUTANT    kill.null_sends
- * MUTANT    kill.esrch_as_eperm
  */
 #include "pc.h"
 #include <errno.h>
@@ -46,11 +45,13 @@ static sigset_t set_of(int first, ...)
 }
 
 /*
- * A child that reports each SIGURG (or SIGUSR1) it gets as one byte on the
- * pipe, after telling the parent it is ready; it lives until killed.
- * group: 0 stays in our group, 1 makes a group of its own.
+ * Children that report each SIGURG or SIGUSR1 they get as one byte on a
+ * pipe. They live until the test's lifeline pipe closes (the test holds
+ * its only write end), so none outlives the test, even in another group.
+ * In a child of the test (kid_fail_exit set), setup failures exit 98
+ * instead of reporting a result.
  */
-static int kid_w = -1;
+static int kid_w = -1, life[2] = { -1, -1 }, kid_fail_exit;
 
 static void on_sig(int sig)
 {
@@ -58,40 +59,92 @@ static void on_sig(int sig)
 	(void)write(kid_w, &c, 1);
 }
 
-static pid_t kid(int p[2], int group)
+static void kid_fail(const char *what)
+{
+	if (kid_fail_exit)
+		_exit(98);
+	pc_unresolved("%s", what);
+}
+
+/* In a kid: install handlers, say ready, wait for the lifeline to close. */
+_Noreturn static void kid_body(int p[2], int ready_w)
+{
+	struct sigaction sa;
+	char c;
+
+	kid_w = p[1];
+	(void)close(p[0]);
+	(void)close(life[1]);
+	memset(&sa, 0, sizeof sa);
+	sa.sa_handler = on_sig;
+	sigemptyset(&sa.sa_mask);
+	if (sigaction(SIGURG, &sa, NULL) != 0 || sigaction(SIGUSR1, &sa, NULL) != 0)
+		_exit(99);
+	(void)write(ready_w, "r", 1);
+	(void)close(ready_w);
+	while (read(life[0], &c, 1) == -1 && errno == EINTR)
+		;
+	_exit(0);
+}
+
+/* group: 0 stays in our group, 1 leads a group of its own, -g joins group g. */
+static pid_t kid(int p[2], pid_t group)
 {
 	int ready[2];
 	pid_t c;
 	char ch;
 
+	if (life[0] == -1 && pipe(life) != 0)
+		kid_fail("pipe failed");
 	if (pipe(ready) != 0)
-		pc_unresolved("pipe failed");
+		kid_fail("pipe failed");
 	c = fork();
 	if (c == -1)
-		pc_unresolved("fork failed");
+		kid_fail("fork failed");
 	if (c == 0) {
-		kid_w = p[1];
-		(void)close(p[0]);
 		(void)close(ready[0]);
-		if (group && setpgid(0, 0) != 0)
+		if (group == 1 && setpgid(0, 0) != 0)
 			_exit(99);
-		catch_sig(SIGURG, on_sig);
-		catch_sig(SIGUSR1, on_sig);
-		(void)write(ready[1], "r", 1);
-		for (;;)
-			(void)pause();
+		if (group < 0 && setpgid(0, -group) != 0)
+			_exit(99);
+		kid_body(p, ready[1]);
 	}
-	if (group)
+	if (group == 1)
 		(void)setpgid(c, c);
 	(void)close(ready[1]);
-	if (read(ready[0], &ch, 1) != 1)
-		pc_unresolved("a child did not start");
+	if (read(ready[0], &ch, 1) != 1) {
+		(void)kill(c, SIGKILL);
+		kid_fail("a child did not start");
+	}
 	(void)close(ready[0]);
 	return c;
 }
 
-/* Collects what arrived on the pipe within ms milliseconds. */
-static int got(int fd, long ms)
+/* Counts bytes on fd, waiting up to 5 s for want of them, then 200 ms more for extras. */
+static int got_until(int fd, int want)
+{
+	struct timespec ts = { 0, 10000000 };
+	int n = 0, fl, extra = 0;
+	long waited = 0;
+	char c;
+
+	fl = fcntl(fd, F_GETFL);
+	(void)fcntl(fd, F_SETFL, fl | O_NONBLOCK);
+	while (waited < 5000 && extra < 200) {
+		while (read(fd, &c, 1) == 1)
+			n++;
+		if (n >= want)
+			extra += 10;
+		(void)nanosleep(&ts, NULL);
+		waited += 10;
+	}
+	while (read(fd, &c, 1) == 1)
+		n++;
+	(void)fcntl(fd, F_SETFL, fl);
+	return n;
+}
+
+static int got(int fd, long ms)	/* for checks that nothing arrives */
 {
 	struct timespec ts = { 0, 10000000 };
 	int n = 0, fl;
@@ -120,15 +173,10 @@ static void end(pid_t c)
 int main(void)
 {
 	int p[2];
-	pid_t c, gone;
+	pid_t c;
 
 	pc_begin("XSH.kill.002");
 	pc_check(pipe(p) == 0, "pipe failed");
-	gone = fork();
-	pc_check(gone != -1, "fork failed");
-	if (gone == 0)
-		_exit(0);
-	pc_check(waitpid(gone, NULL, 0) == gone, "waitpid failed");
 	c = kid(p, 0);
 	pc_test();
 	{
@@ -138,6 +186,5 @@ int main(void)
 		pc_check(r == 0, "kill(child, 0) returned %d (%s)", r, pc_errname(e));
 		pc_check(n == 0, "kill(child, 0) delivered a signal");
 	}
-	pc_expect_err(kill(gone, 0), ESRCH, "kill(<reaped child>, 0)");
 	pc_pass();
 }

@@ -4,21 +4,24 @@
 assertion  XSH.raise.001
 anchor     functions/raise.html#DESCRIPTION
 class      required
-since      1988
+since      2001
 says       raise(SIGUSR1) with a handler returns 0, after the handler has run
            and returned.
-note       If the handler runs, raise() waits for it; whether it must
-           run before raise() returns is standard question Q-11.
+note       raise() came from ISO C (Issue 4); 2001 is the first POSIX.1
+           edition with it. Its rule that it does not return before a
+           handler it causes returns makes delivery before return
+           required (see Q-11).
 test       t/001-handler-before-return.c
 
 assertion  XSH.raise.002
 anchor     functions/raise.html#DESCRIPTION
 class      required
-since      2001
-says       raise() in a thread sends the signal to that thread: the handler
-           runs in the calling thread, and when the caller has the signal
-           blocked it stays pending for that thread, not delivered to
-           another thread that has it unblocked.
+since      2008
+says       raise() sends the signal to the calling thread: while another
+           thread with the signal unblocked exists, raise() in a thread
+           that has it unblocked runs the handler in that thread, and in a
+           thread that has it blocked leaves it pending for that thread
+           until it unblocks it.
 test       t/002-calling-thread.c
 
 assertion  XSH.raise.003

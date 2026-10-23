@@ -95,6 +95,14 @@ documented deviation in `known/*.known` (see `docs/linux-deviations.md`).
 An unlisted FAIL is SUSPECT (check the test first); a listed entry that now
 passes is STALE.
 
+Reference runs use a profile that names what the machine provides; for the
+Linux container that is `profiles/linux-reference.prof`
+(`./posixcheck.sh --profile profiles/linux-reference.prof`). Tests that need
+something a profile lacks (for example `needs kill_uid`, an otherwise unused
+user ID for `kill(-1)`) are UNRESOLVED without it. On your own machine, only
+name a user ID that no process uses: XSH.kill.005 and 012 signal every
+process of that user.
+
 Waivers (`waivers/*.waiver`) are applied here, never on the system.
 
 ## Layout

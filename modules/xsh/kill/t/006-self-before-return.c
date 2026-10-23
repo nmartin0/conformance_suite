@@ -54,8 +54,17 @@ static void h(int sig)
 
 int main(void)
 {
+	sigset_t p;
+
 	pc_begin("XSH.kill.006");
 	catch_sig(SIGUSR1, h);
+	pc_check(sigpending(&p) == 0, "sigpending failed");
+	{
+		int sig;
+		for (sig = 1; sig < 32; sig++)
+			if (sigismember(&p, sig) == 1)
+				pc_unresolved("signal %d is already pending", sig);
+	}
 	pc_test();
 	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
 	pc_check(ran, "the handler had not run when kill() returned");

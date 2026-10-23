@@ -241,7 +241,8 @@ while read -r pc_k pc_code pc_macro pc_yes pc_rest; do
 done <"$pc_results/claims.txt"
 
 # A profile has lines "key value". Keys used now:
-#   have NAME     the environment provides NAME (for "needs NAME")
+#   have NAME [VALUE]  the environment provides NAME (for "needs NAME");
+#                      a VALUE reaches the tests as PC_HAVE_<NAME>
 if [ -n "$pc_profile" ]; then
 	[ -f "$pc_profile" ] || pc_die "no profile $pc_profile"
 	while read -r pc_k pc_v pc_rest; do
@@ -250,7 +251,14 @@ if [ -n "$pc_profile" ]; then
 		have)
 			case $pc_v in
 			'' | *[!a-z0-9_]*) pc_warn "profile: bad name '$pc_v'" ;;
-			*) eval "pc_have_$pc_v=yes" ;;
+			*)
+				eval "pc_have_$pc_v=yes"
+				if [ -n "$pc_rest" ]; then
+					pc_uv=$(printf '%s' "$pc_v" | tr a-z A-Z)
+					eval "PC_HAVE_$pc_uv=\$pc_rest"
+					export "PC_HAVE_$pc_uv"
+				fi
+				;;
 			esac
 			;;
 		*) pc_warn "profile: unknown key '$pc_k'" ;;

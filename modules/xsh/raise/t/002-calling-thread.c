@@ -44,20 +44,19 @@ static sigset_t set_of(int first, ...)
 	return s;
 }
 
-static pthread_t runner;
-static volatile sig_atomic_t ran;
-static volatile int in_caller;
+static _Thread_local volatile sig_atomic_t here;	/* set by the handler in its thread */
+static volatile sig_atomic_t anywhere;
 
 static void h(int sig)
 {
 	(void)sig;
-	in_caller = pthread_equal(pthread_self(), runner) ? 1 : 0;
-	ran = 1;
+	here = 1;
+	anywhere = 1;
 }
 
-static volatile int go, stop;
+static volatile int go, stop, other_here;
 
-/* A thread with SIGUSR1 unblocked that waits for it to arrive elsewhere. */
+/* A thread with SIGUSR1 unblocked, alive through the whole test. */
 static void *other(void *arg)
 {
 	sigset_t a = set_of(SIGUSR1, 0);
@@ -67,6 +66,7 @@ static void *other(void *arg)
 	go = 1;
 	while (!stop)
 		(void)nanosleep(&ts, NULL);
+	other_here = here;
 	return NULL;
 }
 
@@ -74,28 +74,29 @@ int main(void)
 {
 	sigset_t a = set_of(SIGUSR1, 0), p;
 	pthread_t t;
-	struct timespec ts = { 0, 200000000 };
+	struct timespec ts = { 0, 200000000 }, tick = { 0, 10000000 };
 
 	pc_begin("XSH.raise.002");
 	catch_sig(SIGUSR1, h);
-	runner = pthread_self();
-	pc_test();
-	/* Unblocked here: the handler runs in this thread. */
-	pc_check(raise(SIGUSR1) == 0 && ran, "the handler did not run");
-	pc_check(in_caller == 1, "the handler ran in another thread");
-	/* Blocked here, unblocked in another thread: it waits for this thread. */
-	ran = 0;
-	pc_check(pthread_sigmask(SIG_BLOCK, &a, NULL) == 0, "pthread_sigmask failed");
 	pc_check(pthread_create(&t, NULL, other, NULL) == 0, "pthread_create failed");
 	while (!go)
-		(void)nanosleep(&ts, NULL);
+		(void)nanosleep(&tick, NULL);
+	pc_test();
+	/* Unblocked here: the handler runs in this thread. */
+	pc_check(raise(SIGUSR1) == 0, "raise failed");
+	pc_check(here, "the handler did not run in the thread that called raise()");
+	/* Blocked here: it stays pending for this thread, not for the other one. */
+	here = 0;
+	anywhere = 0;
+	pc_check(pthread_sigmask(SIG_BLOCK, &a, NULL) == 0, "pthread_sigmask failed");
 	pc_check(raise(SIGUSR1) == 0, "raise failed");
 	(void)nanosleep(&ts, NULL);
+	pc_check(!anywhere, "the signal raised by a thread that blocks it was delivered to another thread");
+	pc_check(sigpending(&p) == 0 && sigismember(&p, SIGUSR1) == 1, "the raised signal is not pending");
+	pc_check(pthread_sigmask(SIG_UNBLOCK, &a, NULL) == 0, "pthread_sigmask failed");
+	pc_check(here, "unblocking did not deliver the pending signal to this thread");
 	stop = 1;
 	(void)pthread_join(t, NULL);
-	pc_check(!ran, "the signal raised by a thread that blocks it was delivered to another thread");
-	pc_check(sigpending(&p) == 0 && sigismember(&p, SIGUSR1) == 1, "the raised signal is not pending");
-	pc_check(pthread_sigmask(SIG_UNBLOCK, &a, NULL) == 0 && ran && in_caller == 1,
-	    "unblocking did not deliver the pending signal to this thread");
+	pc_check(!other_here, "the handler ran in the other thread");
 	pc_pass();
 }

@@ -48,10 +48,12 @@ typedef int (*mask_fn)(int, const sigset_t *, sigset_t *);
 /* 0 or an error number, as pthread_sigmask() reports it. */
 static int faulty(const char *m, mask_fn real, int is_procmask, int how, const sigset_t *set, sigset_t *oset)
 {
-	sigset_t s, cur;
+	sigset_t s;
 	int r;
 
 	if (set == NULL) {
+		if (IS("query_checks_how") && how != SIG_BLOCK && how != SIG_UNBLOCK && how != SIG_SETMASK)
+			return EINVAL;
 		r = real(how, NULL, oset);
 		if (IS("query_changes")) {
 			sigemptyset(&s);
@@ -63,6 +65,8 @@ static int faulty(const char *m, mask_fn real, int is_procmask, int how, const s
 	if (how != SIG_BLOCK && how != SIG_UNBLOCK && how != SIG_SETMASK && IS("einval_accepted"))
 		return 0;
 	s = *set;
+	if (IS("kill_stop_error") && (sigismember(&s, SIGKILL) == 1 || sigismember(&s, SIGSTOP) == 1))
+		return EINVAL;
 	if (IS("block_replaces") && how == SIG_BLOCK)
 		how = SIG_SETMASK;
 	if (IS("block_ignored") && how == SIG_BLOCK)
@@ -75,7 +79,7 @@ static int faulty(const char *m, mask_fn real, int is_procmask, int how, const s
 	}
 	if (IS("setmask_union") && how == SIG_SETMASK)
 		how = SIG_BLOCK;
-	if (IS("unblock_deferred") && how == SIG_UNBLOCK) {
+	if (IS("unblock_drops") && how == SIG_UNBLOCK) {
 		/* pending signals being unblocked are dropped, not delivered */
 		sigset_t p, one;
 		struct timespec zero = { 0, 0 };
@@ -88,14 +92,14 @@ static int faulty(const char *m, mask_fn real, int is_procmask, int how, const s
 					(void)sigtimedwait(&one, NULL, &zero);
 				}
 	}
-	(void)real(SIG_BLOCK, NULL, &cur);
 	r = real(how, &s, oset);
 	if (is_procmask)
 		r = r == 0 ? 0 : errno;
 done:
 	if (r == 0 && oset != NULL && IS("oset_lost"))
 		sigemptyset(oset);
-	(void)cur;
+	if (r == 0 && oset != NULL && IS("oset_shows_kill"))
+		sigaddset(oset, SIGKILL);
 	return r;
 }
 

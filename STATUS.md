@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (383 assertions):
+- Modules (389 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -86,12 +86,14 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     kill() and sigqueue(), SA_NOCLDSTOP, SA_ONSTACK, SA_RESETHAND,
     SA_RESTART, SA_NODEFER, the handler's mask, signal() round trip,
     EINVAL, queuing with SA_SIGINFO, SIG_IGN.
-  - `xsh/kill` (11): to a process, to the own and another group, to all
-    (pid -1, as an unprivileged user), the null signal, delivery before
-    return, permissions (same user, EPERM, SIGCONT within the session),
-    EINVAL, ESRCH. `xsh/pthread_sigmask` (9): SIG_BLOCK, SIG_UNBLOCK,
+  - `xsh/kill` (15): to a process, to the own and another group, to all
+    (pid -1, as an unused user ID from the profile), the null signal,
+    delivery before return, permissions (same user, EPERM, the receiver's
+    real and saved IDs, SIGCONT within and outside the session), zombies,
+    EINVAL, ESRCH. `xsh/pthread_sigmask` (11): SIG_BLOCK, SIG_UNBLOCK,
     SIG_SETMASK, oset and queries, delivery on unblocking, SIGKILL and
-    SIGSTOP, EINVAL returned, sigprocmask(), per-thread masks.
+    SIGSTOP, EINVAL returned, queries with any how (2024), sigprocmask(),
+    per-thread masks, SIGSEGV and others sent while blocked.
     `xsh/raise` (3): waits for the handler, thread-directed, EINVAL.
   - `xbd/unistd.h` (2): POSIX_CLOSE_RESTART, SEEK_*; `xbd/fcntl.h` now 8.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
@@ -171,8 +173,8 @@ anything.
 ## Issues in the standard
 
 `docs/standard-issues-report.md` is the full write-up of conflicts,
-mistakes and unclear points found in POSIX.1-2024 (SI-1 to SI-26, Q-1 to
-Q-11 so far), for The Austin Group; `docs/standard-issues.md` indexes them
+mistakes and unclear points found in POSIX.1-2024 (SI-1 to SI-31, Q-1 to
+Q-12 so far), for The Austin Group; `docs/standard-issues.md` indexes them
 by assertion. A shared copy: https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 Reviews should report any new ones; add them to both files.
 

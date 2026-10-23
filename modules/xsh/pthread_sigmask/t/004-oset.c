@@ -64,7 +64,7 @@ int main(void)
 	pc_check(pthread_sigmask(SIG_BLOCK, &b, &o) == 0, "pthread_sigmask failed");
 	pc_check(sigismember(&o, SIGUSR1) == 1 && sigismember(&o, SIGUSR2) != 1,
 	    "oset does not hold the mask from before the call");
-	pc_check(pthread_sigmask(-12345, NULL, &o) == 0, "a query with an unused how failed");
+	pc_check(pthread_sigmask(SIG_BLOCK, NULL, &o) == 0, "a query failed");
 	pc_check(sigismember(&o, SIGUSR1) == 1 && sigismember(&o, SIGUSR2) == 1, "the query reported the wrong mask");
 	pc_check(blocked(SIGUSR1) && blocked(SIGUSR2), "a query changed the mask");
 	pc_pass();

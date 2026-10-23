@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 static char phase[16];
@@ -89,8 +90,23 @@ int kill(pid_t pid, int sig)
 		}
 		return r;
 	}
+	if (IS("zombie_esrch") && pid > 0) {
+		siginfo_t si;
+		memset(&si, 0, sizeof si);
+		if (waitid(P_PID, (id_t)pid, &si, WEXITED | WNOHANG | WNOWAIT) == 0 && si.si_pid == pid) {
+			errno = ESRCH;	/* treats a zombie as gone */
+			return -1;
+		}
+	}
+	if (IS("group_plus_self") && pid < -1) {
+		int r = real(pid, sig);
+		(void)real(getpid(), sig);	/* the sender gets it too */
+		return r;
+	}
 	{
 		int r = real(pid, sig);
+		if (r == -1 && IS("eperm_hidden") && errno == EPERM)
+			return 0;
 		if (r == -1 && IS("esrch_as_eperm") && errno == ESRCH)
 			errno = EPERM;
 		if (r == -1 && IS("eperm_as_esrch") && errno == EPERM)

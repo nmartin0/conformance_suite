@@ -5,19 +5,19 @@ DESCRIPTION:9e3b2165        XSH.kill.001 XSH.kill.003 XSH.kill.004
 DESCRIPTION:a3c59bf3        XSH.kill.007  # numbers outside the list fail
 DESCRIPTION:dec5810d        XSH.kill.002
 DESCRIPTION:36ad0c77        XSH.kill.002
-DESCRIPTION:78d88732        partial XSH.kill.009 XSH.kill.010  # real and effective IDs equal here; the saved-ID and set-user-ID cases are todo
-DESCRIPTION:56c73d0c        XSH.kill.001
+DESCRIPTION:78d88732        partial XSH.kill.009 XSH.kill.010 XSH.kill.014  # the receiver's effective ID does not count (014); a set-user-ID sender is todo
+DESCRIPTION:56c73d0c        XSH.kill.001 XSH.kill.015  # a zombie is still a process
 DESCRIPTION:ea484ea5        XSH.kill.003
-DESCRIPTION:83d9484a        XSH.kill.005
+DESCRIPTION:83d9484a        XSH.kill.005 XSH.kill.012  # wording "that signal" vs "a signal": SI-29
 DESCRIPTION:ac972c8c        XSH.kill.004
 DESCRIPTION:0a4804d1        XSH.kill.006
-DESCRIPTION:c5e775f1        XSH.kill.011
+DESCRIPTION:c5e775f1        XSH.kill.011 XSH.kill.013  # within the session, and not outside it
 DESCRIPTION:e095ccc8        impl  extra restrictions (documentation)
-DESCRIPTION:beb375c4        none  a permission
+DESCRIPTION:beb375c4        none  a permission; it is what would let extended security give ESRCH in XSH.kill.009
 DESCRIPTION:9cdab055        todo  pid 0 or -1 with only some targets permitted: kill() succeeds, and only the permitted ones get it
 DESCRIPTION:676e8f87        XSH.kill.009
 RETURN_VALUE:105a0976       XSH.kill.001 XSH.kill.002 XSH.kill.003
 RETURN_VALUE:ce1869b1       XSH.kill.007 XSH.kill.008 XSH.kill.009
 ERRORS:5c704087             XSH.kill.007
 ERRORS:221b33c6             XSH.kill.009
-ERRORS:31706829             XSH.kill.002 XSH.kill.008
+ERRORS:31706829             XSH.kill.008

@@ -13,11 +13,8 @@ assertion  XSH.kill.002
 anchor     functions/kill.html#DESCRIPTION
 class      required
 since      1988
-says       kill() with signal 0 returns 0 for an existing child and sends no
-           signal; for a process ID that no longer exists it fails with
-           ESRCH.
-note       A reaped child's process ID is assumed not to be reused
-           within the test.
+says       kill() with signal 0 returns 0 for an existing child and sends it
+           no signal.
 test       t/002-null-signal.c
 
 assertion  XSH.kill.003
@@ -43,22 +40,23 @@ test       t/004-other-group.c
 assertion  XSH.kill.005
 anchor     functions/kill.html#DESCRIPTION
 class      required
-since      1988
-says       kill(-1, sig) from a process running as user 65534 sends the
-           signal to every process it has permission to signal: another
-           process of that user gets it, and so does the sender.
-needs      root
-note       Run as an unprivileged user (65534), with SIGURG, whose
-           default action is to ignore it, so other processes of that
-           user are not harmed. The text excludes only an unspecified
-           set of system processes, not the sender.
+since      2001
+says       kill(-1, sig) from an unprivileged process sends the signal to the
+           processes it has permission to signal: another process of the
+           same user gets it.
+needs      root kill_uid
+note       Sends kill(-1, SIGURG) as the profile's kill_uid, a user ID
+           no other process may use: every process of that user on the
+           machine gets the signal. The sender first proves it has no
+           privilege left. SIGURG's default action is to ignore it.
 test       t/005-all.c
 
 assertion  XSH.kill.006
 anchor     functions/kill.html#DESCRIPTION
 class      required
 since      1988
-says       kill(getpid(), SIGUSR1) with SIGUSR1 unblocked runs its handler
+says       In a single-threaded process with nothing else pending,
+           kill(getpid(), SIGUSR1) with SIGUSR1 unblocked runs its handler
            before kill() returns.
 test       t/006-self-before-return.c
 
@@ -73,10 +71,13 @@ assertion  XSH.kill.008
 anchor     functions/kill.html#ERRORS/ESRCH
 class      required
 since      1988
-says       kill() for the process ID of a reaped child, and for that number as
-           a process group (-pid), fails with ESRCH.
-note       A reaped child's process ID is assumed not to be reused
-           within the test.
+says       kill() fails with ESRCH for the process ID of a group leader that
+           has exited and been reaped while its group lives on (the ID
+           cannot be reused while the group exists), and for minus the
+           process ID of a live child that leads no group.
+note       Signal 0 is used, so nothing can be sent anywhere even if the
+           system misbehaves. The IDs cannot belong to another process
+           (XBD 4.17).
 test       t/008-esrch.c
 
 assertion  XSH.kill.009
@@ -86,6 +87,9 @@ since      1988
 says       A process running as user 65534 that signals a process of user 0
            (its parent) fails with EPERM, and the signal is not sent.
 needs      root
+note       Assumes no extended security controls that hide processes
+           apply to a plain user ID mismatch (such controls may report
+           ESRCH).
 test       t/009-eperm.c
 
 assertion  XSH.kill.010
@@ -107,3 +111,51 @@ says       A process running as user 65534 may send SIGCONT to a process of
            the parent's SIGCONT handler runs.
 needs      root
 test       t/011-sigcont-session.c
+
+assertion  XSH.kill.012
+anchor     functions/kill.html#DESCRIPTION
+class      required
+since      2001
+says       kill(-1, sig) from an unprivileged process signals the sender
+           itself as well: only an unspecified set of system processes is
+           left out.
+needs      root kill_uid
+note       Sends kill(-1, SIGURG) as the profile's kill_uid, a user ID
+           no other process may use: every process of that user on the
+           machine gets the signal. The sender first proves it has no
+           privilege left. SIGURG's default action is to ignore it.
+           Linux leaves the sender out (research 2.2).
+nomutant   whether the sender is included is the kernel's choice; a
+           wrapper cannot hide it without also changing XSH.kill.005
+test       t/012-all-sender.c
+
+assertion  XSH.kill.013
+anchor     functions/kill.html#DESCRIPTION
+class      required
+since      2001
+says       A process running as user 65534 in a session of its own may not
+           send SIGCONT to a process of user 0 in another session (its
+           parent): kill() fails with EPERM.
+needs      root
+test       t/013-sigcont-other-session.c
+
+assertion  XSH.kill.014
+anchor     functions/kill.html#DESCRIPTION
+class      required
+since      2001
+says       A process running as user 65534 may not signal a process whose
+           effective user ID is 65534 but whose real and saved user IDs
+           are 0 (after seteuid(65534)): kill() fails with EPERM.
+needs      root
+test       t/014-receiver-real-saved.c
+
+assertion  XSH.kill.015
+anchor     functions/kill.html#DESCRIPTION
+class      required
+since      2008
+says       kill(pid, 0) for a child that has terminated but has not been
+           waited for returns 0: a zombie is still a process.
+note       The RATIONALE (TC2, defect 765) says implementations giving
+           ESRCH for a zombie do not conform, since the process lifetime
+           covers zombies.
+test       t/015-zombie.c

@@ -3,7 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.pthread_sigmask.005
- * MUTANT    pthread_sigmask.unblock_deferred
+ * MUTANT    pthread_sigmask.unblock_drops
  */
 #include "pc.h"
 #include <errno.h>

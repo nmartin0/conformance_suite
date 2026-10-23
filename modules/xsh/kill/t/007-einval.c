@@ -1,5 +1,5 @@
 /*
- * kill() with an invalid signal number fails with EINVAL and sends nothing.
+ * kill() with an invalid signal number fails with EINVAL.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.kill.007
