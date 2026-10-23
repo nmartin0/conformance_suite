@@ -172,3 +172,20 @@ note       si_addr may be inaccurate on some systems (<signal.h>), so
            siglongjmp().
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/015-segv-siginfo.c
+
+assertion  XSH.2.4.3-signal-actions.016
+anchor     functions/V2_chap02.html#2.4.3
+class      required
+since      2008
+says       For one second a timer sends SIGALRM about every millisecond; its
+           handler calls getpid(), kill(pid, 0), sigprocmask() and
+           sigaction() queries, clock_gettime(), time(), open(), read(),
+           fstat(), close(), write(), strlen(), memcpy() and memcmp() and
+           checks each result, while the main program calls the same
+           functions in a loop and checks them too; every result is right
+           and the handler runs at least 100 times.
+note       A sample of the 2.4.3 list, not every function; the handler
+           saves and restores errno and records failures in volatile
+           sig_atomic_t objects. The test is single-threaded.
+nomutant   a fault would have to be specific to calls made from handlers
+test       t/016-async-signal-safe.c

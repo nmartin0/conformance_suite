@@ -19,14 +19,16 @@ verified; this file is the plan. Update both when a step finishes.
   `sigpending`, `sigsuspend`, `sigwait`, `sigtimedwait`/`sigwaitinfo`, `sigqueue`,
   `alarm`, `pause`, `<signal.h>`, the XSH 2.4 rules, the sigset functions,
   `signal`, `sigaltstack`, `psiginfo`/`psignal`, `sig2str`/`str2sig`, `killpg`,
-  `abort`.
+  `abort`, the async-signal-safe list (2.4.3.016).
+- Spec model and Tier 0 (`gen/specmodel.py`, `gen/tier0.py`): every
+  header's macros, types, structures, functions and variables, generated
+  from the user's copy under `build/`; about 2,880 checks.
 - Utilities: `true`, `false`.
 - Every module reviewed independently; findings applied.
 
 ## Next
 
-1. **Signals** (remaining): the async-signal-safe list (each function
-   called from a handler), and the signal todos (`ci/coverage.py --show`
+1. **Signals** (remaining): the signal todos (`ci/coverage.py --show`
    lists them).
 2. **Your OS**: run the suite on the OS under development as soon as it can
    run a POSIX shell and a C compiler (or cross-compiled tests with a
@@ -34,10 +36,9 @@ verified; this file is the plan. Update both when a step finishes.
 3. **BSD reference runs** under QEMU (FreeBSD, NetBSD, OpenBSD), then
    macOS and illumos, triaged with `analyze.py matrix`. Waiting on the
    images, which the user will supply.
-4. **Spec-model generator** (`gen/`): parse the user's local copy of the
-   standard into declarations, options and anchors (kept under `build/`,
-   never committed), then Tier 0 header tests for every header, with
-   header mutants.
+4. **Header mutants for Tier 0**, and Tier 0 for the prose-only headers
+   (`<stdint.h>`, `<float.h>` and the like) that `gen/specmodel.py` does
+   not yet read.
 5. **Files and directories**: `stat` family, `link`/`unlink`/`rename`,
    `mkdir`/`rmdir`, `opendir`/`readdir`, `chmod`/`chown`, `utimensat`,
    `access`, `truncate`, `umask`.

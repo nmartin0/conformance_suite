@@ -105,6 +105,29 @@ process of that user.
 
 Waivers (`waivers/*.waiver`) are applied here, never on the system.
 
+## Tier 0 header checks
+
+Tier 0 asks only whether each header provides what the standard lists:
+every symbolic constant defined as a macro (with its value where the
+standard fixes one), every type, structure and member (members with their
+types), every function with its prototype, every external variable. One
+test per item, so one missing name does not hide the rest; a test that
+does not compile is the FAIL (MODULE `buildfail FAIL`), with the first
+compiler error as the note.
+
+The checks come from the standard itself, so (RULES.md, rule 3) they are
+generated on your machine from your copy and never committed:
+
+    python3 gen/specmodel.py --standard DIR      # -> build/spec/model.json
+    python3 gen/specmodel.py --standard DIR --show unistd.h   # inspect one
+    python3 gen/tier0.py                         # -> build/tier0/modules
+    sh posixcheck.sh --root build/tier0/modules --results results-t0
+
+Copy `build/tier0` with the suite to the system under test. Names that the
+standard makes conditional ("if defined", "reserved for compatibility",
+the optional `<limits.h>` and `<unistd.h>` limits) are skipped; option
+items are `conditional` and judged by the profile like any other.
+
 ## Layout
 
     posixcheck.sh        the driver
@@ -112,7 +135,8 @@ Waivers (`waivers/*.waiver`) are applied here, never on the system.
                          pcexec.c, probe.c, trust.sh, options.list,
                          selftest/ (harness self-tests)
     modules/<vol>/<page>/  one module per page of the standard:
-        MODULE           manifest: module, page, volume, option, origin, uses
+        MODULE           manifest: module, page, volume, option, origin, uses,
+                         libs, buildfail (FAIL for Tier 0: not compiling is the failure)
         <page>.asr       assertions, in our own words
         t/NNN-slug.c|sh  one test per assertion
         mutants/         planted faults (C preload library, or shell

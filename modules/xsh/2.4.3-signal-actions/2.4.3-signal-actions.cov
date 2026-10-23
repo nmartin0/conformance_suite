@@ -70,15 +70,15 @@
 2.4.3:2a2a8781              none  undefined
 2.4.3:810495cb              app
 2.4.3:56937603              app
-2.4.3:3d48a482              todo  each listed function behaves as specified when called from a handler
+2.4.3:3d48a482              partial XSH.2.4.3-signal-actions.016  # a sample of the listed functions, called from a handler that interrupts the same calls
 2.4.3:a7c521f1              none  a statement
 2.4.3:c203acc8              none  a statement
-2.4.3:7de80f04              todo  the async-signal-safe function list
-2.4.3:0d5550a1              todo  the async-signal-safe function list
+2.4.3:7de80f04              partial XSH.2.4.3-signal-actions.016  # getpid, kill, sigprocmask, sigaction, clock_gettime, time, open, read, fstat, close, write and others in the sample
+2.4.3:0d5550a1              partial XSH.2.4.3-signal-actions.016  # strlen, memcpy, memcmp, time in the sample; the rest todo
 2.4.3:29025a52              todo  <stdatomic.h> functions in handlers
 2.4.3:b8eb4ed4              none  a statement
 2.4.3:0e043a03              impl  additional async-signal-safe interfaces (documentation)
-2.4.3:20fc47b5              untestable  every function interrupted by every handler
+2.4.3:20fc47b5              partial XSH.2.4.3-signal-actions.016  # safe functions interrupted by handlers calling safe functions; the full matrix is untestable
 2.4.3:23c67b0c              none  a cross-reference
 2.4.3:9b12cdca              todo  a handler that saves, sets and restores errno while the main program is in a call that sets errno
 2.4.3:0fbd3f42              partial XSH.2.4.3-signal-actions.013 XSH.2.4.3-signal-actions.014  # terminate and stop; the continue leg cannot arise (a stopped process is continued when SIGCONT is generated, not delivered)

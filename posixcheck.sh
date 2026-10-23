@@ -415,6 +415,14 @@ pc_assertion() {
 		if ! "$pc_cc" $pc_flags $pc_ccstrict -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
 		    "$pc_bin/pc.o" $mod_libs >"$ctx_out/$pc_id.build.txt" 2>&1 \
 		    </dev/null; then
+			if [ "$mod_buildfail" = FAIL ]; then
+				# Tier 0 checks: a test that does not compile shows a
+				# missing or wrong declaration, which is the failure.
+				pc_e=$(grep -m 1 'error' "$ctx_out/$pc_id.build.txt" |
+				    sed 's/^.*error: //' | tr '\t' ' ' | cut -c 1-200)
+				pc_log FAIL "$pc_id" 0 "does not compile: ${pc_e:-see out/$pc_id.build.txt}"
+				return 0
+			fi
 			pc_log UNINITIATED "$pc_id" 0 "build failed (out/$pc_id.build.txt)"
 			return 0
 		fi
@@ -574,10 +582,11 @@ pc_run_module() {
 	fi
 	: >"$pc_mark.busy"
 
-	mod_option=BASE mod_uses= mod_libs=
+	mod_option=BASE mod_uses= mod_libs= mod_buildfail=UNINITIATED
 	while read -r pc_k pc_v; do
 		case $pc_k in
 		option) mod_option=$pc_v ;;
+		buildfail) mod_buildfail=$pc_v ;;
 		uses) mod_uses=$pc_v ;;
 		libs) mod_libs=$pc_v ;;
 		esac

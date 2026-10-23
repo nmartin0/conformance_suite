@@ -112,7 +112,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     psignal()), `xsh/sig2str` (6, with str2sig(); no Linux C library has
     them yet), `xsh/abort` (6).
   - XSH 2.4 signal concepts: `xsh/2.4.1-signal-generation` (10),
-    `xsh/2.4.2-realtime-signals` (5), `xsh/2.4.3-signal-actions` (15),
+    `xsh/2.4.2-realtime-signals` (5), `xsh/2.4.3-signal-actions` (16),
     `xsh/2.4.4-signal-effects` (3): which thread gets a signal, pending
     and blocked signals, inherited masks, stop and SIGCONT interplay,
     sigevent notification, queues under kill() and SIG_IGN, default
@@ -182,6 +182,11 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   exec-path checks for true/false, a real gap in the 2.6 test, header
   defects owned by `xbd/fcntl.h`, wording, anchors, ENOSPC guard.
 
+- Tier 0 (generated, 2026-10-23): about 2,880 header checks; glibc 278
+  FAIL, musl 217 FAIL, all reviewed as real gaps (mostly Issue 8 lag under
+  the strict build; `docs/linux-deviations.md` O.17). Generated files stay
+  under `build/` and are never committed.
+
 ## Not yet verified
 
 - Every result so far comes from one kernel (Linux 6.18 in the container).
@@ -190,7 +195,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
 ## Next
 
-See `docs/roadmap.md`. Next up: signals.
+See `docs/roadmap.md`. Next up: files and directories.
 
 ## Scope and rules
 

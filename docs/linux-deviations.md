@@ -243,6 +243,46 @@ O.16 **MINSIGSTKSZ is too small for the signal frame on x86-64 with AVX-512.**
   XSH.sigaltstack.010 (standard question Q-22).
 - Src: posixcheck run (this machine has AVX-512).
 
+O.17 **Tier 0: what the headers lack under the strict build.**
+- POSIX (XBD 13, each header's DESCRIPTION): every listed symbolic
+  constant is an object-like macro (XBD 3, "Symbolic Constant"; it may also
+  be an enumeration constant, but must be a macro), every type, member and
+  function is visible with the stated type.
+- Linux: the generated Tier 0 checks (about 2,880, built from the user's
+  copy; see README "Tier 0") fail 278 on glibc 2.39 and 217 on musl 1.2.4.
+  Nearly all are Issue 8 additions not yet made, or made only under
+  `_GNU_SOURCE`/`_DEFAULT_SOURCE`:
+  - both: `<endian.h>` functions, `DT_*` and `struct posix_dent`,
+    `posix_getdents`, `reclen_t`, `ALTMON_*`/`ABALTMON_*`, `*_CLOFORK`,
+    `F_OWNER_*`/`struct f_owner_ex`, `FNM_IGNORECASE`, `FTW_XDEV`,
+    `REG_MINIMAL`, the `*_l` gettext functions, `GETENTROPY_MAX`, `NSIG_MAX`,
+    `SIG2STR_MAX`/`sig2str`/`str2sig`, the `*clock*` timed waits,
+    `posix_tnode`, `ppoll`, `qsort_r`, `strlcpy`/`strlcat`/`wcslcpy`/`wcslcat`,
+    `reallocarray`, `secure_getenv`, `ptsname_r`, `getentropy`,
+    `getres[ug]id`/`setres[ug]id`, `getlocalename_l`, `dladdr`/`Dl_info_t`,
+    `tm_gmtoff`/`tm_zone`, `posix_spawn_file_actions_add[f]chdir`, the
+    `M_*l` and new `M_*` constants of `<math.h>`, the `_CS_POSIX_V8_*`,
+    `_SC_V8_*`, `_SC_NSIG`, `_PC_FALLOC` names, the `O_*` names newly
+    required in `<stdlib.h>`, `<sys/mman.h>` and `<unistd.h>`, and the
+    option constants that Issue 8 fixes at 202405L (both still say
+    200809L).
+  - glibc only: `PTHREAD_MUTEX_*`, `PTHREAD_PRIO_*` and `WRDE_*` are
+    enumeration constants only, not macros; `PTHREAD_NULL`, `O_EXEC`,
+    `O_SEARCH`, `O_TTY_INIT`, `F_OFD_*`, `SEEK_HOLE`/`SEEK_DATA`, `dup3`,
+    `pipe2`, `accept4`, `_Fork`, `posix_close`, `mkostemp`, `memmem`,
+    `ffsl`/`ffsll`, `tcgetwinsize`, `suseconds_t`, `ino_t` from
+    `<dirent.h>`, `wchar_t` from `<inttypes.h>` are hidden or missing;
+    type mismatches: `lio_listio` (no `restrict`), `msghdr.msg_iovlen`
+    and `msg_controllen` and `cmsghdr.cmsg_len` (`size_t`),
+    `semid_ds.sem_nsems` (`unsigned long`), `utmpx.ut_tv` (a private
+    structure on x86-64), `<ndbm.h>` `datum` (`char *dptr`, `int dsize`).
+  - musl only: no `<ndbm.h>`; `<mqueue.h>` does not define the `O_*`
+    flags; `<dirent.h>` does not define `size_t`; no `_XOPEN_SHM`.
+- Comp: glibc, musl. Kind: Issue 8 lag (most), long-standing (the enum
+  constants, the socket member types, `ndbm.h`). Observe: `T0.*`
+  (generated; not in `known/`, since the IDs live only under `build/`).
+- Src: posixcheck Tier 0 run, 2026-10-23.
+
 ## Things the strict build changes
 
 Tests are compiled with `-D_POSIX_C_SOURCE=202405L` (or

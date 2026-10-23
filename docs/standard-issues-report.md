@@ -76,6 +76,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-47 | XSH `sigaltstack()`: ENOMEM has no exception for SS_DISABLE | Defect (editorial) | Low | Disputed (XSH.sigaltstack.011) |
 | SI-48 | XSH `signal()`: the errno rule is not CX-shaded | Defect (editorial) | Low | XSH.signal.006 |
 | SI-49 | XSH `str2sig()`: "a string containing" | Defect (editorial) | Low | Plain names and numbers only |
+| SI-50 | XBD `<stdio.h>`: dprintf() prototype lacks its semicolon | Defect (editorial) | Low | Generator tolerates it |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -627,6 +628,14 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **Why it is a problem:** "containing" could be read as matching a substring ("xINTx"), and nothing says whether leading zeros, a plus sign or white space are accepted in the numbers.
 - **posixcheck meanwhile:** the tests use plain names and shortest decimal numbers only.
 - **Suggested change:** "a string that is the name ...", and say which decimal forms are accepted (editorial).
+
+### SI-50: <stdio.h>: the dprintf() prototype has no semicolon
+
+- **Where:** XBD `<stdio.h>`, SYNOPSIS (the CX-shaded declaration of dprintf()).
+- **What the text says:** the declaration of dprintf() ends after its parameter list with no semicolon; every other function declaration on the page ends with one.
+- **Why it is a problem:** the page lists declarations as C source; read literally, this one runs into the next, so a tool that reads the declarations (posixcheck's spec model) has to special-case it.
+- **posixcheck meanwhile:** `gen/specmodel.py` splits declarations at a line break when the semicolon is missing and flags the item `no_semicolon`.
+- **Suggested change:** add the semicolon (editorial).
 
 ## Questions to raise
 

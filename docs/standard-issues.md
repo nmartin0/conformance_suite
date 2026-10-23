@@ -61,6 +61,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-47 | sigaltstack(): ENOMEM has no exception for SS_DISABLE | editorial | XSH.sigaltstack.011 (disputed) |
 | SI-48 | signal(): the errno rule is not CX-shaded | editorial | XSH.signal.006 |
 | SI-49 | str2sig(): "a string containing" | editorial | (not tested) |
+| SI-50 | <stdio.h>: dprintf() prototype lacks its semicolon | editorial | (gen/specmodel.py) |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
