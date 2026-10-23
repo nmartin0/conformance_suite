@@ -1,0 +1,198 @@
+# XSH fstatat(), lstat() and stat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fstatat.001
+anchor     functions/fstatat.html#DESCRIPTION
+class      required
+since      1988
+says       stat() of a regular file returns 0 and fills the structure:
+           S_ISREG(st_mode), the permission bits it was created with,
+           st_size its length, st_nlink 1, st_uid the effective user ID,
+           st_gid the effective group ID or the directory's group, and
+           st_dev and st_ino those of the same file opened.
+uses       XSH.fstat.001
+test       t/001-stat-regular.c
+
+assertion  XSH.fstatat.002
+anchor     functions/fstatat.html#DESCRIPTION
+class      required
+since      1988
+says       stat() of a file whose permission bits are all clear succeeds
+           and reports those bits (no read, write or execute permission
+           on the file is needed).
+note       Run as root this shows only that no permission bit is
+           consulted; as an ordinary user it is the real check.
+test       t/002-no-permission-needed.c
+
+assertion  XSH.fstatat.003
+anchor     functions/fstatat.html#DESCRIPTION
+class      required
+since      2001
+says       stat() of a symbolic link to a regular file reports the file it
+           names: S_ISREG, the target's size, st_dev and st_ino.
+test       t/003-stat-follows-link.c
+
+assertion  XSH.fstatat.004
+anchor     functions/fstatat.html#DESCRIPTION
+class      required
+since      2001
+says       lstat() of a symbolic link returns 0 with S_ISLNK(st_mode),
+           st_size the length of the link's contents (no null byte),
+           st_nlink 1, st_uid the effective user ID, and an st_ino
+           different from the target's.
+test       t/004-lstat-link.c
+
+assertion  XSH.fstatat.005
+anchor     functions/fstatat.html#DESCRIPTION
+class      required
+since      2001
+says       lstat() of a regular file and of a directory reports what stat()
+           reports: the same type, permission bits, size, st_dev and
+           st_ino.
+test       t/005-lstat-not-link.c
+
+assertion  XSH.fstatat.006
+anchor     functions/fstatat.html#DESCRIPTION
+class      required
+since      1988
+says       stat() reports S_ISDIR for a directory, S_ISFIFO for a FIFO,
+           S_ISCHR for /dev/null and S_ISSOCK for a bound UNIX-domain
+           socket, and only that type macro is true for each.
+test       t/006-file-types.c
+
+assertion  XSH.fstatat.007
+anchor     functions/fstatat.html#DESCRIPTION
+class      required
+since      1988
+says       After link() gives a file a second name, stat() of either name
+           reports st_nlink 2; after unlink() of one, 1.
+test       t/007-nlink.c
+
+assertion  XSH.fstatat.008
+anchor     basedefs/V1_chap04.html#tag_04_12
+class      required
+since      2008
+says       After a write() to a file, stat() reports st_mtim and st_ctim
+           later than before the write and no earlier than st_atim was,
+           within the system's time granularity (the test writes again
+           every 10 ms for up to 3 s until the times move).
+timeout    20
+test       t/008-times-updated.c
+
+assertion  XSH.fstatat.009
+anchor     functions/fstatat.html#DESCRIPTION
+class      required
+since      2008
+says       fstatat(fd, "name", buf, 0), with fd open on a directory, reports
+           the file "name" in that directory, not one of that name in the
+           working directory.
+test       t/009-fstatat-relative.c
+
+assertion  XSH.fstatat.010
+anchor     functions/fstatat.html#DESCRIPTION
+class      required
+since      2008
+says       fstatat() of a symbolic link reports the link with
+           AT_SYMLINK_NOFOLLOW (S_ISLNK, the link's st_ino) and the target
+           without it.
+test       t/010-fstatat-nofollow.c
+
+assertion  XSH.fstatat.011
+anchor     functions/fstatat.html#DESCRIPTION
+class      required
+since      2008
+says       fstatat(AT_FDCWD, path, buf, 0) reports what stat(path) does, and
+           with AT_SYMLINK_NOFOLLOW what lstat(path) does.
+test       t/011-fstatat-fdcwd.c
+
+assertion  XSH.fstatat.012
+anchor     functions/fstatat.html#DESCRIPTION
+class      required
+since      2008
+says       fstatat() with an absolute path reports that file, whatever
+           directory fd is open on.
+test       t/012-fstatat-absolute.c
+
+assertion  XSH.fstatat.013
+anchor     functions/fstatat.html#DESCRIPTION
+class      required
+since      2008
+says       fstatat() relative to a directory opened with O_SEARCH reports
+           the named file.
+note       O_SEARCH itself is a header item (Tier 0); without it this
+           test is UNRESOLVED.
+test       t/013-fstatat-search.c
+
+assertion  XSH.fstatat.014
+anchor     functions/fstatat.html#DESCRIPTION
+class      required
+since      2008
+says       stat("link/") where link is a symbolic link to a directory reports
+           the directory.
+test       t/014-symlink-dir-slash.c
+
+assertion  XSH.fstatat.015
+anchor     functions/fstatat.html#ERRORS
+class      required
+since      1988
+says       stat(), lstat() and fstatat() of a name that does not exist,
+           and stat() of a path through a missing directory, fail with
+           ENOENT.
+test       t/015-enoent.c
+
+assertion  XSH.fstatat.016
+anchor     functions/fstatat.html#ERRORS
+class      required
+since      1988
+says       stat(), lstat() and fstatat(AT_FDCWD, ...) of the empty string fail
+           with ENOENT.
+test       t/016-empty.c
+
+assertion  XSH.fstatat.017
+anchor     functions/fstatat.html#ERRORS
+class      required
+since      1988
+says       stat("file/x") and lstat("file/x"), where file is a regular file,
+           fail with ENOTDIR.
+test       t/017-enotdir-prefix.c
+
+assertion  XSH.fstatat.018
+anchor     functions/fstatat.html#ERRORS
+class      required
+since      2008
+says       stat("file/") and lstat("file/"), where file is a regular file,
+           and stat("flink/"), where flink is a symbolic link to it, fail
+           with ENOTDIR.
+test       t/018-enotdir-slash.c
+
+assertion  XSH.fstatat.019
+anchor     functions/fstatat.html#ERRORS
+class      required
+since      2001
+says       stat() of a symbolic link that leads back to itself (a -> b,
+           b -> a) fails with ELOOP.
+test       t/019-eloop.c
+
+assertion  XSH.fstatat.020
+anchor     functions/fstatat.html#ERRORS
+class      required
+since      1988
+says       stat() of a path whose last component is longer than {NAME_MAX}
+           bytes fails with ENAMETOOLONG.
+test       t/020-enametoolong.c
+
+assertion  XSH.fstatat.021
+anchor     functions/fstatat.html#ERRORS
+class      required
+since      2008
+says       fstatat(fd, "f", buf, 0) with fd a descriptor that is not open
+           fails with EBADF.
+test       t/021-fstatat-ebadf.c
+
+assertion  XSH.fstatat.022
+anchor     functions/fstatat.html#ERRORS
+class      required
+since      2008
+says       fstatat(fd, "f", buf, 0) with fd open on a regular file fails with
+           ENOTDIR.
+test       t/022-fstatat-enotdir.c

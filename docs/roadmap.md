@@ -23,6 +23,7 @@ verified; this file is the plan. Update both when a step finishes.
 - Spec model and Tier 0 (`gen/specmodel.py`, `gen/tier0.py`): every
   header's macros, types, structures, functions and variables, generated
   from the user's copy under `build/`; about 2,880 checks.
+- Files and directories (in progress): `stat`/`lstat`/`fstatat`, `fstat`.
 - Utilities: `true`, `false`.
 - Every module reviewed independently; findings applied.
 
@@ -39,7 +40,7 @@ verified; this file is the plan. Update both when a step finishes.
 4. **Header mutants for Tier 0**, and Tier 0 for the prose-only headers
    (`<stdint.h>`, `<float.h>` and the like) that `gen/specmodel.py` does
    not yet read.
-5. **Files and directories**: `stat` family, `link`/`unlink`/`rename`,
+5. **Files and directories** (remaining): `link`/`unlink`/`rename`,
    `mkdir`/`rmdir`, `opendir`/`readdir`, `chmod`/`chown`, `utimensat`,
    `access`, `truncate`, `umask`.
 6. **Remaining todos** in the done modules (`ci/coverage.py --show MODULE`
