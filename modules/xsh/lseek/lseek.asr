@@ -90,12 +90,15 @@ test       t/010-ebadf.c
 assertion  XSH.lseek.011
 anchor     functions/lseek.html#ERRORS/EOVERFLOW
 anchor     functions/lseek.html#RETURN VALUE
-class      required
+class      disputed
 since      2001
 says       A resulting offset too large for off_t fails with EOVERFLOW
            and leaves the offset unchanged (SEEK_CUR of the largest
            off_t from offset 1).
-note       The largest off_t is computed without signed overflow,
+note       disputed (Q-2): the result is also beyond every file
+           system's largest file, so a system that reports that as an
+           extra error may give EINVAL (XSH 2.3); a FAIL is logged as
+           INSPECT. The largest off_t is computed without signed overflow,
            assuming only that off_t is a signed integer type with no
            padding bits. See Q-2.
 test       t/011-eoverflow.c

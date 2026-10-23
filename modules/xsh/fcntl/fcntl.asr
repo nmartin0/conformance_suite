@@ -119,13 +119,14 @@ test       t/012-setown-getown.c
 
 assertion  XSH.fcntl.013
 anchor     functions/fcntl.html#ERRORS/ESRCH
-class      required
+class      disputed
 since      2001
 says       F_SETOWN with the process ID of a process that no longer
            exists fails with ESRCH.
-note       The ID is that of a child already reaped; reuse of that ID in
-           the next instant would make the test UNRESOLVED-worthy noise,
-           not a FAIL, so it is checked with kill() first.
+note       disputed (Q-43): the may-fail EINVAL for a positive arg "not
+           valid as a process ID" can be read to cover a process that no
+           longer exists, and XSH 2.3 then allows either error; a FAIL
+           is logged as INSPECT.
 test       t/013-setown-esrch.c
 
 assertion  XSH.fcntl.014

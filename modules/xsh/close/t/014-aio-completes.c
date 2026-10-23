@@ -109,7 +109,11 @@ int main(void)
 		ca.aio_nbytes = cb.aio_nbytes = sizeof a;
 		ca.aio_sigevent.sigev_notify = cb.aio_sigevent.sigev_notify = SIGEV_NONE;
 		pc_test();
-		pc_check(aio_write(&ca) == 0 && aio_write(&cb) == 0, "aio_write failed: %s", pc_errname(errno));
+		if (aio_write(&ca) != 0 || aio_write(&cb) != 0) {
+			if (errno == EAGAIN)
+				pc_unresolved("aio_write() was refused for lack of resources (EAGAIN)");
+			pc_check(0, "aio_write failed: %s", pc_errname(errno));
+		}
 		pc_check(pthread_create(&t, NULL, drain, NULL) == 0, "pthread_create failed");
 		closing_fd = fd;
 		pc_check(pthread_create(&t, NULL, closer, NULL) == 0, "pthread_create failed");

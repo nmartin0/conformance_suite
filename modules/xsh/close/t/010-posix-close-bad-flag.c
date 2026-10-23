@@ -4,7 +4,6 @@
  *
  * ASSERTION XSH.close.010
  * MUTANT    close.pc_einval_open
- * MUTANT    close.pc_noop
  */
 #include "pc.h"
 #include <errno.h>
@@ -33,6 +32,10 @@ int main(void)
 	pc_check(r == 0 || (r == -1 && e == EINVAL),
 	    "posix_close() with an invalid flag returned %d (%s)", r,
 	    r == -1 ? pc_errname(e) : "-");
+	if (r == 0 && fcntl(fd, F_GETFD) != -1)
+		pc_unresolved("posix_close() accepted the flag and left the descriptor open: the bit may be an implementation's own flag");
+	if (r == 0 && fcntl(fd, F_GETFD) != -1)
+		pc_unresolved("posix_close() accepted the flag and left the descriptor open: the bit may be an implementation's own flag");
 	pc_expect_err(fcntl(fd, F_GETFD), EBADF,
 	    "fcntl(F_GETFD) after posix_close() with an invalid flag");
 	pc_pass();

@@ -22,6 +22,12 @@ int main(void)
 	fd = open("f", O_RDONLY);
 	pc_check(fd >= 0, "cannot open f");
 	lim = pc_lowest_free_fd() + 4;
+	if (lim < 20)
+		lim = 20;	/* not below {_POSIX_OPEN_MAX}: getrlimit(), APPLICATION USAGE */
+	if (lim < 20)
+		lim = 20;	/* not below {_POSIX_OPEN_MAX}: getrlimit(), APPLICATION USAGE */
+	if (lim < 20)
+		lim = 20;	/* not below {_POSIX_OPEN_MAX}: getrlimit(), APPLICATION USAGE */
 	for (i = 0; i < 1024; i++)
 		if (fcntl(i, F_GETFD) != -1 && i + 1 > lim)
 			lim = i + 1;
@@ -31,6 +37,8 @@ int main(void)
 	pc_check(getrlimit(RLIMIT_NOFILE, &rl) == 0, "getrlimit failed");
 	rl.rlim_cur = (rlim_t)lim;
 	pc_check(setrlimit(RLIMIT_NOFILE, &rl) == 0, "setrlimit failed");
+	if (getrlimit(RLIMIT_NOFILE, &rl) != 0 || rl.rlim_cur != (rlim_t)lim)
+		pc_unresolved("RLIMIT_NOFILE did not take the value %d", lim);
 	pc_check(pc_lowest_free_fd() < lim - 1, "no lower slot is free");
 	pc_test();
 	pc_expect_err(fcntl(fd, F_DUPFD, lim - 1), EMFILE,

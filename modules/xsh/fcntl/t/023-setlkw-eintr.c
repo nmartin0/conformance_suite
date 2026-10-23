@@ -145,7 +145,8 @@ static void holder(int type, off_t start, off_t len, unsigned secs)
 static void release_holder(void)
 {
 	(void)close(hold_ctl);
-	(void)waitpid(hold_pid, NULL, 0);
+	while (waitpid(hold_pid, NULL, 0) == -1 && errno == EINTR)
+		;
 }
 
 int main(void)
@@ -175,6 +176,8 @@ int main(void)
 	fl = lk(F_WRLCK, SEEK_SET, 0, 10);
 	pc_expect_err(fcntl(fd, F_SETLKW, &fl), EINTR, "F_SETLKW interrupted by SIGALRM");
 	rescue_cfd = -1;	/* the holder is released below */
+	alarm(0);
+	alarm(0);
 	release_holder();
 	pc_check(!blocked(F_WRLCK, 0, 10), "the interrupted F_SETLKW left a lock");
 	pc_pass();

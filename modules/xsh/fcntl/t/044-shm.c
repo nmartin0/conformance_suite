@@ -62,8 +62,8 @@ int main(void)
 		(void)shm_unlink(name);
 		pc_test();
 		pc_check(fcntl(fd, F_SETFD, FD_CLOEXEC) == 0, "F_SETFD failed: %s", pc_errname(errno));
-		pc_check(fcntl(fd, F_GETFD) == FD_CLOEXEC, "F_GETFD does not report FD_CLOEXEC");
-		pc_check(fcntl(fd, F_SETFD, 0) == 0 && fcntl(fd, F_GETFD) == 0, "FD_CLOEXEC could not be cleared");
+		pc_check((fcntl(fd, F_GETFD) & FD_CLOEXEC) != 0, "F_GETFD does not report FD_CLOEXEC");
+		pc_check(fcntl(fd, F_SETFD, 0) == 0 && (fcntl(fd, F_GETFD) & FD_CLOEXEC) == 0, "FD_CLOEXEC could not be cleared");
 		low = fd + 10;
 		if (fcntl(low, F_GETFD) != -1)
 			pc_unresolved("descriptor %d is in use", low);
