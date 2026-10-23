@@ -1,0 +1,27 @@
+# opendir.cov - every requirement unit on functions/opendir.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:673b6b73     partial XSH.opendir.004  # the entries are checked; fdopendir()'s errors and the descriptor's offset are not compared with opendir()
+DESCRIPTION:caa85e23     todo  a descriptor whose offset is past the first entries (needs posix_getdents() or a stream to advance it)
+DESCRIPTION:162ebc19     none  undefined
+DESCRIPTION:8792930b     XSH.closedir.001
+DESCRIPTION:0c42969d     none  unspecified
+DESCRIPTION:b5b5e1f8     XSH.opendir.005
+DESCRIPTION:da2c945d     XSH.opendir.001 XSH.opendir.003
+DESCRIPTION:e56e2680     XSH.opendir.001
+DESCRIPTION:972aec1f     none  introduces the two rules that follow
+DESCRIPTION:1843cd20     partial XSH.opendir.002  # FD_CLOEXEC is checked; O_DIRECTORY has no visible effect on a directory
+DESCRIPTION:da812cc1     todo  opendir() with every descriptor in use (EMFILE is a "may fail" error, so only a returned descriptor above the limit could fail)
+RETURN_VALUE:87de40d0    XSH.opendir.001 XSH.opendir.004
+RETURN_VALUE:ef7098ec    XSH.opendir.006 XSH.opendir.007
+ERRORS:d99739fe          XSH.opendir.006
+ERRORS:395f0cb3          XSH.opendir.006
+ERRORS:639b1978          XSH.opendir.010
+ERRORS:489696fd          XSH.opendir.008
+ERRORS:681b232a          XSH.opendir.009
+ERRORS:8ccf2fb7          XSH.opendir.007
+ERRORS:50d2a841          XSH.opendir.008
+ERRORS:18a35e8a          optional
+ERRORS:1fbbba10          optional
+ERRORS:c7f415ad          optional
+ERRORS:6ed3cdf7          optional

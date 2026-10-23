@@ -1,0 +1,39 @@
+# readdir.cov - every requirement unit on functions/readdir.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:8e9bfb12     none  defines the type
+DESCRIPTION:25ee2c1e     none  background
+DESCRIPTION:2b94f887     XSH.readdir.001 XSH.opendir.001
+DESCRIPTION:2767f4a9     XSH.readdir.003
+DESCRIPTION:f553981a     none  background
+DESCRIPTION:0a437df7     XSH.readdir.002
+DESCRIPTION:3ef6d53c     XSH.readdir.002
+DESCRIPTION:6c64904d     XSH.readdir.001
+DESCRIPTION:35b3e0f3     XSH.readdir.001
+DESCRIPTION:7eab7446     partial XSH.readdir.001  # at most one dot and one dot-dot; that they come at all when "entries exist" cannot be told from outside
+DESCRIPTION:0fdc0bdd     app
+DESCRIPTION:e2f44a8f     none  permission for the implementation
+DESCRIPTION:680cd386     XSH.readdir.004
+DESCRIPTION:dee407ea     none  permission for the implementation
+DESCRIPTION:faaf0dd4     none  unspecified
+DESCRIPTION:df9cdcf0     XSH.readdir.005
+DESCRIPTION:23c1b5a3     todo  a stream used by the child alone after fork()
+DESCRIPTION:f0708c1a     none  undefined
+DESCRIPTION:c34ee75d     none  unspecified
+DESCRIPTION:0f1ac1b5     app
+DESCRIPTION:222faad9     XSH.readdir.003
+DESCRIPTION:a1d5e2ed     XSH.readdir.006
+DESCRIPTION:250d196e     app
+DESCRIPTION:b8df61e5     XSH.readdir.006
+DESCRIPTION:5117fe06     XSH.readdir.006
+DESCRIPTION:3567d9a4     XSH.readdir.006
+DESCRIPTION:821d3a4d     none  unspecified
+DESCRIPTION:0bb2e5bf     todo  readdir_r() and the directory's last data access timestamp
+RETURN_VALUE:1051ed77    XSH.readdir.001
+RETURN_VALUE:47ba24e2    todo  needs a readdir() error, which cannot be caused portably
+RETURN_VALUE:16bc17b9    XSH.readdir.003
+RETURN_VALUE:35c6334b    XSH.readdir.006
+ERRORS:14246916          untestable
+ERRORS:3ebae22f          untestable
+ERRORS:76674d06          optional
+ERRORS:fa73e522          optional

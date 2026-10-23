@@ -42,7 +42,7 @@ verified; this file is the plan. Update both when a step finishes.
 4. **Header mutants for Tier 0**, and Tier 0 for the prose-only headers
    (`<stdint.h>`, `<float.h>` and the like) that `gen/specmodel.py` does
    not yet read.
-5. **Files and directories** (remaining): `opendir`/`readdir`.
+5. **Files and directories** (remaining): `posix_getdents` (no reference libc has it yet).
 6. **Remaining todos** in the done modules (`ci/coverage.py --show MODULE`
    lists them): unprivileged EACCES cases, pseudo-terminal cases,
    environment cases (ENOSPC, EROFS, ENFILE), SA_NOCLDWAIT.

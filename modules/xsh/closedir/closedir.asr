@@ -1,0 +1,11 @@
+# XSH closedir()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.closedir.001
+anchor     functions/closedir.html#DESCRIPTION
+class      required
+since      1988
+says       closedir() of a stream from opendir() returns 0, and the descriptor
+           dirfd() had returned is then no longer open; likewise for a
+           stream from fdopendir() and the descriptor given to it.
+test       t/001-closes-fd.c

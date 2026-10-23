@@ -1,0 +1,18 @@
+# XSH rewinddir()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.rewinddir.001
+anchor     functions/rewinddir.html#DESCRIPTION
+class      required
+since      1988
+says       After reading a stream of a, b and c to the end, rewinddir() makes
+           readdir() return a, b and c again.
+test       t/001-rewind.c
+
+assertion  XSH.rewinddir.002
+anchor     functions/rewinddir.html#DESCRIPTION
+class      required
+since      1988
+says       With a stream of a, b and c read to the end, after file d is created
+           and b removed, rewinddir() makes readdir() return a, c and d.
+test       t/002-current-state.c

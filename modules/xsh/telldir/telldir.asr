@@ -1,0 +1,13 @@
+# XSH telldir()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.telldir.001
+anchor     functions/telldir.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       In a directory of 20 files, after 5 entries telldir() gives loc;
+           after reading on to the end, seekdir(d, loc) makes readdir()
+           return the entry that followed loc before; telldir() right after
+           seekdir(d, loc) returns loc.
+test       t/001-telldir.c

@@ -1,0 +1,93 @@
+# XSH opendir() and fdopendir()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.opendir.001
+anchor     functions/opendir.html#DESCRIPTION
+class      required
+since      1988
+says       opendir("d"), with d holding files a, b and c, returns a stream from
+           which readdir() returns a, b and c once each (and dot and dot-dot
+           at most once each) before a null pointer.
+test       t/001-opendir.c
+
+assertion  XSH.opendir.002
+anchor     functions/opendir.html#DESCRIPTION
+class      required
+since      2024
+says       For a stream from opendir(), the descriptor dirfd() returns has
+           FD_CLOEXEC set (whether opendir() or dirfd() opened it, it is
+           opened as if with O_CLOEXEC).
+test       t/002-cloexec.c
+
+assertion  XSH.opendir.003
+anchor     functions/opendir.html#DESCRIPTION
+class      required
+since      2001
+says       opendir("sl"), with sl a symbolic link to directory d holding a, b
+           and c, returns a stream of those entries.
+test       t/003-follows-link.c
+
+assertion  XSH.opendir.004
+anchor     functions/opendir.html#DESCRIPTION
+class      required
+since      2008
+says       fdopendir(fd), with fd open read-only on directory d holding a, b
+           and c, returns a stream of those entries; dirfd() of it returns
+           fd.
+test       t/004-fdopendir.c
+
+assertion  XSH.opendir.005
+anchor     functions/opendir.html#DESCRIPTION
+class      required
+since      2008
+says       fdopendir(fd) with FD_CLOEXEC set on fd leaves it set.
+test       t/005-fdopendir-cloexec.c
+
+assertion  XSH.opendir.006
+anchor     functions/opendir.html#ERRORS
+class      required
+since      2008
+says       fdopendir() of a descriptor that is not open fails with EBADF; of a
+           descriptor open on a regular file, with ENOTDIR.
+test       t/006-fdopendir-errors.c
+
+assertion  XSH.opendir.007
+anchor     functions/opendir.html#ERRORS/ENOENT
+class      required
+since      1988
+says       opendir("missing"), opendir("nodir/x") and opendir("") fail with
+           ENOENT.
+test       t/007-enoent.c
+
+assertion  XSH.opendir.008
+anchor     functions/opendir.html#ERRORS/ENOTDIR
+class      disputed
+since      1988
+says       opendir("f") and opendir("f/") with f a regular file fail with
+           ENOTDIR; opendir("a"), with a -> b and b -> a, fails with
+           ELOOP.
+note       disputed (SI-55): opendir()'s [ENOENT] reads "does not name
+           an existing directory", which a regular file also meets, so
+           XSH 2.3 lets ENOENT be reported too; every reference system
+           reports ENOTDIR.
+test       t/008-enotdir.c
+
+assertion  XSH.opendir.009
+anchor     functions/opendir.html#ERRORS/ENAMETOOLONG
+class      disputed
+since      1988
+says       opendir() of a name longer than {NAME_MAX} bytes fails with
+           ENAMETOOLONG.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
+test       t/009-enametoolong.c
+
+assertion  XSH.opendir.010
+anchor     functions/opendir.html#ERRORS/EACCES
+class      required
+since      1988
+says       For an unprivileged process, opendir() of its own directory with
+           mode 0300 (no read permission) fails with EACCES, and so does
+           opendir("s/d") when s denies search permission.
+test       t/010-eacces.c
