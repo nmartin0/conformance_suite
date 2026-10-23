@@ -148,6 +148,7 @@ int main(void)
 		st = lst("sl");
 		pc_check(S_ISREG(st.st_mode) && same_file(&st, &ref), "sl is not the renamed file");
 		pc_check(pc_file_equals("t", "target"), "the link's target was replaced or changed");
+		pc_check(!exists("f"), "the old name still exists");
 	}
 	pc_pass();
 }

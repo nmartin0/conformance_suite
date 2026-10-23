@@ -7,6 +7,7 @@
  * while PC_PHASE is "test" (as set by pc.c in this process or a parent).
  */
 #define _GNU_SOURCE 1
+#include <dirent.h>
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -105,8 +106,17 @@ int renameat(int oldfd, const char *old, int newfd, const char *new)
 		newfd = AT_FDCWD;
 	if (IS("fdcwd_ebadf") && (oldfd == AT_FDCWD || newfd == AT_FDCWD))
 		return fail(EBADF);
-	if (IS("checks_fd") && ((oldfd != AT_FDCWD && fstat(oldfd, &st) != 0) || (newfd != AT_FDCWD && fstat(newfd, &st) != 0)))
-		return fail(EBADF);	/* checks the descriptors even for absolute paths */
+	if (IS("checks_fd")) {
+		/* checks the descriptors even for absolute paths */
+		if ((oldfd != AT_FDCWD && fstat(oldfd, &st) != 0) || (newfd != AT_FDCWD && fstat(newfd, &st) != 0))
+			return fail(EBADF);
+		if ((oldfd != AT_FDCWD && fstat(oldfd, &st) == 0 && !S_ISDIR(st.st_mode)) ||
+		    (newfd != AT_FDCWD && fstat(newfd, &st) == 0 && !S_ISDIR(st.st_mode)))
+			return fail(ENOTDIR);
+	}
+	if (IS("checks_both_fds") && (old[0] != '/' || new[0] != '/') &&
+	    ((oldfd != AT_FDCWD && fstat(oldfd, &st) != 0) || (newfd != AT_FDCWD && fstat(newfd, &st) != 0)))
+		return fail(EBADF);
 	if (IS("search_checked") && oldfd != AT_FDCWD && old[0] != '/' && fstat(oldfd, &st) == 0 && S_ISDIR(st.st_mode) &&
 	    !(st.st_mode & 0111))
 		return fail(EACCES);

@@ -7,6 +7,7 @@
  * while PC_PHASE is "test" (as set by pc.c in this process or a parent).
  */
 #define _GNU_SOURCE 1
+#include <dirent.h>
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -148,6 +149,25 @@ int rename(const char *old, const char *new)
 		old = unslash(old, b1, sizeof b1);
 	if (IS("dir_slash_ok") && has_slash_end(new) && stat(old, &so) == 0 && S_ISDIR(so.st_mode))
 		new = unslash(new, b2, sizeof b2);
+	if (IS("slash_rejected") && (has_slash_end(old) || has_slash_end(new)))
+		return fail(ENOTDIR);
+	if (IS("same_dir_einval") && stat(old, &so) == 0 && S_ISDIR(so.st_mode) && stat(new, &sn) == 0 &&
+	    so.st_dev == sn.st_dev && so.st_ino == sn.st_ino)
+		return fail(EINVAL);
+	if (IS("dot_resolved")) {
+		/* strips a final "." or ".." and renames what it names */
+		size_t lo = strlen(old), ln = strlen(new);
+		if (lo >= 2 && strcmp(old + lo - 2, "/.") == 0 && lo < sizeof b1) {
+			memcpy(b1, old, lo - 2);
+			b1[lo - 2] = '\0';
+			old = b1;
+		}
+		if (ln >= 2 && strcmp(new + ln - 2, "/.") == 0 && ln < sizeof b2) {
+			memcpy(b2, new, ln - 2);
+			b2[ln - 2] = '\0';
+			new = b2;
+		}
+	}
 	if (IS("sticky_refuses_owner")) {
 		struct stat d;
 		if (stat(dir_of(old, d1, sizeof d1), &d) == 0 && (d.st_mode & S_ISVTX) && d.st_uid != geteuid())
@@ -172,7 +192,7 @@ int rename(const char *old, const char *new)
 		errno = ENOTDIR;
 	if (r == -1 && IS("enotdir_as_eisdir") && errno == ENOTDIR)
 		errno = EISDIR;
-	if (r == -1 && IS("einval_as_enoent") && (errno == EINVAL || errno == EBUSY))
+	if (r == -1 && IS("einval_as_enoent") && errno == EINVAL)
 		errno = ENOENT;
 	if (r == -1 && IS("enoent_as_enotdir") && errno == ENOENT)
 		errno = ENOTDIR;
@@ -184,8 +204,11 @@ int rename(const char *old, const char *new)
 		errno = ENOENT;
 	if (r == -1 && IS("eacces_as_eperm") && errno == EACCES)
 		errno = EPERM;
-	if (r == -1 && IS("sticky_ignored") && (errno == EPERM || errno == EACCES))
-		return 0;	/* pretends the sticky bit did not apply */
+	if (r == -1 && IS("sticky_ignored") && (errno == EPERM || errno == EACCES)) {
+		struct stat d;
+		if (stat(dir_of(old, d1, sizeof d1), &d) == 0 && (d.st_mode & S_ISVTX))
+			return 0;	/* pretends the sticky bit did not apply */
+	}
 	if (r == 0 && IS("returns_one"))
 		return 1;
 	return r;

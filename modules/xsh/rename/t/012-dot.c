@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.rename.012
  * MUTANT    rename.einval_as_enoent
+ * MUTANT    rename.dot_resolved
  */
 #include "pc.h"
 #include <errno.h>
@@ -138,13 +139,15 @@ int main(void)
 	pc_begin("XSH.rename.012");
 	{
 		int r = 0;
-		pc_make_dir("d");
-		pc_make_file("f", "x");
+		pc_make_dir("p");
+		pc_make_dir("p/d");
+		pc_make_dir("e");
+		pc_make_dir("d2");
 		pc_test();
-		pc_expect_err(rename("d/.", "x"), EINVAL, "rename(\"d/.\", \"x\")");
-		pc_expect_err(rename("d/..", "x"), EINVAL, "rename(\"d/..\", \"x\")");
-		pc_expect_err(rename("f", "d/."), EINVAL, "rename(\"f\", \"d/.\")");
-		pc_check(exists("d") && exists("f") && !exists("x"), "a failed rename() changed a name");
+		pc_expect_err(rename("p/d/.", "x"), EINVAL, "rename(\"p/d/.\", \"x\")");
+		pc_expect_err(rename("p/d/..", "x"), EINVAL, "rename(\"p/d/..\", \"x\")");
+		pc_expect_err(rename("e", "d2/."), EINVAL, "rename(\"e\", \"d2/.\")");
+		pc_check(exists("p/d") && exists("e") && exists("d2") && !exists("x"), "a failed rename() changed a name");
 		(void)r;
 	}
 	pc_pass();

@@ -99,9 +99,10 @@ assertion  XSH.rename.012
 anchor     functions/rename.html#ERRORS/EINVAL
 class      required
 since      2008
-says       rename("d/.", "x"), rename("d/..", "x") and rename("f", "d/.")
-           fail with EINVAL, d being a directory that is not the working
-           directory and is not otherwise in use.
+says       rename("p/d/.", "x"), rename("p/d/..", "x") and rename("e", "d2/.")
+           fail with EINVAL, with p, p/d, e and d2 directories that are
+           neither the working directory nor otherwise in use (d2 and e
+           empty, so no other error condition applies).
 test       t/012-dot.c
 
 assertion  XSH.rename.013
@@ -115,15 +116,14 @@ test       t/013-file-slash.c
 
 assertion  XSH.rename.014
 anchor     functions/rename.html#DESCRIPTION
-class      disputed
+class      required
 since      2008
 says       rename("d", "nd/"), with d a directory and nd not existing, fails
            (the new name ends in a slash but does not resolve to an
            existing directory) and d keeps its name.
-note       disputed (SI-52): rename() says it shall fail, but XBD 4.16
-           resolves a trailing slash on a directory entry about to be
-           created for a directory, no error number covers the case, and
-           mkdir("nd/") is allowed.
+note       XBD 4.16 lets interfaces constrain trailing slashes further
+           and names rename() as one that does; no error number is
+           listed for this case (SI-52), so any error is accepted.
 test       t/014-dir-slash-new.c
 
 assertion  XSH.rename.015
@@ -178,6 +178,9 @@ class      required
 since      1988
 says       rename("f/x", "g") and rename("e", "f/y"), with f a regular file,
            fail with ENOTDIR.
+note       For old, "f/x" also names no existing file (ENOENT); the
+           suite reads the more specific ENOTDIR as required (Q-8), as
+           every reference system reports.
 test       t/020-enotdir-prefix.c
 
 assertion  XSH.rename.021
@@ -186,6 +189,9 @@ class      required
 since      2001
 says       rename() fails with ELOOP when old's or new's prefix goes through a
            loop of symbolic links (a -> b, b -> a).
+note       For old, "a/x" also names no existing file (ENOENT); the
+           suite reads the more specific ELOOP as required (Q-8), as
+           every reference system reports.
 test       t/021-eloop.c
 
 assertion  XSH.rename.022
@@ -220,7 +226,8 @@ since      1988
 says       For a process without appropriate privileges, rename() of its own
            file into a directory that denies write permission, out of one
            that does (w/f to c/g), and through a directory that denies
-           search permission all fail with EACCES; nothing moves.
+           search permission (for old, and for new) all fail with EACCES;
+           nothing moves.
 test       t/025-eacces.c
 
 assertion  XSH.rename.026
@@ -281,3 +288,39 @@ says       In a directory with S_ISVTX set and write permission for all,
            can rename() a file it owns.
 needs      root
 test       t/030-sticky-owner.c
+
+assertion  XSH.rename.031
+anchor     basedefs/V1_chap04.html#tag_04_16
+class      required
+since      1988
+says       After rename("q", "p/q") of a directory, "p/q/.." is p (its st_dev
+           and st_ino).
+nomutant   the file system keeps dot-dot; a preload library cannot leave
+           it stale
+test       t/031-dotdot-moved.c
+
+assertion  XSH.rename.032
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      2008
+says       rename("d/", "x") with d a directory, and rename("x", "e/") with e
+           an existing empty directory, both succeed: e is then the
+           directory first named d.
+test       t/032-dir-slashes-ok.c
+
+assertion  XSH.rename.033
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      2008
+says       rename("e", "e") and rename("e", "./e") with e a directory holding a
+           file return 0 and change nothing.
+test       t/033-same-dir.c
+
+assertion  XSH.rename.034
+anchor     functions/rename.html#DESCRIPTION
+class      required
+since      2008
+says       renameat(bad, "/abs/f", dfd, "g") with bad not open succeeds (old
+           is absolute) and creates d/g; renameat(dfd, "g", ffd, "/abs/h")
+           with ffd open on a regular file also succeeds.
+test       t/034-renameat-mixed.c

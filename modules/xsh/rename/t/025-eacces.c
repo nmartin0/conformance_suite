@@ -153,7 +153,9 @@ static int child(void)
 		return v;
 	if ((v = verdict(rename("w/f", "c/g"), EACCES, EACCES)) != 0)
 		return v;
-	return verdict(rename("s/f", "c/h"), EACCES, EACCES);
+	if ((v = verdict(rename("s/f", "c/h"), EACCES, EACCES)) != 0)
+		return v;
+	return verdict(rename("c/own", "s/y"), EACCES, EACCES);
 }
 
 int main(void)

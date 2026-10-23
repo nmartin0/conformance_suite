@@ -63,7 +63,7 @@ by the named assertion.
 | XSH.fstatat.013, XSH.link.021, XSH.unlink.021, XSH.rename.027, XSH.mkdir.018 | UNRESOLVED (glibc), FAIL (musl) | glibc does not define `O_SEARCH`; musl's O_SEARCH (O_PATH) descriptors still get the search check | 1.7, O.18 |
 | XSH.link.019 | INSPECT | `fs.protected_hardlinks` refuses a link to another user's readable file with EPERM (disputed, Q-24) | O.19 |
 | XSH.rename.012 | FAIL | a final dot or dot-dot gives EBUSY; EINVAL required | O.20 |
-| XSH.rename.014 | INSPECT | `rename(dir, "new/")` succeeds (disputed, SI-52) | - |
+| XSH.rename.014 | FAIL | `rename(dir, "new/")` succeeds | O.21 |
 | XSH.unlink.005, .010 | FAIL | `unlink()`/`unlinkat(fd, dir, 0)` of a directory give EISDIR; EPERM required | 1.17 |
 | XSH.sig2str.001 to .006 | UNINITIATED | no sig2str() or str2sig() | 3.1 |
 | XBD.signal.h.007 | FAIL | no `_SC_NSIG` (nor `NSIG_MAX`) | 1.24 |
@@ -326,6 +326,18 @@ O.20 **Linux: rename() with a final dot or dot-dot gives EBUSY, not EINVAL.**
   fail with EBUSY even when d is not in use (not the working directory of
   any process, not a mount point).
 - Comp: kernel. Kind: long-standing. Observe: XSH.rename.012.
+- Src: posixcheck run.
+
+O.21 **Linux: rename() of a directory to "new/" succeeds.**
+- POSIX (`rename`, DESCRIPTION, CX): if new does not resolve to an
+  existing directory and ends with trailing slashes, rename() shall fail.
+  XBD 4.16 allows interfaces to constrain trailing slashes further, and
+  its footnote names rename() as one that does.
+- Linux: rename("d", "nd/") with d a directory and nd not existing
+  succeeds and creates nd (the kernel accepts trailing slashes whenever
+  the source is a directory). Non-directories are refused with ENOTDIR,
+  as required.
+- Comp: kernel. Kind: long-standing. Observe: XSH.rename.014.
 - Src: posixcheck run.
 
 ## Things the strict build changes

@@ -78,7 +78,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-49 | XSH `str2sig()`: "a string containing" | Defect (editorial) | Low | Plain names and numbers only |
 | SI-50 | XBD `<stdio.h>`: dprintf() prototype lacks its semicolon | Defect (editorial) | Low | Generator tolerates it |
 | SI-51 | XBD `<float.h>`: unclosed paragraphs in the HTML edition | Defect (editorial, HTML) | Low | Generator repairs it |
-| SI-52 | XSH `rename()`: trailing slash on a new directory name | Defect (inconsistency) | Medium | Disputed (XSH.rename.014) |
+| SI-52 | XSH `rename()`: no error number for a directory renamed to "new/" | Defect (omission) | Low | Any error accepted (XSH.rename.014) |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -648,18 +648,13 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **posixcheck meanwhile:** `gen/specmodel.py` closes such paragraphs where the next block starts.
 - **Suggested change:** fix the markup in the HTML edition (editorial).
 
-### SI-52: rename(): a trailing slash on a new directory name
+### SI-52: rename(): no error number for a directory renamed to "new/"
 
-- **Where:** XSH `rename()`, DESCRIPTION (CX) and ERRORS; XBD 4.16.
-- **What the text says:** rename() shall fail if new does not resolve to an existing directory and ends with trailing slashes. XBD 4.16 resolves such a pathname successfully when the last component names "a directory entry that is to be created for a directory immediately after the pathname is resolved", which is what rename(dir, "new/") does; mkdir("new/") is allowed on the same grounds.
-- **Why it is a problem:** the rule forbids rename("d", "nd/") with d a directory, which 4.16 otherwise permits, and none of the listed error numbers names that case ([ENOTDIR] covers only old being a non-directory). Linux, at least, accepts the call. Either the rule is meant only for non-directories, or an error number is missing.
-- **posixcheck meanwhile:** XSH.rename.014 is `disputed`: a successful rename(dir, "new/") is logged as INSPECT.
-- **Suggested change:** limit the rule to the case where old is not a directory (matching [ENOTDIR]), or name the error for a directory.
-
-## Questions to raise
-
-These are consistent as written, but the intent or the fit with practice
-is unclear.
+- **Where:** XSH `rename()`, DESCRIPTION (CX) and ERRORS.
+- **What the text says:** rename() shall fail if new does not resolve to an existing directory and ends with trailing slashes (XBD 4.16 permits this constraint and names rename() in its footnote). [ENOTDIR] covers the case only when old is not a directory.
+- **Why it is a problem:** for rename("d", "nd/") with d a directory and nd not existing, the call must fail, but no listed error number describes the condition, so applications cannot tell what to expect. XCU mv, the other interface the footnote names, forbids the trailing slash only for non-directory sources, which makes the difference look unintended.
+- **posixcheck meanwhile:** XSH.rename.014 requires the failure and accepts any error number.
+- **Suggested change:** name the error for a directory (ENOTDIR or ENOENT), or say explicitly that the rule applies to directories too.
 
 ### Q-1: Should SIGPIPE follow EPIPE after shutdown(SHUT_WR)?
 
