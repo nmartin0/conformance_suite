@@ -147,24 +147,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
 ## Next
 
-1. Run on FreeBSD, NetBSD, OpenBSD under QEMU (no KVM here, so software
-   emulation), then macOS and illumos; triage with `analyze.py matrix`.
-   Waiting on images from the user: the BSD download sites are blocked
-   from the development container.
-2. `gen/`: the spec-model generator (parse the HTML into declarations,
-   options and anchors with paragraph hashes), then Tier 0 header tests
-   for every header, with header mutants.
-3. Turn the `todo` units of open, close and fcntl.h into assertions
-   (`ci/coverage.py --show MODULE` lists them).
-4. open(): O_SEARCH/O_EXEC (after the fcntl.h header checks), EACCES
-   cases (unprivileged user), O_SYNC, pseudo-terminal cases, environment
-   cases (ENOSPC, EROFS, ENFILE). close(): posix_close(), locks, FIFO and
-   socket cases. The file-descriptor group (open, close, dup, pipe,
-   fcntl, lseek, read, write) is done; next come processes (fork, exec,
-   wait, exit), then signals.
-5. `xcu/getconf`: cross-check getconf against sysconf/confstr.
-6. Controller script: copy the tree to a VM over ssh, set PC_TREE to the
-   tree's hash, run, copy results back.
+See `docs/roadmap.md`. Next up: signals.
 
 ## Scope and rules
 
@@ -175,10 +158,11 @@ anything.
 
 ## Issues in the standard
 
-`docs/standard-issues.md` indexes conflicts, mistakes and unclear points
-found in POSIX.1-2024 (SI-1 to SI-7, Q-1 to Q-3 so far); the full write-up
-for The Austin Group is https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
-Reviews should report any new ones.
+`docs/standard-issues-report.md` is the full write-up of conflicts,
+mistakes and unclear points found in POSIX.1-2024 (SI-1 to SI-20, Q-1 to
+Q-10 so far), for The Austin Group; `docs/standard-issues.md` indexes them
+by assertion. A shared copy: https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
+Reviews should report any new ones; add them to both files.
 
 ## Open decisions
 
@@ -188,6 +172,11 @@ Reviews should report any new ones.
 ## Bundles
 
 Each checkpoint is sent as `posixcheck-NNNN.bundle`, a complete copy of
-`main`. To resume in a new session, attach the latest bundle and clone it:
-`git clone posixcheck-NNNN.bundle posixcheck`. To update an existing clone:
-`git pull /path/to/posixcheck-NNNN.bundle main`.
+`main` (each one contains all earlier ones, so only the newest is needed).
+Since bundle 0013 the history includes the GitHub repository's first
+commit (github.com/nmartin0/conformance_suite), so a clone of that
+repository updates by fast-forward:
+
+    git pull --ff-only ~/Downloads/posixcheck-NNNN.bundle main
+
+To start from a bundle alone: `git clone posixcheck-NNNN.bundle posixcheck`.

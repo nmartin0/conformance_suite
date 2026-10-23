@@ -4,11 +4,11 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
 Inconsistencies, apparent mistakes and unclear points found in POSIX.1-2024
 while writing posixcheck. The full write-up, for raising with The Austin
-Group, is a separate document:
-https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF
+Group, is `standard-issues-report.md` (a shared copy:
+https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF)
 
 An assertion whose verdict depends on one of these names its ID in its
-`note`. Add a new entry there first, then list it here.
+`note`. Add a new entry to the report first, then list it here.
 
 | ID | Where | Kind | Assertions |
 | --- | --- | --- | --- |
