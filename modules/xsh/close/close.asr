@@ -34,3 +34,74 @@ class      required
 since      1988
 says       close() of a descriptor that is not open returns -1 with EBADF.
 test       t/004-ebadf.c
+
+assertion  XSH.close.005
+anchor     functions/close.html#DESCRIPTION
+anchor     functions/fcntl.html#DESCRIPTION
+class      required
+since      1988
+says       Closing any descriptor for a file releases the process-owned
+           (fcntl F_SETLK) locks the process holds on that file, even
+           locks set through another descriptor; another process then
+           sees no lock.
+test       t/005-lock-any-fd.c
+
+assertion  XSH.close.006
+anchor     functions/close.html#DESCRIPTION
+class      required
+since      1988
+says       When every descriptor for a FIFO is closed, data left in it
+           is discarded: after reopening, a read with no writer returns
+           end of file.
+test       t/006-fifo-discard.c
+
+assertion  XSH.close.007
+anchor     functions/close.html#DESCRIPTION
+anchor     functions/fcntl.html#DESCRIPTION/F_OFD_SETLK
+class      required
+since      2024
+says       An OFD-owned lock stays while any descriptor for its open
+           file description is open, and is released when the last one
+           is closed (the description is freed).
+note       Needs F_OFD_SETLK; UNRESOLVED if <fcntl.h> does not define
+           it.
+test       t/007-ofd-lock-last-close.c
+
+assertion  XSH.close.008
+anchor     functions/close.html#DESCRIPTION
+class      required
+since      2001
+says       When every descriptor for one end of a connected stream
+           socket pair is closed, the socket is destroyed: a read at the
+           other end returns end of file.
+test       t/008-socket-destroyed.c
+
+assertion  XSH.close.009
+anchor     functions/close.html#DESCRIPTION/posix_close
+class      required
+since      2024
+says       posix_close(fd, 0) on an open descriptor returns 0 and closes
+           it, as close() does.
+note       UNRESOLVED if <unistd.h> lacks POSIX_CLOSE_RESTART:
+           posix_close() is then taken as not declared.
+test       t/009-posix-close.c
+
+assertion  XSH.close.010
+anchor     functions/close.html#DESCRIPTION/posix_close
+class      required
+since      2024
+says       posix_close() with an invalid flag either succeeds or fails
+           with EINVAL, and in both cases closes the descriptor.
+note       The invalid flag is a bit other than POSIX_CLOSE_RESTART.
+           UNRESOLVED if POSIX_CLOSE_RESTART is not defined.
+test       t/010-posix-close-bad-flag.c
+
+assertion  XSH.close.011
+anchor     functions/close.html#ERRORS
+class      required
+since      2024
+says       close() never fails with EAGAIN or EWOULDBLOCK: closing a
+           non-blocking stream socket whose send buffer is full returns
+           without either, and the descriptor is closed.
+note       Issue 8 made this explicit.
+test       t/011-nonblock-socket.c

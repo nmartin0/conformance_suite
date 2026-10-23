@@ -149,3 +149,282 @@ class      required
 since      1988
 says       The new file offset is at the beginning of the file.
 test       t/018-offset-start.c
+
+assertion  XSH.open.019
+anchor     functions/open.html#DESCRIPTION/O_RDONLY
+class      required
+since      1988
+says       A descriptor opened O_RDONLY can read, and write() on it
+           fails with EBADF.
+test       t/019-rdonly.c
+
+assertion  XSH.open.020
+anchor     functions/open.html#DESCRIPTION/O_WRONLY
+class      required
+since      1988
+says       A descriptor opened O_WRONLY can write, and read() on it
+           fails with EBADF.
+test       t/020-wronly.c
+
+assertion  XSH.open.021
+anchor     functions/open.html#DESCRIPTION/O_RDWR
+class      required
+since      1988
+says       A descriptor opened O_RDWR can both read and write.
+test       t/021-rdwr.c
+
+assertion  XSH.open.022
+anchor     functions/open.html#DESCRIPTION
+anchor     functions/fcntl.html#DESCRIPTION/F_GETFL
+class      required
+since      1988
+says       fcntl(F_GETFL) on the new descriptor shows the access mode it
+           was opened with, and the file status flags requested (tested
+           with O_APPEND and O_NONBLOCK).
+test       t/022-getfl.c
+
+assertion  XSH.open.023
+anchor     functions/open.html#DESCRIPTION/O_CREAT
+class      required
+since      1988
+says       With O_CREAT but not O_EXCL, an existing file is opened:
+           open() succeeds and changes neither the file's contents nor
+           its mode.
+test       t/023-creat-existing.c
+
+assertion  XSH.open.024
+anchor     functions/open.html#DESCRIPTION/O_CREAT
+class      required
+since      1988
+says       Creating a file with mode 0 and O_RDWR still returns a
+           descriptor that can read and write: the new mode does not
+           restrict the creating open.
+test       t/024-creat-mode0.c
+
+assertion  XSH.open.025
+anchor     functions/open.html#DESCRIPTION
+class      required
+since      1988
+says       Each open() creates a new open file description: two opens of
+           the same file have independent file offsets.
+test       t/025-own-offset.c
+
+assertion  XSH.open.026
+anchor     functions/open.html#DESCRIPTION/O_NONBLOCK
+class      required
+since      1988
+says       O_NONBLOCK on a regular file does not make open() fail, and
+           the descriptor reads normally.
+test       t/026-nonblock-regular.c
+
+assertion  XSH.open.027
+anchor     functions/open.html#DESCRIPTION/O_NONBLOCK
+class      required
+since      1988
+says       Opening a FIFO O_RDONLY|O_NONBLOCK with no writer returns a
+           descriptor at once, without blocking.
+test       t/027-fifo-rd-nonblock.c
+
+assertion  XSH.open.028
+anchor     functions/open.html#DESCRIPTION/O_NONBLOCK
+anchor     functions/open.html#ERRORS/ENXIO
+class      required
+since      1988
+says       Opening a FIFO O_WRONLY|O_NONBLOCK when no process has it
+           open for reading fails at once with ENXIO.
+test       t/028-fifo-wr-nonblock.c
+
+assertion  XSH.open.029
+anchor     functions/open.html#DESCRIPTION/O_NONBLOCK
+anchor     functions/open.html#ERRORS/EINTR
+class      required
+since      1988
+says       A blocking O_RDONLY open of a FIFO with no writer blocks; a
+           caught signal (without SA_RESTART) ends it with -1 and EINTR.
+test       t/029-fifo-rd-blocks.c
+
+assertion  XSH.open.030
+anchor     functions/open.html#DESCRIPTION/O_NONBLOCK
+class      required
+since      1988
+says       A blocking O_RDONLY open of a FIFO returns a descriptor once
+           another process opens the FIFO for writing.
+test       t/030-fifo-rd-writer.c
+
+assertion  XSH.open.031
+anchor     functions/open.html#DESCRIPTION/O_NONBLOCK
+anchor     functions/open.html#ERRORS/EINTR
+class      required
+since      1988
+says       A blocking O_WRONLY open of a FIFO with no reader blocks; a
+           caught signal (without SA_RESTART) ends it with -1 and EINTR.
+test       t/031-fifo-wr-blocks.c
+
+assertion  XSH.open.032
+anchor     functions/open.html#DESCRIPTION/AT_FDCWD
+class      required
+since      2008
+says       openat(AT_FDCWD, path, ...) resolves a relative path against
+           the current working directory, as open() does.
+test       t/032-openat-fdcwd.c
+
+assertion  XSH.open.033
+anchor     functions/open.html#DESCRIPTION/openat
+class      required
+since      2008
+says       openat() with a directory descriptor resolves a relative path
+           against that directory, not the current working directory.
+test       t/033-openat-relative.c
+
+assertion  XSH.open.034
+anchor     functions/open.html#DESCRIPTION/openat
+class      required
+since      2008
+says       openat() with an absolute path ignores the directory
+           descriptor and behaves as open().
+test       t/034-openat-absolute.c
+
+assertion  XSH.open.035
+anchor     functions/open.html#ERRORS/EBADF
+class      required
+since      2008
+says       openat() with a relative path and a descriptor that is not
+           open (and not AT_FDCWD) fails with EBADF.
+test       t/035-openat-ebadf.c
+
+assertion  XSH.open.036
+anchor     functions/open.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       openat() with a relative path and a descriptor for a non-
+           directory file fails with ENOTDIR.
+test       t/036-openat-enotdir.c
+
+assertion  XSH.open.037
+anchor     functions/open.html#DESCRIPTION/openat
+class      required
+since      2008
+says       openat() with O_CREAT creates the file with the mode argument
+           less the file mode creation mask, as open() does.
+note       The run directory must not carry default ACLs.
+test       t/037-openat-creat-umask.c
+
+assertion  XSH.open.038
+anchor     functions/open.html#ERRORS/ELOOP
+class      required
+since      2001
+says       A path that resolves through a loop of symbolic links fails
+           with ELOOP.
+test       t/038-eloop.c
+
+assertion  XSH.open.039
+anchor     functions/open.html#ERRORS/EISDIR
+class      required
+since      2024
+says       O_CREAT without O_DIRECTORY on an existing directory, opened
+           O_RDONLY, fails with EISDIR.
+note       Issue 8 made this case EISDIR explicitly.
+test       t/039-eisdir-creat.c
+
+assertion  XSH.open.040
+anchor     functions/open.html#ERRORS/EMFILE
+class      required
+since      1988
+says       When every descriptor the process may have is open, open()
+           fails with EMFILE (the limit lowered with
+           setrlimit(RLIMIT_NOFILE)).
+test       t/040-emfile.c
+
+assertion  XSH.open.041
+anchor     functions/open.html#DESCRIPTION/O_CREAT
+class      required
+since      1988
+says       Creating a file sets the new file's access, modification and
+           status change times, and updates the parent directory's
+           modification and status change times.
+note       Takes about 2 s: the times are compared across a pause longer
+           than a coarse timestamp resolution.
+test       t/041-creat-times.c
+
+assertion  XSH.open.042
+anchor     functions/open.html#DESCRIPTION/O_TRUNC
+class      required
+since      1988
+says       O_TRUNC on an existing file updates its modification and
+           status change times.
+note       Takes about 2 s, as XSH.open.041.
+test       t/042-trunc-times.c
+
+assertion  XSH.open.043
+anchor     functions/open.html#ERRORS/ENOTDIR
+class      required
+says       Without O_CREAT, a path ending in a slash whose last
+           component names a regular file fails with ENOTDIR.
+test       t/043-trailing-slash-file.c
+
+assertion  XSH.open.044
+anchor     functions/open.html#ERRORS/ENOENT
+anchor     functions/open.html#RETURN VALUE
+class      required
+since      2024
+says       With O_CREAT, a path ending in a slash whose last component
+           does not exist fails with ENOENT or ENOTDIR, and nothing is
+           created.
+note       Issue 8 wording. Linux is known to give EISDIR here.
+test       t/044-creat-trailing-slash-new.c
+
+assertion  XSH.open.045
+anchor     functions/open.html#ERRORS/ENOTDIR
+anchor     functions/open.html#RETURN VALUE
+class      required
+since      2024
+says       With O_CREAT (without O_EXCL), a path ending in a slash whose
+           last component names an existing regular file fails with
+           ENOTDIR (ENOENT is not allowed), and the file is unchanged.
+note       Issue 8 wording.
+test       t/045-creat-trailing-slash-file.c
+
+assertion  XSH.open.046
+anchor     functions/open.html#DESCRIPTION/O_TRUNC
+class      required
+since      1988
+says       O_TRUNC on an existing regular file opened O_RDWR truncates
+           it to length 0.
+test       t/046-trunc-rdwr.c
+
+assertion  XSH.open.047
+anchor     functions/open.html#ERRORS/ENOENT
+anchor     functions/open.html#RETURN VALUE
+class      required
+since      1988
+says       With O_CREAT, a path whose prefix names a directory that does
+           not exist fails with ENOENT, and nothing is created.
+test       t/047-creat-missing-prefix.c
+
+assertion  XSH.open.048
+anchor     functions/open.html#DESCRIPTION/O_CREAT
+class      required
+since      1988
+says       A file created by open() is owned by the process's effective
+           user ID, and its group is the parent directory's group or the
+           process's effective group ID.
+test       t/048-creat-owner.c
+
+assertion  XSH.open.049
+anchor     functions/open.html#DESCRIPTION/O_NOCTTY
+class      required
+since      1988
+says       O_NOCTTY is ignored when the path is not a terminal: open()
+           of a regular file with it succeeds.
+test       t/049-noctty-regular.c
+
+assertion  XSH.open.050
+anchor     functions/open.html#DESCRIPTION/O_TTY_INIT
+class      required
+since      2008
+says       O_TTY_INIT is ignored when the path is not a terminal: open()
+           of a regular file with it succeeds.
+note       If <fcntl.h> lacks O_TTY_INIT the result is UNRESOLVED: the
+           header check reports the defect. If O_TTY_INIT is 0 (allowed),
+           NOTINUSE.
+test       t/050-tty-init-regular.c

@@ -9,34 +9,34 @@
 
 # --- DESCRIPTION: general ---
 DESCRIPTION:fe6d1a9e        none  general description; every open() assertion exercises it
-DESCRIPTION:9dd1e182        XSH.open.018  # every open() test relies on it; offset sharing via dup() belongs to xsh/dup
+DESCRIPTION:9dd1e182        XSH.open.018 XSH.open.025
 DESCRIPTION:406757a3        XSH.2.6-file-descriptor-allocation.001
-DESCRIPTION:0edd2063        todo  a second open() of the same file has its own offset
+DESCRIPTION:0edd2063        XSH.open.025
 DESCRIPTION:fcc5f69f        XSH.open.009
 DESCRIPTION:06ae9996        XSH.open.011
 DESCRIPTION:2eca5eeb        XSH.open.018
-DESCRIPTION:19bb0313        todo  F_GETFL shows the access mode and status flags requested
+DESCRIPTION:19bb0313        XSH.open.022
 DESCRIPTION:63dcbf6a        app
 
 # --- DESCRIPTION: access modes ---
 DESCRIPTION:8cbd9b98        todo  O_EXEC opens a non-directory for execute only
 DESCRIPTION:65779d19        todo  O_EXEC on a directory fails when O_EXEC differs from O_SEARCH
-DESCRIPTION:65636618        todo  O_RDONLY: read works, write fails with EBADF
-DESCRIPTION:6dfefb13        todo  O_RDWR: both read and write work
+DESCRIPTION:65636618        XSH.open.019
+DESCRIPTION:6dfefb13        XSH.open.021
 DESCRIPTION:827d9053        todo  profile states whether a FIFO may be opened O_RDWR; if not, open() must fail
 DESCRIPTION:f99d55a0        todo  O_SEARCH opens a directory for search only
 DESCRIPTION:1fd9d246        todo  O_SEARCH on a non-directory fails when O_SEARCH differs from O_EXEC
-DESCRIPTION:9ff99aa4        todo  O_WRONLY: write works, read fails with EBADF
+DESCRIPTION:9ff99aa4        XSH.open.020
 
 # --- DESCRIPTION: flags ---
 DESCRIPTION:2fa94acf        XSH.open.008
 DESCRIPTION:249d1f94        XSH.open.010
 DESCRIPTION:809b201c        XSH.open.012
-DESCRIPTION:afb7628e        todo  O_CREAT on an existing file changes neither its contents nor its mode
-DESCRIPTION:e1f62691        partial XSH.open.001 XSH.open.002  # owner (effective UID) and group not checked yet
+DESCRIPTION:afb7628e        XSH.open.023
+DESCRIPTION:e1f62691        XSH.open.001 XSH.open.002 XSH.open.048
 DESCRIPTION:0b5d3838        XSH.open.002
 DESCRIPTION:d9336f8c        none  unspecified
-DESCRIPTION:3c24dc20        todo  create with mode 0 and O_RDWR; the descriptor still reads and writes
+DESCRIPTION:3c24dc20        XSH.open.024
 DESCRIPTION:8283ca09        impl  "provide a way" to take the parent directory's group: documented mechanism (profile)
 DESCRIPTION:fe3339a6        none  a permission, not a requirement
 DESCRIPTION:0602dad5        XSH.open.013
@@ -46,66 +46,66 @@ DESCRIPTION:786ba8d1        todo  threads race to create with O_CREAT|O_EXCL; ex
 DESCRIPTION:3c2ee9fa        XSH.open.004
 DESCRIPTION:49f0da4e        none  undefined
 DESCRIPTION:73ad071a        todo  needs a pseudo-terminal and a session without a controlling terminal
-DESCRIPTION:70857f3e        todo  O_NOCTTY on a regular file is ignored
+DESCRIPTION:70857f3e        XSH.open.049
 DESCRIPTION:1213719c        XSH.open.016
-DESCRIPTION:04085639        todo  FIFO, O_RDONLY|O_NONBLOCK, no writer: returns at once
-DESCRIPTION:e20e0feb        todo  FIFO, O_WRONLY|O_NONBLOCK, no reader: fails (ENXIO)
-DESCRIPTION:98d2e488        todo  FIFO, O_RDONLY, blocking: waits for a writer
-DESCRIPTION:f531cc88        todo  FIFO, O_WRONLY, blocking: waits for a reader
+DESCRIPTION:04085639        XSH.open.027
+DESCRIPTION:e20e0feb        XSH.open.028
+DESCRIPTION:98d2e488        XSH.open.029 XSH.open.030
+DESCRIPTION:f531cc88        partial XSH.open.031  # completes once a reader opens: not tested
 DESCRIPTION:c62edf4e        todo  device that supports non-blocking open; a pseudo-terminal may serve
 DESCRIPTION:03b4383b        none  device-specific
 DESCRIPTION:3d39d5ec        todo  environment: a device whose open the harness holds (Linux CUSE) or a serial line without carrier; blocking open waits
-DESCRIPTION:43af9cf3        todo  O_NONBLOCK on a regular file does not cause an error
+DESCRIPTION:43af9cf3        XSH.open.026
 DESCRIPTION:9ca28ab3        untestable  synchronized I/O completion is not observable without power-loss testing
 DESCRIPTION:82adaf06        untestable  synchronized I/O completion is not observable without power-loss testing
 DESCRIPTION:68adc652        untestable  synchronized I/O completion is not observable without power-loss testing
 DESCRIPTION:7b09fa32        untestable  synchronized I/O completion is not observable without power-loss testing
 DESCRIPTION:725c3665        todo  XSI: O_SYNC on a regular file is accepted (and visible in F_GETFL)
-DESCRIPTION:c6f26854        partial XSH.open.007  # owner unchanged not checked; O_RDWR not tested
+DESCRIPTION:c6f26854        partial XSH.open.007 XSH.open.046  # owner unchanged not checked
 DESCRIPTION:2c6e25d8        todo  O_TRUNC on a FIFO has no effect (terminal case needs a pty)
 DESCRIPTION:a8ab0df5        impl  effect of O_TRUNC on other file types (profile)
 DESCRIPTION:eacd217f        none  undefined
 DESCRIPTION:a895b382        todo  environment: a spare VM serial port nobody has open; set odd termios, reopen with O_TTY_INIT, check the state
 DESCRIPTION:37f77679        none  unspecified
 DESCRIPTION:57299830        todo  needs a pseudo-terminal: subsidiary side starts in a conforming termios state
-DESCRIPTION:b8d3c2f3        todo  O_TTY_INIT on a regular file is ignored
-DESCRIPTION:53d3831d        todo  creating a file marks its timestamps and the parent directory's for update
-DESCRIPTION:468a21b2        todo  O_TRUNC of an existing file marks its mtime and ctime for update
+DESCRIPTION:b8d3c2f3        XSH.open.050
+DESCRIPTION:53d3831d        XSH.open.041
+DESCRIPTION:468a21b2        XSH.open.042
 DESCRIPTION:7415a5b2        app
 DESCRIPTION:51e2ea1b        app
 DESCRIPTION:4d6eb88c        todo  the offset maximum is the largest off_t
-DESCRIPTION:b69ac1c5        todo  openat() with an absolute path behaves as open()
+DESCRIPTION:b69ac1c5        XSH.open.034
 DESCRIPTION:696636e6        todo  openat() checks search permission on the directory (needs an unprivileged user)
 DESCRIPTION:80de69f9        todo  openat() with an O_SEARCH descriptor skips the check
-DESCRIPTION:2c96d65a        todo  openat(AT_FDCWD, ...) behaves as open()
+DESCRIPTION:2c96d65a        XSH.open.032
 
 # --- RETURN VALUE ---
 RETURN_VALUE:61a44a99       partial XSH.2.6-file-descriptor-allocation.001  # openat() not exercised
 RETURN_VALUE:73bdf30d       XSH.open.003 XSH.open.005
-RETURN_VALUE:b86035d8       partial XSH.open.003 XSH.open.004  # only EEXIST paths; check ENOTDIR, ENAMETOOLONG, EISDIR with O_CREAT/O_TRUNC leave nothing created or changed
+RETURN_VALUE:b86035d8       partial XSH.open.003 XSH.open.004 XSH.open.044 XSH.open.045 XSH.open.047  # ENAMETOOLONG and EISDIR paths not checked for side effects
 
 # --- ERRORS: shall fail ---
 ERRORS:58a82610             todo  EACCES cases need an unprivileged user
 ERRORS:3f3acd5c             XSH.open.003
 ERRORS:50dff92c             todo  conditional: try a non-portable name (invalid UTF-8 where the file system checks); if creation fails, errno must be EILSEQ
-ERRORS:2f1554e5             todo  interrupt a blocked FIFO open() with a caught signal (no SA_RESTART)
+ERRORS:2f1554e5             XSH.open.029 XSH.open.031
 ERRORS:47ac95fa             todo  profile-driven: FIFO O_RDWR where the profile says it is an error; synchronized I/O flags on a file without SIO
-ERRORS:c9b775de             partial XSH.open.015  # O_CREAT without O_DIRECTORY, and O_EXEC, not yet
-ERRORS:7f8c87e9             partial XSH.open.016  # a loop of symbolic links not yet
-ERRORS:1fbbba10             todo  lower RLIMIT_NOFILE (pcexec -l) and fill the table
+ERRORS:c9b775de             partial XSH.open.015 XSH.open.039  # O_EXEC on a directory not yet
+ERRORS:7f8c87e9             XSH.open.016 XSH.open.038
+ERRORS:1fbbba10             XSH.open.040
 ERRORS:681b232a             XSH.open.017
 ERRORS:78d47d0e             todo  environment: as root in a scratch VM, lower the system-wide file limit and fill the table
-ERRORS:3604a4ab             partial XSH.open.005 XSH.open.006  # O_CREAT with a missing prefix component not yet
-ERRORS:d8f5e412             todo  O_CREAT with trailing slashes; split into assertions (it also forbids ENOENT in one case)
+ERRORS:3604a4ab             XSH.open.005 XSH.open.006 XSH.open.047
+ERRORS:d8f5e412             XSH.open.044 XSH.open.045
 ERRORS:a7a3f1a9             todo  needs a full scratch file system (environment)
-ERRORS:a2700e2f             partial XSH.open.013 XSH.open.014  # trailing slash and O_SEARCH cases not yet
-ERRORS:2ca7db7a             todo  FIFO, O_WRONLY|O_NONBLOCK, no reader
+ERRORS:a2700e2f             partial XSH.open.013 XSH.open.014 XSH.open.043  # O_SEARCH on a non-directory not yet
+ERRORS:2ca7db7a             XSH.open.028
 ERRORS:dc7f9fc1             todo  device file for a missing device (needs root for mknod)
 ERRORS:fcf47b85             todo  only reachable where off_t is narrower than file sizes (32-bit off_t)
 ERRORS:dbbc73ca             todo  needs a read-only scratch file system (environment)
 ERRORS:222666a3             todo  openat() EACCES (needs an unprivileged user)
-ERRORS:0d30acd6             todo  openat() EBADF
-ERRORS:dc6c136c             todo  openat() ENOTDIR
+ERRORS:0d30acd6             XSH.open.035
+ERRORS:dc6c136c             XSH.open.036
 
 # --- ERRORS: may fail ---
 ERRORS:e319bb88             optional
@@ -124,5 +124,5 @@ DESCRIPTION:6786f7c9        none  unspecified
 DESCRIPTION:3fe308bc        untestable  synchronized I/O completion is not observable without power-loss testing
 DESCRIPTION:63bf8e88        app
 DESCRIPTION:fe92f978        none  unspecified
-DESCRIPTION:5db629f2        todo  openat() with a directory descriptor resolves a relative path against it, not the cwd
-DESCRIPTION:04fc4d88        todo  openat() takes the same flags and mode as open() (O_CREAT applies the umask alike)
+DESCRIPTION:5db629f2        XSH.open.033
+DESCRIPTION:04fc4d88        partial XSH.open.037  # only O_CREAT with mode; other flags through openat() not yet

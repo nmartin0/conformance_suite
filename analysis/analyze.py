@@ -15,6 +15,9 @@
 #   analyze.py diff DB RUN_A RUN_B                what changed between runs
 #   analyze.py coverage DB                        expected/recorded/run counts
 #   analyze.py html DB OUT.html                   static report, no server
+#   analyze.py calibrate DB RUN KNOWN...          check a reference run
+#                                                 against its expected
+#                                                 failures (known/*.known)
 #
 # Options for load: --modules DIR (default: the suite's modules/),
 # --waivers DIR (default: the suite's waivers/).
@@ -390,6 +393,56 @@ def cmd_html(a):
     print(f"wrote {a.out}")
 
 
+def read_known(paths):
+    """{assertion: (code, system pattern, reason)} from known/*.known."""
+    out = {}
+    for f in paths:
+        for n, line in enumerate(Path(f).read_text().splitlines(), 1):
+            line = line.split(" #", 1)[0].strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = line.split(None, 3)
+            if len(parts) < 4 or parts[1] not in CODES:
+                raise SystemExit(f"{f}:{n}: expected: assertion code "
+                                 f"system reason...")
+            out[parts[0]] = (parts[1], parts[2], parts[3])
+    return out
+
+
+def cmd_calibrate(a):
+    """A reference system (Linux, a BSD) is not the system being judged:
+    its results judge the tests. Every non-PASS result should be a known,
+    documented deviation; anything else means the test may be wrong."""
+    con = connect(a.db)
+    known = read_known(a.known)
+    bad = 0
+    for run_id, name, release in runs(con, a.run):
+        print(f"== {name} ({release})")
+        got = dict(((aid, (code, note)) for aid, code, note in con.execute(
+            "SELECT assertion, code, note FROM results WHERE run_id=?",
+            (run_id,))))
+        for aid in sorted(set(got) | set(known)):
+            code, note = got.get(aid, (None, ""))
+            k = known.get(aid)
+            if k and not fnmatch.fnmatch(name or "", k[1]):
+                k = None
+            if k:
+                if code == k[0]:
+                    print(f"EXPECTED  {aid:<34} {code:<10} {k[2]}")
+                elif code is None:
+                    continue        # not run here
+                else:
+                    print(f"STALE     {aid:<34} {code:<10} listed as {k[0]}: "
+                          f"{k[2]}")
+                    bad += 1
+            elif code in ("FAIL", "UNINITIATED"):
+                print(f"SUSPECT   {aid:<34} {code:<10} {note}")
+                bad += 1
+    print(f"calibrate: {bad} result(s) need a look (SUSPECT: the test or "
+          f"the list is wrong; STALE: the list is out of date)")
+    sys.exit(1 if bad else 0)
+
+
 def main():
     signal.signal(signal.SIGPIPE, signal.SIG_DFL)   # quiet under "| head"
     ap = argparse.ArgumentParser(description="analyze posixcheck logs")
@@ -416,6 +469,11 @@ def main():
     p.add_argument("run_a")
     p.add_argument("run_b")
     p.set_defaults(fn=cmd_diff)
+    p = sub.add_parser("calibrate")
+    p.add_argument("db")
+    p.add_argument("run")
+    p.add_argument("known", nargs="+")
+    p.set_defaults(fn=cmd_calibrate)
     p = sub.add_parser("html")
     p.add_argument("db")
     p.add_argument("out")

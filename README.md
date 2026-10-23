@@ -83,6 +83,13 @@ Copy `results/` off each system, then:
     analysis/analyze.py diff db.sqlite A B     # regressions and fixes
     analysis/analyze.py coverage db.sqlite
     analysis/analyze.py html db.sqlite report.html
+    analysis/analyze.py calibrate db.sqlite linux-glibc known/linux-glibc.known
+
+`calibrate` is for reference systems (Linux, the BSDs), whose results judge
+the tests rather than the system: every non-PASS result must match a
+documented deviation in `known/*.known` (see `docs/linux-deviations.md`).
+An unlisted FAIL is SUSPECT (check the test first); a listed entry that now
+passes is STALE.
 
 Waivers (`waivers/*.waiver`) are applied here, never on the system.
 
@@ -101,6 +108,8 @@ Waivers (`waivers/*.waiver`) are applied here, never on the system.
     ci/                  lint.py, mutate.sh (off-system)
     analysis/            analyze.py (off-system)
     gen/                 generators run on a development machine
+    docs/                known deviations of reference systems
+    known/               expected non-PASS results on reference systems
     profiles/  waivers/
 
 Volumes: `xbd` (Base Definitions, including headers such as `xbd/fcntl.h`),

@@ -1,0 +1,13 @@
+# Expected non-PASS results on a Linux/glibc reference run.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# assertion        code        system    reason (docs/linux-deviations.md)
+# "system" is a shell pattern matched against the run's name (--name at load).
+XBD.fcntl.h.002    FAIL        linux*    1.1: no FD_CLOFORK
+XBD.fcntl.h.005    FAIL        linux*    1.1: no O_CLOFORK
+XSH.open.044       FAIL        linux*    O.1: EISDIR for O_CREAT "new/"
+XSH.open.045       FAIL        linux*    O.1: EISDIR for O_CREAT "file/"
+XSH.open.050       UNRESOLVED  linux*    1.7: glibc lacks O_TTY_INIT
+XSH.close.007      UNRESOLVED  linux*    1.8: F_OFD_SETLK hidden under the strict build
+XSH.close.009      UNRESOLVED  linux*    1.3: no posix_close() in glibc
+XSH.close.010      UNRESOLVED  linux*    1.3: no posix_close() in glibc

@@ -30,18 +30,26 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (34 assertions):
+- Modules (66 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
     tested with a gap.
-  - `xsh/open` (18), `xsh/close` (4).
+  - `xsh/open` (50): access modes, O_CREAT/O_EXCL/O_TRUNC/O_APPEND,
+    descriptor flags, FIFO open (blocking, non-blocking, EINTR, ENXIO),
+    openat(), EMFILE, ELOOP, trailing slashes, timestamps, ownership.
+  - `xsh/close` (4).
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).
 - `ci/lint.py`: traceability and anchor checks; `ci/mutate.sh`: mutation
-  checks (48 mutants); `ci/catalog.py`: shared parser.
+  checks (93 mutants); `ci/catalog.py`: shared parser.
 - `analysis/analyze.py`: load, runs, verdict, failures, matrix, diff,
-  coverage, html.
+  coverage, html, calibrate (checks a reference run against
+  `known/*.known`, its expected failures).
+- `docs/linux-deviations.md`: what Linux, glibc, musl and dash do
+  differently from POSIX.1-2024 (about 145 entries, with sources), and
+  what posixcheck has observed. `known/linux-glibc.known`,
+  `known/linux-musl.known`: the expected non-PASS results.
 - `ci/coverage.py`: splits each page of the user's copy of the standard
   into requirement units (every normative sentence, list item, table row
   and struct member; XCU 1.4 default sections), identified by section and
@@ -61,11 +69,14 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `|` in `${x%%|*}` is pattern alternation there. Fixed by quoting.)
 - As root and as an unprivileged user: same results.
 - With musl (musl-gcc): same verdicts as glibc.
-- Results: all PASS except FD_CLOFORK/O_CLOFORK, which this glibc lacks
-  (2 FAIL, 3 blocked), matching os-test's published findings.
-- Mutation: 46 of 48 mutants caught, 0 missed. The 2 O_CLOFORK mutants
-  are unchecked here (baseline not PASS); they need a system with
-  O_CLOFORK.
+- Results: all PASS except known Linux deviations, and `calibrate`
+  finds no unexplained result with glibc or musl:
+  - FD_CLOFORK/O_CLOFORK missing (2 FAIL, 3 blocked);
+  - O_CREAT with a trailing slash gives EISDIR (XSH.open.044, .045);
+  - glibc lacks O_TTY_INIT (XSH.open.050 UNRESOLVED; musl passes).
+- Mutation: 0 missed. Unchecked here (baseline not PASS): the O_CLOFORK,
+  trailing-slash and O_TTY_INIT mutants; they need a system that passes
+  those assertions.
 - Planted breakage is caught: a broken result rule fails the self-tests;
   a broken `read` fails the trust checks; six kinds of catalog damage fail
   the linter; a corrupted log is refused by the analyzer.
@@ -91,10 +102,10 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
    for every header, with header mutants.
 3. Turn the `todo` units of open, close and fcntl.h into assertions
    (`ci/coverage.py --show MODULE` lists them).
-4. More open()/close() assertions the review listed: O_CREAT on an
-   existing file, EISDIR for O_CREAT on a directory, trailing slashes,
-   ELOOP on a symlink loop, O_SEARCH/O_EXEC, FIFO ENXIO, timestamps,
-   openat(), posix_close(); 2.6 for dup, F_DUPFD, pipe.
+4. open(): O_SEARCH/O_EXEC (after the fcntl.h header checks), EACCES
+   cases (unprivileged user), O_SYNC, pseudo-terminal cases, environment
+   cases (ENOSPC, EROFS, ENFILE). close(): posix_close(), locks, FIFO and
+   socket cases. Then dup, fcntl, pipe, read/write, lseek.
 5. `xcu/getconf`: cross-check getconf against sysconf/confstr.
 6. Controller script: copy the tree to a VM over ssh, set PC_TREE to the
    tree's hash, run, copy results back.
