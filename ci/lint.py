@@ -198,6 +198,20 @@ if args.standard:
         if item and item not in f.read_text(encoding="latin-1"):
             err(here, f"anchor item '{item}' not found on {page}")
 
+# RULES.md 2: the standard's text never enters the repository.
+MARKERS = ("The IEEE and The Open Group, All Rights Reserved",
+           "Copyright \u00a9 2001-2024 The IEEE and The Open Group")
+for f in sorted(root.rglob("*")):
+    if ".git" in f.parts or not f.is_file() or f.name == "RULES.md" \
+            or f.resolve() == Path(__file__).resolve():
+        continue
+    try:
+        text = f.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        continue
+    if any(m in text for m in MARKERS):
+        err(f.relative_to(root), "contains text copied from the standard")
+
 if args.list_mutants:
     for aid, mu in mutant_pairs:
         print(aid, mu)

@@ -8,6 +8,10 @@ IEEE. This project does not certify conformance.
 
 Copyright (c) 2026 Nicholas Martin. All rights reserved. See `LICENSE`.
 
+For personal use, to verify an operating system under development. Read
+`RULES.md` before adding anything: it keeps the suite within the
+standard's terms and other projects' licenses.
+
 Design: https://claude.ai/artifact/BCH6E4hts9mcGb2t44GRW5
 Status and next steps: `STATUS.md`.
 

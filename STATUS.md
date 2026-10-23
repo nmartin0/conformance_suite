@@ -7,9 +7,9 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
 ## Where things are
 
 - Design doc: https://claude.ai/artifact/BCH6E4hts9mcGb2t44GRW5
-- Standard: each contributor's own copy of the POSIX.1-2024 HTML edition
+- Standard: the user's own copy of the POSIX.1-2024 HTML edition
   (`susv5.tar`, personal-use download from The Open Group). It is never
-  committed or bundled. Tools that read it take `--standard DIR`.
+  committed or bundled (RULES.md). Tools that read it take `--standard DIR`.
 - This repository travels as git bundles; see "Bundles" below.
 
 ## Done (phase 1, "Skeleton")
@@ -84,13 +84,17 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
 6. Controller script: copy the tree to a VM over ssh, set PC_TREE to the
    tree's hash, run, copy results back.
 
+## Scope and rules
+
+posixcheck is for personal use, to verify an OS under development. It is
+not distributed. `RULES.md` lists the rules that keep it within the
+standard's terms and other projects' licenses; read it before adding
+anything.
+
 ## Open decisions
 
-- Project name (`posixcheck` is a placeholder).
 - Since which edition XSH.open.017 (ENAMETOOLONG for a long component) is
   unconditional: when `_POSIX_NO_TRUNC` became mandatory.
-- Permission for proprietary use of the standard's text in the generated
-  spec model: ask The Open Group (the download is for personal use).
 
 ## Bundles
 
