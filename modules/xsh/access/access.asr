@@ -1,0 +1,170 @@
+# XSH access() and faccessat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.access.001
+anchor     functions/access.html#DESCRIPTION
+class      required
+since      1988
+says       For an unprivileged process and a file it owns: with mode 0400,
+           R_OK succeeds and W_OK, X_OK and R_OK|W_OK fail with EACCES;
+           with mode 0700, R_OK|W_OK|X_OK succeeds; F_OK succeeds for
+           both.
+test       t/001-owner-bits.c
+
+assertion  XSH.access.002
+anchor     basedefs/V1_chap04.html#4.7
+class      required
+since      1988
+says       For an unprivileged process and a file it owns with mode 0077
+           (no owner bits, all group and other bits), R_OK, W_OK and X_OK
+           each fail with EACCES (XBD 4.7: the owner class is checked
+           alone).
+test       t/002-owner-class-only.c
+
+assertion  XSH.access.003
+anchor     basedefs/V1_chap04.html#4.7
+class      required
+since      1988
+says       For an unprivileged process and a file owned by another user and
+           a group it is not in: with mode 0604, R_OK succeeds and W_OK
+           fails with EACCES; with mode 0640, R_OK fails with EACCES.
+needs      root
+test       t/003-other-class.c
+
+assertion  XSH.access.004
+anchor     functions/access.html#DESCRIPTION
+class      required
+since      1988
+says       With appropriate privileges, access() of a mode 0 file for R_OK and
+           W_OK succeeds; X_OK succeeds for a file with an execute bit
+           (mode 0100); for the mode 0 file X_OK may succeed or fail with
+           EACCES.
+needs      root
+test       t/004-privileged.c
+
+assertion  XSH.access.005
+anchor     functions/access.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2008
+says       For a process with real user ID 0 and effective user ID 65534,
+           access() of a mode 0600 file owned by 0 for R_OK succeeds and
+           faccessat(..., AT_EACCESS) fails with EACCES; with real user ID
+           65534 and effective 0 the results are reversed.
+needs      root
+note       setreuid() (XSI) sets the IDs apart, so the test runs only on
+           XSI systems as root.
+test       t/005-real-ids.c
+
+assertion  XSH.access.006
+anchor     functions/access.html#DESCRIPTION
+class      required
+since      1988
+says       For an unprivileged process and directories it owns, X_OK succeeds
+           for mode 0700 and fails with EACCES for mode 0600.
+test       t/006-directory-x.c
+
+assertion  XSH.access.007
+anchor     functions/access.html#DESCRIPTION
+class      required
+since      2001
+says       access("sl", F_OK) succeeds for a symbolic link to an existing file
+           and fails with ENOENT for a dangling one.
+test       t/007-follows-link.c
+
+assertion  XSH.access.008
+anchor     functions/access.html#DESCRIPTION
+class      required
+since      2008
+says       faccessat(fd, "f", F_OK, 0), with fd open on directory d holding f,
+           succeeds although the working directory has no f; with fd open on
+           a directory without f it fails with ENOENT.
+test       t/008-faccessat-relative.c
+
+assertion  XSH.access.009
+anchor     functions/access.html#DESCRIPTION
+class      required
+since      2008
+says       faccessat(AT_FDCWD, "f", R_OK, 0) succeeds for a readable file, and
+           faccessat() with an absolute path succeeds with fd not open.
+test       t/009-faccessat-fdcwd.c
+
+assertion  XSH.access.010
+anchor     functions/access.html#ERRORS/ENOENT
+class      required
+since      1988
+says       access("missing", F_OK), access("nodir/f", F_OK) and access("",
+           F_OK) fail with ENOENT.
+test       t/010-enoent.c
+
+assertion  XSH.access.011
+anchor     functions/access.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       access("f/x", F_OK) and access("f/", F_OK), with f a regular file,
+           fail with ENOTDIR.
+note       For "f/x" the name also names no existing file (ENOENT); the
+           suite reads the more specific ENOTDIR as required (Q-8), as
+           every reference system reports.
+test       t/011-enotdir.c
+
+assertion  XSH.access.012
+anchor     functions/access.html#ERRORS
+class      required
+since      2001
+says       access("a", F_OK), with a -> b and b -> a, fails with ELOOP.
+test       t/012-eloop.c
+
+assertion  XSH.access.013
+anchor     functions/access.html#ERRORS
+class      required
+since      1988
+says       access() of a name longer than {NAME_MAX} bytes fails with
+           ENAMETOOLONG.
+note       The name also names no existing file (ENOENT), but XBD 4.16
+           makes an over-long component an error of its own, which every
+           system reports as ENAMETOOLONG.
+test       t/013-enametoolong.c
+
+assertion  XSH.access.014
+anchor     functions/access.html#ERRORS
+class      required
+since      2008
+says       faccessat(fd, "f", F_OK, 0) with fd not open fails with EBADF.
+test       t/014-faccessat-ebadf.c
+
+assertion  XSH.access.015
+anchor     functions/access.html#ERRORS
+class      required
+since      2008
+says       faccessat(fd, "f", F_OK, 0) with fd open on a regular file fails with
+           ENOTDIR.
+test       t/015-faccessat-enotdir.c
+
+assertion  XSH.access.016
+anchor     functions/access.html#ERRORS/EACCES
+class      required
+since      1988
+says       For an unprivileged process, access("s/f", F_OK) fails with EACCES
+           when directory s denies search permission.
+test       t/016-eacces-prefix.c
+
+assertion  XSH.access.017
+anchor     functions/access.html#ERRORS/EACCES
+class      required
+since      2008
+says       For an unprivileged process, faccessat(fd, "f", F_OK, 0) fails with
+           EACCES when fd was opened O_RDONLY on a directory whose
+           permissions were then changed to deny search.
+test       t/017-faccessat-eacces-fd.c
+
+assertion  XSH.access.018
+anchor     functions/access.html#DESCRIPTION
+class      required
+since      2008
+says       For an unprivileged process, faccessat(fd, "f", F_OK, 0) succeeds
+           when fd was opened with O_SEARCH on a directory whose
+           permissions were then changed to deny search.
+note       O_SEARCH itself is a header item (Tier 0); without it this
+           test is UNRESOLVED.
+test       t/018-faccessat-search.c
