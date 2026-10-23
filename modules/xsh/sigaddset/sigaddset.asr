@@ -1,0 +1,12 @@
+# XSH sigaddset()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.sigaddset.001
+anchor     functions/sigaddset.html#DESCRIPTION
+class      required
+since      1988
+says       On an empty set, sigaddset() of SIGUSR1, then of SIGRTMAX, returns 0
+           each time; afterwards those two are members and no other table
+           signal is.
+uses       XSH.sigismember.001
+test       t/001-adds-one.c

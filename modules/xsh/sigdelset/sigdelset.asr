@@ -1,0 +1,12 @@
+# XSH sigdelset()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.sigdelset.001
+anchor     functions/sigdelset.html#DESCRIPTION
+class      required
+since      1988
+says       On a full set, sigdelset() of SIGUSR1, then of SIGRTMIN, returns 0
+           each time; afterwards those two are not members and every other
+           table signal still is.
+uses       XSH.sigismember.001
+test       t/001-deletes-one.c

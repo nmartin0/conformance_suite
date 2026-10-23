@@ -9,7 +9,8 @@
 # that declares MUTANT lines (ci/lint.py --list-mutants):
 #   1. run the test normally (the baseline)
 #   2. run it once per mutant, with the planted fault active
-# A mutant is CAUGHT when the baseline is PASS and the mutant run is FAIL.
+# A mutant is CAUGHT when the baseline is PASS and the mutant run is FAIL
+# (or INSPECT, a disputed assertion's FAIL).
 # Anything else is reported; MISSED (the test passed with the fault in
 # place) makes the script exit 1. When the baseline is not PASS on this
 # machine, the mutant cannot be judged here and is reported UNCHECKED; so
@@ -69,13 +70,14 @@ while read -r id mutant; do
 	fi
 	run "$work/m.$n" "$id" "$mutant"
 	got=$(code_of "$work/m.$n" "$id")
-	if [ "$got" != FAIL ] &&
+	if [ "$got" != FAIL ] && [ "$got" != INSPECT ] &&
 	    grep -q 'pcmutant: cannot plant' "$work/m.$n/out/$id.txt" 2>/dev/null; then
 		printf 'UNCHECKED %-40s %-28s fault cannot be planted here\n' "$id" "$mutant"
 		unchecked=$((unchecked + 1))
 		continue
 	fi
-	if [ "$got" = FAIL ]; then
+	# A disputed assertion logs its FAIL as INSPECT; that counts too.
+	if [ "$got" = FAIL ] || [ "$got" = INSPECT ]; then
 		printf 'CAUGHT    %-40s %-28s %s\n' "$id" "$mutant" \
 		    "$(note_of "$work/m.$n" "$id")"
 		caught=$((caught + 1))

@@ -1,0 +1,56 @@
+# XSH signal()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.signal.001
+anchor     functions/signal.html#DESCRIPTION
+class      required
+since      1988
+says       signal(SIGUSR1, h1) after signal(SIGUSR1, SIG_IGN) returns SIG_IGN;
+           then signal(SIGUSR1, h2) returns h1, and signal(SIGUSR1,
+           SIG_DFL) returns h2.
+test       t/001-returns-previous.c
+
+assertion  XSH.signal.002
+anchor     functions/signal.html#DESCRIPTION
+class      required
+since      1988
+says       A child that sets SIGUSR1 to SIG_IGN with signal() and sends it to
+           itself carries on (it reports so on a pipe); after setting SIG_DFL
+           and sending it again it is terminated by SIGUSR1.
+test       t/002-dfl-ign.c
+
+assertion  XSH.signal.003
+anchor     functions/signal.html#DESCRIPTION
+class      required
+since      1988
+says       A handler installed with signal() for SIGUSR1 is called with
+           SIGUSR1 as its argument when the signal is sent, and the program
+           goes on after the kill() call.
+test       t/003-handler-called.c
+
+assertion  XSH.signal.004
+anchor     functions/signal.html#DESCRIPTION
+class      required
+since      1988
+says       Inside a handler installed with signal() for SIGUSR1, either the
+           action for SIGUSR1 is SIG_DFL or SIGUSR1 is blocked (one of the
+           two implementation-defined choices).
+note       sigaction() and sigprocmask() are async-signal-safe, so the
+           handler can look at both.
+test       t/004-reset-or-block.c
+
+assertion  XSH.signal.005
+anchor     functions/signal.html#ERRORS/EINVAL
+class      required
+since      1988
+says       signal() returns SIG_ERR with errno EINVAL for signal numbers -1 and
+           100000, for catching SIGKILL and for ignoring SIGSTOP.
+test       t/005-einval.c
+
+assertion  XSH.signal.006
+anchor     functions/signal.html#DESCRIPTION
+class      required
+since      2001
+says       With errno set to EINTR, a successful signal(SIGUSR1, SIG_IGN) leaves
+           errno EINTR.
+test       t/006-errno-kept.c

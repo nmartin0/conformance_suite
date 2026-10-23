@@ -1,0 +1,46 @@
+# XSH abort()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.abort.001
+anchor     functions/abort.html#DESCRIPTION
+class      required
+since      1988
+says       A child calling abort() with SIGABRT at SIG_DFL does not return from
+           it, and wait() reports termination by SIGABRT.
+test       t/001-terminates.c
+
+assertion  XSH.abort.002
+anchor     functions/abort.html#DESCRIPTION
+class      required
+since      1988
+says       A child that blocks SIGABRT, and another that ignores it, are each
+           terminated by SIGABRT when they call abort().
+test       t/002-blocked-ignored.c
+
+assertion  XSH.abort.003
+anchor     functions/abort.html#DESCRIPTION
+class      required
+since      1988
+says       A child with a SIGABRT handler that returns (after writing to a pipe)
+           runs the handler and is still terminated by SIGABRT; abort()
+           does not return.
+test       t/003-handler-returns.c
+
+assertion  XSH.abort.004
+anchor     functions/abort.html#DESCRIPTION
+class      required
+since      1988
+says       A child whose SIGABRT handler leaves with siglongjmp() goes on after
+           abort() is interrupted that way and exits normally.
+test       t/004-handler-leaves.c
+
+assertion  XSH.abort.005
+anchor     functions/abort.html#DESCRIPTION
+class      required
+since      2008
+says       In a child where a second thread calls abort(), the SIGABRT handler
+           runs in that thread (seen through a thread-local value set
+           before), not in the main thread.
+note       The handler reads a thread-local int last written before the
+           signal and leaves with _exit(), both allowed in a handler.
+test       t/005-calling-thread.c

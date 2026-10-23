@@ -1,0 +1,26 @@
+# XSH killpg()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.killpg.001
+anchor     functions/killpg.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       killpg(pgrp, SIGUSR1) for a group of two child processes returns 0
+           and both processes get SIGUSR1 (within 5 s); the test process,
+           outside the group, does not.
+note       The children are in their own group, made with setpgid() by
+           both parent and child to avoid a race.
+test       t/001-group.c
+
+assertion  XSH.killpg.002
+anchor     functions/killpg.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       killpg() with signal 0 on the caller's own process group returns 0
+           without sending anything; killpg() with signal 100000 fails with
+           EINVAL.
+note       The caller's group under pcexec holds only the test's own
+           processes.
+test       t/002-null-einval.c

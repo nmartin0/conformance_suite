@@ -1,0 +1,75 @@
+# XSH sig2str() and str2sig()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.sig2str.001
+anchor     functions/sig2str.html#DESCRIPTION
+class      required
+since      2024
+says       For every signal in the <signal.h> table, sig2str() returns 0 and
+           stores the macro's name without the SIG prefix.
+note       Neither glibc 2.39 nor musl has sig2str() or str2sig()
+           (docs/linux-deviations.md 3.1), so the test does not build
+           there (UNINITIATED).
+test       t/001-table-names.c
+
+assertion  XSH.sig2str.002
+anchor     functions/sig2str.html#DESCRIPTION
+class      required
+since      2024
+says       sig2str() gives "RTMIN" for SIGRTMIN, "RTMAX" for SIGRTMAX,
+           "RTMIN+n" (shortest decimal n) for SIGRTMIN+1 up to
+           (SIGRTMIN+SIGRTMAX)/2, and above that either "RTMIN+n" or
+           "RTMAX-m".
+note       Neither glibc 2.39 nor musl has sig2str() or str2sig()
+           (docs/linux-deviations.md 3.1), so the test does not build
+           there (UNINITIATED).
+test       t/002-realtime-names.c
+
+assertion  XSH.sig2str.003
+anchor     functions/sig2str.html#DESCRIPTION
+class      required
+since      2024
+says       sig2str() returns -1 for -1 and for 100000 (numbers for which kill()
+           fails with EINVAL, checked in setup).
+note       Neither glibc 2.39 nor musl has sig2str() or str2sig()
+           (docs/linux-deviations.md 3.1), so the test does not build
+           there (UNINITIATED).
+test       t/003-invalid.c
+
+assertion  XSH.sig2str.004
+anchor     functions/sig2str.html#DESCRIPTION
+class      required
+since      2024
+says       str2sig() returns 0 and stores the right number for each table
+           signal's name without SIG, for "RTMIN" and "RTMAX", for
+           "RTMIN+1" and for "RTMAX-1".
+note       Neither glibc 2.39 nor musl has sig2str() or str2sig()
+           (docs/linux-deviations.md 3.1), so the test does not build
+           there (UNINITIATED).
+test       t/004-str2sig-names.c
+
+assertion  XSH.sig2str.005
+anchor     functions/sig2str.html#DESCRIPTION
+class      required
+since      2024
+says       str2sig("10")-style decimal strings for SIGUSR1 and SIGRTMIN store
+           those numbers; and for every signal from 1 to SIGRTMAX for which
+           sig2str() succeeds, str2sig() of its result stores that
+           number.
+note       Neither glibc 2.39 nor musl has sig2str() or str2sig()
+           (docs/linux-deviations.md 3.1), so the test does not build
+           there (UNINITIATED).
+test       t/005-str2sig-numbers.c
+
+assertion  XSH.sig2str.006
+anchor     functions/sig2str.html#DESCRIPTION
+class      required
+since      2024
+says       str2sig("SIGINT") (with the prefix) and str2sig("NOSUCHSIG") either
+           return -1 leaving *pnum unchanged, or return 0 having stored a
+           value (an implementation-dependent form); a return of -1 with
+           *pnum changed, or 0 without storing, fails.
+note       Neither glibc 2.39 nor musl has sig2str() or str2sig()
+           (docs/linux-deviations.md 3.1), so the test does not build
+           there (UNINITIATED).
+test       t/006-str2sig-unknown.c

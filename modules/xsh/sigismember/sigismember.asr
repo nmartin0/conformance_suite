@@ -1,0 +1,11 @@
+# XSH sigismember()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.sigismember.001
+anchor     functions/sigismember.html#DESCRIPTION
+class      required
+since      1988
+says       With a set made by sigemptyset() and sigaddset(SIGUSR2),
+           sigismember() returns exactly 1 for SIGUSR2 and exactly 0 for
+           SIGUSR1 and SIGRTMIN; on a full set it returns 1 for SIGUSR1.
+test       t/001-one-or-zero.c

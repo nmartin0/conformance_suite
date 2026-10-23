@@ -54,6 +54,11 @@ by the named assertion.
 | XSH.sigaction.021 | INSPECT | sigqueue() does not queue SIGUSR1 even with SA_SIGINFO (disputed, SI-24) | O.11 (withdrawn) |
 | XSH.sigqueue.005 | NOTINUSE (musl) | sysconf(_SC_SIGQUEUE_MAX) is -1 (no definite limit, which is allowed); glibc reports RLIMIT_SIGPENDING | - |
 | XBD.signal.h.006 | FAIL (glibc) | the realtime range is 31 signals but {RTSIG_MAX} is 32 | O.12 |
+| XSH.sigaltstack.005 | FAIL (glibc) | sigaltstack() accepts SS_ONSTACK in ss_flags | O.13 |
+| XSH.psiginfo.004 | FAIL (glibc) | psignal()/psiginfo() orient stderr | O.14 |
+| XSH.psiginfo.002 | FAIL (musl) | psignal(sig, "") writes ": " | O.15 |
+| XSH.psiginfo.003 | INSPECT (glibc) | psiginfo() adds the sender to the description (disputed, Q-19) | - |
+| XSH.sig2str.001 to .006 | UNINITIATED | no sig2str() or str2sig() | 3.1 |
 | XBD.signal.h.007 | FAIL | no `_SC_NSIG` (nor `NSIG_MAX`) | 1.24 |
 | XBD.signal.h.008, .028 | FAIL, UNINITIATED | no `SIG2STR_MAX`, `sig2str()` or `str2sig()` | 3.1 |
 
@@ -193,6 +198,32 @@ O.12 **glibc: SIGRTMIN..SIGRTMAX holds one signal fewer than {RTSIG_MAX}.**
   reports 30 from sysconf() for its range of 30 (and leaves `RTSIG_MAX`
   undefined), which is consistent.
 - Comp: glibc. Kind: long-standing. Observe: XBD.signal.h.006.
+- Src: posixcheck run.
+
+O.13 **sigaltstack() accepts SS_ONSTACK in ss_flags.**
+- POSIX (Issue 8 `sigaltstack`, ERRORS, Defect 1187): ss_flags with
+  SS_ONSTACK (or any bit other than SS_DISABLE) fails with EINVAL.
+- Linux: the kernel treats SS_ONSTACK like 0 (kept for old programs) and
+  sets the stack; glibc passes the call through. musl checks the flags
+  itself and fails with EINVAL, as required.
+- Comp: kernel (glibc builds). Kind: long-standing; the EINVAL rule is new
+  in Issue 8. Observe: XSH.sigaltstack.005.
+- Src: posixcheck run.
+
+O.14 **glibc: psignal() and psiginfo() give stderr a byte orientation.**
+- POSIX (`psiginfo`): these functions shall not change the orientation of
+  the standard error stream.
+- glibc: after psignal() or psiginfo() on an unoriented stderr,
+  fwide(stderr, 0) is negative. musl leaves it unoriented.
+- Comp: glibc. Kind: long-standing. Observe: XSH.psiginfo.004.
+- Src: posixcheck run.
+
+O.15 **musl: psignal() with an empty message writes a leading ": ".**
+- POSIX (`psiginfo`): the message and ": " are written only when the
+  message is neither a null pointer nor the empty string.
+- musl: psignal(sig, "") writes ": " before the description; NULL is
+  right. glibc is right in both cases.
+- Comp: musl. Kind: long-standing. Observe: XSH.psiginfo.002.
 - Src: posixcheck run.
 
 ## Things the strict build changes

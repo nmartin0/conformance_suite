@@ -1,0 +1,12 @@
+# XSH sigfillset()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.sigfillset.001
+anchor     functions/sigfillset.html#DESCRIPTION
+class      required
+since      1988
+says       sigfillset() on an empty set returns 0, and then every table
+           signal and every signal from SIGRTMIN to SIGRTMAX is a
+           member.
+uses       XSH.sigismember.001
+test       t/001-includes-all.c

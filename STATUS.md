@@ -106,6 +106,11 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     delivery to self before return, EAGAIN at {SIGQUEUE_MAX}, EINVAL,
     EPERM; alarm firing, cancelling, rescheduling, not stacking; pause()
     through handlers, termination and ignored signals.
+  - The sigset functions (`xsh/sigemptyset`, `sigfillset`, `sigaddset`,
+    `sigdelset`, `sigismember`, 1 each), `xsh/signal` (6), XSI
+    `xsh/sigaltstack` (8) and `xsh/killpg` (2), `xsh/psiginfo` (5, with
+    psignal()), `xsh/sig2str` (6, with str2sig(); no Linux C library has
+    them yet), `xsh/abort` (5).
   - XSH 2.4 signal concepts: `xsh/2.4.1-signal-generation` (10),
     `xsh/2.4.2-realtime-signals` (5), `xsh/2.4.3-signal-actions` (15),
     `xsh/2.4.4-signal-effects` (3): which thread gets a signal, pending
@@ -197,8 +202,8 @@ anything.
 ## Issues in the standard
 
 `docs/standard-issues-report.md` is the full write-up of conflicts,
-mistakes and unclear points found in POSIX.1-2024 (SI-1 to SI-44, Q-1 to
-Q-18 so far), for The Austin Group; `docs/standard-issues.md` indexes them
+mistakes and unclear points found in POSIX.1-2024 (SI-1 to SI-46, Q-1 to
+Q-19 so far), for The Austin Group; `docs/standard-issues.md` indexes them
 by assertion. A shared copy: https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 Reviews should report any new ones; add them to both files.
 

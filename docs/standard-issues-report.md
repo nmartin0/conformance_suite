@@ -71,6 +71,8 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-42 | XSH 2.4.3: si_addr still the faulting instruction's address | Defect (editorial) | Low | Follows `<signal.h>` (XSH.2.4.3-signal-actions.015) |
 | SI-43 | XSH 2.4.3 SIG_DFL: queued-values sentence's scope and wording | Defect (editorial) | Low | SIG_IGN case only (XSH.2.4.3-signal-actions.010) |
 | SI-44 | XSH 2.4.1: a sigwait() thread has the signal "delivered" | Defect (editorial) | Low | XSH.sigwait.006 |
+| SI-45 | XSH `sigaddset()` etc.: "shall" vs "should" for initialising sets; effects without "shall" | Defect (editorial) | Low | Treats the effects as required |
+| SI-46 | XSH `sigaltstack()`: "in some implementations ... shall" | Defect (editorial) | Low | Classified impl |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -89,6 +91,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-16 | XBD `<limits.h>`/`<signal.h>`: {RTSIG_MAX} the range's size or a lower bound? | Question | Low | Checks the lower bound (XBD.signal.h.006) |
 | Q-17 | XSH 2.4.2: kill() occurrences vs sigqueue() FIFO order | Question | Low | FIFO among sigqueue() ones only (XSH.2.4.2-realtime-signals.004) |
 | Q-18 | XSH 2.4.1/2.4.3: SIGCONT and stopped processes | Question | Low | SIGCONT at SIG_DFL (XSH.2.4.3-signal-actions.006) |
+| Q-19 | XSH `psiginfo()`: may the description carry siginfo_t details? | Question | Low | Disputed (XSH.psiginfo.003) |
 
 ## Entries
 
@@ -578,6 +581,22 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **posixcheck meanwhile:** XSH.sigwait.006 tests that only one waiter returns.
 - **Suggested change:** "delivered to or accepted by exactly one of those threads" (editorial).
 
+### SI-45: sigaddset(): "Applications shall call" where the other set functions say "should"
+
+- **Where:** XSH `sigaddset()`, `sigdelset()`, `sigismember()`, DESCRIPTION.
+- **What the text says:** sigaddset() says applications shall call sigemptyset() or sigfillset() at least once for each sigset_t object before other use; sigdelset() and sigismember() say should. sigaddset() and sigdelset() also describe their own effect without "shall" (the function adds, deletes), while sigfillset() and sigismember() use "shall".
+- **Why it is a problem:** the same application requirement is stated with two strengths, and the core behaviour of two functions is worded as a statement rather than a requirement.
+- **posixcheck meanwhile:** XSH.sigaddset.001 and XSH.sigdelset.001 treat the effect as required.
+- **Suggested change:** use "shall" for the effect of each function and one strength for the application rule (editorial).
+
+### SI-46: sigaltstack(): "In some implementations, ... shall always execute"
+
+- **Where:** XSH `sigaltstack()`, DESCRIPTION.
+- **What the text says:** in some implementations, a signal shall always execute on the alternate stack if it is delivered while another signal is being caught on it.
+- **Why it is a problem:** a "shall" limited to some implementations is not a requirement anyone can test or rely on; it describes allowed behaviour.
+- **posixcheck meanwhile:** the unit is classified `impl`.
+- **Suggested change:** "In some implementations, a signal ... executes on the alternate stack ...", or make it implementation-defined (editorial).
+
 ## Questions to raise
 
 These are consistent as written, but the intent or the fit with practice
@@ -740,6 +759,12 @@ is unclear.
 - **Where:** XSH 2.4.1 and 2.4.3.
 - **Question:** 2.4.3 says a stopped process gets no further signals until continued, naming only SIGKILL as an exception, though 2.4.1 makes SIGCONT continue the process whatever its action; the "continue" leg of the rule that a signal delivered to a thread continues the whole process can never apply, since continuing happens at generation; and the rule that pending unblocked signals are handled before execution resumes sits under SIG_DFL, so its order is unstated when SIGCONT is caught or ignored. Is the order meant to hold whatever SIGCONT's action?
 - **posixcheck meanwhile:** XSH.2.4.3-signal-actions.006 uses SIGCONT at SIG_DFL.
+
+### Q-19: May psiginfo() add details from the siginfo_t?
+
+- **Where:** XSH `psiginfo()`.
+- **Question:** psiginfo() writes the message, ": " and "the signal description string associated with ... the signal indicated by pinfo". glibc adds the cause and sender (for example "(Signal sent by kill() 759 0)") after the description. Is the description meant to be the same string psignal() writes for that signal number, or may it carry what the siginfo_t says?
+- **posixcheck meanwhile:** XSH.psiginfo.003 is `disputed`: it expects psignal()'s line, and a difference is logged as INSPECT.
 
 ## Tracking
 

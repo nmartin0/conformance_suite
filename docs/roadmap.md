@@ -17,16 +17,17 @@ verified; this file is the plan. Update both when a step finishes.
 - Processes: `fork`, `wait`, `_Exit`, `exit`, `exec`.
 - Signals (in progress): `sigaction`, `kill`, `raise`, `pthread_sigmask`/`sigprocmask`,
   `sigpending`, `sigsuspend`, `sigwait`, `sigtimedwait`/`sigwaitinfo`, `sigqueue`,
-  `alarm`, `pause`, `<signal.h>`, the XSH 2.4 rules.
+  `alarm`, `pause`, `<signal.h>`, the XSH 2.4 rules, the sigset functions,
+  `signal`, `sigaltstack`, `psiginfo`/`psignal`, `sig2str`/`str2sig`, `killpg`,
+  `abort`.
 - Utilities: `true`, `false`.
 - Every module reviewed independently; findings applied.
 
 ## Next
 
-1. **Signals** (remaining): sigaltstack(), signal(), psignal() and
-   psiginfo(), sig2str() and str2sig(), killpg(), abort(), sigset
-   functions (sigaddset() and the rest), the async-signal-safe list, and
-   the XSH 2.4 todos (`ci/coverage.py --show` lists them).
+1. **Signals** (remaining): the async-signal-safe list (each function
+   called from a handler), and the signal todos (`ci/coverage.py --show`
+   lists them).
 2. **Your OS**: run the suite on the OS under development as soon as it can
    run a POSIX shell and a C compiler (or cross-compiled tests with a
    small runner). Results are judged by `analyze.py` on another machine.

@@ -1,0 +1,86 @@
+# XSH sigaltstack()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.sigaltstack.001
+anchor     functions/sigaltstack.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       With an alternate stack set by sigaltstack() (returning 0) and
+           SIGUSR1 caught with SA_ONSTACK, the handler's local variables lie
+           within the stack's range, and sigaltstack(NULL, &o) inside the
+           handler reports SS_ONSTACK.
+test       t/001-runs-on-alt.c
+
+assertion  XSH.sigaltstack.002
+anchor     functions/sigaltstack.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A first sigaltstack(&a, &o) reports SS_DISABLE in o; a second
+           sigaltstack(&b, &o) reports a's ss_sp and ss_size with ss_flags
+           not SS_DISABLE.
+note       The first call's report assumes no alternate stack before it:
+           pcexec starts each test without one (exec leaves none).
+test       t/002-oss.c
+
+assertion  XSH.sigaltstack.003
+anchor     functions/sigaltstack.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       After an alternate stack is set and then disabled with SS_DISABLE, a
+           SIGUSR1 caught with SA_ONSTACK runs its handler on the normal
+           stack, and oss reports SS_DISABLE.
+test       t/003-disable.c
+
+assertion  XSH.sigaltstack.004
+anchor     functions/sigaltstack.html#ERRORS/ENOMEM
+class      conditional
+when       XSI
+since      2001
+says       sigaltstack() with ss_size MINSIGSTKSZ - 1 fails with ENOMEM.
+test       t/004-enomem.c
+
+assertion  XSH.sigaltstack.005
+anchor     functions/sigaltstack.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2024
+says       sigaltstack() with ss_flags SS_ONSTACK fails with EINVAL.
+note       Issue 8 (Defect 1187) added SS_ONSTACK to the EINVAL
+           condition. Linux accepts it as if it were 0 (docs/linux-
+           deviations.md O.13).
+test       t/005-einval-onstack.c
+
+assertion  XSH.sigaltstack.006
+anchor     functions/sigaltstack.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2001
+says       sigaltstack() with ss_flags 0x4000 (neither SS_DISABLE nor
+           SS_ONSTACK) fails with EINVAL.
+note       0x4000 is not SS_ONSTACK or SS_DISABLE here (checked in
+           setup); a system that gives it a meaning of its own makes the
+           test UNRESOLVED.
+test       t/006-einval-flags.c
+
+assertion  XSH.sigaltstack.007
+anchor     functions/sigaltstack.html#ERRORS/EPERM
+class      conditional
+when       XSI
+since      2001
+says       Inside a handler running on the alternate stack, sigaltstack() with a
+           new stack fails with EPERM.
+uses       XSH.sigaltstack.001
+test       t/007-eperm.c
+
+assertion  XSH.sigaltstack.008
+anchor     functions/sigaltstack.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A process with an alternate stack that execs itself finds, in the new
+           image, sigaltstack(NULL, &o) reporting SS_DISABLE.
+nomutant   the new image's state is set by exec in the kernel
+test       t/008-exec-none.c
