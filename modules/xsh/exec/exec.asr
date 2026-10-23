@@ -9,10 +9,9 @@ anchor     functions/exec.html#DESCRIPTION
 class      required
 since      1988
 says       A successful execv() does not return, and the program runs as a
-           new process image: a static variable set before the call has
-           its initial value in the new image.
-nomutant   replacing the image is done by the kernel; a wrapper cannot
-           keep the old image
+           new process image in the same process: a static variable set
+           before the call has its initial value in the new image, and the
+           process ID is unchanged.
 test       t/001-replaces-image.c
 
 assertion  XSH.exec.002
@@ -62,10 +61,9 @@ test       t/006-execv-environ.c
 
 assertion  XSH.exec.007
 anchor     functions/exec.html#DESCRIPTION
-class      conditional
-when       XSI
+class      required
 since      2001
-says       XSI: after the application assigns environ to point to a new array
+says       After the application assigns environ to point to a new array
            holding only "PC_NEW=9", execv() gives the new image exactly
            that environment.
 test       t/007-environ-assigned.c
@@ -205,7 +203,6 @@ class      required
 since      1988
 says       The new image has the same process ID, parent process ID, process
            group ID and session ID as the calling image.
-nomutant   process identity across exec is kept by the kernel
 test       t/023-ids.c
 
 assertion  XSH.exec.024
@@ -215,13 +212,12 @@ since      1988
 says       For a file without set-user-ID or set-group-ID bits, the new image
            has the same real and effective user and group IDs and the same
            supplementary group list as the calling image.
-nomutant   credentials across exec are kept by the kernel
 test       t/024-user-ids.c
 
 assertion  XSH.exec.025
 anchor     functions/exec.html#DESCRIPTION
 class      required
-since      1988
+since      2024
 says       Soft limits lowered before exec (RLIMIT_NOFILE to 200, RLIMIT_FSIZE
            to 1 MiB, when the hard limits allow) are the new image's soft
            limits, and the hard limits are unchanged.
@@ -255,27 +251,27 @@ class      conditional
 when       TCT
 since      2001
 says       TCT: the CPU-time clock of the new image's initial thread starts
-           at zero: after the calling thread used 500 ms, the new image's
-           CLOCK_THREAD_CPUTIME_ID reads less than 250 ms.
-note       The 250 ms margin covers the time the exec itself and start-
-           up take.
+           at zero: after the calling thread used 2000 ms, the new image's
+           CLOCK_THREAD_CPUTIME_ID reads less than 1000 ms.
+note       The 1000 ms margin covers the time the exec itself and start-
+           up take, even on a slow emulator.
 nomutant   the thread CPU-time clock is kept by the kernel
 test       t/028-thread-clock-zero.c
 
 assertion  XSH.exec.029
 anchor     functions/exec.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       A per-process timer armed before exec, to send SIGUSR1 (default
-           action: terminate) in 200 ms, is deleted: the new image lives
-           on for 700 ms and ends normally.
+           action: terminate) in 2 s, is deleted: the new image lives on
+           for 3 s and ends normally.
 nomutant   timers are deleted by the kernel
 test       t/029-timers-deleted.c
 
 assertion  XSH.exec.030
 anchor     functions/exec.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       After the calling thread disabled cancellation and made it
            asynchronous, the new image's initial thread has cancellation
            state PTHREAD_CANCEL_ENABLE and type PTHREAD_CANCEL_DEFERRED.
@@ -286,7 +282,7 @@ test       t/030-cancel-state.c
 assertion  XSH.exec.031
 anchor     functions/exec.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       When a thread other than the initial one calls execv() while
            another thread waits with a cancellation cleanup handler and a
            thread-specific value, the process (same process ID) runs the
@@ -319,8 +315,8 @@ assertion  XSH.exec.034
 anchor     functions/exec.html#ERRORS/ENOENT
 class      required
 since      1988
-says       execve() fails with ENOENT for a path that does not exist and for
-           an empty path, and returns -1.
+says       execve() fails, returning -1, with ENOENT for a path that does not
+           exist and for an empty path.
 test       t/034-enoent.c
 
 assertion  XSH.exec.035
@@ -336,10 +332,12 @@ assertion  XSH.exec.036
 anchor     functions/exec.html#ERRORS/EACCES
 class      required
 since      1988
-says       execve() of a directory (a file that is not a regular file and that
-           no implementation runs) fails with EACCES.
-note       A directory with execute (search) permission is used, so only
-           the 'not a regular file' condition applies.
+says       execve() of a directory, which is not a regular file, fails with
+           EACCES.
+note       Assumes the implementation does not run directories as images
+           (the EACCES entry allows file types it does run; standard
+           issue SI-18). The directory has search permission, so only
+           that condition applies.
 test       t/036-eacces-dir.c
 
 assertion  XSH.exec.037
@@ -355,7 +353,11 @@ assertion  XSH.exec.038
 anchor     functions/exec.html#ERRORS/ENOTDIR
 class      required
 since      1988
-says       execve("f/prog"), where f is a regular file, fails with ENOTDIR.
+says       execve("f/prog"), where f is a regular file, fails with ENOTDIR,
+           or with ENOENT, which also applies because no f/prog exists.
+note       Both conditions hold and XSH 2.3 lets the implementation
+           report either (see open.014, which avoids this with O_CREAT;
+           standard question Q-8).
 test       t/038-enotdir-prefix.c
 
 assertion  XSH.exec.039
@@ -379,9 +381,11 @@ anchor     functions/exec.html#ERRORS/ENAMETOOLONG
 class      required
 since      1988
 says       execve() of a path whose last component is {NAME_MAX}+1 bytes long
-           fails with ENAMETOOLONG.
+           fails with ENAMETOOLONG, or with ENOENT, which also applies
+           because no such file can exist.
 note       {NAME_MAX} is taken from pathconf(".", _PC_NAME_MAX); with no
-           limit the test is UNSUPPORTED.
+           limit the test is NOTINUSE. ENOENT also applies (standard
+           question Q-8; open.017 avoids it with O_CREAT).
 test       t/041-enametoolong.c
 
 assertion  XSH.exec.042
@@ -390,6 +394,8 @@ class      required
 since      1988
 says       execve() of a file with execute permission whose contents are in
            no recognized format (64 bytes of 0x01) fails with ENOEXEC.
+note       A binfmt_misc rule (Linux) matching the file would be the
+           environment, not exec.
 test       t/042-enoexec.c
 
 assertion  XSH.exec.043
@@ -399,14 +405,15 @@ since      1988
 says       execv() with arguments totalling more than {ARG_MAX} bytes (as
            sysconf() reports it) fails with E2BIG.
 note       Strings of 4096 bytes are used, so that per-string limits do
-           not apply. With no limit, or one over 64 MiB, the test is
-           UNSUPPORTED.
+           not apply. An indeterminate {ARG_MAX} makes the test
+           NOTINUSE; one over 64 MiB, UNRESOLVED. On musl sysconf()
+           under-reports (O.9, standard question Q-9).
 test       t/043-e2big.c
 
 assertion  XSH.exec.044
 anchor     functions/exec.html#DESCRIPTION
 class      required
-since      1988
+since      2001
 says       execvp() of an executable file of sh commands with no recognized
            format runs it with the command interpreter: the script gets
            the arguments argv[1] onward as its positional parameters.
@@ -415,7 +422,7 @@ test       t/044-execvp-sh.c
 assertion  XSH.exec.045
 anchor     functions/exec.html#DESCRIPTION
 class      required
-since      1988
+since      2001
 says       execlp() of an executable file of sh commands with no recognized
            format runs it with the command interpreter: the script gets
            the arguments after arg0 as its positional parameters.
@@ -466,7 +473,8 @@ class      required
 since      1988
 says       A new image starts as if setlocale(LC_ALL, "C") had been called,
            even with LANG and LC_ALL set in its environment:
-           setlocale(LC_ALL, NULL) reports "C" (or "POSIX").
+           setlocale(LC_ALL, NULL) at start-up names the same locale as
+           setlocale(LC_ALL, "C") returns.
 nomutant   start-up locale is set by the C library
 test       t/050-locale-c.c
 
@@ -476,38 +484,38 @@ class      required
 since      2001
 says       The new image's initial thread starts with the default
            floating-point environment: after the caller set rounding
-           toward +infinity and raised FE_INEXACT, the new image rounds to
-           nearest and has no exception flags set.
+           toward +infinity and raised FE_INEXACT, the new image's rounding
+           direction and exception flags are those of FE_DFL_ENV.
 nomutant   the floating-point environment is reset by the kernel
 test       t/051-fenv-default.c
 
 assertion  XSH.exec.052
 anchor     functions/exec.html#DESCRIPTION
-class      conditional
-when       XSI
-since      2001
-says       XSI: exec of a file with the set-user-ID bit, owned by user 65534,
+class      required
+since      1988
+says       Exec of a file with the set-user-ID bit, owned by user 65534,
            gives the new image effective user ID 65534 and leaves the real
            user ID (0) unchanged.
+needs      root
 note       Needs appropriate privileges to give a file to another owner
-           (user and group 65534); otherwise UNSUPPORTED. A file system
-           mounted without set-ID support (ST_NOSUID) makes it
-           UNRESOLVED.
+           (user and group 65534). A file system mounted without set-ID
+           support (ST_NOSUID) makes it UNRESOLVED. The saved set-IDs
+           are not checked.
 nomutant   set-ID handling is done by the kernel
 test       t/052-setuid.c
 
 assertion  XSH.exec.053
 anchor     functions/exec.html#DESCRIPTION
-class      conditional
-when       XSI
-since      2001
-says       XSI: exec of a file with the set-group-ID bit, group 65534, gives
+class      required
+since      1988
+says       Exec of a file with the set-group-ID bit, group 65534, gives
            the new image effective group ID 65534 and leaves the real
            group ID (0) unchanged.
+needs      root
 note       Needs appropriate privileges to give a file to another owner
-           (user and group 65534); otherwise UNSUPPORTED. A file system
-           mounted without set-ID support (ST_NOSUID) makes it
-           UNRESOLVED.
+           (user and group 65534). A file system mounted without set-ID
+           support (ST_NOSUID) makes it UNRESOLVED. The saved set-IDs
+           are not checked.
 nomutant   set-ID handling is done by the kernel
 test       t/053-setgid.c
 
@@ -528,5 +536,35 @@ when       XSI
 since      2001
 says       XSI: the nice value raised with nice(3) before exec is the new
            image's nice value.
-nomutant   the nice value is kept by the kernel
 test       t/055-nice.c
+
+assertion  XSH.exec.056
+anchor     functions/exec.html#DESCRIPTION
+class      required
+since      2024
+says       An open file description lock (F_OFD_SETLK) set through a
+           descriptor without FD_CLOEXEC is still held while the new image
+           runs: another process's F_GETLK finds it.
+uses       XBD.fcntl.h.006
+test       t/056-ofd-lock-kept.c
+
+assertion  XSH.exec.057
+anchor     functions/exec.html#DESCRIPTION
+class      required
+since      1988
+says       execlp() passes the calling process's current environment: a
+           variable added with setenv() just before the call is set in
+           the new image.
+test       t/057-execlp-environ.c
+
+assertion  XSH.exec.058
+anchor     functions/exec.html#DESCRIPTION
+class      required
+since      1988
+says       When exec closes an FD_CLOEXEC descriptor for a file, the
+           process's locks on that file are released, including one set
+           through another descriptor for the same file that stays open.
+note       The rule speaks of the locks the process owns on the file
+           associated with the closed descriptor, not only those set
+           through it.
+test       t/058-lock-other-fd.c

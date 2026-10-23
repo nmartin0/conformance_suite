@@ -119,6 +119,50 @@ static void expect_ok(const char *buf)
 	pc_check(strcmp(buf, "ok") == 0, "the new image reports: %s", buf);
 }
 
+/* In the child, after an exec that should fail returned r. */
+_Noreturn static void failed(long r)
+{
+	int e = errno;
+
+	if (r != -1)
+		say("R:%ld", r);
+	else
+		say("E:%s", pc_errname(e));
+	_exit(98);
+}
+
+/*
+ * In the parent: the outcome of an exec that should fail in the child,
+ * with errno err (or alt, when another condition also applies). The
+ * image, if the exec wrongly succeeds, reports "ran".
+ */
+static void expect_fail(const char *what, int err, int alt)
+{
+	char buf[256];
+	size_t n = 0;
+	ssize_t r;
+	int st;
+
+	while (n < sizeof buf - 1 && (r = read(report[0], buf + n, sizeof buf - 1 - n)) > 0)
+		n += (size_t)r;
+	buf[n] = '\0';
+	(void)close(report[0]);
+	if (waitpid(kid, &st, 0) != kid)
+		pc_unresolved("waitpid failed");
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
+		pc_unresolved("the child could not set up");
+	if (strcmp(buf, "ran") == 0)
+		pc_fail("%s succeeded: the new image ran", what);
+	if (strncmp(buf, "R:", 2) == 0)
+		pc_fail("%s returned %s, expected -1", what, buf + 2);
+	pc_check(strncmp(buf, "E:", 2) == 0, "%s: no report from the child (status %#x)", what, st);
+	if (strcmp(buf + 2, pc_errname(err)) == 0 || (alt != 0 && strcmp(buf + 2, pc_errname(alt)) == 0))
+		return;
+	if (alt != 0)
+		pc_fail("%s failed with %s, expected %s or %s", what, buf + 2, pc_errname(err), pc_errname(alt));
+	pc_fail("%s failed with %s, expected %s", what, buf + 2, pc_errname(err));
+}
+
 /* Copies this program to path with the given mode. */
 static void copy_self(const char *path, mode_t mode)
 {
@@ -152,6 +196,18 @@ static void image(const char *mode, int n, char **a)
 		say("ok");
 }
 
+static int shm_id = -1;
+
+/* The test's process removes the segment however the test ends. */
+static void remove_shm(void)
+{
+	static pid_t owner;
+	if (owner == 0)
+		owner = getpid();
+	if (shm_id != -1 && getpid() == owner)
+		(void)shmctl(shm_id, IPC_RMID, NULL);
+}
+
 int main(int argc, char **argv)
 {
 	if (argc >= 4 && strcmp(argv[1], "img") == 0) {
@@ -163,15 +219,16 @@ int main(int argc, char **argv)
 	pc_begin("XSH.exec.054");
 	pc_check(argc >= 1 && argv[0][0] == '/', "argv[0] is not an absolute path");
 	self = argv[0];
-	int id;
 	static char num[24];
 
-	id = shmget(IPC_PRIVATE, 4096, IPC_CREAT | 0600);
-	pc_check(id != -1, "shmget failed: %s", pc_errname(errno));
-	(void)snprintf(num, sizeof num, "%d", id);
+	remove_shm();	/* records this process as the owner; removes nothing yet */
+	shm_id = shmget(IPC_PRIVATE, 4096, IPC_CREAT | 0600);
+	pc_check(shm_id != -1, "shmget failed: %s", pc_errname(errno));
+	pc_check(atexit(remove_shm) == 0, "atexit failed");
+	(void)snprintf(num, sizeof num, "%d", shm_id);
 	pc_test();
 	if (spawn_child()) {
-		if (shmat(id, NULL, 0) == (void *)-1)
+		if (shmat(shm_id, NULL, 0) == (void *)-1)
 			_exit(99);
 		execv(self, imgv("shm", num, (char *)NULL));
 		returned("execv");
@@ -179,7 +236,6 @@ int main(int argc, char **argv)
 	{
 		char buf[256];
 		collect(buf, sizeof buf);
-		(void)shmctl(id, IPC_RMID, NULL);
 		expect_ok(buf);
 	}
 	pc_pass();

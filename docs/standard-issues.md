@@ -27,6 +27,11 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-13 | XSH 2.5.1: abort() and signals count as closing a stream | conflict | (not tested) |
 | SI-14 | fexecve() EBADF "open for executing" vs APPLICATION USAGE (O_RDONLY is fine) | unclear | XSH.exec.048, XSH.exec.049 |
 | SI-15 | exec: "saved resource limits" defined nowhere | defect | (exec.cov) |
+| SI-16 | exec: PTHREAD_CANCEL_ENABLED (no such symbol) | editorial | XSH.exec.030 |
+| SI-17 | fexecve(): no-execute EACCES excluded in ERRORS, promised in APPLICATION USAGE | conflict | (not tested) |
+| SI-18 | exec: "regular, executable file" vs EACCES for unsupported file types | conflict | XSH.exec.036 |
+| SI-19 | exec EINVAL: a file "has appropriate privileges" | editorial | (not tested) |
+| SI-20 | exec inherited list: file size limit twice, a "process signal mask" | editorial | XSH.exec.018, XSH.exec.025 |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
@@ -34,3 +39,6 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-5 | wait(): "if the implementation queues SIGCHLD" vs XSH 2.4.1 | question | XSH.wait.019 (both readings agree) |
 | Q-6 | wait(): when is "another child's status available"? | question | (not tested) |
 | Q-7 | exit(): streams with no file descriptor (memory streams) | question | (not tested) |
+| Q-8 | XSH 2.3: ENAMETOOLONG/ENOTDIR always overlap ENOENT for lookups | question | XSH.exec.038, XSH.exec.041 |
+| Q-9 | exec E2BIG: which {ARG_MAX} when sysconf() under-reports | question | XSH.exec.043 |
+| Q-10 | execvp() sh fallback when argv[0] is a null pointer | question | (not tested) |

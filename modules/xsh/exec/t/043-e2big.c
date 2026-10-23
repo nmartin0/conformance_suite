@@ -118,6 +118,50 @@ static void expect_ok(const char *buf)
 	pc_check(strcmp(buf, "ok") == 0, "the new image reports: %s", buf);
 }
 
+/* In the child, after an exec that should fail returned r. */
+_Noreturn static void failed(long r)
+{
+	int e = errno;
+
+	if (r != -1)
+		say("R:%ld", r);
+	else
+		say("E:%s", pc_errname(e));
+	_exit(98);
+}
+
+/*
+ * In the parent: the outcome of an exec that should fail in the child,
+ * with errno err (or alt, when another condition also applies). The
+ * image, if the exec wrongly succeeds, reports "ran".
+ */
+static void expect_fail(const char *what, int err, int alt)
+{
+	char buf[256];
+	size_t n = 0;
+	ssize_t r;
+	int st;
+
+	while (n < sizeof buf - 1 && (r = read(report[0], buf + n, sizeof buf - 1 - n)) > 0)
+		n += (size_t)r;
+	buf[n] = '\0';
+	(void)close(report[0]);
+	if (waitpid(kid, &st, 0) != kid)
+		pc_unresolved("waitpid failed");
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
+		pc_unresolved("the child could not set up");
+	if (strcmp(buf, "ran") == 0)
+		pc_fail("%s succeeded: the new image ran", what);
+	if (strncmp(buf, "R:", 2) == 0)
+		pc_fail("%s returned %s, expected -1", what, buf + 2);
+	pc_check(strncmp(buf, "E:", 2) == 0, "%s: no report from the child (status %#x)", what, st);
+	if (strcmp(buf + 2, pc_errname(err)) == 0 || (alt != 0 && strcmp(buf + 2, pc_errname(alt)) == 0))
+		return;
+	if (alt != 0)
+		pc_fail("%s failed with %s, expected %s or %s", what, buf + 2, pc_errname(err), pc_errname(alt));
+	pc_fail("%s failed with %s, expected %s", what, buf + 2, pc_errname(err));
+}
+
 /* Copies this program to path with the given mode. */
 static void copy_self(const char *path, mode_t mode)
 {
@@ -159,42 +203,26 @@ int main(int argc, char **argv)
 	self = argv[0];
 	long max = sysconf(_SC_ARG_MAX), n, i;
 	static char s[4097];
-	char **av, buf[256];
+	char **av;
 
-	if (max == -1 || max > 64L * 1024 * 1024)
-		pc_unsupported("{ARG_MAX} is %ld", max);
+	if (max == -1)
+		pc_notinuse("{ARG_MAX} is indeterminate");
+	if (max > 64L * 1024 * 1024)
+		pc_unresolved("{ARG_MAX} is %ld, too large to exceed here", max);
 	n = max / 4096 + 2;
 	av = malloc(((size_t)n + 6) * sizeof *av);
 	pc_check(av != NULL, "out of memory");
 	memset(s, 'a', 4096);
 	pc_test();
 	if (spawn_child()) {
-		av[0] = self;
-		av[1] = "img";
-		av[2] = "big";
-		av[3] = fdarg;
+		char **iva = imgv("ran", (char *)NULL);
+		for (i = 0; i < 4; i++)
+			av[i] = iva[i];
 		for (i = 4; i < n + 4; i++)
 			av[i] = s;
 		av[n + 4] = NULL;
-		execv(self, av);
-		{
-			int e = errno;
-			say("%s", e == E2BIG ? "E2BIG" : pc_errname(e));
-			_exit(98);
-		}
+		failed(execv(self, av));
 	}
-	{
-		size_t k = 0;
-		ssize_t r;
-		while (k < sizeof buf - 1 && (r = read(report[0], buf + k, sizeof buf - 1 - k)) > 0)
-			k += (size_t)r;
-		buf[k] = '\0';
-		(void)close(report[0]);
-		(void)waitpid(kid, NULL, 0);
-	}
-	pc_check(strcmp(buf, "ran") != 0, "execv() succeeded with %ld bytes of arguments; sysconf() gives {ARG_MAX} as %ld",
-	    n * 4097, max);
-	pc_check(buf[0] != '\0', "the child gave no report");
-	pc_check(strcmp(buf, "E2BIG") == 0, "execv() failed with %s, expected E2BIG", buf);
+	expect_fail("execv() with more than {ARG_MAX} bytes of arguments", E2BIG, 0);
 	pc_pass();
 }

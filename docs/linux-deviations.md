@@ -155,6 +155,9 @@ O.9 **musl: sysconf(_SC_ARG_MAX) reports less than the real limit.**
   `<limits.h>` defines ARG_MAX), while Linux accepts about a quarter of
   the stack limit (2 MiB with an 8 MiB stack). So an exec with more than
   {ARG_MAX} bytes succeeds. glibc reports the kernel's limit.
+- The fault is sysconf()'s value, not exec: exec enforces the real limit.
+  The exec page itself does not say which value it compares against
+  (standard question Q-9).
 - Comp: musl. Kind: long-standing. Observe: XSH.exec.043.
 - Src: posixcheck run.
 

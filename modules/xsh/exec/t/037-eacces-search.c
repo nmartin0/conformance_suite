@@ -118,6 +118,50 @@ static void expect_ok(const char *buf)
 	pc_check(strcmp(buf, "ok") == 0, "the new image reports: %s", buf);
 }
 
+/* In the child, after an exec that should fail returned r. */
+_Noreturn static void failed(long r)
+{
+	int e = errno;
+
+	if (r != -1)
+		say("R:%ld", r);
+	else
+		say("E:%s", pc_errname(e));
+	_exit(98);
+}
+
+/*
+ * In the parent: the outcome of an exec that should fail in the child,
+ * with errno err (or alt, when another condition also applies). The
+ * image, if the exec wrongly succeeds, reports "ran".
+ */
+static void expect_fail(const char *what, int err, int alt)
+{
+	char buf[256];
+	size_t n = 0;
+	ssize_t r;
+	int st;
+
+	while (n < sizeof buf - 1 && (r = read(report[0], buf + n, sizeof buf - 1 - n)) > 0)
+		n += (size_t)r;
+	buf[n] = '\0';
+	(void)close(report[0]);
+	if (waitpid(kid, &st, 0) != kid)
+		pc_unresolved("waitpid failed");
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
+		pc_unresolved("the child could not set up");
+	if (strcmp(buf, "ran") == 0)
+		pc_fail("%s succeeded: the new image ran", what);
+	if (strncmp(buf, "R:", 2) == 0)
+		pc_fail("%s returned %s, expected -1", what, buf + 2);
+	pc_check(strncmp(buf, "E:", 2) == 0, "%s: no report from the child (status %#x)", what, st);
+	if (strcmp(buf + 2, pc_errname(err)) == 0 || (alt != 0 && strcmp(buf + 2, pc_errname(alt)) == 0))
+		return;
+	if (alt != 0)
+		pc_fail("%s failed with %s, expected %s or %s", what, buf + 2, pc_errname(err), pc_errname(alt));
+	pc_fail("%s failed with %s, expected %s", what, buf + 2, pc_errname(err));
+}
+
 /* Copies this program to path with the given mode. */
 static void copy_self(const char *path, mode_t mode)
 {
@@ -143,7 +187,7 @@ static void image(const char *mode, int n, char **a)
 	(void)mode;
 	(void)n;
 	(void)a;
-	say("ok");
+	say("ran");
 }
 
 int main(int argc, char **argv)
@@ -157,32 +201,18 @@ int main(int argc, char **argv)
 	pc_begin("XSH.exec.037");
 	pc_check(argc >= 1 && argv[0][0] == '/', "argv[0] is not an absolute path");
 	self = argv[0];
-	char *av[] = { "x", NULL };
-	pid_t c;
-	int st;
-
 	pc_make_dir("d");
 	copy_self("d/prog", 0755);
 	pc_check(chmod("d", 0) == 0 && chmod(".", 0711) == 0, "chmod failed");
 	pc_test();
-	c = fork();
-	if (c == -1)
-		pc_unresolved("fork failed");
-	if (c == 0) {
+	if (spawn_child()) {
+		char **av = imgv("ran", (char *)NULL);
 		if (geteuid() == 0 && (setgid(65534) != 0 || setuid(65534) != 0))
 			_exit(99);
 		if (geteuid() == 0)
 			_exit(99);
-		(void)execve("d/prog", av, environ);
-		_exit(errno == EACCES ? 0 : errno == ENOENT ? 2 : 3);
+		failed(execve("d/prog", av, environ));
 	}
-	if (waitpid(c, &st, 0) != c)
-		pc_unresolved("waitpid failed");
-	(void)chmod("d", 0755);
-	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
-		pc_unresolved("cannot run as an unprivileged user");
-	pc_check(WIFEXITED(st) && WEXITSTATUS(st) != 3, "execve() gave neither EACCES nor ENOENT (status %#x)", st);
-	pc_check(WEXITSTATUS(st) != 2, "execve() gave ENOENT, expected EACCES");
-	pc_check(WEXITSTATUS(st) == 0, "execve() succeeded through a directory without search permission");
+	expect_fail("execve(\"d/prog\", ..., ...)", EACCES, 0);
 	pc_pass();
 }

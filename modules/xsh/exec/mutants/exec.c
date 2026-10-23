@@ -21,6 +21,9 @@
 #include <sys/resource.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <grp.h>
+#include <stdio.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 extern char **environ;
@@ -73,9 +76,14 @@ static const char *lookup(const char *name)
 	return v;
 }
 
+/*
+ * Faults apply only in the test process (and its children), where pc.c set
+ * the phase; never in a new image or a shell it runs, which inherit
+ * PC_PHASE but not this memory.
+ */
 static const char *mutant(void)
 {
-	const char *ph = phase[0] != '\0' ? phase : getenv("PC_PHASE");
+	const char *ph = phase[0] != '\0' ? phase : NULL;
 	const char *m = lookup("PC_MUTANT");
 	if (ph == NULL || strcmp(ph, "test") != 0 || m == NULL ||
 	    strncmp(m, "exec.", 5) != 0)
@@ -105,8 +113,12 @@ static void before(const char *m)
 			continue;
 		if (IS("cloexec_ignored") && (fl & FD_CLOEXEC))
 			(void)fcntl(fd, F_SETFD, fl & ~FD_CLOEXEC);
-		if (IS("fds_closed") && !(fl & FD_CLOEXEC))
-			(void)close(fd);
+		if (IS("fds_closed") && !(fl & FD_CLOEXEC)) {
+			struct stat st;
+			/* regular files only: the report pipe must stay */
+			if (fstat(fd, &st) == 0 && S_ISREG(st.st_mode))
+				(void)close(fd);
+		}
 #ifdef FD_CLOFORK
 		if (IS("clofork_cleared") && (fl & FD_CLOFORK))
 			(void)fcntl(fd, F_SETFD, fl & ~FD_CLOFORK);
@@ -120,7 +132,8 @@ static void before(const char *m)
 			(void)sigaction(sig, &sa, NULL);
 		}
 		if (IS("dfl_ignored") && sa.sa_handler == SIG_DFL &&
-		    (sig == SIGUSR1 || sig == SIGUSR2 || sig == SIGTERM || sig == SIGINT)) {
+		    (sig == SIGUSR1 || sig == SIGUSR2 || sig == SIGTERM || sig == SIGINT ||
+		     sig == SIGHUP || sig == SIGPIPE)) {
 			sa.sa_handler = SIG_IGN;
 			(void)sigaction(sig, &sa, NULL);
 		}
@@ -147,6 +160,12 @@ static void before(const char *m)
 			}
 		}
 	}
+	if (IS("pgrp_changed"))
+		(void)setpgid(0, 0);
+	if (IS("nice_changed"))
+		(void)nice(1);
+	if (IS("groups_dropped") && (getgroups(0, NULL) <= 0 || setgroups(0, NULL) != 0))
+		(void)fprintf(stderr, "pcmutant: cannot plant groups_dropped (no groups, or no privilege)\n");
 	if (IS("alarm_cleared"))
 		(void)alarm(0);
 	if (IS("cwd_reset"))
@@ -174,6 +193,10 @@ static int map_errno(const char *m, int e)
 		return ENOENT;
 	if (IS("enotdir_as_enoent") && e == ENOTDIR)
 		return ENOENT;
+	if (IS("enotdir_as_eacces") && e == ENOTDIR)
+		return EACCES;
+	if (IS("enametoolong_as_eacces") && e == ENAMETOOLONG)
+		return EACCES;
 	if (IS("eloop_as_enoent") && e == ELOOP)
 		return ENOENT;
 	if (IS("enametoolong_as_enoent") && e == ENAMETOOLONG)
@@ -193,22 +216,61 @@ static int faulty_execve(const char *m, const char *path, char *const argv[], ch
 	size_t n = 0, k = 0, i;
 	int r, e;
 
-	for (i = 0; argv[i] != NULL && n < MAXARGS; i++) {
+	for (i = 0; argv[i] != NULL; i++) {
 		if (IS("empty_arg_dropped") && argv[i][0] == '\0')
 			continue;
+		if (n == MAXARGS) {
+			(void)fprintf(stderr, "pcmutant: cannot plant: more than %d arguments\n", MAXARGS);
+			errno = E2BIG;
+			return -1;
+		}
 		av[n++] = argv[i];
 	}
 	if (IS("drop_last_arg") && n > 1)
 		n--;
 	av[n] = NULL;
-	for (i = 0; envp != NULL && envp[i] != NULL && k < MAXARGS; i++)
+	for (i = 0; envp != NULL && envp[i] != NULL; i++) {
+		if (k == MAXARGS) {
+			(void)fprintf(stderr, "pcmutant: cannot plant: more than %d environment strings\n", MAXARGS);
+			errno = E2BIG;
+			return -1;
+		}
 		ev[k++] = envp[i];
+	}
 	if (IS("env_dropped") && k > 0)
 		k--;
 	if (IS("env_extra"))
 		ev[k++] = "PC_EXTRA=1";
 	ev[k] = NULL;
 	before(m);
+	if (IS("slash_ignored")) {
+		static char trimmed[4096];
+		size_t len = strlen(path);
+		if (len < sizeof trimmed) {
+			strcpy(trimmed, path);
+			while (len > 1 && trimmed[len - 1] == '/')
+				trimmed[--len] = '\0';
+			path = trimmed;
+		}
+	}
+	if (IS("mode_ignored")) {
+		struct stat st;
+		if (stat(path, &st) == 0 && S_ISREG(st.st_mode))
+			(void)chmod(path, st.st_mode | S_IXUSR);
+	}
+	if (IS("forks")) {
+		/* a fake exec: runs the image in a child and passes on its status */
+		pid_t c = fork();
+		if (c == 0) {
+			(void)real_execve()(path, av, ev);
+			_exit(127);
+		}
+		if (c > 0) {
+			int st;
+			if (waitpid(c, &st, 0) == c)
+				_exit(WIFEXITED(st) ? WEXITSTATUS(st) : 128);
+		}
+	}
 	r = real_execve()(path, av, ev);
 	e = errno;
 	if (IS("scribbles") && argv[0] != NULL)
@@ -252,8 +314,13 @@ static int run_sh(const char *m, const char *file, char *const argv[], char *con
 
 	av[n++] = "sh";
 	av[n++] = (char *)file;
-	for (i = 1; argv[0] != NULL && argv[i] != NULL && n < MAXARGS; i++)
+	for (i = 1; argv[0] != NULL && argv[i] != NULL; i++) {
+		if (n == MAXARGS) {
+			errno = E2BIG;
+			return -1;
+		}
 		av[n++] = argv[i];
+	}
 	av[n] = NULL;
 	return faulty_execve(m, "/bin/sh", av, envp);
 }
@@ -274,6 +341,10 @@ static int faulty_execvp(const char *m, const char *file, char *const argv[])
 	char buf[4096], copy[4096], *p;
 	int nd = 0, i, seen_eacces = 0;
 
+	if (*file == '\0') {
+		errno = ENOENT;
+		return -1;
+	}
 	if (strchr(file, '/') != NULL && !IS("slash_searched"))
 		return try_one(m, file, argv, envp);
 	path = getenv("PATH");
@@ -329,7 +400,9 @@ static char **collect(const char *arg0, va_list *ap)
 	size_t n = 0;
 	char *a = (char *)arg0;
 
-	while (a != NULL && n < MAXARGS) {
+	while (a != NULL) {
+		if (n == MAXARGS)
+			return NULL;	/* the caller fails with E2BIG */
 		av[n++] = a;
 		a = va_arg(*ap, char *);
 	}
@@ -345,6 +418,10 @@ int execl(const char *path, const char *arg0, ...)
 	va_start(ap, arg0);
 	av = collect(arg0, &ap);
 	va_end(ap);
+	if (av == NULL) {
+		errno = E2BIG;
+		return -1;
+	}
 	return execv(path, av);
 }
 
@@ -355,6 +432,11 @@ int execle(const char *path, const char *arg0, ...)
 
 	va_start(ap, arg0);
 	av = collect(arg0, &ap);
+	if (av == NULL) {
+		va_end(ap);
+		errno = E2BIG;
+		return -1;
+	}
 	envp = va_arg(ap, char **);
 	va_end(ap);
 	return execve(path, av, envp);
@@ -368,6 +450,10 @@ int execlp(const char *file, const char *arg0, ...)
 	va_start(ap, arg0);
 	av = collect(arg0, &ap);
 	va_end(ap);
+	if (av == NULL) {
+		errno = E2BIG;
+		return -1;
+	}
 	return execvp(file, av);
 }
 

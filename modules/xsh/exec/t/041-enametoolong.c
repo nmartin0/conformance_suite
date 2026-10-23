@@ -3,7 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.exec.041
- * MUTANT    exec.enametoolong_as_enoent
+ * MUTANT    exec.enametoolong_as_eacces
  */
 #include "pc.h"
 #include <dirent.h>
@@ -118,6 +118,50 @@ static void expect_ok(const char *buf)
 	pc_check(strcmp(buf, "ok") == 0, "the new image reports: %s", buf);
 }
 
+/* In the child, after an exec that should fail returned r. */
+_Noreturn static void failed(long r)
+{
+	int e = errno;
+
+	if (r != -1)
+		say("R:%ld", r);
+	else
+		say("E:%s", pc_errname(e));
+	_exit(98);
+}
+
+/*
+ * In the parent: the outcome of an exec that should fail in the child,
+ * with errno err (or alt, when another condition also applies). The
+ * image, if the exec wrongly succeeds, reports "ran".
+ */
+static void expect_fail(const char *what, int err, int alt)
+{
+	char buf[256];
+	size_t n = 0;
+	ssize_t r;
+	int st;
+
+	while (n < sizeof buf - 1 && (r = read(report[0], buf + n, sizeof buf - 1 - n)) > 0)
+		n += (size_t)r;
+	buf[n] = '\0';
+	(void)close(report[0]);
+	if (waitpid(kid, &st, 0) != kid)
+		pc_unresolved("waitpid failed");
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
+		pc_unresolved("the child could not set up");
+	if (strcmp(buf, "ran") == 0)
+		pc_fail("%s succeeded: the new image ran", what);
+	if (strncmp(buf, "R:", 2) == 0)
+		pc_fail("%s returned %s, expected -1", what, buf + 2);
+	pc_check(strncmp(buf, "E:", 2) == 0, "%s: no report from the child (status %#x)", what, st);
+	if (strcmp(buf + 2, pc_errname(err)) == 0 || (alt != 0 && strcmp(buf + 2, pc_errname(alt)) == 0))
+		return;
+	if (alt != 0)
+		pc_fail("%s failed with %s, expected %s or %s", what, buf + 2, pc_errname(err), pc_errname(alt));
+	pc_fail("%s failed with %s, expected %s", what, buf + 2, pc_errname(err));
+}
+
 /* Copies this program to path with the given mode. */
 static void copy_self(const char *path, mode_t mode)
 {
@@ -143,7 +187,7 @@ static void image(const char *mode, int n, char **a)
 	(void)mode;
 	(void)n;
 	(void)a;
-	say("ok");
+	say("ran");
 }
 
 int main(int argc, char **argv)
@@ -157,18 +201,21 @@ int main(int argc, char **argv)
 	pc_begin("XSH.exec.041");
 	pc_check(argc >= 1 && argv[0][0] == '/', "argv[0] is not an absolute path");
 	self = argv[0];
-	char *av[] = { "x", NULL };
 	static char name[8192];
 	long max;
 
 	errno = 0;
 	max = pathconf(".", _PC_NAME_MAX);
 	if (max == -1 && errno == 0)
-		pc_unsupported("no limit on file name length here");
+		pc_notinuse("no limit on file name length here");
 	pc_check(max > 0 && max < (long)sizeof name - 1, "pathconf(_PC_NAME_MAX) gave %ld", max);
 	memset(name, 'n', (size_t)max + 1);
 	name[max + 1] = '\0';
 	pc_test();
-	pc_expect_err(execve(name, av, environ), ENAMETOOLONG, "execve(<{NAME_MAX}+1 bytes>)");
+	if (spawn_child()) {
+		char **av = imgv("ran", (char *)NULL);
+		failed(execve(name, av, environ));
+	}
+	expect_fail("execve(name, ..., ...)", ENAMETOOLONG, ENOENT);
 	pc_pass();
 }

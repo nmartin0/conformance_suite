@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (334 assertions):
+- Modules (337 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -72,7 +72,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     during exit, repeated registration, no at_quick_exit handlers, a
     handler that does not return, flushing (after the handlers), stream
     offset synced, SIGCHLD, EXIT_SUCCESS/EXIT_FAILURE.
-  - `xsh/exec` (55): each test runs itself again as the new image, which
+  - `xsh/exec` (58): each test runs itself again as the new image, which
     reports what it got: argv and environment (execv, execl, execve,
     execle, environ), descriptors (kept, FD_CLOEXEC, FD_CLOFORK, locks,
     directory streams), signal actions, mask and pending signals,
@@ -85,7 +85,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).
 - `ci/lint.py`: traceability, anchor and `since` checks; `ci/mutate.sh`: mutation
-  checks (425 mutants); `ci/catalog.py`: shared parser.
+  checks (434 mutants); `ci/catalog.py`: shared parser.
 - `analysis/analyze.py`: load, runs, verdict, failures, matrix, diff,
   coverage, html, calibrate (checks a reference run against
   `known/*.known`, its expected failures).
@@ -97,7 +97,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   into requirement units (every normative sentence, list item, table row
   and struct member; XCU 1.4 default sections), identified by section and
   hash. Each module's `<page>.cov` accounts for every unit; lint requires
-  the file. All 18 modules: 1,174 units, 404 asserted, 79 partial, 280
+  the file. All 18 modules: 1,174 units, 405 asserted, 77 partial, 281
   classified (app/impl/optional/none/untestable), 411 todo, 0
   unaccounted. Whole standard: about 43,200 units on reference pages
   (XSH 25,482; XCU 14,615; XBD 3,117) plus the chapters.

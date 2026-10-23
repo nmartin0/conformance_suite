@@ -118,6 +118,50 @@ static void expect_ok(const char *buf)
 	pc_check(strcmp(buf, "ok") == 0, "the new image reports: %s", buf);
 }
 
+/* In the child, after an exec that should fail returned r. */
+_Noreturn static void failed(long r)
+{
+	int e = errno;
+
+	if (r != -1)
+		say("R:%ld", r);
+	else
+		say("E:%s", pc_errname(e));
+	_exit(98);
+}
+
+/*
+ * In the parent: the outcome of an exec that should fail in the child,
+ * with errno err (or alt, when another condition also applies). The
+ * image, if the exec wrongly succeeds, reports "ran".
+ */
+static void expect_fail(const char *what, int err, int alt)
+{
+	char buf[256];
+	size_t n = 0;
+	ssize_t r;
+	int st;
+
+	while (n < sizeof buf - 1 && (r = read(report[0], buf + n, sizeof buf - 1 - n)) > 0)
+		n += (size_t)r;
+	buf[n] = '\0';
+	(void)close(report[0]);
+	if (waitpid(kid, &st, 0) != kid)
+		pc_unresolved("waitpid failed");
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
+		pc_unresolved("the child could not set up");
+	if (strcmp(buf, "ran") == 0)
+		pc_fail("%s succeeded: the new image ran", what);
+	if (strncmp(buf, "R:", 2) == 0)
+		pc_fail("%s returned %s, expected -1", what, buf + 2);
+	pc_check(strncmp(buf, "E:", 2) == 0, "%s: no report from the child (status %#x)", what, st);
+	if (strcmp(buf + 2, pc_errname(err)) == 0 || (alt != 0 && strcmp(buf + 2, pc_errname(alt)) == 0))
+		return;
+	if (alt != 0)
+		pc_fail("%s failed with %s, expected %s or %s", what, buf + 2, pc_errname(err), pc_errname(alt));
+	pc_fail("%s failed with %s, expected %s", what, buf + 2, pc_errname(err));
+}
+
 /* Copies this program to path with the given mode. */
 static void copy_self(const char *path, mode_t mode)
 {
@@ -140,10 +184,13 @@ static void copy_self(const char *path, mode_t mode)
 
 static void image(const char *mode, int n, char **a)
 {
-	int fd = n > 0 ? atoi(a[0]) : -1;
+	int fd = n > 1 ? atoi(a[0]) : -1;
+	struct stat f, d;
 
 	(void)mode;
-	if (fcntl(fd, F_GETFD) != -1)
+	if (n < 2 || stat(a[1], &d) != 0)
+		say("cannot stat the directory in the new image");
+	else if (fstat(fd, &f) == 0 && f.st_dev == d.st_dev && f.st_ino == d.st_ino)
 		say("the directory stream's descriptor %d is open in the new image", fd);
 	else
 		say("ok");
@@ -169,7 +216,7 @@ int main(int argc, char **argv)
 		if (d == NULL || (fd = dirfd(d)) == -1)
 			_exit(99);
 		(void)snprintf(num, sizeof num, "%d", fd);
-		execv(self, imgv("dir", num, (char *)NULL));
+		execv(self, imgv("dir", num, "d", (char *)NULL));
 		returned("execv");
 	}
 	{

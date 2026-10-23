@@ -3,7 +3,7 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
 DESCRIPTION:ac1f09db        XSH.exec.001
-DESCRIPTION:f642b1f0        partial XSH.exec.001 XSH.exec.035 XSH.exec.036  # executable: no x bit and a directory both fail
+DESCRIPTION:f642b1f0        partial XSH.exec.001 XSH.exec.035 XSH.exec.036  # executable: no x bit and a directory both fail (see SI-18)
 DESCRIPTION:65fd41d1        XSH.exec.001
 DESCRIPTION:b47cb5dc        partial XSH.exec.048  # argv and envp; the attribute rules are tested through execv()
 DESCRIPTION:2f6fbff6        XSH.exec.048
@@ -42,13 +42,13 @@ DESCRIPTION:d5b725a2        app
 DESCRIPTION:528a533e        none  describes the argument
 DESCRIPTION:7116b063        XSH.exec.004 XSH.exec.005
 DESCRIPTION:50a545f7        XSH.exec.004
-DESCRIPTION:458ed4ec        partial XSH.exec.006 XSH.exec.007  # execv() only; execl(), execlp(), execvp() not checked for it
+DESCRIPTION:458ed4ec        partial XSH.exec.006 XSH.exec.007 XSH.exec.057  # execv() and execlp(); execl() and execvp() not checked for it
 DESCRIPTION:3d819f65        XSH.exec.043
 DESCRIPTION:5db69ae1        impl  what counts toward {ARG_MAX} (documentation)
 DESCRIPTION:8a84db36        XSH.exec.008 XSH.exec.009
 DESCRIPTION:47f5d5ae        XSH.exec.008 XSH.exec.010
-DESCRIPTION:0d5de5ac        partial XSH.exec.011  # lock set through the closed descriptor; todo: a lock set through another descriptor for the same file goes too
-DESCRIPTION:d744c6e9        XSH.exec.012
+DESCRIPTION:0d5de5ac        XSH.exec.011 XSH.exec.058
+DESCRIPTION:d744c6e9        XSH.exec.012 XSH.exec.056  # process-owned and OFD locks
 DESCRIPTION:fe4edf93        none  a permission
 DESCRIPTION:9c552f89        app
 DESCRIPTION:4b0175e4        XSH.exec.013
@@ -92,7 +92,7 @@ DESCRIPTION:da5a74fe        XSH.exec.027
 DESCRIPTION:a785c6b3        XSH.exec.028
 DESCRIPTION:c4395cde        none  unspecified
 DESCRIPTION:047d7922        none  unspecified
-DESCRIPTION:a966c5f0        XSH.exec.030
+DESCRIPTION:a966c5f0        XSH.exec.030  # the page's PTHREAD_CANCEL_ENABLED is read as PTHREAD_CANCEL_ENABLE (SI-16)
 DESCRIPTION:f6fffab4        partial XSH.exec.031  # no destructors run; keys removed is not observable by key value
 DESCRIPTION:6030087b        todo  pthread_join() of the initial thread from another thread in the new image succeeds
 DESCRIPTION:7cbb41f8        none  introduces the list
@@ -118,22 +118,22 @@ DESCRIPTION:1b54972a        todo  needs a pseudo-terminal: the controlling termi
 DESCRIPTION:7a6dc552        none  introduces the list
 DESCRIPTION:8ee83b54        XSH.exec.018
 DESCRIPTION:70e1d200        XSH.exec.019
-DESCRIPTION:443fa1cf        partial XSH.exec.020 XSH.exec.021 XSH.exec.022 XSH.exec.025  # the listed ones; others (e.g. the alarm-free timers) not enumerated
+DESCRIPTION:443fa1cf        todo  attributes defined elsewhere and not listed: e.g. OFD locks on kept descriptors (056), semadj, the root directory; enumerate from the attribute pages
 DESCRIPTION:da904ad6        none  too broad to test as one unit; the listed thread attributes are tested
 DESCRIPTION:cf014438        impl  inheritance of attributes outside POSIX (documentation)
 DESCRIPTION:1328e645        XSH.exec.031
 DESCRIPTION:77098480        XSH.exec.031
 DESCRIPTION:82c63df6        XSH.exec.032
 DESCRIPTION:245c2f68        none  unspecified
-DESCRIPTION:3bcc69b9        todo  the image file counts as open: ETXTBSY-style interplay and open-file limits are not observable portably
+DESCRIPTION:3bcc69b9        untestable  the implied open of the image file has no portable observable effect
 DESCRIPTION:4d75e3e7        none  timing of an implied close; not observable portably
 DESCRIPTION:8ebd0ee3        XSH.exec.033
 DESCRIPTION:25bb600e        none  "saved resource limits" is defined nowhere else (standard issue SI-15)
 RETURN_VALUE:1014c906       XSH.exec.034
 ERRORS:eedcdf9d             XSH.exec.043
 ERRORS:d9ec94b7             XSH.exec.036
-ERRORS:f4124ecb             todo  needs a recognized binary format the system cannot run (e.g. another machine's ELF); environment
-ERRORS:2a97d395             XSH.exec.035 XSH.exec.037
+ERRORS:f4124ecb             todo  needs a recognized binary format the system cannot run (e.g. another machine's ELF); environment (wording: SI-19)
+ERRORS:2a97d395             XSH.exec.035 XSH.exec.037  # fexecve() without execute permission: SI-17
 ERRORS:e6d42883             XSH.exec.040
 ERRORS:681b232a             XSH.exec.041
 ERRORS:0513d8ce             XSH.exec.034

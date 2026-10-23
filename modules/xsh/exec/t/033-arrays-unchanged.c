@@ -118,6 +118,50 @@ static void expect_ok(const char *buf)
 	pc_check(strcmp(buf, "ok") == 0, "the new image reports: %s", buf);
 }
 
+/* In the child, after an exec that should fail returned r. */
+_Noreturn static void failed(long r)
+{
+	int e = errno;
+
+	if (r != -1)
+		say("R:%ld", r);
+	else
+		say("E:%s", pc_errname(e));
+	_exit(98);
+}
+
+/*
+ * In the parent: the outcome of an exec that should fail in the child,
+ * with errno err (or alt, when another condition also applies). The
+ * image, if the exec wrongly succeeds, reports "ran".
+ */
+static void expect_fail(const char *what, int err, int alt)
+{
+	char buf[256];
+	size_t n = 0;
+	ssize_t r;
+	int st;
+
+	while (n < sizeof buf - 1 && (r = read(report[0], buf + n, sizeof buf - 1 - n)) > 0)
+		n += (size_t)r;
+	buf[n] = '\0';
+	(void)close(report[0]);
+	if (waitpid(kid, &st, 0) != kid)
+		pc_unresolved("waitpid failed");
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
+		pc_unresolved("the child could not set up");
+	if (strcmp(buf, "ran") == 0)
+		pc_fail("%s succeeded: the new image ran", what);
+	if (strncmp(buf, "R:", 2) == 0)
+		pc_fail("%s returned %s, expected -1", what, buf + 2);
+	pc_check(strncmp(buf, "E:", 2) == 0, "%s: no report from the child (status %#x)", what, st);
+	if (strcmp(buf + 2, pc_errname(err)) == 0 || (alt != 0 && strcmp(buf + 2, pc_errname(alt)) == 0))
+		return;
+	if (alt != 0)
+		pc_fail("%s failed with %s, expected %s or %s", what, buf + 2, pc_errname(err), pc_errname(alt));
+	pc_fail("%s failed with %s, expected %s", what, buf + 2, pc_errname(err));
+}
+
 /* Copies this program to path with the given mode. */
 static void copy_self(const char *path, mode_t mode)
 {
@@ -143,7 +187,7 @@ static void image(const char *mode, int n, char **a)
 	(void)mode;
 	(void)n;
 	(void)a;
-	say("ok");
+	say("ran");
 }
 
 int main(int argc, char **argv)
@@ -157,14 +201,29 @@ int main(int argc, char **argv)
 	pc_begin("XSH.exec.033");
 	pc_check(argc >= 1 && argv[0][0] == '/', "argv[0] is not an absolute path");
 	self = argv[0];
-	char a0[] = "prog", a1[] = "arg", e0[] = "X=1";
-	char *argv2[] = { a0, a1, NULL }, *envp[] = { e0, NULL };
-
 	pc_test();
-	pc_expect_err(execve("missing", argv2, envp), ENOENT, "execve(\"missing\")");
-	pc_check(argv2[0] == a0 && argv2[1] == a1 && argv2[2] == NULL, "the argv array was changed");
-	pc_check(envp[0] == e0 && envp[1] == NULL, "the envp array was changed");
-	pc_check(strcmp(a0, "prog") == 0 && strcmp(a1, "arg") == 0 && strcmp(e0, "X=1") == 0,
-	    "an argument or environment string was changed");
+	if (spawn_child()) {
+		static char a0[] = "prog", a1[] = "arg", e0[] = "X=1";
+		char **iva = imgv("ran", (char *)NULL);
+		char *argv2[] = { iva[0], iva[1], iva[2], iva[3], a0, a1, NULL }, *envp[] = { e0, NULL };
+		int r = execve("missing", argv2, envp);
+		if (r != -1 || errno != ENOENT)
+			say("!execve(\"missing\") gave %d (%s), expected -1 (ENOENT)", r, pc_errname(errno));
+		else if (argv2[0] != iva[0] || argv2[1] != iva[1] || argv2[2] != iva[2] || argv2[3] != iva[3] ||
+		    argv2[4] != a0 || argv2[5] != a1 || argv2[6] != NULL)
+			say("the argv array was changed");
+		else if (envp[0] != e0 || envp[1] != NULL)
+			say("the envp array was changed");
+		else if (strcmp(a0, "prog") != 0 || strcmp(a1, "arg") != 0 || strcmp(e0, "X=1") != 0)
+			say("an argument or environment string was changed");
+		else
+			say("ok");
+		_exit(0);
+	}
+	{
+		char buf[256];
+		collect(buf, sizeof buf);
+		expect_ok(buf);
+	}
 	pc_pass();
 }

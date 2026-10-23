@@ -72,6 +72,25 @@ def clean(fragment):
     return re.sub(r"\s*The following sections are informative\.?$", "", t)
 
 
+def option_spans(fragment):
+    """[(option, start, end)]: the shaded spans of a fragment, as offsets
+    into clean(fragment). A span starts at an opt-start image, named by
+    the last open_code() before it, and ends at the next opt-end image
+    (or the end of the fragment)."""
+    spans = []
+    for m in re.finditer(r'<img[^>]*opt-start[^>]*>', fragment):
+        names = re.findall(r"open_code\('([A-Z0-9|]+)'\)", fragment[:m.start()])
+        if not names:
+            continue
+        e = re.search(r'<img[^>]*opt-end[^>]*>', fragment[m.end():])
+        end = m.end() + e.start() if e else len(fragment)
+        a = len(clean(fragment[:m.start()]))
+        b = len(clean(fragment[:end]))
+        for name in names[-1].split("|"):
+            spans.append((name, a, b))
+    return spans
+
+
 def sentences(text):
     parts = re.split(r"(?<=[.;])\s+(?=[A-Z\[(\"'])", text)
     return [p.strip() for p in parts if p.strip()]
@@ -194,9 +213,20 @@ def units_of(path, section=None, xcu=False):
             # sentence leaves something unspecified, undefined or to the
             # implementation); "item" (a list item); "stmt" (any other
             # sentence of a paragraph).
+            spans = option_spans(inner)
+            pos = 0
             for s in sentences(text):
                 if len(s) < 4:
                     continue
+                # Options are per shaded span, not per paragraph: a
+                # sentence carries the options whose span it overlaps.
+                at = text.find(s, pos)
+                if at < 0:
+                    at = pos
+                pos = at + len(s)
+                sopts = [o for o, a, b in spans if a < pos - 1 and b > at + 1]
+                if not spans:
+                    sopts = opts
                 if re.search(r"\bshall\b", s):
                     kind = "shall"
                 elif re.search(r"\b(unspecified|undefined|implementation-"
@@ -204,7 +234,7 @@ def units_of(path, section=None, xcu=False):
                     kind = "unspec"
                 else:
                     kind = "stmt" if tag == "p" else "item"
-                add(sec, kind, label if tag != "p" else "", opts, s)
+                add(sec, kind, label if tag != "p" else "", sopts, s)
             if tag == "p":
                 label = ""
         if xcu and sec in XCU_DEFAULT_SECTIONS and len(out) == before:
