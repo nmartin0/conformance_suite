@@ -1,5 +1,5 @@
 # 2.6-file-descriptor-allocation.cov - XSH 2.6 (one sentence).
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
-2.6:15aca623                partial XSH.2.6-file-descriptor-allocation.001  # only open() so far; dup, fcntl F_DUPFD, pipe, socket, openat, accept to come; atomic allocation under concurrent threads not tested
+2.6:15aca623                partial XSH.2.6-file-descriptor-allocation.001 XSH.dup.001  # open() and dup() so far; fcntl F_DUPFD, pipe, socket, openat, accept to come; atomic allocation under concurrent threads not tested
 2.6:c411476f                app

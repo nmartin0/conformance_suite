@@ -14,6 +14,7 @@
 int main(void)
 {
 	int sv[2], fl, r, e, i;
+	ssize_t w = 0;
 	char buf[4096] = { 0 };
 
 	pc_begin("XSH.close.011");
@@ -21,9 +22,10 @@ int main(void)
 	fl = fcntl(sv[0], F_GETFL);
 	pc_check(fl != -1 && fcntl(sv[0], F_SETFL, fl | O_NONBLOCK) == 0,
 	    "cannot set O_NONBLOCK");
-	for (i = 0; i < 100000 && write(sv[0], buf, sizeof buf) > 0; i++)
+	errno = 0;
+	for (i = 0; i < 100000 && (w = write(sv[0], buf, sizeof buf)) > 0; i++)
 		;
-	pc_check(errno == EAGAIN || errno == EWOULDBLOCK,
+	pc_check(w == -1 && (errno == EAGAIN || errno == EWOULDBLOCK),
 	    "could not fill the send buffer");
 	pc_test();
 	r = close(sv[0]);

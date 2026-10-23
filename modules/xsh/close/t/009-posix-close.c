@@ -23,7 +23,11 @@ int main(void)
 	fd = open("f", O_RDONLY);
 	pc_check(fd >= 0, "cannot open f");
 	pc_test();
-	pc_expect_ok(posix_close(fd, 0), "posix_close(fd, 0)");
+	{
+		int r = posix_close(fd, 0);
+		pc_check(r == 0, "posix_close(fd, 0) returned %d (%s)", r,
+		    r == -1 ? pc_errname(errno) : "-");
+	}
 	pc_expect_err(fcntl(fd, F_GETFD), EBADF, "fcntl(F_GETFD) after posix_close()");
 	pc_pass();
 #endif

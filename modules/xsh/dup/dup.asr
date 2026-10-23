@@ -1,0 +1,142 @@
+# XSH dup(), dup2(), dup3()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Error tests arrange for exactly one error condition (XSH 2.3).
+
+assertion  XSH.dup.001
+anchor     functions/dup.html#DESCRIPTION
+anchor     functions/fcntl.html#DESCRIPTION/F_DUPFD
+anchor     functions/V2_chap02.html#2.6
+class      required
+since      1988
+says       dup() returns the lowest-numbered descriptor not open in the
+           process (tested with a gap below an open descriptor).
+test       t/001-lowest.c
+
+assertion  XSH.dup.002
+anchor     functions/dup.html#DESCRIPTION
+class      required
+since      1988
+says       dup() returns a descriptor for the same open file
+           description: the file offset and the file status flags are
+           shared.
+test       t/002-shares-description.c
+
+assertion  XSH.dup.003
+anchor     functions/dup.html#DESCRIPTION
+anchor     functions/fcntl.html#DESCRIPTION/F_DUPFD
+class      required
+since      1988
+says       The descriptor dup() returns has FD_CLOEXEC clear, even when
+           it is set on the original.
+test       t/003-cloexec-clear.c
+
+assertion  XSH.dup.004
+anchor     functions/dup.html#ERRORS/EBADF
+class      required
+since      1988
+says       dup() of a descriptor that is not open fails with EBADF.
+test       t/004-ebadf.c
+
+assertion  XSH.dup.005
+anchor     functions/dup.html#ERRORS/EMFILE
+class      required
+since      1988
+says       dup() fails with EMFILE when every descriptor the process may
+           have is open (limit lowered with setrlimit(RLIMIT_NOFILE)).
+test       t/005-emfile.c
+
+assertion  XSH.dup.006
+anchor     functions/dup.html#DESCRIPTION
+class      required
+since      1988
+says       dup2(fildes, fildes2) on a free fildes2 returns fildes2,
+           which then refers to the same open file description as fildes
+           (shared offset).
+test       t/006-dup2-target.c
+
+assertion  XSH.dup.007
+anchor     functions/dup.html#DESCRIPTION
+class      required
+since      1988
+says       dup2() onto an open fildes2 closes it first: afterwards
+           fildes2 refers to the file of fildes, and the file fildes2
+           had open is no longer reached through it.
+test       t/007-dup2-closes-target.c
+
+assertion  XSH.dup.008
+anchor     functions/dup.html#DESCRIPTION
+class      required
+since      1988
+says       dup2(fd, fd) on an open descriptor returns fd without closing
+           it and leaves FD_CLOEXEC unchanged.
+test       t/008-dup2-same.c
+
+assertion  XSH.dup.009
+anchor     functions/dup.html#DESCRIPTION
+anchor     functions/dup.html#ERRORS/EBADF
+class      required
+since      1988
+says       dup2() with a fildes that is not open returns -1 with EBADF
+           and does not close fildes2.
+test       t/009-dup2-bad-source.c
+
+assertion  XSH.dup.010
+anchor     functions/dup.html#DESCRIPTION
+anchor     functions/dup.html#ERRORS/EBADF
+class      required
+since      1988
+says       dup2() with fildes2 negative, or not less than {OPEN_MAX},
+           fails with EBADF.
+note       The {OPEN_MAX} case is skipped when sysconf(_SC_OPEN_MAX) is
+           indeterminate.
+test       t/010-dup2-range.c
+
+assertion  XSH.dup.011
+anchor     functions/dup.html#DESCRIPTION
+class      required
+since      2008
+says       After dup2(fildes, fildes2) with different descriptors,
+           FD_CLOEXEC is clear on fildes2, even when set on fildes and
+           on the old fildes2.
+test       t/011-dup2-cloexec-clear.c
+
+assertion  XSH.dup.012
+anchor     functions/dup.html#DESCRIPTION
+anchor     functions/dup.html#ERRORS/EINVAL
+class      required
+since      2024
+says       dup3() with fildes equal to fildes2 fails with EINVAL.
+note       dup3() is new in Issue 8; a library that does not declare it
+           makes the test UNINITIATED (build failure).
+test       t/012-dup3-same.c
+
+assertion  XSH.dup.013
+anchor     functions/dup.html#DESCRIPTION
+anchor     functions/dup.html#DESCRIPTION/O_CLOEXEC
+class      required
+since      2024
+says       dup3() sets FD_CLOEXEC on fildes2 exactly when the flag
+           argument includes O_CLOEXEC, whatever fildes had.
+note       dup3() is new in Issue 8; see XSH.dup.012.
+test       t/013-dup3-flags.c
+
+assertion  XSH.dup.014
+anchor     functions/dup.html#DESCRIPTION
+class      required
+since      2024
+says       dup3(fildes, fildes2, 0) returns fildes2, which then refers
+           to the same open file description as fildes, replacing
+           whatever fildes2 had open.
+note       dup3() is new in Issue 8; see XSH.dup.012.
+test       t/014-dup3-target.c
+
+assertion  XSH.dup.015
+anchor     functions/dup.html#DESCRIPTION
+anchor     functions/dup.html#ERRORS/EBADF
+class      required
+since      2024
+says       dup3() with a fildes that is not open fails with EBADF and
+           does not close fildes2.
+note       dup3() is new in Issue 8; see XSH.dup.012.
+test       t/015-dup3-bad-source.c

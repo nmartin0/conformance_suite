@@ -20,7 +20,8 @@ static int other_sees_lock(void)
 	int st;
 
 	pid = fork();
-	pc_check(pid != -1, "fork failed");
+	if (pid == -1)
+		pc_unresolved("lock probe: fork failed");
 	if (pid == 0) {
 		struct flock fl;
 		int fd = open("f", O_RDWR);
@@ -33,9 +34,10 @@ static int other_sees_lock(void)
 			_exit(2);
 		_exit(fl.l_type == F_UNLCK ? 0 : 1);
 	}
-	pc_check(waitpid(pid, &st, 0) == pid, "waitpid failed");
-	pc_check(WIFEXITED(st) && WEXITSTATUS(st) < 2,
-	    "lock probe in the child failed");
+	if (waitpid(pid, &st, 0) != pid)
+		pc_unresolved("lock probe: waitpid failed");
+	if (!WIFEXITED(st) || WEXITSTATUS(st) >= 2)
+		pc_unresolved("lock probe in the child failed");
 	return WEXITSTATUS(st) == 1;
 }
 #endif

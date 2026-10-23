@@ -46,3 +46,23 @@ since      2024
 says       <fcntl.h> defines O_CLOFORK, usable in #if.
 test       t/005-o-clofork.c
 nomutant   compile-time presence check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.006
+anchor     basedefs/fcntl.h.html#DESCRIPTION/F_OFD_SETLK
+class      required
+since      2024
+says       <fcntl.h> defines F_OFD_GETLK, F_OFD_SETLK and F_OFD_SETLKW,
+           usable in #if.
+note       glibc defines them only with _GNU_SOURCE, so this FAILs under
+           the strict build (docs/linux-deviations.md 1.8).
+test       t/006-f-ofd.c
+nomutant   compile-time presence check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.007
+anchor     basedefs/fcntl.h.html#DESCRIPTION/O_TTY_INIT
+class      required
+since      2008
+says       <fcntl.h> defines O_TTY_INIT, usable in #if. Its value may be
+           zero.
+test       t/007-o-tty-init.c
+nomutant   compile-time presence check; needs the Tier 0 header mutants

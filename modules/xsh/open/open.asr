@@ -427,4 +427,5 @@ says       O_TTY_INIT is ignored when the path is not a terminal: open()
 note       If <fcntl.h> lacks O_TTY_INIT the result is UNRESOLVED: the
            header check reports the defect. If O_TTY_INIT is 0 (allowed),
            NOTINUSE.
+uses       XBD.fcntl.h.007
 test       t/050-tty-init-regular.c

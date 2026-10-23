@@ -1,0 +1,15 @@
+# XBD <unistd.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Compile-time checks; the rest of the header comes with the Tier 0
+# generator.
+
+assertion  XBD.unistd.h.001
+anchor     basedefs/unistd.h.html#DESCRIPTION/POSIX_CLOSE_RESTART
+class      required
+since      2024
+says       <unistd.h> defines POSIX_CLOSE_RESTART, usable in #if (it may
+           be zero). Its absence is taken to mean posix_close() is missing.
+note       glibc has neither (docs/linux-deviations.md 1.3).
+test       t/001-posix-close-restart.c
+nomutant   compile-time presence check; needs the Tier 0 header mutants

@@ -1,0 +1,25 @@
+# dup.cov - every requirement unit on functions/dup.html (dup, dup2, dup3).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:414ea4bd        none  explains the relation to fcntl(F_DUPFD)
+DESCRIPTION:b498497d        XSH.dup.001 XSH.dup.002 XSH.dup.003  # lowest free, same description, FD_CLOEXEC clear: what F_DUPFD 0 does
+DESCRIPTION:56eecdb9        none  the code of the equivalence above
+DESCRIPTION:ed53b49e        partial XSH.dup.006 XSH.dup.007  # sharing locks not tested
+DESCRIPTION:811fdb2b        XSH.dup.007 XSH.dup.008
+DESCRIPTION:3a4c4cc7        todo  environment: make closing fildes2 fail (FUSE flush error); dup2 must return -1 and leave fildes2 as it was
+DESCRIPTION:d86690da        XSH.dup.009
+DESCRIPTION:41b99a0e        XSH.dup.010
+DESCRIPTION:9375930d        partial XSH.dup.011  # FD_CLOFORK not tested
+DESCRIPTION:86e7a902        partial XSH.dup.008  # FD_CLOFORK not tested
+DESCRIPTION:765d97cb        partial XSH.dup.012 XSH.dup.013 XSH.dup.014  # FD_CLOFORK from the flag not tested
+DESCRIPTION:d9aa074c        partial XSH.dup.013  # atomicity not tested
+DESCRIPTION:3d769358        todo  dup3() with O_CLOFORK sets FD_CLOFORK (needs O_CLOFORK)
+DESCRIPTION:ce31a618        none  unspecified
+RETURN_VALUE:c8e959db       XSH.dup.001 XSH.dup.004
+ERRORS:addee83b             XSH.dup.004
+ERRORS:1fbbba10             XSH.dup.005
+ERRORS:e6f43364             XSH.dup.009 XSH.dup.010 XSH.dup.015
+ERRORS:83311682             todo  environment: interrupt a dup2() whose close of fildes2 blocks (lingering socket)
+ERRORS:6dd8a1ab             XSH.dup.012
+ERRORS:7ef2dc55             optional
+ERRORS:47d8655d             optional

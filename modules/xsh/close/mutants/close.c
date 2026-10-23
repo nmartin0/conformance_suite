@@ -9,6 +9,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/socket.h>
 #include <unistd.h>
 
 typedef int (*close_fn)(int);
@@ -42,6 +43,8 @@ int close(int fd)
 		(void)fcntl(fd, F_OFD_SETLK, &fl);
 #endif
 	}
+	if (strcmp(m, "shutdown_each") == 0)
+		(void)shutdown(fd, SHUT_RDWR);	/* ends the socket at any close */
 	r = real(fd);
 	if (strcmp(m, "eagain_nonblock") == 0 && r == 0) {
 		errno = EAGAIN;

@@ -64,3 +64,9 @@ assertion  ST.c.013
 says       pc_expect_err fails on a wrong errno.
 test       t/013-expect-err.c
 expect     FAIL
+
+assertion  ST.c.014
+says       A test that calls a function no header declares does not build:
+           UNINITIATED, even where the compiler only warns by default.
+test       t/014-undeclared.c
+expect     UNINITIATED

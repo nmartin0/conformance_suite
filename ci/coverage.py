@@ -147,7 +147,7 @@ def units_of(path, section=None, xcu=False):
                         members.append([decl, desc])
                     elif members and desc:
                         members[-1][1] += " " + desc
-                if members:
+                if any(desc for _, desc in members):
                     for decl, desc in members:
                         if desc:
                             add(sec, "member", "", [], f"{decl} {desc}")

@@ -168,6 +168,27 @@ pc_rc=$?
 [ "$pc_t" = ok ] && [ "$pc_rc" -eq 3 ] ||
     pc_abort "driver cannot run reliably: program built by $pc_cc misbehaves"
 
+# A call to an undeclared function must not build: a test that uses an
+# interface the headers do not declare must be UNINITIATED, not run
+# against a hidden library symbol. C99 and later forbid implicit
+# declarations, but some compilers only warn; then use a flag that makes it
+# an error, or stop.
+printf 'int main(void) { return pc_no_such_function(); }\n' \
+    >"$pc_trustdir/implicit.c"
+pc_ccstrict=
+pc_implicit_builds() { # extra flags...
+	"$pc_cc" -D_POSIX_C_SOURCE=202405L "$@" -c -o "$pc_trustdir/implicit.o" \
+	    "$pc_trustdir/implicit.c" >>"$pc_trustdir/cc.txt" 2>&1 </dev/null
+}
+if pc_implicit_builds; then
+	pc_ccstrict=-Werror=implicit-function-declaration
+	if pc_implicit_builds "$pc_ccstrict" ||
+	    ! "$pc_cc" -D_POSIX_C_SOURCE=202405L $pc_ccstrict -o "$pc_hello" \
+	    "$pc_hello.c" >>"$pc_trustdir/cc.txt" 2>&1 </dev/null; then
+		pc_abort "driver cannot run reliably: $pc_cc accepts calls to undeclared functions (use --cc with a stricter compiler)"
+	fi
+fi
+
 # ---------- helpers ----------
 
 pc_bin=$pc_results/build/core
@@ -177,7 +198,7 @@ pc_bin=$pc_results/build/core
 "$pc_cc" -D_XOPEN_SOURCE=800 -I "$pc_root/core" -o "$pc_bin/probe" \
     "$pc_root/core/probe.c" >"$pc_trustdir/probe.txt" 2>&1 </dev/null ||
     pc_abort "cannot build probe (see $pc_trustdir/probe.txt)"
-"$pc_cc" -D_POSIX_C_SOURCE=202405L -I "$pc_root/core" -c \
+"$pc_cc" -D_POSIX_C_SOURCE=202405L $pc_ccstrict -I "$pc_root/core" -c \
     -o "$pc_bin/pc.o" "$pc_root/core/pc.c" >"$pc_trustdir/pc.txt" 2>&1 \
     </dev/null || pc_abort "cannot build pc.o (see $pc_trustdir/pc.txt)"
 pc_pcexec=$pc_bin/pcexec
@@ -374,7 +395,7 @@ pc_assertion() {
 		pc_flags=-D_POSIX_C_SOURCE=202405L
 		case "|$pc_when|" in *'|XSI|'*) pc_flags=-D_XOPEN_SOURCE=800 ;; esac
 		# shellcheck disable=SC2086 # mod_libs is a word list
-		if ! "$pc_cc" $pc_flags -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
+		if ! "$pc_cc" $pc_flags $pc_ccstrict -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
 		    "$pc_bin/pc.o" $mod_libs >"$ctx_out/$pc_id.build.txt" 2>&1 \
 		    </dev/null; then
 			pc_log UNINITIATED "$pc_id" 0 "build failed (out/$pc_id.build.txt)"
@@ -661,6 +682,7 @@ $("$pc_probe" sysinfo)
 EOF
 		printf '# sh %s\n' "$pc_sut_sh"
 		printf '# cc %s\n' "$pc_cc"
+		printf '# ccflags %s\n' "${pc_ccstrict:-none}"
 		printf '# euid %s\n' "$pc_euid"
 		printf '# profile %s\n' "${pc_profile:-none}"
 		[ -n "$pc_mutant" ] && printf '# mutant %s\n' "$pc_mutant"

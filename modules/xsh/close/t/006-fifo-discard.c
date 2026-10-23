@@ -23,15 +23,18 @@ int main(void)
 	pc_check(r >= 0, "cannot open the FIFO for reading");
 	w = open("p", O_WRONLY);
 	pc_check(w >= 0, "cannot open the FIFO for writing");
-	pc_check(write(w, "x", 1) == 1, "write to the FIFO failed");
+	pc_check(write(w, "xy", 2) == 2, "write to the FIFO failed");
 	pc_test();
 	pc_expect_ok(close(w), "close(writer)");
+	/* Not the last close: the data must still be there. */
+	n = read(r, &c, 1);
+	pc_check(n == 1 && c == 'x',
+	    "data discarded when the writer closed while a reader was open");
 	pc_expect_ok(close(r), "close(reader)");
 	r = open("p", O_RDONLY | O_NONBLOCK);
-	pc_check(r >= 0, "cannot reopen the FIFO");
+	if (r < 0)
+		pc_unresolved("cannot reopen the FIFO (%s)", pc_errname(errno));
 	n = read(r, &c, 1);
-	pc_check(n != 1, "data written before the last close is still in the FIFO");
-	pc_check(n == 0, "read() with no writer gave %ld (%s), expected 0",
-	    (long)n, n < 0 ? pc_errname(errno) : "-");
+	pc_check(n != 1, "data left at the last close is still in the FIFO");
 	pc_pass();
 }

@@ -29,12 +29,13 @@ by the named assertion.
 
 | Assertion | Result | Cause | Entry |
 | --- | --- | --- | --- |
-| XBD.fcntl.h.002, .005 (and XSH.open.011, .012 blocked) | FAIL | no `FD_CLOFORK` / `O_CLOFORK` in the kernel or either libc | 1.1 |
+| XBD.fcntl.h.002, .005 (XSH.open.011, .012 blocked) | FAIL | no `FD_CLOFORK` / `O_CLOFORK` in the kernel or either libc | 1.1 |
+| XBD.fcntl.h.006 (XSH.close.007 blocked) | FAIL (glibc) | `F_OFD_*` not visible with `_POSIX_C_SOURCE=202405L` | 1.8, 11.1 |
+| XBD.fcntl.h.007 (XSH.open.050 blocked) | FAIL (glibc) | glibc does not define `O_TTY_INIT`; musl defines it as 0, which is allowed (XSH.open.050 NOTINUSE) | 1.7 |
+| XBD.unistd.h.001 (XSH.close.009, .010 blocked) | FAIL (glibc) | no `posix_close()` / `POSIX_CLOSE_RESTART` | 1.3 |
 | XSH.open.044 | FAIL | `open("new/", O_CREAT...)` gives EISDIR; ENOENT or ENOTDIR required | O.1 |
 | XSH.open.045 | FAIL | `open("file/", O_CREAT...)` gives EISDIR; ENOTDIR required | O.1 |
-| XSH.open.050 | UNRESOLVED (glibc), NOTINUSE (musl) | glibc does not define `O_TTY_INIT`; musl defines it as 0, which is allowed | 1.7 |
-| XSH.close.007 | UNRESOLVED (glibc) | `F_OFD_SETLK` not visible with `_POSIX_C_SOURCE=202405L` | 1.8, 11.1 |
-| XSH.close.009, .010 | UNRESOLVED (glibc) | no `posix_close()` / `POSIX_CLOSE_RESTART` | 1.3 |
+| XSH.dup.012 to .015 | UNINITIATED (glibc) | `dup3()` exists but is not declared under the strict build | 11.1 |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or

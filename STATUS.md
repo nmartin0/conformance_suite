@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (66 assertions):
+- Modules (92 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -38,11 +38,14 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   - `xsh/open` (50): access modes, O_CREAT/O_EXCL/O_TRUNC/O_APPEND,
     descriptor flags, FIFO open (blocking, non-blocking, EINTR, ENXIO),
     openat(), EMFILE, ELOOP, trailing slashes, timestamps, ownership.
-  - `xsh/close` (4).
+  - `xsh/close` (12): deallocation, EBADF, lock release, FIFO data,
+    OFD-lock and pipe description lifetime, sockets, posix_close().
+  - `xsh/dup` (15): dup(), dup2(), dup3().
+  - `xbd/unistd.h` (1): POSIX_CLOSE_RESTART; `xbd/fcntl.h` now 7.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).
 - `ci/lint.py`: traceability and anchor checks; `ci/mutate.sh`: mutation
-  checks (93 mutants); `ci/catalog.py`: shared parser.
+  checks (124 mutants); `ci/catalog.py`: shared parser.
 - `analysis/analyze.py`: load, runs, verdict, failures, matrix, diff,
   coverage, html, calibrate (checks a reference run against
   `known/*.known`, its expected failures).
@@ -63,6 +66,11 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   was applied.
 
 ## Verified (on Linux x86_64, glibc, in the development container)
+
+- The driver refuses a compiler that accepts calls to undeclared
+  functions, adding -Werror=implicit-function-declaration where that
+  helps (gcc only warns by default, which let a test link against glibc's
+  undeclared dup3()). Self-test ST.c.014 guards this.
 
 - Driver and tests under dash, bash --posix, busybox sh, ksh93, mksh, yash
   and posh, each with gcc and clang. (ksh93 exposed a driver bug: a bare

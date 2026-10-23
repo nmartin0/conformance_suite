@@ -9,7 +9,7 @@ DESCRIPTION:26bdebae       todo  Tier 0 header check (generator)
 DESCRIPTION:cd0926b8       todo  Tier 0 header check (generator)
 DESCRIPTION:43d1ad34       todo  Tier 0 header check (generator)
 DESCRIPTION:5d5c6ec0       todo  Tier 0 header check (generator)
-DESCRIPTION:ce9d5e31       todo  Tier 0 header check (generator)
+DESCRIPTION:ce9d5e31        partial XBD.fcntl.h.006  # the F_OFD_* constants only; the rest: Tier 0 header check (generator)
 DESCRIPTION:b1d4f256       todo  Tier 0 header check (generator)
 DESCRIPTION:eeab1313       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:62d87f8d       none  describes the constant; its behaviour is on the function page
@@ -42,7 +42,7 @@ DESCRIPTION:fe2d8cff       todo  Tier 0 header check (generator)
 DESCRIPTION:b26ed8fc       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:48e7dd25       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:6306eeac       todo  Tier 0 header check (generator)
-DESCRIPTION:ba3aa83c       todo  Tier 0 header check (generator)
+DESCRIPTION:ba3aa83c        partial XBD.fcntl.h.004 XBD.fcntl.h.005 XBD.fcntl.h.007  # O_CLOEXEC, O_CLOFORK, O_TTY_INIT only; the rest: Tier 0 header check
 DESCRIPTION:f8c1c171.2      todo  Tier 0 header check (generator); O_TTY_INIT may be zero and then need not be distinct (DESCRIPTION:fb2d6a1a)
 DESCRIPTION:72c6c614        partial XBD.fcntl.h.004 XSH.open.010  # atomicity (no window for another thread's fork+exec) not tested
 DESCRIPTION:b429ea4b        partial XBD.fcntl.h.005 XSH.open.012  # atomicity (no window for another thread's fork) not tested
@@ -105,3 +105,4 @@ DESCRIPTION:e3e2eb8c        todo  xsh/fcntl: a lock with l_len 0 extends to end 
 DESCRIPTION:69f2d66c        todo  xsh/fcntl: F_GETLK reports the owner's pid; F_OFD_GETLK reports -1; OFD requests need l_pid 0
 DESCRIPTION:fb2d6a1a        none  a permission; it qualifies DESCRIPTION:f8c1c171.2
 DESCRIPTION:c63a4eab        none  a permission (namespace)
+DESCRIPTION:7ad330d2        todo  Tier 0 header check (generator): the function declarations
