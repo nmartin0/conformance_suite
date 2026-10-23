@@ -226,8 +226,20 @@ class      conditional
 when       XSI
 since      2001
 says       With SIGCHLD caught with SA_NOCLDWAIT, after a child exits,
-           waitpid() for it (retried after EINTR) fails with ECHILD: no
-           status is kept and no zombie is left.
+           waitpid() for it (retried after EINTR) fails with ECHILD and the
+           process ID names no process (no zombie is left).
 note       SI-9 and SI-10: the behaviour is marked XSI in most places;
            the assertion follows that.
 test       t/024-nocldwait.c
+
+assertion  XSH.sigaction.025
+anchor     functions/sigaction.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       With SIGCHLD caught with SA_NOCLDWAIT and two children, one ending at
+           once and one after 300 ms, wait() (retried after EINTR) fails
+           with ECHILD no earlier than 250 ms after they were forked.
+note       SI-9 and SI-10: the behaviour is marked XSI in most places;
+           the assertion follows that.
+test       t/025-nocldwait-blocks.c

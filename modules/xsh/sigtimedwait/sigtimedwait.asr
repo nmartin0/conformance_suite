@@ -71,8 +71,12 @@ anchor     functions/sigtimedwait.html#DESCRIPTION
 class      required
 since      2008
 says       With SIGRTMIN blocked, sigqueue() to the process itself fails with
-           EAGAIN once the queue is full ({SIGQUEUE_MAX}, if at most
-           100000); after every queued instance is accepted with
+           EAGAIN once the queue is full ({SIGQUEUE_MAX} entries where that
+           is definite); after every queued instance is accepted with
            sigtimedwait() (zero timeout), sigqueue() succeeds again.
 timeout    120
+note       Where the limit is shared with other processes of the user
+           (Linux: RLIMIT_SIGPENDING), a queue that fills before
+           {SIGQUEUE_MAX} entries, or that stays full after draining,
+           gives UNRESOLVED.
 test       t/008-queue-again.c

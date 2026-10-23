@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigaltstack.012
  * MUTANT    sigaltstack.process_wide
+ * MUTANT    sigaltstack.borrows_main
  */
 #include "pc.h"
 #include <errno.h>
@@ -49,14 +50,15 @@ static long ms_since(const struct timespec *t0)
 
 static char *base;
 static size_t size;
-static volatile char *where;
+static volatile sig_atomic_t ran, on_main;
 
 static void h(int s)
 {
 	char c;
 
 	(void)s;
-	where = &c;
+	on_main = &c >= base && &c < base + size;
+	ran = 1;
 }
 
 static void *thr(void *a)
@@ -68,11 +70,9 @@ static void *thr(void *a)
 		return (void *)1;
 	if (!(o.ss_flags & SS_DISABLE))
 		return (void *)2;
-	if (pthread_kill(pthread_self(), SIGUSR1) != 0 || where == NULL)
+	if (raise(SIGUSR1) != 0 || !ran)
 		return (void *)4;
-	if (where >= base && where < base + size)
-		return (void *)3;
-	return NULL;
+	return on_main ? (void *)3 : NULL;
 }
 
 int main(void)
@@ -101,8 +101,9 @@ int main(void)
 		pc_check(pthread_join(t, &res) == 0, "pthread_join failed");
 		pc_check(res != (void *)1, "sigaltstack(NULL, &old) failed in the new thread");
 		pc_check(res != (void *)2, "the new thread sees the main thread's alternate stack");
+		pc_check(res != (void *)4, "the handler did not run in the new thread");
 		pc_check(res != (void *)3, "the new thread's handler ran on the main thread's alternate stack");
-		pc_check(res == NULL, "the handler did not run in the new thread");
+		pc_check(res == NULL, "unexpected result from the thread");
 	}
 	pc_pass();
 }

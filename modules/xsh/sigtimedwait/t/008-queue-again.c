@@ -55,27 +55,32 @@ int main(void)
 		siginfo_t info;
 		sigset_t one;
 		union sigval v;
-		long max = sysconf(_SC_SIGQUEUE_MAX), i, taken = 0;
+		long max = sysconf(_SC_SIGQUEUE_MAX), cap, i, taken = 0;
+		int r, e;
 
-		if (max < 1 || max > 100000)
-			pc_notinuse("{SIGQUEUE_MAX} is %ld here", max);
+		cap = max > 0 && max <= 1000000 ? max + 10 : 1000000;
 		sigemptyset(&one);
 		sigaddset(&one, SIGRTMIN);
 		pc_check(sigprocmask(SIG_BLOCK, &one, NULL) == 0, "sigprocmask failed");
 		v.sival_int = 0;
 		pc_test();
-		for (i = 0; i < max + 10; i++)
+		for (i = 0; i < cap; i++)
 			if (sigqueue(getpid(), SIGRTMIN, v) != 0)
 				break;
-		if (i == max + 10)
+		if (i == cap)
 			pc_unresolved("%ld signals were queued without EAGAIN ({SIGQUEUE_MAX} %ld)", i, max);
 		pc_check(errno == EAGAIN, "sigqueue() failed with %s, expected EAGAIN", pc_errname(errno));
+		if (i < 1)
+			pc_unresolved("the queue was already full (shared with other processes)");
 		while (sigtimedwait(&one, &info, &zero) == SIGRTMIN)
 			taken++;
 		pc_check(taken == i, "%ld instances were accepted, %ld queued", taken, i);
-		pc_check(sigqueue(getpid(), SIGRTMIN, v) == 0, "sigqueue() after the queue was emptied failed: %s",
-			 pc_errname(errno));
+		r = sigqueue(getpid(), SIGRTMIN, v);
+		e = errno;
 		(void)sigtimedwait(&one, &info, &zero);
+		if (r != 0 && e == EAGAIN && (max < 1 || i < max))
+			pc_unresolved("the queue is still full after draining: the limit is shared with other processes");
+		pc_check(r == 0, "sigqueue() after the queue was emptied failed: %s", pc_errname(e));
 	}
 	pc_pass();
 }

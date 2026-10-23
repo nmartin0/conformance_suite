@@ -31,7 +31,8 @@ class      conditional
 when       XSI
 since      2001
 says       killpg(pgrp, 0) and killpg(pgrp, SIGUSR1), with pgrp the process ID
-           of a reaped child that led no group, fail with ESRCH.
+           of a live child that leads no group (so no group has that ID),
+           fail with ESRCH.
 test       t/003-esrch.c
 
 assertion  XSH.killpg.004

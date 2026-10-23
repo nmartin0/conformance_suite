@@ -75,6 +75,9 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-61 | *at(): fd search EACCES not limited to relative paths | omission | XSH.futimens.007 |
 | SI-62 | readdir(): _SC_NAME_MAX for fpathconf() | editorial | (none) |
 | SI-63 | alphasort()/scandir(): RETURN VALUE wording | editorial | (none) |
+| SI-64 | <signal.h>: si_code values stated, not required | ambiguity | XSH.2.4.3-signal-actions.020 |
+| SI-65 | SIGBUS past a mapping's end has no si_code | omission | XSH.2.4.3-signal-actions.021 |
+| SI-66 | SI_MESGQ shading | editorial | XSH.2.4.3-signal-actions.017 |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |

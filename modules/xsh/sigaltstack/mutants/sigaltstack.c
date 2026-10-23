@@ -54,6 +54,22 @@ int sigaltstack(const stack_t *ss, stack_t *oss)
 
 	if (m == NULL)
 		return real_sigaltstack(ss, oss);
+	if (IS("borrows_main")) {
+		/* queries report the truth, but a thread that asks is given the first stack set */
+		static stack_t g;
+		static pthread_t owner;
+		static int set;
+		if (ss != NULL && !(ss->ss_flags & SS_DISABLE) && !set) {
+			g = *ss;
+			owner = pthread_self();
+			set = 1;
+		}
+		if (ss == NULL && set && !pthread_equal(owner, pthread_self())) {
+			r = real_sigaltstack(NULL, oss);
+			(void)real_sigaltstack(&g, NULL);
+			return r;
+		}
+	}
 	if (IS("process_wide")) {
 		/* one alternate stack for the whole process, as last set */
 		static stack_t g;

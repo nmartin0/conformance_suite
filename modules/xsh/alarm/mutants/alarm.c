@@ -93,10 +93,14 @@ static unsigned left(void)
 	return (unsigned)it.it_value.tv_sec + (it.it_value.tv_usec > 0);
 }
 
+static pthread_t alarm_caller;
+static unsigned alarm_secs;
+
 static void *alarm_thread(void *a)
 {
-	(void)sleep(1);
-	(void)pthread_kill(*(pthread_t *)a, SIGALRM);
+	(void)a;
+	(void)sleep(alarm_secs);
+	(void)pthread_kill(alarm_caller, SIGALRM);
 	return NULL;
 }
 
@@ -110,15 +114,13 @@ unsigned alarm(unsigned sec)
 		return real_alarm(sec);
 	if (IS("thread_directed") && sec > 0) {
 		/* the signal goes to the calling thread, not to the process */
-		static pthread_t caller;
-		static unsigned secs;
 		pthread_t t;
-		caller = pthread_self();
-		secs = sec;
-		if (pthread_create(&t, NULL, alarm_thread, &caller) == 0)
+		unsigned prev = real_alarm(0);
+		alarm_caller = pthread_self();
+		alarm_secs = sec;
+		if (pthread_create(&t, NULL, alarm_thread, NULL) == 0)
 			(void)pthread_detach(t);
-		(void)secs;
-		return 0;
+		return prev;
 	}
 	if (IS("cancel_ignored") && sec == 0)
 		return left();

@@ -167,7 +167,8 @@ since      1988
 says       In a process group of a process running as user 65534 (the
            sender), a process of user 65534 and one of user 65533,
            kill(0, SIGUSR1) by the sender returns 0; the process of user
-           65534 gets the signal and the one of user 65533 does not.
+           65534 gets the signal (within 5 s) and the one of user 65533
+           does not.
 needs      root
-timeout    30
+timeout    40
 test       t/016-some-permitted.c

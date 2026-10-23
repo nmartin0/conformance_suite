@@ -161,14 +161,17 @@ test       t/014-thread-terminate-whole-process.c
 
 assertion  XSH.2.4.3-signal-actions.015
 anchor     functions/V2_chap02.html#2.4.3
-class      required
+class      disputed
 since      2008
 says       A write to a page mapped PROT_READ gives a SIGSEGV whose siginfo_t
            has si_signo SIGSEGV, si_code SEGV_ACCERR and si_addr inside that
            page.
-note       si_addr may be inaccurate on some systems (<signal.h>), so
-           any address within the page is accepted. The handler records
-           what it saw in volatile sig_atomic_t objects and leaves with
+note       disputed (SI-64): <signal.h> says implementations 'do not
+           generate' other codes for the listed circumstances, a
+           statement rather than a requirement. si_addr may be
+           inaccurate on some systems (<signal.h>), so any address
+           within the page is accepted. The handler records what it saw
+           in volatile sig_atomic_t objects and leaves with
            siglongjmp().
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/015-segv-siginfo.c
@@ -227,12 +230,30 @@ test       t/019-sigchld-info.c
 
 assertion  XSH.2.4.3-signal-actions.020
 anchor     functions/V2_chap02.html#2.4.3
+class      disputed
+since      2008
+says       A read of a page unmapped just before (in the same child) gives a
+           SIGSEGV whose siginfo_t has si_code SEGV_MAPERR and si_addr in
+           that page.
+note       disputed (SI-64): <signal.h> says implementations 'do not
+           generate' other codes for the listed circumstances, which
+           reads as a statement rather than a requirement, and XSH 2.4.3
+           allows implementation-defined codes for events it does not
+           list.
+nomutant   The fault is raised by the hardware and kernel; no interposed
+           function stands between.
+test       t/020-segv-maperr.c
+
+assertion  XSH.2.4.3-signal-actions.021
+anchor     functions/mmap.html#DESCRIPTION
 class      required
 since      2008
-says       A read of a page just unmapped gives a SIGSEGV whose siginfo_t has
-           si_code SEGV_MAPERR and si_addr in that page; a read of the
-           second page of a two-page shared mapping of a file cut to one
-           page gives a SIGBUS whose si_code is BUS_ADRERR or BUS_OBJERR.
-nomutant   The faults are raised by the hardware and kernel; no
-           interposed function stands between.
-test       t/020-fault-codes.c
+says       In a two-page shared mapping of a file cut to one page, a read of
+           the second page gives SIGBUS, and its siginfo_t has si_addr in
+           that page.
+note       Which si_code the SIGBUS carries is not checked: none of the
+           reasons <signal.h> lists describes a reference past the end
+           of a mapped object (SI-65).
+nomutant   The fault is raised by the hardware and kernel; no interposed
+           function stands between.
+test       t/021-sigbus-beyond-end.c

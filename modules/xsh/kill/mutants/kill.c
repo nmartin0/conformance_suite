@@ -57,9 +57,9 @@ int kill(pid_t pid, int sig)
 		real = (int (*)(pid_t, int))dlsym(RTLD_NEXT, "kill");
 	if (m == NULL)
 		return real(pid, sig);
-	if (IS("eperm_if_any") && pid == 0 && sig > 0 && geteuid() != 0) {
+	if (IS("eperm_pid0") && pid == 0 && sig > 0 && geteuid() != 0) {
 		(void)real(pid, sig);
-		errno = EPERM;	/* fails because some member was not permitted */
+		errno = EPERM;	/* reports EPERM for a group send by an unprivileged caller, whatever was permitted */
 		return -1;
 	}
 	if (IS("einval_accepted") && !valid(sig))

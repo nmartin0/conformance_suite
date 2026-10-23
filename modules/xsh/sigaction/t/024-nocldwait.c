@@ -75,6 +75,7 @@ int main(void)
 			;
 		pc_check(r == -1, "waitpid() returned the child's status (%#x): it was kept", (unsigned)st);
 		pc_check(errno == ECHILD, "waitpid() failed with %s, expected ECHILD", pc_errname(errno));
+		pc_check(kill(kid, 0) == -1 && errno == ESRCH, "the child's process ID still names a process (a zombie)");
 	}
 	pc_pass();
 }

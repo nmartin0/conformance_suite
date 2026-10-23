@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (902 assertions):
+- Modules (904 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -38,11 +38,11 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   - `xsh/open` (50): access modes, O_CREAT/O_EXCL/O_TRUNC/O_APPEND,
     descriptor flags, FIFO open (blocking, non-blocking, EINTR, ENXIO),
     openat(), EMFILE, ELOOP, trailing slashes, timestamps, ownership.
-  - `xsh/close` (12): deallocation, EBADF, lock release, FIFO data,
+  - `xsh/close` (14): deallocation, EBADF, lock release, FIFO data,
     OFD-lock and pipe description lifetime, sockets, posix_close().
   - `xsh/dup` (15): dup(), dup2(), dup3().
   - `xsh/pipe` (10): pipe(), pipe2().
-  - `xsh/fcntl` (43): F_DUPFD/F_DUPFD_CLOEXEC, descriptor and status
+  - `xsh/fcntl` (44): F_DUPFD/F_DUPFD_CLOEXEC, descriptor and status
     flags, exec and FD_CLOEXEC, socket owner (F_SETOWN, F_SETOWN_EX),
     process-owned record locks (conflicts, ranges, whence, waiting,
     EINTR, inheritance, exit), OFD-owned locks.
@@ -55,7 +55,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     processes at once), RLIMIT_FSIZE (partial, EFBIG, SIGXFSZ), EINTR
     before and after data, {PIPE_BUF} atomicity with four writers,
     non-blocking pipes, EPIPE and SIGPIPE, sockets, mtime, pwrite().
-  - `xsh/fork` (19): return values and IDs, descriptors and
+  - `xsh/fork` (23): return values and IDs, descriptors and
     FD_CLOFORK, directory streams, times, alarm, pending signals,
     private and shared mappings, timers, threads, process-shared
     mutexes, CPU-time clock, semaphores, inherited attributes, _Fork().
@@ -63,7 +63,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     selection (any, one, own group, other group), WNOHANG, WUNTRACED,
     WCONTINUED, EINTR, ECHILD, EINVAL, consumption, SIGCHLD clearing,
     reparenting, last-thread exit.
-  - `xsh/_Exit` (14): status bits (wait, waitid, SIGCHLD siginfo),
+  - `xsh/_Exit` (19): status bits (wait, waitid, SIGCHLD siginfo),
     _exit/_Exit equivalence, no atexit or at_quick_exit handlers, no
     flushing, descriptors closed, SIGCHLD, zombies, XSI SIGCHLD ignored
     (no zombie), orphaned process groups, no thread cleanup, no signal
@@ -81,12 +81,12 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     errors, execvp/execlp search and the sh fallback, fexecve, start-up
     locale and floating-point state, XSI set-ID bits, shared memory,
     nice.
-  - `xsh/sigaction` (23): querying and replacing actions, SIGKILL and
+  - `xsh/sigaction` (25): querying and replacing actions, SIGKILL and
     SIGSTOP never masked, one- and three-argument handlers, siginfo_t for
     kill() and sigqueue(), SA_NOCLDSTOP, SA_ONSTACK, SA_RESETHAND,
     SA_RESTART, SA_NODEFER, the handler's mask, signal() round trip,
     EINVAL, queuing with SA_SIGINFO, SIG_IGN.
-  - `xsh/kill` (15): to a process, to the own and another group, to all
+  - `xsh/kill` (16): to a process, to the own and another group, to all
     (pid -1, as an unused user ID from the profile), the null signal,
     delivery before return, permissions (same user, EPERM, the receiver's
     real and saved IDs, SIGCONT within and outside the session), zombies,
@@ -95,9 +95,9 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     SIGSTOP, EINVAL returned, queries with any how (2024), sigprocmask(),
     per-thread masks, SIGSEGV and others sent while blocked.
     `xsh/raise` (3): waits for the handler, thread-directed, EINVAL.
-  - `xsh/sigpending` (3), `xsh/sigsuspend` (6), `xsh/sigwait` (6),
-    `xsh/sigtimedwait` (7, with sigwaitinfo()), `xsh/sigqueue` (7),
-    `xsh/alarm` (4), `xsh/pause` (3): the pending set per thread and
+  - `xsh/sigpending` (3), `xsh/sigsuspend` (7), `xsh/sigwait` (6),
+    `xsh/sigtimedwait` (8, with sigwaitinfo()), `xsh/sigqueue` (9),
+    `xsh/alarm` (5), `xsh/pause` (3): the pending set per thread and
     after delivery; sigsuspend()'s mask during and after the wait,
     termination, SIGKILL and SIGSTOP, process-pending signals left alone; selecting and clearing, queued remainders,
     lowest realtime signal first, thread-directed and single-waiter
@@ -108,11 +108,11 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     through handlers, termination and ignored signals.
   - The sigset functions (`xsh/sigemptyset`, `sigfillset`, `sigaddset`,
     `sigdelset` 2 each, `sigismember` 1), `xsh/signal` (6), XSI
-    `xsh/sigaltstack` (11) and `xsh/killpg` (2), `xsh/psiginfo` (6, with
+    `xsh/sigaltstack` (12) and `xsh/killpg` (4), `xsh/psiginfo` (7, with
     psignal()), `xsh/sig2str` (6, with str2sig(); no Linux C library has
     them yet), `xsh/abort` (6).
   - XSH 2.4 signal concepts: `xsh/2.4.1-signal-generation` (10),
-    `xsh/2.4.2-realtime-signals` (5), `xsh/2.4.3-signal-actions` (16),
+    `xsh/2.4.2-realtime-signals` (6), `xsh/2.4.3-signal-actions` (21),
     `xsh/2.4.4-signal-effects` (3): which thread gets a signal, pending
     and blocked signals, inherited masks, stop and SIGCONT interplay,
     sigevent notification, queues under kill() and SIG_IGN, default
@@ -142,7 +142,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).
 - `ci/lint.py`: traceability, anchor and `since` checks; `ci/mutate.sh`: mutation
-  checks (434 mutants); `ci/catalog.py`: shared parser.
+  checks (1205 mutants); `ci/catalog.py`: shared parser.
 - `analysis/analyze.py`: load, runs, verdict, failures, matrix, diff,
   coverage, html, calibrate (checks a reference run against
   `known/*.known`, its expected failures).

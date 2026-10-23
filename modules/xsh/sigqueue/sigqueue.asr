@@ -77,7 +77,9 @@ anchor     functions/sigqueue.html#DESCRIPTION
 class      required
 since      2008
 says       sigqueue() of SIGRTMIN to a child stopped by SIGSTOP returns 0
-           within 500 ms.
+           within 500 ms (a SIGCONT sent 2 s later would release an
+           implementation that waits for delivery).
+timeout    20
 test       t/008-stopped.c
 
 assertion  XSH.sigqueue.009

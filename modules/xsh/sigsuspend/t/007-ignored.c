@@ -62,7 +62,7 @@ int main(void)
 		struct sigaction sa;
 		sigset_t one, none;
 		pid_t kid, me = getpid();
-		int st;
+		int st, r, e;
 
 		(void)signal(SIGUSR1, SIG_IGN);
 		memset(&sa, 0, sizeof sa);
@@ -77,15 +77,20 @@ int main(void)
 		if (kid == -1)
 			pc_unresolved("fork failed: %s", pc_errname(errno));
 		if (kid == 0) {
-			sleep_ms(100);
-			(void)kill(me, SIGUSR1);
+			int i;
+			for (i = 0; i < 4; i++) {
+				sleep_ms(50);
+				(void)kill(me, SIGUSR1);
+			}
 			sleep_ms(300);
 			(void)kill(me, SIGUSR2);
 			_exit(0);
 		}
 		pc_test();
-		(void)sigsuspend(&none);
-		pc_check(got2, "sigsuspend() returned before SIGUSR2 arrived (the ignored SIGUSR1 ended it)");
+		r = sigsuspend(&none);
+		e = errno;
+		pc_check(got2, "sigsuspend() returned before SIGUSR2 arrived (an ignored SIGUSR1 ended it)");
+		pc_check(r == -1 && e == EINTR, "sigsuspend() returned %d (%s), expected -1 with EINTR", r, pc_errname(e));
 		(void)waitpid(kid, &st, 0);
 	}
 	pc_pass();

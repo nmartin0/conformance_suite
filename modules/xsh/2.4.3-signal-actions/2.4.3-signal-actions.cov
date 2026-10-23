@@ -56,9 +56,9 @@
 2.4.3:c4238c01              XSH.2.4.3-signal-actions.018
 2.4.3:717394fd              XSH.2.4.3-signal-actions.017
 2.4.3:2235ee57              none  a cross-reference
-2.4.3:2b5eeffe              partial XSH.2.4.3-signal-actions.015 XSH.2.4.3-signal-actions.020  # SEGV_ACCERR, SEGV_MAPERR and the SIGBUS codes; SIGILL, SIGFPE and SIGTRAP codes are machine-dependent and todo
+2.4.3:2b5eeffe              partial XSH.2.4.3-signal-actions.015 XSH.2.4.3-signal-actions.020  # SEGV_ACCERR and SEGV_MAPERR, both disputed (SI-64): the text also allows implementation-defined codes
 2.4.3:b66352f8              XSH.sigaction.006 XSH.sigtimedwait.001 XSH.sigtimedwait.004 XSH.sigqueue.001
-2.4.3:b093bc3d              XSH.2.4.3-signal-actions.015 XSH.2.4.3-signal-actions.019 XSH.2.4.3-signal-actions.020 XSH._Exit.014
+2.4.3:b093bc3d              partial XSH.2.4.3-signal-actions.015 XSH.2.4.3-signal-actions.019 XSH.2.4.3-signal-actions.020 XSH.2.4.3-signal-actions.021 XSH._Exit.014  # CLD_EXITED's si_pid, si_uid and si_status, and si_addr for SIGSEGV and SIGBUS; CLD_KILLED, CLD_DUMPED, CLD_STOPPED and CLD_CONTINUED, and si_addr for SIGILL and SIGFPE, are todo
 2.4.3:a6c200e0              XSH.sigtimedwait.001 XSH.2.4.2-realtime-signals.001 XSH.2.4.3-signal-actions.017 XSH.2.4.3-signal-actions.018
 2.4.3:a9d141ce              none  undefined
 2.4.3:5ae07797              none  undefined

@@ -79,7 +79,11 @@ int main(void)
 		memset(&it, 0, sizeof it);
 		it.it_value.tv_nsec = 10000000;
 		pc_test();
-		pc_check(timer_create(CLOCK_MONOTONIC, &ev, &t) == 0, "timer_create failed: %s", pc_errname(errno));
+		if (timer_create(CLOCK_REALTIME, &ev, &t) != 0) {
+			if (errno == EAGAIN)
+				pc_unresolved("timer_create: no timer available (EAGAIN)");
+			pc_fail("timer_create failed: %s", pc_errname(errno));
+		}
 		pc_check(timer_settime(t, 0, &it, NULL) == 0, "timer_settime failed: %s", pc_errname(errno));
 		pc_check(wait_for(&got, 3000), "the handler did not run");
 		pc_check(code == SI_TIMER, "si_code is %d, expected SI_TIMER (%d)", code, SI_TIMER);

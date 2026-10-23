@@ -47,13 +47,21 @@ static long ms_since(const struct timespec *t0)
 	return (long)(t.tv_sec - t0->tv_sec) * 1000 + (t.tv_nsec - t0->tv_nsec) / 1000000;
 }
 
+static pid_t kid;
+
+static void release(int s)
+{
+	(void)s;
+	(void)kill(kid, SIGCONT);
+}
+
 int main(void)
 {
 	pc_begin("XSH.sigqueue.008");
 	{
+		struct sigaction sa;
 		struct timespec t0;
 		union sigval v;
-		pid_t kid;
 		long ms;
 		int st, r;
 
@@ -65,11 +73,17 @@ int main(void)
 				pause();
 		pc_check(kill(kid, SIGSTOP) == 0, "kill(SIGSTOP) failed");
 		pc_check(waitpid(kid, &st, WUNTRACED) == kid && WIFSTOPPED(st), "the child did not stop");
+		memset(&sa, 0, sizeof sa);
+		sa.sa_handler = release;
+		sigemptyset(&sa.sa_mask);
+		pc_check(sigaction(SIGALRM, &sa, NULL) == 0, "sigaction failed");
 		v.sival_int = 1;
 		pc_test();
+		(void)alarm(2);
 		(void)clock_gettime(CLOCK_MONOTONIC, &t0);
 		r = sigqueue(kid, SIGRTMIN, v);
 		ms = ms_since(&t0);
+		(void)alarm(0);
 		(void)kill(kid, SIGKILL);
 		(void)waitpid(kid, &st, 0);
 		pc_check(r == 0, "sigqueue() to the stopped child failed: %s", pc_errname(errno));

@@ -126,5 +126,12 @@ pid_t wait(int *st)
 
 	if (m == NULL)
 		return real_waitpid()(-1, st, 0);
+	if (IS("nocldwait_no_block")) {
+		struct sigaction o;
+		if (sigaction(SIGCHLD, NULL, &o) == 0 && (o.sa_flags & SA_NOCLDWAIT)) {
+			errno = ECHILD;	/* does not wait for the children still running */
+			return -1;
+		}
+	}
 	return faulty(m, -1, st, 0);
 }

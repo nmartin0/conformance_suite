@@ -131,6 +131,6 @@ when       XSI
 since      2008
 says       After the main thread sets an alternate stack, a new thread's
            sigaltstack(NULL, &old) reports SS_DISABLE, and its SIGUSR1
-           handler (SA_ONSTACK) does not run on the main thread's
-           stack.
+           handler (SA_ONSTACK, raised by that thread) does not run on the
+           main thread's stack.
 test       t/012-per-thread.c

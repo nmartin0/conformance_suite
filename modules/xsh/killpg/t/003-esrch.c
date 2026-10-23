@@ -52,17 +52,24 @@ int main(void)
 	pc_begin("XSH.killpg.003");
 	{
 		pid_t k;
-		int st;
+		int p[2], st;
+		char c;
 
+		pc_check(pipe(p) == 0, "pipe failed");
 		k = fork();
 		if (k == -1)
 			pc_unresolved("fork failed: %s", pc_errname(errno));
-		if (k == 0)
+		if (k == 0) {
+			(void)close(p[1]);
+			(void)read(p[0], &c, 1);
 			_exit(0);
-		pc_check(waitpid(k, &st, 0) == k, "waitpid failed");
+		}
+		(void)close(p[0]);
 		pc_test();
 		pc_expect_err(killpg(k, 0), ESRCH, "killpg(no such group, 0)");
 		pc_expect_err(killpg(k, SIGUSR1), ESRCH, "killpg(no such group, SIGUSR1)");
+		(void)close(p[1]);
+		(void)waitpid(k, &st, 0);
 	}
 	pc_pass();
 }
