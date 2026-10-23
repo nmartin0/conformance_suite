@@ -13,8 +13,9 @@ assertion  XSH.rmdir.002
 anchor     functions/rmdir.html#ERRORS/EEXIST
 class      required
 since      1988
-says       rmdir("d") with d holding a file, or a subdirectory, fails with
-           EEXIST or ENOTEMPTY and d is unchanged.
+says       rmdir("d") with d holding only a file named ".f", and rmdir("e")
+           with e holding a subdirectory, fail with EEXIST or ENOTEMPTY and
+           neither directory changes.
 test       t/002-nonempty.c
 
 assertion  XSH.rmdir.003
@@ -32,6 +33,9 @@ since      2008
 says       rmdir("d/e/.") fails with EINVAL and rmdir("d/e/..") fails (with
            any error), e being an empty directory inside d; d and e
            remain.
+note       A final dot-dot always names a non-empty directory, so EEXIST
+           or ENOTEMPTY applies too; the test only requires that the
+           call fails.
 test       t/004-dot.c
 
 assertion  XSH.rmdir.005
@@ -40,9 +44,10 @@ class      required
 since      2008
 says       After rmdir() of an empty directory that is open, the name is gone,
            creating a file or directory through the open descriptor
-           (openat(fd, ..., O_CREAT), mkdirat(fd, ...)) fails, and
-           reading the directory through the descriptor yields no dot or
-           dot-dot entries.
+           (openat(fd, ..., O_CREAT), mkdirat(fd, ...)) fails, fstat() of
+           it still succeeds, and reading the directory through the
+           descriptor yields no entries at all. (An implementation that
+           refuses with EBUSY is NOTINUSE.)
 test       t/005-open-dir.c
 
 assertion  XSH.rmdir.006
@@ -112,7 +117,7 @@ needs      root
 test       t/012-sticky.c
 
 assertion  XSH.rmdir.013
-anchor     basedefs/V1_chap04.html#tag_04_05
+anchor     basedefs/V1_chap04.html#4.5
 class      conditional
 when       XSI
 since      2001
@@ -121,3 +126,11 @@ says       In a directory with S_ISVTX set and write permission for all,
            can rmdir() an empty directory it made.
 needs      root
 test       t/013-sticky-owner.c
+
+assertion  XSH.rmdir.014
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+since      2008
+says       rmdir("d/") of an empty directory succeeds; rmdir("f/") of a regular
+           file fails with ENOTDIR and f remains.
+test       t/014-slashes.c

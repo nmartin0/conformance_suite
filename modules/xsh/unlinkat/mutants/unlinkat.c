@@ -7,6 +7,7 @@
  * while PC_PHASE is "test" (as set by pc.c in this process or a parent).
  */
 #define _GNU_SOURCE 1
+#include <dirent.h>
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>

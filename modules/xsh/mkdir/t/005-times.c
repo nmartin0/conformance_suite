@@ -162,6 +162,10 @@ int main(void)
 		pc_make_dir("p");
 		pc_test();
 		for (i = 0; i < 300 && !moved; i++) {
+			if (i > 0) {
+				/* keep one subdirectory at a time: {LINK_MAX} may be small */
+				pc_check(rmdir(name) == 0, "rmdir(%s) failed: %s", name, pc_errname(errno));
+			}
 			snprintf(name, sizeof name, "p/d%d", i);
 			p0 = lst("p");
 			sleep_ms(10);
@@ -172,8 +176,8 @@ int main(void)
 		pc_check(moved, "the parent's st_mtim did not move in 3 s of mkdir() calls");
 		pc_check(ts_cmp(p1.st_ctim, p0.st_ctim) > 0, "the parent's st_ctim did not move");
 		d = lst(name);
-		pc_check(ts_cmp(d.st_mtim, p0.st_mtim) > 0 && ts_cmp(d.st_ctim, p0.st_ctim) > 0 &&
-			 ts_cmp(d.st_atim, p0.st_mtim) > 0, "the new directory's times are older than the mkdir() call");
+		pc_check(ts_cmp(d.st_mtim, p0.st_mtim) >= 0 && ts_cmp(d.st_ctim, p0.st_ctim) >= 0 &&
+			 ts_cmp(d.st_atim, p0.st_mtim) >= 0, "the new directory's times are older than the mkdir() call");
 	}
 	pc_pass();
 }

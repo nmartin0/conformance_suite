@@ -160,7 +160,9 @@ int main(void)
 		pc_test();
 		pc_check(mkdir("d", 01777) == 0, "mkdir() failed: %s", pc_errname(errno));
 		st = lst("d");
-		pc_check((st.st_mode & 07777) == 01777, "st_mode bits %#o, expected 01777", (unsigned)(st.st_mode & 07777));
+		/* S_ISGID may come from the parent (group inheritance), so it is not compared */
+		pc_check((st.st_mode & 01777) == 01777, "st_mode bits %#o, expected 01777 (S_ISGID aside)",
+			 (unsigned)(st.st_mode & 07777));
 	}
 	pc_pass();
 }

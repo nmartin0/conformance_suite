@@ -159,13 +159,10 @@ int main(void)
 		int i, moved = 0;
 
 		pc_make_dir("p");
-		for (i = 0; i < 300; i++) {
-			snprintf(name, sizeof name, "p/d%d", i);
-			pc_make_dir(name);
-		}
 		pc_test();
 		for (i = 0; i < 300 && !moved; i++) {
 			snprintf(name, sizeof name, "p/d%d", i);
+			pc_make_dir(name);	/* one subdirectory at a time: {LINK_MAX} may be small */
 			p0 = lst("p");
 			sleep_ms(10);
 			pc_check(rmdir(name) == 0, "rmdir(%s) failed: %s", name, pc_errname(errno));

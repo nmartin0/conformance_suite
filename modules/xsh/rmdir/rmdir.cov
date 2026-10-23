@@ -1,12 +1,12 @@
 # rmdir.cov - every requirement unit on functions/rmdir.html.
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
-DESCRIPTION:43aba46c     XSH.rmdir.001
+DESCRIPTION:43aba46c     XSH.rmdir.001 XSH.rmdir.014
 DESCRIPTION:1d405732     XSH.rmdir.002
 DESCRIPTION:313b1f55     none  unspecified
 DESCRIPTION:5f909871     XSH.rmdir.003
-DESCRIPTION:29691b60     XSH.rmdir.004
-DESCRIPTION:ab0d24a0     untestable  freeing the space of an unreferenced directory is not observable portably
+DESCRIPTION:29691b60     partial XSH.rmdir.004  # a final dot-dot always names a non-empty directory, so its own rule cannot be isolated
+DESCRIPTION:ab0d24a0     partial XSH.rmdir.001  # freeing the space is not observable portably
 DESCRIPTION:72a88eb7     XSH.rmdir.005
 DESCRIPTION:4d80af1f     XSH.rmdir.002
 DESCRIPTION:16f3317f     XSH.rmdir.006
@@ -14,14 +14,14 @@ RETURN_VALUE:4f018d59    XSH.rmdir.001
 RETURN_VALUE:d0365a78    XSH.rmdir.002 XSH.rmdir.007 XSH.rmdir.008
 RETURN_VALUE:8e3f7321    XSH.rmdir.002 XSH.rmdir.003 XSH.rmdir.004 XSH.rmdir.008 XSH.rmdir.011
 ERRORS:81c38fa5          XSH.rmdir.011
-ERRORS:851c5e0f          impl  which directories are in use by the system (documentation)
+ERRORS:851c5e0f          impl  which directories are in use (documentation); XSH.rmdir.005 is NOTINUSE where an open directory is busy
 ERRORS:207adce3          partial XSH.rmdir.002  # extra hard links to a directory are not tested
 ERRORS:9f97d7a2          XSH.rmdir.004
 ERRORS:1220c343          untestable  needs a failing device
 ERRORS:f39d7871          XSH.rmdir.009
 ERRORS:681b232a          XSH.rmdir.010
 ERRORS:2cd3336c          XSH.rmdir.007
-ERRORS:4e72474c          XSH.rmdir.008
+ERRORS:4e72474c          XSH.rmdir.008 XSH.rmdir.014
 ERRORS:f8976978          XSH.rmdir.012 XSH.rmdir.013
 ERRORS:f580c901          todo  needs a read-only file system (an environment case)
 ERRORS:811d61dd          optional

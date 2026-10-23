@@ -1,0 +1,55 @@
+# XSH fchmod()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fchmod.001
+anchor     functions/fchmod.html#DESCRIPTION
+class      required
+since      1988
+says       fchmod(fd, m) on a descriptor open on a regular file returns 0 and
+           leaves the bits exactly m, for m = 0600, 0777 and 0 (the umask
+           does not apply); it also
+           works on a descriptor open on a directory.
+test       t/001-sets-bits.c
+
+assertion  XSH.fchmod.002
+anchor     functions/fchmod.html#DESCRIPTION
+class      required
+since      1988
+says       fchmod(fd, 0640) of an open file whose only name was removed
+           succeeds, and fstat() reports the new bits.
+test       t/002-unlinked.c
+
+assertion  XSH.fchmod.003
+anchor     functions/chmod.html#DESCRIPTION
+class      required
+since      1988
+says       After fchmod(), fstat() reports a later st_ctim (the test changes the
+           mode again every 10 ms for up to 3 s until it moves).
+timeout    20
+test       t/003-ctime.c
+
+assertion  XSH.fchmod.004
+anchor     functions/fchmod.html#ERRORS
+class      required
+since      1988
+says       fchmod() of a descriptor that is not open fails with EBADF.
+test       t/004-ebadf.c
+
+assertion  XSH.fchmod.005
+anchor     functions/fchmod.html#ERRORS/EPERM
+class      required
+since      1988
+says       For a process without appropriate privileges, fchmod() of a file
+           it does not own, open for reading and writing (mode 0666),
+           fails with EPERM and the mode is unchanged.
+needs      root
+test       t/005-eperm.c
+
+assertion  XSH.fchmod.006
+anchor     functions/fchmod.html#DESCRIPTION
+class      conditional
+when       SHM
+since      2001
+says       fchmod(fd, 0600) of a shared memory object (created 0640) succeeds
+           and fstat() then reports read and write bits 0600.
+test       t/006-shm.c

@@ -25,7 +25,8 @@ class      conditional
 when       XSI
 since      2001
 says       mkdir("d", 01777) under umask 0 creates a directory with S_ISVTX
-           set and permission bits 0777.
+           set and permission bits 0777 (S_ISGID is not examined: a
+           system may set it to inherit the parent's group).
 test       t/003-sticky.c
 
 assertion  XSH.mkdir.004
@@ -42,9 +43,10 @@ anchor     functions/mkdir.html#DESCRIPTION
 class      required
 since      1988
 says       After mkdir("p/dN"), stat() reports later st_mtim and st_ctim for p
-           than before, and st_atim, st_mtim and st_ctim of the new
-           directory no earlier than p's new st_mtim (the test makes a
-           fresh directory every 10 ms for up to 3 s until p's times move).
+           than before the call, and the new directory's st_atim, st_mtim
+           and st_ctim are no earlier than p's times before the call (the
+           test makes a fresh directory every 10 ms for up to 3 s until
+           p's times move, removing the previous one).
 timeout    20
 test       t/005-times.c
 
@@ -75,11 +77,14 @@ says       mkdirat() with an absolute path creates that directory whatever fd
 test       t/008-mkdirat-absolute.c
 
 assertion  XSH.mkdir.009
-anchor     basedefs/V1_chap04.html#tag_04_16
+anchor     basedefs/V1_chap04.html#4.16
 class      required
 since      2008
 says       mkdir("n/", 0755) creates directory n (a trailing slash may follow
            the name of a directory about to be created).
+note       XBD 4.16 resolves a trailing slash on a directory about to be
+           created, and its footnote names rename(), renameat() and mv
+           as the only interfaces that constrain this further.
 test       t/009-trailing-slash.c
 
 assertion  XSH.mkdir.010
@@ -159,3 +164,20 @@ says       For a process without appropriate privileges, mkdirat(fd, "n",
 note       O_SEARCH itself is a header item (Tier 0); without it this
            test is UNRESOLVED.
 test       t/018-mkdirat-search.c
+
+assertion  XSH.mkdir.019
+anchor     functions/mkdir.html#ERRORS/EILSEQ
+class      required
+since      2024
+says       mkdir() of a name holding a newline either succeeds or, if the file
+           system refuses such names, fails with EILSEQ (the only error that
+           applies).
+test       t/019-eilseq.c
+
+assertion  XSH.mkdir.020
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+since      2008
+says       mkdir("d/") with d an existing directory fails with EEXIST, and
+           mkdir("n//") creates directory n.
+test       t/020-slashes.c

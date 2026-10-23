@@ -158,7 +158,7 @@ int main(void)
 	{
 		int r = 0;
 		pc_make_dir("d");
-		pc_make_file("d/f", "x");
+		pc_make_file("d/.f", "x");
 		pc_make_dir("e");
 		pc_make_dir("e/s");
 		pc_test();
@@ -166,7 +166,7 @@ int main(void)
 		pc_check(r == -1 && (errno == EEXIST || errno == ENOTEMPTY), "rmdir(\"d\"): returned %d, errno %s, expected EEXIST or ENOTEMPTY", r, pc_errname(errno));
 		r = rmdir("e");
 		pc_check(r == -1 && (errno == EEXIST || errno == ENOTEMPTY), "rmdir(\"e\"): returned %d, errno %s, expected EEXIST or ENOTEMPTY", r, pc_errname(errno));
-		pc_check(exists("d/f") && exists("e/s"), "a failed rmdir() changed the directory");
+		pc_check(exists("d/.f") && exists("e/s"), "a failed rmdir() changed the directory");
 		(void)r;
 	}
 	pc_pass();

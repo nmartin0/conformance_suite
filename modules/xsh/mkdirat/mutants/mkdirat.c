@@ -103,6 +103,8 @@ int mkdirat(int fd, const char *path, mode_t mode)
 		mode = 0777;
 	if (IS("checks_fd") && fd != AT_FDCWD && fstat(fd, &st) != 0)
 		return fail(EBADF);
+	if (IS("checks_fd") && fd != AT_FDCWD && fstat(fd, &st) == 0 && !S_ISDIR(st.st_mode))
+		return fail(ENOTDIR);
 	if (IS("search_checked") && fd != AT_FDCWD && path[0] != '/' && fstat(fd, &st) == 0 && S_ISDIR(st.st_mode) &&
 	    !(st.st_mode & 0111))
 		return fail(EACCES);

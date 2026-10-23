@@ -1,0 +1,176 @@
+# XSH chmod() and fchmodat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.chmod.001
+anchor     functions/chmod.html#DESCRIPTION
+class      required
+since      1988
+says       chmod("f", m) returns 0 and leaves the permission bits exactly m,
+           for m = 0, 0644, 0777, 0400 and 0070 in turn (the umask does not
+           apply).
+test       t/001-sets-bits.c
+
+assertion  XSH.chmod.002
+anchor     functions/chmod.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       chmod("d", 01755) of a directory leaves its mode bits 01755, and
+           chmod("d", 0700) clears S_ISVTX again.
+test       t/002-directory-sticky.c
+
+assertion  XSH.chmod.003
+anchor     functions/chmod.html#DESCRIPTION
+class      required
+since      2008
+says       chmod("f", S_IFDIR | 0640) of a regular file succeeds; f stays a
+           regular file with permission bits 0640.
+test       t/003-type-bits-ignored.c
+
+assertion  XSH.chmod.004
+anchor     functions/chmod.html#DESCRIPTION
+class      required
+since      2001
+says       chmod("sl", 0600), with sl a symbolic link to f, changes f's
+           permission bits to 0600.
+test       t/004-follows-link.c
+
+assertion  XSH.chmod.005
+anchor     functions/chmod.html#DESCRIPTION
+class      required
+since      1988
+says       After chmod(), stat() reports a later st_ctim for the file (the test
+           changes the mode again every 10 ms for up to 3 s until it
+           moves).
+timeout    20
+test       t/005-ctime.c
+
+assertion  XSH.chmod.006
+anchor     functions/chmod.html#ERRORS/EPERM
+class      required
+since      1988
+says       For a process without appropriate privileges, chmod() of a file
+           it does not own (mode 0666, writable by it) fails with EPERM
+           and the mode is unchanged.
+needs      root
+test       t/006-eperm.c
+
+assertion  XSH.chmod.007
+anchor     functions/chmod.html#DESCRIPTION
+class      required
+since      1988
+says       For a process without appropriate privileges that owns a regular
+           file whose group is not the process's effective or a
+           supplementary group, chmod("f", 02755) succeeds and leaves
+           S_ISGID clear (bits 0755).
+needs      root
+nomutant   the kernel clears the bit; a preload library cannot keep it
+test       t/007-clears-sgid.c
+
+assertion  XSH.chmod.008
+anchor     functions/chmod.html#DESCRIPTION
+class      required
+since      2008
+says       fchmodat(fd, "f", 0600, 0), with fd open on directory d, changes
+           d/f and not a file f in the working directory.
+test       t/008-fchmodat-relative.c
+
+assertion  XSH.chmod.009
+anchor     functions/chmod.html#DESCRIPTION
+class      required
+since      2008
+says       fchmodat(AT_FDCWD, "sl", 0600, 0), with sl a symbolic link to f,
+           changes f's bits as chmod() does; fchmodat() with an absolute
+           path ignores fd (a descriptor that is not open).
+test       t/009-fchmodat-fdcwd.c
+
+assertion  XSH.chmod.010
+anchor     functions/chmod.html#DESCRIPTION
+class      required
+since      2008
+says       fchmodat(AT_FDCWD, "sl", 0600, AT_SYMLINK_NOFOLLOW), with sl a
+           symbolic link to f, either succeeds or fails with EOPNOTSUPP;
+           either way f's bits are unchanged. On a regular file the flag
+           has no effect: the bits change.
+test       t/010-fchmodat-nofollow.c
+
+assertion  XSH.chmod.011
+anchor     functions/chmod.html#ERRORS/ENOENT
+class      required
+since      1988
+says       chmod("missing"), chmod("nodir/f"), chmod("") and
+           fchmodat(AT_FDCWD, "missing", ...) fail with ENOENT.
+test       t/011-enoent.c
+
+assertion  XSH.chmod.012
+anchor     functions/chmod.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       chmod("f/x") and chmod("f/"), with f a regular file, fail with
+           ENOTDIR and f's mode is unchanged.
+test       t/012-enotdir.c
+
+assertion  XSH.chmod.013
+anchor     functions/chmod.html#ERRORS
+class      required
+since      2001
+says       chmod("a"), with a -> b and b -> a, fails with ELOOP.
+test       t/013-eloop.c
+
+assertion  XSH.chmod.014
+anchor     functions/chmod.html#ERRORS
+class      required
+since      1988
+says       chmod() of a name longer than {NAME_MAX} bytes fails with
+           ENAMETOOLONG.
+note       The name also names no existing file (ENOENT), but XBD 4.16
+           makes an over-long component an error of its own, which every
+           system reports as ENAMETOOLONG.
+test       t/014-enametoolong.c
+
+assertion  XSH.chmod.015
+anchor     functions/chmod.html#ERRORS
+class      required
+since      2008
+says       fchmodat(fd, "f", 0600, 0) with fd not open fails with EBADF; a file f
+           in the working directory keeps its mode.
+test       t/015-fchmodat-ebadf.c
+
+assertion  XSH.chmod.016
+anchor     functions/chmod.html#ERRORS
+class      required
+since      2008
+says       fchmodat(fd, "f", 0600, 0) with fd open on a regular file fails with
+           ENOTDIR.
+test       t/016-fchmodat-enotdir.c
+
+assertion  XSH.chmod.017
+anchor     functions/chmod.html#ERRORS/EACCES
+class      required
+since      1988
+says       For a process without appropriate privileges, chmod("s/f") of its
+           own file fails with EACCES when directory s denies search
+           permission.
+test       t/017-eacces.c
+
+assertion  XSH.chmod.018
+anchor     functions/chmod.html#ERRORS/EACCES
+class      required
+since      2008
+says       For a process without appropriate privileges, fchmodat(fd, "f",
+           0600, 0) of its own file fails with EACCES when fd was opened
+           O_RDONLY on a directory whose permissions were then changed to
+           deny search.
+test       t/018-fchmodat-eacces-fd.c
+
+assertion  XSH.chmod.019
+anchor     functions/chmod.html#DESCRIPTION
+class      required
+since      2008
+says       For a process without appropriate privileges, fchmodat(fd, "f",
+           0600, 0) of its own file succeeds when fd was opened with
+           O_SEARCH on a directory whose permissions were then changed to
+           deny search.
+note       O_SEARCH itself is a header item (Tier 0); without it this
+           test is UNRESOLVED.
+test       t/019-fchmodat-search.c

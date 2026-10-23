@@ -106,13 +106,24 @@ int rmdir(const char *path)
 	}
 	if (IS("removes_files") && lstat(path, &st) == 0 && S_ISREG(st.st_mode))
 		return unlink(path);
-	if ((IS("dot_ok") && last_is(path, ".")) || (IS("dotdot_ok") && last_is(path, "..")))
+	if (IS("dot_ok") && last_is(path, "."))
 		return 0;
+	if (IS("slash_rejected") && has_slash_end(path))
+		return fail(ENOTDIR);
+	if (IS("slash_ignored") && has_slash_end(path) && strlen(path) < sizeof b) {
+		strcpy(b, path);
+		while (strlen(b) > 1 && b[strlen(b) - 1] == '/')
+			b[strlen(b) - 1] = '\0';
+		if (lstat(b, &st) == 0 && !S_ISDIR(st.st_mode))
+			return unlink(b);
+	}
 	if (IS("nonempty_removes") && stat(path, &st) == 0 && S_ISDIR(st.st_mode)) {
 		/* empties a directory of plain files first */
 		DIR *d = opendir(path);
 		struct dirent *e;
 		while (d && (e = readdir(d)) != NULL) {
+			if (strcmp(e->d_name, ".") == 0 || strcmp(e->d_name, "..") == 0)
+				continue;
 			snprintf(b, sizeof b, "%s/%s", path, e->d_name);
 			(void)unlink(b);
 		}

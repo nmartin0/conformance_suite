@@ -69,7 +69,7 @@ says       After link() gives a file a second name, stat() of either name
 test       t/007-nlink.c
 
 assertion  XSH.fstatat.008
-anchor     basedefs/V1_chap04.html#tag_04_12
+anchor     basedefs/V1_chap04.html#4.12
 class      required
 since      2008
 says       After a write() to a file, stat() reports st_mtim and st_ctim
@@ -127,7 +127,7 @@ note       O_SEARCH itself is a header item (Tier 0); without it this
 test       t/013-fstatat-search.c
 
 assertion  XSH.fstatat.014
-anchor     basedefs/V1_chap04.html#tag_04_16
+anchor     basedefs/V1_chap04.html#4.16
 class      required
 since      2008
 says       stat("link/"), lstat("link/") and fstatat(AT_FDCWD, "link/", buf,

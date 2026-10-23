@@ -22,8 +22,8 @@ RETURN_VALUE:5cb75ebf    XSH.mkdir.001
 RETURN_VALUE:73bdf30d    XSH.mkdir.004 XSH.mkdir.010 XSH.mkdir.011
 RETURN_VALUE:1f4b16b3    XSH.mkdir.004 XSH.mkdir.010 XSH.mkdir.014 XSH.mkdir.015 XSH.mkdir.016
 ERRORS:b63bcb4b          XSH.mkdir.016
-ERRORS:3a380d47          XSH.mkdir.004
-ERRORS:c1ca8031          impl  which names a file system refuses (none on the reference systems)
+ERRORS:3a380d47          XSH.mkdir.004 XSH.mkdir.020
+ERRORS:c1ca8031          partial XSH.mkdir.019  # whether a file system refuses non-portable names is implementation-defined; only the error is checked
 ERRORS:f39d7871          XSH.mkdir.012
 ERRORS:7252660c          todo  {LINK_MAX} subdirectories: practical only where pathconf(_PC_LINK_MAX) is small
 ERRORS:681b232a          XSH.mkdir.013

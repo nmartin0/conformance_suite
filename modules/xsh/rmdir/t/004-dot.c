@@ -4,7 +4,6 @@
  *
  * ASSERTION XSH.rmdir.004
  * MUTANT    rmdir.dot_ok
- * MUTANT    rmdir.dotdot_ok
  */
 #include "pc.h"
 #include <dirent.h>

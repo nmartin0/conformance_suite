@@ -148,6 +148,8 @@ int mkdir(const char *path, mode_t mode)
 		struct timespec ts[2] = { { 1, 0 }, { 1, 0 } };
 		(void)utimensat(AT_FDCWD, path, ts, 0);
 	}
+	if (IS("eilseq_as_einval") && strchr(path, '\n'))
+		return fail(EINVAL);	/* refuses the name with the wrong error */
 	if (r == -1 && IS("enoent_as_enotdir") && errno == ENOENT)
 		errno = ENOTDIR;
 	if (r == -1 && IS("enotdir_as_enoent") && errno == ENOTDIR)

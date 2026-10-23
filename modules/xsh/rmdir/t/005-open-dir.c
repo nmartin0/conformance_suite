@@ -156,12 +156,17 @@ int main(void)
 	{
 		DIR *dp;
 		struct dirent *e;
-		int fd, f, n = 0;
+		struct stat st;
+		int fd, f, r, n = 0;
 
 		pc_make_dir("d");
 		fd = dir_fd("d");
 		pc_test();
-		pc_check(rmdir("d") == 0, "rmdir() of an open directory failed: %s", pc_errname(errno));
+		r = rmdir("d");
+		if (r == -1 && errno == EBUSY)
+			pc_notinuse("the implementation treats an open directory as busy (EBUSY)");
+		pc_check(r == 0, "rmdir() of an open directory failed: %s", pc_errname(errno));
+		pc_check(fstat(fd, &st) == 0, "fstat() of the removed open directory failed: %s", pc_errname(errno));
 		pc_check(!exists("d"), "the name still exists");
 		f = openat(fd, "new", O_WRONLY | O_CREAT | O_EXCL, 0600);
 		pc_check(f == -1, "openat(O_CREAT) made a file in the removed directory");
