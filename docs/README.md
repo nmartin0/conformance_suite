@@ -8,6 +8,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
 | `standard-issues.md` | Short index of those issues and the assertions that depend on each. |
 | `linux-deviations.md` | Where Linux, glibc and musl differ from POSIX.1-2024: researched entries and what posixcheck has observed. |
 | `roadmap.md` | What comes next, in order. |
+| `review-log.md` | Every independent review: its scope and what it led to. |
 
 None of these contain text from the standard (RULES.md, rule 2):
 requirements are paraphrased and located by page and section.
