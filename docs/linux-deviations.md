@@ -40,6 +40,7 @@ by the named assertion.
 | XBD.fcntl.h.008 (XSH.fcntl.016 blocked) | FAIL | glibc: `F_OWNER_PID`/`F_OWNER_PGRP` are enum constants only, never macros; musl 1.2.4: they and `struct f_owner_ex` need `_GNU_SOURCE` | O.2 |
 | XBD.unistd.h.002 (XSH.lseek.012 to .014 blocked) | FAIL (glibc) | `SEEK_HOLE`/`SEEK_DATA` need `_GNU_SOURCE`; with it, the tests pass | 1.12 |
 | XSH.lseek.011 | FAIL | `lseek()` gives EINVAL, not EOVERFLOW, when the result overflows `off_t` | O.3 |
+| XSH.read.021 | FAIL | `read()`/`recv()` on an unconnected `AF_UNIX` stream socket gives EINVAL; ENOTCONN required (TCP is right) | O.4 |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or
@@ -79,6 +80,15 @@ O.3 **`lseek()` reports EINVAL where EOVERFLOW is required.**
   asserted.
 - Comp: kernel. Kind: long-standing. Observe: XSH.lseek.011.
 - Src: posixcheck run, glibc and musl alike.
+
+O.4 **Unconnected `AF_UNIX` stream socket: EINVAL instead of ENOTCONN.**
+- POSIX (`read`, `recv`, ERRORS): a read on a connection-mode socket that
+  is not connected fails with ENOTCONN. Neither page lists EINVAL for it.
+- Linux: the Unix-domain stream receive path returns EINVAL when the
+  socket is not in the connected state; TCP sockets give ENOTCONN.
+- Comp: kernel. Kind: long-standing. Observe: XSH.read.021 (AF_UNIX).
+- Src: posixcheck run; checked with read() and recv() on AF_UNIX and
+  AF_INET sockets.
 
 ## Things the strict build changes
 

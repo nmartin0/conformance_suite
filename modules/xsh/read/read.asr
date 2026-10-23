@@ -1,0 +1,203 @@
+# XSH read(), pread()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Error tests arrange for exactly one error condition (XSH 2.3).
+
+assertion  XSH.read.001
+anchor     functions/read.html#DESCRIPTION
+anchor     functions/read.html#RETURN VALUE
+class      required
+since      1988
+says       read() on a regular file reads nbyte bytes starting at the
+           file offset, returns nbyte, and advances the offset by that
+           much.
+test       t/001-regular.c
+
+assertion  XSH.read.002
+anchor     functions/read.html#DESCRIPTION
+anchor     functions/read.html#RETURN VALUE
+class      required
+since      1988
+says       A read() across the end of file returns only the bytes before
+           it (never more than nbyte), and the next read() returns 0.
+test       t/002-eof.c
+
+assertion  XSH.read.003
+anchor     functions/read.html#DESCRIPTION
+class      required
+since      1988
+says       read() with nbyte 0 on a valid descriptor returns 0 and
+           changes nothing (the offset stays).
+test       t/003-zero.c
+
+assertion  XSH.read.004
+anchor     functions/read.html#DESCRIPTION
+class      required
+since      1988
+says       read() starting beyond the end of file returns 0.
+test       t/004-beyond-eof.c
+
+assertion  XSH.read.005
+anchor     functions/read.html#DESCRIPTION
+class      required
+since      1988
+says       Bytes of a regular file before the end of file that were
+           never written read as zeros (file extended with ftruncate()).
+test       t/005-unwritten-zeros.c
+
+assertion  XSH.read.006
+anchor     functions/read.html#DESCRIPTION
+class      required
+since      1988
+says       read() of an empty pipe that no process has open for writing
+           returns 0.
+test       t/006-pipe-eof.c
+
+assertion  XSH.read.007
+anchor     functions/read.html#DESCRIPTION
+anchor     functions/read.html#ERRORS/EAGAIN
+class      required
+since      1988
+says       read() of an empty pipe with a writer and O_NONBLOCK set
+           returns -1 with EAGAIN.
+test       t/007-pipe-nonblock.c
+
+assertion  XSH.read.008
+anchor     functions/read.html#DESCRIPTION
+class      required
+since      1988
+says       A blocking read() of an empty pipe with a writer waits until
+           data is written, then returns it.
+note       The writer sleeps 1 s before writing, so the data can only
+           arrive after read() has waited.
+test       t/008-pipe-blocks-data.c
+
+assertion  XSH.read.009
+anchor     functions/read.html#DESCRIPTION
+class      required
+since      1988
+says       A blocking read() of an empty pipe returns 0 once every
+           process that had it open for writing has closed it.
+test       t/009-pipe-blocks-eof.c
+
+assertion  XSH.read.010
+anchor     functions/read.html#DESCRIPTION
+anchor     functions/read.html#RETURN VALUE
+class      required
+since      1988
+says       A blocking read() of a pipe holding fewer bytes than
+           requested returns at once with some of them (between 1 and
+           the number available), without waiting for more.
+test       t/010-pipe-partial.c
+
+assertion  XSH.read.011
+anchor     functions/read.html#DESCRIPTION
+anchor     functions/read.html#ERRORS/EINTR
+class      required
+since      1988
+says       A blocking read() interrupted by a caught signal (without
+           SA_RESTART) before any data arrives returns -1 with EINTR.
+test       t/011-eintr.c
+
+assertion  XSH.read.012
+anchor     functions/read.html#ERRORS/EBADF
+class      required
+since      1988
+says       read() fails with EBADF on a descriptor that is not open, and
+           on one open only for writing.
+test       t/012-ebadf.c
+
+assertion  XSH.read.013
+anchor     functions/read.html#ERRORS/EISDIR
+class      conditional
+when       XSI
+since      2001
+says       XSI: read() on a directory either reads (if the
+           implementation allows it) or fails with EISDIR.
+test       t/013-directory.c
+
+assertion  XSH.read.014
+anchor     functions/read.html#DESCRIPTION
+class      required
+since      1988
+says       A successful read() of more than 0 bytes marks the file's
+           access time for update.
+note       The access time is first set before the modification time, so
+           a relatime mount updates it too. A file system mounted
+           noatime fails this.
+test       t/014-atime.c
+
+assertion  XSH.read.015
+anchor     functions/read.html#DESCRIPTION/pread
+class      required
+since      2001
+says       pread() reads at the given offset and leaves the file offset
+           unchanged.
+test       t/015-pread.c
+
+assertion  XSH.read.016
+anchor     functions/read.html#DESCRIPTION/pread
+anchor     functions/read.html#ERRORS/ESPIPE
+class      required
+since      2001
+says       pread() on a pipe fails with ESPIPE.
+test       t/016-pread-espipe.c
+
+assertion  XSH.read.017
+anchor     functions/read.html#ERRORS/EINVAL
+class      required
+since      2001
+says       pread() on a regular file with a negative offset fails with
+           EINVAL and leaves the file offset unchanged.
+test       t/017-pread-einval.c
+
+assertion  XSH.read.018
+anchor     functions/read.html#DESCRIPTION
+class      required
+since      2001
+says       read() on a connected stream socket returns the data the peer
+           sent, as recv() with no flags would.
+test       t/018-socket.c
+
+assertion  XSH.read.019
+anchor     functions/read.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       read() on an empty connected stream socket with O_NONBLOCK
+           set fails with EAGAIN or EWOULDBLOCK.
+test       t/019-socket-nonblock.c
+
+assertion  XSH.read.020
+anchor     functions/read.html#DESCRIPTION
+anchor     functions/read.html#ERRORS/EAGAIN
+class      required
+since      1988
+says       read() of an empty FIFO that has a writer, with O_NONBLOCK
+           set, fails with EAGAIN.
+test       t/020-fifo-nonblock.c
+
+assertion  XSH.read.021
+anchor     functions/read.html#ERRORS/ENOTCONN
+class      required
+since      2001
+says       read() on a stream socket that is not connected fails with
+           ENOTCONN.
+test       t/021-enotconn.c
+
+assertion  XSH.read.022
+anchor     functions/read.html#ERRORS/ECONNRESET
+class      required
+since      2001
+says       read() on a TCP socket whose peer reset the connection
+           (closed with SO_LINGER 0) fails with ECONNRESET.
+note       Uses TCP over the loopback interface; UNRESOLVED when that is
+           unavailable.
+test       t/022-econnreset.c
+
+assertion  XSH.read.023
+anchor     functions/read.html#DESCRIPTION
+class      required
+since      1988
+says       O_NONBLOCK makes no difference when data is available: a non-
+           blocking read() of a pipe holding data returns it.
+test       t/023-nonblock-data.c
