@@ -5,6 +5,7 @@
  * ASSERTION XSH.pipe.010
  * MUTANT    pipe.emfile_as_enfile
  * MUTANT    pipe.emfile_scribbles
+ * MUTANT    pipe.emfile_leaks
  */
 #include "pc.h"
 #include <errno.h>
@@ -35,6 +36,7 @@ int main(void)
 	pc_check(getrlimit(RLIMIT_NOFILE, &rl) == 0, "getrlimit failed");
 	rl.rlim_cur = (rlim_t)lim;
 	pc_check(setrlimit(RLIMIT_NOFILE, &rl) == 0, "setrlimit failed");
+	pc_check(fcntl(lim - 1, F_GETFD) == -1, "the last slot is not free");
 	pc_test();
 	pc_expect_err(pipe2(p, O_CLOEXEC), EMFILE, "pipe2() with one descriptor free");
 	pc_check(p[0] == -7 && p[1] == -7, "fildes changed to %d, %d", p[0], p[1]);

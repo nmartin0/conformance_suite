@@ -11,6 +11,7 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -31,6 +32,12 @@ static const char *mutant(void)
 
 #define IS(name) (m != NULL && strcmp(m, name) == 0)
 
+/* See ci/mutate.sh: a fault that cannot be planted here is UNCHECKED. */
+static void cannot_plant(const char *m)
+{
+	fprintf(stderr, "pcmutant: cannot plant pipe.%s here\n", m);
+}
+
 static void move_up(int *fd)
 {
 	int n = fcntl(*fd, F_DUPFD, *fd + 3);
@@ -43,6 +50,7 @@ static void move_up(int *fd)
 /* Faults common to pipe() and pipe2(), on a successful result. */
 static void after(const char *m, int *fd)
 {
+	/* On systems with bidirectional pipes (FreeBSD) swapping is invisible. */
 	if (IS("swapped")) {
 		int t = fd[0];
 		fd[0] = fd[1];
@@ -66,7 +74,8 @@ static void after(const char *m, int *fd)
 	}
 	if (IS("old_times")) {
 		struct timespec ts[2] = { { 1, 0 }, { 1, 0 } };
-		(void)futimens(fd[0], ts);
+		if (futimens(fd[0], ts) != 0)
+			cannot_plant(m);	/* FreeBSD, OpenBSD: not on pipes */
 	}
 }
 
@@ -76,6 +85,8 @@ static int failed(const char *m, int *fd, int e)
 		e = ENFILE;
 	if (IS("emfile_scribbles"))
 		fd[0] = fd[1] = 0;
+	if (IS("emfile_leaks") && e == EMFILE)
+		(void)open("/dev/null", O_RDONLY);	/* keeps the one free slot */
 	errno = e;
 	return -1;
 }

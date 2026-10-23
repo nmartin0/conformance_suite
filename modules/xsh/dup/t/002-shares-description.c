@@ -25,9 +25,11 @@ int main(void)
 	pc_check(read(fd, &c, 1) == 1 && c == 'a', "read on the original failed");
 	pc_check(read(d, &c, 1) == 1, "read on the duplicate failed");
 	pc_check(c == 'b', "duplicate read '%c': the offset is not shared", c);
-	pc_check(fcntl(d, F_SETFL, O_NONBLOCK) == 0, "F_SETFL on the duplicate failed");
+	fl = fcntl(d, F_GETFL);
+	pc_check(fl != -1 && fcntl(d, F_SETFL, fl | O_APPEND) == 0,
+	    "F_SETFL on the duplicate failed");
 	fl = fcntl(fd, F_GETFL);
-	pc_check(fl != -1 && (fl & O_NONBLOCK),
-	    "O_NONBLOCK set through the duplicate is not seen on the original");
+	pc_check(fl != -1 && (fl & O_APPEND),
+	    "O_APPEND set through the duplicate is not seen on the original");
 	pc_pass();
 }

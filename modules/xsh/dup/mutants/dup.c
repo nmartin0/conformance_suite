@@ -32,6 +32,15 @@ static const char *mutant(void)
 
 #define IS(name) (m != NULL && strcmp(m, name) == 0)
 
+/*
+ * A fault that cannot be planted on this system says so; ci/mutate.sh
+ * then reports the mutant UNCHECKED instead of MISSED.
+ */
+static void cannot_plant(const char *m)
+{
+	fprintf(stderr, "pcmutant: cannot plant dup.%s here\n", m);
+}
+
 /* A new open file description for the same file (Linux /proc). */
 static int reopen(int fd)
 {
@@ -60,8 +69,9 @@ int dup(int fd)
 		real = (dup_fn)dlsym(RTLD_NEXT, "dup");
 	if (IS("fresh_description")) {
 		r = reopen(fd);
-		if (r >= 0 || errno != ENOENT)
+		if (r >= 0)
 			return r;
+		cannot_plant(m);
 	}
 	r = real(fd);
 	if (r < 0) {
@@ -103,6 +113,11 @@ int dup2(int fd, int fd2)
 		errno = EINVAL;
 		return -1;
 	}
+	if (IS("dup2_max_ok") && fd2 >= 0 && fd2 >= sysconf(_SC_OPEN_MAX) &&
+	    fcntl(fd, F_GETFD) != -1)
+		return fd2;	/* claims success for an out-of-range target */
+	if (IS("dup2_leaks_old") && fd != fd2 && fcntl(fd2, F_GETFD) != -1)
+		(void)fcntl(fd2, F_DUPFD, 100);	/* keeps the old description */
 	if (IS("dup2_fresh_description") && fd != fd2) {
 		int n = reopen(fd);
 		if (n >= 0) {
@@ -110,6 +125,7 @@ int dup2(int fd, int fd2)
 			(void)close(n);
 			return r;
 		}
+		cannot_plant(m);
 	}
 	r = real(fd, fd2);
 	if (r < 0) {
@@ -134,6 +150,10 @@ int dup3(int fd, int fd2, int flag)
 		real = (dup3_fn)dlsym(RTLD_NEXT, "dup3");
 	if (IS("dup3_same_ok") && fd == fd2 && fcntl(fd, F_GETFD) != -1)
 		return fd2;
+	if (IS("dup3_bad_src_closes") && fcntl(fd, F_GETFD) == -1)
+		(void)close(fd2);
+	if (IS("dup2_leaks_old") && fd != fd2 && fcntl(fd2, F_GETFD) != -1)
+		(void)fcntl(fd2, F_DUPFD, 100);
 	if (IS("dup3_cloexec_ignored"))
 		flag &= ~O_CLOEXEC;
 	if (IS("dup3_as_dup"))

@@ -19,7 +19,7 @@ class      required
 since      1988
 says       dup() returns a descriptor for the same open file
            description: the file offset and the file status flags are
-           shared.
+           shared (O_APPEND set through one is seen on the other).
 test       t/002-shares-description.c
 
 assertion  XSH.dup.003
@@ -60,8 +60,9 @@ anchor     functions/dup.html#DESCRIPTION
 class      required
 since      1988
 says       dup2() onto an open fildes2 closes it first: afterwards
-           fildes2 refers to the file of fildes, and the file fildes2
-           had open is no longer reached through it.
+           fildes2 refers to the file of fildes, and the open file
+           description fildes2 had is closed (tested with the only write
+           end of a pipe, whose reader then sees end of file).
 test       t/007-dup2-closes-target.c
 
 assertion  XSH.dup.008
@@ -88,17 +89,20 @@ class      required
 since      1988
 says       dup2() with fildes2 negative, or not less than {OPEN_MAX},
            fails with EBADF.
-note       The {OPEN_MAX} case is skipped when sysconf(_SC_OPEN_MAX) is
-           indeterminate.
+note       The {OPEN_MAX} case is skipped (with a note in the output)
+           when sysconf(_SC_OPEN_MAX) is indeterminate or not below
+           INT_MAX.
 test       t/010-dup2-range.c
 
 assertion  XSH.dup.011
 anchor     functions/dup.html#DESCRIPTION
 class      required
-since      2008
+since      1988
 says       After dup2(fildes, fildes2) with different descriptors,
            FD_CLOEXEC is clear on fildes2, even when set on fildes and
            on the old fildes2.
+note       Follows from the original close-then-F_DUPFD definition; the
+           explicit sentence is from Issue 7.
 test       t/011-dup2-cloexec-clear.c
 
 assertion  XSH.dup.012
@@ -117,7 +121,8 @@ anchor     functions/dup.html#DESCRIPTION/O_CLOEXEC
 class      required
 since      2024
 says       dup3() sets FD_CLOEXEC on fildes2 exactly when the flag
-           argument includes O_CLOEXEC, whatever fildes had.
+           argument includes O_CLOEXEC, whatever fildes and the old
+           fildes2 had.
 note       dup3() is new in Issue 8; see XSH.dup.012.
 test       t/013-dup3-flags.c
 
@@ -126,8 +131,9 @@ anchor     functions/dup.html#DESCRIPTION
 class      required
 since      2024
 says       dup3(fildes, fildes2, 0) returns fildes2, which then refers
-           to the same open file description as fildes, replacing
-           whatever fildes2 had open.
+           to the same open file description as fildes, closing the
+           description fildes2 had (the only write end of a pipe, whose
+           reader then sees end of file).
 note       dup3() is new in Issue 8; see XSH.dup.012.
 test       t/014-dup3-target.c
 

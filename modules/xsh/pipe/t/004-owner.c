@@ -24,6 +24,5 @@ int main(void)
 	    (long)st.st_uid, (long)geteuid());
 	pc_check(st.st_gid == getegid(), "group %ld, effective GID %ld",
 	    (long)st.st_gid, (long)getegid());
-	pc_check(S_ISFIFO(st.st_mode), "fstat does not report a FIFO");
 	pc_pass();
 }

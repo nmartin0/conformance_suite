@@ -12,7 +12,9 @@
 # A mutant is CAUGHT when the baseline is PASS and the mutant run is FAIL.
 # Anything else is reported; MISSED (the test passed with the fault in
 # place) makes the script exit 1. When the baseline is not PASS on this
-# machine, the mutant cannot be judged here and is reported UNCHECKED.
+# machine, the mutant cannot be judged here and is reported UNCHECKED; so
+# is a mutant whose shim reports "pcmutant: cannot plant" in the test's
+# output (the fault needs something this system lacks, such as /proc).
 
 set -u
 here=$(cd "$(dirname "$0")/.." && pwd)
@@ -64,6 +66,12 @@ while read -r id mutant; do
 	fi
 	run "$work/m.$n" "$id" "$mutant"
 	got=$(code_of "$work/m.$n" "$id")
+	if [ "$got" != FAIL ] &&
+	    grep -q 'pcmutant: cannot plant' "$work/m.$n/out/$id.txt" 2>/dev/null; then
+		printf 'UNCHECKED %-40s %-28s fault cannot be planted here\n' "$id" "$mutant"
+		unchecked=$((unchecked + 1))
+		continue
+	fi
 	if [ "$got" = FAIL ]; then
 		printf 'CAUGHT    %-40s %-28s %s\n' "$id" "$mutant" \
 		    "$(note_of "$work/m.$n" "$id")"

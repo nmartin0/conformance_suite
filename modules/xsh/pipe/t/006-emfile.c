@@ -5,6 +5,7 @@
  * ASSERTION XSH.pipe.006
  * MUTANT    pipe.emfile_as_enfile
  * MUTANT    pipe.emfile_scribbles
+ * MUTANT    pipe.emfile_leaks
  */
 #include "pc.h"
 #include <errno.h>

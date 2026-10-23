@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.dup.007
  * MUTANT    dup.dup2_picks_lowest
+ * MUTANT    dup.dup2_leaks_old
  */
 #include "pc.h"
 #include <errno.h>
@@ -12,19 +13,26 @@
 
 int main(void)
 {
-	int a, b, r;
+	int a, b, p[2], r, fl;
+	ssize_t n;
 	char c;
 
 	pc_begin("XSH.dup.007");
 	pc_make_file("a", "A");
-	pc_make_file("b", "B");
 	a = open("a", O_RDONLY);
-	b = open("b", O_RDONLY);
-	pc_check(a >= 0 && b >= 0, "cannot open the files");
+	pc_check(a >= 0, "cannot open a");
+	/* fildes2 is the only write end of a pipe: its close shows as EOF. */
+	pc_check(pipe(p) == 0, "pipe failed");
+	b = p[1];
+	fl = fcntl(p[0], F_GETFL);
+	pc_check(fl != -1 && fcntl(p[0], F_SETFL, fl | O_NONBLOCK) == 0,
+	    "cannot set O_NONBLOCK");
 	pc_test();
 	r = dup2(a, b);
 	pc_check(r == b, "dup2(a, b) returned %d, expected %d", r, b);
-	pc_check(read(b, &c, 1) == 1, "read on fildes2 failed");
-	pc_check(c == 'A', "fildes2 still reads file b");
+	pc_check(read(b, &c, 1) == 1 && c == 'A', "fildes2 does not read file a");
+	n = read(p[0], &c, 1);
+	pc_check(n == 0, "the old fildes2 (pipe write end) was not closed: read gave %ld (%s)",
+	    (long)n, n < 0 ? pc_errname(errno) : "-");
 	pc_pass();
 }

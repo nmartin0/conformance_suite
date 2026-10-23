@@ -31,9 +31,10 @@ test       t/003-flags-clear.c
 assertion  XSH.pipe.004
 anchor     functions/pipe.html#DESCRIPTION
 class      required
-since      1988
+since      2008
 says       The pipe's user ID is the process's effective user ID and its
            group ID the effective group ID (fstat on either end).
+note       The owner sentence was added in Issue 7 (SD5-XSH-ERN-156).
 test       t/004-owner.c
 
 assertion  XSH.pipe.005
@@ -41,7 +42,8 @@ anchor     functions/pipe.html#DESCRIPTION
 class      required
 since      1988
 says       pipe() sets the pipe's access, modification and status change
-           times: none is earlier than one second before the call.
+           times: none is earlier than one second before the call or
+           later than one second after it.
 note       The one-second allowance covers file times taken from a
            coarser clock than CLOCK_REALTIME.
 test       t/005-times.c
