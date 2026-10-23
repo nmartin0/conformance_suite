@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (230 assertions):
+- Modules (251 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -59,11 +59,15 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     FD_CLOFORK, directory streams, times, alarm, pending signals,
     private and shared mappings, timers, threads, process-shared
     mutexes, CPU-time clock, semaphores, inherited attributes, _Fork().
+  - `xsh/wait` (21): blocking and immediate wait, status macros, pid
+    selection (any, one, own group, other group), WNOHANG, WUNTRACED,
+    WCONTINUED, EINTR, ECHILD, EINVAL, consumption, SIGCHLD clearing,
+    reparenting, last-thread exit.
   - `xbd/unistd.h` (2): POSIX_CLOSE_RESTART, SEEK_*; `xbd/fcntl.h` now 8.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).
 - `ci/lint.py`: traceability and anchor checks; `ci/mutate.sh`: mutation
-  checks (323 mutants); `ci/catalog.py`: shared parser.
+  checks (346 mutants); `ci/catalog.py`: shared parser.
 - `analysis/analyze.py`: load, runs, verdict, failures, matrix, diff,
   coverage, html, calibrate (checks a reference run against
   `known/*.known`, its expected failures).

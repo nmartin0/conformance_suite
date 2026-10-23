@@ -10,3 +10,4 @@ XBD.fcntl.h.008    FAIL         linux*    O.2: F_OWNER_*, struct f_owner_ex only
 XSH.lseek.011      FAIL         linux*    O.3: EINVAL, not EOVERFLOW, for an off_t overflow
 XSH.read.021       FAIL         linux*    O.4: EINVAL, not ENOTCONN, on an unconnected AF_UNIX stream socket
 XSH.write.022      FAIL         linux*    1.4: pwrite() with O_APPEND appends, ignoring the offset
+XSH.wait.019       FAIL         linux*    O.5: a blocked, pending SIGCHLD stays pending after wait()

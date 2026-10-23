@@ -43,6 +43,7 @@ by the named assertion.
 | XSH.read.021 | FAIL | `read()`/`recv()` on an unconnected `AF_UNIX` stream socket gives EINVAL; ENOTCONN required (TCP is right) | O.4 |
 | XSH.write.022 | FAIL | `pwrite()` on an `O_APPEND` descriptor appends instead of writing at the offset | 1.4 |
 | XSH.fork.018 | UNINITIATED (glibc) | `_Fork()` exists but is not declared under the strict build | 2.10 |
+| XSH.wait.019 | FAIL | with SIGCHLD blocked, `wait()` leaves the pending SIGCHLD pending after reporting the only child | O.5 |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or
@@ -92,6 +93,17 @@ O.4 **Unconnected `AF_UNIX` stream socket: EINVAL instead of ENOTCONN.**
 - Comp: kernel. Kind: long-standing. Observe: XSH.read.021 (AF_UNIX).
 - Src: posixcheck run; checked with read() and recv() on AF_UNIX and
   AF_INET sockets.
+
+O.5 **`wait()` does not clear a pending, blocked SIGCHLD.**
+- POSIX (`wait`, DESCRIPTION): on an implementation that does not queue
+  SIGCHLD, when SIGCHLD is blocked and wait() or waitpid() returns a
+  child's status, a pending SIGCHLD is cleared unless another child's
+  status is available.
+- Linux: SIGCHLD is not queued (one pending instance), and it stays
+  pending after wait() reaps the only child; a later sigwait() or
+  unblock still delivers it.
+- Comp: kernel. Kind: long-standing. Observe: XSH.wait.019.
+- Src: posixcheck run, glibc and musl alike.
 
 ## Things the strict build changes
 
