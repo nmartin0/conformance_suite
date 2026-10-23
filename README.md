@@ -67,7 +67,11 @@ assertion: code, assertion, milliseconds, note.
 | UNSUPPORTED | conditional assertion; the option is not claimed |
 | UNTESTED | no test yet, or untestable (with a reason) |
 | UNINITIATED | the test never produced a result (did not build, exited without reporting) |
-| INSPECT | output saved for a person to check |
+| INSPECT | output saved for a person to check; also a FAIL of a `disputed` assertion |
+
+An assertion of class `disputed` tests one reading of text that the standard
+itself leaves open (its `note` names the standard issue); its FAIL is
+logged as INSPECT, not counted against the system.
 
 `results/out/<ID>.txt` holds each test's full output.
 

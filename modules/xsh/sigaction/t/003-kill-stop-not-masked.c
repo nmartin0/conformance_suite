@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.sigaction.003
+ * MUTANT    sigaction.mask_ignored
+ * MUTANT    sigaction.kill_in_mask_einval
  */
 #include "pc.h"
 #include <errno.h>
@@ -81,7 +83,7 @@ int main(void)
 	sigaddset(&sa.sa_mask, SIGUSR2);
 	pc_test();
 	pc_expect_ok(sigaction(SIGUSR1, &sa, NULL), "sigaction() with SIGKILL and SIGSTOP in sa_mask");
-	pc_check(raise(SIGUSR1) == 0, "raise failed");
+	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
 	pc_check(ran, "the handler did not run");
 	pc_check(!kill_in, "SIGKILL was blocked during the handler");
 	pc_check(!stop_in, "SIGSTOP was blocked during the handler");

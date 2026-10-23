@@ -81,7 +81,7 @@ int main(void)
 	pc_check(sigismember(&o.sa_mask, SIGUSR2) == 1, "oact->sa_mask lost SIGUSR2");
 	pc_check((o.sa_flags & SA_RESTART) != 0, "oact->sa_flags lost SA_RESTART");
 	pc_check((o.sa_flags & SA_SIGINFO) == 0, "oact->sa_flags has SA_SIGINFO, which was not set");
-	pc_check(raise(SIGUSR1) == 0, "raise failed");
+	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
 	pc_check(ran, "the handler did not run after the query: the query changed the action");
 	pc_pass();
 }

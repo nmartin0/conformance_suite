@@ -18,11 +18,11 @@ DESCRIPTION:beb431fa        XSH.sigaction.005
 DESCRIPTION:e51e8101        none  introduces the flags
 DESCRIPTION:4a6c8144        none  introduces the flags
 DESCRIPTION:c2a3e47b        XSH.sigaction.008  # the stop half; XSI: continued children not tested
-DESCRIPTION:aa8316ee        partial XSH.sigaction.007  # stops; the XSI continue case is a permission
+DESCRIPTION:aa8316ee        partial XSH.sigaction.007  # stops; the XSI continue case is a permission; "if the implementation supports SIGCHLD" is stale (SI-25)
 DESCRIPTION:a9ff2fad        XSH.sigaction.008 XSH.sigaction.011
-DESCRIPTION:49faa940        XSH.sigaction.009
+DESCRIPTION:49faa940        XSH.sigaction.009  # "calling process" read as the receiving thread (SI-26)
 DESCRIPTION:d14d9e8d        XSH.sigaction.009
-DESCRIPTION:6ad043db        XSH.sigaction.010
+DESCRIPTION:6ad043db        XSH.sigaction.010 XSH.sigaction.023
 DESCRIPTION:27e89355        none  an informative note, and it contradicts the normative reset rule (standard issue SI-21)
 DESCRIPTION:128d9d16        none  a permission
 DESCRIPTION:12d586ba        none  defines interruptible functions; restart behaviour in XSH.sigaction.012
@@ -41,7 +41,7 @@ DESCRIPTION:51fe74ac        none  unspecified
 DESCRIPTION:8acc376c        todo  XSI: SA_NOCLDWAIT for SIGCHLD: no zombie, wait() gives ECHILD (see SI-9, SI-10)
 DESCRIPTION:52bd6a24        XSH.sigaction.015
 DESCRIPTION:cef50a3d        XSH.sigaction.014
-DESCRIPTION:d145eb0e        XSH.sigaction.014
+DESCRIPTION:d145eb0e        XSH.sigaction.014  # names sigprocmask() and sigsuspend() but not pthread_sigmask() (SI-26)
 DESCRIPTION:496560d9        partial XSH.sigaction.014 XSH.sigaction.015  # the SA_RESETHAND case conflicts with cef50a3d and 128d9d16 (standard issue SI-22); not tested
 DESCRIPTION:87d7406f        XSH.sigaction.014
 DESCRIPTION:fc73fc86        XSH.sigaction.016  # reset by exec: XSH.exec.016
@@ -50,9 +50,10 @@ DESCRIPTION:fc40c235        XSH.sigaction.017
 DESCRIPTION:befe2ef6        XSH.sigaction.018
 DESCRIPTION:07d0d247        none  unspecified
 DESCRIPTION:2cf19668        partial XSH.sigaction.004  # the one-argument call; queuing without SA_SIGINFO is implementation-defined
-DESCRIPTION:119802ee        XSH.sigaction.020 XSH.sigaction.021
+DESCRIPTION:119802ee        partial XSH.sigaction.020  # realtime signals; for others the text conflicts with <signal.h> (SI-24, XSH.sigaction.021 disputed)
 DESCRIPTION:29870b4e        XSH.sigaction.006
 DESCRIPTION:580d352e        none  unspecified
 RETURN_VALUE:fc04a869       XSH.sigaction.018 XSH.sigaction.019
 ERRORS:e605906a             XSH.sigaction.018 XSH.sigaction.019
 ERRORS:9ba08332             optional
+ERRORS:4cec3169             optional  non-XSI systems may refuse SA_SIGINFO outside the realtime range; no errno is named (SI-23); the SA_SIGINFO tests use SIGRTMIN

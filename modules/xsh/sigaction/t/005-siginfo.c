@@ -71,12 +71,12 @@ int main(void)
 {
 	pc_begin("XSH.sigaction.005");
 	pc_test();
-	install_info(SIGUSR1, h, 0);
-	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
+	install_info(SIGRTMIN, h, 0);
+	pc_check(kill(getpid(), SIGRTMIN) == 0, "kill failed");
 	pc_check(ran != 0, "the handler did not run");
 	pc_check(ran == 1, "the handler got a null siginfo_t pointer");
-	pc_check(argsig == SIGUSR1, "the first argument is %d, expected SIGUSR1", argsig);
-	pc_check(info.si_signo == SIGUSR1, "si_signo is %d, expected SIGUSR1", info.si_signo);
+	pc_check(argsig == SIGRTMIN, "the first argument is %d, expected SIGRTMIN", argsig);
+	pc_check(info.si_signo == SIGRTMIN, "si_signo is %d, expected SIGRTMIN", info.si_signo);
 	pc_check(info.si_code == SI_USER, "si_code is %d, expected SI_USER for kill()", info.si_code);
 	pc_check(info.si_pid == getpid(), "si_pid is %ld, expected %ld", (long)info.si_pid, (long)getpid());
 	pc_check(info.si_uid == getuid(), "si_uid is %ld, expected %ld", (long)info.si_uid, (long)getuid());

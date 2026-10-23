@@ -72,7 +72,7 @@ int main(void)
 	sigemptyset(&n.sa_mask);
 	pc_expect_ok(sigaction(SIGUSR1, &n, &o), "sigaction(SIGUSR1, &act, &oact)");
 	pc_check(o.sa_handler == h1, "oact does not hold the previous handler");
-	pc_check(raise(SIGUSR1) == 0, "raise failed");
+	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
 	pc_check(which == 2, which == 1 ? "the old handler ran" : "no handler ran");
 	pc_pass();
 }

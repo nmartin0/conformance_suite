@@ -203,6 +203,11 @@ def units_of(path, section=None, xcu=False):
                     mode = "may"
                 if "shall not return" in low or "shall not set" in low:
                     add(sec, "shall", "", opts, text)
+                # A paragraph that is more than the list's introduction
+                # ("In addition, ... may fail if <condition>.") is a unit.
+                elif re.search(r"\b(shall|may) fail if\b\s*\S", text) and \
+                        not re.search(r"\b(shall|may) fail if:\s*$", text):
+                    add(sec, "error-" + (mode or "may"), "", opts, text)
                 continue
             if sec == "ERRORS" and tag == "dd" and mode:
                 add(sec, "error-" + mode, label, opts, f"{label} {text}")

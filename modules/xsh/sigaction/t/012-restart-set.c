@@ -55,7 +55,7 @@ static void mask1(int how, int sig)
 }
 
 static volatile sig_atomic_t alarms;
-static int rescue_w = -1;
+static volatile sig_atomic_t rescue_w = -1;
 
 /* Re-armed until the read gives up; after two, unblock a wrongly restarted read. */
 static void on_alarm(int sig)

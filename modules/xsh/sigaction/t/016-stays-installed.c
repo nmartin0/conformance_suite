@@ -70,7 +70,7 @@ int main(void)
 	pc_test();
 	install(SIGUSR1, h, 0, NULL);
 	for (i = 0; i < 3; i++)
-		pc_check(raise(SIGUSR1) == 0, "raise failed");
+		pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
 	pc_check(runs == 3, "the handler ran %d times for 3 signals", (int)runs);
 	pc_pass();
 }

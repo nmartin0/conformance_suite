@@ -61,7 +61,7 @@ int main(void)
 	pc_begin("XSH.sigaction.022");
 	pc_test();
 	install(SIGUSR1, SIG_IGN, 0, NULL);
-	pc_check(raise(SIGUSR1) == 0, "raise failed");
+	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
 	pc_check(sigpending(&p) == 0 && sigismember(&p, SIGUSR1) != 1, "the ignored SIGUSR1 is pending");
 	pc_pass();
 }

@@ -55,16 +55,20 @@ static void mask1(int how, int sig)
 		pc_unresolved("sigprocmask failed");
 }
 
-static char stack_area[65536];
+static char stack_area[65536 + 32768];	/* more than MINSIGSTKSZ on known systems */
 static volatile sig_atomic_t ran, on_alt;
+
+static volatile sig_atomic_t ss_on;
 
 static void h(int sig)
 {
 	char here;
 	uintptr_t p = (uintptr_t)&here, lo = (uintptr_t)stack_area;
+	stack_t cur;
 
 	(void)sig;
 	on_alt = p >= lo && p < lo + sizeof stack_area;
+	ss_on = sigaltstack(NULL, &cur) == 0 && (cur.ss_flags & SS_ONSTACK) != 0;
 	ran = 1;
 }
 
@@ -76,14 +80,19 @@ int main(void)
 	ss.ss_sp = stack_area;
 	ss.ss_size = sizeof stack_area;
 	ss.ss_flags = 0;
+#ifdef MINSIGSTKSZ
+	if (sizeof stack_area < (size_t)MINSIGSTKSZ)
+		pc_unresolved("MINSIGSTKSZ is larger than the test's stack");
+#endif
 	pc_check(sigaltstack(&ss, NULL) == 0, "sigaltstack failed: %s", pc_errname(errno));
 	pc_test();
 	install(SIGUSR1, h, SA_ONSTACK, NULL);
 	install(SIGUSR2, h, 0, NULL);
-	pc_check(raise(SIGUSR1) == 0 && ran, "the SA_ONSTACK handler did not run");
+	pc_check(kill(getpid(), SIGUSR1) == 0 && ran, "the SA_ONSTACK handler did not run");
 	pc_check(on_alt, "the SA_ONSTACK handler did not run on the alternate stack");
+	pc_check(ss_on, "sigaltstack() inside the SA_ONSTACK handler does not report SS_ONSTACK");
 	ran = 0;
-	pc_check(raise(SIGUSR2) == 0 && ran, "the other handler did not run");
-	pc_check(!on_alt, "a handler without SA_ONSTACK ran on the alternate stack");
+	pc_check(kill(getpid(), SIGUSR2) == 0 && ran, "the other handler did not run");
+	pc_check(!on_alt && !ss_on, "a handler without SA_ONSTACK ran on the alternate stack");
 	pc_pass();
 }

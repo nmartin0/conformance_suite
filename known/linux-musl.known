@@ -19,5 +19,5 @@ XSH.exec.028       FAIL         linux*    O.7: the thread CPU-time clock is not 
 XSH.exec.043       FAIL         linux*    O.9: sysconf(_SC_ARG_MAX) is below the real limit
 XSH.exec.044       FAIL         linux*    O.8: execvp() gives ENOEXEC instead of running sh
 XSH.exec.045       FAIL         linux*    O.8: execlp() gives ENOEXEC instead of running sh
-XSH.sigaction.010  FAIL         linux*    O.10: SA_RESETHAND does not clear SA_SIGINFO
-XSH.sigaction.021  FAIL         linux*    O.11: sigqueue() does not queue signals below SIGRTMIN
+XSH.sigaction.023  FAIL         linux*    O.10: SA_RESETHAND does not clear SA_SIGINFO
+XSH.sigaction.021  INSPECT      linux*    SI-24 (disputed): sigqueue() does not queue signals below SIGRTMIN

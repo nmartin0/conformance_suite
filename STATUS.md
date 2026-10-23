@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (359 assertions):
+- Modules (360 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -81,7 +81,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     errors, execvp/execlp search and the sh fallback, fexecve, start-up
     locale and floating-point state, XSI set-ID bits, shared memory,
     nice.
-  - `xsh/sigaction` (22): querying and replacing actions, SIGKILL and
+  - `xsh/sigaction` (23): querying and replacing actions, SIGKILL and
     SIGSTOP never masked, one- and three-argument handlers, siginfo_t for
     kill() and sigqueue(), SA_NOCLDSTOP, SA_ONSTACK, SA_RESETHAND,
     SA_RESTART, SA_NODEFER, the handler's mask, signal() round trip,
@@ -164,8 +164,8 @@ anything.
 ## Issues in the standard
 
 `docs/standard-issues-report.md` is the full write-up of conflicts,
-mistakes and unclear points found in POSIX.1-2024 (SI-1 to SI-22, Q-1 to
-Q-10 so far), for The Austin Group; `docs/standard-issues.md` indexes them
+mistakes and unclear points found in POSIX.1-2024 (SI-1 to SI-26, Q-1 to
+Q-11 so far), for The Austin Group; `docs/standard-issues.md` indexes them
 by assertion. A shared copy: https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 Reviews should report any new ones; add them to both files.
 

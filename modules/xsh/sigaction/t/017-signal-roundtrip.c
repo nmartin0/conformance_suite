@@ -69,7 +69,7 @@ int main(void)
 	pc_expect_ok(sigaction(SIGUSR1, NULL, &o), "sigaction(SIGUSR1, NULL, &oact)");
 	install(SIGUSR1, h2, 0, NULL);
 	pc_expect_ok(sigaction(SIGUSR1, &o, NULL), "sigaction() with the reported action");
-	pc_check(raise(SIGUSR1) == 0, "raise failed");
+	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
 	pc_check(which == 1, which == 2 ? "the later handler still runs" : "no handler ran");
 	pc_pass();
 }

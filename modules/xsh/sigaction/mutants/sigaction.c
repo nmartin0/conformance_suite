@@ -55,6 +55,16 @@ static sigaction_fn real_sigaction(void)
 /* What the application asked for, per signal, when a trampoline stands in. */
 static struct sigaction wanted[65];
 static volatile sig_atomic_t tramp_on[65];
+/* The trampoline state before the current call changed it. */
+static struct sigaction prev[65];
+static volatile sig_atomic_t prev_on[65];
+
+/* Whether the action in place before this call was a trampoline for act. */
+static int tramp_on_prev(int sig, struct sigaction *out)
+{
+	*out = prev[sig];
+	return prev_on[sig];
+}
 
 static void trampoline(int sig)
 {
@@ -64,6 +74,11 @@ static void trampoline(int sig)
 	if (sig <= 0 || sig > 64)
 		return;
 	w = wanted[sig];
+	if (IS("mask_replaces")) {
+		sigset_t only = w.sa_mask;	/* the earlier mask is dropped */
+		sigaddset(&only, sig);
+		(void)sigprocmask(SIG_SETMASK, &only, NULL);
+	}
 	if (IS("resethand_always")) {
 		struct sigaction d;
 		memset(&d, 0, sizeof d);
@@ -96,6 +111,11 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact)
 	}
 	if (IS("act_ignored") && act != NULL)
 		act = NULL;
+	if (IS("kill_in_mask_einval") && act != NULL &&
+	    (sigismember(&act->sa_mask, SIGKILL) == 1 || sigismember(&act->sa_mask, SIGSTOP) == 1)) {
+		errno = EINVAL;
+		return -1;
+	}
 	if (IS("query_resets") && act == NULL && sig > 0 && sig < 65 && sig != SIGKILL && sig != SIGSTOP) {
 		r = real_sigaction()(sig, NULL, oact);
 		memset(&a, 0, sizeof a);
@@ -134,22 +154,39 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact)
 			int caught = (a.sa_flags & SA_SIGINFO) ||
 			    (a.sa_handler != SIG_DFL && a.sa_handler != SIG_IGN);
 			int t = caught && ((IS("siginfo_dropped") && (a.sa_flags & SA_SIGINFO)) ||
-			    IS("resethand_always"));
+			    IS("resethand_always") || IS("mask_replaces"));
 			if (t) {
+				prev[sig] = wanted[sig];
+				prev_on[sig] = tramp_on[sig];
 				wanted[sig] = a;
 				a.sa_handler = trampoline;
 				a.sa_flags &= ~(SA_SIGINFO | SA_RESETHAND);
 				tramp_on[sig] = 1;
 			}
-			else
+			else {
+				prev[sig] = wanted[sig];
+				prev_on[sig] = tramp_on[sig];
 				tramp_on[sig] = 0;
+			}
 		}
 		act = &a;
 	}
-	r = real_sigaction()(sig, act, oact);
+	{
+		/* What the application set before, if a trampoline stood in. */
+		struct sigaction before;
+		int had = 0;
+		if (sig > 0 && sig < 65) {
+			if (act == NULL) {	/* a query: the current state */
+				before = wanted[sig];
+				had = tramp_on[sig];
+			} else
+				had = tramp_on_prev(sig, &before);
+		}
+		r = real_sigaction()(sig, act, oact);
+		if (r == 0 && oact != NULL && had && oact->sa_handler == trampoline)
+			*oact = before;
+	}
 	if (r == 0 && oact != NULL) {
-		if (sig > 0 && sig < 65 && tramp_on[sig] && oact->sa_handler == trampoline && act == NULL)
-			*oact = wanted[sig];	/* report what the application set */
 		if (IS("oact_wrong_handler"))
 			oact->sa_handler = SIG_DFL;
 		if (IS("oact_mask_lost"))

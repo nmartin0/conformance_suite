@@ -27,8 +27,6 @@ since      1988
 says       SIGKILL and SIGSTOP in sa_mask are silently left out: sigaction()
            succeeds, and while the handler runs neither is in the
            signal mask, while another signal from sa_mask (SIGUSR2) is.
-nomutant   the kernel builds the mask; a wrapper cannot add SIGKILL to
-           it
 test       t/003-kill-stop-not-masked.c
 
 assertion  XSH.sigaction.004
@@ -42,10 +40,10 @@ test       t/004-one-argument.c
 assertion  XSH.sigaction.005
 anchor     functions/sigaction.html#DESCRIPTION
 class      required
-since      2001
-says       With SA_SIGINFO the function in sa_sigaction is called with the
-           signal number and a siginfo_t: for kill() from the process
-           itself, si_signo is the signal, si_code is SI_USER, and
+since      2008
+says       With SA_SIGINFO (on SIGRTMIN) the function in sa_sigaction is
+           called with the signal number and a siginfo_t: for kill() from
+           the process itself, si_signo is the signal, si_code is SI_USER, and
            si_pid and si_uid are the sender's process ID and real user
            ID.
 note       si_pid and si_uid for SI_USER come from XSH 2.4.3 and
@@ -56,7 +54,7 @@ assertion  XSH.sigaction.006
 anchor     functions/sigaction.html#DESCRIPTION
 class      required
 since      2008
-says       With SA_SIGINFO, a signal sent with sigqueue() reaches the handler
+says       With SA_SIGINFO, a signal (SIGRTMIN) sent with sigqueue() reaches the handler
            with si_code SI_QUEUE and the value given (si_value.sival_int
            1234).
 test       t/006-sigqueue-value.c
@@ -67,14 +65,13 @@ class      required
 since      2001
 says       With SIGCHLD caught and SA_NOCLDSTOP clear, SIGCHLD is generated
            when a child stops (accepted with sigtimedwait() within 5 s).
-note       Job control signals were optional before 2001; the stop part
-           of this rule is old.
+note       SIGCHLD has been mandatory since 2001 (standard issue SI-25).
 test       t/007-nocldstop-clear.c
 
 assertion  XSH.sigaction.008
 anchor     functions/sigaction.html#DESCRIPTION
 class      required
-since      1988
+since      2001
 says       With SIGCHLD caught and SA_NOCLDSTOP set, no SIGCHLD is generated
            when a child stops: after waitid(WSTOPPED|WNOWAIT) shows the
            stop, SIGCHLD is not pending.
@@ -94,16 +91,16 @@ test       t/009-onstack.c
 assertion  XSH.sigaction.010
 anchor     functions/sigaction.html#DESCRIPTION
 class      required
-since      2001
-says       With SA_RESETHAND (and SA_SIGINFO), the action is SIG_DFL and
-           SA_SIGINFO is clear when the handler is entered, and stays
-           so: the handler runs once.
+since      2008
+says       With SA_RESETHAND, the action for the signal (SIGRTMIN, with
+           SA_SIGINFO) is SIG_DFL when the handler is entered and after it
+           returns.
 test       t/010-resethand.c
 
 assertion  XSH.sigaction.011
 anchor     functions/sigaction.html#DESCRIPTION
 class      required
-since      1988
+since      2001
 says       With SIGCHLD caught and SA_NOCLDSTOP set, a child's termination
            still generates SIGCHLD (accepted with sigtimedwait() within
            5 s): the flag only suppresses the SIGCHLD for stops.
@@ -112,7 +109,7 @@ test       t/011-nocldstop-exit.c
 assertion  XSH.sigaction.012
 anchor     functions/sigaction.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       With SA_RESTART on a caught signal, read() on an empty pipe that
            the signal interrupts does not fail with EINTR: it restarts and
            returns the byte written later.
@@ -139,7 +136,7 @@ test       t/014-mask-in-handler.c
 assertion  XSH.sigaction.015
 anchor     functions/sigaction.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       With SA_NODEFER the signal is not added to the mask while its
            handler runs; if sa_mask includes it, it is blocked.
 test       t/015-nodefer.c
@@ -192,14 +189,15 @@ test       t/020-queued-rt.c
 
 assertion  XSH.sigaction.021
 anchor     functions/sigaction.html#DESCRIPTION
-class      required
+class      disputed
 since      2008
 says       With SA_SIGINFO set for SIGUSR1 (not a realtime signal), three
            occurrences sent with sigqueue() while it is blocked are all
            delivered when it is unblocked, in the order sent.
-note       Neither this page nor XSH 2.4.2 limits queuing to SIGRTMIN-
-           SIGRTMAX when SA_SIGINFO is set and the signal comes from
-           sigqueue().
+note       Disputed (standard issue SI-24): this page, XSH 2.4.2 and
+           sigqueue() require queuing for any signal with SA_SIGINFO,
+           but <signal.h> supports the realtime behaviour only in
+           SIGRTMIN-SIGRTMAX. A FAIL is logged as INSPECT.
 nomutant   queuing is done by the kernel
 test       t/021-queued-usr1.c
 
@@ -211,3 +209,13 @@ says       With the action SIG_IGN, SIGUSR1 (default action: terminate) sent
            with raise() is discarded: the process goes on and the signal is
            not pending.
 test       t/022-sig-ign.c
+
+assertion  XSH.sigaction.023
+anchor     functions/sigaction.html#DESCRIPTION
+class      required
+since      2008
+says       With SA_RESETHAND and SA_SIGINFO, SA_SIGINFO is clear in the action
+           reported by sigaction() inside the handler.
+nomutant   the kernel resets the action; a wrapper cannot make it keep
+           the flag
+test       t/023-resethand-siginfo.c

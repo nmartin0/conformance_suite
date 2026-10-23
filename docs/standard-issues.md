@@ -34,6 +34,10 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-20 | exec inherited list: file size limit twice, a "process signal mask" | editorial | XSH.exec.018, XSH.exec.025 |
 | SI-21 | sigaction() SA_RESETHAND: informative SIGILL/SIGTRAP note contradicts the reset rule | conflict | (sigaction.cov) |
 | SI-22 | sigaction(): signal blocked during an SA_RESETHAND handler? three statements disagree | conflict | (sigaction.cov) |
+| SI-23 | sigaction(): non-XSI SA_SIGINFO "may fail" names no errno | defect | (sigaction.cov) |
+| SI-24 | queuing with SA_SIGINFO outside SIGRTMIN-SIGRTMAX: sigaction/2.4.2/sigqueue vs <signal.h> | conflict | XSH.sigaction.021 (disputed) |
+| SI-25 | sigaction() SA_NOCLDSTOP: "if the implementation supports SIGCHLD" | editorial | XSH.sigaction.007 |
+| SI-26 | sigaction(): SA_ONSTACK and handler mask worded per process | editorial | XSH.sigaction.009, XSH.sigaction.014 |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
@@ -44,3 +48,4 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-8 | XSH 2.3: ENAMETOOLONG/ENOTDIR always overlap ENOENT for lookups | question | XSH.exec.038, XSH.exec.041 |
 | Q-9 | exec E2BIG: which {ARG_MAX} when sysconf() under-reports | question | XSH.exec.043 |
 | Q-10 | execvp() sh fallback when argv[0] is a null pointer | question | (not tested) |
+| Q-11 | raise(): must the signal be delivered before it returns? | question | (sigaction tests use kill()) |

@@ -61,8 +61,9 @@ static void h(int sig, siginfo_t *si, void *uc)
 {
 	(void)sig;
 	(void)uc;
-	info = *si;
-	ran = 1;
+	if (si != NULL)
+		info = *si;
+	ran = si != NULL ? 1 : 2;
 }
 
 int main(void)
@@ -71,10 +72,11 @@ int main(void)
 
 	pc_begin("XSH.sigaction.006");
 	pc_test();
-	install_info(SIGUSR1, h, 0);
+	install_info(SIGRTMIN, h, 0);
 	v.sival_int = 1234;
-	pc_check(sigqueue(getpid(), SIGUSR1, v) == 0, "sigqueue failed: %s", pc_errname(errno));
-	pc_check(ran, "the handler did not run");
+	pc_check(sigqueue(getpid(), SIGRTMIN, v) == 0, "sigqueue failed: %s", pc_errname(errno));
+	pc_check(ran != 0, "the handler did not run");
+	pc_check(ran == 1, "the handler got a null siginfo_t pointer");
 	pc_check(info.si_code == SI_QUEUE, "si_code is %d, expected SI_QUEUE", info.si_code);
 	pc_check(info.si_value.sival_int == 1234, "si_value is %d, expected 1234", info.si_value.sival_int);
 	pc_pass();

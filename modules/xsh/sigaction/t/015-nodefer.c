@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigaction.015
  * MUTANT    sigaction.nodefer_ignored
+ * MUTANT    sigaction.mask_ignored
  */
 #include "pc.h"
 #include <errno.h>
@@ -54,7 +55,7 @@ static void mask1(int how, int sig)
 		pc_unresolved("sigprocmask failed");
 }
 
-static volatile sig_atomic_t ran, self_in, usr2_in;
+static volatile sig_atomic_t ran, self_in, usr2_in, term_in;
 
 static void h(int sig)
 {
@@ -63,6 +64,7 @@ static void h(int sig)
 	if (sigprocmask(SIG_BLOCK, NULL, &cur) == 0) {
 		self_in = sigismember(&cur, sig) == 1;
 		usr2_in = sigismember(&cur, SIGUSR2) == 1;
+		term_in = sigismember(&cur, SIGTERM) == 1;
 	}
 	ran = 1;
 }
@@ -74,13 +76,13 @@ int main(void)
 	pc_begin("XSH.sigaction.015");
 	pc_test();
 	install(SIGUSR1, h, SA_NODEFER, NULL);
-	pc_check(raise(SIGUSR1) == 0 && ran, "the handler did not run");
+	pc_check(kill(getpid(), SIGUSR1) == 0 && ran, "the handler did not run");
 	pc_check(!self_in, "SIGUSR1 was blocked during its handler although SA_NODEFER was set");
 	ran = 0;
 	sigemptyset(&m);
 	sigaddset(&m, SIGUSR1);
 	install(SIGUSR1, h, SA_NODEFER, &m);
-	pc_check(raise(SIGUSR1) == 0 && ran, "the handler did not run");
+	pc_check(kill(getpid(), SIGUSR1) == 0 && ran, "the handler did not run");
 	pc_check(self_in, "SIGUSR1 in sa_mask was not blocked during its handler with SA_NODEFER");
 	pc_pass();
 }

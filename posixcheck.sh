@@ -436,6 +436,13 @@ pc_assertion() {
 	    "$pc_pcexec" -w "$ctx_tmp" -o "$pc_sfile" -t "${a_timeout:-60}" \
 	    $pc_extra -- "$@" >"$ctx_out/$pc_id.txt" 2>&1 </dev/null
 	pc_decide
+	# A disputed assertion (the standard can be read either way; its note
+	# says why) does not count a FAIL against the system: it is logged as
+	# INSPECT for a person to look at.
+	if [ "${a_class:-required}" = disputed ] && [ "$pc_code" = FAIL ]; then
+		pc_code=INSPECT
+		pc_note="disputed (see the assertion's note): $pc_note"
+	fi
 	pc_log "$pc_code" "$pc_id" "$pc_ms" "$pc_note"
 }
 

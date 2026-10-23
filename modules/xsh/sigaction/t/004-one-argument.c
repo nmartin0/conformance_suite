@@ -66,7 +66,7 @@ int main(void)
 	pc_begin("XSH.sigaction.004");
 	pc_test();
 	install(SIGUSR1, h, 0, NULL);
-	pc_check(raise(SIGUSR1) == 0, "raise failed");
+	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
 	pc_check(got == SIGUSR1, got == -1 ? "the handler did not run" : "the handler got signal %d, expected SIGUSR1", (int)got);
 	pc_pass();
 }

@@ -81,6 +81,8 @@ int main(void)
 	pid_t c;
 	int r;
 
+	int e;
+
 	pc_begin("XSH.sigaction.007");
 	pc_test();
 	install(SIGCHLD, on_chld, 0, NULL);
@@ -89,8 +91,9 @@ int main(void)
 	sigaddset(&s, SIGCHLD);
 	c = stopper();
 	r = sigtimedwait(&s, NULL, &limit);
+	e = errno;
 	(void)kill(c, SIGKILL);
 	(void)waitpid(c, NULL, 0);
-	pc_check(r == SIGCHLD, "no SIGCHLD within 5 s of the child stopping (%s)", r == -1 ? pc_errname(errno) : "?");
+	pc_check(r == SIGCHLD, "no SIGCHLD within 5 s of the child stopping (%s)", r == -1 ? pc_errname(e) : "?");
 	pc_pass();
 }

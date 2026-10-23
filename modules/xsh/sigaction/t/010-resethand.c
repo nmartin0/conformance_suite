@@ -1,5 +1,5 @@
 /*
- * SA_RESETHAND resets the action to SIG_DFL and clears SA_SIGINFO on entry.
+ * SA_RESETHAND resets the action to SIG_DFL on entry to the handler.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.sigaction.010
@@ -75,13 +75,11 @@ int main(void)
 
 	pc_begin("XSH.sigaction.010");
 	pc_test();
-	install_info(SIGUSR1, h, SA_RESETHAND);
-	mask1(SIG_BLOCK, SIGUSR2);	/* nothing else interferes */
-	pc_check(raise(SIGUSR1) == 0, "raise failed");
+	install_info(SIGRTMIN, h, SA_RESETHAND);
+	pc_check(kill(getpid(), SIGRTMIN) == 0, "kill failed");
 	pc_check(runs == 1, "the handler ran %d times", (int)runs);
 	pc_check(was_dfl, "the action was not SIG_DFL inside the handler");
-	pc_check(info_clear, "SA_SIGINFO was still set inside the handler");
-	pc_check(sigaction(SIGUSR1, NULL, &after) == 0 && after.sa_handler == SIG_DFL,
+	pc_check(sigaction(SIGRTMIN, NULL, &after) == 0 && after.sa_handler == SIG_DFL,
 	    "the action is not SIG_DFL after the handler returned");
 	pc_pass();
 }

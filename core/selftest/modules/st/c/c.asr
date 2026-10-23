@@ -81,3 +81,15 @@ says       A test starts with every signal at its default action and none
            blocked, even when the driver inherited them ignored or blocked.
 test       t/016-clean-signals.c
 expect     PASS
+
+assertion  ST.c.017
+class      disputed
+says       A FAIL of a disputed assertion is logged as INSPECT.
+test       t/017-disputed-fail.c
+expect     INSPECT
+
+assertion  ST.c.018
+class      disputed
+says       A PASS of a disputed assertion stays PASS.
+test       t/018-disputed-pass.c
+expect     PASS

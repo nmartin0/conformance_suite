@@ -65,13 +65,16 @@ static void h(int sig, siginfo_t *si, void *uc)
 	n++;
 }
 
-/* Queues values 1, 2, 3 for sig while it is blocked, then unblocks it. */
+/*
+ * Queues values 1, 2, 3 for sig while it is blocked, then unblocks and
+ * blocks it again until three have been delivered (at least one is
+ * delivered by each unblocking), or ten tries have passed.
+ */
 static void queue_three(int sig)
 {
 	union sigval v;
 	int i;
 
-	pc_test();
 	install_info(sig, h, 0);
 	mask1(SIG_BLOCK, sig);
 	for (i = 1; i <= 3; i++) {
@@ -79,12 +82,17 @@ static void queue_three(int sig)
 		if (sigqueue(getpid(), sig, v) != 0)
 			pc_fail("sigqueue %d failed: %s", i, pc_errname(errno));
 	}
+	for (i = 0; i < 10 && n < 3; i++) {
+		mask1(SIG_UNBLOCK, sig);
+		mask1(SIG_BLOCK, sig);
+	}
 	mask1(SIG_UNBLOCK, sig);
 }
 
 int main(void)
 {
 	pc_begin("XSH.sigaction.021");
+	pc_test();
 	queue_three(SIGUSR1);
 	pc_check(n == 3, "%d deliveries for 3 signals queued with sigqueue()", (int)n);
 	pc_check(vals[0] == 1 && vals[1] == 2 && vals[2] == 3, "delivered in the order %d, %d, %d", vals[0], vals[1], vals[2]);

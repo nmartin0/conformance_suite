@@ -59,27 +59,14 @@ static void on_chld(int sig)
 	(void)sig;
 }
 
-/* A child that stops itself and then waits to be killed. */
-static pid_t stopper(void)
-{
-	pid_t c = fork();
-
-	if (c == -1)
-		pc_unresolved("fork failed");
-	if (c == 0) {
-		(void)raise(SIGSTOP);
-		for (;;)
-			(void)pause();
-	}
-	return c;
-}
-
 int main(void)
 {
 	sigset_t s;
 	struct timespec limit = { 5, 0 };
 	pid_t c;
 	int r;
+
+	int e;
 
 	pc_begin("XSH.sigaction.011");
 	pc_test();
@@ -93,8 +80,9 @@ int main(void)
 	if (c == 0)
 		_exit(0);
 	r = sigtimedwait(&s, NULL, &limit);
+	e = errno;
 	(void)waitpid(c, NULL, 0);
 	pc_check(r == SIGCHLD, "no SIGCHLD within 5 s of the child's exit, with SA_NOCLDSTOP set (%s)",
-	    r == -1 ? pc_errname(errno) : "?");
+	    r == -1 ? pc_errname(e) : "?");
 	pc_pass();
 }
