@@ -3,20 +3,20 @@
 
 DESCRIPTION:b678d7a4     XSH.fdopen.001
 DESCRIPTION:c2f07d0f     app
-DESCRIPTION:e508043d     XSH.fdopen.001 XSH.fdopen.002 XSH.fdopen.008
+DESCRIPTION:e508043d     XSH.fdopen.001 XSH.fdopen.002 XSH.fdopen.008 XSH.fdopen.010 XSH.fdopen.011
 DESCRIPTION:bd719f89     none  undefined
-DESCRIPTION:87c3be50     partial XSH.fdopen.001 XSH.fdopen.008  # reading with "r" and update with "r+"; that "r" cannot write is not checked
+DESCRIPTION:87c3be50     partial XSH.fdopen.001 XSH.fdopen.008  # reading with "r", update with "r+"; what output on an "r" stream over a read-write descriptor does is not specified
 DESCRIPTION:715cf151     XSH.fdopen.003
-DESCRIPTION:cf85c900     partial XSH.fdopen.002  # writing with "w"; "w+" and write-only are not checked
+DESCRIPTION:cf85c900     partial XSH.fdopen.002 XSH.fdopen.008  # writing with "w", update with "w+"; input on a "w" stream is not specified
 DESCRIPTION:95bfaff3     XSH.fdopen.002
 DESCRIPTION:715cf151.2   XSH.fdopen.003
-DESCRIPTION:cf85c900.2   todo  the 'a' modes
+DESCRIPTION:cf85c900.2   XSH.fdopen.010
 DESCRIPTION:475191fe     none  unspecified
 DESCRIPTION:56f08bf4     XSH.fdopen.004
 DESCRIPTION:dd75632f     XSH.fdopen.005 XSH.fdopen.006
 DESCRIPTION:e9a6198b     none  permission for the implementation
 DESCRIPTION:ad462060     app
-DESCRIPTION:d51dee7a     XSH.fdopen.001
+DESCRIPTION:d51dee7a     XSH.fdopen.001 XSH.fdopen.012 XSH.fdopen.013  # 013, for the 'a' modes, is disputed (Q-36)
 DESCRIPTION:9ddaa6b5     XSH.fdopen.007
 DESCRIPTION:58ec2786     none  permission for the implementation
 DESCRIPTION:574b18d2     none  unspecified

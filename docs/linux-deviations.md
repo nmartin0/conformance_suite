@@ -39,7 +39,9 @@ by the named assertion.
 | XSH.fopen.032, XSH.fdopen.009 | FAIL (glibc) | sysconf(_SC_STREAM_MAX) is 16, but any number of streams can be opened | O.31 |
 | XSH.fopen.032, XSH.fdopen.009 | NOTINUSE (musl) | sysconf(_SC_STREAM_MAX) is -1 (indeterminate, which is allowed) | - |
 | XSH.fdopen.005 | FAIL (glibc) | `fdopen()` ignores 'e': FD_CLOEXEC is not set | O.32 |
-| XSH.fseek.004 | FAIL (glibc) | after fflush() of an input stream, fseek() within the read buffer leaves the descriptor at the end of the read-ahead | O.33 |
+| XSH.fseek.004 | INSPECT (glibc) | after fflush() of an input stream, fseek() within the read buffer leaves the descriptor at the end of the read-ahead (disputed, Q-40) | O.33 |
+| XSH.fseek.016 | INSPECT | `fseeko(f, OFF_MAX, SEEK_END)` with output pending flushes, then gives EINVAL, not EOVERFLOW (disputed, Q-35) | O.3 |
+| XSH.fdopen.013 | INSPECT (glibc) | `fdopen(fd, "a")` moves the descriptor's offset to the end of file (disputed, Q-36) | - |
 | XSH.fseek.015, XSH.ftell.007 | NOTINUSE | long is as wide as off_t (LP64) | - |
 | XSH.fopen.034 | NOTINUSE | any byte but slash and NUL can be in a name, so EILSEQ never arises | - |
 | XSH.dup.012 to .015 | UNINITIATED (glibc) | `dup3()` exists but is not declared under the strict build | 11.1 |
@@ -126,7 +128,10 @@ O.3 **`lseek()` reports EINVAL where EOVERFLOW is required.**
   SEEK_SET to the largest off_t also gives EINVAL (above the file
   system's maximum size); that case is arguably a permitted extra error
   and is not asserted.
-- Comp: kernel. Kind: long-standing. Observe: XSH.lseek.011.
+- fseeko() inherits it: with output pending, fseeko(f, OFF_MAX, SEEK_END)
+  flushes the data and then fails with EINVAL (glibc and musl).
+- Comp: kernel. Kind: long-standing. Observe: XSH.lseek.011, XSH.fseek.016
+  (disputed under Q-35, so INSPECT).
 - Src: posixcheck run, glibc and musl alike.
 
 O.4 **Unconnected `AF_UNIX` stream socket: EINVAL instead of ENOTCONN.**
@@ -439,7 +444,8 @@ O.33 **glibc: fseek() after fflush() does not set the descriptor's offset.**
   fseek(f, 7, SEEK_SET) lands inside the buffer and makes no lseek(), so
   the offset stays at the end of the read-ahead (10 for a 10-byte file,
   4096 for a large one). musl gives 7. Output streams are right.
-- Comp: glibc. Kind: long-standing. Observe: XSH.fseek.004.
+- Comp: glibc. Kind: long-standing. Observe: XSH.fseek.004 (disputed, Q-40:
+  the offset is read through the descriptor, a second handle).
 - Src: posixcheck run.
 
 O.26 **glibc: fflush() of an input stream with pushback sets the wrong offset.**

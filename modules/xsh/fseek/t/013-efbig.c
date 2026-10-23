@@ -166,7 +166,7 @@ static int child(void)
 	if (setrlimit(RLIMIT_FSIZE, &rl) != 0)
 		return 98;
 	f = fopen("big", "w");
-	if (f == NULL)
+	if (f == NULL || setvbuf(f, NULL, _IOFBF, 4096) != 0)
 		return 97;
 	for (i = 0; i < 200; i++)
 		if (fputc('a', f) == EOF)
@@ -196,7 +196,7 @@ int main(void)
 
 		pc_test();
 		kid = fork();
-		pc_check(kid != -1, "fork failed");
+		NEED(kid != -1, "fork failed");
 		if (kid == 0)
 			_exit(child());
 		NEED(waitpid(kid, &st, 0) == kid, "waitpid failed");

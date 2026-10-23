@@ -192,6 +192,13 @@ int main(void)
 		FILE *f;
 		int i;
 
+		/* A default ACL or other extra controls (XBD 4.5) would replace the umask. */
+		(void)umask(0);
+		NEED((i = open("p0", O_WRONLY | O_CREAT | O_EXCL, 0666)) >= 0 && close(i) == 0, "open failed");
+		(void)umask(027);
+		NEED((i = open("p1", O_WRONLY | O_CREAT | O_EXCL, 0666)) >= 0 && close(i) == 0, "open failed");
+		if ((pc_file_mode("p0") & 07777) != 0666 || (pc_file_mode("p1") & 07777) != 0640)
+			pc_unresolved("open(O_CREAT, 0666) itself does not give 0666 less the umask here (a default ACL?)");
 		pc_test();
 		(void)umask(0);
 		for (i = 0; i < 3; i++) {

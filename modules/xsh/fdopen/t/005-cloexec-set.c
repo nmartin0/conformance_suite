@@ -186,13 +186,13 @@ int main(void)
 {
 	pc_begin("XSH.fdopen.005");
 	{
-		static const char *const modes[3] = { "re", "we", "r+e" };
+		static const char *const modes[5] = { "re", "we", "r+e", "re+", "w+e" };
 		FILE *f;
 		int i, fd;
 
 		pc_make_file("f", "abc");
 		pc_test();
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < 5; i++) {
 			fd = open("f", O_RDWR);
 			NEED(fd >= 0 && !cloexec(fd), "open failed or set FD_CLOEXEC");
 			f = fdopen(fd, modes[i]);

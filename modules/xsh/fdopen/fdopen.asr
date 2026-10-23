@@ -43,7 +43,7 @@ anchor     functions/fdopen.html#DESCRIPTION
 class      required
 since      2024
 says       With descriptors that have FD_CLOEXEC clear, fdopen() with "re",
-           "we" and "r+e" sets it.
+           "we", "r+e", "re+" and "w+e" sets it.
 note       Austin Group defects 411 and 1526.
 test       t/005-cloexec-set.c
 
@@ -71,7 +71,8 @@ class      required
 since      1988
 says       With fd open O_RDWR on "abcd", the stream from fdopen(fd, "r+")
            reads 'a'; after fseek(f, 0, SEEK_CUR), fputc('X') and fclose()
-           the file holds "aXcd".
+           the file holds "aXcd". With "w+" on another such descriptor,
+           fputs("YZ"), rewind() and reads return "YZcd" (no truncation).
 test       t/008-update.c
 
 assertion  XSH.fdopen.009
@@ -83,3 +84,48 @@ says       With {STREAM_MAX} from sysconf() bounded and {STREAM_MAX} streams
            descriptor returns a null pointer with errno EMFILE.
 note       SD5-XSH-ERN-149 (Issue 7) added this error.
 test       t/009-stream-max.c
+
+assertion  XSH.fdopen.010
+anchor     functions/fdopen.html#DESCRIPTION
+class      required
+since      1988
+says       With descriptors open O_RDWR|O_APPEND on "abc": a stream from
+           fdopen(fd, "a") takes fputs("Z") into the file; one from
+           fdopen(fd2, "a+") reads 'a' after rewind() and, after
+           fseek(f, 0, SEEK_CUR) and fputs("Y"), the file holds "abcZY".
+note       With O_APPEND already set, writes go to the end whatever the
+           stream's position; O_APPEND staying set for 'a' is implied
+           but not stated (Q-36).
+test       t/010-append-modes.c
+
+assertion  XSH.fdopen.011
+anchor     functions/fdopen.html#DESCRIPTION
+class      required
+since      2001
+says       fdopen() with "rb", "r+b", "rb+", "wb" and "w+b" on descriptors open
+           O_RDWR returns streams whose fileno() is the descriptor.
+note       Issue 6 changed the mode to include binary streams; any
+           string valid for fopen() is allowed.
+test       t/011-binary.c
+
+assertion  XSH.fdopen.012
+anchor     functions/fdopen.html#DESCRIPTION
+class      required
+since      1988
+says       With descriptors open O_RDWR on "abcdef" at offset 2, streams from
+           fdopen() with "r+", "w" and "w+" have ftell() 2; a write of 'Z'
+           through the "w" stream lands at offset 2 ("abZdef").
+test       t/012-position.c
+
+assertion  XSH.fdopen.013
+anchor     functions/fdopen.html#DESCRIPTION
+class      disputed
+since      1988
+says       With descriptors open O_RDWR on "abcdef" at offset 2, streams from
+           fdopen() with "a" and "a+" have ftell() 2, and the descriptor's
+           offset is still 2.
+note       disputed (Q-36): fdopen() sets the position from the
+           descriptor's offset, but XSH 2.5 leaves the initial position
+           of a stream opened in append mode implementation-defined; a
+           FAIL is logged as INSPECT.
+test       t/013-append-position.c

@@ -7,8 +7,9 @@ class      required
 since      1988
 says       On a stream reading "0123456789", ftell() is 0, then 3 after three
            reads, 7 after fseek(f, 7, SEEK_SET); on a "w" stream it is 5 after
-           fputs("hello") (still buffered); on an "a" stream on a 4-byte file
-           it is 6 after fputs("xy").
+           fputs("hello") (still buffered); on an "r+" stream it is 2 after
+           a read and fputc() of one byte (after fseek()); on an "a" stream on
+           a 4-byte file it is 6 after fputs("xy") and fflush().
 test       t/001-position.c
 
 assertion  XSH.ftell.002
@@ -32,27 +33,31 @@ test       t/003-ftello.c
 assertion  XSH.ftell.004
 anchor     functions/ftell.html#ERRORS/ESPIPE
 class      required
-since      1988
 says       ftell() and ftello() on streams from fdopen() of a pipe's read end and
            of a FIFO opened O_RDONLY|O_NONBLOCK return -1 with errno
            ESPIPE.
+note       "since" is left out: the change history shows only that the
+           error predates Issue 6.
 test       t/004-espipe-pipe.c
 
 assertion  XSH.ftell.005
 anchor     functions/ftell.html#ERRORS/ESPIPE
 class      required
 since      2001
-says       ftell() on a stream from fdopen() of one end of an AF_UNIX
-           socketpair() returns -1 with errno ESPIPE.
+says       ftell() and ftello() on a stream from fdopen() of one end of an AF_UNIX
+           socketpair() return -1 with errno ESPIPE.
 note       Issue 6 added sockets to this error.
 test       t/005-espipe-socket.c
 
 assertion  XSH.ftell.006
 anchor     functions/ftell.html#ERRORS/EBADF
 class      required
-since      1988
 says       On a stream reading a file whose descriptor has been closed with
-           close() after one read, ftell() returns -1 with errno EBADF.
+           close() after one read and an ftell(), ftell() and ftello()
+           return -1 with errno EBADF.
+note       close() does not move the offset, so the descriptor is not a
+           second handle (XSH 2.5.1). "since" is left out: the change
+           history shows only that the error predates Issue 6.
 test       t/006-ebadf.c
 
 assertion  XSH.ftell.007

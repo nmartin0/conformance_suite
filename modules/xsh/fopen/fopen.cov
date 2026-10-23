@@ -12,7 +12,7 @@ DESCRIPTION:d3455d1b     XSH.fopen.003 XSH.fopen.004
 DESCRIPTION:1c9d76c4     XSH.fopen.013
 DESCRIPTION:4df390fa     XSH.fopen.007
 DESCRIPTION:6d913ef1     partial XSH.fopen.008  # the flag is set; that it is set atomically is not observable here
-DESCRIPTION:ac312d9d     partial XSH.fopen.009 XSH.fopen.010 XSH.fopen.012  # fails if the file exists, creates it with the usual permissions; the implementation-defined exclusive access and "cannot be created" are not checked
+DESCRIPTION:ac312d9d     partial XSH.fopen.009 XSH.fopen.010 XSH.fopen.012 XSH.fopen.023  # exists (EEXIST), cannot be created (EACCES), created with the usual permissions; the implementation-defined exclusive access is not checked
 DESCRIPTION:d58ab52a     none  implementation-defined
 DESCRIPTION:791b604a     none  an informative note
 DESCRIPTION:1e8040fa     none  an informative note
@@ -22,23 +22,23 @@ DESCRIPTION:66051afb     XSH.fopen.021 XSH.fopen.023
 DESCRIPTION:f9d70671     XSH.fopen.004
 DESCRIPTION:4975a949     XSH.fopen.005
 DESCRIPTION:71e0cc9a     app
-DESCRIPTION:dc8775a6     partial XSH.fopen.019 XSH.fopen.020  # a terminal (XSI) and a regular file; the regular file is disputed (Q-33)
+DESCRIPTION:dc8775a6     partial XSH.fopen.019 XSH.fopen.020  # a terminal (XSI) and a regular file, both disputed (Q-33)
 DESCRIPTION:9ddaa6b5     XSH.fopen.014
 DESCRIPTION:b72d1d45     XSH.fopen.016
-DESCRIPTION:3d661d9a     XSH.fopen.012
+DESCRIPTION:3d661d9a     XSH.fopen.012 XSH.fopen.037
 DESCRIPTION:df4803b7     XSH.fopen.017
 DESCRIPTION:5177aa95     partial XSH.fopen.015  # the orientation; the encoding rule and conversion state are not observable apart from it
 DESCRIPTION:a9ece70a     XSH.fopen.006 XSH.fopen.018
 DESCRIPTION:4eeb3121     XSH.fopen.006 XSH.fopen.021
-DESCRIPTION:8bcf45a5     XSH.fopen.002 XSH.fopen.003 XSH.fopen.006
+DESCRIPTION:8bcf45a5     XSH.fopen.002 XSH.fopen.003 XSH.fopen.006 XSH.fopen.036
 DESCRIPTION:86b777bd     XSH.fopen.003 XSH.fopen.004 XSH.fopen.006
 DESCRIPTION:22e0b89a     XSH.fopen.005 XSH.fopen.006
-DESCRIPTION:54258964     XSH.fopen.003 XSH.fopen.005 XSH.fopen.006
+DESCRIPTION:54258964     XSH.fopen.003 XSH.fopen.005 XSH.fopen.006 XSH.fopen.036
 DESCRIPTION:11be33be     XSH.fopen.003 XSH.fopen.004 XSH.fopen.006
-DESCRIPTION:8ea73ca1     XSH.fopen.008 XSH.fopen.013
-DESCRIPTION:eb326967     XSH.fopen.009 XSH.fopen.011
+DESCRIPTION:8ea73ca1     XSH.fopen.008 XSH.fopen.013 XSH.fopen.035
+DESCRIPTION:eb326967     XSH.fopen.009 XSH.fopen.011 XSH.fopen.013
 DESCRIPTION:68edb10e     none  implementation-specific flags
-DESCRIPTION:fc7a536f     partial XSH.fopen.006  # O_NONBLOCK, O_SYNC and O_DSYNC are clear; other flags have no portable test
+DESCRIPTION:fc7a536f     partial XSH.fopen.035  # O_NONBLOCK, O_SYNC, O_DSYNC and FD_CLOEXEC are clear; other flags have no portable test
 RETURN_VALUE:10eb3dd8    XSH.fopen.001
 RETURN_VALUE:cea1ed56    XSH.fopen.021 XSH.fopen.022 XSH.fopen.024
 ERRORS:ea48a2f8          XSH.fopen.023

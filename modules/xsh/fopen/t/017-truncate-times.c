@@ -200,7 +200,7 @@ int main(void)
 		sleep(2);
 		pc_test();
 		f = opened("f", "w");
-		pc_check(fstat(fileno(f), &st) == 0, "fstat failed");
+		NEED(fstat(fileno(f), &st) == 0, "fstat failed");
 		pc_check(ts_after(st.st_mtim, before.st_mtim), "the modification time was not updated");
 		pc_check(ts_after(st.st_ctim, before.st_ctim), "the status change time was not updated");
 		NEED(fclose(f) == 0, "fclose failed");

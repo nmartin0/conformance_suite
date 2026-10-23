@@ -157,13 +157,11 @@ int main(void)
 
 		if (sizeof(off_t) <= sizeof(long))
 			pc_notinuse("long holds every off_t value");
-		pc_make_file("f", "abc");
 		pc_test();
-		f = open_as("f", "r+");
-		NEED(fseeko(f, (off_t)LONG_MAX, SEEK_SET) == 0, "fseeko to LONG_MAX failed: %s", pc_errname(errno));
-		NEED(fputc('X', f) == 'X', "fputc failed");
+		f = open_as("f", "w");
+		NEED(fputs("abc", f) >= 0, "fputs failed");
 		errno = 0;
-		r = fseek(f, 10, SEEK_CUR);
+		r = fseek(f, LONG_MAX, SEEK_END);
 		e = errno;
 		pc_check(r == -1 && e == EOVERFLOW, "fseek() beyond LONG_MAX returned %d (%s)", r, pc_errname(e));
 	}

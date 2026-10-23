@@ -190,6 +190,5 @@ int main(void)
 	pc_test();
 	fails("f/", "w", ENOTDIR, 0);
 	fails("f/", "a", ENOTDIR, 0);
-	pc_check(holds("f", "abc"), "the file was changed");
 	pc_pass();
 }

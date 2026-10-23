@@ -184,9 +184,16 @@ static int cloexec(int fd)
 }
 #include <signal.h>
 
+static volatile sig_atomic_t rearm;
+
+/* Re-armed while fopen() runs, so a signal also lands once the open blocks. */
 static void on_alarm(int sig)
 {
 	(void)sig;
+	if (rearm > 0) {
+		rearm--;
+		alarm(1);
+	}
 }
 
 int main(void)
@@ -212,8 +219,10 @@ int main(void)
 			_exit(fd == -1 ? 0 : 1);
 		}
 		pc_test();
+		rearm = 2;
 		alarm(1);
 		fails("p", "r", EINTR, 0);
+		rearm = 0;
 		alarm(0);
 		(void)kill(kid, SIGKILL);
 		(void)waitpid(kid, &st, 0);

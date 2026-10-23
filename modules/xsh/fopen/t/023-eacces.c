@@ -205,6 +205,8 @@ static int cases(void)
 		return 4;
 	if (!denied("nw/new", "w"))
 		return 5;
+	if (!denied("nw/new2", "wx"))
+		return 8;
 	if (!denied("ns/f", "r"))
 		return 6;
 	if (lstat("nw/new", &st) == 0)
@@ -230,7 +232,8 @@ int main(void)
 		(void)chmod("ns", 0755);
 		(void)chmod("nw", 0755);
 		pc_check(r == 0, "case %d did not fail with EACCES (1: \"r\" on 0222, 2-4: \"w\", \"a\", \"r+\" on 0444, "
-			 "5: \"w\" in a 0555 directory, 6: \"r\" through a 0666 directory, 7: a file was created)", r);
+			 "5: \"w\" in a 0555 directory, 6: \"r\" through a 0666 directory, 7: a file was created in the 0555 directory, "
+			 "8: \"wx\" in the 0555 directory)", r);
 	}
 	pc_pass();
 }

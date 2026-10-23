@@ -177,6 +177,10 @@ int main(void)
 		r = ftell(g);
 		e = errno;
 		pc_check(r == -1 && e == ESPIPE, "ftell() on a FIFO returned %ld (%s)", r, pc_errname(e));
+		errno = 0;
+		r = (long)ftello(g);
+		e = errno;
+		pc_check(r == -1 && e == ESPIPE, "ftello() on a FIFO returned %ld (%s)", r, pc_errname(e));
 	}
 	pc_pass();
 }

@@ -160,13 +160,17 @@ int main(void)
 		pc_make_file("f", "0123456789");
 		pc_test();
 		f = open_as("f", "r");
-		NEED(fgetc(f) == '0', "reading failed");
+		NEED(fgetc(f) == '0' && ftell(f) == 1, "reading or ftell failed");
 		NEED(close(fileno(f)) == 0, "close failed");
 		errno = 0;
 		r = ftell(f);
 		e = errno;
 		pc_check(r == -1, "ftell() with the descriptor closed returned %ld", r);
 		pc_check(e == EBADF, "ftell() failed with %s, expected EBADF", pc_errname(e));
+		errno = 0;
+		r = (long)ftello(f);
+		e = errno;
+		pc_check(r == -1 && e == EBADF, "ftello() with the descriptor closed returned %ld (%s)", r, pc_errname(e));
 	}
 	pc_pass();
 }

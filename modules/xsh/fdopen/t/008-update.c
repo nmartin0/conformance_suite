@@ -200,6 +200,18 @@ int main(void)
 		pc_check(fputc('X', f) == 'X', "fputc failed");
 		NEED(fclose(f) == 0, "fclose failed");
 		pc_check(holds("f", "aXcd"), "the write did not reach the file");
+		{
+			char buf[16];
+
+			fd = open("f", O_RDWR);
+			NEED(fd >= 0, "open failed");
+			f = fdopen(fd, "w+");
+			pc_check(f != NULL, "fdopen(\"w+\") failed: %s", pc_errname(errno));
+			pc_check(fputs("YZ", f) >= 0, "\"w+\": fputs failed");
+			rewind(f);
+			pc_check(fgets(buf, sizeof buf, f) != NULL && strcmp(buf, "YZcd") == 0, "\"w+\": reading back failed");
+			NEED(fclose(f) == 0, "fclose failed");
+		}
 	}
 	pc_pass();
 }

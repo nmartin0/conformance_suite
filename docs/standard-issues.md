@@ -111,6 +111,12 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-30 | fflush(): position after discarding pushback | question | XSH.fflush.005 |
 | Q-31 | other waiters after the last child | question | XSH._Exit.020 |
 | Q-32 | aio at exit | question | XSH._Exit.019 |
-| Q-33 | setvbuf modes against implementation-defined support | question | XSH.setvbuf.003, XSH.setvbuf.004, XSH.setvbuf.006 |
+| Q-33 | buffering against implementation-defined support | question | XSH.setvbuf.003, .004, .006; XSH.fopen.019, .020 |
 | Q-34 | ungetc limit omits fflush() | question | none (permission) |
-| Q-35 | fseek() ERRORS preamble | question | XSH.fseek.014 |
+| Q-35 | fseek() ERRORS preamble | question | XSH.fseek.009 to .011, XSH.fseek.014 to .017 |
+| Q-36 | fdopen() 'a' modes | question | XSH.fdopen.013 |
+| Q-37 | {STREAM_MAX} | question | XSH.fopen.032, XSH.fdopen.009 |
+| Q-38 | a failed create | question | none |
+| Q-39 | trailing slash with "wx" | question | none |
+| Q-40 | fseek() offset after fflush() against 2.5.1 | question | XSH.fseek.004 |
+| Q-41 | fseek() EBADF wording | question | none |

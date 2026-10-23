@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fopen.013
  * MUTANT    fopen.order_strict
+ * MUTANT    fopen.late_flags_ignored
  */
 #include "pc.h"
 #include <errno.h>
@@ -186,14 +187,19 @@ int main(void)
 {
 	pc_begin("XSH.fopen.013");
 	{
-		static const char *const modes[8] = { "rb+", "r+b", "re+", "r+e", "wxe", "wex", "w+x", "wx+" };
+		static const char *const modes[10] = { "rb+", "r+b", "re+", "r+e", "ae+", "a+e", "wxe", "wex", "w+x", "wx+" };
+		static const char *const excl[6] = { "wex", "wxe", "wx+", "w+x", "ax+", "abx" };
 		char name[8];
 		FILE *f;
 		int i, fl, rw, ce;
 
 		pc_make_file("f", "abc");
+		pc_make_file("g", "abc");
 		pc_test();
-		for (i = 0; i < 8; i++) {
+		for (i = 0; i < 6; i++)
+			fails("g", excl[i], EEXIST, 0);
+		pc_check(holds("g", "abc"), "an exclusive open changed the existing file");
+		for (i = 0; i < 10; i++) {
 			snprintf(name, sizeof name, "n%d", i);
 			f = opened(modes[i][0] == 'r' ? "f" : name, modes[i]);
 			fl = getfl(f);
@@ -202,6 +208,8 @@ int main(void)
 			pc_check((fl & O_ACCMODE) == (rw ? O_RDWR : modes[i][0] == 'r' ? O_RDONLY : O_WRONLY),
 				 "\"%s\": access mode %#x", modes[i], (unsigned)(fl & O_ACCMODE));
 			pc_check(cloexec(fileno(f)) == ce, "\"%s\": FD_CLOEXEC is %s", modes[i], ce ? "clear" : "set");
+			pc_check(((fl & O_APPEND) != 0) == (modes[i][0] == 'a'), "\"%s\": O_APPEND is %s", modes[i],
+				 fl & O_APPEND ? "set" : "clear");
 			NEED(fclose(f) == 0, "fclose failed");
 		}
 	}

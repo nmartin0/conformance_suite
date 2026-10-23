@@ -160,7 +160,7 @@ int main(void)
 		f = fmemopen(buf, sizeof buf, "w");
 		NEED(f != NULL, "fmemopen failed: %s", pc_errname(errno));
 		NEED(fputs("abc", f) >= 0, "fputs failed");
-		NEED(buf[0] == '#', "the data reached the memory buffer before fseek() (the stream is not buffered here)");
+		NEED(memcmp(buf, "abc", 3) != 0, "the data reached the memory buffer before fseek() (the stream is not buffered here)");
 		pc_check(fseek(f, 0, SEEK_SET) == 0, "fseek failed: %s", pc_errname(errno));
 		pc_check(memcmp(buf, "abc", 3) == 0, "the memory buffer does not begin \"abc\"");
 	}

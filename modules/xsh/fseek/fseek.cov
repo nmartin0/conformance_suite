@@ -8,7 +8,7 @@ DESCRIPTION:3d3c722a     XSH.fseek.001 XSH.fseek.008
 DESCRIPTION:14a4c7bd     app
 DESCRIPTION:e0dcd987     XSH.fseek.002 XSH.ungetc.003 XSH.ungetc.011  # ungetwc() is not checked
 DESCRIPTION:482371df     XSH.fseek.003
-DESCRIPTION:6d8084c2     XSH.fseek.004
+DESCRIPTION:6d8084c2     XSH.fseek.004  # disputed (Q-40)
 DESCRIPTION:ec245db8     XSH.fseek.005
 DESCRIPTION:9ce92cf2     XSH.fseek.005
 DESCRIPTION:004d056e     none  implementation-defined
@@ -18,20 +18,20 @@ DESCRIPTION:91992411     partial XSH.fseek.007  # fmemopen(); open_memstream() a
 DESCRIPTION:f3dc9619     none  implementation-defined
 DESCRIPTION:49ff19c3     XSH.fseek.008
 RETURN_VALUE:b7b5c7a0    XSH.fseek.001 XSH.fseek.008
-RETURN_VALUE:85569f7a    XSH.fseek.009 XSH.fseek.010 XSH.fseek.011 XSH.fseek.012
-ERRORS:ad7166d9          XSH.fseek.009 XSH.fseek.010 XSH.fseek.011 XSH.fseek.012  # the preamble: output is left pending (Q-35)
-ERRORS:4cf87faf          none  only pipes, FIFOs and sockets delay a write, and those give ESPIPE
+RETURN_VALUE:85569f7a    XSH.fseek.012 XSH.fseek.013 XSH.fseek.018 XSH.fseek.020
+ERRORS:ad7166d9          partial XSH.fseek.012 XSH.fseek.013 XSH.fseek.017 XSH.fseek.018 XSH.fseek.020  # pending output and the unbuffered branch; whether pending output makes the preamble hold is Q-35
+ERRORS:4cf87faf          XSH.fseek.020
 ERRORS:7a02d171          partial XSH.fseek.012  # the descriptor closed under pending output; a read-only descriptor under output is not checked
 ERRORS:38d3d1f2          todo  environment: the maximum file size
 ERRORS:44f9e858          XSH.fseek.013
-ERRORS:399b8ebf          none  not observable with a 64-bit off_t
-ERRORS:c9cace74          none  only a write to a pipe, FIFO, socket or terminal can be interrupted, and those give ESPIPE or are not seekable
-ERRORS:dc04f67d          partial XSH.fseek.009 XSH.fseek.010 XSH.fseek.014  # negative position, bad whence, and fmemopen() (disputed, Q-35)
+ERRORS:399b8ebf          todo  a write at the offset maximum after a seek to the largest off_t
+ERRORS:c9cace74          todo  a flush to a full blocking pipe interrupted by a signal (EINTR or ESPIPE)
+ERRORS:dc04f67d          partial XSH.fseek.009 XSH.fseek.010 XSH.fseek.014  # negative position, bad whence and fmemopen(), all disputed (Q-35); the fmemopen() failure itself is XSH.fseek.019
 ERRORS:5bcef711          todo  environment: a physical I/O error
 ERRORS:6481f489          todo  open_memstream() out of memory
 ERRORS:5f5513df          todo  environment: a full file system; the fmemopen() case
-ERRORS:cef1b02f          XSH.fseek.015
-ERRORS:1090fc63          none  not observable with a 64-bit off_t
-ERRORS:6ced1491          none  a pipe or FIFO gives ESPIPE as well
-ERRORS:ed3fed0f          partial XSH.fseek.011  # a pipe; FIFOs and sockets are checked for ftell() only
+ERRORS:cef1b02f          XSH.fseek.015  # disputed (Q-35)
+ERRORS:1090fc63          XSH.fseek.016  # disputed (Q-35)
+ERRORS:6ced1491          XSH.fseek.018
+ERRORS:ed3fed0f          partial XSH.fseek.011 XSH.fseek.017  # pipes, disputed (Q-35); FIFOs and sockets are checked for ftell() only
 ERRORS:01ce82ab          optional

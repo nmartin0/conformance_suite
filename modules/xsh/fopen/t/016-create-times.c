@@ -205,7 +205,7 @@ int main(void)
 		pc_test();
 		for (i = 0; i < 2; i++) {
 			f = opened(names[i], modes[i]);
-			pc_check(fstat(fileno(f), &st) == 0, "fstat failed");
+			NEED(fstat(fileno(f), &st) == 0, "fstat failed");
 			pc_check(ts_after(st.st_atim, before.st_mtim), "\"%s\": the new file's access time is old", modes[i]);
 			pc_check(ts_after(st.st_mtim, before.st_mtim), "\"%s\": the new file's modification time is old", modes[i]);
 			pc_check(ts_after(st.st_ctim, before.st_ctim), "\"%s\": the new file's status change time is old", modes[i]);

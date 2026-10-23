@@ -51,23 +51,24 @@ test       t/005-update.c
 assertion  XSH.fopen.006
 anchor     functions/fopen.html#DESCRIPTION
 class      required
-since      2008
+since      2001
 says       For "r", "w", "a", "r+", "w+" and "a+", fcntl(F_GETFL) on the
            stream's descriptor gives access mode O_RDONLY, O_WRONLY, O_WRONLY,
-           O_RDWR, O_RDWR and O_RDWR, O_APPEND exactly for the 'a' modes, and
-           none of O_NONBLOCK, O_SYNC and O_DSYNC (no other flags).
-note       Interpretation 1003.1-2001 #159 (Issue 7) made the open()
-           flags explicit.
+           O_RDWR, O_RDWR and O_RDWR, and O_APPEND exactly for the 'a'
+           modes.
+note       The CX table of open() flags is in Issue 6; that no other
+           flags are passed is XSH.fopen.035.
 test       t/006-open-flags.c
 
 assertion  XSH.fopen.007
 anchor     functions/fopen.html#DESCRIPTION
 class      required
-since      2001
+since      1988
 says       Each of "rb", "wb", "ab", "rb+", "r+b", "wb+", "w+b", "ab+" and "a+b"
            gives the same access mode and O_APPEND as the mode without 'b',
            and bytes 0x0d 0x0a 0x00 0x1a written with "wb" read back
            unchanged with "rb".
+note       'b' is from ISO C (1989); POSIX adds that it has no effect.
 test       t/007-binary.c
 
 assertion  XSH.fopen.008
@@ -89,7 +90,9 @@ says       On an existing file holding "abc", fopen() with "wx", "w+x", "ax" and
            "a+x" each returns a null pointer with errno EEXIST, and the file
            still holds "abc".
 note       Austin Group defects 411 and 1524. ISO C has 'x' for "w"
-           only; POSIX adds "a".
+           only; POSIX adds "a". The file is left unchanged because the
+           open() is as if with O_EXCL, whose check and creation are
+           atomic.
 test       t/009-exclusive-exists.c
 
 assertion  XSH.fopen.010
@@ -108,6 +111,8 @@ since      2024
 says       With "l" a symbolic link to the missing name "target", fopen("l",
            "wx") returns a null pointer with errno EEXIST and "target" is not
            created (O_EXCL is in the open() flags).
+note       As if by open() with O_EXCL, which fails for a symbolic link
+           whatever it points to.
 test       t/011-exclusive-symlink.c
 
 assertion  XSH.fopen.012
@@ -125,9 +130,11 @@ assertion  XSH.fopen.013
 anchor     functions/fopen.html#DESCRIPTION
 class      required
 since      2024
-says       Each of "rb+", "r+b", "re+", "r+e", "wxe", "wex", "w+x" and "wx+" is
-           accepted, and each gives the access mode, O_APPEND and
-           FD_CLOEXEC its characters call for.
+says       Each of "rb+", "r+b", "re+", "r+e", "ae+", "a+e", "wxe", "wex", "w+x"
+           and "wx+" on a new name (an existing file for 'r') is accepted and
+           gives the access mode, O_APPEND and FD_CLOEXEC its characters call
+           for; "wex", "wxe", "wx+", "w+x", "ax+" and "abx" on an existing
+           file holding "abc" fail with EEXIST and leave it unchanged.
 note       ISO C lists "rb+" and "r+b" only; POSIX allows any order (a
            CX addition with 'e' and 'x').
 test       t/013-any-order.c
@@ -172,7 +179,7 @@ test       t/017-truncate-times.c
 assertion  XSH.fopen.018
 anchor     functions/fopen.html#DESCRIPTION
 class      required
-since      2008
+since      2001
 says       With descriptor k the lowest not in use (found by opening and closing
            a file), fileno() of a stream opened by fopen() is k.
 note       The descriptor is allocated as if by open(), which takes the
@@ -181,16 +188,17 @@ test       t/018-lowest-descriptor.c
 
 assertion  XSH.fopen.019
 anchor     functions/fopen.html#DESCRIPTION
-class      conditional
+class      disputed
 when       XSI
 since      1988
 says       On a stream opened with "w" on a pseudo-terminal's slave device,
            fputs("ab\n") without fflush() makes "ab" readable from the
            master within 2 s.
-note       Conditional on XSI only for posix_openpt(), the portable way
-           to get a terminal. A terminal can be determined to be
-           interactive, so its stream is line buffered or unbuffered;
-           either sends the line.
+note       disputed (Q-33): "interactive device" is not defined and XSH
+           2.5 makes the buffering characteristics implementation-
+           defined; a FAIL is logged as INSPECT. Line buffered or
+           unbuffered, the line is sent. XSI only for posix_openpt(),
+           the portable way to get a terminal.
 test       t/019-interactive-buffering.c
 
 assertion  XSH.fopen.020
@@ -229,8 +237,11 @@ since      1988
 says       Without appropriate privileges: "r" on a file of mode 0222, "w", "a"
            and "r+" on a file of mode 0444, "w" for a new file in a
            directory of mode 0555, and "r" on a file in a directory of mode
-           0666 (no search permission) each return a null pointer with errno
-           EACCES; no file is created in the 0555 directory.
+           0666 (no search permission), and "wx" for a new file in the 0555
+           directory, each return a null pointer with errno EACCES; no file is
+           created in the 0555 directory.
+note       A file appearing in the 0555 directory would break the
+           directory's permissions (XBD 4.5), not only fopen()'s errors.
 test       t/023-eacces.c
 
 assertion  XSH.fopen.024
@@ -264,20 +275,22 @@ anchor     functions/fopen.html#ERRORS/ENOTDIR
 class      required
 since      2008
 says       With "f" a regular file holding "abc", fopen("f/", "w") and fopen("f/",
-           "a") return a null pointer with errno ENOTDIR (not ENOENT), and
-           the file still holds "abc".
+           "a") return a null pointer with errno ENOTDIR (not ENOENT).
 note       As XSH.open.045: Linux gives EISDIR for any O_CREAT path
-           ending in a slash (docs/linux-deviations.md O.1).
+           ending in a slash (docs/linux-deviations.md O.1). Whether the
+           file is left alone is not checked: XSH 2.3 lets a failed call
+           have been partly performed (Q-38).
 test       t/027-trailing-slash-write.c
 
 assertion  XSH.fopen.028
 anchor     functions/fopen.html#ERRORS/ENOENT
 class      required
 since      2008
-says       fopen("new/", "w") returns a null pointer with errno ENOENT or ENOTDIR,
-           and nothing named "new" is created.
+says       fopen("new/", "w") returns a null pointer with errno ENOENT or
+           ENOTDIR.
 note       As XSH.open.044: Linux gives EISDIR (docs/linux-deviations.md
-           O.1).
+           O.1). Whether "new" is created is not checked (XSH 2.3,
+           Q-38).
 test       t/028-trailing-slash-new.c
 
 assertion  XSH.fopen.029
@@ -305,7 +318,9 @@ class      required
 since      1988
 says       With RLIMIT_NOFILE lowered so that every allowed descriptor is open,
            fopen("f", "r") and fopen("n", "w") return a null pointer with
-           errno EMFILE, and "n" is not created.
+           errno EMFILE.
+note       Whether "n" is created is not checked: a system may create
+           the name before it finds no descriptor (XSH 2.3, Q-38).
 test       t/031-emfile.c
 
 assertion  XSH.fopen.032
@@ -324,9 +339,10 @@ anchor     functions/fopen.html#ERRORS/EINTR
 class      required
 since      1988
 says       fopen("p", "r") on a FIFO with no writer blocks; a SIGALRM caught 1 s
-           later (handler installed without SA_RESTART) makes it return a
-           null pointer with errno EINTR. A child that opens the FIFO for
-           writing after 4 s ends the wait if it did not fail.
+           later (handler installed without SA_RESTART, re-arming the alarm
+           twice in case the first lands before the open blocks) makes it
+           return a null pointer with errno EINTR. A child that opens the
+           FIFO for writing after 4 s ends the wait if it did not fail.
 test       t/033-eintr.c
 
 assertion  XSH.fopen.034
@@ -339,3 +355,36 @@ says       fopen() with "w" on the name made of bytes 0xff 0xfe 'n' either
 note       Austin Group defect 293 added EILSEQ. Other errors are
            possible in principle; none applies to this name here.
 test       t/034-eilseq.c
+
+assertion  XSH.fopen.035
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2008
+says       For "r", "w", "a", "r+", "w+" and "a+", fcntl(F_GETFL) on the
+           stream's descriptor shows none of O_NONBLOCK, O_SYNC and O_DSYNC,
+           and fcntl(F_GETFD) shows FD_CLOEXEC clear.
+note       Interpretation 1003.1-2001 #159 (Issue 7). Flags with no
+           portable name cannot be checked.
+test       t/035-no-other-flags.c
+
+assertion  XSH.fopen.036
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      1988
+says       On an existing file of mode 0640 holding "abcdef", fopen() with "w"
+           and with "w+" each leave it empty, with the same file serial
+           number, mode 0640 and owner as before.
+note       The open() is as if with O_TRUNC, which keeps the mode and
+           owner of the file.
+test       t/036-truncate-keeps-file.c
+
+assertion  XSH.fopen.037
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2008
+says       Files created by fopen() with "w" and "a" have st_uid equal to
+           geteuid().
+note       As if by open(), which gives a new file the process's
+           effective user ID. The group may come from the directory and
+           is not checked.
+test       t/037-owner.c

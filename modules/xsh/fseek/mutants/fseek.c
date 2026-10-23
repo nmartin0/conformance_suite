@@ -46,6 +46,7 @@ static const char *mutant_of(const char *prefix)
 	if (real_##fn == NULL) real_##fn = (__typeof__(fn) *)dlsym(RTLD_NEXT, #fn)
 
 #include <stdio.h>
+#include <stdint.h>
 #include <stdio_ext.h>
 #include <sys/types.h>
 
@@ -85,6 +86,19 @@ static int seek(FILE *f, off_t off, int whence, int narrow)
 	}
 	if (IS("mem_beyond_ok") && fileno(f) < 0)
 		return 0;
+	if (IS("mem_at_end_refused") && fileno(f) < 0 && whence == SEEK_SET && off > 0 && off == 10) {
+		errno = EINVAL;	/* an off-by-one bound: the end itself is refused */
+		return -1;
+	}
+	if (narrow && IS("overflow_einval") && whence == SEEK_END) {
+		struct stat st;
+
+		if (fileno(f) >= 0 && fstat(fileno(f), &st) == 0 && off > 0 &&
+		    off > (off_t)(((uintmax_t)1 << (sizeof(off_t) * 8 - 1)) - 1) - st.st_size - 4096) {
+			errno = EINVAL;
+			return -1;
+		}
+	}
 	if (IS("fd_offset_stale") && fileno(f) >= 0)
 		fdpos = lseek(fileno(f), 0, SEEK_CUR);
 	if ((IS("old_times") || IS("gap_filled")) && fileno(f) >= 0)
@@ -126,7 +140,7 @@ int fseek(FILE *f, long off, int whence)
 	if (IS("wrong_errno") || IS("whence_set_only") || IS("cur_ignores_buffer") || IS("end_off_by_one") ||
 	    IS("drops_pending") || IS("bad_whence_ok") || IS("negative_ok") || IS("beyond_end_refused") ||
 	    IS("mem_beyond_ok") || IS("fd_offset_stale") || IS("old_times") || IS("gap_filled") || IS("keeps_eof") ||
-	    IS("espipe_ok") || IS("error_cleared")) {
+	    IS("espipe_ok") || IS("error_cleared") || IS("mem_at_end_refused")) {
 		int r;
 		if (IS("wrong_errno") || IS("error_cleared") || IS("espipe_ok")) {
 			r = real_fseek(f, off, whence);	/* keep the real long-offset checks (EOVERFLOW) */

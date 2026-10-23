@@ -1,12 +1,10 @@
 /*
- * The descriptor's status flags follow the mode table.
+ * The descriptor's access mode and O_APPEND follow the mode table.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fopen.006
  * MUTANT    fopen.r_writable
  * MUTANT    fopen.a_no_append
- * MUTANT    fopen.adds_nonblock
- * MUTANT    fopen.adds_sync
  */
 #include "pc.h"
 #include <errno.h>
@@ -192,11 +190,8 @@ int main(void)
 		static const char *const modes[6] = { "r", "w", "a", "r+", "w+", "a+" };
 		static const int acc[6] = { O_RDONLY, O_WRONLY, O_WRONLY, O_RDWR, O_RDWR, O_RDWR };
 		FILE *f;
-		int i, fl, other = O_NONBLOCK | O_SYNC;
+		int i, fl;
 
-#ifdef O_DSYNC
-		other |= O_DSYNC;
-#endif
 		pc_make_file("f", "abc");
 		pc_test();
 		for (i = 0; i < 6; i++) {
@@ -205,7 +200,6 @@ int main(void)
 			pc_check((fl & O_ACCMODE) == acc[i], "\"%s\": access mode %#x", modes[i], (unsigned)(fl & O_ACCMODE));
 			pc_check(((fl & O_APPEND) != 0) == (modes[i][0] == 'a'), "\"%s\": O_APPEND is %s", modes[i],
 				 fl & O_APPEND ? "set" : "clear");
-			pc_check((fl & other) == 0, "\"%s\": other status flags are set (%#x)", modes[i], (unsigned)(fl & other));
 			NEED(fclose(f) == 0, "fclose failed");
 		}
 	}

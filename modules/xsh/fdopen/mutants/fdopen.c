@@ -61,6 +61,12 @@ FILE *fdopen(int fd, const char *mode)
 		errno = EINVAL;
 		return NULL;
 	}
+	if (IS("b_rejected") && strchr(mode, 'b')) {
+		errno = EINVAL;
+		return NULL;
+	}
+	if (IS("a_seeks_end") && mode[0] == 'a')
+		(void)lseek(fd, 0, SEEK_END);
 	if (IS("dups") && (d = dup(fd)) != -1)
 		fd = d;
 	if (IS("rewinds"))

@@ -57,11 +57,11 @@ static off_t tell(FILE *f, int narrow)
 	off_t r;
 
 	if (IS("cached")) {
-		static off_t last;
+		static off_t last = -1;
 		struct stat st;
 
-		if (fileno(f) >= 0 && fstat(fileno(f), &st) != 0)
-			return last;	/* answers from a remembered value, without the descriptor */
+		if (fileno(f) >= 0 && fstat(fileno(f), &st) != 0 && last >= 0)
+			return last;	/* answers from the position it remembered, without the descriptor */
 		return last = real_ftello(f);
 	}
 	if (IS("ignores_buffer") && fileno(f) >= 0) {

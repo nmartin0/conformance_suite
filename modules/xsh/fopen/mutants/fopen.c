@@ -149,6 +149,20 @@ FILE *fopen(const char *path, const char *mode)
 		return rebuilt(path, mode, 0, 0, 0600, -1);
 	if (IS("fixed_mode"))
 		return rebuilt(path, mode, 0, 0, 0644, -1);
+	if (IS("late_flags_ignored") && strlen(mode) > 2) {
+		char mm[8];
+		size_t i, k = 0;
+
+		for (i = 0; mode[i] && k < sizeof mm - 1; i++)
+			if (i < 2 || (mode[i] != 'x' && mode[i] != 'e'))
+				mm[k++] = mode[i];	/* 'x' and 'e' count only straight after the first character */
+		mm[k] = '\0';
+		return real_fopen(path, mm);
+	}
+	if (IS("trunc_replaces") && existed && mode[0] == 'w') {
+		(void)unlink(path);	/* a new file instead of the old one truncated */
+		return real_fopen(path, mode);
+	}
 	if (IS("order_strict") && mode[1] != '\0' && mode[1] != '+' && strchr(mode, '+')) {
 		errno = EINVAL;
 		return NULL;
@@ -203,6 +217,8 @@ FILE *fopen(const char *path, const char *mode)
 	}
 	if (IS("oriented"))
 		(void)fwide(f, 1);
+	if (IS("wrong_owner") && !existed && mode[0] != 'r')
+		(void)fchown(fileno(f), geteuid() + 1, (gid_t)-1);
 	if (IS("creat_old_times") && !existed && mode[0] != 'r') {
 		struct timespec old[2] = { { 1000000000, 0 }, { 1000000000, 0 } };
 		(void)futimens(fileno(f), old);

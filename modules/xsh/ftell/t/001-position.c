@@ -168,8 +168,12 @@ int main(void)
 		f = open_as("w", "w");
 		NEED(fputs("hello", f) >= 0, "fputs failed");
 		pc_check((p = ftell(f)) == 5, "ftell() after writing 5 bytes is %ld", p);
+		f = open_as("r", "r+");
+		NEED(fgetc(f) == '0' && fseek(f, 0, SEEK_CUR) == 0 && fputc('X', f) == 'X', "reading or writing failed");
+		pc_check((p = ftell(f)) == 2, "ftell() on an update stream after output is %ld, expected 2", p);
+		/* The initial position of an append stream is implementation-defined (XSH 2.5); after a flush it is the end. */
 		f = open_as("a", "a");
-		NEED(fputs("xy", f) >= 0, "fputs failed");
+		NEED(fputs("xy", f) >= 0 && fflush(f) == 0, "writing failed");
 		pc_check((p = ftell(f)) == 6, "ftell() on an append stream after writing 2 bytes to 4 is %ld", p);
 	}
 	pc_pass();

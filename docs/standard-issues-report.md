@@ -126,9 +126,15 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-30 | XSH `fflush()`: where does reading resume after pushback is discarded? | Question | Low | Only the discard is checked (XSH.fflush.005) |
 | Q-31 | XSH `_exit()`: what happens to the other threads waiting for the last child? | Question | Low | Disputed (XSH._Exit.020) |
 | Q-32 | XSH `_exit()`: asynchronous I/O at exit cannot be observed | Question | Low | Disputed (XSH._Exit.019) |
-| Q-33 | XSH `setvbuf()`: each mode is required, but support is implementation-defined | Question | Medium | Disputed (XSH.setvbuf.003, .004, .006) |
+| Q-33 | XSH `setvbuf()`, `fopen()`: buffering is required, but support is implementation-defined | Question | Medium | Disputed (XSH.setvbuf.003, .004, .006; XSH.fopen.019, .020) |
 | Q-34 | XSH `ungetc()`: the limit on repeated pushback omits fflush() | Question | Low | Not tested (permission) |
-| Q-35 | XSH `fseek()`: the ERRORS preamble against errors that need no lseek() or write() | Question | Medium | Disputed (XSH.fseek.014) |
+| Q-35 | XSH `fseek()`: the ERRORS preamble against errors that need no lseek() or write() | Question | Medium | Disputed (XSH.fseek.009 to .011, .014 to .017) |
+| Q-36 | XSH `fdopen()`: the 'a' modes: position and O_APPEND | Question | Medium | Disputed (XSH.fdopen.013) |
+| Q-37 | XBD `<limits.h>`: {STREAM_MAX} as a runtime invariant tied to {FOPEN_MAX} | Question | Low | NOTINUSE when it follows RLIMIT_NOFILE |
+| Q-38 | XSH `open()`, `fopen()`: may a failed create leave a file behind? | Question | Low | Not tested |
+| Q-39 | XSH `fopen()`: a trailing slash with "wx" | Question | Low | Not tested |
+| Q-40 | XSH `fseek()`: the offset after fflush() against XSH 2.5.1 | Question | Medium | Disputed (XSH.fseek.004) |
+| Q-41 | XSH `fseek()`: EBADF for a descriptor "not open for writing" | Question | Low | Not tested |
 
 ## Entries
 
@@ -1058,6 +1064,7 @@ is unclear.
 - **Where:** XSH `setvbuf()`, DESCRIPTION and RETURN VALUE; XSH 2.5.
 - **Question:** setvbuf() says each of _IOFBF, _IOLBF and _IONBF shall cause that kind of buffering, and that a request that cannot be honoured makes it return non-zero. XSH 2.5 (following ISO C) makes support for the buffering characteristics implementation-defined. Together these appear to let an implementation refuse any mode, or accept it and buffer some other way. Must an accepted _IONBF stream send each byte at once and an accepted _IOLBF stream send each line at its newline? Is setvbuf() still permitted after an unsuccessful call, given that the text mentions this only as an allowance for applications?
 - **posixcheck meanwhile:** XSH.setvbuf.001 checks only that data arrives intact under each accepted mode and notes refusals. XSH.setvbuf.003, .004 and .006 check the observable effect of an accepted mode and are `disputed`: a FAIL is logged as INSPECT, and a refusal is UNRESOLVED.
+- **Also:** fopen() says a stream is fully buffered if and only if it can be determined not to refer to an interactive device, but "interactive device" is not defined and the same implementation-defined support applies. XSH.fopen.019 (a terminal, XSI) and XSH.fopen.020 (a regular file) are `disputed` under this question.
 
 ### Q-34: ungetc(): the limit on repeated pushback and fflush()
 
@@ -1069,7 +1076,44 @@ is unclear.
 
 - **Where:** XSH `fseek()`, ERRORS.
 - **Question:** the "shall fail" list applies only when the stream is unbuffered or its buffer needed to be flushed, and the call invokes an underlying lseek() or write(). Read literally, a buffered stream with nothing to flush need not fail with EINVAL for an invalid whence or a negative position, or with ESPIPE on a pipe. Yet the same list names conditions that involve neither call: an fmemopen() position beyond the end of the buffer (EINVAL) and open_memstream() running out of memory (ENOMEM). Is the preamble meant to restrict only the errors that come from lseek() and write() (EAGAIN, EFBIG, EINTR, EIO, ENOSPC, EPIPE)? Should EINVAL and ESPIPE be required whatever the buffer state, as ISO C's "a request that cannot be satisfied" suggests?
-- **posixcheck meanwhile:** XSH.fseek.009 to .012 leave output pending so that the preamble holds. XSH.fseek.014 (fmemopen() beyond the end) is `disputed`.
+- **Also:** does the DESCRIPTION's rule that fseek() writes unwritten data apply to a call that fails? If so, pending output always satisfies the preamble; if not, a system can avoid it by validating first, as glibc and musl do for an invalid whence (the data is not written). And fmemopen()'s page requires a seek beyond max_size to fail with no such preamble, while fseek()'s EINVAL for the same case sits under it; the two pages should agree (fmemopen() says "larger than the buffer size", fseek() "beyond the end of the underlying memory buffer").
+- **posixcheck meanwhile:** XSH.fseek.009, .010, .011, .014, .015, .016 and .017 are `disputed`. The flush errors that need a write() (EBADF, EFBIG, EPIPE, EAGAIN: XSH.fseek.012, .013, .018, .020) stay required, and the fmemopen() failure itself is required by XSH.fseek.019.
+
+### Q-36: fdopen(): the 'a' modes
+
+- **Where:** XSH `fdopen()`, DESCRIPTION; XSH 2.5.
+- **Question:** fdopen() sets the new stream's position from the descriptor's offset, but XSH 2.5 makes the initial position of a stream opened in append mode implementation-defined (beginning or end). Which governs fdopen(fd, "a"), and may fdopen() move the shared offset (glibc seeks the descriptor to the end; musl keeps it)? The 'a' paragraph also lacks the "O_APPEND set shall remain set" sentence that 'r' and 'w' have, and when O_APPEND stays clear (allowed) nothing says whether the stream forces its writes to the end of file, as fopen()'s append mode does.
+- **posixcheck meanwhile:** XSH.fdopen.013 (position kept for "a" and "a+") is `disputed`; XSH.fdopen.010 uses descriptors that already have O_APPEND set.
+
+### Q-37: {STREAM_MAX}
+
+- **Where:** XBD `<limits.h>`, Runtime Invariant Values; XSH `fopen()`, `fdopen()`, ERRORS.
+- **Question:** {STREAM_MAX} is a runtime invariant whose actual value sysconf() reports, yet BSD-family systems derive it from RLIMIT_NOFILE, which setrlimit() changes. When defined it equals {FOPEN_MAX}, ISO C's guaranteed minimum, and the EMFILE "shall fail" then turns that minimum into a hard ceiling. Nor does the text say whether stdin, stdout, stderr and streams the library opens for itself count.
+- **posixcheck meanwhile:** XSH.fopen.032 and XSH.fdopen.009 count the three standard streams, and report NOTINUSE when the value follows RLIMIT_NOFILE (the descriptor case is XSH.fopen.031).
+
+### Q-38: a failed create
+
+- **Where:** XSH `open()`, `fopen()`; XSH 2.3.
+- **Question:** XSH 2.3 allows a failed call to have been partly performed unless stated otherwise, and neither open() nor fopen() says that a failed O_CREAT leaves no new file: not for EMFILE (a system may create the name before it finds no free descriptor), nor for the trailing-slash errors. Is a file left behind conforming, or is "no file created" intended?
+- **posixcheck meanwhile:** XSH.fopen.027, .028 and .031 check only the errno. XSH.fopen.009 and .011 do check the file, on the strength of open()'s atomic O_EXCL rule.
+
+### Q-39: fopen(): a trailing slash with "wx"
+
+- **Where:** XSH `fopen()`, ERRORS; XSH `open()`, ERRORS.
+- **Question:** open()'s trailing-slash ENOTDIR is qualified by O_CREAT and O_EXCL not being specified (it is unclear whether that means neither flag or not both), while fopen()'s ENOTDIR has no such qualifier. For fopen("f/", "wx") with f a regular file, EEXIST and ENOTDIR then both apply. XSH 2.3 lets either be reported, but the two pages should be worded alike.
+- **posixcheck meanwhile:** not tested.
+
+### Q-40: fseek(): the offset after fflush() against XSH 2.5.1
+
+- **Where:** XSH `fseek()`, DESCRIPTION (CX); XSH 2.5.1.
+- **Question:** when fflush() is the most recent operation (other than ftell()), fseek() shall adjust the offset of the underlying open file description. That can only be seen through another handle, but XSH 2.5.1 asks the application to fflush() (or close) the stream after its last use (here the fseek()) before using another handle. Is the fseek() sentence an exception to 2.5.1, so that fflush(); fseek(); and then use of the descriptor is defined, or does it have no observable effect?
+- **posixcheck meanwhile:** XSH.fseek.004 reads the descriptor's offset after fflush() and fseek() and is `disputed`. glibc leaves it at the end of the read-ahead for an input stream (docs/linux-deviations.md O.33).
+
+### Q-41: fseek(): EBADF for a descriptor "not open for writing"
+
+- **Where:** XSH `fseek()`, ERRORS.
+- **Question:** EBADF covers a descriptor "not open for writing" or a buffer that needed flushing when the file is not open. Read literally, every fseek() on an unbuffered read-only stream (the preamble holds, since lseek() is invoked) shall fail with EBADF. The first clause presumably means "not open for writing while output needed to be flushed". No implementation behaves the literal way.
+- **posixcheck meanwhile:** XSH.fseek.012 tests only the closed-descriptor case.
 
 ## Tracking
 

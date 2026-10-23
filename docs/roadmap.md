@@ -60,9 +60,12 @@ verified; this file is the plan. Update both when a step finishes.
 6. **Remaining todos** in the done modules (`ci/coverage.py --show MODULE`
    lists them): unprivileged EACCES cases, pseudo-terminal cases,
    environment cases (ENOSPC, EROFS, ENFILE), SA_NOCLDWAIT.
-7. **stdio** (started: `fflush`, `fclose`, `ungetc`, `setvbuf`): next
-   fopen/fdopen modes, fseek/ftell, the XSH 2.5.1 handle rules, the
-   XSH 2.5.2 wide-stream rule for psignal() and psiginfo().
+7. **stdio** (done: `fflush`, `fclose`, `ungetc`, `setvbuf`, `fopen`, `fdopen`,
+   `fseek`, `ftell`): next the XSH 2.5.1 handle rules, the XSH 2.5.2
+   wide-stream rule for psignal() and psiginfo(), and an `fmemopen` module
+   (the fseek review found that neither glibc nor musl writes the NUL at
+   buf[0] for mode "w"); EINTR on a flushing fseek(), and EFBIG at the
+   offset maximum.
 8. **Threads**: `pthread_create`, joins, cancellation, mutexes, condition
    variables, thread-specific data.
 9. **Shell and utilities** (XCU): the shell language first, then the

@@ -80,4 +80,6 @@ XSH.fopen.028      FAIL         linux*    O.1: EISDIR for fopen("new/", "w")
 XSH.fopen.032      FAIL         linux*    O.31: {STREAM_MAX} is 16 but not enforced
 XSH.fdopen.005     FAIL         linux*    O.32: fdopen() ignores 'e'
 XSH.fdopen.009     FAIL         linux*    O.31: {STREAM_MAX} is 16 but not enforced
-XSH.fseek.004      FAIL         linux*    O.33: fseek() after fflush() leaves the read-ahead offset
+XSH.fseek.004      INSPECT      linux*    O.33 (Q-40 disputed): fseek() after fflush() leaves the read-ahead offset
+XSH.fseek.016      INSPECT      linux*    O.3 (Q-35 disputed): fseeko() overflow gives EINVAL
+XSH.fdopen.013     INSPECT      linux*    Q-36 (disputed): fdopen("a") seeks the descriptor to the end

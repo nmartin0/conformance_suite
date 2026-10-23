@@ -168,6 +168,9 @@ int main(void)
 		NEED(feof(f), "the end-of-file indicator is not set at the end");
 		pc_check(fseek(f, 0, SEEK_END) == 0, "fseek(0, SEEK_END) failed");
 		pc_check(!feof(f), "fseek(0, SEEK_END) left the end-of-file indicator set");
+		NEED(fgetc(f) == EOF && feof(f), "the end-of-file indicator is not set at the end");
+		pc_check(fseeko(f, 1, SEEK_SET) == 0, "fseeko(1, SEEK_SET) failed");
+		pc_check(!feof(f), "fseeko() left the end-of-file indicator set");
 	}
 	pc_pass();
 }

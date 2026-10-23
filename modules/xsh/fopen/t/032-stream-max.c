@@ -193,9 +193,16 @@ static long fill_streams(void)
 	max = sysconf(_SC_STREAM_MAX);
 	if (max == -1 && errno == 0)
 		pc_notinuse("{STREAM_MAX} is indeterminate");
-	pc_check(max >= 8, "sysconf(_SC_STREAM_MAX) gave %ld", max);
-	if (max > 4096)
+	if (max < 8)
+		pc_unresolved("sysconf(_SC_STREAM_MAX) gave %ld (not an fopen() result)", max);
+	if (max > 4096) {
+		/* It may follow RLIMIT_NOFILE (as on BSD systems): see whether a lower limit lowers it. */
+		pc_check(getrlimit(RLIMIT_NOFILE, &rl) == 0, "getrlimit failed");
+		rl.rlim_cur = 256;
+		if (setrlimit(RLIMIT_NOFILE, &rl) == 0 && sysconf(_SC_STREAM_MAX) != max)
+			pc_notinuse("{STREAM_MAX} follows RLIMIT_NOFILE; the descriptor case is XSH.fopen.031");
 		pc_notinuse("{STREAM_MAX} is %ld, too many to open", max);
+	}
 	/* Descriptors must not run out first. */
 	pc_check(getrlimit(RLIMIT_NOFILE, &rl) == 0, "getrlimit failed");
 	if (rl.rlim_cur != RLIM_INFINITY && rl.rlim_cur < (rlim_t)max + 16) {
@@ -203,6 +210,8 @@ static long fill_streams(void)
 			pc_unresolved("RLIMIT_NOFILE (%ld) is below {STREAM_MAX} (%ld)", (long)rl.rlim_max, max);
 		rl.rlim_cur = (rlim_t)max + 16;
 		pc_check(setrlimit(RLIMIT_NOFILE, &rl) == 0, "setrlimit failed");
+		if (sysconf(_SC_STREAM_MAX) != max)
+			pc_notinuse("{STREAM_MAX} follows RLIMIT_NOFILE; the descriptor case is XSH.fopen.031");
 	}
 	for (i = 3; i < max; i++) {
 		errno = 0;
