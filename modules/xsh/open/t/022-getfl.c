@@ -10,25 +10,33 @@
  */
 #include "pc.h"
 #include <fcntl.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 int main(void)
 {
-	static const struct { int flags; const char *name; } c[] = {
-		{ O_RDONLY, "O_RDONLY" },
-		{ O_WRONLY, "O_WRONLY" },
-		{ O_RDWR, "O_RDWR" },
-		{ O_WRONLY | O_APPEND, "O_WRONLY|O_APPEND" },
-		{ O_RDONLY | O_NONBLOCK, "O_RDONLY|O_NONBLOCK" },
+	/*
+	 * O_NONBLOCK is checked on a FIFO: for a regular file it is
+	 * unspecified whether F_GETFL shows it.
+	 */
+	static const struct { const char *path; int flags; const char *name; } c[] = {
+		{ "f", O_RDONLY, "O_RDONLY" },
+		{ "f", O_WRONLY, "O_WRONLY" },
+		{ "f", O_RDWR, "O_RDWR" },
+		{ "f", O_WRONLY | O_APPEND, "O_WRONLY|O_APPEND" },
+		{ "p", O_WRONLY | O_NONBLOCK, "FIFO O_WRONLY|O_NONBLOCK" },
 	};
 	size_t i;
-	int fd, fl, want;
+	int fd, fl, want, r;
 
 	pc_begin("XSH.open.022");
 	pc_make_file("f", "x");
+	pc_check(mkfifo("p", 0600) == 0, "mkfifo failed");
+	r = open("p", O_RDONLY | O_NONBLOCK);	/* a reader, so the writer opens */
+	pc_check(r >= 0, "cannot open the FIFO for reading");
 	pc_test();
 	for (i = 0; i < sizeof c / sizeof c[0]; i++) {
-		fd = open("f", c[i].flags);
+		fd = open(c[i].path, c[i].flags);
 		pc_expect_ok(fd, c[i].name);
 		fl = fcntl(fd, F_GETFL);
 		pc_expect_ok(fl, "fcntl(F_GETFL)");

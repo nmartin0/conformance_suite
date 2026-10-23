@@ -15,7 +15,7 @@ DESCRIPTION:0edd2063        XSH.open.025
 DESCRIPTION:fcc5f69f        XSH.open.009
 DESCRIPTION:06ae9996        XSH.open.011
 DESCRIPTION:2eca5eeb        XSH.open.018
-DESCRIPTION:19bb0313        XSH.open.022
+DESCRIPTION:19bb0313        partial XSH.open.022  # O_SYNC, O_DSYNC, O_RSYNC not checked
 DESCRIPTION:63dcbf6a        app
 
 # --- DESCRIPTION: access modes ---
@@ -80,7 +80,7 @@ DESCRIPTION:80de69f9        todo  openat() with an O_SEARCH descriptor skips the
 DESCRIPTION:2c96d65a        XSH.open.032
 
 # --- RETURN VALUE ---
-RETURN_VALUE:61a44a99       partial XSH.2.6-file-descriptor-allocation.001  # openat() not exercised
+RETURN_VALUE:61a44a99       partial XSH.2.6-file-descriptor-allocation.001 XSH.open.032 XSH.open.033 XSH.open.034 XSH.open.037  # openat() results are checked for use, not for being the lowest free
 RETURN_VALUE:73bdf30d       XSH.open.003 XSH.open.005
 RETURN_VALUE:b86035d8       partial XSH.open.003 XSH.open.004 XSH.open.044 XSH.open.045 XSH.open.047  # ENAMETOOLONG and EISDIR paths not checked for side effects
 

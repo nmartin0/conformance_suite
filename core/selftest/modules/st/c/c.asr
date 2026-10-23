@@ -70,3 +70,8 @@ says       A test that calls a function no header declares does not build:
            UNINITIATED, even where the compiler only warns by default.
 test       t/014-undeclared.c
 expect     UNINITIATED
+
+assertion  ST.c.015
+says       A test starts with only descriptors 0, 1 and 2 open.
+test       t/015-clean-fds.c
+expect     PASS

@@ -7,7 +7,6 @@
  */
 #include "pc.h"
 #include <fcntl.h>
-#include <limits.h>
 #include <string.h>
 #include <unistd.h>
 

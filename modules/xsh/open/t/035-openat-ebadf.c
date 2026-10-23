@@ -17,7 +17,6 @@ int main(void)
 	pc_begin("XSH.open.035");
 	pc_make_file("f", "C");
 	bad = pc_lowest_free_fd();
-	pc_check(bad != AT_FDCWD, "lowest free descriptor equals AT_FDCWD");
 	pc_test();
 	fd = openat(bad, "f", O_RDONLY);
 	pc_expect_err(fd, EBADF, "openat(closed descriptor, \"f\", O_RDONLY)");

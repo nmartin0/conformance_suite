@@ -11,6 +11,7 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <sys/stat.h>
+#include <time.h>
 #include <unistd.h>
 
 static void on_alarm(int sig)
@@ -18,8 +19,8 @@ static void on_alarm(int sig)
 	(void)sig;
 }
 
-/* SIGALRM interrupts a blocked call: caught, without SA_RESTART. */
-static void arm_alarm(unsigned secs)
+/* SIGALRM is caught, without SA_RESTART, so it interrupts a blocked call. */
+static void catch_alarm(void)
 {
 	struct sigaction sa;
 
@@ -27,19 +28,33 @@ static void arm_alarm(unsigned secs)
 	sa.sa_flags = 0;
 	sigemptyset(&sa.sa_mask);
 	pc_check(sigaction(SIGALRM, &sa, NULL) == 0, "sigaction failed");
-	alarm(secs);
+}
+
+static long ms_since(const struct timespec *t0)
+{
+	struct timespec t;
+
+	clock_gettime(CLOCK_MONOTONIC, &t);
+	return (t.tv_sec - t0->tv_sec) * 1000L +
+	    (t.tv_nsec - t0->tv_nsec) / 1000000L;
 }
 
 int main(void)
 {
+	struct timespec t0;
+	long ms;
 	int fd;
 
 	pc_begin("XSH.open.031");
 	pc_check(mkfifo("p", 0600) == 0, "mkfifo failed");
-	arm_alarm(1);
+	catch_alarm();
 	pc_test();
+	clock_gettime(CLOCK_MONOTONIC, &t0);
+	alarm(1);
 	fd = open("p", O_WRONLY);
+	ms = ms_since(&t0);
 	pc_check(fd == -1, "open() returned a descriptor although no reader exists");
 	pc_expect_err(fd, EINTR, "blocked open(\"p\", O_WRONLY) interrupted by SIGALRM");
+	pc_check(ms >= 500, "open() returned after %ld ms, before the signal: it did not block", ms);
 	pc_pass();
 }

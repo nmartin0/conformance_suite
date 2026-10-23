@@ -310,6 +310,18 @@ int main(int argc, char **argv)
 			(void)dup2(fd, 0);
 			(void)close(fd);
 		}
+		/*
+		 * Tests start with only 0, 1 and 2 open: descriptors inherited
+		 * from the driver would distort descriptor-allocation and
+		 * limit tests.
+		 */
+		{
+			long max = sysconf(_SC_OPEN_MAX);
+			if (max < 0 || max > 65536)
+				max = 65536;
+			for (fd = 3; fd < max; fd++)
+				(void)close(fd);
+		}
 		if (limitspec)
 			apply_limits(limitspec);
 		if (pw) {

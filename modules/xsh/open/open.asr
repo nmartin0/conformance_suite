@@ -179,8 +179,9 @@ anchor     functions/fcntl.html#DESCRIPTION/F_GETFL
 class      required
 since      1988
 says       fcntl(F_GETFL) on the new descriptor shows the access mode it
-           was opened with, and the file status flags requested (tested
-           with O_APPEND and O_NONBLOCK).
+           was opened with, and the file status flags requested (O_APPEND
+           on a regular file; O_NONBLOCK on a FIFO, since for a regular
+           file it is unspecified whether F_GETFL shows it).
 test       t/022-getfl.c
 
 assertion  XSH.open.023
@@ -320,10 +321,10 @@ test       t/038-eloop.c
 assertion  XSH.open.039
 anchor     functions/open.html#ERRORS/EISDIR
 class      required
-since      2024
+since      2008
 says       O_CREAT without O_DIRECTORY on an existing directory, opened
            O_RDONLY, fails with EISDIR.
-note       Issue 8 made this case EISDIR explicitly.
+note       Added in Issue 7 TC2 (Austin Group defect 847).
 test       t/039-eisdir-creat.c
 
 assertion  XSH.open.040
@@ -343,7 +344,8 @@ says       Creating a file sets the new file's access, modification and
            status change times, and updates the parent directory's
            modification and status change times.
 note       Takes about 2 s: the times are compared across a pause longer
-           than a coarse timestamp resolution.
+           than a coarse timestamp resolution. A file system that
+           keeps access times per day (FAT) fails the atime check.
 test       t/041-creat-times.c
 
 assertion  XSH.open.042
@@ -358,6 +360,7 @@ test       t/042-trunc-times.c
 assertion  XSH.open.043
 anchor     functions/open.html#ERRORS/ENOTDIR
 class      required
+since      2008
 says       Without O_CREAT, a path ending in a slash whose last
            component names a regular file fails with ENOTDIR.
 test       t/043-trailing-slash-file.c
@@ -366,22 +369,24 @@ assertion  XSH.open.044
 anchor     functions/open.html#ERRORS/ENOENT
 anchor     functions/open.html#RETURN VALUE
 class      required
-since      2024
+since      2008
 says       With O_CREAT, a path ending in a slash whose last component
            does not exist fails with ENOENT or ENOTDIR, and nothing is
            created.
-note       Issue 8 wording. Linux is known to give EISDIR here.
+note       In Issue 7 by TC1; defect 822 (TC2) reworded it. Linux gives
+           EISDIR here (docs/linux-deviations.md O.1).
 test       t/044-creat-trailing-slash-new.c
 
 assertion  XSH.open.045
 anchor     functions/open.html#ERRORS/ENOTDIR
 anchor     functions/open.html#RETURN VALUE
 class      required
-since      2024
+since      2008
 says       With O_CREAT (without O_EXCL), a path ending in a slash whose
            last component names an existing regular file fails with
            ENOTDIR (ENOENT is not allowed), and the file is unchanged.
-note       Issue 8 wording.
+note       In Issue 7 by TC1; the ENOENT exclusion is from defect 822
+           (TC2). Linux gives EISDIR (docs/linux-deviations.md O.1).
 test       t/045-creat-trailing-slash-file.c
 
 assertion  XSH.open.046
@@ -408,6 +413,8 @@ since      1988
 says       A file created by open() is owned by the process's effective
            user ID, and its group is the parent directory's group or the
            process's effective group ID.
+note       Run on a local file system: NFS with root squashing, or a
+           mount that forces an owner, fails this for environment reasons.
 test       t/048-creat-owner.c
 
 assertion  XSH.open.049

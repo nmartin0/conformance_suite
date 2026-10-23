@@ -23,6 +23,12 @@ int main(void)
 	lim = pc_lowest_free_fd() + 2;
 	if (lim < 8)
 		lim = 8;
+	/* Never lower the limit below a descriptor that is open. */
+	for (i = 0; i < 1024; i++)
+		if (fcntl(i, F_GETFD) != -1 && i + 1 > lim)
+			lim = i + 1;
+	if (lim > 256)
+		pc_unresolved("a descriptor near %d is open; too many to fill", lim);
 	for (i = 0; i < lim; i++)
 		if (fcntl(i, F_GETFD) == -1)
 			pc_check(dup2(src, i) == i, "dup2 to %d failed", i);

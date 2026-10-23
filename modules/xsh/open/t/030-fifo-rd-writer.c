@@ -37,7 +37,6 @@ int main(void)
 
 	pc_begin("XSH.open.030");
 	pc_check(mkfifo("p", 0600) == 0, "mkfifo failed");
-	pc_test();
 	pid = fork();
 	pc_check(pid != -1, "fork failed");
 	if (pid == 0) {
@@ -45,6 +44,7 @@ int main(void)
 		alarm(10);
 		_exit(open("p", O_WRONLY) >= 0 ? 0 : 1);
 	}
+	pc_test();
 	arm_alarm(5);
 	fd = open("p", O_RDONLY);
 	if (fd == -1 && errno == EINTR)
