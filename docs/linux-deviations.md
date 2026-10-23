@@ -44,6 +44,7 @@ by the named assertion.
 | XSH.write.022 | FAIL | `pwrite()` on an `O_APPEND` descriptor appends instead of writing at the offset | 1.4 |
 | XSH.fork.018 | UNINITIATED (glibc) | `_Fork()` exists but is not declared under the strict build | 2.10 |
 | XSH.wait.019 | FAIL | with SIGCHLD blocked, `wait()` leaves the pending SIGCHLD pending after reporting the only child | O.5 |
+| XSH._Exit.002 | FAIL | `waitid()` reports only the low 8 bits of the exit status in `si_status` | O.6 |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or
@@ -103,6 +104,15 @@ O.5 **`wait()` does not clear a pending, blocked SIGCHLD.**
   pending after wait() reaps the only child; a later sigwait() or
   unblock still delivers it.
 - Comp: kernel. Kind: long-standing. Observe: XSH.wait.019.
+- Src: posixcheck run, glibc and musl alike.
+
+O.6 **`waitid()` gives only 8 bits of the exit status.**
+- POSIX (`_Exit`, `exit`): only the low 8 bits of the status are seen
+  through wait() and waitpid(), but the full value is available from
+  waitid() and in the siginfo_t for SIGCHLD (since Issue 7).
+- Linux: the kernel keeps only the low 8 bits of the exit code, so
+  `_exit(0x1234)` gives si_status 0x34 from waitid().
+- Comp: kernel. Kind: long-standing. Observe: XSH._Exit.002.
 - Src: posixcheck run, glibc and musl alike.
 
 ## Things the strict build changes

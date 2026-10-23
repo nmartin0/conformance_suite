@@ -1,0 +1,50 @@
+# _Exit.cov - every requirement unit on functions/_Exit.html (_Exit, _exit,
+# and the consequences of process termination).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:e208cbcc        none  alignment with ISO C
+DESCRIPTION:5ae5401f        none  alignment with ISO C
+DESCRIPTION:4e137535        none  alignment with ISO C
+DESCRIPTION:0ebb5d06        XSH._Exit.001 XSH._Exit.002
+DESCRIPTION:8c7d281f        XSH._Exit.003
+DESCRIPTION:36418fa2        XSH._Exit.004 XSH._Exit.012
+DESCRIPTION:ff4313f2        XSH._Exit.005
+DESCRIPTION:2ddb25ad        impl  whether open streams are closed (documentation)
+DESCRIPTION:d2c815c8        XSH._Exit.001
+DESCRIPTION:f5ef103e        none  introduces the consequences
+DESCRIPTION:7e061f95        none  a note on shading
+DESCRIPTION:f1602dcb        none  a note on shading
+DESCRIPTION:553cfb29        partial XSH._Exit.006  # descriptors only; directory streams, conversion and catalog descriptors not tested
+DESCRIPTION:28e9e3d4        XSH._Exit.009
+DESCRIPTION:80a7e0e2        none  restated by the zombie and status items, which are tested
+DESCRIPTION:a5c569b1        impl  SIGCHLD with SA_NOCLDWAIT (documentation)
+DESCRIPTION:710a93cd        XSH._Exit.009
+DESCRIPTION:0176c377        none  introduces the next items
+DESCRIPTION:1b06962c        XSH._Exit.001
+DESCRIPTION:9d6fce63        XSH._Exit.008
+DESCRIPTION:3cdff533        XSH._Exit.008
+DESCRIPTION:24fba22c        XSH._Exit.008
+DESCRIPTION:b4c0132d        todo  two threads blocked in wait(): one gets the status (see XSH 2.12)
+DESCRIPTION:6040b728        XSH._Exit.007
+DESCRIPTION:08c0d4dd        XSH.wait.020  # the grandchild lives on
+DESCRIPTION:c0cd31f3        none  explanation
+DESCRIPTION:18888d7e        XSH.wait.020
+DESCRIPTION:bbd69ccc        XSH.wait.020
+DESCRIPTION:49edcc41        todo  XSI: shmat() then exit; shm_nattch drops by one
+DESCRIPTION:209dbd23        todo  XSI: semop() with SEM_UNDO then exit; semval is adjusted
+DESCRIPTION:0966a8f4        todo  a controlling process's exit sends SIGHUP to the foreground group (needs a pseudo-terminal)
+DESCRIPTION:e5c0ec67        todo  the terminal is released and can be acquired again (needs a pseudo-terminal)
+DESCRIPTION:a69949ea        XSH._Exit.010
+DESCRIPTION:5d843f6d        untestable  closing named semaphores at exit is not observable apart from the semaphore staying usable
+DESCRIPTION:c90175b4        untestable  destroying unnamed semaphores at exit is not observable from another process
+DESCRIPTION:1d74f6ec        untestable  no interface reports whether memory is locked
+DESCRIPTION:39f7e815        untestable  no interface reports whether memory is locked
+DESCRIPTION:7856bd94        untestable  unmapping at destruction is not observable after the process is gone
+DESCRIPTION:e22a7718        none  TYM: typed memory is not supported by the reference systems; untested
+DESCRIPTION:b8bcb068        todo  MSG: an mq descriptor open at exit is closed (mq_notify registration released)
+DESCRIPTION:f4efbe90        none  a permission
+DESCRIPTION:31dda5a6        todo  an aio_write() outstanding at _exit() still completes, without its signal
+DESCRIPTION:6a4a5b80        none  a permission
+DESCRIPTION:6a96306b        impl  which outstanding I/O is cancelled (documentation)
+DESCRIPTION:2934dfe9        XSH._Exit.011
+RETURN_VALUE:dd361458       none  "does not return": every test relies on it

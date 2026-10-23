@@ -37,8 +37,15 @@ int main(void)
 	int code;
 
 	pc_begin("XSH.fork.014");
-	mx = mmap(NULL, sizeof *mx, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-	pc_check(mx != MAP_FAILED, "mmap failed");
+	{
+		/* File-backed, so as not to depend on MAP_ANONYMOUS (Issue 8). */
+		int fd;
+		pc_make_file("m", "");
+		fd = open("m", O_RDWR);
+		pc_check(fd >= 0 && ftruncate(fd, (off_t)sizeof *mx) == 0, "cannot size the file");
+		mx = mmap(NULL, sizeof *mx, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+		pc_check(mx != MAP_FAILED, "mmap failed");
+	}
 	pc_check(pthread_mutexattr_init(&a) == 0 &&
 	    pthread_mutexattr_setpshared(&a, PTHREAD_PROCESS_SHARED) == 0 &&
 	    pthread_mutexattr_settype(&a, PTHREAD_MUTEX_ERRORCHECK) == 0 &&

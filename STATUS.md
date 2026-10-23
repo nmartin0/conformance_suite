@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (251 assertions):
+- Modules (264 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -55,7 +55,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     processes at once), RLIMIT_FSIZE (partial, EFBIG, SIGXFSZ), EINTR
     before and after data, {PIPE_BUF} atomicity with four writers,
     non-blocking pipes, EPIPE and SIGPIPE, sockets, mtime, pwrite().
-  - `xsh/fork` (18): return values and IDs, descriptors and
+  - `xsh/fork` (19): return values and IDs, descriptors and
     FD_CLOFORK, directory streams, times, alarm, pending signals,
     private and shared mappings, timers, threads, process-shared
     mutexes, CPU-time clock, semaphores, inherited attributes, _Fork().
@@ -63,11 +63,15 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     selection (any, one, own group, other group), WNOHANG, WUNTRACED,
     WCONTINUED, EINTR, ECHILD, EINVAL, consumption, SIGCHLD clearing,
     reparenting, last-thread exit.
+  - `xsh/_Exit` (12): status bits (wait and waitid), _exit/_Exit
+    equivalence, no handlers or flushing, descriptors closed, SIGCHLD,
+    zombies, XSI SIGCHLD ignored, orphaned process groups, no thread
+    cleanup.
   - `xbd/unistd.h` (2): POSIX_CLOSE_RESTART, SEEK_*; `xbd/fcntl.h` now 8.
   - `xcu/true` (3), `xcu/false` (3): each checks the shell's handling and
     a direct exec (XCU 1.6).
 - `ci/lint.py`: traceability and anchor checks; `ci/mutate.sh`: mutation
-  checks (346 mutants); `ci/catalog.py`: shared parser.
+  checks (355 mutants); `ci/catalog.py`: shared parser.
 - `analysis/analyze.py`: load, runs, verdict, failures, matrix, diff,
   coverage, html, calibrate (checks a reference run against
   `known/*.known`, its expected failures).
@@ -158,7 +162,7 @@ anything.
 ## Issues in the standard
 
 `docs/standard-issues.md` indexes conflicts, mistakes and unclear points
-found in POSIX.1-2024 (SI-1 to SI-6, Q-1, Q-2 so far); the full write-up
+found in POSIX.1-2024 (SI-1 to SI-7, Q-1 to Q-3 so far); the full write-up
 for The Austin Group is https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 Reviews should report any new ones.
 

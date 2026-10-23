@@ -14,18 +14,19 @@
 #include <unistd.h>
 #include <time.h>
 
-/* Uses about ms milliseconds of CPU. */
+/* Uses ms milliseconds of process CPU time (wall-clock cap 10 s). */
 static void burn(long ms)
 {
-	struct timespec a, b;
+	struct timespec c, w0, w;
 	volatile unsigned long x = 0;
 
-	clock_gettime(CLOCK_MONOTONIC, &a);
+	clock_gettime(CLOCK_MONOTONIC, &w0);
 	do {
 		for (int i = 0; i < 100000; i++)
 			x += (unsigned long)i;
-		clock_gettime(CLOCK_MONOTONIC, &b);
-	} while ((b.tv_sec - a.tv_sec) * 1000L + (b.tv_nsec - a.tv_nsec) / 1000000L < ms);
+		clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &c);
+		clock_gettime(CLOCK_MONOTONIC, &w);
+	} while (c.tv_sec * 1000L + c.tv_nsec / 1000000L < ms && w.tv_sec - w0.tv_sec < 10);
 }
 
 /*
@@ -61,7 +62,8 @@ int main(void)
 		struct timespec c;
 		if (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &c) != 0)
 			_exit(9);
-		_exit(c.tv_sec < p.tv_sec || (c.tv_sec == p.tv_sec && c.tv_nsec < p.tv_nsec / 2) ? 0 : 1);
+		_exit((long long)c.tv_sec * 1000000000LL + c.tv_nsec <
+		    ((long long)p.tv_sec * 1000000000LL + p.tv_nsec) / 2 ? 0 : 1);
 	}
 	code = reap(r);
 	pc_check(code == 0, "the child's CPU-time clock did not start at zero");

@@ -88,22 +88,21 @@ test       t/009-pending.c
 assertion  XSH.fork.010
 anchor     functions/fork.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       A MAP_PRIVATE mapping is kept in the child with the parent's
            data from before fork(); after fork(), each process's changes
            to it are visible only to itself.
-nomutant   a copy-on-write fault cannot be planted from a preload
-           library
+nomutant   not planted yet: needs a fault in mmap() or a copy-on-write
+           emulation
 test       t/010-map-private.c
 
 assertion  XSH.fork.011
 anchor     functions/fork.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       A MAP_SHARED mapping is kept in the child: a change the child
            makes is seen by the parent.
-nomutant   the mapping is kernel state that a preload fault cannot
-           remove
+nomutant   not planted yet: needs a fault in mmap()
 test       t/011-map-shared.c
 
 assertion  XSH.fork.012
@@ -111,14 +110,14 @@ anchor     functions/fork.html#DESCRIPTION
 class      required
 since      2008
 says       Per-process timers made with timer_create() are not
-           inherited: a timer the parent armed does not signal the
-           child.
+           inherited: a timer armed in the parent before fork() does not
+           signal the child, while it does signal the parent.
 test       t/012-timer.c
 
 assertion  XSH.fork.013
 anchor     functions/fork.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       The child of a multi-threaded process has only the thread
            that called fork(): another parent thread that keeps counting
            does not run in the child.
@@ -128,12 +127,15 @@ test       t/013-single-thread.c
 
 assertion  XSH.fork.014
 anchor     functions/fork.html#DESCRIPTION
-class      required
+class      conditional
+when       TSH
 since      2001
-says       A process-shared mutex held by the parent is not held by the
-           child: unlocking that error-checking mutex in the child fails
-           with EPERM.
-nomutant   mutex ownership cannot be planted from a preload library
+says       TSH: a process-shared mutex held by the parent is not held by
+           the child: unlocking that error-checking mutex in the child
+           fails with EPERM.
+nomutant   not planted yet: needs a fault in pthread_mutex_unlock()
+note       The fork() page does not shade this item TSH, but only TSH
+           makes a lock process-shared: see SI-7.
 test       t/014-pshared-mutex.c
 
 assertion  XSH.fork.015
@@ -149,10 +151,10 @@ test       t/015-cputime.c
 assertion  XSH.fork.016
 anchor     functions/fork.html#DESCRIPTION
 class      required
-since      2001
+since      2008
 says       A named semaphore open in the parent is open in the child:
            the child's sem_post() releases the parent's sem_wait().
-nomutant   the semaphore handle cannot be closed from a preload library
+nomutant   not planted yet: needs a fault in sem_post()
 test       t/016-semaphore.c
 
 assertion  XSH.fork.017
@@ -169,8 +171,19 @@ assertion  XSH.fork.018
 anchor     functions/fork.html#DESCRIPTION/_Fork
 class      required
 since      2024
-says       _Fork() creates a child as fork() does but does not run
-           handlers registered with pthread_atfork(), which fork() runs.
+says       _Fork() creates a child as fork() does but runs none of the
+           handlers registered with pthread_atfork() (prepare, parent or
+           child), all of which fork() runs.
 note       _Fork() is new in Issue 8; a library that does not declare it
            makes the test UNINITIATED (build failure).
 test       t/018-_Fork.c
+
+assertion  XSH.fork.019
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      1988
+says       After fork() parent and child run independently, before either
+           ends: they exchange 100 messages over pipes, each waiting for
+           the other.
+test       t/019-independent.c
+

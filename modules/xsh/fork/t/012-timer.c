@@ -3,7 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fork.012
- * MUTANT    fork.child_gets_timer_signal
+ * MUTANT    fork.child_inherits_timers
  */
 #include "pc.h"
 #include <errno.h>
@@ -14,13 +14,6 @@
 #include <unistd.h>
 #include <time.h>
 
-static volatile sig_atomic_t got;
-
-static void on_usr1(int sig)
-{
-	(void)sig;
-	got = 1;
-}
 
 /*
  * Waits for the child; returns its exit status (0 = all its checks held).
@@ -41,6 +34,7 @@ int main(void)
 {
 	struct sigevent ev;
 	struct itimerspec its;
+	sigset_t s;
 	timer_t t;
 	pid_t r;
 	int code;
@@ -50,26 +44,34 @@ int main(void)
 	ev.sigev_notify = SIGEV_SIGNAL;
 	ev.sigev_signo = SIGUSR1;
 	pc_check(timer_create(CLOCK_REALTIME, &ev, &t) == 0, "timer_create failed");
-	signal(SIGUSR1, SIG_IGN);	/* the parent ignores its own timer */
+	/* SIGUSR1 blocked (inherited): an inherited timer shows as pending. */
+	sigemptyset(&s);
+	sigaddset(&s, SIGUSR1);
+	pc_check(sigprocmask(SIG_BLOCK, &s, NULL) == 0, "sigprocmask failed");
 	memset(&its, 0, sizeof its);
-	its.it_value.tv_nsec = 200000000;	/* 0.2 s */
+	its.it_value.tv_nsec = 300000000;	/* 0.3 s, armed before fork() */
+	pc_check(timer_settime(t, 0, &its, NULL) == 0, "timer_settime failed");
 	pc_test();
 	r = fork();
 	if (r == -1)
 		pc_unresolved("fork failed");
 	if (r == 0) {
-		struct sigaction sa;
-		struct timespec ts = { 0, 600000000 };
-		memset(&sa, 0, sizeof sa);
-		sa.sa_handler = on_usr1;
-		sigemptyset(&sa.sa_mask);
-		(void)sigaction(SIGUSR1, &sa, NULL);
+		struct timespec ts = { 0, 800000000 };
+		sigset_t pend;
 		while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
 			;
-		_exit(got ? 1 : 0);
+		if (sigpending(&pend) != 0)
+			_exit(9);
+		_exit(sigismember(&pend, SIGUSR1) == 1 ? 1 : 0);
 	}
-	pc_check(timer_settime(t, 0, &its, NULL) == 0, "timer_settime failed");
 	code = reap(r);
-	pc_check(code == 0, "the parent's timer signalled the child");
+	pc_check(code == 0, "a timer the parent armed before fork() signalled the child");
+	{
+		/* The parent's own timer did fire: the setup worked. */
+		sigset_t pend;
+		pc_check(sigpending(&pend) == 0, "sigpending failed");
+		if (sigismember(&pend, SIGUSR1) != 1)
+			pc_unresolved("the parent's timer never fired, so the check proves nothing");
+	}
 	pc_pass();
 }

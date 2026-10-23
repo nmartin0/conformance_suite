@@ -3,7 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fork.005
- * MUTANT    fork.child_reopens_fds
+ * MUTANT    fork.child_keeps_clofork
  */
 #include "pc.h"
 #include <errno.h>

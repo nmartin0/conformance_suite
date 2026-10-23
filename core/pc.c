@@ -84,6 +84,7 @@ _Noreturn static void pc_report(const char *code, const char *note)
 {
 	char rest[900];
 
+	pc_internal_enter();	/* planted faults in exit() must not hit the report */
 	if (!pc_began) {
 		fprintf(stderr, "posixcheck: result before pc_begin()\n");
 		_exit(2);

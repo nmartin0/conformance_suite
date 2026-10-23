@@ -16,9 +16,9 @@ DESCRIPTION:2ab2387d        XSH.fork.008
 DESCRIPTION:ba89fac7        todo  XSI: semop() with SEM_UNDO in the parent; the child's exit does not undo it
 DESCRIPTION:4a91755d        XSH.fcntl.032
 DESCRIPTION:411c7918        XSH.fork.009
-DESCRIPTION:be04c9ba        todo  refers to XSI interval timers, which Issue 8 removed: see SI-6; nothing to test
+DESCRIPTION:be04c9ba        none  refers to XSI interval timers, which Issue 8 removed: see SI-6
 DESCRIPTION:3bda263f        XSH.fork.016
-DESCRIPTION:f9108152        todo  ML: mlockall() in the parent; the child's locked memory is not locked (needs privileges)
+DESCRIPTION:f9108152        untestable  no interface reports whether memory is locked
 DESCRIPTION:9ab1ebfc        XSH.fork.010 XSH.fork.011
 DESCRIPTION:9c004330        XSH.fork.010
 DESCRIPTION:59c68356        XSH.fork.010
@@ -39,7 +39,7 @@ DESCRIPTION:522973b9        XSH.fork.015
 DESCRIPTION:1e3a1d4c        todo  TCT: the child's thread CPU-time clock starts at zero
 DESCRIPTION:e2825544        partial XSH.fork.017  # a sample of attributes; more to add (nice value, real and saved IDs, controlling terminal)
 DESCRIPTION:b56ee184        none  unspecified
-DESCRIPTION:1ffbb226        XSH.fork.003 XSH.fork.010  # parent and child run alternately, each waiting on the other
+DESCRIPTION:1ffbb226        XSH.fork.019
 DESCRIPTION:ac4c4f85        partial XSH.fork.018  # async-signal safety of _Fork() not tested
 RETURN_VALUE:166c3859       XSH.fork.001
 RETURN_VALUE:cf25f380       XSH.fork.001

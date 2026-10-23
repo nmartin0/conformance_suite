@@ -49,6 +49,7 @@ int main(void)
 	if (r == 0)
 		_exit(sem_post(s) == 0 ? 0 : 1);
 	pc_check(reap(r) == 0, "sem_post() in the child failed");
-	pc_check(sem_wait(s) == 0, "sem_wait() in the parent failed");
+	pc_check(sem_trywait(s) == 0, "the child's sem_post() did not reach the parent's semaphore (%s)",
+	    pc_errname(errno));
 	pc_pass();
 }

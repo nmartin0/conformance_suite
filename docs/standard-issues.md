@@ -18,5 +18,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-4 | fcntl() F_DUPFD at {OPEN_MAX}: EINVAL and EMFILE overlap | unclear | XSH.fcntl.005 |
 | SI-5 | true APPLICATION USAGE on "--" vs XCU 1.4 and false | conflict | (todo in true.cov, false.cov) |
 | SI-6 | fork() still resets XSI interval timers, removed in Issue 8 | defect | (todo in fork.cov) |
+| SI-7 | fork() process-shared lock item lacks TSH shading | editorial | XSH.fork.014 |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
+| Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |

@@ -14,11 +14,21 @@
 #include <unistd.h>
 #include <pthread.h>
 
-static volatile int ran;
+static volatile int ran, ran_prepare, ran_parent;
 
 static void in_child(void)
 {
 	ran = 1;
+}
+
+static void in_prepare(void)
+{
+	ran_prepare = 1;
+}
+
+static void in_parent(void)
+{
+	ran_parent = 1;
 }
 
 /*
@@ -42,7 +52,7 @@ int main(void)
 	int code;
 
 	pc_begin("XSH.fork.018");
-	pc_check(pthread_atfork(NULL, NULL, in_child) == 0, "pthread_atfork failed");
+	pc_check(pthread_atfork(in_prepare, in_parent, in_child) == 0, "pthread_atfork failed");
 	pc_test();
 	r = _Fork();
 	if (r == -1)
@@ -51,6 +61,7 @@ int main(void)
 		_exit(ran ? 1 : 0);
 	code = reap(r);
 	pc_check(code == 0, "_Fork() ran a pthread_atfork() child handler");
+	pc_check(!ran_prepare && !ran_parent, "_Fork() ran a pthread_atfork() prepare or parent handler");
 	r = fork();
 	if (r == -1)
 		pc_unresolved("fork failed");
@@ -58,5 +69,6 @@ int main(void)
 		_exit(ran ? 0 : 1);
 	code = reap(r);
 	pc_check(code == 0, "fork() did not run the pthread_atfork() child handler");
+	pc_check(ran_prepare && ran_parent, "fork() did not run the prepare and parent handlers");
 	pc_pass();
 }

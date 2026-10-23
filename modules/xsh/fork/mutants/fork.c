@@ -20,10 +20,12 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/times.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 
 typedef pid_t (*fork_fn)(void);
+typedef int (*tcreate_fn)(clockid_t, struct sigevent *, timer_t *);
 typedef clock_t (*times_fn)(struct tms *);
 typedef int (*cgt_fn)(clockid_t, struct timespec *);
 
@@ -49,6 +51,29 @@ static int in_child;
 static struct tms parent_tms;
 static struct timespec parent_cpu;
 
+/* The last timer the process created, so a fault can "inherit" it. */
+static int have_timer;
+static clockid_t timer_clock;
+static struct sigevent timer_ev;
+static timer_t timer_id;
+
+int timer_create(clockid_t c, struct sigevent *ev, timer_t *id)
+{
+	static tcreate_fn real;
+	int r;
+
+	if (real == NULL)
+		real = (tcreate_fn)dlsym(RTLD_NEXT, "timer_create");
+	r = real(c, ev, id);
+	if (r == 0 && ev != NULL) {
+		have_timer = 1;
+		timer_clock = c;
+		timer_ev = *ev;
+		timer_id = *id;
+	}
+	return r;
+}
+
 static times_fn real_times(void)
 {
 	static times_fn fn;
@@ -69,6 +94,8 @@ static pid_t do_fork(const char *m, fork_fn f)
 {
 	unsigned left = 0;
 	sigset_t pend;
+	struct itimerspec tleft;
+	int keep[64], nkeep = 0, kept_as[64];
 	pid_t r;
 	int i;
 
@@ -80,11 +107,35 @@ static pid_t do_fork(const char *m, fork_fn f)
 		(void)real_times()(&parent_tms);
 	if (IS("cputime_inherited"))
 		(void)real_cgt()(CLOCK_PROCESS_CPUTIME_ID, &parent_cpu);
+	if (IS("child_inherits_timers") && (!have_timer || timer_gettime(timer_id, &tleft) != 0))
+		cannot_plant(m);
+#ifdef FD_CLOFORK
+	if (IS("child_keeps_clofork"))
+		for (i = 3; i < 64; i++) {
+			int fl = fcntl(i, F_GETFD);
+			if (fl != -1 && (fl & FD_CLOFORK) && nkeep < 64) {
+				int d = fcntl(i, F_DUPFD, 200 + nkeep);
+				if (d >= 0) {
+					keep[nkeep] = i;
+					kept_as[nkeep++] = d;
+				}
+			}
+		}
+#else
+	(void)keep;
+	(void)kept_as;
+#endif
 
 	r = f();
 	if (r == -1)
 		return r;
 	if (r > 0) {			/* the parent */
+		for (i = 0; i < nkeep; i++)
+			(void)close(kept_as[i]);
+		if (IS("child_waits_parent")) {
+			int st;
+			(void)waitpid(r, &st, 0);	/* runs the child to completion first */
+		}
 		if (IS("child_alarm_kept") && left)
 			(void)alarm(left);
 		if (IS("parent_gets_self"))
@@ -93,6 +144,16 @@ static pid_t do_fork(const char *m, fork_fn f)
 	}
 	/* the child */
 	in_child = 1;
+	for (i = 0; i < nkeep; i++) {
+		(void)dup2(kept_as[i], keep[i]);	/* brings an FD_CLOFORK descriptor back */
+		(void)close(kept_as[i]);
+	}
+	if (IS("child_inherits_timers") && have_timer) {
+		timer_t t;
+		struct sigevent ev = timer_ev;
+		if (timer_create(timer_clock, &ev, &t) == 0)
+			(void)timer_settime(t, 0, &tleft, NULL);
+	}
 	if (IS("child_alarm_kept") && left)
 		(void)alarm(left);
 	if (IS("child_pending_kept"))

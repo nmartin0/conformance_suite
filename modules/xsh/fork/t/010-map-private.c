@@ -58,7 +58,14 @@ int main(void)
 			_exit(2);
 		_exit(0);
 	}
-	pc_check(read(p[0], &c, 1) == 1, "the child did not report");
+	(void)close(p[1]);
+	(void)close(q[0]);
+	if (read(p[0], &c, 1) != 1) {
+		/* The child stopped early: judge by its status. */
+		code = reap(r);
+		pc_check(code != 1, "the child does not see the parent's change made before fork()");
+		pc_unresolved("the child ended early (status %d)", code);
+	}
 	m[1] = 'B';
 	(void)write(q[1], "g", 1);
 	code = reap(r);

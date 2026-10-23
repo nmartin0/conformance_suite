@@ -45,6 +45,8 @@ int main(void)
 		(void)read(q[0], &c, 1);	/* wait until the parent has looked */
 		_exit(0);
 	}
+	(void)close(p[1]);
+	(void)close(q[0]);
 	pc_check(read(p[0], &c, 1) == 1, "the child did not start");
 	errno = 0;
 	pc_check(kill(-r, 0) == -1 && errno == ESRCH,

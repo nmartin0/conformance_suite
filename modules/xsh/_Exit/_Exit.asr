@@ -1,0 +1,122 @@
+# XSH _Exit(), _exit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Each test ends a child and judges from the parent.
+
+assertion  XSH._Exit.001
+anchor     functions/_Exit.html#DESCRIPTION
+class      required
+since      1988
+says       Only the low 8 bits of the status given to _exit() are seen
+           through wait() and waitpid() (0x1234 gives 0x34).
+test       t/001-status-bits.c
+
+assertion  XSH._Exit.002
+anchor     functions/_Exit.html#DESCRIPTION
+anchor     functions/waitid.html#DESCRIPTION
+class      required
+since      2008
+says       The full status value given to _exit() is available from
+           waitid(): si_status is 0x1234 for _exit(0x1234).
+note       The full value through waitid() and SIGCHLD's siginfo_t was
+           specified in Issue 7.
+test       t/002-waitid-full.c
+
+assertion  XSH._Exit.003
+anchor     functions/_Exit.html#DESCRIPTION
+class      required
+since      2001
+says       _Exit() and _exit() are functionally equivalent: both end the
+           process with the given status and neither runs atexit()
+           handlers.
+test       t/003-same-as-_Exit.c
+
+assertion  XSH._Exit.004
+anchor     functions/_Exit.html#DESCRIPTION
+class      required
+since      1988
+says       _exit() does not call functions registered with atexit() or
+           at_quick_exit().
+test       t/004-no-handlers.c
+
+assertion  XSH._Exit.005
+anchor     functions/_Exit.html#DESCRIPTION
+class      required
+since      2001
+says       _exit() does not flush open streams: data written with
+           fputs() to a fully buffered file stream, without fflush(),
+           does not reach the file.
+test       t/005-no-flush.c
+
+assertion  XSH._Exit.006
+anchor     functions/_Exit.html#DESCRIPTION
+class      required
+since      1988
+says       Process termination closes the process's descriptors: when
+           the only writer of a pipe exits, the reader sees end of file.
+nomutant   descriptor closing at exit is kernel behaviour that a preload
+           fault cannot keep open
+test       t/006-fds-closed.c
+
+assertion  XSH._Exit.007
+anchor     functions/_Exit.html#DESCRIPTION
+class      required
+since      1988
+says       When a child terminates, SIGCHLD is sent to its parent
+           (caught here).
+nomutant   SIGCHLD generation at exit is kernel behaviour
+test       t/007-sigchld.c
+
+assertion  XSH._Exit.008
+anchor     functions/_Exit.html#DESCRIPTION
+class      required
+since      1988
+says       A terminated child stays a zombie until its parent obtains
+           its status: its process ID still exists before the wait, and
+           is gone after it.
+nomutant   zombie lifetime is kernel behaviour
+test       t/008-zombie.c
+
+assertion  XSH._Exit.009
+anchor     functions/_Exit.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       XSI: with SIGCHLD set to SIG_IGN in the parent, a terminating
+           child's status is discarded, and a wait() blocked for it
+           fails with ECHILD.
+nomutant   status discarding is kernel behaviour
+test       t/009-sigchld-ignored.c
+
+assertion  XSH._Exit.010
+anchor     functions/_Exit.html#DESCRIPTION
+class      required
+since      1988
+says       When a process's exit orphans a process group that has a
+           stopped member, each process in that group is sent SIGHUP and
+           SIGCONT; the stopped member receives both (in either order,
+           since delivery order of pending signals is unspecified).
+note       The group is made in a child: the stopped grandchild's group
+           loses its last outside parent in the session when the child
+           exits.
+nomutant   the signals to an orphaned process group come from the kernel
+test       t/010-orphaned-group.c
+
+assertion  XSH._Exit.011
+anchor     functions/_Exit.html#DESCRIPTION
+class      required
+since      2001
+says       Threads ended by _exit() run neither their cancellation
+           cleanup handlers nor their thread-specific data destructors.
+nomutant   other threads' cleanup cannot be triggered from a preload
+           library
+test       t/011-no-cleanup.c
+
+assertion  XSH._Exit.012
+anchor     functions/_Exit.html#DESCRIPTION
+class      required
+since      2001
+says       _exit() calls no registered signal handlers: a pending,
+           blocked signal with a handler is not delivered as the process
+           ends.
+test       t/012-no-signal-handlers.c

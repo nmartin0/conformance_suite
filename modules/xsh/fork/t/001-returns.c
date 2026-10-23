@@ -50,6 +50,7 @@ int main(void)
 		me[1] = getpid();
 		_exit(write(p[1], me, sizeof me) == (ssize_t)sizeof me ? 0 : 99);
 	}
+	(void)close(p[1]);
 	pc_check(r > 0, "fork() returned %ld in the parent", (long)r);
 	{
 		pid_t me[2];
