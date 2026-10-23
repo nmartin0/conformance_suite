@@ -187,10 +187,11 @@ O.11 **Withdrawn: sigqueue() not queuing signals below SIGRTMIN is not a deviati
 O.12 **glibc: SIGRTMIN..SIGRTMAX holds one signal fewer than {RTSIG_MAX}.**
 - POSIX (`<signal.h>`): the range SIGRTMIN through SIGRTMAX includes at
   least {RTSIG_MAX} signal numbers.
-- glibc: `RTSIG_MAX` and sysconf(_SC_RTSIG_MAX) are 32, the kernel's count
-  of realtime signals, but glibc keeps the first two (32 and 33) for its
-  own use, so SIGRTMIN is 34 and the range 34..64 has 31 numbers. musl
-  reports 30 from sysconf() for its range of 30, which is consistent.
+- glibc: `RTSIG_MAX` (a fixed 32) and sysconf(_SC_RTSIG_MAX) are 32, but
+  of the kernel's 33 realtime signals (32..64) glibc keeps 32 and 33 for
+  its own use, so SIGRTMIN is 34 and the range 34..64 has 31 numbers. musl
+  reports 30 from sysconf() for its range of 30 (and leaves `RTSIG_MAX`
+  undefined), which is consistent.
 - Comp: glibc. Kind: long-standing. Observe: XBD.signal.h.006.
 - Src: posixcheck run.
 

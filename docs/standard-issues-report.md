@@ -36,7 +36,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-7 | XSH `fork()`: process-shared locks, no TSH shading | Defect (editorial) | Low | Treats the test as TSH-conditional (XSH.fork.014) |
 | SI-8 | XSH `wait()`: DESCRIPTION against RATIONALE on discarding SIGCHLD | Conflict | Medium | Follows DESCRIPTION (XSH.wait.019; Linux fails) |
 | SI-9 | XSH 2.12 (unshaded) against XSI shading elsewhere: SIG_IGN and SA_NOCLDWAIT | Conflict | Medium | Treats it as XSI (XSH._Exit.009) |
-| SI-10 | XBD `<signal.h>`: SA_NOCLDWAIT moved to Base, yet XSI-shaded | Defect (editorial) | Low | Not tested yet |
+| SI-10 | XBD `<signal.h>`: SA_NOCLDWAIT moved to Base, yet XSI-shaded | Defect (editorial) | Low | XBD.signal.h.017 |
 | SI-11 | XSH `wait()`, RETURN VALUE: the WNOHANG sentence | Defect (editorial) | Low | Treats it as a requirement (XSH.wait.010) |
 | SI-12 | XSH `exit()`: active handle "to a file descriptor" | Defect (editorial) | Low | Reads it as file description (XSH.exit.010) |
 | SI-13 | XSH 2.5.1: abort() and signals count as closing a stream | Conflict | Low | Not tested |
@@ -58,6 +58,16 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-29 | XSH `kill()`: "a signal" against "that signal" in the pid cases | Defect (editorial) | Low | Not tested |
 | SI-30 | XSH `pthread_sigmask()`, 2.4.3: killpg() missing from the generating functions | Defect (editorial) | Low | Uses kill() |
 | SI-31 | XSH `pthread_sigmask()`: no-EINTR sentence covers sigprocmask() | Defect (editorial) | Low | Not tested |
+| SI-32 | XSH `sigwaitinfo()`/`sigtimedwait()`: wait ends on a caught signal, but [EINTR] is may-fail | Defect (editorial) | Low | Not tested |
+| SI-33 | XSH `sigwait()`: leftover "if the implementation supports queued signals" | Defect (editorial) | Low | Tests the rule unconditionally (XSH.sigwait.003) |
+| SI-34 | XSH `sigwait()`: implementation-defined remainder sentence overlaps the queued-signal rule | Defect (editorial) | Low | Follows the queued-signal rule (XSH.sigwait.003) |
+| SI-35 | XSH `sigqueue()`: "the pending, unblocked signal" vs kill()'s "at least one" | Defect (editorial) | Low | XSH.sigqueue.003 |
+| SI-36 | XSH `sigtimedwait()` RATIONALE: a "value" argument that does not exist | Defect (editorial) | Low | Not tested |
+| SI-37 | XSH `sigtimedwait()` CHANGE HISTORY: RETURN VALUE named for an ERRORS sentence | Defect (editorial) | Low | Not tested |
+| SI-38 | XSH `alarm()` SEE ALSO: empty link to itself | Defect (editorial) | Low | Not tested |
+| SI-39 | XBD `<signal.h>` si_code table: option spans opened but not closed | Defect (editorial) | Low | Only the TRAP_ codes as XSI (XBD.signal.h.024) |
+| SI-40 | XBD `<limits.h>`: {NSIG_MAX} has no minimum | Defect (editorial) | Low | XBD.signal.h.007 |
+| SI-41 | XBD `<signal.h>`: SIGRTMIN/SIGRTMAX "declared"; non-overlap without "shall" | Defect (editorial) | Low | Treats non-overlap as required (XBD.signal.h.006) |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -70,6 +80,10 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-10 | XSH `execvp()` sh fallback when argv[0] is null | Question | Low | Not tested |
 | Q-11 | XSH `raise()`/`pthread_kill()`: delivery before return | Question | Low | raise() answered by its own rule (XSH.raise.001); pthread_kill() open |
 | Q-12 | XSH `kill()` with the most negative pid_t | Question | Low | Not tested |
+| Q-13 | XSH `alarm()`: rounding of the seconds returned | Question | Low | Expects 1 under a second left (XSH.alarm.002) |
+| Q-14 | XSH `alarm()`: may SIGALRM come early? | Question | Low | Treats early as FAIL (XSH.alarm.001) |
+| Q-15 | XSH `pause()`/`sigsuspend()`: delivery to the calling thread? | Question | Low | Directs the signal at the waiter (XSH.sigsuspend.006) |
+| Q-16 | XBD `<limits.h>`/`<signal.h>`: {RTSIG_MAX} the range's size or a lower bound? | Question | Low | Checks the lower bound (XBD.signal.h.006) |
 
 ## Entries
 
@@ -217,8 +231,9 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **Why it is a problem:** it is not said whether only the symbol is Base
   while its behaviour stays XSI, or whether the shading was left by
   mistake. This bears on SI-9.
-- **posixcheck meanwhile:** SA_NOCLDWAIT is not tested yet.
-- **Suggested change:** remove the shading, or say that only the symbol is Base.
+- **posixcheck meanwhile:** XBD.signal.h.017 follows the shading (the symbol is checked only on XSI systems); the behaviour is not tested yet.
+- **Related:** in the same list the names SA_ONSTACK, SS_ONSTACK, SS_DISABLE, MINSIGSTKSZ and SIGSTKSZ are unshaded and only their descriptions are XSI-shaded, while the sentence introducing the list is unshaded; read literally, the names are required on systems without the XSI option, although sigaltstack() is XSI. XBD.signal.h.017 and .018 treat them as XSI.
+- **Suggested change:** remove the shading, or say that only the symbol is Base; shade the names together with their descriptions.
 
 ### SI-11: wait()'s WNOHANG return value is worded unlike the rest
 
@@ -509,6 +524,30 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **posixcheck meanwhile:** nothing to test.
 - **Suggested change:** delete the entry (editorial).
 
+### SI-39: <signal.h> si_code table: option spans opened but not closed
+
+- **Where:** XBD `<signal.h>`, the si_code table (HTML edition).
+- **What the text says:** the table opens a CX span at SIGILL, an XSI span at the SIGTRAP rows and another CX span at SIGCHLD, but only one end-of-option marker follows (after SI_MESGQ); the page as a whole has two more option starts than ends.
+- **Why it is a problem:** the markup does not say where the XSI shading of the SIGTRAP rows ends, so the CLD_ and SI_ rows could be read as XSI.
+- **posixcheck meanwhile:** XBD.signal.h.024 treats only TRAP_BRKPT and TRAP_TRACE as XSI.
+- **Suggested change:** close each span where its rows end (editorial).
+
+### SI-40: {NSIG_MAX} has no Minimum Acceptable Value
+
+- **Where:** XBD `<limits.h>`, Other Invariant Values; XBD `<signal.h>`.
+- **What the text says:** {NSIG_MAX} is the largest value sysconf(_SC_NSIG) can return, bounded above by what sigset_t can represent; every signal macro must be below it. Unlike the other entries in that list it has no minimum.
+- **Why it is a problem:** nothing ties {NSIG_MAX} to the signals an implementation must support, so a value below the largest required signal number is not excluded by the entry itself, only indirectly by `<signal.h>`.
+- **posixcheck meanwhile:** XBD.signal.h.007 checks every table signal and SIGRTMAX against it.
+- **Suggested change:** give a minimum, for example one more than the largest required signal number plus {_POSIX_RTSIG_MAX} (editorial or normative).
+
+### SI-41: <signal.h>: SIGRTMIN and SIGRTMAX "declared"; the non-overlap rule has no "shall"
+
+- **Where:** XBD `<signal.h>`, DESCRIPTION.
+- **What the text says:** the header "shall declare" the SIGRTMIN and SIGRTMAX macros; the next sentences say the range is reserved for application use and that its numbers do not overlap the table's signals.
+- **Why it is a problem:** macros are defined, not declared; and the non-overlap statement is worded as a fact, so it is unclear whether it is a requirement.
+- **posixcheck meanwhile:** XBD.signal.h.006 treats non-overlap as required.
+- **Suggested change:** "shall define", and "shall not overlap" (editorial).
+
 ## Questions to raise
 
 These are consistent as written, but the intent or the fit with practice
@@ -653,6 +692,12 @@ is unclear.
 - **Where:** XSH `pause()` and `sigsuspend()`, DESCRIPTION.
 - **Question:** both suspend the calling thread until delivery of a signal whose action is to run a handler or terminate the process, without saying the signal is delivered to the calling thread. Read literally, a process-directed signal handled by another thread ends the wait. Implementations end it only for delivery to the calling thread; should the text say so?
 - **posixcheck meanwhile:** the tests are single-threaded, or (XSH.sigsuspend.006) direct the signal at the waiting thread.
+
+### Q-16: Is {RTSIG_MAX} the size of the realtime range, or a lower bound?
+
+- **Where:** XBD `<limits.h>` ({RTSIG_MAX}); XBD `<signal.h>` (SIGRTMIN, SIGRTMAX).
+- **Question:** `<limits.h>` describes {RTSIG_MAX} as the maximum number of realtime signals reserved for application use; `<signal.h>` says the range reserved for application use includes at least {RTSIG_MAX} numbers. Together they make the range exactly {RTSIG_MAX} long. Is that intended, or is one of them meant loosely?
+- **posixcheck meanwhile:** XBD.signal.h.006 checks only the lower bound (at least {RTSIG_MAX}).
 
 ## Tracking
 

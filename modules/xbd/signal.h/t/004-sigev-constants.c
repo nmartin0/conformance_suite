@@ -28,14 +28,19 @@ int main(void)
 {
 	pc_begin("XBD.signal.h.004");
 	pc_test();
+#if !defined(SIGEV_NONE) || !defined(SIGEV_SIGNAL) || !defined(SIGEV_THREAD)
+	pc_fail("<signal.h> does not define SIGEV_NONE, SIGEV_SIGNAL and SIGEV_THREAD as macros");
+#else
 	{
-		struct sigevent ev;
-		const long v[] = { SIGEV_NONE, SIGEV_SIGNAL, SIGEV_THREAD };
+		enum { N = SIGEV_NONE, S = SIGEV_SIGNAL, T = SIGEV_THREAD };	/* integer constant expressions */
+		static const long v[] = { N, S, T };
 		static const char *const name[] = { "SIGEV_NONE", "SIGEV_SIGNAL", "SIGEV_THREAD" };
+		struct sigevent ev;
 
 		ev.sigev_notify = SIGEV_THREAD;
 		pc_check(ev.sigev_notify == SIGEV_THREAD, "SIGEV_THREAD does not fit in sigev_notify");
 		distinct("sigev_notify values", v, name, 3);
 	}
 	pc_pass();
+#endif
 }

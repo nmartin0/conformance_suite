@@ -32,7 +32,8 @@ int main(void)
 	pc_fail("<signal.h> does not define every si_code constant: missing one of TRAP_BRKPT TRAP_TRACE");
 #else
 	{
-		static const long v[] = { TRAP_BRKPT, TRAP_TRACE };
+		enum { E_TRAP_BRKPT = TRAP_BRKPT, E_TRAP_TRACE = TRAP_TRACE };	/* integer constant expressions */
+		static const long v[] = { E_TRAP_BRKPT, E_TRAP_TRACE };
 		static const char *const name[] = { "TRAP_BRKPT", "TRAP_TRACE" };
 		distinct("si_code values for SIGTRAP", v, name, 2);
 	}

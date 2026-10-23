@@ -32,32 +32,38 @@ int main(void)
 	pc_fail("<signal.h> does not define every si_code constant: missing one of ILL_ILLOPC ILL_ILLOPN ILL_ILLADR ILL_ILLTRP ILL_PRVOPC ILL_PRVREG ILL_COPROC ILL_BADSTK FPE_INTDIV FPE_INTOVF FPE_FLTDIV FPE_FLTOVF FPE_FLTUND FPE_FLTRES FPE_FLTINV FPE_FLTSUB SEGV_MAPERR SEGV_ACCERR BUS_ADRALN BUS_ADRERR BUS_OBJERR CLD_EXITED CLD_KILLED CLD_DUMPED CLD_TRAPPED CLD_STOPPED CLD_CONTINUED SI_USER SI_QUEUE SI_TIMER SI_ASYNCIO SI_MESGQ");
 #else
 	{
-		static const long v[] = { ILL_ILLOPC, ILL_ILLOPN, ILL_ILLADR, ILL_ILLTRP, ILL_PRVOPC, ILL_PRVREG, ILL_COPROC, ILL_BADSTK };
+		enum { E_ILL_ILLOPC = ILL_ILLOPC, E_ILL_ILLOPN = ILL_ILLOPN, E_ILL_ILLADR = ILL_ILLADR, E_ILL_ILLTRP = ILL_ILLTRP, E_ILL_PRVOPC = ILL_PRVOPC, E_ILL_PRVREG = ILL_PRVREG, E_ILL_COPROC = ILL_COPROC, E_ILL_BADSTK = ILL_BADSTK };	/* integer constant expressions */
+		static const long v[] = { E_ILL_ILLOPC, E_ILL_ILLOPN, E_ILL_ILLADR, E_ILL_ILLTRP, E_ILL_PRVOPC, E_ILL_PRVREG, E_ILL_COPROC, E_ILL_BADSTK };
 		static const char *const name[] = { "ILL_ILLOPC", "ILL_ILLOPN", "ILL_ILLADR", "ILL_ILLTRP", "ILL_PRVOPC", "ILL_PRVREG", "ILL_COPROC", "ILL_BADSTK" };
 		distinct("si_code values for SIGILL", v, name, 8);
 	}
 	{
-		static const long v[] = { FPE_INTDIV, FPE_INTOVF, FPE_FLTDIV, FPE_FLTOVF, FPE_FLTUND, FPE_FLTRES, FPE_FLTINV, FPE_FLTSUB };
+		enum { E_FPE_INTDIV = FPE_INTDIV, E_FPE_INTOVF = FPE_INTOVF, E_FPE_FLTDIV = FPE_FLTDIV, E_FPE_FLTOVF = FPE_FLTOVF, E_FPE_FLTUND = FPE_FLTUND, E_FPE_FLTRES = FPE_FLTRES, E_FPE_FLTINV = FPE_FLTINV, E_FPE_FLTSUB = FPE_FLTSUB };	/* integer constant expressions */
+		static const long v[] = { E_FPE_INTDIV, E_FPE_INTOVF, E_FPE_FLTDIV, E_FPE_FLTOVF, E_FPE_FLTUND, E_FPE_FLTRES, E_FPE_FLTINV, E_FPE_FLTSUB };
 		static const char *const name[] = { "FPE_INTDIV", "FPE_INTOVF", "FPE_FLTDIV", "FPE_FLTOVF", "FPE_FLTUND", "FPE_FLTRES", "FPE_FLTINV", "FPE_FLTSUB" };
 		distinct("si_code values for SIGFPE", v, name, 8);
 	}
 	{
-		static const long v[] = { SEGV_MAPERR, SEGV_ACCERR };
+		enum { E_SEGV_MAPERR = SEGV_MAPERR, E_SEGV_ACCERR = SEGV_ACCERR };	/* integer constant expressions */
+		static const long v[] = { E_SEGV_MAPERR, E_SEGV_ACCERR };
 		static const char *const name[] = { "SEGV_MAPERR", "SEGV_ACCERR" };
 		distinct("si_code values for SIGSEGV", v, name, 2);
 	}
 	{
-		static const long v[] = { BUS_ADRALN, BUS_ADRERR, BUS_OBJERR };
+		enum { E_BUS_ADRALN = BUS_ADRALN, E_BUS_ADRERR = BUS_ADRERR, E_BUS_OBJERR = BUS_OBJERR };	/* integer constant expressions */
+		static const long v[] = { E_BUS_ADRALN, E_BUS_ADRERR, E_BUS_OBJERR };
 		static const char *const name[] = { "BUS_ADRALN", "BUS_ADRERR", "BUS_OBJERR" };
 		distinct("si_code values for SIGBUS", v, name, 3);
 	}
 	{
-		static const long v[] = { CLD_EXITED, CLD_KILLED, CLD_DUMPED, CLD_TRAPPED, CLD_STOPPED, CLD_CONTINUED };
+		enum { E_CLD_EXITED = CLD_EXITED, E_CLD_KILLED = CLD_KILLED, E_CLD_DUMPED = CLD_DUMPED, E_CLD_TRAPPED = CLD_TRAPPED, E_CLD_STOPPED = CLD_STOPPED, E_CLD_CONTINUED = CLD_CONTINUED };	/* integer constant expressions */
+		static const long v[] = { E_CLD_EXITED, E_CLD_KILLED, E_CLD_DUMPED, E_CLD_TRAPPED, E_CLD_STOPPED, E_CLD_CONTINUED };
 		static const char *const name[] = { "CLD_EXITED", "CLD_KILLED", "CLD_DUMPED", "CLD_TRAPPED", "CLD_STOPPED", "CLD_CONTINUED" };
 		distinct("si_code values for SIGCHLD", v, name, 6);
 	}
 	{
-		static const long v[] = { SI_USER, SI_QUEUE, SI_TIMER, SI_ASYNCIO, SI_MESGQ };
+		enum { E_SI_USER = SI_USER, E_SI_QUEUE = SI_QUEUE, E_SI_TIMER = SI_TIMER, E_SI_ASYNCIO = SI_ASYNCIO, E_SI_MESGQ = SI_MESGQ };	/* integer constant expressions */
+		static const long v[] = { E_SI_USER, E_SI_QUEUE, E_SI_TIMER, E_SI_ASYNCIO, E_SI_MESGQ };
 		static const char *const name[] = { "SI_USER", "SI_QUEUE", "SI_TIMER", "SI_ASYNCIO", "SI_MESGQ" };
 		distinct("si_code values for any signal", v, name, 5);
 	}

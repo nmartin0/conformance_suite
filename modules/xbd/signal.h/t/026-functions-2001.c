@@ -1,5 +1,5 @@
 /*
- * pthread_kill(), pthread_sigmask() and sigwait() are declared with prototypes.
+ * sigwait() is declared with a prototype.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XBD.signal.h.026
@@ -28,8 +28,7 @@ int main(void)
 {
 	pc_begin("XBD.signal.h.026");
 	pc_test();
-	pc_check(IS_T(&(pthread_kill), int (*)(pthread_t, int)), "pthread_kill() is not declared as int (*)(pthread_t, int)");
-	pc_check(IS_T(&(pthread_sigmask), int (*)(int, const sigset_t *, sigset_t *)), "pthread_sigmask() is not declared as int (*)(int, const sigset_t *, sigset_t *)");
 	pc_check(IS_T(&(sigwait), int (*)(const sigset_t *, int *)), "sigwait() is not declared as int (*)(const sigset_t *, int *)");
+	pc_check(!IS_T(&(sigwait), int (*)(const sigset_t *, int *, int)), "sigwait() is declared without a prototype");
 	pc_pass();
 }

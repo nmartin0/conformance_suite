@@ -21,10 +21,11 @@ anchor     basedefs/signal.h.html#DESCRIPTION/sig_atomic_t
 class      required
 since      2008
 says       <signal.h> alone defines sig_atomic_t (an integer type), sigset_t,
-           pid_t, uid_t, pthread_t, pthread_attr_t and struct timespec
-           (with tv_sec and tv_nsec).
+           pid_t (signed), uid_t, pthread_t, pthread_attr_t and struct
+           timespec (tv_sec, and tv_nsec of type long).
 note       size_t comes from <stddef.h> through pc.h as well, so it is
-           not shown to come from <signal.h> here.
+           not shown to come from <signal.h> here; nor is sigset_t shown
+           to be an integer or structure type.
 test       t/002-types.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -42,8 +43,9 @@ assertion  XBD.signal.h.004
 anchor     basedefs/signal.h.html#DESCRIPTION/SIGEV_NONE
 class      required
 since      2008
-says       <signal.h> defines SIGEV_NONE, SIGEV_SIGNAL and SIGEV_THREAD with
-           different values usable as sigev_notify.
+says       <signal.h> defines SIGEV_NONE, SIGEV_SIGNAL and SIGEV_THREAD as
+           macros with different integer constant values that fit in
+           sigev_notify.
 test       t/004-sigev-constants.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -62,11 +64,13 @@ class      required
 since      2008
 says       SIGRTMIN and SIGRTMAX are macros with type int and positive values;
            SIGRTMAX - SIGRTMIN + 1 is at least {RTSIG_MAX} (from sysconf(),
-           and never less than 8), and no signal named in the table of
-           required signals falls in the range.
-note       <unistd.h> is included for sysconf(). glibc reserves SIGRTMIN
-           for itself, leaving one fewer than its {RTSIG_MAX} of 32
-           (docs/linux-deviations.md O.12).
+           and never less than 8), and none of the table's signals that the
+           header defines falls in the range.
+note       <unistd.h> is included for sysconf(). Missing table signals
+           are reported by XBD.signal.h.009 to .012 and .030, not here.
+           glibc keeps signals 32 and 33 for itself, so its range 34..64
+           holds 31 signals, below its {RTSIG_MAX} of 32 (docs/linux-
+           deviations.md O.12).
 test       t/006-rt-range.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -74,13 +78,14 @@ assertion  XBD.signal.h.007
 anchor     basedefs/signal.h.html#DESCRIPTION/SIGRTMAX
 class      required
 since      2024
-says       _SC_NSIG is defined, SIGRTMAX is less than sysconf(_SC_NSIG), and
-           every required signal number is less than {NSIG_MAX} where
-           <limits.h> defines it (otherwise less than
-           sysconf(_SC_NSIG)).
+says       <unistd.h> defines _SC_NSIG and <limits.h> defines {NSIG_MAX};
+           SIGRTMAX is less than sysconf(_SC_NSIG), which is at most
+           {NSIG_MAX}, and every table signal the header defines is less
+           than {NSIG_MAX}.
 note       <limits.h> and <unistd.h> are included for {NSIG_MAX} and
-           sysconf(). Neither glibc 2.39 nor musl defines _SC_NSIG or
-           NSIG_MAX (docs/linux-deviations.md 1.24).
+           sysconf(); a missing name there is a nonconformance of those
+           headers, reported here. Neither glibc 2.39 nor musl defines
+           _SC_NSIG or NSIG_MAX (docs/linux-deviations.md 1.24).
 test       t/007-nsig.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -88,10 +93,13 @@ assertion  XBD.signal.h.008
 anchor     basedefs/signal.h.html#DESCRIPTION/SIG2STR_MAX
 class      required
 since      2024
-says       <signal.h> defines SIG2STR_MAX as a value usable in #if, large
-           enough for a name like "RTMIN+1" and its null byte.
-note       sig2str() writes names without the SIG prefix, and realtime
-           ones as RTMIN+n or RTMAX-n.
+says       <signal.h> defines SIG2STR_MAX as a value usable in #if, at least
+           the size (with the null byte) of each table signal's name without
+           SIG and of "RTMIN+n" for the largest n sig2str() must write that
+           way, (SIGRTMIN+SIGRTMAX)/2 - SIGRTMIN.
+note       sig2str() writes table names without SIG, and SIGRTMIN+1 up
+           to (SIGRTMIN+SIGRTMAX)/2 as RTMIN+n; above that it may use
+           RTMAX-m, so only the lower half bounds SIG2STR_MAX.
 test       t/008-sig2str-max.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -122,12 +130,10 @@ assertion  XBD.signal.h.011
 anchor     basedefs/signal.h.html#DESCRIPTION/SIGWINCH
 class      required
 since      2024
-says       <signal.h> defines SIGURG and SIGWINCH as positive integer
-           constant expressions with type int, different from each other
-           and from every other required signal.
+says       <signal.h> defines SIGWINCH as a positive integer constant
+           expression with type int, different from the signals in
+           XBD.signal.h.009 and .010.
 uses       XBD.signal.h.010
-note       SIGWINCH is new in Issue 8; SIGURG was XSI before and is
-           unshaded now.
 test       t/011-signals-2024.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -138,8 +144,8 @@ when       XSI
 since      2001
 says       On XSI systems <signal.h> also defines SIGSYS, SIGTRAP, SIGVTALRM,
            SIGXCPU and SIGXFSZ, positive, with type int, and different from
-           every other required signal.
-uses       XBD.signal.h.011
+           the signals in XBD.signal.h.009 and .010.
+uses       XBD.signal.h.010
 test       t/012-signals-xsi.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -177,8 +183,9 @@ since      2008
 says       <signal.h> defines SA_NOCLDSTOP, SA_RESETHAND, SA_RESTART, SA_SIGINFO
            and SA_NODEFER as non-zero constants with no bits in common, so
            any of them can be combined in sa_flags.
-note       sigaction() takes sa_flags as an inclusive OR of these flags,
-           which needs them to be separate bits.
+note       sigaction() lets these flags be set in sa_flags together,
+           which needs each to be a non-zero value with no bits in
+           common with the others.
 test       t/016-sa-flags.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -191,6 +198,9 @@ says       On XSI systems <signal.h> also defines SA_ONSTACK and SA_NOCLDWAIT,
            non-zero, with no bits in common with each other or the other SA_
            flags.
 uses       XBD.signal.h.016
+note       SA_NOCLDWAIT is still XSI-shaded although its CHANGE HISTORY
+           says it moved to the Base (standard issue SI-10); this
+           follows the shading.
 test       t/017-sa-flags-xsi.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -200,10 +210,11 @@ class      conditional
 when       XSI
 since      2001
 says       On XSI systems <signal.h> defines SS_ONSTACK and SS_DISABLE with
-           different values, and MINSIGSTKSZ and SIGSTKSZ with MINSIGSTKSZ
-           positive and not above SIGSTKSZ.
-note       MINSIGSTKSZ and SIGSTKSZ need not be constants (glibc may
-           make them sysconf() calls), so they are read at run time.
+           different values, and MINSIGSTKSZ and SIGSTKSZ with positive
+           values, all four as integer constant expressions.
+note       XBD 3 defines a symbolic constant as an object-like macro
+           expanding to an integer constant expression unless stated
+           otherwise; <signal.h> states no exception for these four.
 test       t/018-altstack.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -223,9 +234,6 @@ since      2008
 says       <signal.h> defines mcontext_t, and ucontext_t with the members
            uc_link (ucontext_t *), uc_sigmask (sigset_t), uc_stack (stack_t)
            and uc_mcontext (mcontext_t).
-note       uc_mcontext is checked by taking its address as a mcontext_t
-           * (a mismatch is a compiler diagnostic, not a FAIL), since
-           mcontext_t may be any object type.
 test       t/020-ucontext.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -276,11 +284,15 @@ assertion  XBD.signal.h.025
 anchor     basedefs/signal.h.html#DESCRIPTION
 class      required
 since      1988
-says       <signal.h> declares kill(), raise(), sigaction(), sigaddset(), sigdelset(), sigemptyset(), sigfillset(), sigismember(), signal(), sigpending(), sigprocmask(), sigsuspend() as functions with the
-           required prototypes.
+says       <signal.h> declares kill(), raise(), sigaction(), sigaddset(),
+           sigdelset(), sigemptyset(), sigfillset(), sigismember(), signal(),
+           sigpending(), sigprocmask(), sigsuspend() with the required
+           prototypes.
 note       Each function is taken by address as (name), which skips a
-           function-like macro, and its type compared with _Generic;
-           restrict on parameters does not affect the comparison.
+           function-like macro, and its type compared with _Generic
+           (restrict on parameters does not affect the comparison); a
+           second check with one more int parameter tells a prototype
+           from an old-style declaration.
 test       t/025-functions-1988.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -288,8 +300,7 @@ assertion  XBD.signal.h.026
 anchor     basedefs/signal.h.html#DESCRIPTION
 class      required
 since      2001
-says       <signal.h> declares pthread_kill(), pthread_sigmask(), sigwait() with the required
-           prototypes.
+says       <signal.h> declares sigwait() with the required prototypes.
 test       t/026-functions-2001.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -297,8 +308,9 @@ assertion  XBD.signal.h.027
 anchor     basedefs/signal.h.html#DESCRIPTION
 class      required
 since      2008
-says       <signal.h> declares sigqueue(), sigtimedwait(), sigwaitinfo(), psiginfo(), psignal() with the required
-           prototypes.
+says       <signal.h> declares pthread_kill(), pthread_sigmask(), sigqueue(),
+           sigtimedwait(), sigwaitinfo(), psiginfo(), psignal() with the
+           required prototypes.
 test       t/027-functions-2008.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -319,7 +331,18 @@ anchor     basedefs/signal.h.html#DESCRIPTION
 class      conditional
 when       XSI
 since      2001
-says       On XSI systems <signal.h> declares killpg(), sigaltstack() with the
-           required prototypes.
+says       On XSI systems <signal.h> declares killpg(), sigaltstack() with
+           the required prototypes.
 test       t/029-functions-xsi.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.signal.h.030
+anchor     basedefs/signal.h.html#DESCRIPTION/SIGURG
+class      required
+since      2001
+says       <signal.h> defines SIGURG as a positive integer constant expression
+           with type int, different from the signals in XBD.signal.h.009 and
+           .010.
+uses       XBD.signal.h.010
+test       t/030-sigurg.c
 nomutant   compile-time check; needs the Tier 0 header mutants

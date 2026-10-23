@@ -21,7 +21,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-7 | fork() process-shared lock item lacks TSH shading | editorial | XSH.fork.014 |
 | SI-8 | wait(): DESCRIPTION requires discarding SIGCHLD, RATIONALE treats it as optional | conflict | XSH.wait.019 |
 | SI-9 | XSH 2.12 unshaded vs XSI shading elsewhere: SIG_IGN/SA_NOCLDWAIT discard status | conflict | XSH._Exit.009 |
-| SI-10 | `<signal.h>` CHANGE HISTORY: SA_NOCLDWAIT moved to Base, still XSI-shaded | editorial | (SA_NOCLDWAIT todo in _Exit.cov) |
+| SI-10 | `<signal.h>` CHANGE HISTORY: SA_NOCLDWAIT moved to Base, still XSI-shaded | editorial | XBD.signal.h.017 (SA_NOCLDWAIT behaviour todo in _Exit.cov) |
 | SI-11 | wait() RETURN VALUE: WNOHANG sentence lacks "shall", overlapping conditions | editorial | XSH.wait.010 |
 | SI-12 | exit(): "active handle to its underlying file descriptor" (description is meant) | editorial | XSH.exit.010 |
 | SI-13 | XSH 2.5.1: abort() and signals count as closing a stream | conflict | (not tested) |
@@ -50,6 +50,9 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-36 | sigtimedwait() RATIONALE: a "value" argument that does not exist | editorial | (not tested) |
 | SI-37 | sigtimedwait() CHANGE HISTORY: RETURN VALUE named for an ERRORS sentence | editorial | (not tested) |
 | SI-38 | alarm() SEE ALSO: empty link to itself | editorial | (not tested) |
+| SI-39 | <signal.h> si_code table: option spans opened but not closed | editorial | XBD.signal.h.024 |
+| SI-40 | <limits.h>: {NSIG_MAX} has no minimum | editorial | XBD.signal.h.007 |
+| SI-41 | <signal.h>: SIGRTMIN/SIGRTMAX "declared"; non-overlap without "shall" | editorial | XBD.signal.h.006 |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
@@ -65,3 +68,4 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-13 | alarm(): rounding of the seconds returned | question | XSH.alarm.002, XSH.alarm.003 |
 | Q-14 | alarm(): may SIGALRM come early? | question | XSH.alarm.001 |
 | Q-15 | pause()/sigsuspend(): delivery to the calling thread? | question | XSH.sigsuspend.006 |
+| Q-16 | {RTSIG_MAX}: the range's size or a lower bound? | question | XBD.signal.h.006 |

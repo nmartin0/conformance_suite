@@ -30,12 +30,10 @@ int main(void)
 	pc_test();
 	{
 		ucontext_t uc;
-		mcontext_t *mc = &uc.uc_mcontext;	/* mcontext_t may be any object type */
-
-		(void)mc;
 		pc_check(IS_T(uc.uc_stack, stack_t), "uc_stack is not a stack_t");
 		pc_check(IS_T(uc.uc_link, ucontext_t *), "uc_link is not a ucontext_t *");
-		pc_check(sigemptyset(&uc.uc_sigmask) == 0, "uc_sigmask is not usable as a sigset_t");
+		pc_check(IS_T(&uc.uc_sigmask, sigset_t *), "uc_sigmask is not a sigset_t");
+		pc_check(IS_T(&uc.uc_mcontext, mcontext_t *), "uc_mcontext is not a mcontext_t");	/* any object type */
 	}
 	pc_pass();
 }

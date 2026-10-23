@@ -106,8 +106,15 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
     delivery to self before return, EAGAIN at {SIGQUEUE_MAX}, EINVAL,
     EPERM; alarm firing, cancelling, rescheduling, not stacking; pause()
     through handlers, termination and ignored signals.
+  - XSH 2.4 signal concepts: `xsh/2.4.1-signal-generation` (9),
+    `xsh/2.4.2-realtime-signals` (5), `xsh/2.4.3-signal-actions` (14),
+    `xsh/2.4.4-signal-effects` (3): which thread gets a signal, pending
+    and blocked signals, inherited masks, stop and SIGCONT interplay,
+    sigevent notification, queues under kill() and SIG_IGN, default
+    actions, stopped and orphaned processes, whole-process actions,
+    blocked read() under stops and ignored signals.
   - `xbd/unistd.h` (2): POSIX_CLOSE_RESTART, SEEK_*; `xbd/fcntl.h` now 8.
-  - `xbd/signal.h` (29): SIG_DFL/SIG_ERR/SIG_IGN, the types it defines,
+  - `xbd/signal.h` (30): SIG_DFL/SIG_ERR/SIG_IGN, the types it defines,
     sigevent, sigval, the realtime range against {RTSIG_MAX}, _SC_NSIG and
     {NSIG_MAX}, SIG2STR_MAX, every required signal (by edition, and XSI),
     sigaction, stack_t, ucontext_t, siginfo_t members and types (checked
@@ -190,8 +197,8 @@ anything.
 ## Issues in the standard
 
 `docs/standard-issues-report.md` is the full write-up of conflicts,
-mistakes and unclear points found in POSIX.1-2024 (SI-1 to SI-38, Q-1 to
-Q-15 so far), for The Austin Group; `docs/standard-issues.md` indexes them
+mistakes and unclear points found in POSIX.1-2024 (SI-1 to SI-41, Q-1 to
+Q-16 so far), for The Austin Group; `docs/standard-issues.md` indexes them
 by assertion. A shared copy: https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 Reviews should report any new ones; add them to both files.
 

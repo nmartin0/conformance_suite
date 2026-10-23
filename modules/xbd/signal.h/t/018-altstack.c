@@ -1,5 +1,5 @@
 /*
- * SS_ONSTACK, SS_DISABLE, MINSIGSTKSZ and SIGSTKSZ are defined sensibly.
+ * SS_ONSTACK, SS_DISABLE, MINSIGSTKSZ and SIGSTKSZ are symbolic constants.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XBD.signal.h.018
@@ -32,10 +32,10 @@ int main(void)
 	pc_fail("<signal.h> does not define SS_ONSTACK, SS_DISABLE, MINSIGSTKSZ and SIGSTKSZ");
 #else
 	{
-		long mn = (long)MINSIGSTKSZ, df = (long)SIGSTKSZ;
+		enum { O = SS_ONSTACK, D = SS_DISABLE, MN = MINSIGSTKSZ, DF = SIGSTKSZ };	/* integer constant expressions */
 
-		pc_check(SS_ONSTACK != SS_DISABLE, "SS_ONSTACK and SS_DISABLE are equal");
-		pc_check(mn > 0 && mn <= df, "MINSIGSTKSZ is %ld and SIGSTKSZ %ld", mn, df);
+		pc_check(O != D, "SS_ONSTACK and SS_DISABLE are equal");
+		pc_check(MN > 0 && DF > 0, "MINSIGSTKSZ is %ld and SIGSTKSZ %ld", (long)MN, (long)DF);
 	}
 	pc_pass();
 #endif

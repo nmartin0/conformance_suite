@@ -29,6 +29,8 @@ int main(void)
 	pc_begin("XBD.signal.h.028");
 	pc_test();
 	pc_check(IS_T(&(sig2str), int (*)(int, char *)), "sig2str() is not declared as int (*)(int, char *)");
+	pc_check(!IS_T(&(sig2str), int (*)(int, char *, int)), "sig2str() is declared without a prototype");
 	pc_check(IS_T(&(str2sig), int (*)(const char *, int *)), "str2sig() is not declared as int (*)(const char *, int *)");
+	pc_check(!IS_T(&(str2sig), int (*)(const char *, int *, int)), "str2sig() is declared without a prototype");
 	pc_pass();
 }

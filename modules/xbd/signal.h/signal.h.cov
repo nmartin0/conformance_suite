@@ -2,14 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
 DESCRIPTION:7985b581        XBD.signal.h.001
-DESCRIPTION:3b9a396b        XBD.signal.h.001
-DESCRIPTION:17b2c983        XBD.signal.h.001
-DESCRIPTION:dd426c56        XBD.signal.h.001
+DESCRIPTION:3b9a396b        XBD.signal.h.001 XSH.2.4.3-signal-actions.001
+DESCRIPTION:17b2c983        partial XBD.signal.h.001  # the error return from signal() is todo
+DESCRIPTION:dd426c56        XBD.signal.h.001 XSH.2.4.3-signal-actions.011
 DESCRIPTION:d0cf2ca4        partial XBD.signal.h.002  # pthread_t and uid_t; size_t also comes from <stddef.h> through pc.h
 DESCRIPTION:00ea903c        XBD.signal.h.002
 DESCRIPTION:d14b8389        XBD.signal.h.002
 DESCRIPTION:fcfcfffb        partial XBD.signal.h.002  # an integer type; atomic access under interrupts is not observable
-DESCRIPTION:edf431cd        XBD.signal.h.002
+DESCRIPTION:edf431cd        partial XBD.signal.h.002  # usable as a set; integer or structure type not shown
 DESCRIPTION:0ba2247e        XBD.signal.h.002
 DESCRIPTION:da7c4ba0        XBD.signal.h.002
 DESCRIPTION:64c8f1ec        XBD.signal.h.003
@@ -34,48 +34,48 @@ DESCRIPTION:4c0a5c69        impl  realtime behaviour for other signals (document
 DESCRIPTION:d222914c        XBD.signal.h.008
 DESCRIPTION:baf2aa7e        XBD.signal.h.008
 DESCRIPTION:fcc5a30e        XBD.signal.h.008
-DESCRIPTION:af037f8e        XBD.signal.h.009 XBD.signal.h.010 XBD.signal.h.011 XBD.signal.h.012
+DESCRIPTION:af037f8e        XBD.signal.h.009 XBD.signal.h.010 XBD.signal.h.011 XBD.signal.h.012 XBD.signal.h.030
 DESCRIPTION:aa16d3bf        none  a naming statement
-DESCRIPTION:a651e7a5        XBD.signal.h.007 XBD.signal.h.009 XBD.signal.h.010 XBD.signal.h.011 XBD.signal.h.012
-DESCRIPTION:bfc51a9a        none  a statement; the null signal is tested with kill() and sigqueue()
+DESCRIPTION:a651e7a5        XBD.signal.h.007 XBD.signal.h.009 XBD.signal.h.010 XBD.signal.h.011 XBD.signal.h.012 XBD.signal.h.030
+DESCRIPTION:bfc51a9a        partial XBD.signal.h.009 XBD.signal.h.010 XBD.signal.h.011 XBD.signal.h.012 XBD.signal.h.030  # every signal is positive; the null signal itself is tested with kill() and sigqueue()
 DESCRIPTION:0d026c27        impl  additional signals (documentation)
 DESCRIPTION:bd95fe06        none  a note on ISO C
 DESCRIPTION:839064c6        none  unspecified
-DESCRIPTION:7447773f        XBD.signal.h.009 XBD.signal.h.010 XBD.signal.h.011 XBD.signal.h.012
-DESCRIPTION:0d40a1a9        partial XBD.signal.h.009  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:c56147c1        partial XBD.signal.h.009  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:8cceffef        partial XBD.signal.h.010  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:fbe7bfe7        partial XBD.signal.h.010  # defined; the default action is todo (XSH 2.4.3)
+DESCRIPTION:7447773f        partial XBD.signal.h.009 XBD.signal.h.010 XBD.signal.h.011 XBD.signal.h.012 XBD.signal.h.030  # defined; default actions under XSH 2.4.3
+DESCRIPTION:0d40a1a9        XBD.signal.h.009 XSH.2.4.3-signal-actions.001
+DESCRIPTION:c56147c1        XBD.signal.h.009 XSH.2.4.3-signal-actions.001
+DESCRIPTION:8cceffef        XBD.signal.h.010 XSH.2.4.3-signal-actions.001
+DESCRIPTION:fbe7bfe7        XBD.signal.h.010 XSH.2.4.3-signal-actions.004
 DESCRIPTION:591e5a13        todo  SIGCHLD when a stopped child continues (XSI)
-DESCRIPTION:5465c3d2        partial XBD.signal.h.010  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:2f590559        partial XBD.signal.h.009  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:d9612bd5        partial XBD.signal.h.009  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:62d34e8b        partial XBD.signal.h.009  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:bb7a57ba        partial XBD.signal.h.009  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:e730274d        partial XBD.signal.h.009  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:eae0ecd5        partial XBD.signal.h.009  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:4c5ac1ff        partial XBD.signal.h.009  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:ef4a29f5        partial XBD.signal.h.009  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:e6d3d102        partial XBD.signal.h.010  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:95c29f9f        partial XBD.signal.h.009  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:3b6b5a34        partial XBD.signal.h.010  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:6c94d995        partial XBD.signal.h.010  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:bd4d324c        partial XBD.signal.h.010  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:7dc9dca7        partial XBD.signal.h.009  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:fb95b1cb        partial XBD.signal.h.009  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:195733c0        partial XBD.signal.h.011  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:ce881c34        partial XBD.signal.h.012  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:8dae13b3        partial XBD.signal.h.012  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:0b1efb7c        partial XBD.signal.h.011  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:210ffcee        partial XBD.signal.h.012  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:948898a6        partial XBD.signal.h.012  # defined; the default action is todo (XSH 2.4.3)
-DESCRIPTION:935dff2f        partial XBD.signal.h.012  # defined; the default action is todo (XSH 2.4.3)
+DESCRIPTION:5465c3d2        XBD.signal.h.010 XSH.2.4.3-signal-actions.006 XSH.2.4.1-signal-generation.008
+DESCRIPTION:2f590559        XBD.signal.h.009 XSH.2.4.3-signal-actions.001
+DESCRIPTION:d9612bd5        XBD.signal.h.009 XSH.2.4.3-signal-actions.001
+DESCRIPTION:62d34e8b        XBD.signal.h.009 XSH.2.4.3-signal-actions.001
+DESCRIPTION:bb7a57ba        XBD.signal.h.009 XSH.2.4.3-signal-actions.001
+DESCRIPTION:e730274d        XBD.signal.h.009 XSH.2.4.3-signal-actions.001
+DESCRIPTION:eae0ecd5        XBD.signal.h.009 XSH.2.4.3-signal-actions.001
+DESCRIPTION:4c5ac1ff        XBD.signal.h.009 XSH.2.4.3-signal-actions.001
+DESCRIPTION:ef4a29f5        XBD.signal.h.009 XSH.2.4.3-signal-actions.001
+DESCRIPTION:e6d3d102        XBD.signal.h.010 XSH.2.4.3-signal-actions.005
+DESCRIPTION:95c29f9f        XBD.signal.h.009 XSH.2.4.3-signal-actions.001
+DESCRIPTION:3b6b5a34        XBD.signal.h.010 XSH.2.4.3-signal-actions.005
+DESCRIPTION:6c94d995        XBD.signal.h.010 XSH.2.4.3-signal-actions.005
+DESCRIPTION:bd4d324c        XBD.signal.h.010 XSH.2.4.3-signal-actions.005
+DESCRIPTION:7dc9dca7        XBD.signal.h.009 XSH.2.4.3-signal-actions.001
+DESCRIPTION:fb95b1cb        XBD.signal.h.009 XSH.2.4.3-signal-actions.001
+DESCRIPTION:195733c0        XBD.signal.h.011 XSH.2.4.3-signal-actions.004
+DESCRIPTION:ce881c34        XBD.signal.h.012 XSH.2.4.3-signal-actions.002
+DESCRIPTION:8dae13b3        XBD.signal.h.012 XSH.2.4.3-signal-actions.002
+DESCRIPTION:0b1efb7c        XBD.signal.h.030 XSH.2.4.3-signal-actions.004
+DESCRIPTION:210ffcee        XBD.signal.h.012 XSH.2.4.3-signal-actions.002
+DESCRIPTION:948898a6        XBD.signal.h.012 XSH.2.4.3-signal-actions.002
+DESCRIPTION:935dff2f        XBD.signal.h.012 XSH.2.4.3-signal-actions.002
 DESCRIPTION:70810d2b        none  introduces the list
-DESCRIPTION:4b891557        todo  default actions (XSH 2.4.3)
-DESCRIPTION:0a798c62        todo  default actions (XSH 2.4.3)
-DESCRIPTION:2cfee080        todo  default actions (XSH 2.4.3)
-DESCRIPTION:540ba194        todo  default actions (XSH 2.4.3)
-DESCRIPTION:65d0efe6        todo  default actions (XSH 2.4.3)
+DESCRIPTION:4b891557        XSH.2.4.3-signal-actions.001 XSH.2.4.3-signal-actions.003
+DESCRIPTION:0a798c62        partial XSH.2.4.3-signal-actions.001  # termination; the additional actions are implementation-defined
+DESCRIPTION:2cfee080        XSH.2.4.3-signal-actions.004
+DESCRIPTION:540ba194        XSH.2.4.3-signal-actions.005
+DESCRIPTION:65d0efe6        XSH.2.4.1-signal-generation.008 XSH.2.4.3-signal-actions.006
 DESCRIPTION:8b0f06bd        none  a cross-reference
 DESCRIPTION:2e24035c        XBD.signal.h.013
 DESCRIPTION:bcaa337b        XBD.signal.h.013
@@ -84,22 +84,22 @@ DESCRIPTION:2cb34cd1        XBD.signal.h.013
 DESCRIPTION:faa0a72e        XBD.signal.h.014
 DESCRIPTION:ccf400cf        app
 DESCRIPTION:dfffd41b        XBD.signal.h.015
-DESCRIPTION:0a4d87ad        XBD.signal.h.015
-DESCRIPTION:ffb446d6        XBD.signal.h.015
-DESCRIPTION:5cb43e74        XBD.signal.h.015
+DESCRIPTION:0a4d87ad        XBD.signal.h.015 XSH.pthread_sigmask.001
+DESCRIPTION:ffb446d6        XBD.signal.h.015 XSH.pthread_sigmask.002
+DESCRIPTION:5cb43e74        XBD.signal.h.015 XSH.pthread_sigmask.003
 DESCRIPTION:295df1a7        XBD.signal.h.016 XBD.signal.h.017 XBD.signal.h.018
-DESCRIPTION:2bbd1392        XBD.signal.h.016
-DESCRIPTION:cbf0234e        XBD.signal.h.017
-DESCRIPTION:a6fa66f6        XBD.signal.h.016
-DESCRIPTION:a9eea22d        XBD.signal.h.016
-DESCRIPTION:3fe53a9f        XBD.signal.h.016
-DESCRIPTION:720eef1e        XBD.signal.h.017
-DESCRIPTION:5f0a1865        XBD.signal.h.017
-DESCRIPTION:5234105e        XBD.signal.h.016
-DESCRIPTION:97954049        XBD.signal.h.018
-DESCRIPTION:cff68e6c        XBD.signal.h.018
-DESCRIPTION:0ed4b229        XBD.signal.h.018
-DESCRIPTION:e297abd5        XBD.signal.h.018
+DESCRIPTION:2bbd1392        partial XBD.signal.h.016 XSH.sigaction.008  # the XSI part (stopped children continuing) is todo
+DESCRIPTION:cbf0234e        partial XBD.signal.h.017 XSH.sigaction.009  # XSI
+DESCRIPTION:a6fa66f6        XBD.signal.h.016 XSH.sigaction.010
+DESCRIPTION:a9eea22d        XBD.signal.h.016 XSH.sigaction.012
+DESCRIPTION:3fe53a9f        XBD.signal.h.016 XSH.sigaction.005
+DESCRIPTION:720eef1e        partial XBD.signal.h.017  # the behaviour (SA_NOCLDWAIT) is todo
+DESCRIPTION:5f0a1865        partial XBD.signal.h.017  # the behaviour (SA_NOCLDWAIT) is todo
+DESCRIPTION:5234105e        XBD.signal.h.016 XSH.sigaction.015
+DESCRIPTION:97954049        partial XBD.signal.h.018  # defined; sigaltstack() behaviour todo
+DESCRIPTION:cff68e6c        partial XBD.signal.h.018  # defined; sigaltstack() behaviour todo
+DESCRIPTION:0ed4b229        partial XBD.signal.h.018  # defined; sigaltstack() behaviour todo
+DESCRIPTION:e297abd5        partial XBD.signal.h.018  # defined; sigaltstack() behaviour todo
 DESCRIPTION:41eb86d0        XBD.signal.h.020
 DESCRIPTION:ea9a8a1a        XBD.signal.h.020
 DESCRIPTION:a301bdc7        XBD.signal.h.020
@@ -163,8 +163,8 @@ DESCRIPTION:ff2dc520        todo  si_addr for hardware faults
 DESCRIPTION:bea6c7ba        todo  si_addr for hardware faults
 DESCRIPTION:a80259ea        todo  si_addr for hardware faults
 DESCRIPTION:75f723f8        todo  si_addr for hardware faults
-DESCRIPTION:d179c82c        XSH._Exit.014
-DESCRIPTION:2e21b25d        XSH.exit.012 XSH._Exit.014
+DESCRIPTION:d179c82c        todo  si_pid of the child for SIGCHLD
+DESCRIPTION:2e21b25d        partial XSH.exit.012 XSH._Exit.014  # the CLD_EXITED value; the signal for other codes is todo
 DESCRIPTION:15525afe        todo  si_uid for SIGCHLD
 DESCRIPTION:c1466f6d        none  a caveat
 DESCRIPTION:61ad5fbc        XBD.signal.h.025 XBD.signal.h.026 XBD.signal.h.027 XBD.signal.h.028 XBD.signal.h.029

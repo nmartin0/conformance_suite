@@ -29,6 +29,8 @@ int main(void)
 	pc_begin("XBD.signal.h.029");
 	pc_test();
 	pc_check(IS_T(&(killpg), int (*)(pid_t, int)), "killpg() is not declared as int (*)(pid_t, int)");
+	pc_check(!IS_T(&(killpg), int (*)(pid_t, int, int)), "killpg() is declared without a prototype");
 	pc_check(IS_T(&(sigaltstack), int (*)(const stack_t *, stack_t *)), "sigaltstack() is not declared as int (*)(const stack_t *, stack_t *)");
+	pc_check(!IS_T(&(sigaltstack), int (*)(const stack_t *, stack_t *, int)), "sigaltstack() is declared without a prototype");
 	pc_pass();
 }

@@ -33,7 +33,7 @@ int main(void)
 
 		pc_check(IS_T(sa.sa_handler, void (*)(int)), "sa_handler is not void (*)(int)");
 		pc_check(IS_T(sa.sa_flags, int), "sa_flags is not an int");
-		pc_check(sigemptyset(&sa.sa_mask) == 0, "sa_mask is not usable as a sigset_t");
+		pc_check(IS_T(&sa.sa_mask, sigset_t *), "sa_mask is not a sigset_t");
 	}
 	pc_pass();
 }

@@ -30,21 +30,20 @@ int main(void)
 	pc_test();
 	{
 		sig_atomic_t a = 3;
-		sigset_t s, s2;
+		sigset_t s;
 		pid_t p = 1;
 		uid_t u = 0;
-		pthread_t th;
+		pthread_t *th = NULL;
 		pthread_attr_t *at = NULL;
 		struct timespec ts;
 
 		ts.tv_sec = 1;
 		ts.tv_nsec = 2;
 		pc_check(sigemptyset(&s) == 0, "sigemptyset failed");
-		s2 = s;	/* an object type that can be assigned */
-		(void)s2;
-		(void)th;
-		(void)at;
+		pc_check(sizeof *th > 0 && at == NULL, "pthread_t or pthread_attr_t unusable");
 		pc_check(a / 2 == 1 && (sig_atomic_t)2.5 == 2, "sig_atomic_t does not behave as an integer type");
+		pc_check((pid_t)-1 < 0, "pid_t is not a signed type");
+		pc_check(IS_T(ts.tv_nsec, long), "tv_nsec is not a long");
 		pc_check(p == 1 && u == 0 && ts.tv_sec + ts.tv_nsec == 3, "pid_t, uid_t or struct timespec misbehaves");
 	}
 	pc_pass();
