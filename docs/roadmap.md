@@ -15,11 +15,13 @@ verified; this file is the plan. Update both when a step finishes.
 - File descriptors: `open`, `close`, `dup`, `pipe`, `fcntl`, `lseek`,
   `read`, `write`, `<fcntl.h>`, `<unistd.h>` (part).
 - Processes: `fork`, `wait`, `_Exit`, `exit`, `exec`.
-- Signals (in progress): `sigaction`, `kill`, `raise`, `pthread_sigmask`/`sigprocmask`,
+- Signals: `sigaction`, `kill`, `raise`, `pthread_sigmask`/`sigprocmask`,
   `sigpending`, `sigsuspend`, `sigwait`, `sigtimedwait`/`sigwaitinfo`, `sigqueue`,
   `alarm`, `pause`, `<signal.h>`, the XSH 2.4 rules, the sigset functions,
   `signal`, `sigaltstack`, `psiginfo`/`psignal`, `sig2str`/`str2sig`, `killpg`,
   `abort`, the async-signal-safe list (2.4.3.016).
+  The coverage todos of the signal, process, close, fork and fcntl modules
+  were worked through (32 assertions); the few left are listed under Next.
 - Spec model and Tier 0 (`gen/specmodel.py`, `gen/tier0.py`): every
   header's macros, types, structures, functions and variables, generated
   from the user's copy under `build/`; about 3,350 checks.
@@ -29,8 +31,10 @@ verified; this file is the plan. Update both when a step finishes.
   `truncate`, `ftruncate`, `umask`, `futimens`/`utimensat`/`utimes`, and the directory
   streams (`opendir`/`fdopendir`, `readdir`/`readdir_r`, `closedir`, `rewinddir`, `dirfd`,
   `seekdir`, `telldir`, `scandir`/`alphasort`).
+- stdio (in progress): `fflush`, `fclose`, `ungetc`, `setvbuf`.
 - Utilities: `true`, `false`.
-- Every module reviewed independently; findings applied.
+- Every module reviewed independently and the findings applied, except
+  `ungetc` and `setvbuf` (review running).
 
 ## Next
 
