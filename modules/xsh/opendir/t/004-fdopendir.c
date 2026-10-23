@@ -4,10 +4,10 @@
  *
  * ASSERTION XSH.opendir.004
  * MUTANT    fdopendir.fails
- * MUTANT    dirfd.other_fd
  */
 #include "pc.h"
 #include <dirent.h>
+#include <stddef.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -248,7 +248,6 @@ int main(void)
 		pc_test();
 		d = fdopendir(fd);
 		pc_check(d != NULL, "fdopendir() failed: %s", pc_errname(errno));
-		pc_check(dirfd(d) == fd, "dirfd() returned %d, not the descriptor %d given to fdopendir()", dirfd(d), fd);
 		read_all(d, &v);
 		why = exactly(&v, ABC, 3);
 		pc_check(why == NULL, "%s", why);

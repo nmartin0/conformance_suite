@@ -57,6 +57,48 @@ static void *fail_p(int e)
 	return NULL;
 }
 
+/*
+ * rewinddir.stale: the stream keeps showing the entries it had when it was
+ * opened. opendir() takes a snapshot of the names; after rewinddir(),
+ * readdir() replays it.
+ */
+#define SNAP 64
+static DIR *snap_dir;
+static int snap_n, snap_pos = -1;
+static union { struct dirent d; char pad[sizeof(struct dirent) + 256]; } snap[SNAP];
+
+DIR *opendir(const char *name)
+{
+	REAL(opendir);
+	REAL(readdir);
+	REAL(closedir);
+	const char *m = mutant_of("rewinddir.");
+	DIR *d = real_opendir(name), *s;
+	struct dirent *e;
+
+	if (d != NULL && IS("stale") && (s = real_opendir(name)) != NULL) {
+		snap_dir = d;
+		snap_n = 0;
+		snap_pos = -1;
+		while (snap_n < SNAP && (e = real_readdir(s)) != NULL) {
+			memcpy(&snap[snap_n].d, e, sizeof snap[snap_n].d);
+			snprintf(snap[snap_n].d.d_name, 256, "%s", e->d_name);
+			snap_n++;
+		}
+		(void)real_closedir(s);
+	}
+	return d;
+}
+
+struct dirent *readdir(DIR *d)
+{
+	REAL(readdir);
+
+	if (d == snap_dir && snap_pos >= 0)
+		return snap_pos < snap_n ? &snap[snap_pos++].d : NULL;
+	return real_readdir(d);
+}
+
 void rewinddir(DIR *d)
 {
 	REAL(rewinddir);
@@ -68,15 +110,7 @@ void rewinddir(DIR *d)
 	}
 	if (IS("noop"))
 		return;
-	if (IS("stale")) {
-		/* restarts, but keeps a removed name in view: re-create d/b while reading */
-		real_rewinddir(d);
-		{
-			int fd = dirfd(d), b;
-			if (fd >= 0 && (b = openat(fd, "b", O_WRONLY | O_CREAT | O_EXCL, 0644)) >= 0)
-				(void)close(b);
-		}
-		return;
-	}
 	real_rewinddir(d);
+	if (IS("stale") && d == snap_dir)
+		snap_pos = 0;
 }

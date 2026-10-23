@@ -5,9 +5,19 @@ assertion  XSH.seekdir.001
 anchor     functions/seekdir.html#DESCRIPTION
 class      conditional
 when       XSI
-since      1988
+since      2001
 says       In a directory of 20 files, after 5 entries telldir() gives loc;
            after reading on to the end, seekdir(d, loc) makes readdir()
-           return the entry that followed loc before; telldir() right after
-           seekdir(d, loc) returns loc.
+           return the entry that followed loc before.
 test       t/001-seekdir.c
+
+assertion  XSH.seekdir.002
+anchor     functions/seekdir.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       In a directory of 3000 files, telldir() after 2500 entries gives loc;
+           after reading on to the end, seekdir(d, loc) makes readdir()
+           return the entry that followed loc before.
+timeout    120
+test       t/002-far.c

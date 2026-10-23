@@ -1,15 +1,15 @@
 # dirfd.cov - every requirement unit on functions/dirfd.html.
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
-DESCRIPTION:30559dc2     XSH.dirfd.001 XSH.opendir.004
-DESCRIPTION:a5649e29     impl  whether a stream has a descriptor is the implementation's choice; the reference systems always have one
-DESCRIPTION:58ac718d     impl  as above
-DESCRIPTION:8ebcf0f1     impl  as above
-DESCRIPTION:0e4e7f54     XSH.dirfd.001
+DESCRIPTION:30559dc2     XSH.dirfd.001 XSH.dirfd.002
+DESCRIPTION:a5649e29     partial XSH.opendir.002  # FD_CLOEXEC of the descriptor; the reference systems' streams always have one, so the opening itself is not seen
+DESCRIPTION:58ac718d     partial XSH.opendir.002  # as above
+DESCRIPTION:8ebcf0f1     todo  needs a stream without a descriptor
+DESCRIPTION:0e4e7f54     XSH.dirfd.002
 DESCRIPTION:fa66dafd     none  undefined
-DESCRIPTION:8792930b     XSH.dirfd.001
+DESCRIPTION:8792930b     XSH.dirfd.002
 RETURN_VALUE:7794e7c0    XSH.dirfd.001
 RETURN_VALUE:64461925    todo  needs a stream without a descriptor and no descriptor free
 ERRORS:17aad9f0          todo  needs a stream without a descriptor (not on the reference systems)
-ERRORS:a316019a          untestable
+ERRORS:a316019a          untestable  filling the system's open file table is not safe on a shared machine
 ERRORS:39f71282          optional

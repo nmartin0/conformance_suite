@@ -7,6 +7,7 @@
  */
 #include "pc.h"
 #include <dirent.h>
+#include <stddef.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -255,6 +256,11 @@ int main(void)
 		while ((e2 = readdir(d2)) != NULL)
 			;
 		pc_check(strcmp(e1->d_name, keep) == 0, "the first stream's entry now names \"%s\"", e1->d_name);
+		d2 = open_dir("d1");
+		while ((e2 = readdir(d2)) != NULL)
+			;
+		pc_check(strcmp(e1->d_name, keep) == 0, "after a second stream of the same directory, the entry names \"%s\"",
+			 e1->d_name);
 	}
 	pc_pass();
 }

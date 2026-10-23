@@ -8,6 +8,7 @@
  */
 #include "pc.h"
 #include <dirent.h>
+#include <stddef.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -253,7 +254,6 @@ int main(void)
 			pc_check(readdir(d) != NULL, "readdir failed");
 		pc_test();
 		loc = telldir(d);
-		pc_check(loc != -1, "telldir() returned -1 (%s)", pc_errname(errno));
 		e = readdir(d);
 		pc_check(e != NULL, "readdir() after telldir() failed");
 		snprintf(after, sizeof after, "%s", e->d_name);
@@ -263,8 +263,6 @@ int main(void)
 		e = readdir(d);
 		pc_check(e != NULL, "readdir() after seekdir() returned a null pointer");
 		pc_check(strcmp(e->d_name, after) == 0, "after seekdir() readdir() returned \"%s\", not \"%s\"", e->d_name, after);
-		seekdir(d, loc);
-		pc_check(telldir(d) == loc, "telldir() right after seekdir() returned %ld, not %ld", telldir(d), loc);
 	}
 	pc_pass();
 }

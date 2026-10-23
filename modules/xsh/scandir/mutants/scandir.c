@@ -57,6 +57,15 @@ static void *fail_p(int e)
 	return NULL;
 }
 
+static int (*sel_saved)(const struct dirent *);
+
+/* Calls the selector twice for each entry. */
+static int sel_both(const struct dirent *e)
+{
+	(void)sel_saved(e);
+	return sel_saved(e);
+}
+
 int scandir(const char *dir, struct dirent ***nl, int (*sel)(const struct dirent *),
 	    int (*compar)(const struct dirent **, const struct dirent **))
 {
@@ -79,8 +88,10 @@ int scandir(const char *dir, struct dirent ***nl, int (*sel)(const struct dirent
 		*nl = malloc(sizeof **nl);
 		return *nl != NULL ? 0 : -1;
 	}
-	if (IS("unsorted"))
-		compar = NULL;
+	if (IS("sel_twice") && sel != NULL) {
+		sel_saved = sel;
+		sel = sel_both;
+	}
 	if (IS("always_alphasort"))
 		compar = alphasort;
 	r = real_scandir(dir, nl, sel, compar);
@@ -91,13 +102,10 @@ int scandir(const char *dir, struct dirent ***nl, int (*sel)(const struct dirent
 	if (r == -1 && IS("eacces_as_enoent") && errno == EACCES)
 		errno = ENOENT;
 	if (r > 1 && IS("unsorted")) {
-		/* the order readdir() gave, reversed so it is surely not sorted */
-		int i;
-		for (i = 0; i < r / 2; i++) {
-			struct dirent *x = (*nl)[i];
-			(*nl)[i] = (*nl)[r - 1 - i];
-			(*nl)[r - 1 - i] = x;
-		}
+		/* sorted, then the first two swapped: surely not in order */
+		struct dirent *x = (*nl)[0];
+		(*nl)[0] = (*nl)[1];
+		(*nl)[1] = x;
 	}
 	return r;
 }

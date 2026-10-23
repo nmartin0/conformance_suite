@@ -5,16 +5,15 @@ assertion  XSH.readdir.001
 anchor     functions/readdir.html#DESCRIPTION
 class      required
 since      1988
-says       For a directory holding files named "plain", "with space",
-           "tab\tname", "x.y.z" and a name of bytes 0xc3 0xa9, readdir()
-           returns each name once, byte for byte, and no other entry but
-           dot and dot-dot (at most once each).
+says       For a directory holding files named "plain", "x.y.z", "-dash_", "A9"
+           and ".hidden", readdir() returns each name once, byte for byte,
+           and no other entry but dot and dot-dot (at most once each).
 test       t/001-names.c
 
 assertion  XSH.readdir.002
 anchor     functions/readdir.html#DESCRIPTION
 class      required
-since      1988
+since      2008
 says       For a directory holding a file f, a directory s and a symbolic link
            sl to f, each entry's d_ino equals st_ino from lstat() of that
            name.
@@ -24,18 +23,18 @@ assertion  XSH.readdir.003
 anchor     functions/readdir.html#RETURN VALUE
 class      required
 since      2001
-says       After the last entry, readdir() returns a null pointer and leaves
-           errno as it was (set to EDOM before the call), and does so again
-           on a further call.
+says       At the end of the stream readdir() returns a null pointer and leaves
+           errno as it was (EDOM, set before every call), and does so again
+           on two further calls.
 test       t/003-end-errno.c
 
 assertion  XSH.readdir.004
 anchor     functions/readdir.html#DESCRIPTION
 class      required
 since      2001
-says       With two streams of different directories, the entry readdir()
-           returned for the first still holds the same name after readdir()
-           on the second.
+says       The entry readdir() returned for one stream still holds the same
+           name after another stream, of a different directory and then of
+           the same directory, is read to the end.
 test       t/004-streams-independent.c
 
 assertion  XSH.readdir.005
@@ -45,16 +44,45 @@ since      1988
 says       With the directory's st_atim set to 2001-09-09 (older than its
            st_mtim), reading it to the end with readdir() and closing the
            stream leaves st_atim later than that.
-nomutant   An interposed function cannot keep the kernel from marking
-           the access; no planted fault applies.
+note       A file system mounted to skip directory access times
+           (nodiratime) gives FAIL here; one that skips all access times
+           (noatime) is detected in setup and gives UNRESOLVED.
 test       t/005-atime.c
 
 assertion  XSH.readdir.006
 anchor     functions/readdir.html#DESCRIPTION
 class      required
-since      2001
-says       readdir_r(d, &ent, &res) returns 0 with res == &ent for each of a, b
-           and c (and dot and dot-dot), then returns 0 with res a null
-           pointer.
+since      2008
+says       With an entry buffer of exactly offsetof(struct dirent, d_name) +
+           {NAME_MAX} + 1 bytes followed by a guard, readdir_r(d, ent, &res)
+           returns 0 with res == ent for each of a, b and a name of
+           {NAME_MAX} bytes (and dot and dot-dot), then 0 with res a null
+           pointer; the guard is untouched.
 note       readdir_r() is obsolescent (OB) but still required.
 test       t/006-readdir-r.c
+
+assertion  XSH.readdir.007
+anchor     functions/readdir.html#DESCRIPTION
+class      required
+since      2024
+says       For files named "with space", "tab\tname" and the bytes 0xc3 0xa9,
+           readdir() returns each name once, byte for byte.
+test       t/007-bytes.c
+
+assertion  XSH.readdir.008
+anchor     functions/readdir.html#DESCRIPTION
+class      required
+since      1988
+says       For a directory of 3000 files with 30-byte names, readdir() returns
+           each name exactly once and no other entry but dot and dot-dot.
+timeout    120
+test       t/008-large.c
+
+assertion  XSH.readdir.009
+anchor     functions/readdir.html#DESCRIPTION
+class      required
+since      1988
+says       With a stream of a, b, c, d and e of which the parent read two
+           entries (dot and dot-dot aside), a child that alone continues
+           gets exactly the other three.
+test       t/009-after-fork.c

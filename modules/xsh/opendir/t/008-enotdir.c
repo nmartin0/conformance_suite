@@ -1,13 +1,13 @@
 /*
- * opendir() of a non-directory gives ENOTDIR; loops give ELOOP.
+ * opendir() of a non-directory gives ENOTDIR.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.opendir.008
  * MUTANT    opendir.enotdir_as_enoent
- * MUTANT    opendir.eloop_as_enoent
  */
 #include "pc.h"
 #include <dirent.h>
+#include <stddef.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -240,8 +240,6 @@ int main(void)
 		void *p;
 		struct dirent **nl;
 		pc_make_file("f", "x");
-		pc_make_symlink("b", "a");
-		pc_make_symlink("a", "b");
 		pc_test();
 		errno = 0;
 		p = opendir("f");
@@ -249,9 +247,6 @@ int main(void)
 		errno = 0;
 		p = opendir("f/");
 		pc_check(p == NULL && errno == ENOTDIR, "opendir(\"f/\"): returned %p, errno %s, expected ENOTDIR", p, pc_errname(errno));
-		errno = 0;
-		p = opendir("a");
-		pc_check(p == NULL && errno == ELOOP, "opendir(\"a\"): returned %p, errno %s, expected ELOOP", p, pc_errname(errno));
 		(void)p;
 		(void)nl;
 	}

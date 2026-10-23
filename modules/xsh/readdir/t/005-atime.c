@@ -3,9 +3,11 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.readdir.005
+ * MUTANT    readdir.no_atime
  */
 #include "pc.h"
 #include <dirent.h>
+#include <stddef.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -245,6 +247,17 @@ int main(void)
 		v[1].tv_sec = 0;
 		v[1].tv_nsec = UTIME_OMIT;
 		pc_check(utimensat(AT_FDCWD, "d", v, 0) == 0, "utimensat failed: %s", pc_errname(errno));
+		{
+			char c;
+			int fd;
+
+			pc_make_file("probe", "x");
+			pc_check(utimensat(AT_FDCWD, "probe", v, 0) == 0, "utimensat failed: %s", pc_errname(errno));
+			fd = open("probe", O_RDONLY);
+			pc_check(fd >= 0 && read(fd, &c, 1) == 1 && close(fd) == 0, "reading the probe file failed");
+			if (lst("probe").st_atim.tv_sec <= 1000000000)
+				pc_unresolved("reading a file does not update its access time here (a noatime mount?)");
+		}
 		pc_test();
 		d = open_dir("d");
 		while (readdir(d) != NULL)

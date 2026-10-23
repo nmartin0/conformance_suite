@@ -72,8 +72,28 @@ struct dirent *readdir(DIR *d)
 		last_dir = d;
 		do
 			e = real_readdir(d);
-		while (e != NULL && e->d_name[0] == '.');	/* the first name that is not dot or dot-dot is lost */
-		return real_readdir(d);
+		while (e != NULL && (strcmp(e->d_name, ".") == 0 || strcmp(e->d_name, "..") == 0));
+		return real_readdir(d);	/* the first entry other than dot and dot-dot is lost */
+	}
+	if (IS("no_atime")) {
+		static DIR *seen;
+		static struct timespec atime;
+		struct stat st;
+		int fd = dirfd(d);
+
+		if (seen != d && fd >= 0 && fstat(fd, &st) == 0) {
+			seen = d;
+			atime = st.st_atim;
+		}
+		e = real_readdir(d);
+		if (e == NULL && seen == d && fd >= 0) {
+			struct timespec v[2];
+			v[0] = atime;
+			v[1].tv_sec = 0;
+			v[1].tv_nsec = UTIME_OMIT;
+			(void)futimens(fd, v);	/* puts the access time back */
+		}
+		return e;
 	}
 	if (IS("dup_entry")) {
 		if (last != NULL && last_dir == d && last->d_name[0] != '.') {

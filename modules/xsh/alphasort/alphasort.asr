@@ -15,8 +15,9 @@ anchor     functions/alphasort.html#DESCRIPTION
 class      required
 since      2008
 says       scandir("d", &nl, sel, alphasort), with d holding c, a, b and x.skip
-           and sel rejecting names starting with "x" or ".", returns 3 and
-           nl holds a, b and c in that order.
+           and sel rejecting names starting with "x" or ".", calls sel once
+           for each of a, b, c and x.skip, returns 3, and nl holds a, b and c
+           in that order.
 test       t/002-scandir-sorted.c
 
 assertion  XSH.alphasort.003
@@ -50,21 +51,22 @@ class      disputed
 since      2008
 says       scandir("f", ...) with f a regular file returns -1 with errno
            ENOTDIR.
-note       disputed (SI-55): scandir()'s [ENOENT] reads "does not name
-           an existing directory", which a regular file also meets, so
-           XSH 2.3 lets ENOENT be reported too; every reference system
-           reports ENOTDIR.
+note       disputed (SI-55): the [ENOENT] entry speaks of a component
+           that names no existing directory, which a regular file (or a
+           loop of links) also meets, so XSH 2.3 lets ENOENT be reported
+           too; every reference system reports the more specific error.
 test       t/006-scandir-enotdir.c
 
 assertion  XSH.alphasort.007
 anchor     functions/alphasort.html#ERRORS/ENAMETOOLONG
 class      disputed
-since      2008
 says       scandir() of a name longer than {NAME_MAX} bytes returns -1 with
            errno ENAMETOOLONG.
 note       disputed (Q-8): the name also names no existing file, so
            ENOENT applies too and XSH 2.3 lets either error be reported;
-           every reference system reports the more specific one.
+           every reference system reports the more specific one. "since"
+           left out, as for XSH.open.017: the error is unconditional
+           only since _POSIX_NO_TRUNC had to be other than -1.
 test       t/007-scandir-enametoolong.c
 
 assertion  XSH.alphasort.008

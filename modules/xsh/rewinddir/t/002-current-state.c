@@ -8,6 +8,7 @@
  */
 #include "pc.h"
 #include <dirent.h>
+#include <stddef.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -243,11 +244,11 @@ int main(void)
 		DIR *d;
 
 		abc();
+		pc_test();
 		d = open_dir("d");
 		read_all(d, &v);
 		pc_make_file("d/d", "x");
 		pc_check(unlink("d/b") == 0, "unlink failed: %s", pc_errname(errno));
-		pc_test();
 		rewinddir(d);
 		read_all(d, &v);
 		why = exactly(&v, want, 3);

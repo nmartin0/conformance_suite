@@ -7,6 +7,7 @@
  */
 #include "pc.h"
 #include <dirent.h>
+#include <stddef.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -243,14 +244,18 @@ int main(void)
 		abc();
 		d = open_dir("d");
 		pc_test();
-		for (i = 0; i < MAXN && readdir(d) != NULL; i++)
-			;
+		for (i = 0; i < MAXN; i++) {
+			errno = EDOM;
+			if ((e = readdir(d)) == NULL)
+				break;
+		}
 		pc_check(i < MAXN, "readdir() never returned a null pointer");
+		pc_check(errno == EDOM, "readdir() at the end changed errno to %s", pc_errname(errno));
 		for (i = 0; i < 2; i++) {
 			errno = EDOM;
 			e = readdir(d);
-			pc_check(e == NULL, "readdir() at the end returned an entry");
-			pc_check(errno == EDOM, "readdir() at the end changed errno to %s", pc_errname(errno));
+			pc_check(e == NULL, "readdir() after the end returned an entry");
+			pc_check(errno == EDOM, "readdir() after the end changed errno to %s", pc_errname(errno));
 		}
 	}
 	pc_pass();

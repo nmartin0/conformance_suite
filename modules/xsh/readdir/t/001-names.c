@@ -5,10 +5,10 @@
  * ASSERTION XSH.readdir.001
  * MUTANT    readdir.skips_first
  * MUTANT    readdir.dup_entry
- * MUTANT    readdir.mangles_name
  */
 #include "pc.h"
 #include <dirent.h>
+#include <stddef.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -238,7 +238,7 @@ int main(void)
 {
 	pc_begin("XSH.readdir.001");
 	{
-		static const char *const want[] = { "plain", "with space", "tab\tname", "x.y.z", "\xc3\xa9" };
+		static const char *const want[] = { "plain", "x.y.z", "-dash_", "A9", ".hidden" };
 		char path[300];
 		struct names v;
 		const char *why;

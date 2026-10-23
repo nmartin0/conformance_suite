@@ -6,6 +6,14 @@ anchor     functions/dirfd.html#DESCRIPTION
 class      required
 since      2008
 says       dirfd() of a stream from opendir("d") returns a descriptor that
-           fstat() shows to be d, returns the same descriptor again, and
-           that descriptor is the stream's own: closedir() closes it.
+           fstat() shows to be d.
 test       t/001-dirfd.c
+
+assertion  XSH.dirfd.002
+anchor     functions/dirfd.html#DESCRIPTION
+class      required
+since      2024
+says       dirfd() returns the same descriptor each time; for a stream from
+           fdopendir(fd) it returns fd; after closedir() the descriptor
+           dirfd() returned is no longer open.
+test       t/002-own-descriptor.c

@@ -69,6 +69,11 @@ int dirfd(DIR *d)
 	if (IS("fails"))
 		return fail(EINVAL);
 	fd = real_dirfd(d);
+	if (IS("wrong_dir") && fd >= 0) {
+		if (extra < 0)
+			extra = open("..", O_RDONLY | O_DIRECTORY);	/* a descriptor of some other directory */
+		return extra;
+	}
 	if (IS("other_fd") && fd >= 0) {
 		if (extra < 0)
 			extra = dup(fd);

@@ -5,9 +5,11 @@
  * ASSERTION XSH.readdir.006
  * MUTANT    readdir_r.other_entry
  * MUTANT    readdir_r.no_end
+ * MUTANT    readdir_r.overruns
  */
 #include "pc.h"
 #include <dirent.h>
+#include <stddef.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -237,34 +239,57 @@ int main(void)
 {
 	pc_begin("XSH.readdir.006");
 	{
-		static union { struct dirent d; char pad[sizeof(struct dirent) + 4096]; } ent;
-		struct dirent *res;
+		static const char *want[3] = { "a", "b", "LONG" };
+		char longname[4096], path[4200];
+		struct dirent *ent, *res;
 		struct names v;
 		const char *why;
+		unsigned char *buf;
+		size_t size;
+		long max = pathconf(".", _PC_NAME_MAX);
 		DIR *d;
 		int r, i;
 
-		abc();
+		if (max < 1 || max > 4000)
+			pc_unresolved("{NAME_MAX} is indeterminate or too large here (%ld)", max);
+		memset(longname, 'n', (size_t)max);
+		longname[max] = '\0';
+		pc_make_dir("d");
+		pc_make_file("d/a", "x");
+		pc_make_file("d/b", "x");
+		snprintf(path, sizeof path, "d/%s", longname);
+		pc_make_file(path, "x");
+		size = offsetof(struct dirent, d_name) + (size_t)max + 1;
+		if (size < sizeof(struct dirent))
+			size = sizeof(struct dirent);
+		buf = malloc(size + 64);
+		pc_check(buf != NULL, "malloc failed");
+		memset(buf + size, 0xa5, 64);
+		ent = (struct dirent *)(void *)buf;
 		d = open_dir("d");
 		memset(&v, 0, sizeof v);
 		pc_test();
 		for (i = 0; i < MAXN; i++) {
-			r = readdir_r(d, &ent.d, &res);
+			r = readdir_r(d, ent, &res);
 			pc_check(r == 0, "readdir_r() returned %d (%s)", r, pc_errname(r));
 			if (res == NULL)
 				break;
-			pc_check(res == &ent.d, "*result is %p, not the entry %p", (void *)res, (void *)&ent.d);
+			pc_check(res == ent, "*result is %p, not the entry %p", (void *)res, (void *)ent);
 			if (strcmp(res->d_name, ".") == 0)
 				v.dots++;
 			else if (strcmp(res->d_name, "..") == 0)
 				v.dotdots++;
 			else if (res->d_name[0] == '\0')
 				v.empty++;
-			else if (v.n < MAXN)
+			else if (strcmp(res->d_name, longname) == 0)
+				strcpy(v.name[v.n++], "LONG");
+			else if (v.n < MAXN && strlen(res->d_name) < 256)
 				strcpy(v.name[v.n++], res->d_name);
 		}
 		pc_check(i < MAXN, "readdir_r() never reported the end");
-		why = exactly(&v, ABC, 3);
+		for (i = 0; i < 64; i++)
+			pc_check(buf[size + i] == 0xa5, "readdir_r() wrote %d bytes past an entry of %zu bytes", i + 1, size);
+		why = exactly(&v, want, 3);
 		pc_check(why == NULL, "%s", why);
 	}
 	pc_pass();

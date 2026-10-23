@@ -7,6 +7,7 @@
  */
 #include "pc.h"
 #include <dirent.h>
+#include <stddef.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -237,7 +238,7 @@ int main(void)
 	pc_begin("XSH.opendir.005");
 	{
 		DIR *d;
-		int fd;
+		int fd, fl;
 
 		pc_make_dir("d");
 		fd = open("d", O_RDONLY | O_DIRECTORY | O_CLOEXEC);
@@ -245,7 +246,9 @@ int main(void)
 		pc_test();
 		d = fdopendir(fd);
 		pc_check(d != NULL, "fdopendir() failed: %s", pc_errname(errno));
-		pc_check(fcntl(fd, F_GETFD) & FD_CLOEXEC, "fdopendir() cleared FD_CLOEXEC");
+		fl = fcntl(fd, F_GETFD);
+		pc_check(fl != -1, "the descriptor given to fdopendir() is no longer open");
+		pc_check(fl & FD_CLOEXEC, "fdopendir() cleared FD_CLOEXEC");
 	}
 	pc_pass();
 }

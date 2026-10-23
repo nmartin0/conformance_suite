@@ -57,6 +57,8 @@ static void *fail_p(int e)
 	return NULL;
 }
 
+#include <stddef.h>
+
 int readdir_r(DIR *d, struct dirent *entry, struct dirent **result)
 {
 	REAL(readdir_r);
@@ -75,5 +77,7 @@ int readdir_r(DIR *d, struct dirent *entry, struct dirent **result)
 	if (r == 0 && *result == NULL && IS("no_end")) {
 		r = ENOENT;
 	}
+	if (r == 0 && *result != NULL && IS("overruns"))
+		memset((char *)entry + offsetof(struct dirent, d_name) + strlen(entry->d_name) + 1, 0, 16);
 	return r;
 }

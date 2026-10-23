@@ -68,6 +68,8 @@ DIR *fdopendir(int fd)
 		return real_fdopendir(fd);
 	if (IS("fails"))
 		return fail_p(EIO);
+	if (IS("unreadable_ok") && (fcntl(fd, F_GETFL) & O_ACCMODE) != O_RDONLY && (fcntl(fd, F_GETFL) & O_ACCMODE) != O_RDWR)
+		return real_fdopendir(open(".", O_RDONLY | O_DIRECTORY));
 	if (IS("file_ok") && fstat(fd, &st) == 0 && !S_ISDIR(st.st_mode))
 		return real_fdopendir(open(".", O_RDONLY | O_DIRECTORY));	/* a stream of some directory */
 	d = real_fdopendir(fd);

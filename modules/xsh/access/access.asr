@@ -125,12 +125,13 @@ test       t/012-eloop.c
 assertion  XSH.access.013
 anchor     functions/access.html#ERRORS
 class      disputed
-since      1988
 says       access() of a name longer than {NAME_MAX} bytes fails with
            ENAMETOOLONG.
 note       disputed (Q-8): the name also names no existing file, so
            ENOENT applies too and XSH 2.3 lets either error be reported;
-           every reference system reports the more specific one.
+           every reference system reports the more specific one. "since"
+           left out, as for XSH.open.017: the error is unconditional
+           only since _POSIX_NO_TRUNC had to be other than -1.
 test       t/013-enametoolong.c
 
 assertion  XSH.access.014

@@ -3,11 +3,12 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.dirfd.001
- * MUTANT    dirfd.other_fd
  * MUTANT    dirfd.fails
+ * MUTANT    dirfd.wrong_dir
  */
 #include "pc.h"
 #include <dirent.h>
+#include <stddef.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -249,10 +250,6 @@ int main(void)
 		pc_check(fstat(fd, &a) == 0, "fstat failed: %s", pc_errname(errno));
 		b = lst("d");
 		pc_check(same_file(&a, &b), "the descriptor is not of the stream's directory");
-		pc_check(dirfd(d) == fd, "a second dirfd() returned another descriptor");
-		pc_check(closedir(d) == 0, "closedir failed: %s", pc_errname(errno));
-		pc_check(fcntl(fd, F_GETFD) == -1 && errno == EBADF,
-			 "the descriptor dirfd() returned is still open after closedir(): it is not the stream's own");
 	}
 	pc_pass();
 }

@@ -65,8 +65,8 @@ int closedir(DIR *d)
 
 	if (m == NULL)
 		return real_closedir(d);
-	fd = dirfd(d);
-	if (IS("leaks_fd") && fd >= 0)
+	fd = IS("leaks_fd") ? dirfd(d) : -1;
+	if (fd >= 0)
 		keep = dup(fd);
 	r = real_closedir(d);
 	if (keep >= 0) {

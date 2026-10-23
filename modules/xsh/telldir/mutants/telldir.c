@@ -72,7 +72,7 @@ long telldir(DIR *d)
 		static long first = -2;
 		if (first == -2)
 			first = r;
-		return first == r ? 0 : r;	/* the start of the stream, not where it is */
+		return first;	/* always the first location it gave, not where the stream is */
 	}
 	return r;
 }

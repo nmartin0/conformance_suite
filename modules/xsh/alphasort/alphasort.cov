@@ -11,7 +11,7 @@ DESCRIPTION:cb9cb7b2     partial XSH.alphasort.002 XSH.alphasort.004  # selectio
 DESCRIPTION:4f242d53     partial XSH.alphasort.002  # the array is passed to free(), not otherwise checked
 DESCRIPTION:44d96cba     XSH.alphasort.003
 DESCRIPTION:b4c4d3f6     none  unspecified
-RETURN_VALUE:1e379d22    XSH.alphasort.001
+RETURN_VALUE:1e379d22    partial XSH.alphasort.001  # the POSIX locale only
 RETURN_VALUE:5edb2f12    none  background
 RETURN_VALUE:2af4644b    XSH.alphasort.002 XSH.alphasort.003
 RETURN_VALUE:a16a197b    XSH.alphasort.005 XSH.alphasort.006
@@ -19,9 +19,9 @@ ERRORS:fe0c96a2          partial XSH.alphasort.008  # read permission; the path 
 ERRORS:3cd10ac0          todo  a loop of symbolic links
 ERRORS:681b232a          XSH.alphasort.007
 ERRORS:1d79fd07          XSH.alphasort.005
-ERRORS:b03247c6          untestable
+ERRORS:b03247c6          untestable  no portable way to make scandir() run out of memory
 ERRORS:6240aee0          XSH.alphasort.006
-ERRORS:caadb6d7          untestable
+ERRORS:caadb6d7          todo  needs a 32-bit build without large-file support on a file system with serial numbers above 2^32
 ERRORS:eeface48          optional
 ERRORS:1fbbba10          optional
 ERRORS:c7f415ad          optional

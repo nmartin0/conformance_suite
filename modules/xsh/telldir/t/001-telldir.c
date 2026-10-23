@@ -8,6 +8,7 @@
  */
 #include "pc.h"
 #include <dirent.h>
+#include <stddef.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -237,34 +238,37 @@ int main(void)
 {
 	pc_begin("XSH.telldir.001");
 	{
-		char after[256];
+		char name[32], first[256], later[256];
 		struct dirent *e;
-		long loc;
+		long l0, l1;
 		DIR *d;
 		int i;
 
 		pc_make_dir("d");
 		for (i = 0; i < 20; i++) {
-			snprintf(after, sizeof after, "d/f%02d", i);
-			pc_make_file(after, "x");
+			snprintf(name, sizeof name, "d/f%02d", i);
+			pc_make_file(name, "x");
 		}
 		d = open_dir("d");
-		for (i = 0; i < 5; i++)
-			pc_check(readdir(d) != NULL, "readdir failed");
 		pc_test();
-		loc = telldir(d);
-		pc_check(loc != -1, "telldir() returned -1 (%s)", pc_errname(errno));
+		l0 = telldir(d);
 		e = readdir(d);
-		pc_check(e != NULL, "readdir() after telldir() failed");
-		snprintf(after, sizeof after, "%s", e->d_name);
-		while (readdir(d) != NULL)
-			;
-		seekdir(d, loc);
+		pc_check(e != NULL, "readdir() failed");
+		snprintf(first, sizeof first, "%s", e->d_name);
+		for (i = 0; i < 6; i++)
+			pc_check(readdir(d) != NULL, "readdir() failed");
+		l1 = telldir(d);
 		e = readdir(d);
-		pc_check(e != NULL, "readdir() after seekdir() returned a null pointer");
-		pc_check(strcmp(e->d_name, after) == 0, "after seekdir() readdir() returned \"%s\", not \"%s\"", e->d_name, after);
-		seekdir(d, loc);
-		pc_check(telldir(d) == loc, "telldir() right after seekdir() returned %ld, not %ld", telldir(d), loc);
+		pc_check(e != NULL, "readdir() failed");
+		snprintf(later, sizeof later, "%s", e->d_name);
+		seekdir(d, l1);
+		pc_check(telldir(d) == l1, "telldir() right after seekdir(l1) returned %ld, not %ld", telldir(d), l1);
+		e = readdir(d);
+		pc_check(e != NULL && strcmp(e->d_name, later) == 0, "after seekdir(l1) readdir() did not return \"%s\"", later);
+		seekdir(d, l0);
+		pc_check(telldir(d) == l0, "telldir() right after seekdir(l0) returned %ld, not %ld", telldir(d), l0);
+		e = readdir(d);
+		pc_check(e != NULL && strcmp(e->d_name, first) == 0, "after seekdir(l0) readdir() did not return \"%s\"", first);
 	}
 	pc_pass();
 }
