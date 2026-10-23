@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.exit.007
+ * MUTANT    exit.continues_after_exit
  * MUTANT    exit.forward_order
  * MUTANT    exit.flush_first
  */
@@ -93,7 +94,6 @@ int main(void)
 	st = reap(c);
 	collect(p[0], buf, sizeof buf);
 	pc_check(WIFEXITED(st), "the child did not exit normally (%#x)", st);
-	pc_check(WEXITSTATUS(st) != 99, "the child could not set up");
 	pc_check(strcmp(buf, "s") == 0, "handlers called as \"%s\", expected \"s\"", buf);
 	pc_check(WEXITSTATUS(st) == 7, "exit status %d, expected the handler's 7", WEXITSTATUS(st));
 	pc_check(pc_file_size("f") == 0, "the stream was flushed after a handler that did not return");

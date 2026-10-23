@@ -34,14 +34,16 @@ test       t/003-reverse-order.c
 assertion  XSH.exit.004
 anchor     functions/exit.html#DESCRIPTION
 class      required
-since      1999
-says       A function registered with atexit() while exit() is calling
-           the handlers is called after the handler that registered it,
+since      2001
+says       If atexit() succeeds when called while exit() is calling the
+           handlers, the function it registers is called after the handler that registered it,
            and before the handlers registered earlier that have not run
            yet (registered x, then a; a registers b: called a, b, x).
 note       b is called after a because a had already been called when b
            was registered; b comes before x by the general reverse-order
-           rule, which the exception does not touch.
+           rule, which the exception does not touch. Whether atexit()
+           succeeds once exit() has been called is unspecified (atexit()
+           page); if it fails, the test is UNRESOLVED.
 test       t/004-registered-during-exit.c
 
 assertion  XSH.exit.005
@@ -56,12 +58,11 @@ test       t/005-as-many-times.c
 assertion  XSH.exit.006
 anchor     functions/exit.html#DESCRIPTION
 class      required
-since      2017
+since      2024
 says       exit() does not call functions registered with
            at_quick_exit(), while it does call those registered with
            atexit().
-note       at_quick_exit() came from ISO C11, in Issue 7 TC2 (2016) or
-           Issue 8; the year is approximate.
+note       at_quick_exit() is new in Issue 8.
 test       t/006-no-quick-exit-handlers.c
 
 assertion  XSH.exit.007
@@ -97,13 +98,18 @@ test       t/009-flush-after-handlers.c
 assertion  XSH.exit.010
 anchor     functions/exit.html#DESCRIPTION
 class      required
-since      2008
+since      2024
 says       For a seekable input stream that is the active handle and not
            at end of file, exit() sets the offset of the open file
            description to the stream's position: after reading 2 bytes
-           of an 8192-byte file through a 4096-byte buffer, the shared
-           offset is 2, not 4096.
-note       glibc is reported not to do this (research 6.1).
+           of an 8191-byte file through a 4096-byte buffer, the shared
+           offset is 2, not the read-ahead position.
+note       The offset rule came with Issue 8 (Austin Group defect 610);
+           the page says active handle to the file descriptor, read here
+           as the file description (SI-12). Read-ahead is checked in setup on a separate open, so that the
+           test does not itself switch the active handle (XSH 2.5.1).
+           glibc 2.39 and musl pass; research 6.1 is the fclose() and
+           fflush() path.
 test       t/010-offset-synced.c
 
 assertion  XSH.exit.011
@@ -126,9 +132,9 @@ note       Linux keeps only 8 bits here too (O.6).
 test       t/012-sigchld-full.c
 
 assertion  XSH.exit.013
-anchor     functions/exit.html#DESCRIPTION
+anchor     basedefs/stdlib.h.html#DESCRIPTION
 class      required
-since      1988
+since      2001
 says       exit(EXIT_SUCCESS) gives exit status 0 and exit(EXIT_FAILURE)
-           a non-zero exit status.
+           an exit status between 1 and 125.
 test       t/013-exit-macros.c

@@ -350,8 +350,17 @@ pc_assertion() {
 	case $pc_id in
 	'' | *[!A-Za-z0-9._-]*) pc_warn "$mdir: bad assertion id '$pc_id'"; return 0 ;;
 	esac
-	if [ -n "$pc_only" ] && [ "$pc_id" != "$pc_only" ]; then return 0; fi
+	if [ -n "$pc_only" ]; then
+		case " $pc_only_set " in
+		*" $pc_id "*) ;;
+		*) return 0 ;;
+		esac
+	fi
 	if [ -e "$ctx_state/$pc_id" ]; then return 0; fi
+	# A planted fault is for the selected assertion only, never for the
+	# prerequisites run with it.
+	pc_mut=
+	[ "$pc_id" = "$pc_only" ] && pc_mut=$pc_mutant
 
 	pc_when=${a_when:-${mod_option:-BASE}}
 	if [ "${a_class:-required}" = untestable ]; then
@@ -402,11 +411,13 @@ pc_assertion() {
 			return 0
 		fi
 		set -- "$pc_exe"
-		if [ -n "$pc_mutant" ]; then pc_mutant_c || return 0; fi
+		pc_extra=
+		if [ -n "$pc_mut" ]; then pc_mutant_c || return 0; fi
 		;;
 	*.sh)
 		set -- "$pc_sut_sh" "$pc_src"
-		if [ -n "$pc_mutant" ]; then pc_mutant_sh || return 0; fi
+		pc_mutant_file=
+		if [ -n "$pc_mut" ]; then pc_mutant_sh || return 0; fi
 		;;
 	*)
 		pc_log UNINITIATED "$pc_id" 0 "unknown test type $a_test"
@@ -419,7 +430,7 @@ pc_assertion() {
 	: >"$pc_rfile"
 	# shellcheck disable=SC2086 # pc_extra is a word list
 	PC_RESULT=$pc_rfile PC_ASSERTION=$pc_id PC_CORE=$pc_root/core \
-	    PC_PHASE=setup PC_MUTANT=$pc_mutant \
+	    PC_PHASE=setup PC_MUTANT=$pc_mut \
 	    PC_MUTANT_FILE=${pc_mutant_file:-} \
 	    PC_SELFTEST_DIR=$ctx_results/survivors \
 	    "$pc_pcexec" -w "$ctx_tmp" -o "$pc_sfile" -t "${a_timeout:-60}" \
@@ -574,6 +585,39 @@ pc_run_module() {
 			(pc_only= pc_sel_options= pc_run_module "$pc_im")
 		fi
 	done
+
+	# With --only, the selected assertion's prerequisites in this module
+	# run too (they come earlier in the .asr files), transitively.
+	pc_only_set=$pc_only
+	if [ -n "$pc_only" ]; then
+		pc_grew=yes
+		while [ "$pc_grew" = yes ]; do
+			pc_grew=no
+			for pc_asr in "$mdir"/*.asr; do
+				[ -f "$pc_asr" ] || continue
+				pc_cur=
+				while read -r pc_k pc_v; do
+					case $pc_k in
+					assertion) pc_cur=$pc_v ;;
+					uses)
+						case " $pc_only_set " in
+						*" $pc_cur "*) ;;
+						*) continue ;;
+						esac
+						for pc_u in $pc_v; do
+							pc_id_module "$pc_u"
+							[ "$pc_im" = "$pc_mod" ] || continue
+							case " $pc_only_set " in
+							*" $pc_u "*) ;;
+							*) pc_only_set="$pc_only_set $pc_u"; pc_grew=yes ;;
+							esac
+						done
+						;;
+					esac
+				done <"$pc_asr"
+			done
+		done
+	fi
 
 	pc_keep=yes
 	if [ -n "$pc_sel_options" ] && [ -z "$pc_only" ]; then

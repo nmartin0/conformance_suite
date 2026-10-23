@@ -8,7 +8,8 @@
 # Fails (exit 1) when the catalog and the tests disagree:
 #   - a module's MODULE file is missing fields or names the wrong path
 #   - an assertion ID is malformed, duplicated, or outside its module
-#   - an assertion has an unknown key or class
+#   - an assertion has an unknown key or class, or a 'since' that is not
+#     an edition year (1988, 1992, 2001, 2008, 2024)
 #   - a testable assertion has no test, or its test file is missing
 #   - a test's header does not name exactly the assertion that uses it
 #   - a test is used by more than one assertion, or by none
@@ -84,6 +85,10 @@ for m in mods:
         cls = a.get("class", "required")
         if cls not in catalog.CLASSES:
             err(here, f"unknown class '{cls}'")
+        since = a.get("since")
+        if since and since not in ("1988", "1992", "2001", "2008", "2024"):
+            err(here, f"'since {since}' is not an edition year "
+                "(1988, 1992, 2001, 2008, 2024)")
         if not a.anchors():
             err(here, "no anchor")
         if not a.get("says"):

@@ -33,8 +33,9 @@ static const char *mutant(void)
 
 #define IS(name) (m != NULL && strcmp(m, name) == 0)
 
-static struct { void (*f)(void *); void *arg; int plain; } list[64], quick[64];
+static struct { void (*f)(void *); void *arg; } list[64], quick[64];
 static int n, nq;
+static int running;	/* exit() is calling the handlers */
 
 static void call_plain(void *f)
 {
@@ -95,11 +96,32 @@ int at_quick_exit(void (*f)(void))
 	if (real == NULL)
 		real = (atexit_fn)dlsym(RTLD_NEXT, "at_quick_exit");
 	if (m == NULL || nq >= 64)
-		return real ? real(f) : -1;
+		return real ? real(f) : __cxa_at_quick_exit((void (*)(void *))f, NULL);
 	quick[nq].f = call_plain;
 	quick[nq].arg = (void *)f;
 	nq++;
 	return 0;
+}
+
+/* For continues_after_exit: a handler's _exit() goes on with exit(). */
+void _exit(int status)
+{
+	static exit_fn real;
+	const char *m = mutant();
+
+	if (real == NULL)
+		real = (exit_fn)dlsym(RTLD_NEXT, "_exit");
+	if (running && IS("continues_after_exit")) {
+		running = 0;
+		while (n > 0) {
+			n--;
+			list[n].f(list[n].arg);
+		}
+		(void)fflush(NULL);
+	}
+	real(status);
+	for (;;)
+		;
 }
 
 void exit(int status)
@@ -112,6 +134,8 @@ void exit(int status)
 		real = (exit_fn)dlsym(RTLD_NEXT, "exit");
 	if (m == NULL)
 		real(status);
+	if (IS("returns"))
+		return;
 	if (IS("status_wrong"))
 		status ^= 1;
 	if (IS("no_atexit"))
@@ -137,14 +161,26 @@ void exit(int status)
 			if (!seen)
 				list[i].f(list[i].arg);
 		}
+	} else if (IS("late_registration_last")) {
+		int top = n;
+		for (i = top - 1; i >= 0; i--)
+			list[i].f(list[i].arg);
+		for (i = top; i < n; i++)
+			list[i].f(list[i].arg);	/* those added meanwhile, last */
 	} else {
+		running = 1;
 		while (n > 0) {
 			n--;
 			list[n].f(list[n].arg);	/* handlers may register more */
 		}
 	}
+	running = 0;
 	if (IS("no_flush"))
-		_exit(status);
+		_Exit(status);
+	if (IS("flush_no_sync")) {
+		(void)fflush(NULL);	/* output only: input offsets are left */
+		_Exit(status);
+	}
 	real(status);
 	_exit(status);	/* not reached */
 }

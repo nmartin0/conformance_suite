@@ -46,6 +46,9 @@ by the named assertion.
 | XSH.wait.019 | FAIL | with SIGCHLD blocked, `wait()` leaves the pending SIGCHLD pending after reporting the only child | O.5 |
 | XSH._Exit.002, XSH.exit.002 | FAIL | `waitid()` reports only the low 8 bits of the exit status in `si_status` | O.6 |
 | XSH.exit.012, XSH._Exit.014 | FAIL | the same 8 bits in the siginfo_t passed to a SIGCHLD handler | O.6 |
+| XSH.exec.028 | FAIL | exec does not reset the initial thread's CPU-time clock | O.7 |
+| XSH.exec.044, XSH.exec.045 (046, 047 blocked) | FAIL (musl) | execvp()/execlp() give ENOEXEC instead of running sh | O.8 |
+| XSH.exec.043 | FAIL (musl) | sysconf(_SC_ARG_MAX) is 131072, below the kernel's limit, so the exec succeeds | O.9 |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or
@@ -123,6 +126,37 @@ O.6 **`waitid()` gives only 8 bits of the exit status.**
 - Comp: kernel. Kind: long-standing. Observe: XSH._Exit.002,
   XSH.exit.002, XSH.exit.012, XSH._Exit.014.
 - Src: posixcheck run, glibc and musl alike.
+
+O.7 **exec does not reset the initial thread's CPU-time clock.**
+- POSIX (`exec`, TCT): the CPU-time clock of the new image's initial
+  thread starts at zero.
+- Linux: the thread that calls exec keeps its accumulated run time, so
+  CLOCK_THREAD_CPUTIME_ID in the new image goes on from where the calling
+  thread left it (500 ms used before exec reads as about 500 ms after).
+- Comp: kernel. Kind: long-standing. Observe: XSH.exec.028.
+- Src: posixcheck run, glibc and musl alike.
+
+O.8 **musl: execvp() and execlp() do not run sh for a file in an unknown format.**
+- POSIX (`exec`): where execve() would fail with ENOEXEC, execlp() and
+  execvp() run the file with the command interpreter (sh), passing the
+  arguments. Austin Group defect 1645 relaxed only what sh gets as its
+  argv[0], not the fallback itself.
+- musl 1.2.4: execvp() returns -1 with ENOEXEC. glibc runs /bin/sh.
+- Comp: musl. Kind: long-standing (a no-fallback thread on the musl list
+  dates from 2018). Observe: XSH.exec.044, XSH.exec.045 (and 046, 047,
+  which need 044, are blocked).
+- Src: posixcheck run; https://www.openwall.com/lists/musl/2018/03/09/2
+
+O.9 **musl: sysconf(_SC_ARG_MAX) reports less than the real limit.**
+- POSIX (`<limits.h>`, `sysconf`, `exec` E2BIG): the actual value of
+  {ARG_MAX} is given by sysconf(), and exec fails with E2BIG when the
+  arguments and environment exceed it.
+- musl 1.2.4: sysconf(_SC_ARG_MAX) is the constant 131072 (and
+  `<limits.h>` defines ARG_MAX), while Linux accepts about a quarter of
+  the stack limit (2 MiB with an 8 MiB stack). So an exec with more than
+  {ARG_MAX} bytes succeeds. glibc reports the kernel's limit.
+- Comp: musl. Kind: long-standing. Observe: XSH.exec.043.
+- Src: posixcheck run.
 
 ## Things the strict build changes
 

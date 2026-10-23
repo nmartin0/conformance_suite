@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.exit.010
+ * MUTANT    exit.flush_no_sync
  * MUTANT    exit.no_flush
  */
 #include "pc.h"
@@ -48,6 +49,16 @@ int main(void)
 	memset(data, 'x', sizeof data);
 	data[sizeof data - 1] = '\0';
 	pc_make_file("f", data);
+	{
+		/* Does a stream read ahead here? If not, the test proves nothing. */
+		static char pbuf[4096];
+		FILE *g = fopen("f", "r");
+		pc_check(g != NULL && setvbuf(g, pbuf, _IOFBF, sizeof pbuf) == 0, "fopen failed");
+		pc_check(getc(g) == 'x' && getc(g) == 'x', "getc failed");
+		if (lseek(fileno(g), 0, SEEK_CUR) == 2)
+			pc_unresolved("the stream did not read ahead");
+		(void)fclose(g);
+	}
 	fd = open("f", O_RDONLY);
 	pc_check(fd != -1, "open failed");
 	pc_test();
@@ -60,13 +71,9 @@ int main(void)
 			_exit(99);
 		if (getc(f) != 'x' || getc(f) != 'x')
 			_exit(99);
-		if (lseek(fd, 0, SEEK_CUR) == 2)
-			_exit(97);	/* nothing buffered: the test proves nothing */
 		exit(0);
 	}
 	st = reap(c);
-	if (WIFEXITED(st) && WEXITSTATUS(st) == 97)
-		pc_unresolved("the stream did not read ahead");
 	pc_check(WIFEXITED(st) && WEXITSTATUS(st) == 0, "the child failed (%#x)", st);
 	off = lseek(fd, 0, SEEK_CUR);
 	pc_check(off == 2, "the offset is %ld after exit(), expected 2", (long)off);

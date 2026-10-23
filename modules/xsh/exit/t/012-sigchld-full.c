@@ -37,14 +37,25 @@ static pid_t spawn(void)
 	return r;
 }
 
-static volatile sig_atomic_t got, status;
+static volatile sig_atomic_t got;
+static siginfo_t info;		/* read only after the handler has run */
 
 static void on_chld(int sig, siginfo_t *si, void *uc)
 {
 	(void)sig;
 	(void)uc;
+	info = *si;
 	got = 1;
-	status = si->si_status;
+}
+
+/* SIGCHLD may come a little after the child can be waited for. */
+static void await_chld(void)
+{
+	struct timespec ts = { 0, 10000000 };
+	int i;
+
+	for (i = 0; i < 100 && !got; i++)
+		(void)nanosleep(&ts, NULL);
 }
 
 int main(void)
@@ -74,8 +85,9 @@ int main(void)
 			pc_unresolved("waitid failed: %s", pc_errname(errno));
 	}
 	pc_check(sigprocmask(SIG_SETMASK, &old, NULL) == 0, "sigprocmask failed");
-	pc_check(got, "no SIGCHLD after the child called exit()");
-	pc_check(status == 0x1234, "si_status %#x, expected 0x1234", (unsigned)status);
+	await_chld();
+	pc_check(got, "no SIGCHLD within 1 s of the child's exit()");
+	pc_check(info.si_status == 0x1234, "si_status %#x, expected 0x1234", (unsigned)info.si_status);
 	st = reap(c);
 	(void)st;
 	pc_pass();

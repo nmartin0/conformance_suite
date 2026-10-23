@@ -4,13 +4,13 @@
 DESCRIPTION:50651605        XSH.exit.011  # normal termination: SIGCHLD with CLD_EXITED and the status
 DESCRIPTION:a1e1abe6        XSH.exit.006
 DESCRIPTION:375b89e2        app
-DESCRIPTION:3b257101        XSH.exit.001 XSH.exit.002 XSH.exit.012 XSH.exit.013
+DESCRIPTION:3b257101        XSH.exit.001 XSH.exit.002 XSH.exit.012  # EXIT_FAILURE's range is XBD <stdlib.h> (XSH.exit.013)
 DESCRIPTION:02b408c3        XSH.exit.003 XSH.exit.004
 DESCRIPTION:b0bd5087        XSH.exit.005
 DESCRIPTION:76970913        app
 DESCRIPTION:241da06d        XSH.exit.007
 DESCRIPTION:86bf94c2        XSH.exit.008 XSH.exit.009
-DESCRIPTION:fd65a20f        partial XSH.exit.010  # input stream only; todo: an output stream after fseek(), and a stream that is not the active handle
+DESCRIPTION:fd65a20f        partial XSH.exit.010  # input stream only; todo: an update (r+) stream with read-ahead; written data after the descriptor became the active handle (fflush, lseek on the descriptor, exit, then a parent write lands at offset 0)
 DESCRIPTION:a63177b5        none  not observable apart from process termination closing every descriptor (XSH._Exit.006)
 DESCRIPTION:9cb63689        partial XSH.exit.011  # the consequences themselves are tested through _exit() in xsh/_Exit
 RETURN_VALUE:2191601b       XSH.exit.001

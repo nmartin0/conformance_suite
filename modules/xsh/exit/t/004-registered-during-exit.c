@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.exit.004
  * MUTANT    exit.late_registration_skipped
+ * MUTANT    exit.late_registration_last
  * MUTANT    exit.forward_order
  */
 #include "pc.h"
@@ -88,7 +89,8 @@ int main(void)
 	st = reap(c);
 	collect(p[0], buf, sizeof buf);
 	pc_check(WIFEXITED(st) && WEXITSTATUS(st) == 0, "the child failed (%#x)", st);
-	pc_check(strchr(buf, '!') == NULL, "atexit() failed inside an exit handler");
+	if (strchr(buf, '!') != NULL)
+		pc_unresolved("atexit() failed inside an exit handler, which atexit() allows");
 	pc_check(strcmp(buf, "abx") == 0, "handlers called as \"%s\", expected \"abx\"", buf);
 	pc_pass();
 }

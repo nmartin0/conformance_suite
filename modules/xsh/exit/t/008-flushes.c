@@ -4,7 +4,6 @@
  *
  * ASSERTION XSH.exit.008
  * MUTANT    exit.no_flush
- * MUTANT    exit.no_atexit
  */
 #include "pc.h"
 #include <errno.h>
@@ -58,7 +57,7 @@ int main(void)
 			_exit(99);
 		(void)close(fd);
 		(void)fputs("buffered", f);
-		(void)fputs("stdout", stdout);	/* a file: fully buffered */
+		(void)fputs("stdout", stdout);	/* a file: usually fully buffered */
 		exit(0);
 	}
 	st = reap(c);

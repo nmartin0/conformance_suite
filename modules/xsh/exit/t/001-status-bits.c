@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.exit.001
  * MUTANT    exit.status_wrong
+ * MUTANT    exit.returns
  */
 #include "pc.h"
 #include <errno.h>
@@ -69,14 +70,18 @@ int main(void)
 	if (c == 0) {
 		trace_fd = p[1];
 		(void)close(p[0]);
-		exit(0x1234);
+		/* Through a volatile pointer: exit() is declared noreturn, so a
+		 * direct call would let the compiler drop the code after it. */
+		void (*volatile ex)(int) = exit;
+		ex(0x1234);
 		mark("r");	/* exit() returned */
-		_exit(99);
+		_exit(98);
 	}
 	(void)close(p[1]);
 	st = reap(c);
 	collect(p[0], buf, sizeof buf);
-	pc_check(buf[0] == '\0', "exit() returned to its caller");
+	pc_check(buf[0] == '\0' && !(WIFEXITED(st) && WEXITSTATUS(st) == 98),
+	    "exit() returned to its caller");
 	pc_check(WIFEXITED(st), "the child did not exit normally (%#x)", st);
 	pc_check(WEXITSTATUS(st) == 0x34, "exit status %#x, expected 0x34", WEXITSTATUS(st));
 	pc_pass();

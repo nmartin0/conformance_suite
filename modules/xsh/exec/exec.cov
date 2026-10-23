@@ -1,0 +1,146 @@
+# exec.cov - every requirement unit on functions/exec.html (execl, execle,
+# execlp, execv, execve, execvp, fexecve).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:ac1f09db        XSH.exec.001
+DESCRIPTION:f642b1f0        partial XSH.exec.001 XSH.exec.035 XSH.exec.036  # executable: no x bit and a directory both fail
+DESCRIPTION:65fd41d1        XSH.exec.001
+DESCRIPTION:b47cb5dc        partial XSH.exec.048  # argv and envp; the attribute rules are tested through execv()
+DESCRIPTION:2f6fbff6        XSH.exec.048
+DESCRIPTION:9948c554        XSH.exec.002
+DESCRIPTION:27d211a9        XSH.exec.002
+DESCRIPTION:dece0158        XSH.exec.002
+DESCRIPTION:9064b30b        none  introduces environ
+DESCRIPTION:424081bb        XSH.exec.004  # the image reads environ
+DESCRIPTION:bad970f3        XSH.exec.004
+DESCRIPTION:be6e9a05        XSH.exec.002 XSH.exec.004
+DESCRIPTION:1735940d        XSH.exec.002
+DESCRIPTION:da0eb119        XSH.exec.007
+DESCRIPTION:c7355f4d        app
+DESCRIPTION:81494415        app
+DESCRIPTION:a21699b4        app
+DESCRIPTION:090192e5        app
+DESCRIPTION:4935a426        XSH.exec.002 XSH.exec.003
+DESCRIPTION:2c5189f4        none  names the argument
+DESCRIPTION:b7777342        none  names the argument
+DESCRIPTION:802123a2        XSH.exec.046
+DESCRIPTION:de778c42        XSH.exec.047
+DESCRIPTION:261eb1f4        none  the end of the previous sentence (a cross-reference)
+DESCRIPTION:35de1633        impl  the search when PATH is unset (documentation)
+DESCRIPTION:6f54bca5        none  introduces ENOEXEC and EINVAL
+DESCRIPTION:6dcb67e7        partial XSH.exec.044 XSH.exec.045  # the positional parameters; "as if by execl" of sh, e.g. the environment, not checked further
+DESCRIPTION:928e148f        XSH.exec.044
+DESCRIPTION:43f80e32        none  unspecified shell path and name
+DESCRIPTION:caade7e0        none  describes the arguments
+DESCRIPTION:31c0517c        XSH.exec.003
+DESCRIPTION:62ce3bd8        XSH.exec.003
+DESCRIPTION:1f995654        app
+DESCRIPTION:9bc9e406        none  describes the argument
+DESCRIPTION:e9679223        app
+DESCRIPTION:31c0517c.2      XSH.exec.002
+DESCRIPTION:d5b725a2        app
+DESCRIPTION:528a533e        none  describes the argument
+DESCRIPTION:7116b063        XSH.exec.004 XSH.exec.005
+DESCRIPTION:50a545f7        XSH.exec.004
+DESCRIPTION:458ed4ec        partial XSH.exec.006 XSH.exec.007  # execv() only; execl(), execlp(), execvp() not checked for it
+DESCRIPTION:3d819f65        XSH.exec.043
+DESCRIPTION:5db69ae1        impl  what counts toward {ARG_MAX} (documentation)
+DESCRIPTION:8a84db36        XSH.exec.008 XSH.exec.009
+DESCRIPTION:47f5d5ae        XSH.exec.008 XSH.exec.010
+DESCRIPTION:0d5de5ac        partial XSH.exec.011  # lock set through the closed descriptor; todo: a lock set through another descriptor for the same file goes too
+DESCRIPTION:d744c6e9        XSH.exec.012
+DESCRIPTION:fe4edf93        none  a permission
+DESCRIPTION:9c552f89        app
+DESCRIPTION:4b0175e4        XSH.exec.013
+DESCRIPTION:63c65cc3        XSH.exec.051
+DESCRIPTION:5f114e78        none  undefined
+DESCRIPTION:5cae7f00        XSH.exec.050
+DESCRIPTION:83b2d915        XSH.exec.050
+DESCRIPTION:ba54158c        XSH.exec.050
+DESCRIPTION:97bb1df8        XSH.exec.014
+DESCRIPTION:b9e4a553        XSH.exec.015
+DESCRIPTION:c7c6fbee        XSH.exec.016
+DESCRIPTION:6d745671        none  unspecified
+DESCRIPTION:e12c05db        XSH.exec.017
+DESCRIPTION:82d3e148        none  the old image's functions no longer exist; nothing for the new image to observe
+DESCRIPTION:49df91c2        todo  XSI: needs a file system mounted with ST_NOSUID (environment)
+DESCRIPTION:ef08f35e        XSH.exec.052
+DESCRIPTION:5f139fbc        XSH.exec.053
+DESCRIPTION:5b2a9f20        partial XSH.exec.024 XSH.exec.052 XSH.exec.053  # supplementary groups with a set-ID file not checked
+DESCRIPTION:7cdadef7        todo  XSI: saved set-user-ID: from an unprivileged real ID, setuid() back to the file owner's ID must work
+DESCRIPTION:abfb9248        XSH.exec.054
+DESCRIPTION:80d4895d        untestable  closing a named semaphore leaves no trace another process can see
+DESCRIPTION:364c3008        untestable  destroying an unnamed semaphore is not observable once the image is gone
+DESCRIPTION:1c8c8541        todo  TYM: typed memory objects; no reference system has the option
+DESCRIPTION:c09b0668        untestable  ML: no interface reports whether memory is locked
+DESCRIPTION:74cf2e99        untestable  ML: no interface reports another process's locks
+DESCRIPTION:f882a879        none  unspecified
+DESCRIPTION:b75659e7        none  explains the rebuilt address space; a shared mapping's other users are unaffected (not tested)
+DESCRIPTION:8c411fcb        impl  scheduling of the new image for other policies (documentation)
+DESCRIPTION:a0b676a5        todo  PS: SCHED_FIFO or SCHED_RR (needs privileges) is kept across exec
+DESCRIPTION:b3876bca        todo  TPS: pthread_getschedparam() in the new image matches the process policy
+DESCRIPTION:b08e415a        todo  TPS: pthread_attr_getscope() default; allocation domain is not observable
+DESCRIPTION:0ff92d52        XSH.exec.029
+DESCRIPTION:d577d825        todo  MSG: an mq descriptor is closed; its mq_notify() registration goes, so another process can register
+DESCRIPTION:7d81a15f        none  a permission
+DESCRIPTION:370fe79d        todo  aio_write() then exec: the data reaches the file and no signal is delivered to the new image
+DESCRIPTION:ce4ebb00        none  unspecified
+DESCRIPTION:b15407a1        todo  with aio_read() into a buffer outstanding, the new image's memory is not overwritten
+DESCRIPTION:e79b1279        impl  which I/O is cancelled (documentation)
+DESCRIPTION:33a3e90a        XSH.exec.027
+DESCRIPTION:da5a74fe        XSH.exec.027
+DESCRIPTION:a785c6b3        XSH.exec.028
+DESCRIPTION:c4395cde        none  unspecified
+DESCRIPTION:047d7922        none  unspecified
+DESCRIPTION:a966c5f0        XSH.exec.030
+DESCRIPTION:f6fffab4        partial XSH.exec.031  # no destructors run; keys removed is not observable by key value
+DESCRIPTION:6030087b        todo  pthread_join() of the initial thread from another thread in the new image succeeds
+DESCRIPTION:7cbb41f8        none  introduces the list
+DESCRIPTION:e6ba434c        XSH.exec.055
+DESCRIPTION:bfbf2947        todo  XSI: semop() with SEM_UNDO, exec, then exit: semval is adjusted once
+DESCRIPTION:fe813540        XSH.exec.023
+DESCRIPTION:8640f9cc        XSH.exec.023
+DESCRIPTION:28535876        XSH.exec.023
+DESCRIPTION:8fc8f11a        XSH.exec.023
+DESCRIPTION:326b4c67        XSH.exec.024
+DESCRIPTION:9cf1f445        XSH.exec.024
+DESCRIPTION:248b011f        XSH.exec.024
+DESCRIPTION:bc6e3cc2        XSH.exec.020
+DESCRIPTION:68fac259        XSH.exec.021
+DESCRIPTION:960ed0df        todo  chroot() is not in POSIX; a privileged test could use one where available (non-portable)
+DESCRIPTION:7cb0ef93        XSH.exec.022
+DESCRIPTION:8eebfb9b        XSH.exec.025
+DESCRIPTION:29b5fda3        XSH.exec.018
+DESCRIPTION:777d7fee        XSH.exec.019
+DESCRIPTION:f807baed        XSH.exec.026
+DESCRIPTION:462ac86f        XSH.exec.025
+DESCRIPTION:1b54972a        todo  needs a pseudo-terminal: the controlling terminal (tcgetsid) is the same after exec
+DESCRIPTION:7a6dc552        none  introduces the list
+DESCRIPTION:8ee83b54        XSH.exec.018
+DESCRIPTION:70e1d200        XSH.exec.019
+DESCRIPTION:443fa1cf        partial XSH.exec.020 XSH.exec.021 XSH.exec.022 XSH.exec.025  # the listed ones; others (e.g. the alarm-free timers) not enumerated
+DESCRIPTION:da904ad6        none  too broad to test as one unit; the listed thread attributes are tested
+DESCRIPTION:cf014438        impl  inheritance of attributes outside POSIX (documentation)
+DESCRIPTION:1328e645        XSH.exec.031
+DESCRIPTION:77098480        XSH.exec.031
+DESCRIPTION:82c63df6        XSH.exec.032
+DESCRIPTION:245c2f68        none  unspecified
+DESCRIPTION:3bcc69b9        todo  the image file counts as open: ETXTBSY-style interplay and open-file limits are not observable portably
+DESCRIPTION:4d75e3e7        none  timing of an implied close; not observable portably
+DESCRIPTION:8ebd0ee3        XSH.exec.033
+DESCRIPTION:25bb600e        none  "saved resource limits" is defined nowhere else (standard issue SI-15)
+RETURN_VALUE:1014c906       XSH.exec.034
+ERRORS:eedcdf9d             XSH.exec.043
+ERRORS:d9ec94b7             XSH.exec.036
+ERRORS:f4124ecb             todo  needs a recognized binary format the system cannot run (e.g. another machine's ELF); environment
+ERRORS:2a97d395             XSH.exec.035 XSH.exec.037
+ERRORS:e6d42883             XSH.exec.040
+ERRORS:681b232a             XSH.exec.041
+ERRORS:0513d8ce             XSH.exec.034
+ERRORS:d8356e12             XSH.exec.038 XSH.exec.039
+ERRORS:e20907ce             XSH.exec.042
+ERRORS:777ace27             XSH.exec.049  # "open for executing": see standard issue SI-14
+ERRORS:df659bd4             optional
+ERRORS:aef12209             optional
+ERRORS:51a2ca5d             optional
+ERRORS:ba0906dd             optional

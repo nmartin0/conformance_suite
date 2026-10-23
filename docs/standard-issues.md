@@ -23,9 +23,14 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-9 | XSH 2.12 unshaded vs XSI shading elsewhere: SIG_IGN/SA_NOCLDWAIT discard status | conflict | XSH._Exit.009 |
 | SI-10 | `<signal.h>` CHANGE HISTORY: SA_NOCLDWAIT moved to Base, still XSI-shaded | editorial | (SA_NOCLDWAIT todo in _Exit.cov) |
 | SI-11 | wait() RETURN VALUE: WNOHANG sentence lacks "shall", overlapping conditions | editorial | XSH.wait.010 |
+| SI-12 | exit(): "active handle to its underlying file descriptor" (description is meant) | editorial | XSH.exit.010 |
+| SI-13 | XSH 2.5.1: abort() and signals count as closing a stream | conflict | (not tested) |
+| SI-14 | fexecve() EBADF "open for executing" vs APPLICATION USAGE (O_RDONLY is fine) | unclear | XSH.exec.048, XSH.exec.049 |
+| SI-15 | exec: "saved resource limits" defined nowhere | defect | (exec.cov) |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
 | Q-4 | is a zombie still a group member for "orphaned process group"? | question | XSH._Exit.010 (avoids it) |
 | Q-5 | wait(): "if the implementation queues SIGCHLD" vs XSH 2.4.1 | question | XSH.wait.019 (both readings agree) |
 | Q-6 | wait(): when is "another child's status available"? | question | (not tested) |
+| Q-7 | exit(): streams with no file descriptor (memory streams) | question | (not tested) |

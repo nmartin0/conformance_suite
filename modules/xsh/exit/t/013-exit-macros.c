@@ -53,6 +53,7 @@ int main(void)
 	if (c == 0)
 		exit(EXIT_FAILURE);
 	st = reap(c);
-	pc_check(WIFEXITED(st) && WEXITSTATUS(st) != 0, "EXIT_FAILURE gave status %#x", st);
+	pc_check(WIFEXITED(st) && WEXITSTATUS(st) >= 1 && WEXITSTATUS(st) <= 125,
+	    "EXIT_FAILURE gave status %#x, expected an exit status from 1 to 125", st);
 	pc_pass();
 }
