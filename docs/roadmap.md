@@ -49,6 +49,10 @@ verified; this file is the plan. Update both when a step finishes.
 3. **BSD reference runs** under QEMU (FreeBSD, NetBSD, OpenBSD), then
    macOS and illumos, triaged with `analyze.py matrix`. Waiting on the
    images, which the user will supply.
+3a. **Linux-ism audit** of the modules reviewed before ungetc: a reviewer
+   given only the standard and the tests (not the Linux results) looks for
+   expectations that Linux meets but the text does not require. glibc and
+   musl agreeing does not rule these out, since both run on one kernel.
 4. **Header mutants for Tier 0**, and Tier 0 for the prose-only headers
    (`<stdint.h>`, `<float.h>` and the like) that `gen/specmodel.py` does
    not yet read.

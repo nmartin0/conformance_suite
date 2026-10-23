@@ -10,6 +10,13 @@ what came of it. Standard issues a review found are in
 `standard-issues-report.md`; Linux behaviour it confirmed is in
 `linux-deviations.md`.
 
+glibc and musl share the Linux kernel and many conventions beyond POSIX,
+so agreement between them is not independent evidence. From the ungetc
+review on, every review also asks whether any expected value, error
+choice, ordering or timing is something Linux does that the text does not
+require. Modules reviewed before that get a separate Linux-ism audit
+(roadmap).
+
 | Review | Scope | What it led to | Applied in |
 | --- | --- | --- | --- |
 | close (batch 1) | `xsh/close` | close() fixes; header assertions split out; strict compiles | ce8b2c7 |
