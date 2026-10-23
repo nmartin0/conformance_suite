@@ -136,12 +136,45 @@ static void long_name(char *buf, size_t size)
 	buf[max + 1] = '\0';
 }
 
-/* 0: failed with one of the expected errors; 1: succeeded; 2: another errno. */
+/* 0: failed with one of the expected errors; 1: succeeded; 10 + errno: another errno. */
 static int verdict(int r, int e1, int e2)
 {
 	if (r == 0)
 		return 1;
-	return errno == e1 || errno == e2 ? 0 : 2;
+	return errno == e1 || errno == e2 ? 0 : 10 + errno % 80;
+}
+
+/*
+ * A group the unprivileged child is not in, and not g0: not its effective
+ * group (65534) nor one of the supplementary groups it keeps from root.
+ */
+static gid_t foreign_gid(gid_t g0)
+{
+	gid_t g[256], c;
+	int n = getgroups(256, g), i;
+
+	for (c = 65533; c > 1; c--) {
+		for (i = 0; i < n && g[i] != c; i++)
+			;
+		if (i == n && c != 65534 && c != getegid() && c != g0)
+			return c;
+	}
+	pc_unresolved("no group outside the child's groups was found");
+	return 0;
+}
+
+/* As root, before the child runs: c/own owned by the child, group g, mode m. */
+static void prepare_own(gid_t g, mode_t m)
+{
+	struct stat st;
+
+	pc_make_dir("c");
+	pc_check(chmod("c", 0777) == 0, "chmod failed");
+	pc_make_file("c/own", "x");
+	pc_check(chown("c/own", 65534, g) == 0 && chmod("c/own", m) == 0, "chown or chmod failed: %s", pc_errname(errno));
+	pc_check(stat("c/own", &st) == 0, "stat failed");
+	if (st.st_uid != 65534 || st.st_gid != g || (st.st_mode & 07777) != m)
+		pc_unresolved("the file system did not take owner 65534, group %ld and mode %#o", (long)g, (unsigned)m);
 }
 
 static void need_root(void)
@@ -164,6 +197,8 @@ int main(void)
 {
 	pc_begin("XSH.chown.011");
 	{
+		int dfd;
+
 		need_root();
 		pc_make_file("f", "x");
 		pc_make_symlink("f", "sl");
@@ -174,6 +209,10 @@ int main(void)
 		pc_check(lst("f").st_uid == geteuid(), "the target's owner changed");
 		pc_check(fchownat(AT_FDCWD, "sl", 65533, 65533, 0) == 0, "fchownat(0) failed: %s", pc_errname(errno));
 		pc_check(lst("f").st_uid == 65533 && lst("sl").st_uid == 65534, "without the flag the target was not changed");
+		dfd = dir_fd(".");
+		pc_check(fchownat(dfd, "sl", 65532, 65532, AT_SYMLINK_NOFOLLOW) == 0, "fchownat(dirfd, NOFOLLOW) failed: %s",
+			 pc_errname(errno));
+		pc_check(lst("sl").st_uid == 65532 && lst("f").st_uid == 65533, "with a directory fd the wrong file changed");
 	}
 	pc_pass();
 }

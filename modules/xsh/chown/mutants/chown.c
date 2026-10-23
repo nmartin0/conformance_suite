@@ -67,8 +67,20 @@ int chown(const char *path, uid_t owner, gid_t group)
 
 	if (m == NULL)
 		return real_chown(path, owner, group);
-	if (IS("noop") || IS("ctime_kept"))
+	if (IS("noop"))
 		return 0;
+	if (IS("ctime_kept") && stat(path, &st) == 0 && owner == st.st_uid && group == st.st_gid)
+		return 0;	/* skips a call that changes no ID, so st_ctim is not marked */
+	if (IS("minus_one_group_used") && group == (gid_t)-1)
+		group = 0;
+	if (IS("foreign_group_ok") && geteuid() != 0 && group != (gid_t)-1 && group != getegid() && stat(path, &st) == 0 &&
+	    st.st_uid == geteuid())
+		return 0;	/* pretends any group may be set */
+	if (IS("partial_change") && geteuid() != 0 && owner != (uid_t)-1 && group != (gid_t)-1 && stat(path, &st) == 0 &&
+	    owner != st.st_uid) {
+		(void)real_chown(path, (uid_t)-1, group);	/* applies the group, then fails */
+		return fail(EPERM);
+	}
 	if (IS("swaps"))
 		return real_chown(path, (uid_t)group, (gid_t)owner);
 	if (IS("minus_one_used") && owner == (uid_t)-1)

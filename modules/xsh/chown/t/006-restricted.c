@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.chown.006
  * MUTANT    chown.restriction_ignored
+ * MUTANT    chown.foreign_group_ok
+ * MUTANT    chown.partial_change
  */
 #include "pc.h"
 #include <errno.h>
@@ -135,12 +137,45 @@ static void long_name(char *buf, size_t size)
 	buf[max + 1] = '\0';
 }
 
-/* 0: failed with one of the expected errors; 1: succeeded; 2: another errno. */
+/* 0: failed with one of the expected errors; 1: succeeded; 10 + errno: another errno. */
 static int verdict(int r, int e1, int e2)
 {
 	if (r == 0)
 		return 1;
-	return errno == e1 || errno == e2 ? 0 : 2;
+	return errno == e1 || errno == e2 ? 0 : 10 + errno % 80;
+}
+
+/*
+ * A group the unprivileged child is not in, and not g0: not its effective
+ * group (65534) nor one of the supplementary groups it keeps from root.
+ */
+static gid_t foreign_gid(gid_t g0)
+{
+	gid_t g[256], c;
+	int n = getgroups(256, g), i;
+
+	for (c = 65533; c > 1; c--) {
+		for (i = 0; i < n && g[i] != c; i++)
+			;
+		if (i == n && c != 65534 && c != getegid() && c != g0)
+			return c;
+	}
+	pc_unresolved("no group outside the child's groups was found");
+	return 0;
+}
+
+/* As root, before the child runs: c/own owned by the child, group g, mode m. */
+static void prepare_own(gid_t g, mode_t m)
+{
+	struct stat st;
+
+	pc_make_dir("c");
+	pc_check(chmod("c", 0777) == 0, "chmod failed");
+	pc_make_file("c/own", "x");
+	pc_check(chown("c/own", 65534, g) == 0 && chmod("c/own", m) == 0, "chown or chmod failed: %s", pc_errname(errno));
+	pc_check(stat("c/own", &st) == 0, "stat failed");
+	if (st.st_uid != 65534 || st.st_gid != g || (st.st_mode & 07777) != m)
+		pc_unresolved("the file system did not take owner 65534, group %ld and mode %#o", (long)g, (unsigned)m);
 }
 
 static void need_root(void)
@@ -159,26 +194,32 @@ static int make_own(mode_t mode)
 	return close(fd);
 }
 
+static gid_t other;
+
 static int child(void)
 {
 	struct stat a, b;
 	gid_t g[256];
 	int n, i, v;
 
-	if (make_own(0644) != 0 || stat("c/own", &a) != 0)
+	if (access("c/own", F_OK) != 0 && make_own(0644) != 0)
+		return 3;
+	if (stat("c/own", &a) != 0)
+		return 3;
+	n = getgroups(256, g);
+	for (i = 0; i < n; i++)
+		if (g[i] == other)
+			return 3;
+	if (getegid() == other)
 		return 3;
 	if ((v = verdict(chown("c/own", 0, (gid_t)-1), EPERM, EPERM)) != 0)
 		return v;
-	n = getgroups(256, g);
-	for (i = 0; i < n; i++)
-		if (g[i] == 1)
-			return 3;
-	if (getegid() == 1)
-		return 3;
-	if ((v = verdict(chown("c/own", (uid_t)-1, 1), EPERM, EPERM)) != 0)
+	if ((v = verdict(chown("c/own", (uid_t)-1, other), EPERM, EPERM)) != 0)
+		return v;
+	if ((v = verdict(chown("c/own", 0, getegid()), EPERM, EPERM)) != 0)
 		return v;
 	if (stat("c/own", &b) != 0 || a.st_uid != b.st_uid || a.st_gid != b.st_gid)
-		return 2;
+		return 4;
 	return 0;
 }
 
@@ -187,18 +228,27 @@ int main(void)
 	pc_begin("XSH.chown.006");
 	pc_searchable();
 	{
-		pc_make_dir("c");
-		pc_check(chmod("c", 0777) == 0, "chmod failed");
+		int r;
+		if (geteuid() == 0) {
+			other = foreign_gid(0);
+			prepare_own(foreign_gid(other), 0644);	/* a group not its own: a partial change shows */
+		} else {
+			other = 1;
+			pc_make_dir("c");
+			pc_check(chmod("c", 0777) == 0, "chmod failed");
+		}
 		pc_test();
-		switch (unprivileged(child)) {
+		switch ((r = unprivileged(child))) {
 		case 0:
 			break;
 		case 1:
 			pc_fail("chown() giving a file away or to a foreign group succeeded without permission");
+		case 4:
+			pc_fail("a failed chown() changed the file's IDs");
 		case 3:
-			pc_unresolved("the child could not prepare its file");
+			pc_unresolved("the child could not prepare its file, or group %ld is one of its groups", (long)other);
 		default:
-			pc_fail("chown() giving a file away or to a foreign group failed with the wrong error");
+			pc_fail("chown() giving a file away or to a foreign group failed with the wrong error (%s)", pc_errname(r >= 10 ? r - 10 : 0));
 		}
 	}
 	pc_pass();

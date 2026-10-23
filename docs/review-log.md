@@ -35,6 +35,7 @@ what came of it. Standard issues a review found are in
 | rename | `xsh/rename` | 7 findings: the trailing-slash rule is required (XBD 4.16 footnote), so SI-52 narrowed and O.21 found; clean dot cases; dot-dot after a move; mixed absolute and relative paths | (rename fixes) |
 | mkdir, rmdir | `xsh/mkdir`, `xsh/rmdir` | 10 findings: S_ISGID inherited in setgid directories, EBUSY for open directories, {LINK_MAX}-safe time loops, dot-files, trailing slashes, EILSEQ; chapter 4 anchors fixed suite-wide | (mkdir fixes) |
 | chmod, fchmod | `xsh/chmod`, `xsh/fchmod` | 9 findings: S_ISGID refused with EPERM (BSD) accepted, non-member group chosen at run time, set-ID bits set and cleared, inherited descriptors, O_SEARCH descriptors; "." made searchable in setup suite-wide | (chmod fixes) |
+| chown, fchown, lchown | `xsh/chown`, `xsh/fchown`, `xsh/lchown` | 11 findings: BSD group inheritance (files prepared by the privileged parent), groups chosen at run time, real changes for S_ISUID/S_ISGID clearing, no partial change on EPERM, lchown restriction rules; SI-53 corrected; the ENOENT overlap (Q-8) made disputed suite-wide | (chown fixes) |
 
 The shared copy of the standard-issues report is the Claude Doc at
 https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF; it is kept in step with

@@ -16,8 +16,11 @@ anchor     functions/fchown.html#ERRORS/EPERM
 class      required
 since      1988
 says       A process without appropriate privileges can fchown() a file it
-           owns to (uid_t)-1 and its effective group ID, and cannot give it
-           to another user (EPERM).
+           owns (group prepared as another by the privileged parent) to
+           (uid_t)-1 and its effective group ID, which the file then has;
+           giving the file away (owner 0) or setting a group it is not in
+           fails with EPERM and leaves the IDs alone.
+needs      root
 test       t/002-own-group.c
 
 assertion  XSH.fchown.003

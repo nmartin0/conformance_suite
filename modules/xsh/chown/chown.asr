@@ -43,18 +43,21 @@ anchor     functions/chown.html#DESCRIPTION
 class      required
 since      1988
 says       A process without appropriate privileges can chown() a file it
-           owns to (uid_t)-1 and its effective group ID; the file then has
-           that group.
+           owns whose group is another (prepared by the privileged parent)
+           to (uid_t)-1 and its effective group ID, and to its own user ID
+           and its effective group ID; the file then has that group.
+needs      root
 test       t/005-own-group.c
 
 assertion  XSH.chown.006
 anchor     functions/chown.html#ERRORS/EPERM
 class      required
 since      1988
-says       For a process without appropriate privileges, chown() of its own
-           file to another user (owner 0) fails with EPERM, and so does
-           chown() to a group it is not a member of (group 1); the file's
-           IDs do not change.
+says       For a process without appropriate privileges and a file it owns:
+           chown() to another user (owner 0) fails with EPERM; chown() to a
+           group it is not a member of fails with EPERM; chown() to owner 0
+           and its own group fails with EPERM without changing the group;
+           the file's IDs never change.
 note       _POSIX_CHOWN_RESTRICTED is required to be in effect (a value
            other than -1) in POSIX.1-2024.
 test       t/006-restricted.c
@@ -86,9 +89,10 @@ anchor     functions/chown.html#DESCRIPTION
 class      required
 since      1988
 says       When a process without appropriate privileges successfully
-           chown()s its own executable regular file (mode 04755) to
-           (uid_t)-1 and its effective group, S_ISUID and S_ISGID are clear
-           afterwards.
+           chown()s its own executable regular file (mode 06755, group not
+           its own, prepared by the privileged parent) to (uid_t)-1 and its
+           effective group, S_ISUID and S_ISGID are clear afterwards.
+needs      root
 test       t/009-clears-setid.c
 
 assertion  XSH.chown.010
@@ -129,10 +133,13 @@ test       t/013-enoent.c
 
 assertion  XSH.chown.014
 anchor     functions/chown.html#ERRORS/ENOTDIR
-class      required
+class      disputed
 since      2008
 says       chown("f/x") and chown("f/"), with f a regular file, fail with
            ENOTDIR.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/014-enotdir.c
 
 assertion  XSH.chown.015
@@ -144,13 +151,13 @@ test       t/015-eloop.c
 
 assertion  XSH.chown.016
 anchor     functions/chown.html#ERRORS
-class      required
+class      disputed
 since      1988
 says       chown() of a name longer than {NAME_MAX} bytes fails with
            ENAMETOOLONG.
-note       The name also names no existing file (ENOENT), but XBD 4.16
-           makes an over-long component an error of its own, which every
-           system reports as ENAMETOOLONG.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/016-enametoolong.c
 
 assertion  XSH.chown.017

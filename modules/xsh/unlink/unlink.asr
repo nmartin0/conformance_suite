@@ -105,11 +105,14 @@ test       t/011-enoent.c
 
 assertion  XSH.unlink.012
 anchor     functions/unlink.html#ERRORS
-class      required
+class      disputed
 since      2008
 says       unlink("f/x") and unlink("f/"), with f a regular file, fail with
            ENOTDIR; so does unlink("sl/") with sl a symbolic link to f;
            f and sl remain.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/012-enotdir.c
 
 assertion  XSH.unlink.013
@@ -121,13 +124,13 @@ test       t/013-eloop.c
 
 assertion  XSH.unlink.014
 anchor     functions/unlink.html#ERRORS
-class      required
+class      disputed
 since      1988
 says       unlink() of a name longer than {NAME_MAX} bytes fails with
            ENAMETOOLONG.
-note       The name also names no existing file (ENOENT), but XBD 4.16
-           makes an over-long component an error of its own, which every
-           system reports as ENAMETOOLONG.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/014-enametoolong.c
 
 assertion  XSH.unlink.015

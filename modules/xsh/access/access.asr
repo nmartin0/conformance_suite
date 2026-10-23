@@ -99,13 +99,13 @@ test       t/010-enoent.c
 
 assertion  XSH.access.011
 anchor     functions/access.html#ERRORS/ENOTDIR
-class      required
+class      disputed
 since      2008
 says       access("f/x", F_OK) and access("f/", F_OK), with f a regular file,
            fail with ENOTDIR.
-note       For "f/x" the name also names no existing file (ENOENT); the
-           suite reads the more specific ENOTDIR as required (Q-8), as
-           every reference system reports.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/011-enotdir.c
 
 assertion  XSH.access.012
@@ -117,13 +117,13 @@ test       t/012-eloop.c
 
 assertion  XSH.access.013
 anchor     functions/access.html#ERRORS
-class      required
+class      disputed
 since      1988
 says       access() of a name longer than {NAME_MAX} bytes fails with
            ENAMETOOLONG.
-note       The name also names no existing file (ENOENT), but XBD 4.16
-           makes an over-long component an error of its own, which every
-           system reports as ENAMETOOLONG.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/013-enametoolong.c
 
 assertion  XSH.access.014

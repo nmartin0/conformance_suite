@@ -87,11 +87,14 @@ test       t/009-enoent.c
 
 assertion  XSH.link.010
 anchor     functions/link.html#ERRORS
-class      required
+class      disputed
 since      2008
 says       link() fails with ENOTDIR when path2's prefix names a regular
            file ("f/g"), when path1's prefix does ("f/x"), and when path1
            is a regular file named with a trailing slash ("f/").
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/010-enotdir.c
 
 assertion  XSH.link.011
@@ -125,13 +128,13 @@ test       t/013-eloop.c
 
 assertion  XSH.link.014
 anchor     functions/link.html#ERRORS
-class      required
+class      disputed
 since      1988
 says       link() fails with ENAMETOOLONG when the last component of path2,
            or of path1, is longer than {NAME_MAX} bytes.
-note       For path1 the over-long name also names no existing file
-           (ENOENT), but XBD 4.16 makes an over-long component an error
-           of its own, which every system reports as ENAMETOOLONG.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/014-enametoolong.c
 
 assertion  XSH.link.015

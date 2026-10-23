@@ -109,10 +109,13 @@ test       t/011-enoent.c
 
 assertion  XSH.chmod.012
 anchor     functions/chmod.html#ERRORS/ENOTDIR
-class      required
+class      disputed
 since      2008
 says       chmod("f/x") and chmod("f/"), with f a regular file, fail with
            ENOTDIR and f's mode is unchanged.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/012-enotdir.c
 
 assertion  XSH.chmod.013
@@ -124,13 +127,13 @@ test       t/013-eloop.c
 
 assertion  XSH.chmod.014
 anchor     functions/chmod.html#ERRORS
-class      required
+class      disputed
 since      1988
 says       chmod() of a name longer than {NAME_MAX} bytes fails with
            ENAMETOOLONG.
-note       The name also names no existing file (ENOENT), but XBD 4.16
-           makes an over-long component an error of its own, which every
-           system reports as ENAMETOOLONG.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/014-enametoolong.c
 
 assertion  XSH.chmod.015

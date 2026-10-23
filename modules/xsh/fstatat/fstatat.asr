@@ -156,12 +156,15 @@ test       t/016-empty.c
 
 assertion  XSH.fstatat.017
 anchor     functions/fstatat.html#ERRORS
-class      required
+class      disputed
 since      1988
 says       stat("file/x") and lstat("file/x"), where file is a regular file,
            fail with ENOTDIR; so do fstatat(fd, "file/x") and
            fstatat(fd, "file/") with fd open on a directory holding a
            regular file named file.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/017-enotdir-prefix.c
 
 assertion  XSH.fstatat.018
@@ -183,13 +186,13 @@ test       t/019-eloop.c
 
 assertion  XSH.fstatat.020
 anchor     functions/fstatat.html#ERRORS
-class      required
+class      disputed
 since      1988
 says       stat() of a path whose last component is longer than {NAME_MAX}
            bytes fails with ENAMETOOLONG.
-note       The name also names no existing file (ENOENT), but XBD 4.16
-           makes an over-long component an error of its own, which every
-           system reports as ENAMETOOLONG.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/020-enametoolong.c
 
 assertion  XSH.fstatat.021

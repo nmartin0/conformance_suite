@@ -79,7 +79,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-50 | XBD `<stdio.h>`: dprintf() prototype lacks its semicolon | Defect (editorial) | Low | Generator tolerates it |
 | SI-51 | XBD `<float.h>`: unclosed paragraphs in the HTML edition | Defect (editorial, HTML) | Low | Generator repairs it |
 | SI-52 | XSH `rename()`: no error number for a directory renamed to "new/" | Defect (omission) | Low | Any error accepted (XSH.rename.014) |
-| SI-53 | XSH `lchown()`/`fchown()`: ERRORS out of step with chown() | Defect (inconsistency) | Low | chown() rules applied |
+| SI-53 | XSH `chown()`/`fchown()`/`lchown()`: ERRORS out of step with each other | Defect (inconsistency) | Low | chown() rules applied |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -660,11 +660,11 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 
 ### SI-53: lchown() and fchown(): error lists out of step with chown()
 
-- **Where:** XSH `lchown()` and `fchown()`, ERRORS; XSH `chown()`, ERRORS.
-- **What the text says:** lchown() is "equivalent to chown()" except for symbolic links, yet its [EINVAL] for an unsupported owner or group ID is a "shall fail" error, where chown() lists the same condition under "may fail". lchown()'s [EPERM] names only the owner mismatch, leaving out the _POSIX_CHOWN_RESTRICTED case that chown() and fchown() list. fchown()'s "may fail" [EINVAL] entry runs two conditions together and says "pipe" after naming a pipe or socket.
-- **Why it is a problem:** an implementation that shares one code path for chown() and lchown() cannot satisfy both EINVAL rules at once, and a reader of lchown() alone would think the restricted-chown rule does not apply.
-- **posixcheck meanwhile:** lchown() is tested with chown()'s rules (XSH.lchown.003); the EINVAL entry is classified as implementation-defined.
-- **Suggested change:** make lchown()'s [EINVAL] a "may fail" error and copy chown()'s [EPERM] wording; split fchown()'s [EINVAL] entry (editorial).
+- **Where:** XSH `chown()`, `fchown()` and `lchown()`, ERRORS and RETURN VALUE.
+- **What the text says:** lchown() is "equivalent to chown()" except for symbolic links, yet its [EINVAL] for an unsupported owner or group ID is a "shall fail" error, where chown() and fchown() list it under "may fail". lchown()'s [EPERM] reads "does not match the owner of the file and the process does not have appropriate privileges", while chown()'s and fchown()'s read "does not match the owner of the file, or the calling process does not have appropriate privileges and _POSIX_CHOWN_RESTRICTED indicates that such privilege is required". fchown()'s "may fail" [EINVAL] entry runs two conditions together and says "pipe" after naming a pipe or socket, and its RETURN VALUE lacks chown()'s "no changes are made" sentence.
+- **Why it is a problem:** lchown() is stricter about EINVAL than the chown() it is equivalent to; lchown() leaves out the restricted-chown case; and chown()'s "or", read literally, makes even a privileged process that does not own the file fail with EPERM, where lchown()'s "and" has the intended meaning.
+- **posixcheck meanwhile:** lchown() is tested with chown()'s rules (XSH.lchown.003, XSH.lchown.007); privileged chown() of another user's file is required to work (XSH.chown.001); lchown()'s EINVAL entry is classified as implementation-defined.
+- **Suggested change:** give all three pages chown()'s [EPERM] with "and" for the owner case and the restricted case as a second sentence; make lchown()'s [EINVAL] a "may fail" error; split fchown()'s [EINVAL] entry and add the RETURN VALUE sentence (editorial).
 
 ## Questions to raise
 
@@ -758,7 +758,10 @@ is unclear.
   (ENOTDIR and ENOENT). Read so, ENAMETOOLONG is never required of such
   interfaces. Is that intended, or should ENOENT exclude these cases?
 - **posixcheck meanwhile:** XSH.exec.038 and 041 accept ENOENT as well; for
-  open() the suite avoids the overlap with O_CREAT (XSH.open.014, 017).
+  open() the suite avoids the overlap with O_CREAT (XSH.open.014, 017); the
+  file and directory modules mark such assertions `disputed` (a FAIL is
+  logged as INSPECT), for example XSH.fstatat.020, XSH.link.014,
+  XSH.chmod.012.
 
 ### Q-9: Which {ARG_MAX} does E2BIG compare against?
 
@@ -869,6 +872,7 @@ is unclear.
 
 - **Where:** XSH `chown()`, DESCRIPTION and ERRORS ([EPERM]).
 - **Question:** [EPERM] applies when "the effective user ID does not match the owner of the file". With owner (uid_t)-1 and group (gid_t)-1 nothing is changed (and st_ctim need not be marked). Must the call still fail with EPERM for a process that is not the owner, or may it succeed as a no-op, as Linux does?
+- **Also:** Linux not only returns 0 but marks st_ctim of the other user's file for update, so the call is not quite a no-op there.
 - **posixcheck meanwhile:** XSH.chown.008 is `disputed`: success is logged as INSPECT.
 
 ## Tracking

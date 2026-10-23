@@ -69,10 +69,13 @@ test       t/007-enoent.c
 
 assertion  XSH.rmdir.008
 anchor     functions/rmdir.html#ERRORS/ENOTDIR
-class      required
+class      disputed
 since      1988
 says       rmdir("f") and rmdir("f/d"), with f a regular file, fail with
            ENOTDIR and f remains.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/008-enotdir.c
 
 assertion  XSH.rmdir.009
@@ -84,13 +87,13 @@ test       t/009-eloop.c
 
 assertion  XSH.rmdir.010
 anchor     functions/rmdir.html#ERRORS
-class      required
+class      disputed
 since      1988
 says       rmdir() of a name longer than {NAME_MAX} bytes fails with
            ENAMETOOLONG.
-note       The name also names no existing directory (ENOENT), but XBD
-           4.16 makes an over-long component an error of its own, which
-           every system reports as ENAMETOOLONG.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too and XSH 2.3 lets either error be reported;
+           every reference system reports the more specific one.
 test       t/010-enametoolong.c
 
 assertion  XSH.rmdir.011
