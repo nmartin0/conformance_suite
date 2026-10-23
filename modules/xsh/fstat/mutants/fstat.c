@@ -68,6 +68,8 @@ static int cook(const char *m, int r, struct stat *buf)
 		buf->st_ino ^= 1;
 	if (IS("uid_wrong"))
 		buf->st_uid++;
+	if (IS("gid_wrong"))
+		buf->st_gid++;
 	if (IS("stale_times"))
 		buf->st_mtim = buf->st_ctim = buf->st_atim;
 	if (IS("size_with_nul") && S_ISLNK(buf->st_mode))

@@ -3,10 +3,10 @@
 
 DESCRIPTION:982e8411     XSH.fstatat.001
 DESCRIPTION:6b922393     none  a definition of the argument
-DESCRIPTION:054b2ebf     partial XSH.fstatat.002  # run as root only the permission bits are shown to be ignored; an unprivileged run is the real check
+DESCRIPTION:054b2ebf     XSH.fstatat.002
 DESCRIPTION:95e3fa5f     impl  additional access control mechanisms (documentation)
 DESCRIPTION:e7ceeb8f     impl  additional access control mechanisms (documentation)
-DESCRIPTION:3e0e53dc     XSH.fstatat.003 XSH.fstatat.014
+DESCRIPTION:3e0e53dc     XSH.fstatat.003 XSH.fstatat.014 XSH.fstatat.023
 DESCRIPTION:bd480169     none  restates the argument's type
 DESCRIPTION:e57eea6c     XSH.fstatat.008
 DESCRIPTION:0b9c126d     untestable  no portable pathname names a shared memory object (fstat() of one is XSH.fstat.006)
@@ -15,28 +15,28 @@ DESCRIPTION:5577db79     untestable  TYM: no portable pathname names a typed mem
 DESCRIPTION:c303e70c.2   none  permission (may)
 DESCRIPTION:d50dd7e1     partial XSH.fstatat.001 XSH.fstatat.006 XSH.fstatat.007  # st_atim is not checked; types other than regular files are checked only for their type
 DESCRIPTION:dc6d1e0e     XSH.fstatat.005
-DESCRIPTION:30db202c     XSH.fstatat.003 XSH.fstatat.004
+DESCRIPTION:30db202c     XSH.fstatat.003 XSH.fstatat.004 XSH.fstatat.014
 DESCRIPTION:fd00dfb2     XSH.fstatat.004
 DESCRIPTION:ec720b88     none  unspecified
-DESCRIPTION:3996cd88     partial XSH.fstatat.004  # st_gid and the times of a symbolic link are not checked
+DESCRIPTION:3996cd88     partial XSH.fstatat.004  # the times of a symbolic link are not checked
 DESCRIPTION:29f6c63c     XSH.fstatat.004
 DESCRIPTION:73998cce     XSH.fstatat.010 XSH.fstatat.012
 DESCRIPTION:6008b3ed     XSH.fstatat.009
-DESCRIPTION:696636e6     todo  needs an unprivileged user: a directory fd without search permission gives EACCES
-DESCRIPTION:80de69f9     partial XSH.fstatat.013  # that the search check is skipped needs an unprivileged user and a directory without search permission
+DESCRIPTION:696636e6     XSH.fstatat.025
+DESCRIPTION:80de69f9     XSH.fstatat.013
 DESCRIPTION:b546c90b     none  how flag is built
-DESCRIPTION:723a0b07     XSH.fstatat.010
+DESCRIPTION:723a0b07     XSH.fstatat.010 XSH.fstatat.023
 DESCRIPTION:a6babf2d     XSH.fstatat.011
 RETURN_VALUE:5cb75ebf    XSH.fstatat.001 XSH.fstatat.004
-RETURN_VALUE:73bdf30d    XSH.fstatat.015 XSH.fstatat.016 XSH.fstatat.017 XSH.fstatat.018 XSH.fstatat.019 XSH.fstatat.020
-ERRORS:c996c4cf          todo  needs an unprivileged user: a path prefix without search permission
+RETURN_VALUE:73bdf30d    XSH.fstatat.015 XSH.fstatat.016 XSH.fstatat.017 XSH.fstatat.018 XSH.fstatat.019 XSH.fstatat.020 XSH.fstatat.024
+ERRORS:c996c4cf          XSH.fstatat.024
 ERRORS:f15d7544          untestable  needs a failing file system
 ERRORS:f39d7871          XSH.fstatat.019
 ERRORS:681b232a          XSH.fstatat.020
 ERRORS:83c37763          XSH.fstatat.015 XSH.fstatat.016
 ERRORS:df8daa9c          XSH.fstatat.017 XSH.fstatat.018
 ERRORS:bbae1601          untestable  needs a file whose size, block count or serial number does not fit off_t, blkcnt_t or ino_t
-ERRORS:222666a3          todo  needs an unprivileged user: fstatat() relative to a directory without search permission
+ERRORS:222666a3          XSH.fstatat.025
 ERRORS:0d30acd6          XSH.fstatat.021
 ERRORS:dc6c136c          XSH.fstatat.022
 ERRORS:811d61dd          optional

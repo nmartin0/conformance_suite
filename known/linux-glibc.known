@@ -49,3 +49,6 @@ XSH.sig2str.005    UNINITIATED  linux*    3.1: no sig2str() or str2sig()
 XSH.sig2str.006    UNINITIATED  linux*    3.1: no sig2str() or str2sig()
 XSH.sigaltstack.010 FAIL         linux*    O.16: MINSIGSTKSZ too small for the frame (AVX-512 CPUs)
 XSH.fstatat.013    UNRESOLVED   linux*    1.7: glibc lacks O_SEARCH
+XSH.unlink.005     FAIL         linux*    1.17: unlink() of a directory gives EISDIR
+XSH.unlink.010     FAIL         linux*    1.17: unlinkat() of a directory without AT_REMOVEDIR gives EISDIR
+XSH.link.019       FAIL         linux*    O.19: fs.protected_hardlinks refuses links to other users' files with EPERM

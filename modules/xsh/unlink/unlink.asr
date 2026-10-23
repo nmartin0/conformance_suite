@@ -1,0 +1,168 @@
+# XSH unlink() and unlinkat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.unlink.001
+anchor     functions/unlink.html#DESCRIPTION
+class      required
+since      1988
+says       unlink("g"), with g a second name of f, returns 0; afterwards g
+           does not exist and f reports st_nlink 1.
+test       t/001-removes-name.c
+
+assertion  XSH.unlink.002
+anchor     functions/unlink.html#DESCRIPTION
+class      required
+since      2001
+says       unlink("sl"), with sl a symbolic link to f, removes sl; f still
+           exists with its contents.
+test       t/002-symlink.c
+
+assertion  XSH.unlink.003
+anchor     functions/unlink.html#DESCRIPTION
+class      required
+since      1988
+says       After unlink() of the only name of a file that is open, the name
+           is gone when unlink() returns, but the descriptor still reads
+           and writes the file's contents.
+test       t/003-open-file-kept.c
+
+assertion  XSH.unlink.004
+anchor     functions/unlink.html#DESCRIPTION
+class      required
+since      1988
+says       After unlink() of one of two names of a file in directory d,
+           stat() reports later st_mtim and st_ctim for d and a later
+           st_ctim for the file (the test removes another name every
+           10 ms for up to 3 s until the times move).
+timeout    20
+test       t/004-times.c
+
+assertion  XSH.unlink.005
+anchor     functions/unlink.html#ERRORS/EPERM
+class      required
+since      1988
+says       unlink("d") with d an empty directory fails with EPERM and d
+           remains; only a process with appropriate privileges, on an
+           implementation that supports it, may succeed.
+test       t/005-directory.c
+
+assertion  XSH.unlink.006
+anchor     functions/unlink.html#DESCRIPTION
+class      required
+since      2008
+says       unlinkat(fd, "f", 0), with fd open on directory d, removes d/f and
+           leaves a file f in the working directory alone.
+test       t/006-unlinkat-relative.c
+
+assertion  XSH.unlink.007
+anchor     functions/unlink.html#DESCRIPTION
+class      required
+since      2008
+says       unlinkat(AT_FDCWD, "d", AT_REMOVEDIR) and unlinkat(fd, "e",
+           AT_REMOVEDIR) remove empty directories and return 0.
+test       t/007-removedir.c
+
+assertion  XSH.unlink.008
+anchor     functions/unlink.html#ERRORS
+class      required
+since      2008
+says       unlinkat(AT_FDCWD, "d", AT_REMOVEDIR) with d holding a file fails
+           with EEXIST or ENOTEMPTY and removes nothing.
+test       t/008-removedir-nonempty.c
+
+assertion  XSH.unlink.009
+anchor     functions/unlink.html#ERRORS
+class      required
+since      2008
+says       unlinkat(AT_FDCWD, "f", AT_REMOVEDIR) with f a regular file fails
+           with ENOTDIR and f remains.
+test       t/009-removedir-file.c
+
+assertion  XSH.unlink.010
+anchor     functions/unlink.html#ERRORS/EPERM
+class      required
+since      2008
+says       unlinkat(AT_FDCWD, "d", 0) with d an empty directory fails with
+           EPERM and d remains, unless the process has appropriate
+           privileges and the implementation supports it.
+test       t/010-unlinkat-dir-eperm.c
+
+assertion  XSH.unlink.011
+anchor     functions/unlink.html#ERRORS
+class      required
+since      1988
+says       unlink() fails with ENOENT for a name that does not exist, a path
+           through a missing directory, and the empty string; unlinkat()
+           with AT_FDCWD too.
+test       t/011-enoent.c
+
+assertion  XSH.unlink.012
+anchor     functions/unlink.html#ERRORS
+class      required
+since      2008
+says       unlink("f/x") and unlink("f/"), with f a regular file, fail with
+           ENOTDIR; so does unlink("sl/") with sl a symbolic link to f;
+           f and sl remain.
+test       t/012-enotdir.c
+
+assertion  XSH.unlink.013
+anchor     functions/unlink.html#ERRORS
+class      required
+since      2001
+says       unlink("a/x"), with a -> b and b -> a, fails with ELOOP.
+test       t/013-eloop.c
+
+assertion  XSH.unlink.014
+anchor     functions/unlink.html#ERRORS
+class      required
+since      1988
+says       unlink() of a name longer than {NAME_MAX} bytes fails with
+           ENAMETOOLONG.
+test       t/014-enametoolong.c
+
+assertion  XSH.unlink.015
+anchor     functions/unlink.html#ERRORS
+class      required
+since      2008
+says       unlinkat(fd, "f", 0) with fd not open fails with EBADF; a file f in
+           the working directory remains.
+test       t/015-unlinkat-ebadf.c
+
+assertion  XSH.unlink.016
+anchor     functions/unlink.html#ERRORS
+class      required
+since      2008
+says       unlinkat(fd, "f", 0) with fd open on a regular file fails with
+           ENOTDIR; f remains.
+test       t/016-unlinkat-enotdir.c
+
+assertion  XSH.unlink.017
+anchor     functions/unlink.html#ERRORS/EACCES
+class      required
+since      1988
+says       For a process without appropriate privileges, unlink("w/f") fails
+           with EACCES when directory w denies write permission, and
+           unlink("s/f") when directory s denies search permission; both
+           files remain.
+test       t/017-eacces.c
+
+assertion  XSH.unlink.018
+anchor     functions/unlink.html#ERRORS/EPERM
+class      conditional
+when       XSI
+since      2001
+says       In a directory with S_ISVTX set and write permission for all,
+           owned by another user, unlink() of a file owned by another user
+           fails with EPERM or EACCES for a process without appropriate
+           privileges, and the file remains.
+needs      root
+test       t/018-sticky.c
+
+assertion  XSH.unlink.019
+anchor     functions/unlink.html#ERRORS/EACCES
+class      required
+since      2008
+says       For a process without appropriate privileges, unlinkat(fd, "f",
+           0) fails with EACCES when fd was opened O_RDONLY on a writable
+           directory whose permissions were then changed to deny search.
+test       t/019-unlinkat-eacces-fd.c

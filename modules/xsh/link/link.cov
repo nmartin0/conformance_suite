@@ -1,0 +1,43 @@
+# link.cov - every requirement unit on functions/link.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d1f33512     XSH.link.001
+DESCRIPTION:129b1755     none  a definition of the argument
+DESCRIPTION:695b9f52     none  a definition of the argument
+DESCRIPTION:75e641b2     partial XSH.link.001  # atomicity is not tested
+DESCRIPTION:b400cecb     XSH.link.012
+DESCRIPTION:4b45a768     impl  whether link() follows a symbolic link (documentation)
+DESCRIPTION:b61e7d32     XSH.link.003
+DESCRIPTION:06535122     XSH.link.003
+DESCRIPTION:17fbbcc5     XSH.link.008 XSH.link.009 XSH.link.011
+DESCRIPTION:d02276a3     partial XSH.link.019  # whether access is required is implementation-defined; a readable file must be enough
+DESCRIPTION:95ddb22d     XSH.link.004 XSH.link.005 XSH.link.006
+DESCRIPTION:4a251972     XSH.link.006
+DESCRIPTION:696636e6     XSH.link.018
+DESCRIPTION:80de69f9     todo  needs an unprivileged user and O_SEARCH: no search check through an O_SEARCH descriptor
+DESCRIPTION:b546c90b     none  how flag is built
+DESCRIPTION:df495ac0     XSH.link.004
+DESCRIPTION:16d40fe6     XSH.link.007
+DESCRIPTION:fb599219     XSH.link.007
+DESCRIPTION:fd5ca3f7     XSH.link.005
+RETURN_VALUE:5cb75ebf    XSH.link.001
+RETURN_VALUE:73bdf30d    XSH.link.008 XSH.link.009 XSH.link.010 XSH.link.017
+ERRORS:3fff655a          partial XSH.link.017  # the case where the implementation requires access to the existing file is not tested
+ERRORS:fbe84d00          XSH.link.008
+ERRORS:47d616f1          impl  which names a file system refuses (none on the reference systems)
+ERRORS:43e71737          XSH.link.013
+ERRORS:91740a27          todo  {LINK_MAX} links: practical only where pathconf(_PC_LINK_MAX) is small
+ERRORS:681b232a          XSH.link.014
+ERRORS:88bfe5c3          XSH.link.009
+ERRORS:56f99df5          XSH.link.011
+ERRORS:907b0c5c          todo  needs a full file system (an environment case)
+ERRORS:79003122          XSH.link.010 XSH.link.011
+ERRORS:2b149eb9          XSH.link.012
+ERRORS:f617c7d0          todo  needs a read-only file system (an environment case)
+ERRORS:2bfa9b0f          impl  needs two file systems; whether links between them work is implementation-defined
+ERRORS:b32a237a          XSH.link.018
+ERRORS:83096b39          XSH.link.015
+ERRORS:f06b9d25          XSH.link.016
+ERRORS:40bc4f50          optional
+ERRORS:c7f415ad          optional
+ERRORS:41158299          optional

@@ -17,6 +17,7 @@
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/un.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -44,6 +45,42 @@ static int ts_cmp(struct timespec a, struct timespec b)
 	return 0;
 }
 
+#ifndef PATH_MAX
+#define PATH_MAX 4096	/* <limits.h> may omit it; tests only need a big buffer */
+#endif
+
+/*
+ * Run fn in a child that has no appropriate privileges: when the test runs
+ * as root, the child takes user and group 65534 (the working directory is
+ * made searchable for it; relative paths need nothing above it). Returns
+ * what fn returns (0 to 98); a child that cannot drop privileges, or that
+ * dies, makes the test UNRESOLVED.
+ */
+static int unprivileged(int (*fn)(void))
+{
+	pid_t kid;
+	int st;
+
+	if (geteuid() == 0 && chmod(".", 0711) != 0)
+		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
+	kid = fork();
+	if (kid == -1)
+		pc_unresolved("fork failed: %s", pc_errname(errno));
+	if (kid == 0) {
+		if (geteuid() == 0 && (setgid(65534) != 0 || setuid(65534) != 0))
+			_exit(99);
+		if (geteuid() == 0)
+			_exit(99);
+		_exit(fn());
+	}
+	while (waitpid(kid, &st, 0) == -1)
+		if (errno != EINTR)
+			pc_unresolved("waitpid failed: %s", pc_errname(errno));
+	if (!WIFEXITED(st) || WEXITSTATUS(st) == 99)
+		pc_unresolved("the unprivileged child could not run (status %#x)", (unsigned)st);
+	return WEXITSTATUS(st);
+}
+
 /* The status of path from a descriptor of it (setup: no mutants apply). */
 static struct stat via_fd(const char *path, int flags)
 {
@@ -62,7 +99,7 @@ int main(void)
 	{
 		struct sockaddr_un sa;
 		struct stat st;
-		const char *name[4] = { "d", "fifo", "/dev/null", "sock" };
+		const char *name[3] = { "d", "fifo", "sock" };
 		int s, i, n;
 
 		pc_make_dir("d");
@@ -74,7 +111,7 @@ int main(void)
 		strcpy(sa.sun_path, "sock");
 		pc_check(bind(s, (struct sockaddr *)&sa, sizeof sa) == 0, "bind failed: %s", pc_errname(errno));
 		pc_test();
-		for (i = 0; i < 4; i++) {
+		for (i = 0; i < 3; i++) {
 			pc_check(stat(name[i], &st) == 0, "stat(%s) failed: %s", name[i], pc_errname(errno));
 			n = !!S_ISDIR(st.st_mode) + !!S_ISFIFO(st.st_mode) + !!S_ISCHR(st.st_mode) +
 			    !!S_ISSOCK(st.st_mode) + !!S_ISREG(st.st_mode) + !!S_ISBLK(st.st_mode) +
@@ -82,8 +119,7 @@ int main(void)
 			pc_check(n == 1, "%s: %d type macros are true for st_mode %#o", name[i], n, (unsigned)st.st_mode);
 			pc_check(i != 0 || S_ISDIR(st.st_mode), "a directory is not S_ISDIR (st_mode %#o)", (unsigned)st.st_mode);
 			pc_check(i != 1 || S_ISFIFO(st.st_mode), "a FIFO is not S_ISFIFO (st_mode %#o)", (unsigned)st.st_mode);
-			pc_check(i != 2 || S_ISCHR(st.st_mode), "/dev/null is not S_ISCHR (st_mode %#o)", (unsigned)st.st_mode);
-			pc_check(i != 3 || S_ISSOCK(st.st_mode), "a socket is not S_ISSOCK (st_mode %#o)", (unsigned)st.st_mode);
+			pc_check(i != 2 || S_ISSOCK(st.st_mode), "a socket is not S_ISSOCK (st_mode %#o)", (unsigned)st.st_mode);
 		}
 	}
 	pc_pass();

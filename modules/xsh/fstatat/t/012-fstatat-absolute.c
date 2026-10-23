@@ -3,7 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fstatat.012
- * MUTANT    fstatat.ignores_fd_always
+ * MUTANT    fstatat.abs_relative_to_fd
+ * MUTANT    fstatat.checks_fd
  */
 #include "pc.h"
 #include <errno.h>
@@ -16,6 +17,7 @@
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/un.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -43,6 +45,42 @@ static int ts_cmp(struct timespec a, struct timespec b)
 	return 0;
 }
 
+#ifndef PATH_MAX
+#define PATH_MAX 4096	/* <limits.h> may omit it; tests only need a big buffer */
+#endif
+
+/*
+ * Run fn in a child that has no appropriate privileges: when the test runs
+ * as root, the child takes user and group 65534 (the working directory is
+ * made searchable for it; relative paths need nothing above it). Returns
+ * what fn returns (0 to 98); a child that cannot drop privileges, or that
+ * dies, makes the test UNRESOLVED.
+ */
+static int unprivileged(int (*fn)(void))
+{
+	pid_t kid;
+	int st;
+
+	if (geteuid() == 0 && chmod(".", 0711) != 0)
+		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
+	kid = fork();
+	if (kid == -1)
+		pc_unresolved("fork failed: %s", pc_errname(errno));
+	if (kid == 0) {
+		if (geteuid() == 0 && (setgid(65534) != 0 || setuid(65534) != 0))
+			_exit(99);
+		if (geteuid() == 0)
+			_exit(99);
+		_exit(fn());
+	}
+	while (waitpid(kid, &st, 0) == -1)
+		if (errno != EINTR)
+			pc_unresolved("waitpid failed: %s", pc_errname(errno));
+	if (!WIFEXITED(st) || WEXITSTATUS(st) == 99)
+		pc_unresolved("the unprivileged child could not run (status %#x)", (unsigned)st);
+	return WEXITSTATUS(st);
+}
+
 /* The status of path from a descriptor of it (setup: no mutants apply). */
 static struct stat via_fd(const char *path, int flags)
 {
@@ -61,19 +99,27 @@ int main(void)
 	{
 		char cwd[PATH_MAX], path[PATH_MAX + 8];
 		struct stat st, ref;
-		int dfd;
+		int dfd, ffd, bad;
 
 		pc_make_dir("d");
 		pc_make_file("f", "outside");
 		pc_make_file("d/f", "in");
-		pc_check(getcwd(cwd, sizeof cwd) != NULL, "getcwd failed");
+		if (getcwd(cwd, sizeof cwd) == NULL)
+			pc_unresolved("getcwd failed: %s", pc_errname(errno));
 		snprintf(path, sizeof path, "%s/f", cwd);
 		ref = via_fd("f", O_RDONLY);
 		dfd = open("d", O_RDONLY | O_DIRECTORY);
 		pc_check(dfd >= 0, "open(d) failed: %s", pc_errname(errno));
+		ffd = open("d/f", O_RDONLY);
+		pc_check(ffd >= 0, "open(d/f) failed: %s", pc_errname(errno));
+		bad = pc_lowest_free_fd();
 		pc_test();
-		pc_check(fstatat(dfd, path, &st, 0) == 0, "fstatat(dfd, absolute) failed: %s", pc_errname(errno));
+		pc_check(fstatat(dfd, path, &st, 0) == 0, "fstatat(dir fd, absolute) failed: %s", pc_errname(errno));
 		pc_check(same_file(&st, &ref), "fstatat() resolved the absolute path from fd");
+		pc_check(fstatat(ffd, path, &st, 0) == 0, "fstatat(file fd, absolute) failed: %s", pc_errname(errno));
+		pc_check(same_file(&st, &ref), "fstatat(file fd, absolute) reported another file");
+		pc_check(fstatat(bad, path, &st, 0) == 0, "fstatat(closed fd, absolute) failed: %s", pc_errname(errno));
+		pc_check(same_file(&st, &ref), "fstatat(closed fd, absolute) reported another file");
 	}
 	pc_pass();
 }

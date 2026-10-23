@@ -68,6 +68,8 @@ static int cook(const char *m, int r, struct stat *buf)
 		buf->st_ino ^= 1;
 	if (IS("uid_wrong"))
 		buf->st_uid++;
+	if (IS("gid_wrong"))
+		buf->st_gid++;
 	if (IS("stale_times"))
 		buf->st_mtim = buf->st_ctim = buf->st_atim;
 	if (IS("size_with_nul") && S_ISLNK(buf->st_mode))
@@ -121,7 +123,16 @@ int stat(const char *restrict path, struct stat *restrict buf)
 		} else
 			path = tmp;
 	}
+	if (IS("slash_ok_on_link") && has_slash_end(path) && strlen(path) < sizeof tmp) {
+		struct stat l, f;
+		strcpy(tmp, path);
+		tmp[strlen(tmp) - 1] = '\0';
+		if (real_lstat(tmp, &l) == 0 && S_ISLNK(l.st_mode) && real_stat(tmp, &f) == 0 && !S_ISDIR(f.st_mode))
+			path = tmp;	/* accepts "link-to-file/" */
+	}
 	r = real_stat(path, buf);
+	if (r == -1 && IS("eacces_as_enoent") && errno == EACCES)
+		errno = ENOENT;
 	if (r == -1 && IS("enoent_as_enotdir") && errno == ENOENT)
 		errno = ENOTDIR;
 	if (r == -1 && IS("enotdir_as_enoent") && errno == ENOTDIR)

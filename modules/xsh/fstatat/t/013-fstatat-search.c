@@ -1,9 +1,9 @@
 /*
- * fstatat() works from an O_SEARCH descriptor.
+ * fstatat() through an O_SEARCH descriptor skips the search check.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fstatat.013
- * MUTANT    fstatat.ignores_fd
+ * MUTANT    fstatat.search_checked
  */
 #include "pc.h"
 #include <errno.h>
@@ -16,6 +16,7 @@
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/un.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -43,6 +44,42 @@ static int ts_cmp(struct timespec a, struct timespec b)
 	return 0;
 }
 
+#ifndef PATH_MAX
+#define PATH_MAX 4096	/* <limits.h> may omit it; tests only need a big buffer */
+#endif
+
+/*
+ * Run fn in a child that has no appropriate privileges: when the test runs
+ * as root, the child takes user and group 65534 (the working directory is
+ * made searchable for it; relative paths need nothing above it). Returns
+ * what fn returns (0 to 98); a child that cannot drop privileges, or that
+ * dies, makes the test UNRESOLVED.
+ */
+static int unprivileged(int (*fn)(void))
+{
+	pid_t kid;
+	int st;
+
+	if (geteuid() == 0 && chmod(".", 0711) != 0)
+		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
+	kid = fork();
+	if (kid == -1)
+		pc_unresolved("fork failed: %s", pc_errname(errno));
+	if (kid == 0) {
+		if (geteuid() == 0 && (setgid(65534) != 0 || setuid(65534) != 0))
+			_exit(99);
+		if (geteuid() == 0)
+			_exit(99);
+		_exit(fn());
+	}
+	while (waitpid(kid, &st, 0) == -1)
+		if (errno != EINTR)
+			pc_unresolved("waitpid failed: %s", pc_errname(errno));
+	if (!WIFEXITED(st) || WEXITSTATUS(st) == 99)
+		pc_unresolved("the unprivileged child could not run (status %#x)", (unsigned)st);
+	return WEXITSTATUS(st);
+}
+
 /* The status of path from a descriptor of it (setup: no mutants apply). */
 static struct stat via_fd(const char *path, int flags)
 {
@@ -55,6 +92,18 @@ static struct stat via_fd(const char *path, int flags)
 	return st;
 }
 
+static int dfd = -1;
+static int unprivileged_errno;
+
+static int child(void)
+{
+	struct stat st;
+
+	if (fstatat(dfd, "f", &st, 0) != 0)
+		return errno < 90 ? 10 + errno % 80 : 1;
+	return st.st_size == 4 ? 0 : 2;
+}
+
 int main(void)
 {
 	pc_begin("XSH.fstatat.013");
@@ -62,18 +111,23 @@ int main(void)
 #ifndef O_SEARCH
 		pc_unresolved("<fcntl.h> does not define O_SEARCH");
 #else
-		struct stat st, ref;
-		int dfd;
-
 		pc_make_dir("d");
 		pc_make_file("d/f", "abcd");
-		pc_make_file("f", "");
-		ref = via_fd("d/f", O_RDONLY);
 		dfd = open("d", O_SEARCH | O_DIRECTORY);
 		pc_check(dfd >= 0, "open(d, O_SEARCH) failed: %s", pc_errname(errno));
+		pc_check(chmod("d", 0) == 0, "chmod failed");
 		pc_test();
-		pc_check(fstatat(dfd, "f", &st, 0) == 0, "fstatat(O_SEARCH fd) failed: %s", pc_errname(errno));
-		pc_check(same_file(&st, &ref), "fstatat() reported a file other than d/f");
+		int r = unprivileged(child);
+
+		unprivileged_errno = r >= 10 ? r - 10 : 0;
+		switch (r) {
+		case 0:
+			break;
+		case 2:
+			pc_fail("fstatat() reported the wrong size through the O_SEARCH descriptor");
+		default:
+			pc_fail("fstatat() through an O_SEARCH descriptor failed: %s", pc_errname(unprivileged_errno));
+		}
 #endif
 	}
 	pc_pass();

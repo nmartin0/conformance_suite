@@ -7,6 +7,7 @@
  * MUTANT    lstat.size_with_nul
  * MUTANT    lstat.size_zero
  * MUTANT    lstat.nlink_zero
+ * MUTANT    lstat.gid_wrong
  */
 #include "pc.h"
 #include <errno.h>
@@ -19,6 +20,7 @@
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/un.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -46,6 +48,42 @@ static int ts_cmp(struct timespec a, struct timespec b)
 	return 0;
 }
 
+#ifndef PATH_MAX
+#define PATH_MAX 4096	/* <limits.h> may omit it; tests only need a big buffer */
+#endif
+
+/*
+ * Run fn in a child that has no appropriate privileges: when the test runs
+ * as root, the child takes user and group 65534 (the working directory is
+ * made searchable for it; relative paths need nothing above it). Returns
+ * what fn returns (0 to 98); a child that cannot drop privileges, or that
+ * dies, makes the test UNRESOLVED.
+ */
+static int unprivileged(int (*fn)(void))
+{
+	pid_t kid;
+	int st;
+
+	if (geteuid() == 0 && chmod(".", 0711) != 0)
+		pc_unresolved("chmod(.) failed: %s", pc_errname(errno));
+	kid = fork();
+	if (kid == -1)
+		pc_unresolved("fork failed: %s", pc_errname(errno));
+	if (kid == 0) {
+		if (geteuid() == 0 && (setgid(65534) != 0 || setuid(65534) != 0))
+			_exit(99);
+		if (geteuid() == 0)
+			_exit(99);
+		_exit(fn());
+	}
+	while (waitpid(kid, &st, 0) == -1)
+		if (errno != EINTR)
+			pc_unresolved("waitpid failed: %s", pc_errname(errno));
+	if (!WIFEXITED(st) || WEXITSTATUS(st) == 99)
+		pc_unresolved("the unprivileged child could not run (status %#x)", (unsigned)st);
+	return WEXITSTATUS(st);
+}
+
 /* The status of path from a descriptor of it (setup: no mutants apply). */
 static struct stat via_fd(const char *path, int flags)
 {
@@ -62,12 +100,13 @@ int main(void)
 {
 	pc_begin("XSH.fstatat.004");
 	{
-		struct stat st, ref;
+		struct stat st, ref, dir;
 		int r;
 
 		pc_make_file("target", "x");
 		pc_make_symlink("target", "link");	/* contents: 6 bytes */
 		ref = via_fd("target", O_RDONLY);
+		dir = via_fd(".", O_RDONLY);
 		pc_test();
 		r = lstat("link", &st);
 		pc_check(r == 0, "lstat(link) failed: %s", pc_errname(errno));
@@ -76,6 +115,8 @@ int main(void)
 		pc_check(st.st_nlink == 1, "st_nlink %lu for a link with one name", (unsigned long)st.st_nlink);
 		pc_check(st.st_uid == geteuid(), "st_uid %lu, effective user %lu", (unsigned long)st.st_uid,
 			 (unsigned long)geteuid());
+		pc_check(st.st_gid == getegid() || st.st_gid == dir.st_gid,
+			 "st_gid %lu is neither the effective group nor the directory's", (unsigned long)st.st_gid);
 		pc_check(!same_file(&st, &ref), "lstat() reported the target, not the link");
 	}
 	pc_pass();

@@ -7,8 +7,9 @@ class      required
 since      1988
 says       fstat() of a descriptor open on a regular file returns 0 and
            reports S_ISREG, the permission bits, st_size, st_nlink 1,
-           st_uid the effective user ID, and the st_dev and st_ino that
-           stat() reports for its name.
+           st_uid the effective user ID, st_gid the effective group ID or
+           the directory's group, and the st_dev and st_ino that stat()
+           reports for its name.
 test       t/001-regular.c
 
 assertion  XSH.fstat.002
@@ -24,7 +25,10 @@ anchor     functions/fstat.html#DESCRIPTION
 class      required
 since      1988
 says       fstat() of a descriptor whose file has had its only name removed
-           still succeeds and reports st_nlink 0.
+           still succeeds and reports st_nlink 0 and the file's size.
+note       Run the suite on a local file system: on NFS, removing an
+           open file renames it instead (silly rename), so st_nlink
+           stays 1.
 test       t/003-unlinked.c
 
 assertion  XSH.fstat.004

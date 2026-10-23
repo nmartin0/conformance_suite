@@ -1,0 +1,178 @@
+# XSH link() and linkat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.link.001
+anchor     functions/link.html#DESCRIPTION
+class      required
+since      1988
+says       link("f", "g") returns 0; afterwards g names the same file as f
+           (same st_dev and st_ino, same contents) and both report
+           st_nlink 2.
+test       t/001-second-name.c
+
+assertion  XSH.link.002
+anchor     functions/link.html#DESCRIPTION
+class      required
+since      1988
+says       After link("f", "g") and unlink("f"), g still names the file with
+           its contents and st_nlink 1.
+uses       XSH.unlink.001
+test       t/002-survives-original.c
+
+assertion  XSH.link.003
+anchor     functions/link.html#DESCRIPTION
+class      required
+since      1988
+says       After link() puts a new entry in directory d, stat() reports a
+           later st_ctim for the file and later st_mtim and st_ctim for d
+           (the test links again every 10 ms for up to 3 s until the
+           times move).
+timeout    20
+test       t/003-times.c
+
+assertion  XSH.link.004
+anchor     functions/link.html#DESCRIPTION
+class      required
+since      2008
+says       linkat(AT_FDCWD, "sl", AT_FDCWD, "g", AT_SYMLINK_FOLLOW), with sl
+           a symbolic link to f, makes g a name of f (a regular file with
+           f's st_ino).
+test       t/004-linkat-follow.c
+
+assertion  XSH.link.005
+anchor     functions/link.html#DESCRIPTION
+class      required
+since      2008
+says       linkat(AT_FDCWD, "sl", AT_FDCWD, "g", 0), with sl a symbolic link,
+           makes g a second name of the symbolic link (S_ISLNK, sl's
+           st_ino, st_nlink 2).
+test       t/005-linkat-nofollow.c
+
+assertion  XSH.link.006
+anchor     functions/link.html#DESCRIPTION
+class      required
+since      2008
+says       linkat(fd1, "f", fd2, "g", 0), with fd1 open on directory d1 and
+           fd2 on d2, makes d2/g a name of d1/f; nothing is created in the
+           working directory.
+test       t/006-linkat-relative.c
+
+assertion  XSH.link.007
+anchor     functions/link.html#DESCRIPTION
+class      required
+since      2008
+says       linkat(AT_FDCWD, "f", AT_FDCWD, "g", 0) makes g a name of f, as
+           link() does; one AT_FDCWD with one directory descriptor also
+           works.
+test       t/007-linkat-fdcwd.c
+
+assertion  XSH.link.008
+anchor     functions/link.html#DESCRIPTION
+class      required
+since      1988
+says       link("f", "e") with e an existing file, and link("f", "dl") with dl
+           a dangling symbolic link, fail with EEXIST; e keeps its
+           contents and f's st_nlink stays 1.
+test       t/008-eexist.c
+
+assertion  XSH.link.009
+anchor     functions/link.html#ERRORS
+class      required
+since      1988
+says       link() fails with ENOENT when path1 does not exist, when path1
+           or path2 is the empty string, and when path2's directory does
+           not exist; no name is created.
+test       t/009-enoent.c
+
+assertion  XSH.link.010
+anchor     functions/link.html#ERRORS
+class      required
+since      2008
+says       link() fails with ENOTDIR when path2's prefix names a regular
+           file ("f/g"), when path1's prefix does ("f/x"), and when path1
+           is a regular file named with a trailing slash ("f/").
+test       t/010-enotdir.c
+
+assertion  XSH.link.011
+anchor     functions/link.html#ERRORS/ENOENT
+class      required
+since      2008
+says       link("f", "new/"), with f a regular file and no "new", fails with
+           ENOENT or ENOTDIR and creates nothing; link("f", "e/"), with e
+           an existing file, fails, and not with ENOENT.
+test       t/011-path2-slash.c
+
+assertion  XSH.link.012
+anchor     functions/link.html#ERRORS/EPERM
+class      required
+since      1988
+says       link("d", "d2") with d a directory fails with EPERM; only a process
+           with appropriate privileges, on an implementation that
+           supports it, may succeed.
+test       t/012-directory.c
+
+assertion  XSH.link.013
+anchor     functions/link.html#ERRORS
+class      required
+since      2001
+says       link() fails with ELOOP when path1's or path2's prefix goes
+           through a loop of symbolic links (a -> b, b -> a).
+test       t/013-eloop.c
+
+assertion  XSH.link.014
+anchor     functions/link.html#ERRORS
+class      required
+since      1988
+says       link() fails with ENAMETOOLONG when the last component of path2,
+           or of path1, is longer than {NAME_MAX} bytes.
+test       t/014-enametoolong.c
+
+assertion  XSH.link.015
+anchor     functions/link.html#ERRORS
+class      required
+since      2008
+says       linkat() with a relative path and its descriptor not open (fd1
+           for path1, or fd2 for path2) fails with EBADF.
+test       t/015-linkat-ebadf.c
+
+assertion  XSH.link.016
+anchor     functions/link.html#ERRORS
+class      required
+since      2008
+says       linkat() with a relative path and its descriptor open on a
+           regular file (fd1 for path1, or fd2 for path2) fails with
+           ENOTDIR.
+test       t/016-linkat-enotdir.c
+
+assertion  XSH.link.017
+anchor     functions/link.html#ERRORS/EACCES
+class      required
+since      1988
+says       For a process without appropriate privileges, link() of its own
+           file to "w/g" fails with EACCES when directory w denies write
+           permission, and link("s/f", ...) when directory s denies search
+           permission; nothing is created.
+test       t/017-eacces.c
+
+assertion  XSH.link.018
+anchor     functions/link.html#ERRORS/EACCES
+class      required
+since      2008
+says       For a process without appropriate privileges, linkat(fd, "f",
+           AT_FDCWD, "g", 0) fails with EACCES when fd was opened O_RDONLY
+           on a directory whose permissions were then changed to deny
+           search.
+test       t/018-linkat-eacces-fd.c
+
+assertion  XSH.link.019
+anchor     functions/link.html#DESCRIPTION
+class      required
+since      1988
+says       A process without appropriate privileges can link() a file it
+           does not own but may read (mode 0644) into a directory it may
+           write; an implementation that requires access to the file gets
+           it from the read permission.
+needs      root
+note       Linux with fs.protected_hardlinks=1 (the usual default)
+           refuses this with EPERM.
+test       t/019-other-users-file.c

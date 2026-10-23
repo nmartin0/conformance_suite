@@ -1,0 +1,40 @@
+# unlink.cov - every requirement unit on functions/unlink.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:1e1a7c6d     XSH.unlink.001
+DESCRIPTION:cd8b3fa9     XSH.unlink.002
+DESCRIPTION:3750e3ee     untestable  freeing the space of an unreferenced file is not observable portably
+DESCRIPTION:8adaa556     XSH.unlink.003
+DESCRIPTION:062be96c     untestable  reuse of a serial number is permitted, not required, so nothing can be observed
+DESCRIPTION:4719c8f8     XSH.unlink.005
+DESCRIPTION:9069d91e     XSH.unlink.004
+DESCRIPTION:65fdd3f0     XSH.unlink.004
+DESCRIPTION:eb306c56     XSH.unlink.006 XSH.unlink.007
+DESCRIPTION:fdabaa53     XSH.unlink.006
+DESCRIPTION:696636e6     XSH.unlink.019
+DESCRIPTION:80de69f9     todo  needs an unprivileged user and O_SEARCH: no search check through an O_SEARCH descriptor
+DESCRIPTION:b546c90b     none  how flag is built
+DESCRIPTION:7f855d1e     XSH.unlink.007 XSH.unlink.009
+DESCRIPTION:5270049e     XSH.unlink.007 XSH.unlink.011
+RETURN_VALUE:5cb75ebf    XSH.unlink.001
+RETURN_VALUE:73bdf30d    XSH.unlink.011 XSH.unlink.012 XSH.unlink.013
+RETURN_VALUE:47a44281    XSH.unlink.005 XSH.unlink.008 XSH.unlink.009 XSH.unlink.012 XSH.unlink.015 XSH.unlink.016
+ERRORS:e5f919d7          XSH.unlink.017
+ERRORS:b47459af          impl  which files are in use by the system (documentation)
+ERRORS:f39d7871          XSH.unlink.013
+ERRORS:681b232a          XSH.unlink.014
+ERRORS:83c37763          XSH.unlink.011
+ERRORS:df8daa9c          XSH.unlink.012
+ERRORS:f8976978          XSH.unlink.018
+ERRORS:835a26bc          todo  needs a read-only file system (an environment case)
+ERRORS:f9437b97          XSH.unlink.005
+ERRORS:222666a3          XSH.unlink.019
+ERRORS:0d30acd6          XSH.unlink.015
+ERRORS:dc6c136c          XSH.unlink.016
+ERRORS:d24c6a5a          partial XSH.unlink.008  # extra hard links to a directory are not tested
+ERRORS:6140ccb0          XSH.unlink.009
+ERRORS:cd6dfb41          XSH.unlink.010
+ERRORS:811d61dd          optional
+ERRORS:c7f415ad          optional
+ERRORS:4b2cc635          optional
+ERRORS:41158299          optional

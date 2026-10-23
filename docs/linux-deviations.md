@@ -60,6 +60,9 @@ by the named assertion.
 | XSH.abort.006 | INSPECT (musl) | abort() with SIGABRT caught but blocked ends the process without the handler (disputed, Q-21) | - |
 | XSH.psiginfo.002 | FAIL (musl) | psignal(sig, "") writes ": " | O.15 |
 | XSH.psiginfo.003 | INSPECT (glibc) | psiginfo() adds the sender to the description (disputed, Q-19) | - |
+| XSH.fstatat.013 | UNRESOLVED (glibc), FAIL (musl) | glibc does not define `O_SEARCH`; musl's O_SEARCH (O_PATH) descriptors still get the search check | 1.7, O.18 |
+| XSH.link.019 | FAIL | `fs.protected_hardlinks` refuses a link to another user's readable file with EPERM | O.19 |
+| XSH.unlink.005, .010 | FAIL | `unlink()`/`unlinkat(fd, dir, 0)` of a directory give EISDIR; EPERM required | 1.17 |
 | XSH.sig2str.001 to .006 | UNINITIATED | no sig2str() or str2sig() | 3.1 |
 | XBD.signal.h.007 | FAIL | no `_SC_NSIG` (nor `NSIG_MAX`) | 1.24 |
 | XBD.signal.h.008, .028 | FAIL, UNINITIATED | no `SIG2STR_MAX`, `sig2str()` or `str2sig()` | 3.1 |
@@ -282,6 +285,31 @@ O.17 **Tier 0: what the headers lack under the strict build.**
   constants, the socket member types, `ndbm.h`). Observe: `T0.*`
   (generated; not in `known/`, since the IDs live only under `build/`).
 - Src: posixcheck Tier 0 run, 2026-10-23.
+
+O.18 **musl: an O_SEARCH descriptor still gets the search check.**
+- POSIX (`fstatat`, `openat` and the other *at functions): when the
+  descriptor was opened with O_SEARCH, the function does not check search
+  permission on the directory; it does when the access mode is not
+  O_SEARCH.
+- Linux: musl defines O_SEARCH as O_PATH. The kernel checks search
+  permission at each lookup through an O_PATH descriptor, so once the
+  directory's mode denies search, fstatat(fd, "f", ...) fails with EACCES
+  for an unprivileged process. glibc does not define O_SEARCH at all
+  (1.7), so the test is UNRESOLVED there.
+- Comp: kernel with musl. Kind: long-standing. Observe: XSH.fstatat.013.
+- Src: posixcheck run.
+
+O.19 **Linux: link() of another user's file fails with EPERM (protected hard links).**
+- POSIX (`link`): an implementation may require permission to access the
+  existing file; when that permission is missing the error is EACCES.
+  Nothing allows refusing a file the process may read.
+- Linux: with `fs.protected_hardlinks=1` (the default on most
+  distributions), an unprivileged process may link only files it owns or
+  may both read and write; otherwise link() and linkat() fail with EPERM.
+  Setting the sysctl to 0 restores the POSIX behaviour.
+- Comp: kernel (configuration). Kind: deliberate (security hardening).
+  Observe: XSH.link.019.
+- Src: posixcheck run; kernel documentation of `protected_hardlinks`.
 
 ## Things the strict build changes
 
@@ -540,7 +568,7 @@ Main source pages:
 - POSIX: [EPERM] when the file is a directory and the implementation does not allow `unlink` of directories.
 - Linux: EISDIR, "the non-POSIX value returned by Linux since 2.1.132".
 - Comp: kernel. Kind: deliberate.
-- Observe: `mkdir d; unlink("d")` gives errno EISDIR.
+- Observe: `mkdir d; unlink("d")` gives errno EISDIR (XSH.unlink.005; unlinkat() without AT_REMOVEDIR, XSH.unlink.010).
 - Src: https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/unlink.2
 
 1.18 **`futimens(fd, NULL)` permission check.**

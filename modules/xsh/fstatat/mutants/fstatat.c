@@ -68,6 +68,8 @@ static int cook(const char *m, int r, struct stat *buf)
 		buf->st_ino ^= 1;
 	if (IS("uid_wrong"))
 		buf->st_uid++;
+	if (IS("gid_wrong"))
+		buf->st_gid++;
 	if (IS("stale_times"))
 		buf->st_mtim = buf->st_ctim = buf->st_atim;
 	if (IS("size_with_nul") && S_ISLNK(buf->st_mode))
@@ -96,12 +98,40 @@ int fstatat(int fd, const char *restrict path, struct stat *restrict buf, int fl
 {
 	REAL(fstatat);
 	const char *m = mutant_of("fstatat.");
+	char tmp[4096];
 
 	if (m == NULL)
 		return real_fstatat(fd, path, buf, flag);
 	if (IS("ignores_fd") && path[0] != '/')
 		fd = AT_FDCWD;
-	if (IS("ignores_fd_always") && path[0] == '/') {
+	if (IS("checks_fd") && fd != AT_FDCWD && path[0] == '/') {
+		struct stat s;
+		if (fstat(fd, &s) != 0)
+			return fail(EBADF);
+		if (!S_ISDIR(s.st_mode))
+			return fail(ENOTDIR);
+	}
+	if (IS("empty_is_fd") && path[0] == '\0' && fd != AT_FDCWD)
+		return fstat(fd, buf);
+	if (IS("slash_no_follow") && (flag & AT_SYMLINK_NOFOLLOW) && has_slash_end(path) && strlen(path) < sizeof tmp) {
+		strcpy(tmp, path);
+		tmp[strlen(tmp) - 1] = '\0';
+		path = tmp;
+	}
+	if (IS("search_checked") && fd != AT_FDCWD && path[0] != '/') {
+		struct stat s;
+		if (fstat(fd, &s) == 0 && S_ISDIR(s.st_mode) && !(s.st_mode & 0111))
+			return fail(EACCES);	/* checks search permission even for O_SEARCH */
+	}
+	if (IS("search_skipped") && fd != AT_FDCWD && path[0] != '/') {
+		int r2 = real_fstatat(fd, path, buf, flag);
+		if (r2 == -1 && errno == EACCES) {
+			memset(buf, 0, sizeof *buf);	/* as if the search check were skipped */
+			return 0;
+		}
+		return r2;
+	}
+	if (IS("abs_relative_to_fd") && path[0] == '/') {
 		/* resolve the absolute path from fd as if it were relative */
 		while (path[0] == '/' && path[1] != '\0')
 			path++;
@@ -118,8 +148,16 @@ int fstatat(int fd, const char *restrict path, struct stat *restrict buf, int fl
 		path = ".";
 	if ((IS("bad_fd_as_cwd") || IS("file_fd_as_cwd")) && path[0] != '/' && fd != AT_FDCWD) {
 		struct stat s;
-		if (fstat(fd, &s) != 0 || !S_ISDIR(s.st_mode))
+		int ok = fstat(fd, &s) == 0;
+		if ((IS("bad_fd_as_cwd") && !ok) || (IS("file_fd_as_cwd") && ok && !S_ISDIR(s.st_mode)))
 			fd = AT_FDCWD;
 	}
-	return real_fstatat(fd, path, buf, flag);
+	{
+		int r = real_fstatat(fd, path, buf, flag);
+		if (r == -1 && IS("eacces_as_enoent") && errno == EACCES)
+			errno = ENOENT;
+		if (r == -1 && IS("enotdir_as_enoent") && errno == ENOTDIR)
+			errno = ENOENT;
+		return r;
+	}
 }
