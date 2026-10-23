@@ -1,0 +1,123 @@
+# XSH rmdir()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.rmdir.001
+anchor     functions/rmdir.html#DESCRIPTION
+class      required
+since      1988
+says       rmdir("d") of an empty directory returns 0 and d no longer
+           exists.
+test       t/001-removes.c
+
+assertion  XSH.rmdir.002
+anchor     functions/rmdir.html#ERRORS/EEXIST
+class      required
+since      1988
+says       rmdir("d") with d holding a file, or a subdirectory, fails with
+           EEXIST or ENOTEMPTY and d is unchanged.
+test       t/002-nonempty.c
+
+assertion  XSH.rmdir.003
+anchor     functions/rmdir.html#DESCRIPTION
+class      required
+since      2001
+says       rmdir("sl"), with sl a symbolic link to an empty directory, fails
+           with ENOTDIR; the link and the directory remain.
+test       t/003-symlink.c
+
+assertion  XSH.rmdir.004
+anchor     functions/rmdir.html#ERRORS/EINVAL
+class      required
+since      2008
+says       rmdir("d/e/.") fails with EINVAL and rmdir("d/e/..") fails (with
+           any error), e being an empty directory inside d; d and e
+           remain.
+test       t/004-dot.c
+
+assertion  XSH.rmdir.005
+anchor     functions/rmdir.html#DESCRIPTION
+class      required
+since      2008
+says       After rmdir() of an empty directory that is open, the name is gone,
+           creating a file or directory through the open descriptor
+           (openat(fd, ..., O_CREAT), mkdirat(fd, ...)) fails, and
+           reading the directory through the descriptor yields no dot or
+           dot-dot entries.
+test       t/005-open-dir.c
+
+assertion  XSH.rmdir.006
+anchor     functions/rmdir.html#DESCRIPTION
+class      required
+since      1988
+says       After rmdir("p/dN"), stat() reports later st_mtim and st_ctim for p
+           (the test removes another directory every 10 ms for up to 3 s
+           until the times move).
+timeout    20
+test       t/006-times.c
+
+assertion  XSH.rmdir.007
+anchor     functions/rmdir.html#ERRORS/ENOENT
+class      required
+since      1988
+says       rmdir("missing"), rmdir("nodir/d") and rmdir("") fail with ENOENT.
+test       t/007-enoent.c
+
+assertion  XSH.rmdir.008
+anchor     functions/rmdir.html#ERRORS/ENOTDIR
+class      required
+since      1988
+says       rmdir("f") and rmdir("f/d"), with f a regular file, fail with
+           ENOTDIR and f remains.
+test       t/008-enotdir.c
+
+assertion  XSH.rmdir.009
+anchor     functions/rmdir.html#ERRORS
+class      required
+since      2001
+says       rmdir("a/d"), with a -> b and b -> a, fails with ELOOP.
+test       t/009-eloop.c
+
+assertion  XSH.rmdir.010
+anchor     functions/rmdir.html#ERRORS
+class      required
+since      1988
+says       rmdir() of a name longer than {NAME_MAX} bytes fails with
+           ENAMETOOLONG.
+note       The name also names no existing directory (ENOENT), but XBD
+           4.16 makes an over-long component an error of its own, which
+           every system reports as ENAMETOOLONG.
+test       t/010-enametoolong.c
+
+assertion  XSH.rmdir.011
+anchor     functions/rmdir.html#ERRORS/EACCES
+class      required
+since      1988
+says       For a process without appropriate privileges, rmdir("w/d") fails
+           with EACCES when directory w denies write permission, and
+           rmdir("s/d") when s denies search permission; both directories
+           remain.
+test       t/011-eacces.c
+
+assertion  XSH.rmdir.012
+anchor     functions/rmdir.html#ERRORS/EPERM
+class      conditional
+when       XSI
+since      2001
+says       In a directory with S_ISVTX set and write permission for all,
+           owned by another user, rmdir() of an empty directory owned by
+           another user and not writable by the process (mode 0755) fails
+           with EPERM or EACCES for a process without appropriate
+           privileges, and the directory remains.
+needs      root
+test       t/012-sticky.c
+
+assertion  XSH.rmdir.013
+anchor     basedefs/V1_chap04.html#tag_04_05
+class      conditional
+when       XSI
+since      2001
+says       In a directory with S_ISVTX set and write permission for all,
+           owned by another user, a process without appropriate privileges
+           can rmdir() an empty directory it made.
+needs      root
+test       t/013-sticky-owner.c

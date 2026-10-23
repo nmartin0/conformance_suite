@@ -1,0 +1,161 @@
+# XSH mkdir() and mkdirat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.mkdir.001
+anchor     functions/mkdir.html#DESCRIPTION
+class      required
+since      1988
+says       mkdir("d", 0755) returns 0; d is a directory with no entries but
+           dot and dot-dot, st_uid the effective user ID and st_gid the
+           effective group ID or the parent's group.
+test       t/001-creates.c
+
+assertion  XSH.mkdir.002
+anchor     functions/mkdir.html#DESCRIPTION
+class      required
+since      1988
+says       The new directory's permission bits are mode with the file
+           creation mask's bits cleared: 0777 under umask 022 gives 0755,
+           0750 under umask 0 gives 0750, 0777 under umask 077 gives 0700.
+test       t/002-mode-umask.c
+
+assertion  XSH.mkdir.003
+anchor     functions/mkdir.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       mkdir("d", 01777) under umask 0 creates a directory with S_ISVTX
+           set and permission bits 0777.
+test       t/003-sticky.c
+
+assertion  XSH.mkdir.004
+anchor     functions/mkdir.html#ERRORS/EEXIST
+class      required
+since      1988
+says       mkdir() of an existing directory, an existing regular file, and a
+           dangling symbolic link fails with EEXIST; the link's target is
+           not created and the file is unchanged.
+test       t/004-eexist.c
+
+assertion  XSH.mkdir.005
+anchor     functions/mkdir.html#DESCRIPTION
+class      required
+since      1988
+says       After mkdir("p/dN"), stat() reports later st_mtim and st_ctim for p
+           than before, and st_atim, st_mtim and st_ctim of the new
+           directory no earlier than p's new st_mtim (the test makes a
+           fresh directory every 10 ms for up to 3 s until p's times move).
+timeout    20
+test       t/005-times.c
+
+assertion  XSH.mkdir.006
+anchor     functions/mkdir.html#DESCRIPTION
+class      required
+since      2008
+says       mkdirat(fd, "n", 0755), with fd open on directory d, creates d/n and
+           nothing in the working directory.
+test       t/006-mkdirat-relative.c
+
+assertion  XSH.mkdir.007
+anchor     functions/mkdir.html#DESCRIPTION
+class      required
+since      2008
+says       mkdirat(AT_FDCWD, "n", 0750) creates n in the working directory,
+           as mkdir() does (a directory, permission bits 0750 under
+           umask 022).
+test       t/007-mkdirat-fdcwd.c
+
+assertion  XSH.mkdir.008
+anchor     functions/mkdir.html#DESCRIPTION
+class      required
+since      2008
+says       mkdirat() with an absolute path creates that directory whatever fd
+           is: a descriptor that is not open, or one open on a regular
+           file.
+test       t/008-mkdirat-absolute.c
+
+assertion  XSH.mkdir.009
+anchor     basedefs/V1_chap04.html#tag_04_16
+class      required
+since      2008
+says       mkdir("n/", 0755) creates directory n (a trailing slash may follow
+           the name of a directory about to be created).
+test       t/009-trailing-slash.c
+
+assertion  XSH.mkdir.010
+anchor     functions/mkdir.html#ERRORS/ENOENT
+class      required
+since      1988
+says       mkdir("nodir/n") and mkdir("") fail with ENOENT and create
+           nothing.
+test       t/010-enoent.c
+
+assertion  XSH.mkdir.011
+anchor     functions/mkdir.html#ERRORS
+class      required
+since      1988
+says       mkdir("f/n"), with f a regular file, fails with ENOTDIR.
+test       t/011-enotdir.c
+
+assertion  XSH.mkdir.012
+anchor     functions/mkdir.html#ERRORS
+class      required
+since      2001
+says       mkdir("a/n"), with a -> b and b -> a, fails with ELOOP.
+test       t/012-eloop.c
+
+assertion  XSH.mkdir.013
+anchor     functions/mkdir.html#ERRORS
+class      required
+since      1988
+says       mkdir() of a name longer than {NAME_MAX} bytes fails with
+           ENAMETOOLONG.
+test       t/013-enametoolong.c
+
+assertion  XSH.mkdir.014
+anchor     functions/mkdir.html#ERRORS
+class      required
+since      2008
+says       mkdirat(fd, "n", 0755) with fd not open fails with EBADF and creates
+           nothing.
+test       t/014-mkdirat-ebadf.c
+
+assertion  XSH.mkdir.015
+anchor     functions/mkdir.html#ERRORS
+class      required
+since      2008
+says       mkdirat(fd, "n", 0755) with fd open on a regular file fails with
+           ENOTDIR and creates nothing.
+test       t/015-mkdirat-enotdir.c
+
+assertion  XSH.mkdir.016
+anchor     functions/mkdir.html#ERRORS/EACCES
+class      required
+since      1988
+says       For a process without appropriate privileges, mkdir("w/n") fails
+           with EACCES when directory w denies write permission, and
+           mkdir("s/x/n") when s denies search permission; nothing is
+           created.
+test       t/016-eacces.c
+
+assertion  XSH.mkdir.017
+anchor     functions/mkdir.html#ERRORS/EACCES
+class      required
+since      2008
+says       For a process without appropriate privileges, mkdirat(fd, "n",
+           0755) fails with EACCES when fd was opened O_RDONLY on a
+           directory that is writable by all and whose permissions were
+           then changed to deny search (mode 0666).
+test       t/017-mkdirat-eacces-fd.c
+
+assertion  XSH.mkdir.018
+anchor     functions/mkdir.html#DESCRIPTION
+class      required
+since      2008
+says       For a process without appropriate privileges, mkdirat(fd, "n",
+           0755) succeeds when fd was opened with O_SEARCH on a directory
+           writable by all whose permissions were then changed to deny
+           search (mode 0666).
+note       O_SEARCH itself is a header item (Tier 0); without it this
+           test is UNRESOLVED.
+test       t/018-mkdirat-search.c
