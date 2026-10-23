@@ -30,3 +30,15 @@ says       An alternative that is claimed satisfies "A|B".
 when       NEVER|BASE
 test       t/006-alt-pass.c
 expect     PASS
+
+assertion  ST.select.007
+says       "A+B" needs both: one unclaimed code makes it UNSUPPORTED.
+when       BASE+NEVER
+test       t/unused.c
+expect     UNSUPPORTED
+
+assertion  ST.select.008
+says       A claimed conjunction satisfies "A|B+C".
+when       NEVER|BASE+BASE
+test       t/008-conj-pass.c
+expect     PASS

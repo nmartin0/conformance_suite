@@ -251,8 +251,8 @@ O.17 **Tier 0: what the headers lack under the strict build.**
   constant is an object-like macro (XBD 3, "Symbolic Constant"; it may also
   be an enumeration constant, but must be a macro), every type, member and
   function is visible with the stated type.
-- Linux: the generated Tier 0 checks (about 2,880, built from the user's
-  copy; see README "Tier 0") fail 278 on glibc 2.39 and 217 on musl 1.2.4.
+- Linux: the generated Tier 0 checks (about 3,350, built from the user's
+  copy; see README "Tier 0") fail 290 on glibc 2.39 and 229 on musl 1.2.4.
   Nearly all are Issue 8 additions not yet made, or made only under
   `_GNU_SOURCE`/`_DEFAULT_SOURCE`:
   - both: `<endian.h>` functions, `DT_*` and `struct posix_dent`,
@@ -266,14 +266,17 @@ O.17 **Tier 0: what the headers lack under the strict build.**
     `tm_gmtoff`/`tm_zone`, `posix_spawn_file_actions_add[f]chdir`, the
     `M_*l` and new `M_*` constants of `<math.h>`, the `_CS_POSIX_V8_*`,
     `_SC_V8_*`, `_SC_NSIG`, `_PC_FALLOC` names, the `O_*` names newly
-    required in `<stdlib.h>`, `<sys/mman.h>` and `<unistd.h>`, and the
-    option constants that Issue 8 fixes at 202405L (both still say
-    200809L).
+    required in `<stdlib.h>`, `<sys/mman.h>` and `<unistd.h>`, the
+    option constants that Issue 8 fixes at 202405L, `_POSIX_VERSION`,
+    `_POSIX2_VERSION` and `_POSIX2_C_BIND` (both still say 200809L) and
+    `_XOPEN_VERSION` (700, not 800), `SHM_FAILED` and `intptr_t` in
+    `<sys/shm.h>`, `struct timespec` in `<poll.h>`.
   - glibc only: `PTHREAD_MUTEX_*`, `PTHREAD_PRIO_*` and `WRDE_*` are
     enumeration constants only, not macros; `PTHREAD_NULL`, `O_EXEC`,
     `O_SEARCH`, `O_TTY_INIT`, `F_OFD_*`, `SEEK_HOLE`/`SEEK_DATA`, `dup3`,
     `pipe2`, `accept4`, `_Fork`, `posix_close`, `mkostemp`, `memmem`,
-    `ffsl`/`ffsll`, `tcgetwinsize`, `suseconds_t`, `ino_t` from
+    `ffsl`/`ffsll`, `tcgetwinsize`, `suseconds_t`, `TSVTX` (no longer
+    XSI-only), `_XOPEN_NAME_MAX`/`_XOPEN_PATH_MAX`, `ino_t` from
     `<dirent.h>`, `wchar_t` from `<inttypes.h>` are hidden or missing;
     type mismatches: `lio_listio` (no `restrict`), `msghdr.msg_iovlen`
     and `msg_controllen` and `cmsghdr.cmsg_len` (`size_t`),

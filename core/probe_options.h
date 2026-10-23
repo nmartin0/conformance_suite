@@ -38,6 +38,17 @@
 #else
 	  0, 0 },
 #endif
+	{ "CRYPT", "_XOPEN_CRYPT",
+#ifdef _XOPEN_CRYPT
+	  1, (long)(_XOPEN_CRYPT),
+#else
+	  0, 0,
+#endif
+#ifdef _SC_XOPEN_CRYPT
+	  1, _SC_XOPEN_CRYPT },
+#else
+	  0, 0 },
+#endif
 	{ "DC", "_POSIX_DEVICE_CONTROL",
 #ifdef _POSIX_DEVICE_CONTROL
 	  1, (long)(_POSIX_DEVICE_CONTROL),

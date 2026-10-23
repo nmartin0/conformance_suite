@@ -182,8 +182,8 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   exec-path checks for true/false, a real gap in the 2.6 test, header
   defects owned by `xbd/fcntl.h`, wording, anchors, ENOSPC guard.
 
-- Tier 0 (generated, 2026-10-23): about 2,880 header checks; glibc 278
-  FAIL, musl 217 FAIL, all reviewed as real gaps (mostly Issue 8 lag under
+- Tier 0 (generated, 2026-10-23): about 3,350 header checks; glibc 290
+  FAIL, musl 229 FAIL, all reviewed as real gaps (mostly Issue 8 lag under
   the strict build; `docs/linux-deviations.md` O.17). Generated files stay
   under `build/` and are never committed.
 

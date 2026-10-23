@@ -40,6 +40,7 @@ void pc_begin(const char *);
 void pc_test(void);
 _Noreturn void pc_pass(void);
 _Noreturn void pc_fail(const char *, ...);
+_Noreturn void pc_unresolved(const char *, ...);
 
 #define IS_T(e, T) _Generic((e), T: 1, default: 0)
 """
@@ -95,9 +96,51 @@ def c_str(s):
     return s.replace("\\", "\\\\").replace('"', '\\"')
 
 
+# Names that C23 makes keywords; POSIX.1-2024 builds on C17, where they
+# are macros. Under a later C the check cannot be made.
+C23_KEYWORDS = {"bool", "true", "false", "alignas", "alignof", "thread_local", "static_assert"}
+# Names the standard allows to be a macro or an identifier.
+MACRO_OR_IDENT = {"math_errhandling"}
+
+
+def body_usable(aid, name, why):
+    return f"""
+int main(void)
+{{
+	pc_begin("{aid}");
+	pc_test();
+	(void)({name});	/* {why} */
+	pc_pass();
+}}
+"""
+
+
 def body_macro(aid, hdr, name, always=None):
+    if name in C23_KEYWORDS:
+        return f"""
+int main(void)
+{{
+	pc_begin("{aid}");
+#if __STDC_VERSION__ > 201710L
+	pc_unresolved("compiled as C later than C17, where {name} is a keyword; use a c17 compiler");
+#else
+	pc_test();
+#ifndef {name}
+	pc_fail("<{hdr}> does not define {name}");
+#else
+	pc_pass();
+#endif
+#endif
+}}
+"""
+    if name in MACRO_OR_IDENT:
+        return body_usable(aid, name, "a macro or an identifier")
     val = ""
-    if always and re.match(r"^[0-9]+L?$", always):
+    if always == "!= -1":
+        val = f"""#elif {name} == -1
+	pc_fail("{name} is -1");
+"""
+    elif always and re.match(r"^[0-9]+L?$", always):
         val = f"""#elif {name} != {always}
 	pc_fail("{name} is not {always}");
 """
@@ -133,6 +176,19 @@ int main(void)
 """
 
 
+def body_complete(aid, name):
+    return f"""
+typedef char pc_t0_c[sizeof({name})];	/* a complete type */
+
+int main(void)
+{{
+	pc_begin("{aid}");
+	pc_test();
+	pc_pass();
+}}
+"""
+
+
 def body_member(aid, agg, mem):
     lines = [f"\nstatic {agg} pc_t0_s;\n", "int main(void)\n{", f'\tpc_begin("{aid}");', "\tpc_test();"]
     if mem["array"]:
@@ -141,6 +197,10 @@ def body_member(aid, agg, mem):
         if pt:
             lines.append(f'\tif (!IS_T(&pc_t0_s.{mem["name"]}[0], {pt}))')
             lines.append(f'\t\tpc_fail("{agg} member {mem["name"]} is not an array of {c_str(mem["type"])}");')
+            if "(*" not in mem["type"]:
+                n = f"sizeof pc_t0_s.{mem['name']} / sizeof pc_t0_s.{mem['name']}[0]"
+                lines.append(f'\tif (!IS_T(&pc_t0_s.{mem["name"]}, {mem["type"]} (*)[{n}]))')
+                lines.append(f'\t\tpc_fail("{agg} member {mem["name"]} is not an array");')
     else:
         pt = ptr_to(mem["type"])
         lines.append(f"\t(void)sizeof pc_t0_s.{mem['name']};")
@@ -225,6 +285,10 @@ def main():
             if x.get("conditional"):
                 skipped += 1
                 continue
+            if x.get("enum"):
+                items.append(("enum", x["name"], f"<{hdr}> defines the enumeration constant {x['name']}", x["option"],
+                              lambda aid, x=x: body_usable(aid, x["name"], "an enumeration constant (or a macro)")))
+                continue
             items.append(("mac", x["name"], f"<{hdr}> defines {x['name']}" + ("()" if x.get("function_like") else "")
                           + (f" as {x['always']}" if x.get("always") not in (None, "defined") else ""),
                           x["option"], lambda aid, x=x, hdr=hdr: body_macro(aid, hdr, x["name"], x.get("always"))))
@@ -233,8 +297,8 @@ def main():
                           lambda aid, x=x: body_type(aid, x["name"])))
         for g in m["aggregates"]:
             agg = {"struct": f"struct {g['name']}", "union": f"union {g['name']}"}.get(g["kind"], g["name"])
-            items.append(("agg", g["name"], f"<{hdr}> defines {agg}", g["option"],
-                          lambda aid, agg=agg: body_type(aid, agg)))
+            items.append(("agg", g["name"], f"<{hdr}> defines {agg} as a complete type", g["option"],
+                          lambda aid, agg=agg: body_complete(aid, agg)))
             for mem in g["members"]:
                 opt = mem["option"] if mem["option"] != "BASE" else g["option"]
                 items.append(("mem", f"{g['name']}.{mem['name']}",

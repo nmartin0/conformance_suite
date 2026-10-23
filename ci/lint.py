@@ -45,6 +45,9 @@ def err(where, msg):
 
 
 mods = catalog.all_modules(args.modules)
+# option codes an assertion's "when" may combine with "|" (either) and "+" (both)
+OPTION_CODES = {"BASE"} | {l.split()[0] for l in (root / "core/options.list").read_text().splitlines()
+                           if l.strip() and not l.startswith("#")}
 by_id = {}
 mutant_pairs = []
 
@@ -85,6 +88,11 @@ for m in mods:
         cls = a.get("class", "required")
         if cls not in catalog.CLASSES:
             err(here, f"unknown class '{cls}'")
+        when = a.get("when")
+        if when:
+            for code in re.split(r"[|+]", when):
+                if code not in OPTION_CODES:
+                    err(here, f"'when {when}': unknown option code '{code}' (core/options.list)")
         since = a.get("since")
         if since and since not in ("1988", "1992", "2001", "2008", "2024"):
             err(here, f"'since {since}' is not an edition year "

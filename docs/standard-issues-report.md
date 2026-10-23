@@ -77,6 +77,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-48 | XSH `signal()`: the errno rule is not CX-shaded | Defect (editorial) | Low | XSH.signal.006 |
 | SI-49 | XSH `str2sig()`: "a string containing" | Defect (editorial) | Low | Plain names and numbers only |
 | SI-50 | XBD `<stdio.h>`: dprintf() prototype lacks its semicolon | Defect (editorial) | Low | Generator tolerates it |
+| SI-51 | XBD `<float.h>`: unclosed paragraphs in the HTML edition | Defect (editorial, HTML) | Low | Generator repairs it |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -636,6 +637,14 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **Why it is a problem:** the page lists declarations as C source; read literally, this one runs into the next, so a tool that reads the declarations (posixcheck's spec model) has to special-case it.
 - **posixcheck meanwhile:** `gen/specmodel.py` splits declarations at a line break when the semicolon is missing and flags the item `no_semicolon`.
 - **Suggested change:** add the semicolon (editorial).
+
+### SI-51: <float.h>: two paragraphs are left unclosed in the HTML edition
+
+- **Where:** XBD `<float.h>`, DESCRIPTION, the list of decimal-digit characteristics (DECIMAL_DIG, FLT_DIG and the rest).
+- **What the text says:** in the HTML edition, one paragraph that holds a formula ends with `</p` without its `>`, and another is never closed, so the following list of constants sits inside the paragraph.
+- **Why it is a problem:** browsers recover, but a tool that reads the pages (posixcheck's spec model) loses the constants unless it repairs the markup. This is a defect of the HTML rendition only.
+- **posixcheck meanwhile:** `gen/specmodel.py` closes such paragraphs where the next block starts.
+- **Suggested change:** fix the markup in the HTML edition (editorial).
 
 ## Questions to raise
 

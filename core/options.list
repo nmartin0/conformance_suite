@@ -12,10 +12,15 @@
 #
 # gen/gen_probe.py turns this file into core/probe_options.h.
 #
+# CRYPT is not a margin code: it names the Encryption Option Group
+# (XBD 2.1.5.2), which crypt(), encrypt() and setkey() need besides XSI.
+# Assertions combine codes with "|" (either) and "+" (both).
+#
 # code  macro
 ADV	_POSIX_ADVISORY_INFO
 CD	_POSIX2_C_DEV
 CPT	_POSIX_CPUTIME
+CRYPT	_XOPEN_CRYPT
 DC	_POSIX_DEVICE_CONTROL
 FR	_POSIX2_FORT_RUN
 FSC	_POSIX_FSYNC

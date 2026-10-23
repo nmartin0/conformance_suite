@@ -73,6 +73,11 @@ An assertion of class `disputed` tests one reading of text that the standard
 itself leaves open (its `note` names the standard issue); its FAIL is
 logged as INSPECT, not counted against the system.
 
+A `conditional` assertion names its option in `when`, using the codes of
+`core/options.list`: `A|B` needs either option, `A+B` needs both (for
+example `XSI+CRYPT` for crypt(), which also needs the Encryption Option
+Group, or `TSA+TSS`).
+
 `results/out/<ID>.txt` holds each test's full output.
 
 ## Analyzing results (on another computer)
@@ -123,7 +128,10 @@ generated on your machine from your copy and never committed:
     python3 gen/tier0.py                         # -> build/tier0/modules
     sh posixcheck.sh --root build/tier0/modules --results results-t0
 
-Copy `build/tier0` with the suite to the system under test. Names that the
+`specmodel.py` checks itself: every name a header page lists in a list,
+table or code block must reach the model, or it stops with the names it
+missed (fix the parser, or add the word to `AUDIT_IGNORE` if it is a
+legend or label). Copy `build/tier0` with the suite to the system under test. Names that the
 standard makes conditional ("if defined", "reserved for compatibility",
 the optional `<limits.h>` and `<unistd.h>` limits) are skipped; option
 items are `conditional` and judged by the profile like any other.

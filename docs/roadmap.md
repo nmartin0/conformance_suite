@@ -22,7 +22,7 @@ verified; this file is the plan. Update both when a step finishes.
   `abort`, the async-signal-safe list (2.4.3.016).
 - Spec model and Tier 0 (`gen/specmodel.py`, `gen/tier0.py`): every
   header's macros, types, structures, functions and variables, generated
-  from the user's copy under `build/`; about 2,880 checks.
+  from the user's copy under `build/`; about 3,350 checks.
 - Files and directories (in progress): `stat`/`lstat`/`fstatat`, `fstat`,
   `link`/`linkat`, `unlink`/`unlinkat`.
 - Utilities: `true`, `false`.

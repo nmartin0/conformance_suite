@@ -273,17 +273,30 @@ pc_claimed() {
 	while :; do
 		# "|" is quoted: ksh93 reads a bare | in a pattern as alternation
 		pc_alt=${pc_x%%'|'*}
-		case $pc_alt in
-		BASE) return 0 ;;
-		'' | *[!A-Z0-9]*) ;;
-		*)
-			eval "pc_cv=\${pc_claim_$pc_alt:-no}"
-			[ "$pc_cv" = yes ] && return 0
-			;;
-		esac
+		pc_claimed_all "$pc_alt" && return 0
 		case $pc_x in
 		*'|'*) pc_x=${pc_x#*'|'} ;;
 		*) return 1 ;;
+		esac
+	done
+}
+
+# Is every code of "A+B+..." claimed?
+pc_claimed_all() {
+	pc_y=$1
+	while :; do
+		pc_one=${pc_y%%+*}
+		case $pc_one in
+		BASE) ;;
+		'' | *[!A-Z0-9]*) return 1 ;;
+		*)
+			eval "pc_cv=\${pc_claim_$pc_one:-no}"
+			[ "$pc_cv" = yes ] || return 1
+			;;
+		esac
+		case $pc_y in
+		*+*) pc_y=${pc_y#*+} ;;
+		*) return 0 ;;
 		esac
 	done
 }
@@ -410,7 +423,7 @@ pc_assertion() {
 		pc_exe=${pc_exe%.c}
 		mkdir -p "${pc_exe%/*}" || pc_abort "cannot create ${pc_exe%/*}"
 		pc_flags=-D_POSIX_C_SOURCE=202405L
-		case "|$pc_when|" in *'|XSI|'*) pc_flags=-D_XOPEN_SOURCE=800 ;; esac
+		case "|$pc_when+" in *[+'|']XSI[+'|']*) pc_flags=-D_XOPEN_SOURCE=800 ;; esac
 		# shellcheck disable=SC2086 # mod_libs is a word list
 		if ! "$pc_cc" $pc_flags $pc_ccstrict -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
 		    "$pc_bin/pc.o" $mod_libs >"$ctx_out/$pc_id.build.txt" 2>&1 \
