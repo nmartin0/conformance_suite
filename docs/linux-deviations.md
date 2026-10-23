@@ -36,6 +36,7 @@ by the named assertion.
 | XSH.open.044 | FAIL | `open("new/", O_CREAT...)` gives EISDIR; ENOENT or ENOTDIR required | O.1 |
 | XSH.open.045 | FAIL | `open("file/", O_CREAT...)` gives EISDIR; ENOTDIR required | O.1 |
 | XSH.dup.012 to .015 | UNINITIATED (glibc) | `dup3()` exists but is not declared under the strict build | 11.1 |
+| XSH.pipe.007 to .010 | UNINITIATED (glibc) | `pipe2()` exists but is not declared under the strict build | 11.1 |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR.**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or

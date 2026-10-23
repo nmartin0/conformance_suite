@@ -1,0 +1,100 @@
+# XSH pipe(), pipe2()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.pipe.001
+anchor     functions/pipe.html#DESCRIPTION
+anchor     functions/pipe.html#RETURN VALUE
+class      required
+since      1988
+says       pipe() returns 0 and two distinct descriptors; data written
+           to fildes[1] is read from fildes[0] in the order written.
+test       t/001-fifo-order.c
+
+assertion  XSH.pipe.002
+anchor     functions/pipe.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.6
+class      required
+since      1988
+says       Each descriptor pipe() allocates is the lowest one free at
+           the time: with free slots L and L+2 (L+1 open), the two
+           descriptors are L and L+2, in either order.
+test       t/002-lowest.c
+
+assertion  XSH.pipe.003
+anchor     functions/pipe.html#DESCRIPTION
+class      required
+since      1988
+says       Both descriptors pipe() returns have FD_CLOEXEC clear, and
+           both open file descriptions have O_NONBLOCK clear.
+test       t/003-flags-clear.c
+
+assertion  XSH.pipe.004
+anchor     functions/pipe.html#DESCRIPTION
+class      required
+since      1988
+says       The pipe's user ID is the process's effective user ID and its
+           group ID the effective group ID (fstat on either end).
+test       t/004-owner.c
+
+assertion  XSH.pipe.005
+anchor     functions/pipe.html#DESCRIPTION
+class      required
+since      1988
+says       pipe() sets the pipe's access, modification and status change
+           times: none is earlier than one second before the call.
+note       The one-second allowance covers file times taken from a
+           coarser clock than CLOCK_REALTIME.
+test       t/005-times.c
+
+assertion  XSH.pipe.006
+anchor     functions/pipe.html#ERRORS/EMFILE
+anchor     functions/pipe.html#RETURN VALUE
+class      required
+since      1988
+says       With only one descriptor free, pipe() fails with EMFILE,
+           allocates no descriptor and leaves fildes unchanged.
+test       t/006-emfile.c
+
+assertion  XSH.pipe.007
+anchor     functions/pipe.html#DESCRIPTION
+class      required
+since      2024
+says       pipe2(fildes, 0) behaves as pipe(): a working pipe with
+           FD_CLOEXEC and O_NONBLOCK clear on both ends.
+note       pipe2() is new in Issue 8; a library that does not declare it
+           makes the test UNINITIATED (build failure).
+test       t/007-pipe2-zero.c
+
+assertion  XSH.pipe.008
+anchor     functions/pipe.html#DESCRIPTION
+anchor     functions/pipe.html#DESCRIPTION/O_CLOEXEC
+class      required
+since      2024
+says       pipe2() with O_CLOEXEC sets FD_CLOEXEC on both new
+           descriptors.
+note       pipe2() is new in Issue 8; a library that does not declare it
+           makes the test UNINITIATED (build failure).
+test       t/008-pipe2-cloexec.c
+
+assertion  XSH.pipe.009
+anchor     functions/pipe.html#DESCRIPTION
+anchor     functions/pipe.html#DESCRIPTION/O_NONBLOCK
+class      required
+since      2024
+says       pipe2() with O_NONBLOCK sets O_NONBLOCK on both new open file
+           descriptions: reading the empty pipe fails with EAGAIN
+           instead of blocking.
+note       pipe2() is new in Issue 8; a library that does not declare it
+           makes the test UNINITIATED (build failure).
+test       t/009-pipe2-nonblock.c
+
+assertion  XSH.pipe.010
+anchor     functions/pipe.html#ERRORS/EMFILE
+anchor     functions/pipe.html#RETURN VALUE
+class      required
+since      2024
+says       pipe2() with only one descriptor free fails with EMFILE and
+           leaves fildes unchanged.
+note       pipe2() is new in Issue 8; a library that does not declare it
+           makes the test UNINITIATED (build failure).
+test       t/010-pipe2-emfile.c

@@ -177,7 +177,7 @@ printf 'int main(void) { return pc_no_such_function(); }\n' \
     >"$pc_trustdir/implicit.c"
 pc_ccstrict=
 pc_implicit_builds() { # extra flags...
-	"$pc_cc" -D_POSIX_C_SOURCE=202405L "$@" -c -o "$pc_trustdir/implicit.o" \
+	"$pc_cc" -D_POSIX_C_SOURCE=202405L ${1+"$@"} -c -o "$pc_trustdir/implicit.o" \
 	    "$pc_trustdir/implicit.c" >>"$pc_trustdir/cc.txt" 2>&1 </dev/null
 }
 if pc_implicit_builds; then

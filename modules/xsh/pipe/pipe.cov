@@ -1,0 +1,23 @@
+# pipe.cov - every requirement unit on functions/pipe.html (pipe, pipe2).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:bc4c9b12        XSH.pipe.001
+DESCRIPTION:79b4e370        XSH.pipe.002
+DESCRIPTION:dca2be8b        partial XSH.pipe.003  # FD_CLOFORK not tested
+DESCRIPTION:a61fdc24        XSH.pipe.003
+DESCRIPTION:d5e8b3b2        none  a remark
+DESCRIPTION:6ccb3696        XSH.pipe.001
+DESCRIPTION:216c71a9        XSH.pipe.001
+DESCRIPTION:68120795        none  unspecified
+DESCRIPTION:6e8d5e68        none  a definition
+DESCRIPTION:5fc8c844        XSH.pipe.004
+DESCRIPTION:d387ea91        XSH.pipe.004
+DESCRIPTION:b79cbd32        XSH.pipe.005
+DESCRIPTION:5d2d92a8        partial XSH.pipe.007 XSH.pipe.008 XSH.pipe.009  # FD_CLOFORK from the flag not tested
+DESCRIPTION:264798a0        partial XSH.pipe.008  # atomicity not tested
+DESCRIPTION:d69f4de6        todo  pipe2() with O_CLOFORK sets FD_CLOFORK on both (needs O_CLOFORK)
+DESCRIPTION:635280a7        XSH.pipe.009
+RETURN_VALUE:3b030261       XSH.pipe.001 XSH.pipe.006 XSH.pipe.010
+ERRORS:b2d24eb3             partial XSH.pipe.006 XSH.pipe.010  # the "all open" case (none free) not tested separately
+ERRORS:f7d346da             todo  environment: as root in a scratch VM, lower the system-wide file limit and fill the table
+ERRORS:47d8655d             optional
