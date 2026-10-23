@@ -79,6 +79,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-50 | XBD `<stdio.h>`: dprintf() prototype lacks its semicolon | Defect (editorial) | Low | Generator tolerates it |
 | SI-51 | XBD `<float.h>`: unclosed paragraphs in the HTML edition | Defect (editorial, HTML) | Low | Generator repairs it |
 | SI-52 | XSH `rename()`: no error number for a directory renamed to "new/" | Defect (omission) | Low | Any error accepted (XSH.rename.014) |
+| SI-53 | XSH `lchown()`/`fchown()`: ERRORS out of step with chown() | Defect (inconsistency) | Low | chown() rules applied |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -103,6 +104,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-22 | XBD `<signal.h>`: MINSIGSTKSZ constant vs CPU-dependent frames | Question | Medium | XSH.sigaltstack.010 FAILs on AVX-512 |
 | Q-23 | XSH `signal()`: return value after failed calls or sigaction() | Question | Low | Successful calls only (XSH.signal.001) |
 | Q-24 | XSH `link()`: what access to the existing file may be required, and with which error | Question | Medium | Disputed (XSH.link.019) |
+| Q-25 | XSH `chown()`: chown(-1, -1) of another user's file | Question | Low | Disputed (XSH.chown.008) |
 
 ## Entries
 
@@ -656,6 +658,19 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **posixcheck meanwhile:** XSH.rename.014 requires the failure and accepts any error number.
 - **Suggested change:** name the error for a directory (ENOTDIR or ENOENT), or say explicitly that the rule applies to directories too.
 
+### SI-53: lchown() and fchown(): error lists out of step with chown()
+
+- **Where:** XSH `lchown()` and `fchown()`, ERRORS; XSH `chown()`, ERRORS.
+- **What the text says:** lchown() is "equivalent to chown()" except for symbolic links, yet its [EINVAL] for an unsupported owner or group ID is a "shall fail" error, where chown() lists the same condition under "may fail". lchown()'s [EPERM] names only the owner mismatch, leaving out the _POSIX_CHOWN_RESTRICTED case that chown() and fchown() list. fchown()'s "may fail" [EINVAL] entry runs two conditions together and says "pipe" after naming a pipe or socket.
+- **Why it is a problem:** an implementation that shares one code path for chown() and lchown() cannot satisfy both EINVAL rules at once, and a reader of lchown() alone would think the restricted-chown rule does not apply.
+- **posixcheck meanwhile:** lchown() is tested with chown()'s rules (XSH.lchown.003); the EINVAL entry is classified as implementation-defined.
+- **Suggested change:** make lchown()'s [EINVAL] a "may fail" error and copy chown()'s [EPERM] wording; split fchown()'s [EINVAL] entry (editorial).
+
+## Questions to raise
+
+These are consistent as written, but the intent or the fit with practice
+is unclear.
+
 ### Q-1: Should SIGPIPE follow EPIPE after shutdown(SHUT_WR)?
 
 - **Where:** XSH `write()` and `send()`, ERRORS, [EPIPE].
@@ -849,6 +864,12 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **Where:** XSH `link()`, DESCRIPTION and ERRORS ([EACCES]).
 - **Question:** the implementation may require that the calling process has permission to access the existing file, and [EACCES] covers the case where it lacks that permission. "Access" is not defined: is read permission enough, or may an implementation demand ownership, or read and write permission? And when a security policy refuses (Linux `fs.protected_hardlinks`, FreeBSD `security.bsd.hardlink_check_uid`), is EPERM an allowed additional error, or must the error be [EACCES] (XSH 2.3 forbids a different error number for a condition the page describes)?
 - **posixcheck meanwhile:** XSH.link.019 is `disputed`: linking another user's readable file must succeed or fail with EACCES; EPERM is logged as INSPECT.
+
+### Q-25: chown() with owner and group both -1 on another user's file
+
+- **Where:** XSH `chown()`, DESCRIPTION and ERRORS ([EPERM]).
+- **Question:** [EPERM] applies when "the effective user ID does not match the owner of the file". With owner (uid_t)-1 and group (gid_t)-1 nothing is changed (and st_ctim need not be marked). Must the call still fail with EPERM for a process that is not the owner, or may it succeed as a no-op, as Linux does?
+- **posixcheck meanwhile:** XSH.chown.008 is `disputed`: success is logged as INSPECT.
 
 ## Tracking
 

@@ -1,0 +1,200 @@
+# XSH chown() and fchownat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.chown.001
+anchor     functions/chown.html#DESCRIPTION
+class      required
+since      1988
+says       With appropriate privileges, chown("f", 65534, 65533) returns 0 and
+           f then has st_uid 65534 and st_gid 65533.
+needs      root
+test       t/001-sets-ids.c
+
+assertion  XSH.chown.002
+anchor     functions/chown.html#DESCRIPTION
+class      required
+since      1988
+says       chown("f", (uid_t)-1, 65533) changes only the group and
+           chown("f", 65532, (gid_t)-1) only the owner.
+needs      root
+test       t/002-minus-one.c
+
+assertion  XSH.chown.003
+anchor     functions/chown.html#DESCRIPTION
+class      required
+since      2001
+says       chown("sl", 65534, 65534), with sl a symbolic link to f, changes f's
+           IDs and not the link's.
+needs      root
+test       t/003-follows-link.c
+
+assertion  XSH.chown.004
+anchor     functions/chown.html#DESCRIPTION
+class      required
+since      1988
+says       After chown("f", uid, gid) with f's own IDs (not -1), stat() reports
+           a later st_ctim (the test calls it every 10 ms for up to 3 s
+           until it moves).
+timeout    20
+test       t/004-ctime.c
+
+assertion  XSH.chown.005
+anchor     functions/chown.html#DESCRIPTION
+class      required
+since      1988
+says       A process without appropriate privileges can chown() a file it
+           owns to (uid_t)-1 and its effective group ID; the file then has
+           that group.
+test       t/005-own-group.c
+
+assertion  XSH.chown.006
+anchor     functions/chown.html#ERRORS/EPERM
+class      required
+since      1988
+says       For a process without appropriate privileges, chown() of its own
+           file to another user (owner 0) fails with EPERM, and so does
+           chown() to a group it is not a member of (group 1); the file's
+           IDs do not change.
+note       _POSIX_CHOWN_RESTRICTED is required to be in effect (a value
+           other than -1) in POSIX.1-2024.
+test       t/006-restricted.c
+
+assertion  XSH.chown.007
+anchor     functions/chown.html#ERRORS/EPERM
+class      required
+since      1988
+says       For a process without appropriate privileges, chown() of a file it
+           does not own, to (uid_t)-1 and its own effective group, fails
+           with EPERM and the file's group does not change.
+needs      root
+test       t/007-not-owner.c
+
+assertion  XSH.chown.008
+anchor     functions/chown.html#ERRORS/EPERM
+class      disputed
+since      1988
+says       For a process without appropriate privileges, chown() of a file it
+           does not own with owner (uid_t)-1 and group (gid_t)-1 fails with
+           EPERM (the effective user ID does not match the owner).
+needs      root
+note       disputed (Q-25): the EPERM condition is met, but the call
+           changes nothing; Linux returns 0.
+test       t/008-not-owner-noop.c
+
+assertion  XSH.chown.009
+anchor     functions/chown.html#DESCRIPTION
+class      required
+since      1988
+says       When a process without appropriate privileges successfully
+           chown()s its own executable regular file (mode 04755) to
+           (uid_t)-1 and its effective group, S_ISUID and S_ISGID are clear
+           afterwards.
+test       t/009-clears-setid.c
+
+assertion  XSH.chown.010
+anchor     functions/chown.html#DESCRIPTION
+class      required
+since      2008
+says       With appropriate privileges, fchownat(fd, "f", 65534, 65534, 0), fd
+           open on directory d, changes d/f and not a file f in the working
+           directory.
+needs      root
+test       t/010-fchownat-relative.c
+
+assertion  XSH.chown.011
+anchor     functions/chown.html#DESCRIPTION
+class      required
+since      2008
+says       With appropriate privileges, fchownat(AT_FDCWD, "sl", 65534, 65534,
+           AT_SYMLINK_NOFOLLOW) changes the symbolic link sl's IDs and not
+           its target's; without the flag the target is changed.
+needs      root
+test       t/011-fchownat-nofollow.c
+
+assertion  XSH.chown.012
+anchor     functions/chown.html#DESCRIPTION
+class      required
+since      2008
+says       fchownat() with an absolute path and fd not open succeeds (the test
+           sets the file's own IDs, which needs no privileges).
+test       t/012-fchownat-absolute.c
+
+assertion  XSH.chown.013
+anchor     functions/chown.html#ERRORS/ENOENT
+class      required
+since      1988
+says       chown("missing"), chown("nodir/f"), chown("") and fchownat(AT_FDCWD,
+           "missing", ...) fail with ENOENT.
+test       t/013-enoent.c
+
+assertion  XSH.chown.014
+anchor     functions/chown.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       chown("f/x") and chown("f/"), with f a regular file, fail with
+           ENOTDIR.
+test       t/014-enotdir.c
+
+assertion  XSH.chown.015
+anchor     functions/chown.html#ERRORS
+class      required
+since      2001
+says       chown("a"), with a -> b and b -> a, fails with ELOOP.
+test       t/015-eloop.c
+
+assertion  XSH.chown.016
+anchor     functions/chown.html#ERRORS
+class      required
+since      1988
+says       chown() of a name longer than {NAME_MAX} bytes fails with
+           ENAMETOOLONG.
+note       The name also names no existing file (ENOENT), but XBD 4.16
+           makes an over-long component an error of its own, which every
+           system reports as ENAMETOOLONG.
+test       t/016-enametoolong.c
+
+assertion  XSH.chown.017
+anchor     functions/chown.html#ERRORS
+class      required
+since      2008
+says       fchownat(fd, "f", -1, -1, 0) with fd not open fails with EBADF.
+test       t/017-fchownat-ebadf.c
+
+assertion  XSH.chown.018
+anchor     functions/chown.html#ERRORS
+class      required
+since      2008
+says       fchownat(fd, "f", -1, -1, 0) with fd open on a regular file fails
+           with ENOTDIR.
+test       t/018-fchownat-enotdir.c
+
+assertion  XSH.chown.019
+anchor     functions/chown.html#ERRORS/EACCES
+class      required
+since      1988
+says       For a process without appropriate privileges, chown() of its own
+           file through a directory that denies search permission fails
+           with EACCES.
+test       t/019-eacces.c
+
+assertion  XSH.chown.020
+anchor     functions/chown.html#ERRORS/EACCES
+class      required
+since      2008
+says       For a process without appropriate privileges, fchownat(fd, "f", -1,
+           its group, 0) of its own file fails with EACCES when fd was
+           opened O_RDONLY on a directory whose permissions were then
+           changed to deny search.
+test       t/020-fchownat-eacces-fd.c
+
+assertion  XSH.chown.021
+anchor     functions/chown.html#DESCRIPTION
+class      required
+since      2008
+says       For a process without appropriate privileges, fchownat(fd, "f", -1,
+           its group, 0) of its own file succeeds when fd was opened with
+           O_SEARCH on a directory whose permissions were then changed to
+           deny search.
+note       O_SEARCH itself is a header item (Tier 0); without it this
+           test is UNRESOLVED.
+test       t/021-fchownat-search.c

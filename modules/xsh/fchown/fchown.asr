@@ -1,0 +1,48 @@
+# XSH fchown()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fchown.001
+anchor     functions/fchown.html#DESCRIPTION
+class      required
+since      1988
+says       With appropriate privileges, fchown(fd, 65534, 65533) on a
+           descriptor open on f returns 0 and f then has those IDs; (uid_t)-1
+           and (gid_t)-1 leave the corresponding ID alone.
+needs      root
+test       t/001-sets-ids.c
+
+assertion  XSH.fchown.002
+anchor     functions/fchown.html#ERRORS/EPERM
+class      required
+since      1988
+says       A process without appropriate privileges can fchown() a file it
+           owns to (uid_t)-1 and its effective group ID, and cannot give it
+           to another user (EPERM).
+test       t/002-own-group.c
+
+assertion  XSH.fchown.003
+anchor     functions/fchown.html#ERRORS/EPERM
+class      required
+since      1988
+says       For a process without appropriate privileges, fchown() of a file it
+           does not own, open for reading, to (uid_t)-1 and its own group,
+           fails with EPERM.
+needs      root
+test       t/003-not-owner.c
+
+assertion  XSH.fchown.004
+anchor     functions/fchown.html#ERRORS
+class      required
+since      1988
+says       fchown() of a descriptor that is not open fails with EBADF.
+test       t/004-ebadf.c
+
+assertion  XSH.fchown.005
+anchor     functions/chown.html#DESCRIPTION
+class      required
+since      1988
+says       After fchown(fd, uid, gid) with the file's own IDs, fstat() reports a
+           later st_ctim (the test calls it every 10 ms for up to 3 s until
+           it moves).
+timeout    20
+test       t/005-ctime.c

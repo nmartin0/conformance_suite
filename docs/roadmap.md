@@ -25,7 +25,7 @@ verified; this file is the plan. Update both when a step finishes.
   from the user's copy under `build/`; about 3,350 checks.
 - Files and directories (in progress): `stat`/`lstat`/`fstatat`, `fstat`,
   `link`/`linkat`, `unlink`/`unlinkat`, `rename`/`renameat`, `mkdir`/`mkdirat`, `rmdir`,
-  `chmod`/`fchmodat`, `fchmod`.
+  `chmod`/`fchmodat`, `fchmod`, `chown`/`fchownat`, `fchown`, `lchown`.
 - Utilities: `true`, `false`.
 - Every module reviewed independently; findings applied.
 
@@ -42,7 +42,7 @@ verified; this file is the plan. Update both when a step finishes.
 4. **Header mutants for Tier 0**, and Tier 0 for the prose-only headers
    (`<stdint.h>`, `<float.h>` and the like) that `gen/specmodel.py` does
    not yet read.
-5. **Files and directories** (remaining): `opendir`/`readdir`, `chown`, `utimensat`,
+5. **Files and directories** (remaining): `opendir`/`readdir`, `utimensat`,
    `access`, `truncate`, `umask`.
 6. **Remaining todos** in the done modules (`ci/coverage.py --show MODULE`
    lists them): unprivileged EACCES cases, pseudo-terminal cases,
