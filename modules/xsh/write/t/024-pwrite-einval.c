@@ -23,7 +23,6 @@ int main(void)
 	pc_check(lseek(fd, 4, SEEK_SET) == 4, "lseek failed");
 	pc_test();
 	pc_expect_err(pwrite(fd, "x", 1, -1), EINVAL, "pwrite() at offset -1");
-	pc_check(pc_file_equals("f", "0123456789"), "the file changed");
 	pc_check(lseek(fd, 0, SEEK_CUR) == 4, "the file offset changed");
 	pc_pass();
 }

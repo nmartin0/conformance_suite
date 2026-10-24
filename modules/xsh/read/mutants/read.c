@@ -153,6 +153,10 @@ ssize_t read(int fd, void *buf, size_t n)
 			return 0;
 		if (IS("econnreset_as_eof") && e == ECONNRESET)
 			return 0;
+		if (IS("econnreset_as_eio") && e == ECONNRESET)
+			e = EIO;
+		if (IS("econnreset_as_eio") && e == ECONNRESET)
+			e = EIO;
 		errno = e;
 		return -1;
 	}

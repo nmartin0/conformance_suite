@@ -179,6 +179,9 @@ class      required
 since      1988
 says       write() fails with EBADF on a descriptor that is not open,
            and on one open only for reading.
+note       The file is checked to be unchanged because the descriptor is
+           open for reading only (open(), O_RDONLY), not because a
+           failed write() promises no partial effect.
 test       t/019-ebadf.c
 
 assertion  XSH.write.020
@@ -240,7 +243,11 @@ class      required
 since      2001
 says       write() on a stream socket that is no longer connected (its peer
            closed) fails with EPIPE and sends SIGPIPE to the thread.
-note       SOCK_SEQPACKET is left out: see SI-2.
+note       A socket whose peer is gone is also not connected, so
+           write()'s ECONNRESET and send()'s ENOTCONN apply too (XSH
+           2.3, as for XSH.write.027 and SI-1); SIGPIPE is required only
+           with EPIPE, and is checked as pending (blocked), since
+           nothing says it is delivered before write() returns.
 test       t/026-socket-peer-closed.c
 
 assertion  XSH.write.027

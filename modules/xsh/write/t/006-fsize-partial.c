@@ -54,9 +54,14 @@ static struct outcome limited_write(const char *path, int flags, rlim_t limit,
 		memset(&sa, 0, sizeof sa);
 		sa.sa_handler = catch_xfsz ? on_xfsz : SIG_IGN;
 		sigemptyset(&sa.sa_mask);
-		if (fd < 0 || sigaction(SIGXFSZ, &sa, NULL) != 0 ||
-		    getrlimit(RLIMIT_FSIZE, &rl) != 0)
+		if (fd < 0 || getrlimit(RLIMIT_FSIZE, &rl) != 0)
 			_exit(2);
+#ifdef SIGXFSZ	/* XSI: without it there is no signal to handle */
+		if (sigaction(SIGXFSZ, &sa, NULL) != 0)
+			_exit(2);
+#else
+		(void)sa;
+#endif
 		rl.rlim_cur = limit;
 		if (setrlimit(RLIMIT_FSIZE, &rl) != 0)
 			_exit(2);
@@ -67,9 +72,13 @@ static struct outcome limited_write(const char *path, int flags, rlim_t limit,
 		_exit(write(p[1], &o, sizeof o) == (ssize_t)sizeof o ? 0 : 2);
 	}
 	(void)close(p[1]);
-	if (waitpid(pid, &st, 0) == pid && WIFSIGNALED(st) && WTERMSIG(st) == SIGXFSZ)
+	if (waitpid(pid, &st, 0) != pid)
+		pc_unresolved("waitpid failed");
+#ifdef SIGXFSZ
+	if (WIFSIGNALED(st) && WTERMSIG(st) == SIGXFSZ)
 		pc_fail("the writer was killed by SIGXFSZ although it %s the signal",
 		    catch_xfsz ? "caught" : "ignored");
+#endif
 	if (!WIFEXITED(st) || WEXITSTATUS(st) != 0 ||
 	    read(p[0], &o, sizeof o) != (ssize_t)sizeof o)
 		pc_unresolved("the writing child could not run its write");

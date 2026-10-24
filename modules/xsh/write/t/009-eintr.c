@@ -95,6 +95,14 @@ int main(void)
 	rescue_rfd = p[0];
 	pc_test();
 	start_timer(1);
-	pc_expect_err(write(p[1], &c, 1), EINTR, "write() to a full pipe interrupted by SIGALRM");
+	{
+		ssize_t r = write(p[1], &c, 1);
+		int e = errno;
+
+		if (r == 1 && !fired)
+			pc_unresolved("the full pipe accepted a blocking write without blocking (its capacity is not fixed)");
+		errno = e;
+		pc_expect_err(r, EINTR, "write() to a full pipe interrupted by SIGALRM");
+	}
 	pc_pass();
 }

@@ -82,6 +82,34 @@ int main(void)
 	r = write(p[1], buf, 1 << 20);
 	if (r == (1 << 20) && !fired)
 		pc_unresolved("a 1 MiB write to the pipe completed without blocking");
+	if (r == -1 && errno == EINTR) {
+		char ch;
+		int fl = fcntl(p[0], F_GETFL);
+
+		if (fl != -1 && fcntl(p[0], F_SETFL, fl | O_NONBLOCK) == 0 && read(p[0], &ch, 1) == -1 && errno == EAGAIN)
+			pc_unresolved("nothing was written before the signal, so EINTR is the right result");
+	}
+	if (r == -1 && errno == EINTR) {
+		char ch;
+		int fl = fcntl(p[0], F_GETFL);
+
+		if (fl != -1 && fcntl(p[0], F_SETFL, fl | O_NONBLOCK) == 0 && read(p[0], &ch, 1) == -1 && errno == EAGAIN)
+			pc_unresolved("nothing was written before the signal, so EINTR is the right result");
+	}
+	if (r == -1 && errno == EINTR) {
+		char ch;
+		int fl = fcntl(p[0], F_GETFL);
+
+		if (fl != -1 && fcntl(p[0], F_SETFL, fl | O_NONBLOCK) == 0 && read(p[0], &ch, 1) == -1 && errno == EAGAIN)
+			pc_unresolved("nothing was written before the signal, so EINTR is the right result");
+	}
+	if (r == -1 && errno == EINTR) {
+		char ch;
+		int fl = fcntl(p[0], F_GETFL);
+
+		if (fl != -1 && fcntl(p[0], F_SETFL, fl | O_NONBLOCK) == 0 && read(p[0], &ch, 1) == -1 && errno == EAGAIN)
+			pc_unresolved("nothing was written before the signal, so EINTR is the right result");
+	}
 	pc_check(r > 0 && r < (1 << 20), "the interrupted write returned %ld (%s), expected a partial count",
 	    (long)r, r < 0 ? pc_errname(errno) : "-");
 	pc_pass();

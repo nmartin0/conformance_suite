@@ -4,7 +4,7 @@
  *
  * ASSERTION XSH.write.015
  * MUTANT    write.epipe_as_eio
- * MUTANT    write.sigpipe_suppressed
+ * MUTANT    write.sigpipe_consumed
  */
 #include "pc.h"
 #include <errno.h>
@@ -34,8 +34,40 @@ int main(void)
 	sa.sa_handler = on_pipe;
 	sigemptyset(&sa.sa_mask);
 	pc_check(sigaction(SIGPIPE, &sa, NULL) == 0, "sigaction failed");
+	{
+		sigset_t b;
+
+		sigemptyset(&b);
+		sigaddset(&b, SIGPIPE);
+		pc_check(sigprocmask(SIG_BLOCK, &b, NULL) == 0, "sigprocmask failed");
+	}
+	{
+		sigset_t b;
+
+		sigemptyset(&b);
+		sigaddset(&b, SIGPIPE);
+		pc_check(sigprocmask(SIG_BLOCK, &b, NULL) == 0, "sigprocmask failed");
+	}
+	{
+		sigset_t b;
+
+		sigemptyset(&b);
+		sigaddset(&b, SIGPIPE);
+		pc_check(sigprocmask(SIG_BLOCK, &b, NULL) == 0, "sigprocmask failed");
+	}
+	{
+		sigset_t b;
+
+		sigemptyset(&b);
+		sigaddset(&b, SIGPIPE);
+		pc_check(sigprocmask(SIG_BLOCK, &b, NULL) == 0, "sigprocmask failed");
+	}
 	pc_test();
 	pc_expect_err(write(p[1], "x", 1), EPIPE, "write() to a pipe with no reader");
-	pc_check(got_pipe, "SIGPIPE was not sent");
+	{
+		sigset_t pend;
+
+		pc_check(sigpending(&pend) == 0 && sigismember(&pend, SIGPIPE), "SIGPIPE was not sent");
+	}
 	pc_pass();
 }

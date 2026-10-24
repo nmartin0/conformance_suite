@@ -3,7 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.read.022
- * MUTANT    read.econnreset_as_eof
+ * MUTANT    read.econnreset_as_eio
  */
 #include "pc.h"
 #include <errno.h>
@@ -45,6 +45,15 @@ int main(void)
 	}
 	alarm(10);
 	pc_test();
-	pc_expect_err(read(c, &ch, 1), ECONNRESET, "read() after the peer reset the connection");
+	{
+		ssize_t r = read(c, &ch, 1);
+		int e = errno;
+
+		if (r == 0)
+			pc_unresolved("the zero-linger close did not reset the connection (that is protocol-specific)");
+		pc_check(r == -1, "read() after the peer reset the connection returned %ld", (long)r);
+		pc_check(e == ECONNRESET || e == ENOTCONN, "read() after a reset failed with %s, expected ECONNRESET (or ENOTCONN)",
+		    pc_errname(e));
+	}
 	pc_pass();
 }

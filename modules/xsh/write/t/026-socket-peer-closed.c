@@ -4,7 +4,7 @@
  *
  * ASSERTION XSH.write.026
  * MUTANT    write.epipe_as_eio
- * MUTANT    write.sigpipe_suppressed
+ * MUTANT    write.sigpipe_consumed
  */
 #include "pc.h"
 #include <errno.h>
@@ -34,9 +34,26 @@ int main(void)
 	sa.sa_handler = on_pipe;
 	sigemptyset(&sa.sa_mask);
 	pc_check(sigaction(SIGPIPE, &sa, NULL) == 0, "sigaction failed");
+	{
+		sigset_t b;
+
+		sigemptyset(&b);
+		sigaddset(&b, SIGPIPE);
+		pc_check(sigprocmask(SIG_BLOCK, &b, NULL) == 0, "sigprocmask failed");
+	}
 	alarm(10);
 	pc_test();
-	pc_expect_err(write(sv[0], "x", 1), EPIPE, "write() on a stream socket whose peer is gone");
-	pc_check(got_pipe, "SIGPIPE was not sent");
+	{
+		sigset_t pend;
+		ssize_t r = write(sv[0], "x", 1);
+		int e = errno;
+
+		pc_check(r == -1, "write() on a stream socket whose peer is gone returned %ld", (long)r);
+		pc_check(e == EPIPE || e == ECONNRESET || e == ENOTCONN,
+		    "write() on a stream socket whose peer is gone failed with %s, expected EPIPE (or ECONNRESET, ENOTCONN)",
+		    pc_errname(e));
+		if (e == EPIPE)
+			pc_check(sigpending(&pend) == 0 && sigismember(&pend, SIGPIPE), "EPIPE, but SIGPIPE was not sent");
+	}
 	pc_pass();
 }
