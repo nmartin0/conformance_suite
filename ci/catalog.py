@@ -109,14 +109,25 @@ def id_module(aid):
     return None
 
 
-HEADER_RE = re.compile(r"^\s*(?:/?\*|#)\s*(ASSERTION|MUTANT)\s+(\S+)\s*$")
+HEADER_RE = re.compile(r"^\s*(?:/?\*|#)\s*(ASSERTION|MUTANT|VARIANT)\s+(\S+)\s*$")
 
 
 def test_header(path):
     """Return (assertion ids, mutant names) declared in a test's header."""
-    ids, mutants = [], []
-    for line in path.read_text().splitlines()[:40]:
+    ids, mutants, _ = test_header_full(path)
+    return ids, mutants
+
+
+def test_header_full(path):
+    """Return (assertion ids, mutant names, variant names) declared in a test's header.
+
+    A MUTANT is a planted fault the test must FAIL; a VARIANT is behaviour the
+    standard allows (but the reference systems may not show) that the test
+    must PASS.
+    """
+    ids, mutants, variants = [], [], []
+    for line in path.read_text().splitlines()[:60]:
         m = HEADER_RE.match(line)
         if m:
-            (ids if m.group(1) == "ASSERTION" else mutants).append(m.group(2))
-    return ids, mutants
+            {"ASSERTION": ids, "MUTANT": mutants, "VARIANT": variants}[m.group(1)].append(m.group(2))
+    return ids, mutants, variants

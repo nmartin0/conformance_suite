@@ -5,6 +5,7 @@
  * ASSERTION XSH.futimens.003
  * MUTANT    utimensat.omit_ignored
  * MUTANT    utimensat.swaps
+ * VARIANT   futimens.utime_now_m1
  */
 #include "pc.h"
 #include <errno.h>

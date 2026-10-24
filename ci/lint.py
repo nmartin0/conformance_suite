@@ -19,7 +19,8 @@
 #   - an anchor's page or section is missing from the standard (when
 #     --standard points at a local copy of the HTML edition)
 #
-# --list-mutants prints "ID MUTANT" pairs for ci/mutate.sh.
+# --list-mutants prints "ID MUTANT" pairs for ci/mutate.sh; --list-variants
+# prints "ID VARIANT" pairs (behaviour the text allows, which must PASS).
 
 import argparse
 import re
@@ -35,6 +36,7 @@ ap.add_argument("--modules", type=Path, default=root / "modules")
 ap.add_argument("--standard", type=Path,
                 help="local copy of the POSIX.1-2024 HTML (susv5-html)")
 ap.add_argument("--list-mutants", action="store_true")
+ap.add_argument("--list-variants", action="store_true")
 args = ap.parse_args()
 
 errors = []
@@ -50,6 +52,7 @@ OPTION_CODES = {"BASE"} | {l.split()[0] for l in (root / "core/options.list").re
                            if l.strip() and not l.startswith("#")}
 by_id = {}
 mutant_pairs = []
+variant_pairs = []
 
 for m in mods:
     where = m.dir / "MODULE"
@@ -113,7 +116,7 @@ for m in mods:
             err(here, f"test file {test} does not exist")
             continue
         used_tests.setdefault(tpath.resolve(), []).append(a.id)
-        ids, mutants = catalog.test_header(tpath)
+        ids, mutants, variants = catalog.test_header_full(tpath)
         if ids != [a.id]:
             err(tpath.relative_to(args.modules),
                 f"header names {ids or 'no assertion'}, expected [{a.id}]")
@@ -135,6 +138,24 @@ for m in mods:
                     err(tpath.relative_to(args.modules),
                         f"mutant {mu} has no file {mf.relative_to(args.modules)}")
             mutant_pairs.append((a.id, mu))
+        for va in variants:
+            fn = va.split(".", 1)[0]
+            name = va.split(".", 1)[1] if "." in va else ""
+            if va in mutants:
+                err(tpath.relative_to(args.modules), f"{va} is declared both MUTANT and VARIANT")
+            if tpath.suffix == ".c":
+                vdir = args.modules / "xsh" / fn / "variants"
+                srcs = list(vdir.glob("*.c"))
+                text = "".join(s.read_text() for s in srcs)
+                if not (vdir / f"{va}.h").is_file() and (not srcs or f'"{name}"' not in text):
+                    err(tpath.relative_to(args.modules),
+                        f"variant {va} not implemented in xsh/{fn}/variants/")
+            else:
+                vf = args.modules / "xcu" / fn / "variants" / f"{va}.sh"
+                if not vf.is_file():
+                    err(tpath.relative_to(args.modules),
+                        f"variant {va} has no file {vf.relative_to(args.modules)}")
+            variant_pairs.append((a.id, va))
 
     for t in sorted((m.dir / "t").glob("*")) if (m.dir / "t").is_dir() else []:
         if t.suffix not in (".c", ".sh"):
@@ -228,6 +249,11 @@ for f in sorted(root.rglob("*")):
     if any(m in text for m in MARKERS):
         err(f.relative_to(root), "contains text copied from the standard")
 
+if args.list_variants:
+    for aid, va in variant_pairs:
+        print(aid, va)
+    sys.exit(0)
+
 if args.list_mutants:
     for aid, mu in mutant_pairs:
         print(aid, mu)
@@ -237,5 +263,5 @@ for e in errors:
     print("lint:", e)
 n_asr = len(by_id)
 print(f"lint: {len(mods)} modules, {n_asr} assertions, {len(mutant_pairs)} "
-      f"mutants, {len(errors)} problems")
+      f"mutants, {len(variant_pairs)} variants, {len(errors)} problems")
 sys.exit(1 if errors else 0)

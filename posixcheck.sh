@@ -17,6 +17,8 @@
 #   --selftest        run only the harness self-tests
 #   --root DIR        modules directory (default: the suite's modules/)
 #   --mutant NAME     CI only: run with a planted fault (needs --only)
+#   --variant NAME    CI only: run with a conforming variant, behaviour the
+#                     standard allows planted the same way (needs --only)
 #
 # Needs only this shell, a C compiler and mkdir. Writes DIR/run.log, one
 # line per assertion; it never summarizes, sorts or deletes anything.
@@ -75,6 +77,7 @@ pc_selftest=yes
 pc_selftest_only=no
 pc_modroot=$pc_root/modules
 pc_mutant=
+pc_variant=
 pc_args=
 
 pc_need_arg() {
@@ -94,6 +97,7 @@ while [ $# -gt 0 ]; do
 	--selftest) pc_selftest_only=yes; shift ;;
 	--root) pc_need_arg $# "$1"; pc_modroot=$2; shift 2 ;;
 	--mutant) pc_need_arg $# "$1"; pc_mutant=$2; shift 2 ;;
+	--variant) pc_need_arg $# "$1"; pc_variant=$2; shift 2 ;;
 	-h | --help)
 		while IFS= read -r pc_l; do
 			case $pc_l in
@@ -118,6 +122,12 @@ pc_abs "$pc_modroot"; pc_modroot=$pc_absv
 if [ -n "$pc_profile" ]; then pc_abs "$pc_profile"; pc_profile=$pc_absv; fi
 if [ -n "$pc_mutant" ] && [ -z "$pc_only" ]; then
 	pc_die "--mutant needs --only"
+fi
+if [ -n "$pc_variant" ] && [ -z "$pc_only" ]; then
+	pc_die "--variant needs --only"
+fi
+if [ -n "$pc_variant" ] && [ -n "$pc_mutant" ]; then
+	pc_die "--variant and --mutant cannot be combined"
 fi
 
 # ---------- results directory ----------
@@ -229,6 +239,18 @@ if [ -z "$pc_sut_sh" ]; then
 fi
 pc_t=$("$pc_sut_sh" "$pc_root/core/trust.sh" "$pc_trustdir/sut")
 [ -z "$pc_t" ] || pc_abort "tests cannot run reliably: $pc_sut_sh check '$pc_t' failed"
+
+# A build for Linux on a kernel that is not Linux runs through a
+# compatibility layer, which tests that layer, not the system (RULES.md 12).
+pc_target= pc_sysname=
+while read -r pc_k pc_v; do
+	case $pc_k in target) pc_target=$pc_v ;; sysname) pc_sysname=$pc_v ;; esac
+done <<EOF
+$("$pc_probe" sysinfo)
+EOF
+if [ "$pc_target" = linux ] && [ "$pc_sysname" != Linux ]; then
+	pc_abort "built for Linux but running on $pc_sysname (a Linux compatibility layer?): build the suite there with its own compiler"
+fi
 
 # ---------- claims and profile ----------
 
@@ -411,8 +433,8 @@ pc_assertion() {
 	if [ -e "$ctx_state/$pc_id" ]; then return 0; fi
 	# A planted fault is for the selected assertion only, never for the
 	# prerequisites run with it.
-	pc_mut=
-	[ "$pc_id" = "$pc_only" ] && pc_mut=$pc_mutant
+	pc_mut= pc_var=
+	[ "$pc_id" = "$pc_only" ] && pc_mut=$pc_mutant pc_var=$pc_variant
 
 	pc_when=${a_when:-${mod_option:-BASE}}
 	if [ "${a_class:-required}" = untestable ]; then
@@ -456,8 +478,16 @@ pc_assertion() {
 		pc_mlibs=$(pc_usable_libs $mod_libs)
 		pc_flags=-D_POSIX_C_SOURCE=202405L
 		case "|$pc_when+" in *[+'|']XSI[+'|']*) pc_flags=-D_XOPEN_SOURCE=800 ;; esac
+		# A variant may change what the headers define (a constant with
+		# another allowed value): it is a header included first, and the
+		# test is built apart.
+		pc_vinc=
+		if [ -n "$pc_var" ] && [ -f "$pc_modroot/xsh/${pc_var%%.*}/variants/$pc_var.h" ]; then
+			pc_vinc="-include $pc_modroot/xsh/${pc_var%%.*}/variants/$pc_var.h"
+			pc_exe=$pc_exe.variant
+		fi
 		# shellcheck disable=SC2086 # mod_libs is a word list
-		if ! "$pc_cc" $pc_flags $pc_ccstrict -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
+		if ! "$pc_cc" $pc_flags $pc_ccstrict $pc_vinc -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
 		    "$pc_bin/pc.o" $pc_mlibs >"$ctx_out/$pc_id.build.txt" 2>&1 \
 		    </dev/null; then
 			if [ "$mod_buildfail" = FAIL ]; then
@@ -474,11 +504,16 @@ pc_assertion() {
 		set -- "$pc_exe"
 		pc_extra=
 		if [ -n "$pc_mut" ]; then pc_mutant_c || return 0; fi
+		if [ -n "$pc_var" ]; then pc_variant_c || return 0; fi
 		;;
 	*.sh)
 		set -- "$pc_sut_sh" "$pc_src"
 		pc_mutant_file=
 		if [ -n "$pc_mut" ]; then pc_mutant_sh || return 0; fi
+		if [ -n "$pc_var" ]; then
+			pc_mutant_file=$pc_modroot/xcu/${pc_var%%.*}/variants/$pc_var.sh
+			[ -f "$pc_mutant_file" ] || pc_abort "no variant file $pc_mutant_file"
+		fi
 		;;
 	*)
 		pc_log UNINITIATED "$pc_id" 0 "unknown test type $a_test"
@@ -491,7 +526,7 @@ pc_assertion() {
 	: >"$pc_rfile"
 	# shellcheck disable=SC2086 # pc_extra is a word list
 	PC_RESULT=$pc_rfile PC_ASSERTION=$pc_id PC_CORE=$pc_root/core \
-	    PC_PHASE=setup PC_MUTANT=$pc_mut \
+	    PC_PHASE=setup PC_MUTANT=$pc_mut PC_VARIANT=$pc_var \
 	    PC_MUTANT_FILE=${pc_mutant_file:-} \
 	    PC_SELFTEST_DIR=$ctx_results/survivors \
 	    "$pc_pcexec" -w "$ctx_tmp" -o "$pc_sfile" -t "${a_timeout:-60}" \
@@ -598,6 +633,25 @@ pc_mutant_c() {
 		"$pc_cc" -shared -fPIC -o "$pc_so" "$@" ${PC_MUTANT_LDFLAGS--ldl} \
 		    >"$ctx_out/mutant-$pc_func.build.txt" 2>&1 </dev/null ||
 		    pc_abort "cannot build mutant library for $pc_func"
+	fi
+	pc_extra="-e LD_PRELOAD=$pc_so"
+}
+
+# C: modules/xsh/<function>/variants/*.c builds one preload library that
+# implements every "<function>.<variant>" (PC_VARIANT) that is not only a
+# header (variants/<function>.<variant>.h, included before the test).
+pc_variant_c() {
+	pc_func=${pc_var%%.*}
+	pc_vdir=$pc_modroot/xsh/$pc_func/variants
+	set -- "$pc_vdir"/*.c
+	[ -f "$1" ] || return 0
+	pc_so=$ctx_build/variants/$pc_func.so
+	mkdir -p "$ctx_build/variants" || pc_abort "cannot create variant dir"
+	if [ ! -f "$pc_so" ]; then
+		# shellcheck disable=SC2086
+		"$pc_cc" -shared -fPIC -I "$pc_root/core" -o "$pc_so" "$@" ${PC_MUTANT_LDFLAGS--ldl} \
+		    >"$ctx_out/variant-$pc_func.build.txt" 2>&1 </dev/null ||
+		    pc_abort "cannot build variant library for $pc_func"
 	fi
 	pc_extra="-e LD_PRELOAD=$pc_so"
 }
@@ -758,7 +812,7 @@ if [ "$pc_selftest" = yes ]; then
 	pc_stdir=$pc_results/selftest.$pc_n
 	printf 'posixcheck: harness self-tests (%s)\n' "$pc_stdir"
 	(
-		pc_only= pc_sel_options= pc_args= pc_mutant=
+		pc_only= pc_sel_options= pc_args= pc_mutant= pc_variant=
 		pc_ctx "$pc_stdir" "$pc_root/core/selftest/modules" yes
 		mkdir -p "$ctx_results/survivors" || exit 1
 		pc_run_modules
@@ -799,6 +853,7 @@ EOF
 		printf '# euid %s\n' "$pc_euid"
 		printf '# profile %s\n' "${pc_profile:-none}"
 		[ -n "$pc_mutant" ] && printf '# mutant %s\n' "$pc_mutant"
+		[ -n "$pc_variant" ] && printf '# variant %s\n' "$pc_variant"
 		printf '# started %s\n' "$("$pc_probe" now)"
 		while IFS= read -r pc_l; do
 			printf '# %s\n' "$pc_l"

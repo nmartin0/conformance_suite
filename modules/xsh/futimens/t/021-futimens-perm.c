@@ -6,6 +6,7 @@
  * MUTANT    futimens.perm_owner_only
  * MUTANT    futimens.null_unchecked
  * MUTANT    futimens.omit_checked
+ * VARIANT   futimens.utime_now_m1
  */
 #include "pc.h"
 #include <errno.h>

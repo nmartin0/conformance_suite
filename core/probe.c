@@ -11,7 +11,8 @@
  *                    claim CODE MACRO yes|no macro=V sysconf=V compile=yes|no
  *                    (compile: the macro is defined and not -1, which is
  *                    what a check of the headers alone needs)
- *   probe sysinfo    uname fields, one "key value" per line
+ *   probe sysinfo    uname fields, one "key value" per line, and
+ *                    "target OS" (what the compiler builds for)
  *   probe cspath     the value of confstr(_CS_PATH)
  *   probe euid       the effective user ID
  *   probe now        current UTC time, ISO 8601
@@ -83,6 +84,28 @@ static int sysinfo(void)
 	printf("sysname %s\nnodename %s\nrelease %s\nversion %s\n"
 	    "machine %s\n", u.sysname, u.nodename, u.release, u.version,
 	    u.machine);
+	/* The system the compiler builds for, from its predefined macros: run
+	 * through a compatibility layer, a Linux build says "linux" on a kernel
+	 * whose sysname is not Linux. */
+	printf("target %s\n",
+#if defined(__linux__)
+	    "linux"
+#elif defined(__FreeBSD__)
+	    "freebsd"
+#elif defined(__NetBSD__)
+	    "netbsd"
+#elif defined(__OpenBSD__)
+	    "openbsd"
+#elif defined(__DragonFly__)
+	    "dragonfly"
+#elif defined(__APPLE__) && defined(__MACH__)
+	    "darwin"
+#elif defined(__sun) && defined(__SVR4)
+	    "sunos"
+#else
+	    "other"
+#endif
+	    );
 #ifdef _POSIX_VERSION
 	printf("posix_version %ld\n", (long)_POSIX_VERSION);
 #endif

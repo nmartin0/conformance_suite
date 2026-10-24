@@ -39,9 +39,39 @@ every other project it learns from. They are not optional.
    Group; if posixcheck is ever distributed, rename it and revisit these
    rules first.
 
+## The oracle
+
+8. The standard is the only oracle. Every expected result comes from a
+   passage of the text, cited by the assertion's anchor; no expectation
+   comes from what any system does. Where the text allows several
+   outcomes (XSH 2.3's choice of errors, "may fail" errors, unspecified
+   and implementation-defined results, timing with no stated bound), the
+   test accepts all of them. Where it leaves open something the test must
+   decide, the result is UNRESOLVED, or the assertion is `disputed` with a
+   standard issue; it is never what a reference system does.
+9. Reference systems (Linux with glibc or musl, and later the BSDs and
+   illumos) check the suite, not the other way round: that each test
+   builds, runs, finishes and catches its planted faults. An expectation
+   is never changed because of a run result unless the change cites the
+   text; "system X does this" is not a reason. Expected non-PASS results
+   on a reference system go in `known/` and `docs/linux-deviations.md`,
+   as records of that system, never as the definition of correct.
+10. Each assertion's expected result is predicted, with the passage it
+    rests on, before its test first runs on any system; afterwards the
+    matches are reviewed as well as the mismatches.
+11. A test must tolerate what the text allows. Where it does allow a
+    choice that the reference systems do not exercise, the test declares
+    a VARIANT that plants the other choice, and `ci/mutate.sh` checks that
+    the test still passes (a fault must FAIL; a variant must PASS). Each
+    variant cites the passage that allows it.
+12. Results from a non-Linux system count only when the suite was built
+    there from source with that system's own compiler and C library, not
+    run through a Linux compatibility layer (FreeBSD's Linuxulator,
+    illumos lx zones and the like).
+
 ## Checking
 
-8. Before each commit, check that no standard text is present:
+13. Before each commit, check that no standard text is present:
 
        grep -rIl 'The IEEE and The Open Group, All Rights Reserved' . \
            --exclude-dir=.git && echo "STANDARD TEXT FOUND"
