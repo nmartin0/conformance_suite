@@ -24,10 +24,6 @@ int main(void)
 	lim = pc_lowest_free_fd() + 4;
 	if (lim < 20)
 		lim = 20;	/* not below {_POSIX_OPEN_MAX}: getrlimit(), APPLICATION USAGE */
-	if (lim < 20)
-		lim = 20;	/* not below {_POSIX_OPEN_MAX}: getrlimit(), APPLICATION USAGE */
-	if (lim < 20)
-		lim = 20;	/* not below {_POSIX_OPEN_MAX}: getrlimit(), APPLICATION USAGE */
 	for (i = 0; i < 1024; i++)
 		if (fcntl(i, F_GETFD) != -1 && i + 1 > lim)
 			lim = i + 1;

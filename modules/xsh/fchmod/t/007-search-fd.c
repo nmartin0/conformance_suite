@@ -224,7 +224,7 @@ int main(void)
 		pc_check(fd >= 0, "open(d, O_SEARCH) failed: %s", pc_errname(errno));
 		pc_test();
 		pc_check(fchmod(fd, 0750) == 0, "fchmod() of an O_SEARCH descriptor failed: %s", pc_errname(errno));
-		pc_check(bits("d") == 0750, "the directory has bits %#o", bits("d"));
+		pc_check((bits("d") & ~02000u) == 0750, "the directory has bits %#o", bits("d"));
 #endif
 	}
 	pc_pass();

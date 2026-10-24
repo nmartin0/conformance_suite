@@ -217,9 +217,9 @@ int main(void)
 		pc_make_dir("d");
 		pc_test();
 		pc_check(chmod("d", 01755) == 0, "chmod(d, 01755) failed: %s", pc_errname(errno));
-		pc_check(bits("d") == 01755, "after chmod(d, 01755) the bits are %#o", bits("d"));
+		pc_check((bits("d") & ~02000u) == 01755, "after chmod(d, 01755) the bits are %#o", bits("d"));
 		pc_check(chmod("d", 0700) == 0, "chmod(d, 0700) failed: %s", pc_errname(errno));
-		pc_check(bits("d") == 0700, "after chmod(d, 0700) the bits are %#o", bits("d"));
+		pc_check((bits("d") & ~02000u) == 0700, "after chmod(d, 0700) the bits are %#o", bits("d"));
 	}
 	pc_pass();
 }

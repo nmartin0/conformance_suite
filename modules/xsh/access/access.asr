@@ -108,8 +108,8 @@ assertion  XSH.access.011
 anchor     functions/access.html#ERRORS/ENOTDIR
 class      disputed
 since      2008
-says       access("f/x", F_OK) and access("f/", F_OK), with f a regular file,
-           fail with ENOTDIR.
+says       access("f/x", F_OK), with f a regular file, fails with
+           ENOTDIR.
 note       disputed (Q-8): the name also names no existing file, so
            ENOENT applies too and XSH 2.3 lets either error be reported;
            every reference system reports the more specific one.
@@ -202,3 +202,12 @@ needs      root
 note       setregid() (XSI) sets the group IDs apart, so the test runs
            only on XSI systems as root.
 test       t/020-real-gid.c
+
+assertion  XSH.access.021
+anchor     functions/access.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       access("f/", F_OK) with f a regular file fails with ENOTDIR.
+note       Only ENOTDIR applies: the last component exists. The f/x
+           case, where ENOENT may apply too (Q-8), is XSH.access.011.
+test       t/021-trailing-slash-file.c

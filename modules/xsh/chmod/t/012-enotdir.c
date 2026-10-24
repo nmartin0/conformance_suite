@@ -4,7 +4,6 @@
  *
  * ASSERTION XSH.chmod.012
  * MUTANT    chmod.enotdir_as_enoent
- * MUTANT    chmod.slash_ignored
  */
 #include "pc.h"
 #include <errno.h>
@@ -220,7 +219,6 @@ int main(void)
 		pc_check(chmod("f", 0644) == 0, "chmod failed");
 		pc_test();
 		pc_expect_err(chmod("f/x", 0600), ENOTDIR, "chmod(\"f/x\", 0600)");
-		pc_expect_err(chmod("f/", 0600), ENOTDIR, "chmod(\"f/\", 0600)");
 		pc_check(bits("f") == 0644, "a failed chmod() changed the mode");
 		(void)r;
 	}

@@ -135,8 +135,7 @@ assertion  XSH.chown.014
 anchor     functions/chown.html#ERRORS/ENOTDIR
 class      disputed
 since      2008
-says       chown("f/x") and chown("f/"), with f a regular file, fail with
-           ENOTDIR.
+says       chown("f/x"), with f a regular file, fails with ENOTDIR.
 note       disputed (Q-8): the name also names no existing file, so
            ENOENT applies too and XSH 2.3 lets either error be reported;
            every reference system reports the more specific one.
@@ -206,3 +205,13 @@ says       For a process without appropriate privileges, fchownat(fd, "f", -1,
 note       O_SEARCH itself is a header item (Tier 0); without it this
            test is UNRESOLVED.
 test       t/021-fchownat-search.c
+
+assertion  XSH.chown.022
+anchor     functions/chown.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       chown("f/", (uid_t)-1, (gid_t)-1) with f a regular file fails
+           with ENOTDIR.
+note       Only ENOTDIR applies: the last component exists. The f/x
+           case, where ENOENT may apply too (Q-8), is XSH.chown.014.
+test       t/022-trailing-slash-file.c

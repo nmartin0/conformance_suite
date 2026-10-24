@@ -277,11 +277,32 @@ int main(void)
 
 		if (sizeof(off_t) < 8 || (bits != -1 && bits < 34))
 			pc_notinuse("files here cannot reach 2^32 + 5 bytes ({FILESIZEBITS} %ld)", bits);
+		{
+			struct rlimit rl;
+
+			if (getrlimit(RLIMIT_FSIZE, &rl) == 0 && rl.rlim_cur != RLIM_INFINITY && rl.rlim_cur < (rlim_t)len)
+				pc_notinuse("the file size limit (RLIMIT_FSIZE) is below 2^32 + 5 bytes");
+		}
+#ifdef SIGXFSZ
+		{
+			sigset_t s;
+
+			sigemptyset(&s);
+			sigaddset(&s, SIGXFSZ);
+			(void)sigprocmask(SIG_BLOCK, &s, NULL);
+		}
+#endif
 		pc_make_file("f", "x");
 		fd = open("f", O_RDWR);
 		pc_check(fd >= 0, "open failed: %s", pc_errname(errno));
 		pc_test();
-		pc_check(ftruncate(fd, len) == 0, "ftruncate(2^32 + 5) failed: %s", pc_errname(errno));
+		{
+			int r = ftruncate(fd, len), e = errno;
+
+			if (r != 0 && (e == ENOSPC || e == EFBIG))
+				pc_unresolved("ftruncate(2^32 + 5) failed with %s: no room here, or no sparse files", pc_errname(e));
+			pc_check(r == 0, "ftruncate(2^32 + 5) failed: %s", pc_errname(e));
+		}
 		pc_check(fstat(fd, &st) == 0, "fstat failed");
 		pc_check(st.st_size == len, "st_size is %lld, expected %lld", (long long)st.st_size, (long long)len);
 		(void)ftruncate(fd, 0);

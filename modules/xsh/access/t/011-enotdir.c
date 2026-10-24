@@ -4,7 +4,6 @@
  *
  * ASSERTION XSH.access.011
  * MUTANT    access.enotdir_as_enoent
- * MUTANT    access.slash_ignored
  */
 #include "pc.h"
 #include <errno.h>
@@ -228,7 +227,6 @@ int main(void)
 		pc_make_file("f", "x");
 		pc_test();
 		pc_expect_err(access("f/x", F_OK), ENOTDIR, "access(\"f/x\", F_OK)");
-		pc_expect_err(access("f/", F_OK), ENOTDIR, "access(\"f/\", F_OK)");
 	}
 	pc_pass();
 }

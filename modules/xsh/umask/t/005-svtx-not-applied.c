@@ -274,8 +274,8 @@ int main(void)
 		(void)umask(01022);
 		if (mkdir("d", 01777) != 0)
 			pc_unresolved("mkdir failed: %s", pc_errname(errno));
-		pc_check((lst("d").st_mode & 07777) == 01755, "the directory has bits %#o, expected 01755",
-			 (unsigned)(lst("d").st_mode & 07777));
+		pc_check((lst("d").st_mode & 05777) == 01755, "the directory has bits %#o, expected 01755",
+			 (unsigned)(lst("d").st_mode & 07777));	/* S_ISGID may come from the parent (mkdir()) */
 	}
 	pc_pass();
 }

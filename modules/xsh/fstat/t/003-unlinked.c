@@ -196,10 +196,6 @@ int main(void)
 		pc_check(fstat(fd, &st) == 0, "fstat() of an unlinked file failed: %s", pc_errname(errno));
 		if (st.st_nlink != 0 && kept_elsewhere(".", &st))
 			pc_unresolved("the file system keeps the removed open file under another name");
-		if (st.st_nlink != 0 && kept_elsewhere(".", &st))
-			pc_unresolved("the file system keeps the removed open file under another name");
-		if (st.st_nlink != 0 && kept_elsewhere(".", &st))
-			pc_unresolved("the file system keeps the removed open file under another name");
 		pc_check(st.st_nlink == 0, "st_nlink %lu, the file has no links left", (unsigned long)st.st_nlink);
 		pc_check(st.st_size == 4, "st_size %lld, the file still has 4 bytes", (long long)st.st_size);
 	}

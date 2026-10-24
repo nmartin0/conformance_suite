@@ -231,7 +231,7 @@ int main(void)
 			pc_check(bits("f") == m[i], "after fchmod(%#o) the bits are %#o", (unsigned)m[i], bits("f"));
 		}
 		pc_check(fchmod(dfd, 0750) == 0, "fchmod() of a directory failed: %s", pc_errname(errno));
-		pc_check(bits("d") == 0750, "the directory has bits %#o", bits("d"));
+		pc_check((bits("d") & ~02000u) == 0750, "the directory has bits %#o", bits("d"));
 	}
 	pc_pass();
 }

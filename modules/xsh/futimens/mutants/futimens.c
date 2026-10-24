@@ -94,6 +94,8 @@ int futimens(int fd, const struct timespec times[2])
 
 		if (IS("perm_owner_only") && both_now && other)
 			return fail(EACCES);	/* write access no longer enough */
+		if (IS("needs_writable_fd") && both_now && other && (fcntl(fd, F_GETFL) & O_ACCMODE) == O_RDONLY)
+			return fail(EACCES);	/* asks the descriptor, not the file, for write access */
 		if (IS("omit_checked") && both_omit && other)
 			return fail(EPERM);
 		if (IS("null_unchecked") && times == NULL && other) {

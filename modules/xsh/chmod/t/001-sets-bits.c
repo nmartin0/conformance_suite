@@ -224,7 +224,7 @@ int main(void)
 		pc_make_dir("d");
 		pc_test();
 		pc_check(chmod("d", 0750) == 0, "chmod(d, 0750) failed: %s", pc_errname(errno));
-		pc_check(bits("d") == 0750, "after chmod(d, 0750) the bits are %#o", bits("d"));
+		pc_check((bits("d") & ~02000u) == 0750, "after chmod(d, 0750) the bits are %#o", bits("d"));
 		for (i = 0; i < 5; i++) {
 			r = chmod("f", m[i]);
 			pc_check(r == 0, "chmod(f, %#o) returned %d (%s)", (unsigned)m[i], r, pc_errname(errno));

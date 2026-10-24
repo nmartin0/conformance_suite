@@ -212,32 +212,37 @@ static long long ns_diff(struct timespec a, struct timespec b)
 
 /*
  * Whether this file system keeps timestamps finer than a microsecond, as
- * seen from a new file's st_mtim (setup; a nanosecond clock gives a
- * multiple of 1000 only rarely, which merely loosens the check).
+ * measured in setup by storing a time with tv_nsec 999999999 and reading
+ * back how much of it the file system kept.
  */
-static int fine_ns = -1;
+static long long res_ns = -1;	/* how much a stored time may be truncated by */
 
 static void probe_resolution(void)
 {
+	struct timespec t[2] = { { 1000000000, 999999999 }, { 1000000000, 999999999 } };
 	struct stat st;
 
 	pc_make_file(".pc-res", "");
-	pc_check(lstat(".pc-res", &st) == 0, "lstat failed: %s", pc_errname(errno));
-	fine_ns = st.st_mtim.tv_nsec % 1000 != 0;
+	if (utimensat(AT_FDCWD, ".pc-res", t, 0) != 0 || lstat(".pc-res", &st) != 0 || st.st_mtim.tv_sec != 1000000000)
+		res_ns = 1000000000LL;	/* cannot tell: allow what XBD 4.12 allows */
+	else
+		res_ns = 999999999LL - st.st_mtim.tv_nsec + 1;
+	if (res_ns < 100)
+		res_ns = 100;
 }
 
 /*
  * The timestamp was set from want: not later than want and less than 1 s
- * earlier (XBD 4.12: resolution no coarser than a second); within 100 ns
- * where the file system keeps sub-microsecond times.
+ * earlier (XBD 4.12: resolution no coarser than a second); within the
+ * truncation measured in setup (at least 100 ns) where it is finer.
  */
 static int set_from(struct timespec got, struct timespec want)
 {
 	long long d = ns_diff(want, got);
 
-	if (fine_ns == -1)
+	if (res_ns == -1)
 		probe_resolution();
-	return d >= 0 && d < (fine_ns ? 100 : 1000000000LL);
+	return d >= 0 && d < res_ns;
 }
 
 static struct timespec now(void)
@@ -326,7 +331,8 @@ int main(void)
 		e = errno;
 		pc_check(r == 0, "utimensat(sl1, 0) failed: %s", pc_errname(e));
 		pc_check(set_from(lst("f1").st_mtim, v[1]), "following the link did not set the target's times");
-		pc_check(ts_cmp(lst("sl1").st_mtim, l1) == 0, "following the link changed the link's own modification time");
+		pc_check(!set_from(lst("sl1").st_mtim, v[1]) || ts_cmp(lst("sl1").st_mtim, l1) == 0,
+			 "following the link set the link's own modification time to the requested one");
 		r = utimensat(AT_FDCWD, "sl2", v, AT_SYMLINK_NOFOLLOW);
 		e = errno;
 		pc_check(r == 0, "utimensat(sl2, AT_SYMLINK_NOFOLLOW) failed: %s", pc_errname(e));

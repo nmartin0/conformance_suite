@@ -41,27 +41,6 @@ int main(void)
 		sigaddset(&b, SIGPIPE);
 		pc_check(sigprocmask(SIG_BLOCK, &b, NULL) == 0, "sigprocmask failed");
 	}
-	{
-		sigset_t b;
-
-		sigemptyset(&b);
-		sigaddset(&b, SIGPIPE);
-		pc_check(sigprocmask(SIG_BLOCK, &b, NULL) == 0, "sigprocmask failed");
-	}
-	{
-		sigset_t b;
-
-		sigemptyset(&b);
-		sigaddset(&b, SIGPIPE);
-		pc_check(sigprocmask(SIG_BLOCK, &b, NULL) == 0, "sigprocmask failed");
-	}
-	{
-		sigset_t b;
-
-		sigemptyset(&b);
-		sigaddset(&b, SIGPIPE);
-		pc_check(sigprocmask(SIG_BLOCK, &b, NULL) == 0, "sigprocmask failed");
-	}
 	pc_test();
 	pc_expect_err(write(p[1], "x", 1), EPIPE, "write() to a pipe with no reader");
 	{

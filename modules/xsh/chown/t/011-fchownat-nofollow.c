@@ -238,8 +238,18 @@ static void prepare_own(gid_t g, mode_t m)
 
 static void need_root(void)
 {
+	static const unsigned ids[3][2] = { { 65534, 65533 }, { 65533, 65532 }, { 0, 0 } };
+	int i;
+
 	if (geteuid() != 0)
 		pc_unresolved("needs appropriate privileges to give files away");
+	/* The privilege, and IDs the system accepts (EINVAL is allowed for an unsupported ID). */
+	pc_make_file(".pc-own", "");
+	for (i = 0; i < 3; i++)
+		if (chown(".pc-own", (uid_t)ids[i][0], (gid_t)ids[i][1]) != 0)
+			pc_unresolved("root could not give a file to %u:%u (%s): no privilege, or the IDs are not supported",
+				      ids[i][0], ids[i][1], pc_errname(errno));
+	(void)unlink(".pc-own");
 }
 
 /* In the child: a regular file of its own, c/own (c is writable by all). */

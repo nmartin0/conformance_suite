@@ -212,32 +212,37 @@ static long long ns_diff(struct timespec a, struct timespec b)
 
 /*
  * Whether this file system keeps timestamps finer than a microsecond, as
- * seen from a new file's st_mtim (setup; a nanosecond clock gives a
- * multiple of 1000 only rarely, which merely loosens the check).
+ * measured in setup by storing a time with tv_nsec 999999999 and reading
+ * back how much of it the file system kept.
  */
-static int fine_ns = -1;
+static long long res_ns = -1;	/* how much a stored time may be truncated by */
 
 static void probe_resolution(void)
 {
+	struct timespec t[2] = { { 1000000000, 999999999 }, { 1000000000, 999999999 } };
 	struct stat st;
 
 	pc_make_file(".pc-res", "");
-	pc_check(lstat(".pc-res", &st) == 0, "lstat failed: %s", pc_errname(errno));
-	fine_ns = st.st_mtim.tv_nsec % 1000 != 0;
+	if (utimensat(AT_FDCWD, ".pc-res", t, 0) != 0 || lstat(".pc-res", &st) != 0 || st.st_mtim.tv_sec != 1000000000)
+		res_ns = 1000000000LL;	/* cannot tell: allow what XBD 4.12 allows */
+	else
+		res_ns = 999999999LL - st.st_mtim.tv_nsec + 1;
+	if (res_ns < 100)
+		res_ns = 100;
 }
 
 /*
  * The timestamp was set from want: not later than want and less than 1 s
- * earlier (XBD 4.12: resolution no coarser than a second); within 100 ns
- * where the file system keeps sub-microsecond times.
+ * earlier (XBD 4.12: resolution no coarser than a second); within the
+ * truncation measured in setup (at least 100 ns) where it is finer.
  */
 static int set_from(struct timespec got, struct timespec want)
 {
 	long long d = ns_diff(want, got);
 
-	if (fine_ns == -1)
+	if (res_ns == -1)
 		probe_resolution();
-	return d >= 0 && d < (fine_ns ? 100 : 1000000000LL);
+	return d >= 0 && d < res_ns;
 }
 
 static struct timespec now(void)
@@ -306,10 +311,24 @@ int main(void)
 {
 	pc_begin("XSH.futimens.009");
 	{
-		static const long bad[4][2] = { { 1000000000L, 0 }, { 0, -1 }, { UTIME_OMIT, -1 }, { UTIME_NOW, 1000000000L } };
+		static const long lows[3] = { -1, -3, -1000 }, highs[3] = { 1000000000L, 1000000001L, LONG_MAX };
+		long lo = 0, hi = 0, bad[4][2];
+		int k;
 		struct timespec b[2];
 		int fd, i;
 
+		/* Values outside [0, 999999999] that are not UTIME_NOW or UTIME_OMIT, which may be any such values. */
+		for (k = 2; k >= 0; k--)
+			if (lows[k] != UTIME_NOW && lows[k] != UTIME_OMIT)
+				lo = lows[k];
+		for (k = 2; k >= 0; k--)
+			if (highs[k] != UTIME_NOW && highs[k] != UTIME_OMIT)
+				hi = highs[k];
+		pc_check(lo < 0 && hi > 999999999L, "no out-of-range value that is not UTIME_NOW or UTIME_OMIT");
+		bad[0][0] = hi, bad[0][1] = 0;
+		bad[1][0] = 0, bad[1][1] = lo;
+		bad[2][0] = UTIME_OMIT, bad[2][1] = lo;
+		bad[3][0] = UTIME_NOW, bad[3][1] = hi;
 		pc_make_file("f", "x");
 		old_times("f");
 		fd = open("f", O_RDONLY);

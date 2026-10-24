@@ -177,7 +177,6 @@ int main(void)
 	pc_expect_err(fcntl(fd, F_SETLKW, &fl), EINTR, "F_SETLKW interrupted by SIGALRM");
 	rescue_cfd = -1;	/* the holder is released below */
 	alarm(0);
-	alarm(0);
 	release_holder();
 	pc_check(!blocked(F_WRLCK, 0, 10), "the interrupted F_SETLKW left a lock");
 	pc_pass();

@@ -111,8 +111,8 @@ assertion  XSH.chmod.012
 anchor     functions/chmod.html#ERRORS/ENOTDIR
 class      disputed
 since      2008
-says       chmod("f/x") and chmod("f/"), with f a regular file, fail with
-           ENOTDIR and f's mode is unchanged.
+says       chmod("f/x"), with f a regular file, fails with ENOTDIR and
+           f's mode is unchanged.
 note       disputed (Q-8): the name also names no existing file, so
            ENOENT applies too and XSH 2.3 lets either error be reported;
            every reference system reports the more specific one.
@@ -202,3 +202,13 @@ says       With appropriate privileges, chmod() of a file owned by another
            user (65534) succeeds and sets the bits.
 needs      root
 test       t/021-privileged-other.c
+
+assertion  XSH.chmod.022
+anchor     functions/chmod.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       chmod("f/", 0600) with f a regular file fails with ENOTDIR,
+           and the mode is unchanged.
+note       Only ENOTDIR applies: the last component exists. The f/x
+           case, where ENOENT may apply too (Q-8), is XSH.chmod.012.
+test       t/022-trailing-slash-file.c

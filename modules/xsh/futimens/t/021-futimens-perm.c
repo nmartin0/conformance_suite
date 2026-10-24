@@ -213,32 +213,37 @@ static long long ns_diff(struct timespec a, struct timespec b)
 
 /*
  * Whether this file system keeps timestamps finer than a microsecond, as
- * seen from a new file's st_mtim (setup; a nanosecond clock gives a
- * multiple of 1000 only rarely, which merely loosens the check).
+ * measured in setup by storing a time with tv_nsec 999999999 and reading
+ * back how much of it the file system kept.
  */
-static int fine_ns = -1;
+static long long res_ns = -1;	/* how much a stored time may be truncated by */
 
 static void probe_resolution(void)
 {
+	struct timespec t[2] = { { 1000000000, 999999999 }, { 1000000000, 999999999 } };
 	struct stat st;
 
 	pc_make_file(".pc-res", "");
-	pc_check(lstat(".pc-res", &st) == 0, "lstat failed: %s", pc_errname(errno));
-	fine_ns = st.st_mtim.tv_nsec % 1000 != 0;
+	if (utimensat(AT_FDCWD, ".pc-res", t, 0) != 0 || lstat(".pc-res", &st) != 0 || st.st_mtim.tv_sec != 1000000000)
+		res_ns = 1000000000LL;	/* cannot tell: allow what XBD 4.12 allows */
+	else
+		res_ns = 999999999LL - st.st_mtim.tv_nsec + 1;
+	if (res_ns < 100)
+		res_ns = 100;
 }
 
 /*
  * The timestamp was set from want: not later than want and less than 1 s
- * earlier (XBD 4.12: resolution no coarser than a second); within 100 ns
- * where the file system keeps sub-microsecond times.
+ * earlier (XBD 4.12: resolution no coarser than a second); within the
+ * truncation measured in setup (at least 100 ns) where it is finer.
  */
 static int set_from(struct timespec got, struct timespec want)
 {
 	long long d = ns_diff(want, got);
 
-	if (fine_ns == -1)
+	if (res_ns == -1)
 		probe_resolution();
-	return d >= 0 && d < (fine_ns ? 100 : 1000000000LL);
+	return d >= 0 && d < res_ns;
 }
 
 static struct timespec now(void)
@@ -306,14 +311,12 @@ static void old_times(const char *path)
 static int child(void)
 {
 	struct timespec v[2];
-	int w = open("c/w", O_WRONLY), wr = open("c/w", O_RDONLY), r = open("c/r", O_RDONLY), x;
+	int w = open("c/w", O_WRONLY), r = open("c/r", O_RDONLY), x;
 
-	if (w < 0 || wr < 0 || r < 0)
+	if (w < 0 || r < 0)
 		return 3;
 	if (futimens(w, NULL) != 0)
 		return 10;
-	if (futimens(wr, NULL) != 0)
-		return 14;	/* write access to the file, through a read-only descriptor */
 	v[0] = ts(0, UTIME_NOW);
 	v[1] = ts(0, UTIME_NOW);
 	if (futimens(w, v) != 0)

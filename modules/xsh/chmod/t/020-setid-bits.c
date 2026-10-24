@@ -217,7 +217,12 @@ static int child(void)
 
 	if (fd < 0 || close(fd) != 0)
 		return 3;
-	if (chmod("c/f", 04755) != 0 || stat("c/f", &st) != 0 || (st.st_mode & 0777) != 0755)
+	if (chmod("c/f", 04755) != 0) {
+		if (errno == EPERM && stat("c/f", &st) == 0 && (st.st_mode & 07777) == 0700)
+			return 6;	/* refused, the mode unchanged: allowed (XSH 2.3, as for XSH.chmod.007) */
+		return 2;
+	}
+	if (stat("c/f", &st) != 0 || (st.st_mode & 0777) != 0755)
 		return 2;
 	if (!(st.st_mode & S_ISUID))
 		return 5;	/* the implementation ignored S_ISUID: allowed */
@@ -239,6 +244,10 @@ int main(void)
 			break;
 		case 5:
 			pc_notinuse("the implementation ignores S_ISUID in chmod() here");
+		case 6:
+			pc_notinuse("the implementation refuses S_ISUID in chmod() here (EPERM, mode unchanged)");
+		case 3:
+			pc_unresolved("the child could not create its file");
 		case 1:
 			pc_fail("chmod(f, 0755) left S_ISUID set");
 		default:

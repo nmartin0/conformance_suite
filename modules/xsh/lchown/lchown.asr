@@ -33,8 +33,7 @@ assertion  XSH.lchown.004
 anchor     functions/lchown.html#ERRORS
 class      disputed
 since      2001
-says       lchown("missing") and lchown("") fail with ENOENT; lchown("f/x")
-           and lchown("f/"), with f a regular file, fail with ENOTDIR.
+says       lchown("f/x"), with f a regular file, fails with ENOTDIR.
 note       disputed (Q-8): the name also names no existing file, so
            ENOENT applies too and XSH 2.3 lets either error be reported;
            every reference system reports the more specific one.
@@ -44,8 +43,8 @@ assertion  XSH.lchown.005
 anchor     functions/lchown.html#ERRORS
 class      disputed
 since      2001
-says       lchown("a/x"), with a -> b and b -> a, fails with ELOOP, and lchown()
-           of a name longer than {NAME_MAX} bytes fails with ENAMETOOLONG.
+says       lchown() of a name longer than {NAME_MAX} bytes fails with
+           ENAMETOOLONG.
 note       disputed (Q-8): the name also names no existing file, so
            ENOENT applies too and XSH 2.3 lets either error be reported;
            every reference system reports the more specific one.
@@ -68,3 +67,25 @@ says       For a process without appropriate privileges and a symbolic link
            it owns, lchown() to another user (owner 0) fails with EPERM and
            lchown() to (uid_t)-1 and its effective group succeeds.
 test       t/007-restricted.c
+
+assertion  XSH.lchown.008
+anchor     functions/lchown.html#ERRORS
+class      required
+since      2001
+says       lchown("missing", -1, -1) and lchown("", -1, -1) fail with
+           ENOENT, and lchown("f/", -1, -1) with f a regular file fails
+           with ENOTDIR.
+note       Each has one error condition only. The f/x case, where ENOENT
+           may apply too (Q-8), stays in XSH.lchown.004.
+test       t/008-errors-unambiguous.c
+
+assertion  XSH.lchown.009
+anchor     functions/lchown.html#ERRORS/ELOOP
+class      required
+since      2001
+says       lchown("a/x", -1, -1), with a a symbolic link in a loop,
+           fails with ELOOP.
+note       Only ELOOP applies: resolving the prefix fails in the loop
+           before x is looked for. The long name stays in XSH.lchown.005
+           (Q-8).
+test       t/009-eloop.c

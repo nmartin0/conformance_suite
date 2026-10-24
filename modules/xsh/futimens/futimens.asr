@@ -212,13 +212,15 @@ assertion  XSH.futimens.021
 anchor     functions/futimens.html#DESCRIPTION
 class      required
 since      2008
-says       For an unprivileged process: futimens(fd, NULL) and futimens() with
-           both UTIME_NOW succeed for a descriptor open for writing on
-           another user's mode 0666 file, and futimens(fd, NULL) for a
-           read-only descriptor of it (write access is to the file); for a read-only descriptor of
-           another user's mode 0644 file futimens(fd, NULL) fails with
-           EACCES and both UTIME_OMIT succeeds, the times staying.
+says       For an unprivileged process: futimens(fd, NULL) and
+           futimens() with both UTIME_NOW succeed for a descriptor open
+           for writing on another user's mode 0666 file; for a read-only
+           descriptor of another user's mode 0644 file futimens(fd,
+           NULL) fails with EACCES and both UTIME_OMIT succeeds, the
+           times staying.
 needs      root
+note       The read-only descriptor of the 0666 file is XSH.futimens.026
+           (disputed, Q-27).
 test       t/021-futimens-perm.c
 
 assertion  XSH.futimens.022
@@ -234,15 +236,17 @@ test       t/022-enotdir-prefix.c
 
 assertion  XSH.futimens.023
 anchor     functions/futimens.html#ERRORS
-class      conditional
+class      disputed
 when       XSI
 since      2001
 says       utimes() with tv_usec 1000000 or -1 in either member fails with
            EINVAL and the times stay.
-note       utimes()'s errors are written in terms of tv_nsec, which a
-           timeval does not have (SI-59); the EINVAL for an out-of-range
-           tv_usec follows from utimes() being equivalent to
-           utimensat().
+note       disputed (Q-46): utimes()'s errors are written in terms of
+           tv_nsec, which a timeval does not have (SI-59); the EINVAL
+           follows only from utimes() being equivalent to utimensat(),
+           and normalising the timeval is also a defensible reading. A
+           FAIL is logged as INSPECT. Conditional on XSI through the
+           module.
 test       t/023-utimes-usec.c
 
 assertion  XSH.futimens.024
@@ -264,3 +268,16 @@ note       O_SEARCH itself is a header item (Tier 0); without it this
            test is UNRESOLVED. No reference system passes it, so its
            planted fault is unverified.
 test       t/025-search-fd.c
+
+assertion  XSH.futimens.026
+anchor     functions/futimens.html#DESCRIPTION
+class      disputed
+since      2008
+says       For an unprivileged process, futimens(fd, NULL) succeeds for
+           a read-only descriptor of another user's mode 0666 file (it
+           has write access to the file).
+note       disputed (Q-27): "write access to the file" may mean the
+           file's permission bits or the descriptor's access mode; a
+           FAIL is logged as INSPECT.
+needs      root
+test       t/026-futimens-readonly-fd.c

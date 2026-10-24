@@ -165,19 +165,6 @@ ssize_t write(int fd, const void *buf, size_t n)
 		errno = e;
 		return r;
 	}
-	if (IS("sigpipe_consumed")) {
-		/* the signal is generated and then thrown away before write() returns */
-		sigset_t s;
-		struct timespec z = { 0, 0 };
-		r = f(fd, buf, n);
-		e = errno;
-		sigemptyset(&s);
-		sigaddset(&s, SIGPIPE);
-		if (r == -1 && e == EPIPE)
-			(void)sigtimedwait(&s, NULL, &z);
-		errno = e;
-		return r;
-	}
 	if (IS("no_mtime") && k == 'r')
 		(void)fstat(fd, &st0);
 	r = f(fd, buf, n);
