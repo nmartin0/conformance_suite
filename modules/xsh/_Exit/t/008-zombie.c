@@ -56,6 +56,8 @@ int main(void)
 	(void)st;
 	errno = 0;
 	/* EPERM is accepted too: the ID may have been reused by then. */
+	if (kill(c, 0) == 0 && waitpid(c, NULL, WNOHANG) == -1 && errno == ECHILD)
+		pc_unresolved("the child's process ID is in use again, by a process that is not our child");
 	pc_check(kill(c, 0) == -1 && (errno == ESRCH || errno == EPERM),
 	    "the child still exists after its status was obtained");
 	pc_pass();

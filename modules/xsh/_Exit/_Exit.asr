@@ -108,11 +108,10 @@ says       When a process's exit orphans a process group that has a
            stopped member, each process in that group is sent SIGHUP and
            SIGCONT; the stopped member receives both (in either order,
            since delivery order of pending signals is unspecified).
-note       A child stays in the test's group and its own child, in a new
-           group, stops; the group's only parent in the session is then
-           the child, and its exit orphans the group. This avoids
-           depending on whether a zombie still counts as a group member
-           (Q-4). Before 2001 this came with the job control option.
+note       The middle process starts a new session, so the process that
+           adopts g (an implementation-defined system process, or a
+           reaper) cannot be in g's session; g's group is then orphaned
+           when the middle process exits.
 nomutant   the signals to an orphaned process group come from the kernel
 test       t/010-orphaned-group.c
 

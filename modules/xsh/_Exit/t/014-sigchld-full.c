@@ -72,7 +72,15 @@ int main(void)
 			pc_unresolved("waitid failed: %s", pc_errname(errno));
 	}
 	pc_check(sigprocmask(SIG_SETMASK, &old, NULL) == 0, "sigprocmask failed");
-	pc_check(got, "no SIGCHLD after the child called _exit()");
+	{
+		/* SIGCHLD may come a little after the status is available (as XSH.exit.011 allows) */
+		struct timespec ts = { 0, 10000000 };
+		int i;
+
+		for (i = 0; i < 100 && !got; i++)
+			(void)nanosleep(&ts, NULL);
+	}
+	pc_check(got, "no SIGCHLD within 1 s after the child called _exit()");
 	pc_check(status == 0x1234, "si_status %#x, expected 0x1234", (unsigned)status);
 	st = reap(c);
 	(void)st;

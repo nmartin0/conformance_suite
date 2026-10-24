@@ -238,8 +238,8 @@ int main(int argc, char **argv)
 
 	pc_make_dir("b1");
 	pc_make_dir("b2");
-	script("b1/s", "echo b1 > out\n");
-	script("b2/s", "echo b2 > out\n");
+	script("b1/s", ": > out; : > ran.b1\n");	/* ":" is a special built-in: no PATH search */
+	script("b2/s", ": > out; : > ran.b2\n");
 	pc_check(getcwd(here, sizeof here) != NULL, "getcwd failed");
 	(void)snprintf(path, sizeof path, "%s/none:%s/b1:%s/b2", here, here, here);
 	pc_check(setenv("PATH", path, 1) == 0, "setenv failed");
@@ -250,6 +250,7 @@ int main(int argc, char **argv)
 		returned("execvp");
 	}
 	script_result(buf, sizeof buf);
-	pc_check(strcmp(buf, "b1\n") == 0, "ran %s, expected b1/s", strcmp(buf, "b2\n") == 0 ? "b2/s" : "something else");
+	pc_check(access("ran.b1", F_OK) == 0 && access("ran.b2", F_OK) != 0, "ran %s, expected b1/s",
+		 access("ran.b2", F_OK) == 0 ? "b2/s" : "something else");
 	pc_pass();
 }

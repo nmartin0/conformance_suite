@@ -211,6 +211,12 @@ int main(int argc, char **argv)
 			_exit(99);
 		if (geteuid() == 0)
 			_exit(99);
+		{
+			struct stat sb;
+
+			if (stat("d/prog", &sb) == 0 || errno != EACCES)
+				_exit(99);	/* still allowed to search d: privileges remain */
+		}
 		failed(execve("d/prog", av, environ));
 	}
 	expect_fail("execve(\"d/prog\", ..., ...)", EACCES, 0);

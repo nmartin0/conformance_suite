@@ -237,8 +237,8 @@ int main(int argc, char **argv)
 	char buf[256], dir[PATH_MAX];
 
 	pc_make_dir("bin");
-	script("s", "echo here > out\n");
-	script("bin/s", "echo path > out\n");
+	script("s", ": > out; : > ran.here\n");	/* ":" is a special built-in: no PATH search */
+	script("bin/s", ": > out; : > ran.path\n");
 	pc_check(getcwd(dir, sizeof dir - 5) != NULL, "getcwd failed");
 	strcat(dir, "/bin");
 	pc_check(setenv("PATH", dir, 1) == 0, "setenv failed");
@@ -249,6 +249,7 @@ int main(int argc, char **argv)
 		returned("execvp");
 	}
 	script_result(buf, sizeof buf);
-	pc_check(strcmp(buf, "here\n") == 0, "ran %s, expected ./s", strcmp(buf, "path\n") == 0 ? "bin/s from PATH" : "something else");
+	pc_check(access("ran.here", F_OK) == 0 && access("ran.path", F_OK) != 0, "ran %s, expected ./s",
+		 access("ran.path", F_OK) == 0 ? "bin/s from PATH" : "something else");
 	pc_pass();
 }

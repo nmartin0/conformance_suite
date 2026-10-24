@@ -82,6 +82,9 @@ int main(void)
 		pid_t c;
 		(void)close(p[0]);
 		(void)close(q[0]);
+		/* A new session: whoever adopts c after mid exits is outside it, so c's group is then orphaned. */
+		if (setsid() == -1)
+			_exit(95);
 		c = fork();
 		if (c == -1)
 			_exit(97);

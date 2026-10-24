@@ -330,14 +330,16 @@ test       t/035-eacces-mode.c
 
 assertion  XSH.exec.036
 anchor     functions/exec.html#ERRORS/EACCES
-class      required
+class      disputed
 since      1988
 says       execve() of a directory, which is not a regular file, fails with
            EACCES.
-note       Assumes the implementation does not run directories as images
-           (the EACCES entry allows file types it does run; standard
-           issue SI-18). The directory has search permission, so only
-           that condition applies.
+note       disputed (SI-18): EACCES covers a file that is not regular
+           only when the implementation does not support executing its
+           type; a FAIL is logged as INSPECT. Assumes the implementation
+           does not run directories as images (the EACCES entry allows
+           file types it does run; standard issue SI-18). The directory
+           has search permission, so only that condition applies.
 test       t/036-eacces-dir.c
 
 assertion  XSH.exec.037
@@ -400,14 +402,18 @@ test       t/042-enoexec.c
 
 assertion  XSH.exec.043
 anchor     functions/exec.html#ERRORS/E2BIG
-class      required
+class      disputed
 since      1988
 says       execv() with arguments totalling more than {ARG_MAX} bytes (as
            sysconf() reports it) fails with E2BIG.
-note       Strings of 4096 bytes are used, so that per-string limits do
-           not apply. An indeterminate {ARG_MAX} makes the test
-           NOTINUSE; one over 64 MiB, UNRESOLVED. On musl sysconf()
-           under-reports (O.9, standard question Q-9).
+note       disputed (Q-9): which {ARG_MAX} applies is open, and an
+           implementation that reports too small a value lets the exec
+           succeed; a FAIL is logged as INSPECT. ENOMEM is accepted when
+           the arguments also exceed the stack limit (XSH 2.3). Strings
+           of 4096 bytes are used, so that per-string limits do not
+           apply. An indeterminate {ARG_MAX} makes the test NOTINUSE;
+           one over 64 MiB, UNRESOLVED. On musl sysconf() under-reports
+           (O.9, standard question Q-9).
 test       t/043-e2big.c
 
 assertion  XSH.exec.044

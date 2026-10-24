@@ -6,6 +6,7 @@
  * MUTANT    exec.e2big_as_enomem
  */
 #include "pc.h"
+#include <sys/resource.h>
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -223,6 +224,15 @@ int main(int argc, char **argv)
 		av[n + 4] = NULL;
 		failed(execv(self, av));
 	}
-	expect_fail("execv() with more than {ARG_MAX} bytes of arguments", E2BIG, 0);
+	{
+		int alt = 0;
+#ifdef RLIMIT_STACK
+		struct rlimit rl;
+
+		if (getrlimit(RLIMIT_STACK, &rl) == 0 && rl.rlim_cur != RLIM_INFINITY && (rlim_t)(n * 4097) > rl.rlim_cur)
+			alt = ENOMEM;	/* the arguments are also past the stack limit: either error may be reported */
+#endif
+		expect_fail("execv() with more than {ARG_MAX} bytes of arguments", E2BIG, alt);
+	}
 	pc_pass();
 }

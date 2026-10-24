@@ -70,6 +70,8 @@ int main(void)
 	    "wait() for a child whose status is discarded did not fail with ECHILD (%s)", pc_errname(e));
 	/* No zombie: the child's lifetime ended at once. */
 	errno = 0;
+	if (kill(c, 0) == 0 && waitpid(c, NULL, WNOHANG) == -1 && errno == ECHILD)
+		pc_unresolved("the child's process ID is in use again, by a process that is not our child");
 	pc_check(kill(c, 0) == -1 && (errno == ESRCH || errno == EPERM),
 	    "the child still exists after it terminated with SIGCHLD ignored");
 	pc_pass();

@@ -16,7 +16,7 @@ XSH.exit.002       FAIL         linux*    O.6: waitid() si_status has only the l
 XSH.exit.012       FAIL         linux*    O.6: SIGCHLD si_status has only the low 8 bits
 XSH._Exit.014      FAIL         linux*    O.6: SIGCHLD si_status has only the low 8 bits
 XSH.exec.028       FAIL         linux*    O.7: the thread CPU-time clock is not reset by exec
-XSH.exec.043       FAIL         linux*    O.9: sysconf(_SC_ARG_MAX) is below the real limit
+XSH.exec.043       INSPECT      linux*    O.9 (Q-9 disputed): sysconf(_SC_ARG_MAX) is below the real limit
 XSH.exec.044       FAIL         linux*    O.8: execvp() gives ENOEXEC instead of running sh
 XSH.exec.045       FAIL         linux*    O.8: execlp() gives ENOEXEC instead of running sh
 XSH.sigaction.023  FAIL         linux*    O.10: SA_RESETHAND does not clear SA_SIGINFO

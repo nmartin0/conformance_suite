@@ -90,7 +90,7 @@ static pid_t faulty(const char *m, pid_t pid, int *st, int opt)
 	}
 	if (r > 0) {
 		if (IS("slow_when_ready")) {
-			struct timespec ts = { 0, 400000000 };
+			struct timespec ts = { 1, 500000000 };
 			(void)nanosleep(&ts, NULL);	/* late although status was there */
 		}
 		if (IS("status_garbage") && WIFEXITED(s))

@@ -47,6 +47,13 @@ static long ms_since(const struct timespec *t0)
 	return (long)(t.tv_sec - t0->tv_sec) * 1000 + (t.tv_nsec - t0->tv_nsec) / 1000000;
 }
 
+/* semctl()'s fourth argument: the application declares it (XSH semctl()). */
+union semun {
+	int val;
+	struct semid_ds *buf;
+	unsigned short *array;
+};
+
 int main(void)
 {
 	pc_begin("XSH._Exit.017");
@@ -57,7 +64,7 @@ int main(void)
 
 		id = semget(IPC_PRIVATE, 1, IPC_CREAT | 0600);
 		pc_check(id != -1, "semget failed: %s", pc_errname(errno));
-		if (semctl(id, 0, SETVAL, 5) != 0) {
+		if (semctl(id, 0, SETVAL, (union semun){ .val = 5 }) != 0) {
 			(void)semctl(id, 0, IPC_RMID);
 			pc_unresolved("semctl(SETVAL) failed: %s", pc_errname(errno));
 		}
