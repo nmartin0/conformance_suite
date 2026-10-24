@@ -249,7 +249,11 @@ int main(void)
 	memset(&it, 0, sizeof it);
 	it.it_value.tv_nsec = 100000000;
 	pc_test();
-	pc_check(timer_create(CLOCK_REALTIME, &ev, &tm) == 0, "timer_create failed: %s", pc_errname(errno));
+	if (timer_create(CLOCK_REALTIME, &ev, &tm) != 0) {
+		if (errno == EAGAIN)
+			pc_unresolved("timer_create() found no timer resources (EAGAIN)");
+		pc_check(0, "timer_create failed: %s", pc_errname(errno));
+	}
 	pc_check(timer_settime(tm, 0, &it, NULL) == 0, "timer_settime failed");
 	for (i = 0; i < 500 && !atomic_load(&called); i++)
 		sleep_ms(10);

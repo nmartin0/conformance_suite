@@ -13,14 +13,17 @@ test       t/001-runs-on-alt.c
 
 assertion  XSH.sigaltstack.002
 anchor     functions/sigaltstack.html#DESCRIPTION
-class      conditional
+class      disputed
 when       XSI
 since      2001
 says       A first sigaltstack(&a, &o) reports SS_DISABLE in o; a second
            sigaltstack(&b, &o) reports a's ss_sp and ss_size with ss_flags
            not SS_DISABLE.
-note       Setup makes sure no alternate stack is set at start-up (some
-           runtimes install one); the test is UNRESOLVED if one is.
+note       disputed (Q-20): ss_flags "may contain" SS_ONSTACK or
+           SS_DISABLE, so reporting either is not plainly required; a
+           FAIL is logged as INSPECT. Setup makes sure no alternate
+           stack is set at start-up (some runtimes install one); the
+           test is UNRESOLVED if one is.
 test       t/002-oss.c
 
 assertion  XSH.sigaltstack.003
@@ -28,9 +31,9 @@ anchor     functions/sigaltstack.html#DESCRIPTION
 class      conditional
 when       XSI
 since      2001
-says       After an alternate stack is set and then disabled with SS_DISABLE, a
-           SIGUSR1 caught with SA_ONSTACK runs its handler on the normal
-           stack, and oss reports SS_DISABLE.
+says       After an alternate stack is set and then disabled with
+           SS_DISABLE, a SIGUSR1 caught with SA_ONSTACK runs its handler
+           on the normal stack.
 test       t/003-disable.c
 
 assertion  XSH.sigaltstack.004
@@ -77,17 +80,20 @@ test       t/007-eperm.c
 
 assertion  XSH.sigaltstack.008
 anchor     functions/sigaltstack.html#DESCRIPTION
-class      conditional
+class      disputed
 when       XSI
 since      2001
 says       A process with an alternate stack that execs itself finds, in the new
            image, sigaltstack(NULL, &o) reporting SS_DISABLE.
 nomutant   the new image's state is set by exec in the kernel
+note       disputed (Q-20): ss_flags "may contain" SS_ONSTACK or
+           SS_DISABLE, so reporting either is not plainly required; a
+           FAIL is logged as INSPECT.
 test       t/008-exec-none.c
 
 assertion  XSH.sigaltstack.009
 anchor     functions/sigaltstack.html#DESCRIPTION
-class      conditional
+class      disputed
 when       XSI
 since      2001
 says       In a handler running on the alternate stack, sigaltstack(NULL, &o)
@@ -114,7 +120,7 @@ test       t/010-minsigstksz.c
 
 assertion  XSH.sigaltstack.011
 anchor     functions/sigaltstack.html#DESCRIPTION
-class      conditional
+class      disputed
 when       XSI
 since      2001
 says       sigaltstack() with ss_flags SS_DISABLE, ss_sp NULL and ss_size 0
@@ -130,7 +136,21 @@ class      conditional
 when       XSI
 since      2008
 says       After the main thread sets an alternate stack, a new thread's
-           sigaltstack(NULL, &old) reports SS_DISABLE, and its SIGUSR1
-           handler (SA_ONSTACK, raised by that thread) does not run on the
-           main thread's stack.
+           SIGUSR1 handler (SA_ONSTACK, raised by that thread) does not
+           run on the main thread's stack.
 test       t/012-per-thread.c
+
+assertion  XSH.sigaltstack.013
+anchor     functions/sigaltstack.html#DESCRIPTION
+class      disputed
+when       XSI
+since      2008
+says       With an alternate stack set in the main thread, a new
+           thread's sigaltstack(NULL, &o) reports SS_DISABLE; after
+           sigaltstack() with SS_DISABLE, sigaltstack(NULL, &o) reports
+           SS_DISABLE.
+note       disputed (Q-20): ss_flags "may contain" SS_ONSTACK or
+           SS_DISABLE, so reporting either is not plainly required; a
+           FAIL is logged as INSPECT. The behaviour of 003 and 012 stays
+           required there.
+test       t/013-reports-disabled.c

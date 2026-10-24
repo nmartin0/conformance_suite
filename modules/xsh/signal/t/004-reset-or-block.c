@@ -118,26 +118,52 @@ static const char *const table_name[] = {
 };
 #define NTABLE ((int)(sizeof table / sizeof table[0]))
 
-static volatile sig_atomic_t reset = -1, blocked = -1;
+static volatile sig_atomic_t depth, calls, nested;
 
+/* Raises SIGUSR1 again from inside its own handler, once: a reset action ends the process; a signal that is not
+   held off re-enters the handler at once. */
 static void h(int sig)
 {
-	struct sigaction cur;
-	sigset_t m;
+	depth++;
+	calls++;
+	if (depth > 1)
+		nested = 1;
+	else if (calls == 1)
+		(void)raise(sig);
+	depth--;
+}
 
-	if (sigaction(sig, NULL, &cur) == 0)
-		reset = cur.sa_handler == SIG_DFL;
-	if (sigprocmask(SIG_BLOCK, NULL, &m) == 0)
-		blocked = sigismember(&m, sig) == 1;
+static int child(void)
+{
+	if (signal(SIGUSR1, h) == SIG_ERR)
+		return 9;
+	(void)raise(SIGUSR1);
+	/* still here: the action was not reset */
+	if (nested)
+		return 3;	/* neither reset nor held off */
+	return calls == 2 ? 0 : 4;	/* 0: held off, then delivered; 4: held off and lost (allowed) */
 }
 
 int main(void)
 {
+	pid_t c;
+	int st;
+
 	pc_begin("XSH.signal.004");
 	pc_test();
-	pc_check(signal(SIGUSR1, h) != SIG_ERR, "signal() failed");
-	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
-	pc_check(reset != -1 && blocked != -1, "the handler did not run, or could not query");
-	pc_check(reset == 1 || blocked == 1, "inside the handler SIGUSR1 is neither reset to SIG_DFL nor blocked");
+	c = fork();
+	if (c == -1)
+		pc_unresolved("fork failed: %s", pc_errname(errno));
+	if (c == 0)
+		_exit(child());
+	st = end_of(c);
+	if (WIFSIGNALED(st) && WTERMSIG(st) == SIGUSR1)
+		pc_pass();	/* the action was reset to SIG_DFL */
+	pc_check(WIFEXITED(st), "the child ended with status %#x", (unsigned)st);
+	pc_check(WEXITSTATUS(st) != 9, "signal() failed");
+	pc_check(WEXITSTATUS(st) != 3, "inside the handler SIGUSR1 was neither reset to SIG_DFL nor held off");
+	if (WEXITSTATUS(st) == 4)
+		pc_note("SIGUSR1 raised inside its handler was not delivered later");
+	pc_check(WEXITSTATUS(st) == 0 || WEXITSTATUS(st) == 4, "child status %d", WEXITSTATUS(st));
 	pc_pass();
 }

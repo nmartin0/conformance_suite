@@ -92,7 +92,8 @@ static int fault(int sig, int maperr)
 		sa.sa_sigaction = hf;
 		sa.sa_flags = SA_SIGINFO;
 		sigemptyset(&sa.sa_mask);
-		(void)sigaction(sig, &sa, NULL);
+		if (sigaction(sig, &sa, NULL) != 0)
+			_exit(8);	/* e.g. SA_SIGINFO refused for this signal: set-up, not the fault */
 		if (maperr) {
 			m = mmap(NULL, (size_t)pg, PROT_READ, MAP_SHARED, fd, 0);
 			if (m == MAP_FAILED || munmap(m, (size_t)pg) != 0)
@@ -100,8 +101,8 @@ static int fault(int sig, int maperr)
 			target = m;
 			check_code = 1;
 		} else {
-			m = mmap(NULL, (size_t)(2 * pg), PROT_READ, MAP_SHARED, fd, 0);
-			if (m == MAP_FAILED || ftruncate(fd, pg) != 0)
+			m = mmap(NULL, (size_t)(2 * pg), PROT_READ, MAP_SHARED, fd, 0);	/* the file is one page */
+			if (m == MAP_FAILED)
 				_exit(9);
 			target = m + pg;
 		}
@@ -132,6 +133,8 @@ int main(void)
 		pc_check(fd >= 0 && ftruncate(fd, pg) == 0, "could not make a one-page file");
 		pc_test();
 		r = fault(SIGSEGV, 1);
+		if (r == 8 || r == 9)
+			pc_unresolved("the faulting child could not set up (%s)", r == 8 ? "sigaction" : "mmap or dup2");
 		pc_check(r != 1, "reading the unmapped page did not raise SIGSEGV");
 		pc_check(r != 2, "SIGSEGV for an unmapped page has si_code %d, expected SEGV_MAPERR (%d)", last_code, SEGV_MAPERR);
 		pc_check(r != 3, "SIGSEGV's si_addr is not in the unmapped page");

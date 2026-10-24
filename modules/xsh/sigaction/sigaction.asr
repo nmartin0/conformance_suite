@@ -86,6 +86,9 @@ says       XSI: with an alternate stack set by sigaltstack(), a handler
            installed with SA_ONSTACK runs on it (a local variable's
            address is inside it), and one installed without SA_ONSTACK
            does not.
+note       Only the stack address is checked: whether sigaltstack()
+           reports SS_ONSTACK in the handler is Q-20
+           (XSH.sigaltstack.009).
 test       t/009-onstack.c
 
 assertion  XSH.sigaction.010

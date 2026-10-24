@@ -252,6 +252,8 @@ int main(void)
 	int before;
 
 	pc_begin("XSH.2.4.1-signal-generation.003");
+	if (ATOMIC_INT_LOCK_FREE != 2)
+		pc_unresolved("atomic_int is not always lock-free, so a signal handler may not use it (XSH 2.4.3)");
 	catch_sig(SIGUSR1, h);
 	mask(SIG_BLOCK, SIGUSR1);
 	pc_check(pthread_create(&b, NULL, other, NULL) == 0, "pthread_create failed");

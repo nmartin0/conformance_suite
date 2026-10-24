@@ -118,6 +118,18 @@ static const char *const table_name[] = {
 };
 #define NTABLE ((int)(sizeof table / sizeof table[0]))
 
+/* A signal number above every valid one: SIGRTMAX is below sysconf(_SC_NSIG) (Issue 8); INT_MAX where that is missing. */
+static int big_sig(void)
+{
+#ifdef _SC_NSIG
+	long n = sysconf(_SC_NSIG);
+
+	if (n > 0 && n <= INT_MAX)
+		return (int)n;
+#endif
+	return INT_MAX;
+}
+
 static void h(int sig)
 {
 	(void)sig;
@@ -125,13 +137,14 @@ static void h(int sig)
 
 int main(void)
 {
-	static const struct { int sig; int ign; const char *what; } c[] = {
-		{ -1, 0, "signal -1" }, { 100000, 0, "signal 100000" },
+	struct { int sig; int ign; const char *what; } c[] = {
+		{ -1, 0, "signal -1" }, { 0, 0, "a signal number above every valid one" },
 		{ SIGKILL, 0, "catching SIGKILL" }, { SIGSTOP, 1, "ignoring SIGSTOP" },
 	};
 	size_t i;
 
 	pc_begin("XSH.signal.005");
+	c[1].sig = big_sig();
 	pc_test();
 	for (i = 0; i < sizeof c / sizeof c[0]; i++) {
 		void (*r)(int);

@@ -187,9 +187,12 @@ says       For one second a timer sends SIGALRM about every millisecond; its
            checks each result, while the main program calls the same
            functions in a loop and checks them too; every result is right
            and the handler runs at least 100 times.
-note       A sample of the 2.4.3 list, not every function; the handler
-           saves and restores errno and records failures in volatile
-           sig_atomic_t objects. The test is single-threaded.
+note       Calls interrupted by the handler may fail with EINTR or
+           transfer less, and close() may report EINTR or EINPROGRESS:
+           the sample retries or accepts those. The run lasts until the
+           handler has run 100 times (30 s at most, else UNRESOLVED: no
+           timer rate is promised), and times are compared on
+           CLOCK_MONOTONIC.
 nomutant   a fault would have to be specific to calls made from handlers
 test       t/016-async-signal-safe.c
 
@@ -248,12 +251,14 @@ assertion  XSH.2.4.3-signal-actions.021
 anchor     functions/mmap.html#DESCRIPTION
 class      required
 since      2008
-says       In a two-page shared mapping of a file cut to one page, a read of
-           the second page gives SIGBUS, and its siginfo_t has si_addr in
-           that page.
-note       Which si_code the SIGBUS carries is not checked: none of the
-           reasons <signal.h> lists describes a reference past the end
-           of a mapped object (SI-65).
+says       Reading the second page of a two-page MAP_SHARED mapping of a
+           one-page file raises SIGBUS in the reading thread (si_addr in
+           that page is noted, not required).
+note       The file is one page from the start: references to a part of
+           a file removed after mmap() are unspecified (mmap()), while
+           whole pages past the end of the object give SIGBUS.
+           <signal.h> allows si_addr to be inaccurate, so a wrong
+           address is only noted (Q-50).
 nomutant   The fault is raised by the hardware and kernel; no interposed
            function stands between.
 test       t/021-sigbus-beyond-end.c

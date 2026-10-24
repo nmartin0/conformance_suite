@@ -6,6 +6,7 @@
  * MUTANT    sigaction.einval_accepted
  */
 #include "pc.h"
+#include <limits.h>
 #include <errno.h>
 #include <signal.h>
 #include <stdint.h>
@@ -59,15 +60,28 @@ static void h(int sig)
 	(void)sig;
 }
 
+/* A signal number above every valid one: SIGRTMAX is below sysconf(_SC_NSIG) (Issue 8); INT_MAX where that is missing. */
+static int big_sig(void)
+{
+#ifdef _SC_NSIG
+	long n = sysconf(_SC_NSIG);
+
+	if (n > 0 && n <= INT_MAX)
+		return (int)n;
+#endif
+	return INT_MAX;
+}
+
 int main(void)
 {
 	struct sigaction sa, o;
-	int bad[3] = { 0, -1, 100000 }, i;
+	int bad[3] = { 0, -1, 0 }, i;
 
 	pc_begin("XSH.sigaction.019");
 	memset(&sa, 0, sizeof sa);
 	sa.sa_handler = h;
 	sigemptyset(&sa.sa_mask);
+	bad[2] = big_sig();	/* setup */
 	pc_test();
 	for (i = 0; i < 3; i++) {
 		char what[64];

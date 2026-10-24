@@ -90,9 +90,8 @@ int main(void)
 	install(SIGUSR2, h, 0, NULL);
 	pc_check(kill(getpid(), SIGUSR1) == 0 && ran, "the SA_ONSTACK handler did not run");
 	pc_check(on_alt, "the SA_ONSTACK handler did not run on the alternate stack");
-	pc_check(ss_on, "sigaltstack() inside the SA_ONSTACK handler does not report SS_ONSTACK");
 	ran = 0;
 	pc_check(kill(getpid(), SIGUSR2) == 0 && ran, "the other handler did not run");
-	pc_check(!on_alt && !ss_on, "a handler without SA_ONSTACK ran on the alternate stack");
+	pc_check(!on_alt, "a handler without SA_ONSTACK ran on the alternate stack");
 	pc_pass();
 }

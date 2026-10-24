@@ -32,11 +32,15 @@ assertion  XSH.signal.004
 anchor     functions/signal.html#DESCRIPTION
 class      required
 since      1988
-says       Inside a handler installed with signal() for SIGUSR1, either the
-           action for SIGUSR1 is SIG_DFL or SIGUSR1 is blocked (one of the
-           two implementation-defined choices).
-note       sigaction() and sigprocmask() are async-signal-safe, so the
-           handler can look at both.
+says       In a child, a handler installed with signal() for SIGUSR1
+           raises SIGUSR1 again from inside itself: either the child is
+           then ended by SIGUSR1 (the action was reset to SIG_DFL), or
+           the handler is not re-entered while it runs (the signal is
+           held off).
+note       Judged by behaviour: after signal() the oact that sigaction()
+           returns is unspecified, and "prevent ... from occurring" need
+           not show in the signal mask. A held-off signal that is never
+           delivered is noted, not failed.
 test       t/004-reset-or-block.c
 
 assertion  XSH.signal.005

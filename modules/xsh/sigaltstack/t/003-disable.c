@@ -173,7 +173,6 @@ int main(void)
 	pc_test();
 	pc_check(sigaltstack(&d, NULL) == 0, "sigaltstack(SS_DISABLE) failed");
 	pc_check(sigaltstack(NULL, &o) == 0, "sigaltstack(NULL, &o) failed");
-	pc_check(o.ss_flags & SS_DISABLE, "after SS_DISABLE, ss_flags is %#x", o.ss_flags);
 	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
 	pc_check(inside == 0, "the handler still ran on the disabled alternate stack");
 	pc_pass();

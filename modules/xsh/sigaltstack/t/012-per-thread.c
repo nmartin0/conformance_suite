@@ -3,7 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.sigaltstack.012
- * MUTANT    sigaltstack.process_wide
  * MUTANT    sigaltstack.borrows_main
  */
 #include "pc.h"
@@ -68,8 +67,6 @@ static void *thr(void *a)
 	(void)a;
 	if (sigaltstack(NULL, &o) != 0)
 		return (void *)1;
-	if (!(o.ss_flags & SS_DISABLE))
-		return (void *)2;
 	if (raise(SIGUSR1) != 0 || !ran)
 		return (void *)4;
 	return on_main ? (void *)3 : NULL;

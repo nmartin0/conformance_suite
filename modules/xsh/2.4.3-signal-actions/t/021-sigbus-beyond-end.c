@@ -92,7 +92,8 @@ static int fault(int sig, int maperr)
 		sa.sa_sigaction = hf;
 		sa.sa_flags = SA_SIGINFO;
 		sigemptyset(&sa.sa_mask);
-		(void)sigaction(sig, &sa, NULL);
+		if (sigaction(sig, &sa, NULL) != 0)
+			_exit(8);	/* e.g. SA_SIGINFO refused for this signal: set-up, not the fault */
 		if (maperr) {
 			m = mmap(NULL, (size_t)pg, PROT_READ, MAP_SHARED, fd, 0);
 			if (m == MAP_FAILED || munmap(m, (size_t)pg) != 0)
@@ -100,8 +101,8 @@ static int fault(int sig, int maperr)
 			target = m;
 			check_code = 1;
 		} else {
-			m = mmap(NULL, (size_t)(2 * pg), PROT_READ, MAP_SHARED, fd, 0);
-			if (m == MAP_FAILED || ftruncate(fd, pg) != 0)
+			m = mmap(NULL, (size_t)(2 * pg), PROT_READ, MAP_SHARED, fd, 0);	/* the file is one page */
+			if (m == MAP_FAILED)
 				_exit(9);
 			target = m + pg;
 		}
@@ -129,11 +130,16 @@ int main(void)
 		pg = sysconf(_SC_PAGESIZE);
 		pc_check(pg > 0, "sysconf(_SC_PAGESIZE) failed");
 		fd = open("f", O_RDWR | O_CREAT | O_EXCL, 0600);
-		pc_check(fd >= 0 && ftruncate(fd, 2 * pg) == 0, "could not make a two-page file");
+		pc_check(fd >= 0 && ftruncate(fd, pg) == 0, "could not make a one-page file");
 		pc_test();
 		r = fault(SIGBUS, 0);
-		pc_check(r != 1, "reading beyond the file's end did not raise SIGBUS");
-		pc_check(r != 3, "SIGBUS's si_addr is not in the page beyond the file's end");
+		if (r == 8 || r == 9)
+			pc_unresolved("the faulting child could not set up (%s)", r == 8 ? "sigaction" : "mmap or dup2");
+		pc_check(r != 1, "reading a whole page past the file's end did not raise SIGBUS");
+		if (r == 3) {
+			pc_note("SIGBUS's si_addr is not in the page past the file's end (allowed: it may be inaccurate)");
+			r = 0;
+		}
 		pc_check(r == 0, "the faulting child failed (%d)", r);
 	}
 	pc_pass();

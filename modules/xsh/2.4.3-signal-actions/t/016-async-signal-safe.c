@@ -246,30 +246,44 @@ static int sample(void)
 		return 3;
 	if (sigaction(SIGUSR1, NULL, &a) != 0 || a.sa_handler != SIG_DFL)
 		return 4;
-	if (clock_gettime(CLOCK_REALTIME, &t1) != 0 || clock_gettime(CLOCK_REALTIME, &t2) != 0)
+	if (clock_gettime(CLOCK_MONOTONIC, &t1) != 0 || clock_gettime(CLOCK_MONOTONIC, &t2) != 0)
 		return 5;
 	if (t2.tv_sec < t1.tv_sec || (t2.tv_sec == t1.tv_sec && t2.tv_nsec < t1.tv_nsec))
 		return 6;
 	if (time(NULL) == (time_t)-1)
 		return 7;
-	fd = open(path, O_RDONLY);
+	while ((fd = open(path, O_RDONLY)) == -1 && errno == EINTR)
+		;
 	if (fd == -1)
 		return 8;
-	k = read(fd, buf, sizeof buf);
+	for (k = 0;;) {
+		ssize_t r = read(fd, buf + k, sizeof buf - (size_t)k);
+		if (r > 0)
+			k += r;
+		else if (r == 0 || errno != EINTR)
+			break;
+	}
 	if (fstat(fd, &st) != 0 || st.st_size != (off_t)(sizeof text - 1)) {
 		(void)close(fd);
 		return 9;
 	}
-	if (close(fd) != 0)
-		return 10;
+	if (close(fd) != 0 && errno != EINTR && errno != EINPROGRESS)
+		return 10;	/* interrupted, close() may report EINTR or EINPROGRESS */
 	if (k != (ssize_t)(sizeof text - 1) || memcmp(buf, text, sizeof text - 1) != 0)
 		return 11;
 	memcpy(copy, buf, (size_t)k);
 	copy[k] = '\0';
 	if (strlen(copy) != sizeof text - 1)
 		return 12;
-	if (write(devnull, copy, (size_t)k) != k)
-		return 13;
+	{
+		ssize_t done = 0, w;
+
+		while (done < k && ((w = write(devnull, copy + done, (size_t)(k - done))) > 0 || errno == EINTR))
+			if (w > 0)
+				done += w;
+		if (done != k)
+			return 13;
+	}
 	return 0;
 }
 
@@ -315,10 +329,12 @@ int main(void)
 		r = sample();
 		n++;
 		(void)clock_gettime(CLOCK_MONOTONIC, &now);
-	} while (r == 0 && bad == 0 && (now.tv_sec - start.tv_sec) * 1000 + (now.tv_nsec - start.tv_nsec) / 1000000 < 1000);
+	} while (r == 0 && bad == 0 && calls < 100 &&
+		 (now.tv_sec - start.tv_sec) * 1000 + (now.tv_nsec - start.tv_nsec) / 1000000 < 30000);
 	(void)timer_delete(tm);
+	if (r == 0 && bad == 0 && calls < 100)
+		pc_unresolved("the 1 ms timer ran the handler only %d times in 30 s (no rate is promised)", (int)calls);
 	pc_check(r == 0, "in the main program, step %d of the sample failed (after %ld rounds)", r, n);
 	pc_check(bad == 0, "in the handler, step %d of the sample failed", (int)bad);
-	pc_check(calls >= 100, "the handler ran only %d times in a second", (int)calls);
 	pc_pass();
 }

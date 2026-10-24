@@ -250,7 +250,11 @@ int main(void)
 	sigemptyset(&s);
 	sigaddset(&s, SIGRTMIN);
 	pc_test();
-	pc_check(timer_create(CLOCK_REALTIME, &ev, &tm) == 0, "timer_create failed: %s", pc_errname(errno));
+	if (timer_create(CLOCK_REALTIME, &ev, &tm) != 0) {
+		if (errno == EAGAIN)
+			pc_unresolved("timer_create() found no timer resources (EAGAIN)");
+		pc_check(0, "timer_create failed: %s", pc_errname(errno));
+	}
 	pc_check(timer_settime(tm, 0, &it, NULL) == 0, "timer_settime failed");
 	memset(&si, 0, sizeof si);
 	r = sigtimedwait(&s, &si, &to);
