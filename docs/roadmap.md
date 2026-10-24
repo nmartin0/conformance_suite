@@ -31,10 +31,12 @@ verified; this file is the plan. Update both when a step finishes.
   `truncate`, `ftruncate`, `umask`, `futimens`/`utimensat`/`utimes`, and the directory
   streams (`opendir`/`fdopendir`, `readdir`/`readdir_r`, `closedir`, `rewinddir`, `dirfd`,
   `seekdir`, `telldir`, `scandir`/`alphasort`).
-- stdio (in progress): `fflush`, `fclose`, `ungetc`, `setvbuf`.
+- stdio: `fopen`, `fdopen`, `fflush`, `fclose`, `ungetc`, `setvbuf`, `fseek`/`fseeko`,
+  `ftell`/`ftello`, and the XSH 2.5.1 stream and descriptor handle rules.
 - Utilities: `true`, `false`.
-- Every module reviewed independently and the findings applied, except
-  `ungetc` and `setvbuf` (review running).
+- Every module reviewed independently and the findings applied; the
+  Linux-ism audit (3a) and the conforming-variant retrofit with its own
+  independent review are done (see the review log).
 
 ## Next
 
