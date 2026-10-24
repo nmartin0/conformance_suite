@@ -6,6 +6,7 @@
  * MUTANT    sigqueue.einval_accepted
  */
 #include "pc.h"
+#include <limits.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <poll.h>
@@ -145,6 +146,18 @@ static void await_ready(int fd)
 		pc_unresolved("the child did not start");
 }
 
+/* A signal number above every valid one: SIGRTMAX is below sysconf(_SC_NSIG) (Issue 8); INT_MAX where that is missing. */
+static int big_sig(void)
+{
+#ifdef _SC_NSIG
+	long n = sysconf(_SC_NSIG);
+
+	if (n > 0 && n <= INT_MAX)
+		return (int)n;
+#endif
+	return INT_MAX;
+}
+
 int main(void)
 {
 	union sigval v;
@@ -153,6 +166,6 @@ int main(void)
 	v.sival_int = 0;
 	pc_test();
 	pc_expect_err(sigqueue(getpid(), -1, v), EINVAL, "sigqueue(self, -1)");
-	pc_expect_err(sigqueue(getpid(), 100000, v), EINVAL, "sigqueue(self, 100000)");
+	pc_expect_err(sigqueue(getpid(), big_sig(), v), EINVAL, "sigqueue(self, <a number above every valid one>)");
 	pc_pass();
 }

@@ -167,11 +167,11 @@ int main(void)
 	block(SIGALRM);
 	pc_test();
 	t0 = now_ms();
-	(void)alarm(2);
+	(void)alarm(5);
 	(void)alarm(1);
-	dt = await_alrm(t0, 10000);
-	pc_check(dt != -1, "no SIGALRM");
-	pc_check(dt >= 990 && dt < 1900, "SIGALRM came %ld ms after alarm(1), expected about 1 s", dt);
-	pc_check(await_alrm(now_ms(), 2500) == -1, "a second SIGALRM came: the replaced alarm(2) request still fired");
+	dt = await_alrm(t0, 4500);
+	pc_check(dt != -1, "no SIGALRM within 4.5 s of alarm(1): the alarm(5) request was not replaced");
+	dt = await_alrm(t0, 6500 - (now_ms() - t0));	/* waits until 6.5 s after t0 */
+	pc_check(dt == -1, "a second SIGALRM came: the replaced alarm(5) request still fired");
 	pc_pass();
 }

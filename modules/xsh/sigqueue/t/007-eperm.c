@@ -175,6 +175,8 @@ int main(void)
 		union sigval v;
 		if (setgid(65534) != 0 || setuid(65534) != 0 || getuid() != 65534 || geteuid() != 65534)
 			_exit(99);
+		if (kill(getppid(), 0) != -1 || errno != EPERM)
+			_exit(98);	/* still privileged: it may signal its root parent */
 		v.sival_int = 0;
 		_exit(sigqueue(getppid(), SIGRTMIN, v) == 0 ? 10 : errno == EPERM ? 0 : 11);
 	}
@@ -182,6 +184,8 @@ int main(void)
 		;
 	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
 		pc_unresolved("cannot run as user 65534");
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 98)
+		pc_unresolved("user 65534 still has appropriate privileges here");
 	{
 		struct timespec ts = { 0, 100000000 };
 		(void)nanosleep(&ts, NULL);

@@ -61,7 +61,7 @@ int main(void)
 	pc_check(sigpending(&p) == 0, "sigpending failed");
 	{
 		int sig;
-		for (sig = 1; sig < 32; sig++)
+		for (sig = 1; sig <= SIGRTMAX + 64; sig++)	/* signals may lie above SIGRTMAX too */
 			if (sigismember(&p, sig) == 1)
 				pc_unresolved("signal %d is already pending", sig);
 	}

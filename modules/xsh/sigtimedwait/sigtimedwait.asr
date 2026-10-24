@@ -38,6 +38,9 @@ says       With SIGUSR1 and SIGUSR2 blocked and pending, sigtimedwait() on a
            set holding only SIGUSR1, with a zero timeout, returns SIGUSR1
            with si_signo SIGUSR1, si_code SI_USER and si_pid the caller's,
            as sigwaitinfo() would; SIGUSR2 stays pending.
+note       SIGUSR1 has an SA_SIGINFO handler (it stays blocked): whether
+           si_code and si_pid are filled in for a signal without
+           SA_SIGINFO is Q-52.
 test       t/004-pending-zero.c
 
 assertion  XSH.sigtimedwait.005

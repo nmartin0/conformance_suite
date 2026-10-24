@@ -77,6 +77,8 @@ static pid_t member(uid_t uid, void (*fn)(int))
 		sigemptyset(&sa.sa_mask);
 		if (sigaction(SIGUSR1, &sa, NULL) != 0 || setgid(65534) != 0 || setuid(uid) != 0)
 			_exit(99);
+		if (kill(getppid(), 0) != -1 || errno != EPERM)
+			_exit(99);	/* still privileged: it may signal its root parent */
 		(void)write(ready[1], "r", 1);
 		while (read(done[0], &c, 1) != 0)
 			;
@@ -108,6 +110,8 @@ static int group(void)
 			(void)signal(SIGUSR1, SIG_IGN);
 			if (setgid(65534) != 0 || setuid(65534) != 0)
 				_exit(99);
+			if (kill(getppid(), 0) != -1 || errno != EPERM)
+				_exit(99);	/* still privileged */
 			_exit(kill(0, SIGUSR1) == 0 ? 0 : errno == EPERM ? 2 : 3);
 		}
 		code = s == -1 || waitpid(s, &st, 0) != s || !WIFEXITED(st) ? 97 : WEXITSTATUS(st);

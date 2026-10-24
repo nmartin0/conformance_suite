@@ -6,6 +6,7 @@
  * MUTANT    kill.einval_accepted
  */
 #include "pc.h"
+#include <limits.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <stdarg.h>
@@ -44,11 +45,23 @@ static sigset_t set_of(int first, ...)
 	return s;
 }
 
+/* A signal number above every valid one: SIGRTMAX is below sysconf(_SC_NSIG) (Issue 8); INT_MAX where that is missing. */
+static int big_sig(void)
+{
+#ifdef _SC_NSIG
+	long n = sysconf(_SC_NSIG);
+
+	if (n > 0 && n <= INT_MAX)
+		return (int)n;
+#endif
+	return INT_MAX;
+}
+
 int main(void)
 {
 	pc_begin("XSH.kill.007");
 	pc_test();
 	pc_expect_err(kill(getpid(), -1), EINVAL, "kill(self, -1)");
-	pc_expect_err(kill(getpid(), 100000), EINVAL, "kill(self, 100000)");
+	pc_expect_err(kill(getpid(), big_sig()), EINVAL, "kill(self, <a number above every valid one>)");
 	pc_pass();
 }

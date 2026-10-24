@@ -127,6 +127,18 @@ static void h(int sig)
 	got = 1;
 }
 
+/* A signal number above every valid one: SIGRTMAX is below sysconf(_SC_NSIG) (Issue 8); INT_MAX where that is missing. */
+static int big_sig(void)
+{
+#ifdef _SC_NSIG
+	long n = sysconf(_SC_NSIG);
+
+	if (n > 0 && n <= INT_MAX)
+		return (int)n;
+#endif
+	return INT_MAX;
+}
+
 int main(void)
 {
 	pid_t g = getpgrp();
@@ -139,6 +151,6 @@ int main(void)
 	pc_check(killpg(g, 0) == 0, "killpg(own group, 0) failed: %s", pc_errname(errno));
 	sleep_ms(100);
 	pc_check(!got, "killpg() with signal 0 sent a signal");
-	pc_expect_err(killpg(g, 100000), EINVAL, "killpg(own group, 100000)");
+	pc_expect_err(killpg(g, big_sig()), EINVAL, "killpg(own group, <a number above every valid one>)");
 	pc_pass();
 }

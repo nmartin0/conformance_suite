@@ -75,6 +75,8 @@ int main(void)
 		if (s == 0) {
 			if (setgid(65534) != 0 || setuid(65534) != 0)
 				_exit(99);
+			if (kill(getppid(), 0) != -1 || errno != EPERM)
+				_exit(99);	/* still privileged */
 			_exit(killpg(l, SIGUSR1) == 0 ? 1 : errno == EPERM ? 0 : 2);
 		}
 		pc_check(waitpid(s, &st, 0) == s && WIFEXITED(st), "the sender did not exit");
@@ -85,7 +87,7 @@ int main(void)
 			(void)kill(l, SIGKILL);
 			(void)waitpid(l, NULL, 0);
 			if (WEXITSTATUS(st) == 99)
-				pc_unresolved("the sender could not take user 65534");
+				pc_unresolved("the sender could not take user 65534 without privileges left");
 			pc_check(r == 0, "the group's member was ended by the signal");
 		}
 		pc_check(WEXITSTATUS(st) != 1, "killpg() without permission succeeded");

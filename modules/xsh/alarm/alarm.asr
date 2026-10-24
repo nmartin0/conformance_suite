@@ -5,8 +5,9 @@ assertion  XSH.alarm.001
 anchor     functions/alarm.html#DESCRIPTION
 class      required
 since      1988
-says       alarm(1) returns 0 (no earlier alarm) and SIGALRM is generated no
-           earlier than 1 s later (10 ms tolerance) (accepted within 10 s).
+says       alarm(1) returns 0 (no earlier alarm) and SIGALRM is
+           generated (accepted within 10 s). Whether it may come early
+           is XSH.alarm.006.
 uses       XSH.sigtimedwait.002 XSH.sigtimedwait.005
 note       Scheduling delays may hold the signal back, so only the lower
            bound is tight.
@@ -27,9 +28,10 @@ assertion  XSH.alarm.003
 anchor     functions/alarm.html#DESCRIPTION
 class      required
 since      1988
-says       After alarm(10) and a 1 s pause, alarm(2) returns the seconds left
-           on the first alarm (8 to 10) and SIGALRM comes about 2 s later,
-           not 10 s.
+says       After alarm(10) and a 1 s pause, alarm(2) returns the seconds
+           left on the first alarm (8 to 10) and SIGALRM comes within 6
+           s, not after 10. Whether it may come before 2 s is
+           XSH.alarm.007.
 uses       XSH.sigtimedwait.002 XSH.sigtimedwait.005
 test       t/003-reschedule.c
 
@@ -37,11 +39,13 @@ assertion  XSH.alarm.004
 anchor     functions/alarm.html#DESCRIPTION
 class      required
 since      1988
-says       After alarm(2) and then alarm(1), one SIGALRM comes about 1 s
-           later (no earlier than 990 ms, and before 1.9 s) and no second
-           one follows in the next 2.5 s, when the replaced request would
-           have fired.
+says       After alarm(5) and then alarm(1), one SIGALRM comes within
+           4.5 s, and no second one comes by 6.5 s, when the replaced
+           request would have fired.
 uses       XSH.sigtimedwait.002 XSH.sigtimedwait.005
+note       No upper bound is promised (scheduling delays may hold the
+           signal), so the two requests are 4 s apart. Whether a signal
+           may come early is XSH.alarm.006 and .007 (Q-14).
 test       t/004-not-stacked.c
 
 assertion  XSH.alarm.005
@@ -53,3 +57,27 @@ says       With SIGALRM blocked in the main thread and caught, after alarm(1)
            not block SIGALRM (within 3 s).
 timeout    20
 test       t/005-to-process.c
+
+assertion  XSH.alarm.006
+anchor     functions/alarm.html#DESCRIPTION
+class      disputed
+since      1988
+says       SIGALRM from alarm(1) is generated no earlier than 1 s later
+           (10 ms tolerance).
+note       disputed (Q-14): alarm()'s RATIONALE notes that historical
+           systems let SIGALRM come up to a second early and calls not
+           early the most appropriate, but the text does not require it;
+           a FAIL is logged as INSPECT.
+test       t/006-not-early.c
+
+assertion  XSH.alarm.007
+anchor     functions/alarm.html#DESCRIPTION
+class      disputed
+since      1988
+says       With alarm(10) pending, alarm(2) makes SIGALRM come no
+           earlier than 2 s later (10 ms tolerance).
+note       disputed (Q-14): alarm()'s RATIONALE notes that historical
+           systems let SIGALRM come up to a second early and calls not
+           early the most appropriate, but the text does not require it;
+           a FAIL is logged as INSPECT.
+test       t/007-replaced-not-early.c

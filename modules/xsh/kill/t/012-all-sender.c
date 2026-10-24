@@ -269,10 +269,10 @@ static void run_sender(char out[3])
 	if (waitpid(s, &st, 0) != s)
 		pc_unresolved("waitpid failed");
 	if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
-		pc_unresolved("cannot become user %%lu without privileges left", (unsigned long)u);
+		pc_unresolved("cannot become user %lu without privileges left", (unsigned long)u);
 	if (WIFEXITED(st) && WEXITSTATUS(st) == 98)
 		pc_unresolved("the sender could not set up");
-	pc_check(k == 3, "the sender did not report (status %%#x)", st);
+	pc_check(k == 3, "the sender did not report (status %#x)", st);
 }
 
 int main(void)

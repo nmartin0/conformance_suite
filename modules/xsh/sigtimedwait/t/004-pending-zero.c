@@ -147,6 +147,25 @@ static void await_ready(int fd)
 		pc_unresolved("the child did not start");
 }
 
+static void info_handler(int sig, siginfo_t *si, void *uc)
+{
+	(void)sig;
+	(void)si;
+	(void)uc;
+}
+
+/* An SA_SIGINFO handler for sig (setup): the signal stays blocked, so it never runs. */
+static void with_siginfo(int sig)
+{
+	struct sigaction sa;
+
+	memset(&sa, 0, sizeof sa);
+	sa.sa_sigaction = info_handler;
+	sa.sa_flags = SA_SIGINFO;
+	sigemptyset(&sa.sa_mask);
+	pc_check(sigaction(sig, &sa, NULL) == 0, "sigaction(SA_SIGINFO) failed");
+}
+
 int main(void)
 {
 	sigset_t s = set_of(SIGUSR1, 0), p;
@@ -157,6 +176,7 @@ int main(void)
 	pc_begin("XSH.sigtimedwait.004");
 	block(SIGUSR1);
 	block(SIGUSR2);
+	with_siginfo(SIGUSR1);	/* si_code and si_pid are tied to SA_SIGINFO (XSH 2.4.3) */
 	pc_check(kill(getpid(), SIGUSR2) == 0 && kill(getpid(), SIGUSR1) == 0, "kill failed");
 	memset(&si, 0, sizeof si);
 	pc_test();

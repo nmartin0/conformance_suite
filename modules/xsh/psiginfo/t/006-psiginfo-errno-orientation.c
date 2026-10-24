@@ -164,14 +164,39 @@ static void call(void)
 	e2 = errno;
 }
 
+static void info_handler(int sig, siginfo_t *si, void *uc)
+{
+	(void)sig;
+	(void)si;
+	(void)uc;
+}
+
+/* An SA_SIGINFO handler for sig (setup): the signal stays blocked, so it never runs. */
+static void with_siginfo(int sig)
+{
+	struct sigaction sa;
+
+	memset(&sa, 0, sizeof sa);
+	sa.sa_sigaction = info_handler;
+	sa.sa_flags = SA_SIGINFO;
+	sigemptyset(&sa.sa_mask);
+	pc_check(sigaction(sig, &sa, NULL) == 0, "sigaction(SA_SIGINFO) failed");
+}
+
 int main(void)
 {
 	pc_begin("XSH.psiginfo.006");
-	memset(&si, 0, sizeof si);
-	si.si_signo = SIGUSR2;
-	si.si_code = SI_USER;
-	si.si_pid = getpid();
-	si.si_uid = getuid();
+	{
+		/* A valid siginfo_t, as psiginfo() requires: one the system filled in. */
+		sigset_t two;
+
+		sigemptyset(&two);
+		sigaddset(&two, SIGUSR2);
+		pc_check(sigprocmask(SIG_BLOCK, &two, NULL) == 0, "sigprocmask failed");
+		with_siginfo(SIGUSR2);
+		pc_check(kill(getpid(), SIGUSR2) == 0, "kill failed");
+		pc_check(sigwaitinfo(&two, &si) == SIGUSR2, "sigwaitinfo failed: %s", pc_errname(errno));
+	}
 	if (fwide(stderr, 0) != 0)
 		pc_unresolved("standard error is already oriented");
 	pc_test();

@@ -47,6 +47,25 @@ static long ms_since(const struct timespec *t0)
 	return (long)(t.tv_sec - t0->tv_sec) * 1000 + (t.tv_nsec - t0->tv_nsec) / 1000000;
 }
 
+static void info_handler(int sig, siginfo_t *si, void *uc)
+{
+	(void)sig;
+	(void)si;
+	(void)uc;
+}
+
+/* An SA_SIGINFO handler for sig (setup): the signal stays blocked, so it never runs. */
+static void with_siginfo(int sig)
+{
+	struct sigaction sa;
+
+	memset(&sa, 0, sizeof sa);
+	sa.sa_sigaction = info_handler;
+	sa.sa_flags = SA_SIGINFO;
+	sigemptyset(&sa.sa_mask);
+	pc_check(sigaction(sig, &sa, NULL) == 0, "sigaction(SA_SIGINFO) failed");
+}
+
 int main(void)
 {
 	pc_begin("XSH.sigtimedwait.008");
@@ -62,6 +81,7 @@ int main(void)
 		sigemptyset(&one);
 		sigaddset(&one, SIGRTMIN);
 		pc_check(sigprocmask(SIG_BLOCK, &one, NULL) == 0, "sigprocmask failed");
+		with_siginfo(SIGRTMIN);	/* queueing without SA_SIGINFO is unspecified (XSH 2.4.2) */
 		v.sival_int = 0;
 		pc_test();
 		for (i = 0; i < cap; i++)
