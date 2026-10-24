@@ -79,6 +79,11 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-65 | SIGBUS past a mapping's end has no si_code | omission | XSH.2.4.3-signal-actions.021 |
 | SI-66 | SI_MESGQ shading | editorial | XSH.2.4.3-signal-actions.017 |
 | SI-67 | fflush(): stale RATIONALE | inconsistency | XSH.fflush.004 |
+| SI-68 | truncate(): application sentence against EACCES | inconsistency | XSH.truncate.011 |
+| SI-69 | getrlimit(): stale RATIONALE on RLIMIT_FSIZE | editorial | none |
+| SI-70 | sigaction(): stale APPLICATION USAGE on longjmp() | editorial | none |
+| SI-71 | pthread_sigmask(): requirement on how | editorial | XSH.pthread_sigmask.010 |
+| SI-72 | 2.5.1: "open file descriptor" | editorial | none |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
@@ -120,3 +125,17 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-39 | trailing slash with "wx" | question | none |
 | Q-40 | fseek() offset after fflush() against 2.5.1 | question | XSH.fseek.004 |
 | Q-41 | fseek() EBADF wording | question | none |
+| Q-42 | RLIMIT_NOFILE below {_POSIX_OPEN_MAX} | question | EMFILE tests |
+| Q-43 | F_SETOWN: EINVAL or ESRCH | question | XSH.fcntl.013 |
+| Q-44 | rmdir() ENOENT wording | question | XSH.rmdir.008, .015 |
+| Q-45 | bind() and the socket file | question | XSH.fstatat.006 |
+| Q-46 | utimes() tv_usec | question | XSH.futimens.023 |
+| Q-47 | ungetc() against fflush() on pushback | question | XSH.ungetc.010 |
+| Q-48 | chmod(): set-ID bits ignored | question | chmod, fchmod, umask |
+| Q-49 | 2.5.1 and popen(), system(), posix_spawn() | question | XSH.2.5.1-stream-handles.009, .010 |
+| Q-50 | mmap() against 2.8.3.3 | question | XSH.2.4.3-signal-actions.021 |
+| Q-51 | signal(): "prevent ... from occurring" | question | XSH.signal.004 |
+| Q-52 | siginfo without SA_SIGINFO | question | XSH.sigtimedwait.004, .008 |
+| Q-53 | SIGCHLD ordering; E2BIG against ENOMEM | question | XSH._Exit.014, XSH.wait.002, XSH.exec.043 |
+| Q-54 | <unistd.h> intptr_t | question | Tier 0 |
+| Q-55 | <signal.h> constants distinct | question | XBD.signal.h.016, .017 |

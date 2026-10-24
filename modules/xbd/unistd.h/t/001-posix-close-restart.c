@@ -13,7 +13,8 @@ int main(void)
 	pc_test();
 #if !defined(POSIX_CLOSE_RESTART)
 	pc_fail("<unistd.h> does not define POSIX_CLOSE_RESTART");
-#elif (POSIX_CLOSE_RESTART) || 1
+#else
+	_Static_assert(POSIX_CLOSE_RESTART == POSIX_CLOSE_RESTART, "an integer constant expression");
 	pc_pass();
 #endif
 }

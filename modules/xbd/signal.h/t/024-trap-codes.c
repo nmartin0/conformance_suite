@@ -32,7 +32,10 @@ int main(void)
 	pc_fail("<signal.h> does not define every si_code constant: missing one of TRAP_BRKPT TRAP_TRACE");
 #else
 	{
-		enum { E_TRAP_BRKPT = TRAP_BRKPT, E_TRAP_TRACE = TRAP_TRACE };	/* integer constant expressions */
+		_Static_assert((TRAP_BRKPT) == (TRAP_BRKPT), "TRAP_BRKPT is an integer constant expression");
+		_Static_assert((TRAP_TRACE) == (TRAP_TRACE), "TRAP_TRACE is an integer constant expression");
+#define E_TRAP_BRKPT (TRAP_BRKPT)
+#define E_TRAP_TRACE (TRAP_TRACE)
 		static const long v[] = { E_TRAP_BRKPT, E_TRAP_TRACE };
 		static const char *const name[] = { "TRAP_BRKPT", "TRAP_TRACE" };
 		distinct("si_code values for SIGTRAP", v, name, 2);

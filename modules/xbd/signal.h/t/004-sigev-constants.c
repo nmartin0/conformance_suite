@@ -32,7 +32,12 @@ int main(void)
 	pc_fail("<signal.h> does not define SIGEV_NONE, SIGEV_SIGNAL and SIGEV_THREAD as macros");
 #else
 	{
-		enum { N = SIGEV_NONE, S = SIGEV_SIGNAL, T = SIGEV_THREAD };	/* integer constant expressions */
+		_Static_assert((SIGEV_NONE) == (SIGEV_NONE), "SIGEV_NONE is an integer constant expression");
+		_Static_assert((SIGEV_SIGNAL) == (SIGEV_SIGNAL), "SIGEV_SIGNAL is an integer constant expression");
+		_Static_assert((SIGEV_THREAD) == (SIGEV_THREAD), "SIGEV_THREAD is an integer constant expression");
+#define N (SIGEV_NONE)
+#define S (SIGEV_SIGNAL)
+#define T (SIGEV_THREAD)
 		static const long v[] = { N, S, T };
 		static const char *const name[] = { "SIGEV_NONE", "SIGEV_SIGNAL", "SIGEV_THREAD" };
 		struct sigevent ev;

@@ -238,6 +238,10 @@ while read -r pc_k pc_code pc_macro pc_yes pc_rest; do
 	[ "$pc_k" = claim ] || continue
 	case $pc_code in '' | *[!A-Z0-9]*) continue ;; esac
 	eval "pc_claim_$pc_code=\$pc_yes"
+	case " $pc_rest " in
+	*" compile=yes "*) eval "pc_cclaim_$pc_code=yes" ;;
+	*) eval "pc_cclaim_$pc_code=no" ;;
+	esac
 done <"$pc_results/claims.txt"
 
 # A profile has lines "key value". Keys used now:
@@ -281,6 +285,26 @@ pc_claimed() {
 	done
 }
 
+# The libraries of a list that link an empty program here (each tried once).
+pc_usable_libs() {
+	pc_ul=
+	for pc_l in "$@"; do
+		pc_lv=$(printf '%s' "$pc_l" | tr -c 'A-Za-z0-9\n' '_')
+		eval "pc_lok=\${pc_libok_$pc_lv:-}"
+		if [ -z "$pc_lok" ]; then
+			pc_lok=no
+			if [ -d "$pc_results" ] && printf 'int main(void) { return 0; }\n' >"$pc_results/.lib.c" &&
+			    "$pc_cc" -o "$pc_results/.lib" "$pc_results/.lib.c" "$pc_l" >/dev/null 2>&1 </dev/null; then
+				pc_lok=yes
+			fi
+			rm -f "$pc_results/.lib" "$pc_results/.lib.c"
+			eval "pc_libok_$pc_lv=\$pc_lok"
+		fi
+		[ "$pc_lok" = yes ] && pc_ul="$pc_ul $pc_l"
+	done
+	printf '%s\n' "$pc_ul"
+}
+
 # Is every code of "A+B+..." claimed?
 pc_claimed_all() {
 	pc_y=$1
@@ -290,7 +314,14 @@ pc_claimed_all() {
 		BASE) ;;
 		'' | *[!A-Z0-9]*) return 1 ;;
 		*)
-			eval "pc_cv=\${pc_claim_$pc_one:-no}"
+			# A module whose build failure is the failure (buildfail FAIL)
+			# checks headers only: an option supported for compilation is
+			# enough (macro 0, whatever sysconf() says).
+			if [ "${mod_buildfail:-}" = FAIL ]; then
+				eval "pc_cv=\${pc_cclaim_$pc_one:-no}"
+			else
+				eval "pc_cv=\${pc_claim_$pc_one:-no}"
+			fi
 			[ "$pc_cv" = yes ] || return 1
 			;;
 		esac
@@ -422,11 +453,12 @@ pc_assertion() {
 		pc_exe=$ctx_build/$pc_mod/${a_test##*/}
 		pc_exe=${pc_exe%.c}
 		mkdir -p "${pc_exe%/*}" || pc_abort "cannot create ${pc_exe%/*}"
+		pc_mlibs=$(pc_usable_libs $mod_libs)
 		pc_flags=-D_POSIX_C_SOURCE=202405L
 		case "|$pc_when+" in *[+'|']XSI[+'|']*) pc_flags=-D_XOPEN_SOURCE=800 ;; esac
 		# shellcheck disable=SC2086 # mod_libs is a word list
 		if ! "$pc_cc" $pc_flags $pc_ccstrict -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
-		    "$pc_bin/pc.o" $mod_libs >"$ctx_out/$pc_id.build.txt" 2>&1 \
+		    "$pc_bin/pc.o" $pc_mlibs >"$ctx_out/$pc_id.build.txt" 2>&1 \
 		    </dev/null; then
 			if [ "$mod_buildfail" = FAIL ]; then
 				# Tier 0 checks: a test that does not compile shows a

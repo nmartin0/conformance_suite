@@ -46,6 +46,8 @@ since      2008
 says       <signal.h> defines SIGEV_NONE, SIGEV_SIGNAL and SIGEV_THREAD as
            macros with different integer constant values that fit in
            sigev_notify.
+note       That the values are distinct is inferred from their having to
+           be told apart, not stated (Q-55).
 test       t/004-sigev-constants.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -173,34 +175,42 @@ class      required
 since      1988
 says       <signal.h> defines SIG_BLOCK, SIG_UNBLOCK and SIG_SETMASK as
            integer constant expressions with different values.
+note       That the values are distinct is inferred from their having to
+           be told apart, not stated (Q-55).
 test       t/015-sig-block.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
 assertion  XBD.signal.h.016
 anchor     basedefs/signal.h.html#DESCRIPTION/SA_NOCLDSTOP
-class      required
+class      disputed
 since      2008
 says       <signal.h> defines SA_NOCLDSTOP, SA_RESETHAND, SA_RESTART, SA_SIGINFO
            and SA_NODEFER as non-zero constants with no bits in common, so
            any of them can be combined in sa_flags.
-note       sigaction() lets these flags be set in sa_flags together,
-           which needs each to be a non-zero value with no bits in
-           common with the others.
+note       disputed (Q-55): <signal.h> calls these symbolic constants
+           and sigaction() speaks of flags set in sa_flags, but nothing
+           says they are non-zero with no bits in common; a FAIL is
+           logged as INSPECT. sigaction() lets these flags be set in
+           sa_flags together, which needs each to be a non-zero value
+           with no bits in common with the others.
 test       t/016-sa-flags.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
 assertion  XBD.signal.h.017
 anchor     basedefs/signal.h.html#DESCRIPTION/SA_ONSTACK
-class      conditional
+class      disputed
 when       XSI
 since      2001
 says       On XSI systems <signal.h> also defines SA_ONSTACK and SA_NOCLDWAIT,
            non-zero, with no bits in common with each other or the other SA_
            flags.
 uses       XBD.signal.h.016
-note       SA_NOCLDWAIT is still XSI-shaded although its CHANGE HISTORY
-           says it moved to the Base (standard issue SI-10); this
-           follows the shading.
+note       disputed (Q-55): <signal.h> calls these symbolic constants
+           and sigaction() speaks of flags set in sa_flags, but nothing
+           says they are non-zero with no bits in common; a FAIL is
+           logged as INSPECT. SA_NOCLDWAIT is still XSI-shaded although
+           its CHANGE HISTORY says it moved to the Base (standard issue
+           SI-10); this follows the shading.
 test       t/017-sa-flags-xsi.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -266,7 +276,9 @@ says       <signal.h> defines the si_code constants for SIGILL (ILL_*), SIGFPE
            SI_MESGQ); the values for one signal, and the SI_ values, are all
            different.
 note       Whether an SI_ value may equal a signal-specific value is not
-           stated, so only values within one group are compared.
+           stated, so only values within one group are compared. That
+           the values are distinct is inferred from their having to be
+           told apart, not stated (Q-55).
 test       t/023-si-codes.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 

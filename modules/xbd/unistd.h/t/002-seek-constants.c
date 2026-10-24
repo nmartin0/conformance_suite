@@ -19,7 +19,16 @@ int main(void)
 #else
 	{
 		/* Integer constant expressions: usable as enumeration values. */
-		enum { S = SEEK_SET, C = SEEK_CUR, E = SEEK_END, H = SEEK_HOLE, D = SEEK_DATA };
+		_Static_assert((SEEK_SET) == (SEEK_SET), "SEEK_SET is an integer constant expression");
+		_Static_assert((SEEK_CUR) == (SEEK_CUR), "SEEK_CUR is an integer constant expression");
+		_Static_assert((SEEK_END) == (SEEK_END), "SEEK_END is an integer constant expression");
+		_Static_assert((SEEK_HOLE) == (SEEK_HOLE), "SEEK_HOLE is an integer constant expression");
+		_Static_assert((SEEK_DATA) == (SEEK_DATA), "SEEK_DATA is an integer constant expression");
+#define S (SEEK_SET)
+#define C (SEEK_CUR)
+#define E (SEEK_END)
+#define H (SEEK_HOLE)
+#define D (SEEK_DATA)
 		int v[5] = { S, C, E, H, D }, i, j;
 		for (i = 0; i < 5; i++)
 			for (j = i + 1; j < 5; j++)

@@ -94,6 +94,11 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-65 | XBD `<signal.h>`: no si_code for SIGBUS past the end of a mapped object | Defect (omission) | Low | Code not checked (XSH.2.4.3-signal-actions.021) |
 | SI-66 | XBD `<signal.h>`: SI_MESGQ not shaded MSG | Defect (editorial) | Low | Test is MSG-conditional (XSH.2.4.3-signal-actions.017) |
 | SI-67 | XSH `fflush()`: RATIONALE says the input-stream offset rule is not mandated | Defect (inconsistency) | Low | DESCRIPTION followed (XSH.fflush.004) |
+| SI-68 | XSH `truncate()`: an application requirement where an error is required | Defect (inconsistency) | Low | EACCES required (XSH.truncate.011) |
+| SI-69 | XSH `getrlimit()`: RATIONALE says RLIMIT_FSIZE stays XSI | Defect (editorial) | Low | Base, per the CHANGE HISTORY |
+| SI-70 | XSH `sigaction()`: APPLICATION USAGE says longjmp() is not async-signal-safe | Defect (editorial) | Low | XSH 2.4.3 table followed |
+| SI-71 | XSH `pthread_sigmask()`: an unconditional requirement on how | Defect (editorial) | Low | The specific text followed (XSH.pthread_sigmask.010) |
+| SI-72 | XSH 2.5.1: "any handle to this open file descriptor" | Defect (editorial) | Low | Read as open file description |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -135,6 +140,20 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-39 | XSH `fopen()`: a trailing slash with "wx" | Question | Low | Not tested |
 | Q-40 | XSH `fseek()`: the offset after fflush() against XSH 2.5.1 | Question | Medium | Disputed (XSH.fseek.004) |
 | Q-41 | XSH `fseek()`: EBADF for a descriptor "not open for writing" | Question | Low | Not tested |
+| Q-42 | XSH `getrlimit()`: RLIMIT_NOFILE below {_POSIX_OPEN_MAX} | Question | Low | Tests keep the limit at 20 or more |
+| Q-43 | XSH `fcntl()`: F_SETOWN with the ID of a process that is gone | Question | Low | Disputed (XSH.fcntl.013) |
+| Q-44 | XSH `rmdir()`: ENOENT for "a nonexistent directory" | Question | Low | Disputed (XSH.rmdir.008, .015) |
+| Q-45 | XSH `bind()`: the file an AF_UNIX address creates | Question | Low | Required, by implication (XSH.fstatat.006) |
+| Q-46 | XSH `utimes()`: an out-of-range tv_usec | Question | Low | Disputed (XSH.futimens.023) |
+| Q-47 | XSH `ungetc()` against `fflush()`: when is pushback discarded? | Question | Medium | Tests use a large file (XSH.ungetc.010) |
+| Q-48 | XSH `chmod()`: what "S_ISUID and S_ISGID bits in mode ... ignored" means | Question | Low | Directory S_ISGID masked (chmod, fchmod, umask) |
+| Q-49 | XSH 2.5.1: process creation the application does not see | Question | Low | Not tested |
+| Q-50 | XSH `mmap()` against XSH 2.8.3.3: references past a shrunk file | Question | Low | A one-page file mapped twice as long (XSH.2.4.3-signal-actions.021) |
+| Q-51 | XSH `signal()`: what "prevent ... from occurring" is | Question | Low | Judged by behaviour (XSH.signal.004) |
+| Q-52 | XSH `sigwaitinfo()`: siginfo for a signal without SA_SIGINFO | Question | Low | SA_SIGINFO set in the tests (XSH.sigtimedwait.004, .008) |
+| Q-53 | XSH `_exit()`: status available before SIGCHLD; E2BIG against ENOMEM | Question | Low | Bounded waits (XSH._Exit.014, XSH.wait.002); ENOMEM accepted (XSH.exec.043) |
+| Q-54 | XBD `<unistd.h>`: intptr_t without XSI shading | Question | Low | Conditional on XSI (Tier 0) |
+| Q-55 | XBD `<signal.h>`: are the flag and code constants distinct? | Question | Low | Disputed (XBD.signal.h.016, .017) |
 
 ## Entries
 
@@ -387,6 +406,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **posixcheck meanwhile:** XSH.exec.036 expects EACCES for a directory.
 - **Suggested change:** drop "regular" from the DESCRIPTION, or make the
   error simply "not a regular file".
+- **After the Linux-ism audit:** XSH.exec.036 is now `disputed`.
 
 ### SI-19: a file with "privileges"
 
@@ -607,6 +627,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **Why it is a problem:** the two descriptions differ for memory faults, and only one of them was updated.
 - **posixcheck meanwhile:** XSH.2.4.3-signal-actions.015 follows `<signal.h>` (an address inside the page written).
 - **Suggested change:** align 2.4.3 with `<signal.h>` (editorial).
+- **After the Linux-ism audit:** <signal.h> also says si_addr "may be inaccurate" for some implementations, with no bound; XSH.2.4.3-signal-actions.021 now notes a wrong address rather than failing it (Q-50).
 
 ### SI-43: XSH 2.4.3 SIG_DFL: the queued-values sentence's scope and wording
 
@@ -743,6 +764,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **Why it is a problem:** for utimes() the conditions can only be read through the sentence making it equivalent to utimensat(); in particular nothing says an out-of-range tv_usec gives EINVAL. The missing shading makes XSI-only text look like Base text.
 - **posixcheck meanwhile:** XSH.futimens.023 requires EINVAL for tv_usec 1000000 and -1 (XSI); utimes() assertions are conditional on XSI.
 - **Suggested change:** state the utimes() conditions in timeval terms (tv_usec, a null times argument) and shade all utimes() text XSI.
+- **After the Linux-ism audit:** Raised to a question, Q-46: XSH.futimens.023 is now `disputed`.
 
 ### SI-60: utimes(): rounding to the nearest second conflicts with XBD 4.12
 
@@ -808,6 +830,41 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **posixcheck meanwhile:** the DESCRIPTION is followed (XSH.fflush.004, .005, .016).
 - **Suggested change:** rewrite the RATIONALE to explain the Issue 7 rule (editorial).
 
+### SI-68: XSH truncate(): an application requirement where an error is required
+
+- **Where:** XSH `truncate()`, DESCRIPTION and ERRORS.
+- **What the text says:** the DESCRIPTION says the application shall ensure the process has write permission for the file, while ERRORS says truncate() shall fail with EACCES when write permission is denied.
+- **Problem:** read as an application requirement, a call without permission is undefined, which contradicts the required error.
+- **Suggested change:** delete the application sentence.
+
+### SI-69: XSH getrlimit(): RATIONALE says RLIMIT_FSIZE stays XSI
+
+- **Where:** XSH `getrlimit()`, RATIONALE and CHANGE HISTORY.
+- **What the text says:** the RATIONALE says the RLIMIT_CPU and RLIMIT_FSIZE limits remain in the XSI option; the Issue 8 CHANGE HISTORY (Austin Group defects 51 and 1669) moves the functions to Base excluding only RLIMIT_CPU, and the DESCRIPTION shades only RLIMIT_CPU and the SIGXFSZ clause of RLIMIT_FSIZE.
+- **Problem:** the RATIONALE disagrees with the normative text.
+- **Suggested change:** say that only RLIMIT_CPU remains XSI.
+
+### SI-70: XSH sigaction(): APPLICATION USAGE says longjmp() is not async-signal-safe
+
+- **Where:** XSH `sigaction()`, APPLICATION USAGE; XSH 2.4.3.
+- **What the text says:** the APPLICATION USAGE says longjmp() and siglongjmp() are not in the list of async-signal-safe functions; the table in XSH 2.4.3 lists both.
+- **Problem:** the informative text is out of date.
+- **Suggested change:** update the APPLICATION USAGE.
+
+### SI-71: XSH pthread_sigmask(): an unconditional requirement on how
+
+- **Where:** XSH `pthread_sigmask()`, DESCRIPTION and ERRORS.
+- **What the text says:** the application shall ensure how is one of SIG_BLOCK, SIG_SETMASK and SIG_UNBLOCK, without exception, yet how "is not significant" when set is a null pointer, and an invalid how is a required EINVAL.
+- **Problem:** the application requirement overlaps both the null-set rule and the required error.
+- **Suggested change:** limit the sentence to a non-null set, or drop it in favour of EINVAL.
+
+### SI-72: XSH 2.5.1: "any handle to this open file descriptor"
+
+- **Where:** XSH 2.5.1, first handle.
+- **What the text says:** the item for a handle whose only further action is to be closed speaks of "any handle to this open file descriptor"; handles are defined on the open file description.
+- **Problem:** the wording names the wrong object.
+- **Suggested change:** read "open file description".
+
 ## Questions to raise
 
 These are consistent as written, but the intent or the fit with practice
@@ -839,6 +896,7 @@ is unclear.
   page could say so.
 - **posixcheck meanwhile:** asserts only the off_t overflow case
   (XSH.lseek.011); Linux fails it.
+- **After the Linux-ism audit:** XSH.lseek.011 is now `disputed`: the overflowing result is also beyond every file system's largest file, so XSH 2.3 lets either error be reported.
 
 ### Q-3: A fork child and an unnamed semaphore with pshared 0?
 
@@ -904,6 +962,7 @@ is unclear.
   file and directory modules mark such assertions `disputed` (a FAIL is
   logged as INSPECT), for example XSH.fstatat.020, XSH.link.014,
   XSH.chmod.012.
+- **After the Linux-ism audit:** Cases where only one error condition applies are now required assertions of their own (XSH.link.024, .025, XSH.unlink.023, XSH.rename.035, XSH.fstatat.026, XSH.chmod.022, XSH.chown.022, XSH.access.021, XSH.lchown.008, .009); only the overlapping cases stay disputed.
 
 ### Q-9: Which {ARG_MAX} does E2BIG compare against?
 
@@ -916,6 +975,7 @@ is unclear.
   means. Linux also derives the limit from the stack size limit, which fits
   badly with a runtime invariant value.
 - **posixcheck meanwhile:** XSH.exec.043 uses sysconf()'s value; musl fails.
+- **After the Linux-ism audit:** XSH.exec.043 is now `disputed`, and accepts ENOMEM when the arguments also exceed the stack limit (Q-53).
 
 ### Q-10: What does execvp()'s sh fallback pass when argv[0] is a null pointer?
 
@@ -949,6 +1009,7 @@ is unclear.
 - **Where:** XSH `alarm()`, DESCRIPTION and RATIONALE; XSH `sleep()`, RATIONALE.
 - **Question:** the DESCRIPTION generates SIGALRM after the given number of realtime seconds have elapsed. The RATIONALE notes that historical systems fire up to a second early and calls not firing early only the "most appropriate" choice. Is an early SIGALRM nonconforming, as the DESCRIPTION reads?
 - **posixcheck meanwhile:** XSH.alarm.001 treats an early signal as a FAIL, with 10 ms tolerance for clock granularity.
+- **After the Linux-ism audit:** The early-signal checks moved to XSH.alarm.006 and .007, both `disputed`; XSH.alarm.001, .003 and .004 no longer depend on this question, and .004 no longer has an upper bound.
 
 ### Q-15: pause() and sigsuspend(): delivery to which thread?
 
@@ -985,6 +1046,7 @@ is unclear.
 - **Where:** XSH `sigaltstack()`, DESCRIPTION.
 - **Question:** the oss ss_flags member "may contain" SS_ONSTACK (the process is executing on the stack) or SS_DISABLE. Is reporting the state required, with "may" only meaning that one value or neither applies? The SS_ONSTACK description also speaks of the process, while the stack is per thread (compare SI-26).
 - **posixcheck meanwhile:** XSH.sigaltstack.009 (SS_ONSTACK reported inside the handler) is `disputed`; XSH.sigaltstack.002 and .003 require SS_DISABLE to be reported.
+- **After the Linux-ism audit:** The same "may contain" wording governs SS_DISABLE. XSH.sigaltstack.002, .008 and the new .013 (SS_DISABLE reported) are now `disputed` too; XSH.sigaltstack.003, .012 and XSH.sigaction.009 keep only their behaviour.
 
 ### Q-21: abort() with SIGABRT caught but blocked: must the handler run?
 
@@ -1009,6 +1071,7 @@ is unclear.
 - **Where:** XSH `link()`, DESCRIPTION and ERRORS ([EACCES]).
 - **Question:** the implementation may require that the calling process has permission to access the existing file, and [EACCES] covers the case where it lacks that permission. "Access" is not defined: is read permission enough, or may an implementation demand ownership, or read and write permission? And when a security policy refuses (Linux `fs.protected_hardlinks`, FreeBSD `security.bsd.hardlink_check_uid`), is EPERM an allowed additional error, or must the error be [EACCES] (XSH 2.3 forbids a different error number for a condition the page describes)?
 - **posixcheck meanwhile:** XSH.link.019 is `disputed`: linking another user's readable file must succeed or fail with EACCES; EPERM is logged as INSPECT.
+- **After the Linux-ism audit:** When path1 is a directory and the implementation also requires access to the existing file, both EPERM and EACCES apply; should EPERM take precedence? XSH.link.012 gives the directory to the unprivileged child, so only EPERM applies there.
 
 ### Q-25: chown() with owner and group both -1 on another user's file
 
@@ -1028,6 +1091,7 @@ is unclear.
 - **Where:** XSH `futimens()`, DESCRIPTION (who may set the current time) and [EACCES].
 - **Question:** for futimens(fd, NULL), is "write access to the file" decided by the file's permission bits, or by whether fd is open for writing? The Linux man page has long said the kernel checks the descriptor; Linux 6.18 decides by the file's permissions. The sentence on the O_SEARCH check also says "the function" where only utimensat() can be meant.
 - **posixcheck meanwhile:** XSH.futimens.021 requires success for a read-only descriptor of a file the process may write.
+- **After the Linux-ism audit:** The read-only-descriptor case is now XSH.futimens.026, `disputed`; XSH.futimens.021 keeps the rest, required.
 
 ### Q-28: fflush(NULL) and the input-stream offset rule
 
@@ -1040,6 +1104,7 @@ is unclear.
 - **Where:** XSH `fflush()`, `fclose()` and `exit()` (the input-stream offset rule); XSH 2.5.1.
 - **Question:** the offset rule applies "if the file is not already at EOF". Does that mean the stream's end-of-file indicator (XSH 2.5.1 speaks of feof() being true), or the underlying file offset being at the end of the file? After one read of a small file, read-ahead has usually taken the whole file: the indicator is clear but the descriptor is at the end, so the two readings give different answers.
 - **posixcheck meanwhile:** the tests read a 1 MiB file, so both readings require the rule; XSH.fflush.015 checks that a stream whose indicator is set is left alone.
+- **After the Linux-ism audit:** Moving the descriptor while the stream is at end of file and then using the stream without fseek() is undefined (XSH 2.5.1, second handle), so the "offset" reading cannot be tested at end of file without undefined behaviour. XSH.fflush.015 no longer moves the descriptor.
 
 ### Q-30: fflush(): the stream's position after pushed-back bytes are discarded
 
@@ -1052,6 +1117,7 @@ is unclear.
 - **Where:** XSH `_exit()`, Consequences of Process Termination; XSH 2.12.
 - **Question:** when several threads of the parent are blocked in wait() or waitpid() for a child that exits, one of them obtains the status. Only the XSI case (SIGCHLD ignored or SA_NOCLDWAIT) then says a waiter with no remaining children fails with ECHILD. In the ordinary case, must the other threads fail with ECHILD once no children remain, or may they stay blocked? wait()'s ERRORS suggest ECHILD, but the text does not say so.
 - **posixcheck meanwhile:** XSH._Exit.015 requires that exactly one thread gets the status; XSH._Exit.020 (the other gets ECHILD) is `disputed`.
+- **After the Linux-ism audit:** XSH._Exit.015 and .020 no longer join the thread that may stay blocked; .020 FAILs (INSPECT) if it is still blocked 2 s later.
 
 ### Q-32: _exit(): completing or canceling outstanding asynchronous I/O
 
@@ -1065,6 +1131,7 @@ is unclear.
 - **Question:** setvbuf() says each of _IOFBF, _IOLBF and _IONBF shall cause that kind of buffering, and that a request that cannot be honoured makes it return non-zero. XSH 2.5 (following ISO C) makes support for the buffering characteristics implementation-defined. Together these appear to let an implementation refuse any mode, or accept it and buffer some other way. Must an accepted _IONBF stream send each byte at once and an accepted _IOLBF stream send each line at its newline? Is setvbuf() still permitted after an unsuccessful call, given that the text mentions this only as an allowance for applications?
 - **posixcheck meanwhile:** XSH.setvbuf.001 checks only that data arrives intact under each accepted mode and notes refusals. XSH.setvbuf.003, .004 and .006 check the observable effect of an accepted mode and are `disputed`: a FAIL is logged as INSPECT, and a refusal is UNRESOLVED.
 - **Also:** fopen() says a stream is fully buffered if and only if it can be determined not to refer to an interactive device, but "interactive device" is not defined and the same implementation-defined support applies. XSH.fopen.019 (a terminal, XSI) and XSH.fopen.020 (a regular file) are `disputed` under this question.
+- **After the Linux-ism audit:** XSH 2.5.1's first-handle items for unbuffered and line-buffered streams rest on the same point: XSH.2.5.1-stream-handles.004 and .005 are both `disputed`.
 
 ### Q-34: ungetc(): the limit on repeated pushback and fflush()
 
@@ -1096,6 +1163,7 @@ is unclear.
 - **Where:** XSH `open()`, `fopen()`; XSH 2.3.
 - **Question:** XSH 2.3 allows a failed call to have been partly performed unless stated otherwise, and neither open() nor fopen() says that a failed O_CREAT leaves no new file: not for EMFILE (a system may create the name before it finds no free descriptor), nor for the trailing-slash errors. Is a file left behind conforming, or is "no file created" intended?
 - **posixcheck meanwhile:** XSH.fopen.027, .028 and .031 check only the errno. XSH.fopen.009 and .011 do check the file, on the strength of open()'s atomic O_EXCL rule.
+- **After the Linux-ism audit:** Correction: open()'s RETURN VALUE does say "If -1 is returned, no files shall be created or modified". The question narrows to fopen(): its file is created as if by open(), which covers a failure of that open(), but fopen() can also fail after a successful open() (no stream left, out of memory). Must it then remove the file it created?
 
 ### Q-39: fopen(): a trailing slash with "wx"
 
@@ -1114,6 +1182,90 @@ is unclear.
 - **Where:** XSH `fseek()`, ERRORS.
 - **Question:** EBADF covers a descriptor "not open for writing" or a buffer that needed flushing when the file is not open. Read literally, every fseek() on an unbuffered read-only stream (the preamble holds, since lseek() is invoked) shall fail with EBADF. The first clause presumably means "not open for writing while output needed to be flushed". No implementation behaves the literal way.
 - **posixcheck meanwhile:** XSH.fseek.012 tests only the closed-descriptor case.
+
+### Q-42: XSH getrlimit(): RLIMIT_NOFILE below {_POSIX_OPEN_MAX}
+
+- **Where:** XSH `getrlimit()`, DESCRIPTION and APPLICATION USAGE; XBD `<limits.h>`.
+- **Question:** setrlimit() sets the requested value, yet the APPLICATION USAGE warns that a soft or hard RLIMIT_NOFILE below {_POSIX_OPEN_MAX} may cause unexpected behaviour, and {OPEN_MAX} has {_POSIX_OPEN_MAX} (20) as its minimum. Must a conforming system honour a soft limit of, say, 8 (getrlimit() returning it, EMFILE at it), and what may sysconf(_SC_OPEN_MAX) return then?
+- **posixcheck meanwhile:** the EMFILE tests (XSH.open.040, XSH.dup.005, XSH.pipe.006, .010, XSH.fcntl.006, XSH.fopen.031) never go below 20, and give UNRESOLVED if the limit does not take.
+
+### Q-43: XSH fcntl(): F_SETOWN with the ID of a process that is gone
+
+- **Where:** XSH `fcntl()`, ERRORS.
+- **Question:** ESRCH (shall fail) is for a process ID that names no process; the may-fail EINVAL is for a positive arg "not valid as a process ID". Is an ID that names no process also "not valid", so that XSH 2.3 allows either error?
+- **posixcheck meanwhile:** XSH.fcntl.013 requires ESRCH and is `disputed`.
+
+### Q-44: XSH rmdir(): ENOENT for "a nonexistent directory"
+
+- **Where:** XSH `rmdir()`, ERRORS.
+- **Question:** ENOENT covers a path that "names a nonexistent directory". An existing regular file, named as "f" or "f/", names no directory, so ENOENT overlaps ENOTDIR and XSH 2.3 allows either. Should ENOENT read "names a nonexistent file", as on other pages?
+- **posixcheck meanwhile:** XSH.rmdir.008 and .015 require ENOTDIR and are `disputed`.
+
+### Q-45: XSH bind(): the file an AF_UNIX address creates
+
+- **Where:** XSH `bind()`; XBD `<sys/stat.h>`.
+- **Question:** bind() never says that binding an AF_UNIX address creates a file of type socket (S_ISSOCK through stat()); that is only implied by EACCES (the name needs writing in a directory) and EROFS (the name would reside on a read-only file system). Should bind() say so?
+- **posixcheck meanwhile:** XSH.fstatat.006 requires S_ISSOCK for the bound name, with a note.
+
+### Q-46: XSH utimes(): an out-of-range tv_usec
+
+- **Where:** XSH `futimens()` (utimes()), ERRORS; SI-59.
+- **Question:** utimes()'s errors are written in tv_nsec terms; nothing says a tv_usec outside [0, 999999] gives EINVAL. utimes() is equivalent to utimensat() with a timeval, so EINVAL follows if the value is carried over unchanged, but normalising the timeval is also a defensible reading. Which is intended?
+- **posixcheck meanwhile:** XSH.futimens.023 requires EINVAL and is `disputed`.
+
+### Q-47: XSH ungetc() against fflush(): when is pushback discarded?
+
+- **Where:** XSH `ungetc()`, DESCRIPTION; XSH `fflush()`, DESCRIPTION.
+- **Question:** ungetc() says a successful fflush() shall discard any pushed-back bytes, with no condition; fflush() discards them only for a stream open for reading on a seekable file that is not already at end of file. For a stream at end of file, or on a pipe, one page requires the discard and the other does not. Which governs?
+- **posixcheck meanwhile:** XSH.ungetc.010 reads a 1 MiB file, so both pages require the discard.
+
+### Q-48: XSH chmod(): what "S_ISUID and S_ISGID bits in mode ... ignored" means
+
+- **Where:** XSH `chmod()`, DESCRIPTION.
+- **Question:** implementation-defined restrictions may cause the S_ISUID and S_ISGID bits in mode to be ignored. Does that mean the file's existing bit is kept (for example a directory's inherited S_ISGID), or that the bit in mode is treated as zero? The answer decides whether a check of the whole mode is valid.
+- **posixcheck meanwhile:** the directory mode checks ignore S_ISGID; XSH.chmod.020 accepts EPERM for a refused S_ISUID, as for an ignored one.
+
+### Q-49: XSH 2.5.1: process creation the application does not see
+
+- **Where:** XSH 2.5.1; XSH `popen()`, `system()`, `posix_spawn()`.
+- **Question:** the rules ask the application to prepare for a fork() as for a change of handle, but popen(), system() and posix_spawn() create processes without the application calling fork(). Does the guarantee (no data lost or duplicated) still hold for data pending in the parent's streams? Separately, the parenthesis saying a process that only calls _exit() or an exec function never accesses the handle sits uneasily with the sentence that the state becomes undefined if the active handle "ceases to be accessible" during a fork() or _exit(); the parenthesis should be stated as an exception.
+- **posixcheck meanwhile:** XSH.2.5.1-stream-handles.009 and .010 rely on the parenthesis; popen(), system() and posix_spawn() are not tested.
+
+### Q-50: XSH mmap() against XSH 2.8.3.3: references past a shrunk file
+
+- **Where:** XSH `mmap()`, DESCRIPTION; XSH 2.8.3.3.
+- **Question:** mmap() leaves references to portions of a mapping that correspond to removed portions of the file unspecified, while 2.8.3.3 requires SIGBUS for references beyond the current length of the object. Which governs a file shrunk after mmap()?
+- **posixcheck meanwhile:** XSH.2.4.3-signal-actions.021 maps two pages of a file that has one page from the start, which both texts cover.
+
+### Q-51: XSH signal(): what "prevent ... from occurring" is
+
+- **Where:** XSH `signal()`, DESCRIPTION; XSH `sigaction()`.
+- **Question:** when a handler installed with signal() runs, the system either resets the action to SIG_DFL or prevents an implementation-defined set of signals from occurring. Must the prevention be the signal mask (visible to sigprocmask() in the handler)? And is the implicit reset "established by signal()", so that sigaction()'s oact is then unspecified?
+- **posixcheck meanwhile:** XSH.signal.004 judges by behaviour: a reset action ends the child; a held-off signal does not re-enter the handler.
+
+### Q-52: XSH sigwaitinfo(): siginfo for a signal without SA_SIGINFO
+
+- **Where:** XSH `sigwaitinfo()`, `sigtimedwait()`; XSH 2.4.2, 2.4.3.
+- **Question:** sigwaitinfo() stores the cause in si_code, but the rule that SI_USER signals carry si_pid and si_uid is stated for handlers entered with SA_SIGINFO, and 2.4.2 leaves queueing unspecified without SA_SIGINFO; some systems report SI_NOINFO for such signals. Must si_code, si_pid and si_uid be valid when the signal accepted has no SA_SIGINFO action?
+- **posixcheck meanwhile:** XSH.sigtimedwait.004 and .008 give their signals an SA_SIGINFO handler (blocked, so it never runs).
+
+### Q-53: XSH _exit(): status available before SIGCHLD; E2BIG against ENOMEM
+
+- **Where:** XSH `_exit()`, Consequences of Process Termination; XSH `wait()`; XSH exec, ERRORS.
+- **Question:** once a parent can obtain a child's status (waitid() with WNOWAIT returns), must the SIGCHLD for that termination already have been generated? The consequences list does not order the two, and wait() covers only the other direction. Separately: when the arguments exceed {ARG_MAX} and the new image would also exceed a memory limit such as the stack limit, XSH 2.3 lets the may-fail ENOMEM be reported instead of the shall-fail E2BIG; should E2BIG take precedence (as with SI-4 and Q-8)?
+- **posixcheck meanwhile:** XSH._Exit.014 waits up to 1 s for SIGCHLD; XSH.wait.002 establishes availability with waitid(WNOWAIT); XSH.exec.043 accepts ENOMEM when the arguments exceed the stack limit.
+
+### Q-54: XBD <unistd.h>: intptr_t without XSI shading
+
+- **Where:** XBD `<unistd.h>`; XBD `<stdint.h>`.
+- **Question:** <unistd.h> (unshaded) shall define intptr_t "as described in <stdint.h>", where intptr_t is required only on XSI-conformant systems. Is intptr_t mandatory for every system, or should the <unistd.h> sentence be XSI-shaded?
+- **posixcheck meanwhile:** Tier 0 checks <unistd.h>'s intptr_t only on XSI systems.
+
+### Q-55: XBD <signal.h>: are the flag and code constants distinct?
+
+- **Where:** XBD `<signal.h>`; XSH `sigaction()`.
+- **Question:** the SA_* constants are only "symbolic constants"; sigaction() speaks of flags set or cleared in sa_flags, which implies non-zero values with no bits in common but does not say so. Likewise nothing states that SIG_BLOCK, SIG_UNBLOCK and SIG_SETMASK, the SIGEV_* values, or the si_code values within one signal's group are distinct. Should the header say so, as <fcntl.h> does for its flags?
+- **posixcheck meanwhile:** XBD.signal.h.016 and .017 (SA_* flags) are `disputed`; .004, .015 and .023 note that distinctness is inferred.
 
 ## Tracking
 

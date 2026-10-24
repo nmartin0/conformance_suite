@@ -24,7 +24,7 @@ XSH.sigaction.021  INSPECT      linux*    SI-24 (disputed): sigqueue() does not 
 XSH.kill.012       FAIL         linux*    2.2: kill(-1, sig) does not signal the calling process
 XBD.signal.h.007   FAIL         linux*    1.24: no _SC_NSIG or NSIG_MAX
 XBD.signal.h.008   FAIL         linux*    3.1: no SIG2STR_MAX
-XBD.signal.h.028   UNINITIATED  linux*    3.1: no sig2str() or str2sig()
+XBD.signal.h.028   FAIL         linux*    3.1: no sig2str() or str2sig() (sig2str undeclared)
 XSH.psiginfo.002   FAIL         linux*    O.15: psignal(sig, "") writes ": "
 XSH.sig2str.001    UNINITIATED  linux*    3.1: no sig2str() or str2sig()
 XSH.sig2str.002    UNINITIATED  linux*    3.1: no sig2str() or str2sig()

@@ -9,7 +9,7 @@ anchor     utilities/false.html#EXIT STATUS
 anchor     utilities/V3_chap01.html#1.6
 class      required
 since      1992
-says       false exits with a status from 1 to 125 inclusive.
+says       false exits with a non-zero status.
 test       t/001-status.sh
 
 assertion  XCU.false.002
@@ -27,3 +27,13 @@ class      required
 since      1992
 says       false writes nothing to standard error.
 test       t/003-no-stderr.sh
+
+assertion  XCU.false.004
+anchor     utilities/false.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.6
+class      required
+since      2024
+says       false exits with a status from 1 to 125 inclusive.
+note       Austin Group defect 1321 (Issue 8) set the range; before, the
+           status had only to be non-zero (XCU.false.001).
+test       t/004-status-range.sh

@@ -16,7 +16,12 @@ int main(void)
 	pc_fail("<unistd.h> does not define SEEK_SET, SEEK_CUR and SEEK_END as macros");
 #else
 	{
-		enum { S = SEEK_SET, C = SEEK_CUR, E = SEEK_END };
+		_Static_assert((SEEK_SET) == (SEEK_SET), "SEEK_SET is an integer constant expression");
+		_Static_assert((SEEK_CUR) == (SEEK_CUR), "SEEK_CUR is an integer constant expression");
+		_Static_assert((SEEK_END) == (SEEK_END), "SEEK_END is an integer constant expression");
+#define S (SEEK_SET)
+#define C (SEEK_CUR)
+#define E (SEEK_END)
 		pc_check(S != C && S != E && C != E, "SEEK_SET, SEEK_CUR and SEEK_END are not all different");
 	}
 	pc_pass();

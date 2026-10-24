@@ -32,7 +32,14 @@ int main(void)
 	pc_fail("<signal.h> does not define SS_ONSTACK, SS_DISABLE, MINSIGSTKSZ and SIGSTKSZ");
 #else
 	{
-		enum { O = SS_ONSTACK, D = SS_DISABLE, MN = MINSIGSTKSZ, DF = SIGSTKSZ };	/* integer constant expressions */
+		_Static_assert((SS_ONSTACK) == (SS_ONSTACK), "SS_ONSTACK is an integer constant expression");
+		_Static_assert((SS_DISABLE) == (SS_DISABLE), "SS_DISABLE is an integer constant expression");
+		_Static_assert((MINSIGSTKSZ) == (MINSIGSTKSZ), "MINSIGSTKSZ is an integer constant expression");
+		_Static_assert((SIGSTKSZ) == (SIGSTKSZ), "SIGSTKSZ is an integer constant expression");
+#define O (SS_ONSTACK)
+#define D (SS_DISABLE)
+#define MN (MINSIGSTKSZ)
+#define DF (SIGSTKSZ)
 
 		pc_check(O != D, "SS_ONSTACK and SS_DISABLE are equal");
 		pc_check(MN > 0 && DF > 0, "MINSIGSTKSZ is %ld and SIGSTKSZ %ld", (long)MN, (long)DF);

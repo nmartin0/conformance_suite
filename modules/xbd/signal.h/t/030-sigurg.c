@@ -32,7 +32,48 @@ int main(void)
 	pc_fail("<signal.h> does not define every one of: SIGABRT SIGFPE SIGILL SIGINT SIGSEGV SIGTERM SIGALRM SIGHUP SIGKILL SIGPIPE SIGQUIT SIGUSR1 SIGUSR2 SIGCHLD SIGCONT SIGSTOP SIGTSTP SIGTTIN SIGTTOU SIGBUS SIGURG");
 #else
 	{
-		enum { E_SIGABRT = SIGABRT, E_SIGFPE = SIGFPE, E_SIGILL = SIGILL, E_SIGINT = SIGINT, E_SIGSEGV = SIGSEGV, E_SIGTERM = SIGTERM, E_SIGALRM = SIGALRM, E_SIGHUP = SIGHUP, E_SIGKILL = SIGKILL, E_SIGPIPE = SIGPIPE, E_SIGQUIT = SIGQUIT, E_SIGUSR1 = SIGUSR1, E_SIGUSR2 = SIGUSR2, E_SIGCHLD = SIGCHLD, E_SIGCONT = SIGCONT, E_SIGSTOP = SIGSTOP, E_SIGTSTP = SIGTSTP, E_SIGTTIN = SIGTTIN, E_SIGTTOU = SIGTTOU, E_SIGBUS = SIGBUS, E_SIGURG = SIGURG };	/* integer constant expressions */
+		_Static_assert((SIGABRT) == (SIGABRT), "SIGABRT is an integer constant expression");
+		_Static_assert((SIGFPE) == (SIGFPE), "SIGFPE is an integer constant expression");
+		_Static_assert((SIGILL) == (SIGILL), "SIGILL is an integer constant expression");
+		_Static_assert((SIGINT) == (SIGINT), "SIGINT is an integer constant expression");
+		_Static_assert((SIGSEGV) == (SIGSEGV), "SIGSEGV is an integer constant expression");
+		_Static_assert((SIGTERM) == (SIGTERM), "SIGTERM is an integer constant expression");
+		_Static_assert((SIGALRM) == (SIGALRM), "SIGALRM is an integer constant expression");
+		_Static_assert((SIGHUP) == (SIGHUP), "SIGHUP is an integer constant expression");
+		_Static_assert((SIGKILL) == (SIGKILL), "SIGKILL is an integer constant expression");
+		_Static_assert((SIGPIPE) == (SIGPIPE), "SIGPIPE is an integer constant expression");
+		_Static_assert((SIGQUIT) == (SIGQUIT), "SIGQUIT is an integer constant expression");
+		_Static_assert((SIGUSR1) == (SIGUSR1), "SIGUSR1 is an integer constant expression");
+		_Static_assert((SIGUSR2) == (SIGUSR2), "SIGUSR2 is an integer constant expression");
+		_Static_assert((SIGCHLD) == (SIGCHLD), "SIGCHLD is an integer constant expression");
+		_Static_assert((SIGCONT) == (SIGCONT), "SIGCONT is an integer constant expression");
+		_Static_assert((SIGSTOP) == (SIGSTOP), "SIGSTOP is an integer constant expression");
+		_Static_assert((SIGTSTP) == (SIGTSTP), "SIGTSTP is an integer constant expression");
+		_Static_assert((SIGTTIN) == (SIGTTIN), "SIGTTIN is an integer constant expression");
+		_Static_assert((SIGTTOU) == (SIGTTOU), "SIGTTOU is an integer constant expression");
+		_Static_assert((SIGBUS) == (SIGBUS), "SIGBUS is an integer constant expression");
+		_Static_assert((SIGURG) == (SIGURG), "SIGURG is an integer constant expression");
+#define E_SIGABRT (SIGABRT)
+#define E_SIGFPE (SIGFPE)
+#define E_SIGILL (SIGILL)
+#define E_SIGINT (SIGINT)
+#define E_SIGSEGV (SIGSEGV)
+#define E_SIGTERM (SIGTERM)
+#define E_SIGALRM (SIGALRM)
+#define E_SIGHUP (SIGHUP)
+#define E_SIGKILL (SIGKILL)
+#define E_SIGPIPE (SIGPIPE)
+#define E_SIGQUIT (SIGQUIT)
+#define E_SIGUSR1 (SIGUSR1)
+#define E_SIGUSR2 (SIGUSR2)
+#define E_SIGCHLD (SIGCHLD)
+#define E_SIGCONT (SIGCONT)
+#define E_SIGSTOP (SIGSTOP)
+#define E_SIGTSTP (SIGTSTP)
+#define E_SIGTTIN (SIGTTIN)
+#define E_SIGTTOU (SIGTTOU)
+#define E_SIGBUS (SIGBUS)
+#define E_SIGURG (SIGURG)
 		static const long v[] = { SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, SIGALRM, SIGHUP, SIGKILL, SIGPIPE, SIGQUIT, SIGUSR1, SIGUSR2, SIGCHLD, SIGCONT, SIGSTOP, SIGTSTP, SIGTTIN, SIGTTOU, SIGBUS, SIGURG };
 		static const char *const name[] = { "SIGABRT", "SIGFPE", "SIGILL", "SIGINT", "SIGSEGV", "SIGTERM", "SIGALRM", "SIGHUP", "SIGKILL", "SIGPIPE", "SIGQUIT", "SIGUSR1", "SIGUSR2", "SIGCHLD", "SIGCONT", "SIGSTOP", "SIGTSTP", "SIGTTIN", "SIGTTOU", "SIGBUS", "SIGURG" };
 		int i, n = (int)(sizeof v / sizeof v[0]);

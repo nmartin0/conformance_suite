@@ -32,7 +32,12 @@ int main(void)
 	pc_fail("<signal.h> does not define SIG_BLOCK, SIG_UNBLOCK and SIG_SETMASK as macros");
 #else
 	{
-		enum { B = SIG_BLOCK, U = SIG_UNBLOCK, S = SIG_SETMASK };
+		_Static_assert((SIG_BLOCK) == (SIG_BLOCK), "SIG_BLOCK is an integer constant expression");
+		_Static_assert((SIG_UNBLOCK) == (SIG_UNBLOCK), "SIG_UNBLOCK is an integer constant expression");
+		_Static_assert((SIG_SETMASK) == (SIG_SETMASK), "SIG_SETMASK is an integer constant expression");
+#define B (SIG_BLOCK)
+#define U (SIG_UNBLOCK)
+#define S (SIG_SETMASK)
 		static const long v[] = { B, U, S };
 		static const char *const name[] = { "SIG_BLOCK", "SIG_UNBLOCK", "SIG_SETMASK" };
 

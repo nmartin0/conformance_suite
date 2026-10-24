@@ -855,6 +855,10 @@ def main():
         if m:
             if m["header"] == "stdint.h":
                 stdint_rules(m)
+            for x in m["types"]:
+                if m["header"] == "unistd.h" and x["name"] == "intptr_t":
+                    # "as described in <stdint.h>", where intptr_t is required on XSI systems only (Q-54)
+                    x.update(option="XSI")
             for x in m["macros"]:
                 if m["header"] == "unistd.h" and x["name"] == "_XOPEN_UNIX":
                     # XBD 2.1.3: an XSI-conforming system sets it other than -1

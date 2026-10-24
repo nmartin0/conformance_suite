@@ -8,7 +8,9 @@
  *
  * usage:
  *   probe claims     one line per option:
- *                    claim CODE MACRO yes|no macro=V sysconf=V
+ *                    claim CODE MACRO yes|no macro=V sysconf=V compile=yes|no
+ *                    (compile: the macro is defined and not -1, which is
+ *                    what a check of the headers alone needs)
  *   probe sysinfo    uname fields, one "key value" per line
  *   probe cspath     the value of confstr(_CS_PATH)
  *   probe euid       the effective user ID
@@ -67,8 +69,8 @@ static int claims(void)
 			(void)snprintf(sv, sizeof sv, "%ld", s);
 			yes = s > 0 ? "yes" : "no";
 		}
-		printf("claim %s %s %s macro=%s sysconf=%s\n", o->code,
-		    o->macro, yes, mv, sv);
+		printf("claim %s %s %s macro=%s sysconf=%s compile=%s\n", o->code,
+		    o->macro, yes, mv, sv, o->defined && o->value != -1 ? "yes" : "no");
 	}
 	return 0;
 }

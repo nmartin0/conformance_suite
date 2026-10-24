@@ -32,7 +32,16 @@ int main(void)
 	pc_fail("<signal.h> does not define every one of: SA_NOCLDSTOP SA_RESETHAND SA_RESTART SA_SIGINFO SA_NODEFER");
 #else
 	{
-		enum { E_SA_NOCLDSTOP = SA_NOCLDSTOP, E_SA_RESETHAND = SA_RESETHAND, E_SA_RESTART = SA_RESTART, E_SA_SIGINFO = SA_SIGINFO, E_SA_NODEFER = SA_NODEFER };	/* integer constant expressions */
+		_Static_assert((SA_NOCLDSTOP) == (SA_NOCLDSTOP), "SA_NOCLDSTOP is an integer constant expression");
+		_Static_assert((SA_RESETHAND) == (SA_RESETHAND), "SA_RESETHAND is an integer constant expression");
+		_Static_assert((SA_RESTART) == (SA_RESTART), "SA_RESTART is an integer constant expression");
+		_Static_assert((SA_SIGINFO) == (SA_SIGINFO), "SA_SIGINFO is an integer constant expression");
+		_Static_assert((SA_NODEFER) == (SA_NODEFER), "SA_NODEFER is an integer constant expression");
+#define E_SA_NOCLDSTOP (SA_NOCLDSTOP)
+#define E_SA_RESETHAND (SA_RESETHAND)
+#define E_SA_RESTART (SA_RESTART)
+#define E_SA_SIGINFO (SA_SIGINFO)
+#define E_SA_NODEFER (SA_NODEFER)
 		static const long v[] = { E_SA_NOCLDSTOP, E_SA_RESETHAND, E_SA_RESTART, E_SA_SIGINFO, E_SA_NODEFER };
 		static const char *const name[] = { "SA_NOCLDSTOP", "SA_RESETHAND", "SA_RESTART", "SA_SIGINFO", "SA_NODEFER" };
 		int i, j, n = (int)(sizeof v / sizeof v[0]);

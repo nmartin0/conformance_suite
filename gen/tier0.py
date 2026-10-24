@@ -115,7 +115,18 @@ int main(void)
 """
 
 
+SUBPROFILE_FREE = {"_POSIX2_VERSION", "_POSIX_JOB_CONTROL", "_POSIX_REGEXP", "_POSIX_SAVED_IDS", "_POSIX_SHELL"}
+
+
 def body_macro(aid, hdr, name, always=None):
+    if name in SUBPROFILE_FREE:
+        return body_macro_plain(aid, hdr, name, always).replace(
+            "\tpc_test();\n", "#ifdef _POSIX_SUBPROFILE\n\tpc_notinuse(\"a profile implementation (_POSIX_SUBPROFILE) need "
+            "not define " + name + "\");\n#endif\n\tpc_test();\n", 1)
+    return body_macro_plain(aid, hdr, name, always)
+
+
+def body_macro_plain(aid, hdr, name, always=None):
     if name in C23_KEYWORDS:
         return f"""
 int main(void)
