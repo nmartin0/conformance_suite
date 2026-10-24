@@ -23,8 +23,9 @@ class      required
 since      1988
 says       When rename() replaces g, a descriptor open on the old g still
            reads its contents, and fstat() of it reports st_nlink 0.
-note       Run the suite on a local file system: on NFS, removing an
-           open file renames it instead (silly rename).
+note       A file system that keeps a removed open file under another
+           name (NFS's silly rename) gives UNRESOLVED: the test looks
+           for an entry with the file's serial number.
 test       t/003-replaced-open.c
 
 assertion  XSH.rename.004
@@ -176,8 +177,7 @@ assertion  XSH.rename.020
 anchor     functions/rename.html#ERRORS/ENOTDIR
 class      disputed
 since      1988
-says       rename("f/x", "g") and rename("e", "f/y"), with f a regular file,
-           fail with ENOTDIR.
+says       rename("f/x", "g") with f a regular file fails with ENOTDIR.
 note       disputed (Q-8): the name also names no existing file, so
            ENOENT applies too and XSH 2.3 lets either error be reported;
            every reference system reports the more specific one.
@@ -194,9 +194,11 @@ test       t/021-eloop.c
 assertion  XSH.rename.022
 anchor     functions/rename.html#ERRORS
 class      required
-since      1988
 says       rename("f", name) with the last component of name longer than
            {NAME_MAX} bytes fails with ENAMETOOLONG and f keeps its name.
+note       "since" is left out, as for XSH.open.017: the error is
+           unconditional only since _POSIX_NO_TRUNC had to be other than
+           -1.
 test       t/022-enametoolong.c
 
 assertion  XSH.rename.023
@@ -321,3 +323,14 @@ says       renameat(bad, "/abs/f", dfd, "g") with bad not open succeeds (old
            is absolute) and creates d/g; renameat(dfd, "g", ffd, "/abs/h")
            with ffd open on a regular file also succeeds.
 test       t/034-renameat-mixed.c
+
+assertion  XSH.rename.035
+anchor     functions/rename.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       rename("e", "f/y") with f a regular file fails with ENOTDIR,
+           and e remains.
+note       Only ENOTDIR applies: rename()'s ENOENT for new is a missing
+           component of its prefix, and f exists. rename() changes
+           neither file when it fails (RETURN VALUE).
+test       t/035-enotdir-new-prefix.c

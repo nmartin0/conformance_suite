@@ -160,6 +160,26 @@ static struct stat via_fd(const char *path, int flags)
 	(void)close(fd);
 	return st;
 }
+#include <dirent.h>
+
+/* Some file systems (NFS) keep a removed open file under another name: is there one with this serial number? */
+static int kept_elsewhere(const char *dir, const struct stat *st)
+{
+	char path[1024];
+	struct dirent *e;
+	struct stat s;
+	DIR *d = opendir(dir);
+	int found = 0;
+
+	if (d == NULL)
+		return 0;
+	while (!found && (e = readdir(d)) != NULL) {
+		snprintf(path, sizeof path, "%s/%s", dir, e->d_name);
+		found = lstat(path, &s) == 0 && s.st_ino == st->st_ino && s.st_dev == st->st_dev;
+	}
+	(void)closedir(d);
+	return found;
+}
 
 int main(void)
 {
@@ -174,6 +194,12 @@ int main(void)
 		pc_check(unlink("f") == 0, "unlink failed: %s", pc_errname(errno));
 		pc_test();
 		pc_check(fstat(fd, &st) == 0, "fstat() of an unlinked file failed: %s", pc_errname(errno));
+		if (st.st_nlink != 0 && kept_elsewhere(".", &st))
+			pc_unresolved("the file system keeps the removed open file under another name");
+		if (st.st_nlink != 0 && kept_elsewhere(".", &st))
+			pc_unresolved("the file system keeps the removed open file under another name");
+		if (st.st_nlink != 0 && kept_elsewhere(".", &st))
+			pc_unresolved("the file system keeps the removed open file under another name");
 		pc_check(st.st_nlink == 0, "st_nlink %lu, the file has no links left", (unsigned long)st.st_nlink);
 		pc_check(st.st_size == 4, "st_size %lld, the file still has 4 bytes", (long long)st.st_size);
 	}

@@ -25,18 +25,19 @@ says       After unlink() of the only name of a file that is open, the name
            is gone when unlink() returns and fstat() of the descriptor
            reports st_nlink 0, but the descriptor still reads and writes
            the file's contents.
-note       Run the suite on a local file system: on NFS, removing an
-           open file renames it instead (silly rename).
+note       A file system that keeps a removed open file under another
+           name (NFS's silly rename) gives UNRESOLVED: the test looks
+           for an entry with the file's serial number.
 test       t/003-open-file-kept.c
 
 assertion  XSH.unlink.004
 anchor     functions/unlink.html#DESCRIPTION
 class      required
 since      1988
-says       After unlink() of one of several names of a file in directory d,
+says       After unlink() of one of two names of a file in directory d,
            stat() reports later st_mtim and st_ctim for d and a later
-           st_ctim for the file (the test removes another name every 10
-           ms, up to 300 names or {LINK_MAX}, until the times move).
+           st_ctim for the file (the test links and removes a second
+           name, 10 ms apart, for up to 3 s until the times move).
 timeout    20
 test       t/004-times.c
 
@@ -107,9 +108,7 @@ assertion  XSH.unlink.012
 anchor     functions/unlink.html#ERRORS
 class      disputed
 since      2008
-says       unlink("f/x") and unlink("f/"), with f a regular file, fail with
-           ENOTDIR; so does unlink("sl/") with sl a symbolic link to f;
-           f and sl remain.
+says       unlink("f/x") with f a regular file fails with ENOTDIR.
 note       disputed (Q-8): the name also names no existing file, so
            ENOENT applies too and XSH 2.3 lets either error be reported;
            every reference system reports the more specific one.
@@ -211,3 +210,14 @@ since      2008
 says       unlinkat() with an absolute path removes that file whatever fd is:
            a descriptor that is not open, or one open on a regular file.
 test       t/022-unlinkat-absolute.c
+
+assertion  XSH.unlink.023
+anchor     functions/unlink.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       With f a regular file and sl a symbolic link to it,
+           unlink("f/") and unlink("sl/") fail with ENOTDIR, and both
+           names remain.
+note       Only ENOTDIR applies: the last component exists. The f/x case
+           is XSH.unlink.012.
+test       t/023-trailing-slash-file.c

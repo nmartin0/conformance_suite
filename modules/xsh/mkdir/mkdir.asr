@@ -112,9 +112,11 @@ test       t/012-eloop.c
 assertion  XSH.mkdir.013
 anchor     functions/mkdir.html#ERRORS
 class      required
-since      1988
 says       mkdir() of a name longer than {NAME_MAX} bytes fails with
            ENAMETOOLONG.
+note       "since" is left out, as for XSH.open.017: the error is
+           unconditional only since _POSIX_NO_TRUNC had to be other than
+           -1.
 test       t/013-enametoolong.c
 
 assertion  XSH.mkdir.014

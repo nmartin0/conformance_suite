@@ -201,6 +201,26 @@ static int verdict(int r, int e1, int e2)
 		return 1;
 	return errno == e1 || errno == e2 ? 0 : 2;
 }
+#include <dirent.h>
+
+/* Some file systems (NFS) keep a removed open file under another name: is there one with this serial number? */
+static int kept_elsewhere(const char *dir, const struct stat *st)
+{
+	char path[1024];
+	struct dirent *e;
+	struct stat s;
+	DIR *d = opendir(dir);
+	int found = 0;
+
+	if (d == NULL)
+		return 0;
+	while (!found && (e = readdir(d)) != NULL) {
+		snprintf(path, sizeof path, "%s/%s", dir, e->d_name);
+		found = lstat(path, &s) == 0 && s.st_ino == st->st_ino && s.st_dev == st->st_dev;
+	}
+	(void)closedir(d);
+	return found;
+}
 
 int main(void)
 {
@@ -218,7 +238,10 @@ int main(void)
 		pc_check(rename("f", "g") == 0, "rename() failed: %s", pc_errname(errno));
 		pc_check(pread(fd, buf, sizeof buf - 1, 0) == 8 && strcmp(buf, "replaced") == 0,
 			 "the replaced file read \"%s\" through its descriptor", buf);
-		pc_check(fstat(fd, &st) == 0 && st.st_nlink == 0, "fstat() of the replaced file does not report st_nlink 0");
+		pc_check(fstat(fd, &st) == 0, "fstat() of the replaced file failed: %s", pc_errname(errno));
+		if (st.st_nlink != 0 && kept_elsewhere(".", &st))
+			pc_unresolved("the file system keeps the replaced open file under another name");
+		pc_check(st.st_nlink == 0, "fstat() of the replaced file does not report st_nlink 0");
 	}
 	pc_pass();
 }

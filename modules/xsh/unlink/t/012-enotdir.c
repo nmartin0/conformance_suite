@@ -4,7 +4,6 @@
  *
  * ASSERTION XSH.unlink.012
  * MUTANT    unlink.enotdir_as_enoent
- * MUTANT    unlink.slash_ignored
  */
 #include "pc.h"
 #include <errno.h>
@@ -204,8 +203,6 @@ int main(void)
 		pc_make_symlink("f", "sl");
 		pc_test();
 		pc_expect_err(unlink("f/x"), ENOTDIR, "unlink(\"f/x\")");
-		pc_expect_err(unlink("f/"), ENOTDIR, "unlink(\"f/\")");
-		pc_expect_err(unlink("sl/"), ENOTDIR, "unlink(\"sl/\")");
 		pc_check(exists("f") && exists("sl"), "a failed unlink() removed a file");
 		(void)r;
 	}

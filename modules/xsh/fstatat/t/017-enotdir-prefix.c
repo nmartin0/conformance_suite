@@ -179,7 +179,6 @@ int main(void)
 		pc_expect_err(stat("file/x", &st), ENOTDIR, "stat(\"file/x\", &st)");
 		pc_expect_err(lstat("file/x", &st), ENOTDIR, "lstat(\"file/x\")");
 		pc_expect_err(fstatat(dfd, "file/x", &st, 0), ENOTDIR, "fstatat(dirfd, \"file/x\")");
-		pc_expect_err(fstatat(dfd, "file/", &st, 0), ENOTDIR, "fstatat(dirfd, \"file/\")");
 	}
 	pc_pass();
 }

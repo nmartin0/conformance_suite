@@ -73,9 +73,10 @@ class      disputed
 since      1988
 says       rmdir("f") and rmdir("f/d"), with f a regular file, fail with
            ENOTDIR and f remains.
-note       disputed (Q-8): the name also names no existing file, so
-           ENOENT applies too and XSH 2.3 lets either error be reported;
-           every reference system reports the more specific one.
+note       disputed (Q-44): f exists, but rmdir()'s ENOENT covers a path
+           that "names a nonexistent directory", which a regular file
+           also does, so XSH 2.3 lets either error be reported; a FAIL
+           is logged as INSPECT.
 test       t/008-enotdir.c
 
 assertion  XSH.rmdir.009
@@ -135,6 +136,17 @@ assertion  XSH.rmdir.014
 anchor     basedefs/V1_chap04.html#4.16
 class      required
 since      2008
-says       rmdir("d/") of an empty directory succeeds; rmdir("f/") of a regular
-           file fails with ENOTDIR and f remains.
+says       rmdir("d/") with d an empty directory succeeds and removes d.
 test       t/014-slashes.c
+
+assertion  XSH.rmdir.015
+anchor     functions/rmdir.html#ERRORS/ENOTDIR
+class      disputed
+since      2008
+says       rmdir("f/") with f a regular file fails with ENOTDIR, and f
+           remains.
+note       disputed (Q-44): rmdir()'s ENOENT covers a path that "names a
+           nonexistent directory", which an existing regular file also
+           does, and XSH 2.3 lets either error be reported; a FAIL is
+           logged as INSPECT.
+test       t/015-slash-file.c

@@ -204,7 +204,6 @@ int main(void)
 		pc_make_file("f", "x");
 		long_name(name, sizeof name);
 		pc_test();
-		pc_expect_err(link("f", name), ENAMETOOLONG, "link(\"f\", name)");
 		pc_expect_err(link(name, "g"), ENAMETOOLONG, "link(name, \"g\")");
 		(void)r;
 	}

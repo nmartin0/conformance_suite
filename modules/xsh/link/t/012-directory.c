@@ -213,6 +213,8 @@ int main(void)
 		pc_make_dir("c");
 		pc_make_dir("c/d");
 		pc_check(chmod("c", 0777) == 0, "chmod failed");
+		if (geteuid() == 0 && chown("c/d", 65534, 65534) != 0)
+			pc_unresolved("chown(c/d) failed: %s", pc_errname(errno));
 		pc_test();
 		switch (unprivileged(child)) {
 		case 0:

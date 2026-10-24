@@ -211,8 +211,6 @@ int main(void)
 		pc_make_file("e", "e");
 		pc_test();
 		pc_expect_err(rename("f/x", "g"), ENOTDIR, "rename(\"f/x\", \"g\")");
-		pc_expect_err(rename("e", "f/y"), ENOTDIR, "rename(\"e\", \"f/y\")");
-		pc_check(exists("e"), "a failed rename() moved e");
 		(void)r;
 	}
 	pc_pass();

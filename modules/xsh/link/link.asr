@@ -89,9 +89,7 @@ assertion  XSH.link.010
 anchor     functions/link.html#ERRORS
 class      disputed
 since      2008
-says       link() fails with ENOTDIR when path2's prefix names a regular
-           file ("f/g"), when path1's prefix does ("f/x"), and when path1
-           is a regular file named with a trailing slash ("f/").
+says       link("f/x", "g") with f a regular file fails with ENOTDIR.
 note       disputed (Q-8): the name also names no existing file, so
            ENOENT applies too and XSH 2.3 lets either error be reported;
            every reference system reports the more specific one.
@@ -113,9 +111,10 @@ since      1988
 says       For a process without appropriate privileges, link("c/d", "c/d2")
            with c/d a directory fails with EPERM (whether privileged
            processes may link directories is not tested).
-note       Privileges are dropped to user 65534 when the suite runs as
-           root; a non-root process that still holds privileges
-           (capabilities, Solaris privileges) may see this FAIL.
+note       Run as root, the test gives the directory to the unprivileged
+           child (user 65534), so access to the existing file (Q-24,
+           EACCES) is not in question and only EPERM applies. A child
+           that still has privileges gives UNRESOLVED.
 test       t/012-directory.c
 
 assertion  XSH.link.013
@@ -129,8 +128,8 @@ test       t/013-eloop.c
 assertion  XSH.link.014
 anchor     functions/link.html#ERRORS
 class      disputed
-says       link() fails with ENAMETOOLONG when the last component of path2,
-           or of path1, is longer than {NAME_MAX} bytes.
+says       link(name, "g"), with name a component longer than {NAME_MAX}
+           bytes, fails with ENAMETOOLONG.
 note       disputed (Q-8): the name also names no existing file, so
            ENOENT applies too and XSH 2.3 lets either error be reported;
            every reference system reports the more specific one. "since"
@@ -228,3 +227,27 @@ says       linkat(AT_FDCWD, "dl", AT_FDCWD, "g", AT_SYMLINK_FOLLOW), with dl a
            symbolic link to a name that does not exist, fails with ENOENT
            and creates nothing.
 test       t/023-follow-dangling.c
+
+assertion  XSH.link.024
+anchor     functions/link.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       With f a regular file, link("f", "f/g") (f in the prefix of
+           path2) and link("f/", "g") (path1 with a trailing slash) fail
+           with ENOTDIR.
+note       Only ENOTDIR applies: f exists, so neither of link()'s ENOENT
+           conditions holds. The f/x case, where ENOENT may apply too,
+           is XSH.link.010.
+test       t/024-enotdir-existing.c
+
+assertion  XSH.link.025
+anchor     functions/link.html#ERRORS/ENAMETOOLONG
+class      required
+says       link("f", name), with name a component longer than {NAME_MAX}
+           bytes, fails with ENAMETOOLONG.
+note       Only ENAMETOOLONG applies: a missing path2 is not one of
+           link()'s ENOENT conditions. The long path1 case is
+           XSH.link.014. "since" is left out, as for XSH.open.017: the
+           error is unconditional only since _POSIX_NO_TRUNC had to be
+           other than -1.
+test       t/025-enametoolong-new.c

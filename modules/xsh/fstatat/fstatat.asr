@@ -58,6 +58,10 @@ since      1988
 says       stat() reports S_ISDIR for a directory, S_ISFIFO for a FIFO and
            S_ISSOCK for a bound UNIX-domain socket, and only that type
            macro is true for each.
+note       That bind() of an AF_UNIX address makes a file of type socket
+           is implied by bind()'s EACCES (the name needs writing in a
+           directory) and EROFS (the name would reside on a read-only
+           file system), not stated (Q-45).
 test       t/006-file-types.c
 
 assertion  XSH.fstatat.007
@@ -238,3 +242,13 @@ says       For a process without appropriate privileges, fstatat(fd, "f",
            buf, 0) fails with EACCES when fd was opened O_RDONLY on a
            directory whose permissions were then changed to deny search.
 test       t/025-fstatat-eacces-fd.c
+
+assertion  XSH.fstatat.026
+anchor     functions/fstatat.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       fstatat(fd, "file/", &st, 0), stat("file/") and
+           lstat("file/") with file a regular file fail with ENOTDIR.
+note       Only ENOTDIR applies: the last component exists. The file/x
+           cases are XSH.fstatat.017.
+test       t/026-trailing-slash-file.c

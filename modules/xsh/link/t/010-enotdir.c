@@ -4,7 +4,6 @@
  *
  * ASSERTION XSH.link.010
  * MUTANT    link.enotdir_as_enoent
- * MUTANT    link.slash1_ignored
  */
 #include "pc.h"
 #include <errno.h>
@@ -202,9 +201,7 @@ int main(void)
 		int r = 0;
 		pc_make_file("f", "x");
 		pc_test();
-		pc_expect_err(link("f", "f/g"), ENOTDIR, "link(\"f\", \"f/g\")");
 		pc_expect_err(link("f/x", "g"), ENOTDIR, "link(\"f/x\", \"g\")");
-		pc_expect_err(link("f/", "g"), ENOTDIR, "link(\"f/\", \"g\")");
 		(void)r;
 	}
 	pc_pass();

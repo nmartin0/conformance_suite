@@ -194,6 +194,26 @@ static void long_name(char *buf, size_t size)
 	memset(buf, 'n', (size_t)max + 1);
 	buf[max + 1] = '\0';
 }
+#include <dirent.h>
+
+/* Some file systems (NFS) keep a removed open file under another name: is there one with this serial number? */
+static int kept_elsewhere(const char *dir, const struct stat *st)
+{
+	char path[1024];
+	struct dirent *e;
+	struct stat s;
+	DIR *d = opendir(dir);
+	int found = 0;
+
+	if (d == NULL)
+		return 0;
+	while (!found && (e = readdir(d)) != NULL) {
+		snprintf(path, sizeof path, "%s/%s", dir, e->d_name);
+		found = lstat(path, &s) == 0 && s.st_ino == st->st_ino && s.st_dev == st->st_dev;
+	}
+	(void)closedir(d);
+	return found;
+}
 
 int main(void)
 {
@@ -209,7 +229,10 @@ int main(void)
 		pc_test();
 		pc_check(unlink("f") == 0, "unlink failed: %s", pc_errname(errno));
 		pc_check(!exists("f"), "the name still exists after unlink() returned");
-		pc_check(fstat(fd, &st) == 0 && st.st_nlink == 0, "fstat() of the open file does not report st_nlink 0");
+		pc_check(fstat(fd, &st) == 0, "fstat() of the open file failed: %s", pc_errname(errno));
+		if (st.st_nlink != 0 && kept_elsewhere(".", &st))
+			pc_unresolved("the file system keeps the removed open file under another name");
+		pc_check(st.st_nlink == 0, "fstat() of the open file does not report st_nlink 0");
 		pc_check(pread(fd, buf, sizeof buf - 1, 0) == 10, "pread from the unlinked file did not return 10 bytes");
 		pc_check(strcmp(buf, "still here") == 0, "read \"%s\" from the unlinked file", buf);
 		pc_check(pwrite(fd, "S", 1, 0) == 1, "pwrite to the unlinked file failed: %s", pc_errname(errno));

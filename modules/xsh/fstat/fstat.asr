@@ -26,9 +26,9 @@ class      required
 since      1988
 says       fstat() of a descriptor whose file has had its only name removed
            still succeeds and reports st_nlink 0 and the file's size.
-note       Run the suite on a local file system: on NFS, removing an
-           open file renames it instead (silly rename), so st_nlink
-           stays 1.
+note       A file system that keeps a removed open file under another
+           name (NFS's silly rename) gives UNRESOLVED: the test looks
+           for an entry with the file's serial number.
 test       t/003-unlinked.c
 
 assertion  XSH.fstat.004
