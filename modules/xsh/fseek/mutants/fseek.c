@@ -65,6 +65,8 @@ static int seek(FILE *f, off_t off, int whence, int narrow)
 		return real_fseeko(f, off, whence);
 	if (narrow && IS("fseeko_narrow"))
 		off = (off_t)(int)off;
+	if (IS("elides") && whence == SEEK_SET && __fpending(f) == 0 && !__freading(f))
+		return 0;	/* nothing buffered: assumes the position is already right and skips the seek */
 	if (IS("whence_set_only"))
 		whence = SEEK_SET;
 	if (IS("cur_ignores_buffer") && whence == SEEK_CUR && fileno(f) >= 0) {
@@ -140,7 +142,7 @@ int fseek(FILE *f, long off, int whence)
 	if (IS("wrong_errno") || IS("whence_set_only") || IS("cur_ignores_buffer") || IS("end_off_by_one") ||
 	    IS("drops_pending") || IS("bad_whence_ok") || IS("negative_ok") || IS("beyond_end_refused") ||
 	    IS("mem_beyond_ok") || IS("fd_offset_stale") || IS("old_times") || IS("gap_filled") || IS("keeps_eof") ||
-	    IS("espipe_ok") || IS("error_cleared") || IS("mem_at_end_refused")) {
+	    IS("espipe_ok") || IS("error_cleared") || IS("mem_at_end_refused") || IS("elides")) {
 		int r;
 		if (IS("wrong_errno") || IS("error_cleared") || IS("espipe_ok")) {
 			r = real_fseek(f, off, whence);	/* keep the real long-offset checks (EOVERFLOW) */

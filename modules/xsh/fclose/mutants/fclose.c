@@ -62,6 +62,8 @@ int fclose(FILE *f)
 	fl = fcntl(fd, F_GETFL);
 	if (IS("no_flush"))
 		__fpurge(f);	/* buffered output is dropped */
+	if (IS("stale_offset") && __fwriting(f) && __fpending(f) > 0)
+		(void)lseek(fd, 0, SEEK_SET);	/* writes where the stream started, as if no other handle had moved */
 	if (IS("no_input_sync") && fl != -1 && ((fl & O_ACCMODE) == O_RDONLY || __freading(f))) {
 		off_t at = lseek(fd, 0, SEEK_CUR);
 		int d = dup(fd);

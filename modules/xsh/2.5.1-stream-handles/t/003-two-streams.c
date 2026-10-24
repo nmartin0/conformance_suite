@@ -196,7 +196,7 @@ static FILE *open_as(const char *path, const char *mode)
 
 static void put(FILE *f, const char *s)
 {
-	NEED(fputs(s, f) >= 0, "fputs failed");
+	pc_check(fputs(s, f) >= 0, "fputs failed: %s", pc_errname(errno));
 }
 
 static void fd_put(int fd, const char *s)
@@ -206,7 +206,7 @@ static void fd_put(int fd, const char *s)
 
 static void flush(FILE *f)
 {
-	NEED(fflush(f) == 0, "fflush failed: %s", pc_errname(errno));
+	pc_check(fflush(f) == 0, "fflush failed: %s", pc_errname(errno));
 }
 
 static void reap(pid_t kid)
@@ -214,7 +214,9 @@ static void reap(pid_t kid)
 	int st;
 
 	NEED(kid != -1, "fork failed");
-	NEED(waitpid(kid, &st, 0) == kid && WIFEXITED(st) && WEXITSTATUS(st) == 0, "the child failed (status %#x)", (unsigned)st);
+	NEED(waitpid(kid, &st, 0) == kid && WIFEXITED(st), "the child did not exit (status %#x)", (unsigned)st);
+	pc_check(WEXITSTATUS(st) != 1, "the child's stream operation failed");
+	NEED(WEXITSTATUS(st) == 0, "the child failed (status %#x)", (unsigned)st);
 }
 
 int main(void)

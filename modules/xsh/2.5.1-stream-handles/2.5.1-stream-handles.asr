@@ -5,8 +5,8 @@ assertion  XSH.2.5.1-stream-handles.001
 anchor     functions/V2_chap02.html#2.5.1
 class      required
 says       On a "w" stream: fputs("abc") and fflush() (the step the rules ask
-           for), then write(fileno(f), "def"), then fputs("ghi") and
-           fclose() leave the file holding "abcdefghi".
+           for), then write(fileno(f), "def"), then fputs("ghi"), fflush()
+           and fclose() leave the file holding "abcdefghi".
 note       The guarantee: when the application follows the rules, no
            data written is lost or duplicated, and all of it is written
            in order. The section has no change history; "since" is left
@@ -39,14 +39,16 @@ test       t/003-two-streams.c
 
 assertion  XSH.2.5.1-stream-handles.004
 anchor     functions/V2_chap02.html#2.5.1
-class      required
+class      disputed
 says       On a "w" stream set _IONBF (UNRESOLVED if refused): fputc('a'),
            write(fileno(f), "b"), fputc('c'), write(fileno(f), "d") leave
            the file holding "abcd" before fclose().
-note       The guarantee: when the application follows the rules, no
-           data written is lost or duplicated, and all of it is written
-           in order. The section has no change history; "since" is left
-           out.
+note       disputed (Q-33): whether an accepted _IONBF makes the stream
+           unbuffered in 2.5.1's sense is the question Q-33 asks; a FAIL
+           is logged as INSPECT. The guarantee: when the application
+           follows the rules, no data written is lost or duplicated, and
+           all of it is written in order. The section has no change
+           history; "since" is left out.
 test       t/004-unbuffered.c
 
 assertion  XSH.2.5.1-stream-handles.005
@@ -79,7 +81,10 @@ assertion  XSH.2.5.1-stream-handles.007
 anchor     functions/V2_chap02.html#2.5.1
 class      required
 says       On an "a" stream on a file holding "0": fputs("1"), fflush(),
-           write(fileno(f), "2"), fputs("3"), fclose() leave "0123".
+           lseek(fileno(f), 0, SEEK_SET) and write(fileno(f), "2"), then
+           fseek(f, 0, SEEK_SET) (the step the rules ask for after an
+           explicit seek), fputs("3") and fclose() leave "0123": every
+           write goes to the end.
 note       The guarantee: when the application follows the rules, no
            data written is lost or duplicated, and all of it is written
            in order. The section has no change history; "since" is left
@@ -126,12 +131,80 @@ test       t/010-fork-exec-not-duplicated.c
 assertion  XSH.2.5.1-stream-handles.011
 anchor     functions/V2_chap02.html#2.5.1
 class      required
-says       On a "r+" stream on "0123456" (flushed, no output yet), lseek() on its
-           descriptor to 5 and write(fileno(f), "Q"); then fseek(f, 1,
-           SEEK_SET) (the step the rules ask for after an explicit seek) and
-           fputs("Z") and fclose(): the file holds "0Z234Q6".
+says       On a "r+" stream on "0123456": fflush() (the step the rules ask
+           for), lseek() on its descriptor to 5 and write(fileno(f), "Q");
+           then fseek(f, 1, SEEK_SET) (the step the rules ask for after an
+           explicit seek), fputs("Z") and fflush(): the file holds
+           "0Z234Q6". Then the descriptor moves to 6 again, and fseek(f, 2,
+           SEEK_SET), the position the stream already has, still makes the
+           next fputs("Y") land at 2: "0ZY34Q6".
 note       The guarantee: when the application follows the rules, no
            data written is lost or duplicated, and all of it is written
            in order. The section has no change history; "since" is left
            out.
 test       t/011-fd-then-stream-seek.c
+
+assertion  XSH.2.5.1-stream-handles.012
+anchor     functions/V2_chap02.html#2.5.1
+class      required
+says       With a "w" stream f and g = fdopen(dup(fileno(f)), "w"): fputs("ab",
+           f), fputs("cd", g), fclose(f), fclose(g) leave the file holding
+           "abcd" (each stream's output goes where the description's offset
+           is when it is written).
+note       The guarantee: when the application follows the rules, no
+           data written is lost or duplicated, and all of it is written
+           in order. The section has no change history; "since" is left
+           out.
+test       t/012-close-only.c
+
+assertion  XSH.2.5.1-stream-handles.013
+anchor     functions/V2_chap02.html#2.5.1
+class      required
+says       On a "r+" stream on "abc" read to end of file (feof() true),
+           write(fileno(f), "d") with no fflush(), then fputs("e") (output
+           may follow input that reached end of file) and fclose() leave
+           "abcde".
+note       The guarantee: when the application follows the rules, no
+           data written is lost or duplicated, and all of it is written
+           in order. The section has no change history; "since" is left
+           out.
+test       t/013-at-end-of-file.c
+
+assertion  XSH.2.5.1-stream-handles.014
+anchor     functions/V2_chap02.html#2.5.1
+class      required
+says       On a "r+" stream on "0123456" (whose read-ahead may take the whole
+           file): fgetc() returns '0', then fflush() (the step the rules ask
+           for), then write(fileno(f), "Z") and fclose(): the file holds
+           "0Z23456".
+note       The guarantee: when the application follows the rules, no
+           data written is lost or duplicated, and all of it is written
+           in order. The section has no change history; "since" is left
+           out.
+test       t/014-reading-stream.c
+
+assertion  XSH.2.5.1-stream-handles.015
+anchor     functions/V2_chap02.html#2.5.1
+class      required
+says       On a stream from fdopen() of a pipe's write end: fputs("ab"),
+           fflush(), write(fileno(f), "cd"), fputs("ef") and fclose(); the
+           read end then yields "abcdef".
+note       The guarantee: when the application follows the rules, no
+           data written is lost or duplicated, and all of it is written
+           in order. The section has no change history; "since" is left
+           out.
+test       t/015-pipe.c
+
+assertion  XSH.2.5.1-stream-handles.016
+anchor     functions/V2_chap02.html#2.5.1
+class      required
+says       On a "w" stream on f with d = dup(fileno(f)): fputs("ab"), then
+           freopen("g", "w", f) (which counts as closing the stream), then
+           write(d, "cd"): f holds "abcd".
+note       The guarantee: when the application follows the rules, no
+           data written is lost or duplicated, and all of it is written
+           in order. The section has no change history; "since" is left
+           out.
+nomutant   freopen() has no planted faults yet; one that dropped the
+           pending data would give "cd".
+test       t/016-freopen-closes.c

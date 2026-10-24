@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.2.5.1-stream-handles.011
  * MUTANT    fseek.fd_offset_stale
+ * MUTANT    fseek.elides
  */
 #include "pc.h"
 #include <errno.h>
@@ -195,7 +196,7 @@ static FILE *open_as(const char *path, const char *mode)
 
 static void put(FILE *f, const char *s)
 {
-	NEED(fputs(s, f) >= 0, "fputs failed");
+	pc_check(fputs(s, f) >= 0, "fputs failed: %s", pc_errname(errno));
 }
 
 static void fd_put(int fd, const char *s)
@@ -205,7 +206,7 @@ static void fd_put(int fd, const char *s)
 
 static void flush(FILE *f)
 {
-	NEED(fflush(f) == 0, "fflush failed: %s", pc_errname(errno));
+	pc_check(fflush(f) == 0, "fflush failed: %s", pc_errname(errno));
 }
 
 static void reap(pid_t kid)
@@ -213,7 +214,9 @@ static void reap(pid_t kid)
 	int st;
 
 	NEED(kid != -1, "fork failed");
-	NEED(waitpid(kid, &st, 0) == kid && WIFEXITED(st) && WEXITSTATUS(st) == 0, "the child failed (status %#x)", (unsigned)st);
+	NEED(waitpid(kid, &st, 0) == kid && WIFEXITED(st), "the child did not exit (status %#x)", (unsigned)st);
+	pc_check(WEXITSTATUS(st) != 1, "the child's stream operation failed");
+	NEED(WEXITSTATUS(st) == 0, "the child failed (status %#x)", (unsigned)st);
 }
 
 int main(void)
@@ -225,12 +228,18 @@ int main(void)
 		pc_make_file("f", "0123456");
 		pc_test();
 		f = open_as("f", "r+");
+		flush(f);
 		NEED(lseek(fileno(f), 5, SEEK_SET) == 5, "lseek failed");
 		fd_put(fileno(f), "Q");
-		NEED(fseek(f, 1, SEEK_SET) == 0, "fseek failed");
+		pc_check(fseek(f, 1, SEEK_SET) == 0, "fseek failed: %s", pc_errname(errno));
 		put(f, "Z");
-		pc_check(fclose(f) == 0, "fclose failed: %s", pc_errname(errno));
+		flush(f);
 		file_is("f", "0Z234Q6");
+		NEED(lseek(fileno(f), 6, SEEK_SET) == 6, "lseek failed");
+		pc_check(fseek(f, 2, SEEK_SET) == 0, "fseek failed: %s", pc_errname(errno));
+		put(f, "Y");
+		pc_check(fclose(f) == 0, "fclose failed: %s", pc_errname(errno));
+		file_is("f", "0ZY34Q6");
 	}
 	pc_pass();
 }
