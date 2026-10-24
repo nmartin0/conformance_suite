@@ -6,6 +6,7 @@
  * MUTANT    fstat.size_off_by_one
  * MUTANT    fstat.uid_wrong
  * MUTANT    fstat.mode_bits_wrong
+ * VARIANT   fstat.shm_partial
  */
 #include "pc.h"
 #include <errno.h>

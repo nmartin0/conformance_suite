@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.rmdir.005
  * MUTANT    rmdir.noop
+ * VARIANT   rmdir.ebusy_open
+ * VARIANT   mkdir.no_dots
  */
 #include "pc.h"
 #include <dirent.h>

@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.2.4.2-realtime-signals.006
+ * VARIANT   sigaction.late_delivery
  */
 #include "pc.h"
 #include <errno.h>

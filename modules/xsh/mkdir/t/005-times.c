@@ -5,6 +5,8 @@
  * ASSERTION XSH.mkdir.005
  * MUTANT    mkdir.times_kept
  * MUTANT    mkdir.old_times
+ * VARIANT   mkdir.coarse_times
+ * VARIANT   mkdir.link_max_min
  */
 #include "pc.h"
 #include <dirent.h>

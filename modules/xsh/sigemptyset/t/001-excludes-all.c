@@ -5,6 +5,7 @@
  * ASSERTION XSH.sigemptyset.001
  * MUTANT    sigemptyset.leaves_one
  * MUTANT    sigemptyset.returns_minus1
+ * VARIANT   sigemptyset.keeps_extra
  */
 #include "pc.h"
 #include <errno.h>

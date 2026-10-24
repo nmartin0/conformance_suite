@@ -5,6 +5,8 @@
  * ASSERTION XSH.sig2str.004
  * MUTANT    sig2str.str2sig_wants_prefix
  * MUTANT    sig2str.str2sig_rt_off_by_one
+ * VARIANT   sig2str.rtmax_upper
+ * VARIANT   sig2str.rtmin_all
  */
 #include "pc.h"
 #include <errno.h>

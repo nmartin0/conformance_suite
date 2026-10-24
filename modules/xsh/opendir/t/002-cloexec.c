@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.opendir.002
  * MUTANT    opendir.no_cloexec
+ * VARIANT   readdir.snapshot
+ * VARIANT   readdir.lazy_fd
  */
 #include "pc.h"
 #include <dirent.h>

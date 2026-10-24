@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigaction.018
  * MUTANT    sigaction.einval_accepted
+ * VARIANT   sigaction.dfl_uncatchable_ok
  */
 #include "pc.h"
 #include <errno.h>

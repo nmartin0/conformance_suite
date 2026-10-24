@@ -7,6 +7,8 @@
  * MUTANT    open.rdonly_writable
  * MUTANT    open.append_ignored
  * MUTANT    open.nonblock_ignored
+ * VARIANT   open.accmode_bits
+ * VARIANT   open.nonblock_hidden_regular
  */
 #include "pc.h"
 #include <fcntl.h>

@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.exec.047
  * MUTANT    exec.path_order_reversed
+ * VARIANT   exec.sh_name
  */
 #include "pc.h"
 #include <dirent.h>

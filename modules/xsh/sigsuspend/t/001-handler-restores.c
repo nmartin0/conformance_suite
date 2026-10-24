@@ -6,6 +6,7 @@
  * MUTANT    sigsuspend.returns_zero
  * MUTANT    sigsuspend.mask_not_restored
  * MUTANT    sigsuspend.errno_not_eintr
+ * VARIANT   sigemptyset.keeps_extra
  */
 #include "pc.h"
 #include <errno.h>

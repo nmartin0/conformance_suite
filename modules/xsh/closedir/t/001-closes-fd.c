@@ -5,6 +5,8 @@
  * ASSERTION XSH.closedir.001
  * MUTANT    closedir.leaks_fd
  * MUTANT    closedir.returns_one
+ * VARIANT   readdir.snapshot
+ * VARIANT   readdir.lazy_fd
  */
 #include "pc.h"
 #include <dirent.h>

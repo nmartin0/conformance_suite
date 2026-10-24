@@ -203,6 +203,19 @@ static int verdict(int r, int e1, int e2)
 	return errno == e1 || errno == e2 ? 0 : 2;
 }
 
+/*
+ * An absolute path at least {PATH_MAX} long may fail with ENAMETOOLONG
+ * (the may-fail errors): such a working directory leaves the test
+ * UNRESOLVED. pathconf() giving -1 means no limit.
+ */
+static void need_path(const char *p)
+{
+	long max = pathconf(".", _PC_PATH_MAX);
+
+	if (max != -1 && (long)strlen(p) >= max)
+		pc_unresolved("the absolute path is %lu bytes, not below {PATH_MAX} (%ld)", (unsigned long)strlen(p), max);
+}
+
 int main(void)
 {
 	pc_begin("XSH.rename.034");
@@ -217,6 +230,8 @@ int main(void)
 			pc_unresolved("getcwd failed: %s", pc_errname(errno));
 		snprintf(p1, sizeof p1, "%s/f", cwd);
 		snprintf(p2, sizeof p2, "%s/h", cwd);
+		need_path(p1);
+		need_path(p2);
 		dfd = dir_fd("d");
 		ffd = open("k", O_RDONLY);
 		pc_check(ffd >= 0, "open failed: %s", pc_errname(errno));

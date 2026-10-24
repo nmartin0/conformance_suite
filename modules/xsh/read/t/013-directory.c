@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.read.013
  * MUTANT    read.eisdir_as_einval
+ * VARIANT   read.dir_readable
  */
 #include "pc.h"
 #include <errno.h>

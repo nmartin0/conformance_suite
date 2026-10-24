@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.chown.018
  * MUTANT    fchownat.file_fd_as_cwd
+ * VARIANT   chown.at_alt
  */
 #include "pc.h"
 #include <errno.h>

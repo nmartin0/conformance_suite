@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.mkdir.019
  * MUTANT    mkdir.eilseq_as_einval
+ * VARIANT   mkdir.eilseq
  */
 #include "pc.h"
 #include <dirent.h>

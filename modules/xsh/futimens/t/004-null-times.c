@@ -5,6 +5,7 @@
  * ASSERTION XSH.futimens.004
  * MUTANT    utimensat.null_ignored
  * MUTANT    futimens.null_ignored
+ * VARIANT   futimens.res_1s
  */
 #include "pc.h"
 #include <errno.h>

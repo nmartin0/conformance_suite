@@ -5,6 +5,7 @@
  * ASSERTION XSH.pthread_sigmask.006
  * MUTANT    pthread_sigmask.kill_stop_error
  * MUTANT    pthread_sigmask.oset_shows_kill
+ * VARIANT   pthread_sigmask.how_values
  */
 #include "pc.h"
 #include <errno.h>

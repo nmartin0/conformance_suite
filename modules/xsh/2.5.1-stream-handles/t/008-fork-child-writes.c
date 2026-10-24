@@ -5,6 +5,7 @@
  * ASSERTION XSH.2.5.1-stream-handles.008
  * MUTANT    fflush.cached_offset
  * MUTANT    fflush.noop
+ * VARIANT   setvbuf.tiny_default
  */
 #include "pc.h"
 #include <errno.h>

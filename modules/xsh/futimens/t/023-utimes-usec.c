@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.futimens.023
  * MUTANT    utimes.einval_accepted
+ * VARIANT   futimens.res_1s
+ * VARIANT   futimens.utimes_round
  */
 #include "pc.h"
 #include <errno.h>

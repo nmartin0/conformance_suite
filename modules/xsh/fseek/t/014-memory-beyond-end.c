@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.fseek.014
  * MUTANT    fseek.mem_beyond_ok
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   fseek.mem_fail_clamps
  */
 #include "pc.h"
 #include <errno.h>

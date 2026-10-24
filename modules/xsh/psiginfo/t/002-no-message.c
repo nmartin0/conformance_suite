@@ -5,6 +5,7 @@
  * ASSERTION XSH.psiginfo.002
  * MUTANT    psiginfo.prefix_always
  * MUTANT    psiginfo.empty_as_message
+ * VARIANT   psiginfo.own_text
  */
 #include "pc.h"
 #include <errno.h>

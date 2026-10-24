@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.rename.024
  * MUTANT    renameat.file_fd_as_cwd
+ * VARIANT   rename.at_fdcwd_alt
  */
 #include "pc.h"
 #include <errno.h>

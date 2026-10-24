@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.sigwait.005
  * MUTANT    sigwait.not_cleared
+ * VARIANT   sigwait.action_dfl
+ * VARIANT   sigwait.late
  */
 #include "pc.h"
 #include <errno.h>

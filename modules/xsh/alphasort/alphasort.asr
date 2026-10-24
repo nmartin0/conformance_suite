@@ -15,9 +15,11 @@ anchor     functions/alphasort.html#DESCRIPTION
 class      required
 since      2008
 says       scandir("d", &nl, sel, alphasort), with d holding c, a, b and x.skip
-           and sel rejecting names starting with "x" or ".", calls sel once
-           for each of a, b, c and x.skip, returns 3, and nl holds a, b and c
-           in that order.
+           and sel rejecting names starting with "x" or ".", calls sel for
+           each of a, b, c and x.skip, returns 3, and nl holds a, b and c in
+           that order.
+note       That sel is called only once per entry is XSH.alphasort.010
+           (disputed).
 test       t/002-scandir-sorted.c
 
 assertion  XSH.alphasort.003
@@ -88,3 +90,15 @@ note       disputed (SI-55): the [ENOENT] entry speaks of a component
            loop of links) also meets, so XSH 2.3 lets ENOENT be reported
            too; every reference system reports the more specific error.
 test       t/009-scandir-eloop.c
+
+assertion  XSH.alphasort.010
+anchor     functions/alphasort.html#DESCRIPTION
+class      disputed
+since      2008
+says       scandir("d", &nl, sel, alphasort), with d holding c, a, b and x.skip,
+           calls sel exactly once for each of a, b, c and x.skip.
+note       disputed (Q-58): the text says sel is called on each entry
+           but not that it is called only once; an implementation that reads
+           the directory twice (to count, then to fill) calls it twice and
+           can be read as conforming. A FAIL is logged as INSPECT.
+test       t/010-scandir-sel-once.c

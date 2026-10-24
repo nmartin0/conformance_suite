@@ -5,6 +5,7 @@
  * ASSERTION XSH.fopen.016
  * MUTANT    fopen.creat_old_times
  * MUTANT    fopen.restores_parent_times
+ * VARIANT   fopen.coarse_times
  */
 #include "pc.h"
 #include <errno.h>

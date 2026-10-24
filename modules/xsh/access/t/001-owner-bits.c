@@ -6,6 +6,7 @@
  * MUTANT    access.noop
  * MUTANT    access.ignores_bits
  * MUTANT    access.any_bit
+ * VARIANT   access.consts_alt
  */
 #include "pc.h"
 #include <errno.h>

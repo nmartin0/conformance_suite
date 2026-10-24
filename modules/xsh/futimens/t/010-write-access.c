@@ -8,6 +8,7 @@
  * MUTANT    futimens.eperm_as_eacces
  * MUTANT    utimensat.any_now_ok
  * VARIANT   futimens.utime_now_m1
+ * VARIANT   futimens.res_1s
  */
 #include "pc.h"
 #include <errno.h>

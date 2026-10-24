@@ -79,6 +79,14 @@ int main(void)
 			sleep_ms(10);
 		(void)write(q[1], "g", 1);
 		pc_check(waitpid(kid, &st, 0) == kid && WIFEXITED(st), "the child did not exit");
+		/*
+		 * XSH aio_read() positions the transfer at aio_offset the way an
+		 * lseek() would, which a pipe cannot do: whether that may fail it is
+		 * unclear (reported as a standard question), so such a failure
+		 * leaves the test without a pending read to judge by.
+		 */
+		if (e == EINVAL || e == ESPIPE)
+			pc_unresolved("the parent's asynchronous read from a pipe failed with %s", pc_errname(e));
 		pc_check(e == 0 && memcmp(buf, "data", 4) == 0, "the parent's read did not complete (%s)", pc_errname(e));
 		pc_check(WEXITSTATUS(st) == 0, "the read completed into the child's memory");
 	}

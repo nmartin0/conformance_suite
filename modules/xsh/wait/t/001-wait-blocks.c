@@ -5,6 +5,7 @@
  * ASSERTION XSH.wait.001
  * MUTANT    wait.status_garbage
  * MUTANT    wait.wrong_pid
+ * VARIANT   wait.status_encoding
  */
 #include "pc.h"
 #include <errno.h>

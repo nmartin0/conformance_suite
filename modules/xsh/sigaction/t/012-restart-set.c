@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigaction.012
  * MUTANT    sigaction.restart_ignored
+ * VARIANT   sigaction.late_delivery
  */
 #include "pc.h"
 #include <errno.h>

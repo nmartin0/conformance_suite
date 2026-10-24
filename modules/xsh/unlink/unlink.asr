@@ -116,9 +116,14 @@ test       t/012-enotdir.c
 
 assertion  XSH.unlink.013
 anchor     functions/unlink.html#ERRORS
-class      required
+class      disputed
 since      2001
 says       unlink("a/x"), with a -> b and b -> a, fails with ELOOP.
+note       disputed (Q-8): path names no existing file, since its
+           resolution never ends, so unlink()'s ENOENT for a component
+           that does not name an existing file applies literally too,
+           and XSH 2.3 lets either error be reported; every reference
+           system reports ELOOP.
 test       t/013-eloop.c
 
 assertion  XSH.unlink.014

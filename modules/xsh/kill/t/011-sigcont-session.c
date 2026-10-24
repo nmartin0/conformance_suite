@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.kill.011
  * MUTANT    kill.sigcont_checked
+ * VARIANT   kill.late
  */
 #include "pc.h"
 #include <errno.h>

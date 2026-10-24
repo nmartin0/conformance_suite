@@ -28,6 +28,6 @@ assertion  XSH.raise.003
 anchor     functions/raise.html#ERRORS/EINVAL
 class      required
 since      2001
-says       raise() with signal number 100000 returns a non-zero value and sets
-           errno to EINVAL.
+says       raise() with signal number sysconf(_SC_NSIG) (one above the highest
+           supported) returns a non-zero value and sets errno to EINVAL.
 test       t/003-einval.c

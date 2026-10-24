@@ -5,6 +5,8 @@
  * ASSERTION XSH.dirfd.001
  * MUTANT    dirfd.fails
  * MUTANT    dirfd.wrong_dir
+ * VARIANT   readdir.snapshot
+ * VARIANT   readdir.lazy_fd
  */
 #include "pc.h"
 #include <dirent.h>

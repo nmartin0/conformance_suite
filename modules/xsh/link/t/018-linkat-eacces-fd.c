@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.link.018
  * MUTANT    linkat.eacces_as_enoent
+ * VARIANT   link.access_rw
+ * VARIANT   link.at_fdcwd_alt
  */
 #include "pc.h"
 #include <errno.h>

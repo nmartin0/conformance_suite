@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.exec.044
  * MUTANT    exec.no_sh_fallback
+ * VARIANT   exec.sh_name
  */
 #include "pc.h"
 #include <dirent.h>

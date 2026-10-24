@@ -5,6 +5,7 @@
  * ASSERTION XSH.wait.005
  * MUTANT    wait.signaled_as_exited
  * MUTANT    wait.wrong_termsig
+ * VARIANT   wait.status_encoding
  */
 #include "pc.h"
 #include <errno.h>

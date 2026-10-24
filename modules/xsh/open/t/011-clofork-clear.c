@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.011
  * MUTANT    open.clofork_forced
+ * VARIANT   open.accmode_bits
  *
  * A missing FD_CLOFORK is a header defect (XBD.fcntl.h.002), not an open()
  * one, so here it is UNRESOLVED.

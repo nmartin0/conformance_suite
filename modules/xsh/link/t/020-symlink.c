@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.link.020
  * MUTANT    link.symlink_fails
+ * VARIANT   link.follows
  */
 #include "pc.h"
 #include <errno.h>

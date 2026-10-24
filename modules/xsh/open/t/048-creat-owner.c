@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.048
  * MUTANT    open.creat_wrong_owner
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <fcntl.h>

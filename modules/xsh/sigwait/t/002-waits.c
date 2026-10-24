@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.sigwait.002
  * MUTANT    sigwait.no_wait
+ * VARIANT   kill.late
+ * VARIANT   sigwait.late
  */
 #include "pc.h"
 #include <errno.h>

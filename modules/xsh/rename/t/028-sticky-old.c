@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.rename.028
  * MUTANT    rename.sticky_ignored
+ * VARIANT   rename.sticky_eacces
  */
 #include "pc.h"
 #include <errno.h>

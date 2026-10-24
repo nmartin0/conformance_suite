@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fcntl.002
  * MUTANT    fcntl.dupfd_fresh
+ * VARIANT   fcntl.ok_other
  */
 #include "pc.h"
 #include <errno.h>
@@ -25,7 +26,7 @@ int main(void)
 	pc_check(read(fd, &c, 1) == 1 && c == 'a', "read on the original failed");
 	pc_check(read(d, &c, 1) == 1 && c == 'b', "the offset is not shared");
 	fl = fcntl(d, F_GETFL);
-	pc_check(fl != -1 && fcntl(d, F_SETFL, fl | O_APPEND) == 0, "F_SETFL failed");
+	pc_check(fl != -1 && fcntl(d, F_SETFL, fl | O_APPEND) != -1, "F_SETFL failed");
 	fl = fcntl(fd, F_GETFL);
 	pc_check(fl != -1 && (fl & O_APPEND), "O_APPEND set on the duplicate not seen on the original");
 	pc_pass();

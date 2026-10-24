@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.unlink.004
  * MUTANT    unlink.times_kept
+ * VARIANT   unlink.coarse_times
  */
 #include "pc.h"
 #include <errno.h>

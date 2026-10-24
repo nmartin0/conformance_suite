@@ -5,6 +5,7 @@
  * ASSERTION XSH.sigpending.001
  * MUTANT    sigpending.empty
  * MUTANT    sigpending.full
+ * VARIANT   sigemptyset.keeps_extra
  */
 #include "pc.h"
 #include <errno.h>

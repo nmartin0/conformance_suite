@@ -6,6 +6,7 @@
  * MUTANT    lseek.hole_beyond_ok
  * MUTANT    lseek.enxio_as_einval
  * MUTANT    lseek.error_moves_offset
+ * VARIANT   lseek.whence_values
  */
 #include "pc.h"
 #include <errno.h>

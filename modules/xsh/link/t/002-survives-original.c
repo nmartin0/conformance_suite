@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.link.002
  * MUTANT    link.copies_empty
+ * VARIANT   link.link_max_8
  */
 #include "pc.h"
 #include <errno.h>

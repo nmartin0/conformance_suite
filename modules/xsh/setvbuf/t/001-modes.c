@@ -3,6 +3,11 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.setvbuf.001
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   setvbuf.size_honored
+ * VARIANT   setvbuf.own_unused
+ * VARIANT   setvbuf.scribbles
+ * VARIANT   setvbuf.refuses_modes
  */
 #include "pc.h"
 #include <errno.h>

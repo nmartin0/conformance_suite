@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigaction.017
  * MUTANT    sigaction.oact_wrong_handler
+ * VARIANT   signal.block_all
  */
 #include "pc.h"
 #include <errno.h>

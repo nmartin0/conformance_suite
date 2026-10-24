@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fopen.011
  * MUTANT    fopen.x_ignored
+ * VARIANT   fopen.x_exclusive
  */
 #include "pc.h"
 #include <errno.h>

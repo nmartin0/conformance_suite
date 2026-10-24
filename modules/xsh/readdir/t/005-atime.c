@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.readdir.005
  * MUTANT    readdir.no_atime
+ * VARIANT   readdir.snapshot
+ * VARIANT   readdir.lazy_fd
  */
 #include "pc.h"
 #include <dirent.h>

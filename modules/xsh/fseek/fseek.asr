@@ -58,8 +58,9 @@ test       t/005-gap.c
 assertion  XSH.fseek.006
 anchor     functions/fseek.html#DESCRIPTION
 class      required
-says       On a "w" stream on an existing file (last changed 2 s before), after
-           fputs("abc") with the data still buffered, fseek(f, 0, SEEK_SET)
+says       On a "w" stream on an existing file (last changed 2 s before), set
+           _IOFBF with a BUFSIZ array of the test's, after fputs("abc") with
+           the data still buffered (UNRESOLVED if not), fseek(f, 0, SEEK_SET)
            returns 0, the file then holds "abc", and its last data
            modification and status change times are later than before.
 note       The change history does not say which edition added the CX
@@ -70,8 +71,9 @@ assertion  XSH.fseek.007
 anchor     functions/fseek.html#DESCRIPTION
 class      required
 since      2024
-says       On a stream from fmemopen(buf, 64, "w") with its default buffering,
-           after fputs("abc") with the data still buffered (not yet in buf),
+says       On a stream from fmemopen(buf, 64, "w") set _IOFBF with a BUFSIZ
+           array of the test's, after fputs("abc") with the data still
+           buffered (not yet in buf; UNRESOLVED if not),
            fseek(f, 0, SEEK_SET) returns 0 and buf then begins "abc".
 note       Austin Group defect 1225 (Issue 8).
 test       t/007-memory-stream.c
@@ -127,11 +129,13 @@ test       t/011-espipe.c
 assertion  XSH.fseek.012
 anchor     functions/fseek.html#ERRORS/EBADF
 class      required
-says       On a "w" stream with output pending whose descriptor has been closed
-           with close(), fseek(f, 0, SEEK_SET) returns -1 with errno EBADF and
-           the stream's error indicator set.
-note       The error indicator is set because the write that fseek()
-           must do fails (DESCRIPTION). close() does not move the
+says       On a "w" stream set _IOFBF with a BUFSIZ array of the test's, with
+           "abc" pending (UNRESOLVED if not) and its descriptor closed with
+           close(), fseek(f, 0, SEEK_SET) returns -1 with errno EBADF.
+note       The error indicator is not required: it is set for a read or
+           write error (DESCRIPTION), and XSH 2.3 leaves the order of
+           detection open, so the closed descriptor may be found by an
+           lseek() before any write is tried (variant fseek.lseek_first). close() does not move the
            offset, so the descriptor is not a second handle (XSH 2.5.1).
            "since" is left out: the change history shows only that the
            error predates Issue 6.
@@ -142,7 +146,8 @@ anchor     functions/fseek.html#ERRORS/EFBIG
 class      required
 since      2024
 says       In a child with RLIMIT_FSIZE 100 and SIGXFSZ blocked, on a "w" stream
-           with 200 bytes pending, fseek(f, 0, SEEK_SET) returns -1 with errno
+           set _IOFBF with a 4096-byte array of the test's, with 200 bytes
+           pending, fseek(f, 0, SEEK_SET) returns -1 with errno
            EFBIG, the error indicator is set, and SIGXFSZ is pending (when
            XSI).
 note       Austin Group defect 1669 (Issue 8) made the error base; the
@@ -219,8 +224,11 @@ class      required
 since      2008
 says       On a stream from fmemopen(buf, 10, "r"): fseek(f, 10, SEEK_SET) returns
            0; fseek(f, 11, SEEK_SET) and fseek(f, -1, SEEK_SET) return -1 and
-           ftell() is still 10.
-note       fmemopen() came in Issue 7. The errno is XSH.fseek.014.
+           ftell() is then within the buffer (0 to 10).
+note       fmemopen() came in Issue 7. The errno is XSH.fseek.014. Where
+           a failed seek leaves the position is not stated, and XSH 2.3
+           lets a failed call be partly done, so only the bounds of XSH
+           2.5 are checked (variant fseek.mem_fail_clamps).
 test       t/019-memory-bounds.c
 
 assertion  XSH.fseek.020

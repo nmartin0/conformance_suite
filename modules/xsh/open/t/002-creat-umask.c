@@ -5,6 +5,7 @@
  * ASSERTION XSH.open.002
  * MUTANT    open.mode_ignores_umask
  * MUTANT    open.mode_ignored
+ * VARIANT   open.accmode_bits
  *
  * Two masks are tried so a coincidence cannot pass.
  */

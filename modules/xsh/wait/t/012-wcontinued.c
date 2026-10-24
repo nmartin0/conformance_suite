@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.wait.012
  * MUTANT    wait.continued_ignored
+ * VARIANT   wait.status_encoding
+ * VARIANT   wait.slow_stop
  */
 #include "pc.h"
 #include <errno.h>

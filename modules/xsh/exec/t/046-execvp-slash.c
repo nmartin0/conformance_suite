@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.exec.046
  * MUTANT    exec.slash_searched
+ * VARIANT   exec.sh_name
  */
 #include "pc.h"
 #include <dirent.h>

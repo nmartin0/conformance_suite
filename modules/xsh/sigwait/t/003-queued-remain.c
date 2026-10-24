@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.sigwait.003
  * MUTANT    sigwait.drains_all
+ * VARIANT   sigwait.action_dfl
+ * VARIANT   sigaddset.rt_minimum
  */
 #include "pc.h"
 #include <errno.h>

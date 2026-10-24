@@ -5,6 +5,7 @@
  * ASSERTION XSH.open.021
  * MUTANT    open.rdwr_as_rdonly
  * MUTANT    open.rdwr_as_wronly
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <fcntl.h>

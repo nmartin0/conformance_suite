@@ -5,6 +5,7 @@
  * ASSERTION XSH.fopen.012
  * MUTANT    fopen.fixed_mode
  * MUTANT    fopen.x_private
+ * VARIANT   fopen.x_exclusive
  */
 #include "pc.h"
 #include <errno.h>

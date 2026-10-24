@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.write.027
  * MUTANT    write.notconn_ok
+ * VARIANT   write.unconn_econnreset
  */
 #include "pc.h"
 #include <errno.h>

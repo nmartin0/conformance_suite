@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.alarm.005
  * MUTANT    alarm.thread_directed
+ * VARIANT   alarm.early_half
  */
 #include "pc.h"
 #include <errno.h>

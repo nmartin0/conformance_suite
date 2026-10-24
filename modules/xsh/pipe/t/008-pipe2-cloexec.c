@@ -5,6 +5,7 @@
  * ASSERTION XSH.pipe.008
  * MUTANT    pipe.p2_flags_ignored
  * MUTANT    pipe.p2_cloexec_one_end
+ * VARIANT   pipe.high_read_end
  */
 #include "pc.h"
 #include <errno.h>

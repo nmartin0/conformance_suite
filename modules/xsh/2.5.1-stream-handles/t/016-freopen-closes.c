@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.2.5.1-stream-handles.016
+ * VARIANT   setvbuf.tiny_default
  */
 #include "pc.h"
 #include <errno.h>

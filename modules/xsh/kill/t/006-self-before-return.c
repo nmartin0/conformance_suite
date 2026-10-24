@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.kill.006
  * MUTANT    kill.deferred
+ * VARIANT   sigaddset.rt_minimum
  */
 #include "pc.h"
 #include <errno.h>

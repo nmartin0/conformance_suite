@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.fstatat.011
  * MUTANT    fstatat.fdcwd_ebadf
+ * VARIANT   fstat.type_bits
+ * VARIANT   fstatat.link_mode
  */
 #include "pc.h"
 #include <errno.h>

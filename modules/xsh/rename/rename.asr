@@ -187,8 +187,11 @@ assertion  XSH.rename.021
 anchor     functions/rename.html#ERRORS
 class      required
 since      2001
-says       rename() fails with ELOOP when old's or new's prefix goes through a
-           loop of symbolic links (a -> b, b -> a).
+says       rename("f", "a/g"), with a -> b and b -> a, fails with ELOOP: new's
+           prefix goes through a loop of symbolic links.
+note       Only ELOOP applies: the prefix component a exists (as a
+           symbolic link), so rename()'s ENOENT for a missing component
+           of new's prefix does not hold. The old case is XSH.rename.036.
 test       t/021-eloop.c
 
 assertion  XSH.rename.022
@@ -334,3 +337,15 @@ note       Only ENOTDIR applies: rename()'s ENOENT for new is a missing
            component of its prefix, and f exists. rename() changes
            neither file when it fails (RETURN VALUE).
 test       t/035-enotdir-new-prefix.c
+
+assertion  XSH.rename.036
+anchor     functions/rename.html#ERRORS
+class      disputed
+since      2001
+says       rename("a/x", "g"), with a -> b and b -> a, fails with ELOOP.
+note       disputed (Q-8): old names no existing file, since its
+           resolution never ends, so rename()'s ENOENT for an old that
+           does not name an existing file applies literally too, and
+           XSH 2.3 lets either error be reported; every reference
+           system reports ELOOP.
+test       t/036-eloop-old.c

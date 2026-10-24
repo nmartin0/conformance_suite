@@ -5,6 +5,7 @@
  * ASSERTION XSH.futimens.011
  * MUTANT    utimensat.eacces_as_eperm
  * VARIANT   futimens.utime_now_m1
+ * VARIANT   futimens.res_1s
  */
 #include "pc.h"
 #include <errno.h>

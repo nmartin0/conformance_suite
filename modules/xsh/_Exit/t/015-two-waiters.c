@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH._Exit.015
  * MUTANT    wait.not_consumed
+ * VARIANT   wait.status_encoding
  */
 #include "pc.h"
 #include <poll.h>

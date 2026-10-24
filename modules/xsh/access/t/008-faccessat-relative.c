@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.access.008
  * MUTANT    faccessat.ignores_fd
+ * VARIANT   access.consts_alt
  */
 #include "pc.h"
 #include <errno.h>

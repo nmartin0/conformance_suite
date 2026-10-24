@@ -5,6 +5,7 @@
  * ASSERTION XSH.open.043
  * MUTANT    open.trailing_slash_ignored
  * MUTANT    open.enotdir_as_enoent
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <errno.h>

@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fork.012
  * MUTANT    fork.child_inherits_timers
+ * VARIANT   fork.timer_late
  */
 #include "pc.h"
 #include <errno.h>
@@ -34,15 +35,18 @@ int main(void)
 {
 	struct sigevent ev;
 	struct itimerspec its;
+	struct timespec cap = { 20, 0 };
 	sigset_t s;
 	timer_t t;
 	pid_t r;
-	int code;
+	int code, q[2];
+	char c;
 
 	pc_begin("XSH.fork.012");
 	memset(&ev, 0, sizeof ev);
 	ev.sigev_notify = SIGEV_SIGNAL;
 	ev.sigev_signo = SIGUSR1;
+	pc_check(pipe(q) == 0, "pipe failed");
 	pc_check(timer_create(CLOCK_REALTIME, &ev, &t) == 0, "timer_create failed");
 	/* SIGUSR1 blocked (inherited): an inherited timer shows as pending. */
 	sigemptyset(&s);
@@ -56,22 +60,32 @@ int main(void)
 	if (r == -1)
 		pc_unresolved("fork failed");
 	if (r == 0) {
-		struct timespec ts = { 0, 800000000 };
+		/*
+		 * Looks only once the parent's timer has fired (a timer may
+		 * expire late, with no bound), and a little after.
+		 */
+		struct timespec ts = { 0, 300000000 };
 		sigset_t pend;
+		(void)close(q[1]);
+		if (read(q[0], &c, 1) != 1)
+			_exit(8);
 		while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
 			;
 		if (sigpending(&pend) != 0)
 			_exit(9);
 		_exit(sigismember(&pend, SIGUSR1) == 1 ? 1 : 0);
 	}
-	code = reap(r);
-	pc_check(code == 0, "a timer the parent armed before fork() signalled the child");
-	{
-		/* The parent's own timer did fire: the setup worked. */
-		sigset_t pend;
-		pc_check(sigpending(&pend) == 0, "sigpending failed");
-		if (sigismember(&pend, SIGUSR1) != 1)
-			pc_unresolved("the parent's timer never fired, so the check proves nothing");
+	(void)close(q[0]);
+	/* The parent's own timer fires: the setup worked. */
+	if (sigtimedwait(&s, NULL, &cap) != SIGUSR1) {
+		(void)kill(r, SIGKILL);
+		(void)waitpid(r, NULL, 0);
+		pc_unresolved("the parent's timer did not fire within %ld s, so the check proves nothing",
+		    (long)cap.tv_sec);
 	}
+	(void)write(q[1], "f", 1);
+	code = reap(r);
+	pc_check(code != 8, "the child was not told that the parent's timer fired");
+	pc_check(code == 0, "a timer the parent armed before fork() signalled the child");
 	pc_pass();
 }

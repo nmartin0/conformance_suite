@@ -176,6 +176,13 @@ int main(void)
 		if (getcwd(cwd, sizeof cwd) == NULL)
 			pc_unresolved("getcwd failed: %s", pc_errname(errno));
 		snprintf(path, sizeof path, "%s/f", cwd);
+		{
+			/* Longer than {PATH_MAX}: the may-fail ENAMETOOLONG applies. */
+			long pm = pathconf("/", _PC_PATH_MAX);
+			if (pm > 0 && (long)strlen(path) >= pm)
+				pc_unresolved("the absolute path (%ld bytes) does not fit in {PATH_MAX} (%ld)",
+				    (long)strlen(path), pm);
+		}
 		ref = via_fd("f", O_RDONLY);
 		dfd = open("d", O_RDONLY | O_DIRECTORY);
 		pc_check(dfd >= 0, "open(d) failed: %s", pc_errname(errno));

@@ -5,6 +5,7 @@
  * ASSERTION XSH.chown.011
  * MUTANT    fchownat.ignores_nofollow
  * MUTANT    fchownat.always_nofollow
+ * VARIANT   chown.at_alt
  */
 #include "pc.h"
 #include <errno.h>

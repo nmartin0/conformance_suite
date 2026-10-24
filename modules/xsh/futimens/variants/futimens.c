@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <time.h>
 #include "pcvariant.h"
 
@@ -64,4 +65,100 @@ int utimensat(int dirfd, const char *path, const struct timespec times[2], int f
 		return real_utimensat(dirfd, path, t, flag);
 	}
 	return real_utimensat(dirfd, path, times, flag);
+}
+
+/*
+ * "res_1s": the file system keeps timestamps to the whole second. XBD 4.12
+ * leaves the resolution to the implementation as long as it is no coarser
+ * than one second, and a time to be stored becomes the greatest value the
+ * file system supports that is not greater than it. Truncating every
+ * timestamp the stat() family reports to the second is what such a file
+ * system shows: the stored time (from futimens(), utimensat(), utimes(),
+ * or the current time for marked updates) rounded down.
+ */
+static void whole_seconds(struct stat *st)
+{
+	st->st_atim.tv_nsec = 0;
+	st->st_mtim.tv_nsec = 0;
+	st->st_ctim.tv_nsec = 0;
+}
+
+static int res_1s(void)
+{
+	const char *v = variant_of("futimens.");
+
+	return IS("res_1s");
+}
+
+int stat(const char *restrict path, struct stat *restrict st)
+{
+	int r;
+	REAL(stat);
+
+	r = real_stat(path, st);
+	if (r == 0 && res_1s())
+		whole_seconds(st);
+	return r;
+}
+
+int lstat(const char *restrict path, struct stat *restrict st)
+{
+	int r;
+	REAL(lstat);
+
+	r = real_lstat(path, st);
+	if (r == 0 && res_1s())
+		whole_seconds(st);
+	return r;
+}
+
+int fstat(int fd, struct stat *st)
+{
+	int r;
+	REAL(fstat);
+
+	r = real_fstat(fd, st);
+	if (r == 0 && res_1s())
+		whole_seconds(st);
+	return r;
+}
+
+int fstatat(int fd, const char *restrict path, struct stat *restrict st, int flag)
+{
+	int r;
+	REAL(fstatat);
+
+	r = real_fstatat(fd, path, st, flag);
+	if (r == 0 && res_1s())
+		whole_seconds(st);
+	return r;
+}
+
+/*
+ * "utimes_round": utimes() rounds each time to the nearest second. XSH
+ * utimes() (futimens.html DESCRIPTION) is utimensat() with microseconds,
+ * except that it says rounding towards the nearest second may occur. Only
+ * in-range tv_usec values are rounded; others go through unchanged, so the
+ * system's own range check still applies to them.
+ */
+int utimes(const char *path, const struct timeval times[2])
+{
+	const char *v = variant_of("futimens.");
+	struct timeval t[2];
+	int i;
+	REAL(utimes);
+
+	if (IS("utimes_round") && times != NULL) {
+		for (i = 0; i < 2; i++) {
+			t[i] = times[i];
+			if (t[i].tv_usec >= 500000 && t[i].tv_usec < 1000000) {
+				t[i].tv_sec++;
+				t[i].tv_usec = 0;
+			} else if (t[i].tv_usec >= 0 && t[i].tv_usec < 500000) {
+				t[i].tv_usec = 0;
+			}
+		}
+		return real_utimes(path, t);
+	}
+	return real_utimes(path, times);
 }

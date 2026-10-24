@@ -7,6 +7,7 @@
  * MUTANT    sigaddset.wrong_bit
  * MUTANT    sigaddset.clears_others
  * MUTANT    sigaddset.returns_one
+ * VARIANT   sigemptyset.keeps_extra
  */
 #include "pc.h"
 #include <errno.h>

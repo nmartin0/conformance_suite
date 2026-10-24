@@ -5,6 +5,8 @@
  * ASSERTION XSH.ungetc.001
  * MUTANT    ungetc.noop
  * MUTANT    ungetc.returns_eof
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   ungetc.one_byte
  */
 #include "pc.h"
 #include <errno.h>

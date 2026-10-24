@@ -5,6 +5,7 @@
  * ASSERTION XSH.open.005
  * MUTANT    open.enoent_as_eacces
  * MUTANT    open.always_creat
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <errno.h>

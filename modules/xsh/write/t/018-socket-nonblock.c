@@ -5,6 +5,7 @@
  * ASSERTION XSH.write.018
  * MUTANT    write.nonblock_blocks
  * MUTANT    write.eagain_as_eintr
+ * VARIANT   write.ewouldblock
  */
 #include "pc.h"
 #include <errno.h>

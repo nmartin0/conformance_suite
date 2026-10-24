@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.ungetc.008
  * MUTANT    ungetc.no_convert
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   ungetc.one_byte
  */
 #include "pc.h"
 #include <errno.h>

@@ -205,13 +205,17 @@ assertion  XSH.fopen.020
 anchor     functions/fopen.html#DESCRIPTION
 class      disputed
 since      1988
-says       On a stream opened with "w" on a regular file, after fputs("ab\n")
-           and fputc('c') (no fflush()), the file is still empty; after
-           fclose() it holds "ab\nc".
+says       On a stream opened with "w" on a regular file, after fputc('\n')
+           (no fflush()), the file is still empty; after fclose() it holds
+           "\n".
 note       disputed (Q-33): fully buffered output is meant to go as a
            block when the buffer fills, but XSH 2.5 and ISO C make
            support for the buffering characteristics implementation-
-           defined; a FAIL is logged as INSPECT.
+           defined; a FAIL is logged as INSPECT. One byte is written
+           because the size of the automatic buffer is not bounded (a
+           2-byte buffer is allowed, variant fopen.tiny_buffer); a newline
+           still tells full from line buffering. With a 1-byte buffer the
+           test cannot tell full buffering from none.
 test       t/020-file-buffering.c
 
 assertion  XSH.fopen.021

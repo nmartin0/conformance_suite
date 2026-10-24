@@ -5,6 +5,9 @@
  * ASSERTION XSH.write.014
  * MUTANT    write.pipe_small_transfer
  * MUTANT    write.nonblock_blocks
+ * VARIANT   write.nb_pipe_min
+ * VARIANT   write.pipe_buf_512
+ * VARIANT   write.pipe_buf_unset
  */
 #include "pc.h"
 #include <errno.h>

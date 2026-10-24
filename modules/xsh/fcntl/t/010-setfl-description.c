@@ -5,6 +5,7 @@
  * ASSERTION XSH.fcntl.010
  * MUTANT    fcntl.setfl_ignored
  * MUTANT    fcntl.setfl_by_file
+ * VARIANT   fcntl.ok_other
  */
 #include "pc.h"
 #include <errno.h>

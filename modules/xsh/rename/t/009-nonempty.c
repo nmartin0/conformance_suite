@@ -5,6 +5,7 @@
  * ASSERTION XSH.rename.009
  * MUTANT    rename.nonempty_ok
  * MUTANT    rename.nonempty_einval
+ * VARIANT   rename.notempty_eexist
  */
 #include "pc.h"
 #include <errno.h>

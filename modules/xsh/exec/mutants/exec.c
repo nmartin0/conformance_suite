@@ -22,6 +22,7 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <grp.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -101,12 +102,39 @@ static execve_fn real_execve(void)
 	return f;
 }
 
+/* Threads the process made, so a fault can end them the wrong way. */
+static pthread_t made[64];
+static int nmade;
+
+int pthread_create(pthread_t *t, const pthread_attr_t *a, void *(*fn)(void *), void *arg)
+{
+	static int (*real)(pthread_t *, const pthread_attr_t *, void *(*)(void *), void *);
+	int r;
+
+	if (real == NULL)
+		real = (int (*)(pthread_t *, const pthread_attr_t *, void *(*)(void *), void *))
+		    dlsym(RTLD_NEXT, "pthread_create");
+	r = real(t, a, fn, arg);
+	if (r == 0 && nmade < 64)
+		made[nmade++] = *t;
+	return r;
+}
+
 /* Process-state faults, done just before the real call. */
 static void before(const char *m)
 {
 	int fd, sig;
 	struct sigaction sa;
 
+	if (IS("cancels_threads")) {
+		/* ends the other threads by cancellation: their cleanup runs */
+		struct timespec ts = { 0, 300000000 };
+		int i;
+		for (i = 0; i < nmade; i++)
+			if (!pthread_equal(made[i], pthread_self()))
+				(void)pthread_cancel(made[i]);
+		(void)nanosleep(&ts, NULL);
+	}
 	if (IS("flushes_streams"))
 		(void)fflush(NULL);	/* writes the old image's buffered data */
 

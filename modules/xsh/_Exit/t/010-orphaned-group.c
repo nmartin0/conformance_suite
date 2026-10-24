@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH._Exit.010
+ * VARIANT   wait.status_encoding
+ * VARIANT   wait.slow_stop
  */
 #include "pc.h"
 #include <errno.h>

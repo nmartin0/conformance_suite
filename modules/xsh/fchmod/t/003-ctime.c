@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fchmod.003
  * MUTANT    fchmod.ctime_kept
+ * VARIANT   fchmod.coarse_times
  */
 #include "pc.h"
 #include <errno.h>

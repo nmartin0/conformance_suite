@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.fcntl.005
  * MUTANT    fcntl.dupfd_neg_ok
+ * VARIANT   fcntl.dupfd_max_emfile
+ * VARIANT   fcntl.open_max_indet
  */
 #include "pc.h"
 #include <errno.h>

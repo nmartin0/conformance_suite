@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigqueue.005
  * MUTANT    sigqueue.eagain_never
+ * VARIANT   sigqueue.max_min
  */
 #include "pc.h"
 #include <errno.h>

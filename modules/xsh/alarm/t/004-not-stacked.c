@@ -5,6 +5,8 @@
  * ASSERTION XSH.alarm.004
  * MUTANT    alarm.stacked
  * MUTANT    alarm.no_reschedule
+ * VARIANT   alarm.early_half
+ * VARIANT   sigtimedwait.sluggish
  */
 #include "pc.h"
 #include <errno.h>

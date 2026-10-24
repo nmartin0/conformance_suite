@@ -5,6 +5,7 @@
  * ASSERTION XSH.mkdir.002
  * MUTANT    mkdir.ignores_umask
  * MUTANT    mkdir.ignores_mode
+ * VARIANT   mkdir.sgid_bit
  */
 #include "pc.h"
 #include <dirent.h>

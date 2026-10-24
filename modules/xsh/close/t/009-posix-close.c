@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.close.009
  * MUTANT    close.pc_noop
+ * VARIANT   close.restart_bit
  */
 #include "pc.h"
 #include <errno.h>

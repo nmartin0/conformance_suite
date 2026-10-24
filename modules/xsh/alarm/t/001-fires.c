@@ -5,6 +5,10 @@
  * ASSERTION XSH.alarm.001
  * MUTANT    alarm.never_fires
  * MUTANT    alarm.returns_nonzero
+ * VARIANT   alarm.ret_trunc
+ * VARIANT   alarm.ret_ceil
+ * VARIANT   alarm.early_half
+ * VARIANT   sigtimedwait.sluggish
  */
 #include "pc.h"
 #include <errno.h>

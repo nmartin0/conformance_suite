@@ -5,6 +5,7 @@
  * ASSERTION XSH.psiginfo.004
  * MUTANT    psiginfo.errno_clobbered
  * MUTANT    psiginfo.orients_wide
+ * VARIANT   psiginfo.own_text
  */
 #include "pc.h"
 #include <errno.h>

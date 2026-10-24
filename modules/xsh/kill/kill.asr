@@ -64,7 +64,8 @@ assertion  XSH.kill.007
 anchor     functions/kill.html#ERRORS/EINVAL
 class      required
 since      1988
-says       kill() with signal number -1 or 100000 fails with EINVAL.
+says       kill() with signal number -1 or sysconf(_SC_NSIG) (one above the
+           highest supported signal) fails with EINVAL.
 test       t/007-einval.c
 
 assertion  XSH.kill.008

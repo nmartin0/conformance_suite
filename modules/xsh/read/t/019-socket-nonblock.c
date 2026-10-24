@@ -5,6 +5,7 @@
  * ASSERTION XSH.read.019
  * MUTANT    read.nonblock_blocks
  * MUTANT    read.eagain_as_eintr
+ * VARIANT   read.ewouldblock
  */
 #include "pc.h"
 #include <errno.h>

@@ -7,6 +7,9 @@
  * MUTANT    mkdir.makes_file
  * MUTANT    mkdir.not_empty
  * MUTANT    mkdir.returns_one
+ * VARIANT   mkdir.parent_gid
+ * VARIANT   mkdir.sgid_bit
+ * VARIANT   mkdir.no_dots
  */
 #include "pc.h"
 #include <dirent.h>

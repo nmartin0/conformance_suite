@@ -5,6 +5,7 @@
  * ASSERTION XSH.close.004
  * MUTANT    close.ebadf_as_einval
  * MUTANT    close.always_ok
+ * VARIANT   close.hidden_fds
  */
 #include "pc.h"
 #include <errno.h>

@@ -5,6 +5,7 @@
  * ASSERTION XSH.sigsuspend.003
  * MUTANT    sigsuspend.mask_ignored
  * MUTANT    sigsuspend.mask_union
+ * VARIANT   kill.late
  */
 #include "pc.h"
 #include <errno.h>

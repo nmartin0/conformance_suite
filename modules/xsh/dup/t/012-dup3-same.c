@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.dup.012
  * MUTANT    dup.dup3_same_ok
+ * VARIANT   dup.hidden_fds
  */
 #include "pc.h"
 #include <errno.h>

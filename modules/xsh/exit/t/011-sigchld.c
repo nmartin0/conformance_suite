@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.exit.011
  * MUTANT    exit.status_wrong
+ * VARIANT   wait.status_encoding
  */
 #include "pc.h"
 #include <errno.h>
@@ -54,7 +55,7 @@ static void await_chld(void)
 	struct timespec ts = { 0, 10000000 };
 	int i;
 
-	for (i = 0; i < 100 && !got; i++)
+	for (i = 0; i < 1000 && !got; i++)
 		(void)nanosleep(&ts, NULL);
 }
 
@@ -87,7 +88,7 @@ int main(void)
 	}
 	pc_check(sigprocmask(SIG_SETMASK, &old, NULL) == 0, "sigprocmask failed");
 	await_chld();
-	pc_check(got, "no SIGCHLD within 1 s of the child's exit()");
+	pc_check(got, "no SIGCHLD within 10 s of the child's exit()");
 	pc_check(info.si_code == CLD_EXITED, "si_code %d, expected CLD_EXITED", info.si_code);
 	pc_check(info.si_pid == c, "si_pid %ld, expected %ld", (long)info.si_pid, (long)c);
 	pc_check(info.si_status == 5, "si_status %d, expected 5", info.si_status);

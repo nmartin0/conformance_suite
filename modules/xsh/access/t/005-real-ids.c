@@ -6,6 +6,7 @@
  * MUTANT    access.uses_effective
  * MUTANT    faccessat.eaccess_ignored
  * MUTANT    faccessat.uses_effective
+ * VARIANT   access.consts_alt
  */
 #include "pc.h"
 #include <errno.h>

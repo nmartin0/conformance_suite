@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.fseek.004
  * MUTANT    fseek.fd_offset_stale
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   fseek.fflush_q29
  */
 #include "pc.h"
 #include <errno.h>

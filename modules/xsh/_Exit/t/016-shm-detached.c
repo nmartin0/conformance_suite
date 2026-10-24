@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH._Exit.016
  * MUTANT    _Exit.lingers
+ * VARIANT   _Exit.late_detach
  */
 #include "pc.h"
 #include <errno.h>
@@ -82,11 +83,19 @@ int main(void)
 		}
 		(void)write(g[1], "g", 1);
 		(void)waitpid(kid, &st, 0);
-		sleep_ms(50);
-		st = shmctl(id, IPC_STAT, &ds);
+		{
+			/* No bound on when termination's consequences are done: up to 10 s. */
+			int i;
+			for (i = 0; i < 1000; i++) {
+				st = shmctl(id, IPC_STAT, &ds);
+				if (st != 0 || ds.shm_nattch == 1)
+					break;
+				sleep_ms(10);
+			}
+		}
 		(void)shmctl(id, IPC_RMID, NULL);
 		pc_check(st == 0, "shmctl(IPC_STAT) failed: %s", pc_errname(errno));
-		pc_check(ds.shm_nattch == 1, "shm_nattch is %lu after the child's _exit(), expected 1", (unsigned long)ds.shm_nattch);
+		pc_check(ds.shm_nattch == 1, "shm_nattch is %lu within 10 s of the child's _exit(), expected 1", (unsigned long)ds.shm_nattch);
 	}
 	pc_pass();
 }

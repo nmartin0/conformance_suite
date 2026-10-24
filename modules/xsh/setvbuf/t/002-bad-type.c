@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.setvbuf.002
  * MUTANT    setvbuf.any_type
+ * VARIANT   setvbuf.tiny_default
  */
 #include "pc.h"
 #include <errno.h>

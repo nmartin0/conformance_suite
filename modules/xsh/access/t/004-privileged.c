@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.access.004
  * MUTANT    access.privilege_ignored
+ * VARIANT   access.consts_alt
+ * VARIANT   access.priv_x_ok
  */
 #include "pc.h"
 #include <errno.h>

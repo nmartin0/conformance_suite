@@ -173,6 +173,9 @@ class      required
 since      2008
 says       fchownat(fd, "f", -1, -1, 0) with fd open on a regular file fails
            with ENOTDIR.
+note       Not plantable: the fd [EACCES] speaks of the directory
+           underlying fd, so it does not apply to a descriptor of a
+           regular file; only ENOTDIR is expected (reviewed by hand).
 test       t/018-fchownat-enotdir.c
 
 assertion  XSH.chown.019

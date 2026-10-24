@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.write.017
  * MUTANT    write.epipe_as_eio
+ * VARIANT   write.peer_gone_reset
  */
 #include "pc.h"
 #include <errno.h>

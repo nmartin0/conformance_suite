@@ -5,6 +5,7 @@
  * ASSERTION XSH.write.009
  * MUTANT    write.eintr_as_eagain
  * MUTANT    write.eintr_restarts
+ * VARIANT   write.pipe_buf_512
  */
 #include "pc.h"
 #include <errno.h>

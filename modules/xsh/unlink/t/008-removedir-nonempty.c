@@ -5,6 +5,8 @@
  * ASSERTION XSH.unlink.008
  * MUTANT    unlinkat.nonempty_ok
  * MUTANT    unlinkat.nonempty_einval
+ * VARIANT   unlink.notempty_eexist
+ * VARIANT   unlink.at_fdcwd_alt
  */
 #include "pc.h"
 #include <errno.h>

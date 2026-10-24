@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.ftruncate.011
  * MUTANT    ftruncate.narrow_length
+ * VARIANT   ftruncate.no_sparse
  */
 #include "pc.h"
 #include <errno.h>

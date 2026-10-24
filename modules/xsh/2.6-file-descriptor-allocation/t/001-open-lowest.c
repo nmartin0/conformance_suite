@@ -5,6 +5,8 @@
  * ASSERTION XSH.2.6-file-descriptor-allocation.001
  * MUTANT    open.not_lowest
  * MUTANT    open.after_highest
+ * VARIANT   open.accmode_bits
+ * VARIANT   open.hidden_fds
  *
  * Setup opens a descriptor well above the lowest free one (with
  * fcntl F_DUPFD, so close() is not involved), leaving a gap: an allocator

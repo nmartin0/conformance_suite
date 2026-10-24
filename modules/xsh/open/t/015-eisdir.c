@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.015
  * MUTANT    open.eisdir_as_eacces
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <errno.h>

@@ -5,6 +5,9 @@
  * ASSERTION XSH.sigaltstack.013
  * MUTANT    sigaltstack.disable_ignored
  * MUTANT    sigaltstack.process_wide
+ * VARIANT   sigaltstack.bsd_flags
+ * VARIANT   sigaltstack.minsigstksz_32k
+ * VARIANT   sigaltstack.disable_size_checked
  */
 #include "pc.h"
 #include <errno.h>
@@ -97,8 +100,7 @@ int main(void)
 	s.ss_sp = alt;
 	s.ss_size = sz;
 	s.ss_flags = 0;
-	d.ss_sp = NULL;
-	d.ss_size = 0;
+	d = s;	/* a valid size: whether it is ignored is XSH.sigaltstack.011 */
 	d.ss_flags = SS_DISABLE;
 	pc_test();
 	pc_check(sigaltstack(&s, NULL) == 0, "sigaltstack() failed: %s", pc_errname(errno));

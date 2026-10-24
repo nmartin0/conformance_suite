@@ -5,6 +5,7 @@
  * ASSERTION XSH.link.012
  * MUTANT    link.dir_eacces
  * MUTANT    link.dir_ok
+ * VARIANT   link.access_rw
  */
 #include "pc.h"
 #include <errno.h>

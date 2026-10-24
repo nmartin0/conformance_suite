@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.sigemptyset.002
  * MUTANT    sigemptyset.misses_rt
+ * VARIANT   sigemptyset.keeps_extra
+ * VARIANT   sigaddset.rt_minimum
  */
 #include "pc.h"
 #include <errno.h>

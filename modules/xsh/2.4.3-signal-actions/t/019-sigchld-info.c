@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.2.4.3-signal-actions.019
+ * VARIANT   sigaction.late_delivery
+ * VARIANT   sigaction.siginfo_rt_only
  */
 #include "pc.h"
 #include <errno.h>
@@ -74,7 +76,15 @@ int main(void)
 		sa.sa_sigaction = hc;
 		sa.sa_flags = SA_SIGINFO;
 		sigemptyset(&sa.sa_mask);
-		pc_check(sigaction(SIGCHLD, &sa, NULL) == 0, "sigaction failed");
+		if (sigaction(SIGCHLD, &sa, NULL) != 0) {
+			int e = errno;
+
+			/* XSH sigaction() ERRORS: only a system without XSI may refuse SA_SIGINFO outside SIGRTMIN..SIGRTMAX */
+			if (e == EINVAL && sysconf(_SC_XOPEN_UNIX) == -1)
+				pc_unresolved("sigaction() refused SA_SIGINFO for SIGCHLD (EINVAL) on a system without XSI, which it may do");
+			pc_test();
+			pc_fail("sigaction() with SA_SIGINFO for SIGCHLD failed: %s", pc_errname(e));
+		}
 		pc_test();
 		kid = fork();
 		if (kid == -1)

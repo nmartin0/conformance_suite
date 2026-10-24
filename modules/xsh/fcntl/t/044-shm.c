@@ -5,6 +5,8 @@
  * ASSERTION XSH.fcntl.044
  * MUTANT    fcntl.dupfd_ignores_arg
  * MUTANT    fcntl.setfd_ignored
+ * VARIANT   fcntl.ok_other
+ * VARIANT   fcntl.cloexec_bit
  */
 #include "pc.h"
 #include <errno.h>
@@ -61,9 +63,9 @@ int main(void)
 		pc_check(fd >= 0, "shm_open failed: %s", pc_errname(errno));
 		(void)shm_unlink(name);
 		pc_test();
-		pc_check(fcntl(fd, F_SETFD, FD_CLOEXEC) == 0, "F_SETFD failed: %s", pc_errname(errno));
+		pc_check(fcntl(fd, F_SETFD, FD_CLOEXEC) != -1, "F_SETFD failed: %s", pc_errname(errno));
 		pc_check((fcntl(fd, F_GETFD) & FD_CLOEXEC) != 0, "F_GETFD does not report FD_CLOEXEC");
-		pc_check(fcntl(fd, F_SETFD, 0) == 0 && (fcntl(fd, F_GETFD) & FD_CLOEXEC) == 0, "FD_CLOEXEC could not be cleared");
+		pc_check(fcntl(fd, F_SETFD, 0) != -1 && (fcntl(fd, F_GETFD) & FD_CLOEXEC) == 0, "FD_CLOEXEC could not be cleared");
 		low = fd + 10;
 		if (fcntl(low, F_GETFD) != -1)
 			pc_unresolved("descriptor %d is in use", low);

@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.020
  * MUTANT    open.wronly_readable
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <errno.h>

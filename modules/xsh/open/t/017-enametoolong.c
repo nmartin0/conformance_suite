@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.017
  * MUTANT    open.enametoolong_as_enoent
+ * VARIANT   open.accmode_bits
  *
  * {NAME_MAX} comes from pathconf() on the directory, since it can differ
  * between file systems. O_CREAT is set in an existing directory so

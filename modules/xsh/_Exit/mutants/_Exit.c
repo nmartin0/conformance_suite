@@ -49,10 +49,11 @@ _Noreturn static void faulty(exit_fn real, int status)
 	if (IS("calls_quick"))
 		quick_exit(status);	/* runs at_quick_exit() handlers */
 	if (IS("lingers")) {
-		/* a helper inherits the process's resources and lives on a while */
+		/* a helper inherits the process's resources and keeps them for 15 s, past
+		 * XSH._Exit.016's practical 10 s limit and long after the status (021) */
 		pid_t g = fork();
 		if (g == 0) {
-			(void)sleep(2);
+			(void)sleep(15);
 			real(0);
 		}
 	}

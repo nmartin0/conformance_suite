@@ -121,8 +121,11 @@ assertion  XSH.link.013
 anchor     functions/link.html#ERRORS
 class      required
 since      2001
-says       link() fails with ELOOP when path1's or path2's prefix goes
-           through a loop of symbolic links (a -> b, b -> a).
+says       link("f", "a/g"), with a -> b and b -> a, fails with ELOOP: path2's
+           prefix goes through a loop of symbolic links.
+note       Only ELOOP applies: the prefix component a exists (as a
+           symbolic link), so link()'s ENOENT for a missing prefix
+           component does not hold. The path1 case is XSH.link.026.
 test       t/013-eloop.c
 
 assertion  XSH.link.014
@@ -251,3 +254,15 @@ note       Only ENAMETOOLONG applies: a missing path2 is not one of
            error is unconditional only since _POSIX_NO_TRUNC had to be
            other than -1.
 test       t/025-enametoolong-new.c
+
+assertion  XSH.link.026
+anchor     functions/link.html#ERRORS
+class      disputed
+since      2001
+says       link("a/x", "g"), with a -> b and b -> a, fails with ELOOP.
+note       disputed (Q-8): no file named by path1 exists, since its
+           resolution never ends, so link()'s ENOENT for a path1 that
+           does not exist applies literally too, and XSH 2.3 lets
+           either error be reported; every reference system reports
+           ELOOP.
+test       t/026-eloop-path1.c

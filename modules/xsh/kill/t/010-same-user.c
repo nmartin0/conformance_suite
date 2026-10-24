@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.kill.010
  * MUTANT    kill.drops
+ * VARIANT   kill.late
  */
 #include "pc.h"
 #include <errno.h>

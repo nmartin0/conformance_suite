@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.pthread_sigmask.005
  * MUTANT    pthread_sigmask.unblock_drops
+ * VARIANT   pthread_sigmask.how_values
  */
 #include "pc.h"
 #include <errno.h>

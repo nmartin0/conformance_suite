@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.pipe.009
  * MUTANT    pipe.p2_nonblock_ignored
+ * VARIANT   pipe.high_read_end
  */
 #include "pc.h"
 #include <errno.h>

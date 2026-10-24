@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.2.4.2-realtime-signals.005
+ * VARIANT   sigaction.late_delivery
+ * VARIANT   sigaction.sigqueue_max_32
  */
 #include "pc.h"
 #include <errno.h>
@@ -251,7 +253,7 @@ int main(void)
 	pc_test();
 	pc_check(sigqueue(getpid(), SIGRTMIN, v) == 0 && sigqueue(getpid(), SIGRTMIN, v) == 0, "sigqueue failed");
 	mask(SIG_UNBLOCK, SIGRTMIN);
-	for (i = 0; i < 100 && calls < 2; i++)
+	for (i = 0; i < 500 && calls < 2; i++)	/* no time is set for delivery; 5 s as elsewhere */
 		sleep_ms(10);
 	pc_check(calls == 2, "the handler ran %d times, expected 2", (int)calls);
 	pc_check(pend1 == 1, "during the first delivery SIGRTMIN was not pending, with one more queued");

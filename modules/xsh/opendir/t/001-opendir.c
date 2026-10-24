@@ -5,6 +5,10 @@
  * ASSERTION XSH.opendir.001
  * MUTANT    opendir.fails
  * MUTANT    readdir.skips_first
+ * VARIANT   readdir.snapshot
+ * VARIANT   readdir.reversed
+ * VARIANT   readdir.no_dots
+ * VARIANT   readdir.lazy_fd
  */
 #include "pc.h"
 #include <dirent.h>

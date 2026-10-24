@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH._Exit.017
+ * VARIANT   wait.status_encoding
  */
 #include "pc.h"
 #include <errno.h>
@@ -81,11 +82,20 @@ int main(void)
 			_exit(semop(id, &op, 1) == 0 ? 0 : 99);
 		}
 		w = waitpid(kid, &st, 0);
-		v = semctl(id, 0, GETVAL);
+		{
+			/* No bound on when termination's consequences are done: up to 10 s. */
+			int i;
+			for (i = 0; i < 1000; i++) {
+				v = semctl(id, 0, GETVAL);
+				if (v == 5 || v == -1)
+					break;
+				sleep_ms(10);
+			}
+		}
 		(void)semctl(id, 0, IPC_RMID);
 		if (w != kid || (WIFEXITED(st) && WEXITSTATUS(st) == 99))
 			pc_unresolved("the child could not run semop()");
-		pc_check(v == 5, "semval is %d after the child's _exit(), expected 5", v);
+		pc_check(v == 5, "semval is %d 10 s after the child's _exit(), expected 5", v);
 	}
 	pc_pass();
 }

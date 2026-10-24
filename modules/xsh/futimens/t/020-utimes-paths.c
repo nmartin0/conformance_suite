@@ -5,6 +5,7 @@
  * ASSERTION XSH.futimens.020
  * MUTANT    utimes.missing_ok
  * MUTANT    utimes.enotdir_as_enoent
+ * VARIANT   futimens.utimes_round
  */
 #include "pc.h"
 #include <errno.h>

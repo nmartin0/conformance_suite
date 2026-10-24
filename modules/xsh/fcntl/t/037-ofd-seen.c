@@ -5,6 +5,8 @@
  * ASSERTION XSH.fcntl.037
  * MUTANT    fcntl.ofd_setlk_ignored
  * MUTANT    fcntl.ofd_as_posix
+ * VARIANT   fcntl.ok_other
+ * VARIANT   fcntl.enolck_small
  */
 #include "pc.h"
 #include <errno.h>
@@ -25,6 +27,26 @@ static struct flock lk(int type, int whence, off_t start, off_t len)
 	fl.l_start = start;
 	fl.l_len = len;
 	return fl;
+}
+
+/*
+ * A lock call in the test's own process. ENOLCK from a set command (the
+ * system's limit on locked regions, which XSH fcntl() sets no minimum for)
+ * is not what these tests are about: it makes the result UNRESOLVED, in
+ * any phase. ENOLCK is not an error of F_GETLK or F_OFD_GETLK, so there it
+ * is left to the test.
+ */
+static int lock_call(int fd, int cmd, struct flock *fl)
+{
+	int r = fcntl(fd, cmd, fl);
+
+	if (r == -1 && errno == ENOLCK && (cmd == F_SETLK || cmd == F_SETLKW
+#ifdef F_OFD_SETLK
+	    || cmd == F_OFD_SETLK || cmd == F_OFD_SETLKW
+#endif
+	    ))
+		pc_unresolved("the system's lock limit was reached (ENOLCK)");
+	return r;
 }
 
 /*
@@ -52,7 +74,7 @@ static void probe(struct flock *q)
 		fd = open("f", O_RDWR);
 		if (fd < 0)
 			_exit(2);
-		if (fcntl(fd, F_GETLK, &a) != 0)
+		if (fcntl(fd, F_GETLK, &a) == -1)
 			_exit(3);
 		if (write(p[1], &a, sizeof a) != (ssize_t)sizeof a)
 			_exit(2);
@@ -101,7 +123,7 @@ static void holder(int type, off_t start, off_t len, unsigned secs)
 		int fd = open("f", O_RDWR);
 		(void)close(sp[0]);
 		(void)close(cp[1]);
-		c = fd >= 0 && fcntl(fd, F_SETLK, &fl) == 0 ? 'y' : 'n';
+		c = fd >= 0 && fcntl(fd, F_SETLK, &fl) != -1 ? 'y' : errno == ENOLCK ? 'l' : 'n';
 		(void)write(sp[1], &c, 1);
 		(void)close(dp[0]);
 		if (secs) {
@@ -119,7 +141,10 @@ static void holder(int type, off_t start, off_t len, unsigned secs)
 	(void)close(dp[1]);
 	hold_ctl = cp[1];
 	hold_done = dp[0];
-	if (read(sp[0], &c, 1) != 1 || c != 'y')
+	c = 0;
+	if (read(sp[0], &c, 1) == 1 && c == 'l')
+		pc_unresolved("holder: the system's lock limit was reached (ENOLCK)");
+	if (c != 'y')
 		pc_unresolved("holder: could not take its lock");
 	(void)close(sp[0]);
 }
@@ -148,7 +173,7 @@ int main(void)
 	getlk_under_test = 1;
 	pc_test();
 	fl = lk(F_WRLCK, SEEK_SET, 0, 10);
-	pc_expect_ok(fcntl(fd, F_OFD_SETLK, &fl), "F_OFD_SETLK F_WRLCK");
+	pc_expect_ok(lock_call(fd, F_OFD_SETLK, &fl), "F_OFD_SETLK F_WRLCK");
 	q = lk(F_RDLCK, SEEK_SET, 0, 1);
 	probe(&q);
 	pc_check(q.l_type == F_WRLCK, "another process does not see the OFD lock");

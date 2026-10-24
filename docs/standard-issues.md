@@ -83,7 +83,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-69 | getrlimit(): stale RATIONALE on RLIMIT_FSIZE | editorial | none |
 | SI-70 | sigaction(): stale APPLICATION USAGE on longjmp() | editorial | none |
 | SI-71 | pthread_sigmask(): requirement on how | editorial | XSH.pthread_sigmask.010 |
-| SI-72 | 2.5.1: "open file descriptor" | editorial | none |
+| SI-72 | 2.5.1: "open file descriptor"; whose further actions count | editorial | XSH.2.5.1-stream-handles.012 |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
@@ -91,7 +91,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-5 | wait(): "if the implementation queues SIGCHLD" vs XSH 2.4.1 | question | XSH.wait.019 (both readings agree) |
 | Q-6 | wait(): when is "another child's status available"? | question | (not tested) |
 | Q-7 | exit(): streams with no file descriptor (memory streams) | question | (not tested) |
-| Q-8 | XSH 2.3: ENAMETOOLONG/ENOTDIR always overlap ENOENT for lookups | question | XSH.exec.038, XSH.exec.041 |
+| Q-8 | XSH 2.3: ENAMETOOLONG/ENOTDIR/ELOOP always overlap ENOENT for lookups | question | XSH.exec.038, XSH.exec.041, XSH.unlink.013, XSH.rmdir.009, XSH.link.026, XSH.rename.036 |
 | Q-9 | exec E2BIG: which {ARG_MAX} when sysconf() under-reports | question | XSH.exec.043 |
 | Q-10 | execvp() sh fallback when argv[0] is a null pointer | question | (not tested) |
 | Q-11 | raise()/pthread_kill(): delivery before return (raise() settled by its own rule) | question | XSH.raise.001 |
@@ -139,3 +139,9 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-53 | SIGCHLD ordering; E2BIG against ENOMEM | question | XSH._Exit.014, XSH.wait.002, XSH.exec.043 |
 | Q-54 | <unistd.h> intptr_t | question | Tier 0 |
 | Q-55 | <signal.h> constants distinct | question | XBD.signal.h.016, .017 |
+| Q-56 | aio_read() on a pipe | question | XSH.fork.023 |
+| Q-57 | signal() return after reset | question | (none) |
+| Q-58 | scandir sel once | question | XSH.alphasort.010 |
+| Q-59 | _Exit consequences timing | question | XSH._Exit.016, .017, .018, .021 |
+| Q-60 | fcntl locks beyond EOF | question | XSH.fcntl.027 |
+| Q-61 | socket peer gone: EPIPE+SIGPIPE or ECONNRESET | question | XSH.write.026, XSH.read.022 |

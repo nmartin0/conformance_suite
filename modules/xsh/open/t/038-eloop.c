@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.038
  * MUTANT    open.eloop_as_enoent
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <errno.h>

@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.psiginfo.003
  * MUTANT    psiginfo.info_wrong_signal
+ * VARIANT   psiginfo.own_text
+ * VARIANT   sigtimedwait.junk_fields
  */
 #include "pc.h"
 #include <errno.h>

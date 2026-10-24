@@ -5,6 +5,7 @@
  * ASSERTION XSH.pthread_sigmask.004
  * MUTANT    pthread_sigmask.oset_lost
  * MUTANT    pthread_sigmask.query_changes
+ * VARIANT   pthread_sigmask.how_values
  */
 #include "pc.h"
 #include <errno.h>

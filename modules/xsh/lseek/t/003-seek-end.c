@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.lseek.003
  * MUTANT    lseek.end_ignores_offset
+ * VARIANT   lseek.whence_values
  */
 #include "pc.h"
 #include <errno.h>

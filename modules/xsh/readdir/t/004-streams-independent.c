@@ -4,6 +4,9 @@
  *
  * ASSERTION XSH.readdir.004
  * MUTANT    readdir.shared_buffer
+ * VARIANT   readdir.snapshot
+ * VARIANT   readdir.reversed
+ * VARIANT   readdir.no_dots
  */
 #include "pc.h"
 #include <dirent.h>

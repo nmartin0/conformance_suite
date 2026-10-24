@@ -164,15 +164,19 @@ anchor     functions/V2_chap02.html#2.4.3
 class      disputed
 since      2008
 says       A write to a page mapped PROT_READ gives a SIGSEGV whose siginfo_t
-           has si_signo SIGSEGV, si_code SEGV_ACCERR and si_addr inside that
-           page.
+           has si_signo SIGSEGV and si_code SEGV_ACCERR (si_addr inside that
+           page is noted, not required).
 note       disputed (SI-64): <signal.h> says implementations 'do not
            generate' other codes for the listed circumstances, a
-           statement rather than a requirement. si_addr may be
-           inaccurate on some systems (<signal.h>), so any address
-           within the page is accepted. The handler records what it saw
-           in volatile sig_atomic_t objects and leaves with
-           siglongjmp().
+           statement rather than a requirement. <signal.h> allows
+           si_addr to be inaccurate, so a wrong address is only
+           noted (variant sigaction.si_addr_inaccurate). The handler
+           records what it saw in volatile sig_atomic_t objects and
+           leaves with siglongjmp().
+           On a system without XSI, sigaction() may refuse SA_SIGINFO
+           for this signal (sigaction() ERRORS): EINVAL there, with
+           sysconf(_SC_XOPEN_UNIX) -1, is UNRESOLVED; elsewhere it
+           is a FAIL.
 nomutant   decided by the kernel; a user-space shim cannot plant it
 test       t/015-segv-siginfo.c
 
@@ -229,6 +233,10 @@ says       When a child exits with status 7, the SIGCHLD handler (SA_SIGINFO)
            the real user ID and si_status 7.
 nomutant   The siginfo_t is filled by the kernel at the child's exit; no
            interposed function stands between.
+note       On a system without XSI, sigaction() may refuse SA_SIGINFO
+           for this signal (sigaction() ERRORS): EINVAL there, with
+           sysconf(_SC_XOPEN_UNIX) -1, is UNRESOLVED; elsewhere it
+           is a FAIL.
 test       t/019-sigchld-info.c
 
 assertion  XSH.2.4.3-signal-actions.020
@@ -236,13 +244,17 @@ anchor     functions/V2_chap02.html#2.4.3
 class      disputed
 since      2008
 says       A read of a page unmapped just before (in the same child) gives a
-           SIGSEGV whose siginfo_t has si_code SEGV_MAPERR and si_addr in
-           that page.
+           SIGSEGV whose siginfo_t has si_code SEGV_MAPERR (si_addr in that
+           page is noted, not required).
 note       disputed (SI-64): <signal.h> says implementations 'do not
            generate' other codes for the listed circumstances, which
            reads as a statement rather than a requirement, and XSH 2.4.3
            allows implementation-defined codes for events it does not
-           list.
+           list. <signal.h> allows si_addr to be inaccurate, so a wrong
+           address is only noted.
+           On a system without XSI (sysconf(_SC_XOPEN_UNIX) -1),
+           sigaction() may refuse SA_SIGINFO for SIGSEGV: UNRESOLVED
+           there, a FAIL elsewhere.
 nomutant   The fault is raised by the hardware and kernel; no interposed
            function stands between.
 test       t/020-segv-maperr.c
@@ -259,6 +271,10 @@ note       The file is one page from the start: references to a part of
            whole pages past the end of the object give SIGBUS.
            <signal.h> allows si_addr to be inaccurate, so a wrong
            address is only noted (Q-50).
+           On a system without XSI (sysconf(_SC_XOPEN_UNIX) -1),
+           sigaction() may refuse SA_SIGINFO for SIGBUS; the test then
+           uses a one-argument handler and still requires the SIGBUS.
+           Elsewhere the refusal is a FAIL.
 nomutant   The fault is raised by the hardware and kernel; no interposed
            function stands between.
 test       t/021-sigbus-beyond-end.c

@@ -9,6 +9,7 @@
  * MUTANT    utimensat.returns_one
  * MUTANT    utimensat.drops_ns
  * MUTANT    utimensat.max_nsec_rejected
+ * VARIANT   futimens.res_1s
  */
 #include "pc.h"
 #include <errno.h>

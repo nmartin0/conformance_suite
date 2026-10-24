@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.rename.015
  * MUTANT    rename.times_kept
+ * VARIANT   rename.coarse_times
  */
 #include "pc.h"
 #include <errno.h>

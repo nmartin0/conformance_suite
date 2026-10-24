@@ -6,6 +6,8 @@
  * MUTANT    utimes.noop
  * MUTANT    utimes.swaps
  * MUTANT    utimes.null_ignored
+ * VARIANT   futimens.res_1s
+ * VARIANT   futimens.utimes_round
  */
 #include "pc.h"
 #include <errno.h>

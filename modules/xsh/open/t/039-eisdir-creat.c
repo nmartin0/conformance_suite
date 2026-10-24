@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.039
  * MUTANT    open.creat_on_dir_ok
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <errno.h>

@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.lseek.010
  * MUTANT    lseek.ebadf_as_einval
+ * VARIANT   lseek.whence_values
  */
 #include "pc.h"
 #include <errno.h>

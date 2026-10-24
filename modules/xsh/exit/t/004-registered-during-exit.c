@@ -6,6 +6,8 @@
  * MUTANT    exit.late_registration_skipped
  * MUTANT    exit.late_registration_last
  * MUTANT    exit.forward_order
+ * VARIANT   wait.status_encoding
+ * VARIANT   exit.late_atexit_fails
  */
 #include "pc.h"
 #include <errno.h>

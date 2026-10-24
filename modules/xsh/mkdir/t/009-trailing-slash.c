@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.mkdir.009
  * MUTANT    mkdir.slash_rejected
+ * VARIANT   mkdir.eilseq
  */
 #include "pc.h"
 #include <dirent.h>

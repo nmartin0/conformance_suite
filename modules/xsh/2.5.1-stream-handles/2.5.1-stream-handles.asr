@@ -107,7 +107,8 @@ test       t/008-fork-child-writes.c
 assertion  XSH.2.5.1-stream-handles.009
 anchor     functions/V2_chap02.html#2.5.1
 class      required
-says       A "w" stream with "abc" pending (not flushed); fork(); the child
+says       A "w" stream set _IOFBF with a BUFSIZ array of the test's, with
+           "abc" pending (not flushed; UNRESOLVED if not); fork(); the child
            calls _exit(0) at once (so it never accesses the handle); after
            waiting, the parent calls fclose(): the file holds "abc".
 note       The guarantee: when the application follows the rules, no
@@ -119,7 +120,8 @@ test       t/009-fork-exit-not-duplicated.c
 assertion  XSH.2.5.1-stream-handles.010
 anchor     functions/V2_chap02.html#2.5.1
 class      required
-says       A "w" stream with "abc" pending (not flushed); fork(); the child
+says       A "w" stream set _IOFBF with a BUFSIZ array of the test's, with
+           "abc" pending (not flushed; UNRESOLVED if not); fork(); the child
            calls execv() on this program (which at once calls _exit(0));
            after waiting, the parent calls fclose(): the file holds "abc".
 note       The guarantee: when the application follows the rules, no
@@ -146,15 +148,20 @@ test       t/011-fd-then-stream-seek.c
 
 assertion  XSH.2.5.1-stream-handles.012
 anchor     functions/V2_chap02.html#2.5.1
-class      required
+class      disputed
 says       With a "w" stream f and g = fdopen(dup(fileno(f)), "w"): fputs("ab",
            f), fputs("cd", g), fclose(f), fclose(g) leave the file holding
            "abcd" (each stream's output goes where the description's offset
            is when it is written).
-note       The guarantee: when the application follows the rules, no
-           data written is lost or duplicated, and all of it is written
-           in order. The section has no change history; "since" is left
-           out.
+note       disputed (SI-72): the first-handle item for a handle whose
+           only further use is to be closed can be read as covering only
+           the case where no handle on the description does anything but
+           close; this test relies on the per-handle reading (f needs no
+           fflush() because it is only closed), so a FAIL is logged as
+           INSPECT. The guarantee: when the application follows the
+           rules, no data written is lost or duplicated, and all of it is
+           written in order. The section has no change history; "since"
+           is left out.
 test       t/012-close-only.c
 
 assertion  XSH.2.5.1-stream-handles.013
@@ -173,11 +180,16 @@ test       t/013-at-end-of-file.c
 assertion  XSH.2.5.1-stream-handles.014
 anchor     functions/V2_chap02.html#2.5.1
 class      required
-says       On a "r+" stream on "0123456" (whose read-ahead may take the whole
-           file): fgetc() returns '0', then fflush() (the step the rules ask
-           for), then write(fileno(f), "Z") and fclose(): the file holds
-           "0Z23456".
-note       The guarantee: when the application follows the rules, no
+says       On a "r+" stream on a 1 MiB file beginning "0123456": fgetc()
+           returns '0', the file is grown by 10 bytes through a separate
+           open(), then fflush() (the step the rules ask for), then
+           write(fileno(f), "Z") and fclose(): the file begins "0Z23456" and
+           is 1 MiB + 10 bytes.
+note       The file is grown through a new open file description (not a
+           handle on the stream's) after the read, so however much the
+           stream buffered (variant fopen.read_all) both readings of "not
+           already at EOF" in fflush() require the offset to be set
+           (Q-29). The guarantee: when the application follows the rules, no
            data written is lost or duplicated, and all of it is written
            in order. The section has no change history; "since" is left
            out.

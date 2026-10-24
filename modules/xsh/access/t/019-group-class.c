@@ -5,6 +5,7 @@
  * ASSERTION XSH.access.019
  * MUTANT    access.any_class
  * MUTANT    access.noop
+ * VARIANT   access.consts_alt
  */
 #include "pc.h"
 #include <errno.h>

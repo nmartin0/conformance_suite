@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fdopen.004
  * MUTANT    fdopen.x_rejected
+ * VARIANT   fopen.tiny_buffer
  */
 #include "pc.h"
 #include <errno.h>

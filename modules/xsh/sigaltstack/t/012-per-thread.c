@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.sigaltstack.012
  * MUTANT    sigaltstack.borrows_main
+ * VARIANT   sigaltstack.bsd_flags
+ * VARIANT   sigaltstack.minsigstksz_32k
  */
 #include "pc.h"
 #include <errno.h>

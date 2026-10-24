@@ -5,6 +5,8 @@
  * ASSERTION XSH.futimens.019
  * MUTANT    utimes.eperm_as_eacces
  * MUTANT    utimes.null_needs_owner
+ * VARIANT   futimens.res_1s
+ * VARIANT   futimens.utimes_round
  */
 #include "pc.h"
 #include <errno.h>

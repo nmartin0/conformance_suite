@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.sigsuspend.007
  * MUTANT    sigsuspend.ignored_wakes
+ * VARIANT   kill.late
+ * VARIANT   pthread_sigmask.how_values
  */
 #include "pc.h"
 #include <errno.h>

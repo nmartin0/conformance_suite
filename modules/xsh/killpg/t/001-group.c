@@ -5,6 +5,7 @@
  * ASSERTION XSH.killpg.001
  * MUTANT    killpg.leader_only
  * MUTANT    killpg.drops
+ * VARIANT   killpg.late
  */
 #include "pc.h"
 #include <errno.h>

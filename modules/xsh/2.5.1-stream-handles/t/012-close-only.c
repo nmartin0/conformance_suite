@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.2.5.1-stream-handles.012
  * MUTANT    fclose.stale_offset
+ * VARIANT   setvbuf.tiny_default
  */
 #include "pc.h"
 #include <errno.h>

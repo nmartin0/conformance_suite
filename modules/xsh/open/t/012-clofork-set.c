@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.012
  * MUTANT    open.clofork_ignored
+ * VARIANT   open.accmode_bits
  *
  * Missing macros are header defects (XBD.fcntl.h.002 and .005), so here
  * they are UNRESOLVED.

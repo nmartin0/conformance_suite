@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.exit.009
  * MUTANT    exit.flush_first
+ * VARIANT   wait.status_encoding
+ * VARIANT   exit.write_through
  */
 #include "pc.h"
 #include <errno.h>
@@ -12,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
@@ -62,9 +65,20 @@ int main(void)
 		    setvbuf(f, buf, _IOFBF, sizeof buf) != 0 || atexit(h) != 0)
 			_exit(99);
 		(void)fputs("S", f);
+		{
+			/*
+			 * Buffering is implementation-defined (XSH 2.5): a stream
+			 * that wrote "S" at once leaves nothing to flush late.
+			 */
+			struct stat sb;
+			if (fstat(other_fd, &sb) == 0 && sb.st_size != 0)
+				_exit(97);
+		}
 		exit(0);
 	}
 	st = reap(c);
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 97)
+		pc_unresolved("the stream wrote \"S\" through at once (buffering is implementation-defined): no buffered data to order");
 	pc_check(WIFEXITED(st) && WEXITSTATUS(st) == 0, "the child failed (%#x)", st);
 	pc_check(!pc_file_equals("f", "SH"), "the stream was flushed before the exit handler ran");
 	pc_check(pc_file_equals("f", "HS"), "the file does not hold \"HS\"");

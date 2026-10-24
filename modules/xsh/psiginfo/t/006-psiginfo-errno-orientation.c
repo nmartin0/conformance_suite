@@ -5,6 +5,8 @@
  * ASSERTION XSH.psiginfo.006
  * MUTANT    psiginfo.info_errno_clobbered
  * MUTANT    psiginfo.orients_wide
+ * VARIANT   psiginfo.own_text
+ * VARIANT   sigtimedwait.junk_fields
  */
 #include "pc.h"
 #include <errno.h>

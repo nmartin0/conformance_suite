@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.rmdir.012
  * MUTANT    rmdir.sticky_ignored
+ * VARIANT   rmdir.sticky_eacces
  */
 #include "pc.h"
 #include <dirent.h>

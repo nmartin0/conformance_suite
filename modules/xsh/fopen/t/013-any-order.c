@@ -5,6 +5,7 @@
  * ASSERTION XSH.fopen.013
  * MUTANT    fopen.order_strict
  * MUTANT    fopen.late_flags_ignored
+ * VARIANT   fopen.x_exclusive
  */
 #include "pc.h"
 #include <errno.h>

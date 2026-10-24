@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fflush.016
  * MUTANT    fflush.no_input_sync
+ * VARIANT   fopen.read_all
  */
 #include "pc.h"
 #include <errno.h>
@@ -304,19 +305,35 @@ static void catch_alarm(void)
 	pc_check(sigaction(SIGALRM, &sa, NULL) == 0, "sigaction failed");
 }
 
+/*
+ * Grows the file by 10 bytes through a new open file description, which is
+ * not a handle on the stream's (XSH 2.5.1): however much the stream has
+ * buffered, its descriptor is then not at end of file on either reading of
+ * "not already at EOF" (Q-29), so the offset rule applies.
+ */
+static void grow(const char *path)
+{
+	int g = open(path, O_WRONLY | O_APPEND);
+
+	NEED(g >= 0 && write(g, "0123456789", 10) == 10 && close(g) == 0, "growing the file failed: %s", pc_errname(errno));
+}
+
 int main(void)
 {
 	pc_begin("XSH.fflush.016");
 	{
 		FILE *f;
+		off_t o;
 
 		make_big("f");
 		pc_test();
 		f = fopen("f", "r+");
 		NEED(f != NULL, "fopen failed");
 		NEED(fgetc(f) == '0', "fgetc failed");
+		grow("f");
 		pc_check(fflush(f) == 0, "fflush() failed: %s", pc_errname(errno));
-		pc_check(offset(fileno(f)) == 1, "the descriptor's offset is %lld, expected 1", (long long)offset(fileno(f)));
+		o = offset(fileno(f));
+		pc_check(o == 1, "the descriptor's offset is %lld, expected 1", (long long)o);
 	}
 	pc_pass();
 }

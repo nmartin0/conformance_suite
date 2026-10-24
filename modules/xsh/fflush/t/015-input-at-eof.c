@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fflush.015
  * MUTANT    fflush.returns_nonzero
+ * VARIANT   fopen.read_all
  */
 #include "pc.h"
 #include <errno.h>
@@ -318,9 +319,17 @@ int main(void)
 			;
 		NEED(feof(f), "the end-of-file indicator is not set");
 		pc_check(fflush(f) == 0, "fflush() at end of file failed: %s", pc_errname(errno));
-		pc_check(offset(fileno(f)) == 10, "after fflush() at end of file the offset is %lld, not the file's size",
-			 (long long)offset(fileno(f)));
 		pc_check(fgetc(f) == EOF, "a read after fflush() at end of file returned data");
+		/*
+		 * Where the reads left the descriptor is not fixed: a stream need not
+		 * read through read() (XSH 2.5.1, last paragraph). With the offset
+		 * elsewhere, fflush() must move it only if "not already at EOF" means
+		 * the offset, not the end-of-file indicator (Q-29).
+		 */
+		if (offset(fileno(f)) != 10)
+			pc_unresolved("after fflush() at end of file the offset is %lld, not the file's size: required only if "
+				      "\"not already at EOF\" means the offset (Q-29), and a stream need not read through read() "
+				      "(XSH 2.5.1)", (long long)offset(fileno(f)));
 	}
 	pc_pass();
 }

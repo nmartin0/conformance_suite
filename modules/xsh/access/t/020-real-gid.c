@@ -5,6 +5,7 @@
  * ASSERTION XSH.access.020
  * MUTANT    access.uses_effective
  * MUTANT    faccessat.eaccess_ignored
+ * VARIANT   access.consts_alt
  */
 #include "pc.h"
 #include <errno.h>

@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.close.014
+ * VARIANT   close.aio_cancel
+ * VARIANT   close.aio_wait
  */
 #include "pc.h"
 #include <errno.h>

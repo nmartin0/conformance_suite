@@ -6,6 +6,7 @@
  * MUTANT    fseek.whence_set_only
  * MUTANT    fseek.cur_ignores_buffer
  * MUTANT    fseek.end_off_by_one
+ * VARIANT   setvbuf.tiny_default
  */
 #include "pc.h"
 #include <errno.h>

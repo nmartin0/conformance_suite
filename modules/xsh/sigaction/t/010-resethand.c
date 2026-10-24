@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigaction.010
  * MUTANT    sigaction.resethand_ignored
+ * VARIANT   sigaction.resethand_nodefer
  */
 #include "pc.h"
 #include <errno.h>

@@ -4,6 +4,9 @@
  *
  * ASSERTION XSH.sigaltstack.003
  * MUTANT    sigaltstack.disable_ignored
+ * VARIANT   sigaltstack.bsd_flags
+ * VARIANT   sigaltstack.minsigstksz_32k
+ * VARIANT   sigaltstack.disable_size_checked
  */
 #include "pc.h"
 #include <errno.h>

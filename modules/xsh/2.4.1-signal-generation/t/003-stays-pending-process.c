@@ -5,6 +5,7 @@
  * ASSERTION XSH.2.4.1-signal-generation.003
  * MUTANT    kill.self_to_calling_thread
  * MUTANT    pthread_sigmask.unblock_ignored
+ * VARIANT   sigaction.late_delivery
  */
 #include "pc.h"
 #include <errno.h>

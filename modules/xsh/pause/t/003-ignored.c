@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.pause.003
  * MUTANT    pause.spurious
+ * VARIANT   pause.late_return
  */
 #include "pc.h"
 #include <errno.h>

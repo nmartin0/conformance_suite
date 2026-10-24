@@ -4,7 +4,10 @@
  *
  * ASSERTION XSH.fseek.012
  * MUTANT    fseek.wrong_errno
- * MUTANT    fseek.error_cleared
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   fseek.lseek_first
+ * VARIANT   setvbuf.own_unused
+ * VARIANT   setvbuf.scribbles
  */
 #include "pc.h"
 #include <errno.h>
@@ -200,19 +203,28 @@ int main(void)
 {
 	pc_begin("XSH.fseek.012");
 	{
+		static char vb[BUFSIZ];
 		FILE *f;
 		int r, e;
 
 		pc_test();
 		f = open_as("f", "w");
+		NEED(setvbuf(f, vb, _IOFBF, sizeof vb) == 0, "setvbuf(_IOFBF) was refused");
 		NEED(fputs("abc", f) >= 0, "fputs failed");
+		NEED(pc_file_size("f") == 0, "the data was not buffered");
 		NEED(close(fileno(f)) == 0, "close failed");
 		errno = 0;
 		r = fseek(f, 0, SEEK_SET);
 		e = errno;
 		pc_check(r == -1, "fseek() with the descriptor closed returned %d", r);
 		pc_check(e == EBADF, "fseek() failed with %s, expected EBADF", pc_errname(e));
-		pc_check(ferror(f), "the error indicator is not set");
+		/*
+		 * The error indicator is set for a read or write error. XSH 2.3 leaves the order of
+		 * detection open, so fseek() may find the closed descriptor with lseek() before it
+		 * tries to write; then no write error occurs and the indicator may stay clear.
+		 */
+		if (!ferror(f))
+			pc_note("the error indicator is clear (the error was found before any write)");
 	}
 	pc_pass();
 }

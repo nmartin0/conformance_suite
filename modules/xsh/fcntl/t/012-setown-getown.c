@@ -5,6 +5,7 @@
  * ASSERTION XSH.fcntl.012
  * MUTANT    fcntl.setown_ignored
  * MUTANT    fcntl.getown_zero
+ * VARIANT   fcntl.ok_other
  */
 #include "pc.h"
 #include <errno.h>

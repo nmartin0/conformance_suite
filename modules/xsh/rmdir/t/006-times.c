@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.rmdir.006
  * MUTANT    rmdir.times_kept
+ * VARIANT   rmdir.coarse_times
+ * VARIANT   mkdir.link_max_min
  */
 #include "pc.h"
 #include <dirent.h>

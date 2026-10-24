@@ -81,9 +81,15 @@ test       t/008-enotdir.c
 
 assertion  XSH.rmdir.009
 anchor     functions/rmdir.html#ERRORS
-class      required
+class      disputed
 since      2001
 says       rmdir("a/d"), with a -> b and b -> a, fails with ELOOP.
+note       disputed (Q-8): rmdir()'s ENOENT covers any component of path
+           that does not name an existing file, and the last component
+           d, reached only through the loop, names none, so ENOENT
+           applies literally alongside ELOOP and XSH 2.3 lets either
+           error be reported; a FAIL is logged as INSPECT. Nothing else
+           in the test is unambiguous enough to split out.
 test       t/009-eloop.c
 
 assertion  XSH.rmdir.010

@@ -5,6 +5,7 @@
  * ASSERTION XSH.open.004
  * MUTANT    open.excl_ignored
  * MUTANT    open.excl_follows_symlink
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <errno.h>

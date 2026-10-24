@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.signal.006
  * MUTANT    signal.errno_clobbered
+ * VARIANT   signal.block_all
  */
 #include "pc.h"
 #include <errno.h>

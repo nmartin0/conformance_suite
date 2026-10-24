@@ -5,6 +5,8 @@
  * ASSERTION XSH.fcntl.007
  * MUTANT    fcntl.setfd_affects_all
  * MUTANT    fcntl.setfd_ignored
+ * VARIANT   fcntl.ok_other
+ * VARIANT   fcntl.cloexec_bit
  */
 #include "pc.h"
 #include <errno.h>

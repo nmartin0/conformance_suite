@@ -6,6 +6,7 @@
  * MUTANT    _Exit.calls_atexit
  * MUTANT    _Exit.unblocks
  * MUTANT    _Exit.raises
+ * VARIANT   wait.status_encoding
  */
 #include "pc.h"
 #include <errno.h>

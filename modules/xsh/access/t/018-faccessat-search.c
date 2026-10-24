@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.access.018
  * MUTANT    faccessat.search_checked
+ * VARIANT   access.consts_alt
  */
 #include "pc.h"
 #include <errno.h>

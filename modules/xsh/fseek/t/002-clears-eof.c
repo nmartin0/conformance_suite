@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fseek.002
  * MUTANT    fseek.keeps_eof
+ * VARIANT   setvbuf.tiny_default
  */
 #include "pc.h"
 #include <errno.h>

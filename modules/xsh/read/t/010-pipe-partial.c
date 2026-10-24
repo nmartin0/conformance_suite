@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.read.010
  * MUTANT    read.waits_for_full
+ * VARIANT   read.short_stream
  */
 #include "pc.h"
 #include <errno.h>

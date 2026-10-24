@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fopen.034
  * MUTANT    fopen.name_einval
+ * VARIANT   fopen.eilseq
  */
 #include "pc.h"
 #include <errno.h>

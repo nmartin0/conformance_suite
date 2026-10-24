@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.2.4.1-signal-generation.002
  * MUTANT    kill.self_to_calling_thread
+ * VARIANT   sigaction.late_delivery
  */
 #include "pc.h"
 #include <errno.h>

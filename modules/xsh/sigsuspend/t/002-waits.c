@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigsuspend.002
  * MUTANT    sigsuspend.no_wait
+ * VARIANT   kill.late
  */
 #include "pc.h"
 #include <errno.h>

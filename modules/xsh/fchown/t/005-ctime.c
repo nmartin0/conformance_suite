@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fchown.005
  * MUTANT    fchown.ctime_kept
+ * VARIANT   chown.coarse_times
  */
 #include "pc.h"
 #include <errno.h>

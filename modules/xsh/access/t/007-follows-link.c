@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.access.007
  * MUTANT    access.no_follow
+ * VARIANT   access.consts_alt
  */
 #include "pc.h"
 #include <errno.h>

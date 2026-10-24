@@ -4,6 +4,9 @@
  *
  * ASSERTION XSH.setvbuf.005
  * MUTANT    setvbuf.lies_size
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   setvbuf.own_unused
+ * VARIANT   setvbuf.scribbles
  */
 #include "pc.h"
 #include <errno.h>

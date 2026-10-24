@@ -5,6 +5,10 @@
  * ASSERTION XSH.alarm.003
  * MUTANT    alarm.no_reschedule
  * MUTANT    alarm.returns_zero
+ * VARIANT   alarm.ret_trunc
+ * VARIANT   alarm.ret_ceil
+ * VARIANT   alarm.early_half
+ * VARIANT   sigtimedwait.sluggish
  */
 #include "pc.h"
 #include <errno.h>
@@ -162,19 +166,31 @@ static long await_alrm(long t0, long ms)
 int main(void)
 {
 	struct timespec one = { 1, 0 };
-	long t0, dt;
+	long ta, t0, t1, dt, lo, hi;
 	unsigned r;
 
 	pc_begin("XSH.alarm.003");
 	block(SIGALRM);
 	pc_test();
+	ta = now_ms();
 	(void)alarm(10);
 	(void)nanosleep(&one, NULL);
 	t0 = now_ms();
 	r = alarm(2);
+	t1 = now_ms();
 	dt = await_alrm(t0, 6000);
 	(void)alarm(0);
-	pc_check(r >= 8 && r <= 10, "alarm(2) returned %u, expected the 8-10 seconds left", r);
+	/*
+	 * The time left on the first request, in whole seconds: the text
+	 * fixes neither how the fraction is rounded nor how long nanosleep()
+	 * oversleeps, so the bounds come from the time measured (1 ms of
+	 * clock slack each way), and never below 1 (time was left).
+	 */
+	lo = (10000 - (t1 - ta) - 1) / 1000;
+	hi = (10000 - (t0 - ta) + 1 + 999) / 1000;
+	if (lo < 1)
+		lo = 1;
+	pc_check((long)r >= lo && (long)r <= hi, "alarm(2) returned %u, expected the %ld-%ld seconds left", r, lo, hi);
 	pc_check(dt != -1, "no SIGALRM within 6 s of alarm(2): the first alarm was not replaced");
 	pc_pass();
 }

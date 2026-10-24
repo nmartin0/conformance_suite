@@ -6,6 +6,8 @@
  * MUTANT    fchmod.noop
  * MUTANT    fchmod.applies_umask
  * MUTANT    fchmod.returns_one
+ * VARIANT   chmod.setid_ignored
+ * VARIANT   mkdir.sgid_bit
  */
 #include "pc.h"
 #include <errno.h>

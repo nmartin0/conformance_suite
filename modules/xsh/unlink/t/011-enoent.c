@@ -6,6 +6,7 @@
  * MUTANT    unlink.enoent_as_enotdir
  * MUTANT    unlink.empty_ok
  * MUTANT    unlinkat.missing_ok
+ * VARIANT   unlink.at_fdcwd_alt
  */
 #include "pc.h"
 #include <errno.h>

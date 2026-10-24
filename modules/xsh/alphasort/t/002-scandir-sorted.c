@@ -6,7 +6,10 @@
  * MUTANT    scandir.ignores_sel
  * MUTANT    scandir.unsorted
  * MUTANT    scandir.fails
- * MUTANT    scandir.sel_twice
+ * VARIANT   readdir.snapshot
+ * VARIANT   readdir.reversed
+ * VARIANT   readdir.no_dots
+ * VARIANT   readdir.sel_twice
  */
 #include "pc.h"
 #include <dirent.h>
@@ -314,7 +317,7 @@ int main(void)
 		pc_check(strcmp(nl[0]->d_name, "a") == 0 && strcmp(nl[1]->d_name, "b") == 0 && strcmp(nl[2]->d_name, "c") == 0,
 			 "the names are \"%s\", \"%s\", \"%s\"", nl[0]->d_name, nl[1]->d_name, nl[2]->d_name);
 		for (i = 0; i < 4; i++)
-			pc_check(seen[i] == 1, "sel was called %d times for entry %d (of a, b, c, x.skip)", seen[i], i);
+			pc_check(seen[i] >= 1, "sel was not called for entry %d (of a, b, c, x.skip)", i);
 		for (i = 0; i < n; i++)
 			free(nl[i]);
 		free(nl);

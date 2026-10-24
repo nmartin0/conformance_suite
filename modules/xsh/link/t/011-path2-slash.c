@@ -5,6 +5,7 @@
  * ASSERTION XSH.link.011
  * MUTANT    link.slash2_ignored
  * MUTANT    link.slash2_existing_enoent
+ * VARIANT   link.slash2_enotdir
  */
 #include "pc.h"
 #include <errno.h>

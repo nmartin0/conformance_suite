@@ -6,6 +6,7 @@
  * MUTANT    sigdelset.no_effect
  * MUTANT    sigdelset.clears_all
  * MUTANT    sigdelset.returns_one
+ * VARIANT   sigfillset.omits_extra
  */
 #include "pc.h"
 #include <errno.h>

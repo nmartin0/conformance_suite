@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fopen.017
  * MUTANT    fopen.trunc_old_times
+ * VARIANT   fopen.coarse_times
  */
 #include "pc.h"
 #include <errno.h>

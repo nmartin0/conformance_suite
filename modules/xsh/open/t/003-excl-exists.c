@@ -6,6 +6,7 @@
  * MUTANT    open.excl_ignored
  * MUTANT    open.eexist_as_eacces
  * MUTANT    open.excl_truncates
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <errno.h>

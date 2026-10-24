@@ -5,6 +5,7 @@
  * ASSERTION XSH.mkdir.007
  * MUTANT    mkdirat.fdcwd_ebadf
  * MUTANT    mkdirat.ignores_mode
+ * VARIANT   mkdir.sgid_bit
  */
 #include "pc.h"
 #include <dirent.h>

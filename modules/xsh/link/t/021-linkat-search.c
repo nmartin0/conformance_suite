@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.link.021
  * MUTANT    linkat.search_checked
+ * VARIANT   link.access_rw
+ * VARIANT   link.at_fdcwd_alt
  */
 #include "pc.h"
 #include <errno.h>

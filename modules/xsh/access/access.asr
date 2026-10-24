@@ -147,6 +147,9 @@ class      required
 since      2008
 says       faccessat(fd, "f", F_OK, 0) with fd open on a regular file fails with
            ENOTDIR.
+note       Not plantable: the fd [EACCES] speaks of the directory
+           underlying fd, so it does not apply to a descriptor of a
+           regular file; only ENOTDIR is expected (reviewed by hand).
 test       t/015-faccessat-enotdir.c
 
 assertion  XSH.access.016

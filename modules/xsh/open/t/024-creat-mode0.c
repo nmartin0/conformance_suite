@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.024
  * MUTANT    open.mode0_reopens_rdonly
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <fcntl.h>

@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.2.4.3-signal-actions.004
  * MUTANT    sigaction.dfl_as_catcher
+ * VARIANT   signal.block_all
  */
 #include "pc.h"
 #include <errno.h>

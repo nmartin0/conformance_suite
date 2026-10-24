@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.fchmod.007
  * MUTANT    fchmod.noop
+ * VARIANT   chmod.setid_ignored
+ * VARIANT   mkdir.sgid_bit
  */
 #include "pc.h"
 #include <errno.h>

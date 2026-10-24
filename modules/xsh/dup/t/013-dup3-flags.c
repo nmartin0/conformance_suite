@@ -5,6 +5,7 @@
  * ASSERTION XSH.dup.013
  * MUTANT    dup.dup3_cloexec_ignored
  * MUTANT    dup.dup3_keeps_cloexec
+ * VARIANT   dup.hidden_fds
  */
 #include "pc.h"
 #include <errno.h>

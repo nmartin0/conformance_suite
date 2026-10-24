@@ -5,6 +5,7 @@
  * ASSERTION XSH.rmdir.001
  * MUTANT    rmdir.noop
  * MUTANT    rmdir.returns_one
+ * VARIANT   rmdir.ebusy_open
  */
 #include "pc.h"
 #include <dirent.h>

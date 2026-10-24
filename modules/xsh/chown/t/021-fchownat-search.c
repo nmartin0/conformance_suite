@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.chown.021
  * MUTANT    fchownat.search_checked
+ * VARIANT   chown.at_alt
  */
 #include "pc.h"
 #include <errno.h>

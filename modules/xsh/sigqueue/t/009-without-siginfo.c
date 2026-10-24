@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigqueue.009
  * MUTANT    sigqueue.drops_plain
+ * VARIANT   sigqueue.plain_once
  */
 #include "pc.h"
 #include <errno.h>

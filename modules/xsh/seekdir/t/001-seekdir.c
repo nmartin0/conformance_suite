@@ -5,6 +5,10 @@
  * ASSERTION XSH.seekdir.001
  * MUTANT    seekdir.noop
  * MUTANT    seekdir.off_by_one
+ * VARIANT   readdir.snapshot
+ * VARIANT   readdir.reversed
+ * VARIANT   readdir.no_dots
+ * VARIANT   readdir.odd_cookies
  */
 #include "pc.h"
 #include <dirent.h>

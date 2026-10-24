@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.link.007
  * MUTANT    linkat.fdcwd_ebadf
+ * VARIANT   link.link_max_8
+ * VARIANT   link.at_fdcwd_alt
  */
 #include "pc.h"
 #include <errno.h>

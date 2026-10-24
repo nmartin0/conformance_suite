@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.link.017
  * MUTANT    link.eacces_as_eperm
+ * VARIANT   link.access_rw
  */
 #include "pc.h"
 #include <errno.h>

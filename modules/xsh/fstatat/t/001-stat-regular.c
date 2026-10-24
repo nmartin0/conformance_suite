@@ -10,6 +10,7 @@
  * MUTANT    stat.ino_wrong
  * MUTANT    stat.uid_wrong
  * MUTANT    stat.returns_one
+ * VARIANT   fstat.type_bits
  */
 #include "pc.h"
 #include <errno.h>

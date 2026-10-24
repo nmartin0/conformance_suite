@@ -201,6 +201,10 @@ note       Disputed (standard issue SI-24): this page, XSH 2.4.2 and
            sigqueue() require queuing for any signal with SA_SIGINFO,
            but <signal.h> supports the realtime behaviour only in
            SIGRTMIN-SIGRTMAX. A FAIL is logged as INSPECT.
+           On a system without XSI, sigaction() may refuse SA_SIGINFO
+           for this signal (sigaction() ERRORS): EINVAL there, with
+           sysconf(_SC_XOPEN_UNIX) -1, is UNRESOLVED; elsewhere it
+           is a FAIL.
 nomutant   queuing is done by the kernel
 test       t/021-queued-usr1.c
 

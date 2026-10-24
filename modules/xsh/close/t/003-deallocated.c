@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.close.003
  * MUTANT    close.noop
+ * VARIANT   close.hidden_fds
  */
 #include "pc.h"
 #include <errno.h>

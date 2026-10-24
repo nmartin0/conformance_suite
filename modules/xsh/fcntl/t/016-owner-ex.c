@@ -5,6 +5,8 @@
  * ASSERTION XSH.fcntl.016
  * MUTANT    fcntl.setown_ex_ignored
  * MUTANT    fcntl.getown_ex_type_swapped
+ * VARIANT   fcntl.ok_other
+ * VARIANT   fcntl.getown_ex_pid0_type
  */
 #include "pc.h"
 #include <errno.h>

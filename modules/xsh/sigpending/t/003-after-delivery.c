@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigpending.003
  * MUTANT    sigpending.sticky_union
+ * VARIANT   pthread_sigmask.how_values
  */
 #include "pc.h"
 #include <errno.h>

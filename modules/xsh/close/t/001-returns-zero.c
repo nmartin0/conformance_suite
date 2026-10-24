@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.close.001
  * MUTANT    close.fail_valid
+ * VARIANT   close.hidden_fds
  */
 #include "pc.h"
 #include <fcntl.h>

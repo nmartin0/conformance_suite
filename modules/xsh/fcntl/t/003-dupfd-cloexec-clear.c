@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fcntl.003
  * MUTANT    fcntl.dupfd_keeps_cloexec
+ * VARIANT   fcntl.cloexec_bit
  */
 #include "pc.h"
 #include <errno.h>

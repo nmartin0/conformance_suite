@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.unlink.018
  * MUTANT    unlink.sticky_ignored
+ * VARIANT   unlink.sticky_eacces
  */
 #include "pc.h"
 #include <errno.h>

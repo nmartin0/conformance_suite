@@ -5,6 +5,8 @@
  * ASSERTION XSH.dup.010
  * MUTANT    dup.dup2_range_einval
  * MUTANT    dup.dup2_max_ok
+ * VARIANT   dup.hidden_fds
+ * VARIANT   dup.open_max_indeterminate
  */
 #include "pc.h"
 #include <errno.h>

@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.open.050
  * MUTANT    open.tty_init_enotty
+ * VARIANT   open.accmode_bits
+ * VARIANT   open.tty_init_bit
  */
 #include "pc.h"
 #include <fcntl.h>

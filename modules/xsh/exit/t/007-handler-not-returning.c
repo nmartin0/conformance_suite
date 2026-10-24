@@ -6,6 +6,8 @@
  * MUTANT    exit.continues_after_exit
  * MUTANT    exit.forward_order
  * MUTANT    exit.flush_first
+ * VARIANT   wait.status_encoding
+ * VARIANT   exit.write_through
  */
 #include "pc.h"
 #include <errno.h>
@@ -14,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
@@ -68,7 +71,7 @@ static void stop(void)
 
 int main(void)
 {
-	int p[2], st;
+	int p[2], st, through;
 	pid_t c;
 	char buf[16];
 
@@ -88,14 +91,26 @@ int main(void)
 		if (atexit(rest) != 0 || atexit(stop) != 0)
 			_exit(99);
 		(void)fputs("unflushed", f);
+		{
+			/*
+			 * Buffering is implementation-defined (XSH 2.5): if the
+			 * data is already in the file, there is nothing left to
+			 * flush, and only that part of the check is void.
+			 */
+			struct stat sb;
+			if (fstat(fileno(f), &sb) == 0 && sb.st_size != 0)
+				mark("W");
+		}
 		exit(0);
 	}
 	(void)close(p[1]);
 	st = reap(c);
 	collect(p[0], buf, sizeof buf);
+	through = buf[0] == 'W';
 	pc_check(WIFEXITED(st), "the child did not exit normally (%#x)", st);
-	pc_check(strcmp(buf, "s") == 0, "handlers called as \"%s\", expected \"s\"", buf);
+	pc_check(strcmp(buf + through, "s") == 0, "handlers called as \"%s\", expected \"s\"", buf + through);
 	pc_check(WEXITSTATUS(st) == 7, "exit status %d, expected the handler's 7", WEXITSTATUS(st));
-	pc_check(pc_file_size("f") == 0, "the stream was flushed after a handler that did not return");
+	if (!through)
+		pc_check(pc_file_size("f") == 0, "the stream was flushed after a handler that did not return");
 	pc_pass();
 }

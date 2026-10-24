@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.link.003
  * MUTANT    link.times_kept
+ * VARIANT   link.coarse_times
  */
 #include "pc.h"
 #include <errno.h>

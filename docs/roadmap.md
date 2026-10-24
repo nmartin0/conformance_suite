@@ -55,6 +55,12 @@ verified; this file is the plan. Update both when a step finishes.
    does not require (glibc and musl agreeing does not rule these out, since
    both run on one kernel). 76 findings in eight areas, 14 new questions
    (Q-42 to Q-55) and 5 entries (SI-68 to SI-72); see the review log.
+3b. **Variant infrastructure** (next): variant directories for dotted module names (2.4.x, 2.5.1, 2.6); variants
+   that plant a disputed reading (expected INSPECT); running variants where the baseline is not PASS, and a
+   variant with a fault; header and xcu variants; harness file names within 14 bytes and a {NAME_MAX} check of
+   the results directory; compile-time renaming instead of LD_PRELOAD and RTLD_NEXT (C17 and POSIX only);
+   ci/mutate.sh without mktemp and python; strict -std=c17 builds in CI; setgroups() found by a build probe,
+   not by OS name; the compatibility-layer abort removed.
 4. **Header mutants for Tier 0**, and Tier 0 for the prose-only headers
    (`<stdint.h>`, `<float.h>` and the like) that `gen/specmodel.py` does
    not yet read.

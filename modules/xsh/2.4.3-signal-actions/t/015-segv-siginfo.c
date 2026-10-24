@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.2.4.3-signal-actions.015
+ * VARIANT   sigaction.si_addr_inaccurate
+ * VARIANT   sigaction.siginfo_rt_only
  */
 #include "pc.h"
 #include <errno.h>
@@ -242,7 +244,23 @@ int main(void)
 	pc_begin("XSH.2.4.3-signal-actions.015");
 	page = mmap(NULL, 4096, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	pc_check(page != MAP_FAILED, "mmap failed");
-	catch_info(SIGSEGV, on_segv);
+	{
+		struct sigaction sa;
+
+		memset(&sa, 0, sizeof sa);
+		sa.sa_sigaction = on_segv;
+		sa.sa_flags = SA_SIGINFO;
+		sigemptyset(&sa.sa_mask);
+		if (sigaction(SIGSEGV, &sa, NULL) != 0) {
+			int e = errno;
+
+			/* XSH sigaction() ERRORS: only a system without XSI may refuse SA_SIGINFO outside SIGRTMIN..SIGRTMAX */
+			if (e == EINVAL && sysconf(_SC_XOPEN_UNIX) == -1)
+				pc_unresolved("sigaction() refused SA_SIGINFO for SIGSEGV (EINVAL) on a system without XSI, which it may do");
+			pc_test();
+			pc_fail("sigaction() with SA_SIGINFO for SIGSEGV failed: %s", pc_errname(e));
+		}
+	}
 	pc_test();
 	if (sigsetjmp(env, 1) == 0) {
 		page[16] = 1;
@@ -250,6 +268,7 @@ int main(void)
 	}
 	pc_check(signo == SIGSEGV, "si_signo is %d", (int)signo);
 	pc_check(code == SEGV_ACCERR, "si_code is %d, expected SEGV_ACCERR", (int)code);
-	pc_check(in_page == 1, "si_addr is not inside the page written");
+	if (in_page != 1)	/* XBD <signal.h>: si_addr may be inaccurate */
+		pc_note("si_addr is not inside the page written (allowed: it may be inaccurate)");
 	pc_pass();
 }

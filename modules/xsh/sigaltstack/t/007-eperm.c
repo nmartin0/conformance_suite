@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.sigaltstack.007
  * MUTANT    sigaltstack.eperm_hidden
+ * VARIANT   sigaltstack.bsd_flags
+ * VARIANT   sigaltstack.minsigstksz_32k
  */
 #include "pc.h"
 #include <errno.h>

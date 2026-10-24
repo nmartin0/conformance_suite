@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.fcntl.011
  * MUTANT    fcntl.setfl_creation_flags_act
+ * VARIANT   fcntl.ok_other
+ * VARIANT   fcntl.cloexec_bit
  */
 #include "pc.h"
 #include <errno.h>

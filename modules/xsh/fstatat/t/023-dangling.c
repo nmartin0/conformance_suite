@@ -6,6 +6,8 @@
  * MUTANT    stat.no_follow
  * MUTANT    lstat.follows
  * MUTANT    fstatat.ignores_nofollow
+ * VARIANT   fstat.type_bits
+ * VARIANT   fstatat.link_mode
  */
 #include "pc.h"
 #include <errno.h>

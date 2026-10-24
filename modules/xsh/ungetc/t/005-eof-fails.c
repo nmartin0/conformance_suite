@@ -6,6 +6,8 @@
  * MUTANT    ungetc.eof_accepted
  * MUTANT    ungetc.eof_discards
  * MUTANT    ungetc.eof_clears_indicator
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   ungetc.one_byte
  */
 #include "pc.h"
 #include <errno.h>

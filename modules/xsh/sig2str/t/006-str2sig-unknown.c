@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.sig2str.006
  * MUTANT    sig2str.str2sig_stores_on_failure
+ * VARIANT   sig2str.rtmax_upper
+ * VARIANT   sig2str.rtmin_all
  */
 #include "pc.h"
 #include <errno.h>

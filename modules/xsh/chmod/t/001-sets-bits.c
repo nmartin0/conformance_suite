@@ -7,6 +7,8 @@
  * MUTANT    chmod.applies_umask
  * MUTANT    chmod.or_bits
  * MUTANT    chmod.returns_one
+ * VARIANT   chmod.setid_ignored
+ * VARIANT   mkdir.sgid_bit
  */
 #include "pc.h"
 #include <errno.h>

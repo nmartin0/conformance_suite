@@ -5,6 +5,7 @@
  * ASSERTION XSH.futimens.007
  * MUTANT    utimensat.ignores_fd
  * MUTANT    utimensat.checks_fd
+ * VARIANT   futimens.res_1s
  */
 #include "pc.h"
 #include <errno.h>

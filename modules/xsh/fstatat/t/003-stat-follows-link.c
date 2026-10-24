@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fstatat.003
  * MUTANT    stat.no_follow
+ * VARIANT   fstat.type_bits
  */
 #include "pc.h"
 #include <errno.h>

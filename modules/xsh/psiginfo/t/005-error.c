@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.psiginfo.005
  * MUTANT    psiginfo.error_hidden
+ * VARIANT   psiginfo.own_text
  */
 #include "pc.h"
 #include <errno.h>

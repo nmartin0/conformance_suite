@@ -6,6 +6,7 @@
  * MUTANT    lseek.negative_ok
  * MUTANT    lseek.error_moves_offset
  * MUTANT    lseek.negative_cur_ok
+ * VARIANT   lseek.whence_values
  */
 #include "pc.h"
 #include <errno.h>

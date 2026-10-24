@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.link.023
  * MUTANT    linkat.follow_ignored
+ * VARIANT   link.at_fdcwd_alt
  */
 #include "pc.h"
 #include <errno.h>

@@ -5,6 +5,7 @@
  * ASSERTION XSH.exit.003
  * MUTANT    exit.forward_order
  * MUTANT    exit.no_atexit
+ * VARIANT   wait.status_encoding
  */
 #include "pc.h"
 #include <errno.h>

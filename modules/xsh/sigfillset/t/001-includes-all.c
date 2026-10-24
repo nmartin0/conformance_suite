@@ -5,6 +5,7 @@
  * ASSERTION XSH.sigfillset.001
  * MUTANT    sigfillset.misses_one
  * MUTANT    sigfillset.returns_minus1
+ * VARIANT   sigfillset.omits_extra
  */
 #include "pc.h"
 #include <errno.h>

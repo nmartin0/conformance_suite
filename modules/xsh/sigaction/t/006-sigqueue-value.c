@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigaction.006
  * MUTANT    sigaction.siginfo_dropped
+ * VARIANT   sigaction.sigqueue_max_32
  */
 #include "pc.h"
 #include <errno.h>

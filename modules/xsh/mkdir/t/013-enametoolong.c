@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.mkdir.013
  * MUTANT    mkdir.long_as_enoent
+ * VARIANT   mkdir.eilseq
  */
 #include "pc.h"
 #include <dirent.h>

@@ -5,6 +5,8 @@
  * ASSERTION XSH.abort.002
  * MUTANT    abort.respects_block
  * MUTANT    abort.respects_ignore
+ * VARIANT   wait.status_encoding
+ * VARIANT   abort.flush_streams
  */
 #include "pc.h"
 #include <errno.h>

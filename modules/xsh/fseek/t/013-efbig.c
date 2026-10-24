@@ -5,6 +5,11 @@
  * ASSERTION XSH.fseek.013
  * MUTANT    fseek.wrong_errno
  * MUTANT    fseek.error_cleared
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   setvbuf.size_honored
+ * VARIANT   setvbuf.own_unused
+ * VARIANT   setvbuf.scribbles
+ * VARIANT   fseek.lseek_first
  */
 #include "pc.h"
 #include <errno.h>
@@ -200,6 +205,7 @@ static int bad_whence(void)
 
 static int child(void)
 {
+	static char vb[4096];
 	struct rlimit rl;
 	sigset_t s;
 	FILE *f;
@@ -213,7 +219,7 @@ static int child(void)
 	if (setrlimit(RLIMIT_FSIZE, &rl) != 0)
 		return 98;
 	f = fopen("big", "w");
-	if (f == NULL || setvbuf(f, NULL, _IOFBF, 4096) != 0)
+	if (f == NULL || setvbuf(f, vb, _IOFBF, sizeof vb) != 0)
 		return 97;
 	for (i = 0; i < 200; i++)
 		if (fputc('a', f) == EOF)

@@ -54,7 +54,7 @@ static void await_chld(void)
 	struct timespec ts = { 0, 10000000 };
 	int i;
 
-	for (i = 0; i < 100 && !got; i++)
+	for (i = 0; i < 1000 && !got; i++)
 		(void)nanosleep(&ts, NULL);
 }
 
@@ -86,7 +86,7 @@ int main(void)
 	}
 	pc_check(sigprocmask(SIG_SETMASK, &old, NULL) == 0, "sigprocmask failed");
 	await_chld();
-	pc_check(got, "no SIGCHLD within 1 s of the child's exit()");
+	pc_check(got, "no SIGCHLD within 10 s of the child's exit()");
 	pc_check(info.si_status == 0x1234, "si_status %#x, expected 0x1234", (unsigned)info.si_status);
 	st = reap(c);
 	(void)st;

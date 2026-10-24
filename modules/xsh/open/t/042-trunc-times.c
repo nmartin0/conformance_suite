@@ -5,6 +5,8 @@
  * ASSERTION XSH.open.042
  * MUTANT    open.trunc_ignored
  * MUTANT    open.trunc_keeps_times
+ * VARIANT   open.accmode_bits
+ * VARIANT   open.coarse_times
  */
 #include "pc.h"
 #include <fcntl.h>

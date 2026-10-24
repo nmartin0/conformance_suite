@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.014
  * MUTANT    open.enotdir_as_enoent
+ * VARIANT   open.accmode_bits
  *
  * O_CREAT is set so that ENOENT's conditions (missing component without
  * O_CREAT) cannot also apply: "f" exists, so with O_CREAT only ENOTDIR

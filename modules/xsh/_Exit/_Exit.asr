@@ -51,6 +51,9 @@ says       _exit() does not flush open streams: data written with
 note       In Issue 6 whether streams were flushed was implementation-
            defined; 'not flushed' came with Issue 7 (interpretation
            1003.1-2001 #085).
+note       Stream buffering is implementation-defined (XSH 2.5): a stream
+           that wrote through at once gives UNRESOLVED (variant
+           exit.write_through).
 test       t/005-no-flush.c
 
 assertion  XSH._Exit.006
@@ -154,7 +157,8 @@ says       The full status value given to _exit() is in the siginfo_t
            passed to a SIGCHLD handler: si_status is 0x1234 for
            _exit(0x1234).
 note       Added with XSH._Exit.002's rule (defect 594, TC2). Linux keeps
-           only 8 bits here too (O.6).
+           only 8 bits here too (O.6). SIGCHLD has no time bound; the test
+           waits up to 10 s.
 test       t/014-sigchld-full.c
 
 assertion  XSH._Exit.015
@@ -190,6 +194,10 @@ since      2001
 says       With an XSI shared memory segment attached by the parent and by a
            child (shm_nattch 2), after the child's _exit() and reaping
            shm_nattch is 1.
+note       The detach is required, but the text gives it no time (Q-59): the
+           test polls for up to 10 s after the wait, a practical limit, not
+           one the text states (variant _Exit.late_detach). Whether it must
+           be done once the status is obtained is XSH._Exit.021.
 test       t/016-shm-detached.c
 
 assertion  XSH._Exit.017
@@ -201,6 +209,7 @@ says       With an XSI semaphore set to 5, a child that raises it to 6 with
            SEM_UNDO and calls _exit() leaves semval 5 once it is reaped.
 nomutant   The kernel applies the adjustment at exit; no interposed
            function stands between.
+note       Polled up to 10 s after the wait: no time bound is given.
 test       t/017-semadj.c
 
 assertion  XSH._Exit.018
@@ -214,6 +223,8 @@ says       After a child registers for notification on a message queue through
            with the descriptor).
 nomutant   The registration is released by the system at exit; no
            interposed function stands between.
+note       mq_notify() is retried while EBUSY for up to 10 s after the
+           wait: no time bound is given.
 test       t/018-mq-closed.c
 
 assertion  XSH._Exit.019
@@ -231,3 +242,19 @@ note       disputed (Q-32): outstanding operations may be canceled at
 nomutant   The I/O completes in the system after the process is gone; no
            interposed function stands between.
 test       t/019-aio-completes.c
+
+assertion  XSH._Exit.021
+anchor     functions/_Exit.html#DESCRIPTION
+class      disputed
+when       XSI
+since      2001
+says       With an XSI shared memory segment attached by the parent and by a
+           child (shm_nattch 2), shm_nattch is 1 as soon as waitpid() has
+           returned the child's status.
+note       disputed (Q-59): the detach is listed among the consequences of
+           termination with no time; only memory mappings are said to be
+           unmapped before the process is destroyed (at the end of its
+           lifetime, when the status is obtained), and whether an XSI
+           attachment counts as a memory mapping is not said. A FAIL is
+           logged as INSPECT.
+test       t/021-shm-detached-at-wait.c

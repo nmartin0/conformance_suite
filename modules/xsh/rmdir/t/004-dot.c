@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.rmdir.004
  * MUTANT    rmdir.dot_ok
+ * VARIANT   rmdir.dotdot_einval
+ * VARIANT   rmdir.eexist
  */
 #include "pc.h"
 #include <dirent.h>

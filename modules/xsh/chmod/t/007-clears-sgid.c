@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.chmod.007
+ * VARIANT   chmod.setid_ignored
+ * VARIANT   chmod.setgid_eperm
  */
 #include "pc.h"
 #include <errno.h>

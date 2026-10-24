@@ -33,25 +33,33 @@ assertion  XSH.fflush.004
 anchor     functions/fflush.html#DESCRIPTION
 class      required
 since      2008
-says       For a 1 MiB file read through a stream opened "r", after one fgetc()
+says       For a 1 MiB file (grown by 10 bytes
+           through a separate open() after the reads) read through a stream opened "r", after one fgetc()
            (the stream not at end of file), fflush() returns 0 and the
            descriptor's offset is 1.
-note       The file is 1 MiB, so after one read the stream is not at end
-           of file whichever way "not already at EOF" is read (the end-
-           of-file indicator or the descriptor's offset; Q-29).
+note       After the reads the file is grown by 10 bytes through a new
+           open file description (not a handle on the stream's, XSH
+           2.5.1), so however much the stream buffered (the buffer size
+           is not bounded; variant fopen.read_all) its descriptor is not
+           at end of file on either reading of "not already at EOF"
+           (Q-29).
 test       t/004-input-offset.c
 
 assertion  XSH.fflush.005
 anchor     functions/fflush.html#DESCRIPTION
 class      required
 since      2008
-says       For a 1 MiB file read through a stream, after fgetc() twice and
+says       For a 1 MiB file (grown by 10 bytes
+           through a separate open() after the reads) read through a stream, after fgetc() twice and
            ungetc('x') (stream position 1), fflush() leaves the descriptor's
            offset at 1, and the next fgetc() does not return the discarded
            'x'.
-note       The file is 1 MiB, so after one read the stream is not at end
-           of file whichever way "not already at EOF" is read (the end-
-           of-file indicator or the descriptor's offset; Q-29).
+note       After the reads the file is grown by 10 bytes through a new
+           open file description (not a handle on the stream's, XSH
+           2.5.1), so however much the stream buffered (the buffer size
+           is not bounded; variant fopen.read_all) its descriptor is not
+           at end of file on either reading of "not already at EOF"
+           (Q-29).
 test       t/005-input-pushback.c
 
 assertion  XSH.fflush.006
@@ -102,7 +110,8 @@ assertion  XSH.fflush.011
 anchor     functions/fflush.html#DESCRIPTION
 class      disputed
 since      2008
-says       With one byte read from a stream on a 1 MiB file, fflush(NULL)
+says       With one byte read from a stream on a 1 MiB file (grown by 10 bytes
+           through a separate open() after the reads), fflush(NULL)
            returns 0 and the stream's descriptor offset is 1.
 note       disputed (Q-28): fflush(NULL) performs this flushing action
            on all streams for which the behaviour is defined above;
@@ -146,20 +155,29 @@ anchor     functions/fflush.html#DESCRIPTION
 class      required
 since      2008
 says       For a stream read to end of file (feof() true) on a 10-byte
-           file, fflush() returns 0, the descriptor's offset is 10, and
-           a further read returns EOF.
+           file, fflush() returns 0 and a further read returns EOF; a
+           descriptor offset other than 10 afterwards is UNRESOLVED
+           (Q-29).
 note       The test no longer moves the descriptor while the stream is
            at end of file: using the stream again after that without an
-           fseek() is undefined (XSH 2.5.1, the second handle).
+           fseek() is undefined (XSH 2.5.1, the second handle). An offset
+           other than 10 is UNRESOLVED, not FAIL: a stream need not read
+           through read() (XSH 2.5.1, last paragraph), and fflush() must
+           then set the offset only if "not already at EOF" means the
+           offset rather than the end-of-file indicator (Q-29).
 test       t/015-input-at-eof.c
 
 assertion  XSH.fflush.016
 anchor     functions/fflush.html#DESCRIPTION
 class      required
 since      2008
-says       For a 1 MiB file opened "r+", after one fgetc() fflush() returns 0
+says       For a 1 MiB file (grown by 10 bytes
+           through a separate open() after the reads) opened "r+", after one fgetc() fflush() returns 0
            and the descriptor's offset is 1.
-note       The file is 1 MiB, so after one read the stream is not at end
-           of file whichever way "not already at EOF" is read (the end-
-           of-file indicator or the descriptor's offset; Q-29).
+note       After the reads the file is grown by 10 bytes through a new
+           open file description (not a handle on the stream's, XSH
+           2.5.1), so however much the stream buffered (the buffer size
+           is not bounded; variant fopen.read_all) its descriptor is not
+           at end of file on either reading of "not already at EOF"
+           (Q-29).
 test       t/016-update-input.c

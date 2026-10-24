@@ -6,6 +6,7 @@
  * MUTANT    psiginfo.no_separator
  * MUTANT    psiginfo.no_newline
  * MUTANT    psiginfo.silent
+ * VARIANT   psiginfo.own_text
  */
 #include "pc.h"
 #include <errno.h>

@@ -5,6 +5,7 @@
  * ASSERTION XSH.ftruncate.004
  * MUTANT    ftruncate.readonly_ok
  * MUTANT    ftruncate.bad_ok
+ * VARIANT   ftruncate.ebadf_einval
  */
 #include "pc.h"
 #include <errno.h>

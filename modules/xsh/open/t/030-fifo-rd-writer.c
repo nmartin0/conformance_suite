@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.030
  * MUTANT    open.fifo_block_enxio
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <errno.h>

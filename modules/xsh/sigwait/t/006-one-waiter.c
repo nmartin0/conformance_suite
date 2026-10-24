@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.sigwait.006
  * MUTANT    sigwait.not_cleared
+ * VARIANT   sigwait.action_dfl
+ * VARIANT   sigwait.late
  */
 #include "pc.h"
 #include <errno.h>
@@ -170,8 +172,15 @@ int main(void)
 	    pthread_create(&t[1], NULL, waiter, NULL) == 0, "pthread_create failed");
 	(void)nanosleep(&ts, NULL);
 	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
+	{
+		/* No bound on how soon a waiter resumes: allow 5 s, then look for a second one. */
+		struct timespec step = { 0, 10000000 };
+		int i;
+		for (i = 0; i < 500 && __atomic_load_n(&got, __ATOMIC_SEQ_CST) == 0; i++)
+			(void)nanosleep(&step, NULL);
+	}
 	(void)nanosleep(&ts, NULL);
-	pc_check(got == 1, "%d threads returned from sigwait() for one signal", got);
+	pc_check(got == 1, "%d threads returned from sigwait() for one signal (within 5 s)", got);
 	pc_check(kill(getpid(), SIGUSR1) == 0, "kill failed");
 	(void)pthread_join(t[0], NULL);
 	(void)pthread_join(t[1], NULL);

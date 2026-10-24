@@ -6,6 +6,8 @@
  * MUTANT    ungetc.survives_seek
  * MUTANT    ungetc.survives_fsetpos
  * MUTANT    ungetc.survives_rewind
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   ungetc.one_byte
  */
 #include "pc.h"
 #include <errno.h>

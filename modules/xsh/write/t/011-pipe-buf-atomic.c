@@ -4,6 +4,9 @@
  *
  * ASSERTION XSH.write.011
  * MUTANT    write.pipe_interleave
+ * VARIANT   read.short_stream
+ * VARIANT   write.pipe_buf_512
+ * VARIANT   write.pipe_buf_unset
  */
 #include "pc.h"
 #include <errno.h>

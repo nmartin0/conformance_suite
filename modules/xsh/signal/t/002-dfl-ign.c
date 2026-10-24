@@ -5,6 +5,7 @@
  * ASSERTION XSH.signal.002
  * MUTANT    signal.ign_as_dfl
  * MUTANT    signal.dfl_ignored
+ * VARIANT   signal.block_all
  */
 #include "pc.h"
 #include <errno.h>

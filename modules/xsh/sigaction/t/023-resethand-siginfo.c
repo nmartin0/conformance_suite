@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.sigaction.023
+ * VARIANT   sigaction.resethand_nodefer
  */
 #include "pc.h"
 #include <errno.h>

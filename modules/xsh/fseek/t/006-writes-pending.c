@@ -5,6 +5,9 @@
  * ASSERTION XSH.fseek.006
  * MUTANT    fseek.drops_pending
  * MUTANT    fseek.old_times
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   setvbuf.own_unused
+ * VARIANT   setvbuf.scribbles
  */
 #include "pc.h"
 #include <errno.h>
@@ -205,6 +208,7 @@ int main(void)
 {
 	pc_begin("XSH.fseek.006");
 	{
+		static char vb[BUFSIZ];
 		struct stat before, st;
 		char buf[16];
 		FILE *f;
@@ -212,6 +216,8 @@ int main(void)
 		pc_make_file("f", "");
 		pc_test();
 		f = open_as("f", "w");
+		/* The default buffer size is open (XSH 2.5): ask for a full buffer of a known size. */
+		NEED(setvbuf(f, vb, _IOFBF, sizeof vb) == 0, "setvbuf(_IOFBF) was refused");
 		NEED(fstat(fileno(f), &before) == 0, "fstat failed");
 		sleep(2);
 		NEED(fputs("abc", f) >= 0, "fputs failed");

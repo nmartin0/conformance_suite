@@ -4,6 +4,9 @@
  *
  * ASSERTION XSH.write.013
  * MUTANT    write.nonblock_short
+ * VARIANT   read.short_stream
+ * VARIANT   write.pipe_buf_512
+ * VARIANT   write.pipe_buf_unset
  */
 #include "pc.h"
 #include <errno.h>

@@ -11,6 +11,7 @@
  * MUTANT    fstat.gid_wrong
  * MUTANT    fstat.mode_bits_wrong
  * MUTANT    fstat.returns_one
+ * VARIANT   fstat.type_bits
  */
 #include "pc.h"
 #include <errno.h>

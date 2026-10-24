@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.pthread_sigmask.003
  * MUTANT    pthread_sigmask.setmask_union
+ * VARIANT   pthread_sigmask.how_values
+ * VARIANT   sigemptyset.keeps_extra
  */
 #include "pc.h"
 #include <errno.h>

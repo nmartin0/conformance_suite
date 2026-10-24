@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.dirfd.002
  * MUTANT    dirfd.other_fd
+ * VARIANT   readdir.snapshot
+ * VARIANT   readdir.lazy_fd
  */
 #include "pc.h"
 #include <dirent.h>

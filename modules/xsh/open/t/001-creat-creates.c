@@ -5,6 +5,7 @@
  * ASSERTION XSH.open.001
  * MUTANT    open.creat_ignored
  * MUTANT    open.creat_makes_dir
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <fcntl.h>

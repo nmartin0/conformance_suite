@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.wait.013
  * MUTANT    wait.stop_reported_always
+ * VARIANT   wait.status_encoding
+ * VARIANT   wait.slow_stop
  */
 #include "pc.h"
 #include <errno.h>
@@ -80,9 +82,19 @@ int main(void)
 	guard(10);
 	c = stopper();
 	{
-		/* Let it stop; its stop status stays unreported. */
-		struct timespec ts = { 0, 300000000 };
-		(void)nanosleep(&ts, NULL);
+		/*
+		 * Wait until it has stopped, however long that takes (nothing
+		 * bounds it), without consuming the stop: WNOWAIT leaves the
+		 * child waitable and does not change its state (XSH waitid()).
+		 */
+		siginfo_t si;
+
+		memset(&si, 0, sizeof si);
+		if (waitid(P_PID, (id_t)c, &si, WSTOPPED | WNOWAIT) != 0) {
+			int e = errno;
+			(void)kill(c, SIGKILL);
+			pc_unresolved("waitid(WSTOPPED | WNOWAIT) failed: %s", pc_errname(e));
+		}
 	}
 	pc_test();
 	r = waitpid(c, &st, WNOHANG);

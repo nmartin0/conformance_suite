@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigsuspend.005
  * MUTANT    sigsuspend.reject_unblockable
+ * VARIANT   sigfillset.omits_extra
  */
 #include "pc.h"
 #include <errno.h>

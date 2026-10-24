@@ -21,12 +21,16 @@ assertion  XSH.fclose.003
 anchor     functions/fclose.html#DESCRIPTION
 class      required
 since      2008
-says       For a 1 MiB file read through a stream (the active handle) with one
+says       For a 1 MiB file (grown by 10 bytes
+           through a separate open() after the reads) read through a stream (the active handle) with one
            fgetc(), after fclose() a duplicate of the descriptor taken before
            the call has offset 1.
-note       The file is 1 MiB, so after one read the stream is not at end
-           of file whichever way "not already at EOF" is read (the end-
-           of-file indicator or the descriptor's offset; Q-29).
+note       After the reads the file is grown by 10 bytes through a new
+           open file description (not a handle on the stream's, XSH
+           2.5.1), so however much the stream buffered (the buffer size
+           is not bounded; variant fopen.read_all) its descriptor is not
+           at end of file on either reading of "not already at EOF"
+           (Q-29).
 test       t/003-input-offset.c
 
 assertion  XSH.fclose.004
@@ -88,23 +92,31 @@ assertion  XSH.fclose.010
 anchor     functions/fclose.html#DESCRIPTION
 class      required
 since      2008
-says       For a 1 MiB file opened "r+" with one fgetc(), after fclose() a
+says       For a 1 MiB file (grown by 10 bytes
+           through a separate open() after the reads) opened "r+" with one fgetc(), after fclose() a
            duplicate of the descriptor taken before the call has offset 1.
-note       The file is 1 MiB, so after one read the stream is not at end
-           of file whichever way "not already at EOF" is read (the end-
-           of-file indicator or the descriptor's offset; Q-29).
+note       After the reads the file is grown by 10 bytes through a new
+           open file description (not a handle on the stream's, XSH
+           2.5.1), so however much the stream buffered (the buffer size
+           is not bounded; variant fopen.read_all) its descriptor is not
+           at end of file on either reading of "not already at EOF"
+           (Q-29).
 test       t/010-update-input.c
 
 assertion  XSH.fclose.011
 anchor     functions/fclose.html#DESCRIPTION
 class      required
 since      2008
-says       For a 1 MiB file read through a stream with fgetc() twice and then
+says       For a 1 MiB file (grown by 10 bytes
+           through a separate open() after the reads) read through a stream with fgetc() twice and then
            ungetc('x') (stream position 1), after fclose() a duplicate of the
            descriptor has offset 1.
-note       The file is 1 MiB, so after one read the stream is not at end
-           of file whichever way "not already at EOF" is read (the end-
-           of-file indicator or the descriptor's offset; Q-29).
+note       After the reads the file is grown by 10 bytes through a new
+           open file description (not a handle on the stream's, XSH
+           2.5.1), so however much the stream buffered (the buffer size
+           is not bounded; variant fopen.read_all) its descriptor is not
+           at end of file on either reading of "not already at EOF"
+           (Q-29).
 test       t/011-pushback-offset.c
 
 assertion  XSH.fclose.012

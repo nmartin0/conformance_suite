@@ -7,6 +7,8 @@
  * MUTANT    sigwait.not_cleared
  * MUTANT    sigwait.returns_minus1
  * MUTANT    sigwait.any_pending
+ * VARIANT   pthread_sigmask.how_values
+ * VARIANT   sigwait.action_dfl
  */
 #include "pc.h"
 #include <errno.h>

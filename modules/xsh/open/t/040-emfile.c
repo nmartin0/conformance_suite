@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.open.040
  * MUTANT    open.emfile_as_enfile
+ * VARIANT   open.accmode_bits
+ * VARIANT   open.hidden_fds
  */
 #include "pc.h"
 #include <errno.h>
@@ -14,7 +16,7 @@
 int main(void)
 {
 	struct rlimit rl;
-	int i, src, lim;
+	int i, src, lim, top;
 
 	pc_begin("XSH.open.040");
 	pc_make_file("f", "x");
@@ -23,16 +25,22 @@ int main(void)
 	lim = pc_lowest_free_fd() + 2;
 	if (lim < 20)
 		lim = 20;	/* not below {_POSIX_OPEN_MAX}: getrlimit(), APPLICATION USAGE */
-	/* Never lower the limit below a descriptor that is open. */
-	for (i = 0; i < 1024; i++)
+	/*
+	 * Never lower the limit below a descriptor that is open (getrlimit(),
+	 * APPLICATION USAGE). The implementation may hold descriptors of its
+	 * own at any number, so look up to the current limit.
+	 */
+	pc_check(getrlimit(RLIMIT_NOFILE, &rl) == 0, "getrlimit failed");
+	top = rl.rlim_cur == RLIM_INFINITY || rl.rlim_cur > 65536 ? 65536 :
+	    (int)rl.rlim_cur;
+	for (i = 0; i < top; i++)
 		if (fcntl(i, F_GETFD) != -1 && i + 1 > lim)
 			lim = i + 1;
-	if (lim > 256)
+	if (lim > 4096)
 		pc_unresolved("a descriptor near %d is open; too many to fill", lim);
 	for (i = 0; i < lim; i++)
 		if (fcntl(i, F_GETFD) == -1)
 			pc_check(dup2(src, i) == i, "dup2 to %d failed", i);
-	pc_check(getrlimit(RLIMIT_NOFILE, &rl) == 0, "getrlimit failed");
 	rl.rlim_cur = (rlim_t)lim;
 	pc_check(setrlimit(RLIMIT_NOFILE, &rl) == 0, "setrlimit failed");
 	if (getrlimit(RLIMIT_NOFILE, &rl) != 0 || rl.rlim_cur != (rlim_t)lim)

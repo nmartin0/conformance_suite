@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.truncate.004
  * MUTANT    truncate.times_kept
+ * VARIANT   chown.coarse_times
  */
 #include "pc.h"
 #include <errno.h>

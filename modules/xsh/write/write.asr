@@ -153,6 +153,8 @@ class      required
 since      2001
 says       write() on a connected stream socket sends the data to the
            peer, as send() with no flags would.
+note       The peer may receive a stream in parts (XSH recv()), so the
+           writer shuts down writing and the peer reads to end of file.
 test       t/016-socket.c
 
 assertion  XSH.write.017
@@ -239,14 +241,19 @@ test       t/025-overwrite.c
 
 assertion  XSH.write.026
 anchor     functions/write.html#ERRORS/EPIPE
-class      required
+class      disputed
 since      2001
 says       write() on a stream socket that is no longer connected (its peer
            closed) fails with EPIPE and sends SIGPIPE to the thread.
-note       A socket whose peer is gone is also not connected, so
-           write()'s ECONNRESET and send()'s ENOTCONN apply too (XSH
-           2.3, as for XSH.write.027 and SI-1); SIGPIPE is required only
-           with EPIPE, and is checked as pending (blocked), since
+note       disputed (Q-61): one reading takes write()'s EPIPE entry for a
+           socket no longer connected, with its SIGPIPE for SOCK_STREAM,
+           as the error for this case, ECONNRESET ("forcibly closed by a
+           peer") and ENOTCONN ("not connected") being separate entries;
+           otherwise the SIGPIPE requirement could always be avoided. The
+           other reading lets a system whose peer reset report
+           ECONNRESET (or ENOTCONN) instead, under XSH 2.3, without
+           SIGPIPE. The test takes the first; a FAIL is logged as
+           INSPECT. SIGPIPE is checked as pending (blocked), since
            nothing says it is delivered before write() returns.
 test       t/026-socket-peer-closed.c
 

@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.pipe.001
  * MUTANT    pipe.swapped
+ * VARIANT   pipe.high_read_end
  */
 #include "pc.h"
 #include <errno.h>

@@ -6,6 +6,7 @@
  * MUTANT    chown.missing_ok
  * MUTANT    chown.enoent_as_enotdir
  * MUTANT    fchownat.missing_ok
+ * VARIANT   chown.at_alt
  */
 #include "pc.h"
 #include <errno.h>

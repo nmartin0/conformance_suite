@@ -5,6 +5,8 @@
  * ASSERTION XSH.ungetc.002
  * MUTANT    ungetc.fifo_order
  * MUTANT    ungetc.position_kept
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   ungetc.one_byte
  */
 #include "pc.h"
 #include <errno.h>

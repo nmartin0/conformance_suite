@@ -5,6 +5,7 @@
  * ASSERTION XSH.chmod.010
  * MUTANT    fchmodat.ignores_nofollow
  * MUTANT    fchmodat.nofollow_fails_on_files
+ * VARIANT   chmod.nofollow_works
  */
 #include "pc.h"
 #include <errno.h>

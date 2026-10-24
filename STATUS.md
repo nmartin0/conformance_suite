@@ -30,7 +30,7 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
   `--option`, `--resume`, `--mutant`), writing `run.log`.
 - `core/selftest/`: 28 harness self-tests with known outcomes; any
   mismatch aborts the run.
-- Modules (1040 assertions):
+- Modules (1044 assertions):
   - `xbd/fcntl.h` (5): FD_CLOEXEC, FD_CLOFORK, O_CLOEXEC, O_CLOFORK
     defined; fd flags bitwise-distinct.
   - `xsh/2.6-file-descriptor-allocation` (1): lowest free descriptor,
@@ -149,8 +149,16 @@ Copyright (c) 2026 Nicholas Martin. All rights reserved.
 - The Linux-ism audit of every module reviewed before ungetc is done (review
   log, roadmap 3a); header and Tier 0 checks now claim an option at compile
   time when its macro is defined and not -1.
+- Conforming variants (docs/variants.md, RULES.md 8 to 12): every function
+  and section module declares VARIANTs, behaviour the text allows that the
+  reference systems do not show, which the tests must PASS; ci/mutate.sh
+  checks both directions. The retrofit and its independent review are in the
+  review log; the coordinator's open infrastructure items (dotted module
+  prefixes, variants for disputed readings, runs where the baseline is not
+  PASS, harness names within 14 bytes, a portable replacement for
+  LD_PRELOAD) are next on the roadmap.
 - `ci/lint.py`: traceability, anchor and `since` checks; `ci/mutate.sh`: mutation
-  checks (1394 mutants); `ci/catalog.py`: shared parser.
+  checks (1398 mutants, and conforming variants, below); `ci/catalog.py`: shared parser.
 - `analysis/analyze.py`: load, runs, verdict, failures, matrix, diff,
   coverage, html, calibrate (checks a reference run against
   `known/*.known`, its expected failures).

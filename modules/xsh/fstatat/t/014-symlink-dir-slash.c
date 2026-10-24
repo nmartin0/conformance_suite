@@ -6,6 +6,8 @@
  * MUTANT    stat.trailing_slash_enotdir
  * MUTANT    lstat.slash_no_follow
  * MUTANT    fstatat.slash_no_follow
+ * VARIANT   fstat.type_bits
+ * VARIANT   fstatat.link_mode
  */
 #include "pc.h"
 #include <errno.h>

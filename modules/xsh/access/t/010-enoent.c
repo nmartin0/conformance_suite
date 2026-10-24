@@ -5,6 +5,7 @@
  * ASSERTION XSH.access.010
  * MUTANT    access.missing_ok
  * MUTANT    access.enoent_as_enotdir
+ * VARIANT   access.consts_alt
  */
 #include "pc.h"
 #include <errno.h>

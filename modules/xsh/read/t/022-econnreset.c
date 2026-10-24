@@ -52,7 +52,8 @@ int main(void)
 		if (r == 0)
 			pc_unresolved("the zero-linger close did not reset the connection (that is protocol-specific)");
 		pc_check(r == -1, "read() after the peer reset the connection returned %ld", (long)r);
-		pc_check(e == ECONNRESET || e == ENOTCONN, "read() after a reset failed with %s, expected ECONNRESET (or ENOTCONN)",
+		/* disputed (Q-61): ENOTCONN would not be accepted */
+		pc_check(e == ECONNRESET, "read() after a reset failed with %s, expected ECONNRESET",
 		    pc_errname(e));
 	}
 	pc_pass();

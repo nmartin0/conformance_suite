@@ -6,6 +6,7 @@
  * MUTANT    rmdir.nonempty_ok
  * MUTANT    rmdir.nonempty_removes
  * MUTANT    rmdir.nonempty_einval
+ * VARIANT   rmdir.eexist
  */
 #include "pc.h"
 #include <dirent.h>

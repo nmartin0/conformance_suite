@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.dup.001
  * MUTANT    dup.not_lowest
+ * VARIANT   dup.hidden_fds
  */
 #include "pc.h"
 #include <errno.h>

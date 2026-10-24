@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.alarm.006
  * MUTANT    alarm.fires_early
+ * VARIANT   sigtimedwait.sluggish
  */
 #include "pc.h"
 #include <errno.h>

@@ -6,6 +6,7 @@
  * MUTANT    futimens.noop
  * MUTANT    futimens.swaps
  * MUTANT    futimens.returns_one
+ * VARIANT   futimens.res_1s
  */
 #include "pc.h"
 #include <errno.h>

@@ -5,6 +5,8 @@
  * ASSERTION XSH.fseek.019
  * MUTANT    fseek.mem_beyond_ok
  * MUTANT    fseek.mem_at_end_refused
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   fseek.mem_fail_clamps
  */
 #include "pc.h"
 #include <errno.h>
@@ -210,7 +212,12 @@ int main(void)
 		pc_check(fseek(f, 10, SEEK_SET) == 0, "fseek() to max_size failed: %s", pc_errname(errno));
 		pc_check(fseek(f, 11, SEEK_SET) == -1, "fseek() past max_size succeeded");
 		pc_check(fseek(f, -1, SEEK_SET) == -1, "fseek() to -1 succeeded");
-		pc_check((p = ftell(f)) == 10, "ftell() after the failed seeks is %ld, expected 10", p);
+		/*
+		 * Where a failed seek leaves the position is not stated, and XSH 2.3 lets a failed
+		 * call have done part of its work; the position must still lie within the buffer.
+		 */
+		p = ftell(f);
+		pc_check(p >= 0 && p <= 10, "ftell() after the failed seeks is %ld, outside the buffer", p);
 	}
 	pc_pass();
 }

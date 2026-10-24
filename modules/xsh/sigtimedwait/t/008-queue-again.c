@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigtimedwait.008
  * MUTANT    sigqueue.eagain_sticky
+ * VARIANT   sigqueue.max_min
  */
 #include "pc.h"
 #include <errno.h>

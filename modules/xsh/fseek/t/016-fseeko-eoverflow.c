@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.fseek.016
  * MUTANT    fseek.overflow_einval
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   fseek.lseek_first
  */
 #include "pc.h"
 #include <errno.h>

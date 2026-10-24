@@ -6,6 +6,7 @@
  * MUTANT    utimensat.now_ignored
  * MUTANT    utimensat.noop
  * VARIANT   futimens.utime_now_m1
+ * VARIANT   futimens.res_1s
  */
 #include "pc.h"
 #include <errno.h>

@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.rmdir.014
  * MUTANT    rmdir.slash_rejected
+ * VARIANT   rmdir.ebusy_open
  */
 #include "pc.h"
 #include <dirent.h>

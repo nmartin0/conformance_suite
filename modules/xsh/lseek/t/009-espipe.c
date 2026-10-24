@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.lseek.009
  * MUTANT    lseek.espipe_as_einval
+ * VARIANT   lseek.whence_values
  */
 #include "pc.h"
 #include <errno.h>

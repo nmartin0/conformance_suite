@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.exec.029
+ * VARIANT   exec.slow
  */
 #include "pc.h"
 #include <dirent.h>
@@ -181,20 +182,62 @@ static void copy_self(const char *path, mode_t mode)
 		pc_unresolved("cannot finish %s", path);
 }
 
+static long long now_ns(void)
+{
+	struct timespec t;
+
+	(void)clock_gettime(CLOCK_MONOTONIC, &t);
+	return (long long)t.tv_sec * 1000000000LL + t.tv_nsec;
+}
+
+static int usr1_pending(void)
+{
+	sigset_t p;
+
+	return sigpending(&p) == 0 && sigismember(&p, SIGUSR1) == 1;
+}
+
+/*
+ * In the image: a[0] is when the old image armed its timer (CLOCK_MONOTONIC,
+ * ns), a[1] the timer's length in ms. SIGUSR1 is blocked (the mask is
+ * inherited), so a timer that fires shows as pending instead of ending us.
+ */
 static void image(const char *mode, int n, char **a)
 {
-	struct timespec ts = { 3, 0 };
+	long long t0, end;
+	long ms;
 
 	(void)mode;
-	(void)n;
-	(void)a;
-	while (nanosleep(&ts, &ts) == -1 && errno == EINTR)
-		;
-	say("ok");
+	if (n < 2) {
+		say("missing arguments");
+		return;
+	}
+	t0 = atoll(a[0]);
+	ms = atol(a[1]);
+	if (usr1_pending()) {
+		/*
+		 * Pending already: the exec took longer than the timer, which
+		 * then expired in the old image, before exec deleted it.
+		 */
+		say("late %ld", (long)((now_ns() - t0) / 1000000));
+		return;
+	}
+	end = t0 + (ms + 1000) * 1000000LL;	/* a second past the expiry */
+	while (now_ns() < end) {
+		long long left = end - now_ns();
+		struct timespec ts;
+		ts.tv_sec = (time_t)(left / 1000000000LL);
+		ts.tv_nsec = (long)(left % 1000000000LL);
+		(void)nanosleep(&ts, NULL);
+	}
+	say(usr1_pending() ? "fired" : "ok");
 }
 
 int main(int argc, char **argv)
 {
+	long ms = 2000;
+	int attempt;
+
 	if (argc >= 4 && strcmp(argv[1], "img") == 0) {
 		rfd = atoi(argv[3]);
 		self = argv[0];
@@ -205,37 +248,40 @@ int main(int argc, char **argv)
 	pc_check(argc >= 1 && argv[0][0] == '/', "argv[0] is not an absolute path");
 	self = argv[0];
 	pc_test();
-	if (spawn_child()) {
-		timer_t tid;
-		struct sigevent ev;
-		struct itimerspec it;
-		memset(&ev, 0, sizeof ev);
-		ev.sigev_notify = SIGEV_SIGNAL;
-		ev.sigev_signo = SIGUSR1;
-		memset(&it, 0, sizeof it);
-		it.it_value.tv_sec = 2;	/* long enough for a slow exec */
-		if (timer_create(CLOCK_REALTIME, &ev, &tid) != 0 || timer_settime(tid, 0, &it, NULL) != 0)
-			_exit(99);
-		execv(self, imgv("timer", (char *)NULL));
-		returned("execv");
-	}
-	{
+	for (attempt = 0; attempt < 3; attempt++) {
 		char buf[256];
-		size_t n = 0;
-		ssize_t r;
-		int st;
-		while (n < sizeof buf - 1 && (r = read(report[0], buf + n, sizeof buf - 1 - n)) > 0)
-			n += (size_t)r;
-		buf[n] = '\0';
-		if (waitpid(kid, &st, 0) != kid)
-			pc_unresolved("waitpid failed");
-		if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
-			pc_unresolved("the child could not set up the timer");
-		if (buf[0] == '!')
-			pc_fail("%s", buf + 1);
-		pc_check(!(WIFSIGNALED(st) && WTERMSIG(st) == SIGUSR1), "the old image's timer fired in the new image");
-		pc_check(WIFEXITED(st) && WEXITSTATUS(st) == 0, "the new image ended with status %#x", st);
+		if (spawn_child()) {
+			static char t0[32], len[32];
+			timer_t tid;
+			struct sigevent ev;
+			struct itimerspec it;
+			sigset_t s;
+			sigemptyset(&s);
+			sigaddset(&s, SIGUSR1);
+			memset(&ev, 0, sizeof ev);
+			ev.sigev_notify = SIGEV_SIGNAL;
+			ev.sigev_signo = SIGUSR1;
+			memset(&it, 0, sizeof it);
+			it.it_value.tv_sec = ms / 1000;
+			it.it_value.tv_nsec = (ms % 1000) * 1000000L;
+			if (sigprocmask(SIG_BLOCK, &s, NULL) != 0 || timer_create(CLOCK_REALTIME, &ev, &tid) != 0)
+				_exit(99);
+			(void)snprintf(t0, sizeof t0, "%lld", now_ns());
+			(void)snprintf(len, sizeof len, "%ld", ms);
+			if (timer_settime(tid, 0, &it, NULL) != 0)
+				_exit(99);
+			execv(self, imgv("timer", t0, len, (char *)NULL));
+			returned("execv");
+		}
+		collect(buf, sizeof buf);
+		if (strncmp(buf, "late ", 5) == 0) {
+			/* No bound on how long an exec takes: try a longer timer. */
+			ms = 3 * atol(buf + 5) + 1000;
+			continue;
+		}
+		pc_check(strcmp(buf, "fired") != 0, "the old image's timer (%ld ms) fired in the new image", ms);
 		expect_ok(buf);
+		pc_pass();
 	}
-	pc_pass();
+	pc_unresolved("each exec took longer than the timer (last %ld ms), which so expired before exec", ms);
 }

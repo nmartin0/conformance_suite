@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.exit.008
  * MUTANT    exit.no_flush
+ * VARIANT   wait.status_encoding
+ * VARIANT   exit.write_through
  */
 #include "pc.h"
 #include <errno.h>

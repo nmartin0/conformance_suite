@@ -86,12 +86,15 @@ anchor     functions/ungetc.html#DESCRIPTION
 class      required
 since      2008
 says       On a stream reading a 1 MiB file that begins "0123", after a
-           read of '0' and ungetc('Z'), a successful fflush() makes the
+           read of '0', ungetc('Z') and growing the file by 10 bytes
+           through a separate open(), a successful fflush() makes the
            next read return a byte other than 'Z' (which byte is open,
            Q-30).
 note       Added by POSIX.1-2008 TC1 (Austin Group defect 87). The file
-           is large so that the stream is not at end of file, where
-           fflush() itself does not promise to discard pushback (Q-47).
+           is grown through a new open file description after the read,
+           so however much the stream buffered (variant fopen.read_all)
+           it is not at end of file, where fflush() itself does not
+           promise to discard pushback (Q-47).
 test       t/010-fflush-discards.c
 
 assertion  XSH.ungetc.011

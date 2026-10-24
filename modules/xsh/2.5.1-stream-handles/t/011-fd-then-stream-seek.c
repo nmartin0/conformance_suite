@@ -5,6 +5,7 @@
  * ASSERTION XSH.2.5.1-stream-handles.011
  * MUTANT    fseek.fd_offset_stale
  * MUTANT    fseek.elides
+ * VARIANT   setvbuf.tiny_default
  */
 #include "pc.h"
 #include <errno.h>

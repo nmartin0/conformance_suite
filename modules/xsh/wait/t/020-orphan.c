@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.wait.020
+ * VARIANT   wait.status_encoding
  */
 #include "pc.h"
 #include <errno.h>

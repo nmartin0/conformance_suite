@@ -165,6 +165,9 @@ class      required
 since      2001
 says       read() on a connected stream socket returns the data the peer
            sent.
+note       A stream read may return the data in parts (XSH recv()), so
+           the peer shuts down writing after sending and the test reads
+           to end of file.
 test       t/018-socket.c
 
 assertion  XSH.read.019
@@ -194,14 +197,17 @@ test       t/021-enotconn.c
 
 assertion  XSH.read.022
 anchor     functions/read.html#ERRORS/ECONNRESET
-class      required
+class      disputed
 since      2001
 says       read() on a TCP socket whose peer reset the connection
            (closed with SO_LINGER 0) fails with ECONNRESET.
-note       Whether a zero-linger close() resets the connection is
-           protocol-specific (XSH 2.10.16), so a read of 0 is
-           UNRESOLVED. A reset connection is also not connected, so
-           ENOTCONN is accepted too (XSH 2.3).
+note       disputed (Q-61): read() lists ECONNRESET for a connection
+           forcibly closed by its peer, and the test requires it. The
+           other reading takes a reset connection as also not connected,
+           so that ENOTCONN would be allowed too (XSH 2.3); a FAIL is
+           logged as INSPECT. Whether a zero-linger close() resets the
+           connection is protocol-specific (XSH 2.10.16), so a read of 0
+           is UNRESOLVED.
 test       t/022-econnreset.c
 
 assertion  XSH.read.023

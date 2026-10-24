@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fflush.003
  * MUTANT    fflush.mtime_kept
+ * VARIANT   fopen.coarse_times
  */
 #include "pc.h"
 #include <errno.h>

@@ -5,6 +5,8 @@
  * ASSERTION XSH.fseek.010
  * MUTANT    fseek.bad_whence_ok
  * MUTANT    fseek.wrong_errno
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   fseek.lseek_first
  */
 #include "pc.h"
 #include <errno.h>

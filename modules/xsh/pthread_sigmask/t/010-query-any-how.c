@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.pthread_sigmask.010
  * MUTANT    pthread_sigmask.query_checks_how
+ * VARIANT   pthread_sigmask.how_values
  */
 #include "pc.h"
 #include <errno.h>
@@ -53,6 +54,20 @@ static int blocked(int sig)
 	return sigismember(&cur, sig) == 1;
 }
 
+/*
+ * A how value that is none of SIG_BLOCK, SIG_UNBLOCK and SIG_SETMASK. XBD
+ * <signal.h> gives only their names, so no fixed number is surely
+ * invalid.
+ */
+static int bad_how(void)
+{
+	int h = -12345;
+
+	while (h == SIG_BLOCK || h == SIG_UNBLOCK || h == SIG_SETMASK)
+		h++;
+	return h;
+}
+
 int main(void)
 {
 	sigset_t a = set_of(SIGUSR1, 0), o;
@@ -60,9 +75,9 @@ int main(void)
 	pc_begin("XSH.pthread_sigmask.010");
 	pc_check(pthread_sigmask(SIG_SETMASK, &a, NULL) == 0, "setup failed");
 	pc_test();
-	pc_check(pthread_sigmask(-12345, NULL, &o) == 0, "pthread_sigmask(<invalid how>, NULL, &oset) failed");
+	pc_check(pthread_sigmask(bad_how(), NULL, &o) == 0, "pthread_sigmask(<invalid how>, NULL, &oset) failed");
 	pc_check(sigismember(&o, SIGUSR1) == 1, "the query reported the wrong mask");
-	pc_check(sigprocmask(-12345, NULL, &o) == 0, "sigprocmask(<invalid how>, NULL, &oset) failed: %s", pc_errname(errno));
+	pc_check(sigprocmask(bad_how(), NULL, &o) == 0, "sigprocmask(<invalid how>, NULL, &oset) failed: %s", pc_errname(errno));
 	pc_check(blocked(SIGUSR1), "a query changed the mask");
 	pc_pass();
 }

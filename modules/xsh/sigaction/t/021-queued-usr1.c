@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.sigaction.021
+ * VARIANT   sigaction.sigqueue_max_32
+ * VARIANT   sigaction.siginfo_rt_only
  */
 #include "pc.h"
 #include <errno.h>
@@ -92,6 +94,23 @@ static void queue_three(int sig)
 int main(void)
 {
 	pc_begin("XSH.sigaction.021");
+	{
+		struct sigaction sa;
+
+		memset(&sa, 0, sizeof sa);
+		sa.sa_sigaction = h;
+		sa.sa_flags = SA_SIGINFO;
+		sigemptyset(&sa.sa_mask);
+		if (sigaction(SIGUSR1, &sa, NULL) != 0) {
+			int e = errno;
+
+			/* XSH sigaction() ERRORS: only a system without XSI may refuse SA_SIGINFO outside SIGRTMIN..SIGRTMAX */
+			if (e == EINVAL && sysconf(_SC_XOPEN_UNIX) == -1)
+				pc_unresolved("sigaction() refused SA_SIGINFO for SIGUSR1 (EINVAL) on a system without XSI, which it may do");
+			pc_test();
+			pc_fail("sigaction() with SA_SIGINFO for SIGUSR1 failed: %s", pc_errname(e));
+		}
+	}
 	pc_test();
 	queue_three(SIGUSR1);
 	pc_check(n == 3, "%d deliveries for 3 signals queued with sigqueue()", (int)n);

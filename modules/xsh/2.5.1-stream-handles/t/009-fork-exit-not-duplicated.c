@@ -4,6 +4,9 @@
  *
  * ASSERTION XSH.2.5.1-stream-handles.009
  * MUTANT    _Exit.flushes
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   setvbuf.own_unused
+ * VARIANT   setvbuf.scribbles
  */
 #include "pc.h"
 #include <errno.h>
@@ -222,11 +225,14 @@ int main(void)
 {
 	pc_begin("XSH.2.5.1-stream-handles.009");
 	{
+		static char vb[BUFSIZ];
 		FILE *f;
 		pid_t kid;
 
 		pc_test();
 		f = open_as("f", "w");
+		/* The default buffer size is open (XSH 2.5): ask for a full buffer of a known size. */
+		NEED(setvbuf(f, vb, _IOFBF, sizeof vb) == 0, "setvbuf(_IOFBF) was refused");
 		put(f, "abc");
 		NEED(pc_file_size("f") == 0, "the data was not buffered (the stream may be unbuffered here)");
 		kid = fork();

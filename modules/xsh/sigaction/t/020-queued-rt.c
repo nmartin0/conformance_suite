@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.sigaction.020
+ * VARIANT   sigaction.late_delivery
+ * VARIANT   sigaction.sigqueue_max_32
  */
 #include "pc.h"
 #include <errno.h>

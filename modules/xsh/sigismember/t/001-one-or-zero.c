@@ -5,6 +5,9 @@
  * ASSERTION XSH.sigismember.001
  * MUTANT    sigismember.returns_nonzero
  * MUTANT    sigismember.inverted
+ * VARIANT   sigfillset.omits_extra
+ * VARIANT   sigemptyset.keeps_extra
+ * VARIANT   sigaddset.rt_minimum
  */
 #include "pc.h"
 #include <errno.h>

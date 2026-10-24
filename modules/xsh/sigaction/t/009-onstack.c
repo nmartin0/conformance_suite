@@ -5,6 +5,8 @@
  * ASSERTION XSH.sigaction.009
  * MUTANT    sigaction.onstack_ignored
  * MUTANT    sigaction.onstack_always
+ * VARIANT   sigaltstack.bsd_flags
+ * VARIANT   sigaltstack.minsigstksz_32k
  */
 #include "pc.h"
 #include <errno.h>

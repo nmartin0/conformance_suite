@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.open.026
  * MUTANT    open.nonblock_regular_eagain
+ * VARIANT   open.accmode_bits
+ * VARIANT   open.nonblock_hidden_regular
  */
 #include "pc.h"
 #include <fcntl.h>

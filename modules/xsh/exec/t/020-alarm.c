@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.exec.020
  * MUTANT    exec.alarm_cleared
+ * VARIANT   exec.slow
  */
 #include "pc.h"
 #include <dirent.h>

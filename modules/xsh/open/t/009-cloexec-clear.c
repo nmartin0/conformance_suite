@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.009
  * MUTANT    open.cloexec_forced
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <fcntl.h>

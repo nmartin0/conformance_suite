@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.2.4.1-signal-generation.008
+ * VARIANT   signal.block_all
  */
 #include "pc.h"
 #include <errno.h>

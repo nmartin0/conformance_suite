@@ -106,7 +106,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-5 | XSH `wait()`: which SIGCHLD paragraph applies | Question | Low | One child, where both agree (XSH.wait.019) |
 | Q-6 | XSH `wait()`: when another child's status is "available" | Question | Low | Not tested |
 | Q-7 | XSH `exit()`: streams with no file descriptor | Question | Low | Not tested |
-| Q-8 | XSH 2.3: ENAMETOOLONG/ENOTDIR always meet ENOENT for lookups | Question | Medium | Accepts ENOENT too (XSH.exec.038, 041) |
+| Q-8 | XSH 2.3: ENAMETOOLONG/ENOTDIR/ELOOP always meet ENOENT for lookups | Question | Medium | Accepts ENOENT too (XSH.exec.038, 041); disputed elsewhere |
 | Q-9 | XSH exec [E2BIG]: which {ARG_MAX} | Question | Low | Uses sysconf()'s value (XSH.exec.043) |
 | Q-10 | XSH `execvp()` sh fallback when argv[0] is null | Question | Low | Not tested |
 | Q-11 | XSH `raise()`/`pthread_kill()`: delivery before return | Question | Low | raise() answered by its own rule (XSH.raise.001); pthread_kill() open |
@@ -127,7 +127,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-26 | XSH `truncate()`/`ftruncate()`: does the file size limit apply when shrinking? | Question | Low | Only growth tested |
 | Q-27 | XSH `futimens()`: "write access to the file" for a descriptor | Question | Low | Requires the file's permission (XSH.futimens.021) |
 | Q-28 | XSH `fflush()`: does fflush(NULL) set the offsets of input streams? | Question | Low | Disputed (XSH.fflush.011) |
-| Q-29 | XSH `fflush()`/`fclose()`/`exit()`: what "not already at EOF" means | Question | Low | Tests use a 1 MiB file (both readings met) |
+| Q-29 | XSH `fflush()`/`fclose()`/`exit()`: what "not already at EOF" means | Question | Low | File grown after the reads (both readings met) |
 | Q-30 | XSH `fflush()`: where does reading resume after pushback is discarded? | Question | Low | Only the discard is checked (XSH.fflush.005) |
 | Q-31 | XSH `_exit()`: what happens to the other threads waiting for the last child? | Question | Low | Disputed (XSH._Exit.020) |
 | Q-32 | XSH `_exit()`: asynchronous I/O at exit cannot be observed | Question | Low | Disputed (XSH._Exit.019) |
@@ -154,6 +154,12 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-53 | XSH `_exit()`: status available before SIGCHLD; E2BIG against ENOMEM | Question | Low | Bounded waits (XSH._Exit.014, XSH.wait.002); ENOMEM accepted (XSH.exec.043) |
 | Q-54 | XBD `<unistd.h>`: intptr_t without XSI shading | Question | Low | Conditional on XSI (Tier 0) |
 | Q-55 | XBD `<signal.h>`: are the flag and code constants distinct? | Question | Low | Disputed (XBD.signal.h.016, .017) |
+| Q-56 | XSH aio_read(): a pipe or FIFO | Question | Low | UNRESOLVED (XSH.fork.023) |
+| Q-57 | XSH signal(): the return value after a reset on delivery | Question | Low | Not tested |
+| Q-58 | XSH scandir(): is sel called once per entry? | Question | Low | Disputed (XSH.alphasort.010) |
+| Q-59 | XSH _exit(): when the consequences of termination take effect | Question | Low | Bounded waits (XSH._Exit.016 to .018); disputed (XSH._Exit.021) |
+| Q-60 | XSH fcntl(): "Locks may start and extend beyond the current end of a file" | Question | Low | Read as required of the implementation (XSH.fcntl.027) |
+| Q-61 | XSH `write()`/`read()`: a stream socket whose peer has gone | Question | Medium | Disputed (XSH.write.026, XSH.read.022) |
 
 ## Entries
 
@@ -864,6 +870,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **What the text says:** the item for a handle whose only further action is to be closed speaks of "any handle to this open file descriptor"; handles are defined on the open file description.
 - **Problem:** the wording names the wrong object.
 - **Suggested change:** read "open file description".
+- **After the variant retrofit:** the same sentence can also be read two ways on whose actions count: "the only further action ... on any handle" may mean no handle at all will do more than close (so a second handle that goes on writing makes the item inapplicable), or that this handle will only be closed. XSH.2.5.1-stream-handles.012 rests on the second reading and is now `disputed`.
 
 ## Questions to raise
 
@@ -963,6 +970,7 @@ is unclear.
   logged as INSPECT), for example XSH.fstatat.020, XSH.link.014,
   XSH.chmod.012.
 - **After the Linux-ism audit:** Cases where only one error condition applies are now required assertions of their own (XSH.link.024, .025, XSH.unlink.023, XSH.rename.035, XSH.fstatat.026, XSH.chmod.022, XSH.chown.022, XSH.access.021, XSH.lchown.008, .009); only the overlapping cases stay disputed.
+- **After the variant retrofit:** the same overlap arises with ELOOP: a path that resolves through a loop of symbolic links names no existing file, so ENOENT applies literally too. XSH.unlink.013 and XSH.rmdir.009 are now `disputed`, and the loop-in-the-first-path cases of link() and rename() are split out as XSH.link.026 and XSH.rename.036 (`disputed`). A loop in the directory part of the second path (XSH.link.013, XSH.rename.021) stays required: the prefix component exists, as a symbolic link, so ENOENT for a missing prefix component does not apply.
 
 ### Q-9: Which {ARG_MAX} does E2BIG compare against?
 
@@ -1105,6 +1113,7 @@ is unclear.
 - **Question:** the offset rule applies "if the file is not already at EOF". Does that mean the stream's end-of-file indicator (XSH 2.5.1 speaks of feof() being true), or the underlying file offset being at the end of the file? After one read of a small file, read-ahead has usually taken the whole file: the indicator is clear but the descriptor is at the end, so the two readings give different answers.
 - **posixcheck meanwhile:** the tests read a 1 MiB file, so both readings require the rule; XSH.fflush.015 checks that a stream whose indicator is set is left alone.
 - **After the Linux-ism audit:** Moving the descriptor while the stream is at end of file and then using the stream without fseek() is undefined (XSH 2.5.1, second handle), so the "offset" reading cannot be tested at end of file without undefined behaviour. XSH.fflush.015 no longer moves the descriptor.
+- **After the variant retrofit:** correction: a 1 MiB file meets both readings only if the stream reads less than 1 MiB ahead; a conforming system may buffer the whole file. The tests now grow the file through a separate open() after the reads (a new open file description, so not a handle on the stream's), so the descriptor is not at the end under either reading and the rule is required: XSH.fflush.004, .005, .011, .016, XSH.fclose.003, .010, .011, XSH.ungetc.010, XSH.2.5.1-stream-handles.014. XSH.fflush.015 (a stream at end of file) is UNRESOLVED when the offset is not the file size, since XSH 2.5.1 lets stdio be built on something other than read().
 
 ### Q-30: fflush(): the stream's position after pushed-back bytes are discarded
 
@@ -1248,6 +1257,7 @@ is unclear.
 - **Where:** XSH `sigwaitinfo()`, `sigtimedwait()`; XSH 2.4.2, 2.4.3.
 - **Question:** sigwaitinfo() stores the cause in si_code, but the rule that SI_USER signals carry si_pid and si_uid is stated for handlers entered with SA_SIGINFO, and 2.4.2 leaves queueing unspecified without SA_SIGINFO; some systems report SI_NOINFO for such signals. Must si_code, si_pid and si_uid be valid when the signal accepted has no SA_SIGINFO action?
 - **posixcheck meanwhile:** XSH.sigtimedwait.004 and .008 give their signals an SA_SIGINFO handler (blocked, so it never runs).
+- **After the variant retrofit:** sigqueue()'s RETURN VALUE says a successful call means the signal "shall have been queued", while its DESCRIPTION and XSH 2.4.2 leave queueing unspecified without SA_SIGINFO. XSH.sigqueue.009 requires only that the signal be sent at least once.
 
 ### Q-53: XSH _exit(): status available before SIGCHLD; E2BIG against ENOMEM
 
@@ -1266,6 +1276,42 @@ is unclear.
 - **Where:** XBD `<signal.h>`; XSH `sigaction()`.
 - **Question:** the SA_* constants are only "symbolic constants"; sigaction() speaks of flags set or cleared in sa_flags, which implies non-zero values with no bits in common but does not say so. Likewise nothing states that SIG_BLOCK, SIG_UNBLOCK and SIG_SETMASK, the SIGEV_* values, or the si_code values within one signal's group are distinct. Should the header say so, as <fcntl.h> does for its flags?
 - **posixcheck meanwhile:** XBD.signal.h.016 and .017 (SA_* flags) are `disputed`; .004, .015 and .023 note that distinctness is inferred.
+
+### Q-56: XSH aio_read(): a pipe or FIFO
+
+- **Where:** XSH `aio_read()`, DESCRIPTION and ERRORS; XSH `lseek()`.
+- **Question:** aio_read() reads at aio_offset "as if" lseek() had been called with that offset, and a pipe or FIFO cannot be positioned (lseek() gives ESPIPE). May aio_read() on a pipe fail (EINVAL for an invalid offset, or ESPIPE, which aio_read() does not list), or must it read the pipe ignoring aio_offset?
+- **posixcheck meanwhile:** XSH.fork.023, which needs a read that stays pending, is UNRESOLVED when aio_read() on a pipe fails with EINVAL or ESPIPE; any other outcome is judged.
+
+### Q-57: XSH signal(): the return value after a reset on delivery
+
+- **Where:** XSH `signal()`, DESCRIPTION and RETURN VALUE.
+- **Question:** on an implementation that resets the action to SIG_DFL when the handler is entered ("the equivalent of signal(sig, SIG_DFL)"), what does the next signal() call return: SIG_DFL, or the handler given to the most recent explicit call? RETURN VALUE speaks of "the most recent call to signal()"; whether the reset counts as a call is not said.
+- **posixcheck meanwhile:** no assertion depends on it.
+
+### Q-58: XSH scandir(): is sel called once per entry?
+
+- **Where:** XSH `alphasort()` (scandir()), DESCRIPTION.
+- **Question:** scandir() calls sel "on each directory entry"; nothing says only once. An implementation that reads the directory twice (counting, then filling) would call it twice per entry with the same result. Is a single call required? It matters to a sel with side effects.
+- **posixcheck meanwhile:** XSH.alphasort.002 (required) checks the sorted result and that every entry is offered; the single call is XSH.alphasort.010, `disputed`.
+
+### Q-59: XSH _exit(): when the consequences of termination take effect
+
+- **Where:** XSH `_exit()`, Consequences of Process Termination; XSH `wait()`.
+- **Question:** the consequences (shared memory detached, semaphore adjustments applied, message queue notification registrations removed) are listed with no order and no time. Must they all have happened by the time the parent can obtain the status? Read strictly, any of them may lag, and no test can wait for ever. Related to Q-53 (SIGCHLD).
+- **posixcheck meanwhile:** XSH._Exit.016, .017 and .018 poll for up to 10 s after the status is obtained (a practical limit). Only memory mappings are said to be unmapped before the process is destroyed, which happens when the status is obtained; whether an XSI shared-memory attachment is such a mapping is not said. XSH._Exit.021 (`disputed`) checks shm_nattch at once.
+
+### Q-60: XSH fcntl(): "Locks may start and extend beyond the current end of a file"
+
+- **Where:** XSH `fcntl()`, DESCRIPTION; XBD 1.5 (terminology).
+- **Question:** under XBD 1.5, "may" describes an optional feature of the implementation, so the sentence could mean an implementation may support such locks, not that an application may request them. The l_len 0 rule (a lock to the largest possible offset) only works if they are supported. Should the sentence say "shall be allowed to"?
+- **posixcheck meanwhile:** XSH.fcntl.027 reads it as a requirement on the implementation.
+
+### Q-61: XSH write() and read(): a stream socket whose peer has gone
+
+- **Where:** XSH `write()`, `read()`, `send()`, `recv()`, ERRORS; XSH 2.3; SI-1.
+- **Question:** write() gives EPIPE for a socket that is "no longer connected" and then requires SIGPIPE for a stream socket; ECONNRESET ("forcibly closed by a peer") and ENOTCONN ("not connected") are separate entries. When the peer has reset the connection, the socket is both no longer connected and forcibly closed, so XSH 2.3 seems to allow ECONNRESET, and then no SIGPIPE is required; read as such, the SIGPIPE requirement can always be avoided. Likewise read() after a reset: ECONNRESET, or ENOTCONN because the socket is no longer connected? Which is intended?
+- **posixcheck meanwhile:** XSH.write.026 requires EPIPE with SIGPIPE pending and XSH.read.022 requires ECONNRESET; both are `disputed`. The other readings are kept as undeclared variants (write.peer_gone_reset, read.reset_enotconn).
 
 ## Tracking
 

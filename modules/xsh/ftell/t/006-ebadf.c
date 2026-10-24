@@ -5,6 +5,7 @@
  * ASSERTION XSH.ftell.006
  * MUTANT    ftell.cached
  * MUTANT    ftell.wrong_errno
+ * VARIANT   setvbuf.tiny_default
  */
 #include "pc.h"
 #include <errno.h>

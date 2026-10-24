@@ -5,6 +5,7 @@
  * ASSERTION XSH.fseek.005
  * MUTANT    fseek.gap_filled
  * MUTANT    fseek.beyond_end_refused
+ * VARIANT   setvbuf.tiny_default
  */
 #include "pc.h"
 #include <errno.h>

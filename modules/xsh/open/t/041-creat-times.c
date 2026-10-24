@@ -5,6 +5,8 @@
  * ASSERTION XSH.open.041
  * MUTANT    open.creat_old_times
  * MUTANT    open.creat_restores_parent_times
+ * VARIANT   open.accmode_bits
+ * VARIANT   open.coarse_times
  */
 #include "pc.h"
 #include <fcntl.h>

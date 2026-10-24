@@ -5,6 +5,8 @@
  * ASSERTION XSH.fstatat.010
  * MUTANT    fstatat.ignores_nofollow
  * MUTANT    fstatat.always_nofollow
+ * VARIANT   fstat.type_bits
+ * VARIANT   fstatat.link_mode
  */
 #include "pc.h"
 #include <errno.h>

@@ -262,9 +262,13 @@ assertion  XSH.exec.029
 anchor     functions/exec.html#DESCRIPTION
 class      required
 since      2008
-says       A per-process timer armed before exec, to send SIGUSR1 (default
-           action: terminate) in 2 s, is deleted: the new image lives on
-           for 3 s and ends normally.
+says       A per-process timer armed before exec, to send SIGUSR1 (blocked,
+           so it shows as pending) in 2 s, is deleted: when the new image
+           starts before the expiry, SIGUSR1 is still not pending a second
+           after it.
+note       No bound on how long exec takes: when the timer expires
+           before the new image starts (in the old image, legitimately),
+           the test retries with a longer timer, then is UNRESOLVED.
 nomutant   timers are deleted by the kernel
 test       t/029-timers-deleted.c
 
@@ -287,7 +291,9 @@ says       When a thread other than the initial one calls execv() while
            another thread waits with a cancellation cleanup handler and a
            thread-specific value, the process (same process ID) runs the
            new image and no cleanup handler or destructor runs.
-nomutant   ending the other threads is done by the kernel
+note       The waiter is known to be in place: it says so after pushing
+           its handler, and a SIGUSR2 is seen to wake it from pause();
+           otherwise (10 s cap) UNRESOLVED.
 test       t/031-threads-terminated.c
 
 assertion  XSH.exec.032

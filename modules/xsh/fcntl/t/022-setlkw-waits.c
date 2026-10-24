@@ -5,6 +5,9 @@
  * ASSERTION XSH.fcntl.022
  * MUTANT    fcntl.setlkw_as_setlk
  * MUTANT    fcntl.setlkw_no_wait
+ * VARIANT   fcntl.ok_other
+ * VARIANT   fcntl.setlkw_poll
+ * VARIANT   fcntl.enolck_small
  */
 #include "pc.h"
 #include <errno.h>
@@ -25,6 +28,26 @@ static struct flock lk(int type, int whence, off_t start, off_t len)
 	fl.l_start = start;
 	fl.l_len = len;
 	return fl;
+}
+
+/*
+ * A lock call in the test's own process. ENOLCK from a set command (the
+ * system's limit on locked regions, which XSH fcntl() sets no minimum for)
+ * is not what these tests are about: it makes the result UNRESOLVED, in
+ * any phase. ENOLCK is not an error of F_GETLK or F_OFD_GETLK, so there it
+ * is left to the test.
+ */
+static int lock_call(int fd, int cmd, struct flock *fl)
+{
+	int r = fcntl(fd, cmd, fl);
+
+	if (r == -1 && errno == ENOLCK && (cmd == F_SETLK || cmd == F_SETLKW
+#ifdef F_OFD_SETLK
+	    || cmd == F_OFD_SETLK || cmd == F_OFD_SETLKW
+#endif
+	    ))
+		pc_unresolved("the system's lock limit was reached (ENOLCK)");
+	return r;
 }
 
 /*
@@ -52,7 +75,7 @@ static void probe(struct flock *q)
 		fd = open("f", O_RDWR);
 		if (fd < 0)
 			_exit(2);
-		if (fcntl(fd, F_GETLK, &a) != 0)
+		if (fcntl(fd, F_GETLK, &a) == -1)
 			_exit(3);
 		if (write(p[1], &a, sizeof a) != (ssize_t)sizeof a)
 			_exit(2);
@@ -101,7 +124,7 @@ static void holder(int type, off_t start, off_t len, unsigned secs)
 		int fd = open("f", O_RDWR);
 		(void)close(sp[0]);
 		(void)close(cp[1]);
-		c = fd >= 0 && fcntl(fd, F_SETLK, &fl) == 0 ? 'y' : 'n';
+		c = fd >= 0 && fcntl(fd, F_SETLK, &fl) != -1 ? 'y' : errno == ENOLCK ? 'l' : 'n';
 		(void)write(sp[1], &c, 1);
 		(void)close(dp[0]);
 		if (secs) {
@@ -119,7 +142,10 @@ static void holder(int type, off_t start, off_t len, unsigned secs)
 	(void)close(dp[1]);
 	hold_ctl = cp[1];
 	hold_done = dp[0];
-	if (read(sp[0], &c, 1) != 1 || c != 'y')
+	c = 0;
+	if (read(sp[0], &c, 1) == 1 && c == 'l')
+		pc_unresolved("holder: the system's lock limit was reached (ENOLCK)");
+	if (c != 'y')
 		pc_unresolved("holder: could not take its lock");
 	(void)close(sp[0]);
 }
@@ -146,14 +172,14 @@ int main(void)
 	pc_test();
 	clock_gettime(CLOCK_MONOTONIC, &t0);
 	fl = lk(F_WRLCK, SEEK_SET, 0, 10);
-	pc_expect_ok(fcntl(fd, F_SETLKW, &fl), "F_SETLKW on a held region");
+	pc_expect_ok(lock_call(fd, F_SETLKW, &fl), "F_SETLKW on a held region");
 	clock_gettime(CLOCK_MONOTONIC, &t1);
 	ms = (t1.tv_sec - t0.tv_sec) * 1000L + (t1.tv_nsec - t0.tv_nsec) / 1000000L;
 	{
 		/* The holder wrote "r" just before letting go: it must be there. */
 		char c;
 		int fl = fcntl(hold_done, F_GETFL);
-		if (fl == -1 || fcntl(hold_done, F_SETFL, fl | O_NONBLOCK) != 0)
+		if (fl == -1 || fcntl(hold_done, F_SETFL, fl | O_NONBLOCK) == -1)
 			pc_unresolved("cannot make the holder's pipe non-blocking");
 		pc_check(read(hold_done, &c, 1) == 1,
 		    "F_SETLKW succeeded (after %ld ms) before the holder let go", ms);

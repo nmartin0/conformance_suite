@@ -4,6 +4,9 @@
  *
  * ASSERTION XSH.readdir.007
  * MUTANT    readdir.mangles_name
+ * VARIANT   readdir.snapshot
+ * VARIANT   readdir.reversed
+ * VARIANT   readdir.no_dots
  */
 #include "pc.h"
 #include <dirent.h>

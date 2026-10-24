@@ -5,6 +5,7 @@
  * ASSERTION XSH.open.007
  * MUTANT    open.trunc_ignored
  * MUTANT    open.trunc_resets_mode
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <fcntl.h>

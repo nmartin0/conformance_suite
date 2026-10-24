@@ -8,6 +8,8 @@
  * MUTANT    lstat.size_zero
  * MUTANT    lstat.nlink_zero
  * MUTANT    lstat.gid_wrong
+ * VARIANT   fstat.type_bits
+ * VARIANT   fstatat.link_mode
  */
 #include "pc.h"
 #include <errno.h>

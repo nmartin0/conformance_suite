@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.signal.005
  * MUTANT    signal.no_einval
+ * VARIANT   signal.block_all
  */
 #include "pc.h"
 #include <errno.h>

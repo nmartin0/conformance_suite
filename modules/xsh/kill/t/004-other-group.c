@@ -6,6 +6,7 @@
  * MUTANT    kill.group_as_pid
  * MUTANT    kill.group_ignored
  * MUTANT    kill.group_plus_self
+ * VARIANT   kill.late
  */
 #include "pc.h"
 #include <errno.h>

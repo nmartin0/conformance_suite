@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fdopen.012
  * MUTANT    fdopen.rewinds
+ * VARIANT   fopen.tiny_buffer
  */
 #include "pc.h"
 #include <errno.h>

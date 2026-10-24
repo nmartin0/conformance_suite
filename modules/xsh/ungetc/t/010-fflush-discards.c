@@ -4,6 +4,10 @@
  *
  * ASSERTION XSH.ungetc.010
  * MUTANT    ungetc.survives_fflush
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   ungetc.one_byte
+ * VARIANT   fseek.fflush_q29
+ * VARIANT   fopen.read_all
  */
 #include "pc.h"
 #include <errno.h>
@@ -205,6 +209,19 @@ static void push(FILE *f, int c)
 	NEED(ungetc(c, f) == (unsigned char)c, "ungetc(%#x) failed", (unsigned)c);
 }
 
+/*
+ * Grows the file by 10 bytes through a new open file description, which is
+ * not a handle on the stream's (XSH 2.5.1): however much the stream has
+ * buffered, its descriptor is then not at end of file on either reading of
+ * "not already at EOF" (Q-29), so the offset rule applies.
+ */
+static void grow(const char *path)
+{
+	int g = open(path, O_WRONLY | O_APPEND);
+
+	NEED(g >= 0 && write(g, "0123456789", 10) == 10 && close(g) == 0, "growing the file failed: %s", pc_errname(errno));
+}
+
 int main(void)
 {
 	pc_begin("XSH.ungetc.010");
@@ -213,7 +230,7 @@ int main(void)
 		int r;
 
 		{
-			/* 1 MiB, so the stream is not at end of file after one read on either reading of Q-29 */
+			/* 1 MiB, grown after the read (see grow()): not at end of file on either reading of Q-29 */
 			static char big[1 << 20];
 			int fd = open("f", O_WRONLY | O_CREAT | O_EXCL, 0644);
 
@@ -225,6 +242,7 @@ int main(void)
 		f = reader("f");
 		read_byte(f, '0');
 		push(f, 'Z');
+		grow("f");
 		NEED(fflush(f) == 0, "fflush failed");
 		r = fgetc(f);
 		pc_check(r != 'Z', "after fflush() the discarded 'Z' was read");

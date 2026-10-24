@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fstat.004
  * MUTANT    fstat.type_reg
+ * VARIANT   fstat.type_bits
  */
 #include "pc.h"
 #include <errno.h>

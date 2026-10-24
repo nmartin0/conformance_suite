@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.mkdir.003
  * MUTANT    mkdir.drops_svtx
+ * VARIANT   mkdir.sgid_bit
  */
 #include "pc.h"
 #include <dirent.h>

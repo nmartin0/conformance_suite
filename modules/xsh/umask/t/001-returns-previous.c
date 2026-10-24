@@ -5,6 +5,8 @@
  * ASSERTION XSH.umask.001
  * MUTANT    umask.returns_new
  * MUTANT    umask.noop
+ * VARIANT   umask.extra_bits
+ * VARIANT   umask.stores_bits
  */
 #include "pc.h"
 #include <errno.h>

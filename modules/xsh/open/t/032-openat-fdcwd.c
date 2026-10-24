@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.032
  * MUTANT    open.at_fdcwd_ebadf
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <fcntl.h>

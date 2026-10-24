@@ -5,6 +5,9 @@
  * ASSERTION XSH.alphasort.004
  * MUTANT    scandir.unsorted
  * MUTANT    scandir.always_alphasort
+ * VARIANT   readdir.snapshot
+ * VARIANT   readdir.reversed
+ * VARIANT   readdir.no_dots
  */
 #include "pc.h"
 #include <dirent.h>

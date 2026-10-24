@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.chmod.002
  * MUTANT    chmod.drops_svtx
+ * VARIANT   chmod.setid_ignored
+ * VARIANT   mkdir.sgid_bit
  */
 #include "pc.h"
 #include <errno.h>

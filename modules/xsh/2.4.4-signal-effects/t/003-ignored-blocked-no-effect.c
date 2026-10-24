@@ -5,6 +5,7 @@
  * ASSERTION XSH.2.4.4-signal-effects.003
  * MUTANT    sigaction.ign_as_catcher
  * MUTANT    sigaction.dfl_as_catcher
+ * VARIANT   signal.block_all
  */
 #include "pc.h"
 #include <errno.h>

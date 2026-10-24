@@ -5,6 +5,7 @@
  * ASSERTION XSH.dup.009
  * MUTANT    dup.dup2_bad_src_closes
  * MUTANT    dup.ebadf_as_einval
+ * VARIANT   dup.hidden_fds
  */
 #include "pc.h"
 #include <errno.h>

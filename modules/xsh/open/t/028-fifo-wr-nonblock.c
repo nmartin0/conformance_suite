@@ -5,6 +5,7 @@
  * ASSERTION XSH.open.028
  * MUTANT    open.nonblock_ignored
  * MUTANT    open.enxio_as_eagain
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <errno.h>

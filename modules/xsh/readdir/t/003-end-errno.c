@@ -4,6 +4,9 @@
  *
  * ASSERTION XSH.readdir.003
  * MUTANT    readdir.errno_at_end
+ * VARIANT   readdir.snapshot
+ * VARIANT   readdir.reversed
+ * VARIANT   readdir.no_dots
  */
 #include "pc.h"
 #include <dirent.h>

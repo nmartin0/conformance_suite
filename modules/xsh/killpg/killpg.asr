@@ -19,8 +19,8 @@ class      conditional
 when       XSI
 since      2001
 says       killpg() with signal 0 on the caller's own process group returns 0
-           without sending anything; killpg() with signal 100000 fails with
-           EINVAL.
+           without sending anything; killpg() with signal sysconf(_SC_NSIG)
+           (one above the highest supported) fails with EINVAL.
 note       The caller's group under pcexec holds only the test's own
            processes.
 test       t/002-null-einval.c

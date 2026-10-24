@@ -4,6 +4,9 @@
  *
  * ASSERTION XSH.umask.004
  * MUTANT    umask.returns_new
+ * VARIANT   umask.extra_bits
+ * VARIANT   umask.stores_bits
+ * VARIANT   mkdir.sgid_bit
  */
 #include "pc.h"
 #include <errno.h>

@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.exec.031
+ * MUTANT    exec.cancels_threads
  */
 #include "pc.h"
 #include <dirent.h>
@@ -207,15 +208,41 @@ static void destructor(void *arg)
 	say("destructor ran; ");
 }
 
+static volatile sig_atomic_t ready, woken;
+
+static void on_usr2(int sig)
+{
+	(void)sig;
+}
+
+/*
+ * Sets its value and pushes its handler, says it is ready, then blocks in
+ * pause(); each wakeup (a SIGUSR2 from main) is counted and it blocks again.
+ */
 static void *waiter(void *arg)
 {
 	(void)arg;
 	(void)pthread_setspecific(key, &key);
 	pthread_cleanup_push(cleanup, NULL);
-	for (;;)
+	ready = 1;
+	for (;;) {
 		(void)pause();
+		woken++;
+	}
 	pthread_cleanup_pop(0);
 	return NULL;
+}
+
+/* Waits up to 10 s for *flag; returns whether it was set. */
+static int wait_flag(volatile sig_atomic_t *flag)
+{
+	int i;
+
+	for (i = 0; i < 1000 && !*flag; i++) {
+		struct timespec ts = { 0, 10000000 };
+		(void)nanosleep(&ts, NULL);
+	}
+	return *flag != 0;
 }
 
 static char pidarg[24];
@@ -241,13 +268,37 @@ int main(int argc, char **argv)
 	pc_test();
 	if (spawn_child()) {
 		pthread_t w, e;
+		struct sigaction sa;
+		sigset_t u2;
 		(void)snprintf(pidarg, sizeof pidarg, "%ld", (long)getpid());
-		if (pthread_key_create(&key, destructor) != 0 ||
-		    pthread_create(&w, NULL, waiter, NULL) != 0)
+		memset(&sa, 0, sizeof sa);
+		sigemptyset(&sa.sa_mask);
+		sa.sa_handler = on_usr2;
+		/* only the waiter takes SIGUSR2: the others block it */
+		sigemptyset(&u2);
+		sigaddset(&u2, SIGUSR2);
+		if (sigaction(SIGUSR2, &sa, NULL) != 0 || pthread_key_create(&key, destructor) != 0 ||
+		    pthread_create(&w, NULL, waiter, NULL) != 0 ||
+		    pthread_sigmask(SIG_BLOCK, &u2, NULL) != 0)
+			_exit(99);
+		/*
+		 * The waiter is in place (value set, handler pushed) and has
+		 * blocked in pause(): a SIGUSR2 sent to it woke it there. If
+		 * that cannot be seen within 10 s, the child cannot set up.
+		 */
+		if (!wait_flag(&ready))
 			_exit(99);
 		{
-			struct timespec ts = { 0, 50000000 };
-			(void)nanosleep(&ts, NULL);	/* the waiter is in place */
+			/* resent: one that comes before pause() wakes nothing */
+			int i;
+			for (i = 0; i < 1000 && !woken; i++) {
+				struct timespec ts = { 0, 10000000 };
+				if (pthread_kill(w, SIGUSR2) != 0)
+					_exit(99);
+				(void)nanosleep(&ts, NULL);
+			}
+			if (!woken)
+				_exit(99);
 		}
 		if (pthread_create(&e, NULL, execer, NULL) != 0)
 			_exit(99);

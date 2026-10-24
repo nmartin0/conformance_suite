@@ -4,6 +4,9 @@
  *
  * ASSERTION XSH.fseek.007
  * MUTANT    fseek.drops_pending
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   setvbuf.own_unused
+ * VARIANT   setvbuf.scribbles
  */
 #include "pc.h"
 #include <errno.h>
@@ -199,13 +202,15 @@ int main(void)
 {
 	pc_begin("XSH.fseek.007");
 	{
-		static char buf[64];
+		static char buf[64], vb[BUFSIZ];
 		FILE *f;
 
 		memset(buf, '#', sizeof buf);
 		pc_test();
 		f = fmemopen(buf, sizeof buf, "w");
 		NEED(f != NULL, "fmemopen failed: %s", pc_errname(errno));
+		/* The default buffering of a memory stream is open (XSH 2.5): ask for a full buffer. */
+		NEED(setvbuf(f, vb, _IOFBF, sizeof vb) == 0, "setvbuf(_IOFBF) was refused");
 		NEED(fputs("abc", f) >= 0, "fputs failed");
 		NEED(memcmp(buf, "abc", 3) != 0, "the data reached the memory buffer before fseek() (the stream is not buffered here)");
 		pc_check(fseek(f, 0, SEEK_SET) == 0, "fseek failed: %s", pc_errname(errno));

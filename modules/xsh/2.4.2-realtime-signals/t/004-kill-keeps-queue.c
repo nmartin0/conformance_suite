@@ -5,6 +5,9 @@
  * ASSERTION XSH.2.4.2-realtime-signals.004
  * MUTANT    sigqueue.as_kill
  * MUTANT    sigqueue.value_lost
+ * VARIANT   sigaction.sigqueue_max_32
+ * VARIANT   sigaction.kill_not_queued
+ * VARIANT   sigaction.kill_first
  */
 #include "pc.h"
 #include <errno.h>

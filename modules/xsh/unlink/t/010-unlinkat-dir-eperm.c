@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.unlink.010
  * MUTANT    unlinkat.dir_eacces
+ * VARIANT   unlink.at_fdcwd_alt
  */
 #include "pc.h"
 #include <errno.h>

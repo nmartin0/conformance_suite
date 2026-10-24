@@ -122,6 +122,9 @@ class      required
 since      1988
 says       Without WUNTRACED a stopped child is not reported:
            waitpid(pid, &st, WNOHANG) returns 0 while it is stopped.
+note       Setup waits for the stop with waitid(WSTOPPED | WNOWAIT),
+           which leaves it unconsumed: nothing bounds how soon the child
+           stops (variant wait.slow_stop).
 test       t/013-stop-not-reported.c
 
 assertion  XSH.wait.014
@@ -155,9 +158,14 @@ assertion  XSH.wait.017
 anchor     functions/wait.html#ERRORS/EINVAL
 class      required
 since      1988
-says       waitpid() with an invalid options value fails with EINVAL.
-note       Uses WNOHANG plus bit 22 (0x400000), which no known system
-           defines.
+says       waitpid() with an invalid options value fails with EINVAL:
+           of WNOHANG plus one bit that no flag in <sys/wait.h> uses (bit
+           22, 0x400000, then bits 4 to 30), at least one fails with
+           EINVAL.
+note       An implementation may define extension flags (W names are
+           reserved in <sys/wait.h>, XSH 2.2.2), so a single bit could be
+           valid; one accepted bit is not a FAIL, but accepting every
+           bit tried is (variant wait.ext_option).
 test       t/017-einval.c
 
 assertion  XSH.wait.018

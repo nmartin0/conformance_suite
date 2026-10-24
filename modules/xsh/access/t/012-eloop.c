@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.access.012
  * MUTANT    access.eloop_as_enoent
+ * VARIANT   access.consts_alt
  */
 #include "pc.h"
 #include <errno.h>

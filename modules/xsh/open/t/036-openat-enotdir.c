@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.036
  * MUTANT    open.at_ignores_fd
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <errno.h>

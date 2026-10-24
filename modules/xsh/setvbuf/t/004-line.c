@@ -4,6 +4,10 @@
  *
  * ASSERTION XSH.setvbuf.004
  * MUTANT    setvbuf.ignores_type
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   setvbuf.own_unused
+ * VARIANT   setvbuf.scribbles
+ * VARIANT   setvbuf.refuses_modes
  */
 #include "pc.h"
 #include <errno.h>

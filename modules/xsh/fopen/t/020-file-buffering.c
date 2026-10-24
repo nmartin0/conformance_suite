@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fopen.020
  * MUTANT    fopen.unbuffered_file
+ * VARIANT   fopen.tiny_buffer
  */
 #include "pc.h"
 #include <errno.h>
@@ -237,10 +238,11 @@ int main(void)
 
 		pc_test();
 		f = opened("f", "w");
-		NEED(fputs("ab\n", f) >= 0 && fputc('c', f) == 'c', "writing failed");
+		/* One byte: any buffer holds it, and a line-buffered stream would send it. */
+		NEED(fputc('\n', f) == '\n', "writing failed");
 		pc_check(pc_file_size("f") == 0, "%ld bytes reached the file without a flush", pc_file_size("f"));
 		NEED(fclose(f) == 0, "fclose failed");
-		pc_check(holds("f", "ab\nc"), "the file does not hold the data after fclose()");
+		pc_check(holds("f", "\n"), "the file does not hold the data after fclose()");
 	}
 	pc_pass();
 }

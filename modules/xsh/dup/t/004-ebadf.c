@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.dup.004
  * MUTANT    dup.ebadf_as_einval
+ * VARIANT   dup.hidden_fds
  */
 #include "pc.h"
 #include <errno.h>

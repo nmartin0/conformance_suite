@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.sigdelset.002
  * MUTANT    sigdelset.no_effect
+ * VARIANT   sigfillset.omits_extra
+ * VARIANT   sigaddset.rt_minimum
  */
 #include "pc.h"
 #include <errno.h>

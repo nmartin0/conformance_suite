@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fclose.004
  * MUTANT    fclose.mtime_kept
+ * VARIANT   fopen.coarse_times
  */
 #include "pc.h"
 #include <errno.h>

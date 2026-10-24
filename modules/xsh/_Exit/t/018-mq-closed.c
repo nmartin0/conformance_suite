@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH._Exit.018
+ * VARIANT   wait.status_encoding
  */
 #include "pc.h"
 #include <errno.h>
@@ -77,7 +78,16 @@ int main(void)
 		(void)waitpid(kid, &st, 0);
 		if (WIFEXITED(st) && WEXITSTATUS(st) == 99)
 			pc_unresolved("the child could not register for notification");
-		r = mq_notify(q, &ev);
+		{
+			/* No bound on when termination's consequences are done: up to 10 s. */
+			int i;
+			for (i = 0; i < 1000; i++) {
+				r = mq_notify(q, &ev);
+				if (r == 0 || errno != EBUSY)
+					break;
+				sleep_ms(10);
+			}
+		}
 		pc_check(r == 0, "mq_notify() after the child's exit failed: %s", pc_errname(errno));
 	}
 	pc_pass();

@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.chown.020
  * MUTANT    fchownat.eacces_as_enoent
+ * VARIANT   chown.at_alt
  */
 #include "pc.h"
 #include <errno.h>

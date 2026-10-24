@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.006
  * MUTANT    open.empty_is_dot
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <errno.h>

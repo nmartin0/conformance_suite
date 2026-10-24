@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.fstatat.008
  * MUTANT    stat.stale_times
+ * VARIANT   fstat.time_1s
  */
 #include "pc.h"
 #include <errno.h>

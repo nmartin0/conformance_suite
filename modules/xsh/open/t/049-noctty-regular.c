@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.open.049
  * MUTANT    open.noctty_enotty
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <fcntl.h>

@@ -5,6 +5,7 @@
  * ASSERTION XSH.open.031
  * MUTANT    open.fifo_never_blocks
  * MUTANT    open.eintr_as_eagain
+ * VARIANT   open.accmode_bits
  */
 #include "pc.h"
 #include <errno.h>

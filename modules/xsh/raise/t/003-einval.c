@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.raise.003
  * MUTANT    raise.einval_accepted
+ * VARIANT   raise.fail_positive
  */
 #include "pc.h"
 #include <limits.h>

@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.umask.003
  * MUTANT    umask.keeps_svtx
+ * VARIANT   umask.extra_bits
+ * VARIANT   umask.stores_bits
  */
 #include "pc.h"
 #include <errno.h>

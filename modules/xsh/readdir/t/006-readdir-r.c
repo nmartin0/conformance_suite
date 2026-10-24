@@ -6,6 +6,9 @@
  * MUTANT    readdir_r.other_entry
  * MUTANT    readdir_r.no_end
  * MUTANT    readdir_r.overruns
+ * VARIANT   readdir.snapshot
+ * VARIANT   readdir.reversed
+ * VARIANT   readdir.no_dots
  */
 #include "pc.h"
 #include <stddef.h>

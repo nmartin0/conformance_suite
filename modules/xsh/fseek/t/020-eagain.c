@@ -5,6 +5,11 @@
  * ASSERTION XSH.fseek.020
  * MUTANT    fseek.wrong_errno
  * MUTANT    fseek.error_cleared
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   setvbuf.size_honored
+ * VARIANT   setvbuf.own_unused
+ * VARIANT   setvbuf.scribbles
+ * VARIANT   fseek.lseek_first
  */
 #include "pc.h"
 #include <errno.h>
@@ -200,6 +205,7 @@ int main(void)
 {
 	pc_begin("XSH.fseek.020");
 	{
+		static char vb[4096];
 		char block[4096];
 		FILE *f;
 		int p[2], r, e;
@@ -212,7 +218,7 @@ int main(void)
 		pc_check(errno == EAGAIN, "filling the pipe stopped with %s", pc_errname(errno));
 		pc_test();
 		f = fdopen(p[1], "w");
-		NEED(f != NULL && setvbuf(f, NULL, _IOFBF, 4096) == 0, "fdopen or setvbuf failed");
+		NEED(f != NULL && setvbuf(f, vb, _IOFBF, sizeof vb) == 0, "fdopen or setvbuf failed");
 		NEED(fputs("abc", f) >= 0, "fputs failed");
 		errno = 0;
 		r = fseek(f, 0, SEEK_SET);

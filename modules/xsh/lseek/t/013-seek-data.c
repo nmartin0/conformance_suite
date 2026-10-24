@@ -5,6 +5,7 @@
  * ASSERTION XSH.lseek.013
  * MUTANT    lseek.data_enxio
  * MUTANT    lseek.noop
+ * VARIANT   lseek.whence_values
  */
 #include "pc.h"
 #include <errno.h>

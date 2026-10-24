@@ -5,6 +5,7 @@
  * ASSERTION XSH.fstatat.006
  * MUTANT    stat.type_reg
  * MUTANT    stat.fifo_as_chr
+ * VARIANT   fstat.type_bits
  */
 #include "pc.h"
 #include <errno.h>

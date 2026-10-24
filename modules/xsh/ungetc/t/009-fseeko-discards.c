@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.ungetc.009
  * MUTANT    ungetc.survives_fseeko
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   ungetc.one_byte
  */
 #include "pc.h"
 #include <errno.h>

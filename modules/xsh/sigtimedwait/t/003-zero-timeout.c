@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.sigtimedwait.003
  * MUTANT    sigtimedwait.timeout_ignored
+ * VARIANT   sigtimedwait.sluggish
  */
 #include "pc.h"
 #include <errno.h>

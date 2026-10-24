@@ -5,6 +5,7 @@
  * ASSERTION XSH.access.009
  * MUTANT    faccessat.fdcwd_ebadf
  * MUTANT    faccessat.checks_fd
+ * VARIANT   access.consts_alt
  */
 #include "pc.h"
 #include <errno.h>

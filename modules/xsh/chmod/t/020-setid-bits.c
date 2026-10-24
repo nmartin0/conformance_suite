@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.chmod.020
  * MUTANT    chmod.keeps_setid
+ * VARIANT   chmod.setid_ignored
+ * VARIANT   chmod.setuid_eperm
  */
 #include "pc.h"
 #include <errno.h>
@@ -242,6 +244,12 @@ int main(void)
 		switch (unprivileged(child)) {
 		case 0:
 			break;
+		/*
+		 * Both are outcomes XSH chmod() allows (an implementation-defined
+		 * restriction may make S_ISUID ignored; XSH 2.3 for EPERM), but then
+		 * S_ISUID is never set, so the clearing this assertion is about is
+		 * never exercised: no verdict.
+		 */
 		case 5:
 			pc_notinuse("the implementation ignores S_ISUID in chmod() here");
 		case 6:

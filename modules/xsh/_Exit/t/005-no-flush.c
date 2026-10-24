@@ -5,6 +5,8 @@
  * ASSERTION XSH._Exit.005
  * MUTANT    _Exit.flushes
  * MUTANT    _Exit.calls_atexit
+ * VARIANT   wait.status_encoding
+ * VARIANT   exit.write_through
  */
 #include "pc.h"
 #include <errno.h>
@@ -13,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
@@ -53,9 +56,20 @@ int main(void)
 		if (f == NULL || setvbuf(f, buf, _IOFBF, sizeof buf) != 0)
 			_exit(99);
 		(void)fputs("unflushed", f);
+		{
+			/*
+			 * Buffering is implementation-defined (XSH 2.5): if the
+			 * data is already in the file, nothing is left unflushed.
+			 */
+			struct stat sb;
+			if (fstat(fileno(f), &sb) == 0 && sb.st_size != 0)
+				_exit(97);
+		}
 		_exit(0);
 	}
 	st = reap(c);
+	if (WIFEXITED(st) && WEXITSTATUS(st) == 97)
+		pc_unresolved("the stream wrote through at once (buffering is implementation-defined): no buffered data to keep");
 	pc_check(WIFEXITED(st) && WEXITSTATUS(st) == 0, "the child failed (%#x)", st);
 	pc_check(pc_file_size("f") == 0, "the buffered data reached the file: the stream was flushed");
 	pc_pass();

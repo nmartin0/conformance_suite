@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.raise.002
  * MUTANT    raise.to_process
+ * VARIANT   pthread_sigmask.how_values
  */
 #include "pc.h"
 #include <errno.h>

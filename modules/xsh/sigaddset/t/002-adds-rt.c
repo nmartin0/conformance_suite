@@ -5,6 +5,8 @@
  * ASSERTION XSH.sigaddset.002
  * MUTANT    sigaddset.no_effect
  * MUTANT    sigaddset.rt_wrong_bit
+ * VARIANT   sigemptyset.keeps_extra
+ * VARIANT   sigaddset.rt_minimum
  */
 #include "pc.h"
 #include <errno.h>

@@ -49,11 +49,11 @@ int main(void)
 		int e = errno;
 
 		pc_check(r == -1, "write() on a stream socket whose peer is gone returned %ld", (long)r);
-		pc_check(e == EPIPE || e == ECONNRESET || e == ENOTCONN,
-		    "write() on a stream socket whose peer is gone failed with %s, expected EPIPE (or ECONNRESET, ENOTCONN)",
+		/* disputed (Q-61): ECONNRESET or ENOTCONN would not be accepted */
+		pc_check(e == EPIPE,
+		    "write() on a stream socket whose peer is gone failed with %s, expected EPIPE",
 		    pc_errname(e));
-		if (e == EPIPE)
-			pc_check(sigpending(&pend) == 0 && sigismember(&pend, SIGPIPE), "EPIPE, but SIGPIPE was not sent");
+		pc_check(sigpending(&pend) == 0 && sigismember(&pend, SIGPIPE), "EPIPE, but SIGPIPE was not sent");
 	}
 	pc_pass();
 }

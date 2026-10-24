@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.futimens.026
  * MUTANT    futimens.needs_writable_fd
+ * VARIANT   futimens.res_1s
  */
 #include "pc.h"
 #include <errno.h>

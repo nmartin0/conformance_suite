@@ -4,6 +4,8 @@
  *
  * ASSERTION XSH.close.010
  * MUTANT    close.pc_einval_open
+ * VARIANT   close.pc_einval
+ * VARIANT   close.restart_bit
  */
 #include "pc.h"
 #include <errno.h>

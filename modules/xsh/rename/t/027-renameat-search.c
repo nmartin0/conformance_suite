@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.rename.027
  * MUTANT    renameat.search_checked
+ * VARIANT   rename.at_fdcwd_alt
  */
 #include "pc.h"
 #include <errno.h>

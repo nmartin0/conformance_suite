@@ -4,6 +4,10 @@
  *
  * ASSERTION XSH.2.5.1-stream-handles.005
  * MUTANT    setvbuf.ignores_type
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   setvbuf.own_unused
+ * VARIANT   setvbuf.scribbles
+ * VARIANT   setvbuf.refuses_modes
  */
 #include "pc.h"
 #include <errno.h>

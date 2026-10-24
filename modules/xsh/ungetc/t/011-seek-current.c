@@ -6,6 +6,8 @@
  * MUTANT    ungetc.seekcur_noop
  * MUTANT    ungetc.seekcur_from_kept
  * MUTANT    ungetc.survives_seek
+ * VARIANT   setvbuf.tiny_default
+ * VARIANT   ungetc.one_byte
  */
 #include "pc.h"
 #include <errno.h>

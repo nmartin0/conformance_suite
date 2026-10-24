@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.link.016
  * MUTANT    linkat.file_fd_as_cwd
+ * VARIANT   link.at_fdcwd_alt
  */
 #include "pc.h"
 #include <errno.h>

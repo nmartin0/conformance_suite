@@ -6,6 +6,7 @@
  * MUTANT    sigtimedwait.zero_fails
  * MUTANT    sigtimedwait.info_lost
  * MUTANT    sigtimedwait.any_pending
+ * VARIANT   sigtimedwait.junk_fields
  */
 #include "pc.h"
 #include <errno.h>

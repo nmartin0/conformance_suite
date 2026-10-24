@@ -7,6 +7,7 @@
  * MUTANT    futimens.null_unchecked
  * MUTANT    futimens.omit_checked
  * VARIANT   futimens.utime_now_m1
+ * VARIANT   futimens.res_1s
  */
 #include "pc.h"
 #include <errno.h>

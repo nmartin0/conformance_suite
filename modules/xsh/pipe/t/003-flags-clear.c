@@ -5,6 +5,7 @@
  * ASSERTION XSH.pipe.003
  * MUTANT    pipe.cloexec_set
  * MUTANT    pipe.nonblock_set
+ * VARIANT   pipe.high_read_end
  */
 #include "pc.h"
 #include <errno.h>

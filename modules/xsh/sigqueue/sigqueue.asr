@@ -60,7 +60,9 @@ assertion  XSH.sigqueue.006
 anchor     functions/sigqueue.html#ERRORS/EINVAL
 class      required
 since      2008
-says       sigqueue() with signal number -1 or 100000 fails with EINVAL.
+says       sigqueue() with signal number -1, and with sysconf(_SC_NSIG) (one
+           above the highest supported signal; INT_MAX where that is not
+           available), fails with EINVAL.
 test       t/006-einval.c
 
 assertion  XSH.sigqueue.007

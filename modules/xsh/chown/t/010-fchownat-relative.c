@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.chown.010
  * MUTANT    fchownat.ignores_fd
+ * VARIANT   chown.at_alt
  */
 #include "pc.h"
 #include <errno.h>

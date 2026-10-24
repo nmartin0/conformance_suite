@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.2.4.3-signal-actions.021
+ * VARIANT   sigaction.si_addr_inaccurate
+ * VARIANT   sigaction.siginfo_rt_only
  */
 #include "pc.h"
 #include <errno.h>
@@ -58,12 +60,26 @@ static void hf(int s, siginfo_t *i, void *u)
 
 	(void)u;
 	if (check_code && s == SIGSEGV && i->si_code != SEGV_MAPERR) {
-		char m[32];
-		int n = snprintf(m, sizeof m, "%d", i->si_code);
-		(void)write(3, m, (size_t)n);
+		/* by hand: snprintf() is not async-signal-safe (XSH 2.4.3) */
+		char m[16];
+		int k = (int)sizeof m, c = i->si_code;
+		unsigned u = c < 0 ? 0u - (unsigned)c : (unsigned)c;
+		do
+			m[--k] = (char)('0' + u % 10);
+		while ((u /= 10) != 0 && k > 1);
+		if (c < 0)
+			m[--k] = '-';
+		(void)write(3, m + k, sizeof m - (size_t)k);
 		_exit(2);
 	}
 	_exit(a >= target && a < target + pg ? 0 : 3);
+}
+
+/* The one-argument fallback: the signal came, its address is not known. */
+static void hf1(int s)
+{
+	(void)s;
+	_exit(4);
 }
 
 /*
@@ -92,8 +108,22 @@ static int fault(int sig, int maperr)
 		sa.sa_sigaction = hf;
 		sa.sa_flags = SA_SIGINFO;
 		sigemptyset(&sa.sa_mask);
-		if (sigaction(sig, &sa, NULL) != 0)
-			_exit(8);	/* e.g. SA_SIGINFO refused for this signal: set-up, not the fault */
+		if (sigaction(sig, &sa, NULL) != 0) {
+			/*
+			 * XSH sigaction() ERRORS: only a system without XSI may
+			 * refuse SA_SIGINFO outside SIGRTMIN..SIGRTMAX. There a
+			 * SIGBUS can still be seen with a one-argument handler;
+			 * the SIGSEGV code cannot (8: set-up, not the fault).
+			 */
+			if (errno != EINVAL || sysconf(_SC_XOPEN_UNIX) != -1)
+				_exit(7);
+			if (maperr)
+				_exit(8);
+			sa.sa_flags = 0;
+			sa.sa_handler = hf1;
+			if (sigaction(sig, &sa, NULL) != 0)
+				_exit(7);
+		}
 		if (maperr) {
 			m = mmap(NULL, (size_t)pg, PROT_READ, MAP_SHARED, fd, 0);
 			if (m == MAP_FAILED || munmap(m, (size_t)pg) != 0)
@@ -114,6 +144,8 @@ static int fault(int sig, int maperr)
 	(void)close(p[0]);
 	if (waitpid(kid, &st, 0) != kid || !WIFEXITED(st))
 		return 9;
+	if (WEXITSTATUS(st) == 7)
+		pc_fail("sigaction() refused SA_SIGINFO for signal %d on a system that claims XSI", sig);
 	if (WEXITSTATUS(st) == 2) {
 		buf[n > 0 ? n : 0] = '\0';
 		last_code = atoi(buf);
@@ -136,6 +168,10 @@ int main(void)
 		if (r == 8 || r == 9)
 			pc_unresolved("the faulting child could not set up (%s)", r == 8 ? "sigaction" : "mmap or dup2");
 		pc_check(r != 1, "reading a whole page past the file's end did not raise SIGBUS");
+		if (r == 4) {
+			pc_note("SIGBUS came to a one-argument handler (SA_SIGINFO refused without XSI): si_addr not seen");
+			r = 0;
+		}
 		if (r == 3) {
 			pc_note("SIGBUS's si_addr is not in the page past the file's end (allowed: it may be inaccurate)");
 			r = 0;

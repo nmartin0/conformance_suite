@@ -6,6 +6,7 @@
  * MUTANT    lseek.bad_whence_ok
  * MUTANT    lseek.error_moves_offset
  * MUTANT    lseek.einval_as_eoverflow
+ * VARIANT   lseek.whence_values
  */
 #include "pc.h"
 #include <errno.h>

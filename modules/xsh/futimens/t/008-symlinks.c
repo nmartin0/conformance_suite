@@ -5,6 +5,7 @@
  * ASSERTION XSH.futimens.008
  * MUTANT    utimensat.nofollow_ignored
  * MUTANT    utimensat.never_follows
+ * VARIANT   futimens.res_1s
  */
 #include "pc.h"
 #include <errno.h>

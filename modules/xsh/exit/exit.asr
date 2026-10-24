@@ -73,6 +73,10 @@ says       If a function registered with atexit() does not return (it
            calls _exit(7)), the remaining registered functions are not
            called and the rest of exit() processing is not done:
            buffered stream data is not flushed, and the status is 7.
+note       Stream buffering is implementation-defined (XSH 2.5): if the
+           data reached the file before exit(), the flush check is void
+           and only the handler and status checks apply (variant
+           exit.write_through).
 test       t/007-handler-not-returning.c
 
 assertion  XSH.exit.008
@@ -93,6 +97,9 @@ says       exit() flushes streams after calling the atexit() functions:
            with "S" buffered on an append-mode stream, a handler that
            writes "H" to the file through another descriptor in append
            mode leaves the file as "HS".
+note       Stream buffering is implementation-defined (XSH 2.5): a stream
+           that wrote "S" at once gives UNRESOLVED (variant
+           exit.write_through).
 test       t/009-flush-after-handlers.c
 
 assertion  XSH.exit.010
@@ -119,6 +126,7 @@ since      2008
 says       After exit(5) the parent receives SIGCHLD with si_code
            CLD_EXITED, si_pid the child's ID and si_status 5, and can
            then collect status 5 with waitpid().
+note       No bound is given for SIGCHLD; the test waits up to 10 s.
 test       t/011-sigchld.c
 
 assertion  XSH.exit.012
@@ -128,7 +136,8 @@ since      2008
 says       The full status value given to exit() is in the siginfo_t
            passed to a SIGCHLD handler: si_status is 0x1234 for
            exit(0x1234).
-note       Linux keeps only 8 bits here too (O.6).
+note       Linux keeps only 8 bits here too (O.6). The test waits up to
+           10 s for SIGCHLD (no bound is given).
 test       t/012-sigchld-full.c
 
 assertion  XSH.exit.013

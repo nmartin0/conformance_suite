@@ -6,6 +6,8 @@
  * MUTANT    link.noop
  * MUTANT    link.copies
  * MUTANT    link.returns_one
+ * VARIANT   link.access_rw
+ * VARIANT   link.link_max_8
  */
 #include "pc.h"
 #include <errno.h>

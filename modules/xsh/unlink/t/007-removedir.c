@@ -5,6 +5,7 @@
  * ASSERTION XSH.unlink.007
  * MUTANT    unlinkat.removedir_ignored
  * MUTANT    unlinkat.removedir_noop
+ * VARIANT   unlink.at_fdcwd_alt
  */
 #include "pc.h"
 #include <errno.h>

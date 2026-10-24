@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.access.006
  * MUTANT    access.ignores_bits
+ * VARIANT   access.consts_alt
  */
 #include "pc.h"
 #include <errno.h>
