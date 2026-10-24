@@ -212,7 +212,15 @@ int main(void)
 		FILE *f;
 		int r;
 
-		pc_make_file("f", "0123");
+		{
+			/* 1 MiB, so the stream is not at end of file after one read on either reading of Q-29 */
+			static char big[1 << 20];
+			int fd = open("f", O_WRONLY | O_CREAT | O_EXCL, 0644);
+
+			memset(big, 'x', sizeof big);
+			memcpy(big, "0123", 4);
+			pc_check(fd >= 0 && write(fd, big, sizeof big) == (ssize_t)sizeof big && close(fd) == 0, "making f failed");
+		}
 		pc_test();
 		f = reader("f");
 		read_byte(f, '0');

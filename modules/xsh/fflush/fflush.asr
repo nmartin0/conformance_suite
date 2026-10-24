@@ -145,9 +145,12 @@ assertion  XSH.fflush.015
 anchor     functions/fflush.html#DESCRIPTION
 class      required
 since      2008
-says       For a stream read to end of file (feof() true) on a 10-byte file, after
-           the descriptor's offset is moved to 3 with lseek(), fflush()
-           returns 0 and the offset is still 3.
+says       For a stream read to end of file (feof() true) on a 10-byte
+           file, fflush() returns 0, the descriptor's offset is 10, and
+           a further read returns EOF.
+note       The test no longer moves the descriptor while the stream is
+           at end of file: using the stream again after that without an
+           fseek() is undefined (XSH 2.5.1, the second handle).
 test       t/015-input-at-eof.c
 
 assertion  XSH.fflush.016

@@ -322,7 +322,9 @@ int main(void)
 			FILE *f;
 			int r;
 
+#ifdef SIGXFSZ
 			(void)signal(SIGXFSZ, SIG_IGN);
+#endif
 			if (getrlimit(RLIMIT_FSIZE, &rl) != 0 || (rl.rlim_max != RLIM_INFINITY && rl.rlim_max < 4096))
 				_exit(98);
 			rl.rlim_cur = 4096;

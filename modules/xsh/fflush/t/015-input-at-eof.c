@@ -3,7 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fflush.015
- * MUTANT    fflush.always_seeks
+ * MUTANT    fflush.returns_nonzero
  */
 #include "pc.h"
 #include <errno.h>
@@ -317,9 +317,10 @@ int main(void)
 		while (fgetc(f) != EOF)
 			;
 		NEED(feof(f), "the end-of-file indicator is not set");
-		NEED(lseek(fileno(f), 3, SEEK_SET) == 3, "lseek failed");
-		pc_check(fflush(f) == 0, "fflush() failed: %s", pc_errname(errno));
-		pc_check(offset(fileno(f)) == 3, "fflush() at end of file moved the offset to %lld", (long long)offset(fileno(f)));
+		pc_check(fflush(f) == 0, "fflush() at end of file failed: %s", pc_errname(errno));
+		pc_check(offset(fileno(f)) == 10, "after fflush() at end of file the offset is %lld, not the file's size",
+			 (long long)offset(fileno(f)));
+		pc_check(fgetc(f) == EOF, "a read after fflush() at end of file returned data");
 	}
 	pc_pass();
 }

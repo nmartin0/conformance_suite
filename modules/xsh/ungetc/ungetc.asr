@@ -85,11 +85,13 @@ assertion  XSH.ungetc.010
 anchor     functions/ungetc.html#DESCRIPTION
 class      required
 since      2008
-says       On a stream reading "0123", after a read of '0' and ungetc('Z'), a
-           successful fflush() makes the next read return a byte other than
-           'Z' (which byte is open, Q-30).
-note       Added by POSIX.1-2008 TC1 (Austin Group defect 87);
-           XSH.fflush.005 checks the offset too.
+says       On a stream reading a 1 MiB file that begins "0123", after a
+           read of '0' and ungetc('Z'), a successful fflush() makes the
+           next read return a byte other than 'Z' (which byte is open,
+           Q-30).
+note       Added by POSIX.1-2008 TC1 (Austin Group defect 87). The file
+           is large so that the stream is not at end of file, where
+           fflush() itself does not promise to discard pushback (Q-47).
 test       t/010-fflush-discards.c
 
 assertion  XSH.ungetc.011

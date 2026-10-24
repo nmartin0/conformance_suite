@@ -8,6 +8,7 @@
  * MUTANT    readdir_r.overruns
  */
 #include "pc.h"
+#include <stddef.h>
 #include <dirent.h>
 #include <stddef.h>
 #include <errno.h>
@@ -309,6 +310,7 @@ int main(void)
 		size = offsetof(struct dirent, d_name) + (size_t)max + 1;
 		if (size < sizeof(struct dirent))
 			size = sizeof(struct dirent);
+		size = (size + _Alignof(max_align_t) - 1) / _Alignof(max_align_t) * _Alignof(max_align_t);	/* with padding */
 		buf = malloc(size + 64);
 		pc_check(buf != NULL, "malloc failed");
 		memset(buf + size, 0xa5, 64);

@@ -309,11 +309,19 @@ int main(void)
 		pc_check(e != NULL, "readdir() failed");
 		snprintf(later, sizeof later, "%s", e->d_name);
 		seekdir(d, l1);
-		pc_check(telldir(d) == l1, "telldir() right after seekdir(l1) returned %ld, not %ld", telldir(d), l1);
+		{
+			long t = telldir(d);
+
+			pc_check(t == l1, "telldir() right after seekdir(l1) returned %ld, not %ld", t, l1);
+		}
 		e = readdir(d);
 		pc_check(e != NULL && strcmp(e->d_name, later) == 0, "after seekdir(l1) readdir() did not return \"%s\"", later);
 		seekdir(d, l0);
-		pc_check(telldir(d) == l0, "telldir() right after seekdir(l0) returned %ld, not %ld", telldir(d), l0);
+		{
+			long t = telldir(d);
+
+			pc_check(t == l0, "telldir() right after seekdir(l0) returned %ld, not %ld", t, l0);
+		}
 		e = readdir(d);
 		pc_check(e != NULL && strcmp(e->d_name, first) == 0, "after seekdir(l0) readdir() did not return \"%s\"", first);
 	}

@@ -291,32 +291,16 @@ int main(void)
 		struct names v;
 		DIR *d;
 
-		pc_make_dir("d");
-		pc_make_file("d/apple", "x");
-		pc_make_file("d/banana", "x");
-		a = b = c = NULL;
-		d = open_dir("d");
-		{
-			struct dirent *e;
-			while ((e = readdir(d)) != NULL) {
-				struct dirent *copy = malloc(sizeof *e + 256);
-				pc_check(copy != NULL, "malloc failed");
-				memcpy(copy, e, sizeof *e);
-				snprintf(copy->d_name, 256, "%s", e->d_name);
-				if (strcmp(e->d_name, "apple") == 0) {
-					if (a == NULL)
-						a = copy;
-				} else if (strcmp(e->d_name, "banana") == 0)
-					b = copy;
-				else
-					free(copy);
-			}
-		}
-		pc_check(a != NULL && b != NULL, "readdir() did not return both names");
-		c = malloc(sizeof *a + 256);
-		pc_check(c != NULL, "malloc failed");
-		memcpy(c, a, sizeof *a + 0);
-		snprintf(c->d_name, 256, "%s", "apple");
+		/* alphasort() looks only at d_name; a record from readdir() may be shorter than sizeof(struct dirent) */
+		a = calloc(1, sizeof(struct dirent) + 256);
+		b = calloc(1, sizeof(struct dirent) + 256);
+		c = calloc(1, sizeof(struct dirent) + 256);
+		pc_check(a != NULL && b != NULL && c != NULL, "calloc failed");
+		strcpy(a->d_name, "apple");
+		strcpy(b->d_name, "banana");
+		strcpy(c->d_name, "apple");
+		d = NULL;
+		(void)d;
 		pa = a;
 		pb = b;
 		pc = c;
