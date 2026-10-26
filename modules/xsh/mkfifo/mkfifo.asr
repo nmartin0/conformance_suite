@@ -1,0 +1,170 @@
+# XSH mkfifo() and mkfifoat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# mkfifoat() is in the Base since 2008. Error tests arrange for one error
+# condition (XSH 2.3) and check that no FIFO was created (RETURN VALUE).
+
+assertion  XSH.mkfifo.001
+anchor     functions/mkfifo.html#DESCRIPTION
+anchor     functions/mkfifo.html#RETURN VALUE
+class      required
+since      1988
+says       mkfifo("g/p", 0640) returns 0 and makes a FIFO with permission
+           bits 0640 under umask 022, st_uid the effective user ID and
+           st_gid the effective group ID or the group of directory g (given
+           group 4242 when the test runs as root); mkfifo("g/q", 0777)
+           under umask 027 gives bits 0750.
+test       t/001-creates.c
+
+assertion  XSH.mkfifo.002
+anchor     functions/mkfifo.html#ERRORS/EEXIST
+anchor     functions/mkfifo.html#DESCRIPTION
+class      required
+since      2001
+says       mkfifo() fails with EEXIST when path is a directory, a regular
+           file, a dangling symbolic link or an existing FIFO; none of them
+           changes and the dangling link's target is not created.
+test       t/002-eexist.c
+
+assertion  XSH.mkfifo.003
+anchor     functions/mkfifo.html#DESCRIPTION
+class      required
+since      1988
+says       After mkfifo() puts a new FIFO in directory p, p's st_mtim and
+           st_ctim are later than before the call, and the FIFO's st_atim,
+           st_mtim and st_ctim are no earlier than p's times before it (a
+           fresh FIFO is made every 10 ms for up to 3 s until p's times
+           move).
+test       t/003-times.c
+
+assertion  XSH.mkfifo.004
+anchor     functions/mkfifo.html#DESCRIPTION
+class      required
+since      2008
+says       mkfifoat(fd, "n", ...), with fd open on directory d, makes the
+           FIFO d/n and nothing in the working directory.
+test       t/004-at-relative.c
+
+assertion  XSH.mkfifo.005
+anchor     functions/mkfifo.html#DESCRIPTION
+class      required
+since      2008
+says       mkfifoat(AT_FDCWD, path, ...) works from the working directory,
+           as mkfifo() does, for "n" and "d/m".
+test       t/005-at-fdcwd.c
+
+assertion  XSH.mkfifo.006
+anchor     functions/mkfifo.html#DESCRIPTION
+class      required
+since      2008
+says       mkfifoat() with an absolute path makes that FIFO whatever fd is:
+           a descriptor that is not open, or one open on a regular file.
+test       t/006-at-absolute.c
+
+assertion  XSH.mkfifo.007
+anchor     functions/mkfifo.html#ERRORS/ENOENT
+anchor     functions/mkfifo.html#RETURN VALUE
+class      required
+since      1988
+says       mkfifo() of "nodir/n" and of "" fails with ENOENT; the missing
+           directory is not created.
+test       t/007-enoent.c
+
+assertion  XSH.mkfifo.008
+anchor     functions/mkfifo.html#ERRORS
+class      required
+since      2008
+says       mkfifo() of "new/" fails with ENOENT or ENOTDIR and creates no
+           "new"; of "e/", with e a regular file, it fails with EEXIST or
+           ENOTDIR (not ENOENT) and leaves e as it was.
+note       The page lists ENOENT or ENOTDIR for a trailing slash, and rules
+           out ENOENT when the name without it exists; for "e/" EEXIST may
+           be read to apply too.
+test       t/008-trailing-slash.c
+
+assertion  XSH.mkfifo.009
+anchor     functions/mkfifo.html#ERRORS/ENOTDIR
+class      required
+since      1988
+says       mkfifo() of "f/n", with f a regular file, fails with ENOTDIR.
+note       Only ENOTDIR applies: mkfifo()'s ENOENT is about a prefix that
+           does not exist, and f does.
+test       t/009-enotdir.c
+
+assertion  XSH.mkfifo.010
+anchor     functions/mkfifo.html#ERRORS/ELOOP
+class      required
+since      2001
+says       mkfifo() of "a/n", with a -> b and b -> a, fails with ELOOP.
+note       Only ELOOP applies: the prefix component a exists (as a symbolic
+           link), so ENOENT for a missing prefix does not hold.
+test       t/010-eloop.c
+
+assertion  XSH.mkfifo.011
+anchor     functions/mkfifo.html#ERRORS/ENAMETOOLONG
+class      required
+says       mkfifo() of a name one byte longer than {NAME_MAX} fails with
+           ENAMETOOLONG.
+note       Only ENAMETOOLONG applies: a missing last component is not one of
+           mkfifo()'s ENOENT conditions. "since" left out, as for
+           XSH.open.017: the error is unconditional only since
+           _POSIX_NO_TRUNC had to be other than -1.
+test       t/011-enametoolong.c
+
+assertion  XSH.mkfifo.012
+anchor     functions/mkfifo.html#ERRORS/EACCES
+class      required
+since      1988
+says       For a process without appropriate privileges, mkfifo() of "w/n"
+           with directory w denying write permission, and of "s/x/n" with s
+           denying search permission, fails with EACCES and creates
+           nothing.
+test       t/012-eacces.c
+
+assertion  XSH.mkfifo.013
+anchor     functions/mkfifo.html#ERRORS/EBADF
+class      required
+since      2008
+says       mkfifoat(fd, "n", ...) with fd not open fails with EBADF and
+           creates nothing in the working directory.
+test       t/013-at-ebadf.c
+
+assertion  XSH.mkfifo.014
+anchor     functions/mkfifo.html#ERRORS
+class      required
+since      2008
+says       mkfifoat(fd, "n", ...) with fd open on a regular file fails with
+           ENOTDIR and creates nothing in the working directory.
+test       t/014-at-enotdir.c
+
+assertion  XSH.mkfifo.015
+anchor     functions/mkfifo.html#DESCRIPTION
+anchor     functions/mkfifo.html#ERRORS/EACCES
+class      required
+since      2008
+says       For a process without appropriate privileges, mkfifoat(fd, "n",
+           ...) fails with EACCES when fd was opened O_RDONLY on a
+           directory writable by all whose mode was then changed to deny
+           search (0666); nothing is created.
+test       t/015-at-eacces-fd.c
+
+assertion  XSH.mkfifo.016
+anchor     functions/mkfifo.html#DESCRIPTION
+class      required
+since      2008
+says       For a process without appropriate privileges, mkfifoat(fd, "n",
+           ...) succeeds when fd was opened with O_SEARCH on a directory
+           writable by all whose mode was then changed to deny search
+           (0666).
+note       O_SEARCH itself is a header item (Tier 0); without it this test
+           is UNRESOLVED.
+test       t/016-at-search.c
+
+assertion  XSH.mkfifo.017
+anchor     functions/mkfifo.html#ERRORS/EILSEQ
+class      required
+since      2024
+says       mkfifo() of "a\nb" either makes the FIFO or, if the file system
+           refuses such names, fails with EILSEQ (the only error that
+           applies).
+test       t/017-eilseq.c

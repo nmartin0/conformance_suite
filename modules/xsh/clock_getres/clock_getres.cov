@@ -1,0 +1,54 @@
+# clock_getres.cov - every requirement unit on functions/clock_getres.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# No test sets a clock to a new value (it would disturb every process on
+# the machine): the truncation and the effects of setting CLOCK_REALTIME
+# are todo until the suite has a way to run on a dedicated machine.
+
+DESCRIPTION:ea5c8c34     XSH.clock_getres.001 XSH.clock_getres.002 XSH.clock_getres.008 XSH.clock_getres.010
+DESCRIPTION:f6c34245     untestable  no interface sets a resolution; its value is implementation-defined
+DESCRIPTION:c9d9ea25     XSH.clock_getres.001 XSH.clock_getres.002
+DESCRIPTION:68687ccd     XSH.clock_getres.003
+DESCRIPTION:8b336e2b     todo  truncation of a set value needs clock_settime() to succeed
+DESCRIPTION:9cf2f1da     partial XSH.clock_getres.001 XSH.clock_getres.002 XSH.clock_getres.005  # the value's form and monotony; "current" only through time() (XSH.time.002)
+DESCRIPTION:78bf9741     todo  setting a clock (see the header)
+DESCRIPTION:e872104a     todo  truncation of a set value needs clock_settime() to succeed
+DESCRIPTION:c410f948     none  a description of kinds of clocks
+DESCRIPTION:4e0b8f8e     XSH.clock_getres.001
+DESCRIPTION:85a38395     none  a description of the clock
+DESCRIPTION:7786b5f9     partial XSH.time.002  # agreement with time(), which also counts from the Epoch
+DESCRIPTION:9fd10041     impl  additional clocks (XSH.clock_getres.004 tolerates them)
+DESCRIPTION:e62a3ff3     impl  the meaning of additional clocks' values
+DESCRIPTION:e6f4ac0a     todo  needs CLOCK_REALTIME to be set; absolute timers are on timer_settime()
+DESCRIPTION:236f8633     todo  needs CLOCK_REALTIME to be set
+DESCRIPTION:0bbdac45     todo  needs CLOCK_REALTIME to be set
+DESCRIPTION:1d2e2d59     todo  needs CLOCK_REALTIME to be set
+DESCRIPTION:a82562d7     todo  needs CLOCK_REALTIME to be set
+DESCRIPTION:20d37707     XSH.clock_getres.002
+DESCRIPTION:9a3f20e1     XSH.clock_getres.005
+DESCRIPTION:564b5583     partial XSH.clock_getres.002  # the origin is unspecified; only the value's form is checked
+DESCRIPTION:1e71a3d8     untestable  needs observation across the system's life
+DESCRIPTION:49926c0a     XSH.clock_getres.006
+DESCRIPTION:dbf06934     XSH.clock_getres.006
+DESCRIPTION:35ef43f4     impl  setting other clocks and per-process timers
+DESCRIPTION:f797b31f     todo  needs CLOCK_REALTIME to be set (clock_nanosleep())
+DESCRIPTION:04d43e5a     todo  needs CLOCK_REALTIME to be set (clock_nanosleep())
+DESCRIPTION:5fe66395     todo  needs CLOCK_REALTIME to be set (clock_nanosleep())
+DESCRIPTION:d926abe0     todo  needs CLOCK_REALTIME to be set (clock_nanosleep())
+DESCRIPTION:d7f6dc62     impl  privileges to set a clock
+DESCRIPTION:723c2e62     XSH.clock_getres.009
+DESCRIPTION:e81ff0e0     XSH.clock_getres.008
+DESCRIPTION:022ef649     XSH.clock_getres.008 XSH.clock_getres.009
+DESCRIPTION:0cb24da7     todo  sporadic server scheduling (SS) and setting a CPU-time clock
+DESCRIPTION:9833a841     XSH.clock_getres.011
+DESCRIPTION:2a8a9021     XSH.clock_getres.010
+DESCRIPTION:831a2cda     XSH.clock_getres.010 XSH.clock_getres.011
+DESCRIPTION:0cb24da7.2   todo  sporadic server scheduling (TSP) and setting a CPU-time clock
+RETURN_VALUE:b26eef8d    XSH.clock_getres.001 XSH.clock_getres.002 XSH.clock_getres.003
+RETURN_VALUE:bdf67291    XSH.clock_getres.004 XSH.clock_getres.006 XSH.clock_getres.007
+ERRORS:23abc750          XSH.clock_getres.004
+ERRORS:fbfc80ce          untestable  needs a clock whose seconds do not fit in time_t (at least 64 bits)
+ERRORS:3308915a          impl  the range of each clock is not given
+ERRORS:b4c6d560          XSH.clock_getres.007
+ERRORS:2de2b2d2          XSH.clock_getres.006
+ERRORS:c582a92a          impl  may-fail; privileges are implementation-defined (accepted by .004, .006, .007)

@@ -1,0 +1,20 @@
+# mprotect.cov - every requirement unit on functions/mprotect.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:a4d45749     XSH.mprotect.001 XSH.mprotect.002 XSH.mprotect.003 XSH.mprotect.004
+DESCRIPTION:7c6d3a8f     none  introduces prot; the values' meaning is tested with the other units
+DESCRIPTION:f9cf5734     app
+DESCRIPTION:2b0f7fb5     untestable  which combinations an implementation cannot support is not stated (PROT_EXEC combinations), so no call is known to fail
+DESCRIPTION:9fcaff12     XSH.mprotect.001 XSH.mprotect.002
+DESCRIPTION:4f8dcea6     XSH.mprotect.007
+DESCRIPTION:00c8a98f     partial XSH.mprotect.005 XSH.mprotect.008  # an application requirement, read with ERRORS EACCES; MAP_PRIVATE case tested
+DESCRIPTION:93330cce     impl  addresses passed are page multiples; the choice is the implementation's
+DESCRIPTION:6c762afa     app
+DESCRIPTION:286eafd2     none  a permission given to the implementation; XSH.mprotect.006 does not look at the pages after the failure
+RETURN_VALUE:daf83d3a    XSH.mprotect.001 XSH.mprotect.005 XSH.mprotect.006
+ERRORS:fbab05f3          XSH.mprotect.005
+ERRORS:f9c6ad4f          untestable  needs memory to run out at the call; XSH.mprotect.008 treats it as UNRESOLVED
+ERRORS:7d764784          XSH.mprotect.006
+ERRORS:d7f30440          untestable  needs memory to run out at the call
+ERRORS:8d34db35          untestable  which combinations are unsupported is not stated
+ERRORS:b15024c9          optional

@@ -1,0 +1,36 @@
+# XSH pthread_detach()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every call names a joinable thread (anything else is undefined), and a
+# detached thread's ID is not used again (XSH 2.9.2).
+
+assertion  XSH.pthread_detach.001
+anchor     functions/pthread_detach.html#DESCRIPTION
+anchor     functions/pthread_detach.html#RETURN VALUE
+class      required
+since      2001
+says       pthread_detach() of a live joinable thread returns 0 and does not
+           end it: the thread, waiting at a cancellation point when
+           detached, then runs on to the end of its start routine.
+note       A cleanup handler in the thread shows whether it was canceled
+           instead.
+test       t/001-live.c
+
+assertion  XSH.pthread_detach.002
+anchor     functions/pthread_detach.html#DESCRIPTION
+class      required
+since      2001
+says       pthread_detach() of a joinable thread that has (in all
+           likelihood) terminated, a zombie thread, returns 0.
+note       The thread signals just before returning and the caller waits
+           200 ms more; a thread not quite ended is a live joinable thread,
+           for which the assertion holds too.
+test       t/002-zombie.c
+
+assertion  XSH.pthread_detach.003
+anchor     functions/pthread_detach.html#DESCRIPTION
+class      required
+since      2001
+says       A thread can detach itself: pthread_detach(pthread_self())
+           returns 0 and the thread goes on running.
+test       t/003-self.c

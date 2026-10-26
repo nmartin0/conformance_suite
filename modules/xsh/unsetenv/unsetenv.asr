@@ -1,0 +1,45 @@
+# XSH unsetenv()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests use names beginning with PCX_ and compare the environment as
+# a set of strings (the order has no meaning, XBD 8.1).
+
+assertion  XSH.unsetenv.001
+anchor     functions/unsetenv.html#DESCRIPTION
+anchor     functions/unsetenv.html#RETURN VALUE
+class      required
+since      2001
+says       With PCX_U, PCX_UV and PCX_V in the environment,
+           unsetenv("PCX_U") returns 0; afterwards getenv("PCX_U") returns
+           a null pointer, environ holds no string named PCX_U, and every
+           other string (PCX_UV, PCX_V and the rest) is still there.
+test       t/001-removes.c
+
+assertion  XSH.unsetenv.002
+anchor     functions/unsetenv.html#DESCRIPTION
+class      required
+since      2001
+says       unsetenv("PCX_ABSENT") of a name not in the environment
+           returns 0 and leaves the environment unchanged (the same set of
+           strings).
+test       t/002-absent.c
+
+assertion  XSH.unsetenv.003
+anchor     functions/unsetenv.html#ERRORS/EINVAL
+anchor     functions/unsetenv.html#RETURN VALUE
+class      required
+since      2001
+says       With PCX_U in the environment, unsetenv("") and
+           unsetenv("PCX_U=x") each return -1 with errno EINVAL and leave
+           the environment unchanged (PCX_U is still there).
+test       t/003-einval.c
+
+assertion  XSH.unsetenv.004
+anchor     functions/unsetenv.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.1
+class      required
+says       After the application assigns environ an array of its own that
+           holds "PCX_U=mine" and "PCX_K=kept", unsetenv("PCX_U") returns
+           0; afterwards environ holds no string named PCX_U, still holds
+           "PCX_K=kept", and getenv("PCX_U") returns a null pointer.
+test       t/004-after-environ-assigned.c

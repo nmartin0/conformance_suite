@@ -1,0 +1,7 @@
+# pthread_equal.cov - every requirement unit on functions/pthread_equal.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:3879e178     XSH.pthread_equal.001 XSH.pthread_equal.002
+RETURN_VALUE:94f3312e    XSH.pthread_equal.001 XSH.pthread_equal.002 XSH.pthread_equal.003
+RETURN_VALUE:dec0b6af    XSH.pthread_equal.003  # undefined except for PTHREAD_NULL, which 003 uses
+ERRORS:9c645020          untestable  pthread_equal() does not wait; there is nothing for a signal to interrupt

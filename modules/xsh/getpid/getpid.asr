@@ -1,0 +1,13 @@
+# XSH getpid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getpid.001
+anchor     functions/getpid.html#DESCRIPTION
+anchor     functions/getpid.html#RETURN VALUE
+anchor     basedefs/V1_chap03.html#3.284
+class      required
+since      1988
+says       In a child, getpid() returns the process ID that fork() returned
+           to the parent, a positive value, and the same value on each call;
+           the parent's getpid() (called before the fork) is different.
+test       t/001-own-id.c

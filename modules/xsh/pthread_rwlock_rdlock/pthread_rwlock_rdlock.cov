@@ -1,0 +1,28 @@
+# pthread_rwlock_rdlock.cov - every requirement unit on
+# functions/pthread_rwlock_rdlock.html (pthread_rwlock_rdlock,
+# pthread_rwlock_tryrdlock).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:f66a1409     XSH.pthread_rwlock_rdlock.001
+DESCRIPTION:d38f6df2     XSH.pthread_rwlock_rdlock.001
+DESCRIPTION:dc0488ad     todo  writer preference under SCHED_FIFO/SCHED_RR (needs TPS, real-time priorities and privileges)
+DESCRIPTION:2f99a576     todo  writer preference under SCHED_SPORADIC (needs TSP)
+DESCRIPTION:ba82b5b5     impl  whether a reader gets in while writers wait, without TPS
+DESCRIPTION:fe04469f     XSH.pthread_rwlock_rdlock.003
+DESCRIPTION:ff46f45d     XSH.pthread_rwlock_rdlock.003
+DESCRIPTION:3627cfdf     none  a permission (rdlock with the caller's own write lock may deadlock)
+DESCRIPTION:8f8b66b3     XSH.pthread_rwlock_rdlock.004
+DESCRIPTION:e20293a3     app
+DESCRIPTION:e18e39ad     impl  the maximum number of read locks (the tests accept EAGAIN beyond it)
+DESCRIPTION:f439529a     none  a "may fail" error
+DESCRIPTION:2539ee51     XSH.pthread_rwlock_rdlock.002
+DESCRIPTION:4a2c1a8b     XSH.pthread_rwlock_rdlock.002
+DESCRIPTION:68e84a37     none  undefined behaviour
+DESCRIPTION:d1c6528e     XSH.pthread_rwlock_rdlock.005
+RETURN_VALUE:c3f77aa7    XSH.pthread_rwlock_rdlock.001 XSH.pthread_rwlock_rdlock.003
+RETURN_VALUE:e33a12c9    XSH.pthread_rwlock_rdlock.001 XSH.pthread_rwlock_rdlock.004
+RETURN_VALUE:27ed31a1    XSH.pthread_rwlock_rdlock.002
+ERRORS:fc7d1af2          partial XSH.pthread_rwlock_rdlock.002  # a writer holding the lock; a waiting writer of the appropriate priority is not tried
+ERRORS:db7fb016          none  a "may fail" error (accepted where it can apply)
+ERRORS:79468f47          none  a "may fail" error
+ERRORS:0a906269          partial XSH.pthread_rwlock_rdlock.005  # a blocked rdlock with a caught signal

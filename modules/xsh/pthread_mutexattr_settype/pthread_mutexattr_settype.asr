@@ -1,0 +1,39 @@
+# XSH pthread_mutexattr_settype(), pthread_mutexattr_gettype()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# How the type changes locking is tested in xsh/pthread_mutex_lock.
+
+assertion  XSH.pthread_mutexattr_settype.001
+anchor     functions/pthread_mutexattr_settype.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_settype.html#RETURN VALUE
+class      required
+since      2008
+says       In a newly initialized mutex attributes object,
+           pthread_mutexattr_gettype() returns 0 and stores
+           PTHREAD_MUTEX_DEFAULT.
+note       PTHREAD_MUTEX_DEFAULT may have the value of another type
+           (an implementation may map it); the stored value is compared
+           with the macro only.
+test       t/001-default-type.c
+
+assertion  XSH.pthread_mutexattr_settype.002
+anchor     functions/pthread_mutexattr_settype.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_settype.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_mutexattr_settype() with each of PTHREAD_MUTEX_NORMAL,
+           ERRORCHECK, RECURSIVE and DEFAULT returns 0, and
+           pthread_mutexattr_gettype() then returns 0 and stores that
+           type, whatever was set before.
+test       t/002-set-get.c
+
+assertion  XSH.pthread_mutexattr_settype.003
+anchor     functions/pthread_mutexattr_settype.html#ERRORS/EINVAL
+class      required
+since      2008
+says       pthread_mutexattr_settype() with a type no implementation
+           defines returns EINVAL.
+note       Uses 0x7ffffff0 and -0x7ffffff0; "valid types include" lets
+           an implementation add types, so the values are chosen far from
+           any known one.
+test       t/003-invalid-type.c

@@ -1,0 +1,91 @@
+# XSH getcwd()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getcwd.001
+anchor     functions/getcwd.html#DESCRIPTION
+anchor     functions/getcwd.html#RETURN VALUE
+class      required
+since      1988
+says       getcwd(buf, size), with size large enough, returns buf, and buf
+           holds a pathname beginning with a slash that stat() resolves to
+           the working directory; after chdir("d") it resolves to d.
+test       t/001-names-cwd.c
+
+assertion  XSH.getcwd.002
+anchor     functions/getcwd.html#DESCRIPTION
+class      required
+says       After chdir("l/./s/../s"), with l a symbolic link to d, getcwd()
+           gives a name of d/s none of whose components is dot or dot-dot
+           and none of whose prefixes is a symbolic link (each checked with
+           lstat()).
+note       "since" is left out: the CHANGE HISTORY does not say when the
+           dot and dot-dot part was added (Interpretation 1003.1-2001 #140,
+           Issue 7, changed this text).
+test       t/002-physical.c
+
+assertion  XSH.getcwd.003
+anchor     functions/getcwd.html#DESCRIPTION
+class      required
+since      2008
+says       After chdir("d//s/"), getcwd() gives a name of d/s with at most
+           two leading slashes, no empty component after them and no
+           trailing slash.
+test       t/003-slashes.c
+
+assertion  XSH.getcwd.004
+anchor     functions/getcwd.html#DESCRIPTION
+class      required
+since      2008
+says       After chdir() to the working directory's own absolute name with
+           an extra leading slash, when that names the same directory,
+           getcwd() gives a name of it that does not begin with two
+           slashes (the single-slash name exists, so it must be chosen).
+note       What a pathname beginning with exactly two slashes means is
+           implementation-defined (XBD 4.16); where "//" + name fails or
+           names another directory the test is NOTINUSE.
+test       t/004-single-slash.c
+
+assertion  XSH.getcwd.005
+anchor     functions/getcwd.html#ERRORS/ERANGE
+anchor     functions/getcwd.html#RETURN VALUE
+class      required
+since      1988
+says       With n the length of the working directory's name, getcwd(buf,
+           n) and getcwd(buf, 1) return a null pointer with ERANGE, and
+           getcwd(buf, n + 1) returns buf holding the whole name.
+test       t/005-erange.c
+
+assertion  XSH.getcwd.006
+anchor     functions/getcwd.html#ERRORS/EINVAL
+class      required
+since      1988
+says       getcwd(buf, 0) with buf not a null pointer returns a null pointer
+           with EINVAL.
+test       t/006-einval.c
+
+assertion  XSH.getcwd.007
+anchor     functions/getcwd.html#ERRORS/EACCES
+class      required
+since      1988
+says       For a process without appropriate privileges whose working
+           directory is a/b, with a granting search but not read
+           permission, getcwd() either returns a name that resolves (for
+           the parent) to a/b or fails with EACCES (the may-fail error for
+           this condition).
+test       t/007-unreadable-above.c
+
+assertion  XSH.getcwd.008
+anchor     functions/getcwd.html#DESCRIPTION
+class      disputed
+since      2008
+says       With the working directory nested so deep that its absolute name
+           is longer than {PATH_MAX} (and pathconf()'s _PC_PATH_MAX), made
+           and entered by relative names, getcwd() with a large enough buf
+           returns the full name, whose part above the made directories
+           resolves to the starting directory.
+note       disputed (new): only the RATIONALE says that ENAMETOOLONG is no
+           longer allowed here; the normative text lists no such error but
+           XSH 2.3 lets implementations add errors unless a page forbids
+           them. The test removes its tree itself (by relative names) before
+           it reports.
+test       t/008-deep.c

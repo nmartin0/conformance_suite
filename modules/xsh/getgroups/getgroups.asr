@@ -1,0 +1,40 @@
+# XSH getgroups()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The supplementary group list is set with pc_drop_groups() (setgroups(),
+# not in POSIX, where the system has it) to {65534}; without it the tests
+# are UNRESOLVED. getgroups() may also report the effective group ID, in
+# any order (implementation-defined); the tests allow both.
+
+assertion  XSH.getgroups.001
+anchor     functions/getgroups.html#DESCRIPTION
+anchor     functions/getgroups.html#RETURN VALUE
+class      required
+since      1988
+says       With supplementary groups {65534}, getgroups({NGROUPS_MAX}+1,
+           list) returns n with 1 <= n <= {NGROUPS_MAX}+1, 65534 is among
+           list[0..n-1], and every other entry there is the effective group
+           ID.
+needs      root
+test       t/001-list.c
+
+assertion  XSH.getgroups.002
+anchor     functions/getgroups.html#DESCRIPTION
+class      required
+since      1988
+says       getgroups(0, list) returns the count a full call returns and
+           leaves list untouched.
+needs      root
+test       t/002-size-zero.c
+
+assertion  XSH.getgroups.003
+anchor     functions/getgroups.html#ERRORS/EINVAL
+anchor     functions/getgroups.html#RETURN VALUE
+class      required
+since      1988
+says       getgroups(-1, list) returns -1 with EINVAL (non-zero and less
+           than any count); when the process has two or more groups to
+           report, getgroups(count - 1, list) does too.
+needs      root
+note       With a single group to report only the first case is checked.
+test       t/003-einval.c

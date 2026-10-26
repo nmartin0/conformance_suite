@@ -1,0 +1,183 @@
+# XSH readlink() and readlinkat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# readlink() is in the Base since POSIX.1-2001; readlinkat() since 2008.
+# Error tests fill the buffer with a pattern first and check that a failed
+# call leaves it unchanged (RETURN VALUE).
+
+assertion  XSH.readlink.001
+anchor     functions/readlink.html#DESCRIPTION
+anchor     functions/readlink.html#RETURN VALUE
+class      required
+since      2001
+says       readlink() with a buffer larger than the contents returns their
+           length and places exactly those bytes, for links holding
+           "target", "/abs/x/y" and "a//b/../c/" (no terminating null byte
+           is looked for).
+test       t/001-contents.c
+
+assertion  XSH.readlink.002
+anchor     functions/readlink.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+since      2001
+says       readlink() reads the named link itself: with l2 -> l1 -> f it
+           gives "l1" for l2, and with a -> b -> a it gives "b" for a.
+test       t/002-not-followed.c
+
+assertion  XSH.readlink.003
+anchor     functions/readlink.html#DESCRIPTION
+class      required
+since      2001
+says       For a link holding "abcdefgh", readlink() with bufsize 3 returns
+           3 and places "abc", with bufsize 0 returns 0 and leaves the
+           buffer alone, and with bufsize 8 returns 8 and places all 8
+           bytes; no byte beyond bufsize is written.
+test       t/003-truncation.c
+
+assertion  XSH.readlink.004
+anchor     functions/readlink.html#ERRORS/EINVAL
+anchor     functions/readlink.html#RETURN VALUE
+class      required
+since      2001
+says       readlink() of a regular file and of a directory fails with
+           EINVAL and leaves the buffer unchanged.
+test       t/004-einval.c
+
+assertion  XSH.readlink.005
+anchor     functions/readlink.html#ERRORS/EINVAL
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+since      2008
+says       readlink("dl/"), with dl a symbolic link to a directory, fails
+           with EINVAL: the trailing slash makes the name resolve through
+           the link to the directory, which is not a symbolic link.
+test       t/005-dir-link-slash.c
+
+assertion  XSH.readlink.006
+anchor     functions/readlink.html#ERRORS/ENOENT
+class      required
+since      2001
+says       readlink() of "nofile", "nodir/l" and "" fails with ENOENT and
+           leaves the buffer unchanged.
+test       t/006-enoent.c
+
+assertion  XSH.readlink.007
+anchor     functions/readlink.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       readlink("f/") and readlink("lf/"), with f a regular file and lf
+           -> f, fail with ENOTDIR and leave the buffer unchanged.
+note       Only ENOTDIR applies: f exists, so ENOENT does not, and a name
+           that cannot be resolved names no file, so EINVAL does not.
+test       t/007-enotdir-slash.c
+
+assertion  XSH.readlink.008
+anchor     functions/readlink.html#ERRORS/ENOTDIR
+class      disputed
+since      2001
+says       readlink("f/x"), with f a regular file, fails with ENOTDIR.
+note       disputed (Q-8): f/x names no existing file, so ENOENT applies
+           too and XSH 2.3 lets either error be reported.
+test       t/008-enotdir-prefix.c
+
+assertion  XSH.readlink.009
+anchor     functions/readlink.html#ERRORS/ELOOP
+class      disputed
+since      2001
+says       readlink("a/x"), with a -> b and b -> a, fails with ELOOP.
+note       disputed (Q-8): a name whose resolution never ends names no
+           existing file, so ENOENT applies literally too.
+test       t/009-eloop.c
+
+assertion  XSH.readlink.010
+anchor     functions/readlink.html#ERRORS/ENAMETOOLONG
+class      disputed
+says       readlink() of a name one byte longer than {NAME_MAX} fails with
+           ENAMETOOLONG.
+note       disputed (Q-8): the long name names no existing file, so ENOENT
+           applies too. "since" left out, as for XSH.open.017.
+test       t/010-enametoolong.c
+
+assertion  XSH.readlink.011
+anchor     functions/readlink.html#ERRORS/EACCES
+class      required
+since      2001
+says       For a process without appropriate privileges, readlink("s/l"),
+           with directory s denying search permission, fails with EACCES
+           and leaves the buffer unchanged.
+test       t/011-eacces.c
+
+assertion  XSH.readlink.012
+anchor     functions/readlink.html#DESCRIPTION
+class      required
+since      2008
+says       readlinkat(fd, "l"), with fd open on directory d, reads d/l, not
+           the working directory's l.
+test       t/012-at-relative.c
+
+assertion  XSH.readlink.013
+anchor     functions/readlink.html#DESCRIPTION
+class      required
+since      2008
+says       readlinkat(AT_FDCWD, path) reads from the working directory, as
+           readlink() does, for "l" and "d/l".
+test       t/013-at-fdcwd.c
+
+assertion  XSH.readlink.014
+anchor     functions/readlink.html#DESCRIPTION
+class      required
+since      2008
+says       readlinkat() with an absolute path reads that link whatever fd
+           is: a descriptor that is not open, or one open on a regular
+           file.
+test       t/014-at-absolute.c
+
+assertion  XSH.readlink.015
+anchor     functions/readlink.html#ERRORS/EBADF
+class      required
+since      2008
+says       readlinkat(fd, "l") with fd not open fails with EBADF (though
+           the working directory has a link l).
+test       t/015-at-ebadf.c
+
+assertion  XSH.readlink.016
+anchor     functions/readlink.html#ERRORS
+class      required
+since      2008
+says       readlinkat(fd, "l") with fd open on a regular file fails with
+           ENOTDIR (though the working directory has a link l).
+test       t/016-at-enotdir.c
+
+assertion  XSH.readlink.017
+anchor     functions/readlink.html#DESCRIPTION
+anchor     functions/readlink.html#ERRORS/EACCES
+class      required
+since      2008
+says       For a process without appropriate privileges, readlinkat(fd,
+           "l") fails with EACCES when fd was opened O_RDONLY on directory d
+           and d's mode was then changed to deny search (0666).
+test       t/017-at-eacces-fd.c
+
+assertion  XSH.readlink.018
+anchor     functions/readlink.html#DESCRIPTION
+class      required
+since      2008
+says       For a process without appropriate privileges, readlinkat(fd,
+           "l") reads d/l when fd was opened with O_SEARCH on d and d's mode
+           was then changed to deny search (0666).
+note       O_SEARCH itself is a header item (Tier 0); without it this test
+           is UNRESOLVED.
+test       t/018-at-search.c
+
+assertion  XSH.readlink.019
+anchor     functions/readlink.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.12
+class      required
+says       With a link's st_atim set to 2001-09-09 (older than its
+           st_mtim), readlink() of it leaves st_atim later than that.
+note       UNRESOLVED where a link's times cannot be set. A file system
+           that does not update access times (noatime) fails this,
+           rightly: XBD 4.12 requires the update. "since" left out: the
+           CHANGE HISTORY does not date the sentence.
+test       t/019-atime.c

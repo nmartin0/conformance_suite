@@ -1,0 +1,55 @@
+# XSH vfscanf(), vscanf(), vsscanf()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Each test calls the function from a variadic wrapper that does
+# va_start(), the call and va_end(), as the page's APPLICATION USAGE
+# advises; ap is not used again after the call (its value is unspecified).
+
+assertion  XSH.vfscanf.001
+anchor     functions/vfscanf.html#DESCRIPTION
+class      required
+since      2001
+says       vfscanf() behaves as fscanf() with the arguments taken from the
+           va_list: on a stream reading "12 ab rest", vfscanf(f, "%d %s",
+           ap) returns 2, stores 12 and "ab", and the next fgetc() returns
+           the space after "ab".
+test       t/001-vfscanf.c
+
+assertion  XSH.vfscanf.002
+anchor     functions/vfscanf.html#DESCRIPTION
+class      required
+since      2001
+says       vscanf() reads from stdin: with descriptor 0 open on a file
+           holding "42 x", vscanf("%d", ap) returns 1 and stores 42, and
+           the next getchar() returns the space.
+test       t/002-vscanf.c
+
+assertion  XSH.vfscanf.003
+anchor     functions/vfscanf.html#DESCRIPTION
+anchor     functions/vfscanf.html#RETURN VALUE
+class      required
+since      2001
+says       vsscanf() reads from the string as sscanf() does: "7 8" with
+           "%d %d" returns 2 with 7 and 8; "" with "%d" returns EOF; "5"
+           with "%d%d" returns 1.
+test       t/003-vsscanf.c
+
+assertion  XSH.vfscanf.004
+anchor     functions/vfscanf.html#DESCRIPTION
+class      required
+since      2008
+says       Numbered conversions take their argument from the va_list:
+           vsscanf("10 20", "%2$d %1$d", ap) with ap holding &a, &b
+           returns 2 with a 20 and b 10.
+note       The "%n$" form moved from the XSI option to the base in Issue 7.
+test       t/004-numbered.c
+
+assertion  XSH.vfscanf.005
+anchor     functions/vfscanf.html#ERRORS
+anchor     functions/vfscanf.html#RETURN VALUE
+class      required
+says       vfscanf() reports errors as fscanf() does: on a read stream
+           whose descriptor has been replaced by a write-only one,
+           vfscanf(f, "%d", ap) returns EOF with errno EBADF and ferror()
+           true.
+test       t/005-error.c

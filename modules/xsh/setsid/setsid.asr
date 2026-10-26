@@ -1,0 +1,31 @@
+# XSH setsid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.setsid.001
+anchor     functions/setsid.html#DESCRIPTION
+anchor     functions/setsid.html#RETURN VALUE
+class      required
+since      1988
+says       A child that leads no group calls setsid(): it returns the
+           child's ID, and then getpgrp() and getsid(0) in the child both
+           return that ID, while the test process keeps its own group and
+           session.
+test       t/001-new-session.c
+
+assertion  XSH.setsid.002
+anchor     functions/setsid.html#ERRORS/EPERM
+anchor     functions/setsid.html#RETURN VALUE
+class      required
+since      1988
+says       A child that has made itself a group leader (setpgid(0, 0)) gets
+           -1 with EPERM from setsid(), and its session is unchanged.
+test       t/002-leader.c
+
+assertion  XSH.setsid.003
+anchor     functions/setsid.html#ERRORS/EPERM
+class      required
+since      1988
+says       A child that is not a group leader, but whose ID is the group ID
+           of its own child (it led that group and then joined the test
+           process's group), gets -1 with EPERM from setsid().
+test       t/003-group-in-use.c

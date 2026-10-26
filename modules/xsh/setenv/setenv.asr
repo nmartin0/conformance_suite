@@ -1,0 +1,71 @@
+# XSH setenv()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests use names beginning with PCX_. The order of the strings in
+# the environment has no meaning (XBD 8.1), so the tests compare the
+# environment as a set of strings, never by position, and never assume
+# that environ keeps its value across a call.
+
+assertion  XSH.setenv.001
+anchor     functions/setenv.html#DESCRIPTION
+anchor     functions/setenv.html#RETURN VALUE
+class      required
+since      2001
+says       setenv("PCX_N", "val", 0) for a name not in the environment
+           returns 0; afterwards getenv("PCX_N") returns "val", the array
+           environ points to holds exactly one string "PCX_N=val" and
+           every string it held before.
+test       t/001-adds.c
+
+assertion  XSH.setenv.002
+anchor     functions/setenv.html#DESCRIPTION
+class      required
+since      2001
+says       With PCX_N=old in the environment, setenv("PCX_N", "new", 1)
+           and then setenv("PCX_N", "newer", -1) (any non-zero overwrite)
+           return 0, and afterwards environ holds exactly one string named
+           PCX_N, "PCX_N=newer", and getenv("PCX_N") returns "newer".
+test       t/002-overwrite.c
+
+assertion  XSH.setenv.003
+anchor     functions/setenv.html#DESCRIPTION
+class      required
+since      2001
+says       With PCX_N=old in the environment, setenv("PCX_N", "new", 0)
+           returns 0 and leaves the environment unchanged: the same set
+           of strings, getenv("PCX_N") still "old".
+test       t/003-no-overwrite.c
+
+assertion  XSH.setenv.004
+anchor     functions/setenv.html#DESCRIPTION
+class      required
+since      2001
+says       setenv() copies its arguments: after setenv(name, value, 1)
+           with name and value in the caller's arrays, overwriting both
+           arrays changes neither getenv("PCX_C") nor the string
+           "PCX_C=orig" in environ.
+test       t/004-copies.c
+
+assertion  XSH.setenv.005
+anchor     functions/setenv.html#ERRORS/EINVAL
+anchor     functions/setenv.html#RETURN VALUE
+class      required
+since      2001
+says       setenv("", "v", 1), setenv("PCX_E=x", "v", 1) and
+           setenv("PCX_E=", "v", 1) each return -1 with errno EINVAL and
+           leave the environment unchanged (the same set of strings; no
+           PCX_E variable appears).
+test       t/005-einval.c
+
+assertion  XSH.setenv.006
+anchor     functions/setenv.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.1
+class      required
+says       After the application assigns environ an array of its own
+           (holding the old strings and "PCX_K=kept"), setenv("PCX_N",
+           "val", 1) returns 0; afterwards environ holds "PCX_N=val" and
+           "PCX_K=kept", getenv() finds both, and the slot just past the
+           null pointer that ends the application's array is not written
+           (the array is the application's object, of a size the
+           implementation does not know).
+test       t/006-after-environ-assigned.c

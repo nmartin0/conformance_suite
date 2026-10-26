@@ -1,0 +1,72 @@
+# XSH shm_unlink()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# shm_unlink() is SHM (the module's option). Names are "/pc<pid><tag>",
+# unique to the test process and removed when it exits.
+
+assertion  XSH.shm_unlink.001
+anchor     functions/shm_unlink.html#DESCRIPTION
+anchor     functions/shm_unlink.html#RETURN VALUE
+class      required
+since      2001
+says       shm_unlink() of an existing object returns 0, and shm_open()
+           of the name without O_CREAT then fails with ENOENT.
+test       t/001-name-removed.c
+
+assertion  XSH.shm_unlink.002
+anchor     functions/shm_unlink.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.8.3.2
+class      required
+since      2001
+says       After shm_unlink() of an object that is open and mapped, fstat()
+           of the descriptor gives the old size and the mapping shows the
+           old data, also after the descriptor is closed.
+test       t/002-contents-kept.c
+
+assertion  XSH.shm_unlink.003
+anchor     functions/shm_unlink.html#DESCRIPTION
+class      required
+since      2001
+says       After shm_unlink() of an object that stays open and mapped,
+           shm_open(O_RDWR|O_CREAT|O_EXCL) of the name makes a new object
+           of size 0 whose data is apart from the old one's.
+note       The new object, extended by ftruncate(), is checked only not
+           to show the old one's byte: no normative text requires an
+           extended shared memory object to read as zero (ftruncate()'s
+           zero fill is stated for regular files, and shm_open()'s
+           RATIONALE is informative).
+test       t/003-name-reused.c
+
+assertion  XSH.shm_unlink.004
+anchor     functions/shm_unlink.html#ERRORS/ENOENT
+class      required
+since      2001
+says       shm_unlink() of a name with no object fails with ENOENT.
+test       t/004-enoent.c
+
+assertion  XSH.shm_unlink.005
+anchor     functions/shm_unlink.html#ERRORS/EACCES
+anchor     functions/shm_unlink.html#RETURN VALUE
+class      disputed
+since      2001
+needs      root
+says       When shm_unlink() by a process of another user without
+           appropriate privileges, of a mode 0600 object, is refused, it
+           fails with EACCES and the object keeps its name, size and data.
+note       disputed (new): the page never says what permission unlinking
+           needs; where it is refused because only the owner may remove
+           the name (as with a sticky directory), unlink() allows EPERM or
+           EACCES but shm_unlink() lists only EACCES, and XSH 2.3 lets an
+           implementation add errors for conditions not described. A
+           system that lets the unlink happen is NOTINUSE. Run as root, so
+           that the child can take another user ID.
+test       t/005-eacces.c
+
+assertion  XSH.shm_unlink.006
+anchor     functions/shm_unlink.html#ERRORS/ENAMETOOLONG
+class      required
+since      2008
+says       shm_unlink() of the longest name of the form /pc<pid>zz...z that
+           shm_open(O_CREAT) accepted (trying up to 1024 bytes) does not
+           fail with ENAMETOOLONG, and returns 0.
+test       t/006-no-enametoolong.c

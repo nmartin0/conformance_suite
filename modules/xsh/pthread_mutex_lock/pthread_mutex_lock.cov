@@ -1,0 +1,47 @@
+# pthread_mutex_lock.cov - every requirement unit on functions/pthread_mutex_lock.html
+# (pthread_mutex_lock, pthread_mutex_trylock, pthread_mutex_unlock).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:b9d76861     XSH.pthread_mutex_lock.001 XSH.pthread_mutex_lock.013
+DESCRIPTION:26929a1a     XSH.pthread_mutex_lock.002
+DESCRIPTION:f2fdc32e     XSH.pthread_mutex_lock.002
+DESCRIPTION:c71be285     XSH.pthread_mutex_lock.007 XSH.pthread_mutex_lock.009 XSH.pthread_mutex_lock.011
+DESCRIPTION:bcfccbd5     XSH.pthread_mutex_lock.008 XSH.pthread_mutex_lock.010 XSH.pthread_mutex_lock.012
+DESCRIPTION:31ce2d88     partial XSH.pthread_mutex_lock.011  # the relock; unlock when not owner is undefined
+DESCRIPTION:1044ff8d     partial XSH.pthread_mutex_lock.012  # unlock when not owner; the robust NORMAL relock is not tried
+DESCRIPTION:4ad72819     partial XSH.pthread_mutex_lock.007 XSH.pthread_mutex_lock.008  # non-robust ERRORCHECK only
+DESCRIPTION:8d59630b     partial XSH.pthread_mutex_lock.009 XSH.pthread_mutex_lock.010  # non-robust RECURSIVE only
+DESCRIPTION:3172ac8e     none  undefined behaviour
+DESCRIPTION:2ac9f4bf     XSH.pthread_mutex_lock.012
+DESCRIPTION:b22aae16     none  a permission (DEFAULT may behave as another type)
+DESCRIPTION:4730b91a     none  undefined behaviour
+DESCRIPTION:5afaeff7     XSH.pthread_mutex_lock.009
+DESCRIPTION:771dacdf     XSH.pthread_mutex_lock.009
+DESCRIPTION:85de50a1     XSH.pthread_mutex_lock.009
+DESCRIPTION:d1e81c1b     XSH.pthread_mutex_lock.009
+DESCRIPTION:169b1464     XSH.pthread_mutex_lock.009
+DESCRIPTION:72b99965     XSH.pthread_mutex_lock.003 XSH.pthread_mutex_lock.004 XSH.pthread_mutex_lock.005
+DESCRIPTION:cbee8ed6     XSH.pthread_mutex_lock.009
+DESCRIPTION:088b6951     XSH.pthread_mutex_lock.006
+DESCRIPTION:596e7f65     none  a statement
+DESCRIPTION:6df52b01     todo  which waiter gets the mutex under a real-time policy (needs TPS and privileges)
+DESCRIPTION:1b26d93a     XSH.pthread_mutex_lock.009
+DESCRIPTION:71767096     XSH.pthread_mutex_lock.015
+DESCRIPTION:dabb3602     XSH.pthread_mutex_lock.013
+DESCRIPTION:891e5ec8     none  a permission (EOWNERDEAD when only the owning thread ended)
+DESCRIPTION:e1425b0a     XSH.pthread_mutex_lock.013
+DESCRIPTION:af2e12cd     app
+DESCRIPTION:de276387     partial XSH.pthread_mutex_lock.014  # the advice is to the application; the unusable state is tested
+DESCRIPTION:87a0ae78     none  undefined behaviour
+RETURN_VALUE:1348c61b    XSH.pthread_mutex_lock.001 XSH.pthread_mutex_lock.003 XSH.pthread_mutex_lock.006
+ERRORS:d7223ae9          untestable  the maximum recursive lock count is not known (XSH.pthread_mutex_lock.009 accepts EAGAIN)
+ERRORS:27359bc4          untestable  the resources for owned robust mutexes cannot be exhausted portably
+ERRORS:9fb5bf75          todo  PTHREAD_PRIO_PROTECT ceiling below the caller's priority (needs RPP|TPP, SCHED_FIFO and privileges)
+ERRORS:527f2ebb          XSH.pthread_mutex_lock.014
+ERRORS:af160977          XSH.pthread_mutex_lock.013
+ERRORS:070fe76a          XSH.pthread_mutex_lock.007
+ERRORS:92b0eead          XSH.pthread_mutex_lock.004 XSH.pthread_mutex_lock.005
+ERRORS:563ffe95          XSH.pthread_mutex_lock.008 XSH.pthread_mutex_lock.010 XSH.pthread_mutex_lock.012
+ERRORS:c184a54d          none  a "may fail" error
+ERRORS:cca22a22          partial XSH.pthread_mutex_lock.011  # accepted for the NORMAL relock
+ERRORS:0a906269          partial XSH.pthread_mutex_lock.015  # a blocked pthread_mutex_lock() with a caught signal

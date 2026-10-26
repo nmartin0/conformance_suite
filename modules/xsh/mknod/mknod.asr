@@ -1,0 +1,223 @@
+# XSH mknod() and mknodat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The whole page is XSI. Only S_IFIFO with dev 0 is a portable use; the
+# tests make FIFOs with mknod(path, S_IFIFO | mode, 0), except the EPERM
+# ones. Error tests arrange for one error condition (XSH 2.3) and check
+# that nothing was created (RETURN VALUE).
+
+assertion  XSH.mknod.001
+anchor     functions/mknod.html#DESCRIPTION
+anchor     functions/mknod.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       mknod("g/p", S_IFIFO | 0640, 0) returns 0 and makes a FIFO with
+           permission bits 0640 under umask 022, st_uid the effective user
+           ID and st_gid the effective group ID or the group of directory g
+           (given group 4242 when the test runs as root); mknod("g/q",
+           S_IFIFO | 0777, 0) under umask 027 gives bits 0750.
+test       t/001-creates.c
+
+assertion  XSH.mknod.002
+anchor     functions/mknod.html#ERRORS/EEXIST
+anchor     functions/mknod.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       mknod() fails with EEXIST when path is a directory, a regular
+           file, a dangling symbolic link or an existing FIFO; none of them
+           changes and the dangling link's target is not created.
+test       t/002-eexist.c
+
+assertion  XSH.mknod.003
+anchor     functions/mknod.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       After mknod() puts a new FIFO in directory p, p's st_mtim and
+           st_ctim are later than before the call, and the FIFO's st_atim,
+           st_mtim and st_ctim are no earlier than p's times before it (a
+           fresh FIFO is made every 10 ms for up to 3 s until p's times
+           move).
+test       t/003-times.c
+
+assertion  XSH.mknod.004
+anchor     functions/mknod.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2008
+says       mknodat(fd, "n", ...), with fd open on directory d, makes the
+           FIFO d/n and nothing in the working directory.
+test       t/004-at-relative.c
+
+assertion  XSH.mknod.005
+anchor     functions/mknod.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2008
+says       mknodat(AT_FDCWD, path, ...) works from the working directory, as
+           mknod() does, for "n" and "d/m".
+test       t/005-at-fdcwd.c
+
+assertion  XSH.mknod.006
+anchor     functions/mknod.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2008
+says       mknodat() with an absolute path makes that FIFO whatever fd is: a
+           descriptor that is not open, or one open on a regular file.
+test       t/006-at-absolute.c
+
+assertion  XSH.mknod.007
+anchor     functions/mknod.html#ERRORS/ENOENT
+anchor     functions/mknod.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       mknod() of "nodir/n" and of "" fails with ENOENT; the missing
+           directory is not created.
+test       t/007-enoent.c
+
+assertion  XSH.mknod.008
+anchor     functions/mknod.html#ERRORS
+class      conditional
+when       XSI
+since      2008
+says       mknod() of "new/" fails with ENOENT or ENOTDIR and creates no
+           "new"; of "e/", with e a regular file, it fails with EEXIST or
+           ENOTDIR (not ENOENT) and leaves e as it was.
+note       The page lists ENOENT or ENOTDIR for a trailing slash, and rules
+           out ENOENT when the name without it exists; for "e/" EEXIST may
+           be read to apply too.
+test       t/008-trailing-slash.c
+
+assertion  XSH.mknod.009
+anchor     functions/mknod.html#ERRORS/ENOTDIR
+class      conditional
+when       XSI
+since      2001
+says       mknod() of "f/n", with f a regular file, fails with ENOTDIR.
+note       Only ENOTDIR applies: mknod()'s ENOENT is about a prefix that
+           does not exist, and f does.
+test       t/009-enotdir.c
+
+assertion  XSH.mknod.010
+anchor     functions/mknod.html#ERRORS/ELOOP
+class      conditional
+when       XSI
+since      2001
+says       mknod() of "a/n", with a -> b and b -> a, fails with ELOOP.
+note       Only ELOOP applies: the prefix component a exists (as a symbolic
+           link), so ENOENT for a missing prefix does not hold.
+test       t/010-eloop.c
+
+assertion  XSH.mknod.011
+anchor     functions/mknod.html#ERRORS/ENAMETOOLONG
+class      conditional
+when       XSI
+says       mknod() of a name one byte longer than {NAME_MAX} fails with
+           ENAMETOOLONG.
+note       Only ENAMETOOLONG applies: a missing last component is not one of
+           mknod()'s ENOENT conditions. "since" left out, as for
+           XSH.open.017: the error is unconditional only since
+           _POSIX_NO_TRUNC had to be other than -1.
+test       t/011-enametoolong.c
+
+assertion  XSH.mknod.012
+anchor     functions/mknod.html#ERRORS/EACCES
+class      conditional
+when       XSI
+since      2001
+says       For a process without appropriate privileges, mknod() of "w/n"
+           with directory w denying write permission, and of "s/x/n" with s
+           denying search permission, fails with EACCES and creates
+           nothing.
+test       t/012-eacces.c
+
+assertion  XSH.mknod.013
+anchor     functions/mknod.html#ERRORS/EBADF
+class      conditional
+when       XSI
+since      2008
+says       mknodat(fd, "n", ...) with fd not open fails with EBADF and
+           creates nothing in the working directory.
+test       t/013-at-ebadf.c
+
+assertion  XSH.mknod.014
+anchor     functions/mknod.html#ERRORS
+class      conditional
+when       XSI
+since      2008
+says       mknodat(fd, "n", ...) with fd open on a regular file fails with
+           ENOTDIR and creates nothing in the working directory.
+test       t/014-at-enotdir.c
+
+assertion  XSH.mknod.015
+anchor     functions/mknod.html#DESCRIPTION
+anchor     functions/mknod.html#ERRORS/EACCES
+class      conditional
+when       XSI
+since      2008
+says       For a process without appropriate privileges, mknodat(fd, "n",
+           ...) fails with EACCES when fd was opened O_RDONLY on a
+           directory writable by all whose mode was then changed to deny
+           search (0666); nothing is created.
+test       t/015-at-eacces-fd.c
+
+assertion  XSH.mknod.016
+anchor     functions/mknod.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2008
+says       For a process without appropriate privileges, mknodat(fd, "n",
+           ...) succeeds when fd was opened with O_SEARCH on a directory
+           writable by all whose mode was then changed to deny search
+           (0666).
+note       O_SEARCH itself is a header item (Tier 0); without it this test
+           is UNRESOLVED.
+test       t/016-at-search.c
+
+assertion  XSH.mknod.017
+anchor     functions/mknod.html#ERRORS/EILSEQ
+class      conditional
+when       XSI
+since      2024
+says       mknod() of "a\nb" either makes the FIFO or, if the file system
+           refuses such names, fails with EILSEQ (the only error that
+           applies).
+test       t/017-eilseq.c
+
+assertion  XSH.mknod.018
+anchor     functions/mknod.html#ERRORS/EPERM
+anchor     functions/mknod.html#DESCRIPTION
+class      disputed
+when       XSI
+since      2001
+says       For a process without appropriate privileges in a directory it
+           may write, mknod() with S_IFBLK and with S_IFDIR (dev 0) fails
+           with EPERM and creates nothing (each type in its own child).
+note       disputed (N1, new): the DESCRIPTION makes the behaviour
+           unspecified whenever mode is not S_IFIFO or dev is not 0, while
+           ERRORS and another DESCRIPTION sentence require EPERM for an
+           unprivileged caller and any type but FIFO-special; under the
+           first reading anything may happen (planted as a READING). The
+           four non-FIFO types are split between this assertion and
+           XSH.mknod.019 only so that each result is recorded separately;
+           the text treats them alike.
+test       t/018-eperm-special.c
+
+assertion  XSH.mknod.019
+anchor     functions/mknod.html#ERRORS/EPERM
+anchor     functions/mknod.html#DESCRIPTION
+class      disputed
+when       XSI
+since      2001
+says       For a process without appropriate privileges in a directory it
+           may write, mknod() with S_IFREG and with S_IFCHR (dev 0) fails
+           with EPERM and creates nothing (each type in its own child).
+note       disputed (N1, new): the same reading as XSH.mknod.018. The
+           types are split between the two assertions only so that each
+           result is recorded separately; the text gives no reason to
+           treat them differently.
+test       t/019-eperm-reg-chr.c

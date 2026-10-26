@@ -1,0 +1,78 @@
+# XSH chdir()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Error tests check that a failed call leaves the working directory as it
+# was (RETURN VALUE).
+
+assertion  XSH.chdir.001
+anchor     functions/chdir.html#DESCRIPTION
+anchor     functions/chdir.html#RETURN VALUE
+class      required
+since      1988
+says       chdir("d") returns 0, "." is then d and the relative name "f"
+           opens d/f; chdir("..") returns to the parent; chdir() of an
+           absolute name and of "d/" reach that directory.
+test       t/001-changes.c
+
+assertion  XSH.chdir.002
+anchor     functions/chdir.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+since      2001
+says       chdir("sl") and chdir("sl/sub"), with sl a symbolic link to d,
+           make d and d/sub the working directory.
+test       t/002-symlinks.c
+
+assertion  XSH.chdir.003
+anchor     functions/chdir.html#ERRORS/ENOENT
+anchor     functions/chdir.html#RETURN VALUE
+class      required
+since      1988
+says       chdir() of "nodir", "nodir/x", "d/nodir" (d a directory) and ""
+           fails with ENOENT and leaves the working directory unchanged.
+test       t/003-enoent.c
+
+assertion  XSH.chdir.004
+anchor     functions/chdir.html#ERRORS/ENOTDIR
+class      disputed
+since      1988
+says       chdir("f") and chdir("f/"), with f a regular file, fail with
+           ENOTDIR and leave the working directory unchanged.
+note       disputed (new): chdir()'s ENOENT is worded "does not name an
+           existing directory", which a regular file meets as well, so
+           XSH 2.3 would let either error be reported; the other reading
+           is planted as a READING.
+test       t/004-enotdir.c
+
+assertion  XSH.chdir.005
+anchor     functions/chdir.html#ERRORS/ELOOP
+class      disputed
+since      2001
+says       chdir("a") and chdir("a/x"), with a -> b and b -> a, fail with
+           ELOOP.
+note       disputed (Q-8): a path whose resolution loops names no existing
+           directory, so ENOENT applies literally too, and XSH 2.3 lets
+           either error be reported.
+test       t/005-eloop.c
+
+assertion  XSH.chdir.006
+anchor     functions/chdir.html#ERRORS/ENAMETOOLONG
+class      disputed
+says       chdir() of a name one byte longer than {NAME_MAX} fails with
+           ENAMETOOLONG, even where a directory named by its first
+           {NAME_MAX} bytes exists.
+note       disputed (Q-8): the long name names no existing directory, so
+           ENOENT applies too. "since" left out, as for XSH.open.017: the
+           error is unconditional only since _POSIX_NO_TRUNC had to be
+           other than -1.
+test       t/006-enametoolong.c
+
+assertion  XSH.chdir.007
+anchor     functions/chdir.html#ERRORS/EACCES
+class      required
+since      1988
+says       For a process without appropriate privileges, chdir("s/x") with
+           s denying search permission, and chdir("n") with n a directory
+           denying search permission (mode 0666), fail with EACCES and
+           leave the working directory unchanged.
+test       t/007-eacces.c

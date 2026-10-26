@@ -1,0 +1,509 @@
+# XSH fscanf(), scanf(), sscanf()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Shared choices the tests leave open (each test says which apply):
+# - how much a stream buffers or reads ahead (XSH 2.5; setvbuf.tiny_default);
+# - the accuracy of decimal-to-floating conversion, which ISO C makes
+#   implementation-defined and the text does not bound: inputs are short
+#   and exactly representable in the target type, and a result within a
+#   relative 4*EPSILON of the value (4 to 8 ulps, by the value's place in
+#   its binade) passes; that cap is practical, not from the text
+#   (fscanf.float_ulp);
+# - what is left in the object of a conversion that fails: never checked;
+# - errno after a successful call: never checked (XSH 2.3).
+
+assertion  XSH.fscanf.001
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       fscanf() reads from the stream it is given: on a stream reading
+           "12 34 rest", fscanf(f, "%d%d") returns 2 and stores 12 and 34,
+           and the next fgetc() returns the space after "34".
+test       t/001-stream.c
+
+assertion  XSH.fscanf.002
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       scanf() reads from stdin: with descriptor 0 open on a file
+           holding "42 x", scanf("%d") returns 1 and stores 42, and the
+           next getchar() returns the space.
+test       t/002-stdin.c
+
+assertion  XSH.fscanf.003
+anchor     functions/fscanf.html#DESCRIPTION
+anchor     functions/fscanf.html#EXAMPLES
+class      required
+since      1988
+says       sscanf() reads from the string it is given: sscanf("25
+           54.32E-1 Hamster", "%d%f%s") returns 3 and stores 25, about
+           5.432 and "Hamster"; the string itself is unchanged.
+note       The float is compared with the constant 5.432f within a
+           relative 4*FLT_EPSILON; the text sets no bound (ISO C makes the
+           accuracy implementation-defined), so the cap is practical.
+test       t/003-string.c
+
+assertion  XSH.fscanf.004
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       Arguments beyond those the format uses are evaluated and
+           otherwise ignored: sscanf("5 6", "%d", &a, &b, <expression
+           with a side effect>) returns 1, stores 5 in a, leaves b
+           untouched, and the side effect happens once.
+test       t/004-excess-args.c
+
+assertion  XSH.fscanf.005
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      2008
+says       A "%n$" conversion stores into the nth argument after the
+           format: sscanf("10 20", "%2$d %1$d", &a, &b) returns 2 with a
+           20 and b 10; "%%" and "%*" may be mixed with the numbered form:
+           sscanf("% 7 8", "%%%*d%1$d", &a) returns 1 with a 8.
+note       Moved from the XSI option to the base in Issue 7. No argument
+           is referenced twice (unspecified).
+test       t/005-numbered.c
+
+assertion  XSH.fscanf.006
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       In the POSIX locale the radix character is the period:
+           sscanf("1.5", "%f") stores 1.5, and sscanf("2,5", "%f%n")
+           returns 1, stores 2.0 and counts 1 byte read.
+test       t/006-radix.c
+
+assertion  XSH.fscanf.007
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       A white-space directive reads white space up to the first other
+           byte, which stays unread, and never fails: fscanf(f, "a %c") on
+           "a \t\n\v\f b!" stores 'b' and the next fgetc() returns '!';
+           sscanf("ab", "a b%n", &n) returns 0 and sets n to 2 (the
+           directive matched no white space).
+test       t/007-ws-directive.c
+
+assertion  XSH.fscanf.008
+anchor     functions/fscanf.html#DESCRIPTION
+anchor     functions/fscanf.html#RETURN VALUE
+class      required
+since      1988
+says       An ordinary-character directive that meets a different byte
+           fails and leaves that byte and the rest unread: fscanf(f,
+           "abc%d") on "abXd5" returns 0 and the next fgetc() calls return
+           'X' then 'd'.
+test       t/008-ordinary-mismatch.c
+
+assertion  XSH.fscanf.009
+anchor     functions/fscanf.html#DESCRIPTION
+anchor     functions/fscanf.html#RETURN VALUE
+class      required
+since      1988
+says       An ordinary-character directive fails at end of file, and with
+           no conversion done the call returns EOF: sscanf("ab", "abc%d")
+           returns EOF; fscanf(f, "abc%d") on a file holding "ab" returns
+           EOF with the end-of-file indicator set and the error indicator
+           clear.
+test       t/009-ordinary-eof.c
+
+assertion  XSH.fscanf.010
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       Conversions other than [, c, C and n skip leading white space:
+           sscanf("  7", "%d"), sscanf("\t\n hi", "%s"), sscanf("  1.5",
+           "%f") and sscanf(" \n1f", "%x") each return 1 with 7, "hi", 1.5
+           and 0x1f.
+test       t/010-skip-ws.c
+
+assertion  XSH.fscanf.011
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       The [, c and n conversions do not skip white space:
+           sscanf("ab  cd", "ab%n%c") stores 2 and ' '; sscanf("  xy",
+           "%[ xy]") stores "  xy".
+test       t/011-no-skip.c
+
+assertion  XSH.fscanf.012
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       The byte after an input item, and a conflicting byte, stay
+           unread in the stream: fscanf(f, "%d") on "123abc" stores 123
+           and the next fgetc() returns 'a'; fscanf(f, "%3d") on "12345"
+           stores 123 and the next returns '4'; fscanf(f, "%d") on "abc"
+           returns 0 and the next returns 'a'.
+test       t/012-item-unread.c
+
+assertion  XSH.fscanf.013
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       A sign alone is an input item that is not a matching sequence,
+           so %d fails with a matching failure: sscanf("-x", "%d") and
+           sscanf("+ 1", "%d") return 0; fscanf(f, "%d") on "-x" returns 0
+           and the next fgetc() returns 'x'.
+test       t/013-sign-only.c
+
+assertion  XSH.fscanf.014
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       The input item is the longest prefix of a possible matching
+           sequence, even when it does not match: on "100ergs" the %f item
+           is "100e", so sscanf("100ergs", "%f%n") returns 0 without
+           reaching %n, and fscanf(f, "%f") on it returns 0 with 'r' the
+           next byte read.
+test       t/014-float-prefix.c
+
+assertion  XSH.fscanf.015
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       On "0xg" the %x and %i items are "0x", which is not a matching
+           sequence: sscanf("0xg", "%x%n") and sscanf("0xg", "%i%n") return
+           0 without reaching %n.
+test       t/015-hex-prefix.c
+
+assertion  XSH.fscanf.016
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       A field width bounds the input item: sscanf("12345", "%2d%d")
+           stores 12 and 345; sscanf("abcdef", "%3s%s") stores "abc" and
+           "def"; sscanf("abcdef", "%2c%c") stores "ab" and 'c'.
+test       t/016-width.c
+
+assertion  XSH.fscanf.017
+anchor     functions/fscanf.html#DESCRIPTION
+anchor     functions/fscanf.html#RETURN VALUE
+class      required
+since      1988
+says       '*' converts without assigning or counting:
+           sscanf("12 34", "%*d %d", &x) returns 1 with x 34;
+           sscanf("ab cd ef", "%*s %*c%s", buf) returns 1 with buf "d".
+test       t/017-suppress.c
+
+assertion  XSH.fscanf.018
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       %n stores the number of bytes read so far by the call, takes an
+           argument and is not counted: sscanf("ab 12  cd", "ab %d%n %s",
+           &x, &n, buf) returns 2 with x 12, n 5 and buf "cd".
+test       t/018-n-count.c
+
+assertion  XSH.fscanf.019
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       %% matches one '%' after skipping white space, with nothing
+           assigned: sscanf("%7", "%%%d") and sscanf(" \t%7", "%%%d")
+           return 1 with 7; sscanf("x7", "%%%d") returns 0.
+test       t/019-percent.c
+
+assertion  XSH.fscanf.020
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       Scanset rules: "%[]a]" on "]a]b" stores "]a]"; "%[^]d]" on
+           "abc]d" stores "abc"; "%[abc]%n" on "abc]" stores "abc" and 3
+           (the first ']' ends the set); "%[^,]" on "x y,z" stores "x y".
+test       t/020-scanset.c
+
+assertion  XSH.fscanf.021
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       A scanset conversion needs at least one byte: sscanf("xyz",
+           "%[abc]") returns 0; fscanf(f, "%[abc]") on "xyz" returns 0 and
+           the next fgetc() returns 'x'.
+test       t/021-scanset-empty.c
+
+assertion  XSH.fscanf.022
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       %c reads exactly the field width in bytes (1 by default),
+           white space included, and adds no null byte: sscanf(" xyz",
+           "%c") stores ' '; sscanf("abcdef", "%3c") into "ZZZZ" leaves
+           "abcZ".
+test       t/022-c-conv.c
+
+assertion  XSH.fscanf.023
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       %s reads a run of non-white-space bytes and adds a null byte:
+           sscanf("  ab\tcd", "%s%n") stores "ab" and 4; fscanf(f, "%s") on
+           "ab cd" leaves the space as the next byte.
+test       t/023-s-conv.c
+
+assertion  XSH.fscanf.024
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       %d reads a decimal integer as strtol() base 10 would: "-12",
+           "+7" and "007" give -12, 7 and 7; sscanf("0x10", "%d%s")
+           returns 2 with 0 and "x10".
+test       t/024-conv-d.c
+
+assertion  XSH.fscanf.025
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       %i reads an integer as strtol() base 0 would: "0x1A", "017",
+           "-0x10" and "42" give 26, 15, -16 and 42; sscanf("09",
+           "%i%d") returns 2 with 0 and 9.
+test       t/025-conv-i.c
+
+assertion  XSH.fscanf.026
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       %o, %u, %x and %X read as strtoul() with bases 8, 10, 16 and 16:
+           "17" gives 15 (o), "42" 42 (u), "1aF" 0x1af and "0X1f" 31 (x),
+           "ff" 255 (X); sscanf("8", "%o") returns 0.
+test       t/026-conv-oux.c
+
+assertion  XSH.fscanf.027
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       %e, %f and %g read a floating-point number into a float:
+           "1.5" (f), "-2.5e3" (e), "0.125" (g) and "1e2" (f) give 1.5,
+           -2500, 0.125 and 100.
+note       Results within a relative 4*FLT_EPSILON pass; the text sets no
+           bound (ISO C makes the accuracy implementation-defined), so the
+           cap is practical.
+test       t/027-conv-float.c
+
+assertion  XSH.fscanf.028
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      2001
+says       %a reads the same forms as the other floating conversions, and
+           all of them accept strtod()'s hexadecimal form: "%a" on
+           "0x1.8p1" gives 3, "%f" on "0x1p-2" gives 0.25, "%a" on "1.5"
+           gives 1.5.
+note       %a and hexadecimal floating input came with the ISO C 1999
+           alignment (Issue 6).
+test       t/028-conv-a.c
+
+assertion  XSH.fscanf.029
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      2001
+says       %A, %E, %F, %G and %X convert as %a, %e, %f, %g and %x: "0x1p1"
+           (A) gives 2, "2.5" (E) 2.5, "-1.25" (F) -1.25, "4e1" (G) 40,
+           "1f" (X) 31.
+test       t/029-uppercase.c
+
+assertion  XSH.fscanf.030
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      2001
+says       The floating conversions read back the infinity and NaN strings
+           that snprintf() makes with %f and %F: infinity, minus infinity
+           and NaN come back as such (isinf() with its sign, isnan()).
+note       Applies when snprintf() produces a string other than a number
+           for them; otherwise NOTINUSE.
+test       t/030-inf-nan.c
+
+assertion  XSH.fscanf.031
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       h and l give the receiving object's size: "%hd" of "-300" and
+           "%hu" of "65000" store into a short and an unsigned short
+           without touching their neighbours in an array; "%ld" of
+           "-123456789" and "%lu" of "4000000000" store into a long and an
+           unsigned long.
+test       t/031-len-h-l.c
+
+assertion  XSH.fscanf.032
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      2001
+says       hh, ll, j, z and t give the receiving object's size: "%hhd" of
+           "-5" and "%hhu" of "200" store into one char without touching
+           its neighbours; "%lld" and "%jd" of "-1234567890123", "%zu" of
+           "4096" and "%td" of "-7" store into long long, intmax_t, size_t
+           and ptrdiff_t.
+test       t/032-len-c99.c
+
+assertion  XSH.fscanf.033
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      2001
+says       %n takes the length modifiers: after "%*s" on "abcde x", %hhn,
+           %hn, %ln, %lln, %jn, %zn and %tn each store 5 into an object of
+           the matching type, leaving its neighbours untouched.
+note       The input has a space after "abcde" so that %*s does not meet
+           end of file before %n: the page and ISO C disagree on %n after
+           an end-of-file-terminated conversion (fscanf.cov, 0a168a50).
+test       t/033-len-n.c
+
+assertion  XSH.fscanf.034
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       l and L with a floating conversion store a double and a long
+           double: "%lf" of "16777217" gives 16777217 (not representable in
+           a float) and "%Lf" of "0.5" gives 0.5.
+test       t/034-len-float.c
+
+assertion  XSH.fscanf.035
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+says       %p reads back what snprintf() wrote with %p in the same program:
+           for the address of a static object and of a malloc()ed one,
+           sscanf() returns 1 and a pointer that compares equal.
+test       t/035-p-roundtrip.c
+
+assertion  XSH.fscanf.036
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+says       %p reads back what snprintf() wrote with %p for a null pointer:
+           sscanf() returns 1 and stores a null pointer.
+note       The text sets no exception for the null pointer: the set of
+           sequences %p matches is the set printf's %p produces, and a
+           value converted earlier compares equal.
+test       t/036-p-null.c
+
+assertion  XSH.fscanf.037
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      2008
+says       'm' with s, c and [ allocates the result as malloc() would:
+           sscanf("hello abc xyz", "%ms %3mc %m[xyz]", &p, &q, &r) returns
+           3, p holds "hello", q the 3 bytes "abc", r "xyz", and free()
+           releases each.
+test       t/037-m-alloc.c
+
+assertion  XSH.fscanf.038
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      2008
+says       'm' with ls and l[ allocates a wide-character result:
+           sscanf("ab cd", "%mls %ml[cd]") returns 2 with the wide strings
+           of "ab" and "cd" (each byte as mbrtowc() converts it in the
+           POSIX locale), each released by free().
+test       t/038-m-wide.c
+
+assertion  XSH.fscanf.039
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      2001
+says       l with s, [ and c stores wide characters converted as mbrtowc()
+           does: in the POSIX locale "%ls" on "ab cd" stores the wide
+           string of "ab"; "%l[ab]" on "abba!" stores 4 and a null wide
+           character; "%2lc" on "xyz" stores two and no null.
+test       t/039-wide.c
+
+assertion  XSH.fscanf.040
+anchor     functions/fscanf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       %C and %S convert as %lc and %ls: "%2C" on "xyz" and "%S" on
+           "ab cd" store the same wide characters as the l forms.
+test       t/040-xsi-c-s.c
+
+assertion  XSH.fscanf.041
+anchor     functions/fscanf.html#DESCRIPTION
+anchor     functions/fscanf.html#RETURN VALUE
+class      required
+since      1988
+says       End of input before a conversion has matched anything is an
+           input failure and the call returns EOF: sscanf() of "" with
+           "%d", "%s", "%c" and "%[a]", of "   " with "%d", and of "  "
+           with " %d" all return EOF.
+test       t/041-eof-first.c
+
+assertion  XSH.fscanf.042
+anchor     functions/fscanf.html#DESCRIPTION
+anchor     functions/fscanf.html#RETURN VALUE
+class      required
+since      1988
+says       End of input after a conversion ends the call with the count so
+           far: sscanf("5", "%d%d") and sscanf("ab", "%s%c") return 1;
+           fscanf(f, "%d %d") on a file holding "5" returns 1 with the
+           end-of-file indicator set.
+test       t/042-eof-following.c
+
+assertion  XSH.fscanf.043
+anchor     functions/fscanf.html#RETURN VALUE
+class      required
+since      2008
+says       A completed conversion with assignment suppressed still counts
+           as the first conversion: sscanf("1", "%*d%d", &x) returns 0, not
+           EOF.
+note       EOF is for input that ends before the first conversion has
+           completed; "%*d" is a conversion (its result is converted and
+           not stored), and the number of assigned items, 0, is returned.
+           The wording came with POSIX.1-2008 TC1 (XSH/TC1-2008/0186).
+test       t/043-suppressed-first.c
+
+assertion  XSH.fscanf.044
+anchor     functions/fscanf.html#RETURN VALUE
+class      required
+since      1988
+says       The return value is the number of items matched and assigned,
+           0 after an early matching failure: sscanf("1 2 x", "%d %d %d")
+           returns 2; sscanf("x", "%d") returns 0.
+test       t/044-return-count.c
+
+assertion  XSH.fscanf.045
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+since      1988
+says       Trailing white space is left unread unless the format matches
+           it: on "5 \n x", fscanf(f, "%d") leaves ' ' as the next byte,
+           and fscanf(f, "%d\n") leaves 'x'.
+test       t/045-trailing-ws.c
+
+assertion  XSH.fscanf.046
+anchor     functions/fscanf.html#RETURN VALUE
+anchor     functions/fscanf.html#ERRORS
+class      required
+says       A read error before the first conversion returns EOF, sets
+           errno and sets the error indicator: on a read stream whose
+           descriptor has been replaced by a write-only one, fscanf(f,
+           "%d") returns EOF with errno EBADF and ferror() true.
+note       fgetc()'s EBADF covers a descriptor not open for reading. The
+           EOF return on error dates from the first edition; the RETURN
+           VALUE wording is from Issue 8 (Austin Group defect 1624).
+test       t/046-ebadf.c
+
+assertion  XSH.fscanf.047
+anchor     functions/fscanf.html#RETURN VALUE
+anchor     functions/fscanf.html#ERRORS
+class      required
+says       On an empty pipe with O_NONBLOCK and a writer, fscanf(f, "%d")
+           returns EOF with errno EAGAIN and ferror() true.
+test       t/047-eagain.c
+
+assertion  XSH.fscanf.048
+anchor     functions/fscanf.html#RETURN VALUE
+class      required
+says       An error after a conversion sets the error indicator and the
+           call returns the count so far: on a non-blocking pipe holding
+           "12 " with its writer open, fscanf(f, "%d %d") returns 1, stores
+           12, and ferror() is true.
+test       t/048-error-later.c
+
+assertion  XSH.fscanf.049
+anchor     functions/fscanf.html#DESCRIPTION
+class      required
+says       A successful fscanf() that returns data from the file marks its
+           last data access timestamp for update: after fscanf(f, "%d")
+           returns 1 on a fresh stream, fstat() shows a later access time
+           than the one set 100 seconds back.
+note       As for read(): the old access time is earlier than the
+           modification time, so a relatime mount updates it; a noatime
+           mount fails this, rightly (XBD 4.12).
+test       t/049-atime.c

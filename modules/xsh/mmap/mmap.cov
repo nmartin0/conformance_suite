@@ -1,0 +1,110 @@
+# mmap.cov - every requirement unit on functions/mmap.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:45bee75d     XSH.mmap.001 XSH.mmap.005
+DESCRIPTION:ade99baa     XSH.mmap.001 XSH.mmap.005 XSH.shm_open.007
+DESCRIPTION:07f0815a     XSH.mmap.001
+DESCRIPTION:89d626dd     XSH.mmap.005
+DESCRIPTION:3c809d1f     XSH.shm_open.007
+DESCRIPTION:225d803d     optional  TYM, not claimed by the reference systems; no test yet
+DESCRIPTION:6fb78758     none  unspecified (XSH.mmap.011 accepts a mappable pipe)
+DESCRIPTION:ccb23eca     none  introduces the call's form
+DESCRIPTION:1d7440d8     none  part of the call's form
+DESCRIPTION:6b67d20a     none  part of the call's form
+DESCRIPTION:7c8fb466     none  part of the call's form
+DESCRIPTION:97097758     none  part of the call's form
+DESCRIPTION:d7d4372a     none  part of the call's form
+DESCRIPTION:c861a9b2     none  part of the call's form
+DESCRIPTION:5ea7392c     none  part of the call's form
+DESCRIPTION:504de6d0     XSH.mmap.001 XSH.mmap.005
+DESCRIPTION:5d373aeb     impl  how pa depends on addr and flags
+DESCRIPTION:f85568df     XSH.mmap.001 XSH.mmap.019
+DESCRIPTION:1552ee32     none  a constraint on the arguments, met by the tests
+DESCRIPTION:1723a90a     none  a constraint on the arguments, met by the tests
+DESCRIPTION:a93c2a7f     optional  TYM, not claimed by the reference systems; no test yet
+DESCRIPTION:4cf7439f     optional  TYM
+DESCRIPTION:18bf8533     optional  TYM, not claimed by the reference systems; no test yet
+DESCRIPTION:8e1c1721     XSH.mmap.019
+DESCRIPTION:81fb9738     none  unspecified; the tests size files before mapping them
+DESCRIPTION:5e1559da     XSH.mmap.007
+DESCRIPTION:7c6d3a8f     none  introduces prot; the values' meaning is tested with the other units
+DESCRIPTION:1901a9de     app
+DESCRIPTION:fc89be19     XSH.mmap.001 XSH.mmap.014
+DESCRIPTION:dbcbec25     XSH.mmap.002 XSH.mmap.014
+DESCRIPTION:affba3dd     untestable  executing mapped data needs machine code, which the suite does not write
+DESCRIPTION:cb1ddb5f     XSH.mmap.013
+DESCRIPTION:c9e8aefc     untestable  which combinations an implementation cannot support is not stated (PROT_EXEC combinations), so no call is known to fail
+DESCRIPTION:ab1edf20     XSH.mmap.012 XSH.mmap.013
+DESCRIPTION:7b772ba8     XSH.mmap.014
+DESCRIPTION:2ba286c1     XSH.mmap.010
+DESCRIPTION:2956b321     partial XSH.mmap.004 XSH.mmap.010  # an application requirement, read with ERRORS EACCES
+DESCRIPTION:16253d8f     none  introduces flags
+DESCRIPTION:8d3df98d     app
+DESCRIPTION:cc27cb76     XSH.mmap.005
+DESCRIPTION:c33b3968     XSH.mmap.005
+DESCRIPTION:c2fc459c     XSH.mmap.002 XSH.mmap.006
+DESCRIPTION:9e17f988     XSH.mmap.003
+DESCRIPTION:f50797e8     XSH.mmap.019
+DESCRIPTION:b733e4d3     impl  whether MAP_FIXED is supported (XSH.mmap.019 is NOTINUSE without it)
+DESCRIPTION:82965f3e     XSH.mmap.019
+DESCRIPTION:af0e9a37     none  introduces the next two units
+DESCRIPTION:2872abcc     XSH.mmap.002 XSH.mmap.006
+DESCRIPTION:b332235b     XSH.mmap.003 XSH.mmap.004
+DESCRIPTION:616913ae     none  unspecified; the tests do not change a privately mapped file
+DESCRIPTION:c6d23fb4     app
+DESCRIPTION:ad42fd3b     XSH.mmap.006 XSH.fork.010 XSH.fork.011
+DESCRIPTION:09190206     none  undefined behaviour of the application's objects
+DESCRIPTION:06847c47     optional  TYM, not claimed by the reference systems; no test yet
+DESCRIPTION:89c0224a     optional  TYM, not claimed by the reference systems; no test yet
+DESCRIPTION:8ba14538     optional  TYM, not claimed by the reference systems; no test yet
+DESCRIPTION:26d96c8e     optional  TYM
+DESCRIPTION:df9b4401     optional  TYM, not claimed by the reference systems; no test yet
+DESCRIPTION:e8776e60     optional  TYM, not claimed by the reference systems; no test yet
+DESCRIPTION:3dd9bdfb     XSH.mmap.019
+DESCRIPTION:2ecbca00     none  a permission (XSH.mmap.019 is NOTINUSE on EINVAL)
+DESCRIPTION:2ff9a99b     partial XSH.mmap.019  # previous mappings replaced; memory locks (ML|MLR) not checked
+DESCRIPTION:2d0d91d4     impl  how addr is used without MAP_FIXED
+DESCRIPTION:e80aca79     none  the area is whatever the implementation deems suitable
+DESCRIPTION:b5b988af     XSH.mmap.020
+DESCRIPTION:ca63cb9a     none  a suggestion the implementation may ignore
+DESCRIPTION:7196a774     XSH.mmap.020
+DESCRIPTION:bbaa463b     app
+DESCRIPTION:831e4498     impl  offsets passed are page multiples; the choice is the implementation's
+DESCRIPTION:565152b5     impl  addresses passed with MAP_FIXED are page multiples; the choice is the implementation's
+DESCRIPTION:a71e2bd2     XSH.mmap.015
+DESCRIPTION:6dc8baf2     XSH.mmap.015
+DESCRIPTION:1a032dfd     XSH.mmap.005
+DESCRIPTION:6354d846     none  unspecified
+DESCRIPTION:86a1d829     XSH.mmap.005
+DESCRIPTION:263ec0b5     XSH.mmap.016
+DESCRIPTION:173f98c1     XSH.mmap.017
+DESCRIPTION:a5e7a8d7     XSH.2.4.3-signal-actions.021
+DESCRIPTION:f1862b70     none  a permission given to the implementation
+DESCRIPTION:275ee73d     XSH.mmap.018
+DESCRIPTION:0f8f1d12     untestable  when the reference goes cannot be seen from a process
+DESCRIPTION:b238423c     none  a permission given to the implementation
+DESCRIPTION:1e664a05     todo  last data access timestamp on the first reference: depends on how the file system is mounted (access time updates may be relaxed)
+DESCRIPTION:f9ca51ad     XSH.msync.005
+DESCRIPTION:3a156c20     untestable  no bound on when the marking happens
+DESCRIPTION:b054194d     impl  the limit on mapped regions
+DESCRIPTION:5fe8000d     impl  XSI: whether shmat() counts against the limit
+DESCRIPTION:dd9f74ae     none  a permission given to the implementation
+RETURN_VALUE:b9f54c92    XSH.mmap.001 XSH.mmap.007 XSH.mmap.008 XSH.mmap.009
+RETURN_VALUE:35eac83d    none  a header definition (XBD <sys/mman.h>)
+RETURN_VALUE:193731d9    XSH.mmap.001 XSH.mmap.005
+ERRORS:31d87302          todo  needs mlockall(MCL_FUTURE) and locking to run out of resources
+ERRORS:323d2221          XSH.mmap.007
+ERRORS:11b23890          XSH.mmap.008
+ERRORS:2a692acd          untestable  the limit is implementation-defined and may be absent
+ERRORS:c3c9e827          partial XSH.mmap.021  # the case without MAP_FIXED; MAP_FIXED beyond the address space not checked
+ERRORS:878d603c          todo  needs mlockall(MCL_FUTURE) and a mapping larger than the system can lock
+ERRORS:e0243bcf          optional  TYM, not claimed by the reference systems; no test yet
+ERRORS:ca438d71          partial XSH.mmap.003 XSH.mmap.019  # ENOTSUP is accepted where MAP_PRIVATE or MAP_FIXED is not supported; unsupported prot combinations are not known
+ERRORS:c96ddc07          todo  ENXIO for MAP_FIXED: no portable combination is known to be invalid
+ERRORS:ad82031e          optional  TYM, not claimed by the reference systems; no test yet
+ERRORS:0d9bfc65          XSH.mmap.010
+ERRORS:addee83b          XSH.mmap.009
+ERRORS:eed9b940          XSH.mmap.011
+ERRORS:574c7bc3          todo  EOVERFLOW: an offset near the largest off_t also meets ENXIO and the may-fail EINVAL; needs a test that accepts the overlap
+ERRORS:c1e62824          todo  ENXIO: offsets invalid for a regular file are those that also give EOVERFLOW
+ERRORS:d60d00c4          optional

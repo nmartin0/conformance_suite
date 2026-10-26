@@ -1,0 +1,13 @@
+# fread.cov - every requirement unit on functions/fread.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:e6f2a71e     XSH.fread.001 XSH.fread.003
+DESCRIPTION:c956bd04     XSH.fread.002
+DESCRIPTION:932b2034     XSH.fread.001 XSH.fread.003
+DESCRIPTION:425d09d4     none  unspecified; XSH.fread.006 and .007 do not look at the position
+DESCRIPTION:bfb3e147     none  unspecified; XSH.fread.003 does not look at the partly read element (variant fread.partial_junk)
+DESCRIPTION:32375f11     none  a permission
+DESCRIPTION:60ea4f6f     partial XSH.fread.008  # fread() only; the other functions named are checked on their own pages, and data from ungetc() is not checked
+RETURN_VALUE:6b7ddb10    XSH.fread.001 XSH.fread.003 XSH.fread.004
+RETURN_VALUE:3705daff    XSH.fread.005
+RETURN_VALUE:8d6f0ddf    XSH.fread.006 XSH.fread.007  # EBADF and EAGAIN; the other fgetc() errors are left to fgetc()'s module

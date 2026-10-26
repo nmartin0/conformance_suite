@@ -1,0 +1,10 @@
+# fgetpos.cov - every requirement unit on functions/fgetpos.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:ecad22f7     partial XSH.fgetpos.001  # the file position; the parse state of a wide-oriented stream is not checked
+DESCRIPTION:3c17b405     XSH.fgetpos.001
+DESCRIPTION:b028a0ef     XSH.fgetpos.002
+RETURN_VALUE:6fbae1a0    XSH.fgetpos.001 XSH.fgetpos.003 XSH.fgetpos.004
+ERRORS:b88d9b94          XSH.fgetpos.004
+ERRORS:3326c934          untestable  only where fpos_t cannot hold every file offset, and nothing portable tells whether it can
+ERRORS:ed3fed0f          XSH.fgetpos.003

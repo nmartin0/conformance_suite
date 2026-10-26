@@ -1,0 +1,34 @@
+# XSH puts()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.puts.001
+anchor     functions/puts.html#DESCRIPTION
+anchor     functions/puts.html#RETURN VALUE
+class      required
+since      1988
+says       With standard output on a regular file, puts("hello") and then
+           puts("") each return a non-negative value, and after
+           fflush(stdout) the file holds exactly "hello\n\n".
+note       Which non-negative value is open (APPLICATION USAGE); variants
+           puts.returns_count and puts.returns_last.
+test       t/001-writes.c
+
+assertion  XSH.puts.002
+anchor     functions/puts.html#RETURN VALUE
+anchor     functions/fputc.html#ERRORS/EBADF
+class      required
+says       With stdout made unbuffered and descriptor 1 then closed,
+           puts("ab") returns EOF, sets errno to EBADF and sets the error
+           indicator of stdout.
+note       Where setvbuf() refuses _IONBF, the test writes until a call
+           fails; if none does within 4 MiB the result is UNRESOLVED.
+test       t/002-ebadf.c
+
+assertion  XSH.puts.003
+anchor     functions/puts.html#DESCRIPTION
+class      required
+says       With standard output on a regular file whose modification time
+           is set to 2001-09-09, after puts("x") and a successful
+           fflush(stdout), fstat() shows a later st_mtim.
+note       As for XSH.fputc.005 (the change time is not checked).
+test       t/003-mtime.c

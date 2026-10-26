@@ -1,0 +1,49 @@
+# XSH memccpy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Destinations are filled with 'X' first, so that bytes written past the
+# copy show.
+
+assertion  XSH.memccpy.001
+anchor     functions/memccpy.html#DESCRIPTION
+anchor     functions/memccpy.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       memccpy(d, "abcdefcx", 'c', 8) copies "abc" and returns d + 3,
+           leaving d[3] onward alone; with c 'x' (the eighth byte) it copies
+           all eight bytes and returns d + 8.
+test       t/001-found.c
+
+assertion  XSH.memccpy.002
+anchor     functions/memccpy.html#DESCRIPTION
+anchor     functions/memccpy.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       When c is not among the first n bytes, memccpy() copies n bytes,
+           returns a null pointer and leaves d[n] onward alone: for a
+           source of 12 bytes ending at an inaccessible (PROT_NONE) page,
+           without touching that page; with n 0 it copies nothing and
+           returns a null pointer.
+note       Reading s2[n] would read outside the n-byte area the caller
+           passed, which a conforming caller may make exactly n bytes.
+test       t/002-not-found.c
+
+assertion  XSH.memccpy.003
+anchor     functions/memccpy.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       c is converted to unsigned char: c -1 stops after a 0xff byte,
+           and c 'b' + 256 stops after a 'b'.
+test       t/003-unsigned-char.c
+
+assertion  XSH.memccpy.004
+anchor     functions/memccpy.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       memccpy() leaves errno unchanged, both when it is 0 and when it is
+           EDOM, whether or not c is found.
+test       t/004-errno-kept.c

@@ -1,0 +1,142 @@
+# XSH strerror(), strerror_l() and strerror_r()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Message texts are implementation-defined: the tests check only what the
+# text fixes (a string is returned, its termination, non-empty for a valid
+# error number, errno, the strerror_r() buffer rules). "Valid error
+# numbers" are a fixed list of <errno.h> macros; "invalid" ones are -1 and
+# INT_MIN (error numbers are positive, XBD <errno.h>) and INT_MAX (an
+# outcome allowed for either kind is accepted for it).
+
+assertion  XSH.strerror.001
+anchor     functions/strerror.html#RETURN VALUE
+anchor     functions/strerror.html#DESCRIPTION
+class      required
+says       strerror() returns a non-null pointer to a null-terminated string
+           for each listed valid error number, for 0, and for -1, INT_MIN
+           and INT_MAX.
+test       t/001-always-string.c
+
+assertion  XSH.strerror.002
+anchor     functions/strerror.html#DESCRIPTION
+class      required
+since      2001
+says       With errno 0, strerror() of each listed valid error number
+           leaves errno 0.
+note       No error condition applies to a valid error number, so the call
+           is taken to succeed; DESCRIPTION has applications detect a
+           strerror() error through a change of errno.
+test       t/002-errno-kept.c
+
+assertion  XSH.strerror.003
+anchor     functions/strerror.html#DESCRIPTION
+class      required
+since      2024
+says       strerror() of each listed valid error number returns a non-empty
+           string.
+note       An empty string cannot indicate which error occurred (the zero
+           case is the one allowed to be empty). No listed error applies to
+           a valid number, so the call is taken to succeed whatever errno
+           shows (XSH.strerror.002 judges errno).
+test       t/003-valid-non-empty.c
+
+assertion  XSH.strerror.004
+anchor     functions/strerror.html#DESCRIPTION
+anchor     functions/strerror.html#ERRORS/EINVAL
+class      required
+since      2024
+says       With errno 0, strerror(0) leaves errno 0; the text (empty or a
+           no-error message) is not checked.
+test       t/004-zero.c
+
+assertion  XSH.strerror.005
+anchor     functions/strerror.html#DESCRIPTION
+anchor     functions/strerror.html#RETURN VALUE
+anchor     functions/strerror.html#ERRORS/EINVAL
+class      required
+since      2024
+says       With errno 0, strerror() of -1, INT_MIN and INT_MAX returns a
+           non-null pointer and leaves errno 0 or sets it to EINVAL; the
+           string (empty included) is not checked.
+note       An unknown-error text is owed only on successful completion, and
+           a call that detects the EINVAL condition need not set errno
+           (RETURN VALUE "may"), so an empty string with errno 0 is
+           allowed.
+test       t/005-invalid.c
+
+assertion  XSH.strerror.006
+anchor     functions/strerror.html#DESCRIPTION
+class      required
+says       The string returned by strerror(ENOENT) still holds the same
+           bytes after perror(), strerror_r(), strsignal() and psignal()
+           calls.
+test       t/006-not-overwritten.c
+
+assertion  XSH.strerror.007
+anchor     functions/strerror.html#DESCRIPTION
+class      required
+says       The string returned by strerror(ENOENT) still holds the same
+           bytes after another thread calls strerror_l(EINVAL, ...) and
+           ends.
+note       Only strerror(), and strerror_l() in the same thread, may
+           overwrite it.
+test       t/007-other-thread.c
+
+assertion  XSH.strerror.008
+anchor     functions/strerror.html#DESCRIPTION
+anchor     functions/strerror.html#RETURN VALUE
+class      required
+since      2024
+says       strerror_r(e, buf, 65536) returns 0 and stores a null-terminated
+           string, non-empty for each listed valid error number e, and
+           possibly empty for e 0.
+note       errno is not checked: the errno rule names strerror() and
+           strerror_l() only. ERANGE with a 64 KiB buffer is UNRESOLVED (no
+           bound on a message's length is stated).
+test       t/008-r-valid.c
+
+assertion  XSH.strerror.009
+anchor     functions/strerror.html#DESCRIPTION
+anchor     functions/strerror.html#RETURN VALUE
+anchor     functions/strerror.html#ERRORS/EINVAL
+class      required
+since      2024
+says       strerror_r() of -1, INT_MIN and INT_MAX with a 65536-byte buffer
+           either returns 0 having stored a non-empty null-terminated
+           string, or returns EINVAL.
+test       t/009-r-invalid.c
+
+assertion  XSH.strerror.010
+anchor     functions/strerror.html#ERRORS/ERANGE
+anchor     functions/strerror.html#DESCRIPTION
+class      required
+since      2024
+says       For ENOENT and EINVAL, with L the length of the message stored
+           with a large buffer: buflen L+1 returns 0 and the same string;
+           buflen L, 1 and 0 return ERANGE; no call changes a byte at or
+           beyond strerrbuf[buflen].
+note       What an ERANGE call leaves below buflen is not checked
+           (termination there is only encouraged, RATIONALE).
+test       t/010-r-erange.c
+
+assertion  XSH.strerror.011
+anchor     functions/strerror.html#DESCRIPTION
+anchor     functions/strerror.html#RETURN VALUE
+class      required
+since      2024
+says       With a locale object from newlocale(LC_ALL_MASK, "POSIX", 0) and
+           errno 0, strerror_l() of each listed valid error number and of 0
+           returns a non-null pointer and leaves errno 0; the string is
+           non-empty for the valid numbers.
+test       t/011-l-valid.c
+
+assertion  XSH.strerror.012
+anchor     functions/strerror.html#RETURN VALUE
+anchor     functions/strerror.html#ERRORS/EINVAL
+class      required
+since      2024
+says       With errno 0, strerror_l() of -1, INT_MIN and INT_MAX returns a
+           non-null pointer and leaves errno 0 or sets it to EINVAL; the
+           string (empty included) is not checked.
+note       As for XSH.strerror.005.
+test       t/012-l-invalid.c

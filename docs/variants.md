@@ -40,8 +40,9 @@ variant that no conforming system could show is a bug in the variant.
 
       * VARIANT   futimens.utime_now_m1
 
-  The part before the dot names the directory, `modules/xsh/<prefix>/variants/`,
-  exactly as for faults (`xcu/<utility>/variants/<name>.sh` for shell tests).
+  The part before the last dot names the module directory,
+  `modules/xsh/<prefix>/variants/` (so `2.4.3-signal-actions.late` works), exactly
+  as for faults; the variant's own name has no dot (`xcu/<utility>/variants/<name>.sh` for shell tests).
 - A C variant is a preload library built from `variants/*.c` (include
   `pcvariant.h`; `variant_of("<prefix>.")` and `IS("name")` select it) and,
   when the variant changes what the headers define, a header
@@ -63,6 +64,24 @@ variant that no conforming system could show is a bug in the variant.
     look at whether the test can do better.
   - UNCHECKED: the baseline does not PASS here, or the variant cannot be
     planted here.
+
+## Build shims
+
+Some declarations or names are absent from a system's headers even though
+the text requires them (a function not declared, a structure member not
+named). A test then cannot even be built there and is UNINITIATED. A
+*build shim* is a header-only variant whose first lines say
+`posixcheck: shim`: it supplies only the missing declaration or name, so the
+behaviour that runs is the host's own. Rules:
+
+- A shim must change nothing but declarations and names; it cannot be a
+  READING and plants no fault.
+- A shim run that PASSes is TOLERATED, as for any variant.
+- A shim run that FAILs is reported as SYSTEM, not REJECTED: the verdict is
+  the system's, not a defect of the test. Record it under `known/`.
+- A shim run that cannot be judged (UNINITIATED, NOTINUSE, UNRESOLVED) is
+  UNDECIDED. SYSTEM is not fatal for `ci/mutate.sh`; it is rerun like any
+  anomaly before it is believed.
 
 ## Limits
 

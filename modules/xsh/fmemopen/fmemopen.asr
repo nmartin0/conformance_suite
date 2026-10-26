@@ -1,0 +1,251 @@
+# XSH fmemopen()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fmemopen.001
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+since      2008
+says       fmemopen(buf, 6, "r") on a buffer holding "foobar" returns a stream
+           whose reads give 'f', 'o', 'o', 'b', 'a', 'r' and then EOF, with
+           the end-of-file indicator set and the error indicator clear.
+test       t/001-read.c
+
+assertion  XSH.fmemopen.002
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+since      2008
+says       On a stream from fmemopen(buf, 6, "r") with buf holding 'a', 0,
+           'b', 0, 0, 'c', fread() of up to 16 bytes returns 6 bytes equal to
+           the buffer, and the next read gives EOF: null bytes end nothing.
+test       t/002-null-bytes-read.c
+
+assertion  XSH.fmemopen.003
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+since      2024
+says       On a stream from fmemopen(buf, 6, "r") over "abcdef", a read, an
+           ungetc() of another byte, a read of it, fseek() to 1, an
+           attempted fputc() and fflush() (their results are not judged),
+           clearerr(), fseek(), a read, fflush(),
+           fseek(f, 2, SEEK_SET) and fclose() leave all 6 bytes unchanged.
+note       Austin Group defect 1144 added the rule that a read-only stream
+           does not modify a caller's buffer.
+test       t/003-read-only-unchanged.c
+
+assertion  XSH.fmemopen.004
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       fmemopen(buf, 4, "w") on a buffer holding "abc" returns a stream
+           and buf[0] is then a null byte, before any other operation; the
+           other bytes are not judged.
+note       The truncation is part of opening, so it is checked as soon as
+           fmemopen() returns. Modes with 'b' are implementation-defined and
+           are not used.
+test       t/004-w-truncates.c
+
+assertion  XSH.fmemopen.005
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       fmemopen(buf, 4, "w+") on a buffer holding "abc" returns a stream
+           and buf[0] is then a null byte, before any other operation.
+test       t/005-wplus-truncates.c
+
+assertion  XSH.fmemopen.006
+anchor     functions/fmemopen.html#DESCRIPTION
+anchor     functions/fmemopen.html#ERRORS/EINVAL
+class      required
+says       With max_size 0 and buf pointing at a byte holding 'x', each of
+           fmemopen(buf, 0, "w") and fmemopen(buf, 0, "w+") either returns a
+           null pointer with errno EINVAL or returns a stream, and the byte
+           still holds 'x' after the call and after fclose().
+note       The null byte is written only when max_size is not zero, and
+           the caller need provide only max_size bytes, so the byte at buf
+           is outside the stream's buffer (XSH 2.5 keeps operations within
+           it). A size of zero may be unsupported (EINVAL, variant
+           fmemopen.size0_einval).
+test       t/006-size-zero-untouched.c
+
+assertion  XSH.fmemopen.007
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+since      2008
+says       fmemopen(NULL, 10, "w+") returns a stream at position 0; after
+           fputs() of "012345678" and rewind(), fread() returns those 9
+           bytes and sets the end-of-file indicator, and fseek(f, 10,
+           SEEK_SET) succeeds.
+note       A null pointer with ENOMEM (allocation failed, a may-fail
+           error) is UNRESOLVED. Nine bytes leave room for the null byte
+           (a buffer filled exactly is XSH.fmemopen.021).
+test       t/007-null-buf.c
+
+assertion  XSH.fmemopen.008
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       fmemopen(NULL, 8, "a+") returns a stream whose position is 0 and
+           whose end position is 0 (fseek(f, 0, SEEK_END) leaves ftell() at
+           0); after fputs("ab") and rewind(), reads give "ab" and then EOF.
+note       The allocated buffer's contents are not looked at for a null
+           byte. A null pointer with ENOMEM is UNRESOLVED.
+test       t/008-null-buf-append.c
+
+assertion  XSH.fmemopen.009
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+since      2008
+says       On buffers of 6 bytes holding "abc", 0, "ef", ftell() right after
+           fmemopen() is 0 for "r", "w", "r+" and "w+", and 3 (the first
+           null byte) for "a" and "a+".
+test       t/009-initial-position.c
+
+assertion  XSH.fmemopen.010
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       On buffers of 6 bytes holding "abcdef" (no null byte), ftell()
+           right after fmemopen() with "a" and with "a+" is 6, and after
+           fseek(f, 0, SEEK_END) it is still 6.
+note       The position the page puts just past the last byte is taken as
+           max_size: the end position is max_size in this case and no
+           seek may go beyond it.
+test       t/010-append-no-null.c
+
+assertion  XSH.fmemopen.011
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       On buffers of 6 bytes holding "ab", 0, "def", fseek(f, 0, SEEK_END)
+           leaves ftell() at 6 for "r" and "r+"; on the "r+" stream, after
+           fputs("XY") at 0 and after fputc('Q') at 4, it is still 6.
+test       t/011-read-end.c
+
+assertion  XSH.fmemopen.012
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       On buffers of 6 bytes holding "abcdef", fseek(f, 0, SEEK_END)
+           right after fmemopen() leaves ftell() at 0 for "w" and "w+".
+test       t/012-write-end.c
+
+assertion  XSH.fmemopen.013
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       On buffers of 6 bytes holding "abc", 0, "ef", fseek(f, 0, SEEK_END)
+           leaves ftell() at 3 and fseek(f, -1, SEEK_END) at 2, for "a" and
+           for "a+".
+test       t/013-append-end.c
+
+assertion  XSH.fmemopen.014
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       On a stream from fmemopen(buf, 10, "w+") after fputs("abc") and
+           rewind(), fread() of up to 10 bytes returns the 3 bytes "abc" and
+           sets the end-of-file indicator; after fseek(f, 5, SEEK_SET),
+           fgetc() returns EOF.
+test       t/014-read-stops-at-end.c
+
+assertion  XSH.fmemopen.015
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       With "r+" on "abcdef" (size 6), fseek(f, 2, SEEK_SET) and
+           fputs("XY") leave ftell() at 4 and, after fflush(), the buffer
+           "abXYef". With "w+" (size 8), fputs("abcdef"), fseek(f, 1,
+           SEEK_SET), fputs("Z") and rewind() make reads give "aZcdef".
+test       t/015-write-at-position.c
+
+assertion  XSH.fmemopen.016
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       On 8-byte buffers holding "ab" and null bytes: with "a+", after a
+           read of 'a', fseek(f, 0, SEEK_SET) and fputs("XY"), and with "a",
+           after fseek(f, 0, SEEK_SET) and fputs("Q"), fflush() leaves the
+           buffers starting "abXY" and "abQ".
+test       t/016-append-writes-at-end.c
+
+assertion  XSH.fmemopen.017
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       On a stream from fmemopen(buf, 10, "w+"): after fputs("abc"),
+           fseek(f, 0, SEEK_END) gives position 3; after fputs("Q") at 0 it
+           still gives 3; after fputs("Z") at 5 it gives 6.
+test       t/017-end-follows-writes.c
+
+assertion  XSH.fmemopen.018
+anchor     functions/fmemopen.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5
+class      required
+says       With max_size 4 inside a 12-byte array of 'x': after fputs() of
+           "abcdefgh" and fclose() on a "w" stream, and after fputs() of
+           "abcdefgh" on an unbuffered "w+" stream, bytes 4 to 11 are still
+           'x', and on the unbuffered stream fseek(f, 0, SEEK_END) then
+           gives a position of at most 4.
+note       How many bytes a write that does not fit puts in, and its
+           errors, are not judged (what the buffer holds when it is filled
+           exactly is XSH.fmemopen.021). setvbuf() refusing _IONBF is
+           UNRESOLVED.
+test       t/018-bounds.c
+
+assertion  XSH.fmemopen.019
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       On an 8-byte buffer of 'x' opened "w", fputs("abc") and fflush()
+           leave "abc" and a null byte at index 3, and a further fputs("de")
+           and fflush() a null byte at index 5; on an 8-byte buffer holding
+           "ab", 0, then 'x', opened "a", fputs("Q") and fflush() leave "abQ"
+           and a null byte at index 3.
+test       t/019-null-after-write.c
+
+assertion  XSH.fmemopen.020
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       With "w+" on an 8-byte buffer of 'x', fputs("abcdef"), fseek(f, 1,
+           SEEK_SET), fputs("Z") and fflush() leave index 2 holding 'c';
+           with "r+" on "abcdef" (size 6), fputs("XY") and fflush() leave
+           index 2 holding 'c', and rewind() and reads give "XYcdef".
+note       Only a write that moves the end position adds a null byte.
+test       t/020-no-null-inside.c
+
+assertion  XSH.fmemopen.021
+anchor     functions/fmemopen.html#DESCRIPTION
+class      required
+says       With max_size 4 inside an 8-byte array of 'x', fputs("abcd") on a
+           "w" stream and on a "w+" stream, and fputs("cd") on an "a"
+           stream over "ab", 0, 0, each followed by fflush() returning 0,
+           leave the 4 bytes "abcd" (no null byte among them) and bytes 4
+           to 7 'x'; on the "w+" stream rewind() and reads then give
+           "abcd".
+note       The null byte goes at the new end position only if it fits;
+           here it does not (the page's APPLICATION USAGE says the same).
+           If fflush() fails, the assertion is UNRESOLVED.
+test       t/021-full-no-null.c
+
+assertion  XSH.fmemopen.022
+anchor     functions/fmemopen.html#DESCRIPTION
+anchor     functions/fseek.html#DESCRIPTION
+class      required
+says       On a stream from fmemopen(buf, 10, "w+") after fputs("abc"),
+           fseek() to 7 and to 10 with SEEK_SET and to 7 with SEEK_END
+           return 0; fseek() to 11 and to -1 with SEEK_SET, by 11 with
+           SEEK_CUR from 0 and to 8 with SEEK_END return -1; ftell() is then
+           within 0 to 10.
+note       Positions past the end position but within max_size are allowed
+           as for files (fseek()). The errno is fseek()'s (XSH.fseek.014,
+           Q-35); where a failed seek leaves the position is not stated
+           (variant fseek.mem_fail_clamps).
+test       t/022-seek-bounds.c
+
+assertion  XSH.fmemopen.023
+anchor     functions/V2_chap02.html#2.5
+class      required
+since      2008
+says       Streams from fmemopen() with "r" and "w+" have no orientation
+           (fwide(f, 0) returns 0); after fgetc() on the "r" stream
+           fwide(f, 0) returns a negative value.
+test       t/023-orientation.c
+
+assertion  XSH.fmemopen.024
+anchor     functions/fmemopen.html#ERRORS/EMFILE
+class      required
+since      2008
+says       With {STREAM_MAX} from sysconf() bounded and {STREAM_MAX} streams
+           open (counting stdin, stdout and stderr), fmemopen(buf, 4, "r")
+           returns a null pointer with errno EMFILE.
+note       An indeterminate {STREAM_MAX} is NOTINUSE, as in
+           XSH.fopen.032.
+test       t/024-stream-max.c

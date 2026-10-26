@@ -1,0 +1,16 @@
+# pthread_join.cov - every requirement unit on functions/pthread_join.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:981286a0     XSH.pthread_join.001 XSH.pthread_join.002
+DESCRIPTION:b038b3a4     XSH.pthread_join.003
+DESCRIPTION:4fb4989a     XSH.pthread_join.004
+DESCRIPTION:00f470e2     none  undefined behaviour
+DESCRIPTION:2bb5a504     XSH.pthread_join.006
+DESCRIPTION:2affbc07     none  unspecified
+DESCRIPTION:926c15f0     none  undefined behaviour
+DESCRIPTION:0b222b8e     none  undefined behaviour
+DESCRIPTION:6dfaa3d1     none  undefined behaviour
+DESCRIPTION:b09fa2aa     none  undefined behaviour
+RETURN_VALUE:026067bb    XSH.pthread_join.001 XSH.pthread_join.002 XSH.pthread_join.003
+ERRORS:f007b6b4          untestable  may-fail: a deadlock (two threads joining each other) may be detected or may simply hang, and a hang cannot be told from a slow join
+ERRORS:c812edde          XSH.pthread_join.005

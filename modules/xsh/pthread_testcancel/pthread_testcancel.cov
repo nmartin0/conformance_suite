@@ -1,0 +1,17 @@
+# pthread_testcancel.cov - every requirement unit on functions/pthread_testcancel.html
+# (one page for pthread_setcancelstate(), pthread_setcanceltype() and
+# pthread_testcancel(): both modules list the same units).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:61e81680     partial XSH.pthread_setcancelstate.002 XSH.pthread_setcancelstate.004  # the effect and the previous value; atomicity is not observable
+DESCRIPTION:9719bbc0     app
+DESCRIPTION:44dda7b4     partial XSH.pthread_setcancelstate.003 XSH.pthread_setcancelstate.006  # the effect and the previous value; atomicity is not observable
+DESCRIPTION:55cdc172     app
+DESCRIPTION:c13e512d     XSH.pthread_setcancelstate.001
+DESCRIPTION:133cba70     XSH.pthread_testcancel.001 XSH.pthread_testcancel.002
+DESCRIPTION:b54d9a6a     XSH.pthread_testcancel.003
+DESCRIPTION:55378cc8     untestable  async-signal-safety cannot be shown by running calls from a handler
+RETURN_VALUE:e819ae57    XSH.pthread_setcancelstate.002 XSH.pthread_setcancelstate.003
+ERRORS:381c1149          optional
+ERRORS:0bc9664c          optional
+ERRORS:0a906269          partial XSH.pthread_setcancelstate.002 XSH.pthread_setcancelstate.003  # every return is checked to be 0; no signal is aimed at the caller during the call

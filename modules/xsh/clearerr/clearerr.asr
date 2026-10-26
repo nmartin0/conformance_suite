@@ -1,0 +1,39 @@
+# XSH clearerr()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.clearerr.001
+anchor     functions/clearerr.html#DESCRIPTION
+class      required
+since      1988
+says       clearerr() clears both indicators: on a file stream read to
+           end-of-file, feof() becomes 0; on a stream from fdopen() of an
+           O_NONBLOCK pipe's read end that has both indicators set (fgetc()
+           on the empty pipe failed with EAGAIN, then returned EOF after the
+           writer closed), feof() and ferror() both become 0.
+note       fgetc() reads while the error indicator alone is set, so the
+           second stream gets both; if it does not, the test is
+           UNRESOLVED.
+test       t/001-clears-both.c
+
+assertion  XSH.clearerr.002
+anchor     functions/clearerr.html#DESCRIPTION
+class      required
+since      2008
+says       With errno set to ERANGE, clearerr() on a stream with its
+           end-of-file indicator set, and on one with no indicator set,
+           leaves errno ERANGE.
+note       Added by POSIX.1-2008 TC1 (Austin Group defect 401).
+test       t/002-errno-kept.c
+
+assertion  XSH.clearerr.003
+anchor     functions/clearerr.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream that has read the 1-byte file "a" to end-of-file,
+           after "b" is appended through another open() of the file and
+           fgetc() has again returned EOF (a precondition: the indicator is
+           set; UNRESOLVED if not), fgetc() after clearerr() returns 'b'.
+note       fgetc() returns EOF while the indicator is set and reads the
+           next byte once it is clear. The other open() is a separate open
+           file description, so XSH 2.5.1 does not apply.
+test       t/003-reads-again.c

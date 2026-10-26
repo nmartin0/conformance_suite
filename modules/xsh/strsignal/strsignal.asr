@@ -1,0 +1,34 @@
+# XSH strsignal()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The strings are implementation-defined: the tests check only that one is
+# returned and that it is psignal()'s description of the same signal.
+
+assertion  XSH.strsignal.001
+anchor     functions/strsignal.html#DESCRIPTION
+anchor     functions/strsignal.html#RETURN VALUE
+class      required
+since      2008
+says       For every signal in the <signal.h> table, strsignal() returns a
+           non-null pointer to a string s, and psignal() of that signal with
+           message "pc" writes exactly "pc: ", s and a newline.
+uses       XSH.psiginfo.001
+test       t/001-same-as-psignal.c
+
+assertion  XSH.strsignal.002
+anchor     functions/strsignal.html#DESCRIPTION
+anchor     functions/strsignal.html#RETURN VALUE
+class      required
+since      2008
+says       The same holds for SIGRTMIN, SIGRTMIN+1 and SIGRTMAX.
+uses       XSH.psiginfo.001
+test       t/002-realtime.c
+
+assertion  XSH.strsignal.003
+anchor     functions/strsignal.html#DESCRIPTION
+class      required
+since      2008
+says       The string returned by strsignal(SIGINT) still holds the same
+           bytes after psignal(), psiginfo(), strerror() and perror()
+           calls.
+test       t/003-not-overwritten.c

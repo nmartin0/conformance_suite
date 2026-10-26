@@ -1,0 +1,35 @@
+# XSH fputs()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fputs.001
+anchor     functions/fputs.html#DESCRIPTION
+anchor     functions/fputs.html#RETURN VALUE
+class      required
+since      1988
+says       On a stream opened "w", fputs("hello") and then fputs("") each
+           return a non-negative value, and after fclose() the file holds
+           exactly the 5 bytes "hello" (no null byte).
+note       Which non-negative value is open (APPLICATION USAGE lists a
+           constant, the last byte and the byte count); variants
+           fputs.returns_count and fputs.returns_last.
+test       t/001-writes.c
+
+assertion  XSH.fputs.002
+anchor     functions/fputs.html#RETURN VALUE
+anchor     functions/fputc.html#ERRORS/EBADF
+class      required
+says       On an unbuffered stream opened "w" whose descriptor was closed,
+           fputs("ab") returns EOF, sets errno to EBADF and sets the
+           stream's error indicator.
+note       Where setvbuf() refuses _IONBF, the test writes until a call
+           fails; if none does within 4 MiB the result is UNRESOLVED.
+test       t/002-ebadf.c
+
+assertion  XSH.fputs.003
+anchor     functions/fputs.html#DESCRIPTION
+class      required
+says       On a stream opened "r+" on a file whose modification time is set
+           to 2001-09-09, after fputs("xy") and a successful fflush(),
+           fstat() shows a later st_mtim.
+note       As for XSH.fputc.005 (the change time is not checked).
+test       t/003-mtime.c

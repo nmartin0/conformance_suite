@@ -1,0 +1,8 @@
+# pthread_detach.cov - every requirement unit on functions/pthread_detach.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:704f5e5f     partial XSH.pthread_detach.001 XSH.pthread_detach.002 XSH.pthread_detach.003  # that the thread is then detached (not joinable) cannot be observed: joining it is undefined
+DESCRIPTION:6b0df457     partial XSH.pthread_detach.001  # not terminating it; that no zombie remains cannot be observed
+DESCRIPTION:facff5ce     none  undefined behaviour
+RETURN_VALUE:9997c2df    XSH.pthread_detach.001 XSH.pthread_detach.002 XSH.pthread_detach.003
+ERRORS:64883635          untestable  pthread_detach() does not wait; there is nothing for a signal to interrupt

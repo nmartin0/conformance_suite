@@ -1,0 +1,47 @@
+# XSH fgetpos()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fgetpos.001
+anchor     functions/fgetpos.html#DESCRIPTION
+anchor     functions/fgetpos.html#RETURN VALUE
+class      required
+since      2001
+says       fgetpos() returns 0 and stores a value fsetpos() can return to: on
+           a stream reading "0123456789", a value stored after 3 reads takes
+           the stream back to '3' after 4 more reads; on a "w" stream, a
+           value stored after fputs("hello") (still buffered) takes it back
+           to offset 5 after fputs("XY"), so that fputc('Z') and fclose()
+           leave "helloZY".
+note       fgetpos() came from ISO C (Issue 4); 2001 is the first POSIX.1
+           edition with it. What the value holds is unspecified and is not
+           looked at (variant fgetpos.opaque).
+test       t/001-round-trip.c
+
+assertion  XSH.fgetpos.002
+anchor     functions/fgetpos.html#DESCRIPTION
+class      required
+since      2001
+says       With errno set to ERANGE, a successful fgetpos() on a file stream
+           leaves errno ERANGE.
+test       t/002-errno-kept.c
+
+assertion  XSH.fgetpos.003
+anchor     functions/fgetpos.html#ERRORS/ESPIPE
+class      required
+since      2001
+says       fgetpos() on streams from fdopen() of a pipe's read end, of a FIFO
+           opened O_RDONLY|O_NONBLOCK, and of one end of an AF_UNIX
+           socketpair() returns a non-zero value with errno ESPIPE.
+note       Issue 6 added the error, sockets included.
+test       t/003-espipe.c
+
+assertion  XSH.fgetpos.004
+anchor     functions/fgetpos.html#ERRORS/EBADF
+class      required
+since      2001
+says       On a stream reading "0123456789" whose descriptor has been closed
+           with close() after one read and a successful fgetpos(), fgetpos()
+           returns a non-zero value with errno EBADF.
+note       Issue 6 added the error. close() does not move the offset, so
+           the descriptor is not a second handle (XSH 2.5.1).
+test       t/004-ebadf.c

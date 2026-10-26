@@ -1,0 +1,18 @@
+# pthread_getspecific.cov - every requirement unit on functions/pthread_getspecific.html
+# (pthread_getspecific, pthread_setspecific).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:bdba794b     XSH.pthread_getspecific.001 XSH.pthread_getspecific.002
+DESCRIPTION:1d4042cd     XSH.pthread_getspecific.001
+DESCRIPTION:4c31fc6e     XSH.pthread_getspecific.002
+DESCRIPTION:e7da4aa4     none  informative
+DESCRIPTION:6ac115fc     none  undefined behaviour
+DESCRIPTION:20123427     XSH.pthread_getspecific.003
+DESCRIPTION:eac976c9     XSH.pthread_getspecific.003
+DESCRIPTION:e987b808     none  a consequence of the destructor iteration rules (XSH.pthread_key_create.004)
+DESCRIPTION:e2ed9d28     none  a permission
+RETURN_VALUE:1c23559d    XSH.pthread_getspecific.001
+RETURN_VALUE:e29f9a47    XSH.pthread_getspecific.001 XSH.pthread_getspecific.002
+RETURN_VALUE:9616030e    XSH.pthread_getspecific.001
+ERRORS:dde5ba45          untestable  insufficient memory for a binding cannot be arranged portably
+ERRORS:269f230e          untestable  pthread_setspecific() does not wait; there is nothing for a signal to interrupt

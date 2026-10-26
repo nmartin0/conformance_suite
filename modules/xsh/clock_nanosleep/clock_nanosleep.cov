@@ -1,0 +1,23 @@
+# clock_nanosleep.cov - every requirement unit on functions/clock_nanosleep.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:950b820b     partial XSH.clock_nanosleep.001 XSH.clock_nanosleep.002 XSH.clock_nanosleep.009 XSH.clock_nanosleep.012  # termination of the process during the sleep is not checked
+DESCRIPTION:23c1b1fa     partial XSH.clock_nanosleep.001 XSH.clock_nanosleep.002  # each sleep is measured on its own clock; telling the clocks apart needs CLOCK_REALTIME to be set
+DESCRIPTION:71260009     partial XSH.clock_nanosleep.003 XSH.clock_nanosleep.004 XSH.clock_nanosleep.011  # termination of the process during the sleep is not checked
+DESCRIPTION:c381d186     XSH.clock_nanosleep.005
+DESCRIPTION:c6e906e4     none  a permission (the variants clock_nanosleep.late and rem_coarse plant it)
+DESCRIPTION:dfbde3ca     XSH.clock_nanosleep.001 XSH.clock_nanosleep.002 XSH.clock_nanosleep.012
+DESCRIPTION:4e387e44     XSH.clock_nanosleep.003 XSH.clock_nanosleep.004
+DESCRIPTION:dc6c6ab7     XSH.clock_nanosleep.013
+DESCRIPTION:26c2c35c     XSH.clock_nanosleep.008
+DESCRIPTION:9dfa866f     impl  other CPU-time clocks may or may not be allowed
+RETURN_VALUE:00e2d5a2    XSH.clock_nanosleep.001 XSH.clock_nanosleep.002 XSH.clock_nanosleep.003 XSH.clock_nanosleep.004 XSH.clock_nanosleep.005
+RETURN_VALUE:a08e8093    XSH.clock_nanosleep.009 XSH.clock_nanosleep.011 XSH.clock_nanosleep.014
+RETURN_VALUE:6f828937    XSH.clock_nanosleep.009
+RETURN_VALUE:d2d256ce    XSH.clock_nanosleep.010
+RETURN_VALUE:8cab689d    XSH.clock_nanosleep.014
+RETURN_VALUE:044c55c6    XSH.clock_nanosleep.011
+RETURN_VALUE:3fd495cd    XSH.clock_nanosleep.006 XSH.clock_nanosleep.007 XSH.clock_nanosleep.008
+ERRORS:c68bf1e2          XSH.clock_nanosleep.009 XSH.clock_nanosleep.010 XSH.clock_nanosleep.011 XSH.clock_nanosleep.014
+ERRORS:6f55f54e          partial XSH.clock_nanosleep.006 XSH.clock_nanosleep.007 XSH.clock_nanosleep.008  # an absolute time outside a clock's range is not checked (the ranges are not given)
+ERRORS:529dbddf          partial XSH.clock_nanosleep.008  # only the calling thread's CPU-time clock, where EINVAL also applies

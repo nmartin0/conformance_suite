@@ -1,0 +1,21 @@
+# gmtime.cov - every requirement unit on functions/gmtime.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:0cc62401     none  alignment with ISO C
+DESCRIPTION:5ae5401f     none  alignment with ISO C
+DESCRIPTION:4e137535     none  alignment with ISO C
+DESCRIPTION:ac86cdfb     XSH.gmtime.001
+DESCRIPTION:7d01b340     XSH.gmtime.001
+DESCRIPTION:60d25c5c     XSH.gmtime.002
+DESCRIPTION:11344dcb     todo  freedom from data races with other functions (threads calling gmtime() and other <time.h> functions at once)
+DESCRIPTION:5ee95c24     none  a permission, read with ISO C (two types of static objects)
+DESCRIPTION:aecb6daa     none  a permission (may overwrite)
+DESCRIPTION:003ea3ac     XSH.gmtime.002
+DESCRIPTION:eee2d7ee     XSH.gmtime.002
+DESCRIPTION:5ca9dc8e     XSH.gmtime.002
+RETURN_VALUE:98da39b6    XSH.gmtime.001
+RETURN_VALUE:19b98988    XSH.gmtime.005
+RETURN_VALUE:e5b2419f    XSH.gmtime.002
+RETURN_VALUE:3dcb1c6c    partial XSH.gmtime.003  # static storage is checked only as the string outliving further calls
+RETURN_VALUE:3b6a647e    XSH.gmtime.006
+ERRORS:4e94a678          XSH.gmtime.005 XSH.gmtime.006

@@ -1,0 +1,24 @@
+# XSH feof()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.feof.001
+anchor     functions/feof.html#RETURN VALUE
+anchor     functions/feof.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream reading "ab", feof() is 0 when it is opened, non-zero
+           once fgetc() has returned 'a', 'b' and then EOF, and 0 again after
+           clearerr(); on a stream whose error indicator alone is set (a
+           read on its closed descriptor, then restored with dup2()), feof()
+           is 0.
+test       t/001-indicator.c
+
+assertion  XSH.feof.002
+anchor     functions/feof.html#DESCRIPTION
+class      required
+since      2008
+says       With errno set to ERANGE, feof() on a stream whose end-of-file
+           indicator is clear, and on one where it is set, leaves errno
+           ERANGE.
+note       Added by POSIX.1-2008 TC1 (Austin Group defect 401).
+test       t/002-errno-kept.c

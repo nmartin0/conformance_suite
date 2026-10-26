@@ -1,0 +1,166 @@
+# fprintf.cov - every requirement unit on functions/fprintf.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:57856cb6     XSH.fprintf.046
+DESCRIPTION:6a2147e4     XSH.fprintf.045
+DESCRIPTION:49034b3d     XSH.fprintf.042
+DESCRIPTION:058f8fb1     partial XSH.fprintf.055 XSH.fprintf.056  # the string and its length; "as if by malloc()" only through free() accepting it
+DESCRIPTION:96c9dd18     XSH.fprintf.055
+DESCRIPTION:a441b7d9     XSH.fprintf.048
+DESCRIPTION:6f23e3c5     XSH.fprintf.043
+DESCRIPTION:b2ef47ad     XSH.fprintf.044
+DESCRIPTION:364f9496     XSH.fprintf.043
+DESCRIPTION:e16f8021     app
+DESCRIPTION:7d8f4bfc     none  introduces the conversions described in the units below
+DESCRIPTION:ac8c0e01     app
+DESCRIPTION:c81fdc07     XSH.fprintf.001 XSH.fprintf.002 XSH.fprintf.024
+DESCRIPTION:3333a84e     app
+DESCRIPTION:e9d9a7ad     XSH.fprintf.001
+DESCRIPTION:c23a340e     XSH.fprintf.034
+DESCRIPTION:69576fd3     XSH.fprintf.034
+DESCRIPTION:40f3ffd5     none  rationale for numbered arguments
+DESCRIPTION:e261cdfa     app
+DESCRIPTION:009b665b     XSH.fprintf.034
+DESCRIPTION:4c87a2bd     app
+DESCRIPTION:37fe4e92     app
+DESCRIPTION:55ddd5d7     XSH.fprintf.034 XSH.fprintf.035
+DESCRIPTION:808ff2fb     XSH.fprintf.001 XSH.fprintf.003 XSH.fprintf.009
+DESCRIPTION:5515dcbd     none  introduces the radix character; the POSIX locale value is the next units
+DESCRIPTION:ae842240     partial XSH.fprintf.033  # only the POSIX locale; no locale with another radix character can be named portably
+DESCRIPTION:09afc0db     XSH.fprintf.033
+DESCRIPTION:b7c56076     XSH.fprintf.034
+DESCRIPTION:b2eaadcd     XSH.fprintf.011 XSH.fprintf.014
+DESCRIPTION:1aa83f62     XSH.fprintf.007
+DESCRIPTION:47741f89     XSH.fprintf.007 XSH.fprintf.008
+DESCRIPTION:becbfbf2     XSH.fprintf.007 XSH.fprintf.009 XSH.fprintf.035
+DESCRIPTION:de9782ca     partial XSH.fprintf.005 XSH.fprintf.025 XSH.fprintf.026 XSH.fprintf.027 XSH.fprintf.029 XSH.fprintf.021 XSH.fprintf.040  # every kind of precision; S precision only in the POSIX locale
+DESCRIPTION:02f4b3b7     XSH.fprintf.005 XSH.fprintf.006 XSH.fprintf.009 XSH.fprintf.035
+DESCRIPTION:10621441     app
+DESCRIPTION:7f2c7130     XSH.fprintf.017 XSH.fprintf.019
+DESCRIPTION:22bdf45f     XSH.fprintf.003
+DESCRIPTION:7d89a123     XSH.fprintf.009
+DESCRIPTION:e065aab8     XSH.fprintf.009
+DESCRIPTION:fff64680     app
+DESCRIPTION:96484ad4     XSH.fprintf.009 XSH.fprintf.035
+DESCRIPTION:e50a5f99     XSH.fprintf.009
+DESCRIPTION:f0b25bf6     XSH.fprintf.035
+DESCRIPTION:eea408eb     XSH.fprintf.035
+DESCRIPTION:db9cf882     none  heading of the flag list
+DESCRIPTION:a04a772e     partial XSH.fprintf.032  # only the POSIX locale, where grouping adds nothing; no locale with a separator can be named portably
+DESCRIPTION:d51a36f2     app
+DESCRIPTION:3bf812cb     partial XSH.fprintf.032  # the POSIX locale's empty separator only
+DESCRIPTION:848fc811     XSH.fprintf.008
+DESCRIPTION:3c863a36     XSH.fprintf.007
+DESCRIPTION:5769a0dc     XSH.fprintf.010
+DESCRIPTION:2dc96510     XSH.fprintf.010
+DESCRIPTION:6bf8bdeb     XSH.fprintf.011
+DESCRIPTION:15caf8f6     XSH.fprintf.011
+DESCRIPTION:5aaae1ce     XSH.fprintf.012 XSH.fprintf.013 XSH.fprintf.028
+DESCRIPTION:dcaab8c8     XSH.fprintf.012
+DESCRIPTION:3b8ea18a     XSH.fprintf.013
+DESCRIPTION:6ce719dc     XSH.fprintf.028
+DESCRIPTION:96b7f1b4     XSH.fprintf.025 XSH.fprintf.026 XSH.fprintf.027 XSH.fprintf.029
+DESCRIPTION:b4c5d25b     XSH.fprintf.028
+DESCRIPTION:8741e928     app
+DESCRIPTION:bb3e96c9     partial XSH.fprintf.014 XSH.fprintf.016  # integers, f and g, and the infinity exception; '0' with e and a is not checked
+DESCRIPTION:43e00d8a     XSH.fprintf.015
+DESCRIPTION:c99ebc82     XSH.fprintf.015
+DESCRIPTION:4de7aea6     partial XSH.fprintf.032  # with no grouping characters in the POSIX locale the order cannot be seen
+DESCRIPTION:b27e85d7     app
+DESCRIPTION:d0ac1212     none  heading of the length modifier list
+DESCRIPTION:285a490a     partial XSH.fprintf.017 XSH.fprintf.024  # in-range signed values only (the conversion of others to signed char is implementation-defined)
+DESCRIPTION:1252aa60     XSH.fprintf.018 XSH.fprintf.024
+DESCRIPTION:6ded8db5     XSH.fprintf.019 XSH.fprintf.024 XSH.fprintf.036 XSH.fprintf.038 XSH.fprintf.057
+DESCRIPTION:07acb319     XSH.fprintf.019 XSH.fprintf.024
+DESCRIPTION:63a510df     XSH.fprintf.019 XSH.fprintf.024
+DESCRIPTION:f0d0b0de     partial XSH.fprintf.019  # u and x only; the signed type corresponding to size_t (for d, i and n) has no portable name
+DESCRIPTION:6cae901f     partial XSH.fprintf.019 XSH.fprintf.024  # d, i and n; the unsigned type corresponding to ptrdiff_t has no portable name
+DESCRIPTION:7fdbb075     partial XSH.fprintf.057  # f, F, e and g; La is not compared (its leading digit is unspecified)
+DESCRIPTION:5793cc6b     app
+DESCRIPTION:1f0009fa     none  heading of the conversion specifier list
+DESCRIPTION:55ce68e7     XSH.fprintf.003
+DESCRIPTION:46f5b270     XSH.fprintf.005
+DESCRIPTION:cdeb6343     XSH.fprintf.003 XSH.fprintf.005
+DESCRIPTION:82937d0a     XSH.fprintf.006
+DESCRIPTION:e3f58c96     XSH.fprintf.004
+DESCRIPTION:46f5b270.2   XSH.fprintf.005
+DESCRIPTION:cdeb6343.2   XSH.fprintf.004
+DESCRIPTION:82937d0a.2   XSH.fprintf.006
+DESCRIPTION:eadbfaf3     XSH.fprintf.004
+DESCRIPTION:46f5b270.3   XSH.fprintf.005
+DESCRIPTION:cdeb6343.3   XSH.fprintf.005
+DESCRIPTION:82937d0a.3   XSH.fprintf.006
+DESCRIPTION:0a8fb70c     XSH.fprintf.004
+DESCRIPTION:46f5b270.4   XSH.fprintf.005
+DESCRIPTION:cdeb6343.4   XSH.fprintf.004
+DESCRIPTION:82937d0a.4   XSH.fprintf.006
+DESCRIPTION:bb443f3c     XSH.fprintf.004
+DESCRIPTION:5ec12170     XSH.fprintf.025
+DESCRIPTION:43571607     XSH.fprintf.025 XSH.fprintf.028
+DESCRIPTION:9af39697     XSH.fprintf.025
+DESCRIPTION:b47f2a9d     impl  the rounding of the low-order digit is implementation-defined (the tests use values that need none)
+DESCRIPTION:36188a06     XSH.fprintf.031 XSH.fprintf.058
+DESCRIPTION:44ad3cce     XSH.fprintf.031 XSH.fprintf.058
+DESCRIPTION:db6824c7     XSH.fprintf.031 XSH.fprintf.058
+DESCRIPTION:90f6e217     XSH.fprintf.026 XSH.fprintf.028
+DESCRIPTION:b47f2a9d.2   impl  the rounding of the low-order digit is implementation-defined (the tests use values that need none)
+DESCRIPTION:4ba1bbe5     XSH.fprintf.026
+DESCRIPTION:096c90aa     XSH.fprintf.026
+DESCRIPTION:e7ccf4bf     XSH.fprintf.026
+DESCRIPTION:aed41d2c     XSH.fprintf.031 XSH.fprintf.058
+DESCRIPTION:abaa5bd3     XSH.fprintf.027
+DESCRIPTION:5c3c16dc     XSH.fprintf.027
+DESCRIPTION:c7d8bb17     XSH.fprintf.027
+DESCRIPTION:ed754eb7     XSH.fprintf.027
+DESCRIPTION:bd7b3916     XSH.fprintf.027 XSH.fprintf.028
+DESCRIPTION:aed41d2c.2   XSH.fprintf.031 XSH.fprintf.058
+DESCRIPTION:760f2780     partial XSH.fprintf.029 XSH.fprintf.028  # FLT_RADIX a power of 2 only; the other case cannot arise on the systems the suite runs on
+DESCRIPTION:27ace5f5     XSH.fprintf.029
+DESCRIPTION:d5331619     XSH.fprintf.029
+DESCRIPTION:a429a9b1     XSH.fprintf.029
+DESCRIPTION:e7ccf4bf.2   XSH.fprintf.029
+DESCRIPTION:aed41d2c.3   XSH.fprintf.031 XSH.fprintf.058
+DESCRIPTION:771915de     XSH.fprintf.020
+DESCRIPTION:77ae3aff     XSH.fprintf.036 XSH.fprintf.037 XSH.fprintf.039
+DESCRIPTION:5fe47474     app
+DESCRIPTION:3cd12771     XSH.fprintf.021
+DESCRIPTION:c96e8647     XSH.fprintf.021 XSH.fprintf.022
+DESCRIPTION:079c2cb5     XSH.fprintf.022
+DESCRIPTION:b33f26c5     app
+DESCRIPTION:0aef110a     XSH.fprintf.038 XSH.fprintf.039
+DESCRIPTION:a570d9ea     XSH.fprintf.038
+DESCRIPTION:34e820c8     app
+DESCRIPTION:5720aad9     partial XSH.fprintf.038 XSH.fprintf.039  # bytes limit and no read past an array that the precision fills exactly; shift sequences are not checked (no state-dependent locale can be named)
+DESCRIPTION:df2c9cbe     XSH.fprintf.039
+DESCRIPTION:57b8ded2     app
+DESCRIPTION:d045f3ff     partial XSH.fprintf.023  # printable characters only; the form is implementation-defined
+DESCRIPTION:398747c2     XSH.fprintf.024
+DESCRIPTION:8f0d177b     XSH.fprintf.024
+DESCRIPTION:2c50e9c6     XSH.fprintf.040
+DESCRIPTION:7f6d1945     XSH.fprintf.040
+DESCRIPTION:af9db5db     XSH.fprintf.002
+DESCRIPTION:3a3cb189     app
+DESCRIPTION:79ac700b     app
+DESCRIPTION:70b5df41     app
+DESCRIPTION:c0232d89     XSH.fprintf.007
+DESCRIPTION:b8027f30     XSH.fprintf.047
+DESCRIPTION:2034c8b0     XSH.fprintf.030
+DESCRIPTION:d83c189d     none  recommended practice for FLT_RADIX not a power of 2 ("should")
+DESCRIPTION:bf62c386     none  recommended practice ("should"); the tests use only exactly representable values
+DESCRIPTION:a1ddcf08     none  recommended practice ("should")
+DESCRIPTION:249714a5     none  recommended practice ("should")
+DESCRIPTION:d005354f     XSH.fprintf.053 XSH.fprintf.054
+DESCRIPTION:152e087b     partial XSH.fprintf.054  # through fflush(); fclose(), exit() and abort() are not checked here
+DESCRIPTION:67fc23d8     XSH.fprintf.053
+RETURN_VALUE:25ef4fd3    XSH.fprintf.045 XSH.fprintf.046 XSH.fprintf.048
+RETURN_VALUE:1b73ad40    XSH.fprintf.055 XSH.fprintf.056
+RETURN_VALUE:81c9bf2c    XSH.fprintf.042
+RETURN_VALUE:dc245513    XSH.fprintf.043
+RETURN_VALUE:01c76da1    XSH.fprintf.041 XSH.fprintf.049 XSH.fprintf.050 XSH.fprintf.051 XSH.fprintf.052
+RETURN_VALUE:50a436a2    todo  asprintf() failing on an allocation (needs a lowered RLIMIT_AS or similar, and the page leaves ptr undefined)
+RETURN_VALUE:8e508b63    XSH.fprintf.044
+ERRORS:b6419eb1          XSH.fprintf.041
+ERRORS:897f145d          XSH.fprintf.052
+ERRORS:b03247c6          todo  asprintf() ENOMEM (needs an address-space limit low enough to make the allocation fail)
+ERRORS:8f957e38          XSH.fprintf.049
+ERRORS:5a3b118c          optional

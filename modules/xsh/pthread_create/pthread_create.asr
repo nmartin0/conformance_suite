@@ -1,0 +1,152 @@
+# XSH pthread_create()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# A thread ID is compared only while its thread is live or a zombie (XSH
+# 2.9.2: its lifetime ends when it has terminated and is no longer
+# joinable), and a new thread never reads the ID stored by its creator
+# (APPLICATION USAGE: it need not be there when the thread starts).
+
+assertion  XSH.pthread_create.001
+anchor     functions/pthread_create.html#DESCRIPTION
+anchor     functions/pthread_attr_getdetachstate.html#DESCRIPTION
+class      required
+since      2001
+says       With a null attr, pthread_create() returns 0, the new thread calls
+           start_routine exactly once with arg as its argument, and the
+           thread is joinable (the default detachstate is
+           PTHREAD_CREATE_JOINABLE): pthread_join() returns 0.
+test       t/001-runs-start-routine.c
+
+assertion  XSH.pthread_create.002
+anchor     functions/pthread_create.html#DESCRIPTION
+class      required
+since      2001
+says       The ID stored through thread equals (pthread_equal()) what
+           pthread_self() returns in the new thread; two threads alive at
+           once get different IDs, and neither equals the creator's.
+test       t/002-stores-id.c
+
+assertion  XSH.pthread_create.003
+anchor     functions/pthread_create.html#DESCRIPTION
+class      required
+since      2001
+says       A start routine that returns ends the thread as pthread_exit()
+           would: pthread_join() obtains the returned pointer, and the
+           destructor of a thread-specific data key the thread had set is
+           called with its value.
+test       t/003-return-is-exit.c
+
+assertion  XSH.pthread_create.004
+anchor     functions/pthread_create.html#DESCRIPTION
+class      required
+since      2001
+says       A process whose main() returns 7 while another thread is
+           blocked ends as exit(7) would: its status is exited with 7, an
+           atexit() handler has run and a fully buffered stdout was
+           flushed.
+note       The process is a child made by fork() whose main() returns.
+test       t/004-main-return-exits.c
+
+assertion  XSH.pthread_create.005
+anchor     functions/pthread_create.html#DESCRIPTION
+class      required
+since      2001
+says       The new thread starts with its creator's signal mask: SIGUSR1
+           and SIGALRM blocked, SIGUSR2 and SIGTERM not.
+test       t/005-mask-inherited.c
+
+assertion  XSH.pthread_create.006
+anchor     functions/pthread_create.html#DESCRIPTION
+class      required
+since      2001
+says       A signal pending for the creating thread only (SIGUSR1, sent to
+           it with pthread_kill() while blocked) is not pending for the new
+           thread: sigpending() there does not include it.
+test       t/006-pending-empty.c
+
+assertion  XSH.pthread_create.007
+anchor     functions/pthread_create.html#DESCRIPTION
+anchor     functions/uselocale.html#RETURN VALUE
+class      required
+since      2008
+says       When the creator uses a thread-local locale (uselocale()), the
+           new thread has none: its uselocale((locale_t)0) returns
+           LC_GLOBAL_LOCALE.
+test       t/007-locale-not-inherited.c
+
+assertion  XSH.pthread_create.008
+anchor     functions/pthread_create.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       When the creator has an alternate signal stack, the new thread
+           does not have that stack: its sigaltstack() query reports
+           SS_DISABLE or a stack outside the creator's.
+test       t/008-altstack-not-inherited.c
+
+assertion  XSH.pthread_create.009
+anchor     functions/pthread_create.html#DESCRIPTION
+class      required
+since      2001
+says       The new thread starts with its creator's floating-point
+           environment: a rounding direction other than the initial one,
+           and FE_DIVBYZERO raised (where defined), are both seen there.
+note       NOTINUSE when no rounding direction but the current one can be
+           set.
+test       t/009-fenv-inherited.c
+
+assertion  XSH.pthread_create.010
+anchor     functions/pthread_create.html#DESCRIPTION
+class      conditional
+when       TCT
+since      2001
+says       The new thread's CPU-time clock can be named with
+           pthread_getcpuclockid() and read with clock_gettime(), and it
+           starts at zero: read first thing in the thread
+           (CLOCK_THREAD_CPUTIME_ID), it is below the 300 ms of CPU time
+           the creator used before creating it.
+note       Assumes the implementation spends under 300 ms of the new
+           thread's CPU time before the start routine runs; the text
+           gives no figure, so this is a judgement of what "starts at
+           zero" can be told from.
+test       t/010-cpu-clock.c
+
+assertion  XSH.pthread_create.011
+anchor     functions/pthread_create.html#DESCRIPTION
+class      required
+since      2001
+says       A thread created joinable stays joinable when its attributes
+           object is set to PTHREAD_CREATE_DETACHED right after
+           pthread_create() returns: pthread_join() returns 0 and the
+           thread's value.
+test       t/011-attr-later.c
+
+assertion  XSH.pthread_create.012
+anchor     functions/pthread_create.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       With {PTHREAD_THREADS_MAX} reported by sysconf(), creating that
+           many plus one threads (all kept alive) fails at least once, and
+           the first failure is EAGAIN.
+note       NOTINUSE when sysconf(_SC_THREAD_THREADS_MAX) reports no limit,
+           or one above 4096. Accepts the failure one creation early,
+           since XBD <limits.h> counts threads "created per process" and
+           this page counts the "total number of threads in a process"
+           (whether the initial thread counts is left open), and any
+           earlier failure for lack of resources, which is EAGAIN too.
+timeout    120
+test       t/012-eagain-threads-max.c
+
+assertion  XSH.pthread_create.013
+anchor     functions/pthread_create.html#ERRORS/EPERM
+class      conditional
+when       TPS
+since      2001
+says       A caller without appropriate privileges whose attributes ask
+           for PTHREAD_EXPLICIT_SCHED, SCHED_FIFO and the highest
+           SCHED_FIFO priority either gets the thread or fails with EPERM.
+note       What privileges are needed is implementation-defined: when the
+           creation succeeds the test is UNRESOLVED (the caller had them),
+           as it is for EAGAIN. Run as root, the call is made in a child
+           that takes user and group 65534.
+test       t/013-eperm.c

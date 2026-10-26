@@ -1,0 +1,51 @@
+# shm_open.cov - every requirement unit on functions/shm_open.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:9ecbca7c     XSH.shm_open.001 XSH.shm_open.007
+DESCRIPTION:c384f483     XSH.shm_open.001 XSH.shm_open.005
+DESCRIPTION:f4fadf5b     XSH.shm_open.004
+DESCRIPTION:5f379420     none  defines the argument
+DESCRIPTION:8147d603     none  unspecified; the tests do not depend on it
+DESCRIPTION:1db11134     impl  slashes after the first and length limits are implementation-defined; names are kept within {_POSIX_NAME_MAX}
+DESCRIPTION:558ec566     XSH.shm_open.007
+DESCRIPTION:715fd280     impl  names without a leading slash are implementation-defined
+DESCRIPTION:25618b98     XSH.shm_open.001
+DESCRIPTION:bece3402     partial XSH.shm_open.005  # two opens give descriptions with their own access modes; sharing with other processes not checked
+DESCRIPTION:69ab5ce4     none  unspecified
+DESCRIPTION:7c322de7     XSH.shm_open.003
+DESCRIPTION:19bb0313     XSH.shm_open.005 XSH.shm_open.006
+DESCRIPTION:c74fbfe9     none  introduces the flags
+DESCRIPTION:f412e213     app
+DESCRIPTION:b0524eab     XSH.shm_open.005
+DESCRIPTION:a266f1b4     XSH.shm_open.005
+DESCRIPTION:1174bc94     app
+DESCRIPTION:956faab4     XSH.shm_open.008
+DESCRIPTION:1b6f0d13     XSH.shm_open.001
+DESCRIPTION:5d22c123     XSH.shm_open.002
+DESCRIPTION:89e5c098     todo  group ID: either the effective group ID or, where the name is visible in the file system, the directory's, which the test cannot find
+DESCRIPTION:dc3212f0     XSH.shm_open.002
+DESCRIPTION:8373ad2f     none  unspecified
+DESCRIPTION:5b4f54fd     XSH.shm_open.005
+DESCRIPTION:061df20f     XSH.shm_open.001
+DESCRIPTION:825109c0     XSH.shm_open.009
+DESCRIPTION:17d1cbc3     XSH.shm_open.010
+DESCRIPTION:49f0da4e     app
+DESCRIPTION:1b488731     XSH.shm_open.011
+DESCRIPTION:7189a964     app
+DESCRIPTION:2d1912c6     todo  atomicity among threads of close(), ftruncate(), mmap(), shm_open(), shm_unlink(): a race test with no planted fault yet
+DESCRIPTION:55479250     none  the list of the previous unit
+DESCRIPTION:951706ed     todo  see DESCRIPTION:2d1912c6
+DESCRIPTION:fd289b13     todo  see DESCRIPTION:2d1912c6
+DESCRIPTION:060d9c24     XSH.shm_open.015 XSH.shm_unlink.002
+DESCRIPTION:f34e1188     none  unspecified
+RETURN_VALUE:9e72f6bc    XSH.shm_open.001
+RETURN_VALUE:34187386    XSH.shm_open.009 XSH.shm_open.012 XSH.shm_open.013 XSH.shm_open.014
+ERRORS:0eb06a5a          partial XSH.shm_open.013  # permission denied for an existing object; creation and O_TRUNC cases not checked
+ERRORS:8b61c235          XSH.shm_open.009
+ERRORS:200ff846          untestable  shm_open() of these objects does not block, so no signal can be made to interrupt it
+ERRORS:11abf3b3          impl  which names are unsupported is implementation-defined
+ERRORS:1fbbba10          XSH.shm_open.014
+ERRORS:d7d702a7          untestable  needs the system-wide limit reached
+ERRORS:771d8f1d          XSH.shm_open.012
+ERRORS:b3ad35e2          untestable  needs the space for objects exhausted
+ERRORS:c715b2cb          optional

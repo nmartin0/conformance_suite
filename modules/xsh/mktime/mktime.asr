@@ -1,0 +1,112 @@
+# XSH mktime()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# TZ is always in the second form of XBD 8.3 with a rule wherever there is
+# a dst part. Expected values come from the XBD 4.19 expression, computed
+# by the test, for broken-down times in years from 1970 on.
+
+assertion  XSH.mktime.001
+anchor     functions/mktime.html#DESCRIPTION
+anchor     functions/mktime.html#RETURN VALUE
+class      required
+since      1988
+says       With TZ="PCT3", mktime() of in-range broken-down times (the
+           Epoch's day, leap days of 2000 and 2024, 2100-03-01, 2400-02-29
+           and a time of day with every member non-zero) returns the
+           XBD 4.19 value plus 3 hours, with tm_isdst 0 on input.
+test       t/001-std-value.c
+
+assertion  XSH.mktime.002
+anchor     functions/mktime.html#DESCRIPTION
+class      required
+since      1988
+says       mktime() uses neither tm_wday nor tm_yday: the same date with
+           tm_wday and tm_yday set to wrong in-range values and to
+           out-of-range ones gives the same value, and the structure
+           afterwards has the right tm_wday and tm_yday.
+test       t/002-ignores-wday-yday.c
+
+assertion  XSH.mktime.003
+anchor     functions/mktime.html#DESCRIPTION
+class      required
+since      1988
+says       With TZ="PCT3", out-of-range members are carried as the steps
+           describe: 29 February 2021 is 1 March, 0 February is 31
+           January, 21:65 is 22:05, month -1 and 12 and 25 move the year,
+           day 0 of March 2020 is 29 February 2020 (the year after the
+           month carry decides the length), day 29 of month 13 of 1999
+           is 29 February 2000 and of 2000 is 1 March 2001, day 366 of
+           January 2001 is 1 January 2002, day -30 of March 2021 is 29
+           January, hour -1 and 48, minute -1, second -1, 60 and 3600
+           carry likewise; the value matches the carried date and the
+           structure is set to it.
+note       Whether tm_sec is range-corrected in step 1 does not change
+           the value or the final structure (every day has 86400 s).
+test       t/003-normalize.c
+
+assertion  XSH.mktime.004
+anchor     functions/mktime.html#DESCRIPTION
+class      required
+since      2024
+says       On success with TZ="PCS5PCD,M3.2.0,M11.1.0", every member the
+           test can name (tm_sec to tm_isdst) holds the local time of the
+           returned value under the rule, including tm_wday, tm_yday and
+           a positive tm_isdst for a summer date.
+test       t/004-sets-members.c
+
+assertion  XSH.mktime.005
+anchor     functions/mktime.html#DESCRIPTION
+class      required
+since      1988
+says       With TZ="PCS5PCD,M3.2.0,M11.1.0": tm_isdst 0 for a July noon
+           returns the instant 17:00 UTC and leaves 13:00 with tm_isdst
+           positive; tm_isdst 1 for that noon returns 16:00 UTC; tm_isdst
+           1 for a January noon returns 16:00 UTC and leaves 11:00 with
+           tm_isdst 0; tm_isdst 0 for that noon returns 17:00 UTC.
+test       t/005-isdst-set.c
+
+assertion  XSH.mktime.006
+anchor     functions/mktime.html#DESCRIPTION
+class      required
+since      1988
+says       With the same TZ, a negative tm_isdst gives the result of
+           tm_isdst 1 for a July noon and of tm_isdst 0 for a January
+           noon, and likewise for the local times an hour or more before
+           and after each change of 2021 (01:00 and 04:00 on 14 March,
+           00:30 and 03:00 on 7 November).
+note       For a TZ in the rule form, whether DST is in effect is fixed
+           by the rule (XBD 8.3), so the "attempt to determine" is
+           expected to succeed.
+test       t/006-isdst-negative.c
+
+assertion  XSH.mktime.007
+anchor     functions/mktime.html#DESCRIPTION
+class      required
+says       With the same TZ and a negative tm_isdst, 02:30 on 14 March
+           2021 (skipped) returns either the standard time reading
+           (07:30 UTC) or the DST reading (06:30 UTC), and 01:30 on 7
+           November 2021 (repeated) either 06:30 or 05:30 UTC; the
+           structure is then set to the local time of the value returned.
+test       t/007-gap-overlap.c
+
+assertion  XSH.mktime.008
+anchor     functions/mktime.html#DESCRIPTION
+class      required
+since      2024
+says       After tzset() with TZ="PCT3", TZ is changed to "PCE-5:30"
+           without calling tzset(): mktime() then converts with the new
+           offset, and tzname[0] is "PCE" afterwards.
+test       t/008-sets-tz-info.c
+
+assertion  XSH.mktime.009
+anchor     functions/mktime.html#RETURN VALUE
+anchor     functions/mktime.html#ERRORS/EOVERFLOW
+class      required
+since      2024
+says       With tm_year INT_MAX and tm_mon 12 (the year cannot be held
+           in tm_year), and with tm_year INT_MAX, tm_mon 11 and tm_mday
+           32, mktime() returns (time_t)-1, sets errno to EOVERFLOW and
+           leaves tm_wday as the caller set it (-1 and 7).
+note       With a 64-bit time_t the time itself can be represented, so
+           only the tm_year condition applies.
+test       t/009-eoverflow.c

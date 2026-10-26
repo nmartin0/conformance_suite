@@ -1,0 +1,88 @@
+# XSH fgetc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fgetc.001
+anchor     functions/fgetc.html#DESCRIPTION
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+since      1988
+says       On a stream reading a file that holds the bytes 0x41, 0xff,
+           0x00, 0x42, successive fgetc() calls return 0x41, 0xff, 0 and
+           0x42 (each byte as an unsigned char value, so 0xff is not
+           EOF), and ftell() after each call is 1, 2, 3 and 4.
+test       t/001-bytes.c
+
+assertion  XSH.fgetc.002
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+since      1988
+says       On a stream at the end of its file (an empty file, and a file
+           "ab" after two reads), fgetc() returns EOF, feof() is then true
+           and ferror() false.
+test       t/002-eof.c
+
+assertion  XSH.fgetc.003
+anchor     functions/fgetc.html#RETURN VALUE
+anchor     functions/fgetc.html#DESCRIPTION
+class      required
+since      2001
+says       On a stream reading "ab" whose end-of-file indicator is set,
+           after "c" is appended to the file through a separate open(),
+           fgetc() returns EOF and feof() stays true; after clearerr()
+           the next fgetc() returns 'c'.
+note       Issue 6 (C99 alignment) made the end-of-file indicator decide
+           the result. The appended byte comes through another open file
+           description, so the handle rules of XSH 2.5.1 do not apply.
+test       t/003-eof-sticky.c
+
+assertion  XSH.fgetc.004
+anchor     functions/fgetc.html#ERRORS/EBADF
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+says       On a stream opened "r" whose descriptor was closed before the
+           first read, fgetc() returns EOF, sets errno to EBADF and sets
+           the stream's error indicator.
+test       t/004-ebadf-closed.c
+
+assertion  XSH.fgetc.005
+anchor     functions/fgetc.html#ERRORS/EBADF
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+says       On a stream opened "w" (its descriptor open for writing only),
+           fgetc() returns EOF, sets errno to EBADF and sets the stream's
+           error indicator.
+test       t/005-ebadf-write-only.c
+
+assertion  XSH.fgetc.006
+anchor     functions/fgetc.html#ERRORS/EAGAIN
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+says       On a stream on the read end of an empty pipe with O_NONBLOCK
+           set (the write end still open), fgetc() returns EOF, sets
+           errno to EAGAIN and sets the stream's error indicator.
+test       t/006-eagain.c
+
+assertion  XSH.fgetc.007
+anchor     functions/fgetc.html#ERRORS/EINTR
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+says       On a stream on the read end of an empty pipe (blocking), a
+           SIGALRM caught without SA_RESTART 1 s into fgetc() makes it
+           return EOF with errno EINTR and the error indicator set (a byte
+           is written to the pipe from the second alarm on, so an
+           implementation that restarts the read returns it and is
+           reported).
+timeout    20
+test       t/007-eintr.c
+
+assertion  XSH.fgetc.008
+anchor     functions/fgetc.html#DESCRIPTION
+class      required
+says       For a file whose last data access time is set to 2001-09-09,
+           the first fgetc() on a new stream reading it returns its first
+           byte, and fstat() afterwards shows a later st_atim.
+note       XBD 4.12: a marked timestamp is updated before fstat()
+           returns. A file system mounted noatime fails this, rightly; a
+           relatime policy updates it, since the access time is older
+           than the modification time.
+test       t/008-atime.c

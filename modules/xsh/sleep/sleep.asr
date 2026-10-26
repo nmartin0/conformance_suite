@@ -1,0 +1,64 @@
+# XSH sleep()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The text gives no upper bound on the suspension; the upper limits here
+# are practical caps. Whether sleep() may return early is open (Q-14: the
+# RATIONALE carries alarm()'s note on early alarms over to sleep()), so
+# only XSH.sleep.002 depends on it; the others hold either way. Intervals
+# are measured with CLOCK_MONOTONIC. Signals come from a child that
+# repeats them, so that one sent before the call cannot leave the test
+# waiting.
+
+assertion  XSH.sleep.001
+anchor     functions/sleep.html#DESCRIPTION
+anchor     functions/sleep.html#RETURN VALUE
+class      required
+since      1988
+says       sleep(2), with no signal, returns 0 after at least 1 s (and
+           within a 12 s cap).
+note       At least 1 s holds even under the reading that lets the
+           wakeup come up to a second early (Q-14); XSH.sleep.002 is the
+           strict bound.
+test       t/001-returns-zero.c
+
+assertion  XSH.sleep.002
+anchor     functions/sleep.html#DESCRIPTION
+class      disputed
+since      1988
+says       sleep(1) does not return before 1 s has passed.
+note       disputed (Q-14): the DESCRIPTION suspends the thread until the
+           seconds have elapsed, but the RATIONALE says alarm()'s note on
+           alarms that come up to a second early applies to sleep() too;
+           a FAIL is logged as INSPECT.
+test       t/002-not-early.c
+
+assertion  XSH.sleep.003
+anchor     functions/sleep.html#DESCRIPTION
+anchor     functions/sleep.html#RETURN VALUE
+class      required
+since      1988
+says       A caught signal ends sleep(10) early (before 9 s): it returns
+           the unslept seconds, at least 10 minus the measured time in the
+           call rounded down, and at most 10.
+note       How a fraction of a second is rounded is not stated; any value
+           between the rounded-down and rounded-up unslept time is taken.
+test       t/003-interrupted.c
+
+assertion  XSH.sleep.004
+anchor     functions/sleep.html#DESCRIPTION
+class      required
+since      1988
+says       A signal that is blocked, or ignored, when it arrives does not
+           end sleep(2): it returns 0 after at least 1 s (Q-14 as in
+           XSH.sleep.001); the blocked signal stays pending.
+test       t/004-not-delivered.c
+
+assertion  XSH.sleep.005
+anchor     functions/sleep.html#DESCRIPTION
+class      required
+says       In a process with a second thread, sleep(1) does not use
+           SIGALRM: with alarm(100) pending and SIGALRM caught, it returns
+           0, the handler does not run, the alarm is still pending
+           (alarm(0) then returns 1 to 100) and the action of SIGALRM is
+           unchanged.
+test       t/005-threads-no-sigalrm.c

@@ -1,0 +1,45 @@
+# XSH pthread_cleanup_pop() and pthread_cleanup_push()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every push is paired with a pop in the same lexical scope, as the page
+# requires of applications, and no block is left early.
+
+assertion  XSH.pthread_cleanup_pop.001
+anchor     functions/pthread_cleanup_pop.html#DESCRIPTION
+class      required
+since      2008
+says       After pushing handlers with arguments 11, 22, 33, the calls
+           pthread_cleanup_pop(1), pthread_cleanup_pop(0) and
+           pthread_cleanup_pop(7) run the handler with 33 and then 11
+           only.
+note       On a system whose pthread_cleanup_pop() is a macro that calls
+           the handler inline, the faults in what it runs cannot be
+           planted; the test is then reviewed by hand.
+test       t/001-pop.c
+
+assertion  XSH.pthread_cleanup_pop.002
+anchor     functions/pthread_cleanup_pop.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.5.3
+class      required
+since      2008
+says       A thread that pushed handlers 1 and 2, popped 2 with
+           pthread_cleanup_pop(0), pushed 3 and 4 and called
+           pthread_exit() runs them as 4, 3, 1, and pthread_join() gives
+           the value passed to pthread_exit().
+test       t/002-exit.c
+
+assertion  XSH.pthread_cleanup_pop.003
+anchor     functions/pthread_cleanup_pop.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.5.3
+class      required
+since      2008
+says       A thread canceled with two nested handlers pushed, whose
+           arguments point to volatile automatic objects of the pushed
+           blocks (assigned 10 and 20 after the pushes), runs the inner
+           handler and then the outer, once each; each handler can still
+           read its object's storage (20, then 10).
+note       The objects are volatile: the macros may use setjmp(), after
+           which ISO C leaves non-volatile automatic objects modified
+           later indeterminate; 2.9.5.3 promises only that the storage
+           remains valid.
+test       t/003-cancel.c

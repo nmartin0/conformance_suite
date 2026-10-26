@@ -1,0 +1,63 @@
+# XSH mlock(), munlock()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# mlock() and munlock() are MLR (the module's option). Whether pages are
+# locked is seen through msync() with MS_INVALIDATE, which fails with EBUSY
+# over locked pages (XSH.msync.004); those assertions need XSI or SIO for
+# msync() as well, and use file mappings (msync() on anonymous memory is
+# unspecified). Residency in memory cannot be observed and is not tested.
+# mlock() failing for resources or privileges (EAGAIN, ENOMEM, EPERM) is
+# UNRESOLVED. Addresses are multiples of {PAGESIZE}
+# (sysconf(_SC_PAGESIZE)).
+
+assertion  XSH.mlock.001
+anchor     functions/mlock.html#DESCRIPTION
+anchor     functions/mlock.html#RETURN VALUE
+class      conditional
+when       MLR+XSI|MLR+SIO
+since      2001
+says       mlock() of the second page of a three-page MAP_SHARED file
+           mapping returns 0 and the page is then locked; munlock() of it
+           returns 0 and no page of the mapping is then locked.
+uses       XSH.msync.004
+test       t/001-lock-unlock.c
+
+assertion  XSH.mlock.002
+anchor     functions/mlock.html#DESCRIPTION
+class      conditional
+when       MLR+XSI|MLR+SIO
+since      2001
+says       After three mlock() calls covering the same pages, one munlock()
+           of them leaves none locked.
+uses       XSH.msync.004
+test       t/002-munlock-count.c
+
+assertion  XSH.mlock.003
+anchor     functions/mlock.html#ERRORS/ENOMEM
+class      required
+since      2001
+says       mlock() and munlock() over three pages whose middle one is
+           unmapped each fail with ENOMEM.
+test       t/003-enomem.c
+
+assertion  XSH.mlock.004
+anchor     functions/mlock.html#RETURN VALUE
+class      conditional
+when       MLR+XSI|MLR+SIO
+since      2001
+says       A failed mlock() over mapped pages around an unmapped one locks
+           neither mapped page, and a failed munlock() over the same range,
+           after both mapped pages were locked, leaves both locked.
+uses       XSH.msync.004 XSH.mlock.003
+test       t/004-failure-no-change.c
+
+assertion  XSH.mlock.005
+anchor     functions/mlock.html#DESCRIPTION
+class      conditional
+when       MLR+XSI|MLR+SIO
+since      2001
+says       With one page of a file mapped MAP_SHARED at two addresses and
+           both mappings locked, munlock() of the first returns 0 and the
+           second stays locked.
+uses       XSH.msync.004
+test       t/005-other-mapping.c

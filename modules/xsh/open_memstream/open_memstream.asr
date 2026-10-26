@@ -1,0 +1,164 @@
+# XSH open_memstream(), open_wmemstream()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.open_memstream.001
+anchor     functions/open_memstream.html#DESCRIPTION
+class      required
+since      2008
+says       open_memstream(&b, &n) returns a stream whose ftell() is 0; after
+           fputs("hello") ftell() is 5, and after fflush() n is 5 and b
+           holds "hello" followed by a null byte; after fclose() the same
+           holds.
+test       t/001-write.c
+
+assertion  XSH.open_memstream.002
+anchor     functions/open_memstream.html#DESCRIPTION
+class      required
+since      2008
+says       With n preset to 12345, open_memstream(&b, &n) followed by
+           fflush() with nothing written sets n to 0; on a second stream,
+           with n preset to 12345 again, fclose() with nothing written sets
+           n to 0.
+note       The contents of the buffer are not judged when nothing was
+           written.
+test       t/002-initial-length.c
+
+assertion  XSH.open_memstream.003
+anchor     functions/open_memstream.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5
+class      required
+since      2008
+says       After 1000 fputs() calls of 100 bytes each and fclose(), n is
+           100000, b holds the bytes written and b[100000] is a null byte.
+test       t/003-grows.c
+
+assertion  XSH.open_memstream.004
+anchor     functions/open_memstream.html#DESCRIPTION
+class      required
+since      2008
+says       After fputs("hello world"), fseek(f, 0, SEEK_SET), fputs("J") and
+           fflush(), n is 1 and b holds "Jello world" followed by a null
+           byte.
+note       n is the smaller of the length (11) and the position (1); the
+           write replaces one byte and leaves the rest.
+test       t/004-overwrite.c
+
+assertion  XSH.open_memstream.005
+anchor     functions/open_memstream.html#DESCRIPTION
+class      required
+says       After fputs("hello") and fflush(), fseek(f, 2, SEEK_SET) and
+           fflush() set n to 2, and fseek(f, 4, SEEK_SET) and fflush() set n
+           to 4.
+note       After a successful fflush() n is the smaller of the length and
+           the position, whether or not the flush had data to move.
+test       t/005-size-after-seek.c
+
+assertion  XSH.open_memstream.006
+anchor     functions/open_memstream.html#DESCRIPTION
+class      required
+since      2008
+says       After fputs("xyz") with no fflush(), fclose() leaves n at 3 and b
+           holding "xyz" followed by a null byte.
+test       t/006-close-updates.c
+
+assertion  XSH.open_memstream.007
+anchor     functions/open_memstream.html#DESCRIPTION
+anchor     functions/open_memstream.html#EXAMPLES
+class      required
+says       As in the page's example: fprintf() of "hello my world",
+           fflush() (n 14), ftello() (14), fseeko(f, 0, SEEK_SET),
+           fprintf() of "good-bye", fseeko(f, 14, SEEK_SET) and fclose()
+           leave n at 14 and b holding "good-bye world".
+note       At fclose() the position is 14 again, so n is 14 although the
+           last write ended at 8.
+test       t/007-close-after-seek.c
+
+assertion  XSH.open_memstream.008
+anchor     functions/open_memstream.html#DESCRIPTION
+class      required
+says       After fputs("ab"), fseek(f, 5, SEEK_SET), fputs("c") and
+           fflush(), n is 6 and b holds 'a', 'b', three null bytes, 'c' and a
+           null byte.
+note       Whether or not the seek extends the buffer, the gap reads as
+           null bytes once data is written after it.
+test       t/008-gap.c
+
+assertion  XSH.open_memstream.009
+anchor     functions/open_memstream.html#DESCRIPTION
+class      required
+says       After fputs("ab"), fseek(f, 5, SEEK_SET) succeeds and fflush()
+           sets n to 2 or to 5; when it is 5, b[2] to b[4] are null bytes.
+note       Whether a seek past the length extends the buffer is
+           implementation-defined: 2 if it does not, 5 if it does.
+test       t/009-seek-past-length.c
+
+assertion  XSH.open_memstream.010
+anchor     functions/open_memstream.html#DESCRIPTION
+class      required
+says       After fputs("hello") and fseek(f, 2, SEEK_SET), fseek(f, 0,
+           SEEK_END) succeeds and ftell() is then 5 (the length) or 2 (the
+           size an fflush() would set).
+note       The base of SEEK_END is implementation-defined between these
+           two (variant open_memstream.seek_end_flush_size).
+test       t/010-seek-end.c
+
+assertion  XSH.open_memstream.011
+anchor     functions/open_memstream.html#ERRORS/EMFILE
+class      required
+since      2008
+says       With {STREAM_MAX} from sysconf() bounded and {STREAM_MAX} streams
+           open (counting stdin, stdout and stderr), open_memstream()
+           returns a null pointer with errno EMFILE.
+note       An indeterminate {STREAM_MAX} is NOTINUSE, as in
+           XSH.fopen.032.
+test       t/011-stream-max.c
+
+assertion  XSH.open_memstream.012
+anchor     functions/open_memstream.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5
+class      disputed
+says       fwide(f, 0) right after open_memstream() returns a negative value
+           (the stream is byte-oriented from the start).
+note       disputed (new): the page makes the stream byte-oriented, but
+           XSH 2.5 says a memory stream's orientation is determined in
+           exactly the same way as a file stream's, which starts with
+           none. Under that reading fwide() returns 0 here (READING
+           open_memstream.unoriented); a FAIL is logged as INSPECT. Both
+           readings agree that a wide-oriented stream is wrong.
+test       t/012-byte-oriented.c
+
+assertion  XSH.open_memstream.013
+anchor     functions/open_memstream.html#DESCRIPTION
+class      required
+since      2008
+says       open_wmemstream(&b, &n) returns a stream; after fputws(L"hello")
+           and fflush(), n is 5 and b holds L"hello" followed by a null wide
+           character; after fclose() the same holds.
+note       n counts wide characters, not bytes. Only characters of the
+           portable character set are written, in the POSIX locale.
+test       t/013-wide-write.c
+
+assertion  XSH.open_memstream.014
+anchor     functions/open_memstream.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5
+class      disputed
+says       fwide(f, 0) right after open_wmemstream() returns a positive value
+           (the stream is wide-oriented from the start).
+note       disputed (new): the same conflict as XSH.open_memstream.012
+           (READING open_memstream.wunoriented); a FAIL is logged as
+           INSPECT.
+test       t/014-wide-oriented.c
+
+assertion  XSH.open_memstream.015
+anchor     functions/V2_chap02.html#2.5
+anchor     functions/setvbuf.html#DESCRIPTION
+class      required
+since      2008
+says       On a new stream from open_memstream(), after setvbuf() with a
+           64-byte array and _IOFBF, and on another after setvbuf(f, NULL,
+           _IONBF, 0), each returning 0, fputs("hello") and fflush() give n
+           5 and b holding "hello" followed by a null byte.
+note       XSH 2.5 has a memory stream's output pass through a buffer
+           given to setvbuf(); setvbuf() may be used on any stream before
+           its first operation. A setvbuf() that fails is UNRESOLVED.
+test       t/015-setvbuf.c

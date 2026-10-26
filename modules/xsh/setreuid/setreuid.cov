@@ -1,0 +1,13 @@
+# setreuid.cov - every requirement unit on functions/setreuid.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:ac4a198b     XSH.setreuid.001 XSH.setreuid.007
+DESCRIPTION:d8d20ed8     XSH.setreuid.002
+DESCRIPTION:9f4c085e     partial XSH.setreuid.001  # two values; "any value" cannot be enumerated
+DESCRIPTION:e139e046     XSH.setreuid.003 XSH.setreuid.006
+DESCRIPTION:32a2abdd     XSH.setreuid.005 XSH.setreuid.004
+DESCRIPTION:330a0b29     none  unspecified; no test changes the real user ID to the effective or saved one without privileges
+RETURN_VALUE:105a0976    XSH.setreuid.001
+RETURN_VALUE:ce1869b1    XSH.setreuid.006
+ERRORS:08f3b267          untestable  no value of uid_t is required to be invalid or out of range ((uid_t)-1 means "unchanged")
+ERRORS:450dd652          partial XSH.setreuid.006  # the effective-ID case; values of the real ID not permitted are implementation-defined

@@ -1,0 +1,15 @@
+# nanosleep.cov - every requirement unit on functions/nanosleep.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:cc8c60ad     partial XSH.nanosleep.001 XSH.nanosleep.003 XSH.nanosleep.006 XSH.nanosleep.008  # termination of the process by a signal during the sleep is not checked
+DESCRIPTION:108e4159     none  a permission (the variants nanosleep.late and rem_coarse plant it)
+DESCRIPTION:48d6fade     XSH.nanosleep.001 XSH.nanosleep.006 XSH.nanosleep.008
+DESCRIPTION:4764b5cd     XSH.nanosleep.007
+RETURN_VALUE:e157cb95    XSH.nanosleep.001
+RETURN_VALUE:b94e1a9c    XSH.nanosleep.003 XSH.nanosleep.005
+RETURN_VALUE:88867be4    XSH.nanosleep.003
+RETURN_VALUE:d2d256ce    XSH.nanosleep.004
+RETURN_VALUE:8cab689d    XSH.nanosleep.005
+RETURN_VALUE:0b4c15de    XSH.nanosleep.002
+ERRORS:8dc6b562          XSH.nanosleep.003 XSH.nanosleep.004 XSH.nanosleep.005
+ERRORS:feee1d53          XSH.nanosleep.002

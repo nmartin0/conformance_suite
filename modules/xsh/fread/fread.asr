@@ -1,0 +1,110 @@
+# XSH fread()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fread.001
+anchor     functions/fread.html#DESCRIPTION
+anchor     functions/fread.html#RETURN VALUE
+class      required
+since      1988
+says       On a stream reading the 13-byte file "0123456789abc": fread(b, 1, 4,
+           f) returns 4 and stores "0123"; fread(b, 3, 2, f) then returns 2
+           and stores "456789"; ftell() is then 10 and the next fgetc()
+           returns 'a'.
+test       t/001-elements.c
+
+assertion  XSH.fread.002
+anchor     functions/fread.html#DESCRIPTION
+class      required
+since      2001
+says       From a file holding the 8 bytes 0x00 0xff 0x80 0x0a 0x41 0x00 0x7f
+           0xfe, fread(obj, 2, 4, f) into an array of four 2-byte objects
+           returns 4, and the objects' bytes are those 8 bytes in file
+           order.
+note       Issue 6 added the rule that each object is filled, byte by byte
+           in the order read, through an unsigned char array overlaying
+           it.
+test       t/002-bytes-in-order.c
+
+assertion  XSH.fread.003
+anchor     functions/fread.html#RETURN VALUE
+anchor     functions/fread.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream reading the 5-byte file "abcde", fread(b, 2, 4, f)
+           returns 2 (whole elements only), the first 4 bytes stored are
+           "abcd", feof() is non-zero, ferror() is 0, and ftell() is 5 (all
+           5 bytes were read).
+note       The value of the partly read third element is unspecified and
+           is not looked at (variant fread.partial_junk).
+test       t/003-short-at-eof.c
+
+assertion  XSH.fread.004
+anchor     functions/fread.html#RETURN VALUE
+class      required
+says       On a stream from fdopen() of a pipe's read end, with the writer
+           sending "abc", pausing 300 ms, then sending "defghij" and closing,
+           fread(b, 1, 10, f) returns 10 and stores "abcdefghij" (a pipe
+           that has only part of the data at first is neither an error nor
+           end-of-file).
+note       The count may be short only for an error or end-of-file.
+           Austin Group defects 1196 and 1624 (Issue 8) reworded the
+           RETURN VALUE section; the change history does not say which
+           edition first stated this, so "since" is left out.
+test       t/004-pipe-pieces.c
+
+assertion  XSH.fread.005
+anchor     functions/fread.html#RETURN VALUE
+class      required
+says       With size 0 or nitems 0, fread() returns 0 and changes neither the
+           array nor the stream: after reading "01" from "0123456789", both
+           calls leave the array as it was, ftell() 2, feof() and ferror() 0,
+           and the next fgetc() returns '2'; on a stream with the end-of-file
+           indicator set it stays set, and on one with the error indicator
+           set it stays set.
+note       The change history does not say which edition added the rule
+           (Austin Group defect 1624 reworded it in Issue 8), so "since" is
+           left out. The error indicator is set by a read on a closed
+           descriptor, which is then restored with dup2().
+test       t/005-zero.c
+
+assertion  XSH.fread.006
+anchor     functions/fread.html#RETURN VALUE
+anchor     functions/fgetc.html#ERRORS/EBADF
+class      required
+says       On a new stream reading "0123456789" whose descriptor has been
+           closed with close(), fread(b, 1, 4, f) returns less than 4, sets
+           the error indicator, and sets errno to EBADF.
+note       The page refers to fgetc() for its errors; data needs to be read
+           because nothing has been read yet. If the stream had already
+           taken all 4 bytes in (nothing requires that, nothing forbids
+           it), the test is UNRESOLVED. close() does not move the offset,
+           so the descriptor is not a second handle (XSH 2.5.1). The
+           change history does not say which edition made errno
+           required, so "since" is left out.
+test       t/006-ebadf.c
+
+assertion  XSH.fread.007
+anchor     functions/fread.html#RETURN VALUE
+anchor     functions/fgetc.html#ERRORS/EAGAIN
+class      required
+says       On a stream from fdopen() of the read end of an empty pipe whose
+           writer is still open, with O_NONBLOCK set, fread(b, 1, 4, f)
+           returns 0, sets the error indicator, and sets errno to EAGAIN.
+note       The change history does not say which edition made errno
+           required, so "since" is left out.
+test       t/007-eagain.c
+
+assertion  XSH.fread.008
+anchor     functions/fread.html#DESCRIPTION
+class      required
+says       A first fread() that returns data from a file whose last data
+           access time was set 100 s before its modification time marks the
+           access time for update: fstat() afterwards shows it later than
+           the value set.
+note       The access time is set before the modification time, so a
+           relatime mount updates it too; a file system mounted noatime
+           fails this, as XBD 4.12 requires the update (as XSH.read.014).
+           Issue 7 reworded the rule for fine-grained timestamps; the
+           change history does not say when it was added, so "since" is
+           left out.
+test       t/008-atime.c

@@ -1,0 +1,211 @@
+# XSH sysconf()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests query only the names of the DESCRIPTION table that <unistd.h>
+# defines; a missing name is noted (its absence is a header matter,
+# XBD <unistd.h>). A name whose variable depends on an option the
+# system does not support (RETURN VALUE: results unspecified) is skipped:
+# IOV_MAX, PAGE_SIZE, _XOPEN_CRYPT and _XOPEN_VERSION need XSI,
+# MQ_OPEN_MAX and MQ_PRIO_MAX need MSG, SS_REPL_MAX needs SS or TSP; the
+# tests ask sysconf() itself whether the option is supported.
+#
+# Limits are checked only against what the text fixes: the minimum
+# acceptable values of <limits.h>, -1 without a change to errno for "no
+# limit", and the compile-time values of <limits.h> and <unistd.h>.
+# Never against a particular system's values.
+
+assertion  XSH.sysconf.001
+anchor     functions/sysconf.html#DESCRIPTION
+anchor     functions/sysconf.html#RETURN VALUE
+class      required
+since      1988
+says       Every name of the table that <unistd.h> defines is supported:
+           with errno set to 0 first, sysconf(name) never returns -1 with
+           errno EINVAL.
+test       t/001-names-supported.c
+
+assertion  XSH.sysconf.002
+anchor     functions/sysconf.html#RETURN VALUE
+anchor     basedefs/limits.h.html#Minimum Values
+anchor     basedefs/limits.h.html#Runtime Invariant Values (Possibly Indeterminate)
+anchor     basedefs/limits.h.html#Runtime Increasable Values
+class      required
+since      1988
+says       For each variable of the table that <limits.h> describes as a
+           maximum or minimum, sysconf() returns either -1 leaving errno
+           unchanged (no limit) or a value at least the minimum acceptable
+           value ({ARG_MAX} 4096, {CHILD_MAX} 25, {HOST_NAME_MAX} 255,
+           {OPEN_MAX} 20, {TZNAME_MAX} 6, ... and {IOV_MAX} 16 on XSI
+           systems); {PAGESIZE} (and on XSI systems {PAGE_SIZE}), which is
+           not a maximum or minimum, is at least 1.
+note       {OPEN_MAX} is checked with the RLIMIT_NOFILE soft limit raised
+           to at least {_POSIX_OPEN_MAX} when the hard limit allows; if it
+           cannot be, {OPEN_MAX} is skipped with a note (Q-42).
+           {SS_REPL_MAX} appears in the table as _POSIX_SS_REPL_MAX
+           (a new standard issue); the check (-1 or at least 4) holds
+           under either name.
+test       t/002-minimum-values.c
+
+assertion  XSH.sysconf.003
+anchor     functions/sysconf.html#RETURN VALUE
+anchor     basedefs/limits.h.html#Runtime Invariant Values (Possibly Indeterminate)
+anchor     basedefs/limits.h.html#Runtime Increasable Values
+class      required
+since      1988
+says       For each limit of the table that <limits.h> defines, sysconf()
+           returns -1 leaving errno unchanged (no limit) or a value no more
+           restrictive than the header's: at least the header's value,
+           except for {PTHREAD_STACK_MIN}, a minimum stack size, where it
+           is at most the header's value.
+test       t/003-not-below-header.c
+
+assertion  XSH.sysconf.004
+anchor     functions/sysconf.html#RETURN VALUE
+anchor     basedefs/V1_chap02.html#2.1.6
+anchor     basedefs/unistd.h.html#Constants for Options and Option Groups
+class      required
+since      2001
+says       For each option or option-group constant of the table that
+           <unistd.h> defines with a value greater than zero, sysconf() of
+           the matching name returns a value greater than zero (the
+           option is always supported at run time).
+test       t/004-options-match-header.c
+
+assertion  XSH.sysconf.005
+anchor     basedefs/unistd.h.html#Version Test Macros
+anchor     functions/sysconf.html#RETURN VALUE
+class      required
+since      2024
+says       sysconf(_SC_VERSION) returns 202405L and sysconf(_SC_2_VERSION)
+           returns 202405L; on XSI systems sysconf(_SC_XOPEN_VERSION)
+           returns 800.
+note       A subprofile implementation (_POSIX_SUBPROFILE defined) is
+           NOTINUSE.
+test       t/005-version.c
+
+assertion  XSH.sysconf.006
+anchor     basedefs/unistd.h.html#Constants for Options and Option Groups
+anchor     basedefs/V1_chap02.html#2.1.6
+class      required
+since      2024
+says       The options POSIX.1-2024 makes mandatory are reported as
+           supported: sysconf() returns a value greater than zero for
+           _SC_ASYNCHRONOUS_IO, _SC_BARRIERS, _SC_CLOCK_SELECTION,
+           _SC_JOB_CONTROL, _SC_MAPPED_FILES, _SC_MEMORY_PROTECTION,
+           _SC_MONOTONIC_CLOCK, _SC_READER_WRITER_LOCKS,
+           _SC_REALTIME_SIGNALS, _SC_REGEXP, _SC_SAVED_IDS,
+           _SC_SEMAPHORES, _SC_SHELL, _SC_SPIN_LOCKS,
+           _SC_THREAD_SAFE_FUNCTIONS, _SC_THREADS, _SC_TIMEOUTS,
+           _SC_TIMERS and _SC_2_C_BIND.
+note       A subprofile implementation (_POSIX_SUBPROFILE defined) is
+           NOTINUSE.
+test       t/006-mandatory-options.c
+
+assertion  XSH.sysconf.007
+anchor     basedefs/unistd.h.html#Constants for Options and Option Groups
+class      required
+since      2024
+says       The option values sysconf() reports are those <unistd.h>
+           allows: 202405L for the options that are always 202405L
+           (_SC_BARRIERS, _SC_THREADS, ...), -1 or 202405L for the
+           optional ones whose sysconf() value is restricted that way
+           (_SC_ADVISORY_INFO, _SC_SPAWN, _SC_2_C_DEV, _SC_XOPEN_UUCP,
+           ...), and -1 or a value greater than zero for
+           _SC_2_CHAR_TERM.
+note       A subprofile implementation (_POSIX_SUBPROFILE defined) is
+           NOTINUSE.
+test       t/007-option-values.c
+
+assertion  XSH.sysconf.008
+anchor     functions/sysconf.html#RETURN VALUE
+class      required
+since      1988
+says       The value (or -1 and errno) for every name of the table other
+           than _SC_NPROCESSORS_ONLN and _SC_OPEN_MAX is the same after
+           the process has forked a child that is still running, opened
+           streams and file descriptors, and allocated memory, as before.
+test       t/008-values-stable.c
+
+assertion  XSH.sysconf.009
+anchor     functions/sysconf.html#RETURN VALUE
+class      required
+since      2001
+says       Changing the RLIMIT_STACK and RLIMIT_NOFILE soft limits with
+           setrlimit() changes the value of no name of the table other
+           than _SC_OPEN_MAX (and _SC_NPROCESSORS_ONLN, which may change
+           at any time): {ARG_MAX} in particular stays the same.
+note       Only _SC_OPEN_MAX, after a change to the RLIMIT_NOFILE soft
+           limit, is excepted from the rule that values do not change
+           during the life of the process.
+test       t/009-stable-across-setrlimit.c
+
+assertion  XSH.sysconf.010
+anchor     functions/sysconf.html#RETURN VALUE
+anchor     basedefs/limits.h.html#Runtime Invariant Values (Possibly Indeterminate)
+class      required
+since      2001
+says       With the RLIMIT_NOFILE soft limit at 64, every descriptor that
+           open() assigns until it fails with EMFILE is below
+           sysconf(_SC_OPEN_MAX) (when that is not -1); after the soft
+           limit is raised to 128, every further descriptor is below a new
+           call's sysconf(_SC_OPEN_MAX) (when not -1).
+note       Skipped (UNRESOLVED) when the hard limit is below 128.
+test       t/010-open-max-bounds-descriptors.c
+
+assertion  XSH.sysconf.011
+anchor     functions/sysconf.html#ERRORS/EINVAL
+anchor     functions/sysconf.html#RETURN VALUE
+class      required
+since      1988
+says       sysconf(-1) and sysconf(0x7ffffff0) (values that are no name
+           of the table) return -1 with errno EINVAL.
+note       Implementations may define further names; no known one uses
+           these values, and the test checks that no name of the table
+           does.
+test       t/011-invalid-name.c
+
+assertion  XSH.sysconf.012
+anchor     basedefs/limits.h.html#Runtime Invariant Values (Possibly Indeterminate)
+anchor     functions/sysconf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       sysconf(_SC_PAGE_SIZE) and sysconf(_SC_PAGESIZE) return the same
+           value, at least 1.
+test       t/012-page-size.c
+
+assertion  XSH.sysconf.013
+anchor     functions/sysconf.html#DESCRIPTION
+anchor     functions/getgrnam.html#DESCRIPTION
+anchor     functions/getpwnam.html#DESCRIPTION
+class      required
+since      2001
+says       sysconf(_SC_CLK_TCK) returns a value greater than zero;
+           sysconf(_SC_GETGR_R_SIZE_MAX) and sysconf(_SC_GETPW_R_SIZE_MAX)
+           each return -1 leaving errno unchanged or a value greater than
+           zero.
+test       t/013-other-variables.c
+
+assertion  XSH.sysconf.014
+anchor     functions/sysconf.html#DESCRIPTION
+class      required
+since      2024
+says       sysconf(_SC_NPROCESSORS_ONLN) returns at least 1 (the calling
+           thread runs on an available execution unit) and
+           sysconf(_SC_NPROCESSORS_CONF), the most that can be made
+           available, returns at least the value _SC_NPROCESSORS_ONLN
+           returned just before.
+test       t/014-nprocessors.c
+
+assertion  XSH.sysconf.015
+anchor     functions/sysconf.html#DESCRIPTION
+anchor     basedefs/limits.h.html#Other Invariant Values
+class      required
+since      2024
+says       sysconf(_SC_NSIG) returns a value greater than SIGRTMAX and than
+           every other signal number <signal.h> defines, no greater than
+           {NSIG_MAX}, and that value is not a supported signal number:
+           sigaction() with it fails with EINVAL.
+note       UNRESOLVED where <unistd.h> lacks _SC_NSIG or <limits.h> lacks
+           NSIG_MAX.
+test       t/015-nsig.c

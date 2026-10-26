@@ -368,19 +368,19 @@ void pc_require_space(void)
 	int fd;
 
 	pc_internal_enter();
-	fd = open(".pc-space-check", O_WRONLY | O_CREAT | O_EXCL, 0600);
+	fd = open(".pcspace", O_WRONLY | O_CREAT | O_EXCL, 0600);
 	if (fd < 0) {
 		if (errno == ENOSPC)
 			pc_unresolved("the file system is full (ENOSPC)");
-		pc_setup_broke("require_space", ".pc-space-check");
+		pc_setup_broke("require_space", ".pcspace");
 	}
 	if (write(fd, "x", 1) != 1) {
 		if (errno == ENOSPC)
 			pc_unresolved("the file system is full (ENOSPC)");
-		pc_setup_broke("require_space/write", ".pc-space-check");
+		pc_setup_broke("require_space/write", ".pcspace");
 	}
 	(void)close(fd);
-	if (unlink(".pc-space-check") != 0)
-		pc_setup_broke("require_space/unlink", ".pc-space-check");
+	if (unlink(".pcspace") != 0)
+		pc_setup_broke("require_space/unlink", ".pcspace");
 	pc_internal_leave();
 }

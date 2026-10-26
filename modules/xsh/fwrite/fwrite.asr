@@ -1,0 +1,97 @@
+# XSH fwrite()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fwrite.001
+anchor     functions/fwrite.html#DESCRIPTION
+anchor     functions/fwrite.html#RETURN VALUE
+class      required
+since      2001
+says       On a "w" stream, fwrite(obj, 4, 2, f) with obj the 8 bytes 0x00
+           0xff 0x80 0x0a 0x41 0x00 0x7f 0xfe returns 2, ftell() is then 8,
+           and after fclose() the file holds exactly those 8 bytes in that
+           order.
+note       Issue 6 added the rule that each object's bytes go out in
+           order through an unsigned char array overlaying it.
+test       t/001-bytes-in-order.c
+
+assertion  XSH.fwrite.002
+anchor     functions/fwrite.html#DESCRIPTION
+class      required
+since      1988
+says       On an "r+" stream on "0123456789", after two fgetc() calls and
+           fseek(f, 0, SEEK_CUR), fwrite("AB", 1, 2, f) returns 2 and ftell()
+           is 4; after fseek(f, 0, SEEK_CUR) the next fgetc() returns '4',
+           and after fclose() the file holds "01AB456789".
+note       The bytes go where the file position indicator is (as by
+           fputc(), on a stream not opened for append).
+test       t/002-at-position.c
+
+assertion  XSH.fwrite.003
+anchor     functions/fwrite.html#RETURN VALUE
+class      required
+since      1988
+says       On a "w" stream on a regular file, fwrite(b, 10, 30000, f) of a
+           300000-byte pattern returns 30000, and after fclose() the file
+           holds the 300000 bytes.
+note       The count may be short only for a write error.
+test       t/003-large.c
+
+assertion  XSH.fwrite.004
+anchor     functions/fwrite.html#RETURN VALUE
+class      required
+says       With size 0 or nitems 0, fwrite() returns 0 and the stream is
+           unchanged: on a "w" stream after fputs("ab"), both calls leave
+           ftell() 2 and ferror() 0, and after fclose() the file holds "ab";
+           on a stream with the error indicator set it stays set.
+note       The change history does not say which edition added the rule
+           (Austin Group defect 1196 reworded it in Issue 8), so "since" is
+           left out. The error indicator is set by a flush to a closed
+           descriptor, which is then restored with dup2().
+test       t/004-zero.c
+
+assertion  XSH.fwrite.005
+anchor     functions/fwrite.html#RETURN VALUE
+anchor     functions/fputc.html#ERRORS/EBADF
+class      required
+says       On a "w" stream whose descriptor has been closed with close(),
+           fwrite(b, 1, 1048576, f) returns less than 1048576, sets the error
+           indicator, and sets errno to EBADF.
+note       The page refers to fputc() for its errors, which apply when the
+           buffer needs to be flushed: 1 MiB is written so that it does.
+           A stream that takes in the whole MiB without writing (no
+           buffer size is set anywhere) makes the test UNRESOLVED; a full
+           count with the error indicator set is a FAIL. close() does not
+           move the offset, so the descriptor is not a second handle (XSH
+           2.5.1). The change history does not say which edition made
+           errno required, so "since" is left out.
+test       t/005-ebadf.c
+
+assertion  XSH.fwrite.006
+anchor     functions/fwrite.html#RETURN VALUE
+anchor     functions/fputc.html#ERRORS/EPIPE
+class      required
+since      2001
+says       On a stream from fdopen() of a pipe's write end whose read end is
+           closed, with SIGPIPE blocked, fwrite(b, 1, 1048576, f) returns less
+           than 1048576, sets the error indicator and errno to EPIPE, and
+           SIGPIPE is then pending.
+note       Issue 6 marks EPIPE as a CX error. As for XSH.fwrite.005, 1 MiB
+           is written so that the buffer needs to be flushed; a stream that
+           takes it all in without writing makes the test UNRESOLVED.
+test       t/006-epipe.c
+
+assertion  XSH.fwrite.007
+anchor     functions/fwrite.html#DESCRIPTION
+class      required
+says       On a "w" stream on an existing file, fwrite("abc", 1, 3, f) and
+           fflush() (2 s after the stream was opened) leave the file's last
+           data modification and status change times later than they were
+           after the open.
+note       The times are marked between the fwrite() and the completion of
+           the next fflush(), and fstat() is an update point (XBD 4.12).
+           Issue 7 reworded the rule for fine-grained timestamps; the
+           change history does not say when it was added, so "since" is
+           left out. The timestamp resolution is implementation-defined;
+           the 2 s wait is a practical cap that covers whole-second
+           timestamps.
+test       t/007-times.c

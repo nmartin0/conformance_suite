@@ -18,7 +18,10 @@
 #   --root DIR        modules directory (default: the suite's modules/)
 #   --mutant NAME     CI only: run with a planted fault (needs --only)
 #   --variant NAME    CI only: run with a conforming variant, behaviour the
-#                     standard allows planted the same way (needs --only)
+#                     standard allows planted the same way (needs --only;
+#                     with --mutant only if the variant is a header alone)
+#   --cache DIR       CI only: reuse compiled helpers, tests and libraries
+#                     kept in DIR by earlier runs (ci/mutate.sh)
 #
 # Needs only this shell, a C compiler and mkdir. Writes DIR/run.log, one
 # line per assertion; it never summarizes, sorts or deletes anything.
@@ -78,6 +81,7 @@ pc_selftest_only=no
 pc_modroot=$pc_root/modules
 pc_mutant=
 pc_variant=
+pc_cache=
 pc_args=
 
 pc_need_arg() {
@@ -98,6 +102,7 @@ while [ $# -gt 0 ]; do
 	--root) pc_need_arg $# "$1"; pc_modroot=$2; shift 2 ;;
 	--mutant) pc_need_arg $# "$1"; pc_mutant=$2; shift 2 ;;
 	--variant) pc_need_arg $# "$1"; pc_variant=$2; shift 2 ;;
+	--cache) pc_need_arg $# "$1"; pc_cache=$2; shift 2 ;;
 	-h | --help)
 		while IFS= read -r pc_l; do
 			case $pc_l in
@@ -120,14 +125,25 @@ while [ $# -gt 0 ]; do pc_args="$pc_args $1"; shift; done
 pc_abs "$pc_results"; pc_results=$pc_absv
 pc_abs "$pc_modroot"; pc_modroot=$pc_absv
 if [ -n "$pc_profile" ]; then pc_abs "$pc_profile"; pc_profile=$pc_absv; fi
+if [ -n "$pc_cache" ]; then
+	pc_abs "$pc_cache"; pc_cache=$pc_absv
+	mkdir -p "$pc_cache" || pc_die "cannot create $pc_cache"
+fi
 if [ -n "$pc_mutant" ] && [ -z "$pc_only" ]; then
 	pc_die "--mutant needs --only"
 fi
 if [ -n "$pc_variant" ] && [ -z "$pc_only" ]; then
 	pc_die "--variant needs --only"
 fi
+# A fault may be planted on top of a variant only when the variant is a
+# header alone (a system the reference systems cannot be, such as one with
+# sig2str()): two preload libraries would compete for the same symbols.
 if [ -n "$pc_variant" ] && [ -n "$pc_mutant" ]; then
-	pc_die "--variant and --mutant cannot be combined"
+	for pc_f in "$pc_modroot/xsh/${pc_variant%.*}/variants"/*.c; do
+		[ -f "$pc_f" ] && pc_die "--mutant can be combined only with a header-only --variant"
+	done
+	[ -f "$pc_modroot/xsh/${pc_variant%.*}/variants/$pc_variant.h" ] ||
+	    pc_die "--mutant can be combined only with a header-only --variant"
 fi
 
 # ---------- results directory ----------
@@ -141,6 +157,44 @@ if [ "$pc_resume" = yes ] && [ ! -f "$pc_mainlog" ]; then
 fi
 mkdir -p "$pc_results/build/core" "$pc_results/out" "$pc_results/state" \
     "$pc_results/tmp" || pc_die "cannot create $pc_results"
+
+# ---------- build cache (CI only: --cache DIR) ----------
+
+# Builds reused across the runs of one ci/mutate.sh invocation. An entry is
+# looked up by the checksum of its key text, and used only if the key text
+# stored with it is the same: what is built, the compiler and its flags,
+# and cksum's CRC and size of every file the build reads. Without --cache
+# every build is done afresh, as before.
+pc_cache_key() { # what files...: the key text
+	pc_kw=$1
+	shift
+	printf '%s\n' "$pc_kw"
+	# Never let cksum read standard input (with no files it would, and the
+	# driver's standard input may be an assertion file being parsed).
+	[ $# -gt 0 ] || return 0
+	cksum "$@" 2>&1 </dev/null
+}
+pc_cache_name() { # keytext: the entry's name
+	printf '%s\n' "$1" | cksum | tr ' ' '_'
+}
+pc_cache_get() { # keytext dest: true when a matching entry was copied to dest
+	[ -n "$pc_cache" ] || return 1
+	pc_cn=$(pc_cache_name "$1")
+	[ -f "$pc_cache/$pc_cn.key" ] && [ -f "$pc_cache/$pc_cn.bin" ] || return 1
+	pc_ckt=$(cat "$pc_cache/$pc_cn.key") || return 1
+	[ "$pc_ckt" = "$1" ] || return 1
+	cp "$pc_cache/$pc_cn.bin" "$2" 2>/dev/null
+}
+pc_cache_put() { # keytext file: keep a copy of a successful build
+	[ -n "$pc_cache" ] || return 0
+	pc_cn=$(pc_cache_name "$1")
+	cp "$2" "$pc_cache/$pc_cn.bin.$$" 2>/dev/null &&
+	    printf '%s\n' "$1" >"$pc_cache/$pc_cn.key.$$" &&
+	    mv -f "$pc_cache/$pc_cn.bin.$$" "$pc_cache/$pc_cn.bin" &&
+	    mv -f "$pc_cache/$pc_cn.key.$$" "$pc_cache/$pc_cn.key"
+	rm -f "$pc_cache/$pc_cn.bin.$$" "$pc_cache/$pc_cn.key.$$"
+	return 0
+}
 
 # ---------- trust base: the shell running this script ----------
 
@@ -170,6 +224,13 @@ fi
 pc_hello=$pc_trustdir/hello
 printf '#include <stdio.h>\nint main(void) { puts("ok"); return 3; }\n' \
     >"$pc_hello.c"
+pc_cckey=$(pc_cache_key "cc checks: $pc_cc" "$pc_hello.c")
+pc_cccached=no
+if pc_cache_get "$pc_cckey" "$pc_trustdir/ccstrict"; then
+	read -r pc_ccstrict <"$pc_trustdir/ccstrict" || pc_ccstrict=
+	[ "$pc_ccstrict" = none ] && pc_ccstrict=
+	pc_cccached=yes
+fi
 "$pc_cc" -D_POSIX_C_SOURCE=202405L -o "$pc_hello" "$pc_hello.c" \
     >"$pc_trustdir/cc.txt" 2>&1 </dev/null ||
     pc_abort "driver cannot run reliably: $pc_cc cannot build a program"
@@ -185,12 +246,14 @@ pc_rc=$?
 # an error, or stop.
 printf 'int main(void) { return pc_no_such_function(); }\n' \
     >"$pc_trustdir/implicit.c"
-pc_ccstrict=
+[ "$pc_cccached" = yes ] || pc_ccstrict=
 pc_implicit_builds() { # extra flags...
 	"$pc_cc" -D_POSIX_C_SOURCE=202405L ${1+"$@"} -c -o "$pc_trustdir/implicit.o" \
 	    "$pc_trustdir/implicit.c" >>"$pc_trustdir/cc.txt" 2>&1 </dev/null
 }
-if pc_implicit_builds; then
+if [ "$pc_cccached" = yes ]; then
+	:
+elif pc_implicit_builds; then
 	pc_ccstrict=-Werror=implicit-function-declaration
 	if pc_implicit_builds "$pc_ccstrict" ||
 	    ! "$pc_cc" -D_POSIX_C_SOURCE=202405L $pc_ccstrict -o "$pc_hello" \
@@ -198,19 +261,53 @@ if pc_implicit_builds; then
 		pc_abort "driver cannot run reliably: $pc_cc accepts calls to undeclared functions (use --cc with a stricter compiler)"
 	fi
 fi
+if [ "$pc_cccached" = no ] && [ -n "$pc_cache" ]; then
+	printf '%s\n' "${pc_ccstrict:-none}" >"$pc_trustdir/ccstrict"
+	pc_cache_put "$pc_cckey" "$pc_trustdir/ccstrict"
+fi
 
 # ---------- helpers ----------
 
 pc_bin=$pc_results/build/core
-"$pc_cc" -o "$pc_bin/pcexec" "$pc_root/core/pcexec.c" \
-    >"$pc_trustdir/pcexec.txt" 2>&1 </dev/null ||
-    pc_abort "cannot build pcexec (see $pc_trustdir/pcexec.txt)"
-"$pc_cc" -D_XOPEN_SOURCE=800 -I "$pc_root/core" -o "$pc_bin/probe" \
-    "$pc_root/core/probe.c" >"$pc_trustdir/probe.txt" 2>&1 </dev/null ||
-    pc_abort "cannot build probe (see $pc_trustdir/probe.txt)"
-"$pc_cc" -D_POSIX_C_SOURCE=202405L $pc_ccstrict -I "$pc_root/core" -c \
-    -o "$pc_bin/pc.o" "$pc_root/core/pc.c" >"$pc_trustdir/pc.txt" 2>&1 \
-    </dev/null || pc_abort "cannot build pc.o (see $pc_trustdir/pc.txt)"
+pc_k=$(pc_cache_key "pcexec: $pc_cc" "$pc_root"/core/*.c "$pc_root"/core/*.h)
+if ! pc_cache_get "$pc_k" "$pc_bin/pcexec"; then
+	"$pc_cc" -o "$pc_bin/pcexec" "$pc_root/core/pcexec.c" \
+	    >"$pc_trustdir/pcexec.txt" 2>&1 </dev/null ||
+	    pc_abort "cannot build pcexec (see $pc_trustdir/pcexec.txt)"
+	pc_cache_put "$pc_k" "$pc_bin/pcexec"
+fi
+pc_k=$(pc_cache_key "probe: $pc_cc -D_XOPEN_SOURCE=800" "$pc_root"/core/*.c "$pc_root"/core/*.h)
+if ! pc_cache_get "$pc_k" "$pc_bin/probe"; then
+	"$pc_cc" -D_XOPEN_SOURCE=800 -I "$pc_root/core" -o "$pc_bin/probe" \
+	    "$pc_root/core/probe.c" >"$pc_trustdir/probe.txt" 2>&1 </dev/null ||
+	    pc_abort "cannot build probe (see $pc_trustdir/probe.txt)"
+	pc_cache_put "$pc_k" "$pc_bin/probe"
+fi
+pc_k=$(pc_cache_key "pc.o: $pc_cc -D_POSIX_C_SOURCE=202405L $pc_ccstrict" "$pc_root"/core/*.c "$pc_root"/core/*.h)
+if ! pc_cache_get "$pc_k" "$pc_bin/pc.o"; then
+	"$pc_cc" -D_POSIX_C_SOURCE=202405L $pc_ccstrict -I "$pc_root/core" -c \
+	    -o "$pc_bin/pc.o" "$pc_root/core/pc.c" >"$pc_trustdir/pc.txt" 2>&1 \
+	    </dev/null || pc_abort "cannot build pc.o (see $pc_trustdir/pc.txt)"
+	pc_cache_put "$pc_k" "$pc_bin/pc.o"
+fi
+# setgroups() is not POSIX: built with the system's own declarations, or as
+# a stub where that fails (core/pcgroups.c).
+pc_k=$(pc_cache_key "pcgroups.o: $pc_cc" "$pc_root"/core/pcgroups.c)
+if ! pc_cache_get "$pc_k" "$pc_bin/pcgroups.o"; then
+	if "$pc_cc" -c -o "$pc_bin/pcgroups.o" "$pc_root/core/pcgroups.c" \
+	    >"$pc_trustdir/pcgroups.txt" 2>&1 </dev/null &&
+	    printf 'int pc_drop_groups(void);\nint main(void) { return pc_drop_groups() == 9; }\n' \
+	    >"$pc_trustdir/groups.c" &&
+	    "$pc_cc" -o "$pc_trustdir/groups" "$pc_trustdir/groups.c" "$pc_bin/pcgroups.o" \
+	    >>"$pc_trustdir/pcgroups.txt" 2>&1 </dev/null; then
+		:
+	else
+		"$pc_cc" -DPC_NO_SETGROUPS -c -o "$pc_bin/pcgroups.o" "$pc_root/core/pcgroups.c" \
+		    >>"$pc_trustdir/pcgroups.txt" 2>&1 </dev/null ||
+		    pc_abort "cannot build pcgroups.o (see $pc_trustdir/pcgroups.txt)"
+	fi
+	pc_cache_put "$pc_k" "$pc_bin/pcgroups.o"
+fi
 pc_pcexec=$pc_bin/pcexec
 pc_probe=$pc_bin/probe
 
@@ -240,16 +337,18 @@ fi
 pc_t=$("$pc_sut_sh" "$pc_root/core/trust.sh" "$pc_trustdir/sut")
 [ -z "$pc_t" ] || pc_abort "tests cannot run reliably: $pc_sut_sh check '$pc_t' failed"
 
-# A build for Linux on a kernel that is not Linux runs through a
-# compatibility layer, which tests that layer, not the system (RULES.md 12).
-pc_target= pc_sysname=
-while read -r pc_k pc_v; do
-	case $pc_k in target) pc_target=$pc_v ;; sysname) pc_sysname=$pc_v ;; esac
-done <<EOF
-$("$pc_probe" sysinfo)
-EOF
-if [ "$pc_target" = linux ] && [ "$pc_sysname" != Linux ]; then
-	pc_abort "built for Linux but running on $pc_sysname (a Linux compatibility layer?): build the suite there with its own compiler"
+# The results directory holds files named after assertions and tests: its
+# file system must allow names that long ({NAME_MAX}; ci/lint.py keeps every
+# name the suite creates within PC_NAME_NEED). This is a requirement on
+# where the suite runs, not a verdict on the system: the tests' private
+# directories need only {_POSIX_NAME_MAX} (14).
+PC_NAME_NEED=64
+pc_nm=$("$pc_probe" namemax "$pc_results")
+case $pc_nm in
+'' | *[!0-9-]*) pc_abort "probe could not read {NAME_MAX} for $pc_results" ;;
+esac
+if [ "$pc_nm" -ge 0 ] && [ "$pc_nm" -lt "$PC_NAME_NEED" ]; then
+	pc_abort "the file system of $pc_results allows names of $pc_nm bytes; the suite needs $PC_NAME_NEED there (choose another --results directory)"
 fi
 
 # ---------- claims and profile ----------
@@ -315,11 +414,18 @@ pc_usable_libs() {
 		eval "pc_lok=\${pc_libok_$pc_lv:-}"
 		if [ -z "$pc_lok" ]; then
 			pc_lok=no
-			if [ -d "$pc_results" ] && printf 'int main(void) { return 0; }\n' >"$pc_results/.lib.c" &&
-			    "$pc_cc" -o "$pc_results/.lib" "$pc_results/.lib.c" "$pc_l" >/dev/null 2>&1 </dev/null; then
-				pc_lok=yes
+			pc_lk=$(pc_cache_key "links: $pc_cc $pc_l")
+			if pc_cache_get "$pc_lk" "$pc_results/.libok"; then
+				read -r pc_lok <"$pc_results/.libok" || pc_lok=no
+			else
+				if [ -d "$pc_results" ] && printf 'int main(void) { return 0; }\n' >"$pc_results/.lib.c" &&
+				    "$pc_cc" -o "$pc_results/.lib" "$pc_results/.lib.c" "$pc_l" >/dev/null 2>&1 </dev/null; then
+					pc_lok=yes
+				fi
+				printf '%s\n' "$pc_lok" >"$pc_results/.libok"
+				pc_cache_put "$pc_lk" "$pc_results/.libok"
 			fi
-			rm -f "$pc_results/.lib" "$pc_results/.lib.c"
+			rm -f "$pc_results/.lib" "$pc_results/.lib.c" "$pc_results/.libok"
 			eval "pc_libok_$pc_lv=\$pc_lok"
 		fi
 		[ "$pc_lok" = yes ] && pc_ul="$pc_ul $pc_l"
@@ -482,13 +588,18 @@ pc_assertion() {
 		# another allowed value): it is a header included first, and the
 		# test is built apart.
 		pc_vinc=
-		if [ -n "$pc_var" ] && [ -f "$pc_modroot/xsh/${pc_var%%.*}/variants/$pc_var.h" ]; then
-			pc_vinc="-include $pc_modroot/xsh/${pc_var%%.*}/variants/$pc_var.h"
+		if [ -n "$pc_var" ] && [ -f "$pc_modroot/xsh/${pc_var%.*}/variants/$pc_var.h" ]; then
+			pc_vinc="-include $pc_modroot/xsh/${pc_var%.*}/variants/$pc_var.h"
 			pc_exe=$pc_exe.variant
 		fi
+		pc_tk=$(pc_cache_key "test: $pc_cc $pc_flags $pc_ccstrict $pc_vinc libs:$pc_mlibs" \
+		    "$pc_src" "$pc_root"/core/*.h "$pc_bin/pc.o" "$pc_bin/pcgroups.o" ${pc_vinc:+"${pc_vinc#-include }"} \
+		    ${pc_vinc:+"$pc_modroot/xsh/${pc_var%.*}/variants"/*.inc})
+		if pc_cache_get "$pc_tk" "$pc_exe"; then
+			: >"$ctx_out/$pc_id.build.txt"
 		# shellcheck disable=SC2086 # mod_libs is a word list
-		if ! "$pc_cc" $pc_flags $pc_ccstrict $pc_vinc -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
-		    "$pc_bin/pc.o" $pc_mlibs >"$ctx_out/$pc_id.build.txt" 2>&1 \
+		elif ! "$pc_cc" $pc_flags $pc_ccstrict $pc_vinc -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
+		    "$pc_bin/pc.o" "$pc_bin/pcgroups.o" $pc_mlibs >"$ctx_out/$pc_id.build.txt" 2>&1 \
 		    </dev/null; then
 			if [ "$mod_buildfail" = FAIL ]; then
 				# Tier 0 checks: a test that does not compile shows a
@@ -500,6 +611,8 @@ pc_assertion() {
 			fi
 			pc_log UNINITIATED "$pc_id" 0 "build failed (out/$pc_id.build.txt)"
 			return 0
+		else
+			pc_cache_put "$pc_tk" "$pc_exe"
 		fi
 		set -- "$pc_exe"
 		pc_extra=
@@ -511,7 +624,7 @@ pc_assertion() {
 		pc_mutant_file=
 		if [ -n "$pc_mut" ]; then pc_mutant_sh || return 0; fi
 		if [ -n "$pc_var" ]; then
-			pc_mutant_file=$pc_modroot/xcu/${pc_var%%.*}/variants/$pc_var.sh
+			pc_mutant_file=$pc_modroot/xcu/${pc_var%.*}/variants/$pc_var.sh
 			[ -f "$pc_mutant_file" ] || pc_abort "no variant file $pc_mutant_file"
 		fi
 		;;
@@ -622,17 +735,21 @@ pc_decide() {
 # C: modules/xsh/<function>/mutants/*.c builds one preload library that
 # implements every "<function>.<fault>" mutant.
 pc_mutant_c() {
-	pc_func=${pc_mutant%%.*}
+	pc_func=${pc_mutant%.*}
 	pc_mdir=$pc_modroot/xsh/$pc_func/mutants
 	pc_so=$ctx_build/mutants/$pc_func.so
 	mkdir -p "$ctx_build/mutants" || pc_abort "cannot create mutant dir"
 	if [ ! -f "$pc_so" ]; then
 		set -- "$pc_mdir"/*.c
 		[ -f "$1" ] || pc_abort "no mutant sources in $pc_mdir"
-		# shellcheck disable=SC2086
-		"$pc_cc" -shared -fPIC -o "$pc_so" "$@" ${PC_MUTANT_LDFLAGS--ldl} \
-		    >"$ctx_out/mutant-$pc_func.build.txt" 2>&1 </dev/null ||
-		    pc_abort "cannot build mutant library for $pc_func"
+		pc_sk=$(pc_cache_key "mutant library: $pc_cc -shared -fPIC ${PC_MUTANT_LDFLAGS--ldl}" "$@")
+		if ! pc_cache_get "$pc_sk" "$pc_so"; then
+			# shellcheck disable=SC2086
+			"$pc_cc" -shared -fPIC -o "$pc_so" "$@" ${PC_MUTANT_LDFLAGS--ldl} \
+			    >"$ctx_out/mutant-$pc_func.build.txt" 2>&1 </dev/null ||
+			    pc_abort "cannot build mutant library for $pc_func"
+			pc_cache_put "$pc_sk" "$pc_so"
+		fi
 	fi
 	pc_extra="-e LD_PRELOAD=$pc_so"
 }
@@ -641,17 +758,22 @@ pc_mutant_c() {
 # implements every "<function>.<variant>" (PC_VARIANT) that is not only a
 # header (variants/<function>.<variant>.h, included before the test).
 pc_variant_c() {
-	pc_func=${pc_var%%.*}
+	pc_func=${pc_var%.*}
 	pc_vdir=$pc_modroot/xsh/$pc_func/variants
 	set -- "$pc_vdir"/*.c
 	[ -f "$1" ] || return 0
 	pc_so=$ctx_build/variants/$pc_func.so
 	mkdir -p "$ctx_build/variants" || pc_abort "cannot create variant dir"
 	if [ ! -f "$pc_so" ]; then
-		# shellcheck disable=SC2086
-		"$pc_cc" -shared -fPIC -I "$pc_root/core" -o "$pc_so" "$@" ${PC_MUTANT_LDFLAGS--ldl} \
-		    >"$ctx_out/variant-$pc_func.build.txt" 2>&1 </dev/null ||
-		    pc_abort "cannot build variant library for $pc_func"
+		pc_sk=$(pc_cache_key "variant library: $pc_cc -shared -fPIC ${PC_MUTANT_LDFLAGS--ldl}" "$@" \
+		    "$pc_vdir"/*.h "$pc_vdir"/*.inc "$pc_root"/core/*.h)
+		if ! pc_cache_get "$pc_sk" "$pc_so"; then
+			# shellcheck disable=SC2086
+			"$pc_cc" -shared -fPIC -I "$pc_root/core" -o "$pc_so" "$@" ${PC_MUTANT_LDFLAGS--ldl} \
+			    >"$ctx_out/variant-$pc_func.build.txt" 2>&1 </dev/null ||
+			    pc_abort "cannot build variant library for $pc_func"
+			pc_cache_put "$pc_sk" "$pc_so"
+		fi
 	fi
 	pc_extra="-e LD_PRELOAD=$pc_so"
 }
@@ -659,7 +781,7 @@ pc_variant_c() {
 # Shell: modules/xcu/<utility>/mutants/<name>.sh defines functions that
 # shadow the utility; pc.sh loads it when the test phase begins.
 pc_mutant_sh() {
-	pc_util=${pc_mutant%%.*}
+	pc_util=${pc_mutant%.*}
 	pc_mutant_file=$pc_modroot/xcu/$pc_util/mutants/$pc_mutant.sh
 	[ -f "$pc_mutant_file" ] || pc_abort "no mutant file $pc_mutant_file"
 }
@@ -764,7 +886,9 @@ pc_run_module() {
 				pc_v=${pc_v#"${pc_v%%[! 	]*}"}
 				case $pc_k in
 				assertion)
-					[ "$pc_have_one" = yes ] && pc_assertion
+					# Each assertion runs with its own standard input: nothing
+					# it does may read the rest of this file.
+					[ "$pc_have_one" = yes ] && pc_assertion </dev/null
 					pc_asr_reset
 					a_id=$pc_v
 					pc_have_one=yes
@@ -781,7 +905,7 @@ pc_run_module() {
 				*) pc_warn "$pc_asr: unknown key '$pc_k'" ;;
 				esac
 			done <"$pc_asr"
-			[ "$pc_have_one" = yes ] && pc_assertion
+			[ "$pc_have_one" = yes ] && pc_assertion </dev/null
 		done
 	fi
 	: >"$pc_mark.done"
@@ -817,6 +941,15 @@ if [ "$pc_selftest" = yes ]; then
 		mkdir -p "$ctx_results/survivors" || exit 1
 		pc_run_modules
 	) >"$pc_trustdir/selftest.txt" 2>&1
+	# Every self-test assertion must have run: one that was silently skipped
+	# would otherwise show no mismatch at all.
+	for pc_f in "$pc_root"/core/selftest/modules/*/*/*.asr; do
+		while read -r pc_k pc_v; do
+			[ "$pc_k" = assertion ] || continue
+			[ -e "$pc_stdir/state/$pc_v" ] ||
+			    printf '%s was never run\n' "$pc_v" >>"$pc_stdir/mismatch"
+		done <"$pc_f"
+	done
 	# A survivor of a killed test would write a marker after 2 seconds.
 	"$pc_probe" sleep 3
 	for pc_f in "$pc_stdir"/survivors/*; do

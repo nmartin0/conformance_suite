@@ -1,0 +1,14 @@
+# setregid.cov - every requirement unit on functions/setregid.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:582e10be     XSH.setregid.001 XSH.setregid.009
+DESCRIPTION:35e9101b     XSH.setregid.002
+DESCRIPTION:a365d46c     XSH.setregid.001
+DESCRIPTION:1bb06ffa     partial XSH.setregid.001  # two values; "any valid value" cannot be enumerated
+DESCRIPTION:7def6165     XSH.setregid.003 XSH.setregid.006
+DESCRIPTION:646faadf     XSH.setregid.005 XSH.setregid.004
+DESCRIPTION:1c5cef30     XSH.setregid.008
+RETURN_VALUE:105a0976    XSH.setregid.001
+RETURN_VALUE:0e4a7c6f    XSH.setregid.007
+ERRORS:b7c5477b          untestable  no value of gid_t is required to be invalid or out of range ((gid_t)-1 means "unchanged")
+ERRORS:54bd6bdb          XSH.setregid.007

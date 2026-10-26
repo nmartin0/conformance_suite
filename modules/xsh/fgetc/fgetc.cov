@@ -1,0 +1,18 @@
+# fgetc.cov - every requirement unit on functions/fgetc.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d42c5a1b     XSH.fgetc.001 XSH.fgetc.003
+DESCRIPTION:bb1d5bcc     none  explanation: a multi-byte character takes several calls (follows from XSH.fgetc.001)
+DESCRIPTION:18cfafb2     none  permission for the implementation
+DESCRIPTION:6398fe4e     partial XSH.fgetc.008  # fgetc() only here; fgets() and getdelim() in their modules; fread(), fscanf(), getc(), getchar(), getline() and scanf() are not checked, nor the ungetc() exception
+RETURN_VALUE:b5f959ec    XSH.fgetc.001
+RETURN_VALUE:558cc78d    XSH.fgetc.002 XSH.fgetc.003
+RETURN_VALUE:ea989ee7    XSH.fgetc.004 XSH.fgetc.005 XSH.fgetc.006 XSH.fgetc.007
+ERRORS:447d2a01          XSH.fgetc.004 XSH.fgetc.005 XSH.fgetc.006 XSH.fgetc.007
+ERRORS:b1765e8d          XSH.fgetc.006
+ERRORS:40df5a22          XSH.fgetc.004 XSH.fgetc.005
+ERRORS:14cd30b2          XSH.fgetc.007
+ERRORS:b4f9cc82          todo  EIO for a background read from the controlling terminal needs a pseudo-terminal session set up; physical I/O errors cannot be caused
+ERRORS:4cf64455          untestable  the offset maximum of a stream opened by this build is the largest off_t; no read can be positioned at or beyond it
+ERRORS:5a3b118c          none  may-fail error: a permission
+ERRORS:01ce82ab          none  may-fail error: a permission

@@ -1,0 +1,7 @@
+# vfscanf.cov - every requirement unit on functions/vfscanf.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:7c33c08d     partial XSH.vfscanf.001 XSH.vfscanf.002 XSH.vfscanf.003 XSH.vfscanf.004 XSH.vfscanf.005  # equivalence is sampled; the fscanf module's assertions are not repeated through the va_list forms
+DESCRIPTION:1c9bcffc     untestable  whether va_end was invoked on the caller's va_list has no portable observable effect (a second va_end is undefined)
+DESCRIPTION:65906a3f     none  unspecified value; the tests do not use ap after the call
+RETURN_VALUE:3d12422f    XSH.vfscanf.003 XSH.vfscanf.005

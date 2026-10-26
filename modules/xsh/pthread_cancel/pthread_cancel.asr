@@ -1,0 +1,71 @@
+# XSH pthread_cancel()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Cancellation is processed asynchronously to the caller and no bound is
+# set on how soon it is acted on: each test polls for its effects for up
+# to 10 s and joins through a helper thread, so a thread that never
+# ends gives a FAIL rather than a hang.
+
+assertion  XSH.pthread_cancel.001
+anchor     functions/pthread_cancel.html#DESCRIPTION
+anchor     functions/pthread_cancel.html#RETURN VALUE
+anchor     functions/V2_chap02.html#2.9.5.2
+class      required
+since      2008
+says       pthread_cancel() of a thread (cancelability enabled and
+           deferred, the defaults) blocked in read() of an empty pipe
+           returns 0; the thread does not return from read(), runs its
+           cleanup handler, and pthread_join() gives PTHREAD_CANCELED.
+test       t/001-blocked-read.c
+
+assertion  XSH.pthread_cancel.002
+anchor     functions/pthread_cancel.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.5.3
+class      required
+since      2008
+says       A canceled thread with a cleanup handler pushed and a non-NULL
+           thread-specific value runs the handler, then the key's
+           destructor (with that value), and only then terminates:
+           pthread_join() returns PTHREAD_CANCELED after both have run.
+test       t/002-order.c
+
+assertion  XSH.pthread_cancel.003
+anchor     functions/pthread_cancel.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.5.3
+class      required
+since      2024
+says       pthread_cancel() of a thread that has returned from its start
+           routine but has not been joined returns 0, and pthread_join()
+           then gives the value the thread returned.
+note       The thread is given 200 ms to terminate; had it not, it has
+           no cancellation point left, so the outcome is the same.
+test       t/003-zombie.c
+
+assertion  XSH.pthread_cancel.004
+anchor     functions/pthread_cancel.html#DESCRIPTION
+class      required
+since      2008
+says       pthread_cancel() returns 0 while its target has cancelability
+           disabled and is waiting for that call to return; the target
+           then enables cancelability and is canceled at
+           pthread_testcancel().
+test       t/004-asynchronous.c
+
+assertion  XSH.pthread_cancel.005
+anchor     functions/V2_chap02.html#2.9.5.3
+class      required
+since      2008
+says       A cleanup handler run while a cancellation is acted on finds
+           the cancelability state PTHREAD_CANCEL_DISABLE and the type
+           PTHREAD_CANCEL_DEFERRED (pthread_setcancelstate(DISABLE) and
+           pthread_setcanceltype(DEFERRED) report them as previous), the
+           thread having set PTHREAD_CANCEL_ASYNCHRONOUS.
+note       The thread spins for 3 s after the request with the type
+           ASYNCHRONOUS and then reaches pthread_testcancel() as DEFERRED,
+           so the test holds whether or not an asynchronous request is
+           acted on at once (XSH.pthread_setcancelstate.006); the type is
+           checked only on systems that do. The fault planted is a
+           request never made; the state and type change itself happens
+           inside the implementation's cancellation processing, which a
+           preload library cannot reach, and is reviewed by hand.
+test       t/005-acting-disables.c

@@ -1,0 +1,93 @@
+# XSH setpgid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Error tests arrange for exactly one error condition (XSH 2.3).
+
+assertion  XSH.setpgid.001
+anchor     functions/setpgid.html#DESCRIPTION
+anchor     functions/setpgid.html#RETURN VALUE
+class      required
+since      1988
+says       The test process calls setpgid(c, c) for a child c that has not
+           called an exec function: it returns 0, getpgid(c) is then c, and
+           the test's own group is unchanged.
+test       t/001-new-group.c
+
+assertion  XSH.setpgid.002
+anchor     functions/setpgid.html#DESCRIPTION
+class      required
+since      1988
+says       setpgid(0, c) in child c makes c the leader of a new group
+           (pid 0 means the caller).
+test       t/002-pid-zero.c
+
+assertion  XSH.setpgid.003
+anchor     functions/setpgid.html#DESCRIPTION
+class      required
+since      1988
+says       setpgid(c, 0) from the test process puts child c in a group
+           whose ID is c, not the caller's ID (pgid 0 means the indicated
+           process's ID).
+test       t/003-pgid-zero.c
+
+assertion  XSH.setpgid.004
+anchor     functions/setpgid.html#DESCRIPTION
+class      required
+since      1988
+says       With child c1 leading a group, child c2 joins it with
+           setpgid(0, c1) and the test process moves child c3 into it with
+           setpgid(c3, c1); getpgid() then reports c1 for both.
+test       t/004-join.c
+
+assertion  XSH.setpgid.005
+anchor     functions/setpgid.html#ERRORS/EPERM
+anchor     functions/setpgid.html#DESCRIPTION
+class      required
+since      1988
+says       A session leader's setpgid(0, 0) returns -1 with EPERM, and its
+           process group ID stays its own ID.
+test       t/005-session-leader.c
+
+assertion  XSH.setpgid.006
+anchor     functions/setpgid.html#ERRORS/EACCES
+class      required
+since      1988
+says       setpgid(c, c) for a child c that has successfully executed an
+           exec function returns -1 with EACCES, and c's group is
+           unchanged.
+note       The child runs the test program again through execv() with its
+           own path (argv[0]) and reports from the new image.
+test       t/006-after-exec.c
+
+assertion  XSH.setpgid.007
+anchor     functions/setpgid.html#ERRORS/EINVAL
+class      required
+since      1988
+says       setpgid(0, -1) in a child returns -1 with EINVAL.
+test       t/007-negative.c
+
+assertion  XSH.setpgid.008
+anchor     functions/setpgid.html#ERRORS/EPERM
+class      required
+since      1988
+says       A process that forked child c and then started a session of its
+           own gets -1 with EPERM from setpgid(c, c) and setpgid(c, 0) (c is
+           in the old session and leads no session).
+test       t/008-child-other-session.c
+
+assertion  XSH.setpgid.009
+anchor     functions/setpgid.html#ERRORS/EPERM
+class      required
+since      1988
+says       In a child, setpgid(0, x) returns -1 with EPERM both when no
+           process group has ID x (the ID of a reaped child) and when x is
+           the group of a process in another session.
+test       t/009-no-such-group.c
+
+assertion  XSH.setpgid.010
+anchor     functions/setpgid.html#ERRORS/ESRCH
+class      required
+since      1988
+says       setpgid(g, g) for a grandchild g, and for the ID of a reaped
+           child, returns -1 with ESRCH.
+test       t/010-not-a-child.c

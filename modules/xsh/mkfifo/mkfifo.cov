@@ -1,0 +1,37 @@
+# mkfifo.cov - every requirement unit on functions/mkfifo.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:8717470a     XSH.mkfifo.001
+DESCRIPTION:f5612f5b     XSH.mkfifo.001
+DESCRIPTION:1df90387     XSH.mkfifo.001
+DESCRIPTION:b467b321     impl  the meaning of other mode bits (documentation)
+DESCRIPTION:8dc472a7     XSH.mkfifo.002
+DESCRIPTION:956a7de0     XSH.mkfifo.001
+DESCRIPTION:84ddf243     XSH.mkfifo.001
+DESCRIPTION:34155617     impl  the way to take the parent's group is implementation-defined (documentation)
+DESCRIPTION:f1523973     none permission (may)
+DESCRIPTION:28f1ee29     XSH.mkfifo.003
+DESCRIPTION:06535122     XSH.mkfifo.003
+DESCRIPTION:d9ab73ae     XSH.mkfifo.004 XSH.mkfifo.006
+DESCRIPTION:bfead937     XSH.mkfifo.004
+DESCRIPTION:696636e6     XSH.mkfifo.015
+DESCRIPTION:80de69f9     XSH.mkfifo.016
+DESCRIPTION:8563a775     XSH.mkfifo.005
+RETURN_VALUE:5cb75ebf    XSH.mkfifo.001
+RETURN_VALUE:73bdf30d    XSH.mkfifo.002 XSH.mkfifo.007 XSH.mkfifo.009
+RETURN_VALUE:57dd7ae0    XSH.mkfifo.007 XSH.mkfifo.008 XSH.mkfifo.012 XSH.mkfifo.013 XSH.mkfifo.014 XSH.mkfifo.015
+ERRORS:caeb746b          XSH.mkfifo.012
+ERRORS:43fe87dc          XSH.mkfifo.002
+ERRORS:c1ca8031          partial XSH.mkfifo.017  # whether a file system refuses non-portable names is implementation-defined; only the error is checked
+ERRORS:f39d7871          XSH.mkfifo.010
+ERRORS:681b232a          XSH.mkfifo.011
+ERRORS:7411514c          XSH.mkfifo.007
+ERRORS:e0aa24f7          XSH.mkfifo.008
+ERRORS:4a06c9d4          todo  needs a full file system (an environment case)
+ERRORS:5b60360c          XSH.mkfifo.009
+ERRORS:403d4c4a          todo  needs a read-only file system (an environment case)
+ERRORS:222666a3          XSH.mkfifo.015
+ERRORS:0d30acd6          XSH.mkfifo.013 XSH.mkfifo.006
+ERRORS:dc6c136c          XSH.mkfifo.014
+ERRORS:811d61dd          optional
+ERRORS:c7f415ad          optional

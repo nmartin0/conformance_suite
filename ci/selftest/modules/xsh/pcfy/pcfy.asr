@@ -1,0 +1,15 @@
+# ci/mutate.sh fixture: a fault on a header-only variant
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.pcfy.001
+anchor     functions/getpid.html#DESCRIPTION
+class      required
+says       Fixture: pcfy_answer() returns 42 (it exists only in a variant header).
+test       t/001-answer.c
+
+assertion  XSH.pcfy.002
+anchor     functions/getpid.html#DESCRIPTION
+class      required
+says       Fixture: pcfy_other() returns 8 (declared only by a build shim).
+nomutant   fixture: only the shim case is checked
+test       t/002-other.c

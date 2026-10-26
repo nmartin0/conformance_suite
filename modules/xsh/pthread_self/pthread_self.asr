@@ -1,0 +1,23 @@
+# XSH pthread_self()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# IDs are compared only while their threads are live (XSH 2.9.2).
+
+assertion  XSH.pthread_self.001
+anchor     functions/pthread_self.html#DESCRIPTION
+class      required
+since      2001
+says       In a new thread, pthread_self() returns the ID pthread_create()
+           stored for it (pthread_equal() is non-zero), which is not the
+           creating thread's own pthread_self().
+test       t/001-in-new-thread.c
+
+assertion  XSH.pthread_self.002
+anchor     functions/pthread_self.html#DESCRIPTION
+anchor     functions/pthread_self.html#RETURN VALUE
+class      required
+since      2001
+says       In the initial thread, pthread_self() returns the same ID on every
+           call, before and after another thread is created, and that ID
+           differs from the other live thread's.
+test       t/002-initial-thread.c

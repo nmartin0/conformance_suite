@@ -1,0 +1,24 @@
+# XSH putc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.putc.001
+anchor     functions/putc.html#DESCRIPTION
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+since      1988
+says       On a stream opened "w", putc('h') returns 'h' and putc(0x1ff)
+           returns 0xff; after fclose() the file holds the two bytes 'h'
+           and 0xff.
+test       t/001-writes.c
+
+assertion  XSH.putc.002
+anchor     functions/putc.html#DESCRIPTION
+anchor     functions/fputc.html#ERRORS/EBADF
+class      required
+says       On an unbuffered stream opened "w" whose descriptor was closed,
+           putc() returns EOF, sets errno to EBADF and sets the stream's
+           error indicator.
+note       Where setvbuf() refuses _IONBF, the test writes until a call
+           fails (the buffer then needs flushing); if none does within
+           4 MiB the result is UNRESOLVED.
+test       t/002-ebadf.c

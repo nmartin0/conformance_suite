@@ -1,0 +1,14 @@
+# strsignal.cov - every requirement unit on functions/strsignal.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:63784f6d     partial XSH.strsignal.001 XSH.strsignal.002  # a string is returned for valid signals; its text is implementation-defined
+DESCRIPTION:1e1e87b3     XSH.strsignal.001 XSH.strsignal.002
+DESCRIPTION:262c3508     app
+DESCRIPTION:f9736593     none  a permission
+DESCRIPTION:ad4b2527     none  a permission
+DESCRIPTION:7dfb40cb     impl  message text per LC_MESSAGES ("should")
+DESCRIPTION:d65b8eae     partial XSH.strsignal.003  # psignal(), psiginfo(), strerror() and perror(); not every function
+DESCRIPTION:9cdc9f7c     app
+DESCRIPTION:571b06e4     none  a permission
+RETURN_VALUE:6fe99f88    XSH.strsignal.001 XSH.strsignal.002
+RETURN_VALUE:d413a105    none  unspecified

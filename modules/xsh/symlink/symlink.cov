@@ -1,0 +1,38 @@
+# symlink.cov - every requirement unit on functions/symlink.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:ec181a8f     XSH.symlink.001
+DESCRIPTION:07ee194d     XSH.symlink.002 XSH.symlink.003
+DESCRIPTION:abc333b9     XSH.symlink.004 XSH.symlink.011
+DESCRIPTION:5c77a05c     XSH.symlink.004
+DESCRIPTION:99b3f369     XSH.symlink.005
+DESCRIPTION:cba9c3f9     XSH.symlink.005
+DESCRIPTION:bfebfec3     impl  the way to take the parent's group is implementation-defined (documentation)
+DESCRIPTION:6b407d8d     none permission (may)
+DESCRIPTION:e5ecfb9f     none unspecified
+DESCRIPTION:1e26c566     XSH.symlink.022
+DESCRIPTION:27d89036     XSH.symlink.006
+DESCRIPTION:06535122     XSH.symlink.006
+DESCRIPTION:b6d32b5b     XSH.symlink.007 XSH.symlink.009
+DESCRIPTION:4a87de44     XSH.symlink.007
+DESCRIPTION:696636e6     XSH.symlink.019
+DESCRIPTION:80de69f9     XSH.symlink.020
+DESCRIPTION:9264678e     XSH.symlink.008
+RETURN_VALUE:5cb75ebf    XSH.symlink.001
+RETURN_VALUE:73bdf30d    XSH.symlink.004 XSH.symlink.010 XSH.symlink.012
+ERRORS:b1763bd5          XSH.symlink.016
+ERRORS:1b323bd6          XSH.symlink.004
+ERRORS:47d616f1          partial XSH.symlink.021  # whether a file system refuses non-portable names is implementation-defined; only the error is checked
+ERRORS:64fc745a          untestable  needs a failing device
+ERRORS:29d07d27          XSH.symlink.013
+ERRORS:54ac2ea6          XSH.symlink.014 XSH.symlink.015
+ERRORS:75e1dea0          XSH.symlink.010
+ERRORS:ce7b0eaf          XSH.symlink.011
+ERRORS:ebfdd6c3          todo  needs a full file system (an environment case)
+ERRORS:ce1febb2          XSH.symlink.012
+ERRORS:0bd16f3f          todo  needs a read-only file system (an environment case)
+ERRORS:222666a3          XSH.symlink.019
+ERRORS:13c6094b          XSH.symlink.017 XSH.symlink.009
+ERRORS:939d2b85          XSH.symlink.018
+ERRORS:05a9b7fc          optional
+ERRORS:6d002285          optional

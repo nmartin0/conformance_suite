@@ -1,0 +1,7 @@
+# vfprintf.cov - every requirement unit on functions/vfprintf.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:60208ddb     partial XSH.vfprintf.001 XSH.vfprintf.002 XSH.vfprintf.003 XSH.vfprintf.004 XSH.vfprintf.005 XSH.vfprintf.006 XSH.vfprintf.008  # each form with a few conversions; the conversions themselves are checked through the variadic forms (fprintf.cov)
+DESCRIPTION:1c9bcffc     untestable  va_end() on the callee's side leaves no trace a conforming caller can observe (the caller's own va_end() must still follow)
+DESCRIPTION:65906a3f     none  leaves ap unspecified after the call; nothing to check
+RETURN_VALUE:2ff30f72    partial XSH.vfprintf.001 XSH.vfprintf.002 XSH.vfprintf.003 XSH.vfprintf.004 XSH.vfprintf.005 XSH.vfprintf.007 XSH.vfprintf.008  # the return values of each form and EOVERFLOW; the other errors through the variadic forms

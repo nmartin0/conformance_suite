@@ -12,7 +12,9 @@
  *                    (compile: the macro is defined and not -1, which is
  *                    what a check of the headers alone needs)
  *   probe sysinfo    uname fields, one "key value" per line, and
- *                    "target OS" (what the compiler builds for)
+ *                    "target OS" (what the compiler builds for), a record
+ *                    of what a run describes
+ *   probe namemax D  pathconf(D, _PC_NAME_MAX), -1 if indeterminate
  *   probe cspath     the value of confstr(_CS_PATH)
  *   probe euid       the effective user ID
  *   probe now        current UTC time, ISO 8601
@@ -22,6 +24,7 @@
  * undefined or -1 means not supported; greater than zero means always
  * supported; zero means "ask sysconf() at run time".
  */
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -84,9 +87,10 @@ static int sysinfo(void)
 	printf("sysname %s\nnodename %s\nrelease %s\nversion %s\n"
 	    "machine %s\n", u.sysname, u.nodename, u.release, u.version,
 	    u.machine);
-	/* The system the compiler builds for, from its predefined macros: run
-	 * through a compatibility layer, a Linux build says "linux" on a kernel
-	 * whose sysname is not Linux. */
+	/* The system the compiler builds for, from its predefined macros: a
+	 * record for whoever reads the results (a Linux build run through
+	 * another system's compatibility layer says "linux"). Nothing depends
+	 * on it. */
 	printf("target %s\n",
 #if defined(__linux__)
 	    "linux"
@@ -143,6 +147,16 @@ int main(int argc, char **argv)
 		return claims();
 	if (argc == 2 && strcmp(argv[1], "sysinfo") == 0)
 		return sysinfo();
+	if (argc == 3 && strcmp(argv[1], "namemax") == 0) {
+		long v;
+
+		errno = 0;
+		v = pathconf(argv[2], _PC_NAME_MAX);
+		if (v == -1 && errno != 0)
+			return 1;
+		printf("%ld\n", v);
+		return 0;
+	}
 	if (argc == 2 && strcmp(argv[1], "cspath") == 0)
 		return cspath();
 	if (argc == 2 && strcmp(argv[1], "euid") == 0)
@@ -155,7 +169,7 @@ int main(int argc, char **argv)
 			left = sleep(left);
 		return 0;
 	}
-	fprintf(stderr, "usage: probe claims|sysinfo|cspath|euid|now|"
+	fprintf(stderr, "usage: probe claims|sysinfo|namemax DIR|cspath|euid|now|"
 	    "sleep N\n");
 	return 2;
 }

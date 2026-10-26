@@ -1,0 +1,116 @@
+# XSH msync()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# msync() is XSI|SIO (the module's option). Page sizes come from
+# sysconf(_SC_PAGESIZE); addresses passed are page multiples (the
+# implementation may require that). All mappings are of regular files:
+# msync() on anonymous memory and shared memory objects is unspecified.
+# Writing to permanent storage cannot be observed and is not tested.
+
+assertion  XSH.msync.001
+anchor     functions/msync.html#DESCRIPTION
+anchor     functions/msync.html#RETURN VALUE
+class      required
+since      2001
+says       msync() of a MAP_SHARED file mapping returns 0 with each of
+           MS_SYNC, MS_ASYNC, MS_SYNC|MS_INVALIDATE and
+           MS_ASYNC|MS_INVALIDATE, and read() of the file then shows a
+           byte stored before each call.
+test       t/001-flags-ok.c
+
+assertion  XSH.msync.002
+anchor     functions/msync.html#DESCRIPTION
+anchor     functions/msync.html#ERRORS/EINVAL
+class      disputed
+since      2001
+says       msync(MS_ASYNC|MS_SYNC) fails with EINVAL.
+note       disputed (new): candidate issue (msync flags), Q number
+           pending. DESCRIPTION says exactly one of MS_ASYNC and MS_SYNC
+           is to be given, and ERRORS requires EINVAL for an invalid
+           flags value; the first can be read as defining which values
+           are invalid (EINVAL required) or as a requirement on the
+           application whose breach is undefined (any outcome). The test
+           expects EINVAL; a call that succeeds (or fails otherwise) is
+           logged as INSPECT. The other reading is planted as READING
+           msync.flags_lenient.
+test       t/002-both-einval.c
+
+assertion  XSH.msync.003
+anchor     functions/msync.html#ERRORS/ENOMEM
+class      required
+since      2001
+says       msync(MS_ASYNC) over three pages of a file mapping whose middle
+           page is unmapped fails with ENOMEM.
+test       t/003-enomem.c
+
+assertion  XSH.msync.004
+anchor     functions/msync.html#ERRORS/EBUSY
+class      conditional
+when       XSI+MLR|SIO+MLR
+since      2001
+says       With the second page of a two-page MAP_SHARED file mapping
+           locked by mlock(), msync(MS_SYNC|MS_INVALIDATE) over both pages
+           and msync(MS_ASYNC|MS_INVALIDATE) of the locked page each fail
+           with EBUSY.
+note       mlock() failing (resources, privileges) is UNRESOLVED.
+test       t/004-ebusy.c
+
+assertion  XSH.msync.005
+anchor     functions/msync.html#DESCRIPTION
+anchor     functions/mmap.html#DESCRIPTION
+class      required
+since      2001
+says       After the file's timestamps are set to 2001 with futimens(), a
+           store through a new MAP_SHARED mapping and msync(MS_SYNC) of it,
+           fstat() shows st_mtim changed.
+note       mmap() requires the marking by the next msync(); msync() marks
+           the timestamps when it writes. The last file status change
+           timestamp is not checked: the change after futimens() could be
+           smaller than its granularity.
+test       t/005-mtime.c
+
+assertion  XSH.msync.006
+anchor     functions/msync.html#DESCRIPTION
+class      required
+since      2001
+says       msync(MS_SYNC) of a MAP_PRIVATE file mapping after a store to it
+           returns 0, and the file does not hold the store while the
+           mapping keeps it.
+note       NOTINUSE where MAP_PRIVATE fails with ENOTSUP.
+test       t/006-private-not-written.c
+
+assertion  XSH.msync.007
+anchor     functions/msync.html#DESCRIPTION
+anchor     functions/msync.html#ERRORS/EINVAL
+class      disputed
+since      2001
+says       msync() of a MAP_SHARED file mapping with flags 0
+           (neither MS_ASYNC nor MS_SYNC) fails with EINVAL.
+note       disputed (new): candidate issue (msync flags), Q number
+           pending. DESCRIPTION says exactly one of MS_ASYNC and MS_SYNC
+           is to be given, and ERRORS requires EINVAL for an invalid
+           flags value; the first can be read as defining which values
+           are invalid (EINVAL required) or as a requirement on the
+           application whose breach is undefined (any outcome). The test
+           expects EINVAL; a call that succeeds (or fails otherwise) is
+           logged as INSPECT. The other reading is planted as READING
+           msync.flags_lenient.
+test       t/007-flags-none.c
+
+assertion  XSH.msync.008
+anchor     functions/msync.html#DESCRIPTION
+anchor     functions/msync.html#ERRORS/EINVAL
+class      disputed
+since      2001
+says       msync() of a MAP_SHARED file mapping with flags MS_INVALIDATE
+           (neither MS_ASYNC nor MS_SYNC) fails with EINVAL.
+note       disputed (new): candidate issue (msync flags), Q number
+           pending. DESCRIPTION says exactly one of MS_ASYNC and MS_SYNC
+           is to be given, and ERRORS requires EINVAL for an invalid
+           flags value; the first can be read as defining which values
+           are invalid (EINVAL required) or as a requirement on the
+           application whose breach is undefined (any outcome). The test
+           expects EINVAL; a call that succeeds (or fails otherwise) is
+           logged as INSPECT. The other reading is planted as READING
+           msync.flags_lenient.
+test       t/008-invalidate-alone.c

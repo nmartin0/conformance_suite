@@ -1,0 +1,36 @@
+# mktime.cov - every requirement unit on functions/mktime.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:8d91c57b     XSH.mktime.001
+DESCRIPTION:6ea60731     XSH.mktime.002 XSH.mktime.003
+DESCRIPTION:b444b8d6     XSH.mktime.008
+DESCRIPTION:a0a682d5     XSH.mktime.003
+DESCRIPTION:f9c090e3     none  a permission; either way the value and the final members are the same (XSH.mktime.003)
+DESCRIPTION:77fec58c     XSH.mktime.003
+DESCRIPTION:35f9f3d7     XSH.mktime.003
+DESCRIPTION:65c740bf     XSH.mktime.003
+DESCRIPTION:05774bad     XSH.mktime.003
+DESCRIPTION:30e452de     XSH.mktime.003
+DESCRIPTION:d94d5687     XSH.mktime.003
+DESCRIPTION:04548e7a     XSH.mktime.003
+DESCRIPTION:441f3a2a     XSH.mktime.003
+DESCRIPTION:a62e5735     XSH.mktime.003
+DESCRIPTION:ade7fd87     XSH.mktime.003
+DESCRIPTION:8536730c     XSH.mktime.003
+DESCRIPTION:dde59c1c     XSH.mktime.003
+DESCRIPTION:46402c86     XSH.mktime.003
+DESCRIPTION:76c84fd8     XSH.mktime.001 XSH.mktime.003
+DESCRIPTION:1c5806a6     XSH.mktime.001
+DESCRIPTION:1b163bfe     XSH.mktime.005 XSH.mktime.006
+DESCRIPTION:549dcf5d     XSH.mktime.005
+DESCRIPTION:e76aaf2f     XSH.mktime.005
+DESCRIPTION:d1cc4478     XSH.mktime.005
+DESCRIPTION:8a965a28     XSH.mktime.006
+DESCRIPTION:dfb32cd2     XSH.mktime.007
+DESCRIPTION:2fd5adab     untestable  needs a geographical timezone from a database; the suite uses only TZ values whose meaning the standard fixes
+DESCRIPTION:27be45c8     XSH.mktime.004
+RETURN_VALUE:7ecb60a1    XSH.mktime.001
+RETURN_VALUE:2ac2e3b1    partial XSH.mktime.009  # only the tm_year case: with a 64-bit time_t the time itself always fits
+RETURN_VALUE:4520e192    none  application advice
+RETURN_VALUE:d592ce19    none  application advice (the tm_wday rule is checked in XSH.mktime.009)
+ERRORS:4e94a678          XSH.mktime.009

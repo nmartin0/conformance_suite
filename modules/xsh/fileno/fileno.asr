@@ -1,0 +1,46 @@
+# XSH fileno()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fileno.001
+anchor     functions/fileno.html#DESCRIPTION
+anchor     functions/stdin.html#DESCRIPTION
+class      required
+since      1988
+says       fileno(stdin) is 0, fileno(stdout) is 1 and fileno(stderr) is 2
+           (STDIN_FILENO, STDOUT_FILENO and STDERR_FILENO).
+test       t/001-standard-streams.c
+
+assertion  XSH.fileno.002
+anchor     functions/fileno.html#RETURN VALUE
+class      required
+since      1988
+says       fileno() of a stream from fopen("f", "r") is a descriptor for f
+           (fstat() gives the st_dev and st_ino of stat("f")) open
+           O_RDONLY; fileno() of fdopen(d, "w"), with d an O_WRONLY
+           descriptor made by fcntl(F_DUPFD, 40), is d.
+test       t/002-descriptor.c
+
+assertion  XSH.fileno.003
+anchor     functions/fileno.html#ERRORS/EBADF
+class      required
+since      2008
+says       fileno() of a stream from fmemopen() and of one from
+           open_memstream() returns -1 with errno EBADF.
+note       Such a stream is associated with a memory buffer, not a file
+           (XSH 2.5). Issue 6 added the error; memory streams came in
+           Issue 7.
+test       t/003-memory-stream.c
+
+assertion  XSH.fileno.004
+anchor     functions/fileno.html#ERRORS/EBADF
+anchor     functions/fileno.html#RETURN VALUE
+class      required
+since      2001
+says       After close(fileno(f)) on a stream from fopen(), fileno(f)
+           returns either the number of the closed descriptor or -1 with
+           errno EBADF.
+note       The descriptor is still the stream's, and EBADF for a
+           descriptor that is not valid is a "may fail" error, so both
+           results are allowed (variant fileno.checks_fd); any other is
+           not.
+test       t/004-closed-descriptor.c

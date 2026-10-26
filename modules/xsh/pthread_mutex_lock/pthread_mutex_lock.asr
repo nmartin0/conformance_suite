@@ -1,0 +1,182 @@
+# XSH pthread_mutex_lock(), pthread_mutex_trylock(), pthread_mutex_unlock()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Misuse that the page leaves undefined (relocking or unlocking a DEFAULT
+# or non-robust NORMAL mutex wrongly, uninitialized mutexes) is not
+# tested. Helper threads report through atomic flags, never through
+# mutexes, so a planted fault in the mutex functions cannot hide itself.
+
+assertion  XSH.pthread_mutex_lock.001
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+anchor     functions/pthread_mutex_lock.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_mutex_lock() on an unlocked mutex (default attributes)
+           returns 0 and leaves it locked: another thread's
+           pthread_mutex_trylock() then returns EBUSY.
+test       t/001-lock-acquires.c
+
+assertion  XSH.pthread_mutex_lock.002
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+class      required
+since      2008
+says       pthread_mutex_lock() on a mutex another thread holds does not
+           return while that thread holds it; after the holder unlocks it,
+           the call returns 0 with the caller as owner (the old holder's
+           trylock returns EBUSY).
+note       The holder keeps the mutex for 300 ms after the waiter has
+           started; the waiter must not have returned by then.
+test       t/002-lock-blocks.c
+
+assertion  XSH.pthread_mutex_lock.003
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+class      required
+since      2008
+says       pthread_mutex_trylock() on an unlocked mutex returns 0 and
+           locks it: another thread's trylock returns EBUSY until the
+           caller unlocks it.
+test       t/003-trylock-acquires.c
+
+assertion  XSH.pthread_mutex_lock.004
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+anchor     functions/pthread_mutex_lock.html#ERRORS/EBUSY
+class      required
+since      2008
+says       pthread_mutex_trylock() on a mutex another thread holds returns
+           EBUSY without waiting for it to be released.
+note       The holder keeps the mutex for 10 s at most; a trylock that has
+           not returned by then is a FAIL.
+test       t/004-trylock-busy.c
+
+assertion  XSH.pthread_mutex_lock.005
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+anchor     functions/pthread_mutex_lock.html#ERRORS/EBUSY
+class      required
+since      2008
+says       pthread_mutex_trylock() by the owner of a NORMAL or an
+           ERRORCHECK mutex returns EBUSY, and the mutex stays locked
+           once (a single unlock releases it).
+note       DEFAULT is left out: it may behave as RECURSIVE.
+test       t/005-trylock-own.c
+
+assertion  XSH.pthread_mutex_lock.006
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+anchor     functions/pthread_mutex_lock.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_mutex_unlock() by the owner returns 0 and releases the
+           mutex: another thread's trylock then returns 0.
+test       t/006-unlock-releases.c
+
+assertion  XSH.pthread_mutex_lock.007
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+anchor     functions/pthread_mutex_lock.html#ERRORS/EDEADLK
+class      required
+since      2008
+says       pthread_mutex_lock() by the owner of an ERRORCHECK mutex returns
+           EDEADLK and does not add a lock: one unlock releases the mutex.
+test       t/007-errorcheck-relock.c
+
+assertion  XSH.pthread_mutex_lock.008
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+anchor     functions/pthread_mutex_lock.html#ERRORS/EPERM
+class      required
+since      2008
+says       pthread_mutex_unlock() of an ERRORCHECK mutex that is unlocked,
+           or that another thread holds, returns EPERM; the other
+           thread's lock is kept.
+test       t/008-errorcheck-unlock.c
+
+assertion  XSH.pthread_mutex_lock.009
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+class      required
+since      2008
+says       A RECURSIVE mutex counts its owner's locks: lock, lock again and
+           trylock by the owner return 0; after all but one unlock another
+           thread's trylock still returns EBUSY, after the last it returns
+           0.
+note       The maximum lock count has no stated minimum: a relock refused
+           with EAGAIN ends the counting there, and fewer than two locks
+           make the test NOTINUSE.
+test       t/009-recursive-count.c
+
+assertion  XSH.pthread_mutex_lock.010
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+anchor     functions/pthread_mutex_lock.html#ERRORS/EPERM
+class      required
+since      2008
+says       pthread_mutex_unlock() of a RECURSIVE mutex that is unlocked, or
+           that another thread holds, returns EPERM.
+test       t/010-recursive-unlock.c
+
+assertion  XSH.pthread_mutex_lock.011
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+anchor     functions/pthread_mutex_lock.html#ERRORS/EDEADLK
+class      required
+since      2008
+says       pthread_mutex_lock() by the owner of a NORMAL mutex does not
+           succeed: it has not returned 300 ms later, or it returned
+           EDEADLK.
+note       The table says the relock deadlocks; the may-fail [EDEADLK]
+           for a detected deadlock is accepted as well (new issue, see
+           the module's report). The thread stays blocked until the
+           test exits.
+test       t/011-normal-relock.c
+
+assertion  XSH.pthread_mutex_lock.012
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+anchor     functions/pthread_mutex_lock.html#ERRORS/EPERM
+class      required
+since      2008
+says       pthread_mutex_unlock() of a robust NORMAL or robust DEFAULT
+           mutex that is unlocked, or that another thread holds, returns
+           EPERM.
+note       pthread_mutex_init() may refuse a robust mutex that is not
+           process-shared (EINVAL); the test then uses a process-shared
+           one where TSH is claimed, and is NOTINUSE otherwise.
+test       t/012-robust-unlock.c
+
+assertion  XSH.pthread_mutex_lock.013
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+anchor     functions/pthread_mutex_lock.html#ERRORS/EOWNERDEAD
+class      conditional
+when       TSH
+since      2008
+says       When the process holding a process-shared robust mutex has
+           terminated, pthread_mutex_trylock() and pthread_mutex_lock() in
+           another process return EOWNERDEAD with the mutex locked by the
+           caller (another thread's trylock returns EBUSY, and after
+           pthread_mutex_consistent() the caller's unlock returns 0).
+note       The mutex is in a file mapped MAP_SHARED; the child locks it
+           and calls _exit(). The owner has been reaped before the calls,
+           so nothing can release the mutex and the call must return
+           EOWNERDEAD rather than wait; 10 s is a generous cap on that
+           return, and a lock that has not returned by then is a FAIL.
+test       t/013-ownerdead.c
+
+assertion  XSH.pthread_mutex_lock.014
+anchor     functions/pthread_mutex_lock.html#ERRORS/ENOTRECOVERABLE
+anchor     functions/pthread_mutexattr_getrobust.html#DESCRIPTION
+class      conditional
+when       TSH
+since      2008
+says       A robust mutex acquired with EOWNERDEAD and unlocked without
+           pthread_mutex_consistent() becomes unusable: pthread_mutex_lock(),
+           then pthread_mutex_trylock(), then pthread_mutex_lock() again
+           each return ENOTRECOVERABLE.
+note       No thread owns the mutex after that unlock (XSH 2.9.3: a call
+           that returns an error other than EOWNERDEAD does not make its
+           caller the owner), so pthread_mutex_lock() has nothing to wait
+           for; one that has not returned after 10 s is a FAIL.
+test       t/014-notrecoverable.c
+
+assertion  XSH.pthread_mutex_lock.015
+anchor     functions/pthread_mutex_lock.html#DESCRIPTION
+anchor     functions/pthread_mutex_lock.html#ERRORS
+class      required
+since      2008
+says       A thread blocked in pthread_mutex_lock() that takes a caught
+           signal (handler without SA_RESTART) goes on waiting: it has not
+           returned 300 ms after the handler ran, and once the holder
+           unlocks, the call returns 0 (never EINTR).
+test       t/015-signal-waiting.c

@@ -1,0 +1,254 @@
+/*
+ * confstr() of a value that is no name returns 0 with errno EINVAL.
+ * Copyright (c) 2026 Nicholas Martin. All rights reserved.
+ *
+ * ASSERTION XSH.confstr.004
+ * MUTANT    confstr.invalid_no_errno
+ * MUTANT    confstr.invalid_wrong_errno
+ */
+#include "pc.h"
+#include <errno.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+/* The names of the confstr() list. */
+static const struct {
+	const char *name;
+	int cs;
+} vars[] = {
+#ifdef _CS_PATH
+	{ "_CS_PATH", _CS_PATH },
+#endif
+#ifdef _CS_POSIX_V8_ILP32_OFF32_CFLAGS
+	{ "_CS_POSIX_V8_ILP32_OFF32_CFLAGS", _CS_POSIX_V8_ILP32_OFF32_CFLAGS },
+#endif
+#ifdef _CS_POSIX_V8_ILP32_OFF32_LDFLAGS
+	{ "_CS_POSIX_V8_ILP32_OFF32_LDFLAGS", _CS_POSIX_V8_ILP32_OFF32_LDFLAGS },
+#endif
+#ifdef _CS_POSIX_V8_ILP32_OFF32_LIBS
+	{ "_CS_POSIX_V8_ILP32_OFF32_LIBS", _CS_POSIX_V8_ILP32_OFF32_LIBS },
+#endif
+#ifdef _CS_POSIX_V8_ILP32_OFFBIG_CFLAGS
+	{ "_CS_POSIX_V8_ILP32_OFFBIG_CFLAGS", _CS_POSIX_V8_ILP32_OFFBIG_CFLAGS },
+#endif
+#ifdef _CS_POSIX_V8_ILP32_OFFBIG_LDFLAGS
+	{ "_CS_POSIX_V8_ILP32_OFFBIG_LDFLAGS", _CS_POSIX_V8_ILP32_OFFBIG_LDFLAGS },
+#endif
+#ifdef _CS_POSIX_V8_ILP32_OFFBIG_LIBS
+	{ "_CS_POSIX_V8_ILP32_OFFBIG_LIBS", _CS_POSIX_V8_ILP32_OFFBIG_LIBS },
+#endif
+#ifdef _CS_POSIX_V8_LP64_OFF64_CFLAGS
+	{ "_CS_POSIX_V8_LP64_OFF64_CFLAGS", _CS_POSIX_V8_LP64_OFF64_CFLAGS },
+#endif
+#ifdef _CS_POSIX_V8_LP64_OFF64_LDFLAGS
+	{ "_CS_POSIX_V8_LP64_OFF64_LDFLAGS", _CS_POSIX_V8_LP64_OFF64_LDFLAGS },
+#endif
+#ifdef _CS_POSIX_V8_LP64_OFF64_LIBS
+	{ "_CS_POSIX_V8_LP64_OFF64_LIBS", _CS_POSIX_V8_LP64_OFF64_LIBS },
+#endif
+#ifdef _CS_POSIX_V8_LPBIG_OFFBIG_CFLAGS
+	{ "_CS_POSIX_V8_LPBIG_OFFBIG_CFLAGS", _CS_POSIX_V8_LPBIG_OFFBIG_CFLAGS },
+#endif
+#ifdef _CS_POSIX_V8_LPBIG_OFFBIG_LDFLAGS
+	{ "_CS_POSIX_V8_LPBIG_OFFBIG_LDFLAGS", _CS_POSIX_V8_LPBIG_OFFBIG_LDFLAGS },
+#endif
+#ifdef _CS_POSIX_V8_LPBIG_OFFBIG_LIBS
+	{ "_CS_POSIX_V8_LPBIG_OFFBIG_LIBS", _CS_POSIX_V8_LPBIG_OFFBIG_LIBS },
+#endif
+#ifdef _CS_POSIX_V8_THREADS_CFLAGS
+	{ "_CS_POSIX_V8_THREADS_CFLAGS", _CS_POSIX_V8_THREADS_CFLAGS },
+#endif
+#ifdef _CS_POSIX_V8_THREADS_LDFLAGS
+	{ "_CS_POSIX_V8_THREADS_LDFLAGS", _CS_POSIX_V8_THREADS_LDFLAGS },
+#endif
+#ifdef _CS_POSIX_V8_WIDTH_RESTRICTED_ENVS
+	{ "_CS_POSIX_V8_WIDTH_RESTRICTED_ENVS", _CS_POSIX_V8_WIDTH_RESTRICTED_ENVS },
+#endif
+#ifdef _CS_V8_ENV
+	{ "_CS_V8_ENV", _CS_V8_ENV },
+#endif
+#ifdef _CS_POSIX_V7_ILP32_OFF32_CFLAGS
+	{ "_CS_POSIX_V7_ILP32_OFF32_CFLAGS", _CS_POSIX_V7_ILP32_OFF32_CFLAGS },
+#endif
+#ifdef _CS_POSIX_V7_ILP32_OFF32_LDFLAGS
+	{ "_CS_POSIX_V7_ILP32_OFF32_LDFLAGS", _CS_POSIX_V7_ILP32_OFF32_LDFLAGS },
+#endif
+#ifdef _CS_POSIX_V7_ILP32_OFF32_LIBS
+	{ "_CS_POSIX_V7_ILP32_OFF32_LIBS", _CS_POSIX_V7_ILP32_OFF32_LIBS },
+#endif
+#ifdef _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS
+	{ "_CS_POSIX_V7_ILP32_OFFBIG_CFLAGS", _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS },
+#endif
+#ifdef _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS
+	{ "_CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS", _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS },
+#endif
+#ifdef _CS_POSIX_V7_ILP32_OFFBIG_LIBS
+	{ "_CS_POSIX_V7_ILP32_OFFBIG_LIBS", _CS_POSIX_V7_ILP32_OFFBIG_LIBS },
+#endif
+#ifdef _CS_POSIX_V7_LP64_OFF64_CFLAGS
+	{ "_CS_POSIX_V7_LP64_OFF64_CFLAGS", _CS_POSIX_V7_LP64_OFF64_CFLAGS },
+#endif
+#ifdef _CS_POSIX_V7_LP64_OFF64_LDFLAGS
+	{ "_CS_POSIX_V7_LP64_OFF64_LDFLAGS", _CS_POSIX_V7_LP64_OFF64_LDFLAGS },
+#endif
+#ifdef _CS_POSIX_V7_LP64_OFF64_LIBS
+	{ "_CS_POSIX_V7_LP64_OFF64_LIBS", _CS_POSIX_V7_LP64_OFF64_LIBS },
+#endif
+#ifdef _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS
+	{ "_CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS", _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS },
+#endif
+#ifdef _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS
+	{ "_CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS", _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS },
+#endif
+#ifdef _CS_POSIX_V7_LPBIG_OFFBIG_LIBS
+	{ "_CS_POSIX_V7_LPBIG_OFFBIG_LIBS", _CS_POSIX_V7_LPBIG_OFFBIG_LIBS },
+#endif
+#ifdef _CS_POSIX_V7_THREADS_CFLAGS
+	{ "_CS_POSIX_V7_THREADS_CFLAGS", _CS_POSIX_V7_THREADS_CFLAGS },
+#endif
+#ifdef _CS_POSIX_V7_THREADS_LDFLAGS
+	{ "_CS_POSIX_V7_THREADS_LDFLAGS", _CS_POSIX_V7_THREADS_LDFLAGS },
+#endif
+#ifdef _CS_POSIX_V7_WIDTH_RESTRICTED_ENVS
+	{ "_CS_POSIX_V7_WIDTH_RESTRICTED_ENVS", _CS_POSIX_V7_WIDTH_RESTRICTED_ENVS },
+#endif
+#ifdef _CS_V7_ENV
+	{ "_CS_V7_ENV", _CS_V7_ENV },
+#endif
+};
+
+/* Names of the list <unistd.h> does not define. */
+static const char *const missing[] = {
+#ifndef _CS_PATH
+	"_CS_PATH",
+#endif
+#ifndef _CS_POSIX_V8_ILP32_OFF32_CFLAGS
+	"_CS_POSIX_V8_ILP32_OFF32_CFLAGS",
+#endif
+#ifndef _CS_POSIX_V8_ILP32_OFF32_LDFLAGS
+	"_CS_POSIX_V8_ILP32_OFF32_LDFLAGS",
+#endif
+#ifndef _CS_POSIX_V8_ILP32_OFF32_LIBS
+	"_CS_POSIX_V8_ILP32_OFF32_LIBS",
+#endif
+#ifndef _CS_POSIX_V8_ILP32_OFFBIG_CFLAGS
+	"_CS_POSIX_V8_ILP32_OFFBIG_CFLAGS",
+#endif
+#ifndef _CS_POSIX_V8_ILP32_OFFBIG_LDFLAGS
+	"_CS_POSIX_V8_ILP32_OFFBIG_LDFLAGS",
+#endif
+#ifndef _CS_POSIX_V8_ILP32_OFFBIG_LIBS
+	"_CS_POSIX_V8_ILP32_OFFBIG_LIBS",
+#endif
+#ifndef _CS_POSIX_V8_LP64_OFF64_CFLAGS
+	"_CS_POSIX_V8_LP64_OFF64_CFLAGS",
+#endif
+#ifndef _CS_POSIX_V8_LP64_OFF64_LDFLAGS
+	"_CS_POSIX_V8_LP64_OFF64_LDFLAGS",
+#endif
+#ifndef _CS_POSIX_V8_LP64_OFF64_LIBS
+	"_CS_POSIX_V8_LP64_OFF64_LIBS",
+#endif
+#ifndef _CS_POSIX_V8_LPBIG_OFFBIG_CFLAGS
+	"_CS_POSIX_V8_LPBIG_OFFBIG_CFLAGS",
+#endif
+#ifndef _CS_POSIX_V8_LPBIG_OFFBIG_LDFLAGS
+	"_CS_POSIX_V8_LPBIG_OFFBIG_LDFLAGS",
+#endif
+#ifndef _CS_POSIX_V8_LPBIG_OFFBIG_LIBS
+	"_CS_POSIX_V8_LPBIG_OFFBIG_LIBS",
+#endif
+#ifndef _CS_POSIX_V8_THREADS_CFLAGS
+	"_CS_POSIX_V8_THREADS_CFLAGS",
+#endif
+#ifndef _CS_POSIX_V8_THREADS_LDFLAGS
+	"_CS_POSIX_V8_THREADS_LDFLAGS",
+#endif
+#ifndef _CS_POSIX_V8_WIDTH_RESTRICTED_ENVS
+	"_CS_POSIX_V8_WIDTH_RESTRICTED_ENVS",
+#endif
+#ifndef _CS_V8_ENV
+	"_CS_V8_ENV",
+#endif
+#ifndef _CS_POSIX_V7_ILP32_OFF32_CFLAGS
+	"_CS_POSIX_V7_ILP32_OFF32_CFLAGS",
+#endif
+#ifndef _CS_POSIX_V7_ILP32_OFF32_LDFLAGS
+	"_CS_POSIX_V7_ILP32_OFF32_LDFLAGS",
+#endif
+#ifndef _CS_POSIX_V7_ILP32_OFF32_LIBS
+	"_CS_POSIX_V7_ILP32_OFF32_LIBS",
+#endif
+#ifndef _CS_POSIX_V7_ILP32_OFFBIG_CFLAGS
+	"_CS_POSIX_V7_ILP32_OFFBIG_CFLAGS",
+#endif
+#ifndef _CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS
+	"_CS_POSIX_V7_ILP32_OFFBIG_LDFLAGS",
+#endif
+#ifndef _CS_POSIX_V7_ILP32_OFFBIG_LIBS
+	"_CS_POSIX_V7_ILP32_OFFBIG_LIBS",
+#endif
+#ifndef _CS_POSIX_V7_LP64_OFF64_CFLAGS
+	"_CS_POSIX_V7_LP64_OFF64_CFLAGS",
+#endif
+#ifndef _CS_POSIX_V7_LP64_OFF64_LDFLAGS
+	"_CS_POSIX_V7_LP64_OFF64_LDFLAGS",
+#endif
+#ifndef _CS_POSIX_V7_LP64_OFF64_LIBS
+	"_CS_POSIX_V7_LP64_OFF64_LIBS",
+#endif
+#ifndef _CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS
+	"_CS_POSIX_V7_LPBIG_OFFBIG_CFLAGS",
+#endif
+#ifndef _CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS
+	"_CS_POSIX_V7_LPBIG_OFFBIG_LDFLAGS",
+#endif
+#ifndef _CS_POSIX_V7_LPBIG_OFFBIG_LIBS
+	"_CS_POSIX_V7_LPBIG_OFFBIG_LIBS",
+#endif
+#ifndef _CS_POSIX_V7_THREADS_CFLAGS
+	"_CS_POSIX_V7_THREADS_CFLAGS",
+#endif
+#ifndef _CS_POSIX_V7_THREADS_LDFLAGS
+	"_CS_POSIX_V7_THREADS_LDFLAGS",
+#endif
+#ifndef _CS_POSIX_V7_WIDTH_RESTRICTED_ENVS
+	"_CS_POSIX_V7_WIDTH_RESTRICTED_ENVS",
+#endif
+#ifndef _CS_V7_ENV
+	"_CS_V7_ENV",
+#endif
+	NULL
+};
+
+/* Notes the names <unistd.h> lacks (a header matter, XBD <unistd.h>). */
+static void note_missing(void)
+{
+	size_t i;
+
+	for (i = 0; missing[i] != NULL; i++)
+		pc_note("<unistd.h> does not define %s; not checked here", missing[i]);
+}
+
+int main(void)
+{
+	static const int bad[] = { -1, 0x7ffffff0 };
+	char buf[64];
+	size_t i, j, r;
+	int e;
+
+	pc_begin("XSH.confstr.004");
+	for (i = 0; i < 2; i++)
+		for (j = 0; j < sizeof vars / sizeof vars[0]; j++)
+			pc_check(vars[j].cs != bad[i], "%s has the value %d", vars[j].name, bad[i]);
+	pc_test();
+	for (i = 0; i < 2; i++) {
+		errno = 0;
+		r = confstr(bad[i], buf, sizeof buf);
+		e = errno;
+		pc_check(r == 0, "confstr(%d, buf, %zu) returned %zu, expected 0", bad[i], sizeof buf, r);
+		pc_check(e == EINVAL, "confstr(%d, buf, %zu) set errno %s, expected EINVAL", bad[i], sizeof buf,
+			 pc_errname(e));
+	}
+	pc_pass();
+}

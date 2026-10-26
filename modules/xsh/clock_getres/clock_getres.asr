@@ -1,0 +1,136 @@
+# XSH clock_getres(), clock_gettime(), clock_settime()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# No test sets a clock to a new value: stepping CLOCK_REALTIME would
+# disturb every other process on the machine. The error tests pass values
+# close to the clock's current value, so that a system that wrongly
+# accepts them barely moves it.
+
+assertion  XSH.clock_getres.001
+anchor     functions/clock_getres.html#DESCRIPTION
+anchor     functions/clock_getres.html#RETURN VALUE
+class      required
+since      2008
+says       clock_getres(CLOCK_REALTIME, &res) and clock_gettime(
+           CLOCK_REALTIME, &tp) return 0; res is a positive time with
+           tv_nsec in [0, 1000000000) and tp has tv_nsec in that range.
+note       The resolution's value is implementation-defined; only that it
+           is a proper, non-zero interval is checked.
+test       t/001-realtime.c
+
+assertion  XSH.clock_getres.002
+anchor     functions/clock_getres.html#DESCRIPTION
+anchor     functions/clock_getres.html#RETURN VALUE
+class      required
+since      2024
+says       clock_getres(CLOCK_MONOTONIC, &res) and clock_gettime(
+           CLOCK_MONOTONIC, &tp) return 0; res is a positive time with
+           tv_nsec in [0, 1000000000) and tp has tv_nsec in that range.
+test       t/002-monotonic.c
+
+assertion  XSH.clock_getres.003
+anchor     functions/clock_getres.html#DESCRIPTION
+class      required
+since      2008
+says       clock_getres() with a null res returns 0 for CLOCK_REALTIME and
+           for CLOCK_MONOTONIC.
+test       t/003-null-res.c
+
+assertion  XSH.clock_getres.004
+anchor     functions/clock_getres.html#ERRORS/EINVAL
+class      required
+since      2008
+says       For a clock ID that is not a known clock, clock_getres() and
+           clock_gettime() fail with EINVAL, and clock_settime() fails with
+           EINVAL (or EPERM, which may also apply).
+note       Implementations may support additional clocks, so no value is
+           certain to be unknown. The test tries a few large values in
+           turn and skips any that all three functions accept (a known
+           clock); a value that one function accepts and another rejects
+           as unknown is a FAIL. No candidate left is UNRESOLVED.
+test       t/004-unknown-clock.c
+
+assertion  XSH.clock_getres.005
+anchor     functions/clock_getres.html#DESCRIPTION
+class      required
+since      2024
+says       Successive clock_gettime(CLOCK_MONOTONIC) values never decrease
+           (100000 reads), and the value increases within 2 s.
+note       XBD 3.209 and <time.h>: the monotonic clock measures real time
+           and has no negative jumps. The 2 s are a practical cap.
+test       t/005-monotonic-order.c
+
+assertion  XSH.clock_getres.006
+anchor     functions/clock_getres.html#DESCRIPTION
+anchor     functions/clock_getres.html#ERRORS/EINVAL
+class      required
+since      2008
+says       clock_settime(CLOCK_MONOTONIC, tp), with tp the clock's current
+           value, fails with EINVAL (or EPERM).
+note       Which processes may set a clock is implementation-defined and
+           EPERM is a may-fail error; when it applies XSH 2.3 allows
+           either error.
+test       t/006-settime-monotonic.c
+
+assertion  XSH.clock_getres.007
+anchor     functions/clock_getres.html#ERRORS/EINVAL
+class      required
+since      2008
+says       clock_settime(CLOCK_REALTIME, tp) fails with EINVAL (or EPERM)
+           when tp->tv_nsec is 1000000000 and when it is -1.
+note       tv_sec is chosen so that a system that carried the excess
+           nanoseconds into seconds would set about the current time.
+test       t/007-settime-nsec.c
+
+assertion  XSH.clock_getres.008
+anchor     functions/clock_getres.html#DESCRIPTION
+class      conditional
+when       CPT
+since      2001
+says       clock_getres() and clock_gettime() accept
+           CLOCK_PROCESS_CPUTIME_ID; its value increases while the process
+           computes (within 5 s), and advances by less than 250 ms while
+           the process sleeps for 500 ms.
+note       XBD 3.90: execution time is time spent executing the process,
+           system services included; a sleeping process does not execute.
+           Both limits are practical.
+test       t/008-process-cputime.c
+
+assertion  XSH.clock_getres.009
+anchor     functions/clock_getres.html#DESCRIPTION
+class      conditional
+when       CPT
+since      2001
+says       The clock ID that clock_getcpuclockid() gives for the calling
+           process is accepted by clock_getres() and clock_gettime(), and
+           its value increases while the process computes (within 5 s).
+test       t/009-getcpuclockid.c
+
+assertion  XSH.clock_getres.010
+anchor     functions/clock_getres.html#DESCRIPTION
+class      conditional
+when       TCT
+since      2001
+says       clock_getres() and clock_gettime() accept
+           CLOCK_THREAD_CPUTIME_ID; its value increases while the thread
+           computes, and the main thread's value advances by less than
+           250 ms while it waits in pthread_join() for a thread that
+           computes for 500 ms of its own CPU time.
+note       The limits are practical; the main thread does not execute
+           while it waits.
+test       t/010-thread-cputime.c
+
+assertion  XSH.clock_getres.011
+anchor     functions/clock_getres.html#DESCRIPTION
+class      conditional
+when       TCT
+since      2001
+says       With the clock ID pthread_getcpuclockid() gives for another
+           thread, clock_gettime() in the main thread sees that thread's
+           execution time: it grows by at least 150 ms while the other
+           thread computes for 200 ms of its own CPU time (as its own
+           CLOCK_THREAD_CPUTIME_ID shows).
+note       The two readings of the same thread's clock come from different
+           clock IDs, so a 50 ms margin is left for accounting at the
+           switch.
+test       t/011-other-thread-clock.c

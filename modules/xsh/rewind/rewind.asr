@@ -1,0 +1,123 @@
+# XSH rewind()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# rewind() reports errors only through errno; the tests set errno to 0
+# first.
+
+assertion  XSH.rewind.001
+anchor     functions/rewind.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream reading "0123456789": after 5 reads, rewind() leaves
+           ftell() 0 and the next fgetc() returns '0'; after the stream is
+           read to end-of-file, rewind() leaves feof() 0 and fgetc() again
+           returns '0'.
+note       As fseek(stream, 0L, SEEK_SET), which clears the end-of-file
+           indicator.
+test       t/001-start.c
+
+assertion  XSH.rewind.002
+anchor     functions/rewind.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream reading "0123456789" whose error indicator is set (a
+           read on its closed descriptor, then restored with dup2()),
+           rewind() leaves ferror() 0 and the next fgetc() returns '0'.
+test       t/002-clears-error.c
+
+assertion  XSH.rewind.003
+anchor     functions/rewind.html#DESCRIPTION
+class      required
+since      2024
+says       On a "w" stream given a BUFSIZ array with setvbuf(_IOFBF), with
+           "abc" still buffered (UNRESOLVED if not) and the descriptor closed
+           with close(), a rewind() that fails (a precondition: errno is no
+           longer 0; UNRESOLVED if it is) leaves ferror() 0.
+note       Austin Group defect 1414 (Issue 8): the error indicator is clear
+           when rewind() returns, whether or not the seek succeeded.
+test       t/003-failed-still-clear.c
+
+assertion  XSH.rewind.004
+anchor     functions/rewind.html#ERRORS
+anchor     functions/fseek.html#ERRORS/EBADF
+class      required
+says       On a "w" stream given a BUFSIZ array with setvbuf(_IOFBF), with
+           "abc" still buffered (UNRESOLVED if not) and the descriptor closed
+           with close(), rewind() with errno 0 sets errno to EBADF.
+note       The errors are fseek()'s; the buffer needed to be flushed, so
+           the preamble holds. The change history does not settle when the
+           CX errors came in, so "since" is left out.
+test       t/004-ebadf.c
+
+assertion  XSH.rewind.005
+anchor     functions/rewind.html#DESCRIPTION
+anchor     functions/fseek.html#DESCRIPTION
+class      required
+says       On a "w" stream on an empty file given a BUFSIZ array with
+           setvbuf(_IOFBF), with "abc" still buffered (UNRESOLVED if not),
+           rewind() writes it: the file then holds "abc"; after fputs("X") and
+           fclose() it holds "Xbc".
+note       As fseek(), which writes unwritten data; a CX rule whose
+           edition the change history does not give, so "since" is left
+           out.
+test       t/005-writes-pending.c
+
+assertion  XSH.rewind.006
+anchor     functions/rewind.html#DESCRIPTION
+anchor     functions/fseek.html#DESCRIPTION
+class      required
+since      1988
+says       On an "r+" stream on "0123456789": fputc('X'), rewind(), then
+           fgetc() returns 'X' and fgetc() '1'; rewind(), fputc('Y') and
+           fclose() leave "Y123456789".
+note       After rewind(), as after fseek(), the next operation on an update
+           stream may be input or output.
+test       t/006-update-switch.c
+
+assertion  XSH.rewind.007
+anchor     functions/rewind.html#DESCRIPTION
+anchor     functions/fseek.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream reading "0123456789", after reading '0' and '1' and
+           ungetc('x'), rewind() makes the next fgetc() return '0'.
+test       t/007-undoes-ungetc.c
+
+assertion  XSH.rewind.008
+anchor     functions/rewind.html#ERRORS
+anchor     functions/fseek.html#ERRORS/EFBIG
+class      required
+since      2024
+says       In a child with RLIMIT_FSIZE 100 and SIGXFSZ blocked, on a "w"
+           stream given a 4096-byte array with setvbuf(_IOFBF), with 200 bytes
+           buffered, rewind() sets errno to EFBIG, leaves ferror() 0, and
+           SIGXFSZ is pending (when XSI).
+note       Austin Group defect 1669 (Issue 8) made the error base; the
+           signal is XSI and checked only there. The cleared indicator is
+           defect 1414 (XSH.rewind.003).
+test       t/008-efbig.c
+
+assertion  XSH.rewind.009
+anchor     functions/rewind.html#ERRORS
+anchor     functions/fseek.html#ERRORS/EPIPE
+class      required
+since      2001
+says       On a stream from fdopen() of a pipe's write end whose read end is
+           closed, SIGPIPE blocked, with output buffered, rewind() sets errno
+           to EPIPE or ESPIPE (both conditions hold); with EPIPE, SIGPIPE is
+           pending. ferror() is 0 afterwards.
+note       Which of the two errors comes first is the implementation's
+           choice (XSH 2.3; variant rewind.lseek_first).
+test       t/009-epipe.c
+
+assertion  XSH.rewind.010
+anchor     functions/rewind.html#ERRORS
+anchor     functions/fseek.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       On a stream on the write end of a full pipe with O_NONBLOCK set,
+           with output buffered, rewind() sets errno to EAGAIN or ESPIPE (both
+           conditions hold); ferror() is 0 afterwards.
+note       Which of the two errors comes first is the implementation's
+           choice (XSH 2.3; variant rewind.lseek_first).
+test       t/010-eagain.c

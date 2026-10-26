@@ -109,7 +109,7 @@ def id_module(aid):
     return None
 
 
-HEADER_RE = re.compile(r"^\s*(?:/?\*|#)\s*(ASSERTION|MUTANT|VARIANT)\s+(\S+)\s*$")
+HEADER_RE = re.compile(r"^\s*(?:/?\*|#)\s*(ASSERTION|MUTANT|VARIANT|READING)\s+(\S+)\s*$")
 
 
 def test_header(path):
@@ -129,5 +129,20 @@ def test_header_full(path):
     for line in path.read_text().splitlines()[:60]:
         m = HEADER_RE.match(line)
         if m:
-            {"ASSERTION": ids, "MUTANT": mutants, "VARIANT": variants}[m.group(1)].append(m.group(2))
+            if m.group(1) != "READING":
+                {"ASSERTION": ids, "MUTANT": mutants, "VARIANT": variants}[m.group(1)].append(m.group(2))
     return ids, mutants, variants
+
+
+def test_readings(path):
+    """Return the READING names a test declares.
+
+    A READING is a variant that plants the other reading of a disputed
+    assertion: the test may PASS or log INSPECT under it, never a plain FAIL.
+    """
+    out = []
+    for line in path.read_text().splitlines()[:60]:
+        m = HEADER_RE.match(line)
+        if m and m.group(1) == "READING":
+            out.append(m.group(2))
+    return out

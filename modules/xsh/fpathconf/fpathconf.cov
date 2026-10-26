@@ -1,0 +1,67 @@
+# fpathconf.cov - every requirement unit on functions/fpathconf.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:98eee5c4     XSH.fpathconf.001 XSH.fpathconf.002
+DESCRIPTION:23ccd605     none  describes the argument
+DESCRIPTION:3559c973     none  describes the argument
+DESCRIPTION:4758efcd     none  describes the argument
+DESCRIPTION:b760810e     partial XSH.fpathconf.001 XSH.fpathconf.002 XSH.fpathconf.003 XSH.fpathconf.007  # names <unistd.h> does not define cannot be queried here (a header matter)
+DESCRIPTION:494fa8ad     none  introduces the table
+DESCRIPTION:743b9795     XSH.fpathconf.001 XSH.fpathconf.004
+DESCRIPTION:c9080d96     XSH.fpathconf.001 XSH.fpathconf.002 XSH.fpathconf.004
+DESCRIPTION:9572369e     XSH.fpathconf.007 XSH.fpathconf.012
+DESCRIPTION:37f4a666     XSH.fpathconf.007 XSH.fpathconf.012
+DESCRIPTION:ba4afa94     XSH.fpathconf.001 XSH.fpathconf.004 XSH.fpathconf.011
+DESCRIPTION:5e2e84a2     XSH.fpathconf.001 XSH.fpathconf.004
+DESCRIPTION:8a4d525f     XSH.fpathconf.001 XSH.fpathconf.003 XSH.fpathconf.004
+DESCRIPTION:22b23742     XSH.fpathconf.001
+DESCRIPTION:1e7b4675     XSH.fpathconf.002
+DESCRIPTION:99be7c1c     XSH.fpathconf.002
+DESCRIPTION:9ec3f1d2     XSH.fpathconf.002
+DESCRIPTION:3404e3c0     XSH.fpathconf.002
+DESCRIPTION:a132159c     XSH.fpathconf.002
+DESCRIPTION:8f46421d     XSH.fpathconf.001 XSH.fpathconf.004
+DESCRIPTION:cf4ea883     XSH.fpathconf.001 XSH.fpathconf.004
+DESCRIPTION:ed53f3ce     XSH.fpathconf.001 XSH.fpathconf.002
+DESCRIPTION:bd721408     XSH.fpathconf.001 XSH.fpathconf.011
+DESCRIPTION:400854ab     XSH.fpathconf.007 XSH.fpathconf.012
+DESCRIPTION:aa0e5f9c     XSH.fpathconf.002 XSH.fpathconf.005
+DESCRIPTION:69df5835     XSH.fpathconf.002 XSH.fpathconf.005
+DESCRIPTION:e5a8c503     XSH.fpathconf.002 XSH.fpathconf.005
+DESCRIPTION:8b62e2b1     XSH.fpathconf.002 XSH.fpathconf.005
+DESCRIPTION:b0f52fa7     XSH.fpathconf.001 XSH.fpathconf.002 XSH.fpathconf.006
+DESCRIPTION:3503ec35     partial XSH.fpathconf.001  # answered for a directory; that the value describes the directory itself (a link count) is not checked
+DESCRIPTION:67292ed1     none  unspecified association (the tests ask terminal variables only of a terminal)
+DESCRIPTION:6027eec2     XSH.fpathconf.011
+DESCRIPTION:93188405     none  unspecified association (the tests ask these names only of directories)
+DESCRIPTION:e6465432     todo  {PATH_MAX} as the longest relative pathname from the directory: not checked
+DESCRIPTION:50b966ba     XSH.fpathconf.003
+DESCRIPTION:3a2d3ded     partial XSH.fpathconf.001 XSH.fpathconf.004  # answered for a directory; atomic writes to a FIFO in it are not checked
+DESCRIPTION:881a8401     none  unspecified association (the tests ask {PIPE_BUF} only of directories, pipes and FIFOs)
+DESCRIPTION:5afaed7e     partial XSH.fpathconf.001  # answered for a directory; its meaning for files in it ({FILESIZEBITS}, _POSIX_CHOWN_RESTRICTED) is not checked
+DESCRIPTION:7befe8bc     none  unspecified association (the tests ask these names only of regular files)
+DESCRIPTION:1b41ce7b     todo  {SYMLINK_MAX} as the longest symbolic link in the directory: not checked
+DESCRIPTION:942a3a1e     none  unspecified association (the tests ask these names only of regular files)
+DESCRIPTION:7b86b8e6     none  unspecified value
+RETURN_VALUE:f106b5de    XSH.fpathconf.008
+RETURN_VALUE:4e8ab0dc    XSH.fpathconf.001 XSH.fpathconf.002 XSH.fpathconf.004
+RETURN_VALUE:3cba4c48    none  cross-reference to <limits.h>
+RETURN_VALUE:75c08c3e    XSH.fpathconf.009  # tolerant: the implementation need not use the path
+RETURN_VALUE:17fea1ad    XSH.fpathconf.010  # tolerant: the implementation need not use the descriptor
+RETURN_VALUE:2fd6af93    XSH.fpathconf.001 XSH.fpathconf.002
+RETURN_VALUE:8fa8ea54    XSH.fpathconf.005
+RETURN_VALUE:1854551a    none  unspecified results: the tests skip option-dependent names when the option is not supported
+ERRORS:01bc32bb          XSH.fpathconf.008
+ERRORS:31f026b3          untestable  needs a file system whose timestamp resolution exceeds {LONG_MAX} ns, which XBD 4.12 rules out
+ERRORS:c996c4cf          optional
+ERRORS:bcc1994c          optional
+ERRORS:f39d7871          optional
+ERRORS:811d61dd          optional
+ERRORS:681b232a          optional
+ERRORS:c7f415ad          optional
+ERRORS:83c37763          optional
+ERRORS:df8daa9c          optional
+ERRORS:01bc32bb.2        XSH.fpathconf.008
+ERRORS:31f026b3.2        untestable  needs a file system whose timestamp resolution exceeds {LONG_MAX} ns, which XBD 4.12 rules out
+ERRORS:8f957e38          optional
+ERRORS:bcc1994c.2        optional

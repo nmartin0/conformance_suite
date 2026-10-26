@@ -1,0 +1,23 @@
+# XSH getuid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getuid.001
+anchor     functions/getuid.html#DESCRIPTION
+anchor     functions/getuid.html#RETURN VALUE
+class      required
+since      1988
+says       In a child of a privileged test, after seteuid(65534) getuid()
+           still returns 0, and after setuid(65534) (with privileges, all
+           three user IDs) it returns 65534.
+needs      root
+note       The IDs are set in the setup phase with seteuid() and setuid();
+           the child is UNRESOLVED when the system does not let it make
+           those changes.
+test       t/001-real.c
+
+assertion  XSH.getuid.002
+anchor     functions/getuid.html#DESCRIPTION
+class      required
+since      2008
+says       getuid() leaves errno as it was (two different values tried).
+test       t/002-errno.c

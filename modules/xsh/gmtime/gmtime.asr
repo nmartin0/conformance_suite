@@ -1,0 +1,67 @@
+# XSH gmtime(), gmtime_r()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every time value used is non-negative and in a year from 1970 on, where
+# XBD 4.19 defines the relationship. Values past 2038 are used only where
+# time_t can hold them (XBD <sys/types.h> asks for 64 bits since 2024).
+
+assertion  XSH.gmtime.001
+anchor     functions/gmtime.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.19
+class      required
+since      1988
+says       For a set of times from the Epoch to the year 2400 (leap days,
+           the ends of leap and common years, 2100 as a common century
+           year, 2000 and 2400 as leap ones, and the start of every
+           month of 1999 to 2001), gmtime() returns a structure whose
+           tm_sec, tm_min, tm_hour, tm_yday and tm_year give the value
+           through the XBD 4.19 expression, whose tm_mon and tm_mday name
+           the same day of the Gregorian calendar as tm_yday, whose
+           tm_wday counts from Thursday 1 January 1970, all within their
+           <time.h> ranges, and whose tm_isdst is 0.
+note       TZ names a zone 3 hours west of UTC during the test, so a
+           conversion to local time is seen. tm_isdst is 0 because a UTC
+           time has no Daylight Saving Time (<time.h>: 0 when DST is not
+           in effect).
+test       t/001-utc-fields.c
+
+assertion  XSH.gmtime.002
+anchor     functions/gmtime.html#DESCRIPTION
+class      required
+since      2001
+says       gmtime_r() stores into *result the same broken-down time as
+           XSH.gmtime.001 describes, for the same set of times, and
+           returns result.
+test       t/002-gmtime-r.c
+
+assertion  XSH.gmtime.003
+anchor     functions/gmtime.html#RETURN VALUE
+anchor     basedefs/time.h.html#DESCRIPTION
+class      required
+since      2024
+says       After gmtime_r(), tm_zone points to the string "UTC" and
+           tm_gmtoff is 0; the string still reads "UTC" after TZ is
+           changed and tzset(), localtime() and gmtime_r() are called
+           again.
+note       Names tm_gmtoff and tm_zone; a system whose <time.h> hides
+           them under the strict build cannot compile the test.
+test       t/003-gmtime-r-zone.c
+
+assertion  XSH.gmtime.005
+anchor     functions/gmtime.html#ERRORS/EOVERFLOW
+anchor     functions/gmtime.html#RETURN VALUE
+class      required
+says       gmtime() of the largest time_t value, whose year cannot be
+           held in tm_year, returns a null pointer and sets errno to
+           EOVERFLOW.
+note       UNRESOLVED where int is wide enough to hold that year.
+test       t/005-eoverflow.c
+
+assertion  XSH.gmtime.006
+anchor     functions/gmtime.html#ERRORS/EOVERFLOW
+anchor     functions/gmtime.html#RETURN VALUE
+class      required
+says       gmtime_r() of the largest time_t value returns a null pointer
+           and sets errno to EOVERFLOW.
+note       UNRESOLVED where int is wide enough to hold that year.
+test       t/006-r-eoverflow.c

@@ -1,0 +1,107 @@
+# XSH setgid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Appropriate privileges are implementation-defined (XBD 3.21). Each test
+# runs in a child of a privileged test process and first probes, in a
+# disposable process and the setup phase, a call that only a privileged
+# process may make (setgid() to a group ID the process does not hold);
+# the test is UNRESOLVED when the probe does not show the state the
+# assertion needs. A process loses appropriate privileges here by setting
+# its user IDs (seteuid() or setuid() to 65534) in the setup phase. Group
+# IDs used: 65534 and 65533 (given to the process), 65532 (probes), 65531
+# (refused targets).
+
+assertion  XSH.setgid.001
+anchor     functions/setgid.html#DESCRIPTION
+anchor     functions/setgid.html#RETURN VALUE
+class      required
+since      1988
+says       With appropriate privileges, setgid(65534) returns 0 and sets
+           the real, effective and saved set-group-ID to 65534: getgid()
+           and getegid() return 65534, and once the process has given up
+           its privileges (user IDs 65534), setegid(0) fails with EPERM, so
+           neither the real nor the saved set-group-ID is still 0.
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/001-privileged.c
+
+assertion  XSH.setgid.002
+anchor     functions/setgid.html#DESCRIPTION
+class      required
+since      2001
+says       A process without appropriate privileges with real and saved
+           set-group-ID 0 and effective group ID 65533 calls setgid(0): it
+           returns 0 and getegid() and getgid() return 0.
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/002-unprivileged-real.c
+
+assertion  XSH.setgid.003
+anchor     functions/setgid.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A process without appropriate privileges with real group ID
+           65534 and effective and saved set-group-ID 65533 calls
+           setgid(65534): it returns 0, getgid() and getegid() return 65534,
+           and setegid(65533) still works (the saved set-group-ID is
+           unchanged); setgid(65533) then returns 0 with getegid() 65533
+           and getgid() 65534.
+needs      root
+note       setregid() (XSI) sets the IDs apart, so the test runs only on
+           XSI systems; the requirement itself is not XSI.
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/003-unprivileged-saved.c
+
+assertion  XSH.setgid.004
+anchor     functions/setgid.html#ERRORS/EPERM
+anchor     functions/setgid.html#RETURN VALUE
+class      required
+since      1988
+says       A process without appropriate privileges with real and saved
+           set-group-ID 0 and effective group ID 65533 gets -1 with EPERM
+           from setgid(65531) and from setgid(65533) (its effective ID,
+           neither the real nor the saved one), and its group IDs are
+           unchanged.
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/004-eperm.c
+
+assertion  XSH.setgid.005
+anchor     functions/setgid.html#ERRORS/EINVAL
+anchor     basedefs/V1_chap03.html#3.165
+class      required
+since      1988
+says       With appropriate privileges, setgid((gid_t)-1) returns -1 with
+           EINVAL ((gid_t)-1 is never a valid group ID) and the group IDs
+           stay 0.
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/005-einval.c
+
+assertion  XSH.setgid.006
+anchor     functions/setgid.html#DESCRIPTION
+class      required
+since      2001
+says       With appropriate privileges and the supplementary group list set
+           to {65534}, setgid(65533) leaves the supplementary list
+           unchanged: what getgroups() reports, leaving out the effective
+           group ID before and after (which it may include), is the same.
+needs      root
+note       The list is set with pc_drop_groups() (setgroups(), not in
+           POSIX, where the system has it); without a supplementary group
+           the test is UNRESOLVED.
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/006-groups.c
+
+assertion  XSH.setgid.007
+anchor     functions/setgid.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9
+class      required
+since      2001
+says       When one thread of a privileged process calls setgid(65534),
+           another thread of the process then gets 65534 from getgid() and
+           getegid().
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/007-threads.c

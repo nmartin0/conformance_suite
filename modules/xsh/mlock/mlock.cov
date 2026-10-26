@@ -1,0 +1,20 @@
+# mlock.cov - every requirement unit on functions/mlock.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:a43058bb     partial XSH.mlock.001  # the lock is seen through msync() EBUSY; residency and release at exit and exec are not checked
+DESCRIPTION:ed77db6b     impl  addresses passed are multiples of {PAGESIZE}; the choice is the implementation's
+DESCRIPTION:80e9a82a     XSH.mlock.001 XSH.mlock.002
+DESCRIPTION:ed77db6b.2   impl  as for mlock()
+DESCRIPTION:9df82ece     todo  another process's locks on the same pages after munlock()
+DESCRIPTION:fb5960cd     XSH.mlock.005
+DESCRIPTION:5448ae21     partial XSH.mlock.001  # locked, seen through msync(); residency cannot be seen
+DESCRIPTION:9951935a     XSH.mlock.001 XSH.mlock.002
+DESCRIPTION:ebe073fd     none  unspecified
+DESCRIPTION:1f086d46     impl  appropriate privileges are implementation-defined; the tests run as root and treat EPERM as UNRESOLVED
+RETURN_VALUE:69f8627d    XSH.mlock.001
+RETURN_VALUE:bc7548a1    XSH.mlock.003 XSH.mlock.004
+ERRORS:9f7ed588          XSH.mlock.003
+ERRORS:0e1c25f5          untestable  needs locking to be impossible at the call
+ERRORS:cb8aaf52          optional
+ERRORS:205bddf9          optional
+ERRORS:f45e19d4          optional

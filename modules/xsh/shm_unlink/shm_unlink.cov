@@ -1,0 +1,12 @@
+# shm_unlink.cov - every requirement unit on functions/shm_unlink.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:85089ef0     XSH.shm_unlink.001
+DESCRIPTION:66d547ef     XSH.shm_unlink.002 XSH.shm_unlink.003
+DESCRIPTION:ae33ee45     XSH.shm_unlink.001 XSH.shm_unlink.003
+RETURN_VALUE:0dae8796    XSH.shm_unlink.001
+RETURN_VALUE:def0b338    XSH.shm_unlink.004
+RETURN_VALUE:0b1e3653    XSH.shm_unlink.005
+ERRORS:6f93a3f5          XSH.shm_unlink.005
+ERRORS:3755b5c4          XSH.shm_unlink.004
+ERRORS:0d8614e8          partial XSH.shm_unlink.006  # the may-fail part is optional; the rule against ENAMETOOLONG for a name shm_open() accepted is tested

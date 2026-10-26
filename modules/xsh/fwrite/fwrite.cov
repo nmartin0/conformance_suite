@@ -1,0 +1,11 @@
+# fwrite.cov - every requirement unit on functions/fwrite.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:370ae158     XSH.fwrite.001 XSH.fwrite.003
+DESCRIPTION:3163ec24     XSH.fwrite.001 XSH.fwrite.002
+DESCRIPTION:649bd0f2     XSH.fwrite.001 XSH.fwrite.002
+DESCRIPTION:d72a2432     none  unspecified; XSH.fwrite.005 and .006 do not look at the position
+DESCRIPTION:5b6e3b7c     partial XSH.fwrite.007  # through fflush(); fclose(), exit() and abort() are not checked
+RETURN_VALUE:c1342b80    XSH.fwrite.001 XSH.fwrite.003
+RETURN_VALUE:7e9c0722    XSH.fwrite.004
+RETURN_VALUE:e0326720    XSH.fwrite.005 XSH.fwrite.006  # EBADF and EPIPE; the other fputc() errors are left to fputc()'s module

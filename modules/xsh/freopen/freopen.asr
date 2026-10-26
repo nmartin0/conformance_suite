@@ -1,0 +1,273 @@
+# XSH freopen()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Error tests arrange for exactly one error condition (XSH 2.3).
+
+assertion  XSH.freopen.001
+anchor     functions/freopen.html#DESCRIPTION
+anchor     functions/freopen.html#RETURN VALUE
+class      required
+since      1988
+says       On a stream reading "AAAA" after one fgetc(), freopen("b", "r", f)
+           with "b" holding "bcd" returns f itself; the next fgetc() returns
+           'b' and ftell() is then 1.
+test       t/001-associates.c
+
+assertion  XSH.freopen.002
+anchor     functions/freopen.html#DESCRIPTION
+class      required
+since      1988
+says       On a "w" stream on "f" given a BUFSIZ array of the test's with
+           setvbuf(_IOFBF), with "abc" still buffered (UNRESOLVED if not),
+           freopen("g", "w", f) returns f and "f" then holds "abc".
+test       t/002-flushes.c
+
+assertion  XSH.freopen.003
+anchor     functions/freopen.html#DESCRIPTION
+class      required
+since      1988
+says       After freopen("b", "r", f) on a stream read to end-of-file
+           (feof() non-zero), and on a "w" stream whose error indicator is
+           set (fgetc() on it failed), feof() and ferror() are both 0.
+note       fgetc() on a stream not open for reading fails with EBADF
+           (XSH fgetc()), which sets the error indicator; only the
+           indicator is needed here (UNRESOLVED if it is not set).
+test       t/003-indicators-cleared.c
+
+assertion  XSH.freopen.004
+anchor     functions/freopen.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream reading "AAAA" whose descriptor has been closed with
+           close(), freopen("b", "r", f) still succeeds (the failure to
+           close is ignored): it returns f and the next fgetc() returns 'b'.
+note       close() does not move the offset, so the descriptor is not a
+           second handle (XSH 2.5.1).
+test       t/004-close-failure.c
+
+assertion  XSH.freopen.005
+anchor     functions/freopen.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream from fdopen() of a pipe's write end whose read end is
+           closed, SIGPIPE blocked, given a BUFSIZ array with setvbuf(_IOFBF)
+           and holding "abc" unwritten (fputs() succeeded, which it could not
+           have done had it written), freopen("b", "r", f) still succeeds:
+           it returns f and the next fgetc() returns 'b'.
+test       t/005-flush-failure.c
+
+assertion  XSH.freopen.006
+anchor     functions/freopen.html#DESCRIPTION
+anchor     functions/freopen.html#ERRORS/ENOENT
+class      required
+since      1988
+says       On a "w" stream on "f" (descriptor k) with "xy" buffered,
+           freopen("missing", "r", f), where "missing" does not exist,
+           returns a null pointer with errno ENOENT; "f" holds "xy" and
+           fcntl(k, F_GETFD) fails with EBADF (the stream was closed).
+test       t/006-closed-on-failure.c
+
+assertion  XSH.freopen.007
+anchor     functions/freopen.html#DESCRIPTION
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2008
+says       After freopen("x", m, f) for m "r", "w", "a", "r+", "w+" and "a+" in
+           turn on an existing file, fcntl(F_GETFL) on fileno(f) shows the
+           access mode O_RDONLY, O_WRONLY, O_WRONLY, O_RDWR, O_RDWR, O_RDWR,
+           O_APPEND set exactly for "a" and "a+", and none of O_NONBLOCK,
+           O_SYNC and O_DSYNC; fcntl(F_GETFD) shows FD_CLOEXEC clear.
+note       Interpretations 1003.1-2001 #043 and #159 (Issue 7): the
+           descriptor is opened as if by open() with fopen()'s flags, and no
+           others.
+test       t/007-open-flags.c
+
+assertion  XSH.freopen.008
+anchor     functions/freopen.html#DESCRIPTION
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2024
+says       After freopen("x", "re", f) and after freopen("x", "we", f),
+           fcntl(F_GETFD) on fileno(f) shows FD_CLOEXEC set; after a further
+           freopen("x", "r", f) it is clear.
+note       Austin Group defect 411 (Issue 8) added the 'e' mode character;
+           O_CLOEXEC is added if and only if 'e' is given (XSH fopen()).
+           glibc 2.39 keeps FD_CLOEXEC on a stream once reopened with 'e'.
+test       t/008-cloexec.c
+
+assertion  XSH.freopen.009
+anchor     functions/freopen.html#ERRORS/EEXIST
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      2024
+says       freopen("old", "wx", f) and freopen("old", "ax", g) with "old"
+           existing (holding "keep") return a null pointer with errno EEXIST
+           and leave "old" holding "keep"; freopen("new", "wx", h) with "new"
+           absent returns h and creates "new", which holds "z" after
+           fputs("z") and fclose().
+note       Austin Group defect 411 (Issue 8) added the 'x' mode character;
+           the open is as if with O_EXCL, and a failed open() creates or
+           modifies no file.
+test       t/009-exclusive.c
+
+assertion  XSH.freopen.010
+anchor     functions/freopen.html#DESCRIPTION
+anchor     functions/fopen.html#DESCRIPTION
+class      required
+since      1988
+says       Under umask(022): freopen("new", "w", f) creates "new" with mode
+           0644; freopen("old", "w", g) on "old" (mode 0600, holding
+           "content") leaves it empty, with the same file serial number and
+           mode 0600; freopen("keep", "a", h) on "keep" (holding "keep")
+           leaves its contents, and after fputs("Z") and fclose() it holds
+           "keepZ".
+note       The mode is used as in fopen(): a new file is created as if by
+           open() with mode 0666, an existing one is truncated for "w" and
+           appended to for "a".
+test       t/010-truncate-create.c
+
+assertion  XSH.freopen.011
+anchor     functions/freopen.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.6
+class      required
+since      2008
+says       With descriptors a < b < c in use (a the lowest descriptor not in
+           use at the start, b another file, c the stream's), after close(a),
+           freopen("y", "r", f) gives the stream descriptor a.
+note       The descriptor is allocated as if by open() (Interpretation
+           1003.1-2001 #043, Issue 7), which takes the lowest one available
+           (XSH 2.6). a is the lowest whether or not c is closed before the
+           new open, so the order of those steps does not matter. glibc
+           2.39 and musl 1.2.4 open the file and then dup3() it onto the
+           old descriptor, so the stream keeps c.
+test       t/011-lowest-descriptor.c
+
+assertion  XSH.freopen.012
+anchor     functions/freopen.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+since      2001
+says       A stream made byte-oriented by fgetc() (fwide(f, 0) negative) and
+           one made wide-oriented by fwide(g, 1) (positive) both have
+           fwide(f, 0) 0 after freopen("b", "r", ...).
+note       Issue 5 added the rule; the encoding rule and the initial
+           conversion state are not observable apart from orientation.
+test       t/012-orientation.c
+
+assertion  XSH.freopen.013
+anchor     functions/freopen.html#DESCRIPTION
+class      required
+since      2001
+says       On a "w" stream on "f" after fputs("abc") and fflush(),
+           freopen(NULL, "w", f) either returns a null pointer (the change
+           is not permitted here: NOTINUSE) or returns f; then "f" is empty,
+           ftell() is 0, and after fputs("Z") and fflush() "f" holds "Z".
+note       With a null pathname the mode is changed as if the name of the
+           file had been used, so "w" truncates the file and starts at its
+           beginning (the page's APPLICATION USAGE says the same of
+           freopen(NULL, "wb", stdout)). Which changes are permitted is
+           implementation-defined, so a refusal is not judged (variant
+           freopen.null_refused). Issue 6 aligned the page with ISO C 1999,
+           which brought the null pathname. musl 1.2.4 only changes the
+           file status flags with fcntl(F_SETFL), so nothing is truncated.
+test       t/013-null-truncates.c
+
+assertion  XSH.freopen.014
+anchor     functions/freopen.html#DESCRIPTION
+class      required
+since      2001
+says       On a stream reading "ab" read to end-of-file (feof() non-zero),
+           freopen(NULL, "r", f) either returns a null pointer (NOTINUSE) or
+           returns f with feof() and ferror() 0.
+note       The indicators are cleared whatever the pathname. A refusal is
+           not judged (variant freopen.null_refused). musl 1.2.4 leaves the
+           indicators set on this path.
+test       t/014-null-indicators.c
+
+assertion  XSH.freopen.015
+anchor     functions/freopen.html#ERRORS/EBADF
+class      required
+since      2001
+says       Where freopen(NULL, "r", f) succeeds on a stream opened "r" on a
+           file (NOTINUSE if it does not), freopen(NULL, "r", g) on another
+           "r" stream whose descriptor has been closed with close() returns a
+           null pointer with errno EBADF.
+note       IEEE Std 1003.1-2001/Cor 2-2004 added the error. A system that
+           refuses the change for a valid descriptor too could report
+           another error, so the change is first tried on a valid one.
+test       t/015-null-ebadf.c
+
+assertion  XSH.freopen.016
+anchor     functions/freopen.html#ERRORS/ENOENT
+class      required
+since      1988
+says       freopen("missing", "r", f), freopen("nodir/f", "w", g) and
+           freopen("", "r", h) each return a null pointer with errno ENOENT,
+           and nothing named "missing" or "nodir" is created.
+test       t/016-enoent.c
+
+assertion  XSH.freopen.017
+anchor     functions/freopen.html#ERRORS/EISDIR
+class      required
+since      1988
+says       freopen("d", m, f) on a directory "d" for each m of "w", "a", "r+",
+           "w+" and "a+" returns a null pointer with errno EISDIR.
+test       t/017-eisdir.c
+
+assertion  XSH.freopen.018
+anchor     functions/freopen.html#ERRORS/ENOTDIR
+class      required
+since      1988
+says       With "f" a regular file, freopen("f/x", m, ...) for m "r", "w" and
+           "a" returns a null pointer with errno ENOTDIR.
+note       For "r", ENOENT can also be read to apply (Q-8); this follows
+           XSH.fopen.025, which takes ENOTDIR as the only error for a
+           path prefix that names a regular file.
+test       t/018-enotdir.c
+
+assertion  XSH.freopen.019
+anchor     functions/freopen.html#ERRORS/ELOOP
+class      required
+since      2001
+says       With "a" a symbolic link to "b" and "b" one to "a", freopen("a",
+           "r", f) and freopen("a", "w", g) return a null pointer with errno
+           ELOOP.
+note       Issue 6 made ELOOP a required error.
+test       t/019-eloop.c
+
+assertion  XSH.freopen.020
+anchor     functions/freopen.html#ERRORS/ENAMETOOLONG
+class      required
+since      1988
+says       With {NAME_MAX} from pathconf(".", _PC_NAME_MAX) bounded, a
+           pathname whose only component has {NAME_MAX} + 1 bytes makes
+           freopen() with "r" and with "w" return a null pointer with errno
+           ENAMETOOLONG.
+note       For "r", ENOENT can also be read to apply (Q-8); this follows
+           XSH.fopen.025 and .030 in taking ENAMETOOLONG as the error.
+test       t/020-name-max.c
+
+assertion  XSH.freopen.021
+anchor     functions/freopen.html#ERRORS/EACCES
+class      required
+since      1988
+says       Without appropriate privileges: freopen() with "r" on a file of
+           mode 0222, with "w" on a file of mode 0444, and with "w" for a new
+           file in a directory of mode 0555, each return a null pointer with
+           errno EACCES, and no file is created in the 0555 directory.
+note       When the test runs as root, a child takes user and group 65534.
+test       t/021-eacces.c
+
+assertion  XSH.freopen.022
+anchor     functions/freopen.html#DESCRIPTION
+class      required
+since      1988
+says       In a child whose RLIMIT_NOFILE is lowered to 32 and whose every
+           allowed descriptor is in use (the stream's among them; open()
+           then fails with EMFILE), freopen("b", "r", f) returns f and the
+           next fgetc() returns 'b'.
+note       The old descriptor is closed before the new file is opened:
+           the DESCRIPTION closes it first, and the page defers to ISO C,
+           whose freopen() first attempts to close the file. So the open
+           has a descriptor to take, and EMFILE cannot arise here.
+test       t/022-all-descriptors-used.c

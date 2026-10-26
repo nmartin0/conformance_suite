@@ -1,0 +1,15 @@
+# pthread_spin_lock.cov - every requirement unit on
+# functions/pthread_spin_lock.html (pthread_spin_lock, pthread_spin_trylock).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:476668cc     XSH.pthread_spin_lock.001
+DESCRIPTION:86d72a9e     XSH.pthread_spin_lock.001
+DESCRIPTION:db492d5b     XSH.pthread_spin_lock.003
+DESCRIPTION:9511a2b7     none  undefined behaviour
+DESCRIPTION:553ec2f8     XSH.pthread_spin_lock.002
+DESCRIPTION:d124db8d     XSH.pthread_spin_lock.002
+DESCRIPTION:495f1254     none  undefined behaviour
+RETURN_VALUE:c5040278    XSH.pthread_spin_lock.001 XSH.pthread_spin_lock.002 XSH.pthread_spin_lock.003
+ERRORS:cca22a22          none  a "may fail" error
+ERRORS:ef7040c3          XSH.pthread_spin_lock.002
+ERRORS:0a906269          partial XSH.pthread_spin_lock.004  # a spinning pthread_spin_lock() with a caught signal

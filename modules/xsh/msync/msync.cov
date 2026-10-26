@@ -1,0 +1,26 @@
+# msync.cov - every requirement unit on functions/msync.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:43b880e3     untestable  writing to permanent storage cannot be seen from a process
+DESCRIPTION:ce4fdf6a     none  a permission given to the implementation
+DESCRIPTION:a3f1f01e     todo  invalidation: on a system with a coherent cache it has no visible effect; needs a non-coherent model to plant
+DESCRIPTION:93330cce     impl  addresses passed are page multiples; the choice is the implementation's
+DESCRIPTION:4b0b0ba7     untestable  synchronized I/O completion to storage cannot be seen from a process
+DESCRIPTION:bf928eb9     none  unspecified
+DESCRIPTION:21bfbb98     partial XSH.msync.006  # not written to the file; visibility to other processes not checked
+DESCRIPTION:60076d70     none  unspecified
+DESCRIPTION:6748e40e     none  unspecified; the tests use file mappings only
+DESCRIPTION:6c762afa     app
+DESCRIPTION:e0d81617     XSH.msync.001
+DESCRIPTION:fe464a06     XSH.msync.001
+DESCRIPTION:5f6b22a7     XSH.msync.001
+DESCRIPTION:a35e1cb5     XSH.msync.001
+DESCRIPTION:0f8bd410     untestable  when writes are initiated or completed cannot be seen from a process
+DESCRIPTION:99babd00     XSH.msync.002 XSH.msync.007 XSH.msync.008  # all disputed (candidate issue, msync flags)
+DESCRIPTION:a29f889f     todo  see DESCRIPTION:a3f1f01e
+DESCRIPTION:f6e7088d     partial XSH.msync.005  # the data modification timestamp only; status change not checked
+RETURN_VALUE:781214f0    XSH.msync.001 XSH.msync.002 XSH.msync.003 XSH.msync.004
+ERRORS:eae043fa          XSH.msync.004
+ERRORS:39790622          XSH.msync.002 XSH.msync.007 XSH.msync.008
+ERRORS:a11b0891          XSH.msync.003
+ERRORS:eb474c12          optional

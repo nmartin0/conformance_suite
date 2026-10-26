@@ -1,0 +1,84 @@
+# XSH pthread_setcancelstate() and pthread_setcanceltype()
+# (pthread_testcancel(), on the same page, is the xsh/pthread_testcancel module)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The state and type are read by setting a value and keeping the previous
+# one: no interface reads them otherwise. Every oldstate and oldtype
+# argument is a valid pointer (the page does not allow a null one).
+
+assertion  XSH.pthread_setcancelstate.001
+anchor     functions/pthread_setcancelstate.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.5.1
+class      required
+since      2008
+says       The thread running main() and a thread made with
+           pthread_create() (default attributes) both start with
+           cancelability state PTHREAD_CANCEL_ENABLE and type
+           PTHREAD_CANCEL_DEFERRED.
+test       t/001-defaults.c
+
+assertion  XSH.pthread_setcancelstate.002
+anchor     functions/pthread_setcancelstate.html#DESCRIPTION
+anchor     functions/pthread_setcancelstate.html#RETURN VALUE
+class      required
+since      2008
+says       In a new thread, pthread_setcancelstate() with DISABLE,
+           DISABLE, ENABLE, ENABLE returns 0 each time and stores ENABLE,
+           DISABLE, DISABLE, ENABLE as the previous state.
+test       t/002-state-round-trip.c
+
+assertion  XSH.pthread_setcancelstate.003
+anchor     functions/pthread_setcancelstate.html#DESCRIPTION
+anchor     functions/pthread_setcancelstate.html#RETURN VALUE
+class      required
+since      2008
+says       In a new thread, pthread_setcanceltype() with ASYNCHRONOUS,
+           ASYNCHRONOUS, DEFERRED, DEFERRED returns 0 each time and stores
+           DEFERRED, ASYNCHRONOUS, ASYNCHRONOUS, DEFERRED as the previous
+           type.
+test       t/003-type-round-trip.c
+
+assertion  XSH.pthread_setcancelstate.004
+anchor     functions/V2_chap02.html#2.9.5.1
+anchor     functions/V2_chap02.html#2.9.5.2
+anchor     functions/pthread_setcancelstate.html#DESCRIPTION
+class      required
+since      2008
+says       A thread that disabled cancelability and then set the type
+           ASYNCHRONOUS is not canceled by a request while it runs for
+           200 ms, nor (back to DEFERRED) at nanosleep() or at read() of
+           a pipe holding a byte; after pthread_setcancelstate(ENABLE)
+           returns, the next pthread_testcancel() acts on the request.
+note       pthread_setcancelstate() is in neither list of cancellation
+           points, and 2.9.5.2 forbids adding any, so enabling cannot act
+           on the deferred request itself.
+test       t/004-disabled-pending.c
+
+assertion  XSH.pthread_setcancelstate.005
+anchor     functions/V2_chap02.html#2.9.5.1
+class      required
+since      2008
+says       With the default (deferred) type, a thread that receives a
+           request while it runs code with no cancellation point
+           (pthread_mutex_trylock(), clock_gettime(), sched_yield()) goes
+           on for 200 ms more, and is canceled at pthread_testcancel().
+test       t/005-deferred-held.c
+
+assertion  XSH.pthread_setcancelstate.006
+anchor     functions/V2_chap02.html#2.9.5.1
+anchor     functions/pthread_setcancelstate.html#DESCRIPTION
+class      disputed
+since      2008
+says       A thread with the type PTHREAD_CANCEL_ASYNCHRONOUS that runs
+           pure computation, with no cancellation point, is canceled
+           within 10 s of the request.
+note       disputed (new): 2.9.5.1 says only that with the asynchronous
+           type requests "may be acted upon at any time"; read as a
+           permission, a system may still wait for a cancellation point
+           and never cancel such a thread. The RATIONALE of
+           pthread_setcancelstate() talks of the points "at which a
+           thread may be asynchronously canceled", which supports either
+           reading. The thread turns DEFERRED now and then to look at the
+           clock (only async-cancel-safe calls are made while
+           ASYNCHRONOUS).
+test       t/006-async-acts.c

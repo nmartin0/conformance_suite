@@ -1,0 +1,20 @@
+# pthread_mutexattr_settype.cov - every requirement unit on
+# functions/pthread_mutexattr_settype.html (pthread_mutexattr_gettype,
+# pthread_mutexattr_settype).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:ad2d7181     XSH.pthread_mutexattr_settype.002
+DESCRIPTION:d54fd108     XSH.pthread_mutexattr_settype.002
+DESCRIPTION:14766b4b     XSH.pthread_mutexattr_settype.001
+DESCRIPTION:86401154     none  a statement
+DESCRIPTION:eeba0a78     XSH.pthread_mutexattr_settype.002
+DESCRIPTION:18efaa2f     XSH.pthread_mutexattr_settype.002
+DESCRIPTION:1cfaab47     none  a statement (behaviour by type is tested in xsh/pthread_mutex_lock)
+DESCRIPTION:a07460ef     none  a cross-reference
+DESCRIPTION:155f1811     none  a permission (the test compares with the macro only)
+DESCRIPTION:0a2299ae     none  undefined behaviour
+RETURN_VALUE:a4daae39    XSH.pthread_mutexattr_settype.001 XSH.pthread_mutexattr_settype.002
+RETURN_VALUE:65070381    none  no error of gettype is named
+RETURN_VALUE:bfcdbbfa    XSH.pthread_mutexattr_settype.002 XSH.pthread_mutexattr_settype.003
+ERRORS:2ab99b29          XSH.pthread_mutexattr_settype.003
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

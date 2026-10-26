@@ -1,0 +1,9 @@
+# time.cov - every requirement unit on functions/time.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:fdc6e329     XSH.time.002
+DESCRIPTION:c5587036     XSH.time.001
+DESCRIPTION:c80a75ed     XSH.time.001
+RETURN_VALUE:4a46f8c7    XSH.time.001 XSH.time.002
+RETURN_VALUE:7b5a6aa5    untestable  needs a failure: the only error is EOVERFLOW, which a time_t of at least 64 bits cannot reach
+ERRORS:7c5375c3          untestable  time_t has at least 64 bits; the seconds since the Epoch fit

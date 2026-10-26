@@ -1,0 +1,32 @@
+# XSH getsid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getsid.001
+anchor     functions/getsid.html#DESCRIPTION
+anchor     functions/getsid.html#RETURN VALUE
+class      required
+since      2008
+says       In a session started by c1 (setsid()), where c2 leads a group of
+           its own and c3 stays in c1's group, c2's getsid() of c1, c2 and
+           c3 each returns c1; the test process, in another session, gets
+           c1 or EPERM from getsid(c2).
+note       Whether a process in another session may be asked is left to
+           the implementation.
+test       t/001-session.c
+
+assertion  XSH.getsid.002
+anchor     functions/getsid.html#DESCRIPTION
+class      required
+since      2008
+says       getsid(0) in c2 (leader of its own group in c1's session)
+           returns c1.
+test       t/002-zero.c
+
+assertion  XSH.getsid.003
+anchor     functions/getsid.html#ERRORS/ESRCH
+anchor     functions/getsid.html#RETURN VALUE
+class      required
+since      2008
+says       getsid() of the ID of a child whose status has been collected
+           (and which no process has reused) returns -1 with ESRCH.
+test       t/003-esrch.c

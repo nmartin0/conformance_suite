@@ -1,0 +1,82 @@
+# XSH strdup() and strndup()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Out-of-memory tests lower RLIMIT_AS (getrlimit(): allocations past it
+# fail with ENOMEM) so that a string fits once but not twice.
+
+assertion  XSH.strdup.001
+anchor     functions/strdup.html#DESCRIPTION
+anchor     functions/strdup.html#RETURN VALUE
+class      required
+since      2008
+says       strdup() of "", "abc" and a 3000-byte string holding every byte
+           value 1 to 255 returns a pointer other than s to an equal string;
+           changing the copy leaves s alone; a second copy made while the
+           first is held is at another address and both keep their bytes;
+           both can be passed to free().
+test       t/001-copy.c
+
+assertion  XSH.strdup.002
+anchor     functions/strdup.html#ERRORS/ENOMEM
+anchor     functions/strdup.html#RETURN VALUE
+class      required
+since      2008
+says       With RLIMIT_AS at 384 MiB and a 224 MiB string allocated, strdup()
+           of that string returns a null pointer and sets errno to ENOMEM.
+note       UNRESOLVED when the limit cannot be set or the string cannot be
+           allocated under it.
+test       t/002-enomem.c
+
+assertion  XSH.strdup.003
+anchor     functions/strdup.html#DESCRIPTION
+anchor     functions/strdup.html#RETURN VALUE
+class      required
+since      2008
+says       strndup() of "abc" (in a larger array) with size 4 and 100, and of
+           "" with size 10, returns a pointer other than s to an equal
+           string; a second copy made while the first is held is at another
+           address and both keep their bytes; the copy can be grown with
+           realloc() keeping its bytes, and passed to free().
+test       t/003-n-whole.c
+
+assertion  XSH.strdup.004
+anchor     functions/strdup.html#DESCRIPTION
+class      required
+since      2008
+says       strndup("abcdef", 3) returns "abc" (three bytes and a null byte);
+           strndup("abcdef", 0) returns "".
+test       t/004-n-prefix.c
+
+assertion  XSH.strdup.005
+anchor     functions/strdup.html#DESCRIPTION
+class      required
+says       strndup() of a 16-byte array without a null byte that ends where
+           an inaccessible (PROT_NONE) page begins, with size 16, returns
+           those 16 bytes and a null byte without touching that page; with
+           size 0 and s at the start of that page it returns "".
+test       t/005-n-not-past-size.c
+
+assertion  XSH.strdup.006
+anchor     functions/strdup.html#ERRORS/ENOMEM
+anchor     functions/strdup.html#RETURN VALUE
+class      required
+since      2008
+says       With RLIMIT_AS at 384 MiB and a 224 MiB array without a null byte
+           allocated, strndup() of the array with its full size returns a
+           null pointer and sets errno to ENOMEM.
+note       UNRESOLVED when the limit cannot be set or the array cannot be
+           allocated under it.
+test       t/006-n-enomem.c
+
+assertion  XSH.strdup.007
+anchor     functions/strdup.html#DESCRIPTION
+class      disputed
+says       strndup() of "abc" stored in the last four bytes before an
+           inaccessible page, with size 64, returns "abc" without touching
+           that page.
+note       disputed (Q-strnul (number pending)): whether strndup() may read past the null byte
+           (up to size bytes) when the array s ends there. The text forbids
+           examining more than size bytes and copies up to the null byte,
+           but does not say that s is an array of at least size bytes or
+           that nothing after the null byte is read.
+test       t/007-n-not-past-nul.c

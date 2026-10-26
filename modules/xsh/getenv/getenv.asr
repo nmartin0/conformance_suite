@@ -1,0 +1,78 @@
+# XSH getenv(), secure_getenv()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests use names beginning with PCX_, which no utility or
+# implementation uses (lowercase names are reserved for applications by
+# XBD 8.1, but the case test needs an uppercase one).
+
+assertion  XSH.getenv.001
+anchor     functions/getenv.html#DESCRIPTION
+anchor     functions/getenv.html#RETURN VALUE
+anchor     basedefs/V1_chap08.html#8.1
+class      required
+since      1988
+says       In a process started by execve() with PCX_A=one, PCX_AB=two and
+           PCX_E= (empty value) in its environment, getenv("PCX_A")
+           returns "one", getenv("PCX_AB") returns "two", getenv("PCX_E")
+           returns an empty string (not a null pointer), and
+           getenv("PCX_Z"), getenv("PCX_") and getenv("pcx_a") return
+           null pointers (a name is matched whole, and upper and lower
+           case are not folded together).
+note       The test runs itself again through execve() with its own path
+           (argv[0]) and an environment of its own plus the harness's
+           PC_* and LD_PRELOAD entries.
+test       t/001-initial-environment.c
+
+assertion  XSH.getenv.002
+anchor     functions/getenv.html#DESCRIPTION
+class      required
+says       After setenv("PCX_A", "one", 1), the pointer getenv("PCX_A")
+           returns lies within one of the strings of the array environ
+           points to, and the string there is "one" (not a copy in a
+           buffer of the implementation's own).
+test       t/002-points-into-environ.c
+
+assertion  XSH.getenv.003
+anchor     functions/getenv.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.1
+class      required
+says       After getenv() has been used, assigning environ a new array
+           (the old entries without PCX_A, plus "PCX_N=new") changes what
+           getenv() finds: getenv("PCX_N") returns "new" and
+           getenv("PCX_A") a null pointer; assigning environ back to an
+           array that holds "PCX_A=again" makes getenv("PCX_A") return
+           "again".
+note       An implementation may copy the new array and its strings when
+           it notices the assignment (getenv() RATIONALE), so the test
+           does not look at where the result points.
+test       t/003-environ-assigned.c
+
+assertion  XSH.getenv.004
+anchor     functions/getenv.html#DESCRIPTION
+anchor     functions/getenv.html#RETURN VALUE
+class      required
+since      2024
+says       secure_getenv() of a name not in the environment returns a
+           null pointer; for PCX_A=one it returns either a null pointer
+           (only an implementation-defined criterion allows this when the
+           real and effective IDs were equal at startup: the result is
+           then UNRESOLVED) or, like getenv(), a pointer to "one" within
+           the environment data.
+test       t/004-secure-getenv.c
+
+assertion  XSH.getenv.005
+anchor     functions/getenv.html#DESCRIPTION
+class      required
+since      2024
+says       In a process whose effective user ID differed from its real
+           user ID at startup (started by execve() after seteuid(65534)
+           by root), secure_getenv("PCX_S") returns a null pointer
+           although getenv("PCX_S") finds the variable; likewise when the
+           effective group ID differed from the real group ID (after
+           setegid(65534)).
+note       With effective user ID 65534 the exec needs search permission
+           on the path to the test and execute permission on it for that
+           ID; the test is UNRESOLVED when the exec fails.
+needs      root
+nomutant   a process whose IDs differ at startup is in secure-execution mode, and the preload libraries that plant faults are not loaded into it; reviewed by hand
+test       t/005-secure-getenv-ids.c

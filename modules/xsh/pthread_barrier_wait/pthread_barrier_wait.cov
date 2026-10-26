@@ -1,0 +1,17 @@
+# pthread_barrier_wait.cov - every requirement unit on
+# functions/pthread_barrier_wait.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:de5bf675     XSH.pthread_barrier_wait.001
+DESCRIPTION:3a6bad92     XSH.pthread_barrier_wait.001
+DESCRIPTION:d7a603d2     XSH.pthread_barrier_wait.002
+DESCRIPTION:21bb3093     XSH.pthread_barrier_wait.003
+DESCRIPTION:1835c305     partial XSH.pthread_barrier_wait.002  # distinct from 0; error numbers cannot all be named
+DESCRIPTION:dd236386     none  undefined behaviour
+DESCRIPTION:0a0530b8     XSH.pthread_barrier_wait.004
+DESCRIPTION:be554b2e     none  unspecified
+DESCRIPTION:f90102e1     partial XSH.pthread_barrier_wait.001  # the main thread goes on while two threads wait; scheduling across policies is not tried
+DESCRIPTION:c32a5b1b     none  a statement on scheduling
+RETURN_VALUE:b2dedc5a    XSH.pthread_barrier_wait.002 XSH.pthread_barrier_wait.003
+RETURN_VALUE:27ed31a1    none  no error is named
+ERRORS:28364a9f          partial XSH.pthread_barrier_wait.004  # a blocked wait with a caught signal

@@ -1,0 +1,91 @@
+# XSH nanosleep()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The text bounds the suspension from below only ("may be longer"); the
+# upper limits in these tests are practical caps, not requirements. The
+# interval is measured with CLOCK_REALTIME, the clock the text names, and
+# the test is UNRESOLVED when CLOCK_REALTIME and CLOCK_MONOTONIC disagree
+# over it (the realtime clock was stepped or slewed meanwhile: the text
+# also says setting that clock does not affect a relative sleep).
+# Measured intervals may be short by one step of the clock
+# (clock_getres()). Signals come from a child that repeats them, so a
+# signal sent before the call cannot leave the test waiting.
+
+assertion  XSH.nanosleep.001
+anchor     functions/nanosleep.html#DESCRIPTION
+anchor     functions/nanosleep.html#RETURN VALUE
+class      required
+since      2008
+says       nanosleep() of 200 ms and of 1 s (tv_sec only) each return 0
+           after at least the requested time by CLOCK_REALTIME (within
+           a 10 s cap).
+uses       XSH.clock_getres.001 XSH.clock_getres.002
+test       t/001-sleeps.c
+
+assertion  XSH.nanosleep.002
+anchor     functions/nanosleep.html#ERRORS/EINVAL
+class      required
+since      2008
+says       nanosleep() with tv_nsec 1000000000 or -1 returns -1 with
+           errno EINVAL.
+test       t/002-einval.c
+
+assertion  XSH.nanosleep.003
+anchor     functions/nanosleep.html#DESCRIPTION
+anchor     functions/nanosleep.html#RETURN VALUE
+anchor     functions/nanosleep.html#ERRORS/EINTR
+class      required
+since      2008
+says       A caught signal ends a 5 s nanosleep(): it returns -1 with
+           errno EINTR, and *rmtp holds a proper time no more than 5 s and
+           no less than 5 s minus the measured time in the call.
+uses       XSH.clock_getres.001 XSH.clock_getres.002
+test       t/003-interrupted.c
+
+assertion  XSH.nanosleep.004
+anchor     functions/nanosleep.html#RETURN VALUE
+class      required
+since      2008
+says       With rmtp equal to rqtp, an interrupted 5 s nanosleep() returns
+           -1/EINTR and leaves the remaining time (within the bounds of
+           XSH.nanosleep.003) in the shared object.
+uses       XSH.clock_getres.001 XSH.clock_getres.002
+test       t/004-same-object.c
+
+assertion  XSH.nanosleep.005
+anchor     functions/nanosleep.html#RETURN VALUE
+class      required
+since      2008
+says       With a null rmtp, a caught signal still ends a 5 s nanosleep()
+           with -1/EINTR.
+test       t/005-null-rmtp.c
+
+assertion  XSH.nanosleep.006
+anchor     functions/nanosleep.html#DESCRIPTION
+class      required
+since      2008
+says       A signal that is blocked, or ignored, when it arrives does not
+           end a 600 ms nanosleep(): it returns 0 after at least 600 ms by
+           CLOCK_REALTIME; the blocked signal stays pending.
+uses       XSH.clock_getres.001 XSH.clock_getres.002
+test       t/006-not-delivered.c
+
+assertion  XSH.nanosleep.007
+anchor     functions/nanosleep.html#DESCRIPTION
+class      required
+since      2008
+says       After an uninterrupted and an interrupted nanosleep(), the
+           signal mask and the actions of SIGALRM, SIGUSR1 and SIGUSR2
+           are what they were before.
+test       t/007-signals-untouched.c
+
+assertion  XSH.nanosleep.008
+anchor     functions/nanosleep.html#DESCRIPTION
+class      required
+since      2008
+says       A caught signal delivered to another thread (sent to it with
+           pthread_kill()) does not end the main thread's 600 ms
+           nanosleep(): it returns 0 after at least 600 ms by
+           CLOCK_REALTIME.
+uses       XSH.clock_getres.001 XSH.clock_getres.002
+test       t/008-other-thread.c

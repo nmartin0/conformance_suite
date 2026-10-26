@@ -75,28 +75,14 @@ static void pc_searchable(void)
 /*
  * Supplementary groups: a child that drops root keeps root's supplementary
  * groups, which would put it in the group class of files root created
- * (XBD 4.5). setgroups() is not POSIX, so it is used only where the system
- * is known to have it; elsewhere the child must already have none but its
- * own group, or the test is UNRESOLVED.
+ * (XBD 4.5). setgroups() is not POSIX: pc_drop_groups() uses it where the
+ * system has it (found when the suite is built); either way the child must
+ * then have no group but its own, or the test is UNRESOLVED.
  */
-#if defined(__linux__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || \
-    defined(__DragonFly__) || defined(__APPLE__) || defined(__sun)
-#if defined(__linux__)
-extern int setgroups(size_t, const gid_t *);
-#else
-extern int setgroups(int, const gid_t *);
-#endif
 static void drop_groups(void)
 {
-	gid_t g = 65534;
-
-	(void)setgroups(1, &g);
+	(void)pc_drop_groups();	/* core/pcgroups.c: setgroups() where the system has it */
 }
-#else
-static void drop_groups(void)
-{
-}
-#endif
 
 /* After dropping privileges: no supplementary group but the child's own. */
 static int groups_dropped(void)

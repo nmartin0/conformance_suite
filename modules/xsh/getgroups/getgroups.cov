@@ -1,0 +1,13 @@
+# getgroups.cov - every requirement unit on functions/getgroups.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:0858e400     XSH.getgroups.001
+DESCRIPTION:d96a8b8c     impl  whether the effective group ID is included; tolerated (variant getgroups.with_egid)
+DESCRIPTION:ab43de46     XSH.getgroups.001 XSH.getgroups.003
+DESCRIPTION:574afd2a     XSH.getgroups.001
+DESCRIPTION:8b3a491b     none  undefined values; the tests never read them (variant getgroups.scribbles)
+DESCRIPTION:7974f153     XSH.getgroups.002
+DESCRIPTION:1cb1e3f8     partial XSH.getgroups.001  # the bound is checked; which case applies is implementation-defined
+RETURN_VALUE:78e2d514    XSH.getgroups.001
+RETURN_VALUE:e41095e7    XSH.getgroups.003
+ERRORS:bb50c13b          XSH.getgroups.003

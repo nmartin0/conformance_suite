@@ -1,0 +1,49 @@
+# XSH pthread_cond_broadcast() and pthread_cond_signal()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Spurious wakeups are allowed (pthread_cond_wait() DESCRIPTION): every
+# wait sits in a loop on its predicate, no test counts wakeups, and a
+# signal may wake more than one thread. A missed wakeup is a FAIL only
+# after 10 s, since no bound is set on how soon a woken thread runs.
+
+assertion  XSH.pthread_cond_signal.001
+anchor     functions/pthread_cond_signal.html#DESCRIPTION
+anchor     functions/pthread_cond_signal.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_cond_signal() ends the wait of the one thread blocked
+           in pthread_cond_wait() or pthread_cond_timedwait(), both when
+           the caller holds the mutex and when it has unlocked it first,
+           and returns 0.
+test       t/001-unblocks.c
+
+assertion  XSH.pthread_cond_signal.002
+anchor     functions/pthread_cond_signal.html#DESCRIPTION
+class      required
+since      2008
+says       With three threads blocked (each waiting for a token), three
+           pthread_cond_signal() calls made under one hold of the mutex,
+           one token each, end all three waits.
+note       While the signaler holds the mutex no woken thread can
+           return, so each signal must unblock a thread that is still
+           blocked.
+test       t/002-one-per-signal.c
+
+assertion  XSH.pthread_cond_signal.003
+anchor     functions/pthread_cond_signal.html#DESCRIPTION
+anchor     functions/pthread_cond_signal.html#RETURN VALUE
+class      required
+since      2008
+says       One pthread_cond_broadcast() ends the waits of three blocked
+           threads (two in pthread_cond_wait(), one in
+           pthread_cond_timedwait()) and returns 0.
+test       t/003-broadcast-all.c
+
+assertion  XSH.pthread_cond_signal.004
+anchor     functions/pthread_cond_signal.html#DESCRIPTION
+class      required
+since      2008
+says       Each of three threads unblocked by one pthread_cond_broadcast()
+           returns 0 owning the (error-checking) mutex: no two hold it at
+           once and each one's pthread_mutex_unlock() succeeds.
+test       t/004-broadcast-owns.c

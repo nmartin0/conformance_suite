@@ -1,0 +1,61 @@
+# XSH pthread_key_create()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Keys are used only between their creation and deletion (anything else
+# is undefined). Where several destructors run, their order is
+# unspecified and is not checked.
+
+assertion  XSH.pthread_key_create.001
+anchor     functions/pthread_key_create.html#DESCRIPTION
+anchor     functions/pthread_key_create.html#RETURN VALUE
+class      required
+since      2001
+says       pthread_key_create() returns 0 and stores a key whose value is
+           NULL in every live thread: in the creating thread and in a
+           thread that already existed, also when a key that thread had
+           set was deleted just before.
+test       t/001-null-in-all.c
+
+assertion  XSH.pthread_key_create.002
+anchor     functions/pthread_key_create.html#DESCRIPTION
+class      required
+since      2001
+says       A thread created after a key was made, by a thread that set a
+           non-NULL value for it, starts with NULL for that key.
+test       t/002-null-in-new-thread.c
+
+assertion  XSH.pthread_key_create.003
+anchor     functions/pthread_key_create.html#DESCRIPTION
+class      required
+since      2001
+says       When a thread ends, the destructor of a key it set to a non-NULL
+           value is called once with that value; the destructor of a key
+           whose value in that thread is NULL (never set, or set back to
+           NULL) is not called.
+test       t/003-destructor.c
+
+assertion  XSH.pthread_key_create.004
+anchor     functions/pthread_key_create.html#DESCRIPTION
+anchor     basedefs/limits.h.html#DESCRIPTION
+class      required
+since      2001
+says       A destructor that sets its key to a non-NULL value again on its
+           first three calls is called again each time: four calls in all,
+           and no fifth once the value stays NULL.
+note       Four is {_POSIX_THREAD_DESTRUCTOR_ITERATIONS}, the least
+           {PTHREAD_DESTRUCTOR_ITERATIONS} may be, so no conforming
+           system may stop before the fourth call.
+test       t/004-iterations.c
+
+assertion  XSH.pthread_key_create.005
+anchor     functions/pthread_key_create.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       With {PTHREAD_KEYS_MAX} known (sysconf(), else <limits.h>),
+           creating that many plus one keys fails at least once, and the
+           first failure is EAGAIN or ENOMEM.
+note       Keys the implementation uses itself may make the failure come
+           sooner; both errors are listed as shall-fail and may apply at
+           once (XSH 2.3). NOTINUSE when the limit is unknown or above
+           65536.
+test       t/005-limit.c

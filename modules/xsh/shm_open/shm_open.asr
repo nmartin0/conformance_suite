@@ -1,0 +1,161 @@
+# XSH shm_open()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# shm_open() is SHM (the module's option). Names are "/pc<pid><tag>", at
+# most 14 bytes after the slash ({_POSIX_NAME_MAX}), unique to the test
+# process and removed when it exits. Error tests arrange for exactly one
+# error condition (XSH 2.3).
+
+assertion  XSH.shm_open.001
+anchor     functions/shm_open.html#DESCRIPTION/O_CREAT
+anchor     functions/shm_open.html#RETURN VALUE
+class      required
+since      2001
+says       shm_open(name, O_RDWR|O_CREAT|O_EXCL, 0600) of a new name returns
+           a non-negative descriptor, and fstat() gives the object size 0.
+test       t/001-create-empty.c
+
+assertion  XSH.shm_open.002
+anchor     functions/shm_open.html#DESCRIPTION/O_CREAT
+anchor     functions/fstat.html#DESCRIPTION
+class      required
+since      2001
+says       Under umask(027), a new object made with mode 0666 has
+           permission bits 0640 and the caller's effective user ID; under
+           umask(0), mode 0604 gives 0604.
+note       The group ID is not checked: where the name is visible in the
+           file system it may be the directory's. fstat() need report
+           only the read and write permission bits of a shared memory
+           object, so the execute bits are masked off (0666).
+test       t/002-owner-mode.c
+
+assertion  XSH.shm_open.003
+anchor     functions/shm_open.html#DESCRIPTION
+class      required
+since      2001
+says       FD_CLOEXEC is set on the descriptor shm_open() returns, for an
+           existing object opened O_RDONLY and for a new one.
+test       t/003-cloexec.c
+
+assertion  XSH.shm_open.004
+anchor     functions/shm_open.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.6
+class      required
+says       With a free descriptor below an open one, shm_open() returns
+           the lowest-numbered free descriptor.
+test       t/004-lowest-fd.c
+
+assertion  XSH.shm_open.005
+anchor     functions/shm_open.html#DESCRIPTION
+class      required
+since      2001
+says       For one object, shm_open(O_RDONLY) and shm_open(O_RDWR) give
+           descriptors whose F_GETFL access modes are O_RDONLY and O_RDWR;
+           mmap(PROT_READ|PROT_WRITE, MAP_SHARED) of the first fails with
+           EACCES and of the second succeeds.
+uses       XSH.mmap.010
+test       t/005-access-mode.c
+
+assertion  XSH.shm_open.006
+anchor     functions/shm_open.html#DESCRIPTION
+class      required
+since      2001
+says       After shm_open(O_RDWR|O_CREAT|O_EXCL) and shm_open(O_RDONLY),
+           F_GETFL shows none of O_APPEND, O_NONBLOCK, O_DSYNC and O_SYNC.
+note       The status flags are set according to oflag, which asks for
+           none of them. Flags outside POSIX that an implementation may
+           report are not looked at.
+test       t/006-status-flags.c
+
+assertion  XSH.shm_open.007
+anchor     functions/shm_open.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.8.3.2
+class      required
+since      2001
+says       A child that shm_open()s the same name (O_RDWR, no O_CREAT) and
+           maps it sees the parent's store through the parent's mapping,
+           and the parent sees the child's.
+test       t/007-same-object.c
+
+assertion  XSH.shm_open.008
+anchor     functions/shm_open.html#DESCRIPTION/O_CREAT
+anchor     functions/fstat.html#DESCRIPTION
+class      required
+since      2001
+says       shm_open(O_RDWR|O_CREAT, 0606) of an existing one-page object
+           with mode 0640 and data succeeds and leaves its size, permission
+           bits and data.
+note       Permission bits are compared through fstat(), which need
+           report only the read and write bits of a shared memory object,
+           so the execute bits are masked off (0666).
+test       t/008-creat-existing.c
+
+assertion  XSH.shm_open.009
+anchor     functions/shm_open.html#ERRORS/EEXIST
+class      required
+since      2001
+says       shm_open(O_RDWR|O_CREAT|O_EXCL) of an existing object fails with
+           EEXIST.
+test       t/009-eexist.c
+
+assertion  XSH.shm_open.010
+anchor     functions/shm_open.html#DESCRIPTION/O_EXCL
+class      required
+since      2001
+says       When six processes released together call
+           shm_open(O_RDWR|O_CREAT|O_EXCL) of the same new name, exactly one
+           succeeds and the others fail with EEXIST, in each of 20 rounds.
+note       A race that a non-atomic implementation loses only rarely can
+           go unseen; a FAIL is always real.
+test       t/010-excl-atomic.c
+
+assertion  XSH.shm_open.011
+anchor     functions/shm_open.html#DESCRIPTION/O_TRUNC
+anchor     functions/fstat.html#DESCRIPTION
+class      required
+since      2001
+says       shm_open(O_RDWR|O_TRUNC) of an existing two-page object leaves it
+           with size 0 and the same read and write permission bits and
+           user ID.
+note       The text keeps the mode and the owner; the group ID is not
+           named, so it is not checked. fstat() need report only the read
+           and write permission bits of a shared memory object, so the
+           execute bits are masked off (0666).
+test       t/011-trunc.c
+
+assertion  XSH.shm_open.012
+anchor     functions/shm_open.html#ERRORS/ENOENT
+class      required
+since      2001
+says       shm_open() with O_RDWR or O_RDONLY and without O_CREAT, of a name
+           with no object, fails with ENOENT.
+test       t/012-enoent.c
+
+assertion  XSH.shm_open.013
+anchor     functions/shm_open.html#ERRORS/EACCES
+class      required
+since      2001
+needs      root
+says       shm_open(O_RDONLY) of an existing mode 0600 object, by a process
+           of another user without appropriate privileges, fails with
+           EACCES.
+note       Run as root, so that the child can take another user ID.
+test       t/013-eacces.c
+
+assertion  XSH.shm_open.014
+anchor     functions/shm_open.html#ERRORS/EMFILE
+class      required
+since      2001
+says       With every descriptor below a lowered RLIMIT_NOFILE open,
+           shm_open() of an existing object fails with EMFILE.
+note       The limit is kept at 20 or more (Q-42).
+test       t/014-emfile.c
+
+assertion  XSH.shm_open.015
+anchor     functions/shm_open.html#DESCRIPTION
+class      required
+since      2001
+says       After a store through a mapping of a new two-page object, then
+           munmap() and close() of its only descriptor, shm_open() of the
+           name gives an object of two pages that holds the store.
+test       t/015-persists.c

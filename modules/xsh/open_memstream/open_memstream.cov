@@ -1,0 +1,27 @@
+# open_memstream.cov - every requirement unit on functions/open_memstream.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:ec55ab56     XSH.open_memstream.001 XSH.open_memstream.003 XSH.open_memstream.013
+DESCRIPTION:51e57280     partial XSH.open_memstream.001 XSH.open_memstream.004 XSH.open_memstream.005  # writing and seeking work; that reads fail is not checked
+DESCRIPTION:c23fe208     XSH.open_memstream.012
+DESCRIPTION:b2bf9894     XSH.open_memstream.014
+DESCRIPTION:03fad329     XSH.open_memstream.004 XSH.open_memstream.005
+DESCRIPTION:55d5ae4d     XSH.open_memstream.001
+DESCRIPTION:a21edba9     partial XSH.open_memstream.001 XSH.open_memstream.004 XSH.open_memstream.013  # bytes; positions of wide streams (wide characters) are not checked
+DESCRIPTION:0e01d7f7     XSH.open_memstream.002
+DESCRIPTION:9e9ef85e     XSH.open_memstream.001 XSH.open_memstream.008
+DESCRIPTION:3c834ccc     XSH.open_memstream.001 XSH.open_memstream.003 XSH.open_memstream.013
+DESCRIPTION:d2281e55     XSH.open_memstream.001 XSH.open_memstream.013
+DESCRIPTION:f4f3a571     XSH.open_memstream.004 XSH.open_memstream.005 XSH.open_memstream.006 XSH.open_memstream.007 XSH.open_memstream.013
+DESCRIPTION:9553b15c     XSH.open_memstream.008 XSH.open_memstream.009
+DESCRIPTION:321b083e     none  implementation-defined (both choices accepted by XSH.open_memstream.009)
+DESCRIPTION:bfd0efde     partial XSH.open_memstream.008 XSH.open_memstream.009  # null bytes; null wide characters are not checked
+DESCRIPTION:0cf60242     XSH.open_memstream.010
+DESCRIPTION:d2a230dd     app
+DESCRIPTION:9b7e2743     partial XSH.open_memstream.001  # the tests free() the buffer; a bad pointer is not otherwise detectable
+RETURN_VALUE:f01fa2af    XSH.open_memstream.001 XSH.open_memstream.013
+RETURN_VALUE:798468b8    XSH.open_memstream.011
+ERRORS:e214d1ec          partial XSH.open_memstream.011  # open_memstream() only
+ERRORS:eaac43ce          optional
+ERRORS:e2d4be0e          optional
+ERRORS:e1507e80          untestable  making a small allocation fail is not portable

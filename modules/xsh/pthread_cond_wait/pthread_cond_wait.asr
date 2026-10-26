@@ -1,0 +1,194 @@
+# XSH pthread_cond_clockwait(), pthread_cond_timedwait() and pthread_cond_wait()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Spurious wakeups are allowed (DESCRIPTION): every wait sits in a loop on
+# its predicate, no test counts wakeups, and a 0 return is always
+# accepted. Nothing bounds how soon a woken or canceled thread runs: a
+# missed wakeup is a FAIL only after 10 s.
+
+assertion  XSH.pthread_cond_wait.001
+anchor     functions/pthread_cond_wait.html#DESCRIPTION
+anchor     functions/pthread_cond_wait.html#RETURN VALUE
+class      required
+since      2008
+says       A thread in pthread_cond_wait() or pthread_cond_timedwait()
+           (abstime 10 min ahead) on an error-checking mutex, signaled
+           after the predicate is set, gets 0 and then owns the mutex:
+           another thread's pthread_mutex_trylock() fails and its own
+           pthread_mutex_unlock() succeeds.
+test       t/001-owns-mutex.c
+
+assertion  XSH.pthread_cond_wait.002
+anchor     functions/pthread_cond_wait.html#DESCRIPTION
+class      required
+since      2008
+says       A signal sent by a thread as soon as it can lock the mutex
+           after the waiter set its flag under that mutex and called
+           pthread_cond_wait() (or pthread_cond_timedwait()) is not lost:
+           the wait ends (20 rounds).
+test       t/002-atomic-release.c
+
+assertion  XSH.pthread_cond_wait.003
+anchor     functions/pthread_cond_wait.html#DESCRIPTION
+anchor     functions/pthread_cond_wait.html#ERRORS/ETIMEDOUT
+class      required
+since      2008
+says       On a condition variable with no clock attribute set,
+           pthread_cond_timedwait() with no signal returns ETIMEDOUT for
+           a CLOCK_REALTIME abstime 1 s in the past and for one 300 ms
+           ahead, never before CLOCK_REALTIME reaches abstime, and the
+           caller owns the (error-checking) mutex on return.
+note       Zero returns before the timeout are spurious wakeups and are
+           waited through; no ETIMEDOUT by 10 s past abstime is a FAIL.
+           The system clock must not be stepped during the test.
+test       t/003-timedwait-timeout.c
+
+assertion  XSH.pthread_cond_wait.004
+anchor     functions/pthread_cond_wait.html#DESCRIPTION
+class      required
+since      2024
+says       On a condition variable whose clock attribute was set to
+           CLOCK_MONOTONIC with pthread_condattr_setclock(),
+           pthread_cond_timedwait() measures abstime against
+           CLOCK_MONOTONIC: an abstime in the past and one 300 ms ahead
+           give ETIMEDOUT, never before CLOCK_MONOTONIC reaches abstime.
+note       Since 2024 because CLOCK_MONOTONIC became mandatory then; the
+           clock attribute itself has been in the Base since 2008.
+test       t/004-clock-attribute.c
+
+assertion  XSH.pthread_cond_wait.005
+anchor     functions/pthread_cond_wait.html#DESCRIPTION
+class      required
+since      2008
+says       While a thread repeats pthread_cond_timedwait() with 200 ms
+           timeouts and nobody signals, another thread blocked in
+           pthread_mutex_lock() on the same mutex gets it within 10 s,
+           and the waiter owns the mutex after its waits.
+test       t/005-timeout-releases.c
+
+assertion  XSH.pthread_cond_wait.006
+anchor     functions/pthread_cond_wait.html#ERRORS/EINVAL
+anchor     functions/pthread_cond_wait.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_cond_timedwait() with an abstime 3 s ahead whose
+           tv_nsec is -1 or 1000000000 returns EINVAL, and the caller
+           still owns the (error-checking) mutex.
+test       t/006-einval-nsec.c
+
+assertion  XSH.pthread_cond_wait.007
+anchor     functions/pthread_cond_wait.html#ERRORS/EPERM
+anchor     functions/pthread_cond_wait.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_cond_wait() and pthread_cond_timedwait() return EPERM
+           when the caller does not own the mutex: an unlocked
+           error-checking mutex (which stays unlocked), an error-checking
+           mutex another thread holds (which that thread still owns
+           afterwards), and an unlocked robust mutex.
+test       t/007-eperm.c
+
+assertion  XSH.pthread_cond_wait.008
+anchor     functions/pthread_cond_wait.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.5.2
+class      required
+since      2008
+says       A thread blocked in pthread_cond_wait() (and, separately, in
+           pthread_cond_timedwait()) that is canceled runs its cleanup
+           handler, in which it owns the (error-checking) mutex, and ends
+           with PTHREAD_CANCELED.
+test       t/008-cancel-in-wait.c
+
+assertion  XSH.pthread_cond_wait.009
+anchor     functions/pthread_cond_wait.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.5.3
+class      required
+since      2008
+says       Of two threads blocked on one condition variable, one is
+           canceled and has finished; one pthread_cond_signal() then ends
+           the other's wait.
+note       Only the case where the signal follows the cancellation is
+           tested; a signal concurrent with the cancellation cannot be
+           arranged.
+test       t/009-canceled-not-waiting.c
+
+assertion  XSH.pthread_cond_wait.010
+anchor     functions/pthread_cond_wait.html#DESCRIPTION
+anchor     functions/pthread_cond_wait.html#ERRORS
+class      required
+since      2008
+says       Caught signals (SIGUSR1, no SA_RESTART) sent with
+           pthread_kill() to a thread in pthread_cond_wait() or
+           pthread_cond_timedwait() never make the wait return anything
+           but 0, and the wait still ends when the predicate is set and
+           signaled.
+test       t/010-signal-during-wait.c
+
+assertion  XSH.pthread_cond_wait.011
+anchor     functions/pthread_cond_wait.html#DESCRIPTION
+class      required
+since      2008
+says       After the only waiter on a condition variable, using mutex 1,
+           has been unblocked by pthread_cond_broadcast() and returned, a
+           wait on that condition variable with mutex 2 works: it returns
+           0 when broadcast and the caller owns mutex 2.
+test       t/011-new-binding.c
+
+assertion  XSH.pthread_cond_wait.012
+anchor     functions/pthread_cond_wait.html#DESCRIPTION
+anchor     functions/pthread_cond_wait.html#ERRORS/EOWNERDEAD
+class      conditional
+when       TSH
+since      2008
+says       A thread waits with a robust process-shared mutex; a child
+           process locks the mutex during the wait and exits holding it;
+           after a pthread_cond_signal() the wait returns EOWNERDEAD and
+           the caller has the mutex (pthread_mutex_consistent() and
+           pthread_mutex_unlock() succeed).
+test       t/012-eownerdead.c
+
+assertion  XSH.pthread_cond_wait.013
+anchor     functions/pthread_cond_wait.html#ERRORS/ENOTRECOVERABLE
+class      conditional
+when       TSH
+since      2008
+says       A thread waits with a robust process-shared mutex; a child
+           process locks it and exits holding it; another thread locks it
+           (EOWNERDEAD) and unlocks it without pthread_mutex_consistent();
+           after a pthread_cond_signal() the wait returns ENOTRECOVERABLE.
+note       If the waiter, woken spuriously, takes the mutex first after
+           the owner died (EOWNERDEAD is then its own result), the try is
+           repeated, up to 5 times, then UNRESOLVED.
+test       t/013-enotrecoverable.c
+
+assertion  XSH.pthread_cond_wait.014
+anchor     functions/pthread_cond_wait.html#DESCRIPTION
+anchor     functions/pthread_cond_wait.html#ERRORS/ETIMEDOUT
+class      required
+since      2024
+says       pthread_cond_clockwait() with CLOCK_REALTIME and with
+           CLOCK_MONOTONIC, and no signal, returns ETIMEDOUT for an
+           abstime in the past and for one 300 ms ahead, never before
+           that clock reaches abstime, the caller owning the mutex.
+test       t/014-clockwait-timeout.c
+
+assertion  XSH.pthread_cond_wait.015
+anchor     functions/pthread_cond_wait.html#ERRORS/EINVAL
+class      required
+since      2024
+says       pthread_cond_clockwait() returns EINVAL for a tv_nsec of -1 or
+           1000000000 (CLOCK_REALTIME and CLOCK_MONOTONIC, abstime 3 s
+           ahead) and for a clock ID that clock_gettime() rejects with
+           EINVAL, and the caller still owns the mutex.
+note       The unknown clock is found by trying a few IDs with
+           clock_gettime(); none rejected is UNRESOLVED.
+test       t/015-clockwait-einval.c
+
+assertion  XSH.pthread_cond_wait.016
+anchor     functions/pthread_cond_wait.html#DESCRIPTION
+class      required
+since      2024
+says       pthread_cond_clockwait() (CLOCK_REALTIME, then
+           CLOCK_MONOTONIC, abstime 10 min ahead) signaled after the
+           predicate is set returns 0 with the caller owning the mutex.
+test       t/016-clockwait-signaled.c

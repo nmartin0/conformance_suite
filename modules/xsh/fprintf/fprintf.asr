@@ -1,0 +1,586 @@
+# XSH fprintf() (also asprintf(), dprintf(), printf(), snprintf(), sprintf())
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Most conversions are checked through snprintf() into a large buffer: the
+# page defines the conversions once for every function of the family, and
+# the functions differ only in where the output goes (checked by 042 to
+# 048). Formats reach the calls through a volatile pointer so that the
+# compiler cannot evaluate them itself. Floating values are dyadic
+# rationals whose decimal (or hexadecimal) expansion fits in the digits
+# printed, so that no low-order digit is rounded: that rounding is
+# implementation-defined, and correct rounding for e, f and g is only
+# recommended ("should").
+
+assertion  XSH.fprintf.001
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       Ordinary characters of the format, tab and newline among them, are
+           copied unchanged; with no conversion specification the excess
+           arguments are evaluated (a side effect happens) and ignored, and an
+           empty format gives an empty result.
+test       t/001-ordinary.c
+
+assertion  XSH.fprintf.002
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       %% writes one '%' and converts no argument: "%%%d" with 5 gives
+           "%5", "%d%%%%" with 7 gives "7%%".
+test       t/002-percent.c
+
+assertion  XSH.fprintf.003
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       d and i write an int in signed decimal ("[-]dddd"): 0, 42, -42,
+           INT_MAX and INT_MIN (expected strings made by the test's own
+           conversion).
+test       t/003-signed-decimal.c
+
+assertion  XSH.fprintf.004
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       o, u, x and X write an unsigned int in octal, decimal and
+           hexadecimal, x with "abcdef" and X with "ABCDEF" (0, 8, 15,
+           0xabcdef, UINT_MAX).
+test       t/004-unsigned.c
+
+assertion  XSH.fprintf.005
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       The precision of d, i, o, u, x and X is the minimum number of
+           digits, made up with leading zeros after any sign ("%.3d" of -5
+           gives "-005"); a value with more digits is not cut; the default
+           precision is 1.
+test       t/005-int-precision.c
+
+assertion  XSH.fprintf.006
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       Zero converted by d, i, o, u, x or X with an explicit precision of
+           zero, written ".0" or "." alone, gives no characters (a width
+           still pads); a non-zero value is unaffected.
+test       t/006-zero-precision.c
+
+assertion  XSH.fprintf.007
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       A result shorter than the field width is padded with spaces on the
+           left; a longer one is written whole ("%2d" of 12345 gives
+           "12345").
+test       t/007-width.c
+
+assertion  XSH.fprintf.008
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       With the '-' flag the result is left-justified, padded with spaces
+           on the right, for d, s, c and f.
+test       t/008-left-justify.c
+
+assertion  XSH.fprintf.009
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       '*' takes the width, then the precision, from int arguments before
+           the converted one; a negative width acts as '-' with its absolute
+           value; a negative precision acts as if none were given.
+test       t/009-star.c
+
+assertion  XSH.fprintf.010
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       With '+' a signed conversion (d, i, f, g) begins with '+' or '-',
+           zero getting '+'; without it only a negative value has a sign.
+test       t/010-plus.c
+
+assertion  XSH.fprintf.011
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       The space flag puts a space before a signed result that has no
+           sign, also before the empty result of "% .0d" of 0; a negative
+           value keeps its '-'; with '+' as well, the space flag is ignored.
+test       t/011-space.c
+
+assertion  XSH.fprintf.012
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       '#' with o raises the precision only as needed for a leading zero:
+           "%#o" of 8 gives "010", "%#.3o" of 8 "010", "%#o" and "%#.0o" of 0
+           give "0".
+test       t/012-alt-octal.c
+
+assertion  XSH.fprintf.013
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       '#' with x or X puts 0x or 0X before a non-zero result only: "%#x"
+           of 255 gives "0xff", of 0 gives "0", "%#.4x" of 255 "0x00ff".
+test       t/013-alt-hex.c
+
+assertion  XSH.fprintf.014
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       The '0' flag pads d, i, o, u, x and X to the field width with
+           zeros placed after the sign or the 0x prefix ("%05d" of -42 gives
+           "-0042", "%#06x" of 255 "0x00ff").
+test       t/014-zero-pad.c
+
+assertion  XSH.fprintf.015
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       The '0' flag is ignored when '-' is also given, and for d, i, o, u,
+           x and X when a precision is given ("%05.3d" of 42 gives "  042").
+test       t/015-zero-ignored.c
+
+assertion  XSH.fprintf.016
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       The '0' flag pads f and g with zeros after the sign ("%08.2f" of
+           -1.5 gives "-0001.50"), but an infinity is padded with spaces
+           ("%012f" gives spaces and then "inf" or "infinity").
+test       t/016-zero-pad-float.c
+
+assertion  XSH.fprintf.017
+anchor     functions/fprintf.html#DESCRIPTION/hh
+class      required
+since      2001
+says       With hh the promoted argument is converted to unsigned char (u, o,
+           x, X: 0x1ff gives 255) or signed char (d, i: -5 and SCHAR_MIN stay
+           as they are) before it is written.
+note       Only in-range values are given to d and i, so that the
+           implementation-defined conversion of an out-of-range value to a
+           signed type does not arise.
+test       t/017-hh.c
+
+assertion  XSH.fprintf.018
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       With h the promoted argument is converted to unsigned short or
+           short before it is written: USHRT_MAX + 2 gives 1 with u and x;
+           -300 and SHRT_MIN stay as they are with d and i.
+note       UNRESOLVED where short is as wide as int.
+test       t/018-h.c
+
+assertion  XSH.fprintf.019
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2001
+says       l, ll, j, z and t make d, i, o, u, x and X take a long, long long,
+           intmax_t, size_t and ptrdiff_t argument: the extreme values of
+           each are written exactly.
+test       t/019-wide-ints.c
+
+assertion  XSH.fprintf.020
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       c converts the int to unsigned char and writes that byte: 'A' + 256
+           gives "A", 0xe9 - 256 the byte 0xe9, and 0 a null byte that is
+           counted in the return value.
+test       t/020-char.c
+
+assertion  XSH.fprintf.021
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       s writes the bytes before the null byte; with a precision, at most
+           that many of them ("%.2s" of "abc" gives "ab", "%.0s" nothing).
+test       t/021-string.c
+
+assertion  XSH.fprintf.022
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       s with a precision no greater than the array needs no null byte:
+           "%.3s" and "%.2s" of 3 bytes "abc" placed just before a page with
+           PROT_NONE give "abc" and "ab" without reading past them.
+test       t/022-string-bounded.c
+
+assertion  XSH.fprintf.023
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       p converts a pointer (to an object, and a null pointer) to
+           printable characters only, and consumes exactly that argument:
+           "%p|%d" ends in "|7" for 7.
+note       The characters themselves are implementation-defined.
+test       t/023-pointer.c
+
+assertion  XSH.fprintf.024
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2001
+says       n stores the number of bytes written so far by the call, through
+           a pointer of the type its length modifier gives (hh, h, none, l,
+           ll, j, t), without touching neighbouring objects, and converts no
+           argument (the next one goes to the next conversion).
+test       t/024-count.c
+
+assertion  XSH.fprintf.025
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       f and F write "[-]ddd.ddd" with precision digits after the radix
+           character, 6 by default, none and no radix character with
+           precision 0, and a digit before it ("%.2f" of 0.5 gives "0.50").
+note       Exactly representable values only; the two with 16 and 17
+           significant digits are checked only where DECIMAL_DIG is at
+           least 17.
+test       t/025-fixed.c
+
+assertion  XSH.fprintf.026
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       e and E write "[-]d.ddde+dd": one digit before the radix character,
+           non-zero for a non-zero value, precision digits after it (6 by
+           default, none with precision 0), 'e' or 'E', a signed exponent of
+           at least two digits, zero for a zero value.
+note       The page fixes "at least two" exponent digits and does not repeat
+           the ISO C limit of no more digits than needed, so the test
+           accepts more (candidate issue in the b04 report); for a zero
+           exponent either sign is accepted.
+test       t/026-exponent.c
+
+assertion  XSH.fprintf.027
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       g and G use style f with precision P - (X + 1) when P > X >= -4,
+           style e with precision P - 1 otherwise (P from the precision: 6
+           when absent, 1 when zero), and drop trailing zeros and a bare radix
+           character (100000 gives "100000", 1000000 "1e+06", "%.10g" of
+           2^-13 "0.0001220703125").
+test       t/027-general.c
+
+assertion  XSH.fprintf.028
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       With '#' f, e, g and a keep the radix character even with no
+           digits after it ("%#.0f" of 2 gives "2.") and g keeps its trailing
+           zeros ("%#g" of 1.5 gives "1.50000").
+test       t/028-alt-float.c
+
+assertion  XSH.fprintf.029
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2001
+says       a writes "[-]0xh.hhhp+d" and A "[-]0XH.HHHP+D": one hex digit,
+           non-zero for a normalized value, before the radix character;
+           without a precision, the exact value; with one, that many digits;
+           with precision 0, no radix character; the exponent in decimal
+           with no extra leading zeros, zero for a zero value.
+note       The digit before the radix character is unspecified beyond being
+           non-zero, so the result is parsed and its value compared, not the
+           string.
+test       t/029-hexfloat.c
+
+assertion  XSH.fprintf.030
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2001
+says       a and A with a precision give the value correctly rounded at that
+           precision (FLT_RADIX 2, rounding to nearest): the result is
+           within half a unit in its last digit of the argument (either
+           neighbour when the argument falls halfway).
+note       The unit is taken from the result's own leading digit and
+           exponent, since the normalization is unspecified. UNRESOLVED
+           where FLT_ROUNDS is not 1.
+test       t/030-hexfloat-round.c
+
+assertion  XSH.fprintf.031
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2001
+says       Each of f, e, g and a writes an infinity as "inf" or "infinity" and
+           minus infinity with a '-' first, and a NaN as "nan" or "nan("
+           n-char-sequence ")" with an optional '-'; F, E, G and A write
+           "INF", "INFINITY" and "NAN" instead. Each conversion is checked on
+           its own (the agreement between them is XSH.fprintf.058).
+note       The NaN part is skipped where NAN is not defined.
+test       t/031-inf-nan.c
+
+assertion  XSH.fprintf.032
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2008
+says       In the POSIX locale, whose thousands_sep is empty and grouping -1
+           (XBD 7.3.4), the ' flag adds no characters to d, i, u, f and g, and
+           with '0' the zeros still pad ("%'08d" of 12345 gives "00012345").
+note       Grouping in a locale that has a separator is not checked: no such
+           locale can be named portably.
+test       t/032-grouping-posix.c
+
+assertion  XSH.fprintf.033
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2001
+says       In the locale a program starts in and after setlocale(LC_ALL,
+           "POSIX"), f, g, e and a write a period as the radix character.
+test       t/033-radix-posix.c
+
+assertion  XSH.fprintf.034
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2008
+says       A "%n$" conversion takes the nth argument: arguments can be taken
+           in any order and more than once, with different types, mixed with
+           %%, and up to the ninth ({NL_ARGMAX} is at least 9).
+test       t/034-numbered.c
+
+assertion  XSH.fprintf.035
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2008
+says       In a numbered format "*m$" takes the width and ".*m$" the precision
+           from the mth argument, which can serve several conversions; a
+           negative "*m$" width acts as '-'.
+test       t/035-numbered-star.c
+
+assertion  XSH.fprintf.036
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2001
+says       In the POSIX locale lc writes the bytes wcrtomb() gives for the
+           wide character L'A', inside other text and padded to a width.
+test       t/036-wide-char.c
+
+assertion  XSH.fprintf.037
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2024
+says       lc of a null wide character writes one null byte: "[%lc]" gives
+           '[', a null byte and ']', and returns 3.
+note       Issue 8 (Defect 1647) departs from the ISO C reading on purpose
+           (RATIONALE).
+test       t/037-wide-nul.c
+
+assertion  XSH.fprintf.038
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2001
+says       In the POSIX locale ls writes the wide characters converted as by
+           wcrtomb() up to the null wide character; with a precision at most
+           that many bytes, and an unterminated array of 3 that ends at a
+           PROT_NONE page is read no further than "%.3ls" needs.
+test       t/038-wide-string.c
+
+assertion  XSH.fprintf.039
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2001
+says       In a multibyte locale, for a wide character of k >= 2 bytes, lc
+           writes all k bytes and ls with precision k - 1, k, 2k - 1 and 2k
+           writes no, one, one and two whole characters.
+note       The locale is the first of a few names that setlocale() accepts
+           with MB_CUR_MAX above 1, NOTINUSE if none; the character is the
+           first of a few codes that wcrtomb() turns into two or more bytes.
+test       t/039-wide-multibyte.c
+
+assertion  XSH.fprintf.040
+anchor     functions/fprintf.html#DESCRIPTION
+class      conditional
+when       XSI
+says       C is lc and S is ls (precision included) in the POSIX locale.
+test       t/040-xsi-C-S.c
+
+assertion  XSH.fprintf.041
+anchor     functions/fprintf.html#ERRORS/EILSEQ
+class      required
+says       lc of a wide-character code that wcrtomb() rejects with EILSEQ in
+           the POSIX locale, and ls of an array holding it, make snprintf()
+           return a negative value with errno EILSEQ.
+test       t/041-eilseq.c
+
+assertion  XSH.fprintf.042
+anchor     functions/fprintf.html#DESCRIPTION
+anchor     functions/fprintf.html#RETURN VALUE
+class      required
+since      1988
+says       sprintf() stores the output and then a null byte from s on, and
+           returns the number of bytes before that null byte (an embedded
+           null byte from %c included; 0 for an empty format).
+test       t/042-sprintf.c
+
+assertion  XSH.fprintf.043
+anchor     functions/fprintf.html#DESCRIPTION/snprintf
+anchor     functions/fprintf.html#RETURN VALUE
+class      required
+since      2001
+says       snprintf() with n of 1, 2, 4, 6, 7 and 8 and a 6-byte result stores
+           the first min(n - 1, 6) bytes and a null byte, leaves the bytes
+           from s[n] on as they were, and returns 6.
+test       t/043-snprintf-truncates.c
+
+assertion  XSH.fprintf.044
+anchor     functions/fprintf.html#DESCRIPTION/snprintf
+anchor     functions/fprintf.html#RETURN VALUE
+class      required
+since      2001
+says       snprintf() with n zero accepts a null s, writes nothing to a
+           non-null one, and returns the length the result would have.
+test       t/044-snprintf-zero.c
+
+assertion  XSH.fprintf.045
+anchor     functions/fprintf.html#DESCRIPTION
+anchor     functions/fprintf.html#RETURN VALUE
+class      required
+since      1988
+says       printf() writes on stdout (descriptor 1, redirected to a file) and
+           returns the number of bytes transmitted.
+test       t/045-printf.c
+
+assertion  XSH.fprintf.046
+anchor     functions/fprintf.html#DESCRIPTION
+anchor     functions/fprintf.html#RETURN VALUE
+class      required
+since      1988
+says       fprintf() writes on the stream given and returns the number of
+           bytes transmitted, a null byte from %c counted and written.
+test       t/046-fprintf.c
+
+assertion  XSH.fprintf.047
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      1988
+says       fprintf() output goes through the stream as if by fputc(): mixed
+           with fputc() calls on the same stream, the file holds everything
+           in call order.
+test       t/047-as-fputc.c
+
+assertion  XSH.fprintf.048
+anchor     functions/fprintf.html#DESCRIPTION/dprintf
+anchor     functions/fprintf.html#RETURN VALUE
+class      required
+since      2008
+says       dprintf() writes to the descriptor itself: on return the file holds
+           the output (read through another open, nothing flushed), the
+           offset has moved by its length, and the number of bytes is
+           returned.
+test       t/048-dprintf.c
+
+assertion  XSH.fprintf.049
+anchor     functions/fprintf.html#ERRORS/EBADF
+class      required
+since      2008
+says       dprintf() on a closed descriptor, and on one open only for
+           reading, returns a negative value with errno EBADF.
+note       The closed descriptor is the may-fail EBADF, or a write() that
+           fails with EBADF (XSH 2.3: no other number for that condition);
+           the read-only one is the EBADF of fputc(), to which ERRORS refers.
+test       t/049-dprintf-ebadf.c
+
+assertion  XSH.fprintf.050
+anchor     functions/fprintf.html#ERRORS
+class      required
+since      2008
+says       dprintf() to a pipe whose read end is closed, with SIGPIPE blocked,
+           returns a negative value with errno EPIPE, and SIGPIPE is pending
+           (the fputc() errors, to which ERRORS refers).
+test       t/050-dprintf-epipe.c
+
+assertion  XSH.fprintf.051
+anchor     functions/fprintf.html#ERRORS
+class      required
+since      1988
+says       fprintf() of 65536 bytes to a pipe whose read end is closed, with
+           SIGPIPE blocked, on a stream set _IONBF (or, if that is refused,
+           one with a 16 KiB buffer of the test's own) fails with EPIPE; if it
+           returns success with nothing written, the fflush() that follows
+           fails with EPIPE. The error indicator is then set and SIGPIPE is
+           pending; success with SIGPIPE pending FAILs.
+note       fputc() fails only when the stream is unbuffered or its buffer
+           needs flushing, and fflush() then shall fail with EPIPE. A stream
+           that accepts _IONBF but writes nothing during fprintf() is only
+           noted: whether _IONBF must be honoured is XSH.setvbuf.003 (Q-33).
+test       t/051-fprintf-epipe.c
+
+assertion  XSH.fprintf.052
+anchor     functions/fprintf.html#ERRORS/EOVERFLOW
+class      required
+says       snprintf(NULL, 0, "x%*d", INT_MAX, 0), whose result would be
+           {INT_MAX} + 1 bytes, returns a negative value with errno EOVERFLOW.
+note       ENOMEM is not among snprintf()'s errors, so no other number
+           applies.
+timeout    120
+test       t/052-eoverflow.c
+
+assertion  XSH.fprintf.053
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+says       After a successful dprintf() to a file whose times were set to
+           2001 (2.1 s earlier), its st_mtim is later than that and its
+           st_ctim later than before the call.
+timeout    20
+test       t/053-dprintf-times.c
+
+assertion  XSH.fprintf.054
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+says       After a successful fprintf() and fflush() on a stream whose file's
+           times were set to 2001 (2.1 s earlier), its st_mtim is later than
+           that and its st_ctim later than before.
+timeout    20
+test       t/054-fprintf-times.c
+
+assertion  XSH.fprintf.055
+anchor     functions/fprintf.html#DESCRIPTION/asprintf
+anchor     functions/fprintf.html#RETURN VALUE
+class      required
+since      2024
+says       asprintf(&p, "%s%d", "ab", 12) returns 4 and stores in p the
+           address of the string "ab12", which free() accepts.
+note       Neither glibc 2.39 nor musl declares asprintf() under the strict
+           build (docs/linux-deviations.md 6.3, 11.1), so the test does not
+           build there (UNINITIATED).
+test       t/055-asprintf.c
+
+assertion  XSH.fprintf.056
+anchor     functions/fprintf.html#DESCRIPTION/asprintf
+class      required
+since      2024
+says       asprintf(&p, "%100000d", 7) returns 100000 and p holds 99999
+           spaces, '7' and a null byte.
+note       Neither glibc 2.39 nor musl declares asprintf() under the strict
+           build (docs/linux-deviations.md 6.3, 11.1), so the test does not
+           build there (UNINITIATED).
+test       t/056-asprintf-long.c
+
+assertion  XSH.fprintf.057
+anchor     functions/fprintf.html#DESCRIPTION
+class      required
+since      2001
+says       L makes f, F, e and g take a long double; l before them has no
+           effect (a double); the argument after a long double is still
+           converted correctly.
+test       t/057-long-double.c
+
+assertion  XSH.fprintf.058
+anchor     functions/fprintf.html#DESCRIPTION
+class      disputed
+since      2001
+says       e, g and a write an infinity and a NaN exactly as f does, and F, E,
+           G and A in the upper-case form of the style f chose ("INF" when f
+           gives "inf").
+note       disputed (new): f and F leave the style of an infinity and of a NaN
+           (and the meaning of an n-char-sequence) implementation-defined, and
+           e, g and a say only that such values are converted "in the style of
+           an f or F conversion specifier", which can be read as the style f
+           uses or as any of the f styles; F "produces INF, INFINITY, or NAN
+           instead of" the lower-case forms, "respectively". A FAIL is logged
+           as INSPECT. The NaN part is skipped where NAN is not defined.
+test       t/058-inf-nan-same-style.c

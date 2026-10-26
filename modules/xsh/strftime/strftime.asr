@@ -1,0 +1,177 @@
+# XSH strftime(), strftime_l()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All in the POSIX locale (the default when setlocale() is not called),
+# whose LC_TIME values XBD 7.3.5.3 fixes. Every test also checks that the
+# return value is the number of bytes placed, without the NUL. Years
+# below 1000 are used only with a flag and a minimum field width, since
+# the default padding is unspecified. %Z is not checked: its replacement
+# in the POSIX locale is implementation-defined (ISO C).
+
+assertion  XSH.strftime.001
+anchor     functions/strftime.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5.3
+class      required
+says       In the POSIX locale %a and %A give "Sun" to "Sat" and "Sunday"
+           to "Saturday" for tm_wday 0 to 6, %b, %h and %B give "Jan" to
+           "Dec" and "January" to "December" for tm_mon 0 to 11, and %p
+           gives "AM" for tm_hour 0 and 11 and "PM" for 12 and 23.
+test       t/001-names.c
+
+assertion  XSH.strftime.002
+anchor     functions/strftime.html#DESCRIPTION
+class      required
+says       The numeric conversions give fixed-width decimal fields: %d,
+           %H, %M, %S, %m and %y two digits with a leading zero, %e two
+           characters with a leading space, %I "12" for hours 0 and 12
+           and "01" for 13, %j three digits (001 to 366), %Y the year
+           for years 1000 to 9999, and %C two digits for years 0 to 9999
+           ("00" for 5, "02" for 270, "19" for 1999, "20" for 2000).
+test       t/002-numeric.c
+
+assertion  XSH.strftime.003
+anchor     functions/strftime.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5.3
+class      required
+says       In the POSIX locale %c is "%a %b %e %H:%M:%S %Y", %D
+           "%m/%d/%y", %F "%Y-%m-%d", %r "%I:%M:%S %p", %R "%H:%M", %T
+           "%H:%M:%S", %x "%m/%d/%y", %X "%H:%M:%S"; %n, %t and %% give a
+           newline, a tab and '%'; ordinary characters are copied; an
+           empty format gives 0 and an empty string.
+test       t/003-composite.c
+
+assertion  XSH.strftime.004
+anchor     functions/strftime.html#DESCRIPTION
+class      required
+says       For every day of 1999 to 2001 and 2004 (tm_wday and tm_yday
+           consistent), %u is 1 to 7 with Monday 1, %w 0 to 6 with Sunday
+           0, %U the week number counting from the first Sunday of the
+           year (days before it in week 00) and %W the same from the
+           first Monday.
+test       t/004-week-sunday-monday.c
+
+assertion  XSH.strftime.005
+anchor     functions/strftime.html#DESCRIPTION
+class      required
+says       %G, %g and %V follow the ISO 8601 week-based year: Saturday
+           2 January 1999 is 1998, 98 and 53; Tuesday 30 December 1997 is
+           1998, 98 and 01; and so on for every day of 1990 to 2030
+           (weeks start on Monday, week 01 holds 4 January).
+test       t/005-iso-week.c
+
+assertion  XSH.strftime.006
+anchor     functions/strftime.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5.3
+class      required
+says       The POSIX locale has no era, alternative digits or alternative
+           month names, so %Ec, %EC, %Ex, %EX, %Ey, %EY, %Ob, %OB, %Od,
+           %Oe, %OH, %OI, %Om, %OM, %OS, %Ou, %OU, %OV, %Ow, %OW and %Oy
+           give the same bytes as the specifiers without the modifier.
+test       t/006-modifiers.c
+
+assertion  XSH.strftime.007
+anchor     functions/strftime.html#DESCRIPTION
+class      required
+since      2024
+says       With a '0' or '+' flag and a minimum field width, %Y, %G, %C
+           and %F pad with zeros to the width and '+' adds a sign only
+           when the year field takes more than four bytes (more than two
+           for %C): %+4Y gives "1970" and "+12345", %+5Y of 270 "+0270",
+           %05Y of 12345 "12345", %06Y "012345", %08Y of 123456
+           "00123456", %+8Y "+0123456", %04Y of 27 "0027", %01Y "27",
+           %+3C%y of 270 "+0270", %04C%y of 12345 "012345", %+4C%y
+           "+12345", %+6C%y of 123456 "+0123456", %+6G "+12345", %06G of
+           2024 "002024", %010F "1970-01-02", %+12F of 12345 "+12345-01-02",
+           %+13F of 2024 "+002024-07-04", %07F of 27 "27-01-02".
+test       t/007-flags-width.c
+
+assertion  XSH.strftime.008
+anchor     functions/strftime.html#DESCRIPTION
+class      required
+since      2024
+says       Without a flag or width, years above 9999 are printed whole:
+           %Y and %G of 12345 give "12345", %C "123", and %F
+           "12345-07-01".
+test       t/008-large-years.c
+
+assertion  XSH.strftime.009
+anchor     functions/strftime.html#DESCRIPTION
+class      required
+since      2024
+says       %s gives the seconds since the Epoch as mktime() would compute
+           them from tm_year to tm_isdst: with TZ="PCT3" the XBD 4.19
+           value plus 10800 for a broken-down time built by hand, and
+           with TZ="PCS5PCD,M3.2.0,M11.1.0" the value plus 18000 for a
+           July noon with tm_isdst 0 and plus 14400 with tm_isdst 1.
+note       The structure is filled member by member after zeroing it, so
+           any other member a system adds is 0; %s does not depend on
+           it.
+test       t/009-seconds.c
+
+assertion  XSH.strftime.010
+anchor     functions/strftime.html#DESCRIPTION
+class      required
+since      2001
+says       %z gives "-0500" for a January structure and "-0400" for a July
+           one from localtime() under TZ="PCS5PCD,M3.2.0,M11.1.0",
+           "+0530" under TZ="PCE-5:30", and no characters after
+           tm_isdst of such a structure is set to -1.
+test       t/010-offset.c
+
+assertion  XSH.strftime.011
+anchor     functions/strftime.html#DESCRIPTION
+class      required
+since      2024
+says       %z of the July structure from XSH.strftime.010 with tm_isdst
+           changed to 0 gives "-0500" or "-0400", in the +hhmm form.
+note       The text does not settle which: a zero tm_isdst selects the
+           standard time offset, but the members listed for %z include
+           tm_gmtoff, which still holds the DST offset (candidate standard
+           issue). Either reading is accepted.
+test       t/011-offset-isdst-zero.c
+
+assertion  XSH.strftime.012
+anchor     functions/strftime.html#DESCRIPTION
+class      required
+since      2024
+says       After tzset() with TZ="PCT3", TZ is changed to "PCE-5:30" and
+           strftime() is called with the format "%H": tzname[0] is
+           "PCE" afterwards.
+test       t/012-sets-tz-info.c
+
+assertion  XSH.strftime.013
+anchor     functions/strftime.html#RETURN VALUE
+class      required
+since      2024
+says       A successful strftime() (a format using every conversion
+           specifier, and one with only ordinary characters) leaves errno
+           as it was before the call.
+test       t/013-errno-kept.c
+
+assertion  XSH.strftime.014
+anchor     functions/strftime.html#ERRORS/ERANGE
+anchor     functions/strftime.html#RETURN VALUE
+class      required
+since      2024
+says       When the result with its NUL needs one byte more than maxsize,
+           strftime() returns 0 and sets errno to ERANGE; with maxsize
+           one larger it succeeds.
+test       t/014-erange.c
+
+assertion  XSH.strftime.015
+anchor     functions/strftime.html#DESCRIPTION
+class      required
+says       strftime() places no more than maxsize bytes: the bytes after
+           the first maxsize are unchanged both when the result does not
+           fit and when it fits exactly with its NUL.
+test       t/015-maxsize.c
+
+assertion  XSH.strftime.016
+anchor     functions/strftime.html#DESCRIPTION
+class      required
+since      2008
+says       strftime_l() with a locale object for the POSIX locale (from
+           newlocale(LC_TIME_MASK, "POSIX", 0)) gives the same bytes and
+           return value as strftime() in the POSIX locale for a format
+           using every conversion specifier.
+test       t/016-strftime-l.c

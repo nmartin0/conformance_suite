@@ -1,0 +1,125 @@
+# XSH getdelim(), getline()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getdelim.001
+anchor     functions/getdelim.html#DESCRIPTION
+anchor     functions/getdelim.html#RETURN VALUE
+class      required
+since      2008
+says       On a stream reading "ab:cd:ef", starting with a null *lineptr and
+           *n of 0, getdelim(&p, &n, ':', f) returns 3 with p holding "ab:"
+           and a null byte and n at least 4; the next call returns 3 with
+           "cd:"; the next returns 2 with "ef" and a null byte; the next
+           returns -1 with feof() true.
+note       The size of the object is open as long as it is large enough
+           (variant getdelim.n_exact).
+test       t/001-records.c
+
+assertion  XSH.getdelim.002
+anchor     functions/getdelim.html#DESCRIPTION
+anchor     functions/getdelim.html#RETURN VALUE
+class      required
+since      2008
+says       On a stream reading "one\ntwo", starting with a null *lineptr and
+           *n of 0, getline() returns 4 with "one\n" and a null byte, then
+           3 with "two" and a null byte, then -1 with feof() true.
+test       t/002-getline.c
+
+assertion  XSH.getdelim.003
+anchor     functions/getdelim.html#RETURN VALUE
+class      required
+since      2008
+says       On a stream reading the bytes 'a', 0, 'b', '\n', getline()
+           returns 4 and the object holds 'a', 0, 'b', '\n' and a null
+           byte.
+test       t/003-embedded-null.c
+
+assertion  XSH.getdelim.004
+anchor     functions/getdelim.html#DESCRIPTION
+class      required
+since      2008
+says       Starting with *lineptr from malloc(2) and *n of 2, getdelim() of
+           a record of 100 'x' and ':' returns 101, sets *n to at least
+           102, and *lineptr then points to the 101 bytes followed by a null
+           byte (the object can be passed to free()).
+test       t/004-grows.c
+
+assertion  XSH.getdelim.005
+anchor     functions/getdelim.html#RETURN VALUE
+class      required
+says       On a stream reading "ab" whose end-of-file indicator is set by a
+           getdelim() that returned -1, after "c:" is appended through a
+           separate open(), getdelim() returns -1 and feof() stays true.
+test       t/005-eof-sticky.c
+
+assertion  XSH.getdelim.006
+anchor     functions/getdelim.html#ERRORS/EINVAL
+class      required
+since      2008
+says       getdelim() with a null lineptr, and getdelim() with a null n, each
+           on a new stream reading "ab:", return -1 with errno EINVAL.
+test       t/006-einval.c
+
+assertion  XSH.getdelim.007
+anchor     functions/getdelim.html#RETURN VALUE
+anchor     functions/getdelim.html#ERRORS/EINVAL
+class      required
+since      2008
+says       After getdelim() with a null lineptr fails with EINVAL on a new
+           stream reading "ab:", ferror() on that stream is true.
+note       EINVAL is a "shall fail" condition, so an error occurs and
+           RETURN VALUE sets the error indicator; nothing limits that
+           sentence to errors in reading.
+test       t/007-einval-indicator.c
+
+assertion  XSH.getdelim.008
+anchor     functions/getdelim.html#ERRORS/ENOMEM
+anchor     functions/getdelim.html#RETURN VALUE
+class      required
+since      2008
+says       In a child that has used up its address space under RLIMIT_AS
+           except for about 2 MiB, getdelim() of a 64 MiB record (a sparse
+           file with no delimiter) returns -1 with errno ENOMEM and the
+           stream's error indicator set.
+test       t/008-enomem.c
+
+assertion  XSH.getdelim.009
+anchor     functions/getdelim.html#ERRORS
+anchor     functions/fgetc.html#ERRORS/EBADF
+class      required
+says       On a stream opened "r" whose descriptor was closed before the
+           first read, getdelim() returns -1, sets errno to EBADF and sets
+           the stream's error indicator.
+test       t/009-ebadf.c
+
+assertion  XSH.getdelim.010
+anchor     functions/getdelim.html#DESCRIPTION
+class      required
+says       For a file whose last data access time is set to 2001-09-09,
+           getdelim() on a new stream reading it returns its first record,
+           and fstat() afterwards shows a later st_atim.
+note       As for XSH.fgetc.008 (XBD 4.12; noatime mounts fail rightly).
+test       t/010-atime.c
+
+assertion  XSH.getdelim.011
+anchor     functions/getdelim.html#DESCRIPTION
+class      required
+since      2008
+says       On a stream reading 'a', 'b', 0, 'c', 'd', 0xff, 'e', 'f',
+           getdelim() with delimiter 0 returns 3 ("ab" and the null
+           byte), then with delimiter 0xff returns 3 ("cd" and 0xff), then
+           returns 2 ("ef").
+test       t/011-delimiters.c
+
+assertion  XSH.getdelim.012
+anchor     functions/getdelim.html#DESCRIPTION
+anchor     functions/getdelim.html#RETURN VALUE
+class      required
+says       On a stream on an empty non-blocking pipe, after a getdelim()
+           that failed with EAGAIN and set the error indicator, and "ab:"
+           then written to the pipe, getdelim() with delimiter ':' returns
+           3 with the object holding "ab:" and a null byte.
+note       Only the end-of-file indicator makes the call return -1 without
+           reading (RETURN VALUE); a set error indicator does not, as for
+           fgetc().
+test       t/012-after-error.c

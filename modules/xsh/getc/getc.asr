@@ -1,0 +1,31 @@
+# XSH getc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getc.001
+anchor     functions/getc.html#DESCRIPTION
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+since      1988
+says       On a stream reading the bytes 0x41, 0xff, 0x00, 0x42, successive
+           getc() calls return 0x41, 0xff, 0 and 0x42, ftell() after each is
+           1, 2, 3 and 4, and the next getc() returns EOF with feof() true.
+test       t/001-bytes.c
+
+assertion  XSH.getc.002
+anchor     functions/getc.html#DESCRIPTION
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+since      2001
+says       On a stream reading "ab" whose end-of-file indicator is set,
+           after "c" is appended through a separate open(), getc() returns
+           EOF and feof() stays true; after clearerr() getc() returns 'c'.
+test       t/002-eof-sticky.c
+
+assertion  XSH.getc.003
+anchor     functions/getc.html#DESCRIPTION
+anchor     functions/fgetc.html#ERRORS/EBADF
+class      required
+says       On a stream opened "r" whose descriptor was closed before the
+           first read, getc() returns EOF, sets errno to EBADF and sets the
+           stream's error indicator.
+test       t/003-ebadf.c

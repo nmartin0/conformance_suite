@@ -1,0 +1,52 @@
+# XSH putenv()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests use names beginning with PCX_ (valid names, XBD 3.216) and
+# strings in static arrays, which stay valid for the life of the process.
+
+assertion  XSH.putenv.001
+anchor     functions/putenv.html#DESCRIPTION
+anchor     functions/putenv.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       putenv(s) with s an array holding "PCX_P=one", for a name not in
+           the environment, returns 0; afterwards getenv("PCX_P") returns
+           "one" and the array environ points to holds the pointer s
+           itself.
+test       t/001-adds-string.c
+
+assertion  XSH.putenv.002
+anchor     functions/putenv.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       After putenv(s) with s holding "PCX_P=one", changing s to
+           "PCX_P=two" makes getenv("PCX_P") return "two"; changing it to
+           "PCX_R=new" makes getenv("PCX_R") return "new" and
+           getenv("PCX_P") return a null pointer.
+test       t/002-alter-string.c
+
+assertion  XSH.putenv.003
+anchor     functions/putenv.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       With PCX_P=old in the environment (set by setenv()), putenv(s)
+           with s holding "PCX_P=new" returns 0; afterwards environ holds
+           exactly one string named PCX_P, the pointer s, and
+           getenv("PCX_P") returns "new".
+test       t/003-replaces.c
+
+assertion  XSH.putenv.004
+anchor     functions/putenv.html#DESCRIPTION
+anchor     functions/putenv.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2024
+says       With PCX_P=old in the environment, putenv(s) with s holding
+           "PCX_P" (a valid name and no '=') either returns 0 and removes
+           the variable (getenv("PCX_P") is then a null pointer, environ
+           holds no string named PCX_P), or returns a non-zero value with
+           errno EINVAL and leaves PCX_P=old in place.
+test       t/004-name-only.c

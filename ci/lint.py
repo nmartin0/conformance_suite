@@ -20,7 +20,9 @@
 #     --standard points at a local copy of the HTML edition)
 #
 # --list-mutants prints "ID MUTANT" pairs for ci/mutate.sh; --list-variants
-# prints "ID VARIANT" pairs (behaviour the text allows, which must PASS).
+# prints "ID VARIANT [reading|shim]" (behaviour the text allows, which must
+# PASS; a reading plants the other reading of a disputed assertion; a shim
+# only supplies declarations a reference system's headers leave out).
 
 import argparse
 import re
@@ -116,7 +118,16 @@ for m in mods:
             err(here, f"test file {test} does not exist")
             continue
         used_tests.setdefault(tpath.resolve(), []).append(a.id)
+        # Names the driver creates must fit the results directory's {NAME_MAX}
+        # budget (PC_NAME_NEED in posixcheck.sh): <id>.build.txt, <test>.variant.
+        if len(a.id) + len(".build.txt") > 64:
+            err(here, f"assertion ID {a.id} is too long for the 64-byte name budget")
+        if len(tpath.stem) + len(".variant") > 64:
+            err(here, f"test file name {tpath.name} is too long for the 64-byte name budget")
         ids, mutants, variants = catalog.test_header_full(tpath)
+        readings = catalog.test_readings(tpath)
+        if readings and cls != "disputed":
+            err(tpath.relative_to(args.modules), "READING lines need a disputed assertion")
         if ids != [a.id]:
             err(tpath.relative_to(args.modules),
                 f"header names {ids or 'no assertion'}, expected [{a.id}]")
@@ -124,11 +135,14 @@ for m in mods:
             err(tpath.relative_to(args.modules),
                 "declares no MUTANT (or give the assertion a 'nomutant' reason)")
         for mu in mutants:
-            fn = mu.split(".", 1)[0]
+            if mu.count(".") != 1 and not (args.modules / "xsh" / mu.rsplit(".", 1)[0]).is_dir() \
+                    and not (args.modules / "xcu" / mu.rsplit(".", 1)[0]).is_dir():
+                err(tpath.relative_to(args.modules), f"mutant {mu}: the part after the last dot names the fault, the rest a module")
+            fn = mu.rsplit(".", 1)[0]
             if tpath.suffix == ".c":
                 srcs = list((args.modules / "xsh" / fn / "mutants").glob("*.c"))
                 text = "".join(s.read_text() for s in srcs)
-                fault = mu.split(".", 1)[1] if "." in mu else ""
+                fault = mu.rsplit(".", 1)[1] if "." in mu else ""
                 if not srcs or f'"{fault}"' not in text:
                     err(tpath.relative_to(args.modules),
                         f"mutant {mu} not implemented in xsh/{fn}/mutants/")
@@ -138,9 +152,12 @@ for m in mods:
                     err(tpath.relative_to(args.modules),
                         f"mutant {mu} has no file {mf.relative_to(args.modules)}")
             mutant_pairs.append((a.id, mu))
-        for va in variants:
-            fn = va.split(".", 1)[0]
-            name = va.split(".", 1)[1] if "." in va else ""
+        for va in variants + readings:
+            if va.count(".") != 1 and not (args.modules / "xsh" / va.rsplit(".", 1)[0]).is_dir() \
+                    and not (args.modules / "xcu" / va.rsplit(".", 1)[0]).is_dir():
+                err(tpath.relative_to(args.modules), f"variant {va}: the part after the last dot names the variant, the rest a module")
+            fn = va.rsplit(".", 1)[0]
+            name = va.rsplit(".", 1)[1] if "." in va else ""
             if va in mutants:
                 err(tpath.relative_to(args.modules), f"{va} is declared both MUTANT and VARIANT")
             if tpath.suffix == ".c":
@@ -155,7 +172,14 @@ for m in mods:
                 if not vf.is_file():
                     err(tpath.relative_to(args.modules),
                         f"variant {va} has no file {vf.relative_to(args.modules)}")
-            variant_pairs.append((a.id, va))
+            # A build shim (a header alone marked "posixcheck: shim") only
+            # supplies what a reference system's headers leave out; what
+            # runs is that system's own behaviour (ci/mutate.sh: SYSTEM).
+            hdr = args.modules / "xsh" / fn / "variants" / f"{va}.h"
+            shim = tpath.suffix == ".c" and hdr.is_file() and "posixcheck: shim" in hdr.read_text()
+            if shim and va in readings:
+                err(tpath.relative_to(args.modules), f"{va} is a build shim and cannot be a READING")
+            variant_pairs.append((a.id, va + (" reading" if va in readings else " shim" if shim else "")))
 
     for t in sorted((m.dir / "t").glob("*")) if (m.dir / "t").is_dir() else []:
         if t.suffix not in (".c", ".sh"):
@@ -225,9 +249,10 @@ if args.standard:
             continue
         if page not in headings:
             text = f.read_text(encoding="latin-1")
-            headings[page] = set(re.findall(r"<h\d[^>]*>(?:<a[^>]*></a>)?([^<]+)</h\d>", text))
+            # A heading may be wrapped in <i> or <b> (some section headings are).
+            headings[page] = set(re.findall(r"<h\d[^>]*>(?:<[ib]>)?(?:<a[^>]*></a>)?([^<]+)(?:</[ib]>)?</h\d>", text))
             headings[page] |= {h.strip() for h in headings[page]}
-            headings[page] |= set(re.findall(r"<h\d[^>]*>(?:<a[^>]*></a>)?(\d+(?:\.\d+)*)\s", text))
+            headings[page] |= set(re.findall(r"<h\d[^>]*>(?:<[ib]>)?(?:<a[^>]*></a>)?(\d+(?:\.\d+)*)\s", text))
         section = rest.split("/", 1)[0]
         if section and section not in headings[page]:
             err(here, f"anchor section '{section}' not found on {page}")

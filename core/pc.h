@@ -77,4 +77,11 @@ void pc_require_space(void);
  */
 void pc_result_raw(const char *code, const char *note);
 
+/*
+ * Drops supplementary groups where the system has setgroups() (not POSIX):
+ * 0 on success, -1 if not done (core/pcgroups.c). Callers still check with
+ * getgroups().
+ */
+int pc_drop_groups(void);
+
 #endif

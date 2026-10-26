@@ -1,0 +1,26 @@
+# fsetpos.cov - every requirement unit on functions/fsetpos.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:0a76e08a     partial XSH.fsetpos.001 XSH.fsetpos.002  # the file position; the mbstate_t of a wide-oriented stream is not checked
+DESCRIPTION:dd68707f     partial XSH.fsetpos.009  # a write error; a read error is not checked
+DESCRIPTION:5b9f2197     XSH.fsetpos.002 XSH.fsetpos.003
+DESCRIPTION:f707465f     XSH.fsetpos.004
+DESCRIPTION:230d479c     impl  behaviour on devices that cannot seek
+DESCRIPTION:653fa1c0     none  undefined
+DESCRIPTION:bd0aa8c7     XSH.fsetpos.005
+DESCRIPTION:5f7a451d     partial XSH.fsetpos.006  # fmemopen(); open_memstream() and open_wmemstream() are not checked
+DESCRIPTION:394a8ec9     XSH.fsetpos.007
+RETURN_VALUE:4892ed38    XSH.fsetpos.001 XSH.fsetpos.008 XSH.fsetpos.009
+ERRORS:f45760f2          partial XSH.fsetpos.008 XSH.fsetpos.009  # pending output on a regular file; the unbuffered branch is not checked
+ERRORS:4cf87faf          untestable  needs a pipe or socket stream, where fgetpos() fails (ESPIPE), so there is no value from fgetpos() on the same stream to pass
+ERRORS:7a02d171          partial XSH.fsetpos.008  # a closed descriptor under pending output; a descriptor not open for writing (Q-41) is not checked
+ERRORS:38d3d1f2          todo  environment: the maximum file size
+ERRORS:44f9e858          XSH.fsetpos.009
+ERRORS:399b8ebf          todo  a write at the offset maximum
+ERRORS:c9cace74          untestable  a write to a regular file is not interrupted in practice, and a pipe stream has no value from fgetpos() to pass
+ERRORS:5bcef711          todo  environment: a physical I/O error
+ERRORS:6481f489          todo  open_memstream() out of memory
+ERRORS:5f5513df          todo  environment: a full file system; the fmemopen() buffer case meets the ERRORS preamble question (Q-35)
+ERRORS:6ced1491          untestable  needs a pipe stream, where fgetpos() fails (ESPIPE), so there is no value from fgetpos() on the same stream to pass
+ERRORS:ed3fed0f          untestable  as for EPIPE: no value from fgetpos() exists for such a stream
+ERRORS:01ce82ab          optional

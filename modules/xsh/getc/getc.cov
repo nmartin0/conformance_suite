@@ -1,0 +1,5 @@
+# getc.cov - every requirement unit on functions/getc.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:f9bcc6e0     partial XSH.getc.001 XSH.getc.002 XSH.getc.003  # the equivalence is checked for bytes, end of file and EBADF; the rest of fgetc() (EAGAIN, EINTR, access time) is not repeated for getc(); the macro permission is a variant (getc.macro)
+RETURN_VALUE:d5e7bfee    XSH.getc.001 XSH.getc.002

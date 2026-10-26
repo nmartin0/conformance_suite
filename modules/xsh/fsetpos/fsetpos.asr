@@ -1,0 +1,113 @@
+# XSH fsetpos()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every fpos_t passed to fsetpos() comes from fgetpos() on the same stream,
+# as the page requires of applications.
+
+assertion  XSH.fsetpos.001
+anchor     functions/fsetpos.html#DESCRIPTION
+anchor     functions/fsetpos.html#RETURN VALUE
+class      required
+since      2001
+says       On a stream reading "0123456789", with p0 stored by fgetpos() at
+           the start and p3 after 3 reads: after 2 more reads fsetpos(f,
+           &p3) returns 0 and fgetc() returns '3'; then fsetpos(f, &p0)
+           returns 0 and fgetc() returns '0'.
+note       fsetpos() came from ISO C (Issue 4); 2001 is the first POSIX.1
+           edition with it.
+test       t/001-restores.c
+
+assertion  XSH.fsetpos.002
+anchor     functions/fsetpos.html#DESCRIPTION
+class      required
+since      2001
+says       On a stream reading "0123456789" read to end-of-file (feof()
+           non-zero), fsetpos() to a value stored after 3 reads returns 0,
+           feof() is then 0 and fgetc() returns '3'.
+test       t/002-clears-eof.c
+
+assertion  XSH.fsetpos.003
+anchor     functions/fsetpos.html#DESCRIPTION
+class      required
+since      2001
+says       On a stream reading "0123456789", with p stored after reading '0'
+           and '1' and then ungetc('x'), fsetpos(f, &p) returns 0 and the
+           next fgetc() returns '2', not 'x'.
+test       t/003-undoes-ungetc.c
+
+assertion  XSH.fsetpos.004
+anchor     functions/fsetpos.html#DESCRIPTION
+class      required
+since      2001
+says       On an "r+" stream on "0123456789": fputc('X') (at 0), fgetpos() and
+           fsetpos() to that value, then fgetc() returns '1'; fgetc() of '2',
+           fgetpos() and fsetpos() to that value, fputc('Y') and fclose()
+           leave "X12Y456789".
+note       After fsetpos() the next operation on an update stream may be
+           input or output.
+test       t/004-update-switch.c
+
+assertion  XSH.fsetpos.005
+anchor     functions/fsetpos.html#DESCRIPTION
+class      required
+says       On a "w" stream on an existing file given a BUFSIZ array of the
+           test's with setvbuf(_IOFBF), with p0 stored at the start and
+           "abc" still buffered 2 s after the open (UNRESOLVED if not),
+           fsetpos(f, &p0) returns 0, the file then holds "abc", and its
+           last data modification and status change times are later than
+           they were after the open.
+note       A CX rule; the change history does not say which edition added
+           it, so "since" is left out. The timestamp resolution is
+           implementation-defined; the 2 s wait is a practical cap that
+           covers whole-second timestamps.
+test       t/005-writes-pending.c
+
+assertion  XSH.fsetpos.006
+anchor     functions/fsetpos.html#DESCRIPTION
+class      required
+since      2024
+says       On a stream from fmemopen(buf, 64, "w") given a BUFSIZ array of the
+           test's with setvbuf(_IOFBF), with p0 stored at the start and "abc"
+           still buffered (not yet in buf; UNRESOLVED if not), fsetpos(f,
+           &p0) returns 0 and buf then begins "abc".
+note       Austin Group defect 1225 (Issue 8) aligned the CX rules with
+           fseek().
+test       t/006-memory-stream.c
+
+assertion  XSH.fsetpos.007
+anchor     functions/fsetpos.html#DESCRIPTION
+class      required
+since      2001
+says       With errno set to ERANGE, a successful fsetpos() on a file stream
+           leaves errno ERANGE.
+test       t/007-errno-kept.c
+
+assertion  XSH.fsetpos.008
+anchor     functions/fsetpos.html#ERRORS/EBADF
+class      required
+says       On a "w" stream given a BUFSIZ array with setvbuf(_IOFBF), with p0
+           stored at the start, "abc" still buffered (UNRESOLVED if not) and
+           the descriptor closed with close(), fsetpos(f, &p0) returns a
+           non-zero value with errno EBADF.
+note       The buffer needed to be flushed, so the ERRORS preamble holds.
+           The error indicator is not required: XSH 2.3 leaves the order of
+           detection open, so the closed descriptor may be found by an
+           lseek() before any write (variant fsetpos.lseek_first), and the
+           indicator is set for a read or write error. close() does not
+           move the offset, so the descriptor is not a second handle (XSH
+           2.5.1). The change history shows only that the error predates
+           Issue 6, so "since" is left out.
+test       t/008-ebadf.c
+
+assertion  XSH.fsetpos.009
+anchor     functions/fsetpos.html#ERRORS/EFBIG
+class      required
+since      2024
+says       In a child with RLIMIT_FSIZE 100 and SIGXFSZ blocked, on a "w"
+           stream given a 4096-byte array with setvbuf(_IOFBF), with p0 stored
+           at the start and 200 bytes buffered, fsetpos(f, &p0) returns a
+           non-zero value with errno EFBIG, the error indicator is set, and
+           SIGXFSZ is pending (when XSI).
+note       Austin Group defect 1669 (Issue 8) made the error base; the
+           signal is XSI and checked only there.
+test       t/009-efbig.c

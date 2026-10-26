@@ -1,0 +1,50 @@
+# XSH tzset(), tzname, daylight, timezone
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# TZ is always in the second form of XBD 8.3, with names no TZ database is
+# expected to hold and a rule wherever there is a dst part.
+
+assertion  XSH.tzset.001
+anchor     functions/tzset.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.3/TZ
+class      required
+since      1988
+says       After tzset(), tzname[0] and tzname[1] are "PCS" and "PCD" for
+           TZ="PCS5PCD,M3.2.0,M11.1.0", "ABCDEF" and "GHIJKL" for
+           TZ="ABCDEF5GHIJKL,M3.2.0,M11.1.0" (six bytes, within
+           {_POSIX_TZNAME_MAX}), and tzname[0] is "PCT" for TZ="PCT3";
+           each tzset() takes the TZ value of that moment.
+test       t/001-tzname.c
+
+assertion  XSH.tzset.002
+anchor     functions/tzset.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.3/TZ
+class      required
+says       With the quoted form, TZ="<-03>3<-02>,M3.2.0,M11.1.0" gives
+           tzname "-03" and "-02" and TZ="<+0530>-5:30" gives tzname[0]
+           "+0530", without the quoting characters; localtime_r() after
+           tzset() converts with the stated offsets.
+test       t/002-quoted.c
+
+assertion  XSH.tzset.003
+anchor     functions/tzset.html#DESCRIPTION
+class      conditional
+when       XSI
+says       After tzset(), daylight is 0 and timezone 10800 for TZ="PCT3";
+           daylight is 0 and timezone -19800 for TZ="PCE-5:30"; daylight
+           is 0 and timezone 15330 for TZ="PCP+4:15:30"; daylight is
+           non-zero and timezone 18000 (the standard time's) for
+           TZ="PCS5PCD,M3.2.0,M11.1.0".
+test       t/003-daylight-timezone.c
+
+assertion  XSH.tzset.004
+anchor     functions/tzset.html#DESCRIPTION
+class      required
+since      1988
+says       After tzset() with TZ="PCT3", localtime_r() converts 3 hours
+           west; after TZ is changed to "PCE-5:30" and tzset() is called
+           again, localtime_r() converts 5 h 30 min east.
+note       localtime_r() need not set timezone information itself
+           (APPLICATION USAGE), so the conversion seen is the one tzset()
+           set up.
+test       t/004-used-by-localtime-r.c

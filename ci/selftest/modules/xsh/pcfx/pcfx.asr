@@ -1,0 +1,21 @@
+# ci/mutate.sh fixture: known answers (not part of the suite)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.pcfx.001
+anchor     functions/getpid.html#DESCRIPTION
+class      required
+says       Fixture: getppid() is positive and differs from getpid().
+test       t/001-pids.c
+
+assertion  XSH.pcfx.002
+anchor     functions/getpid.html#DESCRIPTION
+class      disputed
+says       Fixture: two calls of getppid() give the same value.
+note       disputed (fixture): a READING makes the second call differ.
+test       t/002-same.c
+
+assertion  XSH.pcfx.003
+anchor     functions/getpid.html#DESCRIPTION
+class      required
+says       Fixture: a test whose build always fails here.
+test       t/003-no-build.c

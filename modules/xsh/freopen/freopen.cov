@@ -1,0 +1,42 @@
+# freopen.cov - every requirement unit on functions/freopen.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:6d0f4f80     XSH.freopen.002 XSH.freopen.006
+DESCRIPTION:4dd00d2a     XSH.freopen.005
+DESCRIPTION:9c8fed7b     XSH.freopen.006 XSH.freopen.011 XSH.freopen.022
+DESCRIPTION:06cc7994     XSH.freopen.004
+DESCRIPTION:9ddaa6b5     XSH.freopen.003 XSH.freopen.014
+DESCRIPTION:f067a550     XSH.freopen.001
+DESCRIPTION:662ecfe7     partial XSH.freopen.007 XSH.freopen.008 XSH.freopen.009 XSH.freopen.010  # 'b' and the exclusive-access form of 'x' are not checked
+DESCRIPTION:3a0dbc01     XSH.freopen.006
+DESCRIPTION:f8454bb0     partial XSH.freopen.013  # "w" on a "w" stream only
+DESCRIPTION:14dec541     none  a permission: the descriptor may be kept
+DESCRIPTION:1d922972     impl  which null-pathname mode changes are permitted; a refusal is NOTINUSE (variant freopen.null_refused)
+DESCRIPTION:84297d11     partial XSH.freopen.012  # orientation; the encoding rule and the conversion state are not observable apart from it
+DESCRIPTION:f2bffdf0     partial XSH.freopen.007 XSH.freopen.008 XSH.freopen.011  # a non-null pathname; the null-pathname reopen is not checked
+RETURN_VALUE:e5e4f8d5    XSH.freopen.001
+RETURN_VALUE:cea1ed56    XSH.freopen.006 XSH.freopen.009 XSH.freopen.015 XSH.freopen.016 XSH.freopen.017 XSH.freopen.018 XSH.freopen.019 XSH.freopen.020 XSH.freopen.021
+ERRORS:ea48a2f8          partial XSH.freopen.021  # search permission on a path prefix is not checked
+ERRORS:15f7f9ae          XSH.freopen.015
+ERRORS:71352c7e          todo  a name that is not a portable filename and cannot be created (as XSH.fopen.034)
+ERRORS:dbd50578          XSH.freopen.009
+ERRORS:c7f28b57          todo  a reopen that blocks (a FIFO with no writer) interrupted by a caught signal
+ERRORS:5175da26          XSH.freopen.017
+ERRORS:2543cacb          XSH.freopen.019
+ERRORS:62ac5ce0          todo  only a stream with no descriptor to free (a memory stream) can meet it: the old descriptor is closed before the open, so with one freopen() succeeds (XSH.freopen.022)
+ERRORS:77f7aff8          XSH.freopen.020
+ERRORS:68f07062          todo  environment: the system-wide file table full
+ERRORS:d9b86fb1          XSH.freopen.006 XSH.freopen.016
+ERRORS:18322c4a          todo  trailing slashes (as XSH.fopen.026 to .028)
+ERRORS:fc936e6c          todo  environment: a full file system
+ERRORS:41a787c9          partial XSH.freopen.018  # a path prefix; trailing slashes are not checked
+ERRORS:308e4aeb          todo  environment: a device special file with no device
+ERRORS:018d9a79          todo  a file larger than off_t can represent (only where off_t is narrow)
+ERRORS:0788f248          todo  environment: a read-only file system
+ERRORS:83fd3ac0          optional
+ERRORS:1d629fcc          optional
+ERRORS:d94eec8f          optional
+ERRORS:038c0e60          optional
+ERRORS:5a3b118c          optional
+ERRORS:01ce82ab          optional
+ERRORS:025a63c2          optional

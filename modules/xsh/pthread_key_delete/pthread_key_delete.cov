@@ -1,0 +1,12 @@
+# pthread_key_delete.cov - every requirement unit on functions/pthread_key_delete.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:55c2f83b     XSH.pthread_key_delete.001
+DESCRIPTION:555f76d3     XSH.pthread_key_delete.001  # a permission the test relies on: values are non-NULL
+DESCRIPTION:27f1b302     app
+DESCRIPTION:835a1b37     none  undefined behaviour
+DESCRIPTION:8f0e268d     XSH.pthread_key_delete.004
+DESCRIPTION:d33f30d3     XSH.pthread_key_delete.002
+DESCRIPTION:e3684f5d     XSH.pthread_key_delete.003 XSH.pthread_key_delete.004
+RETURN_VALUE:d8c064dd    XSH.pthread_key_delete.001 XSH.pthread_key_delete.004
+ERRORS:363d5881          untestable  pthread_key_delete() does not wait; there is nothing for a signal to interrupt

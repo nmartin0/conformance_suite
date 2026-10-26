@@ -1,0 +1,101 @@
+# XSH setreuid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Appropriate privileges are implementation-defined (XBD 3.21). Each test
+# runs in a child of a privileged test process and first probes, in a
+# disposable process and the setup phase, a call that only a privileged
+# process may make; the test is UNRESOLVED when the probe does not show
+# the state the assertion needs. The saved set-user-ID is observed through
+# seteuid(): without privileges it accepts only the real user ID and the
+# saved set-user-ID. User IDs used: 65534 and 65533 (given to the
+# process), 65532 (probes), 65531 (refused targets).
+
+assertion  XSH.setreuid.001
+anchor     functions/setreuid.html#DESCRIPTION
+anchor     functions/setreuid.html#RETURN VALUE
+class      required
+since      2001
+says       With appropriate privileges, setreuid(65534, 65533) returns 0,
+           getuid() is then 65534 and geteuid() 65533, and the saved
+           set-user-ID is 65533: once no privilege is left, seteuid(65534)
+           and then seteuid(65533) both work.
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/001-privileged.c
+
+assertion  XSH.setreuid.002
+anchor     functions/setreuid.html#DESCRIPTION
+class      required
+since      2001
+says       With appropriate privileges, setreuid(-1, 65533) changes only the
+           effective user ID (getuid() stays 0) and setreuid(65534, -1)
+           only the real user ID (geteuid() stays 0).
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/002-minus-one.c
+
+assertion  XSH.setreuid.003
+anchor     functions/setreuid.html#DESCRIPTION
+class      required
+since      2001
+says       A process without appropriate privileges with real user ID 65534
+           and effective and saved set-user-ID 65533 may set its effective
+           user ID to the real one, setreuid(-1, 65534), and then back to
+           the saved one, setreuid(-1, 65533): both return 0 and geteuid()
+           follows, getuid() staying 65534.
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/003-unprivileged.c
+
+assertion  XSH.setreuid.004
+anchor     functions/setreuid.html#DESCRIPTION
+class      disputed
+since      2008
+says       After setreuid(-1, 65534) in that process (the real user ID
+           left alone and the effective one set to the real one), the
+           saved set-user-ID is still 65533: seteuid(65533) works.
+note       disputed (new): the page says when the saved set-user-ID is set
+           to the new effective ID but not, in normative text, that it is
+           otherwise left alone (setregid()'s APPLICATION USAGE says so for
+           groups). A FAIL is logged as INSPECT.
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/004-saved-kept.c
+
+assertion  XSH.setreuid.005
+anchor     functions/setreuid.html#DESCRIPTION
+class      required
+since      2008
+says       The saved set-user-ID becomes the new effective ID when the real
+           ID is set: from 65534/65533/65533 without privileges,
+           setreuid(65534, 65534) leaves seteuid(65533) failing with EPERM;
+           and when the effective ID is set to a value other than the real
+           one: after setreuid(65534, -1) and setreuid(-1, 65533) with
+           privileges, seteuid(0) fails with EPERM once no privilege is
+           left.
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/005-saved-set.c
+
+assertion  XSH.setreuid.006
+anchor     functions/setreuid.html#ERRORS/EPERM
+anchor     functions/setreuid.html#RETURN VALUE
+class      required
+since      2001
+says       A process without appropriate privileges with real user ID 65534
+           and effective and saved set-user-ID 65533 gets -1 with EPERM
+           from setreuid(-1, 65531), and its IDs are unchanged.
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/006-eperm.c
+
+assertion  XSH.setreuid.007
+anchor     functions/setreuid.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9
+class      required
+since      2001
+says       When one thread of a privileged process calls setreuid(65534,
+           65533), another thread of the process then gets 65534 from
+           getuid() and 65533 from geteuid().
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/007-threads.c

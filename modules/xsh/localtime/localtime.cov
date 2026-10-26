@@ -1,0 +1,25 @@
+# localtime.cov - every requirement unit on functions/localtime.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:57479e74     none  alignment with ISO C
+DESCRIPTION:5ae5401f     none  alignment with ISO C
+DESCRIPTION:4e137535     none  alignment with ISO C
+DESCRIPTION:5476f9fc     XSH.localtime.001 XSH.localtime.002
+DESCRIPTION:ec026114     XSH.localtime.002 XSH.localtime.003 XSH.localtime.004 XSH.localtime.005 XSH.localtime.006
+DESCRIPTION:23011ccd     XSH.localtime.007
+DESCRIPTION:51d0dd94     XSH.localtime.001 XSH.localtime.002 XSH.localtime.003 XSH.localtime.004
+DESCRIPTION:9d21fe91     XSH.localtime.008
+DESCRIPTION:ecb72566     todo  freedom from data races with other functions (threads calling localtime() and other <time.h> functions at once)
+DESCRIPTION:22416693     none  a permission, read with ISO C (two types of static objects)
+DESCRIPTION:aecb6daa     none  a permission (may overwrite)
+DESCRIPTION:dd86b92e     XSH.localtime.008
+DESCRIPTION:9c0b8593     XSH.localtime.008
+DESCRIPTION:324269f9     none  a permission (XSH.localtime.009 accepts both)
+DESCRIPTION:ba003243     XSH.localtime.009
+DESCRIPTION:60fc7905     XSH.localtime.009
+DESCRIPTION:67202564     app  undefined behaviour the application avoids
+RETURN_VALUE:4f51ad5e    XSH.localtime.001
+RETURN_VALUE:b5811f6e    XSH.localtime.010
+RETURN_VALUE:54a63923    XSH.localtime.008
+RETURN_VALUE:cdbaf38d    XSH.localtime.011
+ERRORS:4e94a678          XSH.localtime.010 XSH.localtime.011

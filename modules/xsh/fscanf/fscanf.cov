@@ -1,0 +1,139 @@
+# fscanf.cov - every requirement unit on functions/fscanf.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:fffaaa7f     XSH.fscanf.001
+DESCRIPTION:c8dc5f63     XSH.fscanf.002
+DESCRIPTION:0c1c3f9b     XSH.fscanf.003
+DESCRIPTION:8a65f0e5     XSH.fscanf.001 XSH.fscanf.002 XSH.fscanf.003
+DESCRIPTION:c9f6a384     none  describes the arguments
+DESCRIPTION:51c004d0     none  undefined behaviour
+DESCRIPTION:cb809b7b     XSH.fscanf.004
+DESCRIPTION:c23a340e     XSH.fscanf.005
+DESCRIPTION:b3d2ad1b     partial XSH.fscanf.005  # n of 1 and 2 only; {NL_ARGMAX} itself is not reached
+DESCRIPTION:f52ebce7     none  rationale for the feature
+DESCRIPTION:1a5aeb20     none  unspecified; the tests never reference an argument twice
+DESCRIPTION:eb48906c     app  # a format the application may not write
+DESCRIPTION:a56444c3     XSH.fscanf.005
+DESCRIPTION:9386243a     app  # all leading arguments must be pointers
+DESCRIPTION:39ce3d8d     todo  detection of a radix other than '.' needs a locale with one; no such locale has a portable name
+DESCRIPTION:ae842240     none  says where the radix character comes from
+DESCRIPTION:09afc0db     XSH.fscanf.006
+DESCRIPTION:de6f8d52     app  # the format must be a character string in its initial shift state
+DESCRIPTION:d86e06fa     XSH.fscanf.007 XSH.fscanf.008 XSH.fscanf.001
+DESCRIPTION:f60ba9a1     XSH.fscanf.001 XSH.fscanf.005
+DESCRIPTION:304a24af     XSH.fscanf.017
+DESCRIPTION:571f352c     XSH.fscanf.016
+DESCRIPTION:bfdf60d7     XSH.fscanf.037
+DESCRIPTION:2cf4dd8b     XSH.fscanf.031 XSH.fscanf.032
+DESCRIPTION:221a53bc     XSH.fscanf.024 XSH.fscanf.027
+DESCRIPTION:51e0cf46     none  points to the list below
+DESCRIPTION:bc62f576     XSH.fscanf.007 XSH.fscanf.018
+DESCRIPTION:b685f594     XSH.fscanf.008 XSH.fscanf.044
+DESCRIPTION:bbb99bfd     XSH.fscanf.041 XSH.fscanf.044
+DESCRIPTION:8fe078f4     XSH.fscanf.007 XSH.fscanf.045
+DESCRIPTION:d3fdb2c6     XSH.fscanf.007
+DESCRIPTION:487397f0     XSH.fscanf.008
+DESCRIPTION:b0fc0bce     partial XSH.fscanf.009  # end of file only; encoding and read errors during an ordinary directive are not arranged
+DESCRIPTION:c9dce28d     none  introduces the conversions
+DESCRIPTION:e96e9b74     none  introduces the steps
+DESCRIPTION:02ecee43     XSH.fscanf.010 XSH.fscanf.011 XSH.fscanf.019 XSH.fscanf.022
+DESCRIPTION:cadef564     XSH.fscanf.018
+DESCRIPTION:0985a864     XSH.fscanf.013 XSH.fscanf.014 XSH.fscanf.015 XSH.fscanf.016
+DESCRIPTION:32ce8d1b     XSH.fscanf.012 XSH.fscanf.013 XSH.fscanf.014
+DESCRIPTION:ace9f7a4     XSH.fscanf.021 XSH.fscanf.041 XSH.fscanf.044
+DESCRIPTION:b9c386a6     XSH.fscanf.024 XSH.fscanf.027 XSH.fscanf.018
+DESCRIPTION:b9e96e3b     XSH.fscanf.013 XSH.fscanf.014 XSH.fscanf.015
+DESCRIPTION:796328a6     XSH.fscanf.005 XSH.fscanf.017
+DESCRIPTION:8f60a913     none  undefined behaviour
+DESCRIPTION:ccbe8bd7     XSH.fscanf.037 XSH.fscanf.038
+DESCRIPTION:070042d3     XSH.fscanf.037 XSH.fscanf.038
+DESCRIPTION:ead7f888     app  # the argument is a pointer to a pointer
+DESCRIPTION:84f5a82a     XSH.fscanf.037 XSH.fscanf.038
+DESCRIPTION:dc4616b9     app  # freeing is the application's
+DESCRIPTION:8d1b40f3     todo  ENOMEM for 'm' needs an allocation that fails; no portable way to arrange it without exhausting memory
+DESCRIPTION:73b3a446     untestable  EOF is returned only before the first conversion completes, and whether memory was allocated and freed then cannot be seen without replacing malloc()
+DESCRIPTION:d0ac1212     none  introduces the length modifiers
+DESCRIPTION:cab35c3a     XSH.fscanf.032 XSH.fscanf.033  # d, u and n checked; i, o, x and X with hh are not
+DESCRIPTION:7c04627e     XSH.fscanf.031 XSH.fscanf.033  # d, u and n checked
+DESCRIPTION:4e33b9f9     XSH.fscanf.031 XSH.fscanf.033 XSH.fscanf.034 XSH.fscanf.039
+DESCRIPTION:630a4ff1     XSH.fscanf.038
+DESCRIPTION:e169a213     XSH.fscanf.032 XSH.fscanf.033
+DESCRIPTION:69fd0f91     XSH.fscanf.032 XSH.fscanf.033
+DESCRIPTION:af235528     XSH.fscanf.032 XSH.fscanf.033
+DESCRIPTION:deeb1844     XSH.fscanf.032 XSH.fscanf.033
+DESCRIPTION:143da5bf     XSH.fscanf.034
+DESCRIPTION:5793cc6b     none  undefined behaviour
+DESCRIPTION:008bc707     none  introduces the list
+DESCRIPTION:5fca36c8     XSH.fscanf.024
+DESCRIPTION:1d816df6     app  # argument type
+DESCRIPTION:85bf37b6     XSH.fscanf.025
+DESCRIPTION:1d816df6.2   app  # argument type
+DESCRIPTION:a7ce67c4     XSH.fscanf.026
+DESCRIPTION:9d83f10a     app  # argument type
+DESCRIPTION:b8547767     XSH.fscanf.026
+DESCRIPTION:9d83f10a.2   app  # argument type
+DESCRIPTION:bf0b87dd     XSH.fscanf.026
+DESCRIPTION:9d83f10a.3   app  # argument type
+DESCRIPTION:2c020ca1     XSH.fscanf.027 XSH.fscanf.028 XSH.fscanf.030
+DESCRIPTION:200ce32f     app  # argument type
+DESCRIPTION:6a9645f1     XSH.fscanf.030
+DESCRIPTION:3c9e9a6f     XSH.fscanf.023
+DESCRIPTION:28f137d2     XSH.fscanf.023  # the null byte added
+DESCRIPTION:867e614a     app  # argument type with 'm'
+DESCRIPTION:5022ffdb     none  describes the input
+DESCRIPTION:42628627     XSH.fscanf.039  # in the POSIX locale only; multibyte characters need a locale with them
+DESCRIPTION:fc64e531     XSH.fscanf.039  # the null wide character added
+DESCRIPTION:d08d9cba     app  # argument type with 'm'
+DESCRIPTION:7748a4b9     XSH.fscanf.020 XSH.fscanf.021
+DESCRIPTION:2369b778     XSH.fscanf.011
+DESCRIPTION:5aed43bf     XSH.fscanf.020  # the null byte added
+DESCRIPTION:867e614a.2   app  # argument type with 'm'
+DESCRIPTION:5022ffdb.2   none  describes the input
+DESCRIPTION:b663339d     XSH.fscanf.039  # in the POSIX locale only
+DESCRIPTION:fc64e531.2   XSH.fscanf.039
+DESCRIPTION:d08d9cba.2   app  # argument type with 'm'
+DESCRIPTION:c21e0e8d     XSH.fscanf.020
+DESCRIPTION:967a4901     XSH.fscanf.020
+DESCRIPTION:3ffecd1a     XSH.fscanf.020
+DESCRIPTION:721a1707     impl  '-' inside a scanlist (the tests use none)
+DESCRIPTION:5ebe561e     XSH.fscanf.016 XSH.fscanf.022
+DESCRIPTION:59c67615     XSH.fscanf.022
+DESCRIPTION:2369b778.2   XSH.fscanf.011 XSH.fscanf.022
+DESCRIPTION:8b6b2c28     app  # argument type
+DESCRIPTION:867e614a.3   app  # argument type with 'm'
+DESCRIPTION:40b8f483     app  # the input for lc
+DESCRIPTION:ec3b7b61     XSH.fscanf.039  # in the POSIX locale only
+DESCRIPTION:08622e00     XSH.fscanf.039
+DESCRIPTION:1d2b4f50     app  # argument type
+DESCRIPTION:d08d9cba.3   app  # argument type with 'm'
+DESCRIPTION:872dd5aa     XSH.fscanf.035 XSH.fscanf.036
+DESCRIPTION:773ebb97     app  # argument type
+DESCRIPTION:4621b10e     impl  interpretation of a %p item
+DESCRIPTION:9beff3ae     XSH.fscanf.035 XSH.fscanf.036
+DESCRIPTION:bd0153b0     XSH.fscanf.011 XSH.fscanf.018
+DESCRIPTION:13e522cb     XSH.fscanf.018 XSH.fscanf.033
+DESCRIPTION:b5b2fe23     XSH.fscanf.018 XSH.fscanf.033
+DESCRIPTION:3b4ad090     XSH.fscanf.018
+DESCRIPTION:21915551     none  undefined behaviour
+DESCRIPTION:2c50e9c6     XSH.fscanf.040
+DESCRIPTION:7f6d1945     XSH.fscanf.040
+DESCRIPTION:13b3b09f     XSH.fscanf.019 XSH.fscanf.005
+DESCRIPTION:86f79d2e     XSH.fscanf.019
+DESCRIPTION:b582c00f     none  undefined behaviour
+DESCRIPTION:8c8bcabb     XSH.fscanf.029
+DESCRIPTION:f26f1642     XSH.fscanf.041 XSH.fscanf.042
+DESCRIPTION:9b9ab04b     XSH.fscanf.041
+DESCRIPTION:0a168a50     partial XSH.fscanf.042  # not with %n as the following specification (new standard issue: ISO C excepts %n there, this text does not)
+DESCRIPTION:4ef73db7     XSH.fscanf.041 XSH.fscanf.042
+DESCRIPTION:1a9ea0b9     XSH.fscanf.008 XSH.fscanf.012
+DESCRIPTION:45297de6     XSH.fscanf.045
+DESCRIPTION:e1bc2f35     none  informative remark
+DESCRIPTION:7deb84a2     none  permission for the implementation
+DESCRIPTION:16c51228     XSH.fscanf.049  # fscanf() only; scanf() on a file is not checked
+RETURN_VALUE:cea8ae71    XSH.fscanf.044 XSH.fscanf.017
+RETURN_VALUE:b704d550    XSH.fscanf.009 XSH.fscanf.041 XSH.fscanf.043
+RETURN_VALUE:9e2080f5    XSH.fscanf.046 XSH.fscanf.047
+RETURN_VALUE:0bb50892    XSH.fscanf.046 XSH.fscanf.047 XSH.fscanf.048
+ERRORS:ebfe59b2          todo  EILSEQ needs a locale with multibyte characters (the POSIX locale's 256 bytes are all valid characters); none has a portable name
+ERRORS:b03247c6          todo  ENOMEM: no portable way to make the call run out of storage
+ERRORS:83b49604          none  may fail on undefined behaviour (insufficient arguments)

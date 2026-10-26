@@ -1,0 +1,75 @@
+# XSH vfprintf() (also vasprintf(), vdprintf(), vprintf(), vsnprintf(),
+# vsprintf())
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Each function is called from a variadic helper of the test's own with the
+# va_list it builds; the conversions themselves are checked in xsh/fprintf.
+
+assertion  XSH.vfprintf.001
+anchor     functions/vfprintf.html#DESCRIPTION
+class      required
+since      2001
+says       vsnprintf() converts its va_list like snprintf(): "%s-%d-%.1f-%x"
+           and "%5d|%c" give the expected text; with n 4 it stores "abc" and a
+           null byte, leaves the rest of the buffer, and returns 6; with a
+           null s and n zero it returns the full length.
+test       t/001-vsnprintf.c
+
+assertion  XSH.vfprintf.002
+anchor     functions/vfprintf.html#DESCRIPTION
+class      required
+since      1988
+says       vsprintf() stores the converted output and a null byte, and returns
+           the bytes before it (an embedded null byte from %c included).
+test       t/002-vsprintf.c
+
+assertion  XSH.vfprintf.003
+anchor     functions/vfprintf.html#DESCRIPTION
+class      required
+since      1988
+says       vfprintf() writes the converted output on the stream given and
+           returns the number of bytes.
+test       t/003-vfprintf.c
+
+assertion  XSH.vfprintf.004
+anchor     functions/vfprintf.html#DESCRIPTION
+class      required
+since      1988
+says       vprintf() writes the converted output on stdout (descriptor 1,
+           redirected to a file) and returns the number of bytes.
+test       t/004-vprintf.c
+
+assertion  XSH.vfprintf.005
+anchor     functions/vfprintf.html#DESCRIPTION
+class      required
+since      2008
+says       vdprintf() writes the converted output to the descriptor (in the
+           file on return, nothing flushed) and returns the number of bytes.
+test       t/005-vdprintf.c
+
+assertion  XSH.vfprintf.006
+anchor     functions/vfprintf.html#DESCRIPTION
+class      required
+since      2008
+says       Numbered conversions ("%n$", "*m$") take their arguments from the
+           va_list by position, reused and out of order.
+test       t/006-numbered.c
+
+assertion  XSH.vfprintf.007
+anchor     functions/vfprintf.html#ERRORS
+class      required
+says       vsnprintf(NULL, 0, "x%*d", ...) with INT_MAX as the width returns a
+           negative value with errno EOVERFLOW (the fprintf() errors).
+timeout    120
+test       t/007-eoverflow.c
+
+assertion  XSH.vfprintf.008
+anchor     functions/vfprintf.html#DESCRIPTION
+class      required
+since      2024
+says       vasprintf() returns 4 for "%s%d" with "ab" and 12 and stores the
+           address of the string "ab12", which free() accepts.
+note       Neither glibc 2.39 nor musl declares vasprintf() under the strict
+           build (docs/linux-deviations.md 6.3, 11.1), so the test does not
+           build there (UNINITIATED).
+test       t/008-vasprintf.c

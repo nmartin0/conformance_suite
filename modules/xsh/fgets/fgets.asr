@@ -1,0 +1,70 @@
+# XSH fgets()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fgets.001
+anchor     functions/fgets.html#DESCRIPTION
+anchor     functions/fgets.html#RETURN VALUE
+class      required
+since      1988
+says       On a stream reading "ab\ncd\n", fgets(s, 16, f) returns s with
+           s holding "ab\n" and a null byte after it; the next call returns
+           s holding "cd\n" and a null byte.
+test       t/001-lines.c
+
+assertion  XSH.fgets.002
+anchor     functions/fgets.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream reading "abcdefgh\n", fgets(s, 4, f) returns s with
+           s holding "abc" and a null byte as s[3], and the next fgetc()
+           returns 'd'.
+test       t/002-limit.c
+
+assertion  XSH.fgets.003
+anchor     functions/fgets.html#DESCRIPTION
+anchor     functions/fgets.html#RETURN VALUE
+class      required
+since      1988
+says       On a stream reading "xy" (no newline), fgets(s, 16, f) returns s
+           with s holding "xy" and a null byte after it.
+test       t/003-last-line.c
+
+assertion  XSH.fgets.004
+anchor     functions/fgets.html#DESCRIPTION
+anchor     functions/fgets.html#RETURN VALUE
+class      required
+since      1988
+says       At end of file before any byte is read (an empty file, and a
+           file "ab\n" after its line was read), fgets(s, 16, f) returns a
+           null pointer, feof() is true, and none of the 16 bytes of s
+           changed.
+test       t/004-eof-unchanged.c
+
+assertion  XSH.fgets.005
+anchor     functions/fgets.html#RETURN VALUE
+anchor     functions/fgetc.html#ERRORS/EBADF
+class      required
+says       On a stream opened "r" whose descriptor was closed before the
+           first read, fgets() returns a null pointer, sets errno to EBADF
+           and sets the stream's error indicator.
+test       t/005-ebadf.c
+
+assertion  XSH.fgets.006
+anchor     functions/fgets.html#RETURN VALUE
+anchor     functions/fgetc.html#ERRORS/EAGAIN
+class      required
+says       On a stream on the read end of a pipe with O_NONBLOCK set that
+           holds "ab" (no newline; the write end still open), fgets(s, 16,
+           f) returns a null pointer with errno EAGAIN and the error
+           indicator set: after "ab" more data needs to be read and none
+           can be without waiting.
+test       t/006-eagain-partial.c
+
+assertion  XSH.fgets.007
+anchor     functions/fgets.html#DESCRIPTION
+class      required
+says       For a file whose last data access time is set to 2001-09-09,
+           fgets() on a new stream reading it returns its first line, and
+           fstat() afterwards shows a later st_atim.
+note       As for XSH.fgetc.008 (XBD 4.12; noatime mounts fail rightly).
+test       t/007-atime.c

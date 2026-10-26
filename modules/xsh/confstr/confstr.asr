@@ -1,0 +1,75 @@
+# XSH confstr()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests query only the names of the DESCRIPTION list that <unistd.h>
+# defines; a missing name is noted (a header matter, XBD <unistd.h>).
+
+assertion  XSH.confstr.001
+anchor     functions/confstr.html#DESCRIPTION
+anchor     functions/confstr.html#RETURN VALUE
+class      required
+since      1992
+says       Every name of the list that <unistd.h> defines is supported:
+           with errno set to a sentinel first, confstr(name, NULL, 0)
+           returns either a value greater than zero or 0 with errno still
+           the sentinel (no configuration-defined value); never 0 with
+           errno changed.
+test       t/001-names-supported.c
+
+assertion  XSH.confstr.002
+anchor     functions/confstr.html#DESCRIPTION
+anchor     functions/confstr.html#RETURN VALUE
+class      required
+since      1992
+says       For every name of the list with a configuration-defined value,
+           confstr(name, buf, len) with len larger than needed returns n,
+           stores a string of n - 1 bytes in buf, and confstr(name, NULL,
+           0) returns the same n.
+test       t/002-size-returned.c
+
+assertion  XSH.confstr.003
+anchor     functions/confstr.html#DESCRIPTION
+anchor     functions/confstr.html#RETURN VALUE
+class      required
+since      1992
+says       confstr(_CS_PATH, buf, len) with len from 1 to n - 1 (n the size
+           the value needs) returns n, stores the first len - 1 bytes of
+           the value followed by a null byte, and writes nothing at or
+           beyond buf[len].
+test       t/003-truncation.c
+
+assertion  XSH.confstr.004
+anchor     functions/confstr.html#ERRORS/EINVAL
+anchor     functions/confstr.html#RETURN VALUE
+class      required
+since      1992
+says       confstr(-1, buf, len) and confstr(0x7ffffff0, buf, len)
+           (values that are no name of the list) return 0 with errno
+           EINVAL.
+note       Implementations may define further _CS_ names; no known one
+           uses these values, and the test checks that no name of the
+           list does.
+test       t/004-invalid-name.c
+
+assertion  XSH.confstr.005
+anchor     functions/confstr.html#DESCRIPTION
+anchor     utilities/V3_chap01.html#1.6
+class      required
+since      2001
+says       confstr(_CS_PATH) has a non-empty value, and searching its
+           directories finds a regular file with execute permission for
+           each of sh, env, getconf, cat and ls (standard utilities that
+           are neither special built-ins nor intrinsic, so they are
+           provided in a manner accessible via exec).
+test       t/005-cs-path.c
+
+assertion  XSH.confstr.006
+anchor     functions/confstr.html#DESCRIPTION
+anchor     basedefs/unistd.h.html#Constants for Functions
+class      required
+since      2024
+says       confstr(_CS_V8_ENV) has a value (returns at least 1), and the
+           value is empty or a list of name=value pairs separated by
+           spaces, each with a non-empty name before its first '='.
+note       UNRESOLVED where <unistd.h> lacks _CS_V8_ENV.
+test       t/006-v8-env.c

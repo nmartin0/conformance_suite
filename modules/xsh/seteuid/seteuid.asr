@@ -1,0 +1,100 @@
+# XSH seteuid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Appropriate privileges are implementation-defined (XBD 3.21). Each test
+# runs in a child of a privileged test process and first probes, in a
+# disposable process and the setup phase, a call that only a privileged
+# process may make (seteuid() to an ID the process does not hold); the
+# test is UNRESOLVED when the probe does not show the state the assertion
+# needs. User IDs used: 65534 and 65533 (given to the process), 65532
+# (probes), 65531 (refused targets).
+
+assertion  XSH.seteuid.001
+anchor     functions/seteuid.html#DESCRIPTION
+anchor     functions/seteuid.html#RETURN VALUE
+class      required
+since      2001
+says       With appropriate privileges and all user IDs 0, seteuid(65534)
+           returns 0, geteuid() then returns 65534 and getuid() still 0.
+needs      root
+note       The saved set-user-ID equals the real user ID here, so whether
+           it changed cannot be seen; XSH.seteuid.002 checks it.
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/001-privileged.c
+
+assertion  XSH.seteuid.002
+anchor     functions/seteuid.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A process without appropriate privileges with real user ID
+           65534 and effective and saved set-user-ID 65533: seteuid(65534)
+           returns 0 with geteuid() and getuid() 65534, and seteuid(65533)
+           (the saved set-user-ID, still 65533) then returns 0 with
+           geteuid() 65533 and getuid() 65534.
+needs      root
+note       setreuid() (XSI) sets the IDs apart, so the test runs only on
+           XSI systems; the requirement itself is not XSI.
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/002-unprivileged.c
+
+assertion  XSH.seteuid.003
+anchor     functions/seteuid.html#ERRORS/EPERM
+anchor     functions/seteuid.html#RETURN VALUE
+class      required
+since      2001
+says       A process without appropriate privileges with real and saved
+           set-user-ID 0 and effective user ID 65534 gets -1 with EPERM from
+           seteuid(65531), and geteuid() is still 65534.
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/003-eperm.c
+
+assertion  XSH.seteuid.004
+anchor     functions/seteuid.html#ERRORS/EPERM
+class      required
+since      2001
+says       The same process gets -1 with EPERM from seteuid(65534): its
+           current effective user ID is neither its real user ID nor its
+           saved set-user-ID, which are the only values allowed without
+           privileges.
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/004-eperm-effective.c
+
+assertion  XSH.seteuid.005
+anchor     functions/seteuid.html#ERRORS/EINVAL
+anchor     basedefs/V1_chap03.html#3.408
+class      required
+since      2001
+says       With appropriate privileges, seteuid((uid_t)-1) returns -1 with
+           EINVAL ((uid_t)-1 is never a valid user ID) and geteuid() stays
+           0.
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/005-einval.c
+
+assertion  XSH.seteuid.006
+anchor     functions/seteuid.html#DESCRIPTION
+class      required
+since      2001
+says       With appropriate privileges and the supplementary group list set
+           to {65534}, seteuid(65533) leaves the list getgroups() reports
+           unchanged.
+needs      root
+note       The list is set with pc_drop_groups() (setgroups(), not in
+           POSIX, where the system has it); without a supplementary group
+           the test is UNRESOLVED.
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/006-groups.c
+
+assertion  XSH.seteuid.007
+anchor     functions/seteuid.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9
+class      required
+since      2001
+says       When one thread of a privileged process calls seteuid(65534),
+           another thread of the process then gets 65534 from geteuid().
+needs      root
+nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
+test       t/007-threads.c

@@ -1,0 +1,22 @@
+# realpath.cov - every requirement unit on functions/realpath.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:dce193b0     XSH.realpath.001 XSH.realpath.002
+DESCRIPTION:4a225b0f     XSH.realpath.003
+DESCRIPTION:7a9917a7     partial XSH.realpath.001  # the result is checked where it fits; a name near {PATH_MAX} bytes is not tried
+DESCRIPTION:356cc526     app  undefined behaviour the application avoids
+RETURN_VALUE:b9e40da6    XSH.realpath.001
+RETURN_VALUE:99019cc9    XSH.realpath.004 XSH.realpath.005 XSH.realpath.009
+RETURN_VALUE:80b6cc15    XSH.realpath.003
+RETURN_VALUE:7cb04e41    none undefined
+ERRORS:d96b772d          XSH.realpath.010
+ERRORS:d2bdca9f          XSH.realpath.009
+ERRORS:f15d7544          untestable  needs a failing device
+ERRORS:29451f56          XSH.realpath.007
+ERRORS:681b232a          XSH.realpath.008
+ERRORS:32bff839          XSH.realpath.004
+ERRORS:6d871526          XSH.realpath.005 XSH.realpath.006
+ERRORS:b34cb477          optional
+ERRORS:328e8ddb          optional
+ERRORS:c7f415ad          optional
+ERRORS:b03247c6          optional

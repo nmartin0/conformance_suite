@@ -1,0 +1,34 @@
+# XSH pthread_getspecific(), pthread_setspecific()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only keys from pthread_key_create() that have not been deleted are used
+# (anything else is undefined).
+
+assertion  XSH.pthread_getspecific.001
+anchor     functions/pthread_getspecific.html#DESCRIPTION
+anchor     functions/pthread_getspecific.html#RETURN VALUE
+class      required
+since      2001
+says       In one thread, pthread_getspecific() returns NULL before any
+           value is set, then each value pthread_setspecific() (returning
+           0) last set: a pointer, another pointer, and NULL again.
+test       t/001-set-get.c
+
+assertion  XSH.pthread_getspecific.002
+anchor     functions/pthread_getspecific.html#DESCRIPTION
+anchor     functions/pthread_key_create.html#DESCRIPTION
+class      required
+since      2001
+says       Values are kept per thread: three threads and the initial thread
+           setting different values for one key each read back their own,
+           and a thread that set none reads NULL.
+test       t/002-per-thread.c
+
+assertion  XSH.pthread_getspecific.003
+anchor     functions/pthread_getspecific.html#DESCRIPTION
+class      required
+since      2001
+says       In the key's destructor, pthread_getspecific() of that key
+           returns NULL; after the destructor calls pthread_setspecific()
+           with a new value, pthread_getspecific() returns that value.
+test       t/003-in-destructor.c

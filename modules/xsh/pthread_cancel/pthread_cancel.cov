@@ -1,0 +1,13 @@
+# pthread_cancel.cov - every requirement unit on functions/pthread_cancel.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:9da417c1     XSH.pthread_cancel.001 XSH.pthread_cancel.004
+DESCRIPTION:a3e21747     XSH.pthread_cancel.004 XSH.pthread_setcancelstate.004 XSH.pthread_setcancelstate.005
+DESCRIPTION:ae6c1aa5     XSH.pthread_cancel.001 XSH.pthread_cancel.002
+DESCRIPTION:c77c415b     XSH.pthread_cancel.002
+DESCRIPTION:e1a23202     XSH.pthread_cancel.002
+DESCRIPTION:db787437     XSH.pthread_cancel.003
+DESCRIPTION:067be63b     XSH.pthread_cancel.004
+DESCRIPTION:b13fd375     none  undefined
+RETURN_VALUE:b2336586    XSH.pthread_cancel.001 XSH.pthread_cancel.003 XSH.pthread_cancel.004
+ERRORS:fcbe7592          partial XSH.pthread_cancel.001 XSH.pthread_cancel.004  # every return is checked to be 0; no signal is aimed at the caller during the call

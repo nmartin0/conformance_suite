@@ -1,0 +1,86 @@
+# XSH strtok() and strtok_r()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Strings are in writable arrays; returned pointers are checked against
+# the array (a token is a pointer into s), not only by content.
+
+assertion  XSH.strtok.001
+anchor     functions/strtok.html#DESCRIPTION
+anchor     functions/strtok.html#RETURN VALUE
+class      required
+says       On "  ab,,cd e  " with separators " ,", strtok() returns s+2
+           ("ab"), then with a null first argument s+6 ("cd") and s+9 ("e"),
+           then a null pointer twice.
+test       t/001-sequence.c
+
+assertion  XSH.strtok.002
+anchor     functions/strtok.html#DESCRIPTION
+class      required
+says       After that sequence the only bytes of the array that changed are
+           the separator ending each token (s[4], s[8] and s[10]), each now
+           a null byte; the skipped separators are left alone.
+note       The text says which byte each call overwrites; no other change
+           to s is among the effects it describes.
+test       t/002-only-terminators.c
+
+assertion  XSH.strtok.003
+anchor     functions/strtok.html#DESCRIPTION
+anchor     functions/strtok.html#RETURN VALUE
+class      required
+says       On "x;y" with ";" strtok() returns s, then s+2 ("y", the token
+           running to the end), then a null pointer twice; on "" and on ";;;"
+           the first call returns a null pointer.
+test       t/003-end.c
+
+assertion  XSH.strtok.004
+anchor     functions/strtok.html#DESCRIPTION
+class      required
+says       The separators may change between calls: on "a,b c,d" with ",",
+           " ", "," and "," strtok() returns s, s+2 ("b"), s+4 ("c"), s+6
+           ("d"), then a null pointer.
+test       t/004-changing-sep.c
+
+assertion  XSH.strtok.005
+anchor     functions/strtok.html#DESCRIPTION
+class      required
+says       With an empty separator string, strtok() on " ab c" returns s
+           (the whole string, unchanged), then a null pointer.
+test       t/005-empty-sep.c
+
+assertion  XSH.strtok.006
+anchor     functions/strtok.html#DESCRIPTION
+anchor     functions/strtok.html#RETURN VALUE
+class      required
+since      2008
+says       strtok_r() gives the same pointers as strtok() for the sequence
+           of XSH.strtok.001; and two strings scanned alternately with
+           their own state pointers ("a b c" with " ", "1,2,3" with ",")
+           each give their own tokens in order, then null pointers.
+test       t/006-r-sequence.c
+
+assertion  XSH.strtok.007
+anchor     functions/strtok.html#DESCRIPTION
+class      required
+since      2008
+says       A strtok() sequence on "a b c" continues correctly ("b" at s+2,
+           "c" at s+4, then a null pointer) after a complete strtok_r() scan
+           of another string between its first and second calls.
+test       t/007-r-leaves-strtok.c
+
+assertion  XSH.strtok.008
+anchor     functions/strtok.html#DESCRIPTION
+class      required
+since      2008
+says       strtok_r() with a non-null s ignores the pointer its state
+           argument points to: preset to another string, the scan of "p,q"
+           with "," still returns s, s+2, then a null pointer.
+test       t/008-r-state-uninitialized.c
+
+assertion  XSH.strtok.009
+anchor     functions/strtok.html#DESCRIPTION
+class      required
+since      2024
+says       strtok() and strtok_r() leave errno unchanged on every call of a
+           sequence, including the call that returns a null pointer, both
+           when errno is 0 and when it is EDOM.
+test       t/009-errno-kept.c

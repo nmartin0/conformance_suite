@@ -1,0 +1,148 @@
+# XSH localtime(), localtime_r()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# TZ is always given in the second form of XBD 8.3 (std offset [dst
+# [offset] [,rule]]), with names no TZ database is expected to hold, and a
+# rule whenever there is a dst part (without one, the change dates are
+# implementation-defined). Every local time checked is non-negative and
+# in a year from 1970 on, where XBD 4.19 defines the relationship; the
+# test computes the expected UTC instants itself from the rule.
+
+assertion  XSH.localtime.001
+anchor     functions/localtime.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.3/TZ
+class      required
+since      1988
+says       With TZ set to a standard time only ("PCT3", "PCE-5:30",
+           "PCP+4:15:30"), localtime() returns the broken-down time of
+           the value minus the offset (3 h, -5 h 30 min, 4 h 15 min 30 s),
+           related to it by the XBD 4.19 expression, with tm_mon, tm_mday
+           and tm_wday matching, and tm_isdst 0.
+test       t/001-std-offset.c
+
+assertion  XSH.localtime.002
+anchor     functions/localtime.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.3/TZ
+class      required
+since      1988
+says       With TZ="PCS5PCD,M3.2.0,M11.1.0", localtime() gives standard
+           time (5 h west, tm_isdst 0) until the second Sunday of March
+           at 02:00 standard time and from the first Sunday of November
+           at 02:00 Daylight Saving Time, and Daylight Saving Time (4 h
+           west, tm_isdst positive) between, checked one second either
+           side of each change in 2021 and 2026 and at midsummer and
+           midwinter.
+note       No offset after dst: DST is one hour ahead; no time after a
+           date: the change is at 02:00 (XBD 8.3).
+test       t/002-dst-rule-m.c
+
+assertion  XSH.localtime.003
+anchor     functions/localtime.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.3/TZ
+class      required
+since      1988
+says       With TZ="PCS5PCD4:30,J60/3,300/1:30", DST (4 h 30 min west)
+           starts on 1 March at 03:00 standard time in both 2023 and the
+           leap year 2024 (Jn does not count 29 February) and ends at
+           01:30 DST on day 300 counted from 0 with 29 February counted
+           (28 October 2023, 27 October 2024).
+test       t/003-dst-rule-julian.c
+
+assertion  XSH.localtime.004
+anchor     functions/localtime.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.3/TZ
+class      required
+since      1988
+says       With TZ="PCW-10PCX,M10.1.0,M4.1.0/3" (the end earlier in the
+           year than the start), the year begins and ends in DST: 11 h
+           east with tm_isdst positive in January and December, 10 h east
+           with tm_isdst 0 in July, and the changes of 2021 (4 April
+           03:00 DST, 3 October 02:00 standard time) fall where the rule
+           puts them.
+test       t/004-dst-rule-south.c
+
+assertion  XSH.localtime.005
+anchor     functions/localtime.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.3/TZ
+class      required
+says       A rule time may be negative or above 24 hours: with
+           TZ="PCS5PCD,M3.2.0/-1,M11.1.0/26", DST starts on Saturday 13
+           March 2021 at 23:00 standard time and ends on Monday 8 November
+           2021 at 02:00 DST (checked one second either side).
+test       t/005-rule-times.c
+
+assertion  XSH.localtime.006
+anchor     functions/localtime.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.3/TZ
+class      required
+says       With TZ="PCS5PCD,0/0,J365/25" DST is in effect all year (4 h
+           west, tm_isdst positive): at midsummer, and every half hour
+           from 03:00 to 07:00 UTC on 1 January 2021 and 2022, where the
+           end of one year's DST meets the start of the next.
+note       The all-year form XBD 8.3 itself describes, with our own
+           names.
+test       t/006-all-year-dst.c
+
+assertion  XSH.localtime.007
+anchor     functions/localtime.html#DESCRIPTION
+class      required
+since      2024
+says       After tzset() with TZ="PCT3", TZ is changed to
+           "PCE-5:30" without calling tzset(): localtime() then converts
+           with the new offset, and tzname[0] is "PCE" afterwards.
+test       t/007-sets-tz-info.c
+
+assertion  XSH.localtime.008
+anchor     functions/localtime.html#DESCRIPTION
+anchor     functions/localtime.html#RETURN VALUE
+class      required
+since      2001
+says       After tzset(), localtime_r() stores into *result the local
+           time localtime() gives for the same value (standard time,
+           DST, and both sides of a change under the rule of
+           XSH.localtime.002) and returns result.
+test       t/008-localtime-r.c
+
+assertion  XSH.localtime.009
+anchor     functions/localtime.html#DESCRIPTION
+class      conditional
+when       XSI
+says       After tzset() with TZ="PCA3", TZ is changed to
+           "PCB-2PCC,M3.5.0,M10.5.0/3" and localtime_r() is called:
+           afterwards tzname, daylight and timezone either all still
+           describe PCA3 (localtime_r() set none of them) or all describe
+           the new value (it set all three).
+note       The result's own offset is not checked: localtime_r() need
+           not take a changed TZ into account (APPLICATION USAGE of
+           tzset()).
+test       t/009-r-tzname-rule.c
+
+assertion  XSH.localtime.010
+anchor     functions/localtime.html#ERRORS/EOVERFLOW
+anchor     functions/localtime.html#RETURN VALUE
+class      required
+says       localtime() of the largest time_t value, with TZ="PCT3",
+           returns a null pointer and sets errno to EOVERFLOW.
+note       UNRESOLVED where int is wide enough to hold that year.
+test       t/010-eoverflow.c
+
+assertion  XSH.localtime.011
+anchor     functions/localtime.html#ERRORS/EOVERFLOW
+anchor     functions/localtime.html#RETURN VALUE
+class      required
+says       localtime_r() of the largest time_t value, with TZ="PCT3",
+           returns a null pointer and sets errno to EOVERFLOW.
+note       UNRESOLVED where int is wide enough to hold that year.
+test       t/011-r-eoverflow.c
+
+assertion  XSH.localtime.012
+anchor     functions/localtime.html#DESCRIPTION
+anchor     basedefs/time.h.html#DESCRIPTION
+class      required
+since      2024
+says       With TZ="PCS5PCD,M3.2.0,M11.1.0", localtime() and
+           localtime_r() set tm_gmtoff to -18000 and tm_zone to "PCS" in
+           January, and tm_gmtoff to -14400 and tm_zone to "PCD" in July.
+note       Names tm_gmtoff and tm_zone; a system whose <time.h> hides
+           them under the strict build cannot compile the test.
+test       t/012-gmtoff-zone.c

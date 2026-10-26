@@ -1,0 +1,49 @@
+# XSH getpgid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getpgid.001
+anchor     functions/getpgid.html#DESCRIPTION
+anchor     functions/getpgid.html#RETURN VALUE
+class      required
+since      2008
+says       In the caller's session, with child c1 leading its own group and
+           child c2 a member of it, getpgid(c1) and getpgid(c2) both return
+           c1, and getpgid() of the caller's own ID returns getpgrp().
+test       t/001-other-process.c
+
+assertion  XSH.getpgid.002
+anchor     functions/getpgid.html#DESCRIPTION
+class      required
+since      2008
+says       getpgid(0) in c2 (a member, not the leader, of c1's group)
+           returns c1.
+test       t/002-zero.c
+
+assertion  XSH.getpgid.003
+anchor     functions/getpgid.html#ERRORS/ESRCH
+anchor     functions/getpgid.html#RETURN VALUE
+class      required
+since      2008
+says       getpgid() of the ID of a child whose status has been collected
+           (and which no process has reused) returns (pid_t)-1 with ESRCH.
+test       t/003-esrch.c
+
+assertion  XSH.getpgid.004
+anchor     functions/getpgid.html#DESCRIPTION
+anchor     functions/getpgid.html#ERRORS/EPERM
+class      required
+since      2008
+says       getpgid() of a child that started a session of its own (so its
+           group is its ID) returns that ID or fails with EPERM.
+note       Whether a process in another session may be asked is left to
+           the implementation.
+test       t/004-other-session.c
+
+assertion  XSH.getpgid.005
+anchor     functions/getpgid.html#ERRORS/ESRCH
+anchor     functions/getpgid.html#ERRORS/EINVAL
+class      required
+since      2008
+says       getpgid(-1) returns (pid_t)-1 with ESRCH (no process has that
+           ID) or EINVAL (the may-fail error for an invalid pid).
+test       t/005-negative.c

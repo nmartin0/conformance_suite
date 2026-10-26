@@ -1,0 +1,54 @@
+# XSH strlen() and strnlen()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Arrays that end where an inaccessible (PROT_NONE) page begins show any
+# byte examined past the allowed ones (the test is killed: FAIL).
+
+assertion  XSH.strnlen.001
+anchor     functions/strnlen.html#DESCRIPTION
+anchor     functions/strnlen.html#RETURN VALUE
+class      required
+says       strlen() returns 0 for "", 1 for "a", 4095 for a 4095-byte string,
+           and 6 for a string whose bytes include 0x80 and 0xff.
+test       t/001-strlen.c
+
+assertion  XSH.strnlen.002
+anchor     functions/strnlen.html#DESCRIPTION
+anchor     functions/strnlen.html#RETURN VALUE
+class      required
+since      2008
+says       strnlen("abcdef", m) returns 6 for m 10 and 6, 3 for m 3 and 0 for
+           m 0; strnlen("", 5) returns 0.
+test       t/002-strnlen.c
+
+assertion  XSH.strnlen.003
+anchor     functions/strnlen.html#DESCRIPTION
+anchor     functions/strnlen.html#RETURN VALUE
+class      required
+since      2008
+says       For an array of 16 non-null bytes ending at an inaccessible page,
+           strnlen() with maxlen 16 returns 16 and with maxlen 5 (the last
+           five bytes) returns 5; strnlen() of the page's first address
+           with maxlen 0 returns 0; none of them touches the page.
+test       t/003-not-past-maxlen.c
+
+assertion  XSH.strnlen.004
+anchor     functions/strnlen.html#DESCRIPTION
+class      required
+since      2024
+says       strlen() and strnlen() leave errno unchanged, both when it is 0
+           and when it is EDOM.
+test       t/004-errno-kept.c
+
+assertion  XSH.strnlen.005
+anchor     functions/strnlen.html#DESCRIPTION
+class      disputed
+says       strnlen() of "abc" stored in the last four bytes before an
+           inaccessible page, with maxlen 64, returns 3 without touching
+           that page.
+note       disputed (Q-strnul (number pending)): whether strnlen() may examine bytes after the
+           first null byte (up to maxlen) when the array ends there. The
+           text bounds the bytes examined by maxlen only; "the array to
+           which s points" can be read to end at its null byte or to have
+           at least maxlen bytes.
+test       t/005-not-past-nul.c

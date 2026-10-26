@@ -1,0 +1,35 @@
+# XSH stpcpy() and strcpy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sources are in arrays (not literals) and destinations are filled with
+# 'X' first, so that bytes written past the terminator show. A
+# destination of exactly the string's size is also placed so that it
+# ends where an inaccessible (PROT_NONE) page begins.
+
+assertion  XSH.stpcpy.001
+anchor     functions/stpcpy.html#DESCRIPTION
+anchor     functions/stpcpy.html#RETURN VALUE
+class      required
+since      2008
+says       stpcpy() of "", "a" and a 300-byte string copies the string and
+           its null byte into s1, changes no byte after it, and returns
+           s1 + strlen(s2); into a 6-byte array that ends at an
+           inaccessible page, stpcpy() of "hello" works the same.
+test       t/001-stpcpy.c
+
+assertion  XSH.stpcpy.002
+anchor     functions/stpcpy.html#DESCRIPTION
+anchor     functions/stpcpy.html#RETURN VALUE
+class      required
+says       strcpy() of the same strings copies the string and its null byte
+           into s1, changes no byte after it, and returns s1, also into the
+           6-byte array at an inaccessible page.
+test       t/002-strcpy.c
+
+assertion  XSH.stpcpy.003
+anchor     functions/stpcpy.html#DESCRIPTION
+class      required
+since      2024
+says       stpcpy() and strcpy() leave errno unchanged, both when it is 0
+           and when it is EDOM.
+test       t/003-errno-kept.c

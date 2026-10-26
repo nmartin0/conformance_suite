@@ -1,0 +1,13 @@
+# XSH getpgrp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getpgrp.001
+anchor     functions/getpgrp.html#DESCRIPTION
+anchor     functions/getpgrp.html#RETURN VALUE
+class      required
+since      1988
+says       A child that made itself a group leader with setpgid(0, 0) gets
+           its own process ID from getpgrp(), and a second child that
+           joined that group gets the same value; before the change the
+           first child's getpgrp() is the test process's group.
+test       t/001-group.c

@@ -1,0 +1,18 @@
+# pthread_key_create.cov - every requirement unit on functions/pthread_key_create.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:c2edb5ea     XSH.pthread_key_create.001
+DESCRIPTION:16819037     none  describes keys as opaque
+DESCRIPTION:f713b54d     partial XSH.pthread_key_create.001  # per-thread values: XSH.pthread_getspecific.002
+DESCRIPTION:c8556af7     XSH.pthread_key_create.001
+DESCRIPTION:d4d56db4     XSH.pthread_key_create.002
+DESCRIPTION:a4f849d7     none  a permission
+DESCRIPTION:58e89ca4     XSH.pthread_key_create.003  # value set to NULL before the call: XSH.pthread_getspecific.003
+DESCRIPTION:4398d967     none  unspecified (variant pthread_key_create.dtors_reversed)
+DESCRIPTION:5fa84f6a     XSH.pthread_key_create.004
+DESCRIPTION:1e15b70c     XSH.pthread_key_create.004  # up to the minimum four rounds; beyond them either choice is allowed
+RETURN_VALUE:e0f1f614    XSH.pthread_key_create.001
+RETURN_VALUE:27ed31a1    XSH.pthread_key_create.005
+ERRORS:f30282e2          partial XSH.pthread_key_create.005  # the {PTHREAD_KEYS_MAX} case
+ERRORS:ec9b51b0          partial XSH.pthread_key_create.005  # accepted when the limit is reached; memory exhaustion cannot be arranged
+ERRORS:42e5d0c9          untestable  pthread_key_create() does not wait; there is nothing for a signal to interrupt

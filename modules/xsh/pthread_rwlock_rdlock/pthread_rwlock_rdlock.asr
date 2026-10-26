@@ -1,0 +1,62 @@
+# XSH pthread_rwlock_rdlock(), pthread_rwlock_tryrdlock()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Whether a reader gets in while a writer waits is implementation-defined
+# without TPS and depends on real-time priorities with it; no test here
+# has a writer waiting. The maximum number of read locks is
+# implementation-defined (EAGAIN beyond it): a test that cannot take the
+# read locks it needs is NOTINUSE. Helper threads report through atomic
+# flags.
+
+assertion  XSH.pthread_rwlock_rdlock.001
+anchor     functions/pthread_rwlock_rdlock.html#DESCRIPTION
+anchor     functions/pthread_rwlock_rdlock.html#RETURN VALUE
+class      required
+since      2008
+says       While one thread holds a read lock and no writer holds or waits
+           for the lock, another thread's pthread_rwlock_rdlock() and
+           pthread_rwlock_tryrdlock() return 0.
+test       t/001-shared-readers.c
+
+assertion  XSH.pthread_rwlock_rdlock.002
+anchor     functions/pthread_rwlock_rdlock.html#DESCRIPTION
+anchor     functions/pthread_rwlock_rdlock.html#ERRORS/EBUSY
+class      required
+since      2008
+says       While another thread holds the write lock,
+           pthread_rwlock_tryrdlock() returns EBUSY without waiting.
+note       A tryrdlock that has not returned 10 s later is a FAIL.
+test       t/002-tryrdlock-writer.c
+
+assertion  XSH.pthread_rwlock_rdlock.003
+anchor     functions/pthread_rwlock_rdlock.html#DESCRIPTION
+class      required
+since      2008
+says       pthread_rwlock_rdlock() while another thread holds the write
+           lock does not return while it is held (300 ms), and returns 0
+           after the writer unlocks.
+test       t/003-rdlock-waits.c
+
+assertion  XSH.pthread_rwlock_rdlock.004
+anchor     functions/pthread_rwlock_rdlock.html#DESCRIPTION
+class      required
+since      2008
+says       A thread may hold several read locks at once: rdlock, rdlock
+           and tryrdlock return 0, and the lock stays read-locked
+           (another thread's trywrlock returns EBUSY) until the same
+           number of unlocks.
+note       A read lock refused with EAGAIN (the implementation-defined
+           maximum) ends the counting there; fewer than two make the test
+           NOTINUSE.
+test       t/004-multiple-read-locks.c
+
+assertion  XSH.pthread_rwlock_rdlock.005
+anchor     functions/pthread_rwlock_rdlock.html#DESCRIPTION
+anchor     functions/pthread_rwlock_rdlock.html#ERRORS
+class      required
+since      2008
+says       A thread blocked in pthread_rwlock_rdlock() that takes a caught
+           signal (without SA_RESTART) goes on waiting: it has not
+           returned 300 ms after the handler ran, and after the writer
+           unlocks the call returns 0 (never EINTR).
+test       t/005-signal-waiting.c

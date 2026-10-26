@@ -1,0 +1,56 @@
+# XSH pthread_once()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every once_control has static storage duration and is initialized with
+# PTHREAD_ONCE_INIT (anything else is undefined).
+
+assertion  XSH.pthread_once.001
+anchor     functions/pthread_once.html#DESCRIPTION
+anchor     functions/pthread_once.html#RETURN VALUE
+class      required
+since      2001
+says       For each once_control, init_routine is called by the first
+           pthread_once() only: later calls with it, from the same thread
+           or another, do not call it again; a second once_control has
+           its own first call. Every call returns 0.
+test       t/001-once.c
+
+assertion  XSH.pthread_once.002
+anchor     functions/pthread_once.html#DESCRIPTION
+class      required
+since      2001
+says       Four threads calling pthread_once() together with one
+           once_control each return only after init_routine (300 ms long)
+           has completed, and it ran once.
+test       t/002-completes.c
+
+assertion  XSH.pthread_once.003
+anchor     functions/pthread_once.html#DESCRIPTION
+class      required
+says       When init_routine is canceled at a cancellation point (blocked in
+           read()), the once_control is as if pthread_once() had never been
+           called: the next pthread_once() with it calls its init_routine
+           and returns 0.
+test       t/003-cancel-init.c
+
+assertion  XSH.pthread_once.004
+anchor     functions/pthread_once.html#ERRORS
+class      required
+since      2001
+says       A thread waiting in pthread_once() while another runs
+           init_routine, interrupted by a caught signal (SIGUSR1, without
+           SA_RESTART), does not get EINTR: it returns 0 after
+           init_routine has completed.
+note       The signal is sent 150 ms after the waiter is about to call
+           pthread_once(), while init_routine still has 250 ms to run.
+test       t/004-no-eintr.c
+
+assertion  XSH.pthread_once.005
+anchor     functions/pthread_once.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.5.2
+class      required
+says       pthread_once() is not a cancellation point: a thread with a
+           deferred cancellation request pending calls it (init_routine
+           runs no cancellation point), returns from it, and is canceled
+           only at its next pthread_testcancel().
+test       t/005-not-cancel-point.c

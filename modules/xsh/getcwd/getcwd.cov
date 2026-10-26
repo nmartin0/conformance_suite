@@ -1,0 +1,16 @@
+# getcwd.cov - every requirement unit on functions/getcwd.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:0245af93     XSH.getcwd.001 XSH.getcwd.008
+DESCRIPTION:e4804671     XSH.getcwd.002
+DESCRIPTION:cda3ae53     XSH.getcwd.004
+DESCRIPTION:cf23c41c     XSH.getcwd.003
+DESCRIPTION:c34d1451     XSH.getcwd.005
+DESCRIPTION:cf142686     none unspecified
+RETURN_VALUE:1182ff55    XSH.getcwd.001
+RETURN_VALUE:4e9d69bd    XSH.getcwd.005 XSH.getcwd.006
+RETURN_VALUE:79f23b8c    none undefined
+ERRORS:52fb5516          XSH.getcwd.006
+ERRORS:36d90e1a          XSH.getcwd.005
+ERRORS:4830b340          partial XSH.getcwd.007  # the case of an unreadable ancestor; a working directory without search permission is not tried
+ERRORS:b03247c6          optional

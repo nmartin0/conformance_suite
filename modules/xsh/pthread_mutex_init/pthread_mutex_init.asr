@@ -1,0 +1,70 @@
+# XSH pthread_mutex_init(), pthread_mutex_destroy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Re-initializing a live mutex, destroying a locked or referenced one and
+# using a destroyed one are undefined and not tested. Helper threads
+# report through atomic flags, never through mutexes.
+
+assertion  XSH.pthread_mutex_init.001
+anchor     functions/pthread_mutex_init.html#DESCRIPTION
+anchor     functions/pthread_mutex_init.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_mutex_init() with a null attr, and with a newly
+           initialized attributes object, returns 0 and gives an unlocked
+           mutex: trylock returns 0, another thread's trylock then EBUSY,
+           and unlock returns 0.
+test       t/001-init-unlocked.c
+
+assertion  XSH.pthread_mutex_init.002
+anchor     functions/pthread_mutex_init.html#DESCRIPTION
+class      required
+since      2008
+says       A mutex initialized with PTHREAD_MUTEX_INITIALIZER, static or
+           automatic, is unlocked and works without pthread_mutex_init():
+           lock returns 0, another thread's trylock EBUSY, unlock 0, and
+           the other thread's trylock then 0.
+note       Since Issue 7 TC1 the macro is not limited to statically
+           allocated mutexes.
+test       t/002-static-initializer.c
+
+assertion  XSH.pthread_mutex_init.003
+anchor     functions/pthread_mutex_init.html#DESCRIPTION
+anchor     functions/pthread_mutex_init.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_mutex_destroy() of an initialized unlocked mutex (one
+           from pthread_mutex_init(), one from PTHREAD_MUTEX_INITIALIZER)
+           returns 0, and pthread_mutex_init() of the destroyed object
+           returns 0 and gives an unlocked mutex that locks and unlocks.
+test       t/003-destroy-reinit.c
+
+assertion  XSH.pthread_mutex_init.004
+anchor     functions/pthread_mutex_init.html#DESCRIPTION
+class      required
+since      2008
+says       pthread_mutex_init() uses the attributes object: with type
+           ERRORCHECK, unlocking the unlocked mutex returns EPERM; with
+           type RECURSIVE, the owner's trylock returns 0.
+note       The maximum recursive lock count has no stated minimum
+           (pthread_mutex_lock() [EAGAIN]): EAGAIN from the owner's trylock
+           is accepted.
+uses       XSH.pthread_mutexattr_settype.002
+test       t/004-init-attr.c
+
+assertion  XSH.pthread_mutex_init.005
+anchor     functions/pthread_mutex_init.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.9
+class      conditional
+when       TSH
+since      2008
+says       A process-shared mutex in a file mapped twice at different
+           addresses, initialized through one mapping, is the same mutex
+           through the other: locked through the second, trylock through
+           the first returns EBUSY; after unlock through the second,
+           trylock through the first returns 0, and a thread blocked in
+           lock through the first is woken by unlock through the second.
+note       XSH 2.9.9 allows another mapping of a process-shared object;
+           pthread_mutex_init() points there. A blocked lock that is not
+           woken within 10 s is UNRESOLVED (no time is stated).
+test       t/005-other-mapping.c

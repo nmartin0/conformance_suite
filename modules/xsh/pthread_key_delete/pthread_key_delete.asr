@@ -1,0 +1,42 @@
+# XSH pthread_key_delete()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# A deleted key is never used again (undefined). Where several
+# destructors run, their order is unspecified.
+
+assertion  XSH.pthread_key_delete.001
+anchor     functions/pthread_key_delete.html#DESCRIPTION
+anchor     functions/pthread_key_delete.html#RETURN VALUE
+class      required
+since      2001
+says       pthread_key_delete() returns 0 for a key that the calling thread
+           and another live thread hold non-NULL values for, and for a key
+           no thread has set.
+test       t/001-delete.c
+
+assertion  XSH.pthread_key_delete.002
+anchor     functions/pthread_key_delete.html#DESCRIPTION
+class      required
+since      2001
+says       pthread_key_delete() calls no destructor, although the calling
+           thread and another live thread hold non-NULL values for the key.
+test       t/002-no-dtor-on-delete.c
+
+assertion  XSH.pthread_key_delete.003
+anchor     functions/pthread_key_delete.html#DESCRIPTION
+class      required
+since      2001
+says       After its key is deleted, a destructor is not called when a
+           thread that held a non-NULL value for the key ends.
+test       t/003-no-dtor-after.c
+
+assertion  XSH.pthread_key_delete.004
+anchor     functions/pthread_key_delete.html#DESCRIPTION
+class      required
+since      2001
+says       A destructor can delete another key: pthread_key_delete() called
+           there returns 0, and the deleted key's destructor is not called
+           after that.
+note       If the other key's destructor ran first (the order is
+           unspecified), only the return value is checked.
+test       t/004-in-destructor.c

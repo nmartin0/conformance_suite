@@ -1,0 +1,47 @@
+# XSH pthread_barrier_wait()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Barriers are process-private and initialized by pthread_barrier_init()
+# with a null attr. Helper threads report through atomic flags.
+
+assertion  XSH.pthread_barrier_wait.001
+anchor     functions/pthread_barrier_wait.html#DESCRIPTION
+class      required
+since      2008
+says       With a barrier for 3 threads, the first two callers of
+           pthread_barrier_wait() have not returned 300 ms after both
+           called it; once the third calls it, all three return.
+test       t/001-blocks-until-count.c
+
+assertion  XSH.pthread_barrier_wait.002
+anchor     functions/pthread_barrier_wait.html#DESCRIPTION
+anchor     functions/pthread_barrier_wait.html#RETURN VALUE
+class      required
+since      2008
+says       When the barrier completes, exactly one of the threads gets
+           PTHREAD_BARRIER_SERIAL_THREAD and the others 0 (3 threads);
+           with a count of 1 the single call returns
+           PTHREAD_BARRIER_SERIAL_THREAD at once; the constant is not 0.
+test       t/002-serial-thread.c
+
+assertion  XSH.pthread_barrier_wait.003
+anchor     functions/pthread_barrier_wait.html#DESCRIPTION
+class      required
+since      2008
+says       After completing, the barrier is back to its initial state: in
+           each of three further rounds with the same 3-thread barrier,
+           two callers wait (300 ms) until the third arrives, and exactly
+           one thread per round gets PTHREAD_BARRIER_SERIAL_THREAD.
+test       t/003-reset.c
+
+assertion  XSH.pthread_barrier_wait.004
+anchor     functions/pthread_barrier_wait.html#DESCRIPTION
+anchor     functions/pthread_barrier_wait.html#ERRORS
+class      required
+since      2008
+says       A thread blocked in pthread_barrier_wait() that takes a caught
+           signal (without SA_RESTART) goes on waiting: it has not
+           returned 300 ms after the handler ran, and returns 0 or
+           PTHREAD_BARRIER_SERIAL_THREAD (never EINTR) when the last
+           thread arrives.
+test       t/004-signal-waiting.c

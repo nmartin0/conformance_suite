@@ -1,0 +1,16 @@
+# munmap.cov - every requirement unit on functions/munmap.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:303bad6f     XSH.munmap.001 XSH.munmap.002
+DESCRIPTION:9ec5fc07     XSH.munmap.001 XSH.munmap.002
+DESCRIPTION:57ce7071     XSH.munmap.003
+DESCRIPTION:93330cce     impl  addresses passed are page multiples; the choice is the implementation's
+DESCRIPTION:054116f5     XSH.munmap.004
+DESCRIPTION:f2311545     todo  locks removed by munmap(): needs ML|MLR and a way to see the lock gone once the pages are mapped again
+DESCRIPTION:f8f1e9d2     optional  TYM, not claimed by the reference systems; no test yet
+DESCRIPTION:91478b6f     optional  TYM, not claimed by the reference systems; no test yet
+DESCRIPTION:6c762afa     app
+RETURN_VALUE:facdc9e0    XSH.munmap.001 XSH.munmap.005 XSH.munmap.006
+ERRORS:56799a22          XSH.munmap.006
+ERRORS:e29b0bc3          XSH.munmap.005
+ERRORS:b15024c9          optional

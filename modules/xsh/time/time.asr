@@ -1,0 +1,29 @@
+# XSH time()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.time.001
+anchor     functions/time.html#DESCRIPTION
+anchor     functions/time.html#RETURN VALUE
+class      required
+since      1988
+says       time(&t) returns a value other than (time_t)-1 and stores the
+           same value in t; time(NULL) also returns a value other than
+           (time_t)-1.
+note       (time_t)-1 is also a time (one second before the Epoch); a
+           system whose clock shows that time would be reported wrongly.
+test       t/001-returns.c
+
+assertion  XSH.time.002
+anchor     functions/time.html#DESCRIPTION
+anchor     functions/clock_getres.html#DESCRIPTION
+class      required
+says       time() agrees with the seconds of clock_gettime(CLOCK_REALTIME),
+           read just before and just after it, to within 1 s; checked twice,
+           2.2 s apart.
+note       Both give the current time in seconds since the Epoch. The 1 s
+           tolerance allows time() to read a clock that is a tick behind,
+           and rounding either way. The test is UNRESOLVED when
+           CLOCK_REALTIME and CLOCK_MONOTONIC disagree over the 2.2 s (the
+           clock was set or slewed).
+uses       XSH.time.001 XSH.clock_getres.001
+test       t/002-agrees-realtime.c

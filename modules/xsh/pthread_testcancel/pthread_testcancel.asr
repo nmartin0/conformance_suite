@@ -1,0 +1,35 @@
+# XSH pthread_testcancel()
+# (pthread_setcancelstate() and pthread_setcanceltype(), on the same page,
+# are the xsh/pthread_setcancelstate module)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.pthread_testcancel.001
+anchor     functions/pthread_testcancel.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.5.2
+class      required
+since      2008
+says       A thread with the default cancelability (enabled, deferred)
+           that calls pthread_testcancel() after a request was made
+           against it does not return from the call: its cleanup handler
+           runs and pthread_join() gives PTHREAD_CANCELED.
+test       t/001-acts.c
+
+assertion  XSH.pthread_testcancel.002
+anchor     functions/pthread_testcancel.html#DESCRIPTION
+class      required
+since      2008
+says       With no request made against it, a thread's
+           pthread_testcancel() returns, and the thread ends with the
+           value it returns.
+test       t/002-nothing-pending.c
+
+assertion  XSH.pthread_testcancel.003
+anchor     functions/pthread_testcancel.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.5.1
+class      required
+since      2008
+says       A thread with cancelability disabled and a request pending
+           returns from two pthread_testcancel() calls; after it enables
+           cancelability, its next pthread_testcancel() acts on the
+           request (PTHREAD_CANCELED).
+test       t/003-disabled.c

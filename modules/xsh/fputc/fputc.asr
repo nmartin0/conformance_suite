@@ -1,0 +1,130 @@
+# XSH fputc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fputc.001
+anchor     functions/fputc.html#DESCRIPTION
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+since      1988
+says       On a stream opened "w" on a new file, fputc('h') returns 'h'
+           with ftell() then 1, fputc('i') returns 'i' with ftell() then 2,
+           and after fclose() the file holds "hi".
+test       t/001-writes.c
+
+assertion  XSH.fputc.002
+anchor     functions/fputc.html#DESCRIPTION
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+since      1988
+says       On a stream opened "w", fputc(0x141) returns 0x41, fputc(-1)
+           returns 0xff and fputc(0x100) returns 0, and after fclose() the
+           file holds the bytes 0x41, 0xff, 0x00.
+test       t/002-converted.c
+
+assertion  XSH.fputc.003
+anchor     functions/fputc.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream opened "r+" on "0123456789", after fseek(f, 3,
+           SEEK_SET), fputc('x') and fputc('y'), fclose() leaves the file
+           holding "012xy56789".
+test       t/003-position.c
+
+assertion  XSH.fputc.004
+anchor     functions/fputc.html#DESCRIPTION
+class      required
+since      1988
+says       On a stream opened "a" on "0123", after fseek(f, 0, SEEK_SET)
+           fputc('x') appends: after fclose() the file holds "0123x". On a
+           stream opened "a+" on "0123", after a read of '0' and fseek(f,
+           1, SEEK_SET), fputc('x') likewise leaves "0123x".
+test       t/004-append.c
+
+assertion  XSH.fputc.005
+anchor     functions/fputc.html#DESCRIPTION
+class      required
+says       On a stream opened "r+" on a file whose modification time is set
+           to 2001-09-09, after fputc('x') and a successful fflush(),
+           fstat() shows a later st_mtim.
+note       XBD 4.12: marked timestamps are updated before fstat()
+           returns. The change time is not checked: telling it apart from
+           the futimens() of the setup needs the clock to move past the
+           file system's granularity.
+test       t/005-mtime.c
+
+assertion  XSH.fputc.006
+anchor     functions/fputc.html#ERRORS/EBADF
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+says       On an unbuffered stream opened "w" whose descriptor was closed,
+           fputc() returns EOF, sets errno to EBADF and sets the stream's
+           error indicator.
+note       Where setvbuf() refuses _IONBF (support for the buffering
+           modes is implementation-defined, XSH 2.5), the test writes until
+           a call fails, since a buffer that needs flushing brings the same
+           error; if none does within 4 MiB the result is UNRESOLVED.
+test       t/006-ebadf-closed.c
+
+assertion  XSH.fputc.007
+anchor     functions/fputc.html#ERRORS/EBADF
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+says       On an unbuffered stream opened "r" (its descriptor open for
+           reading only), fputc() returns EOF, sets errno to EBADF and sets
+           the stream's error indicator.
+note       As for XSH.fputc.006 where _IONBF is refused.
+test       t/007-ebadf-read-only.c
+
+assertion  XSH.fputc.008
+anchor     functions/fputc.html#ERRORS/EPIPE
+class      required
+says       With SIGPIPE blocked, on an unbuffered stream on the write end of
+           a pipe whose read end is closed, fputc() returns EOF with errno
+           EPIPE and the error indicator set, and SIGPIPE is then pending.
+note       As for XSH.fputc.006 where _IONBF is refused.
+test       t/008-epipe.c
+
+assertion  XSH.fputc.009
+anchor     functions/fputc.html#ERRORS/EAGAIN
+class      required
+says       On an unbuffered stream on the write end of a pipe filled to
+           capacity with O_NONBLOCK set, fputc() returns EOF with errno
+           EAGAIN and the error indicator set.
+note       As for XSH.fputc.006 where _IONBF is refused.
+test       t/009-eagain.c
+
+assertion  XSH.fputc.010
+anchor     functions/fputc.html#ERRORS/EINTR
+class      required
+says       On a stream on the write end of a full pipe (blocking), a
+           SIGALRM caught without SA_RESTART 1 s into a write that blocks
+           makes fputc() return EOF with errno EINTR and the error
+           indicator set (later alarms drain the pipe, so an
+           implementation that restarts the write returns success, which is
+           reported).
+note       The stream is made unbuffered where setvbuf() allows it;
+           otherwise the call that blocks is the one whose buffer needs
+           flushing.
+timeout    20
+test       t/010-eintr.c
+
+assertion  XSH.fputc.011
+anchor     functions/fputc.html#ERRORS/EFBIG
+class      required
+since      2024
+says       In a child whose soft RLIMIT_FSIZE is 4096 bytes (SIGXFSZ
+           ignored), on an unbuffered stream opened "a" on a file that
+           already holds 4096 bytes, fputc() returns EOF with errno EFBIG
+           and the error indicator set.
+note       Austin Group defect 1669 (Issue 8) removed the XSI shading from
+           this error. As for XSH.fputc.006 where _IONBF is refused.
+test       t/011-efbig.c
+
+assertion  XSH.fputc.012
+anchor     functions/fputc.html#ERRORS/EFBIG
+class      conditional
+when       XSI
+says       In a child whose soft RLIMIT_FSIZE is 4096 bytes and which
+           blocks SIGXFSZ, after fputc() on a stream opened "a" on a file
+           of 4096 bytes fails with EFBIG, SIGXFSZ is pending.
+test       t/012-sigxfsz.c

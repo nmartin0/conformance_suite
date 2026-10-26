@@ -1,0 +1,20 @@
+# fputc.cov - every requirement unit on functions/fputc.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:13088ece     XSH.fputc.001 XSH.fputc.002 XSH.fputc.003
+DESCRIPTION:d822fc4c     partial XSH.fputc.004  # append mode; a file that cannot seek (a pipe) is not checked separately
+DESCRIPTION:87cee9c5     partial XSH.fputc.005  # the modification time after fflush(); the change time, fclose(), exit() and abort() are not checked
+RETURN_VALUE:512579e5    XSH.fputc.001 XSH.fputc.002
+RETURN_VALUE:fd4c5596    XSH.fputc.006 XSH.fputc.007 XSH.fputc.008 XSH.fputc.009 XSH.fputc.010 XSH.fputc.011
+ERRORS:32eb5fe7          XSH.fputc.006 XSH.fputc.007 XSH.fputc.008 XSH.fputc.009 XSH.fputc.010 XSH.fputc.011
+ERRORS:bebb7770          XSH.fputc.009
+ERRORS:5feec550          XSH.fputc.006 XSH.fputc.007
+ERRORS:80a39d06          untestable  the maximum file size of the file system cannot be reached here
+ERRORS:9f8472ce          XSH.fputc.011 XSH.fputc.012
+ERRORS:e36deb63          untestable  the offset maximum of a stream opened by this build is the largest off_t; no write can be positioned at or beyond it
+ERRORS:c9cace74          XSH.fputc.010
+ERRORS:a6bc3395          todo  EIO for a background write to the controlling terminal with TOSTOP needs a pseudo-terminal session set up; physical I/O errors cannot be caused
+ERRORS:c6294d0e          todo  no portable way to fill a device; the memory-stream reading of ENOSPC is checked for fflush() (XSH.fflush.013)
+ERRORS:060d5689          XSH.fputc.008
+ERRORS:5a3b118c          none  may-fail error: a permission
+ERRORS:01ce82ab          none  may-fail error: a permission

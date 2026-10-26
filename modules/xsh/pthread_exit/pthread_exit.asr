@@ -1,0 +1,75 @@
+# XSH pthread_exit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# pthread_exit() is never called from a cleanup handler or destructor run
+# by thread exit (undefined), and no value points into the exiting
+# thread's own automatic storage.
+
+assertion  XSH.pthread_exit.001
+anchor     functions/pthread_exit.html#DESCRIPTION
+class      required
+since      2001
+says       pthread_exit() called from a function the start routine calls
+           ends the thread there (nothing after the call runs), and
+           pthread_join() obtains its argument; two threads exiting with
+           different values each give their own.
+test       t/001-terminates.c
+
+assertion  XSH.pthread_exit.002
+anchor     functions/pthread_exit.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.5.3
+class      required
+since      2001
+says       Cleanup handlers pushed and not yet popped (three, nested) run
+           at pthread_exit() last pushed first; one already popped
+           without being executed does not run.
+test       t/002-cleanup-lifo.c
+
+assertion  XSH.pthread_exit.003
+anchor     functions/pthread_exit.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.5.3
+class      required
+since      2001
+says       At pthread_exit() the cleanup handler runs before the destructor
+           of a thread-specific data key the thread set, and still sees
+           the key's value; the destructor then gets that value.
+test       t/003-cleanup-then-dtors.c
+
+assertion  XSH.pthread_exit.004
+anchor     functions/pthread_exit.html#DESCRIPTION
+class      required
+since      2001
+says       A thread that ends with a mutex locked and a pipe open leaves
+           both as they were (pthread_mutex_trylock() then fails with
+           EBUSY; the pipe still carries data), and no atexit() handler
+           runs.
+note       The mutex has the default attributes, so it is not robust
+           (PTHREAD_MUTEX_STALLED) and stays owned.
+test       t/004-no-process-cleanup.c
+
+assertion  XSH.pthread_exit.005
+anchor     functions/pthread_exit.html#DESCRIPTION
+class      required
+since      2001
+says       When the initial thread has called pthread_exit() and the last
+           other thread then calls pthread_exit((void *)5), the process
+           ends as exit(0) would: status exited with 0, an atexit() handler
+           has run and a fully buffered stdout was flushed; the other
+           thread ran on after the initial thread's call.
+note       The process is a new image of the test (fork() then execv()).
+test       t/005-last-thread.c
+
+assertion  XSH.pthread_exit.006
+anchor     functions/pthread_exit.html#DESCRIPTION
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      2001
+says       The same holds in a child made by fork() (without exec): after
+           its initial thread has called pthread_exit() and its other
+           thread then calls pthread_exit((void *)5), the child ends with
+           status exited with 0, its atexit() handler has run and its fully
+           buffered stdout was flushed.
+note       A child that never ends is UNRESOLVED by the timeout: the text
+           sets no time by which the process must exit.
+timeout    20
+test       t/006-last-thread-fork-child.c

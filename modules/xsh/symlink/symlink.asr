@@ -1,0 +1,228 @@
+# XSH symlink() and symlinkat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# symlink() is in the Base since POSIX.1-2001; symlinkat() since 2008.
+# Error tests arrange for one error condition (XSH 2.3) and check that
+# nothing was created. The contents of a link are read back with
+# readlink(), which is not under test here (a failure there is UNRESOLVED).
+
+assertion  XSH.symlink.001
+anchor     functions/symlink.html#DESCRIPTION
+anchor     functions/symlink.html#RETURN VALUE
+class      required
+since      2001
+says       symlink("some/target", "sl") returns 0; sl is a symbolic link
+           whose contents are exactly "some/target", and nothing named by
+           path1 is created.
+test       t/001-creates.c
+
+assertion  XSH.symlink.002
+anchor     functions/symlink.html#DESCRIPTION
+class      required
+says       symlink() stores path1 unchanged and does not check it as a
+           pathname: "no/such/file", "/pc-no-such-dir/x", "a//b/../",
+           ".." and (when {SYMLINK_MAX} allows that length) a component
+           longer than {NAME_MAX} all make links holding exactly that
+           string.
+note       "since" is left out: the CHANGE HISTORY does not say when the
+           sentence on path1 not being validated came in.
+test       t/002-not-validated.c
+
+assertion  XSH.symlink.003
+anchor     functions/symlink.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       symlink("", "e") returns 0 and makes a symbolic link with empty
+           contents (readlink() gives 0 bytes).
+note       path1 is only a string and is not validated as a pathname, no
+           error condition names an empty path1 (ENOENT is about an empty
+           path2), and XBD 4.16 says how a link with empty contents
+           resolves. "since" left out, as for XSH.symlink.002.
+test       t/003-empty-path1.c
+
+assertion  XSH.symlink.004
+anchor     functions/symlink.html#ERRORS/EEXIST
+anchor     functions/symlink.html#DESCRIPTION
+class      required
+since      2001
+says       symlink("t", path2) fails with EEXIST when path2 is a directory,
+           a regular file, a dangling symbolic link or a symbolic link to a
+           file; none of them changes and the dangling link's target is
+           not created.
+test       t/004-eexist.c
+
+assertion  XSH.symlink.005
+anchor     functions/symlink.html#DESCRIPTION
+class      required
+since      2008
+says       A link made by symlink() in directory g (given group 4242 when
+           the test runs as root) has st_uid the effective user ID and
+           st_gid either the effective group ID or g's group.
+test       t/005-owner.c
+
+assertion  XSH.symlink.006
+anchor     functions/symlink.html#DESCRIPTION
+class      required
+since      2008
+says       After symlink() puts a new entry in directory p, p's st_mtim and
+           st_ctim are later than before the call, and the link's st_atim,
+           st_mtim and st_ctim are no earlier than p's times before it (a
+           fresh link is made every 10 ms for up to 3 s until p's times
+           move).
+timeout    20
+test       t/006-times.c
+
+assertion  XSH.symlink.007
+anchor     functions/symlink.html#DESCRIPTION
+class      required
+since      2008
+says       symlinkat("t", fd, "n"), with fd open on directory d, makes d/n
+           and nothing in the working directory.
+test       t/007-at-relative.c
+
+assertion  XSH.symlink.008
+anchor     functions/symlink.html#DESCRIPTION
+class      required
+since      2008
+says       symlinkat("t", AT_FDCWD, path2) makes the link from the working
+           directory, as symlink() does, for "n" and "d/m".
+test       t/008-at-fdcwd.c
+
+assertion  XSH.symlink.009
+anchor     functions/symlink.html#DESCRIPTION
+class      required
+since      2008
+says       symlinkat() with an absolute path2 makes that link whatever fd
+           is: a descriptor that is not open, or one open on a regular
+           file.
+test       t/009-at-absolute.c
+
+assertion  XSH.symlink.010
+anchor     functions/symlink.html#ERRORS/ENOENT
+class      required
+since      2001
+says       symlink("t", "nodir/n") and symlink("t", "") fail with ENOENT;
+           the missing directory is not created.
+test       t/010-enoent.c
+
+assertion  XSH.symlink.011
+anchor     functions/symlink.html#ERRORS
+class      required
+since      2008
+says       symlink("t", "new/") fails with ENOENT or ENOTDIR and creates no
+           "new"; symlink("t", "e/"), with e a regular file, fails with
+           EEXIST or ENOTDIR (not ENOENT) and leaves e as it was.
+note       The page lists ENOENT or ENOTDIR for a trailing slash, and rules
+           out ENOENT when the name without it exists; for "e/" EEXIST
+           may be read to apply too.
+test       t/011-trailing-slash.c
+
+assertion  XSH.symlink.012
+anchor     functions/symlink.html#ERRORS/ENOTDIR
+class      required
+since      2001
+says       symlink("t", "f/n"), with f a regular file, fails with ENOTDIR.
+note       Only ENOTDIR applies: symlink()'s ENOENT is about a prefix that
+           does not exist, and f does.
+test       t/012-enotdir.c
+
+assertion  XSH.symlink.013
+anchor     functions/symlink.html#ERRORS/ELOOP
+class      required
+since      2001
+says       symlink("t", "a/n"), with a -> b and b -> a, fails with ELOOP.
+note       Only ELOOP applies: the prefix component a exists (as a
+           symbolic link), so ENOENT for a missing prefix does not hold.
+test       t/013-eloop.c
+
+assertion  XSH.symlink.014
+anchor     functions/symlink.html#ERRORS/ENAMETOOLONG
+class      required
+says       symlink("t", name), with name one byte longer than {NAME_MAX},
+           fails with ENAMETOOLONG.
+note       Only ENAMETOOLONG applies: a missing last component is not one
+           of symlink()'s ENOENT conditions. "since" left out, as for
+           XSH.open.017: the error is unconditional only since
+           _POSIX_NO_TRUNC had to be other than -1.
+test       t/014-enametoolong.c
+
+assertion  XSH.symlink.015
+anchor     functions/symlink.html#ERRORS/ENAMETOOLONG
+class      required
+says       Where pathconf(".", _PC_SYMLINK_MAX) gives a limit L (at most
+           1 MiB), symlink() of a path1 of L + 1 bytes fails with
+           ENAMETOOLONG and creates nothing.
+note       NOTINUSE where {SYMLINK_MAX} is indeterminate (no limit).
+           "since" left out: the CHANGE HISTORY does not date
+           {SYMLINK_MAX}.
+test       t/015-symlink-max.c
+
+assertion  XSH.symlink.016
+anchor     functions/symlink.html#ERRORS/EACCES
+class      required
+since      2001
+says       For a process without appropriate privileges, symlink("t",
+           "w/n") with directory w denying write permission, and
+           symlink("t", "s/x/n") with s denying search permission, fail
+           with EACCES and create nothing.
+test       t/016-eacces.c
+
+assertion  XSH.symlink.017
+anchor     functions/symlink.html#ERRORS/EBADF
+class      required
+since      2008
+says       symlinkat("t", fd, "n") with fd not open fails with EBADF and
+           creates nothing in the working directory.
+test       t/017-at-ebadf.c
+
+assertion  XSH.symlink.018
+anchor     functions/symlink.html#ERRORS
+class      required
+since      2008
+says       symlinkat("t", fd, "n") with fd open on a regular file fails with
+           ENOTDIR and creates nothing in the working directory.
+test       t/018-at-enotdir.c
+
+assertion  XSH.symlink.019
+anchor     functions/symlink.html#DESCRIPTION
+anchor     functions/symlink.html#ERRORS/EACCES
+class      required
+since      2008
+says       For a process without appropriate privileges, symlinkat("t", fd,
+           "n") fails with EACCES when fd was opened O_RDONLY on a directory
+           writable by all whose mode was then changed to deny search
+           (0666); nothing is created.
+test       t/019-at-eacces-fd.c
+
+assertion  XSH.symlink.020
+anchor     functions/symlink.html#DESCRIPTION
+class      required
+since      2008
+says       For a process without appropriate privileges, symlinkat("t", fd,
+           "n") succeeds when fd was opened with O_SEARCH on a directory
+           writable by all whose mode was then changed to deny search
+           (0666).
+note       O_SEARCH itself is a header item (Tier 0); without it this test
+           is UNRESOLVED.
+test       t/020-at-search.c
+
+assertion  XSH.symlink.021
+anchor     functions/symlink.html#ERRORS/EILSEQ
+class      required
+since      2024
+says       symlink("t", "a\nb") either makes the link or, if the file
+           system refuses such names, fails with EILSEQ (the only error
+           that applies).
+test       t/021-eilseq.c
+
+assertion  XSH.symlink.022
+anchor     functions/symlink.html#DESCRIPTION
+class      required
+since      2008
+says       A process without appropriate privileges can read the contents
+           of another user's symbolic link with readlink() and open a
+           readable file through it, also after the link's mode bits were
+           set to 0 where fchmodat(AT_SYMLINK_NOFOLLOW) allows that.
+note       The link's own mode bits are unspecified; interfaces must act
+           as if its contents can always be read.
+test       t/022-contents-readable.c

@@ -1,0 +1,38 @@
+# pthread_cond_wait.cov - every requirement unit on functions/pthread_cond_wait.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:cbe31089     XSH.pthread_cond_wait.001 XSH.pthread_cond_wait.002 XSH.pthread_cond_wait.016
+DESCRIPTION:b0c97f20     XSH.pthread_cond_wait.007
+DESCRIPTION:fd636f16     XSH.pthread_cond_wait.002 XSH.pthread_cond_wait.005
+DESCRIPTION:3962fb80     XSH.pthread_cond_wait.002
+DESCRIPTION:d11621e2     XSH.pthread_cond_wait.001 XSH.pthread_cond_wait.016
+DESCRIPTION:05f03566     XSH.pthread_cond_wait.012
+DESCRIPTION:3d7d2363     none  describes how applications use a predicate
+DESCRIPTION:1d25fd71     none  permission (spurious wakeups); every test tolerates them
+DESCRIPTION:9b587c83     app
+DESCRIPTION:f746f231     none  definition of the binding, used by the next units
+DESCRIPTION:4485ea7d     none  undefined
+DESCRIPTION:aecec256     XSH.pthread_cond_wait.011
+DESCRIPTION:f68d4254     partial XSH.pthread_cond_wait.001 XSH.pthread_cond_wait.008  # only with one mutex per condition variable; a binding replaced while a woken thread returns is not arranged
+DESCRIPTION:f45dc8f9     XSH.pthread_cond_wait.008
+DESCRIPTION:122d3532     XSH.pthread_cond_wait.008
+DESCRIPTION:00f85a8d     XSH.pthread_cond_wait.008
+DESCRIPTION:910a5a79     partial XSH.pthread_cond_wait.009  # only a signal sent after the canceled waiter finished; a concurrent one cannot be arranged
+DESCRIPTION:31593b90     XSH.pthread_cond_wait.014 XSH.pthread_cond_wait.016
+DESCRIPTION:4187a44f     XSH.pthread_cond_wait.014
+DESCRIPTION:f4c3247c     partial XSH.pthread_cond_wait.005 XSH.pthread_cond_wait.014  # release during a timeout is shown for timedwait; for clockwait only the re-acquire
+DESCRIPTION:0271151d     XSH.pthread_cond_wait.003 XSH.pthread_cond_wait.004
+DESCRIPTION:a0641f21     XSH.pthread_cond_wait.004
+DESCRIPTION:d422f52f     XSH.pthread_cond_wait.003
+DESCRIPTION:4988f304     XSH.pthread_cond_wait.010
+DESCRIPTION:254912ab     none  undefined
+RETURN_VALUE:c45e1bb5    partial XSH.pthread_cond_wait.006 XSH.pthread_cond_wait.007 XSH.pthread_cond_wait.015  # the mutex is checked after the error; the condition variable's state is not observable
+RETURN_VALUE:ebb91095    XSH.pthread_cond_wait.001 XSH.pthread_cond_wait.007
+ERRORS:27359bc4          untestable  no portable way to find or reach the limit on robust mutexes owned
+ERRORS:527f2ebb          XSH.pthread_cond_wait.013
+ERRORS:af160977          XSH.pthread_cond_wait.012
+ERRORS:d836f975          XSH.pthread_cond_wait.007
+ERRORS:fde0c857          XSH.pthread_cond_wait.003 XSH.pthread_cond_wait.004 XSH.pthread_cond_wait.014
+ERRORS:c4d9bfae          XSH.pthread_cond_wait.006 XSH.pthread_cond_wait.015
+ERRORS:c184a54d          optional
+ERRORS:0a906269          XSH.pthread_cond_wait.010

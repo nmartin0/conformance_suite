@@ -1,0 +1,64 @@
+# mknod.cov - every requirement unit on functions/mknod.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:077688a5     XSH.mknod.001
+DESCRIPTION:1344bb3d     app  the application chooses the file type
+DESCRIPTION:7308032d     XSH.mknod.001
+DESCRIPTION:0dbd3b5d     XSH.mknod.019
+DESCRIPTION:7a5fdfbe     XSH.mknod.018
+DESCRIPTION:017a640a     XSH.mknod.018
+DESCRIPTION:0212d652     XSH.mknod.019
+DESCRIPTION:72eea3fb     none a statement
+DESCRIPTION:de88ca51     none unspecified (XSH.mknod.018 and .019 are disputed over it)
+DESCRIPTION:1ef9e0d3     none introduces the list
+DESCRIPTION:9d7f1e44     none what a FIFO does with it is not specified
+DESCRIPTION:8d51b5a6     none what a FIFO does with it is not specified
+DESCRIPTION:71730ef0     XSH.mknod.001
+DESCRIPTION:b01e27ae     XSH.mknod.001
+DESCRIPTION:d8927ae3     XSH.mknod.001
+DESCRIPTION:c4e74f62     XSH.mknod.001
+DESCRIPTION:8911fb57     XSH.mknod.001
+DESCRIPTION:14ce50b6     XSH.mknod.001
+DESCRIPTION:aeceb8a1     XSH.mknod.001
+DESCRIPTION:12fd57d6     XSH.mknod.001
+DESCRIPTION:c1e42c58     XSH.mknod.001
+DESCRIPTION:c9ed35ff     XSH.mknod.001
+DESCRIPTION:2d801851     XSH.mknod.001
+DESCRIPTION:3c07ecb4     XSH.mknod.001
+DESCRIPTION:36fabfd6     none for directories, which mknod() makes only unportably
+DESCRIPTION:8426152a     XSH.mknod.001
+DESCRIPTION:f14c7e3c     XSH.mknod.001
+DESCRIPTION:8283ca09     impl  the way to take the parent's group is implementation-defined (documentation)
+DESCRIPTION:fe3339a6     none permission (may)
+DESCRIPTION:1bb441f3     XSH.mknod.001
+DESCRIPTION:0d33d304     XSH.mknod.001
+DESCRIPTION:37a674ed     XSH.mknod.002
+DESCRIPTION:f580eb55     XSH.mknod.003
+DESCRIPTION:06535122     XSH.mknod.003
+DESCRIPTION:30965752     XSH.mknod.018 XSH.mknod.019
+DESCRIPTION:e9ef54c4     XSH.mknod.004 XSH.mknod.006
+DESCRIPTION:f9e9c6bd     XSH.mknod.004
+DESCRIPTION:696636e6     XSH.mknod.015
+DESCRIPTION:80de69f9     XSH.mknod.016
+DESCRIPTION:389857af     XSH.mknod.005
+RETURN_VALUE:5cb75ebf    XSH.mknod.001
+RETURN_VALUE:73bdf30d    XSH.mknod.002 XSH.mknod.007 XSH.mknod.009
+RETURN_VALUE:0865bcc8    XSH.mknod.007 XSH.mknod.008 XSH.mknod.012 XSH.mknod.013 XSH.mknod.014 XSH.mknod.015 XSH.mknod.018
+ERRORS:b36491d5          XSH.mknod.012
+ERRORS:3a380d47          XSH.mknod.002
+ERRORS:c1ca8031          partial XSH.mknod.017  # whether a file system refuses non-portable names is implementation-defined; only the error is checked
+ERRORS:1af5f2f6          untestable  names no condition that a test could arrange
+ERRORS:dc640aad          untestable  needs a failing device
+ERRORS:f39d7871          XSH.mknod.010
+ERRORS:681b232a          XSH.mknod.011
+ERRORS:7411514c          XSH.mknod.007
+ERRORS:e0aa24f7          XSH.mknod.008
+ERRORS:35dce827          todo  needs a full file system (an environment case)
+ERRORS:5b60360c          XSH.mknod.009
+ERRORS:e5aad8d6          XSH.mknod.018 XSH.mknod.019
+ERRORS:1919fc1e          todo  needs a read-only file system (an environment case)
+ERRORS:222666a3          XSH.mknod.015
+ERRORS:0d30acd6          XSH.mknod.013 XSH.mknod.006
+ERRORS:dc6c136c          XSH.mknod.014
+ERRORS:811d61dd          optional
+ERRORS:c7f415ad          optional

@@ -1,0 +1,24 @@
+# pthread_mutex_init.cov - every requirement unit on functions/pthread_mutex_init.html
+# (pthread_mutex_init, pthread_mutex_destroy, PTHREAD_MUTEX_INITIALIZER).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:fda4ed9d     partial XSH.pthread_mutex_init.003  # only that the destroyed object can be initialized again; "in effect uninitialized" cannot be observed
+DESCRIPTION:5b589cca     XSH.pthread_mutex_init.003  # a permission, planted as the variant destroy_poisons
+DESCRIPTION:20042243     XSH.pthread_mutex_init.003
+DESCRIPTION:7f8ca6e5     XSH.pthread_mutex_init.003
+DESCRIPTION:3229bc84     none  undefined behaviour
+DESCRIPTION:85bf26fe     XSH.pthread_mutex_init.004
+DESCRIPTION:4a15c6c4     partial XSH.pthread_mutex_init.001  # both give an unlocked usable mutex; the default type's behaviour on misuse is not compared
+DESCRIPTION:737108eb     XSH.pthread_mutex_init.001
+DESCRIPTION:c14f5ce5     XSH.pthread_mutex_init.005
+DESCRIPTION:31816a83     none  undefined behaviour
+DESCRIPTION:943b7acd     XSH.pthread_mutex_init.002
+DESCRIPTION:312ee65c     partial XSH.pthread_mutex_init.002  # an unlocked mutex that locks, excludes and unlocks
+DESCRIPTION:97d445c6     none  undefined behaviour
+DESCRIPTION:5d4ff307     none  undefined behaviour
+RETURN_VALUE:82082d23    XSH.pthread_mutex_init.001 XSH.pthread_mutex_init.003
+ERRORS:4163f1b3          untestable  resources other than memory for a mutex cannot be exhausted portably
+ERRORS:d9435895          untestable  memory for a mutex cannot be exhausted portably
+ERRORS:155f13a4          untestable  no attribute is named whose use needs privilege
+ERRORS:08bdcad4          none  a "may fail" error (planted as a variant for XSH.pthread_mutex_lock.012)
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

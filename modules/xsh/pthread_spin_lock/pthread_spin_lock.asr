@@ -1,0 +1,45 @@
+# XSH pthread_spin_lock(), pthread_spin_trylock()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Spin locks are process-private here (pthread_spin_init() with
+# PTHREAD_PROCESS_PRIVATE). Relocking by the holder is undefined and not
+# tested. Helper threads report through atomic flags.
+
+assertion  XSH.pthread_spin_lock.001
+anchor     functions/pthread_spin_lock.html#DESCRIPTION
+anchor     functions/pthread_spin_lock.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_spin_lock() on a free spin lock returns 0 and holds it:
+           another thread's pthread_spin_trylock() returns EBUSY until it
+           is unlocked, then 0.
+test       t/001-lock-acquires.c
+
+assertion  XSH.pthread_spin_lock.002
+anchor     functions/pthread_spin_lock.html#DESCRIPTION
+anchor     functions/pthread_spin_lock.html#ERRORS/EBUSY
+class      required
+since      2008
+says       pthread_spin_trylock() on a free spin lock returns 0 and holds
+           it; while it is held, trylock by the holder itself and by
+           another thread return EBUSY.
+test       t/002-trylock.c
+
+assertion  XSH.pthread_spin_lock.003
+anchor     functions/pthread_spin_lock.html#DESCRIPTION
+class      required
+since      2008
+says       pthread_spin_lock() on a spin lock another thread holds does not
+           return while it is held (300 ms), and returns 0 after it is
+           unlocked.
+test       t/003-lock-spins.c
+
+assertion  XSH.pthread_spin_lock.004
+anchor     functions/pthread_spin_lock.html#ERRORS
+class      required
+since      2008
+says       A thread spinning in pthread_spin_lock() that takes a caught
+           signal (without SA_RESTART) does not return EINTR: it has not
+           returned 300 ms after the handler ran, and returns 0 once the
+           lock is unlocked.
+test       t/004-signal-spinning.c

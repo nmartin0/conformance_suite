@@ -64,10 +64,17 @@ every other project it learns from. They are not optional.
     a VARIANT that plants the other choice, and `ci/mutate.sh` checks that
     the test still passes (a fault must FAIL; a variant must PASS). Each
     variant cites the passage that allows it.
-12. Results from a non-Linux system count only when the suite was built
-    there from source with that system's own compiler and C library, not
-    run through a Linux compatibility layer (FreeBSD's Linuxulator,
-    illumos lx zones and the like).
+12. The suite judges whatever implementation it runs on; a run describes
+    that environment and nothing else. run.log records the system's name
+    and the system the compiler built for, so a reader can tell, for
+    example, a native FreeBSD build from a Linux build run through
+    FreeBSD's Linux compatibility layer. No test or driver code branches
+    on the name of an operating system; where a facility outside POSIX
+    helps a test set up (setgroups()), its presence is found by building,
+    not by name. (The CI libraries that plant faults and variants through
+    LD_PRELOAD still name a C library's alternate symbols, such as
+    glibc's open64; they decide no verdict, and go when planting moves to
+    compile time.)
 
 ## Checking
 

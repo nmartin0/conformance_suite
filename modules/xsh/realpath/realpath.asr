@@ -1,0 +1,111 @@
+# XSH realpath()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# realpath() left the XSI option in Issue 8 (Austin Group Defect 1663), so
+# every assertion here is required "since 2024", and <stdlib.h> must
+# declare it in a strict POSIX build. The tests pass resolved_name a
+# buffer of {PATH_MAX} bytes when <limits.h> defines {PATH_MAX}, and a
+# null pointer otherwise (a buffer is then undefined). A name is checked by
+# what it resolves to: absolute, with no dot, dot-dot or symbolic link
+# component (each prefix checked with lstat()), and naming the expected
+# directory entry (its last component and the directory above it).
+
+assertion  XSH.realpath.001
+anchor     functions/realpath.html#DESCRIPTION
+anchor     functions/realpath.html#RETURN VALUE
+class      required
+since      2024
+says       realpath("d/./x/../f", buf) returns buf and gives the entry f of
+           d; realpath("d/g"), with g a second link to d/f, gives the entry
+           g, not f; realpath(".") and realpath("d//x/") give names of the
+           working directory and of d/x.
+test       t/001-entry.c
+
+assertion  XSH.realpath.002
+anchor     functions/realpath.html#DESCRIPTION
+class      required
+since      2024
+says       realpath() resolves symbolic links anywhere in the name: with sl
+           -> d, lf -> d/f and sub/rl -> ../d/f, realpath() of "sl/f",
+           "lf" and "sub/rl" gives the entry f of d, and of "sl" a name of
+           d (relative contents are taken from the link's directory).
+test       t/002-symlinks.c
+
+assertion  XSH.realpath.003
+anchor     functions/realpath.html#DESCRIPTION
+anchor     functions/realpath.html#RETURN VALUE
+class      required
+since      2024
+says       realpath("d/f", NULL) and realpath("d/../d/f", NULL) return two
+           different buffers holding the same name of the entry f of d,
+           which free() accepts.
+test       t/003-allocates.c
+
+assertion  XSH.realpath.004
+anchor     functions/realpath.html#ERRORS/ENOENT
+class      required
+since      2024
+says       realpath() of "nofile", "d/nofile" (d a directory), "nodir/f"
+           and "" returns a null pointer with ENOENT.
+test       t/004-enoent.c
+
+assertion  XSH.realpath.005
+anchor     functions/realpath.html#ERRORS/ENOTDIR
+class      required
+since      2024
+says       realpath("f/") and realpath("lf/"), with f a regular file and lf
+           -> f, return a null pointer with ENOTDIR.
+note       Only ENOTDIR applies: every component exists, so ENOENT does
+           not. The case under a regular file, where ENOENT may apply too,
+           is XSH.realpath.006.
+test       t/005-enotdir-slash.c
+
+assertion  XSH.realpath.006
+anchor     functions/realpath.html#ERRORS/ENOTDIR
+class      disputed
+since      2024
+says       realpath("f/x"), with f a regular file, returns a null pointer
+           with ENOTDIR.
+note       disputed (Q-8): f/x names no existing file, so ENOENT applies
+           too and XSH 2.3 lets either error be reported.
+test       t/006-enotdir-prefix.c
+
+assertion  XSH.realpath.007
+anchor     functions/realpath.html#ERRORS/ELOOP
+class      disputed
+since      2024
+says       realpath("a") and realpath("a/x"), with a -> b and b -> a,
+           return a null pointer with ELOOP.
+note       disputed (Q-8): a name whose resolution never ends names no
+           existing file, so ENOENT applies literally too.
+test       t/007-eloop.c
+
+assertion  XSH.realpath.008
+anchor     functions/realpath.html#ERRORS/ENAMETOOLONG
+class      disputed
+since      2024
+says       realpath() of a name one byte longer than {NAME_MAX} returns a
+           null pointer with ENAMETOOLONG, even where a file named by its
+           first {NAME_MAX} bytes exists.
+note       disputed (Q-8): the long name names no existing file, so ENOENT
+           applies too.
+test       t/008-enametoolong.c
+
+assertion  XSH.realpath.009
+anchor     functions/realpath.html#ERRORS/EINVAL
+class      required
+since      2024
+says       realpath(NULL, buf) returns a null pointer with EINVAL.
+test       t/009-einval.c
+
+assertion  XSH.realpath.010
+anchor     functions/realpath.html#ERRORS/EACCES
+class      required
+since      2024
+says       For a process without appropriate privileges, realpath("s/x"),
+           with directory s denying search permission and s/x a file,
+           returns a null pointer with EACCES.
+note       The child first resolves "."; if an ancestor of the working
+           directory denies it search (so the may-fail EACCES and other
+           errors could apply), the test is UNRESOLVED.
+test       t/010-eacces.c

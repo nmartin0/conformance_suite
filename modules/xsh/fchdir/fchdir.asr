@@ -1,0 +1,50 @@
+# XSH fchdir()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# fchdir() moved from the XSI option to the Base in Issue 7, hence 2008.
+
+assertion  XSH.fchdir.001
+anchor     functions/fchdir.html#DESCRIPTION
+anchor     functions/fchdir.html#RETURN VALUE
+class      required
+since      2008
+says       fchdir(fd), with fd from open("d", O_RDONLY), returns 0; "." is
+           then d, the relative name "f" opens d/f, and fd stays open.
+test       t/001-changes.c
+
+assertion  XSH.fchdir.002
+anchor     functions/fchdir.html#DESCRIPTION
+class      required
+since      2008
+says       fchdir(fd), with fd opened on d before d was renamed to e and a
+           new d was made, makes the directory fd refers to (now e) the
+           working directory, not the new d.
+test       t/002-renamed.c
+
+assertion  XSH.fchdir.003
+anchor     functions/fchdir.html#ERRORS/EBADF
+anchor     functions/fchdir.html#RETURN VALUE
+class      required
+since      2008
+says       fchdir() of a descriptor that is not open, and of -1, fails with
+           EBADF and leaves the working directory unchanged.
+test       t/003-ebadf.c
+
+assertion  XSH.fchdir.004
+anchor     functions/fchdir.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       fchdir() of a descriptor open on a regular file, and of a pipe's
+           read end, fails with ENOTDIR and leaves the working directory
+           unchanged.
+test       t/004-enotdir.c
+
+assertion  XSH.fchdir.005
+anchor     functions/fchdir.html#ERRORS/EACCES
+class      required
+since      2008
+says       For a process without appropriate privileges, fchdir(fd), with
+           fd opened O_RDONLY on a directory that grants it read but not
+           search permission (mode 0644), fails with EACCES and leaves the
+           working directory unchanged.
+test       t/005-eacces.c

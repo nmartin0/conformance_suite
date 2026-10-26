@@ -1,0 +1,29 @@
+# XSH getppid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getppid.001
+anchor     functions/getppid.html#DESCRIPTION
+anchor     basedefs/V1_chap03.html#3.253
+class      required
+since      1988
+says       A child's getppid() returns the test process's ID, and a
+           grandchild's getppid() returns the child's ID as fork() gave it
+           to the test, while the child lives.
+test       t/001-creator.c
+
+assertion  XSH.getppid.002
+anchor     functions/getppid.html#DESCRIPTION
+anchor     basedefs/V1_chap03.html#3.253
+class      required
+since      1988
+says       Once the child that created a grandchild has terminated and its
+           status has been collected, the grandchild's getppid() returns a
+           positive value other than the child's ID (the ID of a system
+           process, implementation-defined).
+note       Only the state after the status is collected is tested: XBD
+           3.253 keeps the creator as parent for its whole lifetime (which
+           XBD 3.285 ends when the ID is returned to the system), while
+           _exit() reparents children at termination; both agree once the
+           child is reaped (new standard issue, see the report). A reaper
+           process outside the standard would also pass.
+test       t/002-after-creator.c

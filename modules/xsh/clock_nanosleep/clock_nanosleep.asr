@@ -1,0 +1,157 @@
+# XSH clock_nanosleep()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The text bounds the suspension from below only; the upper limits here
+# are practical caps. A relative sleep is measured with its own clock,
+# and a measured interval may be short by one step of that clock
+# (clock_getres()). With CLOCK_REALTIME the test is UNRESOLVED when that
+# clock and CLOCK_MONOTONIC disagree over the interval (it was adjusted).
+# Signals come from a child that repeats them, so that one sent before
+# the call cannot leave the test waiting. clock_nanosleep() returns an
+# error number; it is not required to set errno.
+
+assertion  XSH.clock_nanosleep.001
+anchor     functions/clock_nanosleep.html#DESCRIPTION
+anchor     functions/clock_nanosleep.html#RETURN VALUE
+class      required
+since      2008
+says       A relative clock_nanosleep(CLOCK_REALTIME) of 200 ms returns 0
+           after at least 200 ms by CLOCK_REALTIME (within a 10 s cap).
+uses       XSH.clock_getres.001 XSH.clock_getres.002
+test       t/001-relative-realtime.c
+
+assertion  XSH.clock_nanosleep.002
+anchor     functions/clock_nanosleep.html#DESCRIPTION
+anchor     functions/clock_nanosleep.html#RETURN VALUE
+class      required
+since      2024
+says       Relative clock_nanosleep(CLOCK_MONOTONIC) calls of 200 ms and of
+           1 s (tv_sec only) return 0 after at least the time asked for by
+           CLOCK_MONOTONIC (within a 10 s cap).
+uses       XSH.clock_getres.002
+test       t/002-relative-monotonic.c
+
+assertion  XSH.clock_nanosleep.003
+anchor     functions/clock_nanosleep.html#DESCRIPTION
+class      required
+since      2024
+says       clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME) with a time
+           300 ms ahead returns 0, and CLOCK_MONOTONIC read after it has
+           reached that time (within a 10 s cap).
+uses       XSH.clock_getres.002
+test       t/003-absolute-monotonic.c
+
+assertion  XSH.clock_nanosleep.004
+anchor     functions/clock_nanosleep.html#DESCRIPTION
+class      required
+since      2008
+says       clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME) with a time
+           300 ms ahead returns 0, and CLOCK_REALTIME read after it has
+           reached that time (within a 10 s cap).
+uses       XSH.clock_getres.001
+test       t/004-absolute-realtime.c
+
+assertion  XSH.clock_nanosleep.005
+anchor     functions/clock_nanosleep.html#DESCRIPTION
+class      required
+since      2008
+says       With TIMER_ABSTIME and a time already reached (1 s ago, or the
+           value just read), clock_nanosleep() returns 0 at once (within
+           500 ms) for CLOCK_REALTIME and for CLOCK_MONOTONIC.
+note       "At once" is checked with a practical 500 ms limit.
+uses       XSH.clock_getres.001 XSH.clock_getres.002
+test       t/005-absolute-past.c
+
+assertion  XSH.clock_nanosleep.006
+anchor     functions/clock_nanosleep.html#ERRORS/EINVAL
+class      required
+since      2008
+says       clock_nanosleep() returns EINVAL for tv_nsec 1000000000 and for
+           -1, relative and with TIMER_ABSTIME.
+test       t/006-einval-nsec.c
+
+assertion  XSH.clock_nanosleep.007
+anchor     functions/clock_nanosleep.html#ERRORS/EINVAL
+class      required
+since      2008
+says       For a clock ID that clock_gettime() rejects with EINVAL (not a
+           known clock), clock_nanosleep() returns EINVAL, relative and
+           with TIMER_ABSTIME.
+note       The candidate IDs are those of XSH.clock_getres.004; one that
+           clock_gettime() accepts is a known clock and is skipped.
+uses       XSH.clock_getres.004
+test       t/007-unknown-clock.c
+
+assertion  XSH.clock_nanosleep.008
+anchor     functions/clock_nanosleep.html#DESCRIPTION
+anchor     functions/clock_nanosleep.html#ERRORS/EINVAL
+anchor     functions/clock_nanosleep.html#ERRORS/ENOTSUP
+class      conditional
+when       TCT
+since      2008
+says       clock_nanosleep() with CLOCK_THREAD_CPUTIME_ID, or with the ID
+           pthread_getcpuclockid() gives for the calling thread, returns
+           EINVAL or ENOTSUP, relative and with TIMER_ABSTIME.
+note       The calling thread's CPU-time clock is named under EINVAL, and
+           a CPU-time clock is the example under ENOTSUP; both conditions
+           apply and XSH 2.3 allows either.
+test       t/008-thread-cputime.c
+
+assertion  XSH.clock_nanosleep.009
+anchor     functions/clock_nanosleep.html#RETURN VALUE
+anchor     functions/clock_nanosleep.html#ERRORS/EINTR
+class      required
+since      2024
+says       A caught signal ends a relative 5 s
+           clock_nanosleep(CLOCK_MONOTONIC): it returns EINTR, and *rmtp
+           holds a proper time no more than 5 s and no less than 5 s
+           minus the time measured in the call by CLOCK_MONOTONIC.
+uses       XSH.clock_getres.002
+test       t/009-interrupted.c
+
+assertion  XSH.clock_nanosleep.010
+anchor     functions/clock_nanosleep.html#RETURN VALUE
+class      required
+since      2024
+says       With rmtp equal to rqtp, an interrupted relative 5 s
+           clock_nanosleep(CLOCK_MONOTONIC) returns EINTR and leaves the
+           remaining time (within the bounds of XSH.clock_nanosleep.009)
+           in the shared object.
+uses       XSH.clock_getres.002
+test       t/010-same-object.c
+
+assertion  XSH.clock_nanosleep.011
+anchor     functions/clock_nanosleep.html#RETURN VALUE
+class      required
+since      2024
+says       An absolute clock_nanosleep(CLOCK_MONOTONIC) 5 s ahead, ended
+           by a caught signal, returns EINTR and leaves *rmtp as it was.
+test       t/011-absolute-interrupted.c
+
+assertion  XSH.clock_nanosleep.012
+anchor     functions/clock_nanosleep.html#DESCRIPTION
+class      required
+since      2024
+says       A signal that is blocked, or ignored, when it arrives does not
+           end a relative 600 ms clock_nanosleep(CLOCK_MONOTONIC): it
+           returns 0 after at least 600 ms; the blocked signal stays
+           pending.
+uses       XSH.clock_getres.002
+test       t/012-not-delivered.c
+
+assertion  XSH.clock_nanosleep.013
+anchor     functions/clock_nanosleep.html#DESCRIPTION
+class      required
+since      2008
+says       After an uninterrupted and an interrupted clock_nanosleep(), the
+           signal mask and the actions of SIGALRM, SIGUSR1 and SIGUSR2
+           are what they were before.
+test       t/013-signals-untouched.c
+
+assertion  XSH.clock_nanosleep.014
+anchor     functions/clock_nanosleep.html#RETURN VALUE
+class      required
+since      2024
+says       With a null rmtp, a caught signal still ends a relative 5 s
+           clock_nanosleep(CLOCK_MONOTONIC), which returns EINTR.
+test       t/014-null-rmtp.c

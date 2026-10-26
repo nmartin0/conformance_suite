@@ -1,0 +1,23 @@
+# pthread_create.cov - every requirement unit on functions/pthread_create.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:9db44a03     XSH.pthread_create.001
+DESCRIPTION:d93360d0     partial XSH.pthread_create.001  # the default detachstate only; other default attributes are not observable without more interfaces
+DESCRIPTION:5c157ab7     partial XSH.pthread_create.011  # the detachstate attribute only
+DESCRIPTION:464dc24e     XSH.pthread_create.002
+DESCRIPTION:4ddca7e7     XSH.pthread_create.001
+DESCRIPTION:d63c4eee     XSH.pthread_create.003
+DESCRIPTION:8647ebc8     none  introduces the next sentence
+DESCRIPTION:e15ecdd9     XSH.pthread_create.004
+DESCRIPTION:de6d2944     none  introduces the list
+DESCRIPTION:d69e852d     XSH.pthread_create.005
+DESCRIPTION:4f6b79cd     XSH.pthread_create.006
+DESCRIPTION:debfffce     XSH.pthread_create.007 XSH.pthread_create.008
+DESCRIPTION:06d91e63     XSH.pthread_create.009
+DESCRIPTION:f992f622     untestable  that no thread was created cannot be told from a wait of any length; the contents of thread are undefined
+DESCRIPTION:3f815c9f     XSH.pthread_create.010
+DESCRIPTION:17b8fe43     none  undefined behaviour
+RETURN_VALUE:1525e88c    XSH.pthread_create.001 XSH.pthread_create.012 XSH.pthread_create.013
+ERRORS:4240b089          partial XSH.pthread_create.012  # the {PTHREAD_THREADS_MAX} case; a lack of other resources cannot be arranged portably
+ERRORS:36111bf7          XSH.pthread_create.013
+ERRORS:3379dc6d          untestable  pthread_create() does not wait for anything a signal could interrupt in a way a test can arrange

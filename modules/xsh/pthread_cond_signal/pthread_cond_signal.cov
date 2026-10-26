@@ -1,0 +1,14 @@
+# pthread_cond_signal.cov - every requirement unit on functions/pthread_cond_signal.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d3a94269     XSH.pthread_cond_signal.001 XSH.pthread_cond_signal.003
+DESCRIPTION:2da5f6e5     partial XSH.pthread_cond_signal.003  # all blocked threads are unblocked; the atomicity of the determination is not observable through spurious wakeups
+DESCRIPTION:8b49f518     partial XSH.pthread_cond_signal.001 XSH.pthread_cond_signal.002  # at least one is unblocked; the atomicity of the determination is not observable through spurious wakeups
+DESCRIPTION:07270228     untestable  which thread goes first under the default policy is not specified
+DESCRIPTION:387ddd52     XSH.pthread_cond_signal.004
+DESCRIPTION:a1ec72d8     partial XSH.pthread_cond_signal.004  # mutual exclusion and ownership; the order of acquisition is the scheduling policy's
+DESCRIPTION:28206ee6     XSH.pthread_cond_signal.001
+DESCRIPTION:4b54abb3     untestable  a later waiter woken by a signal sent when nobody waited cannot be told from a spurious wakeup
+DESCRIPTION:4d65c3f2     none  undefined
+RETURN_VALUE:720bf0e8    XSH.pthread_cond_signal.001 XSH.pthread_cond_signal.003
+ERRORS:0a906269          partial XSH.pthread_cond_signal.001 XSH.pthread_cond_signal.003  # every return is checked to be 0; no signal is aimed at the calling thread

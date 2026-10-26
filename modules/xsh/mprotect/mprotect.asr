@@ -1,0 +1,86 @@
+# XSH mprotect()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Page sizes come from sysconf(_SC_PAGESIZE); addresses passed are page
+# multiples (the implementation may require that). Signals are seen by
+# touching memory in a child process.
+
+assertion  XSH.mprotect.001
+anchor     functions/mprotect.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.8.3.3
+class      required
+since      2001
+says       After mprotect(PROT_READ) of a read-write anonymous MAP_SHARED
+           page returns 0, a store to it raises SIGSEGV and leaves the byte
+           unchanged.
+test       t/001-to-read.c
+
+assertion  XSH.mprotect.002
+anchor     functions/mprotect.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.8.3.3
+class      required
+since      2001
+says       After mprotect(PROT_NONE) of a read-write page returns 0, a load
+           from it and a store to it each raise SIGSEGV.
+test       t/002-to-none.c
+
+assertion  XSH.mprotect.003
+anchor     functions/mprotect.html#DESCRIPTION
+class      required
+since      2001
+says       mprotect(PROT_READ|PROT_WRITE) of a PROT_READ MAP_SHARED mapping
+           of a file open for reading and writing returns 0, and a store
+           then succeeds and reaches the file.
+test       t/003-to-write.c
+
+assertion  XSH.mprotect.004
+anchor     functions/mprotect.html#DESCRIPTION
+class      required
+since      2001
+says       mprotect(start, one page + 1, PROT_READ) of a three-page
+           read-write mapping covers all of the second page (a store to its
+           last byte raises SIGSEGV) but not the third.
+test       t/004-whole-pages.c
+
+assertion  XSH.mprotect.005
+anchor     functions/mprotect.html#ERRORS/EACCES
+anchor     functions/mprotect.html#DESCRIPTION
+class      required
+since      2001
+says       mprotect(PROT_READ|PROT_WRITE) of a MAP_SHARED mapping of a file
+           opened read-only, after that descriptor is closed, fails with
+           EACCES and the mapping can still be loaded.
+note       DESCRIPTION words this as something the application ensures,
+           while ERRORS requires the error; the error is tested, as for
+           SI-68 (a candidate issue raised with this module).
+test       t/005-eacces.c
+
+assertion  XSH.mprotect.006
+anchor     functions/mprotect.html#ERRORS/ENOMEM
+class      required
+since      2001
+says       mprotect() over three pages whose middle one is unmapped fails
+           with ENOMEM.
+test       t/006-enomem.c
+
+assertion  XSH.mprotect.007
+anchor     functions/mprotect.html#DESCRIPTION
+class      required
+since      2001
+says       mprotect() of an anonymous MAP_SHARED page returns 0 for each
+           of PROT_NONE, PROT_READ, PROT_WRITE and PROT_READ|PROT_WRITE in
+           turn, and a store succeeds after the last.
+test       t/007-required-prot.c
+
+assertion  XSH.mprotect.008
+anchor     functions/mprotect.html#DESCRIPTION
+anchor     functions/mprotect.html#ERRORS/EACCES
+class      required
+since      2001
+says       mprotect(PROT_READ|PROT_WRITE) of a PROT_READ MAP_PRIVATE mapping
+           of a file opened read-only returns 0, and a store then succeeds
+           without reaching the file.
+note       Write permission is needed only for shared mappings. EAGAIN or
+           ENOMEM (no memory to reserve for the private pages) is
+           UNRESOLVED; NOTINUSE where MAP_PRIVATE fails with ENOTSUP.
+test       t/008-private-write.c

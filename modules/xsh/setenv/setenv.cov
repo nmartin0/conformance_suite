@@ -1,0 +1,16 @@
+# setenv.cov - every requirement unit on functions/setenv.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:14cf6df9     XSH.setenv.001 XSH.setenv.002
+DESCRIPTION:71884831     none  describes the argument
+DESCRIPTION:ad88d07a     XSH.setenv.001 XSH.setenv.002
+DESCRIPTION:7a45f538     XSH.setenv.005
+DESCRIPTION:e45ace9d     XSH.setenv.002
+DESCRIPTION:66e1143c     XSH.setenv.003
+DESCRIPTION:cfff3ecc     XSH.setenv.001 XSH.setenv.002 XSH.setenv.006
+DESCRIPTION:7992dbc1     XSH.setenv.004
+DESCRIPTION:ae92ba65     none  permission: thread-safety not required
+RETURN_VALUE:1906e63a    XSH.setenv.001 XSH.setenv.002 XSH.setenv.003
+RETURN_VALUE:eddb1e7f    partial XSH.setenv.005  # the unchanged environment is checked for EINVAL only; ENOMEM cannot be arranged
+ERRORS:b5c22957          XSH.setenv.005
+ERRORS:4675e187          todo  ENOMEM: no portable way to exhaust memory for the environment alone

@@ -1,0 +1,32 @@
+# strerror.cov - every requirement unit on functions/strerror.html
+# (also strerror_l.html and strerror_r.html, the same page).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:2edad2ba     none  alignment with ISO C (a statement about the page)
+DESCRIPTION:5ae5401f     none  alignment with ISO C (a statement about the page)
+DESCRIPTION:4e137535     none  alignment with ISO C (a statement about the page)
+DESCRIPTION:3cf019ab     partial XSH.strerror.001 XSH.strerror.003  # a string is returned and is non-empty; locale dependence not checked
+DESCRIPTION:8ab961b1     XSH.strerror.001 XSH.strerror.005
+DESCRIPTION:262c3508     app
+DESCRIPTION:917ec0b0     XSH.strerror.007  # the permission itself needs no test; another thread's strerror_l() is checked not to overwrite
+DESCRIPTION:e4a08d94     none  a permission
+DESCRIPTION:043dc96c     none  a permission (whose string it means is unclear; see the report)
+DESCRIPTION:70c71766     impl  message text per LC_MESSAGES ("should")
+DESCRIPTION:c409b596     partial XSH.strerror.006 XSH.strerror.007  # perror(), strerror_r(), strsignal(), psignal() and another thread's strerror_l(); not every function
+DESCRIPTION:ead692af     XSH.strerror.002 XSH.strerror.004 XSH.strerror.011
+DESCRIPTION:c6cf1c90     app
+DESCRIPTION:70d34233     app
+DESCRIPTION:00fb749b     untestable  freedom from data races cannot be shown by a finite run
+DESCRIPTION:c59fc031     partial XSH.strerror.011  # the POSIX locale only; a string is returned and is non-empty
+DESCRIPTION:49630cdc     XSH.strerror.008
+DESCRIPTION:bc134c06     partial XSH.strerror.003 XSH.strerror.008 XSH.strerror.009 XSH.strerror.011  # meaning cannot be checked: non-empty for valid numbers, and for unknown ones where strerror_r() returns 0
+DESCRIPTION:7a831a37     app
+RETURN_VALUE:b296948f    XSH.strerror.001
+RETURN_VALUE:a265dacc    XSH.strerror.005
+RETURN_VALUE:3a2daac3    XSH.strerror.011
+RETURN_VALUE:63478fac    XSH.strerror.012
+RETURN_VALUE:be63c77c    untestable  no other error condition can be arranged for strerror_l()
+RETURN_VALUE:10bf2f3a    XSH.strerror.008 XSH.strerror.010
+RETURN_VALUE:27ed31a1    XSH.strerror.009 XSH.strerror.010
+ERRORS:41392a55          XSH.strerror.005 XSH.strerror.009 XSH.strerror.012
+ERRORS:152d1f38          XSH.strerror.010

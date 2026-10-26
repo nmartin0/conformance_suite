@@ -1,0 +1,36 @@
+# XSH pthread_equal()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only IDs of live threads, and PTHREAD_NULL, are compared (anything else
+# is undefined).
+
+assertion  XSH.pthread_equal.001
+anchor     functions/pthread_equal.html#RETURN VALUE
+class      required
+since      2001
+says       pthread_equal() returns non-zero for equal IDs: the calling
+           thread's ID with itself and with a copy, and a new thread's
+           stored ID with what pthread_self() returns in that thread.
+test       t/001-equal.c
+
+assertion  XSH.pthread_equal.002
+anchor     functions/pthread_equal.html#RETURN VALUE
+class      required
+since      2001
+says       pthread_equal() returns 0 for the IDs of two different live
+           threads, in either order, and for a new thread's ID against the
+           initial thread's.
+test       t/002-unequal.c
+
+assertion  XSH.pthread_equal.003
+anchor     functions/pthread_equal.html#RETURN VALUE
+anchor     basedefs/pthread.h.html#DESCRIPTION
+class      required
+since      2024
+says       PTHREAD_NULL initializes a pthread_t; pthread_equal() returns 0
+           for PTHREAD_NULL against the ID of the calling thread and of
+           another live thread (either order), and non-zero for
+           PTHREAD_NULL against PTHREAD_NULL.
+note       The test uses PTHREAD_NULL directly: where <pthread.h> lacks it
+           (a Tier 0 failure) the test does not build.
+test       t/003-null.c
