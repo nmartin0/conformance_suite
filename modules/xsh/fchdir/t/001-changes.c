@@ -253,8 +253,7 @@ int main(void)
 		pc_check(fchdir(fd) == 0, "fchdir() failed: %s", pc_errname(errno));
 		pc_check(still(&d), "after fchdir(), \".\" is not d");
 		pc_check(pc_file_equals("f", "in-d"), "after fchdir(), \"f\" does not open d/f");
-		if (!(fcntl(fd, F_GETFD) != -1))
-			pc_unresolved("fchdir() closed the descriptor");
+		pc_check(fcntl(fd, F_GETFD) != -1, "fchdir() closed the descriptor");
 	}
 	pc_pass();
 }

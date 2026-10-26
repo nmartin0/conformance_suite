@@ -38,7 +38,11 @@ verified; this file is the plan. Update both when a step finishes.
   Linux-ism audit (3a) and the conforming-variant retrofit with its own
   independent review are done (see the review log).
 
+- Round of stdio, process and file modules (about 15 modules; 1880 assertions, 2807 mutants, 1451 variants in all); deviations O.34 to O.53, SI-73 to SI-88 and Q-62 to Q-74 recorded.
+
 ## Next
+
+0. **Core pages still missing** (files, processes, stdio): creat, fsync, mkstemp, pread/pwrite, readv/writev, pipe2, poll/select, system, popen, waitid, getrlimit, nice, times, posix_spawn, the flockfile family and others; about 45 pages in six groups.
 
 1. **Signals** (remaining): the few signal todos left (`ci/coverage.py
    --show` lists them): machine-dependent SIGILL/SIGFPE/SIGTRAP codes,

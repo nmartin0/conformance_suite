@@ -23,7 +23,6 @@ int main(void)
 	bad = pc_lowest_free_fd();
 	pc_test();
 	pc_expect_err(dup2(bad, t), EBADF, "dup2(<not open>, open fd)");
-	if (!(fcntl(t, F_GETFD) != -1))
-		pc_unresolved("fildes2 was closed");
+	pc_check(fcntl(t, F_GETFD) != -1, "fildes2 was closed");
 	pc_pass();
 }

@@ -258,3 +258,12 @@ repository updates by fast-forward:
     git pull --ff-only ~/Downloads/posixcheck-NNNN.bundle main
 
 To start from a bundle alone: `git clone posixcheck-NNNN.bundle posixcheck`.
+
+## Update: stdio, process and file round
+
+- Totals now: 180 modules, 1880 assertions, 2807 mutants, 1451 variants; lint 0 problems.
+- Setup steps (setenv, pipe, fork, ...) after pc_test() now report UNRESOLVED, not FAIL (165 statements, checked by the mutation gate).
+- Not blind-reviewed: three builders' modules (b06, b10, b11). The six ID-changing modules have no mutants (hand-reviewed, see docs/methodology.md).
+- pc_test() calls fflush(NULL), which discards pushback set earlier; flushing only stdout and stderr would be better (core change, not made).
+- Environment: sigtimedwait.008 can show UNRESOLVED when other processes use the user's RLIMIT_SIGPENDING; run serially.
+- kill.012 needs `have kill_uid U` in the profile.
