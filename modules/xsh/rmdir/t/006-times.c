@@ -217,16 +217,32 @@ int main(void)
 
 		pc_make_dir("p");
 		pc_test();
-		for (i = 0; i < 300 && !moved; i++) {
+		/*
+		 * Each round puts a whole second between the mkdir() and the
+		 * rmdir(): it waits until about 100 ms before a second changes,
+		 * makes the directory, waits until 50 ms into the next second and
+		 * removes it. Timestamps kept to the second (the coarsest
+		 * resolution) then differ; three rounds cover two-second ones.
+		 */
+		for (i = 0; i < 3 && !moved; i++) {
+			struct timespec now;
+
+			do {
+				sleep_ms(5);
+				(void)clock_gettime(CLOCK_REALTIME, &now);
+			} while (now.tv_nsec < 900000000L);
 			snprintf(name, sizeof name, "p/d%d", i);
-			pc_make_dir(name);	/* one subdirectory at a time: {LINK_MAX} may be small */
+			pc_make_dir(name);
 			p0 = lst("p");
-			sleep_ms(10);
+			do {
+				sleep_ms(5);
+				(void)clock_gettime(CLOCK_REALTIME, &now);
+			} while (now.tv_nsec < 50000000L || now.tv_nsec >= 900000000L);
 			pc_check(rmdir(name) == 0, "rmdir(%s) failed: %s", name, pc_errname(errno));
 			p1 = lst("p");
 			moved = ts_cmp(p1.st_mtim, p0.st_mtim) > 0;
 		}
-		pc_check(moved, "the parent's st_mtim did not move in 3 s of rmdir() calls");
+		pc_check(moved, "the parent's st_mtim did not move across three rounds of rmdir()");
 		pc_check(ts_cmp(p1.st_ctim, p0.st_ctim) > 0, "the parent's st_ctim did not move");
 	}
 	pc_pass();

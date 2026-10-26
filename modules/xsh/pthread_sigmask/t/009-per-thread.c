@@ -76,7 +76,8 @@ int main(void)
 	pc_begin("XSH.pthread_sigmask.009");
 	pc_check(pthread_sigmask(SIG_BLOCK, &b, NULL) == 0, "pthread_sigmask failed");
 	pc_test();
-	pc_check(pthread_create(&t, NULL, worker, NULL) == 0, "pthread_create failed");
+	if (!(pthread_create(&t, NULL, worker, NULL) == 0))
+		pc_unresolved("pthread_create failed");
 	pc_check(pthread_join(t, NULL) == 0, "pthread_join failed");
 	if (inherited != 1)
 		pc_unresolved("the new thread did not start with its creator's mask (a pthread_create() matter)");

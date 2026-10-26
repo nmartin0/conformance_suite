@@ -103,7 +103,8 @@ static void block_sigpipe(void)
 
 	sigemptyset(&one);
 	sigaddset(&one, SIGPIPE);
-	pc_check(sigprocmask(SIG_BLOCK, &one, NULL) == 0, "sigprocmask failed");
+	if (!(sigprocmask(SIG_BLOCK, &one, NULL) == 0))
+		pc_unresolved("sigprocmask failed");
 }
 
 

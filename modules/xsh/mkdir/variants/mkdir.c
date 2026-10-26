@@ -101,14 +101,11 @@ static int before(const char *v, int dirfd, const char *path)
 
 /*
  * "parent_gid": the new directory takes the parent directory's group, as
- * XSH mkdir() DESCRIPTION allows (parent's group or the effective group);
- * the BSDs always do this.
+ * XSH mkdir() DESCRIPTION allows (parent's group or the effective group).
  * "sgid_bit": as "parent_gid", and every new directory also has S_ISGID
  * set. mkdir() initializes only the permission bits and S_ISVTX from mode
  * (XSH mkdir() DESCRIPTION); nothing requires S_ISGID of a new directory
- * to be clear, and its meaning on a directory is not specified (XBD
- * <sys/stat.h> gives S_ISGID only for execution). Linux does this under a
- * set-group-ID parent; this system does it everywhere.
+ * to be clear, and its meaning on a directory is not specified (XBD <sys/stat.h> gives S_ISGID only for execution). This variant does it everywhere.
  */
 static void after(const char *v, int dirfd, const char *path)
 {

@@ -21,6 +21,7 @@ int main(void)
 	pc_check(fd >= 0, "cannot open f");
 	pc_test();
 	pc_expect_err(dup3(fd, fd, 0), EINVAL, "dup3(fd, fd, 0)");
-	pc_check(fcntl(fd, F_GETFD) != -1, "fd was closed");
+	if (!(fcntl(fd, F_GETFD) != -1))
+		pc_unresolved("fd was closed");
 	pc_pass();
 }

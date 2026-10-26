@@ -33,7 +33,6 @@ XSH._Exit.014      FAIL         linux*    O.6: SIGCHLD si_status has only the lo
 XSH.exec.028       FAIL         linux*    O.7: the thread CPU-time clock is not reset by exec
 XSH.sigaction.023  FAIL         linux*    O.10: SA_RESETHAND does not clear SA_SIGINFO
 XSH.sigaction.021  INSPECT      linux*    SI-24 (disputed): sigqueue() does not queue signals below SIGRTMIN
-XSH.kill.012       FAIL         linux*    2.2: kill(-1, sig) does not signal the calling process
 XBD.signal.h.006   FAIL         linux*    O.12: SIGRTMIN..SIGRTMAX has 31 signals, {RTSIG_MAX} is 32
 XBD.signal.h.007   FAIL         linux*    1.24: no _SC_NSIG or NSIG_MAX
 XBD.signal.h.008   FAIL         linux*    3.1: no SIG2STR_MAX
@@ -83,3 +82,59 @@ XSH.fdopen.009     FAIL         linux*    O.31: {STREAM_MAX} is 16 but not enfor
 XSH.fseek.004      INSPECT      linux*    O.33 (Q-40 disputed): fseek() after fflush() leaves the read-ahead offset
 XSH.fseek.016      INSPECT      linux*    O.3 (Q-35 disputed): fseeko() overflow gives EINVAL
 XSH.fdopen.013     INSPECT      linux*    Q-36 (disputed): fdopen("a") seeks the descriptor to the end
+XSH.fmemopen.004   FAIL         linux*    O.34: fmemopen() null-byte handling
+XSH.fmemopen.006   FAIL         linux*    O.34: fmemopen() null-byte handling
+XSH.fmemopen.021   FAIL         linux*    O.34: fmemopen() null-byte handling
+XSH.fmemopen.023   FAIL         linux*    O.35: fmemopen() stream is byte-oriented at once
+XSH.open_memstream.015 FAIL         linux*    O.36: open_memstream() with setvbuf() crashes
+XSH.fgets.006      FAIL         linux*    O.38: fgets()/getdelim() with a non-blocking pipe
+XSH.getdelim.012   FAIL         linux*    O.38: fgets()/getdelim() with a non-blocking pipe
+XSH.freopen.011    FAIL         linux*    O.40: freopen() order of close and open
+XSH.freopen.022    FAIL         linux*    O.40: freopen() order of close and open
+XSH.freopen.008    FAIL         linux*    O.40: freopen() order of close and open
+XSH.fscanf.014     FAIL         linux*    O.41: fscanf() prefix and suppressed conversion
+XSH.fscanf.015     FAIL         linux*    O.41: fscanf() prefix and suppressed conversion
+XSH.fscanf.043     FAIL         linux*    O.41: fscanf() prefix and suppressed conversion
+XSH.localtime.006  FAIL         linux*    O.42: all-year DST rule at the year end
+XSH.mlock.004      FAIL         linux*    O.43: failed mlock() locks the first page
+XSH.pthread_cancel.005 FAIL         linux*    O.44: cleanup cancelability; unusable mutex locks
+XSH.pthread_mutex_lock.014 FAIL         linux*    O.44: cleanup cancelability; unusable mutex locks
+XSH.readlink.003   FAIL         linux*    O.46: readlink() into 0 bytes returns -1
+XSH.seteuid.004    FAIL         linux*    O.47: effective and real ID rules
+XSH.setegid.004    FAIL         linux*    O.47: effective and real ID rules
+XSH.setregid.006   FAIL         linux*    O.47: effective and real ID rules
+XSH.strftime.002   FAIL         linux*    O.48: strftime() conformance items
+XSH.strftime.007   FAIL         linux*    O.48: strftime() conformance items
+XSH.strftime.012   FAIL         linux*    O.48: strftime() conformance items
+XSH.strftime.014   FAIL         linux*    O.48: strftime() conformance items
+XSH.strsignal.002  FAIL         linux*    O.49: psignal()/strsignal() texts differ
+XSH.symlink.003    FAIL         linux*    O.50: symlink("", path) gives ENOENT
+XSH.sysconf.001    FAIL         linux*    O.51: sysconf() values
+XSH.sysconf.002    FAIL         linux*    O.51: sysconf() values
+XSH.sysconf.004    FAIL         linux*    O.51: sysconf() values
+XSH.sysconf.009    FAIL         linux*    O.51: sysconf() values
+XSH.sysconf.005    FAIL         linux*    O.51: sysconf() values
+XSH.sysconf.007    FAIL         linux*    O.51: sysconf() values
+XSH.fprintf.055    UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.fprintf.056    UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.vfprintf.008   UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.getenv.004     UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.getenv.005     UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.gmtime.003     UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.localtime.012  UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.pthread_cond_wait.014 UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.pthread_cond_wait.015 UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.pthread_cond_wait.016 UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.realpath.001   UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.realpath.002   UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.realpath.003   UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.realpath.004   UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.realpath.005   UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.realpath.006   UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.realpath.007   UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.realpath.008   UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.realpath.009   UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.realpath.010   UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.pthread_equal.003 UNINITIATED  linux*    O.53: not declared under the strict build
+XSH.fmemopen.024   FAIL         linux*    O.31: {STREAM_MAX} is 16 but not enforced
+XSH.open_memstream.011 FAIL         linux*    O.31: {STREAM_MAX} is 16 but not enforced

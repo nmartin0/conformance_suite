@@ -47,8 +47,7 @@ static int in_groups(gid_t g)
  * "setgid_eperm": a process without appropriate privileges that asks for
  * S_ISGID on a regular file of a group it is not in is refused with EPERM
  * and the mode is unchanged, instead of having the bit cleared. EPERM is a
- * listed error and XSH 2.3 lets it be used in other circumstances; the
- * BSDs do this.
+ * listed error and XSH 2.3 lets it be used in other circumstances.
  * "setuid_eperm": likewise, a process without appropriate privileges is
  * refused with EPERM, mode unchanged, when it asks for S_ISUID.
  */

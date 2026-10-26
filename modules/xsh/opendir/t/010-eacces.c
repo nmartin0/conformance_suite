@@ -293,7 +293,8 @@ int main(void)
 		pc_check(r != 3, "the child could not prepare its files");
 		pc_check(r != 1, "opendir() without permission: a call that should fail succeeded");
 		pc_check(r == 0, "opendir() without permission: check %d went wrong", r);
-		pc_check(chmod("c/s", 0700) == 0, "chmod failed");
+		if (!(chmod("c/s", 0700) == 0))
+			pc_unresolved("chmod failed");
 	}
 	pc_pass();
 }

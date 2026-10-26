@@ -46,7 +46,7 @@ static const char *mutant_of(const char *prefix)
 	if (real_##fn == NULL) real_##fn = (__typeof__(fn) *)dlsym(RTLD_NEXT, #fn)
 
 /*
- * Neither glibc 2.39 nor musl has these functions; the shim then has
+ * Where the C library lacks these functions, the shim then has
  * nothing to wrap, and the tests do not build there anyway.
  */
 int sig2str(int signum, char *str)

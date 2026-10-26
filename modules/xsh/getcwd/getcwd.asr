@@ -83,7 +83,7 @@ says       With the working directory nested so deep that its absolute name
            and entered by relative names, getcwd() with a large enough buf
            returns the full name, whose part above the made directories
            resolves to the starting directory.
-note       disputed (new): only the RATIONALE says that ENAMETOOLONG is no
+note       disputed (Q-66): only the RATIONALE says that ENAMETOOLONG is no
            longer allowed here; the normative text lists no such error but
            XSH 2.3 lets implementations add errors unless a page forbids
            them. The test removes its tree itself (by relative names) before

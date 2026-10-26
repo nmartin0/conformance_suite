@@ -126,8 +126,8 @@ says       %z of the July structure from XSH.strftime.010 with tm_isdst
            changed to 0 gives "-0500" or "-0400", in the +hhmm form.
 note       The text does not settle which: a zero tm_isdst selects the
            standard time offset, but the members listed for %z include
-           tm_gmtoff, which still holds the DST offset (candidate standard
-           issue). Either reading is accepted.
+           tm_gmtoff, which still holds the DST offset (SI-78).
+           Either reading is accepted.
 test       t/011-offset-isdst-zero.c
 
 assertion  XSH.strftime.012

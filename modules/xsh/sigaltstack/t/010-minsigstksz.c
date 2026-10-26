@@ -3,7 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.sigaltstack.010
- * VARIANT   sigaltstack.bsd_flags
+ * VARIANT   sigaltstack.disable_4
  * VARIANT   sigaltstack.minsigstksz_32k
  */
 #include "pc.h"

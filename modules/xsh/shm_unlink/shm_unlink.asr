@@ -53,7 +53,7 @@ needs      root
 says       When shm_unlink() by a process of another user without
            appropriate privileges, of a mode 0600 object, is refused, it
            fails with EACCES and the object keeps its name, size and data.
-note       disputed (new): the page never says what permission unlinking
+note       disputed (Q-71): the page never says what permission unlinking
            needs; where it is refused because only the owner may remove
            the name (as with a sticky directory), unlink() allows EPERM or
            EACCES but shm_unlink() lists only EACCES, and XSH 2.3 lets an

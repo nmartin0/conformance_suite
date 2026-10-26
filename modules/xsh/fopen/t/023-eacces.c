@@ -256,8 +256,8 @@ int main(void)
 	pc_make_dir("nw");
 	pc_make_dir("ns");
 	pc_make_file("ns/f", "x");
-	pc_check(chmod("wo", 0222) == 0 && chmod("ro", 0444) == 0 && chmod("nw", 0555) == 0 && chmod("ns", 0666) == 0,
-		 "chmod failed");
+	if (!(chmod("wo", 0222) == 0 && chmod("ro", 0444) == 0 && chmod("nw", 0555) == 0 && chmod("ns", 0666) == 0))
+		pc_unresolved("chmod failed");
 	pc_test();
 	{
 		int r = unprivileged(cases);

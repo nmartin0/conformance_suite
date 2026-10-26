@@ -40,6 +40,25 @@ by the named assertion.
 | XSH.fopen.032, XSH.fdopen.009 | NOTINUSE (musl) | sysconf(_SC_STREAM_MAX) is -1 (indeterminate, which is allowed) | - |
 | XSH.fdopen.005 | FAIL (glibc) | `fdopen()` ignores 'e': FD_CLOEXEC is not set | O.32 |
 | XSH.fseek.004 | INSPECT (glibc) | after fflush() of an input stream, fseek() within the read buffer leaves the descriptor at the end of the read-ahead (disputed, Q-40) | O.33 |
+| XSH.fmemopen.004, XSH.fmemopen.006, XSH.fmemopen.021 | FAIL | fmemopen() null-byte handling | O.34 |
+| XSH.fmemopen.023 | FAIL | fmemopen() stream is byte-oriented at once | O.35 |
+| XSH.open_memstream.015 | FAIL | open_memstream() with setvbuf() crashes | O.36 |
+| XSH.open_memstream.005, XSH.open_memstream.007 | FAIL | open_memstream() size wrong after seek/close | O.37 |
+| XSH.fgets.006, XSH.getdelim.012 | FAIL | fgets()/getdelim() with a non-blocking pipe | O.38 |
+| XSH.fgetc.005, XSH.fputc.007 | FAIL | fgetc()/fputc() errno 0 | O.39 |
+| XSH.freopen.011, XSH.freopen.022, XSH.freopen.008, XSH.freopen.013, XSH.freopen.014 | FAIL | freopen() order of close and open | O.40 |
+| XSH.fscanf.014, XSH.fscanf.015, XSH.fscanf.043 | FAIL | fscanf() prefix and suppressed conversion | O.41 |
+| XSH.localtime.006 | FAIL | all-year DST rule at the year end | O.42 |
+| XSH.mlock.004 | FAIL | failed mlock() locks the first page | O.43 |
+| XSH.pthread_cancel.005, XSH.pthread_mutex_lock.014 | FAIL | cleanup cancelability; unusable mutex locks | O.44 |
+| XSH.pthread_exit.006 | FAIL | fork() child hangs after pthread_exit() | O.45 |
+| XSH.readlink.003 | FAIL | readlink() into 0 bytes returns -1 | O.46 |
+| XSH.seteuid.004, XSH.setegid.004, XSH.setregid.006, XSH.seteuid.005, XSH.setegid.005 | FAIL | effective and real ID rules | O.47 |
+| XSH.strftime.002, XSH.strftime.007, XSH.strftime.012, XSH.strftime.014, XSH.strftime.008, XSH.strftime.009, XSH.strftime.013 | FAIL | strftime() conformance items | O.48 |
+| XSH.strsignal.002 | FAIL | psignal()/strsignal() texts differ | O.49 |
+| XSH.symlink.003 | FAIL | symlink("", path) gives ENOENT | O.50 |
+| XSH.sysconf.001, XSH.sysconf.002, XSH.sysconf.004, XSH.sysconf.009, XSH.sysconf.005, XSH.sysconf.007 | FAIL | sysconf() values | O.51 |
+| XSH.shm_open.006, XSH.fprintf.037 | FAIL | shm_open() O_NONBLOCK; %lc null | O.52 |
 | XSH.fseek.016 | INSPECT | `fseeko(f, OFF_MAX, SEEK_END)` with output pending flushes, then gives EINVAL, not EOVERFLOW (disputed, Q-35) | O.3 |
 | XSH.fdopen.013 | INSPECT (glibc) | `fdopen(fd, "a")` moves the descriptor's offset to the end of file (disputed, Q-36) | - |
 | XSH.fseek.015, XSH.ftell.007 | NOTINUSE | long is as wide as off_t (LP64) | - |
@@ -446,6 +465,126 @@ O.33 **glibc: fseek() after fflush() does not set the descriptor's offset.**
   4096 for a large one). musl gives 7. Output streams are right.
 - Comp: glibc. Kind: long-standing. Observe: XSH.fseek.004 (disputed, Q-40:
   the offset is read through the descriptor, a second handle).
+- Src: posixcheck run.
+
+O.34 **fmemopen(): null byte at open and at a full buffer.**
+- POSIX: `fmemopen`, DESCRIPTION: a null byte is written at the start of a "w" buffer, none over the data of a full buffer, and a zero-size buffer is left alone.
+- Both: after fmemopen(buf, n, "w") the buffer is unchanged until the first write (XSH.fmemopen.004); fmemopen(buf, 0, "w+") changes buf[0] to 0 (006); a write that fills a "w" buffer leaves a null over the last data byte (021).
+- Comp: glibc, musl. Kind: long-standing. Observe: XSH.fmemopen.004, XSH.fmemopen.006, XSH.fmemopen.021.
+- Src: posixcheck run.
+
+O.35 **glibc: an fmemopen() stream already has an orientation.**
+- POSIX: XSH 2.5: a stream has no orientation until its first operation, so fwide(f, 0) gives 0 on a new memory stream.
+- glibc 2.39: fwide(f, 0) right after fmemopen("r") returns -1.
+- Comp: glibc. Kind: long-standing. Observe: XSH.fmemopen.023.
+- Src: posixcheck run.
+
+O.36 **glibc: setvbuf() or unbuffered output on open_memstream() kills the process.**
+- POSIX: `open_memstream`, XSH 2.5: a dynamic memory stream works with a buffer from setvbuf() and when unbuffered.
+- glibc 2.39: XSH.open_memstream.015 is killed by signal 11.
+- Comp: glibc. Kind: long-standing. Observe: XSH.open_memstream.015.
+- Src: posixcheck run.
+
+O.37 **musl: open_memstream() size after a seek and at close.**
+- POSIX: `open_memstream`, DESCRIPTION: the size is the smaller of the current position and the buffer length after fflush() or fclose().
+- musl: after fseek(2) and fflush() the size is 5, expected 2 (.005); after fclose() it is 8, expected 14 (.007).
+- Comp: musl. Kind: long-standing. Observe: XSH.open_memstream.005, XSH.open_memstream.007.
+- Src: posixcheck run.
+
+O.38 **glibc: fgets() and getdelim() after a non-blocking read.**
+- POSIX: `fgets`, `getdelim`: a read that cannot complete gives a null pointer (-1) with the error indicator set; a set error indicator does not stop getdelim() reading more input.
+- glibc: fgets() returns s after reading "ab" with nothing more available (.006); with the error indicator set and "ab:" in the pipe, getdelim() returns -1 with errno 0 (.012).
+- Comp: glibc. Kind: long-standing. Observe: XSH.fgets.006, XSH.getdelim.012.
+- Src: posixcheck run.
+
+O.39 **musl: fgetc() and fputc() leave errno 0 on a stream open the wrong way.**
+- POSIX: `fgetc`, `fputc`, ERRORS: [EBADF] when the stream is not open for reading (writing).
+- musl: both fail with errno 0.
+- Comp: musl. Kind: long-standing. Observe: XSH.fgetc.005, XSH.fputc.007.
+- Src: posixcheck run.
+
+O.40 **freopen(): descriptor order, FD_CLOEXEC and a null pathname.**
+- POSIX: `freopen`: the old descriptor is closed first, so the new one is the lowest available and the call can succeed when every descriptor is in use; 'e' controls FD_CLOEXEC; with a null pathname "w" truncates and the indicators are cleared.
+- Both: the descriptor is 6, not the lowest (4) (.011); with all descriptors in use freopen() fails (.022). glibc: FD_CLOEXEC is set after a reopen with "r" (.008). musl: freopen(NULL, "w") leaves the file 3 bytes long (.013) and the end-of-file indicator set after freopen(NULL, "r") (.014).
+- Comp: glibc, musl. Kind: long-standing. Observe: XSH.freopen.011, XSH.freopen.022, XSH.freopen.008, XSH.freopen.013, XSH.freopen.014.
+- Src: posixcheck run.
+
+O.41 **fscanf(): invalid prefixes and a suppressed first conversion.**
+- POSIX: `fscanf`, DESCRIPTION and RETURN VALUE: a sequence that is only a prefix of valid input is a matching failure; EOF is returned only if input ends before the first conversion completes (a suppressed one counts).
+- glibc: sscanf("100ergs", "%f%n") returns 1 (.014); sscanf("0xg", "%x%n") returns 1 (.015). Both: sscanf("1", "%*d%d") returns -1, expected 0 (.043).
+- Comp: glibc, musl. Kind: long-standing. Observe: XSH.fscanf.014, XSH.fscanf.015, XSH.fscanf.043.
+- Src: posixcheck run.
+
+O.42 **localtime(): a TZ rule whose DST covers the whole year.**
+- POSIX: XBD 8.3 (TZ): "0/0,J365/25" puts DST in effect for the whole year.
+- Both: with TZ=PCS5PCD,0/0,J365/25 localtime(1609470000) gives 2020-12-31 22:00:00, a standard-time value, where DST (23:00:00) is expected.
+- Comp: glibc, musl. Kind: long-standing. Observe: XSH.localtime.006.
+- Src: posixcheck run.
+
+O.43 **mlock(): a failing call locks the pages before the bad one.**
+- POSIX: `mlock`, ERRORS: on [ENOMEM] the memory is not locked.
+- Both: after the failed call the first page is locked.
+- Comp: glibc, musl. Kind: long-standing. Observe: XSH.mlock.004.
+- Src: posixcheck run.
+
+O.44 **glibc: cancellation cleanup state and an unusable robust mutex.**
+- POSIX: XSH 2.9.5.3: cleanup handlers run with cancelability disabled. `pthread_mutex_lock`: an unusable robust mutex gives ENOTRECOVERABLE to every later lock.
+- glibc: in the handler the state is PTHREAD_CANCEL_ENABLE (pthread_cancel.005); the lock after a trylock of an unusable mutex has not returned after 10 s (pthread_mutex_lock.014).
+- Comp: glibc. Kind: long-standing. Observe: XSH.pthread_cancel.005, XSH.pthread_mutex_lock.014.
+- Src: posixcheck run.
+
+O.45 **musl: pthread_exit() in a fork() child's last thread hangs.**
+- POSIX: `pthread_exit`: the process exits with status 0 after the last thread terminates.
+- musl: XSH.pthread_exit.006 (a fork() child, no exec) times out after 20 s.
+- Comp: musl. Kind: long-standing. Observe: XSH.pthread_exit.006.
+- Src: posixcheck run.
+
+O.46 **glibc: readlink() with bufsize 0 fails.**
+- POSIX: `readlink`, RATIONALE: a bufsize of zero represents historical practice; no error is listed for it.
+- glibc: readlink() into 0 bytes returns -1 (the kernel's EINVAL). musl returns 0.
+- Comp: glibc. Kind: long-standing. Observe: XSH.readlink.003.
+- Src: posixcheck run.
+
+O.47 **seteuid(), setegid(), setregid(): privilege checks.**
+- POSIX: `seteuid`, `setegid`, ERRORS: [EPERM] unless the ID equals the real or saved ID, and [EINVAL] for an invalid ID. `setregid`: the saved set-group-ID may become the real ID.
+- Both: setegid()/seteuid() of the current effective ID (neither real nor saved) return 0 (.004); setregid(saved, -1) fails with EPERM (.006). musl: setegid()/seteuid() of (id_t)-1 return 0 (.005).
+- Comp: glibc, musl. Kind: long-standing. Observe: XSH.seteuid.004, XSH.setegid.004, XSH.setregid.006, XSH.seteuid.005, XSH.setegid.005.
+- Src: posixcheck run.
+
+O.48 **strftime(): padding, flags, tzset, errno, signs, %s.**
+- POSIX: `strftime`: %C is two digits; the flags and width apply to %Y; the call acts as if tzset() were called; ERANGE when the result does not fit; a successful call leaves errno alone; %Y has no sign without '+'; %s is mktime() of local time.
+- glibc: %C gives "2" (.002); "%+4Y" is copied out unchanged (.007). Both: tzname[0] is not updated (.012); a result needing exactly maxsize bytes leaves errno 0 (glibc) or EINVAL (musl) instead of ERANGE (.014). musl: %Y of 12345 gives "+12345" (.008); %s is 3600 s off (.009); a success changes errno (.013).
+- Comp: glibc, musl. Kind: long-standing. Observe: XSH.strftime.002, XSH.strftime.007, XSH.strftime.012, XSH.strftime.014, XSH.strftime.008, XSH.strftime.009, XSH.strftime.013.
+- Src: posixcheck run.
+
+O.49 **glibc: psignal() and strsignal() differ for a real-time signal.**
+- POSIX: `strsignal`, `psignal`: both give the same description for a signal.
+- glibc: for SIGRTMIN psignal() writes "Unknown signal 34", strsignal() gives "Real-time signal 0".
+- Comp: glibc. Kind: long-standing. Observe: XSH.strsignal.002.
+- Src: posixcheck run.
+
+O.50 **symlink() with an empty first argument.**
+- POSIX: `symlink`: path1 is stored as given; no error names an empty one.
+- Both: symlink("", "e") fails with ENOENT.
+- Comp: glibc, musl. Kind: long-standing. Observe: XSH.symlink.003.
+- Src: posixcheck run.
+
+O.51 **sysconf(): values that disagree with the headers and minima.**
+- POSIX: `sysconf`; XBD <unistd.h>, <limits.h>: an option macro of a supported option has a sysconf() value other than -1; {HOST_NAME_MAX} is at least 255; _SC_VERSION is 202405 and supported options give 202405 or -1; _SC_ARG_MAX is not changed by setrlimit() of other resources.
+- glibc: _SC_THREAD_ROBUST_PRIO_INHERIT is EINVAL (.001) and -1 although the macro is 200809 (.004); _SC_HOST_NAME_MAX is 64 (.002); _SC_ARG_MAX goes from 2097152 to 4194304 after setrlimit() (.009). Both: _SC_VERSION is 200809 (.005); _SC_ADVISORY_INFO is 200809 (.007).
+- Comp: glibc, musl. Kind: long-standing. Observe: XSH.sysconf.001, XSH.sysconf.002, XSH.sysconf.004, XSH.sysconf.009, XSH.sysconf.005, XSH.sysconf.007.
+- Src: posixcheck run.
+
+O.52 **musl: shm_open() descriptor flags and %lc of a null wide character.**
+- POSIX: `shm_open`: no O_NONBLOCK unless asked. `fprintf` %lc: a null wide character is written as a null byte.
+- musl: F_GETFL shows O_NONBLOCK after shm_open() (shm_open.006); "[%lc]" with L'\0' gives "[]" (fprintf.037).
+- Comp: musl. Kind: long-standing. Observe: XSH.shm_open.006, XSH.fprintf.037.
+- Src: posixcheck run.
+
+O.53 **Names and declarations absent under the strict build.**
+- POSIX: XSH and XBD name `realpath`, `asprintf`, `vasprintf`, `secure_getenv`, `pthread_cond_clockwait`, `PTHREAD_NULL`, and the `tm_gmtoff` and `tm_zone` members of `struct tm`.
+- Both libraries, built with `_POSIX_C_SOURCE=202405L` and `-Werror`: the first five are not declared (implicit declaration), `struct tm` has no `tm_zone`/`tm_gmtoff`, and glibc has no `PTHREAD_NULL`. The tests that need them end UNINITIATED (build failure). See 6.3 and 11.1.
+- Comp: glibc, musl. Kind: feature-test. Observe: XSH.realpath.001-.010, XSH.fprintf.055, .056, XSH.vfprintf.008, XSH.getenv.004, .005, XSH.pthread_cond_wait.014-.016, XSH.gmtime.003, XSH.localtime.012, XSH.pthread_equal.003 (glibc).
 - Src: posixcheck run.
 
 O.26 **glibc: fflush() of an input stream with pushback sets the wrong offset.**

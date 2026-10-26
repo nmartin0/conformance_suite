@@ -52,8 +52,7 @@ since      2008
 says       sigaltstack() with ss_flags SS_ONSTACK fails with EINVAL.
 note       Issue 7 required EINVAL for any flag but SS_DISABLE; Issue 8
            (Defect 1187) narrowed that to SS_ONSTACK or invalid flags,
-           so SS_ONSTACK is rejected in both. Linux accepts it as if it
-           were 0 (docs/linux-deviations.md O.13).
+           so SS_ONSTACK is rejected in both. A system that accepts it as if it were 0 deviates (O.13).
 test       t/005-einval-onstack.c
 
 assertion  XSH.sigaltstack.006
@@ -113,8 +112,7 @@ says       A child with an alternate stack of MINSIGSTKSZ bytes and a trivial
            normally.
 note       MINSIGSTKSZ is the minimum stack size for a signal handler.
            On x86-64 with AVX-512 the kernel's signal frame is larger
-           than glibc's and musl's MINSIGSTKSZ of 2048 (docs/linux-
-           deviations.md O.16).
+           than a MINSIGSTKSZ of 2048 (deviation O.16).
 nomutant   the signal frame is built by the kernel
 test       t/010-minsigstksz.c
 

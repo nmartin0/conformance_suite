@@ -184,7 +184,8 @@ int main(void)
 		get_page_size();
 		fd = make_data_file("f", pg);
 		pc_check(close(fd) == 0, "close failed: %s", pc_errname(errno));
-		pc_check(fcntl(fd, F_GETFD) == -1, "descriptor %d is still open", fd);
+		if (!(fcntl(fd, F_GETFD) == -1))
+			pc_unresolved("descriptor %d is still open", fd);
 		pc_test();
 		errno = 0;
 		p = mmap(NULL, (size_t)pg, PROT_READ, MAP_SHARED, fd, 0);

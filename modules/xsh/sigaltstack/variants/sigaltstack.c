@@ -21,7 +21,7 @@
 #endif
 #include "pcvariant.h"
 
-#define V_SS_DISABLE 4		/* sigaltstack.bsd_flags.h */
+#define V_SS_DISABLE 4		/* sigaltstack.disable_4.h */
 #define V_MINSIGSTKSZ 32768	/* sigaltstack.minsigstksz_32k.h */
 
 int sigaltstack(const stack_t *ss, stack_t *oss)
@@ -35,9 +35,9 @@ int sigaltstack(const stack_t *ss, stack_t *oss)
 		return real_sigaltstack(ss, oss);
 	if (ss != NULL) {
 		n = *ss;
-		if (IS("bsd_flags")) {
+		if (IS("disable_4")) {
 			/*
-			 * "bsd_flags": SS_DISABLE is 4 (see the header). The
+			 * "disable_4": SS_DISABLE is 4 (see the header). The
 			 * library's own SS_DISABLE value is then not a flag of
 			 * this system, so it is an invalid flag (EINVAL).
 			 */
@@ -72,7 +72,7 @@ int sigaltstack(const stack_t *ss, stack_t *oss)
 		ss = &n;
 	}
 	r = real_sigaltstack(ss, oss);
-	if (r == 0 && oss != NULL && IS("bsd_flags") && (oss->ss_flags & SS_DISABLE))
+	if (r == 0 && oss != NULL && IS("disable_4") && (oss->ss_flags & SS_DISABLE))
 		oss->ss_flags = (oss->ss_flags & ~SS_DISABLE) | V_SS_DISABLE;
 	return r;
 }

@@ -119,7 +119,7 @@ anchor     functions/V2_chap02.html#2.5
 class      disputed
 says       fwide(f, 0) right after open_memstream() returns a negative value
            (the stream is byte-oriented from the start).
-note       disputed (new): the page makes the stream byte-oriented, but
+note       disputed (Q-64): the page makes the stream byte-oriented, but
            XSH 2.5 says a memory stream's orientation is determined in
            exactly the same way as a file stream's, which starts with
            none. Under that reading fwide() returns 0 here (READING
@@ -144,7 +144,7 @@ anchor     functions/V2_chap02.html#2.5
 class      disputed
 says       fwide(f, 0) right after open_wmemstream() returns a positive value
            (the stream is wide-oriented from the start).
-note       disputed (new): the same conflict as XSH.open_memstream.012
+note       disputed (Q-64): the same conflict as XSH.open_memstream.012
            (READING open_memstream.wunoriented); a FAIL is logged as
            INSPECT.
 test       t/014-wide-oriented.c

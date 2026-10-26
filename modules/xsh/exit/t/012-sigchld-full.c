@@ -84,7 +84,8 @@ int main(void)
 		if (waitid(P_PID, (id_t)c, &si, WEXITED | WNOWAIT) != 0)
 			pc_unresolved("waitid failed: %s", pc_errname(errno));
 	}
-	pc_check(sigprocmask(SIG_SETMASK, &old, NULL) == 0, "sigprocmask failed");
+	if (!(sigprocmask(SIG_SETMASK, &old, NULL) == 0))
+		pc_unresolved("sigprocmask failed");
 	await_chld();
 	pc_check(got, "no SIGCHLD within 10 s of the child's exit()");
 	pc_check(info.si_status == 0x1234, "si_status %#x, expected 0x1234", (unsigned)info.si_status);

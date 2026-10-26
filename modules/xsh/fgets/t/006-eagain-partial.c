@@ -40,7 +40,8 @@ int main(void)
 		char s[16], *r;
 		int p[2], e;
 
-		pc_check(pipe(p) == 0, "pipe failed: %s", pc_errname(errno));
+		if (!(pipe(p) == 0))
+			pc_unresolved("pipe failed: %s", pc_errname(errno));
 		pc_check(write(p[1], "ab", 2) == 2, "write to the pipe failed: %s", pc_errname(errno));
 		nonblock(p[0]);
 		pc_test();

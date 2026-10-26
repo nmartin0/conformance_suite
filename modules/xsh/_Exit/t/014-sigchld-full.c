@@ -71,7 +71,8 @@ int main(void)
 		if (waitid(P_PID, (id_t)c, &si, WEXITED | WNOWAIT) != 0)
 			pc_unresolved("waitid failed: %s", pc_errname(errno));
 	}
-	pc_check(sigprocmask(SIG_SETMASK, &old, NULL) == 0, "sigprocmask failed");
+	if (!(sigprocmask(SIG_SETMASK, &old, NULL) == 0))
+		pc_unresolved("sigprocmask failed");
 	{
 		/* SIGCHLD may come a little after the status is available (as XSH.exit.011 allows) */
 		struct timespec ts = { 0, 10000000 };

@@ -181,8 +181,9 @@ int main(void)
 		pc_make_file("r0222", "r");
 		pc_make_file("w0444", "w");
 		pc_make_dir("ro");
-		pc_check(chmod("s", 0644) == 0 && chmod("r0222", 0222) == 0 && chmod("w0444", 0444) == 0 &&
-		    chmod("ro", 0555) == 0, "chmod failed");
+		if (!(chmod("s", 0644) == 0 && chmod("r0222", 0222) == 0 && chmod("w0444", 0444) == 0 &&
+		    chmod("ro", 0555) == 0))
+			pc_unresolved("chmod failed");
 		pc_test();
 		r = unprivileged(child);
 		NEED(r == 0 || (r >= 11 && r <= 32 && r % 10 != 0), "the child could not open its stream (status %d)", r);

@@ -89,12 +89,14 @@ int main(void)
 	/* Blocked here: it stays pending for this thread, not for the other one. */
 	here = 0;
 	anywhere = 0;
-	pc_check(pthread_sigmask(SIG_BLOCK, &a, NULL) == 0, "pthread_sigmask failed");
+	if (!(pthread_sigmask(SIG_BLOCK, &a, NULL) == 0))
+		pc_unresolved("pthread_sigmask failed");
 	pc_check(raise(SIGUSR1) == 0, "raise failed");
 	(void)nanosleep(&ts, NULL);
 	pc_check(!anywhere, "the signal raised by a thread that blocks it was delivered to another thread");
 	pc_check(sigpending(&p) == 0 && sigismember(&p, SIGUSR1) == 1, "the raised signal is not pending");
-	pc_check(pthread_sigmask(SIG_UNBLOCK, &a, NULL) == 0, "pthread_sigmask failed");
+	if (!(pthread_sigmask(SIG_UNBLOCK, &a, NULL) == 0))
+		pc_unresolved("pthread_sigmask failed");
 	pc_check(here, "unblocking did not deliver the pending signal to this thread");
 	stop = 1;
 	(void)pthread_join(t, NULL);

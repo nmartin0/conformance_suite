@@ -228,9 +228,11 @@ int main(void)
 		int v;
 
 		pc_make_dir("d");
-		pc_check(chmod("d", 0777) == 0, "chmod failed");
+		if (!(chmod("d", 0777) == 0))
+			pc_unresolved("chmod failed");
 		dfd = dir_fd("d");
-		pc_check(chmod("d", 0666) == 0, "chmod failed");
+		if (!(chmod("d", 0666) == 0))
+			pc_unresolved("chmod failed");
 		pc_test();
 		v = unprivileged(child);
 		pc_check(v == 0, CALLAT " through an O_RDONLY descriptor of a directory without search permission %s"

@@ -95,7 +95,8 @@ int main(void)
 		pc_check(mkfifo("fifo", 0600) == 0, "mkfifo failed");
 		q = open("fifo", O_RDONLY | O_NONBLOCK);
 		pc_check(q >= 0, "open of the FIFO failed");
-		pc_check(socketpair(AF_UNIX, SOCK_STREAM, 0, s) == 0, "socketpair failed");
+		if (!(socketpair(AF_UNIX, SOCK_STREAM, 0, s) == 0))
+			pc_unresolved("socketpair failed");
 		pc_test();
 		fails(p[0], "pipe");
 		fails(q, "FIFO");

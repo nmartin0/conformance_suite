@@ -202,7 +202,8 @@ int main(void)
 		pc_check(chmod("d", 0666) == 0, "chmod failed");
 		pc_test();
 		pc_check(unprivileged(child) == 0, "unlinkat() through an O_SEARCH descriptor failed");
-		pc_check(chmod("d", 0700) == 0, "chmod failed");
+		if (!(chmod("d", 0700) == 0))
+			pc_unresolved("chmod failed");
 		pc_check(!exists("d/f"), "d/f is still there");
 #endif
 	}

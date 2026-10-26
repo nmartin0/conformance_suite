@@ -42,7 +42,7 @@ note       {OPEN_MAX} is checked with the RLIMIT_NOFILE soft limit raised
            to at least {_POSIX_OPEN_MAX} when the hard limit allows; if it
            cannot be, {OPEN_MAX} is skipped with a note (Q-42).
            {SS_REPL_MAX} appears in the table as _POSIX_SS_REPL_MAX
-           (a new standard issue); the check (-1 or at least 4) holds
+           (SI-81); the check (-1 or at least 4) holds
            under either name.
 test       t/002-minimum-values.c
 

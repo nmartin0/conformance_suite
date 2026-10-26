@@ -26,7 +26,8 @@ int main(void)
 
 	pc_begin("XSH.fscanf.047");
 	pc_check(pipe(p) == 0, "pipe() failed: %s", pc_errname(errno));
-	pc_check(fcntl(p[0], F_SETFL, O_NONBLOCK) == 0, "fcntl(O_NONBLOCK) failed: %s", pc_errname(errno));
+	if (!(fcntl(p[0], F_SETFL, O_NONBLOCK) == 0))
+		pc_unresolved("fcntl(O_NONBLOCK) failed: %s", pc_errname(errno));
 	f = fdopen(p[0], "r");
 	pc_check(f != NULL, "fdopen() failed: %s", pc_errname(errno));
 	pc_test();

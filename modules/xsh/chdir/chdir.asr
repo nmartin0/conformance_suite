@@ -38,7 +38,7 @@ class      disputed
 since      1988
 says       chdir("f") and chdir("f/"), with f a regular file, fail with
            ENOTDIR and leave the working directory unchanged.
-note       disputed (new): chdir()'s ENOENT is worded "does not name an
+note       disputed (Q-67, Q-8): chdir()'s ENOENT is worded "does not name an
            existing directory", which a regular file meets as well, so
            XSH 2.3 would let either error be reported; the other reading
            is planted as a READING.

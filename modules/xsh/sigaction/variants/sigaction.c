@@ -129,7 +129,7 @@ int sigaction(int sig, const struct sigaction *act, struct sigaction *oact)
 	/*
 	 * "dfl_uncatchable_ok": setting SIGKILL or SIGSTOP to SIG_DFL is
 	 * ignored and succeeds. XSH sigaction() leaves it unspecified whether
-	 * that is ignored or fails with EINVAL (Linux fails).
+	 * that is ignored or fails with EINVAL.
 	 */
 	if (IS("dfl_uncatchable_ok") && act != NULL && (sig == SIGKILL || sig == SIGSTOP) &&
 	    !(act->sa_flags & SA_SIGINFO) && act->sa_handler == SIG_DFL)

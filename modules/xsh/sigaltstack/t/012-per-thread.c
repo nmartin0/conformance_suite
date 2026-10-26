@@ -4,7 +4,7 @@
  *
  * ASSERTION XSH.sigaltstack.012
  * MUTANT    sigaltstack.borrows_main
- * VARIANT   sigaltstack.bsd_flags
+ * VARIANT   sigaltstack.disable_4
  * VARIANT   sigaltstack.minsigstksz_32k
  */
 #include "pc.h"
@@ -96,7 +96,8 @@ int main(void)
 		ss.ss_size = size;
 		ss.ss_flags = 0;
 		pc_check(sigaltstack(&ss, NULL) == 0, "sigaltstack() failed: %s", pc_errname(errno));
-		pc_check(pthread_create(&t, NULL, thr, NULL) == 0, "pthread_create failed");
+		if (!(pthread_create(&t, NULL, thr, NULL) == 0))
+			pc_unresolved("pthread_create failed");
 		pc_check(pthread_join(t, &res) == 0, "pthread_join failed");
 		pc_check(res != (void *)1, "sigaltstack(NULL, &old) failed in the new thread");
 		pc_check(res != (void *)2, "the new thread sees the main thread's alternate stack");

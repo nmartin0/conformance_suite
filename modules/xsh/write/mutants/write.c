@@ -250,7 +250,7 @@ ssize_t pwrite(int fd, const void *buf, size_t n, off_t off)
 	if (IS("pwrite_ignores_offset"))
 		return real_write()(fd, buf, n);
 	if (IS("pwrite_appends")) {
-		/* Writes at the end when O_APPEND is set, as Linux does. */
+		/* Writes at the end when O_APPEND is set, as some systems do. */
 		int fl = fcntl(fd, F_GETFL);
 		if (fl != -1 && (fl & O_APPEND)) {
 			off_t end = lseek(fd, 0, SEEK_END);

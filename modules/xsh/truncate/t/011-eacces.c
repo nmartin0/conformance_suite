@@ -282,7 +282,8 @@ int main(void)
 		pc_check(r != 3, "the child could not prepare its file");
 		pc_check(r != 1, "a truncate() without permission succeeded");
 		pc_check(r == 0, "a truncate() without permission failed with %s", pc_errname(r >= 10 ? r - 10 : 0));
-		pc_check(chmod("s", 0700) == 0, "chmod failed");
+		if (!(chmod("s", 0700) == 0))
+			pc_unresolved("chmod failed");
 	}
 	pc_pass();
 }

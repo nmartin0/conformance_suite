@@ -373,8 +373,7 @@ since      2008
 says       With O_CREAT, a path ending in a slash whose last component
            does not exist fails with ENOENT or ENOTDIR, and nothing is
            created.
-note       In Issue 7 by TC1; defect 822 (TC2) reworded it. Linux gives
-           EISDIR here (docs/linux-deviations.md O.1).
+note       In Issue 7 by TC1; defect 822 (TC2) reworded it. A system that gives EISDIR here deviates (O.1).
 test       t/044-creat-trailing-slash-new.c
 
 assertion  XSH.open.045
@@ -386,7 +385,7 @@ says       With O_CREAT (without O_EXCL), a path ending in a slash whose
            last component names an existing regular file fails with
            ENOTDIR (ENOENT is not allowed), and the file is unchanged.
 note       In Issue 7 by TC1; the ENOENT exclusion is from defect 822
-           (TC2). Linux gives EISDIR (docs/linux-deviations.md O.1).
+           (TC2). A system that gives EISDIR here deviates (O.1).
 test       t/045-creat-trailing-slash-file.c
 
 assertion  XSH.open.046

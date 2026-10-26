@@ -118,8 +118,7 @@ says       pthread_mutex_lock() by the owner of a NORMAL mutex does not
            succeed: it has not returned 300 ms later, or it returned
            EDEADLK.
 note       The table says the relock deadlocks; the may-fail [EDEADLK]
-           for a detected deadlock is accepted as well (new issue, see
-           the module's report). The thread stays blocked until the
+           for a detected deadlock is accepted as well (SI-80). The thread stays blocked until the
            test exits.
 test       t/011-normal-relock.c
 

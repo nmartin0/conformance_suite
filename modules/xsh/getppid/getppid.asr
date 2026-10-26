@@ -24,6 +24,6 @@ note       Only the state after the status is collected is tested: XBD
            3.253 keeps the creator as parent for its whole lifetime (which
            XBD 3.285 ends when the ID is returned to the system), while
            _exit() reparents children at termination; both agree once the
-           child is reaped (new standard issue, see the report). A reaper
+           child is reaped (SI-84). A reaper
            process outside the standard would also pass.
 test       t/002-after-creator.c

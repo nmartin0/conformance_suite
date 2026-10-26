@@ -84,6 +84,22 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-70 | sigaction(): stale APPLICATION USAGE on longjmp() | editorial | none |
 | SI-71 | pthread_sigmask(): requirement on how | editorial | XSH.pthread_sigmask.010 |
 | SI-72 | 2.5.1: "open file descriptor"; whose further actions count | editorial | XSH.2.5.1-stream-handles.012 |
+| SI-73 | XSH fscanf(): "(except for %n)" and end-of-file | conflict | (fscanf.cov) |
+| SI-74 | XSH fopen() and freopen(): the two ENAMETOOLONG conditions are swapped | inconsistency | XSH.fopen.025, XSH.freopen.020 |
+| SI-75 | XSH strerror(): two statements about overwriting by strerror_l() | editorial | XSH.strerror.006, .007 |
+| SI-76 | XSH gmtime(): tm_zone is set only in the gmtime_r() text | editorial | XSH.gmtime.003 |
+| SI-77 | XSH mktime(): "shall attempt to determine" whether DST is in effect | editorial | (none) |
+| SI-78 | XSH strftime(): %z with tm_isdst 0 and a DST tm_gmtoff | unclear | XSH.strftime.011 |
+| SI-79 | XSH fmemopen(): the append position "one byte after the end of the buffer" | editorial | XSH.fmemopen.010 |
+| SI-80 | XSH pthread_mutex_lock(): NORMAL relock "deadlock" against the may-fail [EDEADLK] | unclear | XSH.pthread_mutex_lock.011 |
+| SI-81 | XSH sysconf(): the table names _POSIX_SS_REPL_MAX for a limit | editorial | XSH.sysconf.002 |
+| SI-82 | XSH fchdir() and readlink(): wording slips | editorial | (none) |
+| SI-83 | XSH fprintf(): wording gaps | editorial | XSH.fprintf.026 |
+| SI-84 | XBD 3.253 against _Exit(): when a child's parent changes | conflict | XSH.getppid.002 |
+| SI-85 | XSH getgroups(): CHANGE HISTORY says 0 is not permitted, DESCRIPTION allows it | conflict | XSH.getgroups.001 to .003 |
+| SI-86 | XSH setreuid(), setregid(), setgid(): wording slips | editorial | (none) |
+| SI-87 | XSH nanosleep() against clock_getres(): measured by CLOCK_REALTIME, or independent of it | unclear | XSH.nanosleep.001, .003, .006, .008 |
+| SI-88 | XSH clock_getres() and clock_nanosleep(): wording slips and an overlap | editorial | XSH.clock_getres.008, .009, XSH.clock_nanosleep.005, .008 |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
@@ -97,7 +113,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-11 | raise()/pthread_kill(): delivery before return (raise() settled by its own rule) | question | XSH.raise.001 |
 | Q-12 | kill() with the most negative pid_t | question | (not tested) |
 | Q-13 | alarm(): rounding of the seconds returned | question | XSH.alarm.002, XSH.alarm.003 |
-| Q-14 | alarm(): may SIGALRM come early? | question | XSH.alarm.001 |
+| Q-14 | alarm(), sleep(): may the wake-up come early? | question | XSH.alarm.001, XSH.sleep.002 |
 | Q-15 | pause()/sigsuspend(): delivery to the calling thread? | question | XSH.sigsuspend.006 |
 | Q-16 | {RTSIG_MAX}: the range's size or a lower bound? | question | XBD.signal.h.006 |
 | Q-17 | 2.4.2: kill() occurrences vs sigqueue() FIFO order | question | XSH.2.4.2-realtime-signals.004 |
@@ -145,3 +161,16 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-59 | _Exit consequences timing | question | XSH._Exit.016, .017, .018, .021 |
 | Q-60 | fcntl locks beyond EOF | question | XSH.fcntl.027 |
 | Q-61 | socket peer gone: EPIPE+SIGPIPE or ECONNRESET | question | XSH.write.026, XSH.read.022 |
+| Q-62 | XSH msync(): flags 0, MS_INVALIDATE alone, MS_ASYNC|MS_SYNC | question | XSH.msync.002, .007, .008 |
+| Q-63 | XSH strndup() and strnlen(): may bytes after the null byte be read? | question | XSH.strdup.007, XSH.strnlen.005 |
+| Q-64 | XSH open_memstream(): byte-oriented from the start, or unoriented until used? | question | XSH.open_memstream.012, .014 |
+| Q-65 | XSH fprintf(): infinity and NaN with e, g and a | question | XSH.fprintf.058 |
+| Q-66 | XSH getcwd(): is ENAMETOOLONG excluded for a long absolute name? | question | XSH.getcwd.008 |
+| Q-67 | XSH chdir(): ENOENT for a regular file | question | XSH.chdir.004 |
+| Q-68 | XSH mknod(): unspecified behaviour against the required EPERM | question | XSH.mknod.018, .019 |
+| Q-69 | XSH setreuid() and setregid(): is the saved ID otherwise left alone? | question | XSH.setreuid.004, XSH.setregid.004 |
+| Q-70 | XSH setregid(): which saved set-group-ID may be assigned to the real group ID? | question | XSH.setregid.006 |
+| Q-71 | XSH shm_unlink(): EPERM or EACCES when the caller may not remove the name | question | XSH.shm_unlink.005 |
+| Q-72 | XSH 2.9.5.1: asynchronous cancellation "may be acted upon at any time" | question | XSH.pthread_setcancelstate.006 |
+| Q-73 | XBD <limits.h> and pthread_create()/pthread_key_create(): how {PTHREAD_THREADS_MAX} and {PTHREAD_KEYS_MAX} count | question | XSH.pthread_create.012, XSH.pthread_key_create.005 |
+| Q-74 | XSH sleep(): rounding of the unslept time | question | XSH.sleep.003 |

@@ -52,7 +52,7 @@ says       mprotect(PROT_READ|PROT_WRITE) of a MAP_SHARED mapping of a file
            EACCES and the mapping can still be loaded.
 note       DESCRIPTION words this as something the application ensures,
            while ERRORS requires the error; the error is tested, as for
-           SI-68 (a candidate issue raised with this module).
+           SI-68 (extended to this page).
 test       t/005-eacces.c
 
 assertion  XSH.mprotect.006

@@ -80,8 +80,7 @@ says       For a process without appropriate privileges, chown() of a file it
            does not own with owner (uid_t)-1 and group (gid_t)-1 fails with
            EPERM (the effective user ID does not match the owner).
 needs      root
-note       disputed (Q-25): the EPERM condition is met, but the call
-           changes nothing; Linux returns 0.
+note       disputed (Q-25): the EPERM condition is met, but the call changes nothing; a system that returns 0 deviates.
 test       t/008-not-owner-noop.c
 
 assertion  XSH.chown.009

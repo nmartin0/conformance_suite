@@ -251,7 +251,7 @@ says       e and E write "[-]d.ddde+dd": one digit before the radix character,
            at least two digits, zero for a zero value.
 note       The page fixes "at least two" exponent digits and does not repeat
            the ISO C limit of no more digits than needed, so the test
-           accepts more (candidate issue in the b04 report); for a zero
+           accepts more (SI-83); for a zero
            exponent either sign is accepted.
 test       t/026-exponent.c
 
@@ -544,8 +544,8 @@ class      required
 since      2024
 says       asprintf(&p, "%s%d", "ab", 12) returns 4 and stores in p the
            address of the string "ab12", which free() accepts.
-note       Neither glibc 2.39 nor musl declares asprintf() under the strict
-           build (docs/linux-deviations.md 6.3, 11.1), so the test does not
+note       A system that does not declare asprintf() under the strict
+           build (deviation 6.3, 11.1), so the test does not
            build there (UNINITIATED).
 test       t/055-asprintf.c
 
@@ -555,8 +555,8 @@ class      required
 since      2024
 says       asprintf(&p, "%100000d", 7) returns 100000 and p holds 99999
            spaces, '7' and a null byte.
-note       Neither glibc 2.39 nor musl declares asprintf() under the strict
-           build (docs/linux-deviations.md 6.3, 11.1), so the test does not
+note       A system that does not declare asprintf() under the strict
+           build (deviation 6.3, 11.1), so the test does not
            build there (UNINITIATED).
 test       t/056-asprintf-long.c
 
@@ -576,7 +576,7 @@ since      2001
 says       e, g and a write an infinity and a NaN exactly as f does, and F, E,
            G and A in the upper-case form of the style f chose ("INF" when f
            gives "inf").
-note       disputed (new): f and F leave the style of an infinity and of a NaN
+note       disputed (Q-65): f and F leave the style of an infinity and of a NaN
            (and the meaning of an n-char-sequence) implementation-defined, and
            e, g and a say only that such values are converted "in the style of
            an f or F conversion specifier", which can be read as the style f

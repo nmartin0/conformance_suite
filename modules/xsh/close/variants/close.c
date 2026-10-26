@@ -73,9 +73,7 @@ static void settle_aio(const char *v, int fd)
 	if (IS("aio_cancel")) {
 #ifndef __GLIBC__
 		/*
-		 * musl's aio_cancel() never returns here: the same fault as its
-		 * close() (docs/linux-deviations.md O.30), so the variant rests
-		 * on the code under suspicion.
+		 * aio_cancel() never returns here (the same fault as close(), deviation O.30), so the variant rests on the code under suspicion.
 		 */
 		fprintf(stderr, "pcmutant: cannot plant close.aio_cancel here "
 		    "(this aio_cancel() is the failing code, O.30)\n");

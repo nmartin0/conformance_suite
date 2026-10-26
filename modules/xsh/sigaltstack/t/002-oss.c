@@ -6,7 +6,7 @@
  * MUTANT    sigaltstack.oss_zeroed
  * MUTANT    sigaltstack.oss_flags_lost
  * MUTANT    sigaltstack.oss_reports_new
- * VARIANT   sigaltstack.bsd_flags
+ * VARIANT   sigaltstack.disable_4
  * VARIANT   sigaltstack.minsigstksz_32k
  */
 #include "pc.h"

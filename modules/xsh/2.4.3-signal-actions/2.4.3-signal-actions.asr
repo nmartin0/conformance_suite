@@ -112,7 +112,7 @@ uses       XSH.sigpending.001 XSH.sigqueue.001
 timeout    120
 note       When {SIGQUEUE_MAX} is indeterminate the queue is filled
            until EAGAIN, up to 1000000 (UNRESOLVED if never). The test
-           briefly exhausts the queue limit, which on Linux is per user,
+           briefly exhausts the queue limit, which may be shared with other processes of the user,
            so the re-queue is tried a few times in case another process
            took the freed slots.
 nomutant   decided by the kernel; a user-space shim cannot plant it

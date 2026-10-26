@@ -92,7 +92,7 @@ says       After freopen("x", "re", f) and after freopen("x", "we", f),
            freopen("x", "r", f) it is clear.
 note       Austin Group defect 411 (Issue 8) added the 'e' mode character;
            O_CLOEXEC is added if and only if 'e' is given (XSH fopen()).
-           glibc 2.39 keeps FD_CLOEXEC on a stream once reopened with 'e'.
+           A system that keeps FD_CLOEXEC on a stream once reopened with 'e' deviates.
 test       t/008-cloexec.c
 
 assertion  XSH.freopen.009
@@ -137,9 +137,7 @@ says       With descriptors a < b < c in use (a the lowest descriptor not in
 note       The descriptor is allocated as if by open() (Interpretation
            1003.1-2001 #043, Issue 7), which takes the lowest one available
            (XSH 2.6). a is the lowest whether or not c is closed before the
-           new open, so the order of those steps does not matter. glibc
-           2.39 and musl 1.2.4 open the file and then dup3() it onto the
-           old descriptor, so the stream keeps c.
+           new open, so the order of those steps does not matter. A system that opens the file and then dup3()s it onto the old descriptor keeps c.
 test       t/011-lowest-descriptor.c
 
 assertion  XSH.freopen.012
@@ -168,8 +166,7 @@ note       With a null pathname the mode is changed as if the name of the
            freopen(NULL, "wb", stdout)). Which changes are permitted is
            implementation-defined, so a refusal is not judged (variant
            freopen.null_refused). Issue 6 aligned the page with ISO C 1999,
-           which brought the null pathname. musl 1.2.4 only changes the
-           file status flags with fcntl(F_SETFL), so nothing is truncated.
+           which brought the null pathname. A system that only changes the file status flags with fcntl(F_SETFL) truncates nothing.
 test       t/013-null-truncates.c
 
 assertion  XSH.freopen.014
@@ -180,8 +177,7 @@ says       On a stream reading "ab" read to end-of-file (feof() non-zero),
            freopen(NULL, "r", f) either returns a null pointer (NOTINUSE) or
            returns f with feof() and ferror() 0.
 note       The indicators are cleared whatever the pathname. A refusal is
-           not judged (variant freopen.null_refused). musl 1.2.4 leaves the
-           indicators set on this path.
+           not judged (variant freopen.null_refused). A system that leaves the indicators set on this path deviates.
 test       t/014-null-indicators.c
 
 assertion  XSH.freopen.015

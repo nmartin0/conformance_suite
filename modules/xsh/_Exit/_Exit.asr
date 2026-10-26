@@ -156,8 +156,7 @@ since      2008
 says       The full status value given to _exit() is in the siginfo_t
            passed to a SIGCHLD handler: si_status is 0x1234 for
            _exit(0x1234).
-note       Added with XSH._Exit.002's rule (defect 594, TC2). Linux keeps
-           only 8 bits here too (O.6). SIGCHLD has no time bound; the test
+note       Added with XSH._Exit.002's rule (defect 594, TC2). A system that keeps only 8 bits here too is a deviation (O.6). SIGCHLD has no time bound; the test
            waits up to 10 s.
 test       t/014-sigchld-full.c
 

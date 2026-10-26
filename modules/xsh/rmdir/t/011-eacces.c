@@ -233,7 +233,8 @@ int main(void)
 		default:
 			pc_fail("an rmdir() needing write or search permission failed with the wrong error");
 		}
-		pc_check(chmod("s", 0700) == 0, "chmod failed");
+		if (!(chmod("s", 0700) == 0))
+			pc_unresolved("chmod failed");
 		pc_check(exists("w/d") && exists("s/d"), "a failed rmdir() removed a directory");
 	}
 	pc_pass();

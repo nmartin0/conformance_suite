@@ -73,7 +73,8 @@ static long fill_streams(void)
 		if (rl.rlim_max != RLIM_INFINITY && rl.rlim_max < (rlim_t)max + 16)
 			pc_unresolved("RLIMIT_NOFILE (%ld) is below {STREAM_MAX} (%ld)", (long)rl.rlim_max, max);
 		rl.rlim_cur = (rlim_t)max + 16;
-		pc_check(setrlimit(RLIMIT_NOFILE, &rl) == 0, "setrlimit failed");
+		if (!(setrlimit(RLIMIT_NOFILE, &rl) == 0))
+			pc_unresolved("setrlimit failed");
 		if (sysconf(_SC_STREAM_MAX) != max)
 			pc_notinuse("{STREAM_MAX} follows RLIMIT_NOFILE");
 	}

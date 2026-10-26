@@ -237,10 +237,12 @@ int main(void)
 			pc_unresolved("a descriptor near %d is open; too many to fill", lim);
 		for (i = 0; i < lim; i++)
 			if (fcntl(i, F_GETFD) == -1)
-				pc_check(dup2(src, i) == i, "dup2 to %d failed", i);
+				if (!(dup2(src, i) == i))
+					pc_unresolved("dup2 to %d failed", i);
 		pc_check(getrlimit(RLIMIT_NOFILE, &rl) == 0, "getrlimit failed");
 		rl.rlim_cur = (rlim_t)lim;
-		pc_check(setrlimit(RLIMIT_NOFILE, &rl) == 0, "setrlimit failed");
+		if (!(setrlimit(RLIMIT_NOFILE, &rl) == 0))
+			pc_unresolved("setrlimit failed");
 		pc_test();
 		fails("f", "r", EMFILE, 0);
 		fails("n", "w", EMFILE, 0);

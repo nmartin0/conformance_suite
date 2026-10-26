@@ -56,7 +56,7 @@ since      2008
 says       After setregid(-1, 65534) in that process (the real group ID
            left alone and the effective one set to the real one), the
            saved set-group-ID is still 65533: setegid(65533) works.
-note       disputed (new): the page says when the saved set-group-ID is set
+note       disputed (Q-69): the page says when the saved set-group-ID is set
            to the new effective ID but leaves it unchanged otherwise only
            in APPLICATION USAGE. A FAIL is logged as INSPECT.
 nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)

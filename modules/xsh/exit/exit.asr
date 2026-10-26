@@ -18,8 +18,7 @@ class      required
 since      2008
 says       The full status value given to exit() is available from
            waitid(): si_status is 0x1234 for exit(0x1234).
-note       Specified in Issue 7. Linux keeps only 8 bits (O.6), as for
-           _exit() in XSH._Exit.002.
+note       Specified in Issue 7. A system that keeps only 8 bits deviates (O.6), as for _exit() in XSH._Exit.002.
 test       t/002-waitid-full.c
 
 assertion  XSH.exit.003
@@ -115,8 +114,7 @@ note       The offset rule came with Issue 8 (Austin Group defect 610);
            the page says active handle to the file descriptor, read here
            as the file description (SI-12). Read-ahead is checked in setup on a separate open, so that the
            test does not itself switch the active handle (XSH 2.5.1).
-           glibc 2.39 and musl pass; research 6.1 is the fclose() and
-           fflush() path.
+           See research 6.1 for the fclose() and fflush() path.
 test       t/010-offset-synced.c
 
 assertion  XSH.exit.011
@@ -136,7 +134,7 @@ since      2008
 says       The full status value given to exit() is in the siginfo_t
            passed to a SIGCHLD handler: si_status is 0x1234 for
            exit(0x1234).
-note       Linux keeps only 8 bits here too (O.6). The test waits up to
+note       A system that keeps only 8 bits here too deviates (O.6). The test waits up to
            10 s for SIGCHLD (no bound is given).
 test       t/012-sigchld-full.c
 

@@ -59,7 +59,7 @@ static FILE *rebuffer(FILE *f, const char *mode)
 #ifdef __GLIBC__
 		size_t n = TINY;
 #else
-		size_t n = TINY + 8;	/* musl keeps 8 bytes of a caller's buffer for pushback */
+		size_t n = TINY + 8;	/* some libraries keep 8 bytes of a caller's buffer for pushback */
 #endif
 		if ((b = malloc(n)) != NULL)
 			(void)setvbuf(f, b, _IOFBF, n);

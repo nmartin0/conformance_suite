@@ -46,7 +46,7 @@ class      disputed
 says       strnlen() of "abc" stored in the last four bytes before an
            inaccessible page, with maxlen 64, returns 3 without touching
            that page.
-note       disputed (Q-strnul (number pending)): whether strnlen() may examine bytes after the
+note       disputed (Q-63): whether strnlen() may examine bytes after the
            first null byte (up to maxlen) when the array ends there. The
            text bounds the bytes examined by maxlen only; "the array to
            which s points" can be read to end at its null byte or to have

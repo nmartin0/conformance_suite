@@ -263,7 +263,8 @@ int main(void)
 		pc_make_symlink("inner", "d/l");
 		dfd = open("d", O_SEARCH | O_DIRECTORY);
 		pc_check(dfd >= 0, "open(d, O_SEARCH) failed: %s", pc_errname(errno));
-		pc_check(chmod("d", 0666) == 0, "chmod failed");
+		if (!(chmod("d", 0666) == 0))
+			pc_unresolved("chmod failed");
 		pc_test();
 		pc_check(unprivileged(child) == 0, "readlinkat() through an O_SEARCH descriptor failed");
 #endif

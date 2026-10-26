@@ -4,7 +4,7 @@
  *
  * ASSERTION XSH.sigaltstack.009
  * MUTANT    sigaltstack.oss_flags_lost
- * VARIANT   sigaltstack.bsd_flags
+ * VARIANT   sigaltstack.disable_4
  * VARIANT   sigaltstack.minsigstksz_32k
  */
 #include "pc.h"

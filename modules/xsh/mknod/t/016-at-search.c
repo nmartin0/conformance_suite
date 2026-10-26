@@ -231,10 +231,12 @@ int main(void)
 		pc_unresolved("<fcntl.h> does not define O_SEARCH");
 #else
 		pc_make_dir("d");
-		pc_check(chmod("d", 0777) == 0, "chmod failed");
+		if (!(chmod("d", 0777) == 0))
+			pc_unresolved("chmod failed");
 		dfd = open("d", O_SEARCH | O_DIRECTORY);
 		pc_check(dfd >= 0, "open(d, O_SEARCH) failed: %s", pc_errname(errno));
-		pc_check(chmod("d", 0666) == 0, "chmod failed");
+		if (!(chmod("d", 0666) == 0))
+			pc_unresolved("chmod failed");
 		pc_test();
 		pc_check(unprivileged(child) == 0, CALLAT " through an O_SEARCH descriptor failed");
 		NEED(chmod("d", 0700) == 0, "chmod failed: %s", pc_errname(errno));

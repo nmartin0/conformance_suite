@@ -261,7 +261,8 @@ int main(void)
 		pc_make_dir("s");
 		pc_make_dir("s/x");
 		pc_make_dir("n");
-		pc_check(chmod("s/x", 0777) == 0 && chmod("s", 0600) == 0 && chmod("n", 0666) == 0, "chmod failed");
+		if (!(chmod("s/x", 0777) == 0 && chmod("s", 0600) == 0 && chmod("n", 0666) == 0))
+			pc_unresolved("chmod failed");
 		pc_test();
 		v = unprivileged(child);
 		pc_check(v != 2, "a failed chdir() changed the working directory");

@@ -19,9 +19,7 @@
  * functions are not restarted. XSH signal() lets the implementation either
  * reset the action or hold off an implementation-defined set of signals
  * that includes the one caught; it says nothing about restarting, so an
- * interrupted function fails as its page describes (XSH 2.4.4). glibc
- * (in strict POSIX mode) resets; musl holds off only the signal and
- * restarts.
+ * interrupted function fails as its page describes (XSH 2.4.4). (Real libraries differ: one resets, the other holds off only the signal and restarts.)
  */
 static void (*set(const char *name, int sig, void (*fn)(int)))(int)
 {

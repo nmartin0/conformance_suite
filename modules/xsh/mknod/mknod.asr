@@ -197,7 +197,7 @@ since      2001
 says       For a process without appropriate privileges in a directory it
            may write, mknod() with S_IFBLK and with S_IFDIR (dev 0) fails
            with EPERM and creates nothing (each type in its own child).
-note       disputed (N1, new): the DESCRIPTION makes the behaviour
+note       disputed (Q-68): the DESCRIPTION makes the behaviour
            unspecified whenever mode is not S_IFIFO or dev is not 0, while
            ERRORS and another DESCRIPTION sentence require EPERM for an
            unprivileged caller and any type but FIFO-special; under the
@@ -216,7 +216,7 @@ since      2001
 says       For a process without appropriate privileges in a directory it
            may write, mknod() with S_IFREG and with S_IFCHR (dev 0) fails
            with EPERM and creates nothing (each type in its own child).
-note       disputed (N1, new): the same reading as XSH.mknod.018. The
+note       disputed (Q-68): the same reading as XSH.mknod.018. The
            types are split between the two assertions only so that each
            result is recorded separately; the text gives no reason to
            treat them differently.

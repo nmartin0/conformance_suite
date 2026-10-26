@@ -173,7 +173,8 @@ int main(void)
 	v.sival_int = 0;
 	pc_check(sigqueue(getpid(), SIGRTMIN + 2, v) == 0 && sigqueue(getpid(), SIGRTMIN + 1, v) == 0, "sigqueue failed");
 	pc_test();
-	pc_check(pthread_sigmask(SIG_UNBLOCK, &s, NULL) == 0, "pthread_sigmask failed");
+	if (!(pthread_sigmask(SIG_UNBLOCK, &s, NULL) == 0))
+		pc_unresolved("pthread_sigmask failed");
 	pc_check(n >= 1, "nothing was delivered on unblocking");
 	{
 		/* the second may come after pthread_sigmask() returns */

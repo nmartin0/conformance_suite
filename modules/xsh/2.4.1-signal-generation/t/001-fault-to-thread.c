@@ -257,7 +257,8 @@ int main(void)
 	catch_sig(SIGSEGV, on_fault);
 	catch_sig(SIGBUS, on_fault);
 	pc_test();
-	pc_check(pthread_create(&b, NULL, writer, NULL) == 0, "pthread_create failed");
+	if (!(pthread_create(&b, NULL, writer, NULL) == 0))
+		pc_unresolved("pthread_create failed");
 	(void)pthread_join(b, NULL);
 	pc_check(!atomic_load(&bus), "the write to a read-only page gave SIGBUS, not SIGSEGV (XSH 2.8.3.3)");
 	pc_check(atomic_load(&b_hit) == 1, "the fault's handler did not run in the thread that faulted");

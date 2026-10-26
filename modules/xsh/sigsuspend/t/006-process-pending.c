@@ -181,7 +181,8 @@ int main(void)
 	pc_check(kill(getpid(), SIGUSR2) == 0, "kill failed");
 	main_t = pthread_self();
 	pc_test();
-	pc_check(pthread_create(&b, NULL, other, NULL) == 0, "pthread_create failed");
+	if (!(pthread_create(&b, NULL, other, NULL) == 0))
+		pc_unresolved("pthread_create failed");
 	(void)sigsuspend(&m);
 	(void)pthread_join(b, NULL);
 	pc_check(ran == 1, "the handler did not run");

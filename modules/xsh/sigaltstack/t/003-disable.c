@@ -4,7 +4,7 @@
  *
  * ASSERTION XSH.sigaltstack.003
  * MUTANT    sigaltstack.disable_ignored
- * VARIANT   sigaltstack.bsd_flags
+ * VARIANT   sigaltstack.disable_4
  * VARIANT   sigaltstack.minsigstksz_32k
  * VARIANT   sigaltstack.disable_size_checked
  */

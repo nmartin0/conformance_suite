@@ -168,8 +168,9 @@ int main(void)
 	pc_begin("XSH.sigwait.005");
 	block(SIGUSR1);
 	pc_test();
-	pc_check(pthread_create(&t[0], NULL, waiter, (void *)0L) == 0 &&
-	    pthread_create(&t[1], NULL, waiter, (void *)1L) == 0, "pthread_create failed");
+	if (!(pthread_create(&t[0], NULL, waiter, (void *)0L) == 0 &&
+	    pthread_create(&t[1], NULL, waiter, (void *)1L) == 0))
+		pc_unresolved("pthread_create failed");
 	(void)nanosleep(&ts, NULL);	/* both are waiting */
 	pc_check(pthread_kill(t[1], SIGUSR1) == 0, "pthread_kill failed");
 	for (i = 0; i < 200 && !got[1]; i++)

@@ -274,7 +274,8 @@ int main(void)
 		default:
 			pc_fail("chown() through a directory without search permission failed with the wrong error (%s)", pc_errname(r >= 10 ? r - 10 : 0));
 		}
-		pc_check(chmod("s", 0700) == 0, "chmod failed");
+		if (!(chmod("s", 0700) == 0))
+			pc_unresolved("chmod failed");
 	}
 	pc_pass();
 }

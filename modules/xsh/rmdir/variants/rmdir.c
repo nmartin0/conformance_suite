@@ -71,7 +71,7 @@ int rmdir(const char *path)
 	/*
 	 * "dotdot_einval": a final dot-dot fails with EINVAL, as for a final
 	 * dot. XSH rmdir() requires such a call to fail and XSH 2.3 lets a
-	 * listed error be reported in other circumstances (the BSDs do this).
+	 * listed error be reported in other circumstances.
 	 */
 	if (IS("dotdot_einval") && strcmp(last_of(path, b, sizeof b), "..") == 0)
 		return fail(EINVAL);

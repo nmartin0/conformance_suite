@@ -24,9 +24,11 @@ int main(void)
 	int p[2], a = -1, b = -1, r;
 
 	pc_begin("XSH.fscanf.048");
-	pc_check(pipe(p) == 0, "pipe() failed: %s", pc_errname(errno));
+	if (!(pipe(p) == 0))
+		pc_unresolved("pipe() failed: %s", pc_errname(errno));
 	pc_check(write(p[1], "12 ", 3) == 3, "write() to the pipe failed");
-	pc_check(fcntl(p[0], F_SETFL, O_NONBLOCK) == 0, "fcntl(O_NONBLOCK) failed: %s", pc_errname(errno));
+	if (!(fcntl(p[0], F_SETFL, O_NONBLOCK) == 0))
+		pc_unresolved("fcntl(O_NONBLOCK) failed: %s", pc_errname(errno));
 	f = fdopen(p[0], "r");
 	pc_check(f != NULL, "fdopen() failed: %s", pc_errname(errno));
 	pc_test();

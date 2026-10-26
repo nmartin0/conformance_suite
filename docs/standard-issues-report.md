@@ -99,6 +99,22 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | SI-70 | XSH `sigaction()`: APPLICATION USAGE says longjmp() is not async-signal-safe | Defect (editorial) | Low | XSH 2.4.3 table followed |
 | SI-71 | XSH `pthread_sigmask()`: an unconditional requirement on how | Defect (editorial) | Low | The specific text followed (XSH.pthread_sigmask.010) |
 | SI-72 | XSH 2.5.1: "any handle to this open file descriptor" | Defect (editorial) | Low | Read as open file description |
+| SI-73 | XSH fscanf(): "(except for %n)" and end-of-file | Defect (conflict with ISO C) | Low | Case avoided (XSH.fscanf.033) |
+| SI-74 | XSH fopen() and freopen(): the two ENAMETOOLONG conditions are swapped | Defect (inconsistency) | Low | {NAME_MAX} case required for both |
+| SI-75 | XSH strerror(): two statements about overwriting by strerror_l() | Defect (editorial) | Low | Only the forbidden overwrites are tested |
+| SI-76 | XSH gmtime(): tm_zone is set only in the gmtime_r() text | Defect (editorial) | Low | Only gmtime_r() tested |
+| SI-77 | XSH mktime(): "shall attempt to determine" whether DST is in effect | Defect (editorial) | Low | Not tested |
+| SI-78 | XSH strftime(): %z with tm_isdst 0 and a DST tm_gmtoff | Defect (unclear) | Low | Both outputs accepted |
+| SI-79 | XSH fmemopen(): the append position "one byte after the end of the buffer" | Defect (editorial) | Low | Position max_size taken |
+| SI-80 | XSH pthread_mutex_lock(): NORMAL relock "deadlock" against the may-fail [EDEADLK] | Defect (unclear) | Low | Both outcomes accepted |
+| SI-81 | XSH sysconf(): the table names _POSIX_SS_REPL_MAX for a limit | Defect (editorial) | Low | Checked under either name |
+| SI-82 | XSH fchdir() and readlink(): wording slips | Defect (editorial) | Low | Not tested |
+| SI-83 | XSH fprintf(): wording gaps | Defect (editorial) | Low | More digits and either sign accepted |
+| SI-84 | XBD 3.253 against _Exit(): when a child's parent changes | Defect (conflict) | Low | Zombie window not tested |
+| SI-85 | XSH getgroups(): CHANGE HISTORY says 0 is not permitted, DESCRIPTION allows it | Defect (conflict, informative) | Low | Zero accepted |
+| SI-86 | XSH setreuid(), setregid(), setgid(): wording slips | Defect (editorial) | Low | Not tested |
+| SI-87 | XSH nanosleep() against clock_getres(): measured by CLOCK_REALTIME, or independent of it | Defect (unclear) | Low | UNRESOLVED if the clocks disagree |
+| SI-88 | XSH clock_getres() and clock_nanosleep(): wording slips and an overlap | Defect (editorial) | Low | Both errors accepted |
 | Q-1 | XSH `write()`/`send()`: SIGPIPE after shutdown(SHUT_WR) | Question | Low | Does not require SIGPIPE (XSH.write.017) |
 | Q-2 | XSH `lseek()`: offsets beyond the file system's largest file | Question | Medium | Asserts only the off_t overflow case (XSH.lseek.011) |
 | Q-3 | XSH `fork()`/`sem_init()`: unnamed semaphore, pshared 0, in the child | Question | Low | Not tested |
@@ -160,6 +176,19 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-59 | XSH _exit(): when the consequences of termination take effect | Question | Low | Bounded waits (XSH._Exit.016 to .018); disputed (XSH._Exit.021) |
 | Q-60 | XSH fcntl(): "Locks may start and extend beyond the current end of a file" | Question | Low | Read as required of the implementation (XSH.fcntl.027) |
 | Q-61 | XSH `write()`/`read()`: a stream socket whose peer has gone | Question | Medium | Disputed (XSH.write.026, XSH.read.022) |
+| Q-62 | XSH msync(): flags 0, MS_INVALIDATE alone, MS_ASYNC|MS_SYNC | Question | Medium | Disputed (XSH.msync.002, .007, .008) |
+| Q-63 | XSH strndup() and strnlen(): may bytes after the null byte be read? | Question | Low | Disputed (XSH.strdup.007, XSH.strnlen.005) |
+| Q-64 | XSH open_memstream(): byte-oriented from the start, or unoriented until used? | Question | Low | Disputed (XSH.open_memstream.012, .014) |
+| Q-65 | XSH fprintf(): infinity and NaN with e, g and a | Question | Low | Disputed (XSH.fprintf.058) |
+| Q-66 | XSH getcwd(): is ENAMETOOLONG excluded for a long absolute name? | Question | Low | Disputed (XSH.getcwd.008) |
+| Q-67 | XSH chdir(): ENOENT for a regular file | Question | Low | Disputed (XSH.chdir.004) |
+| Q-68 | XSH mknod(): unspecified behaviour against the required EPERM | Question | Low | Disputed (XSH.mknod.018, .019) |
+| Q-69 | XSH setreuid() and setregid(): is the saved ID otherwise left alone? | Question | Low | Disputed (XSH.setreuid.004, XSH.setregid.004) |
+| Q-70 | XSH setregid(): which saved set-group-ID may be assigned to the real group ID? | Question | Low | Avoided (XSH.setregid.006) |
+| Q-71 | XSH shm_unlink(): EPERM or EACCES when the caller may not remove the name | Question | Low | Disputed (XSH.shm_unlink.005) |
+| Q-72 | XSH 2.9.5.1: asynchronous cancellation "may be acted upon at any time" | Question | Low | Disputed (XSH.pthread_setcancelstate.006) |
+| Q-73 | XBD <limits.h> and pthread_create()/pthread_key_create(): how {PTHREAD_THREADS_MAX} and {PTHREAD_KEYS_MAX} count | Question | Low | Both readings accepted (XSH.pthread_create.012, XSH.pthread_key_create.005) |
+| Q-74 | XSH sleep(): rounding of the unslept time | Question | Low | Both roundings accepted (XSH.sleep.003) |
 
 ## Entries
 
@@ -842,6 +871,7 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **What the text says:** the DESCRIPTION says the application shall ensure the process has write permission for the file, while ERRORS says truncate() shall fail with EACCES when write permission is denied.
 - **Problem:** read as an application requirement, a call without permission is undefined, which contradicts the required error.
 - **Suggested change:** delete the application sentence.
+- **Also:** the same pattern occurs in `mmap()` and `mprotect()`: an application requirement that PROT_WRITE not be asked for on a descriptor open read-only, next to a required [EACCES]. XSH.mmap.010 and XSH.mprotect.005 require EACCES.
 
 ### SI-69: XSH getrlimit(): RATIONALE says RLIMIT_FSIZE stays XSI
 
@@ -871,6 +901,134 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 - **Problem:** the wording names the wrong object.
 - **Suggested change:** read "open file description".
 - **After the variant retrofit:** the same sentence can also be read two ways on whose actions count: "the only further action ... on any handle" may mean no handle at all will do more than close (so a second handle that goes on writing makes the item inapplicable), or that this handle will only be closed. XSH.2.5.1-stream-handles.012 rests on the second reading and is now `disputed`.
+
+### SI-73: XSH fscanf(): "(except for %n)" and end-of-file
+
+- **Where:** XSH `fscanf()`, DESCRIPTION (end-of-file clause).
+- **What the text says:** the exception for %n sits on the conversion specification that meets end-of-file; ISO C instead lets a %n directive that follows a conversion ended by end-of-file still run.
+- **Problem:** for sscanf("abcde", "%*s%n") the two texts give different results for the %n (POSIX leaves it untouched, ISO C stores 5). The page says it defers to ISO C where they conflict, which settles it, but the wording invites the other reading.
+- **Suggested change:** move the parenthetical to the following-directive clause, as ISO C has it.
+- **posixcheck meanwhile:** the tests avoid the case (XSH.fscanf.033 ends its input in white space); XSH.fscanf.042 is `partial`.
+
+### SI-74: XSH fopen() and freopen(): the two ENAMETOOLONG conditions are swapped
+
+- **Where:** XSH `fopen()` and `freopen()`, ERRORS.
+- **What the text says:** fopen() lists a pathname longer than {PATH_MAX} as a "shall fail" error and a component longer than {NAME_MAX} as "may fail"; freopen() lists the component case as "shall fail" and the whole-pathname case as "may fail". freopen()'s change history says a second [ENAMETOOLONG] was added as optional.
+- **Problem:** the same two conditions have opposite strength on two pages that describe the same open.
+- **Suggested change:** make freopen() match fopen() (or the reverse), whichever was meant.
+- **posixcheck meanwhile:** the {NAME_MAX} cases are required for both (XSH.fopen.025, .030, XSH.freopen.020), taking the stronger listing for each.
+
+### SI-75: XSH strerror(): two statements about overwriting by strerror_l()
+
+- **Where:** XSH `strerror()`, DESCRIPTION.
+- **What the text says:** the string "might be overwritten" by a later strerror_l() in the same thread, and, in a separately shaded sentence, "may be overwritten" by a later strerror_l() in the same thread.
+- **Problem:** the same permission is given twice with different modal verbs, and which string "it" means is not clear (the one from strerror() or from strerror_l()).
+- **Suggested change:** state the permission once, and say for which function's result.
+- **posixcheck meanwhile:** XSH.strerror.006 and .007 check only what the page forbids (no overwriting by other threads or by strerror_l() with a different locale object).
+
+### SI-76: XSH gmtime(): tm_zone is set only in the gmtime_r() text
+
+- **Where:** XSH `gmtime()`, RETURN VALUE.
+- **What the text says:** gmtime_r() sets the result's tm_zone to the string "UTC"; the text for gmtime() never mentions tm_zone, although the structure now has the member.
+- **Problem:** it is unclear whether gmtime() (static result) must set tm_zone too.
+- **Suggested change:** say that gmtime() sets tm_zone as gmtime_r() does, or that it is unspecified.
+- **posixcheck meanwhile:** only gmtime_r() is tested (XSH.gmtime.003).
+
+### SI-77: XSH mktime(): "shall attempt to determine" whether DST is in effect
+
+- **Where:** XSH `mktime()`, DESCRIPTION (negative tm_isdst).
+- **What the text says:** with a negative tm_isdst, mktime() "shall attempt to determine" whether daylight saving time is in effect.
+- **Problem:** an attempt may fail, and the text does not say what result a failed attempt gives.
+- **Suggested change:** say that mktime() determines it, or say what happens when it cannot.
+- **posixcheck meanwhile:** no assertion depends on a failed attempt.
+
+### SI-78: XSH strftime(): %z with tm_isdst 0 and a DST tm_gmtoff
+
+- **Where:** XSH `strftime()`, DESCRIPTION (%z).
+- **What the text says:** %z is built from "tm_isdst and tm_gmtoff" (and from the standard offset); the page does not say which wins when tm_isdst is 0 but tm_gmtoff still holds a summer offset.
+- **Problem:** a structure whose members disagree can be read as asking for the standard offset or the summer one.
+- **Suggested change:** say that %z uses tm_gmtoff when it is available, or the standard offset when tm_isdst is 0.
+- **posixcheck meanwhile:** XSH.strftime.011 is required and accepts both outputs.
+
+### SI-79: XSH fmemopen(): the append position "one byte after the end of the buffer"
+
+- **Where:** XSH `fmemopen()`, DESCRIPTION.
+- **What the text says:** in append mode, with no null byte in the buffer, the initial position is "one byte after the end of the buffer"; elsewhere the page says no position beyond max_size can be reached, and the application-usage note describes a buffer filled to max_size.
+- **Problem:** a position one past the end would be max_size + 1 bytes from the start if "end" meant the last byte, and max_size if it meant the end position.
+- **Suggested change:** say "at the end of the buffer (position max_size)".
+- **posixcheck meanwhile:** XSH.fmemopen.010 takes max_size.
+
+### SI-80: XSH pthread_mutex_lock(): NORMAL relock "deadlock" against the may-fail [EDEADLK]
+
+- **Where:** XSH `pthread_mutex_lock()`, DESCRIPTION table and ERRORS.
+- **What the text says:** the table says a relock of a NORMAL mutex by its owner deadlocks, while ERRORS says the call may fail with [EDEADLK] when a deadlock is detected.
+- **Problem:** an implementation that detects the self-deadlock and returns EDEADLK may or may not conform; the table reads as if no error comes back.
+- **Suggested change:** say in the table that EDEADLK is permitted for NORMAL mutexes, or that it is not.
+- **posixcheck meanwhile:** XSH.pthread_mutex_lock.011 accepts both: no success, and either a block or EDEADLK.
+
+### SI-81: XSH sysconf(): the table names _POSIX_SS_REPL_MAX for a limit
+
+- **Where:** XSH `sysconf()`, the table of variables; RATIONALE.
+- **What the text says:** the table row pairs _SC_SS_REPL_MAX with _POSIX_SS_REPL_MAX, the form used for options; the limit is {SS_REPL_MAX}, and the RATIONALE speaks of "_POSIX_SS_REPL_MAX" as a related variable of _POSIX_SPORADIC_SERVER.
+- **Problem:** it is unclear whether the name is a typo for {SS_REPL_MAX}.
+- **Suggested change:** name the limit as {SS_REPL_MAX}, or define _POSIX_SS_REPL_MAX.
+- **posixcheck meanwhile:** XSH.sysconf.002 checks the value under either name.
+
+### SI-82: XSH fchdir() and readlink(): wording slips
+
+- **Where:** XSH `fchdir()`, ERRORS; XSH `readlink()`, RATIONALE.
+- **What the text says:** the fchdir() "may fail" list is introduced by "The fchdir() may fail if" (no word "function"); the readlink() RATIONALE calls the parameter bufsiz where the SYNOPSIS says bufsize.
+- **Problem:** wording only.
+- **Suggested change:** correct both.
+- **posixcheck meanwhile:** no test depends on it.
+
+### SI-83: XSH fprintf(): wording gaps
+
+- **Where:** XSH `fprintf()`, DESCRIPTION and ERRORS.
+- **What the text says:** (a) the e/E exponent "shall always contain at least two digits" and ISO C adds "no more digits than necessary"; the page does not repeat the upper limit. (b) "If the value is zero, the exponent shall be zero" does not say whether it carries a sign. (c) dprintf() is told to take its errors from fputc(), but it has no stream.
+- **Problem:** each leaves a conforming output or error unspecified or only fixed by reading ISO C.
+- **Suggested change:** repeat the limit, say "+00" or either sign, and name write() for dprintf().
+- **posixcheck meanwhile:** XSH.fprintf.026 accepts more digits and either sign for a zero exponent; dprintf's errors are tested with a bad descriptor only.
+
+### SI-84: XBD 3.253 against _Exit(): when a child's parent changes
+
+- **Where:** XBD 3.253 (Parent Process), 3.285 (Zombie Process); XSH `_Exit()`, DESCRIPTION.
+- **What the text says:** the creator stays the parent for its whole lifetime, which includes the zombie state until it is reaped; _Exit() says children of the terminating process are adopted when it terminates.
+- **Problem:** between termination and reaping a child's getppid() could be either the dead creator or the adopter.
+- **Suggested change:** say which, for the zombie window.
+- **posixcheck meanwhile:** XSH.getppid.002 tests only after the creator has been reaped, where both agree.
+
+### SI-85: XSH getgroups(): CHANGE HISTORY says 0 is not permitted, DESCRIPTION allows it
+
+- **Where:** XSH `getgroups()`, DESCRIPTION and CHANGE HISTORY.
+- **What the text says:** the change history says a return value of 0 is no longer permitted; the description allows it when the effective group ID is not included in the list and there are no other groups.
+- **Problem:** informative text contradicts normative text.
+- **Suggested change:** correct the change history.
+- **posixcheck meanwhile:** XSH.getgroups.001 to .003 accept 0 where the effective group ID is not reported.
+
+### SI-86: XSH setreuid(), setregid(), setgid(): wording slips
+
+- **Where:** XSH `setreuid()` DESCRIPTION; `setregid()` APPLICATION USAGE; `setgid()` RETURN VALUE.
+- **What the text says:** setreuid(): "If ruid or euid is -1, the corresponding effective or real user ID" has the two the wrong way round; setregid() APPLICATION USAGE says "real user ID" and "saved-group-ID" where the real group ID and the saved set-group-ID are meant; setgid() RETURN VALUE "0 is returned" lacks a "shall".
+- **Problem:** wording only.
+- **Suggested change:** correct the three.
+- **posixcheck meanwhile:** no test depends on it.
+
+### SI-87: XSH nanosleep() against clock_getres(): measured by CLOCK_REALTIME, or independent of it
+
+- **Where:** XSH `nanosleep()`, DESCRIPTION; XSH `clock_getres()`, DESCRIPTION.
+- **What the text says:** nanosleep() measures the suspension by CLOCK_REALTIME; clock_getres() says that setting CLOCK_REALTIME does not affect relative sleeps, which expire independently of the clock's value.
+- **Problem:** if the clock is stepped during a sleep the two statements give different durations.
+- **Suggested change:** say which clock a relative sleep follows.
+- **posixcheck meanwhile:** nanosleep tests measure with CLOCK_REALTIME and are UNRESOLVED when CLOCK_REALTIME and CLOCK_MONOTONIC disagree about the interval (XSH.nanosleep.001, .003, .006, .008).
+
+### SI-88: XSH clock_getres() and clock_nanosleep(): wording slips and an overlap
+
+- **Where:** XSH `clock_getres()`, DESCRIPTION; XSH `clock_nanosleep()`, DESCRIPTION and ERRORS.
+- **What the text says:** (a) the process CPU-time paragraph says the values "represent" execution time, the thread paragraph says "shall represent"; (b) the truncation of set values is stated twice, once without "shall"; (c) for an absolute time already reached, "the calling process shall not be suspended" where the thread is meant; (d) the calling thread's CPU-time clock is named under [EINVAL], while [ENOTSUP] cites "a CPU-time clock" as its example, so XSH 2.3 lets either be returned.
+- **Problem:** wording only, except (d), where two errors apply.
+- **Suggested change:** make the modal verbs and the subject agree, and choose one error for (d).
+- **posixcheck meanwhile:** XSH.clock_nanosleep.008 accepts both errors.
 
 ## Questions to raise
 
@@ -970,7 +1128,7 @@ is unclear.
   logged as INSPECT), for example XSH.fstatat.020, XSH.link.014,
   XSH.chmod.012.
 - **After the Linux-ism audit:** Cases where only one error condition applies are now required assertions of their own (XSH.link.024, .025, XSH.unlink.023, XSH.rename.035, XSH.fstatat.026, XSH.chmod.022, XSH.chown.022, XSH.access.021, XSH.lchown.008, .009); only the overlapping cases stay disputed.
-- **After the variant retrofit:** the same overlap arises with ELOOP: a path that resolves through a loop of symbolic links names no existing file, so ENOENT applies literally too. XSH.unlink.013 and XSH.rmdir.009 are now `disputed`, and the loop-in-the-first-path cases of link() and rename() are split out as XSH.link.026 and XSH.rename.036 (`disputed`). A loop in the directory part of the second path (XSH.link.013, XSH.rename.021) stays required: the prefix component exists, as a symbolic link, so ENOENT for a missing prefix component does not apply.
+- **After the variant retrofit:** the same overlap arises with ELOOP: a path that resolves through a loop of symbolic links names no existing file, so ENOENT applies literally too. XSH.unlink.013 and XSH.rmdir.009 are now `disputed`, and the loop-in-the-first-path cases of link() and rename() are split out as XSH.link.026 and XSH.rename.036 (`disputed`). More lookups in the file and directory modules are `disputed` for the same overlap: XSH.chdir.005 and .006, XSH.realpath.006 to .008, XSH.readlink.008 to .010 (see also Q-67 for chdir() of a regular file). XSH.freopen.018 and .020 follow XSH.fopen.025 and take ENAMETOOLONG/ENOTDIR as required. A loop in the directory part of the second path (XSH.link.013, XSH.rename.021) stays required: the prefix component exists, as a symbolic link, so ENOENT for a missing prefix component does not apply.
 
 ### Q-9: Which {ARG_MAX} does E2BIG compare against?
 
@@ -1017,8 +1175,8 @@ is unclear.
 - **Where:** XSH `alarm()`, DESCRIPTION and RATIONALE; XSH `sleep()`, RATIONALE.
 - **Question:** the DESCRIPTION generates SIGALRM after the given number of realtime seconds have elapsed. The RATIONALE notes that historical systems fire up to a second early and calls not firing early only the "most appropriate" choice. Is an early SIGALRM nonconforming, as the DESCRIPTION reads?
 - **posixcheck meanwhile:** XSH.alarm.001 treats an early signal as a FAIL, with 10 ms tolerance for clock granularity.
+- **sleep():** the same question for sleep(), whose RATIONALE extends the allowance; XSH.sleep.002 (`disputed`) asks for the full interval, the other sleep() tests only for 1 s of 2.
 - **After the Linux-ism audit:** The early-signal checks moved to XSH.alarm.006 and .007, both `disputed`; XSH.alarm.001, .003 and .004 no longer depend on this question, and .004 no longer has an upper bound.
-
 ### Q-15: pause() and sigsuspend(): delivery to which thread?
 
 - **Where:** XSH `pause()` and `sigsuspend()`, DESCRIPTION.
@@ -1153,7 +1311,7 @@ is unclear.
 - **Where:** XSH `fseek()`, ERRORS.
 - **Question:** the "shall fail" list applies only when the stream is unbuffered or its buffer needed to be flushed, and the call invokes an underlying lseek() or write(). Read literally, a buffered stream with nothing to flush need not fail with EINVAL for an invalid whence or a negative position, or with ESPIPE on a pipe. Yet the same list names conditions that involve neither call: an fmemopen() position beyond the end of the buffer (EINVAL) and open_memstream() running out of memory (ENOMEM). Is the preamble meant to restrict only the errors that come from lseek() and write() (EAGAIN, EFBIG, EINTR, EIO, ENOSPC, EPIPE)? Should EINVAL and ESPIPE be required whatever the buffer state, as ISO C's "a request that cannot be satisfied" suggests?
 - **Also:** does the DESCRIPTION's rule that fseek() writes unwritten data apply to a call that fails? If so, pending output always satisfies the preamble; if not, a system can avoid it by validating first, as glibc and musl do for an invalid whence (the data is not written). And fmemopen()'s page requires a seek beyond max_size to fail with no such preamble, while fseek()'s EINVAL for the same case sits under it; the two pages should agree (fmemopen() says "larger than the buffer size", fseek() "beyond the end of the underlying memory buffer").
-- **posixcheck meanwhile:** XSH.fseek.009, .010, .011, .014, .015, .016 and .017 are `disputed`. The flush errors that need a write() (EBADF, EFBIG, EPIPE, EAGAIN: XSH.fseek.012, .013, .018, .020) stay required, and the fmemopen() failure itself is required by XSH.fseek.019.
+- **posixcheck meanwhile:** XSH.fseek.009, .010, .011, .014, .015, .016 and .017 are `disputed`; the same preamble question applies to fsetpos() and rewind() and their notes cite this entry. The flush errors that need a write() (EBADF, EFBIG, EPIPE, EAGAIN: XSH.fseek.012, .013, .018, .020) stay required, and the fmemopen() failure itself is required by XSH.fseek.019.
 
 ### Q-36: fdopen(): the 'a' modes
 
@@ -1190,7 +1348,7 @@ is unclear.
 
 - **Where:** XSH `fseek()`, ERRORS.
 - **Question:** EBADF covers a descriptor "not open for writing" or a buffer that needed flushing when the file is not open. Read literally, every fseek() on an unbuffered read-only stream (the preamble holds, since lseek() is invoked) shall fail with EBADF. The first clause presumably means "not open for writing while output needed to be flushed". No implementation behaves the literal way.
-- **posixcheck meanwhile:** XSH.fseek.012 tests only the closed-descriptor case.
+- **posixcheck meanwhile:** XSH.fseek.012 tests only the closed-descriptor case (and fsetpos() has the same wording).
 
 ### Q-42: XSH getrlimit(): RLIMIT_NOFILE below {_POSIX_OPEN_MAX}
 
@@ -1312,6 +1470,84 @@ is unclear.
 - **Where:** XSH `write()`, `read()`, `send()`, `recv()`, ERRORS; XSH 2.3; SI-1.
 - **Question:** write() gives EPIPE for a socket that is "no longer connected" and then requires SIGPIPE for a stream socket; ECONNRESET ("forcibly closed by a peer") and ENOTCONN ("not connected") are separate entries. When the peer has reset the connection, the socket is both no longer connected and forcibly closed, so XSH 2.3 seems to allow ECONNRESET, and then no SIGPIPE is required; read as such, the SIGPIPE requirement can always be avoided. Likewise read() after a reset: ECONNRESET, or ENOTCONN because the socket is no longer connected? Which is intended?
 - **posixcheck meanwhile:** XSH.write.026 requires EPIPE with SIGPIPE pending and XSH.read.022 requires ECONNRESET; both are `disputed`. The other readings are kept as undeclared variants (write.peer_gone_reset, read.reset_enotconn).
+
+### Q-62: XSH msync(): flags 0, MS_INVALIDATE alone, MS_ASYNC|MS_SYNC
+
+- **Where:** XSH `msync()`, DESCRIPTION and ERRORS.
+- **Question:** the DESCRIPTION says that exactly one of MS_ASYNC and MS_SYNC is to be specified, and ERRORS requires [EINVAL] when flags is invalid. Does the first sentence define which values are invalid (so EINVAL is required for 0, for MS_INVALIDATE alone and for both together), or is it a requirement on the application whose breach is undefined?
+- **posixcheck meanwhile:** XSH.msync.002, .007 and .008 expect EINVAL and are `disputed` (a FAIL is logged as INSPECT); the lenient reading is planted as READING msync.flags_lenient.
+
+### Q-63: XSH strndup() and strnlen(): may bytes after the null byte be read?
+
+- **Where:** XSH `strdup()` (strndup()), `strnlen()`, DESCRIPTION.
+- **Question:** both functions examine at most size bytes and stop at the null byte, but nothing says the argument array must have size bytes, or that nothing after the null byte is read. May an implementation read ahead up to size bytes when the string ends sooner (as a word-at-a-time scan would), faulting on an unmapped page?
+- **posixcheck meanwhile:** XSH.strdup.007 and XSH.strnlen.005 require that nothing past the null byte is touched and are `disputed`; the other reading is planted as a READING.
+
+### Q-64: XSH open_memstream(): byte-oriented from the start, or unoriented until used?
+
+- **Where:** XSH `open_memstream()`, DESCRIPTION; XSH 2.5.
+- **Question:** open_memstream() makes the stream byte-oriented; XSH 2.5 says the orientation of a memory stream is determined as for a file stream, which starts with none until the first operation. What does fwide(f, 0) return right after the call: negative, or 0?
+- **posixcheck meanwhile:** XSH.open_memstream.012 (and .014 for the wide function) take the page's wording and are `disputed`; a FAIL is logged as INSPECT. Both readings agree that a wide-oriented stream is wrong.
+
+### Q-65: XSH fprintf(): infinity and NaN with e, g and a
+
+- **Where:** XSH `fprintf()`, DESCRIPTION (f, F, e, E, g, G, a, A).
+- **Question:** f and F leave the style of an infinity or NaN (and the n-char-sequence) implementation-defined; e, g and a say only "in the style of an f or F conversion". Is that the style f itself uses (so f and e agree), or any style f or F could use (so e may differ from f)? F is said to produce INF, INFINITY or NAN "respectively".
+- **posixcheck meanwhile:** XSH.fprintf.058 requires e, g and a to write exactly as f does and is `disputed`.
+
+### Q-66: XSH getcwd(): is ENAMETOOLONG excluded for a long absolute name?
+
+- **Where:** XSH `getcwd()`, ERRORS and RATIONALE; XSH 2.3.
+- **Question:** only the RATIONALE says the old ENAMETOOLONG for a name longer than {PATH_MAX} no longer applies when buf is large enough; the normative ERRORS lists no such error, but XSH 2.3 lets implementations add errors that no page forbids.
+- **posixcheck meanwhile:** XSH.getcwd.008 requires the full name and is `disputed`.
+
+### Q-67: XSH chdir(): ENOENT for a regular file
+
+- **Where:** XSH `chdir()`, ERRORS; XSH 2.3; Q-8.
+- **Question:** chdir()'s [ENOENT] is "does not name an existing directory", which a regular file also meets, while [ENOTDIR] says a component is not a directory. Read so, either error is allowed for chdir("file"); this is the Q-8 overlap with a different wording.
+- **posixcheck meanwhile:** XSH.chdir.004 requires ENOTDIR and is `disputed`; the other reading is planted as a READING.
+
+### Q-68: XSH mknod(): unspecified behaviour against the required EPERM
+
+- **Where:** XSH `mknod()`, DESCRIPTION and ERRORS.
+- **Question:** the DESCRIPTION makes the behaviour unspecified whenever mode is not S_IFIFO or dev is not 0, while ERRORS requires [EPERM] for a caller without appropriate privileges for any type but FIFO-special. Which governs an unprivileged mknod() of a regular file, directory or special file?
+- **posixcheck meanwhile:** XSH.mknod.018 and .019 require EPERM and are `disputed`; the types are split only so each result is recorded separately.
+
+### Q-69: XSH setreuid() and setregid(): is the saved ID otherwise left alone?
+
+- **Where:** XSH `setreuid()` and `setregid()`, DESCRIPTION; setregid() APPLICATION USAGE.
+- **Question:** the pages say when the saved set-ID becomes the new effective ID, not (in normative text) that it is otherwise unchanged. The setregid() APPLICATION USAGE says so for groups.
+- **posixcheck meanwhile:** XSH.setreuid.004 and XSH.setregid.004 require it unchanged and are `disputed`.
+
+### Q-70: XSH setregid(): which saved set-group-ID may be assigned to the real group ID?
+
+- **Where:** XSH `setregid()`, DESCRIPTION.
+- **Question:** an unprivileged process may set the real group ID to "the saved set-group-ID from one of the exec family of functions". Does an ID that a later setgid() or setregid() stored in the saved ID count?
+- **posixcheck meanwhile:** XSH.setregid.006 obtains the saved ID from exec and avoids the question.
+
+### Q-71: XSH shm_unlink(): EPERM or EACCES when the caller may not remove the name
+
+- **Where:** XSH `shm_unlink()`, ERRORS; XSH 2.3; unlink() ERRORS.
+- **Question:** the page never says what permission removing the name needs; where it is refused because only the owner may remove it (as with a sticky directory), unlink() allows EPERM or EACCES, but shm_unlink() lists only EACCES, and XSH 2.3 lets an implementation add errors for conditions the page does not describe.
+- **posixcheck meanwhile:** XSH.shm_unlink.005 requires EACCES and is `disputed`; a system that lets the unlink happen is NOTINUSE.
+
+### Q-72: XSH 2.9.5.1: asynchronous cancellation "may be acted upon at any time"
+
+- **Where:** XSH 2.9.5.1; XSH `pthread_setcancelstate()`, RATIONALE.
+- **Question:** with the asynchronous type a cancellation request "may be acted upon at any time". Read as a permission, an implementation may still wait for a cancellation point and never cancel a thread that computes without one. Is that intended?
+- **posixcheck meanwhile:** XSH.pthread_setcancelstate.006 requires cancellation within 10 s and is `disputed`.
+
+### Q-73: XBD <limits.h> and pthread_create()/pthread_key_create(): how {PTHREAD_THREADS_MAX} and {PTHREAD_KEYS_MAX} count
+
+- **Where:** XBD `<limits.h>`; XSH `pthread_create()` and `pthread_key_create()`, ERRORS.
+- **Question:** <limits.h> speaks of threads "created per process" and keys "created by a process"; the ERRORS say "total number of threads in a process" and "keys per process". Does the initial thread count, do terminated threads count, do deleted keys count?
+- **posixcheck meanwhile:** XSH.pthread_create.012 accepts failure one creation early; XSH.pthread_key_create.005 counts live keys only.
+
+### Q-74: XSH sleep(): rounding of the unslept time
+
+- **Where:** XSH `sleep()`, RETURN VALUE.
+- **Question:** an interrupted sleep() returns the unslept amount in seconds; how a fraction of a second is rounded is not said (compare Q-13 for alarm()).
+- **posixcheck meanwhile:** XSH.sleep.003 accepts the rounded-down and rounded-up values.
 
 ## Tracking
 

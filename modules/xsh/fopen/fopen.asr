@@ -280,8 +280,7 @@ class      required
 since      2008
 says       With "f" a regular file holding "abc", fopen("f/", "w") and fopen("f/",
            "a") return a null pointer with errno ENOTDIR (not ENOENT).
-note       As XSH.open.045: Linux gives EISDIR for any O_CREAT path
-           ending in a slash (docs/linux-deviations.md O.1). Whether the
+note       As XSH.open.045: a system that gives EISDIR for any O_CREAT path ending in a slash deviates (O.1). Whether the
            file is left alone is not checked: XSH 2.3 lets a failed call
            have been partly performed (Q-38).
 test       t/027-trailing-slash-write.c
@@ -292,8 +291,7 @@ class      required
 since      2008
 says       fopen("new/", "w") returns a null pointer with errno ENOENT or
            ENOTDIR.
-note       As XSH.open.044: Linux gives EISDIR (docs/linux-deviations.md
-           O.1). Whether "new" is created is not checked (XSH 2.3,
+note       As XSH.open.044: a system that gives EISDIR deviates (O.1). Whether "new" is created is not checked (XSH 2.3,
            Q-38).
 test       t/028-trailing-slash-new.c
 

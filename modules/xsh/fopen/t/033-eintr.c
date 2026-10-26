@@ -241,7 +241,8 @@ int main(void)
 		sa.sa_handler = on_alarm;
 		sa.sa_flags = 0;
 		sigemptyset(&sa.sa_mask);
-		pc_check(sigaction(SIGALRM, &sa, NULL) == 0, "sigaction failed");
+		if (!(sigaction(SIGALRM, &sa, NULL) == 0))
+			pc_unresolved("sigaction failed");
 		kid = fork();
 		pc_check(kid != -1, "fork failed");
 		if (kid == 0) {

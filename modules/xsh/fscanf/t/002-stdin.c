@@ -25,7 +25,8 @@ int main(void)
 	pc_make_file("in", "42 x");
 	fd = open("in", O_RDONLY);
 	pc_check(fd >= 0, "open(in) failed: %s", pc_errname(errno));
-	pc_check(dup2(fd, 0) == 0, "dup2() onto 0 failed: %s", pc_errname(errno));
+	if (!(dup2(fd, 0) == 0))
+		pc_unresolved("dup2() onto 0 failed: %s", pc_errname(errno));
 	(void)close(fd);
 	pc_test();
 	r = scanf("%d", &a);

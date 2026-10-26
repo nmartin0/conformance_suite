@@ -116,9 +116,11 @@ int main(void)
 				pc_unresolved("aio_write() was refused for lack of resources (EAGAIN)");
 			pc_check(0, "aio_write failed: %s", pc_errname(errno));
 		}
-		pc_check(pthread_create(&t, NULL, drain, NULL) == 0, "pthread_create failed");
+		if (!(pthread_create(&t, NULL, drain, NULL) == 0))
+			pc_unresolved("pthread_create failed");
 		closing_fd = fd;
-		pc_check(pthread_create(&t, NULL, closer, NULL) == 0, "pthread_create failed");
+		if (!(pthread_create(&t, NULL, closer, NULL) == 0))
+			pc_unresolved("pthread_create failed");
 		for (i = 0; i < 1000 && !closed; i++)
 			sleep_ms(10);
 		pc_check(closed, "close() had not returned after 10 s");

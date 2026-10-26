@@ -70,9 +70,7 @@ says       SIGRTMIN and SIGRTMAX are macros with type int and positive values;
            header defines falls in the range.
 note       <unistd.h> is included for sysconf(). Missing table signals
            are reported by XBD.signal.h.009 to .012 and .030, not here.
-           glibc keeps signals 32 and 33 for itself, so its range 34..64
-           holds 31 signals, below its {RTSIG_MAX} of 32 (docs/linux-
-           deviations.md O.12).
+           A system that keeps some real-time signals for its own use may have fewer than {RTSIG_MAX} in the range (deviation O.12).
 test       t/006-rt-range.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -86,8 +84,8 @@ says       <unistd.h> defines _SC_NSIG and <limits.h> defines {NSIG_MAX};
            than {NSIG_MAX}.
 note       <limits.h> and <unistd.h> are included for {NSIG_MAX} and
            sysconf(); a missing name there is a nonconformance of those
-           headers, reported here. Neither glibc 2.39 nor musl defines
-           _SC_NSIG or NSIG_MAX (docs/linux-deviations.md 1.24).
+           headers, reported here. A system that does not define
+           _SC_NSIG or NSIG_MAX (deviation 1.24).
 test       t/007-nsig.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 
@@ -332,8 +330,7 @@ class      required
 since      2024
 says       <signal.h> declares sig2str(), str2sig() with the required
            prototypes.
-note       Neither glibc 2.39 nor musl has these functions (docs/linux-
-           deviations.md 3.1), so the test does not build there
+note       A system without these functions (deviation 3.1), so the test does not build there
            (UNINITIATED).
 test       t/028-functions-2024.c
 nomutant   compile-time check; needs the Tier 0 header mutants

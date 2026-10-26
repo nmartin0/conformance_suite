@@ -199,7 +199,8 @@ int main(void)
 
 		sigemptyset(&s);
 		sigaddset(&s, SIGPIPE);
-		pc_check(sigprocmask(SIG_BLOCK, &s, NULL) == 0, "sigprocmask failed");
+		if (!(sigprocmask(SIG_BLOCK, &s, NULL) == 0))
+			pc_unresolved("sigprocmask failed");
 		pc_check(pipe(p) == 0 && close(p[0]) == 0, "pipe failed");
 		pc_test();
 		f = fdopen(p[1], "w");

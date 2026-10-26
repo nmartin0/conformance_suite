@@ -34,7 +34,8 @@ static void stdout_to(const char *path)
 	int fd = open(path, O_RDWR | O_CREAT | O_TRUNC, 0666);
 
 	pc_check(fd >= 0, "open(%s) failed: %s", path, pc_errname(errno));
-	pc_check(dup2(fd, 1) == 1, "dup2 failed: %s", pc_errname(errno));
+	if (!(dup2(fd, 1) == 1))
+		pc_unresolved("dup2 failed: %s", pc_errname(errno));
 	pc_check(close(fd) == 0, "close failed: %s", pc_errname(errno));
 }
 

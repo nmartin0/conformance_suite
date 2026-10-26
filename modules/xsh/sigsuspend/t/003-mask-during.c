@@ -178,7 +178,8 @@ int main(void)
 	pc_check(!woke, "SIGUSR1 did not end the wait (only the watchdog did): the sigsuspend() mask was not used alone");
 	pc_check(n >= 1 && order[0] == SIGUSR1, "the first signal handled was %d, expected SIGUSR1 (SIGUSR2 was blocked by the sigsuspend() mask)", n ? (int)order[0] : 0);
 	pc_check(n == 1, "%d signals were handled during sigsuspend(), expected only SIGUSR1", (int)n);
-	pc_check(pthread_sigmask(SIG_UNBLOCK, &both, NULL) == 0, "pthread_sigmask failed");
+	if (!(pthread_sigmask(SIG_UNBLOCK, &both, NULL) == 0))
+		pc_unresolved("pthread_sigmask failed");
 	pc_check(n == 2 && order[1] == SIGUSR2, "SIGUSR2 was not delivered after it was unblocked");
 	pc_pass();
 }

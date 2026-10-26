@@ -74,7 +74,7 @@ class      disputed
 says       strndup() of "abc" stored in the last four bytes before an
            inaccessible page, with size 64, returns "abc" without touching
            that page.
-note       disputed (Q-strnul (number pending)): whether strndup() may read past the null byte
+note       disputed (Q-63): whether strndup() may read past the null byte
            (up to size bytes) when the array s ends there. The text forbids
            examining more than size bytes and copies up to the null byte,
            but does not say that s is an array of at least size bytes or

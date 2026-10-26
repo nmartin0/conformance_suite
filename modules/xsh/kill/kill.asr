@@ -125,7 +125,7 @@ note       Sends kill(-1, SIGURG) as the profile's kill_uid, a user ID
            no other process may use: every process of that user on the
            machine gets the signal. The sender first proves it has no
            privilege left. SIGURG's default action is to ignore it.
-           Linux leaves the sender out (research 2.2).
+           A system that leaves the sender out deviates (research 2.2).
 nomutant   whether the sender is included is the kernel's choice; a
            wrapper cannot hide it without also changing XSH.kill.005
 test       t/012-all-sender.c

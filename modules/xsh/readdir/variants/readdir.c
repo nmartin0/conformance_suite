@@ -9,7 +9,7 @@
  * A preload library; see core/pcvariant.h. Every variant replaces the
  * system's directory streams with an emulated one built on the real
  * functions, so that the choices the standard leaves open can be made
- * differently from glibc and musl, consistently across all the functions
+ * differently from the real library, consistently across all the functions
  * that see a stream:
  *
  * "snapshot": the stream reads the whole directory at once, when it is

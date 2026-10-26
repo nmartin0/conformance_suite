@@ -18,9 +18,7 @@
 #include "pcvariant.h"
 
 /*
- * musl keeps the first 8 bytes of an array given to setvbuf() for pushback
- * and ignores an array smaller than that; glibc uses all of it. SLACK is
- * added so that the usable buffer has the size meant here on both.
+ * Some C libraries keep the first 8 bytes of an array given to setvbuf() for pushback and ignore a smaller array; others use all of it. SLACK is added so that the usable buffer has the size meant here on both.
  */
 #ifdef __GLIBC__
 #define SLACK 0

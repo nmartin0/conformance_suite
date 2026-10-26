@@ -78,7 +78,8 @@ static void catch_alarm(void)
 	memset(&sa, 0, sizeof sa);
 	sa.sa_handler = on_alarm;
 	sigemptyset(&sa.sa_mask);
-	pc_check(sigaction(SIGALRM, &sa, NULL) == 0, "sigaction failed");
+	if (!(sigaction(SIGALRM, &sa, NULL) == 0))
+		pc_unresolved("sigaction failed");
 }
 
 int main(void)
@@ -89,10 +90,12 @@ int main(void)
 		long i, lim;
 		int p[2], fl, nb, r = 0, e = 0;
 
-		pc_check(pipe(p) == 0, "pipe failed: %s", pc_errname(errno));
+		if (!(pipe(p) == 0))
+			pc_unresolved("pipe failed: %s", pc_errname(errno));
 		fill(p[1]);
 		fl = fcntl(p[1], F_GETFL);
-		pc_check(fcntl(p[1], F_SETFL, fl & ~O_NONBLOCK) == 0, "fcntl failed: %s", pc_errname(errno));
+		if (!(fcntl(p[1], F_SETFL, fl & ~O_NONBLOCK) == 0))
+			pc_unresolved("fcntl failed: %s", pc_errname(errno));
 		catch_alarm();
 		rescue_rfd = p[0];
 		pc_test();

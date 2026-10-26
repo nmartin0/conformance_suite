@@ -24,8 +24,7 @@ anchor     functions/msync.html#ERRORS/EINVAL
 class      disputed
 since      2001
 says       msync(MS_ASYNC|MS_SYNC) fails with EINVAL.
-note       disputed (new): candidate issue (msync flags), Q number
-           pending. DESCRIPTION says exactly one of MS_ASYNC and MS_SYNC
+note       disputed (Q-62): DESCRIPTION says exactly one of MS_ASYNC and MS_SYNC
            is to be given, and ERRORS requires EINVAL for an invalid
            flags value; the first can be read as defining which values
            are invalid (EINVAL required) or as a requirement on the
@@ -86,8 +85,7 @@ class      disputed
 since      2001
 says       msync() of a MAP_SHARED file mapping with flags 0
            (neither MS_ASYNC nor MS_SYNC) fails with EINVAL.
-note       disputed (new): candidate issue (msync flags), Q number
-           pending. DESCRIPTION says exactly one of MS_ASYNC and MS_SYNC
+note       disputed (Q-62): DESCRIPTION says exactly one of MS_ASYNC and MS_SYNC
            is to be given, and ERRORS requires EINVAL for an invalid
            flags value; the first can be read as defining which values
            are invalid (EINVAL required) or as a requirement on the
@@ -104,8 +102,7 @@ class      disputed
 since      2001
 says       msync() of a MAP_SHARED file mapping with flags MS_INVALIDATE
            (neither MS_ASYNC nor MS_SYNC) fails with EINVAL.
-note       disputed (new): candidate issue (msync flags), Q number
-           pending. DESCRIPTION says exactly one of MS_ASYNC and MS_SYNC
+note       disputed (Q-62): DESCRIPTION says exactly one of MS_ASYNC and MS_SYNC
            is to be given, and ERRORS requires EINVAL for an invalid
            flags value; the first can be read as defining which values
            are invalid (EINVAL required) or as a requirement on the

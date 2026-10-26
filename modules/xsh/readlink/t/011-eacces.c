@@ -262,7 +262,8 @@ int main(void)
 
 		pc_make_dir("s");
 		pc_make_symlink("t", "s/l");
-		pc_check(chmod("s", 0600) == 0, "chmod failed");
+		if (!(chmod("s", 0600) == 0))
+			pc_unresolved("chmod failed");
 		pc_test();
 		v = unprivileged(child);
 		pc_check(v != 2, "readlink() failed but changed the buffer");

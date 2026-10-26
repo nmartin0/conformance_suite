@@ -65,8 +65,7 @@ says       For a process without appropriate privileges that owns a regular
            S_ISGID clear (bits 0755) or fails with EPERM leaving the mode
            unchanged; S_ISGID is never set.
 needs      root
-note       XSH 2.3 lets an implementation refuse with EPERM (the BSDs
-           do) instead of clearing the bit.
+note       XSH 2.3 lets an implementation refuse with EPERM instead of clearing the bit.
 nomutant   the kernel clears the bit; a preload library cannot keep it
 test       t/007-clears-sgid.c
 

@@ -72,7 +72,7 @@ since      2008
 says       A thread with the type PTHREAD_CANCEL_ASYNCHRONOUS that runs
            pure computation, with no cancellation point, is canceled
            within 10 s of the request.
-note       disputed (new): 2.9.5.1 says only that with the asynchronous
+note       disputed (Q-72): 2.9.5.1 says only that with the asynchronous
            type requests "may be acted upon at any time"; read as a
            permission, a system may still wait for a cancellation point
            and never cancel such a thread. The RATIONALE of

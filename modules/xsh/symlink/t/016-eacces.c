@@ -231,7 +231,8 @@ int main(void)
 		pc_make_dir("w");
 		pc_make_dir("s");
 		pc_make_dir("s/x");
-		pc_check(chmod("s/x", 0777) == 0 && chmod("w", 0555) == 0 && chmod("s", 0600) == 0, "chmod failed");
+		if (!(chmod("s/x", 0777) == 0 && chmod("w", 0555) == 0 && chmod("s", 0600) == 0))
+			pc_unresolved("chmod failed");
 		pc_test();
 		v = unprivileged(child);
 		pc_check(v == 0, "a call needing write or search permission %s (EACCES expected)", verdict_text(v));

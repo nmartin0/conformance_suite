@@ -206,10 +206,12 @@ int main(void)
 			pc_unresolved("a descriptor near %d is open", lim);
 		for (i = 0; i < lim; i++)
 			if (fcntl(i, F_GETFD) == -1)
-				pc_check(dup2(fd, i) == i, "cannot fill slot %d", i);
+				if (!(dup2(fd, i) == i))
+					pc_unresolved("cannot fill slot %d", i);
 		pc_check(getrlimit(RLIMIT_NOFILE, &rl) == 0, "getrlimit failed");
 		rl.rlim_cur = (rlim_t)lim;
-		pc_check(setrlimit(RLIMIT_NOFILE, &rl) == 0, "setrlimit failed");
+		if (!(setrlimit(RLIMIT_NOFILE, &rl) == 0))
+			pc_unresolved("setrlimit failed");
 		if (getrlimit(RLIMIT_NOFILE, &rl) != 0 || rl.rlim_cur != (rlim_t)lim)
 			pc_unresolved("RLIMIT_NOFILE did not take the value %d", lim);
 		pc_test();

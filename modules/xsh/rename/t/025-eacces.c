@@ -233,7 +233,8 @@ int main(void)
 		default:
 			pc_fail("a rename() needing write or search permission failed with the wrong error");
 		}
-		pc_check(chmod("s", 0700) == 0, "chmod failed");
+		if (!(chmod("s", 0700) == 0))
+			pc_unresolved("chmod failed");
 		pc_check(exists("c/own") && exists("w/f") && !exists("w/g") && !exists("c/g") && !exists("c/h"), "a failed rename() moved a file");
 	}
 	pc_pass();

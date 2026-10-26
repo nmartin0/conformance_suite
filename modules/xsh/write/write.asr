@@ -211,7 +211,7 @@ class      required
 since      2008
 says       pwrite() writes at the given offset even when O_APPEND is
            set, and leaves the file offset unchanged.
-note       Linux appends instead (docs/linux-deviations.md 1.4).
+note       A system that appends instead deviates (deviation 1.4).
 test       t/022-pwrite-append.c
 
 assertion  XSH.write.023

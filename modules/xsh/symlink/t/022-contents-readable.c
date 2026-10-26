@@ -238,7 +238,8 @@ int main(void)
 		int v;
 
 		pc_make_file("f", "data");
-		pc_check(chmod("f", 0644) == 0, "chmod failed");
+		if (!(chmod("f", 0644) == 0))
+			pc_unresolved("chmod failed");
 		pc_make_symlink("f", "sl");
 		if (fchmodat(AT_FDCWD, "sl", 0, AT_SYMLINK_NOFOLLOW) == 0)
 			pc_note("the link's mode bits were set to 0");

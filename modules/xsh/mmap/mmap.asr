@@ -109,7 +109,7 @@ says       mmap(PROT_READ, MAP_SHARED) of a descriptor open only for
            only for reading, each return MAP_FAILED with errno EACCES.
 note       DESCRIPTION words the second case as something the application
            ensures, while ERRORS requires the error; the error is tested,
-           as for SI-68 (a candidate issue raised with this module).
+           as for SI-68 (extended to this page).
 test       t/010-eacces.c
 
 assertion  XSH.mmap.011

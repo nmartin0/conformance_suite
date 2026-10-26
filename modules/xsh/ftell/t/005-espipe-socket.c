@@ -191,7 +191,8 @@ int main(void)
 		long r;
 		int s[2], e;
 
-		pc_check(socketpair(AF_UNIX, SOCK_STREAM, 0, s) == 0, "socketpair failed");
+		if (!(socketpair(AF_UNIX, SOCK_STREAM, 0, s) == 0))
+			pc_unresolved("socketpair failed");
 		pc_test();
 		f = fdopen(s[0], "r");
 		NEED(f != NULL, "fdopen failed");

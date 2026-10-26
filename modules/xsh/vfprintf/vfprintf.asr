@@ -69,7 +69,7 @@ class      required
 since      2024
 says       vasprintf() returns 4 for "%s%d" with "ab" and 12 and stores the
            address of the string "ab12", which free() accepts.
-note       Neither glibc 2.39 nor musl declares vasprintf() under the strict
-           build (docs/linux-deviations.md 6.3, 11.1), so the test does not
+note       A system that does not declare vasprintf() under the strict
+           build (deviation 6.3, 11.1), so the test does not
            build there (UNINITIATED).
 test       t/008-vasprintf.c

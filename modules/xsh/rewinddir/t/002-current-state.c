@@ -285,7 +285,8 @@ int main(void)
 		d = open_dir("d");
 		read_all(d, &v);
 		pc_make_file("d/d", "x");
-		pc_check(unlink("d/b") == 0, "unlink failed: %s", pc_errname(errno));
+		if (!(unlink("d/b") == 0))
+			pc_unresolved("unlink failed: %s", pc_errname(errno));
 		rewinddir(d);
 		read_all(d, &v);
 		why = exactly(&v, want, 3);

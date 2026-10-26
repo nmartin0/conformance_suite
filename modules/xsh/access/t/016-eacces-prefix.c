@@ -230,7 +230,8 @@ int main(void)
 		r = unprivileged(child);
 		pc_check(r != 3, "the child could not prepare its file");
 		pc_check(r == 0, "access() through a directory without search permission (check %d of the child went wrong)", r);
-		pc_check(chmod("s", 0700) == 0, "chmod failed");
+		if (!(chmod("s", 0700) == 0))
+			pc_unresolved("chmod failed");
 	}
 	pc_pass();
 }

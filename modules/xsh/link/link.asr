@@ -188,9 +188,7 @@ says       A process without appropriate privileges that links a file it
 needs      root
 note       disputed (Q-24): the standard does not say what access to the
            existing file an implementation may require, or whether a
-           security policy may refuse with EPERM; Linux
-           (fs.protected_hardlinks) and FreeBSD
-           (security.bsd.hardlink_check_uid) refuse with EPERM.
+           security policy may refuse with EPERM; some systems do (deviation record).
 test       t/019-other-users-file.c
 
 assertion  XSH.link.020

@@ -55,7 +55,8 @@ int main(void)
 		ssize_t r;
 		int fd[2];
 
-		pc_check(pipe(fd) == 0, "pipe failed: %s", pc_errname(errno));
+		if (!(pipe(fd) == 0))
+			pc_unresolved("pipe failed: %s", pc_errname(errno));
 		nonblock(fd[0]);
 		pc_test();
 		f = fdopen(fd[0], "r");

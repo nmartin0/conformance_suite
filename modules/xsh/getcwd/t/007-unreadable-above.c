@@ -250,9 +250,11 @@ int main(void)
 
 		pc_make_dir("a");
 		pc_make_dir("a/b");
-		pc_check(chmod("a", 0111) == 0, "chmod failed");
+		if (!(chmod("a", 0111) == 0))
+			pc_unresolved("chmod failed");
 		b = st_of("a/b");
-		pc_check(pipe(pfd) == 0, "pipe failed: %s", pc_errname(errno));
+		if (!(pipe(pfd) == 0))
+			pc_unresolved("pipe failed: %s", pc_errname(errno));
 		pc_test();
 		v = unprivileged(child);
 		NEED(chmod("a", 0755) == 0, "chmod failed: %s", pc_errname(errno));

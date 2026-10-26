@@ -83,7 +83,8 @@ int main(void)
 		f = open_as("f", "r");
 		pc_check(fgetc(f) == 'a' && fgetc(f) == EOF && feof(f), "cannot reach end-of-file");
 		/* g: both indicators, from an EAGAIN and then end-of-file. */
-		pc_check(pipe(p) == 0 && fcntl(p[0], F_SETFL, O_NONBLOCK) == 0, "pipe or fcntl failed");
+		if (!(pipe(p) == 0 && fcntl(p[0], F_SETFL, O_NONBLOCK) == 0))
+			pc_unresolved("pipe or fcntl failed");
 		g = fdopen(p[0], "r");
 		pc_check(g != NULL, "fdopen failed");
 		pc_check(fgetc(g) == EOF && ferror(g), "fgetc() on an empty O_NONBLOCK pipe did not set the error indicator");

@@ -84,7 +84,8 @@ int main(void)
 		int p[2], e;
 
 		pc_check(pipe(p) == 0, "pipe failed");
-		pc_check(fcntl(p[1], F_SETFL, O_NONBLOCK) == 0, "fcntl failed");
+		if (!(fcntl(p[1], F_SETFL, O_NONBLOCK) == 0))
+			pc_unresolved("fcntl failed");
 		while (write(p[1], "x", 1) == 1)
 			;
 		pc_check(errno == EAGAIN, "filling the pipe stopped with %s", pc_errname(errno));

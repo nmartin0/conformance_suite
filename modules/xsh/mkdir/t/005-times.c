@@ -221,7 +221,8 @@ int main(void)
 		for (i = 0; i < 300 && !moved; i++) {
 			if (i > 0) {
 				/* keep one subdirectory at a time: {LINK_MAX} may be small */
-				pc_check(rmdir(name) == 0, "rmdir(%s) failed: %s", name, pc_errname(errno));
+				if (!(rmdir(name) == 0))
+					pc_unresolved("rmdir(%s) failed: %s", name, pc_errname(errno));
 			}
 			snprintf(name, sizeof name, "p/d%d", i);
 			p0 = lst("p");

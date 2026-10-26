@@ -402,8 +402,7 @@ class      required
 since      1988
 says       execve() of a file with execute permission whose contents are in
            no recognized format (64 bytes of 0x01) fails with ENOEXEC.
-note       A binfmt_misc rule (Linux) matching the file would be the
-           environment, not exec.
+note       A rule of the environment that interprets the file (a registered format handler) would be the environment, not exec.
 test       t/042-enoexec.c
 
 assertion  XSH.exec.043
@@ -418,8 +417,7 @@ note       disputed (Q-9): which {ARG_MAX} applies is open, and an
            the arguments also exceed the stack limit (XSH 2.3). Strings
            of 4096 bytes are used, so that per-string limits do not
            apply. An indeterminate {ARG_MAX} makes the test NOTINUSE;
-           one over 64 MiB, UNRESOLVED. On musl sysconf() under-reports
-           (O.9, standard question Q-9).
+           one over 64 MiB, UNRESOLVED. A sysconf() that under-reports {ARG_MAX} is a deviation (O.9, standard question Q-9).
 test       t/043-e2big.c
 
 assertion  XSH.exec.044

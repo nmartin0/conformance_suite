@@ -243,7 +243,8 @@ int main(void)
 	pc_begin("XSH.2.4.1-signal-generation.004");
 	mask(SIG_BLOCK, SIGUSR1);
 	pc_test();
-	pc_check(pthread_create(&b, NULL, other, NULL) == 0, "pthread_create failed");
+	if (!(pthread_create(&b, NULL, other, NULL) == 0))
+		pc_unresolved("pthread_create failed");
 	(void)pthread_join(b, NULL);
 	pc_check(atomic_load(&t_ok) == 1, "the new thread's mask is not the creating thread's");
 	c = fork();

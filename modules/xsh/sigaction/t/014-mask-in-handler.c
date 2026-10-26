@@ -84,7 +84,8 @@ int main(void)
 	pc_check(self_in, "SIGUSR1 was not blocked during its own handler");
 	pc_check(usr2_in, "SIGUSR2 (in sa_mask) was not blocked during the handler");
 	pc_check(term_in, "the mask before the signal (SIGTERM) was not kept during the handler");
-	pc_check(sigprocmask(SIG_BLOCK, NULL, &after) == 0, "sigprocmask failed");
+	if (!(sigprocmask(SIG_BLOCK, NULL, &after) == 0))
+		pc_unresolved("sigprocmask failed");
 	pc_check(sigismember(&after, SIGTERM) == 1, "the mask before the handler (SIGTERM) was not restored");
 	pc_check(sigismember(&after, SIGUSR1) != 1 && sigismember(&after, SIGUSR2) != 1,
 	    "the handler's mask was left in place after it returned");

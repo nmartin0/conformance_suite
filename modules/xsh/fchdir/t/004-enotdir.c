@@ -259,7 +259,8 @@ int main(void)
 		pc_make_file("f", "x");
 		ffd = open("f", O_RDONLY);
 		pc_check(ffd >= 0, "open(f) failed: %s", pc_errname(errno));
-		pc_check(pipe(p) == 0, "pipe failed: %s", pc_errname(errno));
+		if (!(pipe(p) == 0))
+			pc_unresolved("pipe failed: %s", pc_errname(errno));
 		pc_test();
 		ffails(ffd, ENOTDIR, "a regular file");
 		ffails(p[0], ENOTDIR, "a pipe");

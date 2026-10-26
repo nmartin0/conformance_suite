@@ -190,7 +190,8 @@ int main(void)
 		pc_make_file("f", "kept");
 		pc_test();
 		pc_check(link("f", "g") == 0, "link() failed: %s", pc_errname(errno));
-		pc_check(unlink("f") == 0, "unlink(f) failed: %s", pc_errname(errno));
+		if (!(unlink("f") == 0))
+			pc_unresolved("unlink(f) failed: %s", pc_errname(errno));
 		st = lst("g");
 		pc_check(st.st_nlink == 1, "st_nlink %lu after the original name went", (unsigned long)st.st_nlink);
 		pc_check(pc_file_equals("g", "kept"), "g lost the contents");

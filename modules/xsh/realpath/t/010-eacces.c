@@ -299,7 +299,8 @@ int main(void)
 
 		pc_make_dir("s");
 		pc_make_file("s/x", "x");
-		pc_check(chmod("s", 0600) == 0, "chmod failed");
+		if (!(chmod("s", 0600) == 0))
+			pc_unresolved("chmod failed");
 		pc_test();
 		v = unprivileged(child);
 		pc_check(v == 0, "realpath(\"s/x\") with s denying search %s (EACCES expected)", verdict_text(v));

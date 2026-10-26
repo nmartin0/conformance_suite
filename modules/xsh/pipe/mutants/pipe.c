@@ -50,7 +50,7 @@ static void move_up(int *fd)
 /* Faults common to pipe() and pipe2(), on a successful result. */
 static void after(const char *m, int *fd)
 {
-	/* On systems with bidirectional pipes (FreeBSD) swapping is invisible. */
+	/* On systems with bidirectional pipes swapping is invisible. */
 	if (IS("swapped")) {
 		int t = fd[0];
 		fd[0] = fd[1];
@@ -75,7 +75,7 @@ static void after(const char *m, int *fd)
 	if (IS("old_times")) {
 		struct timespec ts[2] = { { 1, 0 }, { 1, 0 } };
 		if (futimens(fd[0], ts) != 0)
-			cannot_plant(m);	/* FreeBSD, OpenBSD: not on pipes */
+			cannot_plant(m);	/* not plantable on bidirectional pipes */
 	}
 }
 

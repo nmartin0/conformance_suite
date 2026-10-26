@@ -53,8 +53,7 @@ class      required
 since      2024
 says       <fcntl.h> defines F_OFD_GETLK, F_OFD_SETLK and F_OFD_SETLKW,
            usable in #if.
-note       glibc defines them only with _GNU_SOURCE, so this FAILs under
-           the strict build (docs/linux-deviations.md 1.8).
+note       A system that defines them only under an extension feature macro FAILs under the strict build (deviation 1.8).
 test       t/006-f-ofd.c
 nomutant   compile-time presence check; needs the Tier 0 header mutants
 
@@ -76,8 +75,6 @@ says       <fcntl.h> defines F_GETOWN_EX and F_SETOWN_EX, the macros
            struct f_owner_ex with members type and pid.
 note       A symbolic constant is a macro (XBD 3.363); an enumeration
            constant alone does not do. A missing struct member makes the
-           test UNINITIATED. glibc 2.39 has F_OWNER_* only as
-           enumeration constants; musl 1.2.4 defines them and the struct
-           only with _GNU_SOURCE (docs/linux-deviations.md O.2).
+           test UNINITIATED. A system with F_OWNER_* only as enumeration constants, or with them and the struct only under an extension feature macro, FAILs or is UNINITIATED (deviation O.2).
 test       t/008-owner-ex.c
 nomutant   compile-time presence check; needs the Tier 0 header mutants

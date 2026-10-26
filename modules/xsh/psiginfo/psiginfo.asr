@@ -28,8 +28,7 @@ says       For a siginfo_t filled by sigwaitinfo() for SIGUSR1 sent by kill(),
            psiginfo(&si, "pc") writes the same line as psignal(SIGUSR1,
            "pc").
 uses       XSH.psiginfo.001
-note       Whether psiginfo() may add details from the siginfo_t (glibc
-           adds the sender) to the description is unclear (standard
+note       Whether psiginfo() may add details from the siginfo_t (adding the sender, say) to the description is unclear (standard
            question Q-19), so a FAIL is logged as INSPECT.
 test       t/003-psiginfo-format.c
 

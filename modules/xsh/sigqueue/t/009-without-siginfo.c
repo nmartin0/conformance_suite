@@ -75,7 +75,8 @@ int main(void)
 		pc_test();
 		pc_check(sigqueue(getpid(), SIGRTMIN, v) == 0, "the first sigqueue() failed: %s", pc_errname(errno));
 		pc_check(sigqueue(getpid(), SIGRTMIN, v) == 0, "the second sigqueue() failed: %s", pc_errname(errno));
-		pc_check(sigprocmask(SIG_UNBLOCK, &one, NULL) == 0, "sigprocmask failed");
+		if (!(sigprocmask(SIG_UNBLOCK, &one, NULL) == 0))
+			pc_unresolved("sigprocmask failed");
 		pc_check(wait_for(&n, 2000), "the handler never ran");
 	}
 	pc_pass();

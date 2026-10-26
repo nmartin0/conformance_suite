@@ -4,7 +4,7 @@
  *
  * ASSERTION XSH.sigaltstack.011
  * MUTANT    sigaltstack.disable_checks_size
- * VARIANT   sigaltstack.bsd_flags
+ * VARIANT   sigaltstack.disable_4
  * VARIANT   sigaltstack.minsigstksz_32k
  */
 #include "pc.h"

@@ -81,7 +81,8 @@ int main(void)
 		int p[2], e;
 
 		pc_check(pipe(p) == 0, "pipe failed");
-		pc_check(fcntl(p[0], F_SETFL, O_NONBLOCK) == 0, "fcntl failed");
+		if (!(fcntl(p[0], F_SETFL, O_NONBLOCK) == 0))
+			pc_unresolved("fcntl failed");
 		pc_test();
 		f = fdopen(p[0], "r");
 		NEED(f != NULL, "fdopen failed: %s", pc_errname(errno));

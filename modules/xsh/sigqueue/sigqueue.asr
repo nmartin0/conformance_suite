@@ -51,9 +51,7 @@ says       Queuing SIGRTMIN to the caller (blocked, SA_SIGINFO set) with
 timeout    120
 note       {SIGQUEUE_MAX} from sysconf(); over 1000000 the test is
            UNRESOLVED. A system-wide limit may make it fail earlier,
-           which is allowed. musl gives -1 for {SIGQUEUE_MAX} (no
-           definite limit, which is allowed), so there the test is
-           NOTINUSE.
+           which is allowed. A system that gives -1 for {SIGQUEUE_MAX} (no definite limit, which is allowed) makes the test NOTINUSE.
 test       t/005-eagain.c
 
 assertion  XSH.sigqueue.006

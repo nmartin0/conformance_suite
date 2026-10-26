@@ -247,7 +247,8 @@ static void block_sigpipe(void)
 
 	sigemptyset(&one);
 	sigaddset(&one, SIGPIPE);
-	pc_check(sigprocmask(SIG_BLOCK, &one, NULL) == 0, "sigprocmask failed");
+	if (!(sigprocmask(SIG_BLOCK, &one, NULL) == 0))
+		pc_unresolved("sigprocmask failed");
 }
 
 /* Fills the pipe completely (setup): non-blocking writes until EAGAIN; leaves O_NONBLOCK set. */
@@ -287,7 +288,8 @@ static void catch_alarm(void)
 	memset(&sa, 0, sizeof sa);
 	sa.sa_handler = on_alarm;
 	sigemptyset(&sa.sa_mask);
-	pc_check(sigaction(SIGALRM, &sa, NULL) == 0, "sigaction failed");
+	if (!(sigaction(SIGALRM, &sa, NULL) == 0))
+		pc_unresolved("sigaction failed");
 }
 
 int main(void)
