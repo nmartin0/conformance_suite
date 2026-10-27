@@ -153,7 +153,8 @@ says       creat() of a name whose last component is longer than
 note       "since" left out, as for XSH.open.017: the error is
            unconditional only since _POSIX_NO_TRUNC had to be other than
            -1. The call has O_CREAT, so ENOENT for the missing file
-           cannot also apply.
+           cannot also apply. NOTINUSE when pathconf(_PC_NO_TRUNC) reports 0
+           for the directory (names may then be truncated, not rejected).
 test       t/015-enametoolong.c
 
 assertion  XSH.creat.016

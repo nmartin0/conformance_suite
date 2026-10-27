@@ -1,0 +1,67 @@
+# glob.cov - every requirement unit on functions/glob.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:6690cd72     XSH.glob.001 XSH.glob.008 XSH.glob.009 XSH.glob.013
+DESCRIPTION:587fa830     none  introduction of the structure members
+DESCRIPTION:365c5d25     XSH.glob.001
+DESCRIPTION:51866d24     XSH.glob.001
+DESCRIPTION:2fe788c2     XSH.glob.023
+DESCRIPTION:6196c9d0     none  statement about the argument
+DESCRIPTION:5d6a1ad5     XSH.glob.001 XSH.glob.003 XSH.glob.008
+DESCRIPTION:b97ff095     partial XSH.glob.027 XSH.glob.028  # read permission on a directory; the search-permission case is not tested
+DESCRIPTION:7b49e022     XSH.glob.001
+DESCRIPTION:089b31a3     XSH.glob.002 XSH.glob.003
+DESCRIPTION:f5be6456     XSH.glob.001
+DESCRIPTION:c4f923c5     XSH.glob.004
+DESCRIPTION:a8626dbb     app
+DESCRIPTION:aad8948a     untestable  allocation is not observable
+DESCRIPTION:e96ef8dc     untestable  releasing memory is not observable
+DESCRIPTION:30604f17     XSH.glob.031
+DESCRIPTION:7ee235c0     none  introduction
+DESCRIPTION:a61f981a     none  introduction
+DESCRIPTION:ecb2c61b     XSH.glob.025
+DESCRIPTION:ae2b3c99     XSH.glob.023 XSH.glob.024
+DESCRIPTION:75b69ef7     XSH.glob.023
+DESCRIPTION:b78f1873     XSH.glob.023 XSH.glob.024
+DESCRIPTION:ca0a90a9     XSH.glob.029
+DESCRIPTION:f6c3f5dd     XSH.glob.027 XSH.glob.030
+DESCRIPTION:c91cdbfb     optional
+DESCRIPTION:e1eb9ef8     XSH.glob.017 XSH.glob.018 XSH.glob.019
+DESCRIPTION:93c87b3a     none  only for an implementation that treats a leading double slash specially; not observable
+DESCRIPTION:6f6c417e     XSH.glob.017 XSH.glob.018
+DESCRIPTION:3238f792     optional
+DESCRIPTION:b74610df     optional
+DESCRIPTION:e270ae83     XSH.glob.006
+DESCRIPTION:8b0bb4a4     XSH.glob.006 XSH.glob.007
+DESCRIPTION:0fde9243     XSH.glob.021 XSH.glob.020
+DESCRIPTION:3211c084     XSH.glob.002
+DESCRIPTION:2b06037c     XSH.glob.022
+DESCRIPTION:88e44d67     XSH.glob.025
+DESCRIPTION:3b2d7d26     app
+DESCRIPTION:25855005     app
+DESCRIPTION:e7d38a3c     app
+DESCRIPTION:02144622     app
+DESCRIPTION:c5ae388a     XSH.glob.026
+DESCRIPTION:3e5ec882     XSH.glob.025 XSH.glob.026
+DESCRIPTION:69d70611     XSH.glob.025 XSH.glob.026
+DESCRIPTION:c73c107c     XSH.glob.025 XSH.glob.026
+DESCRIPTION:eb0de685     app
+DESCRIPTION:b8f278eb     app
+DESCRIPTION:63201b4f     XSH.glob.027
+DESCRIPTION:8fb867ef     XSH.glob.027
+DESCRIPTION:2403dd52     XSH.glob.027
+DESCRIPTION:862b4174     optional
+DESCRIPTION:1d33a69f     XSH.glob.028 XSH.glob.029 XSH.glob.030
+DESCRIPTION:7c7ceee2     XSH.glob.027 XSH.glob.030
+DESCRIPTION:f8234075     partial XSH.glob.027  # EACCES only; ELOOP and ENAMETOOLONG have no reliable way to make glob() open the directory
+DESCRIPTION:2da546c5     none  implementation-defined
+DESCRIPTION:627c8b26     XSH.glob.032
+RETURN_VALUE:d97572b3    XSH.glob.001 XSH.glob.027
+RETURN_VALUE:1ec86501    XSH.glob.001
+RETURN_VALUE:12bfe61a    none  undefined content
+RETURN_VALUE:717e1ef4    XSH.glob.031
+RETURN_VALUE:d29511f6    XSH.glob.004 XSH.glob.028
+RETURN_VALUE:e8aa5529    XSH.glob.028
+ERRORS:491d0f20          XSH.glob.028 XSH.glob.029
+ERRORS:53143256          XSH.glob.004 XSH.glob.005
+ERRORS:3f1b554d          untestable  an allocation failure cannot be arranged portably

@@ -1,0 +1,233 @@
+# XSH nftw()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# nftw() is an XSI function. The order in which the entries of one directory
+# are reported is not fixed by the page, so the tests look objects up by the
+# name that the base member points at and only compare the order of a
+# directory with its own contents. Error tests arrange exactly one error
+# condition (XSH 2.3). Tests of permission failures drop privilege in a child
+# when the suite runs as root. FTW_MOUNT and FTW_XDEV across a real device
+# boundary need a second file system and cannot be arranged generically.
+
+assertion  XSH.nftw.001
+anchor     functions/nftw.html#DESCRIPTION
+anchor     functions/nftw.html#RETURN VALUE
+class      conditional
+when       XSI
+says       With flags 0 over a tree holding a file a, a directory d with a
+           file b and a directory e holding a file c, a symbolic link s to a
+           and a dangling symbolic link, nftw() calls fn once for each of
+           the eight objects and returns 0. The type code is FTW_D for the
+           three directories, FTW_F for the three files and for s (the link
+           is followed), and FTW_SLN for the dangling link. The levels are 0
+           for the root, 1 for a, d, s and the dangling link, 2 for b and e,
+           3 for c. The base member offsets to the object's own name in the
+           pathname. The stat buffer describes the object: a regular file of
+           the right size and identity for a and the followed s, a directory
+           for d, and the link itself for the dangling one.
+test       t/001-types-levels.c
+
+assertion  XSH.nftw.002
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With FTW_PHYS, a symbolic link to a file, a dangling symbolic link
+           and a symbolic link to a directory are each reported once with
+           FTW_SL and a stat buffer describing the link itself, and nothing
+           below the link to the directory is reported; the walk returns 0.
+test       t/002-phys.c
+
+assertion  XSH.nftw.003
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Without FTW_PHYS, a symbolic link sd to a sibling directory d is
+           followed: sd is reported as FTW_D (stat buffer of a directory) at
+           level 1 and the file inside it is reported at level 2 as well as
+           the same file under d.
+test       t/003-follow-dir-link.c
+
+assertion  XSH.nftw.004
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Without FTW_DEPTH, each directory is reported before the objects
+           in it (the root is first, and d before its entries b and e, e
+           before c).
+test       t/004-preorder.c
+
+assertion  XSH.nftw.005
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With FTW_DEPTH, each directory is reported after the objects in
+           it, with type FTW_DP and its usual level and base, and no readable
+           directory is reported with FTW_D; files keep FTW_F.
+test       t/005-depth.c
+
+assertion  XSH.nftw.006
+anchor     functions/nftw.html#RETURN VALUE
+class      conditional
+when       XSI
+says       When fn returns a non-zero value nftw() stops at once and returns
+           that value: a walk where fn returns 1 on its first call makes one
+           call and returns 1; one where fn returns 42 on its third call makes
+           three calls and returns 42.
+test       t/006-fn-return.c
+
+assertion  XSH.nftw.007
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With fd_limit 1 over a tree three directories deep, the walk is
+           still completed (all objects reported, return 0), and at no call
+           of fn does the process hold more than one descriptor beyond those
+           it had before the call.
+note       See Q-99 for what the page leaves open about small limits.
+test       t/007-fd-limit.c
+
+assertion  XSH.nftw.008
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Every descriptor that is open during a call of fn and was not open
+           before nftw() was called has FD_CLOEXEC set. NOTINUSE when no such
+           descriptor is ever seen.
+test       t/008-cloexec.c
+
+assertion  XSH.nftw.009
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       When nftw() returns, after a complete walk and after one stopped
+           by fn, the set of open descriptors is what it was before the
+           call.
+test       t/009-fds-closed.c
+
+assertion  XSH.nftw.010
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With FTW_CHDIR, whenever fn is called for a regular file, the file
+           is found by its own name (the part of the pathname at base) in
+           the current directory.
+note       Only non-directory objects are checked: for a directory the page
+           does not say whether the directory itself or its parent is
+           current. The directory in force after nftw() returns is not
+           specified (the test changes back). See Q-98.
+test       t/010-chdir.c
+
+assertion  XSH.nftw.011
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Without FTW_CHDIR, the current directory is the same one at every
+           call of fn as before the walk, with flags 0 and with
+           FTW_DEPTH|FTW_PHYS.
+test       t/011-no-chdir.c
+
+assertion  XSH.nftw.012
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Without FTW_PHYS and FTW_DEPTH, a symbolic link below the root
+           that names an ancestor directory is followed without looping: the
+           walk finishes with 0, and nothing is reported below that link
+           (though the link itself may be); the objects outside it are
+           reported once.
+test       t/012-cycle.c
+
+assertion  XSH.nftw.013
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Without FTW_PHYS and with FTW_DEPTH, a symbolic link below the
+           root that names an ancestor directory is not reported at all and
+           nothing is reported below it; the walk finishes with 0 and the
+           objects outside it are reported once.
+test       t/013-cycle-depth.c
+
+assertion  XSH.nftw.014
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       On a tree wholly on one file system, FTW_MOUNT, FTW_XDEV and both
+           together report the same objects as flags 0 (seven objects), and
+           return 0.
+test       t/014-mount-xdev.c
+
+assertion  XSH.nftw.015
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       When path names a regular file, fn is called exactly once, with
+           FTW_F, level 0, and base pointing at the file's name in the
+           pathname; nftw() returns 0.
+test       t/015-root-file.c
+
+assertion  XSH.nftw.016
+anchor     functions/nftw.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A directory that cannot be read, below the root, is reported with
+           FTW_DNR, fn is not called for anything below it, and the walk
+           still returns 0 (the other objects are reported).
+note       The call runs without appropriate privileges. The root itself is
+           readable (see Q-97).
+test       t/016-dnr.c
+
+assertion  XSH.nftw.017
+anchor     functions/nftw.html#DESCRIPTION
+anchor     functions/nftw.html#RETURN VALUE
+class      conditional
+when       XSI
+says       An entry in a readable directory that is not searchable, whose
+           status therefore cannot be read for lack of permission, is
+           reported with FTW_NS; the directory itself is reported with
+           FTW_D, and the walk returns 0.
+note       The call runs without appropriate privileges.
+test       t/017-ns.c
+
+assertion  XSH.nftw.018
+anchor     functions/nftw.html#ERRORS/ENOENT
+class      conditional
+when       XSI
+says       nftw() of a path whose last component does not exist, and of an
+           empty string, returns -1 with ENOENT and does not call fn.
+test       t/018-enoent.c
+
+assertion  XSH.nftw.019
+anchor     functions/nftw.html#ERRORS/ENOTDIR
+class      conditional
+when       XSI
+says       nftw() of "f/x" where f is a regular file returns -1 with ENOTDIR
+           and does not call fn.
+test       t/019-enotdir.c
+
+assertion  XSH.nftw.020
+anchor     functions/nftw.html#ERRORS/ENAMETOOLONG
+class      disputed
+when       XSI
+says       nftw() of a name longer than {NAME_MAX} bytes returns -1 with
+           ENAMETOOLONG and does not call fn.
+note       disputed (Q-8): the name also names no existing file, so ENOENT
+           applies too. NOTINUSE when pathconf(_PC_NO_TRUNC) reports 0 for
+           the directory.
+test       t/020-enametoolong.c
+
+assertion  XSH.nftw.021
+anchor     functions/nftw.html#ERRORS/ELOOP
+class      conditional
+when       XSI
+says       nftw() of "l/x" where l is a symbolic link naming itself returns
+           -1 with ELOOP and does not call fn.
+test       t/021-eloop.c
+
+assertion  XSH.nftw.022
+anchor     functions/nftw.html#ERRORS/EACCES
+class      conditional
+when       XSI
+says       nftw() of "p/x" where p is a directory without search permission
+           returns -1 with EACCES and does not call fn.
+note       The call runs without appropriate privileges.
+test       t/022-eacces.c

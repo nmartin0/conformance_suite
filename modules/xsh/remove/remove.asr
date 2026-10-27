@@ -154,7 +154,8 @@ says       remove() of a name longer than {NAME_MAX} bytes fails with
 note       disputed (Q-8): the name also names no existing file, so
            ENOENT applies too; see XSH.unlink.014. "since" left out, as
            for XSH.open.017: the error is unconditional only since
-           _POSIX_NO_TRUNC had to be other than -1.
+           _POSIX_NO_TRUNC had to be other than -1. NOTINUSE when
+           pathconf(_PC_NO_TRUNC) reports 0 for the directory.
 test       t/014-enametoolong.c
 
 assertion  XSH.remove.015

@@ -1,0 +1,71 @@
+# XSH dirname()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# dirname() is an XSI function declared in <libgen.h>. The page leaves open
+# whether redundant slashes and "." components are dropped from the result,
+# and what a leading "//" means: tests accept every allowed spelling and
+# otherwise compare the whole returned string. The function may change its
+# argument and return a pointer into it or to constant data: tests pass
+# writable copies and never write through the result.
+
+assertion  XSH.dirname.001
+anchor     functions/dirname.html#DESCRIPTION
+anchor     functions/dirname.html#RETURN VALUE
+class      conditional
+when       XSI
+says       dirname() returns, for "usr/" ".", for "/usr/" "/", for "/usr/lib"
+           "/usr", for "/" "/", for "a/b" "a", for "a/b/" "a", for "a/b/c"
+           "a/b", for "/a" "/", for "usr/lib//" "usr", for "a//b" "a" and for
+           "/home/dwc/." "/home/dwc".
+test       t/001-directory-part.c
+
+assertion  XSH.dirname.002
+anchor     functions/dirname.html#DESCRIPTION
+anchor     functions/dirname.html#APPLICATION USAGE
+class      conditional
+when       XSI
+says       Where the page allows two results, dirname() returns one of them:
+           "//" gives "/" or "//"; "///" gives "/" or "///"; "//foo" gives
+           "//" or "/"; "//usr//lib//" gives "//usr" or "/usr";
+           "/home//dwc//test" gives "/home//dwc" or "/home/dwc";
+           "/home/.././test" gives "/home/../." or "/home/.."; "a/./b" gives
+           "a/." or "a".
+test       t/002-allowed-alternatives.c
+
+assertion  XSH.dirname.003
+anchor     functions/dirname.html#DESCRIPTION
+class      conditional
+when       XSI
+says       ".." components before the last component are kept: "a/../b"
+           gives "a/..", "../x" gives "..", "/../x" gives "/..", and
+           "a/b/../c" gives "a/b/..".
+test       t/003-dotdot-kept.c
+
+assertion  XSH.dirname.004
+anchor     functions/dirname.html#DESCRIPTION
+class      conditional
+when       XSI
+says       dirname() of a null pointer, an empty string, and strings with no
+           slash ("usr", "x.y", ".", "..") returns ".".
+test       t/004-dot-cases.c
+
+assertion  XSH.dirname.005
+anchor     functions/dirname.html#DESCRIPTION
+class      conditional
+when       XSI
+says       The result does not depend on the file system: "link/leaf" where
+           link is a symbolic link to a directory, "file/x" where file is a
+           regular file, and "missing/x" give "link", "file" and "missing".
+test       t/005-no-resolution.c
+
+assertion  XSH.dirname.006
+anchor     functions/dirname.html#DESCRIPTION
+anchor     functions/dirname.html#RETURN VALUE
+class      conditional
+when       XSI
+says       The result of one call stays valid when dirname() is called again
+           for another string: the results for "x/aa", "y/bb", a null
+           pointer and "" can all be read after the four calls.
+note       The page lets a result be invalidated only when its own input is
+           modified or freed; the inputs here are left alone. See Q-100.
+test       t/006-results-coexist.c

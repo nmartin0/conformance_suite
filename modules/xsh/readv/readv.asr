@@ -128,3 +128,14 @@ since      2001
 says       readv() with iovcnt 1 reads like read(): the buffer is filled
            from the file offset and the offset advances.
 test       t/012-single.c
+
+assertion  XSH.readv.013
+anchor     functions/readv.html#DESCRIPTION
+class      conditional
+when       XSI
+says       readv() with iovcnt equal to {IOV_MAX} (one-byte entries over a
+           regular file of that many bytes) is valid: it succeeds and
+           reads all {IOV_MAX} bytes, in order.
+note       NOTINUSE when {IOV_MAX} cannot be found or is too large to
+           allocate here.
+test       t/013-iov-max.c

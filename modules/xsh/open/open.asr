@@ -140,7 +140,8 @@ says       A final component longer than {NAME_MAX} fails with ENAMETOOLONG
            (tested with O_CREAT in an existing directory, so ENOENT cannot
            also apply).
 note       "since" left out: unconditional only once _POSIX_NO_TRUNC had
-           to be other than -1; that edition is still to be confirmed.
+           to be other than -1; that edition is still to be confirmed. NOTINUSE when pathconf(_PC_NO_TRUNC) reports 0 for
+           the directory.
 test       t/017-enametoolong.c
 
 assertion  XSH.open.018

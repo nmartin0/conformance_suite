@@ -33,6 +33,9 @@ int main(void)
 	pc_check(name != NULL, "malloc");
 	memset(name, 'a', (size_t)max + 1);
 	name[max + 1] = '\0';
+	errno = 0;
+	if (pathconf(".", _PC_NO_TRUNC) == 0)
+		pc_notinuse("over-long names are truncated here (_PC_NO_TRUNC reports 0 for this directory)");
 	pc_require_space();
 	pc_test();
 	fd = open(name, O_WRONLY | O_CREAT, 0600);

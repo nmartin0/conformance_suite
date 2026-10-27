@@ -138,3 +138,14 @@ says       With the soft file size limit lowered (RLIMIT_FSIZE, SIGXFSZ
            ignored) and the file at the limit, writev() fails with EFBIG
            and writes nothing.
 test       t/012-fsize-efbig.c
+
+assertion  XSH.writev.013
+anchor     functions/writev.html#DESCRIPTION
+class      conditional
+when       XSI
+says       writev() with iovcnt equal to {IOV_MAX} (one-byte entries over a
+           regular file of that many bytes) is valid: it succeeds and
+           writes all {IOV_MAX} bytes, in order.
+note       NOTINUSE when {IOV_MAX} cannot be found or is too large to
+           allocate here.
+test       t/013-iov-max.c

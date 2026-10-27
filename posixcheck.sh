@@ -144,7 +144,11 @@ if [ -z "$pc_results" ]; then
 	pc_ephemeral=yes
 	pc_cleanup() {
 		trap '' EXIT HUP INT TERM
-		cd / && rm -rf "$pc_results"
+		cd / || return 0
+		# A test that failed while a directory was unreadable or unsearchable
+		# would defeat rm -rf for an ordinary user: restore owner access first.
+		find "$pc_results" -type d -exec chmod u+rwx {} + >/dev/null 2>&1
+		rm -rf "$pc_results"
 	}
 	trap 'pc_cleanup' EXIT
 	trap 'exit 130' HUP INT TERM

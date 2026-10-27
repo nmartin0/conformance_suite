@@ -1,0 +1,302 @@
+# XSH glob() and globfree()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# glob() and globfree() share a page. Names are made in a fresh directory,
+# patterns use only the POSIX locale (the default for a C program), and the
+# GLOB_NOSPACE return is not tested (an allocation failure cannot be
+# arranged portably).
+
+assertion  XSH.glob.001
+anchor     functions/glob.html#DESCRIPTION
+anchor     functions/glob.html#RETURN VALUE
+class      required
+since      1988
+says       glob("*.c", 0, NULL, &g) over a directory holding a.c, b.c and c.h
+           returns 0, sets gl_pathc to 2, and gl_pathv holds "a.c", "b.c" and
+           then a null pointer.
+test       t/001-star-basic.c
+
+assertion  XSH.glob.002
+anchor     functions/glob.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.2.6
+class      required
+since      1988
+says       In the POSIX locale the pathnames are sorted by character code:
+           files made in the order a, 1, B match "*" and come back as 1, B, a.
+test       t/002-sort-order.c
+
+assertion  XSH.glob.003
+anchor     functions/glob.html#DESCRIPTION
+anchor     utilities/V3_chap02.html#2.14.3
+class      required
+since      1988
+says       A pattern with a wildcard in two components ("d*/f*") matches whole
+           pathnames, and the list is sorted by the whole pathname:
+           d1/f1, d1/f2, d2/f1.
+test       t/003-multi-component.c
+
+assertion  XSH.glob.004
+anchor     functions/glob.html#DESCRIPTION
+anchor     functions/glob.html#ERRORS/GLOB_NOMATCH
+anchor     functions/glob.html#RETURN VALUE
+class      required
+since      1988
+says       A pattern that matches nothing, without GLOB_NOCHECK, returns
+           GLOB_NOMATCH and gl_pathc is 0.
+test       t/004-nomatch.c
+
+assertion  XSH.glob.005
+anchor     functions/glob.html#DESCRIPTION
+anchor     functions/glob.html#ERRORS/GLOB_NOMATCH
+class      required
+since      1988
+says       A pattern without wildcards that names an existing file returns 0
+           with that name as the only result; one that names nothing returns
+           GLOB_NOMATCH.
+test       t/005-literal.c
+
+assertion  XSH.glob.006
+anchor     functions/glob.html#DESCRIPTION
+class      required
+since      1988
+says       With GLOB_NOCHECK and no match, glob() returns 0, gl_pathc is 1 and
+           gl_pathv[0] is a string equal to the pattern, text for text
+           (including a backslash), followed by a null pointer.
+test       t/006-nocheck-nomatch.c
+
+assertion  XSH.glob.007
+anchor     functions/glob.html#DESCRIPTION
+class      required
+since      1988
+says       With GLOB_NOCHECK and a pattern that does match, the result is the
+           matches only: the pattern text itself is not added.
+test       t/007-nocheck-match.c
+
+assertion  XSH.glob.008
+anchor     utilities/V3_chap02.html#2.14.1
+class      required
+since      1988
+says       "?" matches exactly one character: "a?" over a1, a2, a10, b1 gives
+           a1 and a2.
+test       t/008-question.c
+
+assertion  XSH.glob.009
+anchor     basedefs/V1_chap09.html#9.3.5
+anchor     utilities/V3_chap02.html#2.14.1
+class      required
+since      1988
+says       A bracket expression matches one character of its list or range:
+           "[ab]1" and "[a-c]x" select the expected names and no others.
+test       t/009-bracket-list.c
+
+assertion  XSH.glob.010
+anchor     basedefs/V1_chap09.html#9.3.5
+anchor     utilities/V3_chap02.html#2.14.1
+class      required
+since      1988
+says       In a bracket expression, "!" first makes a non-matching list:
+           "[!a]1" over a1, b1, c1 gives b1 and c1.
+test       t/010-bracket-negate.c
+
+assertion  XSH.glob.011
+anchor     basedefs/V1_chap09.html#9.3.5
+anchor     utilities/V3_chap02.html#2.14.1
+class      required
+since      1988
+says       A character class expression in a bracket expression selects its
+           class in the POSIX locale: "[[:digit:]]x" over 1x, ax, Bx gives 1x;
+           "[[:upper:]]x" gives Bx.
+test       t/011-bracket-class.c
+
+assertion  XSH.glob.012
+anchor     basedefs/V1_chap09.html#9.3.5
+anchor     utilities/V3_chap02.html#2.14.1
+class      required
+since      1988
+says       A right bracket placed first in a bracket expression, and a hyphen
+           placed first or last, stand for themselves: "[]a]", "[a-]" and
+           "[-a]" select the one-character names "]", "a" and "-" as listed.
+test       t/012-bracket-edges.c
+
+assertion  XSH.glob.013
+anchor     utilities/V3_chap02.html#2.14.3
+class      required
+since      1988
+says       A period at the start of a name is not matched by "*", "?", a
+           non-matching list, a range containing it, or a character class:
+           over the names .hid and v, "*" gives v only and each of "?hid",
+           "[!a]hid", "[%-0]hid" and "[[:punct:]]hid" gives GLOB_NOMATCH.
+test       t/013-leading-period-wild.c
+
+assertion  XSH.glob.014
+anchor     utilities/V3_chap02.html#2.14.3
+class      required
+since      1988
+says       A leading period matched explicitly by a period in the pattern: ".h*"
+           selects .hid, and "d/.*" selects d/.x (the dot and dot-dot entries
+           may or may not also appear).
+test       t/014-leading-period-explicit.c
+
+assertion  XSH.glob.015
+anchor     utilities/V3_chap02.html#2.14.3
+class      required
+since      1988
+says       A slash in a pathname is matched only by a slash in the pattern: over
+           a directory a holding b, "*" gives a alone, and each of "a?b",
+           "a*b" and "a[!x]b" gives GLOB_NOMATCH.
+test       t/015-slash-explicit.c
+
+assertion  XSH.glob.016
+anchor     utilities/V3_chap02.html#2.14.3
+class      required
+since      1988
+says       A bracket that would have to contain a slash is an ordinary
+           character: over the names abd, a/d and a[b/c]d, the pattern
+           "a[b/c]d" selects only "a[b/c]d".
+test       t/016-bracket-slash.c
+
+assertion  XSH.glob.017
+anchor     functions/glob.html#DESCRIPTION
+class      required
+since      1988
+says       With GLOB_MARK a matching directory gets one slash appended and a
+           matching regular file does not; without GLOB_MARK no slash is
+           appended to the directory.
+test       t/017-mark-dir.c
+
+assertion  XSH.glob.018
+anchor     functions/glob.html#DESCRIPTION
+class      required
+since      1988
+says       With GLOB_MARK a matching symbolic link that resolves to a directory
+           gets a slash appended.
+test       t/018-mark-symlink.c
+
+assertion  XSH.glob.019
+anchor     functions/glob.html#DESCRIPTION
+class      required
+since      1988
+says       With GLOB_MARK the pattern "/" yields the pathname "/" unmodified.
+test       t/019-mark-root.c
+
+assertion  XSH.glob.020
+anchor     functions/glob.html#DESCRIPTION
+anchor     utilities/V3_chap02.html#2.14.1
+class      required
+since      1988
+says       Without GLOB_NOESCAPE a backslash makes the next character literal:
+           over the names a*, ab, "a\*" gives a* only and "a\b" gives ab.
+test       t/020-escape.c
+
+assertion  XSH.glob.021
+anchor     functions/glob.html#DESCRIPTION
+anchor     utilities/V3_chap02.html#2.14.1
+class      required
+since      1988
+says       With GLOB_NOESCAPE a backslash is an ordinary character: over the
+           names ab and a\b (a, backslash, b), the pattern "a\b" gives the
+           second only.
+test       t/021-noescape.c
+
+assertion  XSH.glob.022
+anchor     functions/glob.html#DESCRIPTION
+class      required
+since      1988
+says       With GLOB_NOSORT the result holds exactly the matching names, each
+           once, in an order that is not checked.
+test       t/022-nosort.c
+
+assertion  XSH.glob.023
+anchor     functions/glob.html#DESCRIPTION
+class      required
+since      1988
+says       With GLOB_DOOFFS and gl_offs 2, gl_pathv starts with two null
+           pointers, then gl_pathc (not counting them) names, then a null
+           pointer.
+test       t/023-dooffs.c
+
+assertion  XSH.glob.024
+anchor     functions/glob.html#DESCRIPTION
+class      required
+since      1988
+says       Without GLOB_DOOFFS a nonzero gl_offs is not used: gl_pathv[0] is the
+           first name.
+test       t/024-no-dooffs.c
+
+assertion  XSH.glob.025
+anchor     functions/glob.html#DESCRIPTION
+class      required
+since      1988
+says       GLOB_APPEND keeps the earlier names in order and adds the new ones
+           after them without sorting the two sets together: "z*" then "a*"
+           with GLOB_APPEND gives z1, a1 and gl_pathc 2.
+test       t/025-append.c
+
+assertion  XSH.glob.026
+anchor     functions/glob.html#DESCRIPTION
+class      required
+since      1988
+says       GLOB_APPEND together with GLOB_DOOFFS keeps the leading null
+           pointers: gl_offs 2 gives two nulls, then the earlier names, then
+           the new ones, then a null pointer.
+test       t/026-append-dooffs.c
+
+assertion  XSH.glob.027
+anchor     functions/glob.html#DESCRIPTION
+anchor     functions/glob.html#ERRORS/GLOB_ABORTED
+class      required
+says       A directory that cannot be opened for reading (permission denied)
+           makes glob() call errfunc with the failing path and an error number
+           of EACCES; when errfunc returns 0 and GLOB_ERR is not set, the scan
+           continues and glob() returns 0 with the matches from the other
+           directories.
+note       Run by a process without privilege (a child drops root's identity). EACCES is one of the errors the page says are included.
+test       t/027-errfunc-continue.c
+
+assertion  XSH.glob.028
+anchor     functions/glob.html#DESCRIPTION
+anchor     functions/glob.html#ERRORS/GLOB_ABORTED
+class      required
+says       When errfunc returns nonzero for that failure, glob() returns
+           GLOB_ABORTED; gl_pathc and gl_pathv still describe a valid list
+           (when gl_pathc is above 0, gl_pathv ends in a null pointer after
+           gl_pathc names, all of them real matches).
+note       Run by a process without privilege.
+test       t/028-errfunc-abort.c
+
+assertion  XSH.glob.029
+anchor     functions/glob.html#DESCRIPTION
+anchor     functions/glob.html#ERRORS/GLOB_ABORTED
+class      required
+says       With GLOB_ERR set, the same failure makes glob() return
+           GLOB_ABORTED, whether errfunc is a null pointer or a function that
+           returns 0.
+note       Run by a process without privilege.
+test       t/029-err-flag.c
+
+assertion  XSH.glob.030
+anchor     functions/glob.html#DESCRIPTION
+class      required
+says       With errfunc a null pointer and GLOB_ERR not set, the same failure
+           (a condition tied to file system contents) is ignored: glob()
+           returns 0 with the matches from the other directories.
+note       Run by a process without privilege. The XRAT rationale lists EACCES among the errors tied to file system contents, which the page requires to be ignored in this case (Q-95).
+test       t/030-null-errfunc-ignored.c
+
+assertion  XSH.glob.031
+anchor     functions/glob.html#DESCRIPTION
+anchor     functions/glob.html#RETURN VALUE
+class      required
+since      2024
+says       globfree() leaves errno unchanged when given a glob_t that a
+           successful glob() filled, and also one filled by a call that
+           returned GLOB_NOMATCH.
+test       t/031-globfree-errno.c
+
+assertion  XSH.glob.032
+anchor     functions/glob.html#DESCRIPTION
+class      required
+says       glob() does not fail because of a large file: over a file whose
+           length is a little above 2 GiB, "big*" returns 0 and selects it.
+note       The file is made by extending its length; if that is refused the test is UNRESOLVED.
+test       t/032-large-file.c

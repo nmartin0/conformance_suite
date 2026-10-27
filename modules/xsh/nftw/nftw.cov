@@ -1,0 +1,56 @@
+# nftw.cov - every requirement unit on functions/nftw.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:3ab1d3a0     XSH.nftw.001 XSH.nftw.003 XSH.nftw.004 XSH.nftw.005
+DESCRIPTION:594b712f     none  background
+DESCRIPTION:46631a7e     XSH.nftw.010
+DESCRIPTION:2ee84edf     XSH.nftw.011
+DESCRIPTION:4484a24a     XSH.nftw.005
+DESCRIPTION:be061966     XSH.nftw.004
+DESCRIPTION:f3a168dd     partial XSH.nftw.014  # only a tree on one device; a different device needs a second file system
+DESCRIPTION:6a54a499     XSH.nftw.014
+DESCRIPTION:6319529b     XSH.nftw.002
+DESCRIPTION:53be384c     partial XSH.nftw.014  # only a tree on one device; a different device needs a second file system
+DESCRIPTION:557c71d8     XSH.nftw.014
+DESCRIPTION:0f70b7a6     partial XSH.nftw.014  # the combination is run on one device only
+DESCRIPTION:7fc077c5     XSH.nftw.013
+DESCRIPTION:469a555b     XSH.nftw.012
+DESCRIPTION:47007fb4     XSH.nftw.001
+DESCRIPTION:450d05f7     XSH.nftw.001
+DESCRIPTION:86881ead     XSH.nftw.001 XSH.nftw.002
+DESCRIPTION:ebce5078     none  background
+DESCRIPTION:8896189c     XSH.nftw.001
+DESCRIPTION:3756ff13     XSH.nftw.016
+DESCRIPTION:eb6d7a6b     XSH.nftw.016
+DESCRIPTION:4d1d5b54     XSH.nftw.005
+DESCRIPTION:2d3df51b     XSH.nftw.001 XSH.nftw.002 XSH.nftw.004 XSH.nftw.005
+DESCRIPTION:d267e49e     XSH.nftw.017
+DESCRIPTION:b3b04c94     none  unspecified
+DESCRIPTION:88d3194c     partial XSH.nftw.021  # only for the root; a stat failure below the root other than for permission cannot be arranged generically
+DESCRIPTION:b6672f86     XSH.nftw.002
+DESCRIPTION:962df8d4     XSH.nftw.001
+DESCRIPTION:35351a46     XSH.nftw.001
+DESCRIPTION:cce3d339     XSH.nftw.001 XSH.nftw.002
+DESCRIPTION:cc7337a6     XSH.nftw.001
+DESCRIPTION:3b61bcc5     XSH.nftw.001
+DESCRIPTION:c6bf47af     XSH.nftw.001 XSH.nftw.005
+DESCRIPTION:f69393b3     none  unspecified
+DESCRIPTION:9b05ee36     XSH.nftw.007
+DESCRIPTION:97203250     partial XSH.nftw.007  # observed through the total held, with a limit of 1
+DESCRIPTION:b54b05d1     XSH.nftw.008
+DESCRIPTION:1e808719     XSH.nftw.009
+DESCRIPTION:0af5fa1f     none  permission for the implementation
+RETURN_VALUE:66476ff7    XSH.nftw.006
+RETURN_VALUE:75f03d82    XSH.nftw.006
+RETURN_VALUE:a3566cee    XSH.nftw.018 XSH.nftw.019 XSH.nftw.020 XSH.nftw.021 XSH.nftw.022
+RETURN_VALUE:9f860b5c    XSH.nftw.001
+ERRORS:eaa97eb1          partial XSH.nftw.022  # search permission only; read permission denied for path and fn returning -1 are not tested (wording unclear, see the report)
+ERRORS:f39d7871          XSH.nftw.021
+ERRORS:681b232a          XSH.nftw.020
+ERRORS:83c37763          XSH.nftw.018
+ERRORS:4e72474c          XSH.nftw.019
+ERRORS:c12033bc          untestable  needs a file whose status field cannot be represented, which a test cannot arrange
+ERRORS:811d61dd          optional  may fail, nothing to require
+ERRORS:1fbbba10          optional  may fail, nothing to require
+ERRORS:c7f415ad          optional  may fail, nothing to require
+ERRORS:6ed3cdf7          optional  may fail, nothing to require

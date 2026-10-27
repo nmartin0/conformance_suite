@@ -1,0 +1,54 @@
+# XSH basename()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# basename() is an XSI function declared in <libgen.h>. The function may
+# change its argument and may return a pointer into it or to constant data:
+# tests pass writable copies, look only at the returned string, and never
+# write through the returned pointer. Where the page allows two results
+# (the path "//") both are accepted.
+
+assertion  XSH.basename.001
+anchor     functions/basename.html#DESCRIPTION
+anchor     functions/basename.html#RETURN VALUE
+class      conditional
+when       XSI
+says       basename() returns the last component, without trailing slashes,
+           for "usr", "usr/", "/usr/", "/usr/lib", "//usr//lib//",
+           "/home//dwc//test", "/home/.././test", "a/b///", "///x" and
+           "x.y" ("usr", "usr", "usr", "lib", "lib", "test", "test", "b",
+           "x", "x.y"); and "." for "/home/dwc/.".
+test       t/001-final-component.c
+
+assertion  XSH.basename.002
+anchor     functions/basename.html#DESCRIPTION
+class      conditional
+when       XSI
+says       basename() of a string made only of slashes ("/", "///",
+           "//////") returns "/".
+test       t/002-slashes-only.c
+
+assertion  XSH.basename.003
+anchor     functions/basename.html#DESCRIPTION
+class      conditional
+when       XSI
+says       basename() of exactly "//" returns "/" or "//".
+test       t/003-double-slash.c
+
+assertion  XSH.basename.004
+anchor     functions/basename.html#DESCRIPTION
+class      conditional
+when       XSI
+says       basename() of a null pointer and of an empty string returns ".".
+test       t/004-null-empty.c
+
+assertion  XSH.basename.005
+anchor     functions/basename.html#DESCRIPTION
+anchor     functions/basename.html#RETURN VALUE
+class      conditional
+when       XSI
+says       The result of one call stays valid when basename() is called again
+           for another string: the results for "x/aa", "y/bb", a null
+           pointer and "" can all be read after the four calls.
+note       The page lets a result be invalidated only when its own input is
+           modified or freed; the inputs here are left alone. See Q-100.
+test       t/005-results-coexist.c
