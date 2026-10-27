@@ -17,8 +17,8 @@ How it is used:
 - Waivers (`waivers/`) are a different thing: they are for the system
   being judged, not for reference systems.
 
-Compiled from documentation, release notes, man pages and published test
-results (os-test); no other suite's code was read. POSIX requirements are
+Compiled from documentation, release notes and man pages, and from runs in
+the development container. No other test suite's code or results are used. POSIX requirements are
 paraphrased. Re-check entries marked "unconfirmed" before relying on them.
 
 ## Observed by posixcheck
@@ -664,32 +664,6 @@ Each item gives:
 - **Observe:** how a test would see it.
 - **Src:** a URL I opened. "Unconfirmed" marks claims I could not check against a primary source, or that may be out of date.
 
-### Caveats about the os-test data (sortix.org/os-test)
-
-- os-test's **"linux"** column is "Linux 7.1.12+deb14-amd64", which is Debian 14 (forky/sid).
-  - Its libc is therefore glibc, but a version **newer than 2.39** (about 2.41 or 2.42).
-  - Anything listed as missing there is also missing in 2.39.
-  - A few glibc 2.39 bugs fixed in 2.40 to 2.42 will **not** show up in os-test, but will show up on your Ubuntu 24.04 machine. They are listed separately below.
-- os-test's **"musl"** column is "Linux 6.18.52-0-lts", which is Alpine.
-  - It reports `posix_getdents` as working, so it is musl **1.2.6 or later**.
-  - musl 1.2.4 is missing more than that column shows. See the musl WHATSNEW items below.
-- In the header ("include") suite, os-test grades results as follows:
-  - `extension`: the declaration exists, but only with system-specific feature macros (such as `_GNU_SOURCE` or `_DEFAULT_SOURCE`), not with `_POSIX_C_SOURCE=202405L` / `_XOPEN_SOURCE=800` alone.
-  - `undeclared` / `unknown_type`: the declaration is absent.
-  - `incompatible`: the prototype or type differs from POSIX.
-  - `missing_optional`: an optional limit macro is absent. POSIX permits this, so it is **not** a deviation.
-- A few os-test "undeclared" results for C keywords may be artefacts of compiling as C23, where these are keywords and not macros. Treat them as "verify your compiler mode":
-  - `thread_local` in `<threads.h>`
-  - `static_assert` in `<assert.h>`
-
-Main source pages:
-
-- https://sortix.org/os-test/ (overview)
-- https://sortix.org/blog/os-testing-posix-headers/ (analysis)
-- https://sortix.org/blog/posix-2024/ (list of Issue 8 additions)
-
----
-
 ## 0. Things that look like deviations but are NOT (avoid false positives)
 
 0.1 **ENOTSUP == EOPNOTSUPP on Linux.**
@@ -716,8 +690,7 @@ Main source pages:
 0.8 **Many `<limits.h>` runtime-invariant values are absent:**
 - `OPEN_MAX`, `CHILD_MAX`, `LINK_MAX`, `SYMLINK_MAX`, `TIMER_MAX`, `STREAM_MAX`, `ATEXIT_MAX`, `PTHREAD_THREADS_MAX` and others.
 - The values vary per process or filesystem, so they are left undefined, which is permitted. `sysconf()`/`pathconf()` may return -1 without setting errno (indeterminate). Also permitted.
-- os-test grades these "missing_optional". They differ between glibc and musl (for example, musl defines `PAGESIZE`, `TZNAME_MAX`, `SYMLOOP_MAX` and `FILESIZEBITS`, while glibc does not). So do not hard-require them.
-- Src: https://sortix.org/os-test/limits/
+-
 
 0.9 **`select()` with fd > 1023.** `FD_SETSIZE` is 1024 in glibc. POSIX allows an implementation limit. Src: select.2 BUGS.
 
@@ -738,14 +711,9 @@ Main source pages:
 1.1 **O_CLOFORK / FD_CLOFORK / F_DUPFD_CLOFORK / SOCK_CLOFORK / MSG_CMSG_CLOFORK absent.**
 - POSIX: Issue 8 adds close-on-fork for `open`, `fcntl`, `dup3`, `socket`, `accept4`, `pipe2` and recvmsg cmsg.
 - Linux: the kernel has no close-on-fork. A patch series ("Implement close-on-fork", Nate Karstens, v2 May 2020) was not merged. Neither libc defines the macros.
-- Comp: kernel (root cause), glibc, musl. Kind: missing-2024. Fixed: no (still absent on kernel 7.1 per os-test).
 - Observe: these do not compile:
   - `#ifdef O_CLOFORK`
-  - os-test io tests `open-clofork-fork` and `dup3-clofork-fork`, which report "bad: no O_CLOFORK".
-- Src:
-  - https://sortix.org/os-test/io/
-  - https://sortix.org/os-test/include/fcntl/
-  - https://sortix.org/os-test/include/sys_socket/
+
   - https://lwn.net/Articles/820652
 
 1.2 **`close()` interrupted by a signal returns EINTR with the descriptor already closed.**
@@ -758,19 +726,16 @@ Main source pages:
 - musl: maps -EINTR to 0, which conforms.
 - Comp: kernel + glibc. Kind: deliberate/long-standing. Fixed: no.
 - Observe: hard to trigger; it needs a filesystem or device whose flush blocks interruptibly, such as NFS or a tape. If triggered, `fcntl(fd, F_GETFD)` after EINTR returns EBADF.
-- Src:
+
   - https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/close.2
   - https://lwn.net/Articles/576478/
   - musl `close.c`: https://git.musl-libc.org/cgit/musl/tree/src/unistd/close.c
 
 1.3 **`posix_close()` / `POSIX_CLOSE_RESTART` missing in glibc.**
 - POSIX: new in Issue 8, in `<unistd.h>`.
-- glibc: undeclared. os-test basic/unistd `posix_close` gives compile_error on Linux.
 - musl: has it since 0.9.15 (Dec 2013) as a plain wrapper for `close`. Upstream log: "Linux does not support EINTR semantics".
 - Comp: glibc. Kind: missing-2024.
-- Src:
-  - https://sortix.org/os-test/basic/unistd/
-  - https://sortix.org/os-test/include/unistd/
+
   - https://git.musl-libc.org/cgit/musl/log/src/unistd/posix_close.c?showmsg=1
 
 1.4 **`pwrite()` on an O_APPEND descriptor appends and ignores `offset`.**
@@ -782,24 +747,21 @@ Main source pages:
   - musl **1.2.6** ("pwrite now handles O_APPEND correctly, reports error if it can't").
   - Kernel: `pwritev2(RWF_NOAPPEND)` exists in newer kernels (6.9?). Unconfirmed.
 - Observe: open with `O_WRONLY|O_APPEND` on a file of 10 bytes, call `pwrite(fd,"X",1,0)`, then check that byte 0 changed. On Linux the file grows to 11 bytes instead.
-- Src:
+
   - https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/pread.2 (BUGS)
   - https://raw.githubusercontent.com/kraj/musl/master/WHATSNEW (1.2.6)
 
 1.5 **`posix_getdents()` / `struct posix_dent` / `reclen_t` missing.**
 - POSIX: new in Issue 8, in `<dirent.h>`.
-- glibc: absent, even on the newer glibc that os-test used. os-test basic/dirent `posix_getdents` gives compile_error.
 - musl: added in **1.2.6**, so it is absent in 1.2.4.
 - Comp: glibc, musl<1.2.6. Kind: missing-2024.
-- Src:
-  - https://sortix.org/os-test/include/dirent/
-  - https://sortix.org/os-test/basic/dirent/
+
   - musl WHATSNEW 1.2.6
 
 1.6 **`<dirent.h>` DT_* constants are extension-only in glibc, and DT_MQ / DT_SEM / DT_SHM / DT_TMO are absent everywhere.**
 - glibc exposes `DT_REG` and the others only under `_DEFAULT_SOURCE`. musl exposes them under POSIX 2024.
 - Comp: glibc (macro gating); glibc + musl for the four absent ones. Kind: missing-2024.
-- Src: https://sortix.org/os-test/include/dirent/
+-
 
 1.7 **O_SEARCH, O_EXEC, O_TTY_INIT undefined in glibc.**
 - POSIX: `<fcntl.h>` shall define O_SEARCH and O_EXEC. O_TTY_INIT is also listed.
@@ -809,8 +771,7 @@ Main source pages:
 - Observe: these do not compile under glibc:
   - `#ifdef O_SEARCH`
   - `fexecve` via an `O_EXEC` fd
-- Src:
-  - https://sortix.org/os-test/include/fcntl/
+
   - musl WHATSNEW
 
 1.8 **F_OFD_* locks and `F_SETOWN_EX` / `struct f_owner_ex` are extension-only in glibc.**
@@ -818,12 +779,10 @@ Main source pages:
 - glibc exposes them only with `_GNU_SOURCE`.
 - `f_owner_ex` / `F_OWNER_PID` / `F_OWNER_PGRP` are extension-only in musl too.
 - Comp: glibc, musl. Kind: missing-2024 (namespace).
-- Src: https://sortix.org/os-test/include/fcntl/
+-
 
-1.9 **`struct flock` member types differ in glibc (os-test "incompatible").**
-- The os-test header-analysis post lists glibc `struct flock` `l_type`/`l_whence` as not matching the required `short`.
 - Unconfirmed on x86-64, where glibc uses `short`. It may be architecture-specific.
-- Comp: glibc. Src: https://sortix.org/blog/os-testing-posix-headers/
+- Comp: glibc.
 
 1.10 **`<unistd.h>` and `<stdlib.h>` do not define the O_* flags that Issue 8 requires there.**
 - POSIX 2024 requires these headers to define some O_* flags:
@@ -832,22 +791,16 @@ Main source pages:
 - Both libcs leave them undeclared unless `<fcntl.h>` is included.
 - Comp: glibc, musl. Kind: missing-2024.
 - Observe: compile a TU that includes only `<stdlib.h>` and uses `O_CLOEXEC`.
-- Src:
-  - https://sortix.org/os-test/include/unistd/
-  - https://sortix.org/os-test/include/stdlib/
 
 1.11 **`<semaphore.h>` (glibc) and `<sys/mman.h>` (both) do not define O_CREAT, O_EXCL and the other O_* flags.**
 - Issue 8 requires `sem_open`/`shm_open` constants in those headers.
 - The `<semaphore.h>` gap is glibc only; musl is fine there. The `<sys/mman.h>` gap is in both.
 - Comp: glibc, musl. Src:
-  - https://sortix.org/os-test/include/semaphore/
-  - https://sortix.org/os-test/include/sys_mman/
 
 1.12 **SEEK_DATA / SEEK_HOLE are extension-only in glibc.**
 - Standardized in Issue 8.
 - glibc needs `_GNU_SOURCE`. musl exposes them since 1.2.3.
 - Comp: glibc. Src:
-  - https://sortix.org/os-test/include/unistd/
   - musl WHATSNEW 1.2.3
 
 1.13 **`select()` ignores fds in the sets above the highest open fd, instead of failing with EBADF.**
@@ -866,22 +819,14 @@ Main source pages:
 1.15 **`poll()` reports POLLHUP together with POLLOUT.**
 - POSIX `poll()`: POLLHUP "and POLLOUT are mutually-exclusive".
 - Linux:
-  - On a pty master after the slave closes, poll returns `POLLIN|POLLOUT|POLLERR|POLLHUP` (os-test `pty-hup-poll`).
-  - On a UDP socket connected to itself after send and `shutdown(SHUT_RDWR)`, poll returns `POLLIN|POLLOUT|POLLHUP` (os-test `bind-connect-self-send-shutdown-rw-poll`).
 - Comp: kernel. Kind: long-standing.
-- Src:
-  - https://sortix.org/os-test/pty/
-  - https://sortix.org/os-test/udp/
+
   - local `functions/poll.html`
 
 1.16 **`ppoll()` edge cases.**
-- os-test signal suite, bad on both Linux and musl:
-  - `ppoll-block-raise-write` returns "0 | POLLIN".
-  - `ppoll-block-close-raise` returns "0 | POLLNVAL".
 - In other words, ppoll reports readiness or POLLNVAL caused by actions taken inside the signal handler that interrupted it, rather than returning -1/EINTR.
-- The exact POSIX expectation is os-test's interpretation. Treat it as "Linux returns events, not EINTR, when the handler changes fd state".
 - Comp: kernel.
-- Src: https://sortix.org/os-test/signal/
+-
 
 1.17 **`unlink()` on a directory fails with EISDIR, not EPERM.**
 - POSIX: [EPERM] when the file is a directory and the implementation does not allow `unlink` of directories.
@@ -919,8 +864,7 @@ Main source pages:
 - glibc: 64, matching the kernel's `__NEW_UTS_LEN`. musl: 255, which passes.
 - Comp: glibc (and kernel limit). Kind: deliberate.
 - Observe: `#if HOST_NAME_MAX < _POSIX_HOST_NAME_MAX`, or `sethostname` with 65 bytes fails with EINVAL.
-- Src:
-  - https://sortix.org/os-test/limits/
+
   - local `basedefs/limits.h.html`
 
 1.23 **New Issue 8 `pathconf`/`sysconf`/`confstr` names are missing.**
@@ -929,21 +873,16 @@ Main source pages:
   - all `_CS_POSIX_V8_*` and `_CS_V8_ENV`
   - `_POSIX_FALLOC`
 - Comp: glibc, musl. Kind: missing-2024.
-- Src: https://sortix.org/os-test/include/unistd/
+-
 
 1.24 **`NSIG_MAX`, `GETENTROPY_MAX` and `_SC_NSIG` are absent.**
 - Issue 8 `<limits.h>` adds `NSIG_MAX` and `GETENTROPY_MAX`. Both are undeclared in glibc and musl.
 - `_POSIX_SS_REPL_MAX` is undeclared in glibc.
 - Comp: glibc, musl. Src:
-  - https://sortix.org/os-test/include/limits/
-  - https://sortix.org/os-test/limits/
 
 1.25 **`<aio.h>` `lio_listio` prototype is incompatible in glibc.**
 - The glibc prototype uses `struct aiocb *const restrict *restrict`, which does not match POSIX.
 - Comp: glibc. Observe: a pointer-to-function-type test fails to compile.
-- Src:
-  - https://sortix.org/os-test/include/aio/
-  - https://sortix.org/blog/os-testing-posix-headers/
 
 1.26 **`aio_suspend()` is not async-signal-safe in glibc**, though POSIX requires it to be.
 - Comp: glibc. Unconfirmed for 2.39; the man-page statement is old.
@@ -959,10 +898,8 @@ Main source pages:
 
 2.1 **`waitpid(-pgid)` blocks when the target group has emptied because the child moved out of it.**
 - POSIX: [ECHILD] if "the process group specified by pid does not exist or does not have any member process that is a child of the calling process".
-- Linux: after the only child in the group calls `setpgid()`/`setsid()` to leave it, `waitpid(-pgid, ...)` keeps blocking. os-test killed it with SIGALRM.
 - Comp: kernel. Kind: long-standing.
-- Observe: os-test tests `waitpid-pgid-empty-on-setpgid`, `-on-setpgid-rejoin` and `-on-setsid` fail on both Linux and musl.
-- Src: https://sortix.org/os-test/process/
+-
 
 2.2 **`kill(-1, sig)` does not signal the calling process.**
 - POSIX: send to all processes the caller may signal, excluding only an unspecified set of system processes.
@@ -976,7 +913,7 @@ Main source pages:
 - Linux/NPTL: per-thread. `setpriority(PRIO_PROCESS, 0, n)` affects only the calling thread. pthreads(7) calls this "at least one nonconformance" that remains in NPTL.
 - Comp: kernel (glibc and musl do not compensate). Kind: deliberate/long-standing.
 - Observe: thread A calls `nice(5)`; thread B calls `getpriority(PRIO_PROCESS, 0)` and still gets 0.
-- Src:
+
   - https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/getpriority.2 (BUGS)
   - https://raw.githubusercontent.com/mkerrisk/man-pages/master/man7/pthreads.7
 
@@ -986,7 +923,7 @@ Main source pages:
 - Comp: kernel (root), handled by glibc and musl. Kind: deliberate.
 - Observe: conformant through libc wrappers. A test that uses `syscall(SYS_setuid, ...)` sees per-thread behaviour.
 - Fixed: musl race fixed in 1.2.5 (musl 1.2.4 "multithreaded set*id could malfunction").
-- Src:
+
   - https://raw.githubusercontent.com/mkerrisk/man-pages/master/man7/nptl.7
   - setuid.2
   - musl WHATSNEW 1.2.5
@@ -1006,34 +943,25 @@ Main source pages:
 - Unconfirmed: musl's `sched_setparam`, `sched_getparam` and `sched_getscheduler` are probably similar stubs. Verify them.
 - Comp: kernel/glibc (return value); musl (ENOSYS). Kind: deliberate.
 - Observe: as root, set SCHED_FIFO; check the return value equals the old policy (SCHED_OTHER = 0 makes this ambiguous, so set SCHED_RR first).
-- Src:
+
   - https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/sched_setscheduler.2 (BUGS)
   - https://git.musl-libc.org/cgit/musl/tree/src/sched/sched_setscheduler.c
 
 2.7 **`tcsetpgrp()` error semantics.**
-- os-test pty suite on both Linux and musl:
-  - `tcsetpgrp-wrong-member`: the call succeeds ("exit: 0") where an error was expected. POSIX requires [EPERM] when the pgid is not in the caller's session.
-  - `tcsetpgrp-wrong-orphan`: gives ENOTTY.
-  - `tcsetpgrp-wrong-pid`: ESRCH, graded "unknown".
-- The precise scenarios are os-test's. Treat Linux `tcsetpgrp` error codes as unreliable for negative tests.
 - Comp: kernel.
-- Src: https://sortix.org/os-test/pty/
+-
 
 2.8 **`posix_spawn_file_actions_addchdir()` / `addfchdir()` are missing.**
 - POSIX: new in Issue 8 (SPN option).
-- glibc: only `posix_spawn_file_actions_addchdir_np` and `_addfchdir_np`, added in 2.29 as "GNU extensions". The un-suffixed names are undeclared even in the newer glibc os-test used.
 - musl: also undeclared, although its `posix_spawn` implements the chdir/fchdir actions internally.
 - Comp: glibc, musl. Kind: missing-2024.
-- Src:
-  - https://sortix.org/os-test/include/spawn/
+
   - glibc NEWS 2.29: https://raw.githubusercontent.com/bminor/glibc/master/NEWS
   - https://git.musl-libc.org/cgit/musl/tree/src/process/posix_spawn.c
 
-2.9 **`POSIX_SPAWN_SETSID` is extension-only in glibc.** The glibc flag exists but needs `_GNU_SOURCE`. musl has had it since 1.1.17. Src: https://sortix.org/os-test/include/spawn/
+2.9 **`POSIX_SPAWN_SETSID` is extension-only in glibc.** The glibc flag exists but needs `_GNU_SOURCE`. musl has had it since 1.1.17.
 
-2.10 **`_Fork()`.** glibc has had it since 2.34, but it is extension-gated (os-test `extension`). musl has had it since 1.2.2. Src: os-test include/unistd; glibc NEWS 2.34; musl WHATSNEW 1.2.2.
-
-2.11 **`WCOREDUMP` is extension-only in glibc.** It is standardized in Issue 8. Src: https://sortix.org/os-test/include/sys_wait/
+2.11 **`WCOREDUMP` is extension-only in glibc.** It is standardized in Issue 8.
 
 2.12 **`waitid(..., infop=NULL, ...)` succeeds on Linux.**
 - POSIX requires `infop` to be non-NULL; NULL is undefined behaviour.
@@ -1064,27 +992,20 @@ Main source pages:
 
 3.1 **`sig2str()` / `str2sig()` / `SIG2STR_MAX` are missing in both glibc and musl.**
 - POSIX: new in Issue 8, in `<signal.h>`.
-- os-test basic/signal: `sig2str` undeclared and `str2sig` compile_error on both.
 - Comp: glibc, musl. Kind: missing-2024. Fixed: not in glibc through 2.43 per NEWS.
-- Src:
-  - https://sortix.org/os-test/basic/signal/
-  - https://sortix.org/os-test/include/signal/
 
 3.2 **musl `sigismember()` does not fail on a negative signal number.**
 - POSIX: [EINVAL] for an invalid signal number.
 - musl: no error. glibc: passes.
 - Comp: musl. Observe: `sigismember(&s, -1)` returns 0/1 instead of -1/EINVAL.
-- Src: https://sortix.org/os-test/basic/signal/
+-
 
 3.3 **`abort()` is not async-signal-safe in glibc < 2.41.**
 - POSIX lists `abort` as async-signal-safe.
-- glibc bug 26275 ("abort(3) is not signal-safe") was fixed in **2.41**, so 2.39 is affected. This will not appear in os-test's newer-glibc column.
 - Comp: glibc. Observe: hard to observe deterministically. A deadlock is possible when `abort` is called from a handler while another `abort`/stdio lock is held.
 - Src: glibc NEWS 2.41 (bug list).
 
 3.4 **`sigaltstack()` accepts `SS_ONSTACK` in `ss_flags` as a no-op.** POSIX uses `SS_ONSTACK` only as an output flag. This is an extension; do not test for EINVAL. Src: sigaltstack.2 BUGS.
-
-3.5 **`sigaction-exec-flags`.** os-test grades `sigaction` flags across exec as "unknown" ("0") on both Linux and musl. This is an unclear area; avoid asserting it. Src: https://sortix.org/os-test/signal/
 
 3.6 **The hardware-exception signal is architecture-dependent.**
 - For example, x86 `int` with a bad vector gives SIGSEGV, not SIGILL.
@@ -1097,18 +1018,13 @@ Main source pages:
 
 4.1 **`pthread_cond_clockwait`, `pthread_mutex_clocklock`, `pthread_rwlock_clockrdlock`, `pthread_rwlock_clockwrlock` and `sem_clockwait` are missing in musl.**
 - POSIX: new in Issue 8.
-- glibc: all present since **2.30**, but declared only under `_GNU_SOURCE` (os-test `extension`). basic tests pass at runtime.
-- musl: missing in all versions tested, including 1.2.6. They are compile_error in os-test basic/pthread and basic/semaphore.
 - Comp: musl (missing); glibc (gating). Kind: missing-2024.
-- Src:
-  - https://sortix.org/os-test/basic/pthread/
-  - https://sortix.org/os-test/basic/semaphore/
-  - https://sortix.org/os-test/include/pthread/
+
   - glibc NEWS 2.30
 
-4.2 **`PTHREAD_NULL` is undefined in glibc.** It is new in Issue 8. musl has had it since 1.2.1. Src: https://sortix.org/os-test/include/pthread/; musl WHATSNEW.
+4.2 **`PTHREAD_NULL` is undefined in glibc.** It is new in Issue 8. musl has had it since 1.2.1. musl WHATSNEW.
 
-4.3 **musl declares `pthread_mutexattr_getprioceiling`/`setprioceiling` but they do not link.** Src: https://sortix.org/blog/os-testing-posix-headers/
+4.3 **musl declares `pthread_mutexattr_getprioceiling`/`setprioceiling` but they do not link.**
 
 4.4 **glibc `pthread_attr_setstacksize` may round a size that is not a multiple of 16 *down*.**
 - POSIX requires at least the requested size.
@@ -1124,11 +1040,7 @@ Main source pages:
 - glibc 2.34 fixed spurious EINTR on cancellation, and 2.41/2.42 fixed cancellation races (bugs 12683 and 32782).
 - Src: musl wiki; glibc NEWS 2.34, 2.41, 2.42.
 
-4.7 **`thread_local` (`<threads.h>`) and `static_assert` (`<assert.h>`) are reported undeclared for glibc by os-test.**
 - This is probably a C23 artefact, because they are keywords in C23 and glibc does not define the macros then. Verify with your compiler mode before treating it as a deviation.
-- Src:
-  - https://sortix.org/os-test/include/threads/
-  - https://sortix.org/os-test/include/assert/
 
 4.8 **`<sched.h>` / `pthread_setschedparam` with RT policies needs CAP_SYS_NICE or RLIMIT_RTPRIO.**
 - POSIX's "appropriate privileges" covers this. Tests should skip on EPERM.
@@ -1143,12 +1055,10 @@ Main source pages:
 - POSIX: Issue 8 requires them in `struct tm`.
 - glibc and musl name them `__tm_gmtoff` / `__tm_zone` unless `_DEFAULT_SOURCE` or `_GNU_SOURCE` is defined.
 - Comp: glibc, musl. Kind: missing-2024 (namespace).
-- Src: https://sortix.org/os-test/include/time/
+-
 
 5.2 **musl < 1.2.6 `strptime` does not accept the conversion specifiers added in Issue 8.**
-- The new specifiers include `%s`, `%z`, `%Z`, `%F` and `%V` (list per the sortix POSIX-2024 post; unconfirmed which ones musl lacked).
 - Fixed: musl **1.2.6**.
-- Src: musl WHATSNEW 1.2.6; https://sortix.org/blog/posix-2024/
 
 5.3 **`clock_nanosleep(CLOCK_THREAD_CPUTIME_ID, ...)` fails with EINVAL.**
 - POSIX: sleeping on the calling thread's CPU clock shall fail.
@@ -1174,7 +1084,6 @@ Main source pages:
 6.1 **glibc < 2.42: `fclose()`/`fflush()` on a seekable *input* stream does not reposition the underlying fd.**
 - POSIX: `fclose`/`fflush` on a seekable input stream sets the file offset of the underlying open file description to the stream's position.
 - glibc 2.39 leaves the fd offset at the read-ahead position. Bugs 12724 ("fclose violates POSIX 2008 on seekable input streams") and 5994 ("fflush after ungetc on seekable input stream").
-- Comp: glibc. Fixed: **2.42**, so 2.39 is affected and the os-test column will not show it.
 - Observe: `fopen` a 10 kB file, `fgetc` once, `fflush`/`fclose`, then `lseek(fd, 0, SEEK_CUR)` on a dup'd fd returns 4096 or more instead of 1.
 - Src: glibc NEWS 2.42 bug list, https://raw.githubusercontent.com/bminor/glibc/master/NEWS
 - posixcheck: `exit()` is a different path. With glibc 2.39, XSH.exit.010
@@ -1190,19 +1099,11 @@ Main source pages:
 6.3 **`asprintf`/`vasprintf` are extension-only in both libcs.**
 - POSIX: new in Issue 8, in `<stdio.h>`.
 - Both need `_GNU_SOURCE` (musl also accepts `_BSD_SOURCE`).
-- On failure, Issue 8 requires `*strp` to be handled in a specified way. os-test saw differences, all graded good:
-  - glibc sets it to NULL.
-  - musl leaves the old value.
-  - glibc reports ENOMEM where musl reports EOVERFLOW.
-- Src:
-  - https://sortix.org/os-test/include/stdio/
-  - https://sortix.org/os-test/stdio/
 
 6.4 **`swprintf` error code when output does not fit.**
-- os-test basic/wchar wants `swprintf` to fail with EOVERFLOW.
 - glibc sets **E2BIG**. musl leaves **errno == 0**.
 - Comp: glibc, musl. Observe: `swprintf(buf, 2, L"abc")` returns -1, then check errno.
-- Src: https://sortix.org/os-test/basic/wchar/
+-
 
 6.5 **musl < 1.2.6: `printf` did not honor hex-float (`%a`) precision in some cases.** Fixed in **1.2.6**. Observe: `printf("%.1a", 1.96875)` rounding. Src: musl WHATSNEW 1.2.6.
 
@@ -1227,7 +1128,7 @@ Main source pages:
 - glibc < 2.22 had several POSIX-2008 `fmemopen` bugs: size 0 gave EINVAL, append mode was broken, and SEEK_END was subtracted instead of added.
 - glibc < 2.7 failed `open_memstream` seeks past the end.
 - All fixed long ago, so they do not apply to 2.39.
-- Src:
+
   - https://raw.githubusercontent.com/mkerrisk/man-pages/master/man3/fmemopen.3
   - open_memstream.3
 
@@ -1235,36 +1136,28 @@ Main source pages:
 
 6.11 **`encrypt()` / `setkey()` are not available in glibc.**
 - POSIX: still in Issue 8 (XSI, obsolescent).
-- glibc **2.28** made them unavailable to newly linked binaries ("no longer available"). os-test basic/unistd `encrypt` and basic/stdlib `setkey` give compile_error on Linux.
 - musl provides them.
 - Comp: glibc. Kind: deliberate.
-- Src:
-  - https://sortix.org/os-test/basic/unistd/
-  - https://sortix.org/os-test/basic/stdlib/
+
   - glibc NEWS 2.28
 
 6.12 **`strfmon()` in the POSIX locale prints a decimal point.**
-- os-test expected `"%foo90142bar-13710quxf42010 "`.
 - glibc gave `"%foo901.42bar-137.10qux f42.010 "` and musl gave `"%foo901.42bar-137.10qux 42.010"`.
 - My reading is that in the POSIX locale `mon_decimal_point` is "", so no '.' should appear. Field/padding handling also differs.
 - Both `strfmon` and `strfmon_l` fail on both libcs.
 - Comp: glibc, musl.
-- Src: https://sortix.org/os-test/basic/monetary/
+-
 
-6.13 **`mkostemp`, `qsort_r`, `reallocarray`, `secure_getenv`, `realpath` (os-test), `ptsname_r` are extension-only.**
-- os-test grades them `extension` in `<stdlib.h>`. The symbols exist, but glibc needs `_DEFAULT_SOURCE`/`_GNU_SOURCE`, and musl gates `qsort_r`, `reallocarray` and `secure_getenv` similarly.
 - Versions:
   - `qsort_r`: glibc 2.8, with the same argument order as POSIX 2024; musl **1.2.3**.
   - `reallocarray`: glibc 2.26; musl 1.2.2.
   - `mkostemp`: glibc 2.7; musl 0.9.10.
-- Src: https://sortix.org/os-test/include/stdlib/; musl WHATSNEW; glibc NEWS.
+- musl WHATSNEW; glibc NEWS.
 
 6.14 **`memmem`, `strlcpy`, `strlcat` are extension-only.**
 - `memmem` is extension-only in glibc. musl exposes it by default since **1.2.4**.
 - `strlcpy`/`strlcat`: glibc added them in **2.38**. Both libcs gate them.
-- Src: https://sortix.org/os-test/include/string/; glibc NEWS 2.38; musl WHATSNEW 1.2.4.
-
-6.15 **`wcslcpy` / `wcslcat` missing in musl.** glibc has them, extension-gated. musl does not have them, even in 1.2.6 (compile_error). Src: https://sortix.org/os-test/basic/wchar/; https://sortix.org/os-test/include/wchar/
+- glibc NEWS 2.38; musl WHATSNEW 1.2.4.
 
 6.16 **`getopt()` permutes argv in glibc.**
 - POSIX: `getopt` returns -1 at the first non-option argument.
@@ -1272,7 +1165,7 @@ Main source pages:
 - musl: stops at the first non-option, as POSIX requires.
 - Comp: glibc. Kind: deliberate.
 - Observe: argv = {"p","file","-a"} with optstring "a". glibc returns 'a'; POSIX returns -1 with optind=1.
-- Src:
+
   - https://raw.githubusercontent.com/mkerrisk/man-pages/master/man3/getopt.3
   - musl wiki
 
@@ -1281,13 +1174,11 @@ Main source pages:
 - musl < 1.2.5 provided a non-prototype `basename` in `string.h`.
 - Src: musl wiki; musl WHATSNEW 1.2.5; strerror.3.
 
-6.18 **The `<inttypes.h>` `wcstoimax`/`wcstoumax` declarations need `wchar_t`, which glibc does not provide in strict mode.** os-test reports `unknown_type` for glibc. Src: https://sortix.org/os-test/include/inttypes/
-
 6.19 **`<endian.h>` in glibc.**
 - POSIX: new in Issue 8. It shall define the byte-order macros, `be16toh` and the related functions, and the `uint16_t`/`uint32_t`/`uint64_t` types.
 - glibc: all macros and functions are `extension`, and the types are not declared (`unknown_type`).
 - musl: fully good since it aimed at "future POSIX" in 1.2.0.
-- Comp: glibc. Src: https://sortix.org/os-test/include/endian/
+- Comp: glibc.
 
 ---
 
@@ -1299,7 +1190,7 @@ Main source pages:
 - musl: since 1.1.11 the C locale maps 0x80-0xFF to individual abstract characters.
 - Comp: glibc. Kind: long-standing.
 - Fixed: not found in glibc NEWS through 2.43, so unconfirmed whether still true. Test `mbrtowc` on "\x80" in the C locale.
-- Src:
+
   - https://wiki.musl-libc.org/functional-differences-from-glibc.html
   - local `basedefs/V1_chap06.html`
 
@@ -1308,7 +1199,7 @@ Main source pages:
 - glibc: returns EILSEQ. musl substitutes '*' and counts it, which conforms.
 - Comp: glibc. Kind: deliberate.
 - Observe: UTF-8 "é" converted to ASCII without suffix. glibc gives -1/EILSEQ.
-- Src:
+
   - musl wiki
   - local `functions/iconv.html`
 
@@ -1323,22 +1214,18 @@ Main source pages:
 - musl's UTF-16/32 handling honors a BOM but never emits one.
 - Src: musl wiki.
 
-7.5 **`getlocalename_l()` is missing in both libcs.** It is new in Issue 8 (compile_error/undeclared). Src: https://sortix.org/os-test/basic/locale/; https://sortix.org/os-test/include/locale/
-
 7.6 **`ALTMON_x` / `ABALTMON_x` (`<langinfo.h>`).**
 - `ABALTMON_1..12` are undeclared in both libcs. glibc has only the nonstandard `_NL_ABALTMON_*`.
 - `ALTMON_1..12` are extension-only in glibc (since 2.27) and undeclared in musl.
 - Comp: glibc, musl. Kind: missing-2024.
-- Src: https://sortix.org/os-test/include/langinfo/; glibc NEWS 2.27
+- glibc NEWS 2.27
 
 7.7 **`<libintl.h>` `*_l` variants are missing.**
 - Issue 8 adds `gettext_l`, `dgettext_l`, `dcgettext_l`, `ngettext_l`, `dngettext_l` and `dcngettext_l`.
 - They are missing from both libcs.
 - In musl, the base gettext functions are graded "outside_libc".
 - musl 1.2.6 fixed a `bind_textdomain_codeset` return-value bug.
-- Src: https://sortix.org/os-test/include/libintl/; musl WHATSNEW 1.2.6
-
-7.8 **musl `nl_types` (`catopen`/`catgets`) fails at runtime.** os-test basic `nl_types` scores 0/3 on musl and 3/3 on glibc. Src: https://sortix.org/os-test/basic/
+- musl WHATSNEW 1.2.6
 
 7.9 **musl < 1.2.6 `mbsnrtowcs` partial-character handling.** It did not meet the Issue 8 requirement for a partial character at the end of input. Fixed in **1.2.6**. Src: musl WHATSNEW 1.2.6.
 
@@ -1356,8 +1243,6 @@ Main source pages:
 
 ## 8. Regex, fnmatch, glob
 
-Source for most items: os-test regex and fnmatch suites (https://sortix.org/os-test/regex/, https://sortix.org/os-test/fnmatch/). The grading is os-test's interpretation of POSIX.
-
 8.1 **glibc regex: subexpressions inside a repeated alternation keep stale matches.**
 - ERE `((a)|(b))*` on "ab": POSIX requires `\2` to report "not matched" (-1), because `(a)` did not participate in the last iteration.
 - glibc reports "a" [0,1].
@@ -1373,15 +1258,13 @@ Source for most items: os-test regex and fnmatch suites (https://sortix.org/os-t
 
 8.5 **musl regex: nested interval submatch.** `\(a\(\(a\{1,2\}\)\{1,2\}\)\)` on "aaa" reports submatch "a" [2-3] instead of "aa" [1-3], in both BRE and ERE. Comp: musl.
 
-8.6 **`REG_MINIMAL` is undeclared in both libcs.** It is new in Issue 8. Src: https://sortix.org/os-test/include/regex/
+8.6 **`REG_MINIMAL` is undeclared in both libcs.** It is new in Issue 8.
 
 8.7 **glibc `regoff_t` is `int` (32-bit) even on LP64.**
 - POSIX requires `regoff_t` to hold the largest value in `ssize_t` or `ptrdiff_t`, so matches beyond 2 GiB break.
 - musl uses the correct type.
 - Comp: glibc. Kind: deliberate (ABI).
 - Src: musl wiki.
-
-8.8 **musl BRE GNU extensions.** These are not POSIX. musl lacked `\|`, `\+` and `\?` in BRE until 1.1.13, and rejects `a{,3}`. Do not test them as POSIX. Src: musl wiki; os-test regex (nonstandard section).
 
 8.9 **glibc fnmatch: backslash inside bracket expression class, collating and equivalence names.** `[[:al\num:]]`, `[[.\a.]]` and `[[=\a=]]` do not match "a". Comp: glibc; musl also fails the first.
 
@@ -1397,7 +1280,6 @@ Source for most items: os-test regex and fnmatch suites (https://sortix.org/os-t
 
 8.12 **glibc fnmatch matches invalid UTF-8 bytes with `?` / `[!x]`.**
 - In a UTF-8 locale, `?` or `[!x]` matches invalid sequences: continuation-only bytes, missing bytes, values over U+10FFFF, overlong forms and surrogates.
-- os-test expects rejection. musl rejects.
 - Comp: glibc.
 
 8.13 **musl fnmatch bracket expressions.**
@@ -1408,7 +1290,7 @@ Source for most items: os-test regex and fnmatch suites (https://sortix.org/os-t
 - `[[...][./.]]` periodslash cases fail, and `\.` with FNM_PERIOD fails.
 - Comp: musl.
 
-8.14 **`FNM_IGNORECASE` is undeclared in both; `FNM_CASEFOLD` is extension-only in glibc.** Both are new in Issue 8. Src: https://sortix.org/os-test/include/fnmatch/
+8.14 **`FNM_IGNORECASE` is undeclared in both; `FNM_CASEFOLD` is extension-only in glibc.** Both are new in Issue 8.
 
 8.15 **musl < 1.2.5 `glob` could wrongly return GLOB_NOMATCH if aborted before any matches.** Fixed in 1.2.5. Src: musl WHATSNEW 1.2.5.
 
@@ -1423,15 +1305,13 @@ Source for most items: os-test regex and fnmatch suites (https://sortix.org/os-t
 - glibc: not declared (compile_error). glibc only has `TIOCGWINSZ` ioctl and `struct winsize` in `<sys/ioctl.h>`.
 - musl: has them since **1.2.2**.
 - Comp: glibc. Kind: missing-2024.
-- Src:
-  - https://sortix.org/os-test/basic/termios/
-  - https://sortix.org/os-test/include/termios/
+
   - musl WHATSNEW 1.2.2
 
 9.2 **`ptsname_r` is extension-only in both libcs.**
 - It is new in Issue 8 (XSI). glibc needs `_GNU_SOURCE`.
 - glibc ≤2.25 returned EINVAL for buf NULL. musl < 1.0.0 returned negated error codes.
-- Src: https://sortix.org/os-test/include/stdlib/; ptsname.3; musl WHATSNEW
+- ptsname.3; musl WHATSNEW
 
 9.3 **`pty-hup-poll`: POLLHUP is set together with POLLOUT on the master after the slave closes.** See 1.15.
 
@@ -1459,18 +1339,16 @@ Source for most items: os-test regex and fnmatch suites (https://sortix.org/os-t
 - glibc: `size_t`, following the kernel ABI. musl uses POSIX types with padding.
 - Comp: glibc. Kind: deliberate (ABI).
 - Observe: `_Static_assert(sizeof(((struct msghdr*)0)->msg_iovlen) == sizeof(int))`.
-- Src:
-  - https://sortix.org/os-test/include/sys_socket/
+
   - https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/recv.2 (NOTES)
 
-10.2 **`accept4`, `SO_DOMAIN`, `SO_PROTOCOL` are extension-only in glibc.** They are standardized in Issue 8. glibc needs `_GNU_SOURCE`; musl exposes them. Src: https://sortix.org/os-test/include/sys_socket/
+10.2 **`accept4`, `SO_DOMAIN`, `SO_PROTOCOL` are extension-only in glibc.** They are standardized in Issue 8. glibc needs `_GNU_SOURCE`; musl exposes them.
 
-10.3 **`NI_NUMERICSCOPE` is undeclared in glibc.** Src: https://sortix.org/os-test/include/netdb/
+10.3 **`NI_NUMERICSCOPE` is undeclared in glibc.**
 
 10.4 **UDP edge cases.**
-- After `shutdown(SHUT_RD)`, a later `send` to self can still be received; os-test grades `bind-connect-self-shutdown-r-send-recv` "bad: x" on both.
 - Many `SO_REUSEADDR` and broadcast bind-conflict cases are graded "unknown". Avoid strict assertions there.
-- Comp: kernel. Src: https://sortix.org/os-test/udp/
+- Comp: kernel.
 
 10.5 **`send()` on a non-connected stream socket may give EPIPE instead of ENOTCONN.** Src: https://raw.githubusercontent.com/mkerrisk/man-pages/master/man2/send.2 (BUGS)
 
@@ -1489,9 +1367,7 @@ Source for most items: os-test regex and fnmatch suites (https://sortix.org/os-t
 - 1.2.6 fixed "lost or delayed wakes in sem_post under race condition", so musl 1.2.4 can still lose wakes.
 - Src: musl WHATSNEW 1.2.4 and 1.2.6.
 
-10.9 **Typed memory objects are not supported.** `posix_typed_mem_open` and related interfaces (TYM option) are absent, which is fine because the option is optional. `S_TYPEISTMO` is undeclared in glibc. Src: https://sortix.org/os-test/include/sys_mman/; https://sortix.org/os-test/include/sys_stat/
-
-10.10 **`<devctl.h>` / `posix_devctl` is missing** (optional DC). Src: https://sortix.org/os-test/namespace/
+10.10 **`<devctl.h>` / `posix_devctl` is missing** (optional DC).
 
 10.11 **AF_UNIX `sun_path`.** Linux appends a NUL if one is not supplied, so a 108-byte path round-trips without a terminator. Src: unix.7 BUGS.
 
@@ -1500,38 +1376,25 @@ Source for most items: os-test regex and fnmatch suites (https://sortix.org/os-t
 ## 11. Header namespace and the Issue 8 feature-test macro
 
 11.1 **glibc does not honour `_POSIX_C_SOURCE=202405L` / `_XOPEN_SOURCE=800` as "POSIX 2024".**
-- Nearly every Issue 8 interface that glibc *does* have is reported by os-test as `extension`, meaning it is visible only with `_DEFAULT_SOURCE`/`_GNU_SOURCE`:
-  - `endian.h`, `accept4`, `asprintf`, `memmem`, `strlcpy`, `mkostemp`, `qsort_r`, `reallocarray`
-  - `pthread_*clock*`, `sem_clockwait`, `ppoll`
-  - `SEEK_DATA`, `F_OFD_*`, `POSIX_SPAWN_SETSID`, `WCOREDUMP`, `tm_gmtoff`/`tm_zone`, `DT_*`, `LONG_BIT`, `NL_*MAX`, `ALTMON_*`
 - glibc NEWS through 2.43 contains no entry adding POSIX.1-2024 feature-macro support.
 - Kind: missing-2024.
 - Practical advice:
   - Compile with `-D_GNU_SOURCE` on glibc, or treat `extension` as a soft failure.
   - Define nothing, or `_DEFAULT_SOURCE`, on musl.
-  - musl needs 19 feature-macro adjustments, per the os-test blog.
-- Src:
-  - https://sortix.org/blog/os-testing-posix-headers/
-  - https://sortix.org/os-test/include/
 
 11.2 **musl < 1.2.5: `ppoll` is not exposed in the default feature profile.** In 1.2.4 it needs `_GNU_SOURCE`/`_BSD_SOURCE`. Src: musl WHATSNEW 1.2.5.
 
 11.3 **Namespace pollution.**
-- os-test namespace suite: both libcs leak non-reserved identifiers from these headers:
-  - `<arpa/inet.h>`, `<netdb.h>`, `<netinet/in.h>`, `<pthread.h>`, `<signal.h>`, `<stdlib.h>`
-  - `<sys/resource.h>`, `<sys/socket.h>`, `<sys/wait.h>`, `<threads.h>`, `<time.h>`
 - musl additionally pollutes `<aio.h>`, `<libintl.h>`, `<wchar.h>` and `<spawn.h>`.
 - A namespace-cleanliness test will fail on both.
-- Src: https://sortix.org/os-test/namespace/
+-
 
 11.4 **`dladdr` / `Dl_info_t`.**
 - POSIX Issue 8 names the type `Dl_info_t` (`Dl_info` was added by a later fix).
 - Both libcs have only `Dl_info`, extension-gated. `Dl_info_t` and the `dladdr` test give `unknown_type`.
-- Src: https://sortix.org/os-test/include/dlfcn/
+-
 
-11.5 **`struct stat` `st_dev` and `struct statvfs` `f_fsid` use glibc-internal types.** os-test flags 16 "incompatible" declarations in glibc in total. Src: https://sortix.org/blog/os-testing-posix-headers/
-
-11.6 **`LONG_BIT` and the `NL_ARGMAX`/`NL_MSGMAX`/`NL_SETMAX`/`NL_TEXTMAX` limits are extension-only in glibc.** Src: https://sortix.org/os-test/include/limits/
+11.6 **`LONG_BIT` and the `NL_ARGMAX`/`NL_MSGMAX`/`NL_SETMAX`/`NL_TEXTMAX` limits are extension-only in glibc.**
 
 ### Availability table for Issue 8 additions
 
@@ -1640,14 +1503,6 @@ Each is fixed before the reference versions.
 
 ### Primary source index (all opened during this research)
 
-- os-test results:
-  - https://sortix.org/os-test/
-  - suites: io, process, signal, pty, regex, fnmatch, limits, paths, udp, stdio, basic, include, namespace
-  - per-header pages under `include/` and `basic/` as cited above
-- os-test blog:
-  - https://sortix.org/blog/os-testing-posix-headers/
-  - https://sortix.org/blog/posix-2024/
-  - https://sortix.org/blog/
 - musl:
   - https://wiki.musl-libc.org/functional-differences-from-glibc.html
   - WHATSNEW (GitHub mirror): https://raw.githubusercontent.com/kraj/musl/master/WHATSNEW

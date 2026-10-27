@@ -27,8 +27,9 @@ every other project it learns from. They are not optional.
 
 5. Never read or copy the source code of another test suite (os-test,
    the Open POSIX Test Suite, LTP, the BSD test suites, pjdfstest, The Open
-   Group's suites). Reading their published design notes, papers and
-   result pages is fine; ideas are not copyrighted, code is.
+   Group's suites). Their published results are not used as evidence for
+   an expectation either (RULES 9). Design notes and papers are fine;
+   ideas are not copyrighted, code is.
 6. Do not use The Open Group's test suites at all: their licenses do not
    cover this project.
 
