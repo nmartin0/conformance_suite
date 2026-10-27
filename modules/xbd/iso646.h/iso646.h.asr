@@ -1,0 +1,22 @@
+# XBD <iso646.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.iso646.h.001
+anchor     basedefs/iso646.h.html#DESCRIPTION/and
+class      required
+says       The eleven macros and, and_eq, bitand, bitor, compl, not, not_eq, or,
+           or_eq, xor and xor_eq expand to the tokens &&, &=, &, |, ~, !, !=, ||,
+           |=, ^ and ^=.
+test       t/001-spellings.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.iso646.h.002
+anchor     basedefs/iso646.h.html#DESCRIPTION/and
+class      required
+says       The alternative spellings work as the operators they stand for, in
+           expressions and in #if.
+test       t/002-operators.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

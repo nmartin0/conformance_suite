@@ -1,0 +1,38 @@
+# XBD <aio.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.aio.h.001
+anchor     basedefs/aio.h.html#DESCRIPTION/AIO_ALLDONE
+class      required
+since      2001
+says       AIO_ALLDONE, AIO_CANCELED and AIO_NOTCANCELED have three
+           different values and none is -1, the error return of
+           aio_cancel().
+note       Return values that aio_cancel() must report apart, and apart
+           from its error return (Q-165).
+test       t/001-cancel-results.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.aio.h.002
+anchor     basedefs/aio.h.html#DESCRIPTION/LIO_NOP
+class      required
+since      2001
+says       LIO_NOP, LIO_READ and LIO_WRITE have three different values.
+note       Element operations that aio_lio_opcode must tell apart
+           (Q-165).
+test       t/002-lio-opcodes.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.aio.h.003
+anchor     basedefs/aio.h.html#DESCRIPTION/LIO_WAIT
+class      required
+since      2001
+says       LIO_WAIT and LIO_NOWAIT have different values.
+note       Modes that lio_listio() must tell apart (Q-165).
+test       t/003-lio-modes.c
+nomutant   header content check; needs the Tier 0 header mutants

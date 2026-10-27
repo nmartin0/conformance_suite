@@ -1,0 +1,29 @@
+# XBD <assert.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.assert.h.001
+anchor     basedefs/assert.h.html#DESCRIPTION/assert
+class      required
+since      1988
+says       assert is a macro; when NDEBUG is not defined a true assertion has no
+           effect and its expression is evaluated once; after NDEBUG is defined
+           and <assert.h> included again the expression is not evaluated;
+           undefining NDEBUG and including it once more makes assert evaluate it
+           again.
+test       t/001-assert-macro.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.assert.h.002
+anchor     basedefs/assert.h.html#DESCRIPTION/assert
+class      required
+since      1988
+says       A false assertion ends the process abnormally while NDEBUG is not
+           defined, and does nothing after NDEBUG is defined and <assert.h> is
+           included again.
+note       What the abnormal end looks like (message, signal) is on the assert()
+           page; here only that the process does not carry on normally.
+test       t/002-assert-ndebug-state.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

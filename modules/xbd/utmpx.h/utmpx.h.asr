@@ -1,0 +1,20 @@
+# XBD <utmpx.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.utmpx.h.001
+anchor     basedefs/utmpx.h.html#DESCRIPTION/EMPTY
+class      conditional
+when       XSI
+since      1988
+says       EMPTY, BOOT_TIME, OLD_TIME, NEW_TIME, USER_PROCESS,
+           INIT_PROCESS, LOGIN_PROCESS and DEAD_PROCESS have eight
+           different values that fit in ut_type (a short).
+note       Values of the one ut_type member, which getutxid() matches on
+           (Q-165).
+test       t/001-ut-type.c
+nomutant   header content check; needs the Tier 0 header mutants

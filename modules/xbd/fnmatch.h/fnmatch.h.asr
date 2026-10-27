@@ -1,0 +1,30 @@
+# XBD <fnmatch.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.fnmatch.h.001
+anchor     basedefs/fnmatch.h.html#DESCRIPTION/FNM_PATHNAME
+class      required
+since      2001
+says       FNM_PATHNAME, FNM_PERIOD, FNM_NOESCAPE and FNM_CASEFOLD are
+           nonzero and share no bits.
+note       fnmatch() flags are the bitwise-inclusive OR of these
+           (fnmatch page) (Q-165). FNM_CASEFOLD is a 2024 addition and
+           is skipped when absent (the header check reports that).
+test       t/001-flags.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.fnmatch.h.002
+anchor     basedefs/fnmatch.h.html#DESCRIPTION/FNM_IGNORECASE
+class      required
+since      2024
+says       FNM_IGNORECASE acts as FNM_CASEFOLD: matching ignores case
+           with either, alone or with FNM_PATHNAME.
+note       Equivalence is tested by effect; the values need not be
+           equal.
+test       t/002-ignorecase.c
+nomutant   header content check; needs the Tier 0 header mutants

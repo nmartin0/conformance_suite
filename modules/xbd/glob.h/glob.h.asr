@@ -1,0 +1,29 @@
+# XBD <glob.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.glob.h.001
+anchor     basedefs/glob.h.html#DESCRIPTION/GLOB_APPEND
+class      required
+since      1988
+says       GLOB_APPEND, GLOB_DOOFFS, GLOB_ERR, GLOB_MARK, GLOB_NOCHECK,
+           GLOB_NOESCAPE and GLOB_NOSORT are nonzero and share no bits.
+note       The glob() flags value is a bitwise-inclusive OR of these
+           constants (glob page) (Q-165).
+test       t/001-flags.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.glob.h.002
+anchor     basedefs/glob.h.html#DESCRIPTION/GLOB_ABORTED
+class      required
+since      1988
+says       GLOB_ABORTED, GLOB_NOMATCH and GLOB_NOSPACE are nonzero and
+           have three different values.
+note       glob() returns zero for success and these for the three
+           errors, which callers tell apart (Q-165).
+test       t/002-errors.c
+nomutant   header content check; needs the Tier 0 header mutants

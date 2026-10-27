@@ -1,0 +1,82 @@
+# XBD <sys/wait.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.sys_wait.h.001
+anchor     basedefs/sys_wait.h.html#DESCRIPTION/WNOHANG
+class      required
+since      1988
+says       WNOHANG and WUNTRACED are nonzero and share no bits, so they
+           can be OR-ed in the options argument of waitpid().
+note       Non-zero and bit-disjoint follow from options being the
+           bitwise-inclusive OR of the flags (waitpid page); the header
+           page does not say it (Q-165).
+test       t/001-waitpid-options.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_wait.h.002
+anchor     basedefs/sys_wait.h.html#DESCRIPTION/WEXITED
+class      required
+since      2008
+says       WEXITED, WNOWAIT, WSTOPPED and WNOHANG are nonzero and share
+           no bits, so they can be OR-ed in the options argument of
+           waitid().
+note       WSTOPPED may equal WUNTRACED (two functions); only the
+           waitid() set is tested. See Q-165.
+test       t/002-waitid-options.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_wait.h.003
+anchor     basedefs/sys_wait.h.html#DESCRIPTION/WCONTINUED
+class      conditional
+when       XSI
+since      2001
+says       On XSI systems WCONTINUED is nonzero and shares no bits with
+           WNOHANG, WUNTRACED, WEXITED, WNOWAIT or WSTOPPED.
+note       WCONTINUED is accepted by both waitpid() and waitid(), so it
+           must be separable from both functions' flags. See Q-165.
+test       t/003-wcontinued.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_wait.h.004
+anchor     basedefs/sys_wait.h.html#DESCRIPTION/P_ALL
+class      required
+since      2008
+says       P_ALL, P_PGID and P_PID can be stored in an idtype_t and are
+           three different values.
+note       Different values follow from the three selecting different
+           sets of processes (Q-165).
+test       t/004-idtype.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_wait.h.005
+anchor     basedefs/sys_wait.h.html#DESCRIPTION/WEXITSTATUS
+class      required
+since      1988
+says       For children that call _exit() with 0, 1, 2, 63, 64, 127,
+           128, 129, 254 and 255, WIFEXITED is true, WEXITSTATUS gives
+           the value, and WIFSIGNALED, WIFSTOPPED and (when defined)
+           WIFCONTINUED are false.
+test       t/005-exit-macros.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_wait.h.006
+anchor     basedefs/sys_wait.h.html#DESCRIPTION/WTERMSIG
+class      required
+since      2024
+says       For children killed by SIGKILL, SIGTERM, SIGHUP, SIGINT,
+           SIGUSR1, SIGUSR2, SIGPIPE, SIGABRT, SIGSEGV, SIGFPE, SIGILL
+           and SIGQUIT with default actions, WIFSIGNALED is true,
+           WTERMSIG gives the signal, WIFEXITED, WIFSTOPPED and (when
+           defined) WIFCONTINUED are false, and for the first seven,
+           whose default action creates no core image, WCOREDUMP is
+           zero.
+note       WCOREDUMP is zero only where the default action is plain
+           termination; for the abnormal-termination signals it may be
+           either. Children switch core files off with setrlimit().
+test       t/006-signal-macros.c
+nomutant   header content check; needs the Tier 0 header mutants

@@ -1,0 +1,70 @@
+# XBD <wchar.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of <wchar.h> that the generated header check cannot
+# express: wint_t and WEOF, the limits of wchar_t, and mbstate_t. Where
+# the page depends on the locale's character set only the portable
+# characters are used. Each says why it has no mutant yet.
+
+assertion  XBD.wchar.h.001
+anchor     basedefs/wchar.h.html#DESCRIPTION/wint_t
+class      required
+since      1992
+says       wint_t is an integer type that holds the wide-character codes of the
+           portable characters (such as L'A' and the null wide character) and the
+           value WEOF, each unchanged when converted to wint_t and back.
+note       The page says wint_t can store any valid wchar_t value; which wchar_t
+           values are valid depends on the character set of the locale, so only
+           the portable characters and zero are used, not the whole range of
+           wchar_t.
+test       t/001-wint-t.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.wchar.h.002
+anchor     basedefs/wchar.h.html#DESCRIPTION/WEOF
+class      required
+since      1992
+says       WEOF is a constant expression of type wint_t (usable as a static
+           initializer) whose value differs from the wint_t value of the null
+           wide character and of each portable character.
+uses       XBD.wchar.h.001
+note       A WEOF that is not a valid wide character is stated for wint_t; the
+           full character set depends on the locale, so only the portable
+           characters and zero are compared. That WEOF differs from a valid
+           character is inferred from its use as end-of-file (Q-169).
+test       t/002-weof.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.wchar.h.003
+anchor     basedefs/wchar.h.html#DESCRIPTION/WCHAR_MIN
+anchor     basedefs/stdint.h.html#DESCRIPTION
+class      required
+since      1992
+says       <wchar.h> defines WCHAR_MIN and WCHAR_MAX, usable in #if, the limits
+           of wchar_t: if wchar_t is signed then WCHAR_MIN is -127 or lower and
+           WCHAR_MAX 127 or higher; if it is unsigned then WCHAR_MIN is 0 and
+           WCHAR_MAX at least 255 and equal to the largest wchar_t value; both
+           are values of wchar_t.
+note       The ranges are those of the page it points to, <stdint.h>.
+test       t/003-wchar-limits.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.wchar.h.004
+anchor     basedefs/wchar.h.html#DESCRIPTION/mbstate_t
+class      required
+since      1992
+says       mbstate_t is a complete object type other than an array type (it can
+           be copied by assignment), and the tag struct tm is declared as an
+           incomplete structure type, so a pointer to it can be declared.
+test       t/004-mbstate-tm.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.wchar.h.005
+anchor     basedefs/wchar.h.html#DESCRIPTION/NULL
+class      required
+since      1992
+says       <wchar.h> defines NULL as a null pointer constant: it can initialise a
+           pointer of any object type, compares equal to a null pointer, and can
+           be used in a static initializer.
+test       t/005-null.c
+nomutant   compile-time check; needs the Tier 0 header mutants

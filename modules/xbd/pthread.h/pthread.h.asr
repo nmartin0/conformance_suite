@@ -1,0 +1,143 @@
+# XBD <pthread.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.pthread.h.001
+anchor     basedefs/pthread.h.html#DESCRIPTION/PTHREAD_CANCEL_ENABLE
+class      required
+since      2001
+says       PTHREAD_CANCEL_ENABLE and PTHREAD_CANCEL_DISABLE have
+           different values.
+note       Alternatives that a get function must report apart (Q-165).
+test       t/001-cancel-state.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.pthread.h.002
+anchor     basedefs/pthread.h.html#DESCRIPTION/PTHREAD_CANCEL_DEFERRED
+class      required
+since      2001
+says       PTHREAD_CANCEL_DEFERRED and PTHREAD_CANCEL_ASYNCHRONOUS have
+           different values.
+note       Alternatives that a get function must report apart (Q-165).
+test       t/002-cancel-type.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.pthread.h.003
+anchor     basedefs/pthread.h.html#DESCRIPTION/PTHREAD_CREATE_DETACHED
+class      required
+since      2001
+says       PTHREAD_CREATE_DETACHED and PTHREAD_CREATE_JOINABLE have
+           different values.
+note       Alternatives that a get function must report apart (Q-165).
+test       t/003-detach-state.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.pthread.h.004
+anchor     basedefs/pthread.h.html#DESCRIPTION/PTHREAD_MUTEX_NORMAL
+class      required
+since      2001
+says       PTHREAD_MUTEX_NORMAL, PTHREAD_MUTEX_ERRORCHECK and
+           PTHREAD_MUTEX_RECURSIVE have three different values.
+note       PTHREAD_MUTEX_DEFAULT may map to any of them and is left out
+           (pthread_mutexattr_settype page) (Q-165).
+test       t/004-mutex-types.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.pthread.h.005
+anchor     basedefs/pthread.h.html#DESCRIPTION/PTHREAD_MUTEX_ROBUST
+class      required
+since      2008
+says       PTHREAD_MUTEX_ROBUST and PTHREAD_MUTEX_STALLED have different
+           values.
+note       Alternatives that a get function must report apart (Q-165).
+test       t/005-mutex-robust.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.pthread.h.006
+anchor     basedefs/pthread.h.html#DESCRIPTION/PTHREAD_PROCESS_SHARED
+class      required
+since      2001
+says       PTHREAD_PROCESS_SHARED and PTHREAD_PROCESS_PRIVATE have
+           different values.
+note       Alternatives that a get function must report apart (Q-165).
+test       t/006-process-shared.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.pthread.h.007
+anchor     basedefs/pthread.h.html#DESCRIPTION/PTHREAD_EXPLICIT_SCHED
+class      conditional
+when       TPS
+since      2001
+says       PTHREAD_EXPLICIT_SCHED and PTHREAD_INHERIT_SCHED have
+           different values.
+note       Alternatives that a get function must report apart (Q-165).
+test       t/007-sched-attr.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.pthread.h.008
+anchor     basedefs/pthread.h.html#DESCRIPTION/PTHREAD_SCOPE_PROCESS
+class      conditional
+when       TPS
+since      2001
+says       PTHREAD_SCOPE_PROCESS and PTHREAD_SCOPE_SYSTEM have different
+           values.
+note       Alternatives that a get function must report apart (Q-165).
+test       t/008-scope.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.pthread.h.009
+anchor     basedefs/pthread.h.html#DESCRIPTION/PTHREAD_PRIO_NONE
+class      conditional
+when       TPP|TPI|RPP|RPI
+since      2001
+says       PTHREAD_PRIO_NONE, PTHREAD_PRIO_INHERIT and
+           PTHREAD_PRIO_PROTECT, as far as defined, have different
+           values.
+note       Alternatives that a get function must report apart (Q-165).
+test       t/009-prio-protocol.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.pthread.h.010
+anchor     basedefs/pthread.h.html#DESCRIPTION/PTHREAD_MUTEX_INITIALIZER
+class      required
+since      2001
+says       PTHREAD_MUTEX_INITIALIZER, PTHREAD_COND_INITIALIZER and
+           PTHREAD_RWLOCK_INITIALIZER initialise static objects (so they
+           are constant expressions) that the lock, signal and unlock
+           functions then accept without an init call.
+test       t/010-initializers.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.pthread.h.011
+anchor     basedefs/pthread.h.html#DESCRIPTION/PTHREAD_ONCE_INIT
+class      required
+since      2001
+says       A static pthread_once_t initialised with PTHREAD_ONCE_INIT
+           makes two pthread_once() calls run the routine exactly once.
+test       t/011-once-init.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.pthread.h.012
+anchor     basedefs/pthread.h.html#DESCRIPTION/PTHREAD_NULL
+class      required
+since      2024
+says       PTHREAD_NULL initialises a static pthread_t and an automatic
+           one, and compares equal to neither the calling thread's ID
+           nor that of a running thread created by the test.
+test       t/012-null-thread.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.pthread.h.013
+anchor     basedefs/pthread.h.html#DESCRIPTION/PTHREAD_BARRIER_SERIAL_THREAD
+class      required
+since      2001
+says       PTHREAD_BARRIER_SERIAL_THREAD is nonzero and differs from
+           EINVAL, the one error the pthread_barrier_wait() page names.
+note       The page names no other error for the function (EBUSY is
+           not one of its errors), so only EINVAL is compared.
+test       t/013-serial-thread.c
+nomutant   header content check; needs the Tier 0 header mutants

@@ -1,0 +1,15 @@
+# XBD <semaphore.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.semaphore.h.001
+anchor     basedefs/semaphore.h.html#DESCRIPTION/SEM_FAILED
+class      required
+since      2001
+says       SEM_FAILED has type sem_t *.
+test       t/001-sem-failed.c
+nomutant   header content check; needs the Tier 0 header mutants

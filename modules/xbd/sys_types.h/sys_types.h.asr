@@ -1,0 +1,79 @@
+# XBD <sys_types.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.sys_types.h.001
+anchor     basedefs/sys_types.h.html#DESCRIPTION/blkcnt_t
+class      required
+since      1988
+says       The types in <sys/types.h> other than the pthread_*_t types and
+           timer_t are arithmetic types: they can be initialised from,
+           multiplied, and converted to and from numbers.
+note       key_t is XSI and is examined in the XSI assertion.
+test       t/001-arithmetic-types.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_types.h.002
+anchor     basedefs/sys_types.h.html#DESCRIPTION/mode_t
+class      required
+since      2001
+says       mode_t, dev_t, nlink_t, uid_t, gid_t and id_t are integer types;
+           blkcnt_t, off_t, blksize_t, pid_t and ssize_t are signed integer
+           types; fsblkcnt_t, fsfilcnt_t, ino_t and size_t are unsigned integer
+           types.
+test       t/002-integer-types.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_types.h.003
+anchor     basedefs/sys_types.h.html#DESCRIPTION/time_t
+class      required
+since      2024
+says       clock_t is an integer or real-floating type, and time_t is an integer
+           type that holds values of 64 bits.
+note       The 64-bit width of time_t comes from 2024.
+test       t/003-clock-time-types.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_types.h.004
+anchor     basedefs/sys_types.h.html#DESCRIPTION/ssize_t
+class      required
+since      2001
+says       ssize_t holds every value from -1 to SSIZE_MAX.
+test       t/004-ssize-range.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_types.h.005
+anchor     basedefs/sys_types.h.html#DESCRIPTION/suseconds_t
+class      conditional
+when       XSI
+since      2001
+says       On an XSI system suseconds_t is a signed integer type that holds -1 to
+           1000000, and key_t is an arithmetic type.
+test       t/005-xsi-types.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_types.h.006
+anchor     basedefs/sys_types.h.html#DESCRIPTION/id_t
+class      required
+since      2001
+says       id_t can hold any pid_t, uid_t or gid_t value: converting such a value
+           to id_t and back gives the original.
+test       t/006-id-holds-ids.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_types.h.007
+anchor     basedefs/sys_types.h.html#DESCRIPTION/reclen_t
+class      required
+since      2024
+says       reclen_t is an arithmetic type and an unsigned integer type.
+test       t/007-reclen-type.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_types.h.008
+anchor     basedefs/sys_types.h.html#DESCRIPTION/suseconds_t
+class      required
+says       suseconds_t is an arithmetic type.
+test       t/008-suseconds-type.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

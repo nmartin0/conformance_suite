@@ -1,0 +1,29 @@
+# XBD <sys/msg.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.sys_msg.h.001
+anchor     basedefs/sys_msg.h.html#DESCRIPTION/MSG_NOERROR
+class      conditional
+when       XSI
+since      1988
+says       MSG_NOERROR is nonzero and shares no bits with IPC_NOWAIT,
+           the other flag of msgrcv().
+note       msgflg is tested with & against each of them (msgrcv page)
+           (Q-165).
+test       t/001-noerror.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_msg.h.002
+anchor     basedefs/sys_msg.h.html#DESCRIPTION/msgqnum_t
+class      conditional
+when       XSI
+since      1988
+says       msgqnum_t and msglen_t are unsigned integer types at least as
+           large as unsigned short.
+test       t/002-types.c
+nomutant   header content check; needs the Tier 0 header mutants

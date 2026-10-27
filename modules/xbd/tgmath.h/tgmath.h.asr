@@ -1,0 +1,77 @@
+# XBD <tgmath.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Behaviour of the type-generic macros of <tgmath.h>: which header
+# contents they bring in, the type of the result for real, complex and
+# imaginary arguments, and that the right function runs. Only the types of
+# expressions are examined where possible, so nothing depends on the
+# accuracy of a result. Each says why it has no mutant yet.
+
+assertion  XBD.tgmath.h.001
+anchor     basedefs/tgmath.h.html#DESCRIPTION
+class      required
+since      2001
+says       <tgmath.h> alone makes the contents of <math.h> and <complex.h>
+           available (FP_NAN, HUGE_VAL, MATH_ERRNO, complex, I, _Complex_I and
+           CMPLX are defined), and modf(), which has no type-generic macro, still
+           takes a pointer to double.
+test       t/001-includes.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.tgmath.h.002
+anchor     basedefs/tgmath.h.html#DESCRIPTION
+class      required
+since      2001
+says       For a type-generic macro called with real arguments, the result type
+           follows the generic arguments: long double if any is long double,
+           otherwise double if any is double or of integer type, otherwise float
+           (for example sin of a float is float, atan2(float, long double) is
+           long double, pow(long double, int) is long double, sin of an int is
+           double).
+note       Only the type of the expression is examined, so no argument is
+           evaluated. The functions that return int, long or long long keep that
+           type. nexttoward() is decided by its first argument alone.
+test       t/002-real-dispatch.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.tgmath.h.003
+anchor     basedefs/tgmath.h.html#DESCRIPTION
+class      required
+since      2001
+says       If any generic argument is complex the macro invokes a complex
+           function of the type the arguments determine (log of a float complex
+           is float complex, pow(long double complex, float) is long double
+           complex); fabs() of a complex argument gives the real type of cabs();
+           carg, cimag, creal, conj and cproj accept any real or complex argument
+           and use the complex functions.
+note       Only the type of the expression is examined, so no argument is
+           evaluated.
+test       t/003-complex-dispatch.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.tgmath.h.004
+anchor     basedefs/tgmath.h.html#DESCRIPTION
+class      required
+since      2001
+says       The type-generic macros evaluate to the result of the matching
+           function: sqrt of the double complex -4+0i is 2i, fabs of 3+4i is 5,
+           sqrt of the real -1 is a NaN (not the complex root), pow of two ints
+           is the double power, and creal, cimag and conj accept real arguments.
+test       t/004-right-function.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.tgmath.h.005
+anchor     basedefs/tgmath.h.html#DESCRIPTION
+class      required
+since      2001
+says       Where the implementation supports the IEC 60559 complex option with
+           imaginary types, an imaginary argument gives a real result for cos,
+           cosh, fabs, carg, cimag and creal; an imaginary result for sin, tan,
+           sinh, tanh, asin, atan, asinh and atanh; a complex result for the
+           others; and cos(iy) equals cosh(y) while sin(iy) is i sinh(y).
+note       Shaded MXC: NOTINUSE unless the implementation defines
+           __STDC_IEC_559_COMPLEX__ (or its successor __STDC_IEC_60559_COMPLEX__)
+           and _Imaginary_I. A claim without imaginary types is reported by
+           XBD.complex.h.006.
+test       t/005-imaginary-args.c
+nomutant   compile-time check; needs the Tier 0 header mutants

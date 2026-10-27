@@ -1,0 +1,82 @@
+# XBD <time.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.time.h.001
+anchor     basedefs/time.h.html#DESCRIPTION/CLOCKS_PER_SEC
+class      required
+since      1988
+says       CLOCKS_PER_SEC is an expression of type clock_t and is positive.
+test       t/001-clocks-per-sec.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.002
+anchor     basedefs/time.h.html#DESCRIPTION/CLOCKS_PER_SEC
+class      conditional
+when       XSI
+since      1988
+says       On an XSI system CLOCKS_PER_SEC is one million.
+test       t/002-clocks-per-sec-xsi.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.003
+anchor     basedefs/time.h.html#DESCRIPTION/TIME_UTC
+class      required
+since      2024
+says       TIME_UTC is an integer constant greater than zero that can be used in
+           #if.
+test       t/003-time-utc.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.004
+anchor     basedefs/time.h.html#DESCRIPTION/CLOCK_MONOTONIC
+class      required
+since      2024
+says       CLOCK_REALTIME and CLOCK_MONOTONIC (and CLOCK_PROCESS_CPUTIME_ID and
+           CLOCK_THREAD_CPUTIME_ID where defined) can be held in a clockid_t and
+           name different clocks, so their values differ.
+note       The page does not say the identifiers differ in words; they name
+           clocks of different kinds (clock_settime() must set the real-time
+           clock and must fail for the monotonic clock, XSH clock_settime
+           DESCRIPTION and ERRORS), so one value for those two is not possible;
+           the CPU-time clocks measure other quantities.
+           CLOCK_PROCESS_CPUTIME_ID and CLOCK_THREAD_CPUTIME_ID exist only with
+           the CPU-time options.
+           See Q-168 in docs/standard-issues.md.
+test       t/004-clock-ids.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.005
+anchor     basedefs/time.h.html#DESCRIPTION/tm
+class      required
+since      1988
+says       The members of the structure gmtime(), gmtime_r(), localtime() and
+           localtime_r() fill in lie in the ranges the page gives (seconds 0 to
+           60, minutes 0 to 59, hours 0 to 23, day of month 1 to 31, month 0 to
+           11, weekday 0 to 6, day of year 0 to 365), and tm_isdst is never
+           negative.
+note       tm_isdst is "positive if Daylight Saving Time is in effect and 0 if
+           not"; a negative value is forbidden for results of the interfaces.
+test       t/005-tm-ranges.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.006
+anchor     basedefs/time.h.html#DESCRIPTION/timespec
+class      required
+since      2024
+says       The tv_nsec member of a timespec filled in by clock_gettime(),
+           clock_getres() or timespec_get() is between 0 and 999999999.
+test       t/006-timespec-nsec.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.007
+anchor     basedefs/time.h.html#DESCRIPTION/getdate_err
+class      conditional
+when       XSI
+since      1988
+says       On an XSI system <time.h> provides getdate_err as an expression of
+           type int.
+test       t/007-getdate-err.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

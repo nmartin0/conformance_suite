@@ -1,0 +1,29 @@
+# XBD <wordexp.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.wordexp.h.001
+anchor     basedefs/wordexp.h.html#DESCRIPTION/WRDE_APPEND
+class      required
+since      1988
+says       WRDE_APPEND, WRDE_DOOFFS, WRDE_NOCMD, WRDE_REUSE,
+           WRDE_SHOWERR and WRDE_UNDEF are nonzero and share no bits.
+note       The wordexp() flags value is a bitwise-inclusive OR of these
+           constants (wordexp page) (Q-165).
+test       t/001-flags.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.wordexp.h.002
+anchor     basedefs/wordexp.h.html#DESCRIPTION/WRDE_BADCHAR
+class      required
+since      1988
+says       WRDE_BADCHAR, WRDE_BADVAL, WRDE_CMDSUB, WRDE_NOSPACE and
+           WRDE_SYNTAX are nonzero and have five different values.
+note       wordexp() returns zero for success and these for the errors,
+           which callers tell apart (Q-165).
+test       t/002-errors.c
+nomutant   header content check; needs the Tier 0 header mutants

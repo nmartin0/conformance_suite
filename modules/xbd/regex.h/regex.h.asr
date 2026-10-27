@@ -1,0 +1,72 @@
+# XBD <regex.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Value relations of <regex.h>: the cflags and eflags macros are separate
+# non-zero bit sets (regcomp() and regexec() take their OR), the error
+# codes are non-zero and different, and regoff_t is wide enough. Each says
+# why it has no mutant yet.
+
+assertion  XBD.regex.h.001
+anchor     basedefs/regex.h.html#DESCRIPTION/REG_EXTENDED
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       REG_EXTENDED, REG_ICASE, REG_NOSUB and REG_NEWLINE are non-zero values
+           with no bit in common, so that any of them can be combined with | in
+           the cflags argument of regcomp().
+note       regcomp() takes cflags as the bitwise-inclusive OR of zero or more of
+           the flags, which needs each to be a separate non-zero bit set.
+           REG_MINIMAL, added later, is in XBD.regex.h.002.
+test       t/001-cflags.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.regex.h.002
+anchor     basedefs/regex.h.html#DESCRIPTION/REG_MINIMAL
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      2024
+says       REG_MINIMAL is defined, non-zero, and shares no bit with REG_EXTENDED,
+           REG_ICASE, REG_NOSUB or REG_NEWLINE.
+uses       XBD.regex.h.001
+note       Kept apart because REG_MINIMAL was added in Issue 8; a system without
+           it should fail here alone.
+test       t/002-reg-minimal.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.regex.h.003
+anchor     basedefs/regex.h.html#DESCRIPTION/REG_NOTBOL
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       REG_NOTBOL and REG_NOTEOL are non-zero values with no bit in common,
+           so that both can be combined with | in the eflags argument of
+           regexec().
+note       regexec() takes eflags as the bitwise-inclusive OR of zero or more of
+           the flags.
+test       t/003-eflags.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.regex.h.004
+anchor     basedefs/regex.h.html#DESCRIPTION/REG_NOMATCH
+anchor     functions/regcomp.html#RETURN VALUE
+class      required
+since      1992
+says       REG_NOMATCH, REG_BADPAT, REG_ECOLLATE, REG_ECTYPE, REG_EESCAPE,
+           REG_ESUBREG, REG_EBRACK, REG_EPAREN, REG_EBRACE, REG_BADBR,
+           REG_ERANGE, REG_ESPACE and REG_BADRPT are defined, none is 0, and no
+           two have the same value.
+note       Zero is what regcomp() and regexec() return on success, so no error
+           code is 0. That the codes differ is inferred from their having to be
+           told apart by regerror() (Q-169); it is not stated.
+test       t/004-error-codes.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.regex.h.005
+anchor     basedefs/regex.h.html#DESCRIPTION/regoff_t
+class      required
+since      2024
+says       regoff_t is a signed integer type that can hold the largest value of
+           ptrdiff_t and the largest value of ssize_t (PTRDIFF_MAX and
+           SSIZE_MAX).
+test       t/005-regoff-t.c
+nomutant   compile-time check; needs the Tier 0 header mutants

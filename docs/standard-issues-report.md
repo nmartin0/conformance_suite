@@ -189,6 +189,9 @@ https://claude.ai/artifact/L3t5goEQYUJKhbTWAj2BXF.
 | Q-72 | XSH 2.9.5.1: asynchronous cancellation "may be acted upon at any time" | Question | Low | Disputed (XSH.pthread_setcancelstate.006) |
 | Q-73 | XBD <limits.h> and pthread_create()/pthread_key_create(): how {PTHREAD_THREADS_MAX} and {PTHREAD_KEYS_MAX} count | Question | Low | Both readings accepted (XSH.pthread_create.012, XSH.pthread_key_create.005) |
 | Q-74 | XSH sleep(): rounding of the unslept time | Question | Low | Both roundings accepted (XSH.sleep.003) |
+| Q-166 | XBD <netinet/in.h>: no value given for INADDR_ANY or INADDR_BROADCAST | Question | Low | Expects 0 and all ones, `disputed` (XBD.netinet_in.h.010) |
+| Q-167 | XBD <netdb.h>: IPPORT_RESERVED is "the highest reserved port", reserved ports undefined | Unclear | Low | Only the range of a port number is checked (XBD.netdb.h.004) |
+| Q-169 | XBD headers: constants used as alternatives or return codes are never said to differ | Question | Low | Distinctness expected; `disputed` for <langinfo.h> (XBD.langinfo.h.002, .004) |
 
 ## Entries
 
@@ -1548,6 +1551,24 @@ is unclear.
 - **Where:** XSH `sleep()`, RETURN VALUE.
 - **Question:** an interrupted sleep() returns the unslept amount in seconds; how a fraction of a second is rounded is not said (compare Q-13 for alarm()).
 - **posixcheck meanwhile:** XSH.sleep.003 accepts the rounded-down and rounded-up values.
+
+### Q-166: XBD <netinet/in.h>: the values of INADDR_ANY and INADDR_BROADCAST
+
+- **Where:** XBD `<netinet/in.h>`, DESCRIPTION (the paragraphs introducing INADDR_ANY and INADDR_BROADCAST) and RATIONALE.
+- **Question:** the page calls INADDR_ANY the IPv4 wildcard address and INADDR_BROADCAST the IPv4 broadcast address and says their byte order is not specified because they do not depend on it, but it gives no value for either. The values 0.0.0.0 and 255.255.255.255 come from the IPv4 address definitions, which are outside this standard. Should the page state them?
+- **posixcheck meanwhile:** XBD.netinet_in.h.010 expects 0 and all 32 bits set, unchanged by htonl(), and is `disputed`; a failure is reported for inspection.
+
+### Q-167: XBD <netdb.h>: what IPPORT_RESERVED is
+
+- **Where:** XBD `<netdb.h>`, DESCRIPTION (the IPPORT_RESERVED paragraph).
+- **Question:** the value is described as that of the highest reserved Internet port number, but the standard never says which ports are reserved. Common practice names the first unreserved port rather than the highest reserved one, which differ by one. Is the description meant literally, and which ports are reserved?
+- **posixcheck meanwhile:** XBD.netdb.h.004 checks only that the value is a possible port number (0 to 65535).
+
+### Q-169: XBD headers: constants that must be told apart are not said to differ
+
+- **Where:** XBD `<langinfo.h>` (the nl_item constants), `<regex.h>` (REG_ error codes and flags), `<netdb.h>` (EAI_ error values), `<netinet/in.h>` (IPPROTO_ levels beside SOL_SOCKET), `<locale.h>` (the LC_ mask macros), `<nl_types.h>` (NL_CAT_LOCALE beside 0), `<dlfcn.h>` (RTLD_ modes), `<wchar.h>` (WEOF beside the wide characters).
+- **Question:** each page lists constants that a function takes as alternatives in one argument, ORs into a flags argument, or returns as codes that a second function turns into messages. As in Q-55, Q-165 and Q-168, no sentence says that two different names have different values, or that flags share no bit; the function pages imply it, since the alternatives could not be told apart otherwise. Should the header pages say so?
+- **posixcheck meanwhile:** the tests expect distinct values (no common bit for flags); for the nl_langinfo items the assertions XBD.langinfo.h.002 and .004 are `disputed`.
 
 ## Tracking
 

@@ -1,0 +1,58 @@
+# XBD <poll.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.poll.h.001
+anchor     basedefs/poll.h.html#DESCRIPTION/POLLIN
+class      required
+since      2001
+says       All ten POLL event constants are nonzero and fit in a short
+           (the type of events and revents).
+note       They are OR-ed into events and revents, which are shorts;
+           zero would not name a condition (Q-165). POLLWRNORM may equal
+           POLLOUT, so values are not compared here.
+test       t/001-event-bits.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.poll.h.002
+anchor     basedefs/poll.h.html#DESCRIPTION/POLLERR
+class      required
+since      2001
+says       POLLERR, POLLHUP and POLLNVAL each share no bits with any
+           other POLL constant.
+note       These are set in revents whether or not requested, next to
+           the requested bits and, for POLLHUP, next to POLLIN and
+           others (poll page), so they must be separable from them
+           (Q-165).
+test       t/002-revents-only.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.poll.h.003
+anchor     basedefs/poll.h.html#DESCRIPTION/POLLRDNORM
+class      disputed
+since      2001
+says       POLLIN, POLLRDNORM, POLLRDBAND, POLLPRI, POLLOUT and
+           POLLWRBAND have six different values.
+note       disputed (Q-165): the page describes six different readiness
+           conditions but never says a system may not give two of them
+           the same value, for devices that do not tell them apart; a
+           FAIL is logged as INSPECT.
+test       t/003-request-distinct.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.poll.h.004
+anchor     basedefs/poll.h.html#DESCRIPTION/POLLWRNORM
+class      required
+since      2001
+says       poll() on the write end of an empty pipe, asked for
+           POLLWRNORM and asked for POLLOUT, reports a writable
+           descriptor with POLLWRNORM or POLLOUT set.
+note       POLLWRNORM is called equivalent to POLLOUT, so either bit is
+           accepted for either request; nothing about the values is
+           assumed.
+test       t/004-wrnorm.c
+nomutant   header content check; needs the Tier 0 header mutants

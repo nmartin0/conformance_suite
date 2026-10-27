@@ -1,0 +1,34 @@
+# XBD <dirent.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.dirent.h.001
+anchor     basedefs/dirent.h.html#DESCRIPTION/DT_BLK
+class      required
+since      2024
+says       DT_BLK, DT_CHR, DT_DIR, DT_FIFO, DT_LNK, DT_REG, DT_SOCK and
+           DT_UNKNOWN are usable in #if, have eight different values and
+           fit in d_type (an unsigned char).
+note       Fitting unsigned char follows from d_type being the member
+           that returns them.
+test       t/001-dt-distinct.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.dirent.h.002
+anchor     basedefs/dirent.h.html#DESCRIPTION/DT_MQ
+class      required
+since      2024
+says       In a directory holding only a regular file, a directory, a
+           FIFO and a symbolic link, no posix_getdents() entry has
+           d_type DT_MQ, DT_SEM, DT_SHM or DT_TMO, and each of the four
+           has its own DT_ value or DT_UNKNOWN.
+note       The page lets DT_MQ and the others be equal to nothing else,
+           or, when the system has no such file type, any value that is
+           never returned; either way no entry of these four ordinary
+           files may carry one.
+test       t/002-dt-never-returned.c
+nomutant   header content check; needs the Tier 0 header mutants

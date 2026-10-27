@@ -1,0 +1,41 @@
+# XBD <arpa/inet.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantics of <arpa/inet.h> that the generated header check cannot
+# express: network byte order of the conversion functions, and the types
+# and constants the header takes over from other headers. Each says why it
+# has no mutant yet.
+
+assertion  XBD.arpa_inet.h.001
+anchor     basedefs/arpa_inet.h.html#DESCRIPTION
+anchor     functions/htonl.html#RETURN VALUE
+anchor     basedefs/V1_chap03.html#3.223
+class      required
+since      2001
+says       htonl(0x01020304) stored in a uint32_t has the octets 1, 2, 3, 4 in
+           increasing address order, and htons(0x0102) the octets 1, 2 (network
+           byte order, most significant first); ntohl() and ntohs() turn octets
+           stored that way back into the number.
+test       t/001-byte-order.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.arpa_inet.h.002
+anchor     basedefs/arpa_inet.h.html#DESCRIPTION
+class      required
+since      2024
+says       <arpa/inet.h> alone defines in_port_t as a 16-bit unsigned type,
+           in_addr_t as a 32-bit unsigned type, socklen_t as an integer type of
+           at least 32 bits, struct in_addr with s_addr of type in_addr_t, and
+           INET_ADDRSTRLEN with the value 16.
+test       t/002-types-len.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.arpa_inet.h.003
+anchor     basedefs/arpa_inet.h.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       With IPv6, <arpa/inet.h> alone defines INET6_ADDRSTRLEN with the value
+           46.
+test       t/003-inet6-len.c
+nomutant   compile-time check; needs the Tier 0 header mutants

@@ -1,0 +1,30 @@
+# XBD <sys/sem.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.sys_sem.h.001
+anchor     basedefs/sys_sem.h.html#DESCRIPTION/SEM_UNDO
+class      conditional
+when       XSI
+since      1988
+says       SEM_UNDO is nonzero, fits in a short and shares no bits with
+           IPC_NOWAIT, the other flag in sem_flg.
+note       sem_flg is a short and is tested with & against both flags
+           (semop page) (Q-165).
+test       t/001-undo.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_sem.h.002
+anchor     basedefs/sys_sem.h.html#DESCRIPTION/GETVAL
+class      conditional
+when       XSI
+since      1988
+says       GETNCNT, GETPID, GETVAL, GETALL, GETZCNT, SETVAL, SETALL,
+           IPC_RMID, IPC_SET and IPC_STAT have ten different values.
+note       All are values of the one cmd argument of semctl() (Q-165).
+test       t/002-semctl-cmds.c
+nomutant   header content check; needs the Tier 0 header mutants

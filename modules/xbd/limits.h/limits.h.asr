@@ -1,0 +1,166 @@
+# XBD <limits.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.limits.h.001
+anchor     basedefs/limits.h.html#DESCRIPTION/_POSIX_ARG_MAX
+class      required
+says       <limits.h> defines the _POSIX_*_MAX minimum-value constants (and
+           _POSIX_CLOCKRES_MIN) with exactly the values the page gives for them,
+           each usable in #if.
+test       t/001-posix-minima.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.002
+anchor     basedefs/limits.h.html#DESCRIPTION/_POSIX_MQ_OPEN_MAX
+class      conditional
+when       MSG
+says       On a system with the Message Passing option <limits.h> defines
+           _POSIX_MQ_OPEN_MAX as 8 and _POSIX_MQ_PRIO_MAX as 32.
+test       t/002-posix-mq-minima.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.003
+anchor     basedefs/limits.h.html#DESCRIPTION/_POSIX_SS_REPL_MAX
+class      conditional
+when       SS|TSP
+since      2001
+says       On a system with the Process or Thread Sporadic Server option
+           <limits.h> defines _POSIX_SS_REPL_MAX as 4.
+test       t/003-posix-ss-minimum.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.004
+anchor     basedefs/limits.h.html#DESCRIPTION/_XOPEN_IOV_MAX
+class      conditional
+when       XSI
+since      2001
+says       On an XSI system <limits.h> defines _XOPEN_IOV_MAX as 16,
+           _XOPEN_NAME_MAX as 255 and _XOPEN_PATH_MAX as 1024.
+test       t/004-xopen-minima.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.005
+anchor     basedefs/limits.h.html#DESCRIPTION/_POSIX2_BC_BASE_MAX
+class      required
+since      1992
+says       <limits.h> defines the _POSIX2_* minimum-value constants with exactly
+           the values the page gives for them, each usable in #if.
+test       t/005-posix2-minima.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.006
+anchor     basedefs/limits.h.html#DESCRIPTION/CHAR_BIT
+class      required
+since      2001
+says       CHAR_BIT is 8, SCHAR_MAX 127, SCHAR_MIN -128 and UCHAR_MAX 255;
+           CHAR_MIN and CHAR_MAX are SCHAR_MIN and SCHAR_MAX when char can hold
+           negative values, otherwise 0 and UCHAR_MAX.
+test       t/006-char-limits.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.007
+anchor     basedefs/limits.h.html#DESCRIPTION/INT_MAX
+class      required
+since      2001
+says       The integer limits are at least as large in magnitude as the page
+           gives: INT_MAX and UINT_MAX, SHRT, LONG and LLONG maxima, USHRT, ULONG
+           and ULLONG maxima, the signed minima no greater than the stated
+           negative values, LONG_BIT and WORD_BIT at least 32, MB_LEN_MAX at
+           least 1.
+test       t/007-numeric-minima.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.008
+anchor     basedefs/limits.h.html#DESCRIPTION/LONG_BIT
+class      required
+since      2001
+says       LONG_BIT is the number of bits in a long and WORD_BIT the number of
+           bits in an int, so the largest value of each type is one less than a
+           power of two of that many bits less one.
+note       The width is derived from the largest value of the type, so padding
+           bits do not matter.
+test       t/008-bit-widths.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.009
+anchor     basedefs/limits.h.html#DESCRIPTION
+class      required
+since      2001
+says       Each numerical limit other than CHAR_BIT, LONG_BIT, MB_LEN_MAX and
+           WORD_BIT has the type an object of the corresponding type has after
+           the integer promotions.
+test       t/009-limit-types.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.010
+anchor     basedefs/limits.h.html#DESCRIPTION/limits
+class      required
+since      2001
+says       Every macro and symbolic constant <limits.h> defines is suitable for
+           use in #if preprocessing directives.
+test       t/010-usable-in-if.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.011
+anchor     basedefs/limits.h.html#DESCRIPTION
+class      required
+says       Each runtime-invariant, pathname-variable and runtime-increasable
+           limit that <limits.h> defines is not below its minimum acceptable
+           value (the matching _POSIX_ or _POSIX2_ constant, or the number the
+           page gives).
+note       A limit may be left undefined (indeterminate or varying), so an
+           undefined limit is not checked.
+test       t/011-variable-minima.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.012
+anchor     basedefs/limits.h.html#DESCRIPTION/PAGE_SIZE
+class      conditional
+when       XSI
+since      1988
+says       On an XSI system the limits are at least the XSI minimum values
+           (IOV_MAX, NAME_MAX, PATH_MAX, TEXTDOMAIN_MAX), PAGE_SIZE and PAGESIZE
+           are both defined with one value when either is, and NL_LANGMAX (at
+           least 14) and NZERO (at least 20) are defined.
+test       t/012-xsi-minima.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.013
+anchor     basedefs/limits.h.html#DESCRIPTION/SSIZE_MAX
+class      required
+since      2001
+says       SSIZE_MAX is the largest value an object of type ssize_t holds, and is
+           at least _POSIX_SSIZE_MAX.
+test       t/013-ssize-max.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.014
+anchor     basedefs/limits.h.html#DESCRIPTION
+class      required
+says       <limits.h> defines GETENTROPY_MAX (at least 256), NL_ARGMAX (at least
+           9), NL_MSGMAX (at least 32767), NL_SETMAX (at least 255), NL_TEXTMAX
+           (at least _POSIX2_LINE_MAX) and NSIG_MAX.
+note       GETENTROPY_MAX was added in 2024 and NSIG_MAX in 2024.
+test       t/014-invariant-values.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.015
+anchor     basedefs/limits.h.html#DESCRIPTION/STREAM_MAX
+class      required
+says       When STREAM_MAX is defined it has the same value as FOPEN_MAX.
+test       t/015-stream-max.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.016
+anchor     basedefs/limits.h.html#DESCRIPTION
+class      required
+since      2001
+says       sysconf(_SC_NSIG) never returns more than NSIG_MAX, and for the
+           runtime-increasable limits the run-time value sysconf() returns is not
+           smaller than the value <limits.h> gives (a result of -1, no definite
+           limit, is not compared).
+test       t/016-sysconf-vs-header.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

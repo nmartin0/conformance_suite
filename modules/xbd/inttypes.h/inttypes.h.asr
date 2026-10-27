@@ -1,0 +1,52 @@
+# XBD <inttypes.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.inttypes.h.001
+anchor     basedefs/inttypes.h.html#DESCRIPTION
+class      required
+says       <inttypes.h> includes <stdint.h>, and for every integer type
+           <stdint.h> provides (widths 8, 16, 32 and 64, the least, fast,
+           greatest-width and pointer types) it defines the fprintf macros PRId,
+           PRIi, PRIo, PRIu, PRIx and PRIX for that type.
+note       Only the widths 8, 16, 32 and 64 are examined.
+test       t/001-pri-defined.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.inttypes.h.002
+anchor     basedefs/inttypes.h.html#DESCRIPTION
+class      required
+says       Used in an fprintf-family format string, the PRId and PRIi macros
+           print values of the matching signed type, and the PRIo, PRIu, PRIx and
+           PRIX macros print values of the matching unsigned type, as the
+           decimal, octal and hexadecimal text of the value.
+note       The expected text is made with the j length modifier. Only the widths
+           8, 16, 32 and 64 are examined.
+test       t/002-printf-macros.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.inttypes.h.003
+anchor     basedefs/inttypes.h.html#DESCRIPTION
+class      required
+says       Where an SCN macro is defined, used in an fscanf-family format string
+           it reads decimal (SCNd, SCNi), octal (SCNo), unsigned decimal (SCNu),
+           hexadecimal (SCNx) and prefixed hexadecimal (SCNi) text into an object
+           of the matching type with the value the text gives.
+note       An SCN macro may be absent when the system has no suitable modifier
+           for the type, so only those defined are used. Only the widths 8, 16,
+           32 and 64 are examined.
+test       t/003-scanf-macros.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.inttypes.h.004
+anchor     basedefs/inttypes.h.html#DESCRIPTION
+class      required
+says       The same PRI and SCN macros work in the wide-character formats of
+           swprintf() and swscanf() (and so of the fwprintf and fwscanf
+           families).
+note       An SCN macro may be absent, and is then not used. A sample of types is
+           used.
+test       t/004-wide-macros.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

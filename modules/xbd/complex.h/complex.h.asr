@@ -1,0 +1,87 @@
+# XBD <complex.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Macro semantics of <complex.h> that the generated header check cannot
+# express: the imaginary unit and its type, the optional imaginary macros,
+# CMPLX, and the ban on __STDC_NO_COMPLEX__. Parts the page ties to the
+# IEC 60559 complex option are NOTINUSE where the compiler does not claim
+# it. Each says why it has no mutant yet.
+
+assertion  XBD.complex.h.001
+anchor     basedefs/complex.h.html#DESCRIPTION
+class      required
+since      2024
+says       The implementation does not define __STDC_NO_COMPLEX__, before or
+           after <complex.h> is included, unless it defines _POSIX_SUBPROFILE in
+           <unistd.h>.
+note       NOTINUSE on a subprofile implementation, which may define it.
+test       t/001-no-complex.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.complex.h.002
+anchor     basedefs/complex.h.html#DESCRIPTION/complex
+class      required
+since      2001
+says       The macro complex expands to the keyword _Complex; the macro
+           imaginary, if it is defined, expands to _Imaginary.
+test       t/002-complex-token.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.complex.h.003
+anchor     basedefs/complex.h.html#DESCRIPTION/_Complex_I
+class      required
+since      2001
+says       _Complex_I is a constant expression (usable as a static initializer)
+           of type float _Complex whose value is the imaginary unit: real part
+           zero, imaginary part one, and its square is -1.
+test       t/003-complex-i.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.complex.h.004
+anchor     basedefs/complex.h.html#DESCRIPTION/_Imaginary_I
+anchor     basedefs/complex.h.html#DESCRIPTION/I
+class      required
+since      2001
+says       The macros imaginary and _Imaginary_I are both defined or both
+           undefined. If _Imaginary_I is defined it has type float _Imaginary and
+           I has type float _Imaginary or float _Complex; if not, I has type
+           float _Complex and the value of _Complex_I.
+test       t/004-imaginary-i.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.complex.h.005
+anchor     basedefs/complex.h.html#DESCRIPTION/I
+class      required
+since      2001
+says       The imaginary unit I satisfies I*I == -1: as a complex value the
+           product has real part -1 and imaginary part 0, for float, double and
+           long double complex.
+uses       XBD.complex.h.003
+test       t/005-i-squared.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.complex.h.006
+anchor     basedefs/complex.h.html#DESCRIPTION/_Imaginary_I
+class      required
+since      2001
+says       An implementation that supports the IEC 60559 Complex Floating-Point
+           option (signalled by __STDC_IEC_559_COMPLEX__ or
+           __STDC_IEC_60559_COMPLEX__) defines imaginary and _Imaginary_I, and I
+           expands to _Imaginary_I, so I has type float _Imaginary.
+note       NOTINUSE where neither macro is defined.
+test       t/006-imaginary-iec.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.complex.h.007
+anchor     basedefs/complex.h.html#DESCRIPTION/CMPLX
+class      required
+since      2024
+says       CMPLX, CMPLXF and CMPLXL are macros giving a double complex, float
+           complex and long double complex value whose real and imaginary parts
+           are the two arguments, usable as static initializers; under IEC 60559
+           signed zeros and infinities in the arguments are kept.
+note       XSH CMPLX() says the macros behave as if built with _Imaginary_I,
+           which keeps a signed zero and an infinity untouched; those cases run
+           only where the compiler claims IEC 60559 floating point.
+test       t/007-cmplx.c
+nomutant   compile-time check; needs the Tier 0 header mutants

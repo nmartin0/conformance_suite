@@ -1,0 +1,31 @@
+# XBD <ftw.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.ftw.h.001
+anchor     basedefs/ftw.h.html#DESCRIPTION/FTW_F
+class      conditional
+when       XSI
+since      1988
+says       FTW_F, FTW_D, FTW_DNR, FTW_DP, FTW_NS, FTW_SL and FTW_SLN
+           have seven different values.
+note       Values of the one typeflag argument that the callback tells
+           apart (Q-165).
+test       t/001-type-flags.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.ftw.h.002
+anchor     basedefs/ftw.h.html#DESCRIPTION/FTW_PHYS
+class      conditional
+when       XSI
+since      1988
+says       FTW_PHYS, FTW_MOUNT, FTW_XDEV, FTW_DEPTH and FTW_CHDIR are
+           nonzero and share no bits.
+note       nftw() flags are the bitwise-inclusive OR of these (nftw
+           page) (Q-165).
+test       t/002-walk-flags.c
+nomutant   header content check; needs the Tier 0 header mutants

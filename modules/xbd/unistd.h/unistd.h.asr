@@ -35,3 +35,195 @@ note       A system may define SEEK_HOLE and SEEK_DATA only under an extension f
 uses       XBD.unistd.h.003
 test       t/002-seek-constants.c
 nomutant   compile-time presence check; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.004
+anchor     basedefs/unistd.h.html#DESCRIPTION/_POSIX_VERSION
+class      required
+since      2024
+says       <unistd.h> defines _POSIX_VERSION as 202405L and _POSIX2_VERSION as
+           202405L, both usable in #if; on a profile that defines
+           _POSIX_SUBPROFILE, _POSIX2_VERSION may be undefined or -1, and
+           sysconf(_SC_2_VERSION) then returns 202405L or -1.
+note       The check of sysconf(_SC_2_VERSION) applies only when
+           _POSIX_SUBPROFILE is defined and _POSIX2_VERSION is undefined or -1;
+           otherwise NOTINUSE is not reported, the compile-time checks decide.
+test       t/004-version-macros.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.005
+anchor     basedefs/unistd.h.html#DESCRIPTION/_XOPEN_VERSION
+class      conditional
+when       XSI
+since      2001
+says       On an XSI system <unistd.h> defines _XOPEN_VERSION as 800 and
+           _XOPEN_UNIX with a value other than -1, both usable in #if.
+test       t/005-xopen-version.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.006
+anchor     basedefs/unistd.h.html#DESCRIPTION/_POSIX_ADVISORY_INFO
+class      required
+since      2024
+says       Each option symbol of the optional family (Advisory Information,
+           process and thread CPU-time clocks, device control, file
+           synchronization, IPv6, memory locking, message passing, prioritized
+           I/O, process scheduling, raw sockets, shared memory objects, spawn,
+           sporadic servers, synchronized I/O, the thread attribute and priority
+           options, robust mutexes, typed memory, and the _POSIX2 and UUCP
+           options) that is defined has the value -1, 0 or 202405L, usable in
+           #if.
+test       t/006-option-values-optional.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.007
+anchor     basedefs/unistd.h.html#DESCRIPTION/_POSIX_ASYNCHRONOUS_IO
+class      required
+since      2024
+says       The symbols for asynchronous I/O, barriers, clock selection, mapped
+           files, memory protection, the monotonic clock, read-write locks,
+           realtime signals, semaphores, spin locks, thread-safe functions,
+           threads, timeouts, timers and the C-language binding are defined as
+           202405L, and those for job control, regular expressions, saved IDs and
+           the shell are defined with a value above zero (except that a profile
+           defining _POSIX_SUBPROFILE may leave them undefined or give -1, 0 or
+           more), all usable in #if.
+note       Whether the subprofile relaxation also covers the symbols that are
+           always 202405L is not stated; the relaxation is applied to them too
+           (candidate issue).
+test       t/007-option-values-always.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.008
+anchor     basedefs/unistd.h.html#DESCRIPTION/_POSIX_CHOWN_RESTRICTED
+class      required
+since      2001
+says       _POSIX_CHOWN_RESTRICTED, _POSIX_NO_TRUNC, _POSIX_VDISABLE,
+           _XOPEN_ENH_I18N and _XOPEN_SHM are defined with a value other than -1,
+           usable in #if.
+test       t/008-option-values-not-minus-one.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.009
+anchor     basedefs/unistd.h.html#DESCRIPTION
+class      required
+since      2001
+says       Every symbol under Constants for Options and Option Groups that
+           <unistd.h> defines has the value -1, 0 or greater and can be used in
+           #if.
+test       t/009-option-values-floor.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.010
+anchor     basedefs/unistd.h.html#DESCRIPTION/_POSIX_ADVISORY_INFO
+class      required
+since      2024
+says       For each option symbol of the optional family, sysconf() with the
+           matching _SC_ name returns -1 or 202405L.
+test       t/010-sysconf-optional.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.011
+anchor     basedefs/unistd.h.html#DESCRIPTION
+class      required
+since      2001
+says       When an option symbol is defined with a value greater than zero, the
+           option is supported at run time: sysconf() with the matching _SC_ name
+           does not return -1.
+test       t/011-sysconf-matches-header.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.012
+anchor     basedefs/unistd.h.html#DESCRIPTION/F_OK
+class      required
+since      1988
+says       F_OK, R_OK, W_OK, X_OK, R_OK|W_OK, R_OK|X_OK and R_OK|W_OK|X_OK all
+           have different values, and the four constants are usable in #if.
+test       t/012-access-modes.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.013
+anchor     basedefs/unistd.h.html#DESCRIPTION/STDIN_FILENO
+class      required
+since      1988
+says       STDIN_FILENO is 0, STDOUT_FILENO is 1 and STDERR_FILENO is 2.
+test       t/013-std-filenos.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.014
+anchor     basedefs/unistd.h.html#DESCRIPTION/_SC_2_C_BIND
+class      required
+since      2008
+says       The _SC_ constants for sysconf() that earlier editions already had are
+           pairwise different, except that _SC_PAGESIZE and _SC_PAGE_SIZE may be
+           equal.
+note       Only the pair _SC_PAGESIZE and _SC_PAGE_SIZE is allowed to share a
+           value; each other name selects a different quantity.
+           See Q-168 in docs/standard-issues.md.
+test       t/014-sc-distinct.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.015
+anchor     basedefs/unistd.h.html#DESCRIPTION/_PC_2_SYMLINKS
+class      required
+since      2008
+says       The _PC_ constants for pathconf() that earlier editions already had
+           are pairwise different.
+note       Each name selects a different quantity, so two names cannot share a
+           value (the page lists no exception).
+           See Q-168 in docs/standard-issues.md.
+test       t/015-pc-distinct.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.016
+anchor     basedefs/unistd.h.html#DESCRIPTION/_CS_PATH
+class      required
+since      2008
+says       The _CS_ constants for confstr() that earlier editions already had are
+           pairwise different.
+note       Each name selects a different string, so two names cannot share a
+           value (the page lists no exception).
+           See Q-168 in docs/standard-issues.md.
+test       t/016-cs-distinct.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.017
+anchor     basedefs/unistd.h.html#DESCRIPTION/F_LOCK
+class      conditional
+when       XSI
+since      1988
+says       On an XSI system F_LOCK, F_TEST, F_TLOCK and F_ULOCK are different
+           values.
+test       t/017-lockf-commands.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.018
+anchor     basedefs/unistd.h.html#DESCRIPTION/Execution-Time_Symbolic_Constants
+class      required
+since      2001
+says       For the execution-time symbols _POSIX_ASYNC_IO, _POSIX_FALLOC,
+           _POSIX_PRIO_IO, _POSIX_SYNC_IO, _POSIX_CHOWN_RESTRICTED and
+           _POSIX_NO_TRUNC: when the header defines one as -1, pathconf() with
+           the matching _PC_ name gives -1 for a file, and when it defines one
+           with another value, pathconf() does not give -1.
+note       Checked on a regular file (a directory for _POSIX_NO_TRUNC) in the
+           working directory.
+test       t/018-pathconf-matches-header.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.019
+anchor     basedefs/unistd.h.html#DESCRIPTION/_SC_NSIG
+class      required
+since      2024
+says       The constants the 2024 edition added for sysconf(), pathconf() and
+           confstr() (the processor counts, device control, signal count, the
+           _V8_ environments, _PC_FALLOC, _PC_TEXTDOMAIN_MAX and the _CS_ names
+           for the _V8_ environments) are different from one another and from the
+           earlier names of the same function, except that a _V8_ name and the
+           _V7_ name of the same environment may be equal.
+note       The earlier names are included so that a new name equal to an old one
+           is found; a missing earlier name is reported by the assertions for the
+           earlier names. The _V7_ names are obsolescent aliases for the same
+           environments, so one value for a _V7_ and a _V8_ name is not excluded.
+           See Q-168 in docs/standard-issues.md.
+test       t/019-new-names-distinct.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

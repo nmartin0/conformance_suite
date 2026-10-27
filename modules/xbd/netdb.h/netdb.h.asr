@@ -1,0 +1,52 @@
+# XBD <netdb.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Value relations of <netdb.h>: the AI_ and NI_ flags are bitwise-
+# distinct, the EAI_ error values are usable in #if and different, and
+# IPPORT_RESERVED is a port number. Each says why it has no mutant yet.
+
+assertion  XBD.netdb.h.001
+anchor     basedefs/netdb.h.html#DESCRIPTION/AI_PASSIVE
+class      required
+since      2001
+says       AI_PASSIVE, AI_CANONNAME, AI_NUMERICHOST, AI_NUMERICSERV, AI_V4MAPPED,
+           AI_ALL and AI_ADDRCONFIG are defined and no two have a bit in common.
+test       t/001-ai-flags.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netdb.h.002
+anchor     basedefs/netdb.h.html#DESCRIPTION/NI_NOFQDN
+class      required
+since      2001
+says       NI_NOFQDN, NI_NUMERICHOST, NI_NAMEREQD, NI_NUMERICSERV,
+           NI_NUMERICSCOPE and NI_DGRAM are defined and no two have a bit in
+           common.
+test       t/002-ni-flags.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netdb.h.003
+anchor     basedefs/netdb.h.html#DESCRIPTION/EAI_AGAIN
+anchor     functions/getaddrinfo.html#RETURN VALUE
+class      required
+since      2001
+says       EAI_AGAIN, EAI_BADFLAGS, EAI_FAIL, EAI_FAMILY, EAI_MEMORY, EAI_NONAME,
+           EAI_SERVICE, EAI_SOCKTYPE, EAI_SYSTEM and EAI_OVERFLOW are defined
+           with values usable in #if preprocessing directives, none is 0, and no
+           two have the same value.
+note       Zero is what getaddrinfo() and getnameinfo() return on success, so no
+           error value is 0. That the values differ is inferred from their having
+           to be told apart by gai_strerror() (Q-169); it is not stated.
+test       t/003-eai-codes.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netdb.h.004
+anchor     basedefs/netdb.h.html#DESCRIPTION/IPPORT_RESERVED
+class      required
+since      2001
+says       IPPORT_RESERVED is defined with an integer value in the range of port
+           numbers, 0 to 65535.
+note       The page says the value is the highest reserved port number but does
+           not say which ports are reserved, so only the range is checked
+           (Q-167).
+test       t/004-ipport-reserved.c
+nomutant   compile-time check; needs the Tier 0 header mutants

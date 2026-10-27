@@ -1,0 +1,86 @@
+# XBD <stdio.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.stdio.h.001
+anchor     basedefs/stdio.h.html#DESCRIPTION/BUFSIZ
+class      required
+since      1988
+says       BUFSIZ, L_tmpnam, FILENAME_MAX, FOPEN_MAX, TMP_MAX, _IOFBF, _IOLBF,
+           _IONBF, SEEK_CUR, SEEK_END, SEEK_SET and EOF are integer constant
+           expressions, and BUFSIZ is positive.
+test       t/001-integer-constants.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdio.h.002
+anchor     basedefs/stdio.h.html#DESCRIPTION/_IOFBF
+class      required
+since      1988
+says       _IOFBF, _IOLBF and _IONBF are different from one another, and so are
+           SEEK_CUR, SEEK_END and SEEK_SET.
+test       t/002-distinct-modes.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdio.h.003
+anchor     basedefs/stdio.h.html#DESCRIPTION/EOF
+class      required
+since      1988
+says       EOF is an integer constant expression of type int with a negative
+           value.
+test       t/003-eof.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdio.h.004
+anchor     basedefs/stdio.h.html#DESCRIPTION/FOPEN_MAX
+class      required
+since      1988
+says       FOPEN_MAX is at least 8 and TMP_MAX is at least 25.
+test       t/004-fopen-tmp-max.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdio.h.005
+anchor     basedefs/stdio.h.html#DESCRIPTION/TMP_MAX
+class      conditional
+when       XSI
+since      2001
+says       On an XSI system TMP_MAX is at least 10000.
+test       t/005-tmp-max-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdio.h.006
+anchor     basedefs/stdio.h.html#DESCRIPTION/stderr
+class      required
+since      1988
+says       stdin, stdout and stderr are expressions of type pointer to FILE, and
+           are different streams.
+test       t/006-standard-streams.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdio.h.007
+anchor     basedefs/stdio.h.html#DESCRIPTION/fpos_t
+class      required
+since      1988
+says       fpos_t is a complete object type that is not an array: an object of
+           the type has a size, and can be assigned to another.
+test       t/007-fpos-type.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdio.h.008
+anchor     basedefs/stdio.h.html#DESCRIPTION/L_tmpnam
+class      required
+since      1988
+says       tmpnam() stores its name in an array of L_tmpnam characters: the
+           string (with its terminating null) fits in L_tmpnam bytes.
+test       t/008-tmpnam-size.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdio.h.009
+anchor     basedefs/stdio.h.html#DESCRIPTION/L_ctermid
+class      required
+since      2001
+says       ctermid() stores its result in an array of L_ctermid characters: the
+           string (with its terminating null) fits in L_ctermid bytes.
+test       t/009-ctermid-size.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

@@ -1,0 +1,45 @@
+# XBD <errno.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.errno.h.001
+anchor     basedefs/errno.h.html#DESCRIPTION/errno
+class      required
+since      2001
+says       Every error number <errno.h> lists is defined as a positive integer
+           constant expression of type int that can be used in #if.
+test       t/001-e-constants.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.errno.h.002
+anchor     basedefs/errno.h.html#DESCRIPTION/errno
+class      required
+since      2001
+says       The error numbers <errno.h> lists are pairwise different, except that
+           EAGAIN and EWOULDBLOCK may be equal and ENOTSUP and EOPNOTSUPP may be
+           equal.
+note       Equal or different is accepted for the two permitted pairs.
+test       t/002-e-distinct.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.errno.h.003
+anchor     basedefs/errno.h.html#DESCRIPTION/errno
+class      required
+since      1988
+says       errno expands to a modifiable lvalue of type int: it can be assigned,
+           changed in place and have its address taken.
+test       t/003-errno-lvalue.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.errno.h.004
+anchor     basedefs/errno.h.html#DESCRIPTION/errno
+class      required
+since      2001
+says       errno has thread local storage duration: a value stored by one thread
+           is not seen by another thread, and the other thread storing its own
+           value does not change it.
+note       The value errno has when a thread starts is not required here.
+test       t/004-errno-thread-local.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

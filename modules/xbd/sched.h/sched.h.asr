@@ -1,0 +1,27 @@
+# XBD <sched.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.sched.h.001
+anchor     basedefs/sched.h.html#DESCRIPTION/SCHED_FIFO
+class      conditional
+when       PS|TPS
+since      2001
+says       SCHED_FIFO, SCHED_RR and SCHED_OTHER have three different
+           values.
+test       t/001-policies.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sched.h.002
+anchor     basedefs/sched.h.html#DESCRIPTION/SCHED_SPORADIC
+class      conditional
+when       SS|TSP
+since      2001
+says       SCHED_SPORADIC differs from SCHED_FIFO, SCHED_RR and
+           SCHED_OTHER (as far as they are defined).
+test       t/002-policy-sporadic.c
+nomutant   header content check; needs the Tier 0 header mutants

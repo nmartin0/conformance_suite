@@ -1,0 +1,15 @@
+# XBD <setjmp.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The array types of <setjmp.h>. Each says why it has no mutant yet.
+
+assertion  XBD.setjmp.h.001
+anchor     basedefs/setjmp.h.html#DESCRIPTION
+class      required
+since      1988
+says       jmp_buf and sigjmp_buf are array types: an object of either type
+           designates the same address as the address of its first element, and
+           one can be passed as a function parameter (where it becomes a
+           pointer).
+test       t/001-array-types.c
+nomutant   compile-time check; needs the Tier 0 header mutants

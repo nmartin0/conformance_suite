@@ -1,0 +1,56 @@
+# XBD <langinfo.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Type and distinctness of the nl_item constants of <langinfo.h>. The page
+# lists them as items to be told apart without saying their values differ,
+# so the distinctness assertions are disputed (Q-169). Each says why it has
+# no mutant yet.
+
+assertion  XBD.langinfo.h.001
+anchor     basedefs/langinfo.h.html#DESCRIPTION/CODESET
+class      required
+since      1988
+says       Each of CODESET, D_T_FMT, D_FMT, T_FMT, T_FMT_AMPM, AM_STR, PM_STR,
+           DAY_1 to DAY_7, ABDAY_1 to ABDAY_7, MON_1 to MON_12, ABMON_1 to
+           ABMON_12, ERA, ERA_D_FMT, ERA_D_T_FMT, ERA_T_FMT, ALT_DIGITS,
+           RADIXCHAR, THOUSEP, YESEXPR, NOEXPR and CRNCYSTR has type nl_item.
+test       t/001-item-types.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.langinfo.h.002
+anchor     basedefs/langinfo.h.html#DESCRIPTION/CODESET
+class      disputed
+since      1988
+says       No two of CODESET, D_T_FMT, D_FMT, T_FMT, T_FMT_AMPM, AM_STR, PM_STR,
+           DAY_1 to DAY_7, ABDAY_1 to ABDAY_7, MON_1 to MON_12, ABMON_1 to
+           ABMON_12, ERA, ERA_D_FMT, ERA_D_T_FMT, ERA_T_FMT, ALT_DIGITS,
+           RADIXCHAR, THOUSEP, YESEXPR, NOEXPR and CRNCYSTR have the same value.
+note       disputed (Q-169): the page says each constant identifies an item of
+           langinfo data, and nl_langinfo() has to tell them apart, but it
+           nowhere says the values differ; a FAIL is logged as INSPECT.
+test       t/002-items-distinct.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.langinfo.h.003
+anchor     basedefs/langinfo.h.html#DESCRIPTION/ALTMON_1
+class      required
+since      2024
+says       Each of ALTMON_1 to ALTMON_12 and ABALTMON_1 to ABALTMON_12 has type
+           nl_item.
+note       Kept apart from XBD.langinfo.h.001 because the constants were added in
+           Issue 8 and a system without them should fail here alone.
+test       t/003-altmon-types.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.langinfo.h.004
+anchor     basedefs/langinfo.h.html#DESCRIPTION/ALTMON_1
+class      disputed
+since      2024
+says       ALTMON_1 to ALTMON_12 and ABALTMON_1 to ABALTMON_12 differ from each
+           other and from every constant listed in XBD.langinfo.h.002.
+uses       XBD.langinfo.h.002
+note       disputed (Q-169): as for the other items, the page does not say the
+           values differ; a FAIL is logged as INSPECT. Kept apart because the
+           constants were added in Issue 8.
+test       t/004-altmon-distinct.c
+nomutant   compile-time check; needs the Tier 0 header mutants

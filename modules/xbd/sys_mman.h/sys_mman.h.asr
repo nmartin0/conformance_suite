@@ -1,0 +1,99 @@
+# XBD <sys/mman.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.sys_mman.h.001
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/PROT_EXEC
+class      required
+since      1988
+says       PROT_READ, PROT_WRITE and PROT_EXEC are nonzero, PROT_WRITE
+           shares no bits with the other two, and PROT_NONE differs from
+           every OR of them.
+note       From prot being PROT_NONE or the bitwise-inclusive OR of one
+           or more of the others (mmap page); the header page does not
+           say it (Q-165). PROT_READ and PROT_EXEC may share bits: the
+           page lets a mapping allow more access than prot names, but
+           never a write without PROT_WRITE.
+test       t/001-prot.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.002
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/MAP_SHARED
+class      required
+since      1988
+says       MAP_SHARED, MAP_PRIVATE, MAP_FIXED and MAP_ANONYMOUS are
+           nonzero and share no bits.
+note       From flags being the bitwise-inclusive OR of these options
+           (mmap page) (Q-165).
+test       t/002-map-flags.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.003
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/MAP_ANON
+class      required
+since      2024
+says       MAP_ANON has the same value as MAP_ANONYMOUS.
+test       t/003-map-anon.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.004
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/MS_ASYNC
+class      conditional
+when       XSI|SIO
+since      1988
+says       MS_ASYNC, MS_INVALIDATE and MS_SYNC are nonzero and share no
+           bits.
+note       From flags being the bitwise-inclusive OR of these flags
+           (msync page) (Q-165).
+test       t/004-ms-flags.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.005
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/MCL_CURRENT
+class      conditional
+when       ML
+since      1988
+says       MCL_CURRENT and MCL_FUTURE are nonzero and share no bits.
+note       From flags being the bitwise-inclusive OR of these flags
+           (mlockall page) (Q-165).
+test       t/005-mcl-flags.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.006
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/MAP_FAILED
+class      required
+since      1988
+says       MAP_FAILED has type void *.
+test       t/006-map-failed.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.007
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/POSIX_MADV_DONTNEED
+class      conditional
+when       ADV
+since      2001
+says       POSIX_MADV_NORMAL, POSIX_MADV_RANDOM, POSIX_MADV_SEQUENTIAL,
+           POSIX_MADV_WILLNEED and POSIX_MADV_DONTNEED have five
+           different values.
+note       Five pieces of advice that posix_madvise() must tell apart
+           (Q-165).
+test       t/007-madv-distinct.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.008
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/POSIX_TYPED_MEM_ALLOCATE
+class      conditional
+when       TYM
+since      2001
+says       POSIX_TYPED_MEM_ALLOCATE, POSIX_TYPED_MEM_ALLOCATE_CONTIG and
+           POSIX_TYPED_MEM_MAP_ALLOCATABLE are nonzero and have three
+           different values.
+note       posix_typed_mem_open() takes at most one of the three in
+           tflag and zero for none, so each is nonzero and they differ
+           (Q-165).
+test       t/008-typed-mem-flags.c
+nomutant   header content check; needs the Tier 0 header mutants

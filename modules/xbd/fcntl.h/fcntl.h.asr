@@ -78,3 +78,99 @@ note       A symbolic constant is a macro (XBD 3.363); an enumeration
            test UNINITIATED. A system with F_OWNER_* only as enumeration constants, or with them and the struct only under an extension feature macro, FAILs or is UNINITIATED (deviation O.2).
 test       t/008-owner-ex.c
 nomutant   compile-time presence check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.009
+anchor     basedefs/fcntl.h.html#DESCRIPTION/F_DUPFD
+class      required
+since      1988
+says       The fcntl() command constants are usable in #if and have
+           different values (F_DUPFD, F_DUPFD_CLOEXEC, F_DUPFD_CLOFORK,
+           F_GETFD, F_SETFD, F_GETFL, F_SETFL, F_GETLK, F_SETLK,
+           F_SETLKW, the F_OFD_* three, F_GETOWN, F_SETOWN, F_GETOWN_EX,
+           F_SETOWN_EX).
+test       t/009-cmd-unique.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.010
+anchor     basedefs/fcntl.h.html#DESCRIPTION/F_RDLCK
+class      required
+since      1988
+says       F_RDLCK, F_UNLCK and F_WRLCK are usable in #if, have
+           different values and fit in l_type (a short).
+note       That they fit a short follows from l_type being a short that
+           holds them (struct flock).
+test       t/010-lock-types.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.011
+anchor     basedefs/fcntl.h.html#DESCRIPTION/O_CLOEXEC
+class      required
+since      2008
+says       O_CLOEXEC, O_CLOFORK, O_CREAT, O_DIRECTORY, O_EXCL, O_NOCTTY,
+           O_NOFOLLOW, O_TRUNC and O_TTY_INIT are usable in #if and
+           share no bits; each is nonzero except that O_TTY_INIT may be
+           zero.
+note       Zero is allowed for O_TTY_INIT only, as the page says; a zero
+           value is bit-disjoint from all.
+test       t/011-creation-flags.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.012
+anchor     basedefs/fcntl.h.html#DESCRIPTION/O_RDONLY
+class      required
+since      1988
+says       O_RDONLY, O_WRONLY and O_RDWR (and O_EXEC and O_SEARCH when
+           defined) are usable in #if and have different values, except
+           that O_EXEC and O_SEARCH may be equal.
+note       O_RDONLY is commonly zero, so zero is not rejected.
+test       t/012-access-modes.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.013
+anchor     basedefs/fcntl.h.html#DESCRIPTION/O_ACCMODE
+class      required
+since      1988
+says       O_ACCMODE is usable in #if and every access mode constant
+           lies wholly inside it.
+note       The page and fcntl() say the access mode is extracted from
+           the F_GETFL value with this mask, which presupposes that each
+           mode survives the mask (Q-165).
+test       t/013-accmode-mask.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.014
+anchor     basedefs/fcntl.h.html#DESCRIPTION/O_ACCMODE
+class      required
+since      1988
+says       For a file opened with each access mode, with and without
+           O_APPEND and O_NONBLOCK, the F_GETFL result masked with
+           O_ACCMODE equals the access mode.
+test       t/014-getfl-accmode.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.015
+anchor     basedefs/fcntl.h.html#DESCRIPTION/AT_FDCWD
+class      required
+since      2008
+says       AT_FDCWD is not the number of any descriptor (it differs from
+           the descriptors in use and is negative or beyond OPEN_MAX),
+           and AT_EACCESS, AT_SYMLINK_NOFOLLOW, AT_SYMLINK_FOLLOW and
+           AT_REMOVEDIR are nonzero.
+note       Nonzero follows from a flag argument of zero meaning no flag;
+           whether the flags are distinct from each other is not needed,
+           as no function takes two of them (Q-165).
+test       t/015-at-constants.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.016
+anchor     basedefs/fcntl.h.html#DESCRIPTION/POSIX_FADV_DONTNEED
+class      conditional
+when       ADV
+since      2001
+says       The POSIX_FADV_* advice constants (NORMAL, SEQUENTIAL,
+           RANDOM, WILLNEED, DONTNEED, NOREUSE) have six different
+           values.
+note       Not said in words; six advice values that posix_fadvise()
+           must tell apart (Q-165).
+test       t/016-fadv-distinct.c
+nomutant   header content check; needs the Tier 0 header mutants

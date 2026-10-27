@@ -1,0 +1,200 @@
+# XBD <sys/socket.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantics of <sys/socket.h> that the generated header check cannot
+# express: the types, the layout and alignment of sockaddr_storage, the
+# families of constants that must differ, and the CMSG macros evaluated on
+# a crafted message header. Each says why it has no mutant yet.
+
+assertion  XBD.sys_socket.h.001
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/socklen_t
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/sa_family_t
+class      required
+since      2001
+says       <sys/socket.h> defines socklen_t as an integer type at least 32 bits
+           wide and sa_family_t as an unsigned integer type.
+test       t/001-socklen-family.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.002
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/sockaddr_storage
+class      required
+since      2001
+says       struct sockaddr_storage is at least as large as struct sockaddr_in and
+           struct sockaddr_un, is aligned at least as strictly as struct
+           sockaddr, sockaddr_in and sockaddr_un, and has ss_family, of type
+           sa_family_t, at the same offset as sa_family, sin_family and
+           sun_family.
+note       Aligned at least as strictly is taken as: the alignment of
+           sockaddr_storage is a multiple of the other alignment. The IPv6
+           structure is XBD.sys_socket.h.003.
+test       t/002-sockaddr-storage.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.003
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/sockaddr_storage
+class      conditional
+when       IP6
+since      2001
+says       With IPv6, struct sockaddr_storage is at least as large as struct
+           sockaddr_in6, aligned at least as strictly as it and as struct
+           sockaddr, and has ss_family at the same offset as sin6_family and
+           sa_family.
+uses       XBD.sys_socket.h.002
+test       t/003-sockaddr-storage-in6.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.004
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/SOCK_DGRAM
+class      required
+since      2001
+says       SOCK_DGRAM, SOCK_SEQPACKET and SOCK_STREAM are defined with three
+           different values.
+test       t/004-sock-types.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.005
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/SOCK_RAW
+class      conditional
+when       RS
+since      2001
+says       With raw sockets, SOCK_RAW is defined and differs from SOCK_DGRAM,
+           SOCK_SEQPACKET and SOCK_STREAM.
+uses       XBD.sys_socket.h.004
+test       t/005-sock-raw.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.006
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/SOCK_NONBLOCK
+class      required
+since      2024
+says       SOCK_NONBLOCK, SOCK_CLOEXEC and SOCK_CLOFORK are defined, share no bit
+           with each other, and share no bit with SOCK_DGRAM, SOCK_SEQPACKET,
+           SOCK_STREAM or (where defined) SOCK_RAW.
+uses       XBD.sys_socket.h.004
+test       t/006-sock-flags.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.007
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/SO_ACCEPTCONN
+class      required
+since      2024
+says       SO_ACCEPTCONN, SO_BROADCAST, SO_DEBUG, SO_DOMAIN, SO_DONTROUTE,
+           SO_ERROR, SO_KEEPALIVE, SO_LINGER, SO_OOBINLINE, SO_PROTOCOL,
+           SO_RCVBUF, SO_RCVLOWAT, SO_RCVTIMEO, SO_REUSEADDR, SO_SNDBUF,
+           SO_SNDLOWAT, SO_SNDTIMEO and SO_TYPE are defined with eighteen
+           different values.
+note       SO_DOMAIN and SO_PROTOCOL were added in Issue 8.
+test       t/007-so-options.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.008
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/MSG_CTRUNC
+class      required
+since      2024
+says       MSG_CMSG_CLOEXEC, MSG_CMSG_CLOFORK, MSG_CTRUNC, MSG_DONTROUTE,
+           MSG_EOR, MSG_OOB, MSG_NOSIGNAL, MSG_PEEK, MSG_TRUNC and MSG_WAITALL
+           are defined with ten different values.
+note       MSG_CMSG_CLOEXEC and MSG_CMSG_CLOFORK were added in Issue 8.
+test       t/008-msg-flags.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.009
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/AF_INET
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/AF_UNSPEC
+class      required
+since      2001
+says       AF_INET, AF_UNIX and AF_UNSPEC are defined with three different
+           values, and AF_UNSPEC is 0.
+test       t/009-af-values.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.010
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/AF_INET6
+class      conditional
+when       IP6
+since      2001
+says       With IPv6, AF_INET6 is defined and differs from AF_INET, AF_UNIX and
+           AF_UNSPEC.
+uses       XBD.sys_socket.h.009
+test       t/010-af-inet6.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.011
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/SHUT_RD
+class      required
+since      2001
+says       SHUT_RD, SHUT_RDWR and SHUT_WR are defined with three different
+           values.
+test       t/011-shut-values.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.012
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/CMSG_FIRSTHDR
+class      required
+since      2001
+says       CMSG_FIRSTHDR(mhdr) returns a null pointer if msg_controllen is zero
+           or less than sizeof(struct cmsghdr), and otherwise a pointer of type
+           struct cmsghdr * to the start of the control data (msg_control).
+test       t/012-cmsg-firsthdr.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.013
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/CMSG_NXTHDR
+class      required
+since      2001
+says       For control data holding two objects laid out CMSG_SPACE apart,
+           CMSG_NXTHDR(mhdr, first) returns the second header and
+           CMSG_NXTHDR(mhdr, second) a null pointer; CMSG_NXTHDR(mhdr, first) is
+           a null pointer when the first object is the only one.
+uses       XBD.sys_socket.h.012
+note       The second header is placed CMSG_SPACE(sizeof(int)) after the first,
+           the space an object of that data length takes, and both headers are
+           filled in before CMSG_NXTHDR is called, so the unspecified case of an
+           incomplete next header does not arise.
+test       t/013-cmsg-nxthdr.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.016
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/CMSG_NXTHDR
+class      required
+since      2024
+says       CMSG_NXTHDR(mhdr, cmsg) with a null pointer of type struct cmsghdr *
+           for cmsg is equivalent to CMSG_FIRSTHDR(mhdr), for control data of
+           room for a header and for none.
+uses       XBD.sys_socket.h.012
+note       Kept apart from XBD.sys_socket.h.013: an implementation that follows
+           the null pointer would crash this test alone.
+test       t/016-cmsg-nxthdr-null.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.014
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/CMSG_LEN
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/CMSG_SPACE
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/CMSG_DATA
+class      required
+since      2024
+says       For a constant length CMSG_LEN and CMSG_SPACE are integer constant
+           expressions; for each length n, CMSG_LEN(n) is at least sizeof(struct
+           cmsghdr) + n, CMSG_SPACE(n) is at least CMSG_LEN(n) and a multiple of
+           the alignment of struct cmsghdr; CMSG_DATA(cmsg) has type unsigned
+           char * and points after the header at an offset where n data bytes fit
+           within CMSG_LEN(n).
+uses       XBD.sys_socket.h.012
+note       CMSG_SPACE keeps the next header aligned, which is what padding to
+           satisfy alignment requirements is for. The data offset is not fixed by
+           the page, so only that the data array lies after the header and inside
+           cmsg_len is checked.
+test       t/014-cmsg-len-space.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.015
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/SCM_RIGHTS
+class      required
+since      2001
+says       SCM_RIGHTS can be stored in the int cmsg_type member and SOL_SOCKET in
+           the int cmsg_level member of a struct cmsghdr and read back unchanged.
+note       That the pair means that the data holds file descriptors is tested on
+           sendmsg() and recvmsg().
+test       t/015-scm-rights.c
+nomutant   compile-time check; needs the Tier 0 header mutants

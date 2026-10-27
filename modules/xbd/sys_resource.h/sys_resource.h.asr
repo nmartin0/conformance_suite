@@ -1,0 +1,55 @@
+# XBD <sys/resource.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.sys_resource.h.001
+anchor     basedefs/sys_resource.h.html#DESCRIPTION/PRIO_PROCESS
+class      conditional
+when       XSI
+since      1988
+says       On XSI systems PRIO_PROCESS, PRIO_PGRP and PRIO_USER have
+           three different values.
+note       Different values follow from the three selecting different
+           kinds of who (Q-165).
+test       t/001-prio-which.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_resource.h.002
+anchor     basedefs/sys_resource.h.html#DESCRIPTION/RUSAGE_SELF
+class      conditional
+when       XSI
+since      1988
+says       On XSI systems RUSAGE_SELF and RUSAGE_CHILDREN have different
+           values.
+note       As XBD.sys_resource.h.001 (Q-165).
+test       t/002-rusage-who.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_resource.h.003
+anchor     basedefs/sys_resource.h.html#DESCRIPTION/RLIMIT_CORE
+class      required
+since      1988
+says       RLIMIT_CORE, RLIMIT_DATA, RLIMIT_FSIZE, RLIMIT_NOFILE,
+           RLIMIT_STACK and RLIMIT_AS (and RLIMIT_CPU on XSI systems)
+           have different values.
+note       As XBD.sys_resource.h.001 (Q-165): resources named by one
+           argument must differ.
+test       t/003-rlimit-resources.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_resource.h.004
+anchor     basedefs/sys_resource.h.html#DESCRIPTION/RLIM_INFINITY
+class      required
+since      2001
+says       rlim_t is an unsigned integer type, and RLIM_INFINITY,
+           RLIM_SAVED_MAX and RLIM_SAVED_CUR are usable in #if and are
+           values of rlim_t.
+note       No relation between the three is tested: on a system where
+           every limit is representable they need not differ from each
+           other.
+test       t/004-rlim-values.c
+nomutant   header content check; needs the Tier 0 header mutants

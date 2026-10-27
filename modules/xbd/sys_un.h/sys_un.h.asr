@@ -1,0 +1,18 @@
+# XBD <sys/un.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The size and position of sun_path in <sys/un.h>. Each says why it has no
+# mutant yet.
+
+assertion  XBD.sys_un.h.001
+anchor     basedefs/sys_un.h.html#DESCRIPTION/sun_path
+class      required
+since      2001
+says       <sys/un.h> alone defines sa_family_t as an unsigned integer type and
+           struct sockaddr_un with sun_family of type sa_family_t and, after it,
+           a char array sun_path of at least 92 bytes; nothing but alignment
+           padding follows sun_path.
+note       Only the necessary condition for sun_path being last is checked: the
+           structure does not extend past it by as much as its alignment.
+test       t/001-sun-path.c
+nomutant   compile-time check; needs the Tier 0 header mutants

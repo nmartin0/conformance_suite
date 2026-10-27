@@ -1,0 +1,14 @@
+# XBD <stdnoreturn.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.stdnoreturn.h.001
+anchor     basedefs/stdnoreturn.h.html#DESCRIPTION/noreturn
+class      required
+since      2024
+says       noreturn expands to _Noreturn and can be used to declare a function
+           that does not return.
+test       t/001-noreturn-macro.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

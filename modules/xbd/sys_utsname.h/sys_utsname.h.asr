@@ -1,0 +1,15 @@
+# XBD <sys/utsname.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.sys_utsname.h.001
+anchor     basedefs/sys_utsname.h.html#DESCRIPTION/utsname
+class      required
+since      1988
+says       After uname() succeeds, each of the members sysname, nodename,
+           release, version and machine of the structure holds a string ended by
+           a null byte inside the array.
+test       t/001-uname-strings.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

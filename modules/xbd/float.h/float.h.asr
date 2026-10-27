@@ -1,0 +1,60 @@
+# XBD <float.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.float.h.001
+anchor     basedefs/float.h.html#DESCRIPTION/FLT_RADIX
+class      required
+says       The integer values of <float.h> (all but FLT_ROUNDS) are usable in
+           #if; FLT_RADIX is at least 2; the DIG and DECIMAL_DIG values are at
+           least 6 (float) and 10 (double, long double, DECIMAL_DIG); the
+           MIN_10_EXP values are at most -37 and the MAX_10_EXP values at least
+           37; the MIN_EXP values are negative and the MAX_EXP values positive.
+test       t/001-integer-values.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.float.h.002
+anchor     basedefs/float.h.html#DESCRIPTION/FLT_MAX
+class      required
+says       FLT_MAX, DBL_MAX and LDBL_MAX are constant expressions of at least
+           1E+37; FLT_EPSILON (at most 1E-5), DBL_EPSILON and LDBL_EPSILON (at
+           most 1E-9), the MIN values and the TRUE_MIN values (each at most
+           1E-37) are positive constant expressions.
+test       t/002-floating-values.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.float.h.003
+anchor     basedefs/float.h.html#DESCRIPTION/FLT_MANT_DIG
+class      required
+says       The values follow the model the page defines: MAX_EXP is at least
+           MANT_DIG; EPSILON is radix^(1-p); MIN is radix^(min_exp-1); MAX is (1
+           - radix^-p) times radix^max_exp, for float, double and long double.
+note       The exact comparison is made when the radix is a power of two (2, 4, 8
+           or 16); the MAX_EXP check always.
+test       t/003-model-relations.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.float.h.004
+anchor     basedefs/float.h.html#DESCRIPTION/FLT_DIG
+class      required
+says       For each floating type, DIG, DECIMAL_DIG, MIN_10_EXP and MAX_10_EXP
+           equal the values the page's formulas give from MANT_DIG, MIN_EXP,
+           MAX_EXP and the radix, and DECIMAL_DIG is at least the long double
+           value.
+note       Checked when the radix is a power of two. The formulas are evaluated
+           with the radix's decimal logarithm built from log10(2), and are not
+           near an integer boundary for any real format.
+test       t/004-digit-counts.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.float.h.005
+anchor     basedefs/float.h.html#DESCRIPTION/FLT_HAS_SUBNORM
+class      required
+since      2024
+says       FLT_HAS_SUBNORM, DBL_HAS_SUBNORM and LDBL_HAS_SUBNORM are -1, 0 or 1;
+           TRUE_MIN is never above MIN, and is below it for a type that has
+           subnormal numbers.
+test       t/005-subnormal-values.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

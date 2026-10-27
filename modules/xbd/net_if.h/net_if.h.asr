@@ -1,0 +1,15 @@
+# XBD <net/if.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# IF_NAMESIZE of <net/if.h> as a buffer size. Each says why it has no
+# mutant yet.
+
+assertion  XBD.net_if.h.001
+anchor     basedefs/net_if.h.html#DESCRIPTION/IF_NAMESIZE
+class      required
+since      2001
+says       IF_NAMESIZE is an integer constant expression with a positive value,
+           so that char buf[IF_NAMESIZE] is a buffer for an interface name and
+           its terminating null character.
+test       t/001-if-namesize.c
+nomutant   compile-time check; needs the Tier 0 header mutants

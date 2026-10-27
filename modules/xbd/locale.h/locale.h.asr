@@ -1,0 +1,45 @@
+# XBD <locale.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Value relations of <locale.h>: the category macros are distinct, the
+# mask macros are disjoint bit sets covered by LC_ALL_MASK, and
+# LC_GLOBAL_LOCALE is a real descriptor. Each says why it has no mutant
+# yet.
+
+assertion  XBD.locale.h.001
+anchor     basedefs/locale.h.html#DESCRIPTION/LC_ALL
+class      required
+since      1988
+says       <locale.h> defines LC_ALL, LC_COLLATE, LC_CTYPE, LC_MESSAGES,
+           LC_MONETARY, LC_NUMERIC and LC_TIME as integer constant expressions
+           (usable in #if) with seven different values.
+test       t/001-lc-categories.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.locale.h.002
+anchor     basedefs/locale.h.html#DESCRIPTION/LC_COLLATE_MASK
+anchor     functions/newlocale.html#DESCRIPTION
+class      required
+since      2008
+says       <locale.h> defines LC_COLLATE_MASK, LC_CTYPE_MASK, LC_MESSAGES_MASK,
+           LC_MONETARY_MASK, LC_NUMERIC_MASK and LC_TIME_MASK as non-zero values
+           with no bit in common, and LC_ALL_MASK, which has every one of their
+           bits set.
+note       The page calls them bitmasks, and newlocale() builds its category
+           argument by OR-ing them, which needs each to be non-zero with bits of
+           its own; neither is spelled out for the header (Q-169).
+test       t/002-lc-masks.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.locale.h.003
+anchor     basedefs/locale.h.html#DESCRIPTION/LC_GLOBAL_LOCALE
+anchor     functions/uselocale.html#RETURN VALUE
+class      required
+since      2008
+says       LC_GLOBAL_LOCALE is an expression of type locale_t and is not
+           (locale_t)0.
+note       Not stated for the header: uselocale() returns LC_GLOBAL_LOCALE when
+           no thread-local locale is in use and (locale_t)0 for an error, so the
+           two have to differ.
+test       t/003-lc-global-locale.c
+nomutant   compile-time check; needs the Tier 0 header mutants

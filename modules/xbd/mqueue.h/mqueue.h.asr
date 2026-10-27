@@ -1,0 +1,16 @@
+# XBD <mqueue.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.mqueue.h.001
+anchor     basedefs/mqueue.h.html#DESCRIPTION/mqd_t
+class      required
+since      2001
+says       mqd_t is not an array type: a function can return one, take
+           one by value, and objects of the type can be assigned.
+test       t/001-mqd-not-array.c
+nomutant   header content check; needs the Tier 0 header mutants

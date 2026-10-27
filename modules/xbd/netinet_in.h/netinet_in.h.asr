@@ -1,0 +1,132 @@
+# XBD <netinet/in.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Value relations of <netinet/in.h>: the integer types, the protocol level
+# numbers, the address string lengths, the IPv6 options and wildcard and
+# loopback addresses, and the two IPv4 addresses. Each says why it has no
+# mutant yet.
+
+assertion  XBD.netinet_in.h.001
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/in_port_t
+class      required
+since      2001
+says       <netinet/in.h> alone defines in_port_t as the type uint16_t, in_addr_t
+           as the type uint32_t, sa_family_t as an unsigned integer type, and
+           uint8_t and uint32_t; s_addr of struct in_addr has type in_addr_t.
+note       The type of in_port_t is compared with uint16_t after <inttypes.h> is
+           included, which gives the same type name to both.
+test       t/001-types.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.002
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/IPPROTO_IP
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/SOL_SOCKET
+class      required
+since      2001
+says       IPPROTO_IP, IPPROTO_ICMP, IPPROTO_TCP and IPPROTO_UDP are defined and,
+           with SOL_SOCKET, are five different values, since all serve as the
+           level argument of getsockopt() and setsockopt().
+note       That the levels differ is inferred from their having to be told apart
+           in one argument (Q-169); it is not stated.
+test       t/002-ipproto-distinct.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.003
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/IPPROTO_IPV6
+class      conditional
+when       IP6
+since      2001
+says       With IPv6, IPPROTO_IPV6 is defined and differs from IPPROTO_IP,
+           IPPROTO_ICMP, IPPROTO_TCP, IPPROTO_UDP and SOL_SOCKET.
+uses       XBD.netinet_in.h.002
+note       Inferred as in XBD.netinet_in.h.002 (Q-169).
+test       t/003-ipproto-ipv6.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.004
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/IPPROTO_RAW
+class      conditional
+when       RS
+since      2001
+says       With raw sockets, IPPROTO_RAW is defined and differs from IPPROTO_IP,
+           IPPROTO_ICMP, IPPROTO_TCP, IPPROTO_UDP and SOL_SOCKET.
+uses       XBD.netinet_in.h.002
+note       Inferred as in XBD.netinet_in.h.002 (Q-169).
+test       t/004-ipproto-raw.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.005
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/INET_ADDRSTRLEN
+class      required
+since      2001
+says       INET_ADDRSTRLEN is an integer constant expression with the value 16,
+           usable as the size of an array.
+test       t/005-inet-addrstrlen.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.006
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/INET6_ADDRSTRLEN
+class      conditional
+when       IP6
+since      2001
+says       With IPv6, INET6_ADDRSTRLEN is an integer constant expression with the
+           value 46, usable as the size of an array.
+test       t/006-inet6-addrstrlen.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.007
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/IPV6_JOIN_GROUP
+class      conditional
+when       IP6
+since      2001
+says       With IPv6, IPV6_JOIN_GROUP, IPV6_LEAVE_GROUP, IPV6_MULTICAST_HOPS,
+           IPV6_MULTICAST_IF, IPV6_MULTICAST_LOOP, IPV6_UNICAST_HOPS and
+           IPV6_V6ONLY are defined with seven different integer values.
+test       t/007-ipv6-options.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.008
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/in6addr_any
+anchor     functions/in6addr_any.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       With IPv6, in6addr_any holds the wildcard address :: (sixteen zero
+           bytes) and in6addr_loopback the loopback address ::1; both have type
+           const struct in6_addr; IN6ADDR_ANY_INIT and IN6ADDR_LOOPBACK_INIT
+           initialise a static struct in6_addr to the same two addresses; and
+           IN6_IS_ADDR_UNSPECIFIED and IN6_IS_ADDR_LOOPBACK accept exactly the
+           matching one of the two.
+note       The two addresses are named in the page for the in6addr_any variables.
+test       t/008-in6addr.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.009
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/IN6_IS_ADDR_UNSPECIFIED
+class      conditional
+when       IP6
+since      2001
+says       With IPv6, each of the twelve IN6_IS_ADDR_ macros (UNSPECIFIED,
+           LOOPBACK, MULTICAST, LINKLOCAL, SITELOCAL, V4MAPPED, V4COMPAT and the
+           five MC_ scope forms) accepts a const struct in6_addr * and has type
+           int.
+note       What addresses each macro accepts rests on the IPv6 address
+           architecture, which the page does not reproduce; only the unspecified
+           and loopback addresses, named elsewhere, are checked as values
+           (XBD.netinet_in.h.008).
+test       t/009-in6-is-addr.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.010
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/INADDR_ANY
+class      disputed
+since      2001
+says       INADDR_ANY is the value 0 and INADDR_BROADCAST the value with all 32
+           bits set (0xffffffff), both usable as in_addr_t; being unchanged by
+           byte swapping, they are the same in host and network byte order.
+note       disputed (Q-166): the page names INADDR_ANY the IPv4 wildcard address
+           and INADDR_BROADCAST the IPv4 broadcast address without giving a
+           value; 0.0.0.0 and 255.255.255.255 come from the IPv4 specifications,
+           outside this standard. A FAIL is logged as INSPECT.
+test       t/010-inaddr-values.c
+nomutant   compile-time check; needs the Tier 0 header mutants

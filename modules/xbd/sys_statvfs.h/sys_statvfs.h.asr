@@ -1,0 +1,16 @@
+# XBD <sys/statvfs.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.sys_statvfs.h.001
+anchor     basedefs/sys_statvfs.h.html#DESCRIPTION/ST_RDONLY
+class      required
+since      2001
+says       ST_RDONLY and ST_NOSUID are nonzero and share no bits.
+note       f_flag is a bit mask of these values (Q-165).
+test       t/001-f-flag.c
+nomutant   header content check; needs the Tier 0 header mutants

@@ -1,0 +1,181 @@
+# XBD <math.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Value relations and macro semantics of <math.h> that the generated
+# header check cannot express: the classification constants, the error-
+# handling macros, the infinity and NaN macros, float_t and double_t, the
+# ilogb constants and the M_ constants. Where the page ties a requirement
+# to IEC 60559 floating point the test is NOTINUSE unless the compiler
+# defines __STDC_IEC_559__ (or __STDC_IEC_60559_BFP__). Each says why it
+# has no mutant yet.
+
+assertion  XBD.math.h.001
+anchor     basedefs/math.h.html#DESCRIPTION/FP_INFINITE
+class      required
+since      2001
+says       <math.h> defines FP_INFINITE, FP_NAN, FP_NORMAL, FP_SUBNORMAL and
+           FP_ZERO as integer constant expressions (usable in #if) with five
+           different values.
+test       t/001-fp-classes.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.002
+anchor     basedefs/math.h.html#DESCRIPTION/fpclassify
+class      required
+since      2001
+says       fpclassify, isfinite, isinf, isnan, isnormal and signbit, and
+           isgreater, isgreaterequal, isless, islessequal, islessgreater and
+           isunordered, are macros whose value has type int for an argument of
+           each real-floating type.
+test       t/002-macro-types.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.003
+anchor     basedefs/math.h.html#DESCRIPTION/MATH_ERRNO
+class      required
+since      2001
+says       <math.h> defines MATH_ERRNO as the integer constant 1 and
+           MATH_ERREXCEPT as the integer constant 2, usable in #if.
+test       t/003-math-errno-macros.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.004
+anchor     basedefs/math.h.html#DESCRIPTION/math_errhandling
+class      required
+since      2001
+says       math_errhandling is an expression of type int whose value is
+           MATH_ERRNO, MATH_ERREXCEPT or their bitwise OR (1, 2 or 3), and it has
+           the same value at every use during the program.
+uses       XBD.math.h.003
+note       It may be a macro or an identifier with external linkage; the test
+           only reads its value.
+test       t/004-math-errhandling.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.005
+anchor     basedefs/math.h.html#DESCRIPTION/math_errhandling
+class      required
+since      2001
+says       If math_errhandling & MATH_ERREXCEPT is non-zero, <fenv.h> defines the
+           macros FE_DIVBYZERO, FE_INVALID and FE_OVERFLOW.
+note       NOTINUSE when math_errhandling is MATH_ERRNO alone.
+test       t/005-errhandling-fenv.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.006
+anchor     basedefs/math.h.html#DESCRIPTION/HUGE_VAL
+class      required
+since      2001
+says       HUGE_VAL, HUGE_VALF and HUGE_VALL are positive constant expressions of
+           type double, float and long double respectively (usable as static
+           initializers).
+test       t/006-huge-val.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.007
+anchor     basedefs/math.h.html#DESCRIPTION/HUGE_VAL
+class      required
+since      2001
+says       On a system that defines __STDC_IEC_559__ (or its successor
+           __STDC_IEC_60559_BFP__), HUGE_VAL, HUGE_VALF and HUGE_VALL evaluate to
+           positive infinity.
+note       NOTINUSE where neither macro is defined.
+test       t/007-huge-val-inf.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.008
+anchor     basedefs/math.h.html#DESCRIPTION/INFINITY
+class      required
+since      2001
+says       INFINITY is a positive constant expression of type float (usable as a
+           static initializer); where the implementation defines __STDC_IEC_559__
+           it is positive infinity.
+test       t/008-infinity.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.009
+anchor     basedefs/math.h.html#DESCRIPTION/NAN
+class      required
+since      2001
+says       If NAN is defined it is a constant expression of type float (usable as
+           a static initializer) whose value is a NaN; an implementation that
+           defines __STDC_IEC_559__ supports quiet NaNs and so defines it.
+note       NOTINUSE where NAN is not defined and IEC 60559 is not claimed (the
+           macro is only defined when quiet NaNs are supported).
+test       t/009-nan.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.010
+anchor     basedefs/math.h.html#DESCRIPTION/float_t
+class      required
+since      2001
+says       float_t and double_t are real-floating types; float_t is at least as
+           wide as float, double_t at least as wide as double and as float_t; for
+           FLT_EVAL_METHOD 0 they are float and double, for 1 both are double,
+           for 2 both are long double.
+note       Width is compared by significand digits. Other
+           FLT_EVAL_METHOD values are implementation-defined and not checked.
+test       t/010-float-t.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.011
+anchor     basedefs/math.h.html#DESCRIPTION/FP_ILOGB0
+class      required
+since      2001
+says       FP_ILOGB0 and FP_ILOGBNAN are integer constant expressions; FP_ILOGB0
+           is {INT_MIN} or -{INT_MAX}, and FP_ILOGBNAN is {INT_MAX} or {INT_MIN}.
+test       t/011-fp-ilogb.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.012
+anchor     basedefs/math.h.html#DESCRIPTION/FP_FAST_FMA
+class      required
+since      2001
+says       Each of FP_FAST_FMA, FP_FAST_FMAF and FP_FAST_FMAL that the header
+           defines expands to the integer constant 1 (usable in #if).
+note       NOTINUSE when none of the three is defined.
+test       t/012-fp-fast-fma.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.013
+anchor     basedefs/math.h.html#DESCRIPTION/M_E
+class      conditional
+when       XSI
+says       With XSI, M_E, M_LOG2E, M_LOG10E, M_LN2, M_LN10, M_PI, M_PI_2, M_PI_4,
+           M_1_PI, M_2_PI, M_2_SQRTPI, M_SQRT2 and M_SQRT1_2 have type double,
+           each within two units in the last place of the mathematical value, and
+           (double)M_x == M_x.
+note       Accuracy is compared with the 40-digit value the page names, to a
+           relative error of 2*DBL_EPSILON. The page does not say how closely
+           'accurate to the precision of their type' must agree; two units in the
+           last place is the widest reading that still rules out a truncated
+           constant.
+test       t/013-m-consts-double.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.014
+anchor     basedefs/math.h.html#DESCRIPTION/M_EGAMMA
+class      conditional
+when       XSI
+since      2024
+says       With XSI, M_EGAMMA, M_PHI, M_1_SQRTPI, M_SQRT3 and M_SQRT1_3 (added in
+           Issue 8) have type double, each within two units in the last place of
+           the mathematical value, and (double)M_x == M_x.
+note       Kept apart from the older constants so that a system that lacks the
+           Issue 8 additions fails here alone.
+test       t/014-m-consts-new.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.015
+anchor     basedefs/math.h.html#DESCRIPTION/M_El
+class      conditional
+when       XSI
+since      2024
+says       With XSI, each of the eighteen constants M_El, M_EGAMMAl, M_LOG2El,
+           M_LOG10El, M_LN2l, M_LN10l, M_PHIl, M_PIl, M_PI_2l, M_PI_4l, M_1_PIl,
+           M_1_SQRTPIl, M_2_PIl, M_2_SQRTPIl, M_SQRT2l, M_SQRT3l, M_SQRT1_2l and
+           M_SQRT1_3l has type long double and lies within two units in the last
+           place of the mathematical value.
+note       Compared with a 40-digit value to a relative error of 2*LDBL_EPSILON.
+test       t/015-m-consts-long.c
+nomutant   compile-time check; needs the Tier 0 header mutants

@@ -1,0 +1,23 @@
+# XBD <stdalign.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.stdalign.h.001
+anchor     basedefs/stdalign.h.html#DESCRIPTION/alignas
+class      required
+since      2024
+says       alignas expands to _Alignas and alignof to _Alignof, and an alignas
+           specifier aligns an object as asked.
+test       t/001-align-macros.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdalign.h.002
+anchor     basedefs/stdalign.h.html#DESCRIPTION/__alignas_is_defined
+class      required
+since      2024
+says       __alignas_is_defined and __alignof_is_defined expand to the integer
+           constant 1 and are suitable for use in #if.
+test       t/002-align-defined.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

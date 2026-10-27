@@ -10,7 +10,7 @@ DESCRIPTION:cd0926b8       todo  Tier 0 header check (generator)
 DESCRIPTION:43d1ad34       todo  Tier 0 header check (generator)
 DESCRIPTION:5d5c6ec0       todo  Tier 0 header check (generator)
 DESCRIPTION:ce9d5e31        partial XBD.fcntl.h.006  # the F_OFD_* constants only; the rest: Tier 0 header check (generator)
-DESCRIPTION:b1d4f256       todo  Tier 0 header check (generator)
+DESCRIPTION:b1d4f256         XBD.fcntl.h.009
 DESCRIPTION:eeab1313       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:62d87f8d       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:2467b6d7       none  describes the constant; its behaviour is on the function page
@@ -32,8 +32,8 @@ DESCRIPTION:581b4663       XBD.fcntl.h.001 XBD.fcntl.h.002
 DESCRIPTION:f8c1c171       XBD.fcntl.h.001 XBD.fcntl.h.002 XBD.fcntl.h.003
 DESCRIPTION:324acb18        partial XBD.fcntl.h.001  # closing on exec and in a posix_spawn child: xsh/exec and xsh/posix_spawn
 DESCRIPTION:e78b0e45        partial XBD.fcntl.h.002  # todo: the child of fork() must not have the descriptor
-DESCRIPTION:3156ab80       todo  Tier 0 header check (generator)
-DESCRIPTION:b1d4f256.2     todo  Tier 0 header check (generator)
+DESCRIPTION:3156ab80         partial XBD.fcntl.h.010  # the lock type constants; the rest of the sentence is Tier 0
+DESCRIPTION:b1d4f256.2       XBD.fcntl.h.010
 DESCRIPTION:7c886790       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:b0998705       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:8968191e       none  describes the constant; its behaviour is on the function page
@@ -43,7 +43,7 @@ DESCRIPTION:b26ed8fc       none  describes the constant; its behaviour is on the
 DESCRIPTION:48e7dd25       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:6306eeac       todo  Tier 0 header check (generator)
 DESCRIPTION:ba3aa83c        partial XBD.fcntl.h.004 XBD.fcntl.h.005 XBD.fcntl.h.007  # O_CLOEXEC, O_CLOFORK, O_TTY_INIT only; the rest: Tier 0 header check
-DESCRIPTION:f8c1c171.2      todo  Tier 0 header check (generator); O_TTY_INIT may be zero and then need not be distinct (DESCRIPTION:fb2d6a1a)
+DESCRIPTION:f8c1c171.2       XBD.fcntl.h.011  # O_TTY_INIT may be zero (DESCRIPTION:fb2d6a1a)
 DESCRIPTION:72c6c614        partial XBD.fcntl.h.004 XSH.open.010  # atomicity (no window for another thread's fork+exec) not tested
 DESCRIPTION:b429ea4b        partial XBD.fcntl.h.005 XSH.open.012  # atomicity (no window for another thread's fork) not tested
 DESCRIPTION:25ec7d74       none  describes the constant; its behaviour is on the function page
@@ -60,12 +60,12 @@ DESCRIPTION:f1669632       none  describes the constant; its behaviour is on the
 DESCRIPTION:c78285ca       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:9bfa72fd       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:22c893a2       none  describes the constant; its behaviour is on the function page
-DESCRIPTION:61374857       todo  Tier 0 header check (generator)
-DESCRIPTION:07eaa323       todo  Tier 0 header check (generator)
+DESCRIPTION:61374857         partial XBD.fcntl.h.013 XBD.fcntl.h.014  # relation to the access modes and extraction; presence: Tier 0
+DESCRIPTION:07eaa323         XBD.fcntl.h.013
 DESCRIPTION:faf9b1a7       none  describes the constant; its behaviour is on the function page
-DESCRIPTION:3c27cfd8       todo  Tier 0 header check (generator)
-DESCRIPTION:39abe829       todo  Tier 0 header check (generator)
-DESCRIPTION:686ac2e0.2     todo  Tier 0 header check (generator)
+DESCRIPTION:3c27cfd8         partial XBD.fcntl.h.012  # the uniqueness of the access modes; presence: Tier 0 header check (generator)
+DESCRIPTION:39abe829         XBD.fcntl.h.012
+DESCRIPTION:686ac2e0.2       XBD.fcntl.h.012
 DESCRIPTION:8cbd9b98       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:5ee7af61        none  leaves the result unspecified
 DESCRIPTION:65636618       none  describes the constant; its behaviour is on the function page
@@ -74,17 +74,17 @@ DESCRIPTION:f99d55a0       none  describes the constant; its behaviour is on the
 DESCRIPTION:8fac7e64        none  leaves the result unspecified
 DESCRIPTION:9ff99aa4       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:636d72cf       todo  Tier 0 header check (generator)
-DESCRIPTION:e64296a5       todo  Tier 0 header check (generator)
+DESCRIPTION:e64296a5         partial XBD.fcntl.h.015  # AT_FDCWD is not a descriptor; presence: Tier 0 header check (generator)
 DESCRIPTION:53ee72a6       none  describes the constant; its behaviour is on the function page
-DESCRIPTION:9538d1aa       todo  Tier 0 header check (generator)
+DESCRIPTION:9538d1aa         partial XBD.fcntl.h.015  # AT_EACCESS nonzero; presence: Tier 0 header check (generator)
 DESCRIPTION:018e3895       none  describes the constant; its behaviour is on the function page
-DESCRIPTION:0d49b149       todo  Tier 0 header check (generator)
+DESCRIPTION:0d49b149         partial XBD.fcntl.h.015  # AT_SYMLINK_NOFOLLOW nonzero; presence: Tier 0 header check (generator)
 DESCRIPTION:f9ec1de6.2     none  describes the constant; its behaviour is on the function page
-DESCRIPTION:2288c704       todo  Tier 0 header check (generator)
+DESCRIPTION:2288c704         partial XBD.fcntl.h.015  # AT_SYMLINK_FOLLOW nonzero; presence: Tier 0 header check (generator)
 DESCRIPTION:447ec05b       none  describes the constant; its behaviour is on the function page
-DESCRIPTION:28a6e0a6       todo  Tier 0 header check (generator)
+DESCRIPTION:28a6e0a6         partial XBD.fcntl.h.015  # AT_REMOVEDIR nonzero; presence: Tier 0 header check (generator)
 DESCRIPTION:e51c03b9       none  describes the constant; its behaviour is on the function page
-DESCRIPTION:c723ba72       todo  Tier 0 header check (generator)
+DESCRIPTION:c723ba72         partial XBD.fcntl.h.016  # the six advice values differ; presence: Tier 0 header check (generator)
 DESCRIPTION:3a5b6a0d       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:ac501195       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:c4bc8e32       none  describes the constant; its behaviour is on the function page

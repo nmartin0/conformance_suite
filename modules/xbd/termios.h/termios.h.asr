@@ -1,0 +1,150 @@
+# XBD <termios.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.termios.h.001
+anchor     basedefs/termios.h.html#DESCRIPTION/cc_t
+class      required
+since      1988
+says       cc_t, speed_t and tcflag_t are unsigned integer types.
+test       t/001-types.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.002
+anchor     basedefs/termios.h.html#DESCRIPTION/NCCS
+class      required
+since      1988
+says       NCCS is positive and c_cc has exactly NCCS elements.
+note       The page does not say NCCS is usable in #if (it says so of
+           the subscripts), so that is not tested.
+test       t/002-nccs.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.003
+anchor     basedefs/termios.h.html#DESCRIPTION/VEOF
+class      required
+since      1988
+says       VEOF, VEOL, VERASE, VINTR, VKILL, VMIN, VQUIT, VSTART, VSTOP,
+           VSUSP and VTIME are usable in #if, non-negative and below
+           NCCS, and different from each other except that VMIN may
+           equal VEOF and VTIME may equal VEOL.
+note       Non-negative and below NCCS follow from their being
+           subscripts of c_cc.
+test       t/003-cc-subscripts.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.004
+anchor     basedefs/termios.h.html#DESCRIPTION/BRKINT
+class      required
+since      1988
+says       BRKINT, ICRNL, IGNBRK, IGNCR, IGNPAR, INLCR, INPCK, ISTRIP,
+           IXANY, IXOFF, IXON and PARMRK are nonzero and share no bits.
+note       XBD 11.2.2: composed of the bitwise-inclusive OR of the
+           masks, which are bitwise-distinct.
+test       t/004-iflag-bits.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.005
+anchor     basedefs/termios.h.html#DESCRIPTION/OPOST
+class      conditional
+when       XSI
+since      1988
+says       On XSI systems OPOST, ONLCR, OCRNL, ONOCR, ONLRET, OFILL,
+           OFDEL, NLDLY, CRDLY, TABDLY, BSDLY, VTDLY and FFDLY are
+           nonzero and share no bits.
+note       XBD 11.2.3: as for c_iflag. OPOST alone is required of every
+           system; the rest are XSI.
+test       t/005-oflag-bits.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.006
+anchor     basedefs/termios.h.html#DESCRIPTION/NLDLY
+class      conditional
+when       XSI
+since      1988
+says       On XSI systems NL0 and NL1, CR0 to CR3, TAB0 to TAB3, BS0 and
+           BS1, VT0 and VT1, and FF0 and FF1 each lie inside their mask
+           (NLDLY, CRDLY, TABDLY, BSDLY, VTDLY, FFDLY) and differ from
+           each other within a group.
+note       Each group is a field that a mask selects (XBD 11.2.3): the
+           mask picks the value out of c_oflag, so the values lie inside
+           it. Zero is allowed (Q-165).
+test       t/006-delay-values.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.007
+anchor     basedefs/termios.h.html#DESCRIPTION/CLOCAL
+class      required
+since      1988
+says       CLOCAL, CREAD, CSIZE, CSTOPB, HUPCL, PARENB and PARODD are
+           nonzero and share no bits.
+note       XBD 11.2.4: composed of the bitwise-inclusive OR of the
+           masks, which are bitwise-distinct.
+test       t/007-cflag-bits.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.008
+anchor     basedefs/termios.h.html#DESCRIPTION/CSIZE
+class      required
+since      1988
+says       CS5, CS6, CS7 and CS8 lie inside CSIZE and have four
+           different values.
+note       CSIZE is the field of the bits that give the character size
+           (XBD 11.2.4), so the four sizes lie inside it (Q-165).
+test       t/008-csize-values.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.009
+anchor     basedefs/termios.h.html#DESCRIPTION/ECHO
+class      required
+since      1988
+says       ECHO, ECHOE, ECHOK, ECHONL, ICANON, IEXTEN, ISIG, NOFLSH and
+           TOSTOP are nonzero and share no bits.
+note       XBD 11.2.5: composed of the bitwise-inclusive OR of the
+           masks, which are bitwise-distinct.
+test       t/009-lflag-bits.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.010
+anchor     basedefs/termios.h.html#DESCRIPTION/B0
+class      required
+since      1988
+says       B0, B50, B75, B110, B134, B150, B200, B300, B600, B1200,
+           B1800, B2400, B4800, B9600, B19200 and B38400 have sixteen
+           different values.
+note       Sixteen different speeds (and hang up) that cfsetospeed() and
+           cfgetospeed() must tell apart (Q-165). No order or value is
+           assumed.
+test       t/010-speeds.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.011
+anchor     basedefs/termios.h.html#DESCRIPTION/TCSANOW
+class      required
+since      1988
+says       TCSANOW, TCSADRAIN and TCSAFLUSH have three different values.
+note       Alternatives for the one optional_actions argument (Q-165).
+test       t/011-tcsetattr-actions.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.012
+anchor     basedefs/termios.h.html#DESCRIPTION/TCIFLUSH
+class      required
+since      1988
+says       TCIFLUSH, TCOFLUSH and TCIOFLUSH have three different values.
+note       Alternatives for the one queue_selector argument (Q-165).
+test       t/012-tcflush-queues.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.013
+anchor     basedefs/termios.h.html#DESCRIPTION/TCOOFF
+class      required
+since      1988
+says       TCOOFF, TCOON, TCIOFF and TCION have four different values.
+note       Alternatives for the one action argument (Q-165).
+test       t/013-tcflow-actions.c
+nomutant   header content check; needs the Tier 0 header mutants

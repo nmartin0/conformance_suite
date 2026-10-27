@@ -1,0 +1,33 @@
+# XBD <nl_types.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Value relations of <nl_types.h>: NL_CAT_LOCALE differs from the 0 that
+# catopen() reads as a different request, and NL_SETD and nl_catd are
+# usable as catgets() and catopen() use them. Each says why it has no
+# mutant yet.
+
+assertion  XBD.nl_types.h.001
+anchor     basedefs/nl_types.h.html#DESCRIPTION/NL_CAT_LOCALE
+anchor     functions/catopen.html#DESCRIPTION
+class      required
+since      1988
+says       NL_CAT_LOCALE is a value that can be passed as the int oflag argument
+           of catopen() and it is not 0.
+note       Not stated for the header: catopen() treats 0 and NL_CAT_LOCALE as two
+           different requests (LANG, or the LC_MESSAGES locale category), so the
+           values have to differ (Q-169).
+test       t/001-cat-locale.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.nl_types.h.002
+anchor     basedefs/nl_types.h.html#DESCRIPTION/NL_SETD
+anchor     functions/catopen.html#RETURN VALUE
+class      required
+since      1988
+says       NL_SETD has a value that can be passed as the int set_id argument of
+           catgets(), and (nl_catd)-1, the error return of catopen(), is a valid
+           nl_catd value that compares equal to itself.
+note       The value of NL_SETD is implementation-defined, so only its use as an
+           int is checked.
+test       t/002-setd-catd.c
+nomutant   compile-time check; needs the Tier 0 header mutants

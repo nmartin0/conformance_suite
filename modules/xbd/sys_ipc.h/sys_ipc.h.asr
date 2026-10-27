@@ -1,0 +1,36 @@
+# XBD <sys/ipc.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.sys_ipc.h.001
+anchor     basedefs/sys_ipc.h.html#DESCRIPTION/IPC_CREAT
+class      conditional
+when       XSI
+since      1988
+says       IPC_CREAT, IPC_EXCL and IPC_NOWAIT are nonzero; IPC_CREAT and
+           IPC_EXCL share no bits with each other or with the
+           permission bits 0777.
+note       IPC_CREAT and IPC_EXCL are OR-ed with the low nine
+           permission bits in the flag arguments of msgget(), semget()
+           and shmget(), so they cannot overlap them. IPC_NOWAIT is
+           used in other calls (msgsnd, msgrcv, semop) and the page
+           does not tie it to them, so it is only required nonzero; its
+           separation from MSG_NOERROR and SEM_UNDO is XBD.sys_msg.h.001
+           and XBD.sys_sem.h.001 (Q-165).
+test       t/001-mode-bits.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_ipc.h.002
+anchor     basedefs/sys_ipc.h.html#DESCRIPTION/IPC_RMID
+class      conditional
+when       XSI
+since      1988
+says       IPC_RMID, IPC_SET and IPC_STAT have three different values.
+note       Commands that msgctl(), semctl() and shmctl() tell apart
+           (Q-165).
+test       t/002-commands.c
+nomutant   header content check; needs the Tier 0 header mutants

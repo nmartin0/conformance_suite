@@ -1,0 +1,31 @@
+# XBD <cpio.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The octal constants of <cpio.h>. Each says why it has no mutant yet.
+
+assertion  XBD.cpio.h.001
+anchor     basedefs/cpio.h.html#DESCRIPTION/C_IRUSR
+class      required
+since      1988
+says       C_IRUSR is 0400, C_IWUSR 0200, C_IXUSR 0100, C_IRGRP 040, C_IWGRP 020,
+           C_IXGRP 010, C_IROTH 04, C_IWOTH 02, C_IXOTH 01, C_ISUID 04000,
+           C_ISGID 02000 and C_ISVTX 01000.
+test       t/001-mode-bits.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.cpio.h.002
+anchor     basedefs/cpio.h.html#DESCRIPTION/C_ISDIR
+class      required
+since      1988
+says       C_ISDIR is 040000, C_ISFIFO 010000, C_ISREG 0100000, C_ISBLK 060000,
+           C_ISCHR 020000, C_ISCTG 0110000, C_ISLNK 0120000 and C_ISSOCK 0140000.
+test       t/002-file-types.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.cpio.h.003
+anchor     basedefs/cpio.h.html#DESCRIPTION/MAGIC
+class      required
+since      1988
+says       MAGIC is the string "070707".
+test       t/003-magic.c
+nomutant   compile-time check; needs the Tier 0 header mutants

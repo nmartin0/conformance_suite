@@ -1,0 +1,50 @@
+# XBD <sys/shm.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.sys_shm.h.001
+anchor     basedefs/sys_shm.h.html#DESCRIPTION/SHM_RDONLY
+class      conditional
+when       XSI
+since      1988
+says       SHM_RDONLY and SHM_RND are nonzero and share no bits.
+note       shmflg is tested with & against each of them (shmat page)
+           (Q-165).
+test       t/001-attach-flags.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_shm.h.002
+anchor     basedefs/sys_shm.h.html#DESCRIPTION/SHMLBA
+class      conditional
+when       XSI
+since      1988
+says       SHMLBA is positive.
+note       shmat() computes shmaddr modulo SHMLBA, which needs a
+           positive value; the page does not say positive (Q-165).
+test       t/002-shmlba.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_shm.h.003
+anchor     basedefs/sys_shm.h.html#DESCRIPTION/SHM_FAILED
+class      conditional
+when       XSI
+since      2024
+says       SHM_FAILED has the same value as ((void *)(intptr_t)-1).
+note       The page gives the value, not a type, so only the value is
+           compared.
+test       t/003-shm-failed.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_shm.h.004
+anchor     basedefs/sys_shm.h.html#DESCRIPTION/shmatt_t
+class      conditional
+when       XSI
+since      1988
+says       shmatt_t is an unsigned integer type at least as large as
+           unsigned short.
+test       t/004-shmatt.c
+nomutant   header content check; needs the Tier 0 header mutants

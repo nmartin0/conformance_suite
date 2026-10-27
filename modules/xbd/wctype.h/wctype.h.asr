@@ -1,0 +1,26 @@
+# XBD <wctype.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of <wctype.h> that the generated header check cannot
+# express: the types are scalar or integer, and WEOF is the one <wchar.h>
+# defines. Each says why it has no mutant yet.
+
+assertion  XBD.wctype.h.001
+anchor     basedefs/wctype.h.html#DESCRIPTION/wctrans_t
+anchor     basedefs/wctype.h.html#DESCRIPTION/wctype_t
+class      required
+since      2001
+says       <wctype.h> alone defines wctype_t and wctrans_t as scalar types (a
+           value can be cast from zero and tested) and wint_t, as described for
+           <wchar.h>, as an integer type.
+test       t/001-scalar-types.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.wctype.h.002
+anchor     basedefs/wctype.h.html#DESCRIPTION/WEOF
+class      required
+since      2001
+says       <wctype.h> alone defines WEOF, a constant expression of type wint_t,
+           with the same value as the WEOF of <wchar.h>.
+test       t/002-weof.c
+nomutant   compile-time check; needs the Tier 0 header mutants

@@ -1,0 +1,21 @@
+# XBD <dlfcn.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The mode constants of <dlfcn.h>. dlopen() builds its mode from one
+# relocation value and one visibility value, which needs the two pairs to
+# be told apart and combinable. Each says why it has no mutant yet.
+
+assertion  XBD.dlfcn.h.001
+anchor     basedefs/dlfcn.h.html#DESCRIPTION/RTLD_LAZY
+anchor     functions/dlopen.html#DESCRIPTION
+class      required
+since      2001
+says       RTLD_LAZY differs from RTLD_NOW, RTLD_GLOBAL differs from RTLD_LOCAL,
+           and neither RTLD_LAZY nor RTLD_NOW shares a bit with RTLD_GLOBAL or
+           RTLD_LOCAL, so that one of each pair can be combined with | in the
+           mode argument of dlopen().
+note       dlopen() describes mode as a relocation value OR-ed with a visibility
+           value. RTLD_LOCAL may be 0, so no value is required to be non-zero. That the pairs differ is
+           inferred, not stated (Q-169).
+test       t/001-rtld-modes.c
+nomutant   compile-time check; needs the Tier 0 header mutants

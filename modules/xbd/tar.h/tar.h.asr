@@ -1,0 +1,43 @@
+# XBD <tar.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The constants of <tar.h>. Each says why it has no mutant yet.
+
+assertion  XBD.tar.h.001
+anchor     basedefs/tar.h.html#DESCRIPTION/TMAGIC
+class      required
+since      1988
+says       TMAGIC is the string "ustar" and TMAGLEN is 6, which is the length of
+           the string with its terminating null byte; TVERSION is the string "00"
+           and TVERSLEN is 2, the length without the terminating null byte.
+test       t/001-magic-version.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.tar.h.002
+anchor     basedefs/tar.h.html#DESCRIPTION/REGTYPE
+class      required
+since      1988
+says       REGTYPE is '0', AREGTYPE is the null character, LNKTYPE '1', SYMTYPE
+           '2', CHRTYPE '3', BLKTYPE '4', DIRTYPE '5', FIFOTYPE '6' and CONTTYPE
+           '7'.
+test       t/002-typeflags.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.tar.h.003
+anchor     basedefs/tar.h.html#DESCRIPTION/TSUID
+class      required
+since      1988
+says       TSUID is 04000, TSGID 02000, TUREAD 0400, TUWRITE 0200, TUEXEC 0100,
+           TGREAD 040, TGWRITE 020, TGEXEC 010, TOREAD 04, TOWRITE 02 and TOEXEC
+           01.
+test       t/003-mode-bits.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.tar.h.004
+anchor     basedefs/tar.h.html#DESCRIPTION/TSVTX
+class      conditional
+when       XSI
+since      1988
+says       With XSI, TSVTX is 01000.
+test       t/004-tsvtx.c
+nomutant   compile-time check; needs the Tier 0 header mutants

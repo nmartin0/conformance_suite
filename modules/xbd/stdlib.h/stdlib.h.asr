@@ -1,0 +1,45 @@
+# XBD <stdlib.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.stdlib.h.001
+anchor     basedefs/stdlib.h.html#DESCRIPTION/EXIT_FAILURE
+class      required
+since      1988
+says       EXIT_SUCCESS is an integer constant expression with value 0 and
+           EXIT_FAILURE one with a value from 1 to 125.
+note       The range 1 to 125 is the POSIX addition to ISO C.
+test       t/001-exit-codes.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdlib.h.002
+anchor     basedefs/stdlib.h.html#DESCRIPTION/RAND_MAX
+class      required
+since      1988
+says       RAND_MAX is an integer constant expression of at least 32767.
+test       t/002-rand-max.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdlib.h.003
+anchor     basedefs/stdlib.h.html#DESCRIPTION/MB_CUR_MAX
+class      required
+since      1988
+says       MB_CUR_MAX has type size_t and is positive, and is 1 in the POSIX
+           locale (the default for a program that has not called setlocale(), and
+           the one named by "C" or "POSIX").
+test       t/003-mb-cur-max.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdlib.h.004
+anchor     basedefs/stdlib.h.html#DESCRIPTION/WNOHANG
+class      required
+since      2024
+says       <stdlib.h> also defines WNOHANG and WUNTRACED; they are flag values
+           for waitpid(), so each is nonzero and they share no bit.
+note       The page points to <sys/wait.h>, where the options argument of
+           waitpid() is an inclusive OR of flags; that a flag has a bit of its
+           own is the reading of that.
+test       t/004-wait-options.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

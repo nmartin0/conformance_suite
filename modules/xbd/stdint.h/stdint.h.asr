@@ -1,0 +1,121 @@
+# XBD <stdint.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.stdint.h.001
+anchor     basedefs/stdint.h.html#DESCRIPTION
+class      required
+since      2001
+says       int8_t, int16_t and int32_t (and int64_t when a 64-bit type exists)
+           are signed types of exactly 8, 16, 32 and 64 bits, and uint8_t to
+           uint64_t unsigned ones of the same widths; a standard integer type of
+           one of those widths has a matching exact-width type.
+note       Only the widths 8, 16, 32 and 64 are examined.
+test       t/001-exact-types.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdint.h.002
+anchor     basedefs/stdint.h.html#DESCRIPTION
+class      required
+since      2001
+says       INTN_MIN is exactly -2^(N-1), INTN_MAX exactly 2^(N-1)-1 and UINTN_MAX
+           exactly 2^N-1 for the exact-width types, usable in #if, each with the
+           type an object of the matching type has after the integer promotions.
+test       t/002-exact-limits.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdint.h.003
+anchor     basedefs/stdint.h.html#DESCRIPTION
+class      required
+since      2001
+says       int_leastN_t and uint_leastN_t exist for N of 8, 16, 32 and 64, are
+           signed and unsigned, are at least N bits wide, are the smallest such
+           types (no standard type with a smaller range is wide enough), and
+           their limit macros reach the stated magnitudes and have the promoted
+           type.
+note       Only the widths 8, 16, 32 and 64 are examined.
+test       t/003-least-types.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdint.h.004
+anchor     basedefs/stdint.h.html#DESCRIPTION
+class      required
+since      2001
+says       int_fastN_t and uint_fastN_t exist for N of 8, 16, 32 and 64, are
+           signed and unsigned, are at least N bits wide, and their limit macros
+           reach the stated magnitudes and have the promoted type.
+note       Only the widths 8, 16, 32 and 64 are examined.
+test       t/004-fast-types.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdint.h.005
+anchor     basedefs/stdint.h.html#DESCRIPTION
+class      required
+since      2001
+says       When intptr_t and uintptr_t are provided, a valid void pointer
+           converted to either and back compares equal to the original, intptr_t
+           is signed and uintptr_t unsigned, and their limits reach -32768, 32767
+           and 65535 in magnitude with the promoted type.
+note       These types are optional unless the system is XSI; a system that
+           provides neither gives NOTINUSE.
+test       t/005-pointer-types.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdint.h.006
+anchor     basedefs/stdint.h.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       On an XSI system intptr_t and uintptr_t exist, and INTPTR_MIN,
+           INTPTR_MAX and UINTPTR_MAX are defined.
+test       t/006-pointer-types-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdint.h.007
+anchor     basedefs/stdint.h.html#DESCRIPTION
+class      required
+since      2001
+says       intmax_t is a signed type and uintmax_t an unsigned type that hold
+           every value of every standard signed and unsigned type; intmax_t is
+           two's complement; INTMAX_MIN, INTMAX_MAX and UINTMAX_MAX reach -2^63,
+           2^63-1 and 2^64-1 in magnitude, with the promoted type.
+test       t/007-greatest-width.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdint.h.008
+anchor     basedefs/stdint.h.html#DESCRIPTION
+class      required
+since      2001
+says       PTRDIFF_MIN, PTRDIFF_MAX and SIZE_MAX reach -65536, 65535 and 65535 in
+           magnitude; SIG_ATOMIC, WCHAR and WINT limits follow the signedness of
+           their types (signed: no greater than -127, -127 and -32767 and no less
+           than 127, 127 and 32767; unsigned: 0 and at least 255, 255 and 65535);
+           all have the promoted type of the matching type.
+test       t/008-other-limits.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdint.h.009
+anchor     basedefs/stdint.h.html#DESCRIPTION
+class      required
+since      2001
+says       INTN_C and UINTN_C (N of 8, 16, 32, 64) expand to integer constant
+           expressions usable in #if with the argument's value and the promoted
+           type of int_leastN_t and uint_leastN_t; INTMAX_C and UINTMAX_C do the
+           same with the types intmax_t and uintmax_t.
+note       Only the widths 8, 16, 32 and 64 are examined.
+test       t/009-constant-macros.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdint.h.010
+anchor     basedefs/stdint.h.html#DESCRIPTION
+class      required
+since      2001
+says       A type named with and without the leading u (exact, least, fast,
+           pointer, greatest width) is provided together with its counterpart,
+           the two have the same size, and the MIN, MAX and UMAX limit macros of
+           a type are defined together.
+note       Only the widths 8, 16, 32 and 64 are examined.
+test       t/010-signed-unsigned-pairs.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

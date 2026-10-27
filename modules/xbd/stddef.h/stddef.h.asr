@@ -1,0 +1,53 @@
+# XBD <stddef.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.stddef.h.001
+anchor     basedefs/stddef.h.html#DESCRIPTION/NULL
+class      required
+since      2024
+says       NULL has type void * and compares equal to 0; a pointer object whose
+           bytes are all zero (made with memset() or calloc()) is a null pointer.
+test       t/001-null.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stddef.h.002
+anchor     basedefs/stddef.h.html#DESCRIPTION/offsetof
+class      required
+says       offsetof(type, member) is an integer constant expression of type
+           size_t whose value is the byte offset of the member from the start of
+           the structure, including nested and array-element designators; offsets
+           are in member order, suitably aligned and inside the structure.
+test       t/002-offsetof.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stddef.h.003
+anchor     basedefs/stddef.h.html#DESCRIPTION/ptrdiff_t
+class      required
+says       ptrdiff_t is a signed integer type and is the type of the difference
+           of two pointers, size_t is an unsigned integer type and is the type of
+           sizeof, and wchar_t is an integer type whose null character has code
+           zero.
+test       t/003-basic-types.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stddef.h.004
+anchor     basedefs/stddef.h.html#DESCRIPTION/wchar_t
+class      required
+says       Unless __STDC_MB_MIGHT_NEQ_WC__ is defined, each character of the
+           basic character set has as wide character the same code it has as a
+           single-character integer constant.
+test       t/004-wchar-basic-chars.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stddef.h.005
+anchor     basedefs/stddef.h.html#DESCRIPTION/max_align_t
+class      required
+since      2024
+says       The alignment of max_align_t is at least that of every standard scalar
+           type (the greatest fundamental alignment), and is a power of two that
+           divides the size of max_align_t.
+test       t/005-max-align.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

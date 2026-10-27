@@ -1,0 +1,50 @@
+# XBD <stdarg.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of the header page: values, relations and properties.
+# The presence of each name and type comes with the Tier 0 generator.
+
+assertion  XBD.stdarg.h.001
+anchor     basedefs/stdarg.h.html#DESCRIPTION/va_arg
+class      required
+says       va_start() and successive va_arg() calls return the arguments in
+           order, whatever their types (int, double, long, long long, pointers, a
+           structure).
+test       t/001-va-arg-sequence.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdarg.h.002
+anchor     basedefs/stdarg.h.html#DESCRIPTION/va_copy
+class      required
+says       va_copy() makes a second list in the same state as the first: reading
+           it gives the arguments the original would give next, and reading one
+           list does not move the other.
+test       t/002-va-copy.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdarg.h.003
+anchor     basedefs/stdarg.h.html#DESCRIPTION/va_start
+class      required
+says       A va_list can be passed to another function that reads arguments with
+           va_arg(), and then be ended; a variadic function can be traversed more
+           than once, each traversal bracketed by va_start() and va_end().
+test       t/003-va-list-passing.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdarg.h.004
+anchor     basedefs/stdarg.h.html#DESCRIPTION/va_arg
+class      required
+says       va_arg() may read an argument as the signed or unsigned type matching
+           its own when the value fits both, and a void pointer as a pointer to a
+           character type or the reverse.
+test       t/004-va-arg-compatible-types.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdarg.h.005
+anchor     basedefs/stdarg.h.html#DESCRIPTION/va_arg
+class      conditional
+when       XSI
+says       On an XSI system va_arg() may read a pointer argument as a pointer of
+           any other type, and the pointer converted back is the original.
+test       t/005-va-arg-pointers-xsi.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

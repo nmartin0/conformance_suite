@@ -1,0 +1,32 @@
+# XBD <spawn.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.spawn.h.001
+anchor     basedefs/spawn.h.html#DESCRIPTION/POSIX_SPAWN_RESETIDS
+class      required
+since      2001
+says       POSIX_SPAWN_RESETIDS, POSIX_SPAWN_SETPGROUP,
+           POSIX_SPAWN_SETSIGDEF, POSIX_SPAWN_SETSIGMASK and
+           POSIX_SPAWN_SETSID are nonzero, fit in a short and share no
+           bits.
+note       From the flags being the bitwise-inclusive OR of these flags
+           (posix_spawnattr_setflags page) in a short argument (Q-165).
+test       t/001-flags-base.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.spawn.h.002
+anchor     basedefs/spawn.h.html#DESCRIPTION/POSIX_SPAWN_SETSCHEDPARAM
+class      conditional
+when       SPN+PS
+since      2001
+says       POSIX_SPAWN_SETSCHEDPARAM and POSIX_SPAWN_SETSCHEDULER are
+           nonzero, fit in a short and share no bits with each other or
+           with the five other flags.
+note       As XBD.spawn.h.001 (Q-165).
+test       t/002-flags-ps.c
+nomutant   header content check; needs the Tier 0 header mutants

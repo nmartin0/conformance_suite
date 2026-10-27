@@ -1,0 +1,72 @@
+# XBD <fenv.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Value relations of <fenv.h>: the exception macros are bitwise-distinct,
+# FE_ALL_EXCEPT covers them, the rounding macros are distinct and non-
+# negative, the IEC 60559 option brings in every macro, and FE_DFL_ENV is
+# usable. Parts tied to the IEC 60559 option are NOTINUSE where the
+# compiler does not claim it. Each says why it has no mutant yet.
+
+assertion  XBD.fenv.h.001
+anchor     basedefs/fenv.h.html#DESCRIPTION/FE_DIVBYZERO
+class      required
+since      2001
+says       Each of FE_DIVBYZERO, FE_INEXACT, FE_INVALID, FE_OVERFLOW and
+           FE_UNDERFLOW that <fenv.h> defines is an integer constant expression,
+           and no two of them have a bit in common.
+note       NOTINUSE when the header defines none of them. Whether each macro must
+           be defined is XBD.fenv.h.004.
+test       t/001-exception-bits.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.fenv.h.002
+anchor     basedefs/fenv.h.html#DESCRIPTION/FE_ALL_EXCEPT
+class      required
+since      2001
+says       <fenv.h> defines FE_ALL_EXCEPT as an integer constant expression that
+           is the bitwise OR of the exception macros the implementation defines,
+           so it contains every bit of each of FE_DIVBYZERO, FE_INEXACT,
+           FE_INVALID, FE_OVERFLOW and FE_UNDERFLOW that is defined.
+uses       XBD.fenv.h.001
+note       An implementation may add exception macros of its own, so equality
+           with the OR of the five is not required; containment is.
+test       t/002-all-except.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.fenv.h.003
+anchor     basedefs/fenv.h.html#DESCRIPTION/FE_DOWNWARD
+class      required
+since      2001
+says       Each of FE_DOWNWARD, FE_TONEAREST, FE_TOWARDZERO and FE_UPWARD that
+           <fenv.h> defines is an integer constant expression with a non-negative
+           value, and no two have the same value.
+note       NOTINUSE when the header defines none of them. Whether each macro must
+           be defined is XBD.fenv.h.004.
+test       t/003-rounding-values.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.fenv.h.004
+anchor     basedefs/fenv.h.html#DESCRIPTION/FE_DIVBYZERO
+anchor     basedefs/fenv.h.html#DESCRIPTION/FE_DOWNWARD
+class      required
+since      2001
+says       An implementation that supports the IEC 60559 Floating-Point option
+           (signalled by __STDC_IEC_559__ or __STDC_IEC_60559_BFP__) defines all
+           of FE_DIVBYZERO, FE_INEXACT, FE_INVALID, FE_OVERFLOW, FE_UNDERFLOW,
+           FE_DOWNWARD, FE_TONEAREST, FE_TOWARDZERO and FE_UPWARD.
+note       NOTINUSE where neither macro is defined.
+test       t/004-iec-all-defined.c
+nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.fenv.h.005
+anchor     basedefs/fenv.h.html#DESCRIPTION/FE_DFL_ENV
+class      required
+since      2001
+says       FE_DFL_ENV is an expression of type const fenv_t *; fenv_t and
+           fexcept_t are complete object types; the current environment can be
+           saved, FE_DFL_ENV installed with fesetenv(), and the saved environment
+           restored.
+note       Only that the default environment can be used as an argument is
+           checked; what it contains is tested on the function pages.
+test       t/005-dfl-env.c
+nomutant   compile-time check; needs the Tier 0 header mutants

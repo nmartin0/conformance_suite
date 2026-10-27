@@ -1,0 +1,155 @@
+# XBD <sys/stat.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.sys_stat.h.001
+anchor     basedefs/sys_stat.h.html#DESCRIPTION/S_IRWXU
+class      required
+since      1988
+says       S_IRWXU, S_IRUSR, S_IWUSR, S_IXUSR, S_IRWXG, S_IRGRP,
+           S_IWGRP, S_IXGRP, S_IRWXO, S_IROTH, S_IWOTH and S_IXOTH are
+           usable in #if and have the octal values 0700, 0400, 0200,
+           0100, 070, 040, 020, 010, 07, 04, 02 and 01.
+test       t/001-perm-values.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_stat.h.002
+anchor     basedefs/sys_stat.h.html#DESCRIPTION/S_ISUID
+class      required
+since      1988
+says       S_ISUID and S_ISGID are usable in #if and have the octal
+           values 04000 and 02000.
+test       t/002-setid-values.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_stat.h.003
+anchor     basedefs/sys_stat.h.html#DESCRIPTION/S_IRWXU
+class      required
+since      1988
+says       The permission constants can be used singly or OR-ed as the
+           third argument of open() with no cast to mode_t: a file made
+           that way gets exactly those permission bits when the umask is
+           zero.
+test       t/003-open-mode.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_stat.h.004
+anchor     basedefs/sys_stat.h.html#DESCRIPTION/S_IFBLK
+class      required
+since      1988
+says       S_IFBLK, S_IFCHR, S_IFIFO, S_IFREG, S_IFDIR, S_IFLNK and
+           S_IFSOCK are usable in #if and have seven different values.
+note       That the values differ is implied by their naming different
+           file types that st_mode must tell apart (S_ISDIR and the
+           others); the page does not say it in words (Q-165).
+test       t/004-ifmt-distinct.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_stat.h.005
+anchor     basedefs/sys_stat.h.html#DESCRIPTION/S_ISBLK
+class      required
+since      1988
+says       For a mode made of one of the seven file type constants and
+           any permission bits (0, 0644, 0777, 07777), exactly the
+           matching one of S_ISBLK, S_ISCHR, S_ISDIR, S_ISFIFO, S_ISREG,
+           S_ISLNK and S_ISSOCK is nonzero and the other six are zero.
+test       t/005-isx-crafted.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_stat.h.006
+anchor     basedefs/sys_stat.h.html#DESCRIPTION/S_ISREG
+class      required
+since      1988
+says       For st_mode of a real regular file, directory, FIFO and
+           symbolic link (lstat), the matching S_IS macro is true and
+           the others are false; stat() of the symbolic link gives the
+           regular file it names.
+test       t/006-isx-real.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_stat.h.007
+anchor     basedefs/sys_stat.h.html#DESCRIPTION/S_TYPEISMQ
+class      required
+since      2001
+says       S_TYPEISMQ(), S_TYPEISSEM() and S_TYPEISSHM() applied to the
+           stat structure of a regular file and of a directory evaluate
+           to zero.
+note       Only the zero side is tested: a system may implement these
+           objects as distinct file types, and a file the test made is
+           none of them.
+test       t/007-typeis.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_stat.h.008
+anchor     basedefs/sys_stat.h.html#DESCRIPTION/S_TYPEISTMO
+class      conditional
+when       TYM
+since      2001
+says       S_TYPEISTMO() applied to the stat structure of a regular file
+           and of a directory evaluates to zero.
+note       Only the zero side is tested, as for XBD.sys_stat.h.007.
+test       t/008-typeis-tmo.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_stat.h.009
+anchor     basedefs/sys_stat.h.html#DESCRIPTION/UTIME_NOW
+class      required
+since      2008
+says       UTIME_NOW and UTIME_OMIT are different, lie outside 0 to
+           999999999 and survive being stored in tv_nsec.
+note       The page does not say these two are usable in #if (it says
+           so of the file type and mode constants), so that is not
+           tested.
+test       t/009-utime.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_stat.h.010
+anchor     basedefs/sys_stat.h.html#DESCRIPTION/st_atime
+class      required
+since      2008
+says       st_atime, st_mtime and st_ctime are macros that stand for the
+           tv_sec members of st_atim, st_mtim and st_ctim of the
+           structure they are used with.
+test       t/010-time-macros.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_stat.h.011
+anchor     basedefs/sys_stat.h.html#DESCRIPTION/st_nlink
+class      required
+since      2024
+says       A new file has st_nlink 1; a second name made with link()
+           gives st_nlink 2 and the same st_dev and st_ino, and removing
+           it takes st_nlink back to 1; two different files have
+           different st_dev and st_ino pairs.
+note       Only a plain file in one directory is used, so the traversal
+           caveats on the page do not come into play.
+test       t/011-file-identity.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_stat.h.012
+anchor     basedefs/sys_stat.h.html#DESCRIPTION/S_ISVTX
+class      conditional
+when       XSI
+since      1988
+says       On XSI systems S_ISVTX is usable in #if and has the octal
+           value 01000.
+test       t/012-sticky-value.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_stat.h.013
+anchor     basedefs/sys_stat.h.html#DESCRIPTION/S_IFMT
+class      conditional
+when       XSI
+since      1988
+says       On XSI systems S_IFMT is usable in #if, each file type
+           constant lies wholly inside it, and it shares no bit with the
+           permission, set-user-ID and set-group-ID bits.
+note       S_IFMT is called the type-of-file constant; that it is a mask
+           whose bits are the type bits, apart from the permission bits
+           that share st_mode, is implied, not spelled out (Q-165).
+test       t/013-ifmt-mask.c
+nomutant   header content check; needs the Tier 0 header mutants

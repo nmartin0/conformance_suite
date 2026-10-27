@@ -1,0 +1,29 @@
+# XBD <sys/select.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.sys_select.h.001
+anchor     basedefs/sys_select.h.html#DESCRIPTION/FD_SETSIZE
+class      required
+since      2001
+says       FD_SETSIZE is usable in #if, positive, and fd_set has room
+           for that many descriptors.
+note       Room is checked as sizeof(fd_set) in bits; the page calls
+           FD_SETSIZE the maximum number of descriptors in an fd_set.
+test       t/001-fd-setsize.c
+nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_select.h.002
+anchor     basedefs/sys_select.h.html#DESCRIPTION/fd_set
+class      required
+since      2001
+says       An fd_set can be copied by assignment, as a structure can,
+           and the copy keeps its own members apart from the original,
+           with the first, middle and last descriptors (0, FD_SETSIZE/2,
+           FD_SETSIZE-1) usable.
+test       t/002-fd-set-struct.c
+nomutant   header content check; needs the Tier 0 header mutants
