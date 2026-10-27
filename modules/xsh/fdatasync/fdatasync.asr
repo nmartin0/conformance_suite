@@ -1,0 +1,68 @@
+# XSH fdatasync()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# fdatasync() is the Synchronized Input and Output option (SIO). Whether
+# data reached a storage device cannot be observed without a crash and is
+# not tested; the assertions check return values, errors, and that the call
+# does not disturb the file. Error tests arrange exactly one error
+# condition (XSH 2.3).
+
+assertion  XSH.fdatasync.001
+anchor     functions/fdatasync.html#DESCRIPTION
+anchor     functions/fdatasync.html#RETURN VALUE
+class      conditional
+when       SIO
+since      2001
+says       fdatasync() of a descriptor open for writing on a regular file
+           that was just written returns 0, and afterwards the file has
+           the same length and contents and the descriptor the same file
+           offset.
+note       NOTINUSE where fpathconf(_PC_SYNC_IO) says synchronized I/O
+           is not supported for the file: EINVAL is then allowed.
+test       t/001-regular.c
+
+assertion  XSH.fdatasync.002
+anchor     functions/fdatasync.html#ERRORS/EBADF
+class      conditional
+when       SIO
+since      2001
+says       fdatasync() of a descriptor that is not open, and of -1, fails
+           with EBADF.
+test       t/002-ebadf.c
+
+assertion  XSH.fdatasync.003
+anchor     functions/fdatasync.html#APPLICATION USAGE
+anchor     functions/fdatasync.html#RETURN VALUE
+class      conditional
+when       SIO
+since      2001
+says       fdatasync() of a descriptor open only for reading on a regular
+           file that another descriptor has written returns 0.
+note       NOTINUSE as XSH.fdatasync.001.
+test       t/003-rdonly.c
+
+assertion  XSH.fdatasync.004
+anchor     functions/fdatasync.html#ERRORS/EINVAL
+class      disputed
+when       SIO
+since      2001
+says       fdatasync() of the read end of a pipe either returns 0 or
+           fails with EINVAL; any other outcome is a failure.
+note       disputed (new: fsync-pipe): EINVAL is required where the
+           implementation does not support synchronized I/O for the
+           file, and nothing says which file types those are; both
+           outcomes are accepted. See XSH.fsync.003.
+test       t/004-pipe.c
+
+assertion  XSH.fdatasync.005
+anchor     functions/fdatasync.html#APPLICATION USAGE
+anchor     functions/fdatasync.html#ERRORS/EINVAL
+class      conditional
+when       SIO
+since      2001
+says       fdatasync() of a descriptor open on a directory either returns
+           0 or fails with EINVAL; any other outcome is a failure.
+note       The usage section says an application can call it on a
+           directory; a file system that does not support synchronized
+           I/O for it may report EINVAL.
+test       t/005-directory.c

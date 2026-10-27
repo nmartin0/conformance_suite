@@ -1,0 +1,120 @@
+# XSH pread()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page is shared with read() (module xsh/read, which also tests
+# pread() as XSH.read.015 to .017). This module tests pread() on its own:
+# what "equivalent to read() except for the position" means in each case.
+# Behaviour that is read()'s alone (terminals, pipes, sockets, signals) is
+# tested in xsh/read. Error tests arrange exactly one error condition
+# (XSH 2.3).
+
+assertion  XSH.pread.001
+anchor     functions/pread.html#DESCRIPTION
+class      required
+since      2008
+says       pread(fd, buf, n, off) on a regular file returns the n bytes
+           starting at offset off, whatever the descriptor's file offset
+           is, and does not change that file offset (set to 2, a pread()
+           at 6, then a read() returns the bytes from 2).
+test       t/001-offset.c
+
+assertion  XSH.pread.002
+anchor     functions/pread.html#DESCRIPTION
+anchor     functions/pread.html#RETURN VALUE
+class      required
+since      2008
+says       A pread() whose range crosses the end of file returns only the
+           bytes before it; one starting at the end of file, and one
+           starting beyond it, return 0.
+test       t/002-eof.c
+
+assertion  XSH.pread.003
+anchor     functions/pread.html#DESCRIPTION
+class      required
+since      2008
+says       pread() with nbyte 0 on a valid descriptor of a regular file
+           returns 0 and has no other result.
+test       t/003-zero.c
+
+assertion  XSH.pread.004
+anchor     functions/pread.html#DESCRIPTION
+class      required
+since      2008
+says       pread() of a range of a regular file that was never written but
+           lies before the end of file (the file extended by
+           ftruncate()) reads as bytes of value zero.
+test       t/004-hole.c
+
+assertion  XSH.pread.005
+anchor     functions/pread.html#ERRORS/EBADF
+class      required
+since      2008
+says       pread() fails with EBADF on a descriptor that is not open, and
+           on one open only for writing.
+test       t/005-ebadf.c
+
+assertion  XSH.pread.006
+anchor     functions/pread.html#ERRORS/ESPIPE
+class      required
+since      2008
+says       pread() on the read end of a pipe holding data fails with
+           ESPIPE.
+note       Whether data is consumed by the failed call is not checked: a
+           failed call may have been partly performed (XSH 2.3).
+test       t/006-espipe-pipe.c
+
+assertion  XSH.pread.007
+anchor     functions/pread.html#ERRORS/ESPIPE
+class      required
+since      2008
+says       pread() on a FIFO holding data, opened for reading, fails with
+           ESPIPE.
+note       As XSH.pread.006.
+test       t/007-espipe-fifo.c
+
+assertion  XSH.pread.008
+anchor     functions/pread.html#ERRORS/EINVAL
+class      required
+since      2008
+says       pread() on a regular file with a negative offset fails with
+           EINVAL and the file offset is unchanged.
+note       See SI-3 (the "offset unchanged" sentence is checked anyway).
+test       t/008-einval.c
+
+assertion  XSH.pread.009
+anchor     functions/pread.html#DESCRIPTION
+class      required
+since      2008
+says       pread() is not affected by O_APPEND: on a descriptor that has
+           it, pread() still reads from the offset given and leaves the
+           file offset alone.
+test       t/009-append.c
+
+assertion  XSH.pread.010
+anchor     functions/pread.html#DESCRIPTION
+class      required
+since      2008
+says       pread() works with an offset that does not fit in 32 bits: data
+           written with write() at 2^32 + 5 is read back at that offset.
+note       Needs a 64-bit off_t and a file system that holds the file
+           (sparse); otherwise the setup is UNRESOLVED or NOTINUSE.
+test       t/010-large-offset.c
+
+assertion  XSH.pread.011
+anchor     functions/pread.html#ERRORS/EISDIR
+class      conditional
+when       XSI
+since      2008
+says       XSI: pread() on a directory either reads (if the
+           implementation allows it) or fails with EISDIR.
+test       t/011-directory.c
+
+assertion  XSH.pread.012
+anchor     functions/pread.html#DESCRIPTION
+anchor     functions/pread.html#RETURN VALUE
+class      required
+since      2008
+says       Successive pread() calls at the same offset return the same
+           data, and a pread() sees what write() just put there (through
+           another descriptor of the same file).
+test       t/012-repeat-and-see.c

@@ -1,0 +1,87 @@
+# XSH fsync()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# fsync() is the File Synchronization option (FSC). That data reached a
+# storage device cannot be observed without a crash and is not tested
+# (the page's RATIONALE says so too); the assertions check return values,
+# errors, and that the call does not disturb the file. Error tests arrange
+# exactly one error condition (XSH 2.3).
+
+assertion  XSH.fsync.001
+anchor     functions/fsync.html#DESCRIPTION
+anchor     functions/fsync.html#RETURN VALUE
+class      conditional
+when       FSC
+since      2001
+says       fsync() of a descriptor open for writing on a regular file that
+           was just written returns 0, and afterwards the file has the
+           same length and contents and the descriptor the same file
+           offset.
+test       t/001-regular.c
+
+assertion  XSH.fsync.002
+anchor     functions/fsync.html#ERRORS/EBADF
+class      conditional
+when       FSC
+since      2001
+says       fsync() of a descriptor that is not open, and of -1, fails with
+           EBADF.
+test       t/002-ebadf.c
+
+assertion  XSH.fsync.003
+anchor     functions/fsync.html#DESCRIPTION
+anchor     functions/fsync.html#ERRORS/EINVAL
+class      disputed
+when       FSC
+since      2001
+says       fsync() of the read end of a pipe either returns 0 or fails
+           with EINVAL; any other outcome is a failure.
+note       disputed (new: fsync-pipe): the ERRORS section requires
+           EINVAL when the descriptor does not refer to a file on which
+           the operation is possible, but nothing says which file types
+           those are, and the RATIONALE permits a null implementation.
+           Both outcomes are therefore accepted, and only another errno
+           (or a hang) fails.
+test       t/003-pipe.c
+
+assertion  XSH.fsync.004
+anchor     functions/fsync.html#DESCRIPTION
+anchor     functions/fsync.html#ERRORS/EBADF
+class      disputed
+when       FSC
+since      2001
+says       fsync() of a descriptor open only for reading on a regular file
+           returns 0.
+note       disputed (new: fsync-rdonly): the page does not say whether a
+           descriptor not open for writing is acceptable (fdatasync()'s
+           page says outright that it is); the descriptor is valid and
+           the operation is possible on a regular file, so the test
+           takes the reading that it succeeds. A FAIL is logged as
+           INSPECT.
+test       t/004-rdonly.c
+
+assertion  XSH.fsync.005
+anchor     functions/fsync.html#APPLICATION USAGE
+anchor     functions/fsync.html#ERRORS/EINVAL
+class      conditional
+when       FSC
+since      2001
+says       fsync() of a descriptor open on a directory either returns 0
+           or fails with EINVAL; any other outcome is a failure.
+note       The usage section says an application can call it on a
+           directory; a file system on which that is not possible may
+           report EINVAL.
+test       t/005-directory.c
+
+assertion  XSH.fsync.006
+anchor     functions/fsync.html#DESCRIPTION
+anchor     functions/fsync.html#RETURN VALUE
+class      conditional
+when       FSC
+since      2001
+says       Data written through one descriptor of a regular file, fsync()
+           through a second descriptor opened separately on the same
+           file returns 0 and the file keeps the data.
+note       The description concerns the file named by the descriptor,
+           not the descriptor that did the writing.
+test       t/006-other-descriptor.c

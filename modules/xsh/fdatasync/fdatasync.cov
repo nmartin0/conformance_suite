@@ -1,0 +1,9 @@
+# fdatasync.cov - every requirement unit on functions/fdatasync.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:c7d30f76        untestable  synchronized I/O completion is not observable without a crash
+DESCRIPTION:e4bf5250        untestable  synchronized I/O completion is not observable without a crash
+RETURN_VALUE:8789389e       XSH.fdatasync.001 XSH.fdatasync.002 XSH.fdatasync.003
+RETURN_VALUE:68ddcdeb       none  not guaranteed (a permission)
+ERRORS:8f957e38             XSH.fdatasync.002
+ERRORS:b7f60a8a             partial XSH.fdatasync.004 XSH.fdatasync.005  # which files qualify is not stated (disputed new: fsync-pipe)

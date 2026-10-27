@@ -1,0 +1,140 @@
+# XSH writev()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# writev() is an XSI function. It behaves as write() except where the page
+# says otherwise; its errors are write()'s plus those listed (module
+# xsh/write tests those for write()). Error tests arrange exactly one error
+# condition (XSH 2.3).
+
+assertion  XSH.writev.001
+anchor     functions/writev.html#DESCRIPTION
+anchor     functions/writev.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       writev() of three buffers ("ab", "cde", "f") on a regular file
+           returns 6 and the file holds "abcdef", the buffers written in
+           array order; the file offset advances by 6, so a second
+           writev() continues after it.
+test       t/001-gather.c
+
+assertion  XSH.writev.002
+anchor     functions/writev.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A zero-length entry among the buffers writes nothing: with
+           lengths 2, 0, 3, writev() returns 5 and the file holds the
+           first and third buffers in order.
+test       t/002-zero-entry.c
+
+assertion  XSH.writev.003
+anchor     functions/writev.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       writev() on a regular file with every iov_len 0 returns 0 and
+           has no other effect: the file's length, its contents and the
+           file offset are unchanged.
+test       t/003-all-zero.c
+
+assertion  XSH.writev.004
+anchor     functions/writev.html#DESCRIPTION
+anchor     functions/write.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       writev() on a descriptor with O_APPEND set writes all its
+           buffers at the end of the file, in order, as one block.
+test       t/004-append.c
+
+assertion  XSH.writev.005
+anchor     functions/writev.html#DESCRIPTION
+anchor     functions/writev.html#RETURN VALUE
+anchor     functions/writev.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2001
+says       writev() with buffer lengths whose sum exceeds the largest
+           ssize_t value (SSIZE_MAX and 1; then SSIZE_MAX and SSIZE_MAX)
+           fails with EINVAL, transfers no data, and leaves the file
+           offset unchanged.
+test       t/005-overflow.c
+
+assertion  XSH.writev.006
+anchor     functions/writev.html#ERRORS
+anchor     functions/write.html#ERRORS/EBADF
+class      conditional
+when       XSI
+since      2001
+says       writev() fails with EBADF on a descriptor that is not open, and
+           on one open only for reading.
+test       t/006-ebadf.c
+
+assertion  XSH.writev.007
+anchor     functions/writev.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2001
+says       writev() with iovcnt 0, or greater than {IOV_MAX}, either fails
+           with EINVAL or is carried out; no other error is allowed. When
+           {IOV_MAX} cannot be found the second call is skipped.
+note       The result is NOTINUSE when the system carries both calls out.
+test       t/007-iovcnt.c
+
+assertion  XSH.writev.008
+anchor     functions/writev.html#DESCRIPTION
+anchor     functions/writev.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       A successful writev() of more than 0 bytes marks the file's
+           data modification and file status change times for update.
+note       Takes about 2 s, as XSH.write.020.
+timeout    20
+test       t/008-times.c
+
+assertion  XSH.writev.009
+anchor     functions/writev.html#DESCRIPTION
+anchor     functions/write.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       writev() to a pipe delivers the buffers in order and returns
+           the total; the reader gets the bytes joined.
+test       t/009-pipe.c
+
+assertion  XSH.writev.010
+anchor     functions/writev.html#ERRORS
+anchor     functions/write.html#ERRORS/EPIPE
+class      conditional
+when       XSI
+since      2001
+says       writev() to a pipe that no process has open for reading fails
+           with EPIPE (SIGPIPE ignored).
+test       t/010-epipe.c
+
+assertion  XSH.writev.011
+anchor     functions/writev.html#DESCRIPTION
+anchor     functions/write.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       With the soft file size limit lowered (RLIMIT_FSIZE, SIGXFSZ
+           ignored) so that 10 bytes fit, writev() of two buffers of 6
+           bytes returns 10: the first is written complete and the second
+           only as far as there is room.
+note       Runs in a child, since the limit would apply to the result
+           file too.
+test       t/011-fsize-partial.c
+
+assertion  XSH.writev.012
+anchor     functions/writev.html#DESCRIPTION
+anchor     functions/write.html#ERRORS/EFBIG
+class      conditional
+when       XSI
+since      2001
+says       With the soft file size limit lowered (RLIMIT_FSIZE, SIGXFSZ
+           ignored) and the file at the limit, writev() fails with EFBIG
+           and writes nothing.
+test       t/012-fsize-efbig.c

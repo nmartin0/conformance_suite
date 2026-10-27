@@ -1,0 +1,139 @@
+# XSH pwrite()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page is shared with write() (module xsh/write, which also tests
+# pwrite() as XSH.write.021 to .024). This module tests pwrite() on its
+# own: what "equivalent to write() except for the position" means in each
+# case. Error tests arrange exactly one error condition (XSH 2.3).
+
+assertion  XSH.pwrite.001
+anchor     functions/pwrite.html#DESCRIPTION
+anchor     functions/pwrite.html#RETURN VALUE
+class      required
+since      2008
+says       pwrite(fd, buf, n, off) on a regular file returns n, writes the
+           bytes at offset off whatever the descriptor's file offset is,
+           and does not change that file offset.
+test       t/001-offset.c
+
+assertion  XSH.pwrite.002
+anchor     functions/pwrite.html#DESCRIPTION
+class      required
+since      2008
+says       pwrite() on a descriptor with O_APPEND set writes at the offset
+           given, not at the end, and leaves the file offset alone.
+test       t/002-append.c
+
+assertion  XSH.pwrite.003
+anchor     functions/pwrite.html#DESCRIPTION
+class      required
+since      2008
+says       pwrite() starting beyond the end of a regular file extends it
+           to the offset plus the number of bytes, and the bytes between
+           the old end and the new data read as zeros.
+test       t/003-extend.c
+
+assertion  XSH.pwrite.004
+anchor     functions/pwrite.html#DESCRIPTION
+class      required
+since      2008
+says       pwrite() entirely inside a regular file leaves its length
+           alone and replaces only the bytes written.
+test       t/004-overwrite.c
+
+assertion  XSH.pwrite.005
+anchor     functions/pwrite.html#DESCRIPTION
+class      required
+since      2008
+says       pwrite() with nbyte 0 on a regular file returns 0 and has no
+           other result: even with an offset beyond the end of file the
+           file's length is unchanged, and the file offset is unchanged.
+test       t/005-zero.c
+
+assertion  XSH.pwrite.006
+anchor     functions/pwrite.html#ERRORS/EBADF
+class      required
+since      2008
+says       pwrite() fails with EBADF on a descriptor that is not open, and
+           on one open only for reading.
+test       t/006-ebadf.c
+
+assertion  XSH.pwrite.007
+anchor     functions/pwrite.html#ERRORS/ESPIPE
+class      required
+since      2008
+says       pwrite() on the write end of a pipe fails with ESPIPE.
+note       Whether data enters the pipe is not checked: a failed call may
+           have been partly performed (XSH 2.3).
+test       t/007-espipe-pipe.c
+
+assertion  XSH.pwrite.008
+anchor     functions/pwrite.html#ERRORS/ESPIPE
+class      required
+since      2008
+says       pwrite() on a FIFO opened for writing (a reader present) fails
+           with ESPIPE.
+note       As XSH.pwrite.007.
+test       t/008-espipe-fifo.c
+
+assertion  XSH.pwrite.009
+anchor     functions/pwrite.html#ERRORS/EINVAL
+class      required
+since      2008
+says       pwrite() on a regular file with a negative offset fails with
+           EINVAL and leaves the file offset unchanged.
+note       See SI-3.
+test       t/009-einval.c
+
+assertion  XSH.pwrite.010
+anchor     functions/pwrite.html#DESCRIPTION
+class      required
+since      2008
+says       A successful pwrite() of more than 0 bytes marks the file's
+           data modification and file status change times for update.
+note       Takes about 2 s, as XSH.write.020.
+timeout    20
+test       t/010-times.c
+
+assertion  XSH.pwrite.011
+anchor     functions/pwrite.html#DESCRIPTION
+class      required
+since      2008
+says       pwrite() works with an offset that does not fit in 32 bits:
+           the file's length becomes 2^32 + 5 + n and a pread() at that
+           offset returns the data.
+note       Needs a 64-bit off_t and a file system that holds the file
+           (sparse); a refusal for size or space is UNRESOLVED, as the
+           text lets the file system limit file size.
+test       t/011-large-offset.c
+
+assertion  XSH.pwrite.012
+anchor     functions/pwrite.html#DESCRIPTION
+anchor     functions/pwrite.html#ERRORS/EFBIG
+class      required
+since      2008
+says       With the soft file size limit lowered (RLIMIT_FSIZE, SIGXFSZ
+           ignored), pwrite() at an offset at or beyond the limit fails
+           with EFBIG and writes nothing.
+note       Runs in a child, since the limit would apply to the result
+           file too.
+test       t/012-fsize-efbig.c
+
+assertion  XSH.pwrite.013
+anchor     functions/pwrite.html#DESCRIPTION
+class      required
+since      2008
+says       With the soft file size limit lowered (RLIMIT_FSIZE, SIGXFSZ
+           ignored), a pwrite() that starts below the limit but would
+           cross it writes only as many bytes as fit and returns that
+           number.
+test       t/013-fsize-partial.c
+
+assertion  XSH.pwrite.014
+anchor     functions/pwrite.html#DESCRIPTION
+class      required
+since      2008
+says       After pwrite() returns, a read() through another descriptor
+           of the file returns the data written, and a later pwrite() to
+           the same position replaces it.
+test       t/014-visible.c

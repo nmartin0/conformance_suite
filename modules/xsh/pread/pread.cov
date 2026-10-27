@@ -1,0 +1,61 @@
+# pread.cov - every requirement unit on functions/pread.html (read, pread; the page is shared with xsh/read, whose assertions are cited for read() behaviour).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:11da3738        XSH.read.001 XSH.pread.001
+DESCRIPTION:0b508d00        none  unspecified
+DESCRIPTION:4f46d1f9        none  a permission
+DESCRIPTION:e98b66e5        XSH.read.003 XSH.pread.003
+DESCRIPTION:6f6acd4b        XSH.read.001
+DESCRIPTION:a43d2e52        XSH.read.001
+DESCRIPTION:c30892c1        none  explanation
+DESCRIPTION:799067ff        none  undefined
+DESCRIPTION:2012e799        XSH.read.002 XSH.pread.002
+DESCRIPTION:3b827dd2        XSH.read.002 XSH.read.004 XSH.pread.002
+DESCRIPTION:da51d094        impl  reads from device special files after the end (documentation)
+DESCRIPTION:b1be1c50        impl  nbyte above {SSIZE_MAX} (documentation)
+DESCRIPTION:d0b3c17b        none  introduces the pipe cases
+DESCRIPTION:4fca1688        XSH.read.006
+DESCRIPTION:db6a1bad        XSH.read.007 XSH.read.020
+DESCRIPTION:a6463407        XSH.read.008 XSH.read.009
+DESCRIPTION:40e001c5        none  introduces the other cases
+DESCRIPTION:7e0799c9        partial XSH.read.019  # sockets; terminals need a pseudo-terminal
+DESCRIPTION:c02beb9e        todo  blocking read of a terminal waits for input (needs a pseudo-terminal)
+DESCRIPTION:6caa80e0        XSH.read.023  # the socket half
+DESCRIPTION:a63f16ba        none  explanation
+DESCRIPTION:5a4e0770        XSH.read.005 XSH.pread.004
+DESCRIPTION:aa174986        none  example
+DESCRIPTION:32919a5b        XSH.lseek.005
+DESCRIPTION:3865984e        XSH.read.001 XSH.read.014
+DESCRIPTION:69aca9ee        XSH.read.002 XSH.read.010
+DESCRIPTION:dd3d832c        XSH.read.010  # the pipe case; the others are permissions
+DESCRIPTION:66889380        none  example
+DESCRIPTION:33718d69        XSH.read.011
+DESCRIPTION:aa45518e        todo  a read interrupted after some data returns the count (needs a pseudo-terminal)
+DESCRIPTION:034a673b        todo  only reachable where the offset maximum is below the largest file size (32-bit off_t)
+DESCRIPTION:5dd51659        partial XSH.read.018  # equivalence with recv() for out-of-band data and message boundaries not tested
+DESCRIPTION:29dda4b3        untestable  synchronized I/O completion is not observable without power-loss testing
+DESCRIPTION:aa314506        untestable  synchronized I/O completion is not observable without power-loss testing
+DESCRIPTION:00a97dea        none  unspecified
+DESCRIPTION:710a72a4        none  unspecified
+DESCRIPTION:df951ac7        XSH.read.015 XSH.pread.001 XSH.pread.009 XSH.pread.010 XSH.pread.012
+DESCRIPTION:7c759f2b        none  describes the arguments
+DESCRIPTION:92df1447        XSH.read.016 XSH.pread.006 XSH.pread.007
+RETURN_VALUE:172ae798       XSH.read.001 XSH.read.002 XSH.pread.001 XSH.pread.002
+RETURN_VALUE:07cecf34       XSH.read.012 XSH.pread.005
+ERRORS:f6dc6cac             todo  non-blocking read of a terminal with no input (needs a pseudo-terminal)
+ERRORS:0f422ac6             XSH.read.012 XSH.pread.005
+ERRORS:201620e6             XSH.read.011
+ERRORS:187581de             todo  background process group reading its controlling terminal (needs a pseudo-terminal and job control)
+ERRORS:98cbd6f2             XSH.read.013 XSH.pread.011
+ERRORS:f99ad3ea             todo  only reachable where the offset maximum is below the largest file size (32-bit off_t)
+ERRORS:dc606093             XSH.read.017 XSH.pread.008
+ERRORS:4933f0fc             XSH.read.016 XSH.pread.006 XSH.pread.007
+ERRORS:46b55cc9             XSH.read.007 XSH.read.020
+ERRORS:60755504             XSH.read.019
+ERRORS:04ab2a1f             XSH.read.022
+ERRORS:3f3d9e56             XSH.read.021
+ERRORS:82c28805             todo  environment: a TCP peer that stops answering (needs a network namespace or firewall rule)
+ERRORS:1220c343             optional
+ERRORS:f270bfef             optional
+ERRORS:00777f07             optional
+ERRORS:24561c7d             optional

@@ -1,0 +1,222 @@
+# XSH creat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# creat(path, mode) behaves as open(path, O_WRONLY|O_CREAT|O_TRUNC, mode),
+# and its return value and errors are those of open(). The assertions
+# below test creat() itself against the open() passages that apply to
+# that flag combination. Error tests arrange exactly one error condition
+# (XSH 2.3). Tests that need a process without appropriate privileges run
+# the call in a child that drops to an unprivileged user when the suite
+# runs as root; if that is impossible they are UNRESOLVED.
+
+assertion  XSH.creat.001
+anchor     functions/creat.html#DESCRIPTION
+anchor     functions/open.html#DESCRIPTION/O_CREAT
+class      required
+since      1988
+says       creat() of a path that does not exist returns a descriptor
+           and creates a regular file of length 0.
+test       t/001-creates.c
+
+assertion  XSH.creat.002
+anchor     functions/creat.html#DESCRIPTION
+anchor     functions/open.html#DESCRIPTION/O_CREAT
+class      required
+since      1988
+says       The permission bits of a file created by creat() are the mode
+           argument with the bits set in the file mode creation mask
+           cleared (mask 027, mode 0777 gives 0750).
+note       The run directory must not carry default ACLs, which some
+           systems apply instead of the mask.
+test       t/002-umask.c
+
+assertion  XSH.creat.003
+anchor     functions/creat.html#DESCRIPTION
+anchor     functions/open.html#DESCRIPTION/O_TRUNC
+class      required
+since      1988
+says       creat() of an existing regular file returns a descriptor, sets
+           its length to 0, and leaves its mode and owner as they were
+           (the mode argument is not applied).
+test       t/003-truncates.c
+
+assertion  XSH.creat.004
+anchor     functions/creat.html#DESCRIPTION
+anchor     functions/open.html#DESCRIPTION
+class      required
+since      1988
+says       The descriptor from creat() is open for writing only: write()
+           through it succeeds and read() fails with EBADF, even when the
+           file was created with a mode that denies write permission
+           (0444).
+test       t/004-write-only.c
+
+assertion  XSH.creat.005
+anchor     functions/creat.html#DESCRIPTION
+anchor     functions/open.html#DESCRIPTION
+class      required
+since      1988
+says       The file offset of the descriptor from creat() is the start of
+           the file: a first write lands at byte 0 of the (emptied) file.
+test       t/005-offset-zero.c
+
+assertion  XSH.creat.006
+anchor     functions/creat.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.6
+class      required
+since      1988
+says       creat() returns the lowest-numbered descriptor not open in the
+           process (tested with a gap below an open descriptor).
+test       t/006-lowest.c
+
+assertion  XSH.creat.007
+anchor     functions/creat.html#DESCRIPTION
+anchor     functions/open.html#DESCRIPTION
+class      required
+since      1988
+says       FD_CLOEXEC is clear on the descriptor from creat(), and so is
+           FD_CLOFORK where the system defines it.
+note       FD_CLOFORK is looked for by building (#ifdef).
+test       t/007-cloexec-clear.c
+
+assertion  XSH.creat.008
+anchor     functions/creat.html#DESCRIPTION
+anchor     functions/open.html#DESCRIPTION/O_TRUNC
+class      required
+since      2001
+says       creat("sl"), with sl a symbolic link to an existing regular
+           file, truncates that file; sl remains a symbolic link.
+test       t/008-symlink.c
+
+assertion  XSH.creat.009
+anchor     functions/creat.html#ERRORS
+anchor     functions/open.html#ERRORS/ENOENT
+class      required
+since      1988
+says       creat("nodir/f"), with nodir not existing, and creat(""), fail
+           with ENOENT; nothing is created.
+test       t/009-enoent.c
+
+assertion  XSH.creat.010
+anchor     functions/creat.html#ERRORS
+anchor     functions/open.html#ERRORS/EISDIR
+class      required
+since      1988
+says       creat() of a path naming a directory fails with EISDIR and the
+           directory is unchanged.
+test       t/010-eisdir.c
+
+assertion  XSH.creat.011
+anchor     functions/creat.html#ERRORS
+anchor     functions/open.html#ERRORS/ENOTDIR
+class      required
+since      1988
+says       creat("f/x"), with f a regular file, fails with ENOTDIR (the
+           call has O_CREAT, so no component of the prefix is missing);
+           f is unchanged.
+test       t/011-enotdir-prefix.c
+
+assertion  XSH.creat.012
+anchor     functions/creat.html#ERRORS
+anchor     functions/open.html#ERRORS/ENOENT or ENOTDIR
+anchor     functions/open.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       creat("f/"), with f an existing regular file, fails with
+           ENOTDIR (not ENOENT, which the text excludes when the path
+           without the slash names an existing file); f is unchanged.
+test       t/012-trailing-slash-file.c
+
+assertion  XSH.creat.013
+anchor     functions/creat.html#ERRORS
+anchor     functions/open.html#ERRORS/ENOENT or ENOTDIR
+class      required
+since      2008
+says       creat("new/"), with nothing named new, fails with ENOENT or
+           ENOTDIR and creates nothing.
+test       t/013-trailing-slash-new.c
+
+assertion  XSH.creat.014
+anchor     functions/creat.html#ERRORS
+anchor     functions/open.html#ERRORS/ELOOP
+class      required
+since      2001
+says       creat("a"), with a -> b and b -> a, fails with ELOOP.
+test       t/014-eloop.c
+
+assertion  XSH.creat.015
+anchor     functions/creat.html#ERRORS
+anchor     functions/open.html#ERRORS/ENAMETOOLONG
+class      required
+says       creat() of a name whose last component is longer than
+           {NAME_MAX} fails with ENAMETOOLONG and creates nothing.
+note       "since" left out, as for XSH.open.017: the error is
+           unconditional only since _POSIX_NO_TRUNC had to be other than
+           -1. The call has O_CREAT, so ENOENT for the missing file
+           cannot also apply.
+test       t/015-enametoolong.c
+
+assertion  XSH.creat.016
+anchor     functions/creat.html#ERRORS
+anchor     functions/open.html#ERRORS/EACCES
+class      required
+since      1988
+says       For a process without appropriate privileges, creat("w/f")
+           fails with EACCES when directory w denies write permission,
+           and creat("s/f") when directory s denies search permission;
+           neither file is created.
+test       t/016-eacces-dir.c
+
+assertion  XSH.creat.017
+anchor     functions/creat.html#ERRORS
+anchor     functions/open.html#ERRORS/EACCES
+anchor     functions/open.html#RETURN VALUE
+class      required
+since      1988
+says       For a process without appropriate privileges, creat() of an
+           existing file that denies write permission fails with EACCES
+           and the file keeps its contents.
+test       t/017-eacces-file.c
+
+assertion  XSH.creat.018
+anchor     functions/creat.html#ERRORS
+anchor     functions/open.html#ERRORS/EMFILE
+class      required
+since      1988
+says       creat() fails with EMFILE when every descriptor the process may
+           have is open (limit lowered with setrlimit(RLIMIT_NOFILE)), and
+           creates nothing.
+test       t/018-emfile.c
+
+assertion  XSH.creat.019
+anchor     functions/creat.html#DESCRIPTION
+anchor     functions/open.html#DESCRIPTION
+class      required
+since      1988
+says       creat() of a new file marks the data modification and file
+           status change times of the parent directory for update.
+note       Takes about 2 s: the times are compared across a pause longer
+           than a coarse timestamp resolution.
+timeout    20
+test       t/019-parent-times.c
+
+assertion  XSH.creat.020
+anchor     functions/creat.html#DESCRIPTION
+anchor     functions/open.html#DESCRIPTION
+class      required
+since      1988
+says       creat() of an existing non-empty file marks its data
+           modification and file status change times for update.
+note       Takes about 2 s, as XSH.creat.019.
+timeout    20
+test       t/020-trunc-times.c
+
+assertion  XSH.creat.021
+anchor     functions/creat.html#DESCRIPTION
+anchor     functions/open.html#DESCRIPTION/O_CREAT
+class      required
+since      1988
+says       The owner of a file created by creat() is the effective user
+           ID of the process, and its group is the group of the parent
+           directory or the effective group ID of the process.
+test       t/021-owner.c

@@ -1,0 +1,178 @@
+# XSH remove()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# remove(path) is unlink(path) when path does not name a directory and
+# rmdir(path) when it does; its return value and errors are theirs (modules
+# xsh/unlink and xsh/rmdir test those functions). Error tests arrange
+# exactly one error condition (XSH 2.3). Where the standard says a
+# regular-file prefix gives ENOTDIR but the missing last component gives
+# ENOENT too, the assertion is disputed as in unlink() and rmdir().
+# remove() of a symbolic link to a directory is not tested: whether such a
+# path "names a directory" (so that rmdir() would apply and fail with
+# ENOTDIR) is not settled by the text (candidate issue new: remove-symlink-dir).
+
+assertion  XSH.remove.001
+anchor     functions/remove.html#DESCRIPTION
+class      required
+since      1988
+says       remove("f") of a regular file returns 0; afterwards f does not
+           exist and open("f", O_RDONLY) fails with ENOENT.
+test       t/001-file.c
+
+assertion  XSH.remove.002
+anchor     functions/remove.html#DESCRIPTION
+class      required
+since      2001
+says       remove("d") of an empty directory returns 0 and d no longer
+           exists.
+test       t/002-empty-dir.c
+
+assertion  XSH.remove.003
+anchor     functions/remove.html#DESCRIPTION
+class      required
+since      2001
+says       remove("g"), with g a second name of f, returns 0; afterwards g
+           does not exist and f reports st_nlink 1 and keeps its
+           contents.
+test       t/003-link.c
+
+assertion  XSH.remove.004
+anchor     functions/remove.html#DESCRIPTION
+class      required
+since      2001
+says       remove("sl"), with sl a symbolic link to a regular file,
+           removes sl and leaves the file; remove() of a dangling
+           symbolic link removes it too.
+test       t/004-symlink.c
+
+assertion  XSH.remove.005
+anchor     functions/remove.html#DESCRIPTION
+class      required
+since      2001
+says       After remove() of the only name of a file that is open, the
+           name is gone, and the descriptor still reads the file's
+           contents.
+note       A file system that keeps a removed open file under another
+           name (NFS's silly rename) is not a problem here: only the name
+           and the readable contents are checked.
+test       t/005-open-file-kept.c
+
+assertion  XSH.remove.006
+anchor     functions/remove.html#DESCRIPTION
+anchor     functions/rmdir.html#ERRORS/EEXIST
+class      required
+since      2001
+says       remove("d") with d a directory holding a file fails with EEXIST
+           or ENOTEMPTY, and d and the file remain.
+test       t/006-nonempty.c
+
+assertion  XSH.remove.007
+anchor     functions/remove.html#ERRORS
+anchor     functions/unlink.html#ERRORS/ENOENT
+class      required
+since      1988
+says       remove("missing"), remove("nodir/x") and remove("") fail with
+           ENOENT.
+test       t/007-enoent.c
+
+assertion  XSH.remove.008
+anchor     functions/remove.html#ERRORS
+anchor     functions/unlink.html#ERRORS/ENOTDIR
+class      disputed
+since      2001
+says       remove("f/x"), with f a regular file, fails with ENOTDIR and f
+           remains.
+note       disputed (Q-8): x names no existing file, so ENOENT applies
+           too and XSH 2.3 lets either error be reported; a FAIL is
+           logged as INSPECT. See XSH.unlink.012.
+test       t/008-enotdir-prefix.c
+
+assertion  XSH.remove.009
+anchor     functions/remove.html#ERRORS
+anchor     functions/unlink.html#ERRORS/ENOTDIR
+anchor     functions/rmdir.html#ERRORS/ENOTDIR
+class      disputed
+since      2008
+says       remove("f/"), with f a regular file, fails with ENOTDIR and f
+           remains.
+note       disputed (Q-44): as unlink("f/") the error is ENOTDIR
+           (XSH.unlink.023), but as rmdir("f/") ENOENT for "a
+           nonexistent directory" applies too (XSH.rmdir.015), and it is
+           not settled which function a trailing-slash path to a file
+           selects; a FAIL is logged as INSPECT.
+test       t/009-slash-file.c
+
+assertion  XSH.remove.010
+anchor     functions/remove.html#ERRORS
+anchor     functions/unlink.html#ERRORS/EACCES
+class      required
+since      1988
+says       For a process without appropriate privileges, remove("w/f")
+           fails with EACCES when directory w denies write permission,
+           and remove("s/f") when directory s denies search permission;
+           both files remain.
+test       t/010-eacces-file.c
+
+assertion  XSH.remove.011
+anchor     functions/remove.html#ERRORS
+anchor     functions/rmdir.html#ERRORS/EACCES
+class      required
+since      2001
+says       For a process without appropriate privileges, remove("w/d")
+           with d an empty directory fails with EACCES when directory w
+           denies write permission; d remains.
+test       t/011-eacces-dir.c
+
+assertion  XSH.remove.012
+anchor     functions/remove.html#ERRORS
+anchor     functions/rmdir.html#ERRORS/EINVAL
+class      required
+since      2008
+says       remove("d/e/."), with e an empty directory, fails with EINVAL
+           and e remains; remove("d/e/..") fails (any error) and nothing
+           is removed.
+test       t/012-dot.c
+
+assertion  XSH.remove.013
+anchor     functions/remove.html#ERRORS
+anchor     functions/unlink.html#ERRORS/ELOOP
+class      disputed
+since      2001
+says       remove("a/x"), with a -> b and b -> a, fails with ELOOP.
+note       disputed (Q-8): x names no existing file, since resolution of
+           the prefix never ends, so ENOENT applies literally too and
+           XSH 2.3 lets either error be reported; a FAIL is logged as
+           INSPECT. See XSH.unlink.013.
+test       t/013-eloop.c
+
+assertion  XSH.remove.014
+anchor     functions/remove.html#ERRORS
+anchor     functions/unlink.html#ERRORS/ENAMETOOLONG
+class      disputed
+says       remove() of a name longer than {NAME_MAX} bytes fails with
+           ENAMETOOLONG.
+note       disputed (Q-8): the name also names no existing file, so
+           ENOENT applies too; see XSH.unlink.014. "since" left out, as
+           for XSH.open.017: the error is unconditional only since
+           _POSIX_NO_TRUNC had to be other than -1.
+test       t/014-enametoolong.c
+
+assertion  XSH.remove.015
+anchor     functions/remove.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+since      2008
+says       remove("d/") with d an empty directory succeeds and removes d.
+test       t/015-dir-slash.c
+
+assertion  XSH.remove.016
+anchor     functions/remove.html#DESCRIPTION
+class      required
+since      2001
+says       remove() of a file, and of an empty directory, marks the parent
+           directory's data modification and file status change times for
+           update (as unlink() and rmdir() do).
+note       Takes about 4 s: the times are compared across pauses longer
+           than a coarse timestamp resolution.
+timeout    20
+test       t/016-parent-times.c

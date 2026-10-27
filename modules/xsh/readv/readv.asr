@@ -1,0 +1,130 @@
+# XSH readv()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# readv() is an XSI function. It behaves as read() except where the page
+# says otherwise, and its return value and errors are read()'s (module
+# xsh/read tests those for read()). Error tests arrange exactly one error
+# condition (XSH 2.3).
+
+assertion  XSH.readv.001
+anchor     functions/readv.html#DESCRIPTION
+anchor     functions/readv.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       readv() on a regular file with three buffers of 2, 3 and 4
+           bytes and 9 bytes available returns 9, with the data in
+           file order across the buffers, each filled before the next.
+test       t/001-gather.c
+
+assertion  XSH.readv.002
+anchor     functions/readv.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       readv() on a regular file holding 5 bytes, with buffers of 3,
+           4 and 4 bytes, returns 5: the first buffer holds the first 3
+           bytes and the second starts with the last 2.
+test       t/002-short.c
+
+assertion  XSH.readv.003
+anchor     functions/readv.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       readv() advances the file offset by the number of bytes read,
+           so a second readv() continues where the first stopped.
+test       t/003-offset.c
+
+assertion  XSH.readv.004
+anchor     functions/readv.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A zero-length entry among the buffers takes no data: with
+           lengths 2, 0, 3, readv() returns 5 and the data fills the
+           first and third buffers in order.
+test       t/004-zero-entry.c
+
+assertion  XSH.readv.005
+anchor     functions/readv.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       readv() on a regular file at its end returns 0 and leaves the
+           buffers alone.
+test       t/005-eof.c
+
+assertion  XSH.readv.006
+anchor     functions/readv.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A successful readv() that reads data marks the file's last data
+           access time for update.
+note       Takes about 2 s, as XSH.read.014.
+timeout    20
+test       t/006-atime.c
+
+assertion  XSH.readv.007
+anchor     functions/readv.html#DESCRIPTION
+anchor     functions/read.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       readv() on a pipe that holds 4 bytes, with buffers of 3 and 3,
+           returns at once with between 1 and 4 bytes, which are the
+           pipe's first bytes in order across the buffers.
+test       t/007-pipe.c
+
+assertion  XSH.readv.008
+anchor     functions/readv.html#ERRORS
+anchor     functions/read.html#ERRORS/EBADF
+class      conditional
+when       XSI
+since      2001
+says       readv() fails with EBADF on a descriptor that is not open, and
+           on one open only for writing.
+test       t/008-ebadf.c
+
+assertion  XSH.readv.009
+anchor     functions/readv.html#ERRORS
+anchor     functions/read.html#ERRORS/EAGAIN
+class      conditional
+when       XSI
+since      2001
+says       readv() on an empty pipe that has a writer, with O_NONBLOCK
+           set, fails with EAGAIN.
+test       t/009-eagain.c
+
+assertion  XSH.readv.010
+anchor     functions/readv.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2001
+says       readv() with two buffers whose lengths sum to more than the
+           largest ssize_t value (each is SSIZE_MAX, on a small file)
+           fails with EINVAL and reads nothing.
+test       t/010-overflow.c
+
+assertion  XSH.readv.011
+anchor     functions/readv.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2001
+says       readv() with iovcnt 0, or greater than {IOV_MAX}, either fails
+           with EINVAL or is carried out; no other error is allowed (the
+           call may fail, and nothing is said of what happens when it
+           does not). When {IOV_MAX} cannot be found the second call is
+           skipped.
+note       The result is NOTINUSE when the system carries both calls out.
+test       t/011-iovcnt.c
+
+assertion  XSH.readv.012
+anchor     functions/readv.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       readv() with iovcnt 1 reads like read(): the buffer is filled
+           from the file offset and the offset advances.
+test       t/012-single.c

@@ -1,0 +1,15 @@
+# fsync.cov - every requirement unit on functions/fsync.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:b762f293        partial XSH.fsync.001 XSH.fsync.006  # that data reached a storage device is not observable without a crash (RATIONALE)
+DESCRIPTION:eba4a648        none  implementation-defined
+DESCRIPTION:eb93c8ae        untestable  completion of the transfer is not observable without a crash
+DESCRIPTION:32e18db7        untestable  synchronized I/O completion is not observable without a crash
+DESCRIPTION:5d7aa21d        untestable  synchronized I/O completion is not observable without a crash
+RETURN_VALUE:aac30b20       XSH.fsync.001 XSH.fsync.004 XSH.fsync.006
+RETURN_VALUE:ce1869b1       XSH.fsync.002
+RETURN_VALUE:d8d87818       none  not guaranteed (a permission)
+ERRORS:a7988c9f             XSH.fsync.002
+ERRORS:a080c923             todo  environment: interrupt an fsync() that blocks (needs a slow device)
+ERRORS:2eb01162             partial XSH.fsync.003 XSH.fsync.005  # which files qualify is not stated (disputed new: fsync-pipe)
+ERRORS:eae567a3             todo  environment: an I/O error on the device
