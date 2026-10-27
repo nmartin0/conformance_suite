@@ -1,0 +1,51 @@
+# XSH longjmp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Whether longjmp() restores the signal mask is unspecified and is not
+# tested here (see siglongjmp for the signal mask).
+
+assertion  XSH.longjmp.001
+anchor     functions/longjmp.html#DESCRIPTION
+anchor     functions/longjmp.html#RETURN VALUE
+class      required
+since      1988
+says       longjmp(env, val) makes the matching setjmp() return val, for
+           val of 1, 2, 7, -5, INT_MAX and INT_MIN.
+test       t/001-value.c
+
+assertion  XSH.longjmp.002
+anchor     functions/longjmp.html#RETURN VALUE
+class      required
+since      1988
+says       longjmp(env, 0) makes setjmp() return 1, never 0.
+test       t/002-zero-value.c
+
+assertion  XSH.longjmp.003
+anchor     functions/longjmp.html#DESCRIPTION
+class      required
+since      1988
+says       At the jump, volatile locals, globals and objects in memory have
+           the values they held when longjmp() was called (changed after
+           setjmp()), and the state of an open file (its offset after a
+           write between the calls) is as at the call.
+test       t/003-state-kept.c
+
+assertion  XSH.longjmp.004
+anchor     functions/longjmp.html#DESCRIPTION
+class      required
+since      1988
+says       longjmp() unwinds any number of active calls: from 50 nested
+           calls, and repeated 1000 times, the matching setjmp() resumes in
+           the function that called it with its volatile locals intact.
+test       t/004-nested.c
+
+assertion  XSH.longjmp.005
+anchor     functions/longjmp.html#DESCRIPTION
+anchor     functions/longjmp.html#RETURN VALUE
+class      required
+since      1988
+says       longjmp() may be called from a signal handler that interrupted the
+           function with the setjmp(): after raise(), the handler's longjmp()
+           returns control there with the value given.
+note       longjmp() is async-signal-safe (XSH 2.4.3).
+test       t/005-from-handler.c

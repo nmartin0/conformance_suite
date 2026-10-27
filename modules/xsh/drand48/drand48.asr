@@ -1,0 +1,115 @@
+# XSH drand48(), erand48(), jrand48(), lcong48(), lrand48(), mrand48(),
+# nrand48(), seed48() and srand48()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All nine are XSI. The page fixes the generator exactly (48-bit linear
+# congruential with the standard multiplier and addend), so the tests
+# compute the expected values from the recurrence in the test code. A
+# three-word state array holds X with word 0 least significant, as the page
+# gives for seed48() and its EXAMPLES show for the *rand48 functions with
+# an array.
+
+assertion  XSH.drand48.001
+anchor     functions/drand48.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       After srand48(s) the values of lrand48() are those of the page's
+           recurrence started from X with the high 32 bits equal to the low
+           32 bits of s and the low 16 bits 0x330E, for several seeds
+           (including negative ones), and bits of s above the low 32 do not
+           matter.
+test       t/001-srand48.c
+
+assertion  XSH.drand48.002
+anchor     functions/drand48.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       drand48() after srand48(s) returns exactly X * 2^-48 for each
+           successive X of the recurrence, always in [0.0, 1.0).
+test       t/002-drand48.c
+
+assertion  XSH.drand48.003
+anchor     functions/drand48.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       mrand48() and jrand48() return values in [-2^31, 2^31); when X is
+           below 2^47 the value is floor(X / 2^16); jrand48() leaves the new X
+           in its array.
+test       t/003-mrand48.c
+
+assertion  XSH.drand48.004
+anchor     functions/drand48.html#DESCRIPTION
+class      disputed
+when       XSI
+since      1988
+says       When X is 2^47 or more, mrand48() and jrand48() return floor(X /
+           2^16) - 2^32 (the value of the top 32 bits as a signed number).
+note       disputed (new): the formula floor(X / 2^16) reaches 2^32 - 1, but
+           the stated range is [-2^31, 2^31); the page does not say how the
+           upper half maps into the range. The test takes the two's complement
+           reading.
+test       t/004-signed-mapping.c
+
+assertion  XSH.drand48.005
+anchor     functions/drand48.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       erand48() and nrand48() need no initialisation: from X in the
+           caller's array they return X' * 2^-48 and floor(X' / 2^17), and
+           store the new X' in the array.
+test       t/005-erand48-nrand48.c
+
+assertion  XSH.drand48.006
+anchor     functions/drand48.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       The sequence from one array does not depend on how often other
+           arrays or the internal generator are used: 20 erand48() values
+           are the same alone and interleaved with drand48(), lrand48(),
+           mrand48(), nrand48() and jrand48() calls on other state.
+test       t/006-streams.c
+
+assertion  XSH.drand48.007
+anchor     functions/drand48.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       lrand48() values are in [0, 2^31) and equal floor(X / 2^17) of
+           the recurrence after srand48().
+test       t/007-lrand48.c
+
+assertion  XSH.drand48.008
+anchor     functions/drand48.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       seed48(v) sets X from the three words of v, and returns a pointer to
+           three words holding the previous X (the seed state after srand48(),
+           and later the last X generated).
+test       t/008-seed48.c
+
+assertion  XSH.drand48.009
+anchor     functions/drand48.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       lcong48() sets X, the multiplier and the addend from its seven
+           words (shown with palindromic words so that word order cannot
+           matter), and a later srand48() or seed48() restores the standard
+           multiplier and addend.
+test       t/009-lcong48.c
+
+assertion  XSH.drand48.010
+anchor     functions/drand48.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       drand48(), lrand48() and mrand48() called with no initialisation
+           return values in their ranges, and two fresh processes produce the
+           same values (constant default initial values).
+test       t/010-default-init.c

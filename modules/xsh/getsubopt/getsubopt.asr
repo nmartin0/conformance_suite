@@ -1,0 +1,67 @@
+# XSH getsubopt()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The key vector is { "ro", "rw", "name", "size", NULL } (indexes 0 to 3).
+# The page does not say what the value pointer holds when a token is not
+# matched beyond the general rule, and does not say whether the equals sign
+# is replaced by a null character, so neither is relied on beyond that rule.
+
+assertion  XSH.getsubopt.001
+anchor     functions/getsubopt.html#DESCRIPTION
+anchor     functions/getsubopt.html#RETURN VALUE
+class      required
+since      1992
+says       A lone token that is in the key vector returns its index, sets the
+           value pointer to a null pointer and leaves the option pointer at
+           the terminating null character of the string.
+test       t/001-token-only.c
+
+assertion  XSH.getsubopt.002
+anchor     functions/getsubopt.html#DESCRIPTION
+anchor     functions/getsubopt.html#RETURN VALUE
+class      required
+since      1992
+says       A token=value suboption returns the token's index and sets the
+           value pointer to the first character of the value (the text after
+           the first equals sign, up to the end of that suboption), including
+           an empty value for a trailing equals sign (pointing to a null
+           character, not null).
+test       t/002-token-value.c
+
+assertion  XSH.getsubopt.003
+anchor     functions/getsubopt.html#DESCRIPTION
+class      required
+since      1992
+says       Suboptions are separated by commas: "ro,name=x,size=10,rw"
+           yields, in successive calls, indexes 0, 2, 3, 1 with values null,
+           "x", "10", null, and the option pointer ends at the terminating
+           null; the comma after a suboption is replaced by a null character
+           and the option pointer is left at the start of the next
+           suboption.
+test       t/003-sequence.c
+
+assertion  XSH.getsubopt.004
+anchor     functions/getsubopt.html#RETURN VALUE
+class      required
+since      1992
+says       A token that matches no key returns -1, also when it is only a
+           prefix of a key ("nam"), has extra characters ("names") or is
+           unknown ("bogus"); the option pointer still moves on to the next
+           suboption so the scan can continue.
+test       t/004-no-match.c
+
+assertion  XSH.getsubopt.005
+anchor     functions/getsubopt.html#DESCRIPTION
+class      required
+since      1992
+says       Only the first equals sign of a suboption separates token from
+           value: "name=a=b" gives value "a=b" and "size==3" gives "=3".
+test       t/005-equals-in-value.c
+
+assertion  XSH.getsubopt.006
+anchor     functions/getsubopt.html#DESCRIPTION
+class      required
+since      1992
+says       getsubopt() does not modify the key vector: the pointers and the
+           key strings are the same after a scan as before.
+test       t/006-keylist-unchanged.c

@@ -1,0 +1,53 @@
+# XSH assert()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# A failing assert() aborts the process, so every failing case runs in a
+# forked child whose standard error (and, where relevant, standard output)
+# goes to a pipe the parent reads; the parent reaps the child. The exact
+# wording of the message is not specified, only what it must include.
+
+assertion  XSH.assert.001
+anchor     functions/assert.html#DESCRIPTION
+class      required
+since      1988
+says       assert() with a true expression (an int, a pointer, a floating
+           value, a long) does nothing visible and execution continues; the
+           expression is evaluated.
+test       t/001-true.c
+
+assertion  XSH.assert.002
+anchor     functions/assert.html#DESCRIPTION
+class      required
+since      1988
+says       assert() with a false expression calls abort(): a child with the
+           default SIGABRT action dies of SIGABRT, and a child that catches
+           SIGABRT sees its handler run.
+test       t/002-aborts.c
+
+assertion  XSH.assert.003
+anchor     functions/assert.html#DESCRIPTION
+class      required
+since      1988
+says       The message a failed assert() writes goes to standard error (and
+           nothing to standard output) and contains the text of the
+           expression, the file name given by __FILE__, the line number given
+           by __LINE__ and the name of the enclosing function.
+test       t/003-message.c
+
+assertion  XSH.assert.004
+anchor     functions/assert.html#DESCRIPTION
+class      required
+since      1988
+says       When NDEBUG is defined before <assert.h> is included, assert()
+           has no effect: a false expression does not abort and is not
+           evaluated.
+test       t/004-ndebug.c
+
+assertion  XSH.assert.005
+anchor     functions/assert.html#DESCRIPTION
+class      required
+since      1988
+says       The expression may have any scalar type: a null pointer, 0.0 and
+           0L are false (abort), while a non-null pointer, 0.5 and -1L are
+           true.
+test       t/005-scalar-types.c

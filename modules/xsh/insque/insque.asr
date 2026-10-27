@@ -1,0 +1,59 @@
+# XSH insque() and remque()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Both are XSI. The element structure has a forward pointer first and a
+# backward pointer second. What remque() leaves in the removed element's own
+# pointers is not specified and is not checked.
+
+assertion  XSH.insque.001
+anchor     functions/insque.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       insque(&e, NULL) sets both the forward and the backward pointer of e
+           to null pointers, whatever they held before.
+test       t/001-initial.c
+
+assertion  XSH.insque.002
+anchor     functions/insque.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       insque(&b, &a) with a the last element of a linear queue makes b
+           follow a: a's forward pointer is b, b's backward pointer is a, and
+           b's forward pointer is null; repeated, a chain of five is linked
+           both ways.
+test       t/002-append.c
+
+assertion  XSH.insque.003
+anchor     functions/insque.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       insque(&c, &a) with a followed by b puts c immediately after a: the
+           queue is a, c, b, with the forward and backward pointers of all
+           three consistent.
+test       t/003-middle.c
+
+assertion  XSH.insque.004
+anchor     functions/insque.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       remque() of the middle, first and last element of a linear queue
+           of four links the remaining neighbours to each other in both
+           directions and leaves the ends null (the first element's backward
+           pointer, the last element's forward pointer).
+test       t/004-remove.c
+
+assertion  XSH.insque.005
+anchor     functions/insque.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       A circular queue starts with one element whose forward and
+           backward pointers are its own address; insque() after it gives a
+           ring of two, insque() after the first again a ring of three in the
+           order first, new, old, and remque() of an element closes the ring
+           over the rest.
+test       t/005-circular.c

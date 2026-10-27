@@ -1,0 +1,62 @@
+# XSH lfind() and lsearch()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Both are XSI. The comparison functions in these tests return 0 for equal
+# and non-zero otherwise, with no ordering, as the page allows; the tables
+# hold distinct entries, so which of several matches is returned never
+# matters.
+
+assertion  XSH.lfind.001
+anchor     functions/lfind.html#DESCRIPTION
+anchor     functions/lfind.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       lfind() of an entry present in the table returns a pointer to that
+           element (inside the table) and leaves the count unchanged.
+test       t/001-lfind-found.c
+
+assertion  XSH.lfind.002
+anchor     functions/lfind.html#DESCRIPTION
+anchor     functions/lfind.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       lfind() of an entry that is not present returns a null pointer and
+           changes neither the table nor the count; on an empty table it
+           returns a null pointer.
+test       t/002-lfind-missing.c
+
+assertion  XSH.lfind.003
+anchor     functions/lfind.html#DESCRIPTION
+anchor     functions/lfind.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       lsearch() of an entry already in the table returns a pointer to that
+           element and neither adds an entry nor changes the count.
+test       t/003-lsearch-found.c
+
+assertion  XSH.lfind.004
+anchor     functions/lfind.html#DESCRIPTION
+anchor     functions/lfind.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       lsearch() of an entry that is not present copies it to the end of
+           the table (the position after the last of the nel entries),
+           increments the count by one, and returns a pointer to the new
+           element; the entry is then found by lfind(), earlier entries are
+           unchanged, and a second lsearch() of it adds nothing.
+test       t/004-lsearch-append.c
+
+assertion  XSH.lfind.005
+anchor     functions/lfind.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       With 8-byte string records, a comparison function that returns
+           only 0 or 1, and an empty table, lsearch() appends at the table's
+           start, later strings after it, and lfind() finds each by content
+           (a key in a different buffer).
+test       t/005-records.c

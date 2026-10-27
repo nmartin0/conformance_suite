@@ -1,0 +1,60 @@
+# XSH qsort() and qsort_r()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The sort is not required to be stable, so elements that compare equal may
+# come out in any order. The comparison function may be given pointers to
+# the array or to copies of elements, so only the values it is shown are
+# checked, never where they live.
+
+assertion  XSH.qsort.001
+anchor     functions/qsort.html#DESCRIPTION
+class      required
+since      1988
+says       qsort() puts int arrays in ascending order: random data, already
+           sorted, reversed, all equal, and with few distinct values, for
+           1, 2, 3, 10, 1000 and 50000 elements, and the result is a
+           permutation of the original values.
+test       t/001-ascending.c
+
+assertion  XSH.qsort.002
+anchor     functions/qsort.html#DESCRIPTION
+class      required
+since      1988
+says       Elements of 12 bytes (a key and 8 bytes derived from it) are moved
+           whole: after qsort() every record is intact, the keys are
+           ascending and every original record is still present once.
+test       t/002-records.c
+
+assertion  XSH.qsort.003
+anchor     functions/qsort.html#DESCRIPTION
+class      required
+since      1988
+says       With nel zero the comparison function is not called and the array
+           is left as it was.
+test       t/003-empty.c
+
+assertion  XSH.qsort.004
+anchor     functions/qsort.html#DESCRIPTION
+class      required
+since      1988
+says       The order is the one the comparison function defines: a descending
+           comparison gives a descending array, and an array of string
+           pointers sorted with strcmp() is in strcmp() order.
+test       t/004-order.c
+
+assertion  XSH.qsort.005
+anchor     functions/qsort.html#DESCRIPTION
+class      required
+since      2024
+says       qsort_r() passes its arg pointer, unchanged, as the third argument
+           of every call to the comparison function, and sorts as the
+           comparison function directs (the context flag selects ascending
+           or descending).
+test       t/005-qsort-r.c
+
+assertion  XSH.qsort.006
+anchor     functions/qsort.html#DESCRIPTION
+class      required
+since      2024
+says       With nel zero qsort_r() does not call the comparison function.
+test       t/006-qsort-r-empty.c

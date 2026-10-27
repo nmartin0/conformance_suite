@@ -1,0 +1,75 @@
+# XSH realloc() and reallocarray()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Both functions are on one page. A zero-size request is obsolescent
+# behaviour (OB) with two outcomes; whether a null return from it leaves the
+# old block allocated is not stated, so the tests never free a block after a
+# null result of a zero-size request.
+
+assertion  XSH.realloc.001
+anchor     functions/realloc.html#DESCRIPTION
+class      required
+since      1988
+says       realloc(NULL, n) acts as malloc(n): a non-null, fundamentally
+           aligned pointer to n usable bytes.
+test       t/001-null-ptr.c
+
+assertion  XSH.realloc.002
+anchor     functions/realloc.html#DESCRIPTION
+anchor     functions/realloc.html#RETURN VALUE
+class      required
+since      1988
+says       realloc() to a larger and then to a smaller non-zero size keeps
+           the old contents up to the smaller of the two sizes, and every
+           returned pointer is fundamentally aligned.
+test       t/002-grow-shrink.c
+
+assertion  XSH.realloc.003
+anchor     functions/realloc.html#DESCRIPTION
+anchor     functions/realloc.html#RETURN VALUE
+anchor     functions/realloc.html#ERRORS
+class      required
+since      1988
+says       realloc(p, SIZE_MAX) returns a null pointer and sets errno to
+           ENOMEM, and the old block is not deallocated: its contents are
+           unchanged and it can still be resized and freed.
+test       t/003-failure-keeps-old.c
+
+assertion  XSH.realloc.004
+anchor     functions/realloc.html#RETURN VALUE
+class      required
+since      1988
+says       realloc(p, 0) with p from malloc() either returns a null pointer
+           with errno EINVAL, or returns a pointer (to be freed) after which
+           the old block is gone.
+note       The behaviour is the obsolescent one the page describes; in the
+           null case the test does not free p, since it is not stated
+           whether p was released.
+test       t/004-zero-size.c
+
+assertion  XSH.realloc.005
+anchor     functions/realloc.html#DESCRIPTION
+class      required
+since      2024
+says       reallocarray(NULL, n, m) returns usable aligned space for n*m
+           bytes, and reallocarray(p, n, m) resizes keeping the old contents
+           up to the smaller size, like realloc(p, n*m).
+test       t/005-reallocarray.c
+
+assertion  XSH.realloc.006
+anchor     functions/realloc.html#DESCRIPTION
+anchor     functions/realloc.html#ERRORS
+class      required
+since      2024
+says       When nelem * elsize overflows, reallocarray() returns a null
+           pointer, sets errno to ENOMEM, and leaves the old block intact.
+test       t/006-reallocarray-overflow.c
+
+assertion  XSH.realloc.007
+anchor     functions/realloc.html#RETURN VALUE
+class      required
+since      2024
+says       reallocarray(p, 0, m) and reallocarray(p, n, 0) behave like a
+           zero-size realloc(): a null pointer with errno EINVAL, or a
+           pointer after which the old block is gone.
+test       t/007-reallocarray-zero.c

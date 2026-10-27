@@ -1,0 +1,12 @@
+# rand.cov - every requirement unit on functions/rand.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:8c8e8f19         partial XSH.rand.001  # the range; the XSI period of 2^32 cannot be observed in practice
+DESCRIPTION:5f1c521e         none  data-race freedom with other functions is not observable
+DESCRIPTION:f9ec025b         XSH.rand.002
+DESCRIPTION:b7603ae7         XSH.rand.002
+DESCRIPTION:5e7d9917         XSH.rand.003
+DESCRIPTION:5bdf1639         none  data-race freedom with other functions is not observable
+DESCRIPTION:32040e05         untestable  whether library functions call rand() internally cannot be observed
+RETURN_VALUE:013173b7        XSH.rand.001 XSH.rand.002
+RETURN_VALUE:1f8bcfc3        untestable  absence of a return value cannot be observed

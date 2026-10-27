@@ -1,0 +1,94 @@
+# XSH random(), srandom(), initstate() and setstate()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All four are XSI. The generator's values are not specified; the tests use
+# only range, repeatability, equal sequences where the page says two set-ups
+# are the same, and the pointers initstate() and setstate() return. State
+# arrays are suitably aligned for long.
+
+assertion  XSH.random.001
+anchor     functions/random.html#DESCRIPTION
+anchor     functions/random.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1992
+says       random() values are in the range 0 to 2^31-1 and not constant over
+           1000 calls; srandom(s) again with the same seed s repeats the
+           same 100 values, for several seeds.
+test       t/001-repeat-range.c
+
+assertion  XSH.random.002
+anchor     functions/random.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       random() before any seeding gives the sequence that srandom(1)
+           produces: 50 values taken first equal 50 taken after srandom(1).
+test       t/002-default-seed.c
+
+assertion  XSH.random.003
+anchor     functions/random.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       With no earlier initstate() call random() behaves as though
+           initstate(1, state, 128) had been called: the first 50 values
+           equal the 50 after initstate(1, state, 128).
+test       t/003-default-state.c
+
+assertion  XSH.random.004
+anchor     functions/random.html#DESCRIPTION
+anchor     functions/random.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1992
+says       initstate() and setstate() return a pointer to the previous state
+           array: the first initstate(.., A, ..) returns non-null; a second
+           initstate(.., B, ..) returns A; setstate(A) then returns B and
+           setstate(B) returns A.
+test       t/004-previous-state.c
+
+assertion  XSH.random.005
+anchor     functions/random.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       setstate() switches between state arrays without losing their
+           progress: with two initialised arrays A and B, five values from A,
+           five from B and five more from A give the same values as five
+           from A then five further from A, and B's five equal a fresh
+           run of B.
+test       t/005-switch-state.c
+
+assertion  XSH.random.006
+anchor     functions/random.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1992
+says       initstate() with a size less than 8 returns a null pointer.
+test       t/006-small-size.c
+
+assertion  XSH.random.007
+anchor     functions/random.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       Sizes that are not one of 8, 32, 64, 128 and 256 are rounded down
+           to the nearest of them (values of 8 up to 31 giving the 8-byte
+           generator): with the same seed the sequences for 20, 31, 33, 100,
+           127, 255 and 300 bytes equal those for 8, 8, 32, 64, 64, 128 and
+           256; and every size gives values in 0 to 2^31-1.
+test       t/007-size-rounding.c
+
+assertion  XSH.random.008
+anchor     functions/random.html#DESCRIPTION
+anchor     functions/random.html#APPLICATION USAGE
+class      conditional
+when       XSI
+since      1992
+says       For n of 8, 32 and 128, calling initstate(s, A, n) twice with the
+           same seed gives the same values both times, and calling
+           srandom(t) twice on that array gives the same values both times.
+note       The page does not say that initstate(s, ...) and srandom(s) give
+           the same sequence, so the two are compared only with themselves.
+test       t/008-restart.c

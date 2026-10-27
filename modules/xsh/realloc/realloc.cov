@@ -1,0 +1,30 @@
+# realloc.cov - every requirement unit on functions/realloc.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:837af5d8         none  statement about alignment with ISO C
+DESCRIPTION:5ae5401f         none  statement about conflicts with ISO C
+DESCRIPTION:4e137535         none  statement about deferring to ISO C
+DESCRIPTION:e8bb957f         XSH.realloc.002 XSH.realloc.003
+DESCRIPTION:5f4c0133         XSH.realloc.002 XSH.realloc.005
+DESCRIPTION:37c90de8         none  indeterminate values cannot be tested
+DESCRIPTION:53e41685         XSH.realloc.005 XSH.realloc.006
+DESCRIPTION:ca54cca1         XSH.realloc.001 XSH.realloc.005
+DESCRIPTION:a2d409c9         none  undefined behaviour
+DESCRIPTION:7ee10321         XSH.realloc.003 XSH.realloc.006
+DESCRIPTION:b15dcf87         none  order and contiguity are unspecified
+DESCRIPTION:9e28f6d6         XSH.realloc.001 XSH.realloc.002
+DESCRIPTION:e232b7fd         partial XSH.realloc.002  # only one live block at a time is compared with its neighbours
+DESCRIPTION:25884267         partial XSH.realloc.001  # start of the block is observed only through use
+DESCRIPTION:3841495c         XSH.realloc.003
+DESCRIPTION:01234709         untestable  data-race freedom of internals is not observable
+DESCRIPTION:b752915a         none  permission, not a requirement
+DESCRIPTION:15caf3b0         untestable  single total order of allocation calls is not observable without a race
+RETURN_VALUE:4d226e68        XSH.realloc.002 XSH.realloc.005
+RETURN_VALUE:fc191efc        XSH.realloc.004 XSH.realloc.007
+RETURN_VALUE:f52ddfbb        XSH.realloc.004 XSH.realloc.007
+RETURN_VALUE:84449c13        XSH.realloc.004 XSH.realloc.007
+RETURN_VALUE:520d3716        none  requirement on applications
+RETURN_VALUE:4f456aa5        XSH.realloc.003 XSH.realloc.006
+ERRORS:38ef8d25              XSH.realloc.003
+ERRORS:0932a202              XSH.realloc.006
+ERRORS:35ac7805              optional

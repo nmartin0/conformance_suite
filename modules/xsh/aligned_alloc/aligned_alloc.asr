@@ -1,0 +1,54 @@
+# XSH aligned_alloc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Which alignments are valid beyond the fundamental ones is left to the
+# implementation, so only the alignments of the basic types are required to
+# work; larger powers of two may succeed or fail. Sizes are multiples of the
+# alignment.
+
+assertion  XSH.aligned_alloc.001
+anchor     functions/aligned_alloc.html#DESCRIPTION
+anchor     functions/aligned_alloc.html#RETURN VALUE
+class      required
+since      2024
+says       For each fundamental alignment (that of char, short, int, long,
+           long long, double, long double, a pointer, and max_align_t),
+           aligned_alloc() returns a non-null pointer that is a multiple of
+           it, to space of the requested size that can be written and read.
+           For 64 and 4096 it returns either an aligned pointer or a null
+           pointer with errno EINVAL or ENOMEM.
+test       t/001-alignments.c
+
+assertion  XSH.aligned_alloc.002
+anchor     functions/aligned_alloc.html#DESCRIPTION
+anchor     functions/aligned_alloc.html#ERRORS
+class      required
+since      2024
+says       An alignment that is not a power of two (3, 24, 100) gives a null
+           pointer and errno EINVAL.
+test       t/002-invalid.c
+
+assertion  XSH.aligned_alloc.003
+anchor     functions/aligned_alloc.html#DESCRIPTION
+class      required
+since      2024
+says       aligned_alloc(alignof(max_align_t), 0) returns either a null pointer or a pointer
+           that can be freed; two such non-null live results differ.
+test       t/003-zero-size.c
+
+assertion  XSH.aligned_alloc.004
+anchor     functions/aligned_alloc.html#RETURN VALUE
+anchor     functions/aligned_alloc.html#ERRORS
+class      required
+since      2024
+says       aligned_alloc(max_align_t alignment, a size no memory can satisfy) returns a null
+           pointer and sets errno to ENOMEM.
+test       t/004-failure.c
+
+assertion  XSH.aligned_alloc.005
+anchor     functions/aligned_alloc.html#DESCRIPTION
+class      required
+since      2024
+says       Thirty-two live aligned_alloc() blocks of mixed alignments are
+           pairwise disjoint, and each keeps its own fill pattern.
+test       t/005-disjoint.c

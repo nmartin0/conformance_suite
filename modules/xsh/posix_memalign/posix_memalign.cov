@@ -1,0 +1,18 @@
+# posix_memalign.cov - every requirement unit on functions/posix_memalign.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:bf205cd4         XSH.posix_memalign.001
+DESCRIPTION:a683dd1d         XSH.posix_memalign.001 XSH.posix_memalign.002
+DESCRIPTION:a414d4b0         XSH.posix_memalign.001
+DESCRIPTION:89349129         XSH.posix_memalign.004
+DESCRIPTION:92a845fc         untestable  free() acceptance of such pointers is covered by XSH.free.003
+DESCRIPTION:336e8d5d         untestable  data-race freedom of internals is not observable
+DESCRIPTION:b752915a         none  permission, not a requirement
+DESCRIPTION:edf43ab0         untestable  single total order of allocation calls is not observable without a race
+RETURN_VALUE:2b39b351        XSH.posix_memalign.001 XSH.posix_memalign.002 XSH.posix_memalign.003
+RETURN_VALUE:4c1a5ce2        XSH.posix_memalign.004
+RETURN_VALUE:c821ed98        XSH.posix_memalign.004
+RETURN_VALUE:e56bb665        XSH.posix_memalign.004
+RETURN_VALUE:520d3716        none  requirement on applications
+ERRORS:1b16c463              XSH.posix_memalign.002
+ERRORS:c0241460              XSH.posix_memalign.003

@@ -1,5 +1,5 @@
 /*
- * ic.h - the integer wide-string converters behind one signature, and a
+ * ic.h - the integer string converters behind one signature, and a
  * table driven checker. IC_L, IC_UL, IC_IMAX or IC_UMAX picks the family.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  */

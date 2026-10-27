@@ -1,0 +1,50 @@
+# XSH hcreate(), hdestroy() and hsearch()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All three are XSI. There is one table at a time. When the table counts as
+# full is not defined (the size is only an estimate that may be adjusted), so
+# the "table is full" result is not tested.
+
+assertion  XSH.hcreate.001
+anchor     functions/hcreate.html#DESCRIPTION
+anchor     functions/hcreate.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       hcreate(50) returns non-zero, and 50 hsearch(ENTER) calls with
+           distinct keys each return a non-null entry whose key is equal to
+           the key given and whose data pointer is the one given.
+test       t/001-create-enter.c
+
+assertion  XSH.hcreate.002
+anchor     functions/hcreate.html#DESCRIPTION
+anchor     functions/hcreate.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       hsearch(FIND) of an entered key returns an entry with that key and
+           the data entered, also when the key is given in another buffer
+           (comparison is by string content); of an absent key it returns a
+           null pointer and enters nothing.
+test       t/002-find.c
+
+assertion  XSH.hcreate.003
+anchor     functions/hcreate.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       hsearch(ENTER) of a key that is already in the table returns the
+           entry already there: the same location as hsearch(FIND) gives, and
+           the table does not gain a second entry for it.
+test       t/003-enter-existing.c
+
+assertion  XSH.hcreate.004
+anchor     functions/hcreate.html#DESCRIPTION
+anchor     functions/hcreate.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       After hdestroy() another hcreate() succeeds and gives an empty
+           table: keys entered before are not found, and new ones can be
+           entered; this holds for three create/destroy cycles.
+test       t/004-destroy-recreate.c

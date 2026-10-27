@@ -1,0 +1,74 @@
+# XSH va_start(), va_arg(), va_end() and va_copy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page only refers to XBD <stdarg.h>; the requirements tested come from
+# that header's description (anchors below name this page, the requirements
+# are in basedefs/stdarg.h.html). Each test uses its own variadic helper.
+
+assertion  XSH.va_start.001
+anchor     functions/va_start.html#DESCRIPTION
+class      required
+since      1988
+says       va_start() and va_arg() return the successive arguments in order,
+           for int, long, long long, double, long double, pointer and
+           struct-free argument lists, with char and short promoted to int
+           and float promoted to double; a function called with no
+           variable argument still can use va_start()/va_end().
+test       t/001-in-order.c
+
+assertion  XSH.va_start.002
+anchor     functions/va_start.html#DESCRIPTION
+class      required
+since      1988
+says       The mixes of type that are allowed work: an argument passed as a
+           signed type is read as the corresponding unsigned type (value
+           representable in both), and the other way round; a void pointer
+           is read as a char pointer and the other way round.
+test       t/002-compatible-types.c
+
+assertion  XSH.va_start.003
+anchor     functions/va_start.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2008
+says       On an XSI system arguments passed as one pointer type may be read
+           as another pointer type (int * read as long *, then converted
+           back).
+note       The statement is XSI-shaded in the stdarg.h description.
+test       t/003-pointer-types.c
+
+assertion  XSH.va_start.004
+anchor     functions/va_start.html#DESCRIPTION
+class      required
+since      2001
+says       va_copy() makes a copy that continues from the same point: after
+           two arguments are read, the copy yields the remaining arguments in
+           order, independently of further reads from the original, and
+           both are ended with va_end().
+test       t/004-copy.c
+
+assertion  XSH.va_start.005
+anchor     functions/va_start.html#DESCRIPTION
+class      required
+since      1988
+says       A va_list may be passed to another function: vsnprintf() called
+           with it formats the arguments, and after the call the caller
+           passes the list only to va_end().
+test       t/005-pass-to-function.c
+
+assertion  XSH.va_start.006
+anchor     functions/va_start.html#DESCRIPTION
+class      required
+since      1988
+says       Several traversals, each bracketed by va_start() and va_end(),
+           in one function give the same values each time.
+test       t/006-multiple-traversals.c
+
+assertion  XSH.va_start.007
+anchor     functions/va_start.html#DESCRIPTION
+class      required
+since      1988
+says       A call with 24 variable arguments of mixed int, double and pointer
+           types (more than fit in registers on any usual convention) reads
+           back every value correctly.
+test       t/007-many-args.c

@@ -1,0 +1,36 @@
+# XSH setjmp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# setjmp() appears only in the contexts the page allows. Locals changed
+# after setjmp() are volatile where their values are read after the jump.
+
+assertion  XSH.setjmp.001
+anchor     functions/setjmp.html#DESCRIPTION
+anchor     functions/setjmp.html#RETURN VALUE
+class      required
+since      1988
+says       A direct call of setjmp() returns 0 and saves the environment;
+           longjmp() with the saved buffer then makes setjmp() return a
+           non-zero value, once for each longjmp().
+test       t/001-direct-and-jump.c
+
+assertion  XSH.setjmp.002
+anchor     functions/setjmp.html#DESCRIPTION
+class      required
+since      1988
+says       setjmp() works in each context the page allows: as the whole
+           controlling expression of if, switch and while; compared with an
+           integral constant (== 0, != 0); under a unary !; and as an
+           expression statement, possibly cast to void. In each, the direct
+           return takes the 0 path and a longjmp() takes the other.
+test       t/002-contexts.c
+
+assertion  XSH.setjmp.003
+anchor     functions/setjmp.html#DESCRIPTION
+anchor     functions/setjmp.html#RETURN VALUE
+class      required
+since      1988
+says       Calling setjmp() again with the same jmp_buf replaces the saved
+           environment: a later longjmp() resumes from the second call, not
+           the first.
+test       t/003-replace.c

@@ -35,11 +35,11 @@ int main(void)
 	wchar_t smax[IC_N][64], sover[IC_N][64], smin[IC_N][64], sunder[IC_N][64];
 	pc_begin("XSH.wcstoimax.009");
 	for (j = 0; j < IC_N; j++) {
-		pc_check(swprintf(smax[j], 64, L"%jd", (intmax_t)ic_fns[j].max) > 0, "swprintf failed");
-		wcscpy(sover[j], smax[j]);
+		pc_check(snprintf(smax[j], 64, L"%jd", (intmax_t)ic_fns[j].max) > 0, "swprintf failed");
+		strcpy(sover[j], smax[j]);
 		inc_dec(sover[j]);
-		pc_check(swprintf(smin[j], 64, L"%jd", (intmax_t)ic_fns[j].min) > 0, "swprintf failed");
-		wcscpy(sunder[j], smin[j]);
+		pc_check(snprintf(smin[j], 64, L"%jd", (intmax_t)ic_fns[j].min) > 0, "swprintf failed");
+		strcpy(sunder[j], smin[j]);
 		inc_dec(sunder[j]);
 	}
 	pc_test();

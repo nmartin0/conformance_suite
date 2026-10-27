@@ -1,0 +1,37 @@
+# XSH sigsetjmp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# sigsetjmp() is equivalent to setjmp() except for the saved mask. The
+# mask's restoration is observable only through siglongjmp(); XSH.siglongjmp
+# tests that rule, and the same observation is made here from sigsetjmp()'s
+# side.
+
+assertion  XSH.sigsetjmp.001
+anchor     functions/sigsetjmp.html#DESCRIPTION
+anchor     functions/sigsetjmp.html#RETURN VALUE
+class      required
+since      1992
+says       A direct call of sigsetjmp() returns 0, with savemask 0 and with
+           savemask 1, and siglongjmp() then makes it return a non-zero
+           value, once per siglongjmp().
+test       t/001-direct-and-jump.c
+
+assertion  XSH.sigsetjmp.002
+anchor     functions/sigsetjmp.html#DESCRIPTION
+class      required
+since      1992
+says       sigsetjmp() works in the contexts setjmp() allows (if, switch,
+           while controlling expressions, compared with a constant, under
+           !, as an expression statement), the direct return taking the 0
+           path and a siglongjmp() the other.
+test       t/002-contexts.c
+
+assertion  XSH.sigsetjmp.003
+anchor     functions/sigsetjmp.html#DESCRIPTION
+class      required
+since      1992
+says       With savemask non-zero, sigsetjmp() saves the calling thread's
+           signal mask: a mask change after the call (blocking SIGUSR1,
+           unblocking SIGUSR2) is undone by siglongjmp(), giving the mask at
+           the time of the call.
+test       t/003-saves-mask.c

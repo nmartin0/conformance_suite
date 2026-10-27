@@ -1,0 +1,14 @@
+# tmpnam.cov - every requirement unit on functions/tmpnam.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:996c60ef         XSH.tmpnam.001 XSH.tmpnam.002 XSH.tmpnam.004
+DESCRIPTION:aea04fea         XSH.tmpnam.003
+DESCRIPTION:674a358f         XSH.tmpnam.003
+DESCRIPTION:c49fac2b         none  implementation-defined
+DESCRIPTION:74ffd413         untestable  whether library functions call tmpnam() cannot be observed
+DESCRIPTION:f868bce2         none  thread-safety of calls with a null argument is not required
+RETURN_VALUE:0230e1d3        XSH.tmpnam.001 XSH.tmpnam.002
+RETURN_VALUE:5f994716        untestable  failure to generate a name cannot be provoked
+RETURN_VALUE:571898ed        XSH.tmpnam.002
+RETURN_VALUE:c8c1c234        none  permission only; tests copy each name before the next call
+RETURN_VALUE:af242c73        XSH.tmpnam.001

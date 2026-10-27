@@ -1,0 +1,22 @@
+# hcreate.cov - every requirement unit on functions/hcreate.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:ec6ef8f6         XSH.hcreate.001
+DESCRIPTION:58e85617         XSH.hcreate.001
+DESCRIPTION:e30aa7ef         XSH.hcreate.001
+DESCRIPTION:bf62b8a7         none  adjustment of the estimate is allowed
+DESCRIPTION:f46bb057         XSH.hcreate.004
+DESCRIPTION:4788a196         none  inaccessibility after destruction is not observable
+DESCRIPTION:b0753a67         XSH.hcreate.002
+DESCRIPTION:6d5eca50         XSH.hcreate.001 XSH.hcreate.002
+DESCRIPTION:297d4337         XSH.hcreate.001 XSH.hcreate.002
+DESCRIPTION:2df8e78b         XSH.hcreate.002
+DESCRIPTION:6f5ae379         XSH.hcreate.003
+DESCRIPTION:17ca04a4         XSH.hcreate.001
+DESCRIPTION:72a7e001         XSH.hcreate.002
+DESCRIPTION:70ea09e1         XSH.hcreate.002
+DESCRIPTION:2e1d32a7         none  thread-safety is not required
+RETURN_VALUE:ff50ebc2        partial XSH.hcreate.001 XSH.hcreate.004  # success; failure to allocate cannot be arranged
+RETURN_VALUE:20e43722        untestable  absence of a return value cannot be observed
+RETURN_VALUE:e5d23078        partial XSH.hcreate.002  # the FIND case; "table is full" is not defined well enough to provoke
+ERRORS:b03247c6              optional

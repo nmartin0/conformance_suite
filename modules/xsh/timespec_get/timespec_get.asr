@@ -1,0 +1,41 @@
+# XSH timespec_get()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Time is compared with clock_gettime(CLOCK_REALTIME) read just before and
+# just after, allowing one second of slack in each direction for clock
+# adjustments.
+
+assertion  XSH.timespec_get.001
+anchor     functions/timespec_get.html#DESCRIPTION
+anchor     functions/timespec_get.html#RETURN VALUE
+class      required
+since      2024
+says       timespec_get(&ts, TIME_UTC) returns TIME_UTC (non-zero) and sets
+           ts to the current time: tv_nsec in 0 to 999999999 and ts between
+           the real-time clock read before and after (within one second).
+test       t/001-utc.c
+
+assertion  XSH.timespec_get.002
+anchor     functions/timespec_get.html#DESCRIPTION
+class      required
+since      2024
+says       The seconds agree with time(): the difference from time(NULL)
+           read before and after is at most one second.
+test       t/002-agrees-with-time.c
+
+assertion  XSH.timespec_get.003
+anchor     functions/timespec_get.html#RETURN VALUE
+class      required
+since      2024
+says       A call with base 0 cannot succeed (success returns the non-zero
+           base) and returns zero.
+test       t/003-bad-base.c
+
+assertion  XSH.timespec_get.004
+anchor     functions/timespec_get.html#DESCRIPTION
+class      required
+since      2024
+says       Two calls in a row give times that do not differ by more than one
+           second, the second not earlier than one second before the first,
+           and TIME_UTC is a non-zero macro.
+test       t/004-successive.c

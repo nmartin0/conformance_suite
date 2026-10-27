@@ -1,0 +1,17 @@
+# malloc.cov - every requirement unit on functions/malloc.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:5be03e00         XSH.malloc.001
+DESCRIPTION:f9e79fb3         none  order and contiguity are unspecified
+DESCRIPTION:9e28f6d6         XSH.malloc.002
+DESCRIPTION:e232b7fd         XSH.malloc.003
+DESCRIPTION:292bb186         partial XSH.malloc.001  # start of the block is observed only through use
+DESCRIPTION:3841495c         XSH.malloc.005
+DESCRIPTION:b69838f9         XSH.malloc.004
+DESCRIPTION:ec35ef1a         untestable  data-race freedom of internals is not observable
+DESCRIPTION:b752915a         none  permission, not a requirement
+DESCRIPTION:806a7c45         untestable  single total order of allocation calls is not observable without a race
+RETURN_VALUE:83b5c996        XSH.malloc.001 XSH.malloc.004
+RETURN_VALUE:fd39a752        XSH.malloc.005
+ERRORS:5a3b118c              XSH.malloc.005
+ERRORS:ed609e74              optional

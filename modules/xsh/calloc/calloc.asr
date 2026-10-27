@@ -1,0 +1,45 @@
+# XSH calloc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.calloc.001
+anchor     functions/calloc.html#DESCRIPTION
+class      required
+since      1988
+says       Space from calloc() is all bits zero: after a block is dirtied
+           (malloc, fill with a non-zero byte, free), calloc() blocks of the
+           same and other sizes read back as all zero bytes.
+test       t/001-zero-filled.c
+
+assertion  XSH.calloc.002
+anchor     functions/calloc.html#DESCRIPTION
+anchor     functions/calloc.html#RETURN VALUE
+class      required
+since      1988
+says       calloc(n, s) returns a non-null, fundamentally aligned pointer to
+           n*s usable bytes, and live results are pairwise disjoint.
+test       t/002-array.c
+
+assertion  XSH.calloc.003
+anchor     functions/calloc.html#DESCRIPTION
+class      required
+since      1988
+says       calloc() with nelem or elsize 0 returns either a null pointer or a
+           freeable pointer, and two non-null live results differ.
+test       t/003-zero-size.c
+
+assertion  XSH.calloc.004
+anchor     functions/calloc.html#ERRORS
+class      required
+since      2024
+says       When nelem * elsize would overflow size_t, calloc() returns a null
+           pointer and sets errno to ENOMEM.
+test       t/004-overflow.c
+
+assertion  XSH.calloc.005
+anchor     functions/calloc.html#ERRORS
+anchor     functions/calloc.html#RETURN VALUE
+class      required
+since      1988
+says       calloc(1, SIZE_MAX) (no overflow, impossible to satisfy) returns a
+           null pointer and sets errno to ENOMEM.
+test       t/005-failure.c

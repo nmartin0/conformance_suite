@@ -1,0 +1,36 @@
+# XSH getentropy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page lets getentropy() fail with ENOSYS when there is no source of
+# entropy; the tests then report NOTINUSE. Randomness is judged only by
+# gross failures that a real random source has negligible chance of
+# producing (a 256-byte draw with sixteen or more zero bytes, two 32-byte
+# draws that are equal).
+
+assertion  XSH.getentropy.001
+anchor     functions/getentropy.html#DESCRIPTION
+anchor     functions/getentropy.html#RETURN VALUE
+class      required
+since      2024
+says       getentropy() returns 0 for lengths 0, 1, 16, 64, 256 and
+           {GETENTROPY_MAX}, and does not touch bytes beyond the length.
+note       {GETENTROPY_MAX} is at least 256 (XBD limits.h).
+test       t/001-lengths.c
+
+assertion  XSH.getentropy.002
+anchor     functions/getentropy.html#ERRORS
+anchor     functions/getentropy.html#RETURN VALUE
+class      required
+since      2024
+says       A length of {GETENTROPY_MAX} + 1 (and a much larger one) gives -1
+           with errno EINVAL.
+test       t/002-too-long.c
+
+assertion  XSH.getentropy.003
+anchor     functions/getentropy.html#DESCRIPTION
+class      required
+since      2024
+says       The whole requested length is filled with unpredictable data: in
+           a 256-byte draw fewer than sixteen bytes are zero, and two
+           consecutive 32-byte draws differ.
+test       t/003-random-fill.c

@@ -1,0 +1,18 @@
+# aligned_alloc.cov - every requirement unit on functions/aligned_alloc.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:8d68cfb2         XSH.aligned_alloc.001 XSH.aligned_alloc.005
+DESCRIPTION:5c4c6a5c         none  order and contiguity are unspecified
+DESCRIPTION:e232b7fd         XSH.aligned_alloc.005
+DESCRIPTION:25884267         partial XSH.aligned_alloc.001  # start of the block is observed only through use
+DESCRIPTION:c6e5e05d         XSH.aligned_alloc.002
+DESCRIPTION:3841495c         XSH.aligned_alloc.004
+DESCRIPTION:e8633cc6         XSH.aligned_alloc.003
+DESCRIPTION:6e631f2e         untestable  data-race freedom of internals is not observable
+DESCRIPTION:b752915a         none  permission, not a requirement
+DESCRIPTION:aced2a83         untestable  single total order of allocation calls is not observable without a race
+RETURN_VALUE:20b6a84e        XSH.aligned_alloc.001 XSH.aligned_alloc.003
+RETURN_VALUE:fd39a752        XSH.aligned_alloc.002 XSH.aligned_alloc.004
+ERRORS:ff4edba9              XSH.aligned_alloc.002
+ERRORS:5a3b118c              XSH.aligned_alloc.004
+ERRORS:ed609e74              optional

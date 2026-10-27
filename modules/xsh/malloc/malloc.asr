@@ -1,0 +1,50 @@
+# XSH malloc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Requests are small or moderate; failure is provoked only with a size no
+# address space can hold. Pointers from a zero-size request may be null.
+
+assertion  XSH.malloc.001
+anchor     functions/malloc.html#DESCRIPTION
+anchor     functions/malloc.html#RETURN VALUE
+class      required
+since      1988
+says       malloc() of sizes from 1 byte to 1 MiB returns a non-null pointer to
+           space of that many bytes, which can be written and read back.
+test       t/001-usable.c
+
+assertion  XSH.malloc.002
+anchor     functions/malloc.html#DESCRIPTION
+class      required
+since      1988
+says       Every pointer malloc() returns, whatever the size (1 byte up),
+           is a multiple of the fundamental alignment, and objects of the
+           widest basic types can be stored through it and read back.
+test       t/002-aligned.c
+
+assertion  XSH.malloc.003
+anchor     functions/malloc.html#DESCRIPTION
+class      required
+since      1988
+says       Sixty-four allocations of different sizes that are all live at once
+           are pairwise disjoint: distinct fill patterns written into each
+           remain intact in every other after all are written.
+test       t/003-disjoint.c
+
+assertion  XSH.malloc.004
+anchor     functions/malloc.html#DESCRIPTION
+class      required
+since      1988
+says       malloc(0) returns either a null pointer or a pointer that can be
+           passed to free(); two such results that are both non-null and
+           live at once differ.
+test       t/004-zero-size.c
+
+assertion  XSH.malloc.005
+anchor     functions/malloc.html#RETURN VALUE
+anchor     functions/malloc.html#ERRORS
+class      required
+since      1988
+says       When the space cannot be allocated (a request of SIZE_MAX bytes),
+           malloc() returns a null pointer and sets errno to ENOMEM.
+test       t/005-failure.c

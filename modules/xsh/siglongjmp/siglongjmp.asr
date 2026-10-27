@@ -1,0 +1,55 @@
+# XSH siglongjmp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The signal mask is observed with sigprocmask() in the single-threaded
+# test process. The signals used (SIGUSR1, SIGUSR2) are not sent by anything
+# else.
+
+assertion  XSH.siglongjmp.001
+anchor     functions/siglongjmp.html#DESCRIPTION
+anchor     functions/siglongjmp.html#RETURN VALUE
+class      required
+since      1992
+says       siglongjmp(env, val) makes the matching sigsetjmp() return val
+           (1, 2, 7, -5, INT_MAX, INT_MIN), for savemask 0 and 1.
+test       t/001-value.c
+
+assertion  XSH.siglongjmp.002
+anchor     functions/siglongjmp.html#RETURN VALUE
+class      required
+since      1992
+says       siglongjmp(env, 0) makes sigsetjmp() return 1, never 0, for
+           savemask 0 and 1.
+test       t/002-zero-value.c
+
+assertion  XSH.siglongjmp.003
+anchor     functions/siglongjmp.html#DESCRIPTION
+class      required
+since      1992
+says       When env was initialised by sigsetjmp() with a non-zero savemask,
+           siglongjmp() restores the signal mask saved there: a mask
+           changed in between (SIGUSR1 blocked, SIGUSR2 unblocked) is
+           returned to the mask at the time of sigsetjmp().
+test       t/003-restores-mask.c
+
+assertion  XSH.siglongjmp.004
+anchor     functions/siglongjmp.html#DESCRIPTION
+class      required
+since      1992
+says       When env was initialised with savemask 0, siglongjmp() does not
+           restore a mask: the mask in force at the siglongjmp() call (here
+           with SIGUSR1 blocked and SIGUSR2 unblocked) is the mask after the
+           jump.
+test       t/004-leaves-mask.c
+
+assertion  XSH.siglongjmp.005
+anchor     functions/siglongjmp.html#DESCRIPTION
+class      required
+since      1992
+says       siglongjmp() from a signal handler for SIGUSR1: with savemask 1 the
+           signal is not blocked after the jump (the saved mask is
+           restored); with savemask 0 it is still blocked (the handler's
+           mask stays).
+note       A caught signal is blocked while its handler runs
+           (sigaction's sa_mask rules, XSH 2.4.3 / sigaction).
+test       t/005-from-handler.c

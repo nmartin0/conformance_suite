@@ -1,0 +1,54 @@
+# XSH bsearch()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Which of several equal members is returned is unspecified; the tests only
+# require a member that compares equal.
+
+assertion  XSH.bsearch.001
+anchor     functions/bsearch.html#DESCRIPTION
+anchor     functions/bsearch.html#RETURN VALUE
+class      required
+since      1988
+says       For sorted arrays of distinct ints of 1, 2, 3, 10 and 257
+           elements, bsearch() with each element's value as key returns a
+           pointer to that element.
+test       t/001-found.c
+
+assertion  XSH.bsearch.002
+anchor     functions/bsearch.html#RETURN VALUE
+class      required
+since      1988
+says       A key below the first, above the last or between two elements,
+           and any key in a one-element array that does not match, gives a
+           null pointer.
+test       t/002-not-found.c
+
+assertion  XSH.bsearch.003
+anchor     functions/bsearch.html#DESCRIPTION
+class      required
+since      1988
+says       With nel zero the comparison function is not called and the
+           result is a null pointer.
+test       t/003-empty.c
+
+assertion  XSH.bsearch.004
+anchor     functions/bsearch.html#DESCRIPTION
+class      required
+since      1988
+says       Every call to the comparison function has the key's address as
+           its first argument and, as its second, the address of an array
+           element (an element boundary inside the array, for records
+           7 bytes wide); a non-empty search makes at least one call, and a
+           negative result moves the search toward lower elements and a
+           positive one toward higher elements (every record is found).
+test       t/004-compar-args.c
+
+assertion  XSH.bsearch.005
+anchor     functions/bsearch.html#DESCRIPTION
+anchor     functions/bsearch.html#RETURN VALUE
+class      required
+since      1988
+says       When several members compare equal to the key, bsearch() returns
+           a pointer to one of them, and the contents of the array are
+           unchanged afterwards.
+test       t/005-duplicates.c

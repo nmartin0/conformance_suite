@@ -1,0 +1,59 @@
+# XSH errno
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# errno is a macro from <errno.h> that expands to a modifiable int lvalue.
+
+assertion  XSH.errno.001
+anchor     functions/errno.html#DESCRIPTION
+class      required
+since      1988
+says       errno designates a modifiable lvalue of type int: values can be
+           assigned and read back (including through its address), and its
+           type is int.
+test       t/001-lvalue.c
+
+assertion  XSH.errno.002
+anchor     functions/errno.html#DESCRIPTION
+class      required
+since      1988
+says       errno is zero when main() of the initial thread starts (read
+           before anything else runs).
+test       t/002-initial-zero.c
+
+assertion  XSH.errno.003
+anchor     functions/errno.html#DESCRIPTION
+class      required
+since      2008
+says       errno is per thread: while one thread keeps assigning EDOM to
+           errno and the main thread keeps assigning ERANGE, each reads back
+           only its own value (100000 rounds each), and the main thread's
+           value is unchanged after the other thread is joined.
+test       t/003-thread-local.c
+
+assertion  XSH.errno.004
+anchor     functions/errno.html#DESCRIPTION
+class      required
+since      1988
+says       No function sets errno to zero: after calls that succeed (getpid,
+           strlen, malloc, free, open, write, read, lseek, close, pipe, dup,
+           fcntl, getcwd, sysconf, time, sigprocmask), with errno holding a
+           non-zero value before each call, errno is not zero afterwards.
+test       t/004-never-zero.c
+
+assertion  XSH.errno.005
+anchor     functions/errno.html#DESCRIPTION
+class      required
+since      1988
+says       errno is a macro: it is defined by <errno.h> (tested with #ifdef).
+test       t/005-is-macro.c
+
+assertion  XSH.errno.006
+anchor     functions/errno.html#DESCRIPTION
+class      required
+since      1988
+says       A failing call stores its error number in errno and the value stays
+           until the next call or assignment: open() of a missing file sets
+           ENOENT, and reading errno twice, with only non-library statements
+           in between, gives the same value; assigning another value
+           replaces it.
+test       t/006-set-by-call.c

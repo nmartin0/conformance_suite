@@ -1,0 +1,18 @@
+# calloc.cov - every requirement unit on functions/calloc.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:97697fe9         XSH.calloc.002
+DESCRIPTION:30f98f04         XSH.calloc.001
+DESCRIPTION:33fdd04f         none  order and contiguity are unspecified
+DESCRIPTION:2fc8f343         XSH.calloc.002
+DESCRIPTION:e232b7fd         XSH.calloc.002
+DESCRIPTION:25884267         partial XSH.calloc.002  # start of the block is observed only through use
+DESCRIPTION:3841495c         XSH.calloc.005
+DESCRIPTION:b69838f9         XSH.calloc.003
+DESCRIPTION:3df40bd6         untestable  data-race freedom of internals is not observable
+DESCRIPTION:b752915a         none  permission, not a requirement
+DESCRIPTION:933eded7         untestable  single total order of allocation calls is not observable without a race
+RETURN_VALUE:c9e731c6        XSH.calloc.002 XSH.calloc.003
+RETURN_VALUE:fd39a752        XSH.calloc.004 XSH.calloc.005
+ERRORS:423ee150              XSH.calloc.004 XSH.calloc.005
+ERRORS:cafa3e21              optional

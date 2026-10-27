@@ -1,0 +1,40 @@
+# XSH tmpnam()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# tmpnam() is obsolescent but is still on the page, so it is tested. The
+# names are only looked up (lstat, stat); no file is created.
+
+assertion  XSH.tmpnam.001
+anchor     functions/tmpnam.html#DESCRIPTION
+anchor     functions/tmpnam.html#RETURN VALUE
+class      required
+since      1988
+says       tmpnam(buf) with a buffer of L_tmpnam bytes returns buf itself, a
+           non-empty string shorter than L_tmpnam, that does not name an
+           existing file.
+test       t/001-buffer.c
+
+assertion  XSH.tmpnam.002
+anchor     functions/tmpnam.html#RETURN VALUE
+class      required
+since      1988
+says       tmpnam(NULL) returns a pointer to a non-empty string that does not
+           name an existing file.
+test       t/002-null-argument.c
+
+assertion  XSH.tmpnam.003
+anchor     functions/tmpnam.html#DESCRIPTION
+class      required
+since      1988
+says       Twenty-five successive calls (TMP_MAX is at least 25) return
+           25 different strings, copied before the next call.
+test       t/003-different.c
+
+assertion  XSH.tmpnam.004
+anchor     functions/tmpnam.html#DESCRIPTION
+class      required
+since      1988
+says       Three successive names are valid pathnames of files that do not
+           exist (lstat() fails with ENOENT) and, when they have a directory
+           part, that directory exists. Nothing is created.
+test       t/004-creatable.c

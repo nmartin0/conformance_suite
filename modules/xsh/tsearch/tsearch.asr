@@ -1,0 +1,123 @@
+# XSH tsearch(), tfind(), tdelete() and twalk()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All four are XSI. The tree's shape (balancing) is unspecified, so the
+# tests never depend on which node is the root or on the depth of any
+# element; they use the visit events of twalk() to learn the shape and then
+# check what the page fixes (levels, visit kinds, ascending order, and the
+# parent returned by tdelete()). Elements are pointers to int, compared by
+# the integers' values.
+
+assertion  XSH.tsearch.001
+anchor     functions/tsearch.html#DESCRIPTION
+anchor     functions/tsearch.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       tsearch() into an empty tree (the variable at rootp is null)
+           returns a non-null node, sets the variable to that node, and the
+           node holds the key pointer given (only the pointer is copied).
+test       t/001-first-insert.c
+
+assertion  XSH.tsearch.002
+anchor     functions/tsearch.html#DESCRIPTION
+anchor     functions/tsearch.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       tsearch() of a key equal to one already in the tree returns that
+           node (not a new one), leaves the stored pointer as it was, and the
+           tree has no second node for it.
+test       t/002-existing-key.c
+
+assertion  XSH.tsearch.003
+anchor     functions/tsearch.html#DESCRIPTION
+anchor     functions/tsearch.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       tfind() of a key in the tree returns the node tsearch() gave for it;
+           of an absent key, or on an empty tree, returns a null pointer and
+           inserts nothing.
+test       t/003-tfind.c
+
+assertion  XSH.tsearch.004
+anchor     functions/tsearch.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       tsearch(), tfind() and tdelete() return a null pointer when rootp
+           itself is a null pointer.
+test       t/004-null-rootp.c
+
+assertion  XSH.tsearch.005
+anchor     functions/tsearch.html#DESCRIPTION
+anchor     functions/tsearch.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       Deleting the elements of a 40-element tree one by one in a random
+           order: tdelete() of an absent key returns null; of a present key
+           it returns non-null, the key is gone, the variable at rootp
+           leads to a tree of exactly the remaining elements, and a second
+           deletion of the same key returns null; after the last element is
+           deleted the variable is a null pointer.
+test       t/005-tdelete.c
+
+assertion  XSH.tsearch.006
+anchor     functions/tsearch.html#DESCRIPTION
+anchor     functions/tsearch.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       tdelete() of a node that is not the root returns the node that was
+           its parent (found beforehand from the walk's levels and order),
+           and for the root returns a non-null pointer.
+test       t/006-tdelete-parent.c
+
+assertion  XSH.tsearch.007
+anchor     functions/tsearch.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       twalk() of trees built by ascending, descending and random
+           insertion (1, 2, 3, 7 and 200 elements) visits the root at
+           level 0, gives each childless node one visit of kind leaf and
+           each other node preorder, postorder and endorder visits in that
+           order with children one level deeper, and the elements at the
+           leaf and postorder visits are in strictly ascending order and
+           number exactly the elements inserted.
+test       t/007-twalk-structure.c
+
+assertion  XSH.tsearch.008
+anchor     functions/tsearch.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       twalk() started at an inner node (a node pointer from tfind())
+           treats it as the root: its first visit is that node at level 0,
+           the walk is consistent as above, and the elements are a
+           contiguous ascending run of the whole tree's elements.
+note       Passing a pointer returned by tfind() is the page's "any node in
+           a tree may be used as the root".
+test       t/008-twalk-subtree.c
+
+assertion  XSH.tsearch.009
+anchor     functions/tsearch.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       Every argument the comparison function receives from tsearch(),
+           tfind() and tdelete() is a pointer to an element: the key
+           pointer given or a stored pointer.
+test       t/009-compar-args.c
+
+assertion  XSH.tsearch.010
+anchor     functions/tsearch.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       With 500 elements inserted in random order, all are found and the
+           walk reaches all, deleting 250 leaves exactly the other 250
+           found and walked, and deleting the rest empties the tree.
+test       t/010-stress.c

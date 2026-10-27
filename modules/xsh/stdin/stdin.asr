@@ -1,0 +1,69 @@
+# XSH stdin, stdout and stderr
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Behaviour of the three predefined streams is observed in forked children
+# whose descriptors 0, 1 and 2 are replaced by pipes, so nothing depends on
+# what the suite's own standard streams are connected to. The parent never
+# uses its own stdout stream (results go to a file), so a child's first use
+# of stdout decides its buffering after the pipe is in place.
+
+assertion  XSH.stdin.001
+anchor     functions/stdin.html#DESCRIPTION
+class      required
+since      1988
+says       STDIN_FILENO, STDOUT_FILENO and STDERR_FILENO are 0, 1 and 2, and
+           fileno() of stdin, stdout and stderr gives those values.
+test       t/001-descriptors.c
+
+assertion  XSH.stdin.002
+anchor     functions/stdin.html#DESCRIPTION
+class      required
+since      1988
+says       The three streams are already open at program start: descriptors
+           0, 1 and 2 are open, the access mode of 0 allows reading and those
+           of 1 and 2 allow writing, and the stream pointers are non-null.
+test       t/002-open-at-start.c
+
+assertion  XSH.stdin.003
+anchor     functions/stdin.html#DESCRIPTION
+class      required
+since      1988
+says       stderr is not fully buffered: a line written to stderr with
+           fputs() reaches descriptor 2 (a pipe) without fflush(), even if
+           the process then ends with _exit().
+test       t/003-stderr-unbuffered.c
+
+assertion  XSH.stdin.004
+anchor     functions/stdin.html#DESCRIPTION
+class      required
+since      1988
+says       stdout is fully buffered when descriptor 1 is not an interactive
+           device (a pipe): a short line written with fputs() has not reached
+           the pipe by the time the child reports it, and does after
+           fflush().
+test       t/004-stdout-buffered.c
+
+assertion  XSH.stdin.005
+anchor     functions/stdin.html#DESCRIPTION
+class      required
+since      1988
+says       stdin reads from descriptor 0: with a pipe on descriptor 0, fgets()
+           returns the text written to it, then end-of-file.
+test       t/005-stdin-reads-fd0.c
+
+assertion  XSH.stdin.006
+anchor     functions/stdin.html#DESCRIPTION
+class      required
+since      1988
+says       stdout writes to descriptor 1 and stderr to descriptor 2: text
+           written with fputs() and flushed arrives on the pipe placed on
+           that descriptor.
+test       t/006-write-fds.c
+
+assertion  XSH.stdin.007
+anchor     functions/stdin.html#DESCRIPTION
+class      required
+since      1988
+says       Before any operation the three streams have no orientation:
+           fwide(stream, 0) returns 0 for each.
+test       t/007-unoriented.c

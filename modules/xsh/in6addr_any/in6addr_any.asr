@@ -1,0 +1,20 @@
+# XSH in6addr_any, in6addr_loopback
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.in6addr_any.001
+anchor     functions/in6addr_any.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       in6addr_any contains the wildcard IPv6 address (::): sixteen zero
+           bytes.
+test       t/001-any.c
+
+assertion  XSH.in6addr_any.002
+anchor     functions/in6addr_any.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       in6addr_loopback contains the loopback IPv6 address (::1): fifteen
+           zero bytes followed by a byte of value 1.
+test       t/002-loopback.c

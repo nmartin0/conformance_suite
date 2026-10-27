@@ -1,0 +1,86 @@
+# XSH fmtmsg()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# XSI. Messages are written to standard error in a forked child whose
+# descriptor 2 is a pipe; the console is never used (a console message would
+# appear on a real console). Only what the normative text fixes is checked:
+# which components appear, the severity and "TO FIX:" strings, that the
+# components appear in the order label, severity, text, action, tag, and
+# how MSGVERB selects them. The separators between components are shown only
+# in the page's examples and are not checked. The text used avoids the
+# words that stand for a severity.
+
+assertion  XSH.fmtmsg.001
+anchor     functions/fmtmsg.html#DESCRIPTION
+anchor     functions/fmtmsg.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1992
+says       With MM_PRINT and MSGVERB unset, fmtmsg() writes all five
+           components to standard error: the label, the severity string, the
+           text, "TO FIX:" followed by the action, and the tag, in that
+           order, and returns MM_OK.
+test       t/001-all-components.c
+
+assertion  XSH.fmtmsg.002
+anchor     functions/fmtmsg.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       MM_HALT, MM_ERROR, MM_WARNING and MM_INFO produce the strings HALT,
+           ERROR, WARNING and INFO respectively (and none of the others);
+           MM_NOSEV produces none of them.
+test       t/002-severities.c
+
+assertion  XSH.fmtmsg.003
+anchor     functions/fmtmsg.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       MSGVERB selects which components go to standard error: with
+           severity:text:action only those three appear (no label, no tag);
+           with text only the text appears; with label:tag only the label and
+           the tag; the order of the keywords does not matter.
+test       t/003-msgverb.c
+
+assertion  XSH.fmtmsg.004
+anchor     functions/fmtmsg.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       When MSGVERB is empty, has an unknown keyword (bogus, label:bogus),
+           or is not colon-separated (label,text), all components are shown.
+test       t/004-msgverb-invalid.c
+
+assertion  XSH.fmtmsg.005
+anchor     functions/fmtmsg.html#DESCRIPTION
+anchor     functions/fmtmsg.html#APPLICATION USAGE
+class      conditional
+when       XSI
+since      1992
+says       Components given their null values (MM_NULLLBL, MM_NOSEV,
+           MM_NULLACT, MM_NULLTAG) are left out: no "TO FIX:" without an
+           action, none of the severity strings with MM_NOSEV, and the
+           components that remain are still shown.
+test       t/005-null-values.c
+
+assertion  XSH.fmtmsg.006
+anchor     functions/fmtmsg.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       A long text and a long action (3000 bytes each) are written in full:
+           the text is not limited to a specific size.
+test       t/006-long-strings.c
+
+assertion  XSH.fmtmsg.007
+anchor     functions/fmtmsg.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1992
+says       When standard error cannot be written (descriptor 2 closed), a
+           MM_PRINT message gives a return value of MM_NOMSG or MM_NOTOK,
+           not MM_OK.
+note       Which of the two applies when only standard error was requested is
+           not settled by the page, so both are accepted.
+test       t/007-stderr-closed.c

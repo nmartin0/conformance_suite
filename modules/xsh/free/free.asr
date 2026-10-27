@@ -1,0 +1,37 @@
+# XSH free()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.free.001
+anchor     functions/free.html#DESCRIPTION
+class      required
+since      1988
+says       free(NULL) takes no action and does not change errno, and free()
+           of a pointer from malloc() does not change errno either.
+test       t/001-null-errno.c
+
+assertion  XSH.free.002
+anchor     functions/free.html#DESCRIPTION
+class      required
+since      1988
+says       Freed space becomes available for further allocation: 4096 rounds of
+           allocating and freeing 1 MiB all succeed (with the address space
+           capped, where the system allows a cap, so that a leak shows).
+note       The cap is only a way to make a leak visible; the test is also
+           valid without it (it then just runs the rounds).
+test       t/002-reuse.c
+
+assertion  XSH.free.003
+anchor     functions/free.html#DESCRIPTION
+class      required
+since      1988
+says       free() accepts pointers returned by calloc(), realloc(),
+           reallocarray() and aligned_alloc() as well as malloc(), and the
+           allocator keeps working afterwards.
+test       t/003-other-allocators.c
+
+assertion  XSH.free.004
+anchor     functions/free.html#RETURN VALUE
+class      untestable
+since      1988
+says       free() returns no value.
+reason     free() returns void; the absence of a value cannot be observed.

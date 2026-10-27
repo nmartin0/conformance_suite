@@ -1,0 +1,46 @@
+# XSH CMPLX(), CMPLXF() and CMPLXL()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Components are compared with creal()/cimag() and their float and long
+# double forms; signs of zero with signbit(); NaN with isnan(); infinity
+# with isinf().
+
+assertion  XSH.CMPLX.001
+anchor     functions/CMPLX.html#DESCRIPTION
+anchor     functions/CMPLX.html#RETURN VALUE
+class      required
+since      2024
+says       CMPLX(x, y), CMPLXF(x, y) and CMPLXL(x, y) have the real part x
+           and imaginary part y (converted to the type), for several finite
+           values including integers passed as arguments.
+test       t/001-components.c
+
+assertion  XSH.CMPLX.002
+anchor     functions/CMPLX.html#RETURN VALUE
+class      required
+since      2024
+says       The parts are exact for the special values that x + I*y would
+           damage: CMPLX(-0.0, -0.0) and CMPLX(0.0, -0.0) keep the signs
+           of both zeros; CMPLX(INFINITY, 1.0) has an infinite real part
+           and imaginary part 1.0 (not NaN); CMPLX(1.0, INFINITY) and
+           CMPLX(NAN, 2.0), CMPLX(3.0, NAN) keep the finite part exactly;
+           the same for the float and long double forms.
+test       t/002-special-values.c
+
+assertion  XSH.CMPLX.003
+anchor     functions/CMPLX.html#DESCRIPTION
+class      required
+since      2024
+says       The expressions have the types double complex, float complex and
+           long double complex respectively, whatever the argument types.
+test       t/003-types.c
+
+assertion  XSH.CMPLX.004
+anchor     functions/CMPLX.html#DESCRIPTION
+class      required
+since      2024
+says       The expressions can initialise objects with static storage
+           duration (file scope and function-local static) from constant
+           arguments, and arguments are converted to the type of the macro:
+           CMPLXF(0.1, 0.2) has the float values of 0.1 and 0.2.
+test       t/004-static-and-conversion.c

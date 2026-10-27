@@ -1,0 +1,63 @@
+# XSH quick_exit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Each test forks a child that registers handlers with at_quick_exit() and
+# ends with quick_exit(); the handlers report with write() on a pipe and the
+# parent judges the report and the wait status.
+
+assertion  XSH.quick_exit.001
+anchor     functions/quick_exit.html#DESCRIPTION
+class      required
+since      2024
+says       quick_exit() calls the functions registered with at_quick_exit()
+           in the reverse order of registration (three handlers registered
+           1, 2, 3 run 3, 2, 1) and the process then ends.
+test       t/001-reverse-order.c
+
+assertion  XSH.quick_exit.002
+anchor     functions/quick_exit.html#DESCRIPTION
+class      required
+since      2024
+says       quick_exit() does not call functions registered with atexit().
+test       t/002-not-atexit.c
+
+assertion  XSH.quick_exit.003
+anchor     functions/quick_exit.html#DESCRIPTION
+class      required
+since      2024
+says       The process ends as if by _Exit(status): the wait status shows a
+           normal exit with the status given, for 0, 1, 42 and 255, with
+           and without registered functions.
+test       t/003-status.c
+
+assertion  XSH.quick_exit.004
+anchor     functions/quick_exit.html#DESCRIPTION
+class      required
+since      2024
+says       If a registered function does not return (it calls _exit()), the
+           functions still to run are not called and the termination is not
+           completed otherwise: the wait status is the one the function
+           gave.
+test       t/004-handler-no-return.c
+
+assertion  XSH.quick_exit.005
+anchor     functions/quick_exit.html#DESCRIPTION
+class      required
+since      2024
+says       A function registered while quick_exit() is running (when the
+           registration succeeds) is called after the function that
+           registered it and before the functions that were registered
+           earlier than that one: registrations 1, 2, with 2 registering 3,
+           give the order 2, 3, 1.
+note       Whether such a late registration succeeds is unspecified; if it
+           fails the test is NOTINUSE.
+test       t/005-register-in-handler.c
+
+assertion  XSH.quick_exit.006
+anchor     functions/quick_exit.html#DESCRIPTION
+class      required
+since      2024
+says       Each registered function is called exactly once, also when the
+           same function is registered several times (registered three
+           times it runs three times).
+test       t/006-once-each.c

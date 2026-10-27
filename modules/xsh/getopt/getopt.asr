@@ -1,0 +1,107 @@
+# XSH getopt() (and optarg, optind, opterr, optopt)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every scan runs in a freshly forked child, so getopt()'s internal state is
+# the system's initial one and nothing depends on how a second command line
+# could be started (resetting optind is not specified for a partly used
+# state). A scan stops at the first '?' or ':' returned, because the page
+# does not say what follows an error. argv[0] is "prog" in every case.
+
+assertion  XSH.getopt.001
+anchor     functions/getopt.html#DESCRIPTION
+anchor     functions/getopt.html#RETURN VALUE
+class      required
+since      1992
+says       Options without arguments are returned one at a time in the order
+           given, whether separate (-a -b -c), grouped (-abc) or mixed (-ab
+           -c); the final optind is the index after the last option element,
+           and the operands left follow it.
+test       t/001-flags.c
+
+assertion  XSH.getopt.002
+anchor     functions/getopt.html#DESCRIPTION
+class      required
+since      1992
+says       An option that takes an argument gets it from the rest of the same
+           element (-afoo) or else from the next element (-a foo), optind
+           moving past the element or two elements; an argument that begins
+           with '-' (including "--") is still the argument; a flag grouped
+           before it (-bafoo) works.
+test       t/002-option-arguments.c
+
+assertion  XSH.getopt.003
+anchor     functions/getopt.html#DESCRIPTION
+anchor     functions/getopt.html#RETURN VALUE
+class      required
+since      1992
+says       Scanning ends with -1 at the first element that is not an option:
+           an operand, a lone "-", or the end of the vector; optind is the
+           index of that element and later "options" are left as operands.
+test       t/003-operands-stop.c
+
+assertion  XSH.getopt.004
+anchor     functions/getopt.html#DESCRIPTION
+class      required
+since      1992
+says       An element "--" ends the options: getopt() returns -1 with optind
+           advanced past the "--", and what follows (even an option-like
+           element) is left as operands.
+test       t/004-double-dash.c
+
+assertion  XSH.getopt.005
+anchor     functions/getopt.html#DESCRIPTION
+anchor     functions/getopt.html#RETURN VALUE
+class      required
+since      1992
+says       An option character not in optstring, and a colon given as an
+           option character, make getopt() return '?' with optopt set to
+           that character; options before it are returned normally.
+test       t/005-unknown-option.c
+
+assertion  XSH.getopt.006
+anchor     functions/getopt.html#DESCRIPTION
+anchor     functions/getopt.html#RETURN VALUE
+class      required
+since      1992
+says       A missing option-argument (the option is the last element) makes
+           getopt() return '?' when optstring does not start with ':' (after
+           an optional '+'), and ':' when it does; optopt is the option
+           character in both cases.
+test       t/006-missing-argument.c
+
+assertion  XSH.getopt.007
+anchor     functions/getopt.html#DESCRIPTION
+class      required
+since      1992
+says       A diagnostic is written to standard error for an unknown option
+           or a missing argument unless opterr was set to 0 or optstring
+           starts with ':' (after an optional '+'); a clean scan writes
+           nothing. Only the presence of output is checked.
+test       t/007-diagnostics.c
+
+assertion  XSH.getopt.008
+anchor     functions/getopt.html#DESCRIPTION
+class      required
+since      2024
+says       A leading '+' in optstring has no effect on a scan (the same
+           results with and without it), and a '+' on the command line is
+           then an unknown option character.
+test       t/008-plus.c
+
+assertion  XSH.getopt.009
+anchor     functions/getopt.html#DESCRIPTION
+class      required
+since      1992
+says       optind is 1 when the program starts, and optarg, opterr, optopt
+           and optind are declared by <unistd.h> (assignable int variables
+           and a char * variable).
+test       t/009-initial-optind.c
+
+assertion  XSH.getopt.010
+anchor     functions/getopt.html#DESCRIPTION
+class      required
+since      1992
+says       optarg points into argv: for -afoo to the character after the
+           option in the same element, and for -a foo to the next element
+           itself.
+test       t/010-optarg-pointer.c

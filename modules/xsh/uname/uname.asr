@@ -1,0 +1,25 @@
+# XSH uname()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The format of each member is implementation-defined, so only that each is
+# a null-terminated string inside its array, and that the identifying ones
+# are not empty, is checked. nodename is only required to be terminated.
+
+assertion  XSH.uname.001
+anchor     functions/uname.html#DESCRIPTION
+anchor     functions/uname.html#RETURN VALUE
+class      required
+since      1988
+says       uname() returns a non-negative value and fills the structure:
+           sysname, nodename, release, version and machine are each
+           null-terminated within their arrays, and sysname, release,
+           version and machine are not empty.
+test       t/001-fields.c
+
+assertion  XSH.uname.002
+anchor     functions/uname.html#DESCRIPTION
+class      required
+since      1988
+says       Repeated calls, also from a child process, give the same sysname,
+           release, version and machine.
+test       t/002-stable.c

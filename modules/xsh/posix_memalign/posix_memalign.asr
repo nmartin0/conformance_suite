@@ -1,0 +1,52 @@
+# XSH posix_memalign()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# posix_memalign() is the Advisory Information option (ADV). It returns an
+# error number; it is not required to set errno.
+
+assertion  XSH.posix_memalign.001
+anchor     functions/posix_memalign.html#DESCRIPTION
+anchor     functions/posix_memalign.html#RETURN VALUE
+class      conditional
+when       ADV
+since      2001
+says       For alignments that are power-of-two multiples of sizeof(void *)
+           up to 64, posix_memalign() returns 0 and stores a pointer that is
+           a multiple of the alignment, to space of the requested size that
+           can be written and read. For 128 to 4096 it returns 0 with an
+           aligned pointer, or ENOMEM.
+test       t/001-success.c
+
+assertion  XSH.posix_memalign.002
+anchor     functions/posix_memalign.html#DESCRIPTION
+anchor     functions/posix_memalign.html#ERRORS
+class      conditional
+when       ADV
+since      2001
+says       An alignment that is not a power-of-two multiple of sizeof(void *)
+           (1, sizeof(void *) + 1, three times sizeof(void *), 0) gives a
+           return value of EINVAL, and *memptr is left unmodified or set to
+           a null pointer.
+test       t/002-invalid.c
+
+assertion  XSH.posix_memalign.003
+anchor     functions/posix_memalign.html#RETURN VALUE
+anchor     functions/posix_memalign.html#ERRORS
+class      conditional
+when       ADV
+since      2001
+says       With a valid alignment and a size no memory can satisfy,
+           posix_memalign() returns ENOMEM and leaves *memptr unmodified or
+           null.
+test       t/003-enomem.c
+
+assertion  XSH.posix_memalign.004
+anchor     functions/posix_memalign.html#DESCRIPTION
+anchor     functions/posix_memalign.html#RETURN VALUE
+class      conditional
+when       ADV
+since      2001
+says       With size 0 posix_memalign() either returns 0 with a null
+           pointer or a freeable pointer in *memptr, or returns a non-zero
+           error number leaving *memptr unmodified or null.
+test       t/004-zero-size.c

@@ -1,0 +1,35 @@
+# XSH at_quick_exit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Each test forks a child that registers handlers and ends with
+# quick_exit(); handlers report with write() on a pipe and the parent judges.
+
+assertion  XSH.at_quick_exit.001
+anchor     functions/at_quick_exit.html#DESCRIPTION
+anchor     functions/at_quick_exit.html#RETURN VALUE
+class      required
+since      2024
+says       at_quick_exit() of a function returns 0, and quick_exit() then
+           calls that function once, with no argument.
+test       t/001-registers.c
+
+assertion  XSH.at_quick_exit.002
+anchor     functions/at_quick_exit.html#DESCRIPTION
+anchor     functions/at_quick_exit.html#RETURN VALUE
+class      required
+since      2024
+says       At least 32 registrations are possible: 32 registrations (of one
+           function) all return 0 and quick_exit() makes all 32 calls.
+test       t/002-thirty-two.c
+
+assertion  XSH.at_quick_exit.003
+anchor     functions/at_quick_exit.html#DESCRIPTION
+anchor     functions/at_quick_exit.html#RETURN VALUE
+class      required
+since      2024
+says       A registration that returned 0 is honoured and none that returned
+           non-zero is: after up to 4096 registrations of one function,
+           quick_exit() calls it exactly as many times as registrations
+           succeeded.
+note       Registering past the limit may succeed or fail; both are accepted.
+test       t/003-count-matches.c

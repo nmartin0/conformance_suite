@@ -1,0 +1,17 @@
+# XSH gethostid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# XSI. The value itself is not specified; only that it is a 32-bit
+# identifier and that it identifies the host (the same each time, also
+# in a child process).
+
+assertion  XSH.gethostid.001
+anchor     functions/gethostid.html#DESCRIPTION
+anchor     functions/gethostid.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1992
+says       gethostid() returns a value that fits in 32 bits (as a signed or an
+           unsigned 32-bit number) and is the same on repeated calls and in a
+           child process.
+test       t/001-identifier.c

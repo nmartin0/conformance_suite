@@ -1,0 +1,12 @@
+# quick_exit.cov - every requirement unit on functions/quick_exit.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:52ea413a         XSH.quick_exit.003
+DESCRIPTION:91d6bfc1         partial XSH.quick_exit.002  # atexit() handlers; a signal handler cannot be made to run by termination
+DESCRIPTION:33bfc546         none  undefined behaviour
+DESCRIPTION:0cf63a21         none  undefined behaviour
+DESCRIPTION:dadc0e20         XSH.quick_exit.001 XSH.quick_exit.005 XSH.quick_exit.006
+DESCRIPTION:a0bf5289         none  undefined behaviour
+DESCRIPTION:6d789cfd         XSH.quick_exit.004
+DESCRIPTION:725141af         XSH.quick_exit.003
+RETURN_VALUE:91c17898        untestable  not returning is checked through the child's status in every test

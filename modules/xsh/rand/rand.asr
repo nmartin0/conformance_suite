@@ -1,0 +1,36 @@
+# XSH rand() and srand()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# rand_r() is not on this page in this edition (it was removed), so it is
+# not tested. The generator's actual values are not specified, only its
+# range and its repeatability.
+
+assertion  XSH.rand.001
+anchor     functions/rand.html#DESCRIPTION
+anchor     functions/rand.html#RETURN VALUE
+class      required
+since      1988
+says       RAND_MAX is at least 32767, and 1000 consecutive rand() values are
+           all in the range 0 to RAND_MAX and are not all equal.
+test       t/001-range.c
+
+assertion  XSH.rand.002
+anchor     functions/rand.html#DESCRIPTION
+class      required
+since      1988
+says       Calling srand() again with the same seed makes rand() repeat the
+           same 100 values, for seeds 1, 42, 0 and the largest unsigned
+           value; srand() with one seed, then another, then the first
+           again, also reproduces the first run.
+test       t/002-repeat.c
+
+assertion  XSH.rand.003
+anchor     functions/rand.html#DESCRIPTION
+class      required
+since      1988
+says       rand() called before any srand() gives the same sequence as after
+           srand(1): 50 values taken first, then srand(1) and 50 more are
+           equal.
+note       Taken at the start of the process, before anything else could
+           have seeded the generator.
+test       t/003-default-seed.c
