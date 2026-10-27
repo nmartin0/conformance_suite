@@ -26,7 +26,7 @@ int main(void)
 {
 #ifndef FD_CLOFORK
 	pc_begin("XSH.system.011");
-	pc_unresolved("<fcntl.h> does not define FD_CLOFORK");
+	pc_fail("<fcntl.h> does not define FD_CLOFORK");
 #else
 	char cmd[128];
 	int a, b, r;

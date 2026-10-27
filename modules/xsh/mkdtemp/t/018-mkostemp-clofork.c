@@ -55,6 +55,6 @@ int main(void)
 #else
 	pc_begin("XSH.mkdtemp.018");
 	pc_test();
-	pc_unresolved("O_CLOFORK or FD_CLOFORK is not defined by the headers");
+	pc_fail("O_CLOFORK or FD_CLOFORK is not defined by the headers");
 #endif
 }

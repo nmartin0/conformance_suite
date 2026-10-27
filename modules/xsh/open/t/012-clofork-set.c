@@ -16,7 +16,7 @@ int main(void)
 {
 	pc_begin("XSH.open.012");
 #if !defined(O_CLOFORK) || !defined(FD_CLOFORK)
-	pc_unresolved("<fcntl.h> lacks O_CLOFORK or FD_CLOFORK "
+	pc_fail("<fcntl.h> lacks O_CLOFORK or FD_CLOFORK "
 	    "(see XBD.fcntl.h.002, .005)");
 #else
 	{

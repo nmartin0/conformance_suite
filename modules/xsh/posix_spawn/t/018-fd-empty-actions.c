@@ -668,7 +668,7 @@ static void parent(void)
 	st = finish(buf, sizeof buf);
 	expect_ok(buf, st, 0);
 #else
-	pc_unresolved("<fcntl.h> does not define FD_CLOFORK");
+	pc_fail("<fcntl.h> does not define FD_CLOFORK");
 #endif
 }
 

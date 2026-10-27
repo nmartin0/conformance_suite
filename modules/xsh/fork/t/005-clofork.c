@@ -40,7 +40,7 @@ int main(void)
 	b = open("f", O_RDONLY);
 	pc_check(a >= 0 && b >= 0, "cannot open f");
 #ifndef FD_CLOFORK
-	pc_unresolved("<fcntl.h> does not define FD_CLOFORK");
+	pc_fail("<fcntl.h> does not define FD_CLOFORK");
 #else
 	pc_check(fcntl(a, F_SETFD, FD_CLOFORK) == 0, "cannot set FD_CLOFORK");
 	pc_test();

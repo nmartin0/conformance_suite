@@ -65,7 +65,7 @@ int main(void)
 {
 	pc_begin("XSH.popen.018");
 #ifndef FD_CLOFORK
-	pc_unresolved("<fcntl.h> does not define FD_CLOFORK");
+	pc_fail("<fcntl.h> does not define FD_CLOFORK");
 #else
 	int a, b;
 

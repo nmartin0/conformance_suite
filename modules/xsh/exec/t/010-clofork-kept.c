@@ -214,7 +214,7 @@ int main(int argc, char **argv)
 	pc_check(argc >= 1 && argv[0][0] == '/', "argv[0] is not an absolute path");
 	self = argv[0];
 #ifndef FD_CLOFORK
-	pc_unresolved("<fcntl.h> has no FD_CLOFORK (XBD.fcntl.h.002)");
+	pc_fail("<fcntl.h> has no FD_CLOFORK (XBD.fcntl.h.002)");
 #else
 	int fd;
 	char num[16];
