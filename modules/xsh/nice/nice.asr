@@ -1,0 +1,77 @@
+# XSH nice()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# nice() is XSI. It changes the nice value of the whole process and cannot
+# be undone without privilege when it raises the value, so every test that
+# calls it works in a child process. Scheduling effects are never observed:
+# only the return values, errno and the nice value read back with
+# getpriority() (which returns the nice value minus NZERO, as nice() does).
+# getpriority() is a separate XSI page but is used here as the page's own
+# "see also". The value reached when the request would pass the upper
+# limit is taken as the highest value the implementation enforces: the
+# nice page says 2*NZERO-1 but the getpriority page lets an implementation
+# enforce more restrictive limits (see the report), so the tests only
+# require a value at or below NZERO-1 that does not change on repeating the
+# request. Privilege is not assumed in either direction (EPERM test).
+
+assertion  XSH.nice.001
+anchor     functions/nice.html#DESCRIPTION
+anchor     functions/nice.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       nice(0) returns the current nice value minus NZERO: a value from
+           -NZERO to NZERO-1, equal to getpriority(PRIO_PROCESS, 0), and the
+           same again when repeated.
+test       t/001-nice-zero.c
+
+assertion  XSH.nice.002
+anchor     functions/nice.html#DESCRIPTION
+anchor     functions/nice.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       nice(1) adds 1 to the nice value: it returns the value from
+           nice(0) plus 1 and getpriority() then reports that value; the
+           only other outcome allowed is the old value returned unchanged
+           when that is the highest value the implementation enforces
+           (confirmed by a larger request returning the same value).
+note       Q-86: the upper limit may be lower than NZERO-1.
+test       t/002-nice-adds.c
+
+assertion  XSH.nice.003
+anchor     functions/nice.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A request past the upper limit sets the nice value to the limit
+           and is not an error: nice(2*NZERO+5) returns a value from the old
+           value up to NZERO-1, getpriority() reports the same value, and
+           repeating the request returns it again.
+note       Q-86: the upper limit may be lower than NZERO-1.
+test       t/003-nice-clamps.c
+
+assertion  XSH.nice.004
+anchor     functions/nice.html#ERRORS/EPERM
+anchor     functions/nice.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       A process without appropriate privileges that calls nice(-1)
+           gets -1 with EPERM, and its nice value is not changed. The test
+           is UNRESOLVED when the call succeeds (the process may have
+           appropriate privileges).
+note       If the effective user ID is 0 the child first tries to give up
+           privilege with setgid() and setuid() to an unlikely user ID.
+test       t/004-nice-eperm.c
+
+assertion  XSH.nice.005
+anchor     functions/nice.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       The nice value set applies to the process, not to the calling
+           thread: after one thread calls nice(1), getpriority(PRIO_PROCESS,
+           0) called from another thread of the process reports the new
+           value.
+test       t/005-nice-process-wide.c

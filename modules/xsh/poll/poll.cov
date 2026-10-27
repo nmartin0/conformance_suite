@@ -1,0 +1,69 @@
+# poll.cov - every requirement unit on functions/poll.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:34e1e45e    XSH.poll.001 XSH.poll.002
+DESCRIPTION:4b1e92a0    XSH.poll.001 XSH.poll.002 XSH.poll.005
+DESCRIPTION:a01a6ca5    XSH.poll.005
+DESCRIPTION:00af07be    XSH.poll.001 XSH.poll.002 XSH.poll.005
+DESCRIPTION:39e13ce6    XSH.poll.001 XSH.poll.002 XSH.poll.005
+DESCRIPTION:0fe3caae    XSH.poll.017 XSH.poll.031
+DESCRIPTION:64857253    XSH.poll.019
+DESCRIPTION:5381ade9    XSH.poll.021
+DESCRIPTION:d7e05316    XSH.poll.001 XSH.poll.002 XSH.poll.005
+DESCRIPTION:8584d9bf    XSH.poll.005
+DESCRIPTION:22739b7f    XSH.poll.001 XSH.poll.002 XSH.poll.005
+DESCRIPTION:ed3d0db3    XSH.poll.001 XSH.poll.004 XSH.poll.030
+DESCRIPTION:0a951da6    none  what normal data is, is file-specific; not required for pipes
+DESCRIPTION:05327d4a    none  priority data is file-specific; no priority bands are arranged
+DESCRIPTION:56abf471    none  high-priority data is file-specific; none is arranged
+DESCRIPTION:9f825155    XSH.poll.002 XSH.poll.015
+DESCRIPTION:317397f0    XSH.poll.003
+DESCRIPTION:0918f5d7    none  priority data is file-specific; no priority bands are arranged
+DESCRIPTION:74ba2785    XSH.poll.027
+DESCRIPTION:f6ded944    XSH.poll.027 XSH.poll.028
+DESCRIPTION:ea5b1a5b    XSH.poll.028
+DESCRIPTION:8ebb1880    XSH.poll.009 XSH.poll.010
+DESCRIPTION:465fa22b    XSH.poll.012 XSH.poll.013
+DESCRIPTION:ce9358ad    XSH.poll.011
+DESCRIPTION:982a279b    none  a permission
+DESCRIPTION:ea5b1a5b.2  XSH.poll.010
+DESCRIPTION:a1ebf8b5    XSH.poll.007 XSH.poll.008
+DESCRIPTION:33a7b338    XSH.poll.008
+DESCRIPTION:c45fe6ad    XSH.poll.001 XSH.poll.009 XSH.poll.014 XSH.poll.030
+DESCRIPTION:58477972    XSH.poll.002 XSH.poll.009 XSH.poll.015
+DESCRIPTION:48c2dbfc    none  depends on the object
+DESCRIPTION:b4b6bd22    none  file and device-specific
+DESCRIPTION:2092b653    none  device-specific
+DESCRIPTION:347d3cf9    XSH.poll.006
+DESCRIPTION:779e20ec    XSH.poll.004 XSH.poll.005 XSH.poll.016
+DESCRIPTION:b264d747    XSH.poll.008 XSH.poll.010 XSH.poll.028
+DESCRIPTION:0abec82e    XSH.poll.016 XSH.poll.017
+DESCRIPTION:59858026    XSH.poll.017 XSH.poll.020
+DESCRIPTION:1b556efe    XSH.poll.016 XSH.poll.017
+DESCRIPTION:b91efe58    XSH.poll.019 XSH.poll.021
+DESCRIPTION:887c319b    XSH.poll.018
+DESCRIPTION:400e5f28    none  a permission
+DESCRIPTION:6c3a5a7b    XSH.poll.031
+DESCRIPTION:91f1e98e    untestable  the maximum is implementation-defined and the wait cannot be observed to its end
+DESCRIPTION:0edfb19f    none  a permission
+DESCRIPTION:9f552c51    partial XSH.poll.017 XSH.poll.026  # only the lower bound of the wait is tested, which rounding up cannot break
+DESCRIPTION:542fed20    XSH.poll.026
+DESCRIPTION:9deae476    partial XSH.poll.001 XSH.poll.009 XSH.poll.012 XSH.poll.015 XSH.poll.029 XSH.poll.030  # terminals and pseudo-terminals are not tested
+DESCRIPTION:d929cdca    none  unspecified
+DESCRIPTION:8b88a11b    XSH.poll.015
+DESCRIPTION:3a35b0e7    XSH.poll.029
+DESCRIPTION:9e13a955    todo  needs a non-blocking connect to a peer that is not answering at once
+DESCRIPTION:28d29c4e    XSH.poll.001 XSH.poll.005
+DESCRIPTION:ece3180f    XSH.poll.022 XSH.poll.023 XSH.poll.024
+DESCRIPTION:341c52e7    XSH.poll.022
+DESCRIPTION:54900271    XSH.poll.022
+DESCRIPTION:4c6d0655    none  unspecified
+DESCRIPTION:35d0c974    none  unspecified
+RETURN_VALUE:58fba71f   XSH.poll.001 XSH.poll.002 XSH.poll.005 XSH.poll.016
+RETURN_VALUE:3b6d49af   XSH.poll.005 XSH.poll.006 XSH.poll.007
+RETURN_VALUE:952c5887   XSH.poll.016 XSH.poll.017 XSH.poll.018
+RETURN_VALUE:bbc932df   XSH.poll.021 XSH.poll.022 XSH.poll.025
+ERRORS:815e359b         untestable  needs the allocation of internal data structures to fail
+ERRORS:c40fdda5         XSH.poll.021 XSH.poll.022
+ERRORS:8d17d2f5         XSH.poll.025
+ERRORS:727af9fb         untestable  the page does not say which timeout intervals are invalid (see the report)

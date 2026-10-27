@@ -1,0 +1,78 @@
+# XSH getrusage()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# getrusage() is XSI. The page names only ru_utime and ru_stime as members
+# of the result and says nothing about their accuracy, granularity or
+# normalisation, so the tests ask only for what a measure of processor
+# time must do: be positive after the process (or a waited-for child) has
+# spent a good part of a second in a busy loop, and not go backwards. The
+# busy loops are bounded by wall-clock time, not by the processor-time
+# counters under test. Times are compared as microsecond totals of
+# ru_utime and ru_stime. Not tested: other members, the contents for a
+# terminated child that has not been waited for (the page does not say),
+# SA_NOCLDWAIT (SIG_IGN for SIGCHLD is used for the discarded-child case).
+
+assertion  XSH.getrusage.001
+anchor     functions/getrusage.html#DESCRIPTION
+anchor     functions/getrusage.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       getrusage(RUSAGE_SELF) returns 0; after the process has run a
+           busy loop that used 300 ms of processor time (measured with clock()), the total of ru_utime
+           and ru_stime is above 0 and not below the total read before the
+           loop.
+note       The busy loop is capped by CLOCK_MONOTONIC (5 s); a reading of zero
+           after 300 ms of processor time means the measure is not one of
+           processor time used.
+           Q-88: accuracy and granularity are not defined; only positive and not decreasing are asked.
+test       t/001-self.c
+
+assertion  XSH.getrusage.002
+anchor     functions/getrusage.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       After a child that used 300 ms of processor time in a busy loop has terminated and
+           been waited for, the total of ru_utime and ru_stime from
+           getrusage(RUSAGE_CHILDREN) is larger than before the child was
+           created.
+note       Q-88: accuracy and granularity are not defined; only positive and not decreasing are asked.
+test       t/002-children.c
+
+assertion  XSH.getrusage.003
+anchor     functions/getrusage.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       RUSAGE_CHILDREN also covers the descendants of children, when
+           they have terminated and been waited for: a child that waits for
+           a grandchild running a busy loop (300 ms), and is itself waited
+           for, leaves the total larger than before.
+note       Q-88: accuracy and granularity are not defined; only positive and not decreasing are asked.
+test       t/003-grandchildren.c
+
+assertion  XSH.getrusage.004
+anchor     functions/getrusage.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       A child that is never waited for (SIGCHLD set to SIG_IGN, so that
+           wait() ends with ECHILD once the child is gone) is discarded: the
+           two totals from getrusage(RUSAGE_CHILDREN) before the fork and
+           after the wait are equal, even though the child ran a busy loop.
+note       Change history: the RUSAGE_CHILDREN wording was clarified in
+           Issue 8.
+test       t/004-discarded-child.c
+
+assertion  XSH.getrusage.005
+anchor     functions/getrusage.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2001
+says       getrusage() with a who value that is neither RUSAGE_SELF nor
+           RUSAGE_CHILDREN (tried: -1, INT_MAX, INT_MIN; at least one must
+           be refused) returns -1 with EINVAL for each that is refused.
+note       An implementation may define more values (RUSAGE_THREAD), so a
+           candidate that succeeds is skipped.
+test       t/005-einval.c

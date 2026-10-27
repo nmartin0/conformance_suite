@@ -1,0 +1,322 @@
+# XSH poll() and ppoll()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# poll() is ppoll() with a null signal mask and a millisecond timeout, so
+# a test about both runs its check through both (a failure names the
+# function). Readiness is arranged with pipes, FIFOs, socket pairs and a
+# regular file; whether a pipe is two-way is unspecified (pipe() page), so
+# only the end meant for the operation is polled. The page does not
+# constrain priority-band events, so POLLRDBAND, POLLWRBAND, POLLPRI and
+# POLLRDNORM on pipes are not required. The values of revents bits other
+# than those requested are required to be clear except for POLLHUP,
+# POLLERR and POLLNVAL, which are conditions the call reports anyway.
+# Lower bounds on waiting use CLOCK_MONOTONIC and allow for the clock's
+# resolution; no upper bound is asserted (a guard alarm gives UNRESOLVED).
+# Signals for the EINTR tests come from a child that repeats them or are
+# made pending while masked. Not tested: terminals, priority bands,
+# thread cancellation, an invalid ppoll timeout (the page does not say
+# which are invalid, see the report).
+
+assertion  XSH.poll.001
+anchor     functions/poll.html#DESCRIPTION
+anchor     functions/poll.html#RETURN VALUE
+class      required
+since      2001
+says       A pipe's read end holding data, polled for POLLIN, gives 1 from
+           poll() and ppoll() with POLLIN set in revents, and the fd and
+           events members are as they were.
+test       t/001-pollin-pipe.c
+
+assertion  XSH.poll.002
+anchor     functions/poll.html#DESCRIPTION
+anchor     functions/poll.html#RETURN VALUE
+class      required
+since      2001
+says       The write end of a pipe with room, polled for POLLOUT, gives 1
+           with POLLOUT set in revents.
+test       t/002-pollout-pipe.c
+
+assertion  XSH.poll.003
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       POLLWRNORM is equivalent to POLLOUT: the write end of a pipe with
+           room, polled for POLLWRNORM, gives 1 with POLLWRNORM set in
+           revents.
+test       t/003-pollwrnorm.c
+
+assertion  XSH.poll.004
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       Only the requested conditions are reported: a socket with data
+           waiting that is also writable, polled for POLLIN alone, gives
+           revents equal to POLLIN (ignoring POLLHUP, POLLERR and POLLNVAL,
+           none of which applies), and an entry with events 0 on the same
+           kind of socket gets revents 0 and is not counted.
+test       t/004-only-requested.c
+
+assertion  XSH.poll.005
+anchor     functions/poll.html#DESCRIPTION
+anchor     functions/poll.html#RETURN VALUE
+class      required
+since      2001
+says       With three entries (ready, not ready, ready) the return value is
+           2, the not-ready entry's revents is 0 although it held another
+           value before the call, and the two ready entries' revents are
+           non-zero.
+test       t/005-count.c
+
+assertion  XSH.poll.006
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       An entry whose fd is negative has its events ignored and its
+           revents set to 0 (although it held another value), and is not
+           counted: with a ready pipe in a second entry the return value
+           is 1.
+test       t/006-negative-fd.c
+
+assertion  XSH.poll.007
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       An fd that is not open, polled for POLLIN, gives POLLNVAL in
+           revents and is counted: the return value is 1.
+test       t/007-pollnval.c
+
+assertion  XSH.poll.008
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       POLLNVAL is reported although it was not requested: an fd that is
+           not open with events 0 gives POLLNVAL in revents and 1 from the
+           call.
+test       t/008-pollnval-unrequested.c
+
+assertion  XSH.poll.009
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       The read end of a pipe whose last write end was closed, polled
+           for POLLIN, has POLLHUP set in revents.
+test       t/009-pollhup-pipe.c
+
+assertion  XSH.poll.010
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       POLLHUP is reported although it was not requested: the same pipe
+           read end with events 0 gives POLLHUP in revents and 1 from the
+           call.
+test       t/010-pollhup-unrequested.c
+
+assertion  XSH.poll.011
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       POLLHUP and POLLOUT are mutually exclusive: the read end of a
+           pipe whose last write end was closed, polled for POLLIN and
+           POLLOUT, never has both in revents.
+test       t/011-hup-excludes-out.c
+
+assertion  XSH.poll.012
+anchor     functions/poll.html#DESCRIPTION
+anchor     functions/poll.html#RATIONALE
+class      required
+since      2001
+says       The hangup state of a FIFO persists: after a writer wrote a byte
+           and closed, POLLHUP is set for the read end, and still set after
+           the byte has been read, and in a later call.
+test       t/012-fifo-hup-persists.c
+
+assertion  XSH.poll.013
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       The hangup state of a FIFO lasts only until a process opens the
+           FIFO for writing: after the persisted hangup, a new writer's
+           open makes POLLHUP clear in revents while the writer stays open.
+test       t/013-fifo-hup-cleared.c
+
+assertion  XSH.poll.014
+anchor     functions/poll.html#DESCRIPTION
+anchor     functions/poll.html#RATIONALE
+class      required
+since      2001
+says       A FIFO that has been opened for reading but never had a writer is
+           not in the hangup state: polling its read end for POLLIN (with a
+           short timeout) leaves POLLHUP clear in revents.
+note       Whether POLLIN is set for such a FIFO (a read would return
+           end-of-file without blocking) is not asserted.
+test       t/014-fifo-no-hup-without-writer.c
+
+assertion  XSH.poll.015
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       A regular file always polls true for reading and writing: with
+           events POLLIN|POLLOUT the call returns 1 and revents holds both.
+test       t/015-regular-file.c
+
+assertion  XSH.poll.016
+anchor     functions/poll.html#DESCRIPTION
+anchor     functions/poll.html#RETURN VALUE
+class      required
+since      2001
+says       When the timeout (50 ms) expires with nothing ready (an empty
+           pipe's read end), poll() and ppoll() return 0 and revents is 0.
+test       t/016-expiry.c
+
+assertion  XSH.poll.017
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       With nothing ready and no signal, poll() and ppoll() with a
+           250 ms timeout do not return before that interval has elapsed
+           (measured allowing for the clock's resolution) and return 0.
+note       Only a lower bound is asserted; the interval may be rounded up.
+test       t/017-expiry-waits.c
+
+assertion  XSH.poll.018
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       With a zero timeout the call is a poll and does not wait: an empty
+           pipe's read end gives 0 and a pipe with data gives 1 with POLLIN
+           (a call that does not come back within the guard is UNRESOLVED).
+test       t/018-zero-timeout.c
+
+assertion  XSH.poll.019
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       A timeout of -1 for poll(), and a null timeout for ppoll(), wait
+           until a descriptor is ready: with an empty pipe that a child fills
+           after a pause, the call returns 1 with POLLIN, and a byte can
+           then be read (a call that does not come back within the guard is
+           UNRESOLVED).
+timeout    70
+test       t/019-infinite-wait.c
+
+assertion  XSH.poll.020
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       A positive timeout is a maximum: with a 10 s timeout and a child
+           that fills an empty pipe after a pause, poll() and ppoll() return
+           1 with POLLIN (not 0) once the byte is there.
+timeout    70
+test       t/020-timeout-is-maximum.c
+
+assertion  XSH.poll.021
+anchor     functions/poll.html#ERRORS/EINTR
+class      required
+since      2001
+says       A signal caught (handler installed without SA_RESTART) while
+           poll() or ppoll() (null mask) waits on an empty pipe with a long
+           timeout makes it return -1 with EINTR.
+note       The signal comes from a child that repeats it every 20 ms.
+test       t/021-eintr.c
+
+assertion  XSH.poll.022
+anchor     functions/poll.html#DESCRIPTION
+anchor     functions/poll.html#ERRORS/EINTR
+class      required
+since      2024
+says       With SIGUSR1 blocked and pending, ppoll() given an empty sigmask
+           and nothing ready runs the handler (installed without
+           SA_RESTART) and returns -1 with EINTR instead of waiting out a
+           long timeout; the caller's mask is back (SIGUSR1 blocked) on
+           return.
+note       Q-87: nothing is ready here, so the unspecified case does not arise.
+test       t/022-ppoll-unmask-eintr.c
+
+assertion  XSH.poll.023
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2024
+says       A signal that the sigmask given to ppoll() blocks does not cut the
+           wait short: with SIGUSR1 sent every 10 ms by a child during a
+           300 ms call with nothing ready, the call does not return before
+           the interval has elapsed (allowing for the clock's resolution).
+note       The signal may become deliverable once the original mask is
+           restored, so the result (0, or -1 with EINTR) is not asserted.
+test       t/023-sigmask-blocks.c
+
+assertion  XSH.poll.024
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2024
+says       After ppoll() returns, the caller's mask is back: with SIGUSR2
+           blocked by the caller (on top of whatever mask the test started
+           with) and a sigmask holding all signals, the mask afterwards is
+           the same one (checked for a set of common signals), after a
+           timeout return and after a return with a ready descriptor.
+test       t/024-mask-restored.c
+
+assertion  XSH.poll.025
+anchor     functions/poll.html#ERRORS/EINVAL
+class      required
+since      2001
+says       nfds greater than {OPEN_MAX} (found with sysconf(_SC_OPEN_MAX))
+           makes poll() and ppoll() return -1 with EINVAL.
+note       Not applicable (NOTINUSE) when the limit is indeterminate or too
+           large for the test to build the array.
+test       t/025-einval-nfds.c
+
+assertion  XSH.poll.026
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       O_NONBLOCK does not affect poll() and ppoll(): the read end of an
+           empty pipe with O_NONBLOCK set, polled with a 250 ms timeout,
+           does not return before the interval has elapsed (allowing for the
+           clock's resolution) and gives 0.
+test       t/026-nonblock-unaffected.c
+
+assertion  XSH.poll.027
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       An error that read() or write() would report and that comes only
+           from the state of the object is POLLERR: the write end of a pipe
+           whose read end is closed (a write would give EPIPE), polled for
+           POLLOUT, has POLLERR set in revents.
+test       t/027-pollerr-epipe.c
+
+assertion  XSH.poll.028
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       POLLERR is reported although it was not requested: the same pipe
+           write end with events 0 has POLLERR set in revents and the call
+           returns 1.
+test       t/028-pollerr-unrequested.c
+
+assertion  XSH.poll.029
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       A listening socket is not ready for reading with no connection
+           pending, and polls ready (POLLIN) once a connection is available.
+test       t/029-listening-socket.c
+
+assertion  XSH.poll.030
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2001
+says       Sockets and FIFOs are supported: a socket pair end gives POLLIN
+           after the peer sends a byte, and a FIFO read end opened
+           nonblocking gives POLLIN after a writer wrote.
+test       t/030-socket-fifo.c
+
+assertion  XSH.poll.031
+anchor     functions/poll.html#DESCRIPTION
+class      required
+since      2024
+says       A ppoll() timeout of 31 days is supported: with a ready pipe the
+           call returns 1 rather than failing.
+note       The page requires a maximum timeout of at least 31 days for
+           ppoll() (not for poll()).
+test       t/031-timeout-31-days.c

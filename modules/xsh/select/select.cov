@@ -1,0 +1,74 @@
+# select.cov - every requirement unit on functions/select.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:e1b25d95    XSH.select.001 XSH.select.002 XSH.select.003 XSH.select.004 XSH.select.009
+DESCRIPTION:c6f55046    XSH.select.001 XSH.select.002 XSH.select.003
+DESCRIPTION:0513eed8    XSH.select.006 XSH.select.022
+DESCRIPTION:f58bd10e    XSH.select.015 XSH.select.029
+DESCRIPTION:a5a82fd7    optional
+DESCRIPTION:d81762d6    partial XSH.select.001 XSH.select.002 XSH.select.019 XSH.select.020 XSH.select.021  # terminals and pseudo-terminals are not tested
+DESCRIPTION:3e5ab6dd    none  unspecified
+DESCRIPTION:ee8d3a82    XSH.select.010
+DESCRIPTION:22275ac5    XSH.select.010 XSH.select.011
+DESCRIPTION:a0c24e81    XSH.select.001 XSH.select.003
+DESCRIPTION:5d9c50cc    XSH.select.002
+DESCRIPTION:cc814c4c    partial XSH.select.009  # only the regular file, which always has the error condition true, is used with errorfds
+DESCRIPTION:f59ed201    XSH.select.001 XSH.select.002 XSH.select.003 XSH.select.004 XSH.select.009
+DESCRIPTION:05413455    XSH.select.001 XSH.select.002 XSH.select.003
+DESCRIPTION:fd35bc5f    XSH.select.006 XSH.select.015 XSH.select.016
+DESCRIPTION:6a9d33fa    XSH.select.006 XSH.select.008
+DESCRIPTION:9ca1b74e    XSH.select.006
+DESCRIPTION:51016fdb    XSH.select.005 XSH.select.006
+DESCRIPTION:e046eacf    XSH.select.028
+DESCRIPTION:75395c4d    XSH.select.007
+DESCRIPTION:d165a203    XSH.select.023
+DESCRIPTION:400e5f28    none  a permission
+DESCRIPTION:e78acef3    XSH.select.022
+DESCRIPTION:91f1e98e    untestable  the maximum is implementation-defined and the wait cannot be observed to its end
+DESCRIPTION:0edfb19f    none  a permission
+DESCRIPTION:9f552c51    partial XSH.select.006 XSH.select.008  # only the lower bound of the wait is tested, which rounding up cannot break
+DESCRIPTION:4aa74b53    XSH.select.016 XSH.select.017 XSH.select.018
+DESCRIPTION:6f8d1dcd    XSH.select.016
+DESCRIPTION:b1b52767    XSH.select.016
+DESCRIPTION:8f2e3962    none  unspecified
+DESCRIPTION:b26c5def    XSH.select.001 XSH.select.003 XSH.select.019 XSH.select.020
+DESCRIPTION:c79b3880    XSH.select.003 XSH.select.020
+DESCRIPTION:af6a97be    XSH.select.002 XSH.select.005 XSH.select.019
+DESCRIPTION:fad72136    todo  a socket with a pending error needs an asynchronous connection failure, not arranged portably
+DESCRIPTION:c39d8a8f    none  file type-specific, nothing to require
+DESCRIPTION:f94d47ff    none  protocol-specific
+DESCRIPTION:bec2133a    none  implementation-defined
+DESCRIPTION:df60f490    XSH.select.009
+DESCRIPTION:b85c7c82    partial XSH.select.020  # ancillary data is not arranged
+DESCRIPTION:e3610de7    todo  out-of-band data needs a protocol that has it and SO_OOBINLINE
+DESCRIPTION:369b42b7    XSH.select.021
+DESCRIPTION:8c72ee98    partial XSH.select.004  # SO_SNDLOWAT is not varied
+DESCRIPTION:d86a74a3    todo  needs a non-blocking connect to a peer that is not answering at once
+DESCRIPTION:7440ded8    todo  out-of-band data needs a protocol that has it
+DESCRIPTION:a7716d34    todo  out-of-band data needs a protocol that has it
+DESCRIPTION:f932d8c1    none  protocol-specific and implementation-defined
+DESCRIPTION:d17e572b    XSH.select.008
+DESCRIPTION:bb026460    XSH.select.029
+DESCRIPTION:80707858    XSH.select.009
+DESCRIPTION:f8d4dac7    XSH.select.012 XSH.select.013 XSH.select.014 XSH.select.015 XSH.select.016
+DESCRIPTION:f1734e5a    XSH.select.005
+DESCRIPTION:1b2a14ca    XSH.select.024 XSH.select.025 XSH.select.026 XSH.select.027
+DESCRIPTION:557edd1f    none  unspecified
+DESCRIPTION:e11d04e7    none  undefined behaviour
+DESCRIPTION:a86768db    XSH.select.026
+DESCRIPTION:ea8c2bdf    XSH.select.026
+DESCRIPTION:ccbfc097    XSH.select.027
+DESCRIPTION:ff184a06    XSH.select.025
+DESCRIPTION:dfbb7324    XSH.select.025
+DESCRIPTION:f2e486db    XSH.select.024
+DESCRIPTION:4993e9b3    XSH.select.024
+DESCRIPTION:54d4f881    none  undefined behaviour
+DESCRIPTION:d9daab34    none  either mask is allowed
+RETURN_VALUE:f778d346   XSH.select.001 XSH.select.002 XSH.select.003 XSH.select.004 XSH.select.009
+RETURN_VALUE:b25cc6be   XSH.select.012 XSH.select.013 XSH.select.014 XSH.select.015 XSH.select.016
+RETURN_VALUE:a33d915d   XSH.select.024 XSH.select.025 XSH.select.026
+RETURN_VALUE:5791904d   XSH.select.027
+ERRORS:06c432c3         XSH.select.014
+ERRORS:778a383c         partial XSH.select.015 XSH.select.016 XSH.select.029  # whether a handler with SA_RESTART set restarts the call is implementation-defined
+ERRORS:727af9fb         untestable  the page does not say which timeout intervals are invalid (see the report)
+ERRORS:5311bc43         XSH.select.011 XSH.select.012 XSH.select.013

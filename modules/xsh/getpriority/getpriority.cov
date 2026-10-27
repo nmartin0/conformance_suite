@@ -1,0 +1,28 @@
+# getpriority.cov - every requirement unit on functions/getpriority.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d39b60be    XSH.getpriority.001 XSH.getpriority.002 XSH.getpriority.003 XSH.getpriority.004
+DESCRIPTION:2afd2dca    XSH.getpriority.005 XSH.getpriority.006 XSH.getpriority.007 XSH.getpriority.008
+DESCRIPTION:57caa3d3    XSH.getpriority.001 XSH.getpriority.002 XSH.getpriority.004 XSH.getpriority.007
+DESCRIPTION:78d98d21    XSH.getpriority.001 XSH.getpriority.002 XSH.getpriority.004
+DESCRIPTION:a84c29c5    partial XSH.getpriority.001 XSH.getpriority.003 XSH.getpriority.004  # who 0 is tried for PRIO_PROCESS, PRIO_PGRP (read) and PRIO_USER (read); setpriority() with who 0 for PRIO_PGRP and PRIO_USER is not tried
+DESCRIPTION:e74ea652    XSH.getpriority.005 XSH.getpriority.013
+DESCRIPTION:dd4dbeda    partial XSH.getpriority.013  # seen from another thread through getpriority(); the effect on system scope threads is not observed
+DESCRIPTION:244cba21    partial XSH.getpriority.002 XSH.getpriority.003 XSH.getpriority.008  # setting every process of a user (PRIO_USER) is not tried: it would change every process of the user
+DESCRIPTION:0412172f    untestable  the default of a new process depends on its parent, and the scheduling effect is not observed
+DESCRIPTION:9a2dcfc1    none  a permission
+DESCRIPTION:8ec51686    partial XSH.getpriority.005 XSH.getpriority.006  # the upper bound only; the lower bound needs privilege
+DESCRIPTION:012294a9    XSH.getpriority.012
+DESCRIPTION:45c9c61a    todo  needs a process with SCHED_FIFO or SCHED_RR, which needs privilege
+DESCRIPTION:b3ca6798    todo  needs a process with SCHED_FIFO or SCHED_RR, which needs privilege
+DESCRIPTION:4ad35cc6    none  unspecified
+DESCRIPTION:071340ec    none  scheduling effects are not observed
+DESCRIPTION:af2a1ecb    XSH.getpriority.001 XSH.getpriority.004
+DESCRIPTION:3ebb8260    XSH.getpriority.001 XSH.getpriority.004
+RETURN_VALUE:26fef0b9   XSH.getpriority.001 XSH.getpriority.004
+RETURN_VALUE:ce1869b1   XSH.getpriority.009 XSH.getpriority.010 XSH.getpriority.011
+RETURN_VALUE:396893e4   XSH.getpriority.005 XSH.getpriority.006 XSH.getpriority.007 XSH.getpriority.008 XSH.getpriority.009 XSH.getpriority.010 XSH.getpriority.011
+ERRORS:adbf6891         XSH.getpriority.009
+ERRORS:dc319c7a         partial XSH.getpriority.010 XSH.getpriority.011  # an invalid which, and a who that cannot be a process ID; an invalid group or user ID is not tried
+ERRORS:75c8e09b         optional
+ERRORS:b0c69315         XSH.getpriority.012

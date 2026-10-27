@@ -1,0 +1,48 @@
+# getrlimit.cov - every requirement unit on functions/getrlimit.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:e425011b    XSH.getrlimit.001 XSH.getrlimit.008
+DESCRIPTION:81415a56    XSH.getrlimit.001 XSH.getrlimit.008
+DESCRIPTION:fb5567e0    XSH.getrlimit.001 XSH.getrlimit.008
+DESCRIPTION:85ba89c4    XSH.getrlimit.001 XSH.getrlimit.008
+DESCRIPTION:8aad2c25    XSH.getrlimit.010
+DESCRIPTION:03012db8    XSH.getrlimit.008 XSH.getrlimit.009
+DESCRIPTION:0fdfe82a    XSH.getrlimit.007
+DESCRIPTION:182baeb1    XSH.getrlimit.008
+DESCRIPTION:3ab1b9e4    XSH.getrlimit.006 XSH.getrlimit.011
+DESCRIPTION:f44a1908    untestable  the absence of enforcement cannot be observed
+DESCRIPTION:641e17fe    partial XSH.getrlimit.011  # only that RLIM_INFINITY is accepted and read back; the absence of enforcement is not observed
+DESCRIPTION:d34fec3e    XSH.getrlimit.001 XSH.getrlimit.002
+DESCRIPTION:adbb66a6    none  introduces the resource
+DESCRIPTION:173b99c3    untestable  the name and place of a core file are not specified
+DESCRIPTION:c7e47cfd    untestable  the name and place of a core file are not specified
+DESCRIPTION:0d4f7618    none  implementation-defined
+DESCRIPTION:0f30eafd    XSH.getrlimit.002
+DESCRIPTION:68ce75a1    XSH.getrlimit.016
+DESCRIPTION:983e6285    none  unspecified
+DESCRIPTION:931c77e7    none  introduces the resource
+DESCRIPTION:32c1e989    untestable  what counts as the data segment (and whether malloc() uses it) is not specified
+DESCRIPTION:ea05bb51    none  introduces the resource
+DESCRIPTION:da757617    XSH.getrlimit.013 XSH.getrlimit.014 XSH.getrlimit.015
+DESCRIPTION:01573077    XSH.getrlimit.012
+DESCRIPTION:45233d14    XSH.getrlimit.012
+DESCRIPTION:fd871bdd    XSH.getrlimit.012
+DESCRIPTION:2cb5b3d6    none  introduces the resource
+DESCRIPTION:58262db7    XSH.getrlimit.018
+DESCRIPTION:4dc28f15    XSH.getrlimit.018
+DESCRIPTION:711cd7ad    partial XSH.getrlimit.018  # only the default disposition is tried; blocked, ignored and caught SIGSEGV are not
+DESCRIPTION:829b0577    none  introduces the resource
+DESCRIPTION:21cdebb0    XSH.getrlimit.017
+DESCRIPTION:f0936f4f    partial XSH.getrlimit.018  # stack growth under RLIMIT_AS is not tried
+DESCRIPTION:fd34cc5f    none  representability is implementation-defined
+DESCRIPTION:effa81d7    partial XSH.getrlimit.011  # only RLIM_INFINITY and an ordinary value; RLIM_SAVED_MAX and RLIM_SAVED_CUR are not set
+DESCRIPTION:a423e81b    untestable  the saved limits are not observable except through exec
+DESCRIPTION:86efc072    none  unspecified
+DESCRIPTION:19ac6c80    none  implementation-defined
+DESCRIPTION:3830b548    none  an example
+DESCRIPTION:3686e4c7    todo  the effect of exec on the saved limits is not observable portably
+RETURN_VALUE:122b2f6a   XSH.getrlimit.001 XSH.getrlimit.002 XSH.getrlimit.008 XSH.getrlimit.009 XSH.getrlimit.010 XSH.getrlimit.011
+RETURN_VALUE:73bdf30d   XSH.getrlimit.003 XSH.getrlimit.004 XSH.getrlimit.005 XSH.getrlimit.006 XSH.getrlimit.007
+ERRORS:aad3e716         XSH.getrlimit.003 XSH.getrlimit.004 XSH.getrlimit.005 XSH.getrlimit.006
+ERRORS:cb379b87         XSH.getrlimit.007
+ERRORS:fc6da83d         optional

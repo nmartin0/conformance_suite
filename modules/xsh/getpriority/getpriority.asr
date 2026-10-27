@@ -1,0 +1,180 @@
+# XSH getpriority() and setpriority()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Both are XSI. They change nice values, which a process without
+# privilege cannot lower again, so every test that sets a value runs it in
+# a child process (or in children that the test creates and reaps). PRIO_USER
+# is only read, never set: setting it would renice every process of the
+# user. getpriority() returns the nice value minus NZERO, and setpriority()
+# takes that offset. Scheduling effects are never observed. The highest
+# nice value the implementation enforces may be below NZERO-1 (the page
+# says implementations may enforce more restrictive limits), so a request
+# to raise a value is checked as "the value asked for, or the
+# implementation's highest value" and the latter is confirmed by asking for
+# NZERO-1 and seeing no change. Privilege is not assumed in either
+# direction (the lowering test is UNRESOLVED when lowering succeeds).
+# Process groups used to observe "lowest nice value of the group" are made
+# by the test from two children that report their own values through pipes
+# and are held until the parent has made its calls.
+
+assertion  XSH.getpriority.001
+anchor     functions/getpriority.html#DESCRIPTION
+anchor     functions/getpriority.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       getpriority(PRIO_PROCESS, 0) returns a value from -NZERO to
+           NZERO-1 that equals getpriority(PRIO_PROCESS, getpid()) and
+           nice(0), and PRIO_PROCESS with who 0 means the calling process.
+note       nice(0) is called in a child so the harness is not changed (it
+           adds 0 in any case).
+test       t/001-get-process.c
+
+assertion  XSH.getpriority.002
+anchor     functions/getpriority.html#DESCRIPTION
+anchor     functions/getpriority.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       getpriority(PRIO_PGRP, pgid) returns the lowest value over the
+           group: for a group of two children (neither the caller) that
+           have raised their nice values by different amounts, it returns
+           the smaller of the two values they report for themselves.
+test       t/002-get-pgrp.c
+
+assertion  XSH.getpriority.003
+anchor     functions/getpriority.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A who of 0 with PRIO_PGRP means the caller's own process group: a
+           member of the two-child group above gets, from
+           getpriority(PRIO_PGRP, 0), the smaller of the two members'
+           values.
+test       t/003-get-pgrp-zero.c
+
+assertion  XSH.getpriority.004
+anchor     functions/getpriority.html#DESCRIPTION
+anchor     functions/getpriority.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       getpriority(PRIO_USER, 0) returns, for the effective user, the
+           lowest value over that user's processes, which is not above the
+           caller's own value and is in the range -NZERO to NZERO-1; the
+           same holds with who equal to geteuid().
+test       t/004-get-user.c
+
+assertion  XSH.getpriority.005
+anchor     functions/getpriority.html#DESCRIPTION
+anchor     functions/getpriority.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       setpriority(PRIO_PROCESS, 0, c+1), with c the current value and c+1
+           at most NZERO-1, returns 0 and getpriority() then reports c+1;
+           when it reports c instead, c is the implementation's highest
+           value (asking for NZERO-1 leaves it at c).
+note       Q-86: the highest value the implementation enforces may be below NZERO-1.
+test       t/005-set-raise.c
+
+assertion  XSH.getpriority.006
+anchor     functions/getpriority.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A value above the highest supported one is not an error: 
+           setpriority(PRIO_PROCESS, 0, 4*NZERO) returns 0 and the value
+           read back is from the old value up to NZERO-1 and does not
+           change if the request is repeated.
+note       Q-86: the highest value the implementation enforces may be below NZERO-1.
+test       t/006-set-clamps.c
+
+assertion  XSH.getpriority.007
+anchor     functions/getpriority.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       setpriority(PRIO_PROCESS, pid, v) for another process sets that
+           process: a child asked to report its own value afterwards gets
+           the value asked for (or the implementation's highest value), and
+           the parent's getpriority(PRIO_PROCESS, pid) agrees.
+test       t/007-set-other-process.c
+
+assertion  XSH.getpriority.008
+anchor     functions/getpriority.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       setpriority(PRIO_PGRP, pgid, v) sets every process of the group:
+           after raising both members of the two-child group above, both
+           report the same value, not below the larger of their old values
+           and not above v.
+test       t/008-set-pgrp.c
+
+assertion  XSH.getpriority.009
+anchor     functions/getpriority.html#ERRORS/ESRCH
+class      conditional
+when       XSI
+since      2001
+says       When no process matches, getpriority() and setpriority() return
+           -1 with ESRCH: PRIO_PROCESS with the ID of a child that has been
+           reaped, and PRIO_PGRP with the ID of a group whose only member
+           has been reaped (tried with up to three IDs; a call that
+           succeeds because the ID has been reused is skipped).
+note       The test is FAIL if every ID tried matches a process.
+test       t/009-esrch.c
+
+assertion  XSH.getpriority.010
+anchor     functions/getpriority.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2001
+says       A which value that is none of the three (tried: -1, INT_MAX,
+           INT_MIN; at least one must be refused) gets -1 with EINVAL from
+           getpriority() and from setpriority() (run in a child).
+note       An implementation may define more values, so a candidate that
+           succeeds is skipped.
+test       t/010-einval-which.c
+
+assertion  XSH.getpriority.011
+anchor     functions/getpriority.html#ERRORS/EINVAL
+anchor     functions/getpriority.html#ERRORS/ESRCH
+class      conditional
+when       XSI
+since      2001
+says       A PRIO_PROCESS who that cannot be a process ID ((id_t)-1) makes
+           getpriority() and setpriority() return -1 with EINVAL or ESRCH.
+note       Both errors apply (no process, not a valid ID); XSH 2.3 lets the
+           implementation choose.
+test       t/011-who-invalid.c
+
+assertion  XSH.getpriority.012
+anchor     functions/getpriority.html#DESCRIPTION
+anchor     functions/getpriority.html#ERRORS/EACCES
+class      conditional
+when       XSI
+since      2001
+says       Without appropriate privileges the nice value cannot be lowered:
+           after raising its value, a child calling setpriority() with a
+           lower value either gets -1 (EACCES is the error the page lists;
+           the errno is not checked), or returns 0, and the value read back
+           is not below the one before. The test is
+           UNRESOLVED when the value did get lower (the process may have
+           appropriate privileges).
+note       If the effective user ID is 0 the child first tries to give up
+           privilege with setgid() and setuid() to an unlikely user ID.
+test       t/012-set-lower.c
+
+assertion  XSH.getpriority.013
+anchor     functions/getpriority.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       The value set applies to the process as a whole: after one thread
+           calls setpriority(PRIO_PROCESS, 0, v) with v above the current
+           value, getpriority(PRIO_PROCESS, 0) called from another thread of
+           the process reports what the calling thread sees (UNRESOLVED
+           when the value did not go up, e.g. at the implementation's
+           highest value).
+test       t/013-set-process-wide.c

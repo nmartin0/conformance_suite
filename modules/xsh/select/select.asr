@@ -1,0 +1,314 @@
+# XSH pselect(), select() and FD_CLR(), FD_ISSET(), FD_SET(), FD_ZERO()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# select() is the same as pselect() with a null signal mask and a timeval
+# timeout, so each test that is about both runs the check through both
+# functions (a failure names the function). Readiness is arranged with
+# pipes, FIFOs, socket pairs and a regular file. Whether a pipe is two-way
+# is unspecified (pipe() page), so only the end meant for the operation is
+# put in a set. The exceptional-condition set is used only for regular
+# files: what counts as one for other files is implementation-defined.
+# The timeout object select() may modify is never inspected. Lower bounds
+# on waiting are measured with CLOCK_MONOTONIC and allow for the clock's
+# resolution; no upper bound is asserted (a guard alarm gives UNRESOLVED).
+# Signals for the EINTR tests come either from a child that repeats them
+# or are made pending while masked, so that no test depends on timing.
+# Not tested: terminals; OOB data and socket errors (not arranged
+# portably); thread cancellation; an invalid timeout (the page does not say
+# which intervals are invalid, see the report).
+
+assertion  XSH.select.001
+anchor     functions/select.html#DESCRIPTION
+anchor     functions/select.html#RETURN VALUE
+class      required
+since      2001
+says       With one pipe's read end holding data and another's empty, both
+           in readfds, select() and pselect() return 1, the ready
+           descriptor's bit is set on return and the other one's is clear.
+test       t/001-pipe-readable.c
+
+assertion  XSH.select.002
+anchor     functions/select.html#DESCRIPTION
+anchor     functions/select.html#RETURN VALUE
+class      required
+since      2001
+says       The write end of a pipe with room in it is reported ready for
+           writing: select() and pselect() with it in writefds return 1 with
+           its bit set.
+test       t/002-pipe-writable.c
+
+assertion  XSH.select.003
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       The read end of a pipe whose write end has been closed (and which
+           holds no data) is ready for reading, since a read would return
+           end-of-file without blocking: select() and pselect() return 1
+           with its bit set.
+test       t/003-pipe-eof-readable.c
+
+assertion  XSH.select.004
+anchor     functions/select.html#DESCRIPTION
+anchor     functions/select.html#RETURN VALUE
+class      required
+since      2001
+says       The return value counts the bits set over all the output sets: a
+           socket with data waiting, put in both readfds and writefds,
+           gives 2 from select() and from pselect(), with its bit set in
+           both.
+test       t/004-count-total.c
+
+assertion  XSH.select.005
+anchor     functions/select.html#DESCRIPTION
+anchor     functions/select.html#RETURN VALUE
+class      required
+since      2001
+says       When the timeout expires with nothing ready (an empty pipe's read
+           end in readfds, the write end of a full pipe in writefds),
+           select() and pselect() return 0 and every bit of both sets is 0.
+test       t/005-expiry-zero.c
+
+assertion  XSH.select.006
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       With nothing ready and no signal, select() and pselect() with a
+           250 ms timeout do not return before that interval has elapsed
+           (measured allowing for the clock's resolution) and then return 0.
+note       Only a lower bound is asserted; the interval may be rounded up.
+test       t/006-expiry-waits.c
+
+assertion  XSH.select.007
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       With a zero-valued timeout the call is a poll: an empty pipe's
+           read end gives 0 and a pipe with data gives 1 with its bit set;
+           the call does not wait for anything (a call that does not come
+           back within the guard is UNRESOLVED).
+test       t/007-zero-timeout.c
+
+assertion  XSH.select.008
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       With readfds, writefds and errorfds all null and a 250 ms
+           timeout, select() and pselect() wait for the interval (no return
+           before it has elapsed, allowing for the clock's resolution) and
+           return 0.
+test       t/008-null-sets-wait.c
+
+assertion  XSH.select.009
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       A regular file always selects true for reading, for writing and
+           for error conditions: with its descriptor in all three sets,
+           select() and pselect() return 3 with the bit set in each.
+test       t/009-regular-file.c
+
+assertion  XSH.select.010
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       The descriptors from 0 through nfds-1 are examined: a ready pipe
+           whose descriptor number is the highest one below nfds (nfds is
+           that number plus 1) is found, 1 is returned and its bit is set.
+test       t/010-nfds-last-examined.c
+
+assertion  XSH.select.011
+anchor     functions/select.html#ERRORS/EINVAL
+class      required
+since      2001
+says       nfds equal to FD_SETSIZE is not an error: with a ready pipe in
+           readfds, select() and pselect() with nfds == FD_SETSIZE return 1.
+note       The ERRORS section names nfds greater than FD_SETSIZE; the Issue
+           5 change history records that equal to FD_SETSIZE was made valid.
+test       t/011-nfds-fdsetsize.c
+
+assertion  XSH.select.012
+anchor     functions/select.html#ERRORS/EINVAL
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       nfds equal to FD_SETSIZE+1 makes select() and pselect() return
+           -1 with EINVAL, and the sets given are left as they were.
+note       The sets are checked because the page says outright that on
+           failure they are not modified.
+test       t/012-einval-nfds-big.c
+
+assertion  XSH.select.013
+anchor     functions/select.html#ERRORS/EINVAL
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       A negative nfds makes select() and pselect() return -1 with
+           EINVAL, and the sets given are left as they were.
+test       t/013-einval-nfds-neg.c
+
+assertion  XSH.select.014
+anchor     functions/select.html#ERRORS/EBADF
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       A set naming a descriptor that is not open (together with a ready
+           pipe) makes select() and pselect() return -1 with EBADF, and the
+           sets given are left as they were.
+test       t/014-ebadf.c
+
+assertion  XSH.select.015
+anchor     functions/select.html#ERRORS/EINTR
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       A signal caught (handler installed without SA_RESTART) while
+           select() or pselect() (null mask) waits on an empty pipe with a
+           long timeout makes it return -1 with EINTR, and readfds is left as
+           it was.
+note       The signal comes from a child that repeats it every 20 ms, so one
+           that arrives before the call cannot leave the test waiting.
+test       t/015-eintr-select.c
+
+assertion  XSH.select.016
+anchor     functions/select.html#DESCRIPTION
+anchor     functions/select.html#ERRORS/EINTR
+class      required
+since      2001
+says       With SIGUSR1 blocked and pending, pselect() given an empty
+           sigmask and nothing ready runs the handler (installed without
+           SA_RESTART) and returns -1 with EINTR instead of waiting out a
+           long timeout; the caller's mask is back (SIGUSR1 blocked) on
+           return, and readfds is as it was.
+note       Q-87: nothing is ready here, so the unspecified case does not arise.
+test       t/016-pselect-unmask-eintr.c
+
+assertion  XSH.select.017
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       A signal that the sigmask given to pselect() blocks does not cut
+           the wait short: with SIGUSR1 sent every 10 ms by a child during a
+           300 ms call with nothing ready, the call does not return before
+           the interval has elapsed (allowing for the clock's resolution).
+note       The signal may become deliverable once the original mask is
+           restored, so the result (0, or -1 with EINTR) is not asserted,
+           only that the call lasted the full interval.
+test       t/017-sigmask-blocks.c
+
+assertion  XSH.select.018
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       After pselect() returns, the caller's mask is back: with SIGUSR2
+           blocked by the caller (on top of whatever mask the test started
+           with) and a sigmask holding all signals, the mask afterwards is
+           the same one (checked for a set of common signals), after a
+           timeout return and after a return with a ready descriptor.
+test       t/018-mask-restored.c
+
+assertion  XSH.select.019
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       FIFOs are supported: a FIFO opened for reading (nonblocking)
+           with data written by a writer is ready for reading, and the
+           write end of the empty FIFO is ready for writing, in select()
+           and pselect().
+test       t/019-fifo.c
+
+assertion  XSH.select.020
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       Sockets are supported: one end of a socket pair is not ready for
+           reading when empty, ready (return 1, bit set) after the peer
+           sends a byte, and ready again, still without data, after the
+           peer is closed (end-of-file), in select() and pselect().
+test       t/020-socketpair.c
+
+assertion  XSH.select.021
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       A listening socket is not ready for reading with no connection
+           pending, and is ready once a connection request has arrived; the
+           accept() that follows completes without blocking (bounded by a
+           guard that gives UNRESOLVED), in select() and pselect().
+test       t/021-listening-socket.c
+
+assertion  XSH.select.022
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       A timeout of 31 days is supported: select() and pselect() with a
+           ready pipe and that timeout return 1 rather than failing.
+note       The page requires a maximum timeout of at least 31 days; larger
+           values are cut to the maximum, so the interval itself is the
+           largest one the test uses.
+test       t/022-timeout-31-days.c
+
+assertion  XSH.select.023
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       A timeout does not disturb a pending alarm(): after alarm(100)
+           and a select() or pselect() call that times out, alarm(0)
+           reports about 100 seconds left (more than 90 and at most 100).
+test       t/023-alarm-unaffected.c
+
+assertion  XSH.select.024
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       FD_ZERO() empties a set, also one that has members: afterwards
+           FD_ISSET() is zero for every descriptor from 0 to FD_SETSIZE-1.
+test       t/024-fd-zero.c
+
+assertion  XSH.select.025
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       FD_SET() adds a descriptor (FD_ISSET() is then non-zero for it and
+           zero for every other one in range), also for 0 and FD_SETSIZE-1;
+           adding one that is already a member changes nothing, so a single
+           FD_CLR() removes it.
+test       t/025-fd-set.c
+
+assertion  XSH.select.026
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       FD_CLR() removes a member and leaves the others; on a descriptor
+           that is not a member it has no effect and is not an error.
+test       t/026-fd-clr.c
+
+assertion  XSH.select.027
+anchor     functions/select.html#DESCRIPTION
+anchor     functions/select.html#RETURN VALUE
+class      required
+since      2001
+says       FD_ISSET() is non-zero for exactly the descriptors that are in the
+           set (checked for a spread of members and non-members), and it
+           accepts a pointer to a const set.
+test       t/027-fd-isset.c
+
+assertion  XSH.select.028
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       With a null timeout, select() and pselect() wait until a
+           descriptor is ready: on an empty pipe that a child fills after
+           a pause, the call returns 1 with the bit set (a call that does
+           not come back within the guard is UNRESOLVED).
+test       t/028-null-timeout-waits.c
+
+assertion  XSH.select.029
+anchor     functions/select.html#DESCRIPTION
+class      required
+since      2001
+says       With all three sets null and a null timeout, select() and
+           pselect() wait until a signal interrupts them: a signal caught
+           (no SA_RESTART) from a child makes them return -1 with EINTR
+           (a call that does not come back within the guard is UNRESOLVED).
+note       The signal comes from a child that repeats it every 20 ms.
+test       t/029-no-sets-null-timeout.c

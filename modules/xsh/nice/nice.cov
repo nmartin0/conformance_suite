@@ -1,0 +1,16 @@
+# nice.cov - every requirement unit on functions/nice.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:2941b8d4    XSH.nice.002 XSH.nice.003
+DESCRIPTION:17b724f2    untestable  the effect on scheduling is not observed
+DESCRIPTION:60232a96    partial XSH.nice.003  # the upper limit is checked as a value up to NZERO-1 that does not change on repeating, because the getpriority page lets an implementation enforce a lower limit (see the report); the minimum of 0 needs privilege
+DESCRIPTION:569c0d86    partial XSH.nice.003  # only requests above the upper limit; below the lower limit needs privilege
+DESCRIPTION:ebf574f2    XSH.nice.004
+DESCRIPTION:d54279d8    todo  needs a process with SCHED_FIFO or SCHED_RR, which needs privilege
+DESCRIPTION:5a371b61    none  implementation-defined
+DESCRIPTION:349867a3    XSH.nice.005
+DESCRIPTION:dd4dbeda    partial XSH.nice.005  # seen from another thread through getpriority(); the effect on system scope threads is not observed
+DESCRIPTION:442107be    XSH.nice.001 XSH.nice.002 XSH.nice.003 XSH.nice.004
+RETURN_VALUE:287f0757   XSH.nice.001 XSH.nice.002 XSH.nice.003
+RETURN_VALUE:a76fac5d   XSH.nice.004
+ERRORS:df26a3b2         XSH.nice.004

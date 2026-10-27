@@ -1,0 +1,226 @@
+# XSH getrlimit() and setrlimit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# getrlimit()/setrlimit() are Base (Issue 8) apart from RLIMIT_CPU and the
+# SIGXFSZ wording of RLIMIT_FSIZE, which are XSI. Every test that lowers
+# a limit does it in a child process that reports through a pipe and
+# leaves with _exit(), so the harness is never limited; the parent waits
+# with a guard (an expired guard is UNRESOLVED). Lowering never needs
+# privilege, so the children only lower; the one test that raises a hard
+# limit (EPERM) takes the process unprivileged as far as it can and is
+# UNRESOLVED when the raise succeeds (the process then has appropriate
+# privileges, which the text leaves to the implementation). Values read
+# by getrlimit() that equal RLIM_SAVED_MAX or RLIM_SAVED_CUR are not
+# compared. The resource tests pick values from what getrlimit() reports,
+# so they hold whatever the starting limits are, and are UNRESOLVED when
+# the starting limits leave no room to arrange the state. A setrlimit()
+# that "may fail" because usage is already above the new limit (EINVAL) is
+# tolerated and ends the test as UNRESOLVED. Not tested: RLIMIT_DATA
+# (what counts as the data segment is not specified), RLIMIT_CORE
+# (the name and place of a core file are not specified), RLIM_SAVED_MAX and
+# RLIM_SAVED_CUR (representability is implementation-defined), the effect
+# of exec on limits, the state of the limits after a failed setrlimit()
+# (not stated).
+
+assertion  XSH.getrlimit.001
+anchor     functions/getrlimit.html#DESCRIPTION
+anchor     functions/getrlimit.html#RETURN VALUE
+class      required
+since      2001
+says       getrlimit() returns 0 for each of RLIMIT_CORE, RLIMIT_DATA,
+           RLIMIT_FSIZE, RLIMIT_NOFILE, RLIMIT_STACK and RLIMIT_AS, and the
+           soft limit is not above the hard limit (RLIM_INFINITY counting as
+           above every other value).
+test       t/001-get-all.c
+
+assertion  XSH.getrlimit.002
+anchor     functions/getrlimit.html#DESCRIPTION
+anchor     functions/getrlimit.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       getrlimit(RLIMIT_CPU) returns 0 and the soft limit is not above
+           the hard limit.
+test       t/002-get-cpu.c
+
+assertion  XSH.getrlimit.003
+anchor     functions/getrlimit.html#ERRORS/EINVAL
+class      required
+since      2001
+says       getrlimit() with a resource value that no resource has (tried:
+           -1, INT_MAX, INT_MIN; at least one must be refused) returns -1
+           with EINVAL for each that is refused.
+note       An implementation may define more resources than the page lists,
+           so a candidate that succeeds is skipped; at least one of the
+           three must fail.
+test       t/003-get-einval.c
+
+assertion  XSH.getrlimit.004
+anchor     functions/getrlimit.html#ERRORS/EINVAL
+class      required
+since      2001
+says       setrlimit() with a resource value that no resource has (tried:
+           -1, INT_MAX, INT_MIN, with the limits of RLIMIT_NOFILE as
+           read) returns -1 with EINVAL for each that is refused, and at
+           least one is refused (run in a child).
+test       t/004-set-einval-resource.c
+
+assertion  XSH.getrlimit.005
+anchor     functions/getrlimit.html#ERRORS/EINVAL
+anchor     functions/getrlimit.html#DESCRIPTION
+class      required
+since      2001
+says       setrlimit() with rlim_cur larger than rlim_max (RLIMIT_CORE,
+           with the hard limit first lowered to a finite value, new soft
+           limit hard+1) returns -1 with EINVAL.
+test       t/005-set-einval-cur-gt-max.c
+
+assertion  XSH.getrlimit.006
+anchor     functions/getrlimit.html#ERRORS/EINVAL
+anchor     functions/getrlimit.html#DESCRIPTION
+class      required
+since      2001
+says       RLIM_INFINITY counts as larger than any other limit: setrlimit()
+           with rlim_cur RLIM_INFINITY and a finite rlim_max (RLIMIT_CORE,
+           max lowered to a finite value first) returns -1 with EINVAL.
+test       t/006-set-einval-inf-cur.c
+
+assertion  XSH.getrlimit.007
+anchor     functions/getrlimit.html#ERRORS/EPERM
+anchor     functions/getrlimit.html#DESCRIPTION
+class      required
+since      2001
+says       A process that has lowered a hard limit (RLIMIT_CORE) cannot raise
+           it again without appropriate privileges: setrlimit() with the old
+           hard limit returns -1 with EPERM. The test is UNRESOLVED when the
+           raise succeeds (the process may have appropriate privileges).
+note       If the effective user ID is 0 the child first tries to give up
+           privilege with setgid() and setuid() to an unlikely user ID.
+test       t/007-set-eperm-raise-hard.c
+
+assertion  XSH.getrlimit.008
+anchor     functions/getrlimit.html#DESCRIPTION
+class      required
+since      2001
+says       Soft and hard limits can both be lowered in one setrlimit() call
+           (soft below the new hard, hard below the old hard): it returns 0
+           and getrlimit() then reports exactly the two new values.
+test       t/008-set-lower-both.c
+
+assertion  XSH.getrlimit.009
+anchor     functions/getrlimit.html#DESCRIPTION
+class      required
+since      2001
+says       The hard limit can be lowered to exactly the soft limit: after
+           setrlimit() with both set to the soft value, getrlimit() reports
+           that value as both.
+test       t/009-set-hard-eq-soft.c
+
+assertion  XSH.getrlimit.010
+anchor     functions/getrlimit.html#DESCRIPTION
+class      required
+since      2001
+says       The soft limit can be changed to any value up to the hard limit:
+           after lowering the soft limit alone, setrlimit() with the soft
+           limit raised back to the hard limit returns 0 and getrlimit()
+           reports it, with the hard limit unchanged.
+test       t/010-set-soft-up-to-hard.c
+
+assertion  XSH.getrlimit.011
+anchor     functions/getrlimit.html#DESCRIPTION
+class      required
+since      2001
+says       RLIM_INFINITY is a limit value: when the hard limit is
+           RLIM_INFINITY, setrlimit() lowering the soft limit and then
+           setting it back to RLIM_INFINITY returns 0 and getrlimit()
+           reports RLIM_INFINITY. UNRESOLVED when the hard limit of every
+           resource tried is finite.
+test       t/011-infinity.c
+
+assertion  XSH.getrlimit.012
+anchor     functions/getrlimit.html#DESCRIPTION
+anchor     functions/dup.html#ERRORS/EMFILE
+class      required
+since      2001
+says       RLIMIT_NOFILE is one more than the highest descriptor number that
+           can be assigned: with the soft limit lowered to N (a little above
+           the highest descriptor in use), repeated dup() ends with -1 and
+           EMFILE, no descriptor numbered N or more is open, and N-1 is
+           open (it is the lowest-numbered free one that is taken last).
+note       Descriptors are allocated lowest first (XSH 2.6), so descriptor
+           N-1 being open after the failure shows N-1 could be assigned.
+test       t/012-nofile-emfile.c
+
+assertion  XSH.getrlimit.013
+anchor     functions/getrlimit.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2001
+says       With RLIMIT_FSIZE lowered to 1000 bytes (SIGXFSZ ignored in the
+           child where the macro exists), write() of 1000 bytes to an empty
+           regular file returns 1000, and a further write() of one byte at
+           offset 1000 returns -1 with EFBIG.
+note       XSI only for the SIGXFSZ macro used to make the failure
+           observable; the failure with EFBIG itself is Base.
+test       t/013-fsize-efbig-write.c
+
+assertion  XSH.getrlimit.014
+anchor     functions/getrlimit.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2001
+says       With RLIMIT_FSIZE lowered to 1000 bytes (SIGXFSZ ignored in the
+           child where the macro exists), ftruncate() of a regular file to
+           1001 bytes returns -1 with EFBIG and ftruncate() to 1000 bytes
+           returns 0.
+note       XSI only for the SIGXFSZ macro used to make the failure
+           observable; the failure with EFBIG itself is Base.
+test       t/014-fsize-efbig-truncate.c
+
+assertion  XSH.getrlimit.015
+anchor     functions/getrlimit.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       With RLIMIT_FSIZE lowered to 1000 bytes and a SIGXFSZ handler
+           installed, the write() that would take a file past 1000 bytes
+           generates SIGXFSZ (the handler has run by the time the call has
+           returned) and returns -1 with EFBIG.
+test       t/015-fsize-sigxfsz.c
+
+assertion  XSH.getrlimit.016
+anchor     functions/getrlimit.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       With RLIMIT_CPU lowered to 1 s soft and the default action of
+           SIGXCPU in effect, a process that goes on using the processor is
+           ended by SIGXCPU (the child gets 5 s of processor time to be
+           ended; core files are disabled by RLIMIT_CORE 0).
+note       A catching or ignoring process is unspecified, so the default
+           disposition is used. An expired wall-clock guard is UNRESOLVED.
+timeout    70
+test       t/016-cpu-sigxcpu.c
+
+assertion  XSH.getrlimit.017
+anchor     functions/getrlimit.html#DESCRIPTION
+class      required
+since      2001
+says       With RLIMIT_AS lowered to L (a value the system accepts), an
+           mmap() of a file for 2L bytes and a malloc() of 2L bytes both
+           fail with ENOMEM (a request larger than the whole limit exceeds
+           it).
+note       UNRESOLVED when no tried L is accepted by setrlimit().
+test       t/017-as-enomem.c
+
+assertion  XSH.getrlimit.018
+anchor     functions/getrlimit.html#DESCRIPTION
+class      required
+since      2001
+says       With RLIMIT_STACK lowered and SIGSEGV at its default action, a
+           process that keeps growing its stack (recursion of 4 KiB frames)
+           is ended by SIGSEGV before using 256 MiB of stack.
+note       UNRESOLVED when no tried limit is accepted by setrlimit() or the
+           guard expires. Core files are disabled by RLIMIT_CORE 0.
+timeout    70
+test       t/018-stack-sigsegv.c
