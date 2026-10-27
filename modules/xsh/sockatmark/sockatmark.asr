@@ -1,0 +1,51 @@
+# XSH sockatmark()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only the cases that need no out-of-band data: out-of-band data is
+# protocol-specific (the page and XSH 2.10.12 do not say how any protocol
+# marks the stream, nor when the mark becomes visible), so no assertion
+# sends MSG_OOB. The page says 0 is returned when there is no mark, which
+# every socket in these tests satisfies.
+
+assertion  XSH.sockatmark.001
+anchor     functions/sockatmark.html#RETURN VALUE
+class      required
+since      2001
+says       sockatmark() on a connected AF_UNIX stream socket with nothing
+           queued and no out-of-band data sent returns 0.
+test       t/001-no-mark-empty.c
+
+assertion  XSH.sockatmark.002
+anchor     functions/sockatmark.html#RETURN VALUE
+anchor     functions/sockatmark.html#DESCRIPTION
+class      required
+since      2001
+says       sockatmark() on a connected stream socket with normal data queued
+           and no mark returns 0, and does not remove or change the data:
+           the data is still received afterwards.
+test       t/002-data-no-mark.c
+
+assertion  XSH.sockatmark.003
+anchor     functions/sockatmark.html#ERRORS/EBADF
+class      required
+since      2001
+says       sockatmark() with a descriptor that is not open fails with EBADF
+           (-1, and a closed descriptor).
+test       t/003-ebadf.c
+
+assertion  XSH.sockatmark.004
+anchor     functions/sockatmark.html#ERRORS/ENOTTY
+class      required
+since      2001
+says       sockatmark() on a descriptor that is not a socket (a pipe end, a
+           regular file) fails with ENOTTY.
+test       t/004-enotty.c
+
+assertion  XSH.sockatmark.005
+anchor     functions/sockatmark.html#RETURN VALUE
+class      required
+since      2001
+says       sockatmark() on a connected loopback TCP socket with no
+           out-of-band data sent returns 0, both with the receive queue
+           empty and with normal data queued.
+test       t/005-inet-no-mark.c

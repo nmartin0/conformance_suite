@@ -1,0 +1,18 @@
+# XSH if_indextoname()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.if_indextoname.001
+anchor     functions/if_indextoname.html#DESCRIPTION
+class      required
+since      2001
+says       For each (index, name) in the array if_nameindex() returns, if_indextoname(index, buf) with a buffer of IF_NAMESIZE bytes returns buf and buf holds name, null-terminated.
+note       NOTINUSE when no interface exists.
+test       t/001-round-trip.c
+
+assertion  XSH.if_indextoname.002
+anchor     functions/if_indextoname.html#ERRORS/ENXIO
+class      required
+since      2001
+says       if_indextoname() of an index no interface has (0, one more than the largest listed, and UINT_MAX, whichever are not listed) returns a null pointer and sets ENXIO.
+note       The list from if_nameindex() is ended by index 0 (if_nameindex page), so 0 is no interface.
+test       t/002-absent-index.c

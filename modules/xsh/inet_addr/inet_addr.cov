@@ -1,0 +1,18 @@
+# inet_addr.cov - every requirement unit on functions/inet_addr.html (also inet_ntoa).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:30ffb760     XSH.inet_addr.001 XSH.inet_addr.007
+DESCRIPTION:7b72ea84     XSH.inet_addr.008 XSH.inet_addr.009
+DESCRIPTION:a2c64a68     none  allows an implementation not to be thread-safe; nothing to test
+DESCRIPTION:2ee37cb0     XSH.inet_addr.001 XSH.inet_addr.008
+DESCRIPTION:17e601fb     none  a statement
+DESCRIPTION:6400b035     XSH.inet_addr.001
+DESCRIPTION:06d6b6a2     XSH.inet_addr.002
+DESCRIPTION:0f850e3d     none  an explanatory remark
+DESCRIPTION:79c3f303     XSH.inet_addr.003
+DESCRIPTION:962c88f8     none  an explanatory remark
+DESCRIPTION:3c2731c8     XSH.inet_addr.004
+DESCRIPTION:8b572e05     XSH.inet_addr.005
+RETURN_VALUE:be32556d    XSH.inet_addr.001 XSH.inet_addr.002 XSH.inet_addr.003
+RETURN_VALUE:7ce38391    partial XSH.inet_addr.006  # what counts as a failure is not defined for out-of-range parts (such as 256.1.1.1), which are not tested
+RETURN_VALUE:08cf8c9a    XSH.inet_addr.008

@@ -1,0 +1,109 @@
+# XSH shutdown()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Socket pairs and loopback TCP only. What a receive does after SHUT_RD,
+# and what the peer's sends do, is not specified and is not tested beyond
+# not blocking.
+
+assertion  XSH.shutdown.001
+anchor     functions/shutdown.html#DESCRIPTION
+anchor     functions/accept.html#RATIONALE
+anchor     functions/socketpair.html#RATIONALE
+anchor     functions/V2_chap02.html#2.10.11
+class      required
+since      2001
+says       shutdown(SHUT_WR) on one end of a stream pair returns 0; the peer
+           reads the data written before it, the shut-down end still
+           receives what the peer sends, and its descriptor stays open.
+note       The peer's end-of-file afterwards rests only on the RATIONALE of
+           accept() and socketpair(); a missing end-of-file gives UNRESOLVED,
+           not FAIL.
+test       t/001-shut-wr.c
+
+assertion  XSH.shutdown.002
+anchor     functions/shutdown.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.14
+class      required
+since      2001
+says       After SHUT_WR, send() on that end fails with EPIPE; SIGPIPE is
+           delivered at most once.
+note       Q-147: send() ties SIGPIPE to a socket that is no longer
+           connected, while 2.10.14 speaks of one no longer able to send, so
+           whether SIGPIPE follows SHUT_WR is open and both are accepted;
+           EPIPE for a socket shut down for writing is stated by send().
+test       t/002-sigpipe.c
+
+assertion  XSH.shutdown.003
+anchor     functions/shutdown.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.14
+class      required
+since      2001
+says       After SHUT_WR, send() with MSG_NOSIGNAL fails with EPIPE and no
+           SIGPIPE is raised.
+note       Q-147: see XSH.shutdown.002.
+test       t/003-nosignal.c
+
+assertion  XSH.shutdown.004
+anchor     functions/shutdown.html#DESCRIPTION
+class      required
+since      2001
+says       shutdown(SHUT_RD) returns 0; the end can still send (the peer
+           receives the data); a later read with nothing sent is expected
+           not to block (0 or an error), but what it does is unspecified,
+           so a block gives UNRESOLVED.
+test       t/004-shut-rd.c
+
+assertion  XSH.shutdown.005
+anchor     functions/shutdown.html#DESCRIPTION
+anchor     functions/accept.html#RATIONALE
+class      required
+since      2001
+says       After SHUT_RDWR, send() on that end fails with EPIPE (with
+           MSG_NOSIGNAL, so SIGPIPE is not an issue); the peer then reads
+           end-of-file.
+note       The end-of-file rests only on the RATIONALE of accept() and
+           socketpair(); a missing end-of-file gives UNRESOLVED, not FAIL.
+test       t/005-shut-rdwr.c
+
+assertion  XSH.shutdown.006
+anchor     functions/shutdown.html#DESCRIPTION
+anchor     functions/accept.html#RATIONALE
+class      required
+since      2001
+says       On a TCP connection, a client that shuts down sending still
+           receives the server's reply, and the server reads the request.
+note       The end-of-file each side then reads rests only on the RATIONALE
+           of accept() and socketpair(); a missing end-of-file gives
+           UNRESOLVED, not FAIL.
+test       t/006-tcp-half-close.c
+
+assertion  XSH.shutdown.007
+anchor     functions/shutdown.html#ERRORS/EINVAL
+class      required
+since      2001
+says       shutdown() with a how value that is none of SHUT_RD, SHUT_WR and
+           SHUT_RDWR fails with EINVAL.
+test       t/007-einval.c
+
+assertion  XSH.shutdown.008
+anchor     functions/shutdown.html#ERRORS/ENOTCONN
+class      required
+since      2001
+says       shutdown() on an unconnected stream socket (AF_UNIX and TCP, both
+           fresh) fails with ENOTCONN.
+test       t/008-enotconn.c
+
+assertion  XSH.shutdown.009
+anchor     functions/shutdown.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       shutdown() on a regular-file descriptor or a pipe end fails with
+           ENOTSOCK.
+test       t/009-enotsock.c
+
+assertion  XSH.shutdown.010
+anchor     functions/shutdown.html#ERRORS/EBADF
+class      required
+since      2001
+says       shutdown() on -1 or on a closed descriptor fails with EBADF.
+test       t/010-ebadf.c

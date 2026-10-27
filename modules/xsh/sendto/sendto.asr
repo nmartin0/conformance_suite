@@ -1,0 +1,178 @@
+# XSH sendto()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Same arrangements as send(): local sockets only, every blocking call
+# guarded. A datagram socket has no peer until connect() is called; the
+# AF_UNIX destinations are sockets bound in the test's own directory, with
+# dest_len as the page asks (offset of sun_path, plus the name, plus one).
+# Not tested: broadcast (a system that wrongly accepts the call would put a
+# datagram on the network), EACCES, EINVAL for a bad dest_len, ENAMETOOLONG
+# (a component longer than {NAME_MAX} does not fit in sun_path), and the
+# may-fail routing errors.
+
+assertion  XSH.sendto.001
+anchor     functions/sendto.html#DESCRIPTION
+anchor     functions/sendto.html#RETURN VALUE
+class      required
+since      2001
+says       sendto() on an unconnected datagram socket, with a bound AF_UNIX
+           socket as destination (dest_len exactly the offset of sun_path
+           plus the name length plus one), returns the length given and the
+           whole 1000 byte message arrives there.
+test       t/001-dgram-dest.c
+
+assertion  XSH.sendto.002
+anchor     functions/sendto.html#DESCRIPTION
+anchor     functions/sendto.html#ERRORS/EISCONN
+class      disputed
+since      2008
+says       sendto() on a connected stream socket with a destination given
+           either sends the bytes to the connected peer (the destination is
+           ignored) or fails with EISCONN with nothing sent.
+note       disputed (Q-150): the DESCRIPTION says the address is ignored
+           for a connection-mode socket, while EISCONN is a may-fail entry
+           for "a destination was specified and the socket is already
+           connected". The test accepts both outcomes; a failure of any
+           other kind (another error, or data sent but not delivered) is
+           logged as INSPECT.
+test       t/002-stream-ignores-dest.c
+
+assertion  XSH.sendto.003
+anchor     functions/sendto.html#DESCRIPTION
+anchor     functions/sendto.html#ERRORS/EISCONN
+class      required
+since      2008
+says       sendto() with a destination on a datagram socket that has a
+           pre-specified peer either delivers the message to the given
+           destination (not to the peer) or fails with EISCONN with
+           nothing delivered.
+test       t/003-connected-dgram.c
+
+assertion  XSH.sendto.004
+anchor     functions/sendto.html#ERRORS/EDESTADDRREQ
+class      required
+since      2001
+says       sendto() on an unconnected, unbound UDP socket with no
+           destination fails, with EDESTADDRREQ or EINVAL (a success
+           leaves the test UNRESOLVED, because the entries are may-fail).
+note       Both are may-fail entries: the page does not say that a call
+           with no destination at all must fail, so only the error is
+           judged (SI-96).
+test       t/004-edestaddrreq.c
+
+assertion  XSH.sendto.005
+anchor     functions/sendto.html#ERRORS/EBADF
+class      required
+since      2001
+says       sendto() with a descriptor that is not open fails with EBADF
+           (-1, and a closed descriptor).
+test       t/005-ebadf.c
+
+assertion  XSH.sendto.006
+anchor     functions/sendto.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       sendto() on a descriptor that is not a socket fails with
+           ENOTSOCK.
+test       t/006-enotsock.c
+
+assertion  XSH.sendto.007
+anchor     functions/sendto.html#ERRORS/EAFNOSUPPORT
+class      required
+since      2001
+says       sendto() on an AF_UNIX datagram socket with an AF_INET
+           destination (a correct sockaddr_in and length) fails with
+           EAFNOSUPPORT.
+test       t/007-eafnosupport.c
+
+assertion  XSH.sendto.008
+anchor     functions/sendto.html#ERRORS/ENOENT
+class      required
+since      2001
+says       sendto() on an AF_UNIX datagram socket with a destination
+           pathname that names nothing fails with ENOENT.
+test       t/008-enoent.c
+
+assertion  XSH.sendto.009
+anchor     functions/sendto.html#ERRORS/ENOTDIR
+class      required
+since      2001
+says       sendto() on an AF_UNIX datagram socket with a destination
+           whose path prefix names a regular file fails with ENOTDIR.
+test       t/009-enotdir.c
+
+assertion  XSH.sendto.010
+anchor     functions/sendto.html#ERRORS/ELOOP
+class      required
+since      2001
+says       sendto() on an AF_UNIX datagram socket with a destination that
+           is a symbolic link leading back to itself fails with ELOOP.
+test       t/010-eloop.c
+
+assertion  XSH.sendto.011
+anchor     functions/sendto.html#ERRORS/ENOTCONN
+class      required
+since      2001
+says       sendto() on a stream socket that was never connected fails with
+           ENOTCONN.
+test       t/011-enotconn.c
+
+assertion  XSH.sendto.012
+anchor     functions/sendto.html#DESCRIPTION
+anchor     functions/sendto.html#ERRORS/EPIPE
+anchor     functions/V2_chap02.html#2.10.14
+class      required
+since      2008
+says       sendto() with MSG_NOSIGNAL on a stream socket whose peer has gone
+           fails (EPIPE, or ECONNRESET or ENOTCONN if the system reports
+           the case that way) and no SIGPIPE is generated.
+note       See XSH.send.008 and Q-61.
+test       t/012-nosignal.c
+
+assertion  XSH.sendto.013
+anchor     functions/sendto.html#ERRORS/EPIPE
+class      disputed
+since      2001
+says       sendto() without MSG_NOSIGNAL on a stream socket whose peer has
+           closed fails with EPIPE and SIGPIPE is generated for the
+           calling thread.
+note       disputed (Q-61), as for XSH.send.009; a FAIL is logged as
+           INSPECT.
+test       t/013-sigpipe.c
+
+assertion  XSH.sendto.014
+anchor     functions/sendto.html#ERRORS/EPIPE
+class      required
+since      2001
+says       sendto() on a connected stream socket whose own side has been
+           shut down for writing fails with EPIPE.
+test       t/014-epipe-shutwr.c
+
+assertion  XSH.sendto.015
+anchor     functions/sendto.html#DESCRIPTION
+anchor     functions/sendto.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       sendto() on a non-blocking stream socket whose send space is
+           full fails with EAGAIN or EWOULDBLOCK.
+test       t/015-eagain.c
+
+assertion  XSH.sendto.016
+anchor     functions/sendto.html#ERRORS/EMSGSIZE
+class      required
+since      2001
+says       sendto() of 100000 bytes through an unconnected UDP socket to a
+           loopback destination (larger than any UDP datagram can be) fails
+           with EMSGSIZE and nothing reaches the receiver.
+note       See XSH.send.012 for why UDP is used.
+test       t/016-emsgsize-udp.c
+
+assertion  XSH.sendto.017
+anchor     functions/sendto.html#DESCRIPTION
+anchor     functions/sendto.html#RETURN VALUE
+class      required
+since      2001
+says       sendto() on an unconnected UDP socket to the loopback address
+           and the port of a bound UDP socket returns the length given and
+           the message arrives there.
+test       t/017-udp-loopback.c

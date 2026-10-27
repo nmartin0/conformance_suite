@@ -1,0 +1,20 @@
+# gethostent.cov - every requirement unit on functions/gethostent.html (also sethostent, endhostent).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:78b7cde1     XSH.gethostent.001
+DESCRIPTION:8fc19968     none  a statement
+DESCRIPTION:e1fa2a20     none  unspecified: nothing to test
+DESCRIPTION:250873c4     none  a note
+DESCRIPTION:85f713e9     XSH.gethostent.001
+DESCRIPTION:cb506d23     partial XSH.gethostent.005  # that the connection stays open is seen only through a descriptor, which the implementation need not use
+DESCRIPTION:f2a5e099     XSH.gethostent.003
+DESCRIPTION:abd122d7     XSH.gethostent.001
+DESCRIPTION:e007ec1c     XSH.gethostent.002
+DESCRIPTION:8dbdce36     XSH.gethostent.004
+DESCRIPTION:2e1d32a7     none  allows an implementation not to be thread-safe
+RETURN_VALUE:0d262c28    XSH.gethostent.001
+RETURN_VALUE:f879af69    app  the application's duty
+RETURN_VALUE:95574dca    none  permission to invalidate a returned structure
+RETURN_VALUE:dee407ea    none  permission to invalidate a returned structure
+ERRORS:1fbbba10          optional  may-fail error that needs every descriptor used
+ERRORS:78d47d0e          optional  may-fail error that needs the system's file table full

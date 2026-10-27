@@ -1,0 +1,10 @@
+# XSH if_nameindex()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.if_nameindex.001
+anchor     functions/if_nameindex.html#DESCRIPTION
+class      required
+since      2001
+says       if_nameindex() returns an array that ends with an entry of index 0 and a null name; every earlier entry has a non-zero index and a non-empty name that fits in IF_NAMESIZE bytes, and no two entries share an index or a name.
+note       NOTINUSE when the array has no interface entry.
+test       t/001-list-shape.c

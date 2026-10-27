@@ -1,0 +1,69 @@
+# XSH getservent(), getservbyname(), getservbyport(), setservent() and endservent() (one page)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The standard guarantees no entry in these databases, so the tests use whatever
+# entries exist and are NOTINUSE when there are none.
+
+assertion  XSH.getservent.001
+anchor     functions/getservent.html#DESCRIPTION
+class      required
+since      2001
+says       Reading entries one at a time after the open call with 0 ends with a null pointer, and opening again with 0 gives the same sequence of entries.
+note       NOTINUSE when the database has no entry; the suite assumes nothing about which entries exist.
+test       t/001-sequence-rewind.c
+
+assertion  XSH.getservent.002
+anchor     functions/getservent.html#DESCRIPTION
+class      required
+since      2001
+says       Every entry getservent() returns has non-null s_name, s_proto and s_aliases, and s_aliases ends with a null pointer.
+note       NOTINUSE when the database has no entry; the suite assumes nothing about which entries exist.
+test       t/002-entry-shape.c
+
+assertion  XSH.getservent.003
+anchor     functions/getservent.html#DESCRIPTION
+class      required
+since      2001
+says       getservbyname(name, proto) with the s_name and s_proto of the first entry returns that entry (name, port and protocol equal), and so does getservbyname(name, NULL).
+note       NOTINUSE when the database has no entry; the suite assumes nothing about which entries exist. The first entry is used because it comes first whatever way names are matched.
+test       t/003-lookup-name.c
+
+assertion  XSH.getservent.004
+anchor     functions/getservent.html#DESCRIPTION
+class      required
+since      2001
+says       getservbyport(port, proto) with the port (as a uint16_t value converted to int) and s_proto of the first entry returns that entry, and so does getservbyport(port, NULL).
+note       NOTINUSE when the database has no entry; the suite assumes nothing about which entries exist. The first entry is used because it comes first whatever way keys are matched.
+test       t/004-lookup-key.c
+
+assertion  XSH.getservent.005
+anchor     functions/getservent.html#DESCRIPTION
+class      required
+since      2001
+says       getservbyname() of "pc-no-such-service-zz" (with a null protocol or an unknown protocol) and getservbyport() of port 80 with an unknown protocol name return a null pointer.
+note       These hold whatever the database holds.
+test       t/005-not-found.c
+
+assertion  XSH.getservent.006
+anchor     functions/getservent.html#DESCRIPTION
+class      required
+since      2024
+says       After the open call with a non-zero argument and one read, every descriptor that was not open before has FD_CLOEXEC set.
+note       NOTINUSE when the implementation opens no descriptor. Only the descriptors the call opened are examined.
+test       t/006-fd-cloexec.c
+
+assertion  XSH.getservent.007
+anchor     functions/getservent.html#DESCRIPTION
+class      required
+since      2001
+says       After the open call with a non-zero argument and one read, the end call leaves none of the descriptors that call opened open.
+note       NOTINUSE when the implementation opens no descriptor.
+test       t/007-end-closes.c
+
+assertion  XSH.getservent.008
+anchor     functions/getservent.html#DESCRIPTION
+class      required
+since      2001
+says       With a non-zero argument to the open call, reading every entry gives the same sequence as with 0.
+note       NOTINUSE when the database has no entry; the suite assumes nothing about which entries exist.
+test       t/008-stayopen-sequence.c

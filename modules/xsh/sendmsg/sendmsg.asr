@@ -1,0 +1,238 @@
+# XSH sendmsg()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Same arrangements as send() and sendto(): local sockets only, every
+# blocking call guarded. The descriptor-passing assertion uses an AF_UNIX
+# stream pair. Not tested: broadcast (a wrongly accepting system would put
+# a datagram on the network), MSG_OOB and MSG_EOR (protocol-specific),
+# EOPNOTSUPP, ECONNRESET, EINTR, ENAMETOOLONG for a component longer than
+# {NAME_MAX} (does not fit in sun_path), and the may-fail network errors.
+
+assertion  XSH.sendmsg.001
+anchor     functions/sendmsg.html#DESCRIPTION
+anchor     functions/sendmsg.html#RETURN VALUE
+class      required
+since      2001
+says       sendmsg() on a connected stream socket with three buffers of 2,
+           3 and 4 bytes returns 9 and the peer receives the nine bytes in
+           buffer order.
+test       t/001-gather.c
+
+assertion  XSH.sendmsg.002
+anchor     functions/sendmsg.html#DESCRIPTION
+class      required
+since      2001
+says       A zero-length buffer among the vector entries sends nothing: with
+           lengths 2, 0 and 3, sendmsg() returns 5 and the peer receives
+           the data of the first and third buffers in order.
+test       t/002-zero-entry.c
+
+assertion  XSH.sendmsg.003
+anchor     functions/sendmsg.html#ERRORS/EMSGSIZE
+anchor     functions/sendmsg.html#DESCRIPTION
+class      disputed
+since      2001
+says       sendmsg() with msg_iovlen 0 fails with EMSGSIZE.
+note       disputed (Q-148): the DESCRIPTION says the vector holds "zero
+           or more buffers", while EMSGSIZE is required when msg_iovlen is
+           less than or equal to 0. The test takes the ERRORS entry; a
+           FAIL (the call succeeding with 0) is logged as INSPECT.
+test       t/003-iovlen-zero.c
+
+assertion  XSH.sendmsg.004
+anchor     functions/sendmsg.html#ERRORS/EMSGSIZE
+class      required
+since      2001
+says       sendmsg() with msg_iovlen one more than {IOV_MAX} fails with
+           EMSGSIZE.
+test       t/004-iovlen-over-max.c
+
+assertion  XSH.sendmsg.005
+anchor     functions/sendmsg.html#ERRORS/EINVAL
+class      required
+since      2001
+says       sendmsg() with two buffers of SSIZE_MAX bytes each, whose total
+           overflows ssize_t, fails with EINVAL.
+test       t/005-overflow.c
+
+assertion  XSH.sendmsg.006
+anchor     functions/sendmsg.html#DESCRIPTION
+class      required
+since      2001
+says       sendmsg() on an unconnected datagram socket with msg_name set to
+           a bound AF_UNIX socket and three buffers sends one datagram made
+           of the buffers in order: the return value is the total and a
+           single receive gets all of it.
+test       t/006-dgram-name.c
+
+assertion  XSH.sendmsg.007
+anchor     functions/sendmsg.html#DESCRIPTION
+anchor     functions/sendmsg.html#ERRORS/EISCONN
+class      disputed
+since      2008
+says       sendmsg() on a connected stream socket with a destination in
+           msg_name either sends the bytes to the connected peer (the
+           address is ignored) or fails with EISCONN with nothing sent.
+note       disputed (Q-150): see XSH.sendto.002; the DESCRIPTION says the
+           address is ignored for a connection-mode socket and EISCONN is
+           a may-fail entry for the same case.
+test       t/007-stream-ignores-name.c
+
+assertion  XSH.sendmsg.008
+anchor     functions/sendmsg.html#DESCRIPTION
+anchor     functions/sendmsg.html#ERRORS/EISCONN
+class      required
+since      2008
+says       sendmsg() with a destination in msg_name on a datagram socket
+           that has a pre-specified peer either delivers the message to the
+           given destination (not to the peer) or fails with EISCONN with
+           nothing delivered.
+test       t/008-connected-dgram.c
+
+assertion  XSH.sendmsg.009
+anchor     functions/sendmsg.html#ERRORS/EDESTADDRREQ
+class      required
+since      2001
+says       sendmsg() with no msg_name on an unconnected, unbound UDP socket
+           fails, with EDESTADDRREQ or EINVAL (a success leaves the test
+           UNRESOLVED, because the entries are may-fail).
+note       See XSH.sendto.004 and SI-96.
+test       t/009-edestaddrreq.c
+
+assertion  XSH.sendmsg.010
+anchor     functions/sendmsg.html#ERRORS/EBADF
+class      required
+since      2001
+says       sendmsg() with a descriptor that is not open fails with EBADF
+           (-1, and a closed descriptor).
+test       t/010-ebadf.c
+
+assertion  XSH.sendmsg.011
+anchor     functions/sendmsg.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       sendmsg() on a descriptor that is not a socket fails with
+           ENOTSOCK.
+test       t/011-enotsock.c
+
+assertion  XSH.sendmsg.012
+anchor     functions/sendmsg.html#ERRORS/ENOTCONN
+class      required
+since      2001
+says       sendmsg() on a stream socket that was never connected fails with
+           ENOTCONN.
+test       t/012-enotconn.c
+
+assertion  XSH.sendmsg.013
+anchor     functions/sendmsg.html#ERRORS/EAFNOSUPPORT
+class      required
+since      2001
+says       sendmsg() on an AF_UNIX datagram socket with an AF_INET address
+           in msg_name fails with EAFNOSUPPORT.
+test       t/013-eafnosupport.c
+
+assertion  XSH.sendmsg.014
+anchor     functions/sendmsg.html#ERRORS/ENOENT
+class      required
+since      2001
+says       sendmsg() on an AF_UNIX datagram socket with a msg_name path
+           that names nothing fails with ENOENT.
+test       t/014-enoent.c
+
+assertion  XSH.sendmsg.015
+anchor     functions/sendmsg.html#ERRORS/ENOTDIR
+class      required
+since      2001
+says       sendmsg() on an AF_UNIX datagram socket with a msg_name path
+           whose prefix names a regular file fails with ENOTDIR.
+test       t/015-enotdir.c
+
+assertion  XSH.sendmsg.016
+anchor     functions/sendmsg.html#ERRORS/ELOOP
+class      required
+since      2001
+says       sendmsg() on an AF_UNIX datagram socket with a msg_name path that
+           is a symbolic link leading back to itself fails with ELOOP.
+test       t/016-eloop.c
+
+assertion  XSH.sendmsg.017
+anchor     functions/sendmsg.html#DESCRIPTION
+anchor     functions/sendmsg.html#ERRORS/EPIPE
+anchor     functions/V2_chap02.html#2.10.14
+class      required
+since      2008
+says       sendmsg() with MSG_NOSIGNAL on a stream socket whose peer has
+           gone fails (EPIPE, or ECONNRESET or ENOTCONN if the system
+           reports the case that way) and no SIGPIPE is generated.
+note       See XSH.send.008 and Q-61.
+test       t/017-nosignal.c
+
+assertion  XSH.sendmsg.018
+anchor     functions/sendmsg.html#ERRORS/EPIPE
+class      disputed
+since      2001
+says       sendmsg() without MSG_NOSIGNAL on a stream socket whose peer has
+           closed fails with EPIPE and SIGPIPE is generated for the calling
+           thread.
+note       disputed (Q-61), as for XSH.send.009; a FAIL is logged as
+           INSPECT.
+test       t/018-sigpipe.c
+
+assertion  XSH.sendmsg.019
+anchor     functions/sendmsg.html#ERRORS/EPIPE
+class      required
+since      2001
+says       sendmsg() on a connected stream socket whose own side has been
+           shut down for writing fails with EPIPE.
+test       t/019-epipe-shutwr.c
+
+assertion  XSH.sendmsg.020
+anchor     functions/sendmsg.html#DESCRIPTION
+anchor     functions/sendmsg.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       sendmsg() on a non-blocking stream socket whose send space is
+           full fails with EAGAIN or EWOULDBLOCK.
+test       t/020-eagain.c
+
+assertion  XSH.sendmsg.021
+anchor     functions/sendmsg.html#ERRORS/EMSGSIZE
+class      required
+since      2001
+says       sendmsg() of 100000 bytes through an unconnected UDP socket to a
+           loopback destination (larger than any UDP datagram can be) fails
+           with EMSGSIZE and nothing reaches the receiver.
+note       See XSH.send.012 for why UDP is used.
+test       t/021-emsgsize-udp.c
+
+assertion  XSH.sendmsg.022
+anchor     functions/sendmsg.html#DESCRIPTION
+class      required
+since      2001
+says       The msg_flags member of the message is ignored by sendmsg(): with
+           every bit set in it, the call still succeeds and sends the data.
+test       t/022-msg-flags-ignored.c
+
+assertion  XSH.sendmsg.023
+anchor     functions/sendmsg.html#DESCRIPTION
+anchor     basedefs/sys_socket.h.html#DESCRIPTION
+class      disputed
+since      2001
+says       sendmsg() on an AF_UNIX stream socket with one SCM_RIGHTS control
+           message carrying a descriptor, and one data byte, returns 1 and
+           the byte arrives at the peer.
+note       disputed (Q-149): no page says that AF_UNIX sockets accept
+           SCM_RIGHTS, or what error a socket that does not accept it
+           gives; the header only names the type. The test takes AF_UNIX as
+           the socket for which it is meant; a FAIL is logged as INSPECT.
+test       t/023-scm-rights.c
+
+assertion  XSH.sendmsg.024
+anchor     functions/sendmsg.html#DESCRIPTION
+anchor     functions/sendmsg.html#RETURN VALUE
+class      required
+since      2001
+says       sendmsg() on an unconnected UDP socket with msg_name set to the
+           loopback address and port of a bound UDP socket returns the total
+           of the buffers and the datagram arrives there.
+test       t/024-udp-loopback.c

@@ -1,0 +1,39 @@
+# getnameinfo.cov - every requirement unit on functions/getnameinfo.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:3f7f2069     XSH.getnameinfo.001 XSH.getnameinfo.002
+DESCRIPTION:0c0f39bc     none  a statement
+DESCRIPTION:5e418cf8     partial XSH.getnameinfo.010  # only a length too short for the family
+DESCRIPTION:4a986e98     untestable  the lookup of a name needs a name service, and whether NI_NUMERICHOST then returns the mapped or the embedded address is not stated (Q-139)
+DESCRIPTION:3f03269b     XSH.getnameinfo.013 XSH.getnameinfo.014
+DESCRIPTION:76895000     XSH.getnameinfo.001 XSH.getnameinfo.003 XSH.getnameinfo.005
+DESCRIPTION:f751fa18     XSH.getnameinfo.006
+DESCRIPTION:da7579a3     partial XSH.getnameinfo.014  # a name that cannot be located depends on the name service, except for the unspecified address
+DESCRIPTION:ad3d1bb4     XSH.getnameinfo.001 XSH.getnameinfo.004 XSH.getnameinfo.005
+DESCRIPTION:e43baa36     XSH.getnameinfo.007
+DESCRIPTION:9d8120db     untestable  whether a port has a service name depends on the services database
+DESCRIPTION:23c96c32     none  a statement
+DESCRIPTION:f6ecb69b     untestable  the host name needs a name service
+DESCRIPTION:3f526214     partial XSH.getnameinfo.012  # the flag is accepted; local host names need a name service
+DESCRIPTION:88f6c7aa     XSH.getnameinfo.001 XSH.getnameinfo.002
+DESCRIPTION:62d00a3f     partial XSH.getnameinfo.013  # only the unspecified address, whose name cannot be located by rule
+DESCRIPTION:906f3092     XSH.getnameinfo.001 XSH.getnameinfo.002
+DESCRIPTION:fb2683ae     partial XSH.getnameinfo.012  # accepted and ignored for IPv4; the scope text of an IPv6 address needs a scoped address that exists
+DESCRIPTION:73eae22c     XSH.getnameinfo.012
+DESCRIPTION:fd7938f7     partial XSH.getnameinfo.012  # the flag is accepted; the effect needs a service known to differ per type
+DESCRIPTION:f12352da     untestable  needs a service known to differ per type
+DESCRIPTION:689c81bc     none  a note
+DESCRIPTION:fbad028f     none  a note
+DESCRIPTION:85c5fee8     untestable  thread safety is not observable by one test without a race
+RETURN_VALUE:b7c172f1    XSH.getnameinfo.001 XSH.getnameinfo.008
+RETURN_VALUE:482d4300    none  a pointer to the ERRORS section
+RETURN_VALUE:4e309ce2    XSH.getnameinfo.001 XSH.getnameinfo.002
+RETURN_VALUE:483fd228    XSH.getnameinfo.001 XSH.getnameinfo.002 XSH.getnameinfo.005
+ERRORS:c9618d17          untestable  EAI_AGAIN needs a name service that can be made to fail temporarily
+ERRORS:5cb1d38c          XSH.getnameinfo.011
+ERRORS:9f8cc5f0          untestable  EAI_FAIL needs a name service that can be made to fail
+ERRORS:085eb1ae          XSH.getnameinfo.009 XSH.getnameinfo.010
+ERRORS:6aec15ac          untestable  memory exhaustion cannot be provoked portably
+ERRORS:e811d41a          XSH.getnameinfo.008 XSH.getnameinfo.013
+ERRORS:a0c603b9          XSH.getnameinfo.003 XSH.getnameinfo.004
+ERRORS:e72c3b72          untestable  a system error cannot be provoked portably

@@ -1,0 +1,30 @@
+# XSH htonl(), htons(), ntohl() and ntohs() (one page)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.htonl.001
+anchor     functions/htonl.html#RETURN VALUE
+class      required
+since      2001
+says       htons(0x0102) and htons(0xfffe) are 16-bit values whose bytes in memory are 01 02 and ff fe (most significant byte first).
+test       t/001-htons-bytes.c
+
+assertion  XSH.htonl.002
+anchor     functions/htonl.html#RETURN VALUE
+class      required
+since      2001
+says       htonl(0x01020304) and htonl(0xa1b2c3d4) are 32-bit values whose bytes in memory are 01 02 03 04 and a1 b2 c3 d4 (most significant byte first).
+test       t/002-htonl-bytes.c
+
+assertion  XSH.htonl.003
+anchor     functions/htonl.html#RETURN VALUE
+class      required
+since      2001
+says       ntohs() of the 16-bit value whose bytes in memory are 01 02 gives 0x0102, and ntohl() of the 32-bit value with bytes 01 02 03 04 gives 0x01020304.
+test       t/003-ntoh-from-bytes.c
+
+assertion  XSH.htonl.004
+anchor     functions/htonl.html#RETURN VALUE
+class      required
+since      2001
+says       ntohs(htons(v)) is v and ntohl(htonl(v)) is v for values at both ends of the range and with each byte distinct; htons(ntohs(v)) and htonl(ntohl(v)) are v.
+test       t/004-round-trip.c

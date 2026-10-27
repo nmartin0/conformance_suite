@@ -1,0 +1,23 @@
+# getnetent.cov - every requirement unit on functions/getnetent.html (also getnetbyname, getnetbyaddr, setnetent, endnetent).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:47affb3d     XSH.getnetent.001 XSH.getnetent.003
+DESCRIPTION:8fc19968     none  a statement
+DESCRIPTION:e1fa2a20     none  unspecified: nothing to test
+DESCRIPTION:5810c5f4     XSH.getnetent.001
+DESCRIPTION:b6c506b3     partial XSH.getnetent.008  # that the database stays open is seen only through a descriptor, which the implementation need not use
+DESCRIPTION:1bd95d82     XSH.getnetent.006
+DESCRIPTION:999cc42e     XSH.getnetent.001
+DESCRIPTION:adfb0204     partial XSH.getnetent.004  # the first entry only
+DESCRIPTION:8f3936e5     XSH.getnetent.004
+DESCRIPTION:57f3c06d     partial XSH.getnetent.003  # the first entry only
+DESCRIPTION:70e3f3af     XSH.getnetent.002
+DESCRIPTION:5352fb69     XSH.getnetent.007
+DESCRIPTION:2e1d32a7     none  allows an implementation not to be thread-safe
+RETURN_VALUE:3ac1a029    XSH.getnetent.001 XSH.getnetent.003 XSH.getnetent.004 XSH.getnetent.005
+RETURN_VALUE:2a2da805    untestable  the failure case is not described
+RETURN_VALUE:f879af69    app  the application's duty
+RETURN_VALUE:6af56dca    none  permission to invalidate a returned structure
+RETURN_VALUE:dee407ea    none  permission to invalidate a returned structure
+ERRORS:1fbbba10          optional  may-fail error that needs every descriptor used
+ERRORS:78d47d0e          optional  may-fail error that needs the system's file table full

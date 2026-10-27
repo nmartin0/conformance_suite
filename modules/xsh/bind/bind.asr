@@ -1,0 +1,213 @@
+# XSH bind()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# AF_UNIX sockets use names in the test's own directory (removed at the
+# end); AF_INET and AF_INET6 use the loopback address with an ephemeral
+# port. Asynchronous assignment (EINPROGRESS, EALREADY) cannot be provoked
+# and is not tested.
+
+assertion  XSH.bind.001
+anchor     functions/bind.html#DESCRIPTION
+anchor     functions/bind.html#RETURN VALUE
+class      required
+since      2001
+says       bind() of an unbound AF_UNIX stream socket to a pathname in the
+           working directory returns 0, and the name exists afterwards.
+test       t/001-unix-creates-name.c
+
+assertion  XSH.bind.002
+anchor     functions/bind.html#DESCRIPTION
+anchor     basedefs/V1_chap03.html#3.342
+class      disputed
+since      2001
+says       The name bind() creates for an AF_UNIX socket is a file of
+           socket type (S_ISSOCK true for lstat of the name).
+note       disputed (Q-144): the page implies that a name is created and
+           treats an existing file as in use, but never says what type of
+           file the name is.
+test       t/002-unix-file-type.c
+
+assertion  XSH.bind.003
+anchor     functions/bind.html#ERRORS/EADDRINUSE
+class      required
+since      2001
+says       Binding a second AF_UNIX socket to a pathname another socket
+           is bound to fails with EADDRINUSE.
+test       t/003-addrinuse-bound.c
+
+assertion  XSH.bind.004
+anchor     functions/bind.html#DESCRIPTION
+anchor     functions/bind.html#ERRORS/EADDRINUSE
+class      required
+since      2024
+says       An AF_UNIX pathname that names an existing file (a regular
+           file, a symbolic link, or a dangling symbolic link) is treated
+           as in use: bind() fails with EADDRINUSE.
+note       The sentence on existing files and symbolic links was added by
+           Austin Group defect 1605.
+test       t/004-addrinuse-existing-file.c
+
+assertion  XSH.bind.005
+anchor     functions/bind.html#DESCRIPTION
+anchor     functions/bind.html#ERRORS/EADDRINUSE
+class      required
+since      2024
+says       The name of a closed AF_UNIX socket is still an existing file,
+           so binding to it fails with EADDRINUSE until the name is
+           removed with unlink(); after that the bind succeeds.
+test       t/005-name-outlives-socket.c
+
+assertion  XSH.bind.006
+anchor     functions/bind.html#ERRORS/EINVAL
+class      required
+since      2001
+says       A second bind() on an already bound AF_UNIX socket, to a
+           different pathname, either succeeds (the protocol allows a new
+           address) or fails with EINVAL.
+note       Q-145: the page makes EINVAL depend on the protocol not
+           supporting a new address, which for AF_UNIX it does not state.
+test       t/006-bind-twice.c
+
+assertion  XSH.bind.007
+anchor     functions/bind.html#ERRORS/EBADF
+class      required
+since      2001
+says       bind() on -1 or on a closed descriptor fails with EBADF.
+test       t/007-ebadf.c
+
+assertion  XSH.bind.008
+anchor     functions/bind.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       bind() on a regular-file descriptor or a pipe end fails with
+           ENOTSOCK.
+test       t/008-enotsock.c
+
+assertion  XSH.bind.009
+anchor     functions/bind.html#ERRORS/EAFNOSUPPORT
+class      required
+since      2001
+says       bind() on an AF_UNIX socket with an address whose family is
+           AF_INET (length sizeof(struct sockaddr_in), valid for both
+           families) fails with EAFNOSUPPORT.
+test       t/009-eafnosupport-unix-socket.c
+
+assertion  XSH.bind.010
+anchor     functions/bind.html#ERRORS/EAFNOSUPPORT
+class      required
+since      2001
+says       bind() on an AF_INET socket with an address whose family is
+           AF_UNIX (length sizeof(struct sockaddr_in)) fails with
+           EAFNOSUPPORT.
+test       t/010-eafnosupport-inet-socket.c
+
+assertion  XSH.bind.011
+anchor     functions/bind.html#ERRORS/ENOENT
+class      required
+since      2001
+says       An AF_UNIX pathname whose directory part does not exist fails
+           with ENOENT.
+test       t/011-enoent-prefix.c
+
+assertion  XSH.bind.012
+anchor     functions/bind.html#ERRORS/ENOENT
+anchor     functions/bind.html#DESCRIPTION
+class      required
+since      2001
+says       An AF_UNIX address with an empty pathname (address_len of
+           offsetof(sun_path) plus 1, sun_path starting with a null
+           byte) fails with ENOENT.
+test       t/012-enoent-empty.c
+
+assertion  XSH.bind.013
+anchor     functions/bind.html#ERRORS/ENOTDIR
+class      required
+since      2001
+says       An AF_UNIX pathname with a prefix component that is a regular
+           file fails with ENOTDIR.
+test       t/013-enotdir-prefix.c
+
+assertion  XSH.bind.014
+anchor     functions/bind.html#ERRORS/ENAMETOOLONG
+class      required
+since      2001
+says       An AF_UNIX pathname with a component longer than {NAME_MAX}
+           fails with ENAMETOOLONG; not in use where such a component does
+           not fit in sun_path.
+test       t/014-enametoolong-component.c
+
+assertion  XSH.bind.015
+anchor     functions/bind.html#ERRORS/ELOOP
+class      required
+since      2001
+says       An AF_UNIX pathname that goes through a symbolic link loop
+           fails with ELOOP.
+test       t/015-eloop.c
+
+assertion  XSH.bind.016
+anchor     functions/bind.html#ERRORS/EACCES
+class      required
+since      2001
+says       Binding to a name in a directory without write permission for
+           the caller (an unprivileged child) fails with EACCES.
+test       t/016-eacces-no-write.c
+
+assertion  XSH.bind.017
+anchor     functions/bind.html#ERRORS/EACCES
+class      required
+since      2001
+says       Binding below a directory without search permission for the
+           caller (an unprivileged child) fails with EACCES.
+test       t/017-eacces-no-search.c
+
+assertion  XSH.bind.018
+anchor     functions/bind.html#ERRORS/EDESTADDRREQ
+class      required
+since      2001
+says       bind() on an AF_UNIX socket with a null address pointer fails
+           with EDESTADDRREQ or EISDIR.
+test       t/018-null-address.c
+
+assertion  XSH.bind.019
+anchor     functions/bind.html#ERRORS/EADDRINUSE
+class      required
+since      2001
+says       Binding a second TCP socket to the loopback address and port
+           another socket is bound to fails with EADDRINUSE.
+test       t/019-inet-addrinuse.c
+
+assertion  XSH.bind.020
+anchor     functions/bind.html#DESCRIPTION
+anchor     basedefs/netinet_in.h.html#DESCRIPTION
+class      required
+since      2001
+says       Binding the IPv4 loopback address with port 0 succeeds; the
+           name read back has family AF_INET, the same address and a
+           non-zero port.
+test       t/020-inet-port-zero.c
+
+assertion  XSH.bind.021
+anchor     functions/bind.html#ERRORS/EADDRNOTAVAIL
+class      required
+since      2001
+says       Binding to 192.0.2.1 (an address no host owns) fails with
+           EADDRNOTAVAIL.
+test       t/021-inet-eaddrnotavail.c
+
+assertion  XSH.bind.022
+anchor     functions/bind.html#DESCRIPTION
+anchor     basedefs/netinet_in.h.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       Binding the IPv6 loopback address with port 0 succeeds; the
+           name read back has family AF_INET6 and a non-zero port.
+test       t/022-inet6-port-zero.c
+
+assertion  XSH.bind.023
+anchor     functions/bind.html#ERRORS/ENOENT
+class      required
+since      2008
+says       An AF_UNIX pathname that names nothing and ends in a slash
+           fails with ENOENT or ENOTDIR.
+test       t/023-trailing-slash.c

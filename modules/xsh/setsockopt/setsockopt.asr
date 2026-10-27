@@ -1,0 +1,238 @@
+# XSH setsockopt()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Options are set on fresh sockets (socketpair(), loopback AF_INET and,
+# under IP6, AF_INET6) and read back with getsockopt(). Boolean options are
+# set to a non-zero value other than 1 and to 0; only zero and non-zero are
+# compared on the way back. An option that the protocol does not support
+# (ENOPROTOOPT) leaves the test not in use, as the page lets a protocol
+# leave options out; the page also leaves open whether SO_RCVTIMEO,
+# SO_SNDTIMEO, SO_RCVLOWAT and SO_SNDLOWAT can be set at all. The values of
+# SO_RCVBUF and SO_SNDBUF after a set are not specified, so only success is
+# judged. Waiting-time tests have a lower bound only (the clock's
+# resolution allowed for) and a guard alarm in place of an upper bound.
+# Not tested: SO_DEBUG (may need privilege), SO_DONTROUTE effect, the
+# effect of SO_LINGER, SO_REUSEADDR, SO_KEEPALIVE and SO_BROADCAST (all
+# protocol-specific), SO_RCVLOWAT and SO_SNDLOWAT values, EISCONN (no
+# option is known that cannot be set on a connected socket), ENOMEM and
+# ENOBUFS (may-fail).
+
+assertion  XSH.setsockopt.001
+anchor     functions/setsockopt.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_REUSEADDR set to a non-zero value on a new TCP socket reads
+           back non-zero, and set to 0 reads back 0.
+test       t/001-reuseaddr.c
+
+assertion  XSH.setsockopt.002
+anchor     functions/setsockopt.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_KEEPALIVE set to a non-zero value on a new TCP socket reads
+           back non-zero, and set to 0 reads back 0.
+test       t/002-keepalive.c
+
+assertion  XSH.setsockopt.003
+anchor     functions/setsockopt.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_BROADCAST set to a non-zero value on a new UDP socket reads
+           back non-zero, and set to 0 reads back 0.
+test       t/003-broadcast.c
+
+assertion  XSH.setsockopt.004
+anchor     functions/setsockopt.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_LINGER set to {on, 3 seconds} on a new TCP socket reads back
+           with a non-zero l_onoff and l_linger 3 (the length given and
+           returned is that of struct linger), and set to {off, 0} reads
+           back off.
+test       t/004-linger.c
+
+assertion  XSH.setsockopt.005
+anchor     functions/setsockopt.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_OOBINLINE set to a non-zero value on a new TCP socket reads
+           back non-zero, and set to 0 reads back 0.
+test       t/005-oobinline.c
+
+assertion  XSH.setsockopt.006
+anchor     functions/setsockopt.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_DONTROUTE set to a non-zero value on a new TCP socket reads
+           back non-zero, and set to 0 reads back 0.
+test       t/006-dontroute.c
+
+assertion  XSH.setsockopt.007
+anchor     functions/setsockopt.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_RCVBUF can be set to 32768 on an AF_UNIX stream socket and
+           read back, as an int of the right length (the value is not
+           specified).
+test       t/007-rcvbuf.c
+
+assertion  XSH.setsockopt.008
+anchor     functions/setsockopt.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_SNDBUF can be set to 32768 on an AF_UNIX stream socket and
+           read back, as an int of the right length (the value is not
+           specified).
+test       t/008-sndbuf.c
+
+assertion  XSH.setsockopt.009
+anchor     functions/setsockopt.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_RCVTIMEO set to 1.5 seconds on an AF_UNIX stream socket reads
+           back as a struct timeval no smaller than that (it may have been
+           rounded up); a set that fails with ENOPROTOOPT or EINVAL leaves
+           the test not in use because the page leaves open whether the
+           option can be set.
+test       t/009-rcvtimeo.c
+
+assertion  XSH.setsockopt.010
+anchor     functions/setsockopt.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_SNDTIMEO set to 1.5 seconds on an AF_UNIX stream socket reads
+           back as a struct timeval no smaller than that (it may have been
+           rounded up); a set that fails with ENOPROTOOPT or EINVAL leaves
+           the test not in use.
+test       t/010-sndtimeo.c
+
+assertion  XSH.setsockopt.011
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       With SO_RCVTIMEO set to 200 ms, a blocking recv() on an empty
+           stream socket fails with EAGAIN or EWOULDBLOCK after waiting at
+           least that long (the clock's resolution allowed for).
+test       t/011-rcvtimeo-effect.c
+
+assertion  XSH.setsockopt.012
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       With SO_RCVTIMEO set to 20 s, a blocking recv() on a stream
+           socket that receives a byte 200 ms later returns the byte, not a
+           timeout failure.
+test       t/012-rcvtimeo-data.c
+
+assertion  XSH.setsockopt.013
+anchor     functions/setsockopt.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.16
+anchor     functions/send.html#DESCRIPTION
+class      required
+since      2001
+says       With SO_SNDTIMEO set to 200 ms, a blocking send() on a stream
+           socket whose send space is full fails with EAGAIN or EWOULDBLOCK
+           after waiting at least that long (the clock's resolution allowed
+           for).
+test       t/013-sndtimeo-effect.c
+
+assertion  XSH.setsockopt.014
+anchor     functions/setsockopt.html#ERRORS/EDOM
+class      required
+since      2001
+says       setsockopt() of SO_RCVTIMEO with the largest possible tv_sec
+           either succeeds or fails with EDOM (the value too big for the
+           socket's timeout field); ENOPROTOOPT leaves the test not in use.
+note       The page says the error is for values too big for the field, so
+           a system whose field holds the value succeeds; any other failure
+           is wrong.
+test       t/014-timeout-edom.c
+
+assertion  XSH.setsockopt.015
+anchor     functions/setsockopt.html#ERRORS/EBADF
+class      required
+since      2001
+says       setsockopt() with a descriptor that is not open fails with EBADF
+           (-1, and a closed descriptor).
+test       t/015-ebadf.c
+
+assertion  XSH.setsockopt.016
+anchor     functions/setsockopt.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       setsockopt() on a descriptor that is not a socket (a pipe end, a
+           regular file) fails with ENOTSOCK.
+test       t/016-enotsock.c
+
+assertion  XSH.setsockopt.017
+anchor     functions/setsockopt.html#ERRORS/ENOPROTOOPT
+anchor     functions/setsockopt.html#ERRORS/EINVAL
+class      required
+since      2001
+says       setsockopt() with an option name that no protocol defines (the
+           largest int) fails with ENOPROTOOPT or EINVAL.
+test       t/017-unknown-option.c
+
+assertion  XSH.setsockopt.018
+anchor     functions/setsockopt.html#ERRORS/ENOPROTOOPT
+anchor     functions/setsockopt.html#ERRORS/EINVAL
+class      required
+since      2001
+says       setsockopt() with a level that is no protocol's (-1) fails with
+           ENOPROTOOPT or EINVAL.
+test       t/018-bad-level.c
+
+assertion  XSH.setsockopt.019
+anchor     functions/setsockopt.html#ERRORS/EINVAL
+class      required
+since      2001
+says       setsockopt() on a connected TCP socket that has been shut down in
+           both directions fails with EINVAL (or ENOPROTOOPT if the system
+           does not support the option, SO_KEEPALIVE, at all).
+test       t/019-shutdown-einval.c
+
+assertion  XSH.setsockopt.020
+anchor     functions/V2_chap02.html#2.10.20
+class      conditional
+when       IP6
+since      2001
+says       IPV6_UNICAST_HOPS on an AF_INET6 socket: 5 reads back as 5, -1
+           is accepted, and 256 and -2 are rejected with EINVAL.
+test       t/020-v6-unicast-hops.c
+
+assertion  XSH.setsockopt.021
+anchor     functions/V2_chap02.html#2.10.20
+class      conditional
+when       IP6
+since      2001
+says       IPV6_V6ONLY set to a non-zero value on an AF_INET6 socket reads
+           back non-zero, and set to 0 reads back 0.
+test       t/021-v6only.c
+
+assertion  XSH.setsockopt.022
+anchor     functions/V2_chap02.html#2.10.20
+class      conditional
+when       IP6
+since      2001
+says       IPV6_MULTICAST_LOOP on an AF_INET6 datagram socket accepts 0 and
+           1 and reads them back, and the value 2 is rejected with EINVAL.
+test       t/022-v6-multicast-loop.c
+
+assertion  XSH.setsockopt.023
+anchor     functions/setsockopt.html#DESCRIPTION
+class      untestable
+since      2001
+reason     the behaviour of setsockopt() for SO_ACCEPTCONN, SO_ERROR and
+           SO_TYPE is stated as unspecified
+says       setsockopt() with SO_ACCEPTCONN, SO_ERROR or SO_TYPE has
+           unspecified behaviour.

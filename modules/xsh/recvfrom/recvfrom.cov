@@ -1,0 +1,47 @@
+# recvfrom.cov - every requirement unit on functions/recvfrom.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:c3892619    XSH.recvfrom.001 XSH.recvfrom.005 XSH.recvfrom.006
+DESCRIPTION:1a180352    none  a note on usual use
+DESCRIPTION:1b79fae7    none  introduces the arguments
+DESCRIPTION:b4367baf    none  describes an argument
+DESCRIPTION:6a3456ef    none  describes an argument
+DESCRIPTION:97fbe2c6    none  describes an argument
+DESCRIPTION:5f3559f2    none  describes an argument
+DESCRIPTION:64cf97fb    none  describes an argument
+DESCRIPTION:9e130347    XSH.recvfrom.008
+DESCRIPTION:75d01961    XSH.recvfrom.008
+DESCRIPTION:8c788d48    untestable  out-of-band data is protocol-specific (XSH 2.10.12)
+DESCRIPTION:649dd640    untestable  out-of-band data is protocol-specific (XSH 2.10.12)
+DESCRIPTION:dbe2c781    XSH.recvfrom.010
+DESCRIPTION:5b7a8f69    none  the cases that permit a short count; the test arranges none of them
+DESCRIPTION:d6f535b9    XSH.recvfrom.001 XSH.recvfrom.002 XSH.recvfrom.005
+DESCRIPTION:b6444ceb    none  describes an argument
+DESCRIPTION:23992a8f    XSH.recvfrom.001 XSH.recvfrom.003 XSH.recvfrom.004 XSH.recvfrom.005
+DESCRIPTION:f4869bf7    XSH.recvfrom.001 XSH.recvfrom.007
+DESCRIPTION:c23a43b4    XSH.recvfrom.007
+DESCRIPTION:16a04e8d    XSH.recvfrom.007
+DESCRIPTION:24da3ed9    partial XSH.recvfrom.006  # stream ordering and loss are tested under recv()
+DESCRIPTION:5e084fad    partial XSH.recvfrom.006  # stream ordering and loss are tested under recv()
+DESCRIPTION:d46bbadf    XSH.recvfrom.007
+DESCRIPTION:eb3810de    none  introduces the next two sentences
+DESCRIPTION:e2aecb4a    XSH.recvfrom.001 XSH.recvfrom.002 XSH.recvfrom.009 XSH.recvfrom.016
+DESCRIPTION:c65ad5ba    XSH.recvfrom.003 XSH.recvfrom.004
+DESCRIPTION:754c7839    none  the stored value is unspecified
+DESCRIPTION:dad0ab96    todo  blocking is tested under recv() (XSH.recv.013)
+DESCRIPTION:13ba7952    XSH.recvfrom.011
+RETURN_VALUE:7832844d   XSH.recvfrom.001 XSH.recvfrom.005 XSH.recvfrom.007
+RETURN_VALUE:92757002   XSH.recvfrom.015
+RETURN_VALUE:202ddf38   XSH.recvfrom.011 XSH.recvfrom.012 XSH.recvfrom.013 XSH.recvfrom.014
+ERRORS:2986e2e3         XSH.recvfrom.011
+ERRORS:a6580c4c         XSH.recvfrom.012
+ERRORS:b7601858         untestable  a reset by the peer cannot be arranged reliably
+ERRORS:65e243c7         todo  tested for recv() only (XSH.recv.014)
+ERRORS:469babc9         todo  tested for recv() only (XSH.recv.015)
+ERRORS:6cb348bb         XSH.recvfrom.014
+ERRORS:548da8fd         XSH.recvfrom.013
+ERRORS:70623854         todo  no flag value is known to be unsupported on every system
+ERRORS:4ca2dfee         untestable  a transmission timeout cannot be arranged
+ERRORS:eae567a3         optional
+ERRORS:f270bfef         optional
+ERRORS:00777f07         optional

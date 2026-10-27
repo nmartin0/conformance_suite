@@ -1,0 +1,78 @@
+# XSH getpeername()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Loopback and the test's own socket files only.
+
+assertion  XSH.getpeername.001
+anchor     functions/getpeername.html#DESCRIPTION
+anchor     functions/getpeername.html#APPLICATION USAGE
+class      required
+since      2001
+says       getpeername() on a connected AF_UNIX client returns family AF_UNIX
+           and the listener's pathname, with address_len from
+           offsetof(sun_path) plus the path length up to the buffer size.
+test       t/001-unix.c
+
+assertion  XSH.getpeername.002
+anchor     functions/getpeername.html#DESCRIPTION
+class      required
+since      2001
+says       On a connected TCP pair, getpeername() on the client gives the
+           listener's address and on the accepted socket gives the client's
+           own address.
+test       t/002-inet-both-sides.c
+
+assertion  XSH.getpeername.003
+anchor     functions/getpeername.html#DESCRIPTION
+anchor     functions/getpeername.html#RETURN VALUE
+anchor     functions/socketpair.html#DESCRIPTION
+class      required
+since      2001
+says       getpeername() succeeds on both ends of a connected socket pair (no
+           listed error applies).
+test       t/003-socketpair.c
+
+assertion  XSH.getpeername.004
+anchor     functions/getpeername.html#DESCRIPTION
+class      required
+since      2001
+says       With address_len smaller than the address (4 bytes, then 0),
+           getpeername() returns 0, stores only that many bytes (the rest is
+           untouched, the prefix is the true prefix) and sets address_len to
+           the full length.
+test       t/004-truncation.c
+
+assertion  XSH.getpeername.005
+anchor     functions/getpeername.html#ERRORS/ENOTCONN
+class      required
+since      2001
+says       getpeername() on a socket with no peer (a fresh AF_UNIX or TCP
+           stream socket, a listening socket, a bound TCP socket, an
+           unconnected UDP socket) fails with ENOTCONN.
+test       t/005-enotconn.c
+
+assertion  XSH.getpeername.006
+anchor     functions/getpeername.html#ERRORS/EBADF
+class      required
+since      2001
+says       getpeername() on -1 or on a closed descriptor fails with EBADF.
+test       t/006-ebadf.c
+
+assertion  XSH.getpeername.007
+anchor     functions/getpeername.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       getpeername() on a regular-file descriptor or a pipe end fails
+           with ENOTSOCK.
+test       t/007-enotsock.c
+
+assertion  XSH.getpeername.008
+anchor     functions/getpeername.html#ERRORS/EINVAL
+class      required
+since      2001
+says       getpeername() on a socket that has been shut down in both
+           directions (SHUT_RDWR) fails with EINVAL; ENOTCONN is tolerated,
+           as the socket is no longer connected either.
+note       Q-146: the page lists EINVAL under shall-fail, while
+           getsockname() lists the same condition under may-fail.
+test       t/008-shut-down.c

@@ -1,0 +1,163 @@
+# XSH recvfrom()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Local sockets only. Datagram senders are AF_UNIX sockets bound in the
+# test's directory, or loopback UDP sockets bound to ephemeral ports, so
+# that the expected source address is known. For an AF_UNIX source the page
+# leaves the returned length open between the size of sockaddr_un and
+# something not smaller than the offset of sun_path plus the name, so a
+# test accepts any length from the second value up to the buffer given.
+# Everything the page says about recv() applies here too and is tested under
+# recv(); this page's own points are the address and the null-address form.
+# Not tested: ECONNRESET, ETIMEDOUT, EOPNOTSUPP, MSG_OOB data, and the
+# may-fail errors.
+
+assertion  XSH.recvfrom.001
+anchor     functions/recvfrom.html#DESCRIPTION
+class      required
+since      2001
+says       recvfrom() on a datagram socket sets address to the AF_UNIX
+           address the datagram came from (family AF_UNIX, the sender's
+           bound path) and address_len to a length at least covering the
+           family and the path.
+test       t/001-unix-source.c
+
+assertion  XSH.recvfrom.002
+anchor     functions/recvfrom.html#DESCRIPTION
+class      required
+since      2001
+says       recvfrom() on a UDP socket sets address to the sender's IPv4
+           address: family AF_INET, the sender's bound loopback address and
+           port, with address_len covering them.
+test       t/002-inet-source.c
+
+assertion  XSH.recvfrom.003
+anchor     functions/recvfrom.html#DESCRIPTION
+class      required
+since      2001
+says       When address_len supplied is smaller than the sender's address
+           (4 bytes for a 30 character path), recvfrom() stores no more than
+           4 bytes of it: the bytes of the buffer beyond that are untouched,
+           and the message itself is received in full.
+test       t/003-address-truncated.c
+
+assertion  XSH.recvfrom.004
+anchor     functions/recvfrom.html#DESCRIPTION
+class      required
+since      2024
+says       When the address is truncated because the supplied address_len is
+           too small, the value stored in address_len is the length of the
+           sender's address (not the truncated length): it is not smaller
+           than the offset of sun_path plus the path length.
+note       Defect 1565 changed the description of address_len; the value
+           after truncation is read from "on output specifies the length of
+           the sending address".
+test       t/004-address-length-truncated.c
+
+assertion  XSH.recvfrom.005
+anchor     functions/recvfrom.html#DESCRIPTION
+class      required
+since      2001
+says       recvfrom() with a null address and a null address_len receives a
+           datagram as recv() does: the length and the data are returned.
+test       t/005-null-address.c
+
+assertion  XSH.recvfrom.006
+anchor     functions/recvfrom.html#DESCRIPTION
+class      required
+since      2001
+says       recvfrom() on a connected stream socket with an address buffer
+           supplied returns the data as recv() does (the stored address is
+           unspecified and is not looked at).
+test       t/006-stream-address.c
+
+assertion  XSH.recvfrom.007
+anchor     functions/recvfrom.html#DESCRIPTION
+class      required
+since      2001
+says       A datagram longer than the buffer (10 bytes, buffer of 4) with an
+           address supplied: recvfrom() returns 4, the first 4 bytes, still
+           stores the sender's address, and discards the excess.
+test       t/007-dgram-truncate.c
+
+assertion  XSH.recvfrom.008
+anchor     functions/recvfrom.html#DESCRIPTION
+class      required
+since      2001
+says       recvfrom() with MSG_PEEK stores the sender's address and leaves
+           the datagram: a following recvfrom() without MSG_PEEK returns the
+           same data and the same address.
+test       t/008-peek-address.c
+
+assertion  XSH.recvfrom.009
+anchor     functions/recvfrom.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.6
+class      required
+since      2001
+says       Datagrams from two different bound senders, received in turn,
+           each come with their own source address, the first message with
+           the first sender's path and the second with the second's.
+test       t/009-two-senders.c
+
+assertion  XSH.recvfrom.010
+anchor     functions/recvfrom.html#DESCRIPTION
+class      required
+since      2001
+says       recvfrom() with MSG_WAITALL on a stream socket and a buffer of 8
+           bytes waits for the data of two sends (3 bytes, then 5 bytes a
+           moment later) and returns all 8.
+test       t/010-waitall.c
+
+assertion  XSH.recvfrom.011
+anchor     functions/recvfrom.html#DESCRIPTION
+anchor     functions/recvfrom.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       recvfrom() on an empty non-blocking datagram socket fails with
+           EAGAIN or EWOULDBLOCK.
+test       t/011-eagain.c
+
+assertion  XSH.recvfrom.012
+anchor     functions/recvfrom.html#ERRORS/EBADF
+class      required
+since      2001
+says       recvfrom() with a descriptor that is not open fails with EBADF
+           (-1, and a closed descriptor).
+test       t/012-ebadf.c
+
+assertion  XSH.recvfrom.013
+anchor     functions/recvfrom.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       recvfrom() on a descriptor that is not a socket fails with
+           ENOTSOCK.
+test       t/013-enotsock.c
+
+assertion  XSH.recvfrom.014
+anchor     functions/recvfrom.html#ERRORS/ENOTCONN
+class      required
+since      2001
+says       recvfrom() on a stream socket that was never connected fails with
+           ENOTCONN.
+test       t/014-enotconn.c
+
+assertion  XSH.recvfrom.015
+anchor     functions/recvfrom.html#RETURN VALUE
+class      required
+since      2001
+says       recvfrom() on a stream socket whose peer has performed an orderly
+           shutdown (SHUT_WR), with nothing left to receive, returns 0.
+test       t/015-orderly-shutdown.c
+
+assertion  XSH.recvfrom.016
+anchor     functions/recvfrom.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.20
+class      conditional
+when       IP6
+since      2001
+says       recvfrom() on an IPv6 UDP socket sets address to the sender's
+           IPv6 address: family AF_INET6, the sender's bound loopback
+           address and port, with address_len covering them. Without an
+           AF_INET6 socket or an IPv6 loopback address the test is not in
+           use.
+test       t/016-inet6-source.c

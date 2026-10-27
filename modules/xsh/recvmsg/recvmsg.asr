@@ -1,0 +1,303 @@
+# XSH recvmsg()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Local sockets only. The descriptor-passing assertions use AF_UNIX stream
+# pairs with SCM_RIGHTS; the page names the type, and XSH 2.10.17 makes
+# AF_UNIX sockets mandatory, but no page states that AF_UNIX sockets carry
+# it (Q-149), so those assertions that need the descriptor to arrive are
+# disputed and the ones that only need the send to work are not. The
+# control-message macros of <sys/socket.h> are checked here too, on plain
+# buffers (they are what the receive and send tests use to build and read
+# ancillary data). Every blocking call is guarded; a receive that must not
+# block is preceded by a poll(). A stream receive may return less than
+# asked, so tests that need a count loop until they have it. Not tested:
+# MSG_EOR and MSG_OOB in msg_flags (protocol-specific), ECONNRESET,
+# ETIMEDOUT, EOPNOTSUPP, and the may-fail errors.
+
+assertion  XSH.recvmsg.001
+anchor     functions/recvmsg.html#DESCRIPTION
+anchor     functions/recvmsg.html#RETURN VALUE
+class      required
+since      2001
+says       recvmsg() of a 9 byte datagram into three buffers of 3, 4 and 5
+           bytes returns 9 with the data in order, the first buffer filled
+           before the second is used, and MSG_TRUNC clear in msg_flags.
+test       t/001-scatter.c
+
+assertion  XSH.recvmsg.002
+anchor     functions/recvmsg.html#DESCRIPTION
+class      required
+since      2001
+says       When a datagram (10 bytes) is longer than the buffers (3 and 3
+           bytes), recvmsg() fills them with the first 6 bytes, sets
+           MSG_TRUNC in msg_flags and discards the excess (nothing is left
+           to receive). The return value is 6 or 10.
+note       The page says "return the total length of the message" in one
+           sentence and the length of the message in the buffer elsewhere;
+           for a truncated datagram it is not clear whether that is the
+           bytes stored or the whole message (Q-151), so either is
+           accepted.
+test       t/002-trunc-flag.c
+
+assertion  XSH.recvmsg.003
+anchor     functions/recvmsg.html#DESCRIPTION
+class      required
+since      2001
+says       msg_flags is not read on input and is set on output: with every
+           bit set before the call, a complete receipt of a datagram leaves
+           MSG_TRUNC, MSG_CTRUNC and MSG_OOB clear.
+test       t/003-flags-output.c
+
+assertion  XSH.recvmsg.004
+anchor     functions/recvmsg.html#DESCRIPTION
+class      required
+since      2001
+says       recvmsg() on an unconnected datagram socket stores the AF_UNIX
+           address the datagram came from in msg_name (family AF_UNIX, the
+           sender's bound path) and sets msg_namelen to a length covering
+           the family and the path, not larger than the buffer given.
+test       t/004-source-unix.c
+
+assertion  XSH.recvmsg.005
+anchor     functions/recvmsg.html#DESCRIPTION
+class      required
+since      2001
+says       recvmsg() on a UDP socket stores the sender's IPv4 address in
+           msg_name: family AF_INET, the sender's bound loopback address
+           and port, with msg_namelen covering them.
+test       t/005-source-inet.c
+
+assertion  XSH.recvmsg.006
+anchor     functions/recvmsg.html#DESCRIPTION
+class      required
+since      2001
+says       When msg_namelen is smaller than the sender's address (4 bytes
+           for a 32 character path), recvmsg() stores no more than 4 bytes
+           of it in msg_name, and the message is received in full.
+test       t/006-name-truncated-bytes.c
+
+assertion  XSH.recvmsg.007
+anchor     functions/recvmsg.html#DESCRIPTION
+class      required
+since      2024
+says       When the stored address is truncated because msg_namelen was
+           too small, msg_namelen on return is the length of the sender's
+           address: not smaller than the offset of sun_path plus the path
+           length.
+note       Defect 1565 changed the description of msg_namelen ("on output
+           specifies the length of the source address"), as for recvfrom().
+test       t/007-name-truncated-length.c
+
+assertion  XSH.recvmsg.008
+anchor     functions/recvmsg.html#DESCRIPTION
+class      required
+since      2001
+says       msg_name may be a null pointer when the source address is not
+           wanted: recvmsg() on a datagram socket with a null msg_name
+           returns the datagram.
+test       t/008-null-name.c
+
+assertion  XSH.recvmsg.009
+anchor     functions/recvmsg.html#DESCRIPTION
+class      required
+since      2001
+says       On a connected stream socket msg_name and msg_namelen are
+           ignored: with msg_name pointing at a buffer the buffer is left
+           as it was, and with a null msg_name and a non-zero msg_namelen
+           the call still succeeds.
+test       t/009-connected-name-ignored.c
+
+assertion  XSH.recvmsg.010
+anchor     functions/recvmsg.html#ERRORS/EMSGSIZE
+class      required
+since      2001
+says       recvmsg() with msg_iovlen 0 fails with EMSGSIZE.
+test       t/010-iovlen-zero.c
+
+assertion  XSH.recvmsg.011
+anchor     functions/recvmsg.html#ERRORS/EMSGSIZE
+class      required
+since      2001
+says       recvmsg() with msg_iovlen one more than {IOV_MAX} fails with
+           EMSGSIZE.
+test       t/011-iovlen-over-max.c
+
+assertion  XSH.recvmsg.012
+anchor     functions/recvmsg.html#ERRORS/EINVAL
+class      required
+since      2001
+says       recvmsg() with two buffers of SSIZE_MAX bytes each, whose total
+           overflows ssize_t, fails with EINVAL.
+test       t/012-overflow.c
+
+assertion  XSH.recvmsg.013
+anchor     functions/recvmsg.html#DESCRIPTION
+anchor     functions/recvmsg.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       recvmsg() on an empty non-blocking socket fails with EAGAIN or
+           EWOULDBLOCK.
+test       t/013-eagain.c
+
+assertion  XSH.recvmsg.014
+anchor     functions/recvmsg.html#ERRORS/EBADF
+class      required
+since      2001
+says       recvmsg() with a descriptor that is not open fails with EBADF
+           (-1, and a closed descriptor).
+test       t/014-ebadf.c
+
+assertion  XSH.recvmsg.015
+anchor     functions/recvmsg.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       recvmsg() on a descriptor that is not a socket fails with
+           ENOTSOCK.
+test       t/015-enotsock.c
+
+assertion  XSH.recvmsg.016
+anchor     functions/recvmsg.html#ERRORS/ENOTCONN
+class      required
+since      2001
+says       recvmsg() on a stream socket that was never connected fails with
+           ENOTCONN.
+test       t/016-enotconn.c
+
+assertion  XSH.recvmsg.017
+anchor     functions/recvmsg.html#RETURN VALUE
+class      required
+since      2001
+says       recvmsg() on a stream socket whose peer has performed an orderly
+           shutdown (SHUT_WR), with nothing left to receive, returns 0.
+test       t/017-orderly-shutdown.c
+
+assertion  XSH.recvmsg.018
+anchor     functions/recvmsg.html#DESCRIPTION
+class      required
+since      2001
+says       recvmsg() with MSG_PEEK on a stream socket returns data without
+           consuming it: after the peek, receiving the 6 bytes sent gives
+           all of them from the beginning.
+test       t/018-peek.c
+
+assertion  XSH.recvmsg.019
+anchor     functions/recvmsg.html#DESCRIPTION
+class      required
+since      2001
+says       recvmsg() with MSG_WAITALL on a stream socket and buffers of 3
+           and 5 bytes waits for the data of two sends (3 bytes, then 5
+           bytes a moment later) and returns all 8.
+test       t/019-waitall.c
+
+assertion  XSH.recvmsg.020
+anchor     functions/recvmsg.html#DESCRIPTION
+anchor     basedefs/sys_socket.h.html#DESCRIPTION
+class      disputed
+since      2001
+says       A descriptor of a regular file sent over an AF_UNIX stream socket
+           with an SCM_RIGHTS control message is received by recvmsg() as a
+           control message with level SOL_SOCKET and type SCM_RIGHTS, and
+           the descriptor in it refers to the same file (equal device and
+           file serial number) and reads its contents.
+note       disputed (Q-149): no page states that an AF_UNIX socket carries
+           SCM_RIGHTS or what happens if it does not; the test takes AF_UNIX
+           as the socket this is meant for. A setup failure of the send is
+           UNRESOLVED; a missing control message is a FAIL, logged as
+           INSPECT.
+test       t/020-scm-rights-file.c
+
+assertion  XSH.recvmsg.021
+anchor     functions/recvmsg.html#DESCRIPTION
+anchor     basedefs/sys_socket.h.html#DESCRIPTION
+class      disputed
+since      2001
+says       The read end of a pipe sent over an AF_UNIX stream socket with
+           SCM_RIGHTS and received with recvmsg() is a live copy: a byte
+           later written to the pipe's write end is read through the
+           received descriptor.
+note       disputed (Q-149), as for XSH.recvmsg.020.
+test       t/021-scm-rights-pipe.c
+
+assertion  XSH.recvmsg.022
+anchor     functions/recvmsg.html#DESCRIPTION
+anchor     basedefs/sys_socket.h.html#DESCRIPTION
+class      disputed
+since      2001
+says       Two descriptors sent in one SCM_RIGHTS message are received as a
+           single control message whose cmsg_len is CMSG_LEN(2 * sizeof
+           (int)), with both descriptors valid and in order, and
+           CMSG_NXTHDR() after it gives a null pointer.
+note       disputed (Q-149), as for XSH.recvmsg.020.
+test       t/022-scm-rights-two.c
+
+assertion  XSH.recvmsg.023
+anchor     functions/recvmsg.html#DESCRIPTION
+class      required
+since      2001
+says       When the control buffer is too small (msg_controllen 0) for the
+           SCM_RIGHTS message sent with a data byte, recvmsg() still returns
+           the data byte and sets MSG_CTRUNC in msg_flags.
+note       If the send cannot be done the test is UNRESOLVED (see
+           XSH.recvmsg.020).
+test       t/023-ctrunc.c
+
+assertion  XSH.recvmsg.024
+anchor     functions/recvmsg.html#DESCRIPTION
+class      required
+since      2024
+says       With MSG_CMSG_CLOEXEC, a descriptor received in an SCM_RIGHTS
+           message has FD_CLOEXEC set; if no descriptor is delivered the
+           test is UNRESOLVED.
+test       t/024-cmsg-cloexec.c
+
+assertion  XSH.recvmsg.025
+anchor     functions/recvmsg.html#DESCRIPTION
+class      required
+since      2024
+says       With MSG_CMSG_CLOFORK, a descriptor received in an SCM_RIGHTS
+           message has FD_CLOFORK set; if no descriptor is delivered the
+           test is UNRESOLVED.
+test       t/025-cmsg-clofork.c
+
+assertion  XSH.recvmsg.026
+anchor     basedefs/sys_socket.h.html#DESCRIPTION
+class      required
+since      2024
+says       CMSG_LEN(n) is not smaller than the offset of CMSG_DATA() within
+           a control message plus n, that offset is not smaller than the
+           size of struct cmsghdr, and CMSG_SPACE(n) is not smaller than
+           CMSG_LEN(n), for several n from 0 to 100.
+note       CMSG_LEN() is the value to store in cmsg_len, which counts the
+           header and the data; the data array follows the structure.
+test       t/026-cmsg-len-space.c
+
+assertion  XSH.recvmsg.027
+anchor     basedefs/sys_socket.h.html#DESCRIPTION
+class      required
+since      2024
+says       CMSG_FIRSTHDR() returns a null pointer when msg_controllen is 0
+           and when it is non-zero but smaller than struct cmsghdr, and
+           returns msg_control when msg_controllen is exactly the size of
+           struct cmsghdr and when it is CMSG_SPACE of a small length.
+test       t/027-cmsg-firsthdr.c
+
+assertion  XSH.recvmsg.028
+anchor     basedefs/sys_socket.h.html#DESCRIPTION
+class      required
+since      2024
+says       In a zeroed control buffer of CMSG_SPACE(4) + CMSG_SPACE(8)
+           bytes holding a message of length 4 first, CMSG_NXTHDR() gives a
+           pointer beyond the first message and inside the buffer, and a
+           null pointer after the second message of length 8; with a null
+           second argument it gives what CMSG_FIRSTHDR() gives.
+test       t/028-cmsg-nxthdr.c
+
+assertion  XSH.recvmsg.029
+anchor     basedefs/sys_socket.h.html#DESCRIPTION
+class      required
+since      2024
+says       CMSG_LEN() and CMSG_SPACE() with an integer constant argument are
+           integer constant expressions: they work as array dimensions,
+           enumeration values and in a compile-time relation, and the values
+           are positive.
+test       t/029-cmsg-constexpr.c

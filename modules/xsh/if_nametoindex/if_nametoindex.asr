@@ -1,0 +1,26 @@
+# XSH if_nametoindex()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.if_nametoindex.001
+anchor     functions/if_nametoindex.html#RETURN VALUE
+class      required
+since      2001
+says       For each (index, name) in the array if_nameindex() returns, if_nametoindex(name) is index.
+note       NOTINUSE when no interface exists.
+test       t/001-round-trip.c
+
+assertion  XSH.if_nametoindex.002
+anchor     functions/if_nametoindex.html#RETURN VALUE
+class      required
+since      2001
+says       if_nametoindex() of a string that is not the name of an interface ("pc-no-such-if-zz", "", "0", "no such interface") returns 0.
+note       Names that happen to be interface names are skipped. errno is not asserted: no error is defined.
+test       t/002-unknown-name.c
+
+assertion  XSH.if_nametoindex.003
+anchor     functions/if_nametoindex.html#RETURN VALUE
+class      required
+since      2001
+says       if_nametoindex() of the first interface's name with a character added at the end, or the last character removed, returns 0 when that string names no interface.
+note       NOTINUSE when no interface exists or neither variation can be tried.
+test       t/003-near-miss.c

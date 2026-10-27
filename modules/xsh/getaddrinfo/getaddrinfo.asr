@@ -1,0 +1,251 @@
+# XSH getaddrinfo() and freeaddrinfo() (one page)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only numeric host and service strings are used, so no name service is consulted.
+
+assertion  XSH.getaddrinfo.001
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       Hints AF_INET and SOCK_STREAM with node 127.0.0.1 and service 8080 (AI_NUMERICHOST and AI_NUMERICSERV) give a non-empty list whose every entry has family AF_INET, type SOCK_STREAM, a sockaddr_in with port 8080 and address 127.0.0.1, and values that socket() accepts.
+test       t/001-v4-fields.c
+
+assertion  XSH.getaddrinfo.002
+anchor     functions/getaddrinfo.html#RETURN VALUE
+class      required
+since      2001
+says       The IPv4 address and port of a result are in network byte order: for 10.20.30.40 and port 258 the stored address bytes are 10 20 30 40 and the port bytes are 1 2.
+test       t/002-v4-byte-order.c
+
+assertion  XSH.getaddrinfo.003
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       Numeric service strings "0", "80" and "65535" give those port numbers in the result.
+test       t/003-v4-ports.c
+
+assertion  XSH.getaddrinfo.004
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       A null hints pointer gives the same list (count, family, type, protocol, address) as a zeroed hints structure, and every entry's family, type and protocol are accepted by socket().
+test       t/004-null-hints.c
+
+assertion  XSH.getaddrinfo.005
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       With ai_family AF_UNSPEC an IPv4 address string gives entries of family AF_INET only, with the address and port given.
+test       t/005-unspec-v4.c
+
+assertion  XSH.getaddrinfo.006
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       With ai_family AF_INET6 and without AI_V4MAPPED an IPv4 address string does not give a result (the call fails).
+note       The error code is not asserted.
+test       t/006-v6-rejects-v4.c
+
+assertion  XSH.getaddrinfo.007
+anchor     functions/getaddrinfo.html#RETURN VALUE
+class      conditional
+when       IP6
+since      2001
+says       With AF_INET6 and SOCK_STREAM, node 2001:db8::1 and service 443 give a sockaddr_in6 with the address bytes 20 01 0d b8 0 ... 0 1, port bytes 01 bb, and sin6_flowinfo and sin6_scope_id zero.
+test       t/007-v6-fields.c
+
+assertion  XSH.getaddrinfo.008
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       With ai_family AF_UNSPEC an IPv6 address string (::1) gives entries of family AF_INET6 only, holding that address and the port.
+test       t/008-unspec-v6.c
+
+assertion  XSH.getaddrinfo.009
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       With ai_family AF_INET an IPv6 address string (::1) does not give a result (the call fails).
+note       Only dotted notation is named as valid for AF_INET; the error code is not asserted.
+test       t/009-v4-rejects-v6.c
+
+assertion  XSH.getaddrinfo.010
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      disputed
+when       IP6
+since      2001
+says       With AF_INET6 and AI_V4MAPPED the IPv4 address string 127.0.0.1 gives entries holding the IPv4-mapped address of 127.0.0.1.
+note       disputed (Q-138): the text lists dotted notation as valid for AF_INET and AF_UNSPEC only, and says mapped addresses come when no IPv6 addresses are found; whether an IPv4 literal is such a case is not said. Read as mapping.
+test       t/010-v4mapped.c
+
+assertion  XSH.getaddrinfo.011
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       With AF_INET, AI_V4MAPPED and AI_ALL (alone or together) have no effect: entries are AF_INET with the address given.
+note       The page marks both flags IP6, but their ignored case for other families is a plain rule; the test uses only AF_INET.
+test       t/011-v4mapped-ignored.c
+
+assertion  XSH.getaddrinfo.012
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       AI_PASSIVE with a null node and AF_INET gives entries whose address is the IPv4 wildcard address and whose port is the service given.
+test       t/012-passive-null-v4.c
+
+assertion  XSH.getaddrinfo.013
+anchor     functions/getaddrinfo.html#RETURN VALUE
+class      required
+since      2001
+says       Entries from AI_PASSIVE with a null node, family AF_INET and service 0 can each be bound with a socket made from their own family, type and protocol, using ai_addr and ai_addrlen.
+test       t/013-passive-bind.c
+
+assertion  XSH.getaddrinfo.014
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       AI_PASSIVE with a null node and AF_INET6 gives entries whose address is the IPv6 wildcard address and whose port is the service given.
+test       t/014-passive-null-v6.c
+
+assertion  XSH.getaddrinfo.015
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       AI_PASSIVE with a null node and AF_UNSPEC gives AF_INET entries holding the IPv4 wildcard address and AF_INET6 entries (if any) holding the IPv6 wildcard address.
+test       t/015-passive-unspec.c
+
+assertion  XSH.getaddrinfo.016
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       Without AI_PASSIVE and with a null node, an AF_INET entry is not the wildcard address and connect() to a listener on this host's wildcard address succeeds with it.
+note       Only a loopback address is described by the page; the IPv4 loopback value is therefore found by connecting.
+test       t/016-nopassive-null-v4.c
+
+assertion  XSH.getaddrinfo.017
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       Without AI_PASSIVE and with a null node, AF_INET6 entries hold the IPv6 loopback address.
+test       t/017-nopassive-null-v6.c
+
+assertion  XSH.getaddrinfo.018
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       AI_PASSIVE is ignored when the node is not null: with node 127.0.0.1 the address is 127.0.0.1, not the wildcard address.
+test       t/018-passive-ignored.c
+
+assertion  XSH.getaddrinfo.019
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       A non-zero ai_socktype (SOCK_STREAM, SOCK_DGRAM) limits every entry to that type, and each entry's values are accepted by socket().
+test       t/019-socktype-filter.c
+
+assertion  XSH.getaddrinfo.020
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       With AF_INET and a non-zero ai_protocol (IPPROTO_TCP, IPPROTO_UDP), no entry has another protocol: ai_protocol is the hint (or zero), and socket() accepts the entry's family and type with the hint protocol.
+note       A zero ai_protocol in an entry is tolerated: for these types 2.10.18 makes zero mean the same protocol.
+test       t/020-protocol-filter.c
+
+assertion  XSH.getaddrinfo.021
+anchor     functions/getaddrinfo.html#RETURN VALUE
+class      required
+since      2001
+says       AI_CANONNAME with a numeric node: ai_canonname of the first entry is a string equal to the node string.
+note       A numeric address has no canonical name and is not translated to one; the page then lets ai_canonname hold the node string.
+test       t/021-canonname-numeric.c
+
+assertion  XSH.getaddrinfo.022
+anchor     functions/getaddrinfo.html#ERRORS/EAI_BADFLAGS
+class      disputed
+since      2001
+says       An ai_flags value that has a bit outside the seven listed flags fails with EAI_BADFLAGS.
+note       disputed (Q-137): the page says what flags may be set but not whether an implementation may define more, in which case that bit would not be invalid.
+test       t/022-badflags.c
+
+assertion  XSH.getaddrinfo.023
+anchor     functions/getaddrinfo.html#ERRORS/EAI_FAMILY
+class      required
+since      2001
+says       An ai_family of -1 fails with EAI_FAMILY.
+test       t/023-family.c
+
+assertion  XSH.getaddrinfo.024
+anchor     functions/getaddrinfo.html#ERRORS/EAI_SOCKTYPE
+class      required
+since      2001
+says       An ai_socktype of -1 fails with EAI_SOCKTYPE.
+test       t/024-socktype.c
+
+assertion  XSH.getaddrinfo.025
+anchor     functions/getaddrinfo.html#APPLICATION USAGE
+class      required
+since      2024
+says       SOCK_STREAM combined with SOCK_CLOEXEC in ai_socktype fails with EAI_SOCKTYPE.
+test       t/025-socktype-flags.c
+
+assertion  XSH.getaddrinfo.026
+anchor     functions/getaddrinfo.html#ERRORS/EAI_NONAME
+class      required
+since      2001
+says       A null node and a null service fail with EAI_NONAME.
+test       t/026-noname-both-null.c
+
+assertion  XSH.getaddrinfo.027
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       With AI_NUMERICHOST a node that is not a numeric address ("localhost") fails with EAI_NONAME.
+test       t/027-noname-numerichost.c
+
+assertion  XSH.getaddrinfo.028
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       With AI_NUMERICSERV a service that is not a number ("http") fails with EAI_NONAME.
+test       t/028-noname-numericserv.c
+
+assertion  XSH.getaddrinfo.029
+anchor     functions/getaddrinfo.html#ERRORS/EAI_SERVICE
+class      required
+since      2001
+says       A service name that is not numeric and that no service has ("pc-no-such-service-zz"), with a numeric node, fails with EAI_SERVICE or EAI_NONAME.
+note       Both codes fit the wording (service not recognized; name does not resolve), so either is accepted.
+test       t/029-service-unknown.c
+
+assertion  XSH.getaddrinfo.030
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2001
+says       A null service with a numeric node gives entries holding the address of the node, whose family, type and protocol socket() accepts.
+test       t/030-service-null.c
+
+assertion  XSH.getaddrinfo.031
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2024
+says       freeaddrinfo() of a list returned by getaddrinfo() leaves errno as it was.
+test       t/031-free-errno.c
+
+assertion  XSH.getaddrinfo.032
+anchor     functions/getaddrinfo.html#DESCRIPTION
+class      required
+since      2024
+says       freeaddrinfo() applied to the list that starts at the second entry of a returned list (a sublist) leaves errno as it was.
+note       NOTINUSE when the list has one entry. The first entry is not freed afterwards, as its ai_next would have to be altered.
+test       t/032-free-sublist.c
+
+assertion  XSH.getaddrinfo.033
+anchor     functions/getaddrinfo.html#RETURN VALUE
+class      required
+since      2001
+says       An entry for the numeric node 127.0.0.1 and a listening port on this host can be connected with ai_addr and ai_addrlen from a socket made with its family, type and protocol.
+test       t/033-connect-numeric.c

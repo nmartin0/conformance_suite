@@ -1,0 +1,179 @@
+# XSH recv()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Local sockets only (socketpair(), AF_UNIX in the test's directory,
+# loopback AF_INET). Every blocking call is guarded by an alarm
+# (UNRESOLVED if it fires) or made non-blocking, and a readiness wait with
+# poll() comes before a receive that must not block. A stream receive may
+# return less than was asked for even when more is queued, so tests that
+# need a number of bytes loop until they have it. Timeouts (SO_RCVTIMEO) are
+# tested under setsockopt(). Not tested: MSG_OOB data itself (the page and
+# XSH 2.10.12 make it protocol-specific), ECONNRESET, ETIMEDOUT, EOPNOTSUPP,
+# and the may-fail errors.
+
+assertion  XSH.recv.001
+anchor     functions/recv.html#DESCRIPTION
+anchor     functions/recv.html#RETURN VALUE
+class      required
+since      2001
+says       On a stream socket holding 10 bytes, recv() with a 4 byte buffer
+           returns between 1 and 4 bytes from the front, and receiving the
+           rest afterwards gives the other bytes: all 10 arrive in order
+           and none are discarded.
+test       t/001-stream-pieces.c
+
+assertion  XSH.recv.002
+anchor     functions/recv.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.6
+class      required
+since      2001
+says       1 MiB written to one end of a stream socket pair by a child, in
+           calls of varied sizes, is received by the parent in calls of
+           other varied sizes with every byte present and in order.
+test       t/002-stream-bulk.c
+
+assertion  XSH.recv.003
+anchor     functions/recv.html#DESCRIPTION
+class      required
+since      2001
+says       On a datagram socket, message boundaries are kept: after sends of
+           3 and 5 bytes, one recv() with a large buffer returns exactly 3
+           bytes and the next exactly 5.
+test       t/003-dgram-boundaries.c
+
+assertion  XSH.recv.004
+anchor     functions/recv.html#DESCRIPTION
+class      required
+since      2001
+says       When a datagram is longer than the buffer (10 bytes, buffer of
+           4) and MSG_PEEK is not given, recv() returns 4 bytes from the
+           front and the excess is discarded: nothing remains to receive.
+test       t/004-dgram-truncate.c
+
+assertion  XSH.recv.005
+anchor     functions/recv.html#DESCRIPTION
+class      required
+since      2001
+says       recv() with MSG_PEEK on a stream socket returns data without
+           consuming it: after a peek, receiving the 6 bytes sent gives all
+           of them from the beginning.
+test       t/005-peek-stream.c
+
+assertion  XSH.recv.006
+anchor     functions/recv.html#DESCRIPTION
+class      required
+since      2001
+says       recv() with MSG_PEEK and a buffer smaller than the datagram (4
+           bytes of 10) returns 4 bytes and does not discard the excess: a
+           following recv() without MSG_PEEK returns all 10 bytes.
+test       t/006-peek-dgram.c
+
+assertion  XSH.recv.007
+anchor     functions/recv.html#DESCRIPTION
+class      required
+since      2001
+says       recv() with MSG_WAITALL on a stream socket and a buffer of 8
+           bytes waits for the data of two sends (3 bytes, then 5 bytes a
+           moment later) and returns all 8.
+test       t/007-waitall.c
+
+assertion  XSH.recv.008
+anchor     functions/recv.html#RETURN VALUE
+class      required
+since      2001
+says       When the peer of a stream socket has performed an orderly
+           shutdown (SHUT_WR) after sending 2 bytes, recv() returns those 2
+           bytes and then returns 0, again on a second call.
+test       t/008-orderly-shutdown.c
+
+assertion  XSH.recv.009
+anchor     functions/recv.html#DESCRIPTION
+anchor     functions/recv.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       recv() on an empty non-blocking stream socket, and on an empty
+           non-blocking datagram socket, fails with EAGAIN or EWOULDBLOCK.
+test       t/009-eagain.c
+
+assertion  XSH.recv.010
+anchor     functions/recv.html#ERRORS/ENOTCONN
+class      required
+since      2001
+says       recv() on a stream socket that was never connected fails with
+           ENOTCONN.
+test       t/010-enotconn.c
+
+assertion  XSH.recv.011
+anchor     functions/recv.html#ERRORS/EBADF
+class      required
+since      2001
+says       recv() with a descriptor that is not open fails with EBADF (-1,
+           and a closed descriptor).
+test       t/011-ebadf.c
+
+assertion  XSH.recv.012
+anchor     functions/recv.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       recv() on a descriptor that is not a socket (a pipe end, a
+           regular file) fails with ENOTSOCK.
+test       t/012-enotsock.c
+
+assertion  XSH.recv.013
+anchor     functions/recv.html#DESCRIPTION
+class      required
+since      2001
+says       recv() on an empty blocking stream socket waits for data: a byte
+           sent by another process 200 ms later is returned.
+test       t/013-blocks.c
+
+assertion  XSH.recv.014
+anchor     functions/recv.html#ERRORS/EINTR
+class      required
+since      2001
+says       A blocked recv() interrupted by a caught signal (installed
+           without SA_RESTART) before any data arrived fails with EINTR.
+test       t/014-eintr.c
+
+assertion  XSH.recv.015
+anchor     functions/recv.html#ERRORS/EINVAL
+anchor     functions/recv.html#ERRORS/EAGAIN
+anchor     functions/recv.html#ERRORS/EOPNOTSUPP
+class      required
+since      2001
+says       recv() with MSG_OOB on a non-blocking AF_UNIX stream socket with
+           no out-of-band data fails, with EINVAL, EAGAIN or EWOULDBLOCK,
+           or EOPNOTSUPP (the system may not support the flag here).
+test       t/015-oob-none.c
+
+assertion  XSH.recv.016
+anchor     functions/recv.html#DESCRIPTION
+anchor     functions/recv.html#RETURN VALUE
+class      required
+since      2001
+says       A zero-length datagram sent on a datagram socket pair is received
+           as a message of length 0 (the send returns 0, the receive
+           returns 0), after which the queue is empty; a datagram sent
+           after it is received normally. If the zero-length datagram is
+           never queued the test is UNRESOLVED (the page does not say a
+           zero-length datagram must be delivered).
+test       t/016-zero-length-dgram.c
+
+assertion  XSH.recv.017
+anchor     functions/V2_chap02.html#2.10.6
+anchor     functions/recv.html#DESCRIPTION
+class      required
+since      2001
+says       A datagram socket with a pre-specified peer receives datagrams
+           only from that peer: a datagram sent to it by another socket is
+           not received (the send itself may fail), while one from the peer
+           is.
+test       t/017-connected-dgram-filter.c
+
+assertion  XSH.recv.018
+anchor     functions/recv.html#APPLICATION USAGE
+class      required
+since      2001
+says       With flags 0, recv() on a socket behaves as read() does: bytes
+           written to the peer with write() are returned.
+test       t/018-write-equivalence.c

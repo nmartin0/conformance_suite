@@ -1,0 +1,11 @@
+# sockatmark.cov - every requirement unit on functions/sockatmark.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:e9065e7f    XSH.sockatmark.001 XSH.sockatmark.002 XSH.sockatmark.005
+DESCRIPTION:6e767072    untestable  how a protocol marks the stream is protocol-specific (XSH 2.10.12), so the return value 1 cannot be arranged
+DESCRIPTION:145b8398    XSH.sockatmark.002
+RETURN_VALUE:610cf432   XSH.sockatmark.001 XSH.sockatmark.002 XSH.sockatmark.005
+RETURN_VALUE:652c2154   XSH.sockatmark.001 XSH.sockatmark.002 XSH.sockatmark.005  # the 0 half; the 1 half is untestable (protocol-specific)
+RETURN_VALUE:b7757f78   XSH.sockatmark.003 XSH.sockatmark.004
+ERRORS:b094cc17         XSH.sockatmark.003
+ERRORS:3668e5d7         XSH.sockatmark.004

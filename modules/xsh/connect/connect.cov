@@ -1,0 +1,51 @@
+# connect.cov - every requirement unit on functions/connect.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:7c443519     XSH.connect.001 XSH.connect.018 XSH.connect.019
+DESCRIPTION:38b2e23a     none  introduces the arguments
+DESCRIPTION:c3ae6f5b     none  argument description
+DESCRIPTION:9906d377     none  argument description
+DESCRIPTION:b6444ceb     none  argument description
+DESCRIPTION:412b9807     none  argument description
+DESCRIPTION:bfa749a5     app
+DESCRIPTION:6d09f722     partial XSH.connect.002  # the AF_UNIX case has no requirement
+DESCRIPTION:5f6a914b     XSH.connect.018 XSH.connect.019
+DESCRIPTION:26b0a368     partial XSH.connect.018  # the sender limit on receive is not tested
+DESCRIPTION:1c42d98a     XSH.connect.020
+DESCRIPTION:5222eecb     none  a remark on terminology
+DESCRIPTION:2f3f596e     XSH.connect.001 XSH.connect.002
+DESCRIPTION:51d548fe     untestable  the timeout interval is unspecified and a stalled connection cannot be provoked on loopback
+DESCRIPTION:fe5c40ee     untestable  the timeout interval is unspecified and a stalled connection cannot be provoked on loopback
+DESCRIPTION:e4765471     untestable  needs a connection that stays pending
+DESCRIPTION:a8077dca     XSH.connect.015 XSH.connect.016
+DESCRIPTION:af3be640     partial XSH.connect.017  # only when the first attempt is still in progress
+DESCRIPTION:4245924f     XSH.connect.015
+DESCRIPTION:af5ccda1     none  privilege may be needed; nothing to check
+RETURN_VALUE:90c60dd5    XSH.connect.001 XSH.connect.003 XSH.connect.004 XSH.connect.005
+ERRORS:6fb30ed1          untestable  provoking it would mean addressing a non-local host
+ERRORS:67d7d6e8          XSH.connect.011 XSH.connect.012
+ERRORS:c54b2f7c          partial XSH.connect.017  # not in use where the first call completes at once
+ERRORS:a6580c4c          XSH.connect.014
+ERRORS:586d2408          XSH.connect.003 XSH.connect.004 XSH.connect.016
+ERRORS:066f4519          XSH.connect.015 XSH.connect.016
+ERRORS:bf1e1fe5          untestable  needs a connection that stays pending
+ERRORS:63d44ec4          XSH.connect.010
+ERRORS:7d29b464          untestable  provoking it would mean addressing a non-local network
+ERRORS:548da8fd          XSH.connect.013
+ERRORS:30d1a823          partial XSH.connect.021  # needs AF_UNIX datagram sockets
+ERRORS:79ddfde9          untestable  provoking it would mean addressing a non-local host
+ERRORS:eae567a3          untestable  an I/O error cannot be provoked
+ERRORS:2ae0771c          XSH.connect.008
+ERRORS:681b232a          XSH.connect.009
+ERRORS:dddbc128          XSH.connect.005 XSH.connect.006
+ERRORS:9f4eb6fd          XSH.connect.007 XSH.connect.022
+ERRORS:12b66268          optional
+ERRORS:6442b59c          optional
+ERRORS:1daec409          optional
+ERRORS:4c8c839f          optional
+ERRORS:0cbf6867          optional
+ERRORS:54a0b5c2          optional
+ERRORS:c7f415ad          optional
+ERRORS:c1749d27          optional
+ERRORS:956c798b          optional
+ERRORS:ab4da844          optional

@@ -1,0 +1,58 @@
+# sendmsg.cov - every requirement unit on functions/sendmsg.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:647d19c5    XSH.sendmsg.001 XSH.sendmsg.006 XSH.sendmsg.024
+DESCRIPTION:a29f2c41    XSH.sendmsg.006 XSH.sendmsg.024
+DESCRIPTION:dc153b73    XSH.sendmsg.008
+DESCRIPTION:99d192b1    XSH.sendmsg.007
+DESCRIPTION:4ad0e5f0    none  introduces the arguments
+DESCRIPTION:b4367baf    none  describes an argument
+DESCRIPTION:1f08f455    none  describes an argument
+DESCRIPTION:b6444ceb    none  describes an argument
+DESCRIPTION:4f7bfb64    XSH.sendmsg.022
+DESCRIPTION:3e349852    none  describes an argument
+DESCRIPTION:9ddf0296    none  introduces the flags
+DESCRIPTION:e674eb3a    none  record termination is protocol-specific; no protocol is pinned
+DESCRIPTION:63264dea    untestable  out-of-band data is protocol-specific (XSH 2.10.12)
+DESCRIPTION:649dd640    untestable  out-of-band data is protocol-specific (XSH 2.10.12)
+DESCRIPTION:1aeb1aef    XSH.sendmsg.017 XSH.sendmsg.018
+DESCRIPTION:1ce3e418    XSH.sendmsg.017
+DESCRIPTION:303f8594    XSH.sendmsg.001 XSH.sendmsg.002 XSH.sendmsg.003
+DESCRIPTION:71fee981    XSH.sendmsg.001
+DESCRIPTION:4a2b85f2    XSH.sendmsg.002
+DESCRIPTION:490281de    XSH.sendmsg.001 XSH.sendmsg.002 XSH.sendmsg.006
+DESCRIPTION:e77a2b47    none  a statement about delivery
+DESCRIPTION:f6b8c60c    none  a statement about the meaning of -1
+DESCRIPTION:108ea3be    todo  blocking until space is available needs a reader that drains a full socket; the timeout form is XSH.setsockopt.013
+DESCRIPTION:fbe0e9dc    XSH.sendmsg.020
+DESCRIPTION:81d0aea3    untestable  a system that wrongly accepts the call would put a datagram on the network
+DESCRIPTION:940c3455    none  the socket in use may need privileges; nothing to test
+RETURN_VALUE:1c48f85a   XSH.sendmsg.001 XSH.sendmsg.002 XSH.sendmsg.006 XSH.sendmsg.024
+RETURN_VALUE:ce1869b1   XSH.sendmsg.003 XSH.sendmsg.004 XSH.sendmsg.010 XSH.sendmsg.011 XSH.sendmsg.012
+ERRORS:5ffeb697         XSH.sendmsg.020
+ERRORS:457844c3         XSH.sendmsg.013
+ERRORS:a6580c4c         XSH.sendmsg.010
+ERRORS:b7601858         untestable  a reset by the peer cannot be arranged reliably
+ERRORS:bfcf9a7b         todo  an interrupt before any data was transmitted cannot be arranged without a full socket and a signal at the right moment
+ERRORS:d06892c9         XSH.sendmsg.005
+ERRORS:ec1a2057         XSH.sendmsg.003 XSH.sendmsg.004 XSH.sendmsg.021
+ERRORS:e49f3815         XSH.sendmsg.012
+ERRORS:548da8fd         XSH.sendmsg.011
+ERRORS:a5c465ca         todo  no flag value is known to be unsupported on every system
+ERRORS:996738b1         XSH.sendmsg.017 XSH.sendmsg.018 XSH.sendmsg.019
+ERRORS:eae567a3         optional
+ERRORS:d2887a0f         XSH.sendmsg.016
+ERRORS:681b232a         todo  a component longer than {NAME_MAX} fits in sun_path only where {NAME_MAX} is small
+ERRORS:ce3fc3ea         XSH.sendmsg.014
+ERRORS:2ad24ccc         XSH.sendmsg.015
+ERRORS:12b66268         optional
+ERRORS:6e7cddb7         optional
+ERRORS:4c8c839f         optional
+ERRORS:eae567a3.2       optional
+ERRORS:9b0437f0         optional
+ERRORS:c1749d27         optional
+ERRORS:7d29b464         optional
+ERRORS:f270bfef         optional
+ERRORS:00777f07         optional
+ERRORS:a4bcf699         optional
+ERRORS:c7f415ad         optional

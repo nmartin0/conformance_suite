@@ -1,0 +1,39 @@
+# socket.cov - every requirement unit on functions/socket.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:710eeed3     partial XSH.socket.001 XSH.socket.002 XSH.socket.003 XSH.socket.004 XSH.socket.006 XSH.socket.016  # "unbound" is read through bind() in XSH.bind.001
+DESCRIPTION:70537945     XSH.socket.005
+DESCRIPTION:1ce3b170     none  introduces the arguments
+DESCRIPTION:8a125d3a     none  argument description
+DESCRIPTION:b9c9d34c     none  argument description
+DESCRIPTION:6f0f597f     none  argument description
+DESCRIPTION:3bf2f01a     impl  the default protocol for AF_UNIX is unspecified; 2.10.18 fixes it for AF_INET (XSH.socket.002, 003)
+DESCRIPTION:62af2fab     none  definition
+DESCRIPTION:64fd60e3     impl  supported families are implementation-defined
+DESCRIPTION:35195f60     none  header content, checked by the XBD tier 0 tests
+DESCRIPTION:352592a6     none  definition
+DESCRIPTION:3016eb70     none  introduces the type list
+DESCRIPTION:7c201c1e     partial XSH.socket.001 XSH.socketpair.002  # out-of-band data is protocol-specific
+DESCRIPTION:48764e5e     partial XSH.socket.003 XSH.connect.018  # fixed maximum length and unreliability are not testable
+DESCRIPTION:1e474f63     none  SOCK_SEQPACKET is not required of any family; not tested
+DESCRIPTION:e2698321     none  SOCK_SEQPACKET is not required of any family; not tested
+DESCRIPTION:55173ab8     none  SOCK_SEQPACKET is not required of any family; not tested
+DESCRIPTION:3543f451     XSH.socket.007 XSH.socket.008 XSH.socket.009 XSH.socket.010
+DESCRIPTION:72c6c614     XSH.socket.007
+DESCRIPTION:b429ea4b     XSH.socket.009
+DESCRIPTION:c85e5d0b     XSH.socket.008
+DESCRIPTION:6b2c1335     impl  additional flags are implementation-defined
+DESCRIPTION:7d5233d8     partial XSH.socket.002 XSH.socket.003  # the protocols named for AF_INET only
+DESCRIPTION:ead06c41     XSH.socket.002 XSH.socket.003
+DESCRIPTION:5df77847     impl  supported protocols are implementation-defined
+DESCRIPTION:7a6ba854     none  privilege may be needed; nothing to check
+RETURN_VALUE:99a3936c    XSH.socket.001 XSH.socket.005
+RETURN_VALUE:def0b338    XSH.socket.011 XSH.socket.012 XSH.socket.013 XSH.socket.014 XSH.socket.015
+ERRORS:5ec70887          XSH.socket.011
+ERRORS:1fbbba10          XSH.socket.015
+ERRORS:c384d876          untestable  needs the system-wide table of open files to be full
+ERRORS:95a81b59          XSH.socket.013
+ERRORS:8ed94c6f          XSH.socket.014
+ERRORS:8bc49e3e          optional
+ERRORS:f270bfef          optional
+ERRORS:00777f07          optional

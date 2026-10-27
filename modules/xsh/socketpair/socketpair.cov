@@ -1,0 +1,39 @@
+# socketpair.cov - every requirement unit on functions/socketpair.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:c5896998     partial XSH.socketpair.001 XSH.socketpair.003  # "unbound" not checked: the name of an unbound socket is unspecified
+DESCRIPTION:9b5cc8a9     XSH.socketpair.001
+DESCRIPTION:a617875e     XSH.socketpair.001
+DESCRIPTION:79b4e370     XSH.socketpair.004
+DESCRIPTION:b27be751     none  introduces the arguments
+DESCRIPTION:52a767d2     none  argument description
+DESCRIPTION:a1b0ef0f     none  argument description
+DESCRIPTION:de0caa67     none  argument description
+DESCRIPTION:91191840     impl  the default protocol is unspecified
+DESCRIPTION:0c6a6b29     none  argument description
+DESCRIPTION:67a0e2dc     none  definition
+DESCRIPTION:3016eb70     none  introduces the type list
+DESCRIPTION:7c201c1e     partial XSH.socketpair.002  # out-of-band data is protocol-specific
+DESCRIPTION:48764e5e     none  a datagram pair is not required of AF_UNIX; not tested
+DESCRIPTION:1e474f63     none  SOCK_SEQPACKET is not required of any family; not tested
+DESCRIPTION:e2698321     none  SOCK_SEQPACKET is not required of any family; not tested
+DESCRIPTION:55173ab8     none  SOCK_SEQPACKET is not required of any family; not tested
+DESCRIPTION:3543f451     XSH.socketpair.006 XSH.socketpair.007 XSH.socketpair.008
+DESCRIPTION:7ac44eaa     XSH.socketpair.006
+DESCRIPTION:acd8d517     XSH.socketpair.008
+DESCRIPTION:5872eb51     XSH.socketpair.007
+DESCRIPTION:6b2c1335     impl  additional flags are implementation-defined
+DESCRIPTION:7d5233d8     partial XSH.socketpair.010  # only a protocol number no family can have
+DESCRIPTION:ead06c41     XSH.socketpair.001
+DESCRIPTION:5df77847     impl  supported protocols are implementation-defined
+DESCRIPTION:7b889c0d     none  privilege may be needed; nothing to check
+RETURN_VALUE:cc61586c    XSH.socketpair.001 XSH.socketpair.009 XSH.socketpair.010 XSH.socketpair.011 XSH.socketpair.012
+ERRORS:5ec70887          XSH.socketpair.009
+ERRORS:b2d24eb3          partial XSH.socketpair.011  # the "all open" case is not tested separately
+ERRORS:c384d876          untestable  needs the system-wide table of open files to be full
+ERRORS:87a82196          partial XSH.socketpair.012  # no family is known that refuses pairs, so the error may not arise
+ERRORS:e73871ce          XSH.socketpair.010
+ERRORS:29419fa5          todo  no type/protocol combination in AF_UNIX is known to be unsupported
+ERRORS:8bc49e3e          optional
+ERRORS:f270bfef          optional
+ERRORS:00777f07          optional

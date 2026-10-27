@@ -1,0 +1,45 @@
+# XSH gethostent(), sethostent() and endhostent() (one page)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The standard guarantees no entry in these databases, so the tests use whatever
+# entries exist and are NOTINUSE when there are none.
+
+assertion  XSH.gethostent.001
+anchor     functions/gethostent.html#DESCRIPTION
+class      required
+since      2001
+says       Reading entries one at a time after the open call with 0 ends with a null pointer, and opening again with 0 gives the same sequence of entries.
+note       NOTINUSE when the database has no entry; the suite assumes nothing about which entries exist.
+test       t/001-sequence-rewind.c
+
+assertion  XSH.gethostent.002
+anchor     functions/gethostent.html#DESCRIPTION
+class      required
+since      2001
+says       Every entry gethostent() returns has non-null h_name, h_aliases and h_addr_list, both lists end with a null pointer, and h_length is 4 for an AF_INET entry and 16 for an AF_INET6 entry.
+note       NOTINUSE when the database has no entry; the suite assumes nothing about which entries exist.
+test       t/002-entry-shape.c
+
+assertion  XSH.gethostent.003
+anchor     functions/gethostent.html#DESCRIPTION
+class      required
+since      2024
+says       After the open call with a non-zero argument and one read, every descriptor that was not open before has FD_CLOEXEC set.
+note       NOTINUSE when the implementation opens no descriptor. Only the descriptors the call opened are examined.
+test       t/003-fd-cloexec.c
+
+assertion  XSH.gethostent.004
+anchor     functions/gethostent.html#DESCRIPTION
+class      required
+since      2001
+says       After the open call with a non-zero argument and one read, the end call leaves none of the descriptors that call opened open.
+note       NOTINUSE when the implementation opens no descriptor.
+test       t/004-end-closes.c
+
+assertion  XSH.gethostent.005
+anchor     functions/gethostent.html#DESCRIPTION
+class      required
+since      2001
+says       With a non-zero argument to the open call, reading every entry gives the same sequence as with 0.
+note       NOTINUSE when the database has no entry; the suite assumes nothing about which entries exist.
+test       t/005-stayopen-sequence.c

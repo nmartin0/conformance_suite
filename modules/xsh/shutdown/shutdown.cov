@@ -1,0 +1,18 @@
+# shutdown.cov - every requirement unit on functions/shutdown.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:769ef836     XSH.shutdown.001 XSH.shutdown.005 XSH.shutdown.006
+DESCRIPTION:2ddff6d3     none  introduces the arguments
+DESCRIPTION:38abee15     none  argument description
+DESCRIPTION:1f6445c1     none  argument description
+DESCRIPTION:7dcea64e     none  introduces the values
+DESCRIPTION:acbb5281     partial XSH.shutdown.004  # what a receive does after SHUT_RD is not specified; only that it does not block
+DESCRIPTION:dbf7b682     XSH.shutdown.001 XSH.shutdown.002 XSH.shutdown.003 XSH.shutdown.006
+DESCRIPTION:9433abdb     XSH.shutdown.005
+DESCRIPTION:bcf6d03c     XSH.shutdown.001 XSH.shutdown.004 XSH.shutdown.005
+RETURN_VALUE:33c414b1    XSH.shutdown.001 XSH.shutdown.004 XSH.shutdown.005 XSH.shutdown.007 XSH.shutdown.008 XSH.shutdown.009 XSH.shutdown.010
+ERRORS:a6580c4c          XSH.shutdown.010
+ERRORS:5ed3d89d          XSH.shutdown.007
+ERRORS:4a7c8b27          XSH.shutdown.008
+ERRORS:548da8fd          XSH.shutdown.009
+ERRORS:f270bfef          optional

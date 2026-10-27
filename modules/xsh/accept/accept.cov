@@ -1,0 +1,39 @@
+# accept.cov - every requirement unit on functions/accept.html (accept, accept4).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:bc5f1801     XSH.accept.001 XSH.accept.002  # the protocol of the new socket is checked through its type only
+DESCRIPTION:70537945     XSH.accept.003
+DESCRIPTION:3639b56b     none  introduces the arguments
+DESCRIPTION:5e12c83e     none  argument description
+DESCRIPTION:6ace36d4     XSH.accept.001 XSH.accept.004 XSH.accept.006
+DESCRIPTION:bf75e06f     XSH.accept.001 XSH.accept.007
+DESCRIPTION:1b6c460b     XSH.accept.004 XSH.accept.005 XSH.accept.006
+DESCRIPTION:c65ad5ba     XSH.accept.007
+DESCRIPTION:9a6fa2ea     impl  the stored value is unspecified
+DESCRIPTION:1783556d     XSH.accept.009
+DESCRIPTION:a954a95e     XSH.accept.008
+DESCRIPTION:f4d11963     XSH.accept.010
+DESCRIPTION:6bb9ef1b     XSH.accept.001
+DESCRIPTION:fe76ef0e     impl  whether O_NONBLOCK is inherited is implementation-defined; accept4() with a flag removes the choice (XSH.accept.014)
+DESCRIPTION:b9115510     XSH.accept.011 XSH.accept.012
+DESCRIPTION:37e997a2     impl  inheritance of socket options is implementation-defined
+DESCRIPTION:9194dc34     XSH.accept.005 XSH.accept.014 XSH.accept.015 XSH.accept.016 XSH.accept.017
+DESCRIPTION:72c6c614     XSH.accept.016
+DESCRIPTION:b429ea4b     XSH.accept.017
+DESCRIPTION:c85e5d0b     XSH.accept.015
+DESCRIPTION:6b2c1335     impl  additional flags are implementation-defined
+RETURN_VALUE:0ec8d2ba    XSH.accept.001 XSH.accept.005
+RETURN_VALUE:58c6d954    XSH.accept.008 XSH.accept.010 XSH.accept.018 XSH.accept.021
+ERRORS:a5f131d3          XSH.accept.008
+ERRORS:a6580c4c          XSH.accept.018
+ERRORS:d678125f          untestable  an aborted connection cannot be provoked portably
+ERRORS:7cc5580e          XSH.accept.022
+ERRORS:ad50887b          XSH.accept.010
+ERRORS:1fbbba10          XSH.accept.021
+ERRORS:ecddb67b          untestable  needs the system-wide table of open files to be full
+ERRORS:956c798b          untestable  resource exhaustion cannot be provoked portably
+ERRORS:d5223103          untestable  resource exhaustion cannot be provoked portably
+ERRORS:548da8fd          XSH.accept.019
+ERRORS:d3e1b58c          XSH.accept.020
+ERRORS:ded673f0          optional
+ERRORS:47d8655d          optional

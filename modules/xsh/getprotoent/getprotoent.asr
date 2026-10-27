@@ -1,0 +1,69 @@
+# XSH getprotoent(), getprotobyname(), getprotobynumber(), setprotoent() and endprotoent() (one page)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The standard guarantees no entry in these databases, so the tests use whatever
+# entries exist and are NOTINUSE when there are none.
+
+assertion  XSH.getprotoent.001
+anchor     functions/getprotoent.html#DESCRIPTION
+class      required
+since      2001
+says       Reading entries one at a time after the open call with 0 ends with a null pointer, and opening again with 0 gives the same sequence of entries.
+note       NOTINUSE when the database has no entry; the suite assumes nothing about which entries exist.
+test       t/001-sequence-rewind.c
+
+assertion  XSH.getprotoent.002
+anchor     functions/getprotoent.html#DESCRIPTION
+class      required
+since      2001
+says       Every entry getprotoent() returns has non-null p_name and p_aliases, and p_aliases ends with a null pointer.
+note       NOTINUSE when the database has no entry; the suite assumes nothing about which entries exist.
+test       t/002-entry-shape.c
+
+assertion  XSH.getprotoent.003
+anchor     functions/getprotoent.html#DESCRIPTION
+class      required
+since      2001
+says       getprotobyname(name) with the p_name of the first entry returns that entry (name and number equal), and getprotobynumber(number) with its p_proto does too.
+note       NOTINUSE when the database has no entry; the suite assumes nothing about which entries exist. The first entry is used because it comes first whatever way names are matched.
+test       t/003-lookup-name.c
+
+assertion  XSH.getprotoent.004
+anchor     functions/getprotoent.html#DESCRIPTION
+class      required
+since      2001
+says       For the last entry getprotoent() returns (up to 1000 entries), getprotobynumber() of its number returns an entry with that number, and getprotobyname() of its name returns an entry with that name.
+note       NOTINUSE when the database has no entry; the suite assumes nothing about which entries exist. Comparison of names is case-insensitive here, a tolerance for matching rules the page leaves open.
+test       t/004-lookup-key.c
+
+assertion  XSH.getprotoent.005
+anchor     functions/getprotoent.html#DESCRIPTION
+class      required
+since      2001
+says       getprotobyname("pc-no-such-protocol-zz") and getprotobynumber(12345678) return a null pointer.
+note       These hold whatever the database holds.
+test       t/005-not-found.c
+
+assertion  XSH.getprotoent.006
+anchor     functions/getprotoent.html#DESCRIPTION
+class      required
+since      2024
+says       After the open call with a non-zero argument and one read, every descriptor that was not open before has FD_CLOEXEC set.
+note       NOTINUSE when the implementation opens no descriptor. Only the descriptors the call opened are examined.
+test       t/006-fd-cloexec.c
+
+assertion  XSH.getprotoent.007
+anchor     functions/getprotoent.html#DESCRIPTION
+class      required
+since      2001
+says       After the open call with a non-zero argument and one read, the end call leaves none of the descriptors that call opened open.
+note       NOTINUSE when the implementation opens no descriptor.
+test       t/007-end-closes.c
+
+assertion  XSH.getprotoent.008
+anchor     functions/getprotoent.html#DESCRIPTION
+class      required
+since      2001
+says       With a non-zero argument to the open call, reading every entry gives the same sequence as with 0.
+note       NOTINUSE when the database has no entry; the suite assumes nothing about which entries exist.
+test       t/008-stayopen-sequence.c

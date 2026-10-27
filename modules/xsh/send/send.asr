@@ -1,0 +1,143 @@
+# XSH send()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sockets are local: socketpair() and AF_UNIX sockets in the test's own
+# directory, and loopback AF_INET with ephemeral ports. Every blocking call
+# is guarded by an alarm (UNRESOLVED if it fires) or made non-blocking. A
+# failed call may have been partly performed, so tests do not look at a
+# buffer after a failure except where the page says no data is transmitted.
+# Not tested: MSG_OOB and MSG_EOR (protocol-specific), EOPNOTSUPP (no flag
+# value is known to be unsupported), ECONNRESET (cannot be arranged
+# reliably), EINTR, and the may-fail errors that depend on the network.
+
+assertion  XSH.send.001
+anchor     functions/send.html#DESCRIPTION
+anchor     functions/send.html#RETURN VALUE
+class      required
+since      2001
+says       send() on a connected stream socket returns the number of bytes
+           given, and two calls (5 bytes, then 7) arrive at the peer as
+           those 12 bytes in order.
+test       t/001-stream-data.c
+
+assertion  XSH.send.002
+anchor     functions/send.html#DESCRIPTION
+class      required
+since      2001
+says       send() on a connectionless-mode (datagram) socket that has a
+           pre-specified peer sends the message to that peer: the whole
+           message, with the stated length as the return value, arrives.
+test       t/002-dgram-peer.c
+
+assertion  XSH.send.003
+anchor     functions/send.html#APPLICATION USAGE
+class      required
+since      2001
+says       With flags 0, send() on a socket behaves as write() does: the
+           bytes arrive at the peer and read() on the peer returns them.
+test       t/003-read-equivalence.c
+
+assertion  XSH.send.004
+anchor     functions/send.html#ERRORS/ENOTCONN
+class      required
+since      2001
+says       send() on a stream socket that was never connected fails with
+           ENOTCONN.
+test       t/004-enotconn.c
+
+assertion  XSH.send.005
+anchor     functions/send.html#ERRORS/EDESTADDRREQ
+anchor     functions/send.html#ERRORS/ENOTCONN
+class      required
+since      2001
+says       send() on a datagram socket that is neither bound nor connected
+           fails, with EDESTADDRREQ or ENOTCONN (both entries describe the
+           case, XSH 2.3).
+note       See SI-96: three of the entries overlap here.
+test       t/005-edestaddrreq.c
+
+assertion  XSH.send.006
+anchor     functions/send.html#ERRORS/EBADF
+class      required
+since      2001
+says       send() with a descriptor that is not open fails with EBADF (-1,
+           and a descriptor that has been closed).
+test       t/006-ebadf.c
+
+assertion  XSH.send.007
+anchor     functions/send.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       send() on a descriptor that is not a socket (a pipe end, a
+           regular file) fails with ENOTSOCK.
+test       t/007-enotsock.c
+
+assertion  XSH.send.008
+anchor     functions/send.html#DESCRIPTION
+anchor     functions/send.html#ERRORS/EPIPE
+anchor     functions/V2_chap02.html#2.10.14
+class      required
+since      2008
+says       send() with MSG_NOSIGNAL on a stream socket whose peer has gone
+           fails (EPIPE, or ECONNRESET or ENOTCONN if the system reports
+           the case that way) and no SIGPIPE is generated.
+note       Q-61 allows the three errors for a peer that has gone; the
+           assertion is the signal suppression, which XSH 2.10.14 states
+           for the send operation whichever error is reported.
+test       t/008-nosignal.c
+
+assertion  XSH.send.009
+anchor     functions/send.html#ERRORS/EPIPE
+class      disputed
+since      2001
+says       send() without MSG_NOSIGNAL on a stream socket whose peer has
+           closed fails with EPIPE and SIGPIPE is generated for the
+           calling thread.
+note       disputed (Q-61): the same question as for write(): a peer that
+           is gone may be reported as ECONNRESET or ENOTCONN, without
+           SIGPIPE. The test takes the reading that EPIPE with SIGPIPE is
+           the result for a socket no longer connected; a FAIL is logged
+           as INSPECT. SIGPIPE is checked as pending while blocked.
+test       t/009-sigpipe.c
+
+assertion  XSH.send.010
+anchor     functions/send.html#ERRORS/EPIPE
+class      required
+since      2001
+says       send() on a connected stream socket whose own side has been shut
+           down for writing fails with EPIPE (MSG_NOSIGNAL given so that no
+           signal ends the test).
+test       t/010-epipe-shutwr.c
+
+assertion  XSH.send.011
+anchor     functions/send.html#DESCRIPTION
+anchor     functions/send.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       send() on a non-blocking stream socket whose send space is full
+           fails with EAGAIN or EWOULDBLOCK; each earlier call that
+           succeeded returned a count from 1 up to the length given.
+test       t/011-eagain.c
+
+assertion  XSH.send.012
+anchor     functions/send.html#DESCRIPTION
+anchor     functions/send.html#ERRORS/EMSGSIZE
+class      required
+since      2001
+says       send() of 100000 bytes on a connected UDP socket (larger than
+           any UDP datagram can be) fails with EMSGSIZE and nothing reaches
+           the receiver.
+note       The limit used is that of the protocol the page names for
+           datagrams over IPv4 (XSH 2.10.18 gives UDP as the default for
+           that socket type); the page leaves AF_UNIX limits open, so no
+           local-socket size is used.
+test       t/012-emsgsize-udp.c
+
+assertion  XSH.send.013
+anchor     functions/send.html#RETURN VALUE
+class      required
+since      2001
+says       send() of zero bytes on a connected stream socket returns 0 and
+           leaves the connection as it was: a later byte arrives as the
+           first byte, and the peer sees no end of file.
+test       t/013-zero-length-stream.c

@@ -1,0 +1,8 @@
+# gethostname.cov - every requirement unit on functions/gethostname.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:4db1e72f     XSH.gethostname.001 XSH.gethostname.003
+DESCRIPTION:9321be12     XSH.gethostname.002 XSH.gethostname.003
+DESCRIPTION:1612c6a1     partial XSH.gethostname.001 XSH.gethostname.002 XSH.gethostname.003  # the unspecified part (termination of a truncated name) is left unchecked
+DESCRIPTION:54239294     XSH.gethostname.001
+RETURN_VALUE:8318f7ec    partial XSH.gethostname.001 XSH.gethostname.003  # the failure case cannot be provoked, and the truncated case is left open by the text

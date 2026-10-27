@@ -1,0 +1,25 @@
+# getservent.cov - every requirement unit on functions/getservent.html (also getservbyname, getservbyport, setservent, endservent).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:23b71ae0     XSH.getservent.001 XSH.getservent.003
+DESCRIPTION:8fc19968     none  a statement
+DESCRIPTION:e1fa2a20     none  unspecified: nothing to test
+DESCRIPTION:98d18a06     XSH.getservent.001
+DESCRIPTION:9750fe59     partial XSH.getservent.008  # that the database stays open is seen only through a descriptor, which the implementation need not use
+DESCRIPTION:1bd95d82     XSH.getservent.006
+DESCRIPTION:9d2cd5f5     XSH.getservent.001
+DESCRIPTION:184ac2b0     partial XSH.getservent.003  # the first entry only; a later entry's match depends on how names are compared
+DESCRIPTION:20f13fe4     XSH.getservent.003
+DESCRIPTION:3af07aff     partial XSH.getservent.004  # the first entry only
+DESCRIPTION:20f13fe4.2   XSH.getservent.004
+DESCRIPTION:3b510cc6     XSH.getservent.004
+DESCRIPTION:0c8e7942     XSH.getservent.002
+DESCRIPTION:2de0ab79     XSH.getservent.007
+DESCRIPTION:2e1d32a7     none  allows an implementation not to be thread-safe
+RETURN_VALUE:4e2e1cd9    XSH.getservent.001 XSH.getservent.003 XSH.getservent.004 XSH.getservent.005
+RETURN_VALUE:8724b99c    untestable  the failure case is not described
+RETURN_VALUE:f879af69    app  the application's duty
+RETURN_VALUE:0e2ab8f6    none  permission to invalidate a returned structure
+RETURN_VALUE:dee407ea    none  permission to invalidate a returned structure
+ERRORS:1fbbba10          optional  may-fail error that needs every descriptor used
+ERRORS:78d47d0e          optional  may-fail error that needs the system's file table full

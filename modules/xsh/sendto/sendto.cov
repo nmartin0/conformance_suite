@@ -1,0 +1,59 @@
+# sendto.cov - every requirement unit on functions/sendto.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:104e47ad    XSH.sendto.001 XSH.sendto.002 XSH.sendto.017
+DESCRIPTION:d4511451    XSH.sendto.001 XSH.sendto.017
+DESCRIPTION:f2aedaaa    XSH.sendto.003
+DESCRIPTION:c1a03222    XSH.sendto.002
+DESCRIPTION:6613dd3e    none  introduces the arguments
+DESCRIPTION:b4367baf    none  describes an argument
+DESCRIPTION:a11b8a42    none  describes an argument
+DESCRIPTION:c1553f9a    none  describes an argument
+DESCRIPTION:3e349852    none  describes an argument
+DESCRIPTION:e80cc8c5    none  describes an argument
+DESCRIPTION:e674eb3a    none  record termination is protocol-specific; no protocol is pinned
+DESCRIPTION:5dc80a88    untestable  out-of-band data is protocol-specific (XSH 2.10.12)
+DESCRIPTION:649dd640    untestable  out-of-band data is protocol-specific (XSH 2.10.12)
+DESCRIPTION:1aeb1aef    XSH.sendto.012 XSH.sendto.013
+DESCRIPTION:1ce3e418    XSH.sendto.012
+DESCRIPTION:aee3d19b    none  describes an argument
+DESCRIPTION:b6444ceb    none  describes an argument
+DESCRIPTION:f843f0b3    none  describes an argument
+DESCRIPTION:8be43f4c    app
+DESCRIPTION:ae53f231    untestable  a system that wrongly accepts the call would put a datagram on the network
+DESCRIPTION:60976531    none  restates the argument
+DESCRIPTION:8e50600c    none  restates the argument
+DESCRIPTION:54eb75e1    none  a statement about delivery
+DESCRIPTION:f6b8c60c    none  a statement about the meaning of -1
+DESCRIPTION:83302b68    todo  blocking until space is available needs a reader that drains a full socket; the timeout form is XSH.setsockopt.013
+DESCRIPTION:2823ceef    XSH.sendto.015
+DESCRIPTION:80a44fd5    none  the socket in use may need privileges; nothing to test
+RETURN_VALUE:a79969c9   XSH.sendto.001 XSH.sendto.017
+RETURN_VALUE:ce1869b1   XSH.sendto.005 XSH.sendto.006 XSH.sendto.007 XSH.sendto.008 XSH.sendto.011
+ERRORS:457844c3         XSH.sendto.007
+ERRORS:5ffeb697         XSH.sendto.015
+ERRORS:a6580c4c         XSH.sendto.005
+ERRORS:b7601858         untestable  a reset by the peer cannot be arranged reliably
+ERRORS:5fa35bb7         todo  an interrupt before any data was transmitted cannot be arranged without a full socket and a signal at the right moment
+ERRORS:23538bb8         XSH.sendto.016
+ERRORS:e49f3815         XSH.sendto.011
+ERRORS:548da8fd         XSH.sendto.006
+ERRORS:a5c465ca         todo  no flag value is known to be unsupported on every system
+ERRORS:996738b1         XSH.sendto.012 XSH.sendto.013 XSH.sendto.014
+ERRORS:eae567a3         optional
+ERRORS:d2887a0f         XSH.sendto.010
+ERRORS:681b232a         todo  a component longer than {NAME_MAX} fits in sun_path only where {NAME_MAX} is small
+ERRORS:dddbc128         XSH.sendto.008
+ERRORS:2ad24ccc         XSH.sendto.009
+ERRORS:12b66268         optional
+ERRORS:6e7cddb7         optional
+ERRORS:4c8c839f         optional
+ERRORS:da1da9d7         optional
+ERRORS:eae567a3.2       optional
+ERRORS:9b0437f0         optional
+ERRORS:c1749d27         optional
+ERRORS:7d29b464         optional
+ERRORS:f270bfef         optional
+ERRORS:00777f07         optional
+ERRORS:a4bcf699         optional
+ERRORS:c7f415ad         optional

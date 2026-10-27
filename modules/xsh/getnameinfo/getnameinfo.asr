@@ -1,0 +1,106 @@
+# XSH getnameinfo()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Numeric flags are used for host and service, so no name service is consulted.
+
+assertion  XSH.getnameinfo.001
+anchor     functions/getnameinfo.html#DESCRIPTION
+class      required
+since      2001
+says       With NI_NUMERICHOST and NI_NUMERICSERV an IPv4 socket address (127.0.0.1:8080, 10.20.30.40:258, 192.168.100.200:65535, 0.0.0.0:0) gives rc 0, a node string that inet_pton(AF_INET) parses to the address, and a service string holding the decimal port; both are null-terminated.
+test       t/001-v4-numeric.c
+
+assertion  XSH.getnameinfo.002
+anchor     functions/getnameinfo.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       With the same flags an IPv6 socket address (::1 port 443, 2001:db8::ff00:42:8329 port 65535) gives a node string that inet_pton(AF_INET6) parses to the address and the decimal port.
+test       t/002-v6-numeric.c
+
+assertion  XSH.getnameinfo.003
+anchor     functions/getnameinfo.html#ERRORS/EAI_OVERFLOW
+class      required
+since      2001
+says       A node buffer whose length is that of the name without its null byte, or 1, gives EAI_OVERFLOW.
+test       t/003-overflow-node.c
+
+assertion  XSH.getnameinfo.004
+anchor     functions/getnameinfo.html#ERRORS/EAI_OVERFLOW
+class      required
+since      2001
+says       A service buffer whose length is that of the service text without its null byte, or 1, gives EAI_OVERFLOW.
+test       t/004-overflow-service.c
+
+assertion  XSH.getnameinfo.005
+anchor     functions/getnameinfo.html#DESCRIPTION
+class      required
+since      2001
+says       Buffers whose lengths are exactly the string lengths plus one succeed and give the same strings as large buffers.
+test       t/005-exact-buffers.c
+
+assertion  XSH.getnameinfo.006
+anchor     functions/getnameinfo.html#DESCRIPTION
+class      required
+since      2001
+says       With a null node pointer or a node length of zero, the call succeeds, the node buffer is not written, and the service is returned.
+test       t/006-node-absent.c
+
+assertion  XSH.getnameinfo.007
+anchor     functions/getnameinfo.html#DESCRIPTION
+class      required
+since      2001
+says       With a null service pointer or a service length of zero, the call succeeds, the service buffer is not written, and the node is returned.
+test       t/007-service-absent.c
+
+assertion  XSH.getnameinfo.008
+anchor     functions/getnameinfo.html#ERRORS/EAI_NONAME
+class      required
+since      2001
+says       With neither node nor service requested (null pointers, or zero lengths) the call fails with EAI_NONAME.
+test       t/008-noname-nothing-asked.c
+
+assertion  XSH.getnameinfo.009
+anchor     functions/getnameinfo.html#ERRORS/EAI_FAMILY
+class      required
+since      2001
+says       A sockaddr_storage whose family is the largest value of sa_family_t (checked not to be a known family) fails with EAI_FAMILY.
+test       t/009-family-unknown.c
+
+assertion  XSH.getnameinfo.010
+anchor     functions/getnameinfo.html#ERRORS/EAI_FAMILY
+class      required
+since      2001
+says       A sockaddr_in passed with a length that holds only the family field fails with EAI_FAMILY.
+test       t/010-family-length.c
+
+assertion  XSH.getnameinfo.011
+anchor     functions/getnameinfo.html#ERRORS/EAI_BADFLAGS
+class      disputed
+since      2001
+says       A flags value with a bit outside the six listed NI flags fails with EAI_BADFLAGS.
+note       disputed (Q-137): the page does not say whether an implementation may define more flag bits, in which case that bit would not be invalid.
+test       t/011-badflags.c
+
+assertion  XSH.getnameinfo.012
+anchor     functions/getnameinfo.html#DESCRIPTION
+class      required
+since      2001
+says       NI_NOFQDN, NI_NUMERICSCOPE (ignored for IPv4) and NI_DGRAM, singly and together, added to the two numeric flags are accepted and the numeric node and service strings are unchanged.
+test       t/012-extra-flags.c
+
+assertion  XSH.getnameinfo.013
+anchor     functions/getnameinfo.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       For the IPv6 unspecified address with NI_NAMEREQD (and NI_NUMERICSERV) the call fails with EAI_NONAME, since no lookup is made and the name cannot be located.
+test       t/013-unspec-namereqd.c
+
+assertion  XSH.getnameinfo.014
+anchor     functions/getnameinfo.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       For the IPv6 unspecified address with NI_NUMERICSERV only, the call succeeds and the node string parses as the unspecified address.
+test       t/014-unspec-numeric-fallback.c

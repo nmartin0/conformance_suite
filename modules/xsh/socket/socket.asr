@@ -1,0 +1,165 @@
+# XSH socket()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only AF_UNIX and loopback AF_INET/AF_INET6 are used. SOCK_SEQPACKET and
+# SOCK_RAW are never required.
+
+assertion  XSH.socket.001
+anchor     functions/socket.html#DESCRIPTION
+anchor     functions/socket.html#RETURN VALUE
+anchor     functions/V2_chap02.html#2.10.17
+class      required
+since      2001
+says       socket(AF_UNIX, SOCK_STREAM, 0) returns a non-negative
+           descriptor of a socket whose type (SO_TYPE) is SOCK_STREAM.
+test       t/001-unix-stream.c
+
+assertion  XSH.socket.002
+anchor     functions/socket.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.18
+class      required
+since      2024
+says       socket(AF_INET, SOCK_STREAM, 0) yields a socket whose protocol
+           (SO_PROTOCOL) is IPPROTO_TCP, and naming IPPROTO_TCP as the
+           protocol gives the same.
+note       SO_PROTOCOL is new in Issue 8.
+test       t/002-inet-stream-tcp.c
+
+assertion  XSH.socket.003
+anchor     functions/socket.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.18
+class      required
+since      2024
+says       socket(AF_INET, SOCK_DGRAM, 0) yields a SOCK_DGRAM socket whose
+           protocol is IPPROTO_UDP, and naming IPPROTO_UDP gives the same.
+note       SO_PROTOCOL is new in Issue 8.
+test       t/003-inet-dgram-udp.c
+
+assertion  XSH.socket.004
+anchor     functions/socket.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.20
+class      conditional
+when       IP6
+since      2001
+says       socket(AF_INET6, SOCK_STREAM, 0) returns a stream socket; where
+           the family is not supported the test is not in use.
+test       t/004-inet6-stream.c
+
+assertion  XSH.socket.005
+anchor     functions/socket.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.6
+class      required
+since      2001
+says       The descriptor socket() returns is the lowest free one: with
+           slots L and L+2 free and L+1 open, the result is L.
+test       t/005-lowest.c
+
+assertion  XSH.socket.006
+anchor     functions/V2_chap02.html#2.10.7
+anchor     functions/socket.html#DESCRIPTION
+class      required
+since      2001
+says       A socket created without SOCK_NONBLOCK has O_NONBLOCK clear
+           on its open file description (AF_UNIX, AF_INET, and AF_INET6
+           where supported).
+test       t/006-nonblock-clear.c
+
+assertion  XSH.socket.007
+anchor     functions/socket.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.7
+class      required
+since      2024
+says       With SOCK_CLOEXEC in the type, the new descriptor has
+           FD_CLOEXEC set; O_NONBLOCK stays clear.
+test       t/007-sock-cloexec.c
+
+assertion  XSH.socket.008
+anchor     functions/socket.html#DESCRIPTION
+class      required
+since      2024
+says       With SOCK_NONBLOCK in the type, the new open file description
+           has O_NONBLOCK set.
+test       t/008-sock-nonblock.c
+
+assertion  XSH.socket.009
+anchor     functions/socket.html#DESCRIPTION
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      2024
+says       With SOCK_CLOFORK in the type, the new descriptor has
+           FD_CLOFORK set and a child made by fork() has no such
+           descriptor.
+note       Blocked when XBD.fcntl.h.002 (FD_CLOFORK) fails.
+uses       XBD.fcntl.h.002
+test       t/009-sock-clofork.c
+
+assertion  XSH.socket.010
+anchor     functions/socket.html#DESCRIPTION
+class      required
+since      2024
+says       Flags combine with the type by bitwise OR: SOCK_CLOEXEC and
+           SOCK_NONBLOCK together both take effect, and the socket still
+           has type SOCK_STREAM.
+test       t/010-flags-combined.c
+
+assertion  XSH.socket.011
+anchor     functions/socket.html#ERRORS/EAFNOSUPPORT
+anchor     functions/socket.html#RETURN VALUE
+class      required
+since      2001
+says       A domain value the system does not support (tried: INT_MAX,
+           30000, -1; a value that works as an extension is skipped) makes
+           socket() fail with EAFNOSUPPORT and allocate no descriptor.
+test       t/011-eafnosupport.c
+
+assertion  XSH.socket.012
+anchor     functions/socket.html#ERRORS/ESOCKTNOSUPPORT
+anchor     functions/socket.html#RATIONALE
+class      required
+since      2024
+says       A type value that is none of the supported socket types, with
+           protocol 0, makes socket() fail with ESOCKTNOSUPPORT,
+           EPROTONOSUPPORT or EPROTOTYPE (EINVAL is tolerated).
+note       Q-143: the page does not say which error an invalid type
+           value (as against a valid but unsupported one) gets; EINVAL is
+           accepted.
+test       t/012-unsupported-type.c
+
+assertion  XSH.socket.013
+anchor     functions/socket.html#ERRORS/EPROTONOSUPPORT
+class      required
+since      2001
+says       A non-zero protocol (99999) that the address family does not
+           support makes socket() fail with EPROTONOSUPPORT; EPROTOTYPE
+           and ESOCKTNOSUPPORT are tolerated, since no error takes
+           precedence.
+test       t/013-unknown-protocol.c
+
+assertion  XSH.socket.014
+anchor     functions/socket.html#ERRORS/EPROTOTYPE
+class      required
+since      2001
+says       A protocol that cannot provide the requested type (stream
+           with UDP, datagram with TCP, in AF_INET) makes socket() fail
+           with EPROTOTYPE (EPROTONOSUPPORT and ESOCKTNOSUPPORT
+           tolerated).
+test       t/014-protocol-type-mismatch.c
+
+assertion  XSH.socket.015
+anchor     functions/socket.html#ERRORS/EMFILE
+class      required
+since      2001
+says       With every descriptor in use, socket() fails with EMFILE and
+           opens nothing.
+test       t/015-emfile.c
+
+assertion  XSH.socket.016
+anchor     functions/V2_chap02.html#2.10.16
+anchor     functions/socket.html#DESCRIPTION
+class      required
+since      2024
+says       The SO_DOMAIN option of a new socket reports the domain
+           given to socket() (AF_UNIX, AF_INET, and AF_INET6 where
+           supported).
+note       SO_DOMAIN is new in Issue 8.
+test       t/016-domain-reported.c

@@ -1,0 +1,61 @@
+# XSH getsockname()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Loopback and the test's own socket files only.
+
+assertion  XSH.getsockname.001
+anchor     functions/getsockname.html#DESCRIPTION
+anchor     functions/getsockname.html#RETURN VALUE
+class      required
+since      2001
+says       getsockname() on a TCP socket bound to the loopback address with
+           port 0 returns 0, family AF_INET, the loopback address, a non-zero
+           port and a length covering the address; a client can connect to
+           that address.
+test       t/001-inet.c
+
+assertion  XSH.getsockname.002
+anchor     functions/getsockname.html#DESCRIPTION
+anchor     functions/getsockname.html#APPLICATION USAGE
+class      required
+since      2001
+says       getsockname() on an AF_UNIX socket bound to a pathname returns
+           family AF_UNIX and that pathname, with address_len from
+           offsetof(sun_path) plus the path length up to the buffer size.
+test       t/002-unix.c
+
+assertion  XSH.getsockname.003
+anchor     functions/getsockname.html#DESCRIPTION
+class      required
+since      2001
+says       With address_len smaller than the address (4 bytes, then 0),
+           getsockname() returns 0, stores only that many bytes (the rest is
+           untouched, the prefix is the true prefix) and sets address_len to
+           the full length.
+test       t/003-truncation.c
+
+assertion  XSH.getsockname.004
+anchor     functions/getsockname.html#DESCRIPTION
+anchor     basedefs/netinet_in.h.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       getsockname() on an AF_INET6 socket bound to the IPv6 loopback
+           address with port 0 returns family AF_INET6, that address and a
+           non-zero port.
+test       t/004-inet6.c
+
+assertion  XSH.getsockname.005
+anchor     functions/getsockname.html#ERRORS/EBADF
+class      required
+since      2001
+says       getsockname() on -1 or on a closed descriptor fails with EBADF.
+test       t/005-ebadf.c
+
+assertion  XSH.getsockname.006
+anchor     functions/getsockname.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       getsockname() on a regular-file descriptor or a pipe end fails
+           with ENOTSOCK.
+test       t/006-enotsock.c

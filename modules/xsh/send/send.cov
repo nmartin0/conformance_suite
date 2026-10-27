@@ -1,0 +1,42 @@
+# send.cov - every requirement unit on functions/send.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:551c76ed    XSH.send.001 XSH.send.002
+DESCRIPTION:4b27c0a7    XSH.send.004 XSH.send.005
+DESCRIPTION:0535efe3    XSH.send.002
+DESCRIPTION:5a0c4e3d    none  introduces the arguments
+DESCRIPTION:b4367baf    none  describes an argument
+DESCRIPTION:f5554b15    none  describes an argument
+DESCRIPTION:3d3a63f1    none  describes an argument
+DESCRIPTION:3e349852    none  describes an argument
+DESCRIPTION:e80cc8c5    none  describes an argument
+DESCRIPTION:e674eb3a    none  record termination is protocol-specific; no protocol is pinned
+DESCRIPTION:ec6a72f8    untestable  out-of-band data is protocol-specific (XSH 2.10.12)
+DESCRIPTION:649dd640    untestable  out-of-band data is protocol-specific (XSH 2.10.12)
+DESCRIPTION:1aeb1aef    XSH.send.008 XSH.send.009
+DESCRIPTION:1ce3e418    XSH.send.008 XSH.send.009
+DESCRIPTION:dbfa8f82    XSH.send.001
+DESCRIPTION:1b5abbb9    XSH.send.012
+DESCRIPTION:c8a0f2a3    none  a statement about delivery
+DESCRIPTION:f6b8c60c    none  a statement about the meaning of -1
+DESCRIPTION:f45ec4e3    todo  blocking until space is available needs a reader that drains a full socket; the timeout form is XSH.setsockopt.013
+DESCRIPTION:a128e421    XSH.send.011
+DESCRIPTION:6cb2c10d    none  a pointer to poll()
+DESCRIPTION:b21bda9d    none  the socket in use may need privileges; nothing to test
+RETURN_VALUE:b0d38122   XSH.send.001 XSH.send.002 XSH.send.006
+RETURN_VALUE:ce1869b1   XSH.send.004 XSH.send.005 XSH.send.006 XSH.send.007
+ERRORS:5ffeb697         XSH.send.011
+ERRORS:a6580c4c         XSH.send.006
+ERRORS:b7601858         untestable  a reset by the peer cannot be arranged reliably
+ERRORS:a26b392a         XSH.send.005
+ERRORS:27152f74         todo  an interrupt before any data was transmitted cannot be arranged without a full socket and a signal at the right moment
+ERRORS:23538bb8         XSH.send.012
+ERRORS:4a7c8b27         XSH.send.004 XSH.send.005
+ERRORS:548da8fd         XSH.send.007
+ERRORS:a5c465ca         todo  no flag value is known to be unsupported on every system
+ERRORS:996738b1         XSH.send.008 XSH.send.009 XSH.send.010
+ERRORS:59e55a61         optional
+ERRORS:eae567a3         optional
+ERRORS:c1749d27         optional
+ERRORS:7d29b464         optional
+ERRORS:f270bfef         optional

@@ -1,0 +1,80 @@
+# getaddrinfo.cov - every requirement unit on functions/getaddrinfo.html (freeaddrinfo shares the page).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:1264c13b     partial XSH.getaddrinfo.031  # the release of storage is not observable; only errno is checked
+DESCRIPTION:ab2b6b66     partial XSH.getaddrinfo.031  # as above
+DESCRIPTION:7a57962c     XSH.getaddrinfo.032
+DESCRIPTION:f804b885     XSH.getaddrinfo.031 XSH.getaddrinfo.032
+DESCRIPTION:525e9be3     XSH.getaddrinfo.001 XSH.getaddrinfo.033
+DESCRIPTION:a2177228     none  a note on how the function is often implemented
+DESCRIPTION:5aba0907     untestable  thread safety is not observable by one test without a race
+DESCRIPTION:02cf5654     app  the application's duty
+DESCRIPTION:3bd9e419     app  the application's duty
+DESCRIPTION:6184b816     none  a statement
+DESCRIPTION:6da3beee     partial XSH.getaddrinfo.004 XSH.getaddrinfo.005  # the multi-family case needs a name valid in several families, which numeric strings are not
+DESCRIPTION:2f67d0b7     none  a statement
+DESCRIPTION:eb112339     untestable  host names need a name service, which the suite does not use
+DESCRIPTION:047852db     XSH.getaddrinfo.005 XSH.getaddrinfo.009
+DESCRIPTION:4e8b4d3a     XSH.getaddrinfo.007 XSH.getaddrinfo.008
+DESCRIPTION:54d27a49     XSH.getaddrinfo.012 XSH.getaddrinfo.016
+DESCRIPTION:f5bbe657     XSH.getaddrinfo.030
+DESCRIPTION:33cdfa72     none  a statement
+DESCRIPTION:1d830a0e     partial XSH.getaddrinfo.029  # descriptive names that exist are not required by the text
+DESCRIPTION:e9f46941     XSH.getaddrinfo.001 XSH.getaddrinfo.003
+DESCRIPTION:a74e12e5     XSH.getaddrinfo.019 XSH.getaddrinfo.020
+DESCRIPTION:1540de2b     app  the application's duty
+DESCRIPTION:6b988192     app  undefined behaviour the application avoids
+DESCRIPTION:36434708     XSH.getaddrinfo.005 XSH.getaddrinfo.015
+DESCRIPTION:d83798c2     XSH.getaddrinfo.004
+DESCRIPTION:ef4b1794     XSH.getaddrinfo.004
+DESCRIPTION:4131403d     XSH.getaddrinfo.004
+DESCRIPTION:91359562     XSH.getaddrinfo.022
+DESCRIPTION:2306c484     XSH.getaddrinfo.013
+DESCRIPTION:badb1ccf     XSH.getaddrinfo.012 XSH.getaddrinfo.014 XSH.getaddrinfo.015
+DESCRIPTION:bd432bc8     XSH.getaddrinfo.033
+DESCRIPTION:953f5406     XSH.getaddrinfo.016 XSH.getaddrinfo.017
+DESCRIPTION:78686eca     XSH.getaddrinfo.018
+DESCRIPTION:ec40e255     partial XSH.getaddrinfo.021  # only the numeric-node case; a real alias needs a name service
+DESCRIPTION:764250c7     none  a note
+DESCRIPTION:03445f64     none  a note
+DESCRIPTION:1c356a58     XSH.getaddrinfo.021
+DESCRIPTION:0d3e79b5     none  a pointer to the RETURN VALUE text
+DESCRIPTION:a945e99d     XSH.getaddrinfo.027
+DESCRIPTION:06273e46     XSH.getaddrinfo.027
+DESCRIPTION:c26c1d61     partial XSH.getaddrinfo.027  # that no DNS query is made cannot be seen; the error is the observable part
+DESCRIPTION:7ffc7ead     XSH.getaddrinfo.028
+DESCRIPTION:f3319e6b     XSH.getaddrinfo.028
+DESCRIPTION:a6227a69     partial XSH.getaddrinfo.028  # as for the DNS sentence
+DESCRIPTION:28ad561c     XSH.getaddrinfo.006
+DESCRIPTION:10eac4bd     XSH.getaddrinfo.010
+DESCRIPTION:7b8a7f99     partial XSH.getaddrinfo.011  # checked for AF_INET only
+DESCRIPTION:abcc1767     untestable  matching IPv4 and IPv6 addresses of one name need a name service
+DESCRIPTION:726f2c4d     partial XSH.getaddrinfo.011  # checked for AF_INET only
+DESCRIPTION:ee75e618     untestable  whether loopback counts as a configured address is not stated, and the result depends on the host's configuration
+DESCRIPTION:47477406     none  a statement
+DESCRIPTION:d69ffaee     partial XSH.getaddrinfo.004  # the number of types returned for a service is not fixed by the text
+DESCRIPTION:4f4164ef     XSH.getaddrinfo.019
+DESCRIPTION:4101a7d5     XSH.getaddrinfo.005 XSH.getaddrinfo.008
+DESCRIPTION:d231f67e     XSH.getaddrinfo.006 XSH.getaddrinfo.009
+DESCRIPTION:bcfd25d6     XSH.getaddrinfo.020
+RETURN_VALUE:8b0bc7de    XSH.getaddrinfo.001 XSH.getaddrinfo.026
+RETURN_VALUE:482d4300    none  a pointer to the ERRORS section
+RETURN_VALUE:5926586e    XSH.getaddrinfo.001 XSH.getaddrinfo.004
+RETURN_VALUE:1abd1ce4    XSH.getaddrinfo.001
+RETURN_VALUE:6061b22c    XSH.getaddrinfo.001 XSH.getaddrinfo.004
+RETURN_VALUE:ae304843    XSH.getaddrinfo.013 XSH.getaddrinfo.033
+RETURN_VALUE:875269fe    XSH.getaddrinfo.001 XSH.getaddrinfo.004 XSH.getaddrinfo.019 XSH.getaddrinfo.030
+RETURN_VALUE:42988bef    XSH.getaddrinfo.013 XSH.getaddrinfo.016 XSH.getaddrinfo.033
+RETURN_VALUE:bfbb5961    partial XSH.getaddrinfo.021  # the numeric-node case only
+RETURN_VALUE:2684ea56    none  unspecified: nothing to test
+RETURN_VALUE:05037386    partial XSH.getaddrinfo.007  # sin6_flowinfo and sin6_scope_id; other unnamed fields are implementation-specific
+RETURN_VALUE:2882b5a9    none  a note
+ERRORS:c9618d17          untestable  EAI_AGAIN needs a name service that can be made to fail temporarily
+ERRORS:75ecb349          XSH.getaddrinfo.022
+ERRORS:5a6cb83a          untestable  EAI_FAIL needs a name service that can be made to fail
+ERRORS:1413f23c          XSH.getaddrinfo.023
+ERRORS:7dc0d2c5          untestable  memory exhaustion cannot be provoked portably
+ERRORS:7dba1b5d          XSH.getaddrinfo.026 XSH.getaddrinfo.027 XSH.getaddrinfo.028
+ERRORS:c8cbc232          XSH.getaddrinfo.029
+ERRORS:cd95ede7          XSH.getaddrinfo.024 XSH.getaddrinfo.025
+ERRORS:8ee5a420          untestable  a system error cannot be provoked portably

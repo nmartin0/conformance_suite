@@ -1,0 +1,67 @@
+# XSH inet_addr() and inet_ntoa() (one page; both obsolescent)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.inet_addr.001
+anchor     functions/inet_addr.html#DESCRIPTION
+class      required
+since      2001
+says       inet_addr() of a four-part string (1.2.3.4, 127.0.0.1, 192.168.100.200, 10.0.200.7) returns an address whose four bytes in memory are the parts from left to right.
+test       t/001-four-parts.c
+
+assertion  XSH.inet_addr.002
+anchor     functions/inet_addr.html#DESCRIPTION
+class      required
+since      2001
+says       inet_addr() of a three-part string puts the last part, as a 16-bit quantity, in the two rightmost bytes (10.20.258 gives 10 20 1 2).
+test       t/002-three-parts.c
+
+assertion  XSH.inet_addr.003
+anchor     functions/inet_addr.html#DESCRIPTION
+class      required
+since      2001
+says       inet_addr() of a two-part string puts the last part, as a 24-bit quantity, in the three rightmost bytes (10.65793 gives 10 1 1 1).
+test       t/003-two-parts.c
+
+assertion  XSH.inet_addr.004
+anchor     functions/inet_addr.html#DESCRIPTION
+class      disputed
+since      2001
+says       inet_addr() of a one-part string gives the address whose bytes from left to right are the number's bytes from the most significant (16909060 gives 1 2 3 4).
+note       disputed (Q-140): the page says the value is stored directly in the network address without any byte rearrangement, which does not say whether the integer or its big-endian bytes are meant; the other forms and the network-order rule point to the bytes.
+test       t/004-one-part.c
+
+assertion  XSH.inet_addr.005
+anchor     functions/inet_addr.html#DESCRIPTION
+class      required
+since      2001
+says       Parts in C octal (leading 0) and hexadecimal (0x or 0X) notation are read as such, in any of the forms.
+note       The page says parts "may be" in these notations; read as what the function must accept, since the ISO C rules are named.
+test       t/005-radix.c
+
+assertion  XSH.inet_addr.006
+anchor     functions/inet_addr.html#RETURN VALUE
+class      required
+since      2001
+says       inet_addr() of strings that are not in the dotted notation (abc, 1.2.3.4.5, 1.2.x.4, 1..2.3, a.b.c.d) returns (in_addr_t)-1.
+test       t/006-invalid.c
+
+assertion  XSH.inet_addr.007
+anchor     functions/inet_addr.html#RETURN VALUE
+class      required
+since      2001
+says       inet_addr("0.0.0.0") is zero and inet_addr("255.255.255.255") is all ones, equal to (in_addr_t)-1.
+test       t/007-extremes.c
+
+assertion  XSH.inet_addr.008
+anchor     functions/inet_addr.html#RETURN VALUE
+class      required
+since      2001
+says       inet_ntoa() of an in_addr holding bytes b0 b1 b2 b3 returns a string of the four values as decimal numbers separated by dots, in that order (1.2.3.4, 0.0.0.0, 255.255.255.255, 10.0.200.7, 192.168.100.200).
+test       t/008-ntoa.c
+
+assertion  XSH.inet_addr.009
+anchor     functions/inet_addr.html#DESCRIPTION
+class      required
+since      2001
+says       For 64 pseudo-random addresses, inet_addr() of the string inet_ntoa() gives returns the original address.
+test       t/009-round-trip.c

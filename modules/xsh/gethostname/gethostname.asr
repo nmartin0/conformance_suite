@@ -1,0 +1,25 @@
+# XSH gethostname()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.gethostname.001
+anchor     functions/gethostname.html#DESCRIPTION
+class      required
+since      2001
+says       With a buffer much larger than any host name, gethostname() returns 0, the name is null-terminated, it is no longer than {HOST_NAME_MAX} (when that limit is known), and a second call gives the same name.
+note       The limit is taken from sysconf(_SC_HOST_NAME_MAX), or the macro if sysconf reports none.
+test       t/001-name-terminated.c
+
+assertion  XSH.gethostname.002
+anchor     functions/gethostname.html#DESCRIPTION
+class      required
+since      2001
+says       With namelen one less than the length of the name, gethostname() does not write beyond namelen bytes, and if it returns 0 the bytes written are the first namelen bytes of the name.
+note       Whether the result is null-terminated and the return value in this case are not specified. NOTINUSE when the name has fewer than two characters.
+test       t/002-truncation.c
+
+assertion  XSH.gethostname.003
+anchor     functions/gethostname.html#DESCRIPTION
+class      required
+since      2001
+says       With namelen one more than the length of the name, gethostname() returns 0 and the buffer holds the full name, null-terminated.
+test       t/003-exact-fit.c

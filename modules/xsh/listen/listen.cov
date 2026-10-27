@@ -1,0 +1,24 @@
+# listen.cov - every requirement unit on functions/listen.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:5c62368e     XSH.listen.001 XSH.listen.008
+DESCRIPTION:44474373     untestable  the queue length is a hint; its effect cannot be observed portably
+DESCRIPTION:852f46ac     none  permission for the implementation
+DESCRIPTION:e586fd32     untestable  the queue length cannot be observed portably
+DESCRIPTION:d10c1321     XSH.listen.002
+DESCRIPTION:acc22545     none  permission for the implementation
+DESCRIPTION:2bdc4052     none  permission for the implementation
+DESCRIPTION:693aa64b     none  permission for the implementation
+DESCRIPTION:2224d8f6     untestable  the queue length and its limit cannot be observed portably
+DESCRIPTION:a7d602a6     partial XSH.listen.002  # only that a negative backlog is accepted
+DESCRIPTION:f10e0884     none  unspecified
+DESCRIPTION:acbbf6a3     none  privilege may be needed; nothing to check
+RETURN_VALUE:2eeef4f8    XSH.listen.001 XSH.listen.004 XSH.listen.005 XSH.listen.006 XSH.listen.007
+ERRORS:a6580c4c          XSH.listen.006
+ERRORS:91f91f52          XSH.listen.003
+ERRORS:75ee3578          XSH.listen.004
+ERRORS:548da8fd          XSH.listen.005
+ERRORS:12ec30ed          XSH.listen.007
+ERRORS:59e55a61          optional
+ERRORS:eee3580e          optional
+ERRORS:5f0bd3ed          optional

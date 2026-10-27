@@ -1,0 +1,22 @@
+# getprotoent.cov - every requirement unit on functions/getprotoent.html (also getprotobyname, getprotobynumber, setprotoent, endprotoent).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:fc228626     XSH.getprotoent.001 XSH.getprotoent.003
+DESCRIPTION:8fc19968     none  a statement
+DESCRIPTION:e1fa2a20     none  unspecified: nothing to test
+DESCRIPTION:026543c1     XSH.getprotoent.001
+DESCRIPTION:1facba5e     partial XSH.getprotoent.008  # that the database stays open is seen only through a descriptor, which the implementation need not use
+DESCRIPTION:1bd95d82     XSH.getprotoent.006
+DESCRIPTION:7e968b96     XSH.getprotoent.003 XSH.getprotoent.004
+DESCRIPTION:f2a4b25f     XSH.getprotoent.003 XSH.getprotoent.004
+DESCRIPTION:6b5d6684     XSH.getprotoent.001
+DESCRIPTION:8cc5804b     XSH.getprotoent.002
+DESCRIPTION:88b60c8f     XSH.getprotoent.007
+DESCRIPTION:2e1d32a7     none  allows an implementation not to be thread-safe
+RETURN_VALUE:ea4575de    XSH.getprotoent.001 XSH.getprotoent.003 XSH.getprotoent.005
+RETURN_VALUE:8724b99c    untestable  the failure case is not described
+RETURN_VALUE:f879af69    app  the application's duty
+RETURN_VALUE:ae6024c3    none  permission to invalidate a returned structure
+RETURN_VALUE:dee407ea    none  permission to invalidate a returned structure
+ERRORS:1fbbba10          optional  may-fail error that needs every descriptor used
+ERRORS:78d47d0e          optional  may-fail error that needs the system's file table full

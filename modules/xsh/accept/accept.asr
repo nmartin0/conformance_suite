@@ -1,0 +1,212 @@
+# XSH accept(), accept4()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Page functions/accept.html also holds accept4(). Test file names ending
+# in accept4 or numbered 005 and 014 to 017 use accept4() and are separate
+# so that a header without it fails only those.
+
+assertion  XSH.accept.001
+anchor     functions/accept.html#DESCRIPTION
+anchor     functions/accept.html#RETURN VALUE
+class      required
+since      2001
+says       accept() with null address and length returns a new descriptor,
+           different from the listener and the client, of a connected socket
+           of the listener's type: bytes pass both ways. The listener stays
+           open and a second accept() gives another connection.
+test       t/001-new-descriptor.c
+
+assertion  XSH.accept.002
+anchor     functions/accept.html#DESCRIPTION
+class      required
+since      2001
+says       accept() extracts the first connection on the queue: three clients
+           that connected in turn, each writing a distinct byte, are accepted
+           in that order.
+test       t/002-first-in-first-out.c
+
+assertion  XSH.accept.003
+anchor     functions/accept.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.6
+class      required
+since      2001
+says       The descriptor accept() returns is the lowest free one: with slots
+           L and L+2 free and L+1 open, the result is L.
+test       t/003-lowest.c
+
+assertion  XSH.accept.004
+anchor     functions/accept.html#DESCRIPTION
+class      required
+since      2001
+says       accept() on an AF_UNIX listener with a client that is bound to a
+           pathname stores an address of family AF_UNIX whose path is the
+           client's, and sets address_len to a value from offsetof(sun_path)
+           plus the path length up to the buffer size.
+test       t/004-unix-peer-address.c
+
+assertion  XSH.accept.005
+anchor     functions/accept.html#DESCRIPTION
+class      required
+since      2024
+says       accept4() with flag 0 is equivalent to accept(): same address,
+           family and length bounds as the previous assertion.
+note       accept4() is new in Issue 8.
+test       t/005-unix-peer-address-accept4.c
+
+assertion  XSH.accept.006
+anchor     functions/accept.html#DESCRIPTION
+class      required
+since      2001
+says       accept() on a TCP listener stores the connecting socket's own
+           address (family AF_INET, its port and address) and sets
+           address_len to the length that getsockname() reported for that
+           socket.
+test       t/006-inet-peer-address.c
+
+assertion  XSH.accept.007
+anchor     functions/accept.html#DESCRIPTION
+class      required
+since      2001
+says       With address_len smaller than the address (4 bytes, then 0),
+           accept() succeeds, stores only that many bytes (the rest of the
+           buffer is untouched, the prefix is the true prefix) and sets
+           address_len to the full length of the address.
+test       t/007-truncation.c
+
+assertion  XSH.accept.008
+anchor     functions/accept.html#DESCRIPTION
+anchor     functions/accept.html#ERRORS/EAGAIN
+anchor     functions/accept.html#RETURN VALUE
+class      required
+since      2001
+says       On a non-blocking listener with nothing pending, accept() fails
+           with EAGAIN or EWOULDBLOCK and leaves address_len unchanged; it
+           succeeds once a connection is pending.
+test       t/008-eagain.c
+
+assertion  XSH.accept.009
+anchor     functions/accept.html#DESCRIPTION
+class      required
+since      2001
+says       accept() on a blocking listener with an empty queue waits; when a
+           child connects later it returns that connection.
+test       t/009-blocks-until-connection.c
+
+assertion  XSH.accept.010
+anchor     functions/accept.html#ERRORS/EINVAL
+anchor     functions/accept.html#RETURN VALUE
+class      required
+since      2001
+says       accept() on a socket that is not accepting connections (a fresh
+           one, a bound one that does not listen, an accepted one) fails with
+           EINVAL and leaves address_len unchanged.
+test       t/010-einval-not-listening.c
+
+assertion  XSH.accept.011
+anchor     functions/accept.html#DESCRIPTION
+class      required
+since      2024
+says       The descriptor accept() returns has FD_CLOEXEC clear even if the
+           listener's FD_CLOEXEC is set.
+note       The sentence was added by Austin Group defects 411 and 1318.
+test       t/011-cloexec-clear.c
+
+assertion  XSH.accept.012
+anchor     functions/accept.html#DESCRIPTION
+class      required
+since      2024
+says       The descriptor accept() returns has FD_CLOFORK clear even if the
+           listener's FD_CLOFORK is set.
+note       Blocked when XBD.fcntl.h.002 (FD_CLOFORK) fails.
+uses       XBD.fcntl.h.002
+test       t/012-clofork-clear.c
+
+assertion  XSH.accept.013
+anchor     functions/accept.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.7
+class      required
+since      2001
+says       From a listener whose O_NONBLOCK is clear, accept() returns a
+           socket with O_NONBLOCK clear.
+test       t/013-blocking-by-default.c
+
+assertion  XSH.accept.014
+anchor     functions/accept.html#DESCRIPTION
+class      required
+since      2024
+says       accept4() with flag 0 gives a descriptor with FD_CLOEXEC clear and
+           a description with O_NONBLOCK clear, whatever the listener has
+           set.
+test       t/014-accept4-zero-flags.c
+
+assertion  XSH.accept.015
+anchor     functions/accept.html#DESCRIPTION
+class      required
+since      2024
+says       accept4() with SOCK_NONBLOCK sets O_NONBLOCK on the new
+           description and leaves FD_CLOEXEC clear even if the listener has
+           it.
+test       t/015-accept4-nonblock.c
+
+assertion  XSH.accept.016
+anchor     functions/accept.html#DESCRIPTION
+class      required
+since      2024
+says       accept4() with SOCK_CLOEXEC sets FD_CLOEXEC on the new descriptor
+           and leaves O_NONBLOCK clear even if the listener has it set.
+test       t/016-accept4-cloexec.c
+
+assertion  XSH.accept.017
+anchor     functions/accept.html#DESCRIPTION
+anchor     functions/fork.html#DESCRIPTION
+class      required
+since      2024
+says       accept4() with SOCK_CLOFORK sets FD_CLOFORK on the new descriptor;
+           a forked child does not have it.
+note       Blocked when XBD.fcntl.h.002 (FD_CLOFORK) fails.
+uses       XBD.fcntl.h.002
+test       t/017-accept4-clofork.c
+
+assertion  XSH.accept.018
+anchor     functions/accept.html#ERRORS/EBADF
+anchor     functions/accept.html#RETURN VALUE
+class      required
+since      2001
+says       accept() on -1 or on a closed descriptor fails with EBADF and
+           leaves address_len unchanged.
+test       t/018-ebadf.c
+
+assertion  XSH.accept.019
+anchor     functions/accept.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       accept() on a regular-file descriptor or a pipe end fails with
+           ENOTSOCK.
+test       t/019-enotsock.c
+
+assertion  XSH.accept.020
+anchor     functions/accept.html#ERRORS/EOPNOTSUPP
+anchor     functions/accept.html#ERRORS/EINVAL
+class      required
+since      2001
+says       accept() on a bound datagram socket fails with EOPNOTSUPP (EINVAL
+           tolerated, since the socket is also not accepting connections).
+test       t/020-datagram.c
+
+assertion  XSH.accept.021
+anchor     functions/accept.html#ERRORS/EMFILE
+anchor     functions/accept.html#RETURN VALUE
+class      required
+since      2008
+says       With no free descriptor, accept() of a pending connection fails
+           with EMFILE and leaves address_len unchanged.
+test       t/021-emfile.c
+
+assertion  XSH.accept.022
+anchor     functions/accept.html#ERRORS/EINTR
+class      required
+since      2001
+says       A blocking accept() that is interrupted by a caught signal
+           (installed without SA_RESTART) before a connection arrives fails
+           with EINTR.
+test       t/022-eintr.c

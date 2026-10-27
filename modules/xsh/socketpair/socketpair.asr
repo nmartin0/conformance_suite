@@ -1,0 +1,122 @@
+# XSH socketpair()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.socketpair.001
+anchor     functions/socketpair.html#DESCRIPTION
+anchor     functions/socketpair.html#RETURN VALUE
+class      required
+since      2001
+says       socketpair(AF_UNIX, SOCK_STREAM, 0, v) returns 0 and two
+           distinct descriptors in v; the two sockets are identical (same
+           type) and connected: bytes written to either are read from the
+           other.
+test       t/001-pair-connected.c
+
+assertion  XSH.socketpair.002
+anchor     functions/V2_chap02.html#2.10.6
+anchor     functions/socketpair.html#DESCRIPTION
+class      required
+since      2001
+says       The sockets of a stream pair keep no record boundaries: two
+           writes of 3 and 4 bytes are read back as the 7 bytes, in order.
+test       t/002-byte-stream.c
+
+assertion  XSH.socketpair.003
+anchor     functions/socketpair.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.11
+class      required
+since      2001
+says       After one end of a stream pair is closed, the other end reads
+           the data written before the close and then reaches
+           end-of-file (a read returning 0).
+test       t/003-eof-after-close.c
+
+assertion  XSH.socketpair.004
+anchor     functions/socketpair.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.6
+class      required
+since      2001
+says       Each descriptor is the lowest one free when it is allocated:
+           with slots L and L+2 free and L+1 open, the pair is L and L+2
+           in either order.
+test       t/004-lowest.c
+
+assertion  XSH.socketpair.005
+anchor     functions/V2_chap02.html#2.10.7
+class      required
+since      2001
+says       Without SOCK_NONBLOCK, O_NONBLOCK is clear on both
+           descriptions.
+test       t/005-nonblock-clear.c
+
+assertion  XSH.socketpair.006
+anchor     functions/socketpair.html#DESCRIPTION
+class      required
+since      2024
+says       With SOCK_CLOEXEC in the type, FD_CLOEXEC is set on both
+           descriptors.
+test       t/006-sock-cloexec.c
+
+assertion  XSH.socketpair.007
+anchor     functions/socketpair.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.7
+class      required
+since      2024
+says       With SOCK_NONBLOCK in the type, O_NONBLOCK is set on both
+           descriptions; reading an empty one fails with EAGAIN or
+           EWOULDBLOCK instead of blocking.
+test       t/007-sock-nonblock.c
+
+assertion  XSH.socketpair.008
+anchor     functions/socketpair.html#DESCRIPTION
+class      required
+since      2024
+says       With SOCK_CLOFORK in the type, FD_CLOFORK is set on both
+           descriptors and a forked child has neither.
+note       Blocked when XBD.fcntl.h.002 (FD_CLOFORK) fails.
+uses       XBD.fcntl.h.002
+test       t/008-sock-clofork.c
+
+assertion  XSH.socketpair.009
+anchor     functions/socketpair.html#ERRORS/EAFNOSUPPORT
+anchor     functions/socketpair.html#RETURN VALUE
+class      required
+since      2001
+says       An unsupported domain value (INT_MAX, 30000, -1; accepted
+           extension values are skipped) makes socketpair() fail with
+           EAFNOSUPPORT, allocate no descriptor and leave the vector
+           unmodified.
+test       t/009-eafnosupport.c
+
+assertion  XSH.socketpair.010
+anchor     functions/socketpair.html#ERRORS/EPROTONOSUPPORT
+anchor     functions/socketpair.html#RETURN VALUE
+class      required
+since      2001
+says       Protocol 99999 in AF_UNIX makes socketpair() fail (with
+           EPROTONOSUPPORT; EPROTOTYPE and EOPNOTSUPP tolerated since no
+           error takes precedence), allocating nothing and leaving the
+           vector unmodified.
+test       t/010-unknown-protocol.c
+
+assertion  XSH.socketpair.011
+anchor     functions/socketpair.html#ERRORS/EMFILE
+anchor     functions/socketpair.html#RETURN VALUE
+class      required
+since      2008
+says       With only one descriptor free, socketpair() fails with EMFILE,
+           allocates no descriptor and leaves the vector unmodified.
+note       The "all but one" wording came with Issue 7.
+test       t/011-emfile.c
+
+assertion  XSH.socketpair.012
+anchor     functions/socketpair.html#ERRORS/EOPNOTSUPP
+anchor     functions/socketpair.html#APPLICATION USAGE
+anchor     functions/socketpair.html#RETURN VALUE
+class      required
+since      2001
+says       In AF_INET a stream pair may be created (then it is closed) or
+           the call fails with EOPNOTSUPP (or EAFNOSUPPORT,
+           EPROTONOSUPPORT, EPROTOTYPE); a failure leaves the vector
+           unmodified and allocates nothing.
+test       t/012-failure-clean.c

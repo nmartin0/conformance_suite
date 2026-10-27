@@ -1,0 +1,116 @@
+# XSH inet_ntop() and inet_pton() (one page)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.inet_ntop.001
+anchor     functions/inet_ntop.html#DESCRIPTION
+class      required
+since      2001
+says       inet_pton(AF_INET, ...) of dotted-decimal text (0.0.0.0, 1.2.3.4, 127.0.0.1, 192.168.100.200, 255.255.255.255) returns 1 and stores the four parts as bytes, first part first.
+test       t/001-pton-v4.c
+
+assertion  XSH.inet_ntop.002
+anchor     functions/inet_ntop.html#DESCRIPTION
+class      required
+since      2024
+says       inet_pton(AF_INET, ...) accepts parts with leading zeros and reads them as decimal (001.002.003.004 is 1.2.3.4; 010.0.0.1 is 10.0.0.1; 000.000.000.000 is zero).
+note       Parts are written with at most three digits (Q-142 for more).
+test       t/002-pton-v4-zeros.c
+
+assertion  XSH.inet_ntop.003
+anchor     functions/inet_ntop.html#RETURN VALUE
+class      required
+since      2001
+says       inet_pton(AF_INET, ...) returns 0 for text that is not four decimal parts of 0 to 255: values above 255, fewer or more than four parts, hexadecimal parts, empty parts, a single number, an empty string, trailing letters, a sign, and an IPv6 string.
+test       t/003-pton-v4-invalid.c
+
+assertion  XSH.inet_ntop.004
+anchor     functions/inet_ntop.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       inet_pton(AF_INET6, ...) of the standard IPv6 text forms (full, with leading zeros dropped or kept, with one :: standing for zero fields, at the start, middle or end; upper or lower case hexadecimal digits) returns 1 and stores the sixteen bytes in network order.
+test       t/004-pton-v6.c
+
+assertion  XSH.inet_ntop.005
+anchor     functions/inet_ntop.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       inet_pton(AF_INET6, ...) of x:x:x:x:x:x:d.d.d.d text returns 1; the six pieces fill the first twelve bytes and the dotted parts the last four.
+test       t/005-pton-v6-mixed.c
+
+assertion  XSH.inet_ntop.006
+anchor     functions/inet_ntop.html#RETURN VALUE
+class      conditional
+when       IP6
+since      2001
+says       inet_pton(AF_INET6, ...) returns 0 for text not in a standard form: empty, wrong number of fields, two ::, a field of five digits, a non-hexadecimal digit, a single leading or trailing colon, a malformed or out-of-range dotted tail, and an IPv4 string.
+test       t/006-pton-v6-invalid.c
+
+assertion  XSH.inet_ntop.007
+anchor     functions/inet_ntop.html#ERRORS/EAFNOSUPPORT
+class      required
+since      2001
+says       inet_pton() with an unknown family (AF_UNSPEC, -1) returns -1 with errno EAFNOSUPPORT.
+test       t/007-pton-eafnosupport.c
+
+assertion  XSH.inet_ntop.008
+anchor     functions/inet_ntop.html#DESCRIPTION
+class      required
+since      2001
+says       inet_pton() writes four bytes for AF_INET and sixteen for AF_INET6, and no more.
+test       t/008-pton-store-size.c
+
+assertion  XSH.inet_ntop.009
+anchor     functions/inet_ntop.html#DESCRIPTION
+class      required
+since      2001
+says       inet_ntop(AF_INET, ...) returns dst; for 192.168.100.200 and 255.255.255.255 dst holds exactly those dotted-decimal texts, and for other addresses dst holds text that inet_pton(AF_INET) reads back as the address; a buffer of INET_ADDRSTRLEN bytes suffices.
+note       Exact text is asserted only for addresses whose parts all have three digits: the page defines the input form, and does not say whether output uses leading zeros (Q-141).
+test       t/009-ntop-v4.c
+
+assertion  XSH.inet_ntop.010
+anchor     functions/inet_ntop.html#ERRORS/ENOSPC
+class      required
+since      2001
+says       inet_ntop(AF_INET, ...) of 255.255.255.255 with size 0, 1, 7 or 15 returns a null pointer with errno ENOSPC; size INET_ADDRSTRLEN succeeds.
+test       t/010-ntop-v4-enospc.c
+
+assertion  XSH.inet_ntop.011
+anchor     functions/inet_ntop.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       inet_ntop(AF_INET6, ...) returns dst, holding text that inet_pton(AF_INET6) reads back as the address, for the unspecified, loopback, trailing-zero, full, all-ones and IPv4-mapped addresses, within INET6_ADDRSTRLEN bytes.
+note       The text chosen for each address (compressed or not) is not asserted, only that it reads back.
+test       t/011-ntop-v6.c
+
+assertion  XSH.inet_ntop.012
+anchor     functions/inet_ntop.html#ERRORS/ENOSPC
+class      conditional
+when       IP6
+since      2001
+says       inet_ntop(AF_INET6, ...) returns a null pointer with errno ENOSPC for size 0 or 2 (any address) and for size 38 with the all-ones address (whose text is at least 39 characters); size INET6_ADDRSTRLEN succeeds.
+test       t/012-ntop-v6-enospc.c
+
+assertion  XSH.inet_ntop.013
+anchor     functions/inet_ntop.html#ERRORS/EAFNOSUPPORT
+class      required
+since      2001
+says       inet_ntop() with an unknown family (AF_UNSPEC, -1) returns a null pointer with errno EAFNOSUPPORT.
+test       t/013-ntop-eafnosupport.c
+
+assertion  XSH.inet_ntop.014
+anchor     functions/inet_ntop.html#DESCRIPTION
+class      required
+since      2001
+says       For 64 pseudo-random IPv4 addresses, the text inet_ntop() puts in an INET_ADDRSTRLEN buffer reads back with inet_pton() as the same address.
+test       t/014-v4-round-trip.c
+
+assertion  XSH.inet_ntop.015
+anchor     functions/inet_ntop.html#DESCRIPTION
+class      conditional
+when       IP6
+since      2001
+says       For 64 pseudo-random IPv6 addresses, about a third of whose pieces are zero, the text inet_ntop() puts in an INET6_ADDRSTRLEN buffer reads back with inet_pton() as the same address.
+test       t/015-v6-round-trip.c

@@ -1,0 +1,57 @@
+# recvmsg.cov - every requirement unit on functions/recvmsg.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:3667c898    XSH.recvmsg.001 XSH.recvmsg.004 XSH.recvmsg.008
+DESCRIPTION:1a180352    none  a note on usual use
+DESCRIPTION:163fde94    none  introduces the arguments
+DESCRIPTION:b4367baf    none  describes an argument
+DESCRIPTION:da2b36ba    none  describes an argument
+DESCRIPTION:b6444ceb    none  describes an argument
+DESCRIPTION:3d950d4d    XSH.recvmsg.003
+DESCRIPTION:5f3559f2    none  describes an argument
+DESCRIPTION:64cf97fb    none  describes an argument
+DESCRIPTION:8c788d48    untestable  out-of-band data is protocol-specific (XSH 2.10.12)
+DESCRIPTION:649dd640    untestable  out-of-band data is protocol-specific (XSH 2.10.12)
+DESCRIPTION:079a0e9f    XSH.recvmsg.018
+DESCRIPTION:dbe2c781    XSH.recvmsg.019
+DESCRIPTION:5b7a8f69    none  the cases that permit a short count; the test arranges none of them
+DESCRIPTION:5bc90c86    XSH.recvmsg.024
+DESCRIPTION:9eac54c1    XSH.recvmsg.025
+DESCRIPTION:e87a79d8    XSH.recvmsg.001 XSH.recvmsg.004 XSH.recvmsg.009
+DESCRIPTION:f2032c62    XSH.recvmsg.001 XSH.recvmsg.002
+DESCRIPTION:da225abd    XSH.recvmsg.001
+DESCRIPTION:6a60bbab    XSH.recvmsg.002
+DESCRIPTION:24da3ed9    partial XSH.recvmsg.018 XSH.recvmsg.019  # stream ordering and loss are tested under recv()
+DESCRIPTION:5e084fad    partial XSH.recvmsg.018 XSH.recvmsg.019  # stream ordering and loss are tested under recv()
+DESCRIPTION:d46bbadf    XSH.recvmsg.001
+DESCRIPTION:6e6d3a07    todo  blocking is tested under recv() (XSH.recv.013)
+DESCRIPTION:37b46931    XSH.recvmsg.013
+DESCRIPTION:e1ea3322    XSH.recvmsg.008
+DESCRIPTION:26736349    XSH.recvmsg.004 XSH.recvmsg.005 XSH.recvmsg.006 XSH.recvmsg.007
+DESCRIPTION:c65ad5ba    XSH.recvmsg.006 XSH.recvmsg.007
+DESCRIPTION:939d8180    XSH.recvmsg.009
+DESCRIPTION:a0f98153    XSH.recvmsg.001
+DESCRIPTION:5986e78e    XSH.recvmsg.001 XSH.recvmsg.010 XSH.recvmsg.011
+DESCRIPTION:71fee981    XSH.recvmsg.001
+DESCRIPTION:805c1f6b    XSH.recvmsg.001
+DESCRIPTION:b2c1f67f    XSH.recvmsg.002 XSH.recvmsg.003 XSH.recvmsg.023
+DESCRIPTION:18f2f675    none  end of record is protocol-specific; no protocol is pinned
+DESCRIPTION:f0734507    untestable  out-of-band data is protocol-specific (XSH 2.10.12)
+DESCRIPTION:0abee8f4    XSH.recvmsg.002
+DESCRIPTION:ec77f2c0    XSH.recvmsg.023
+RETURN_VALUE:47d7002e   XSH.recvmsg.001 XSH.recvmsg.002
+RETURN_VALUE:0e556d8f   XSH.recvmsg.017
+RETURN_VALUE:ce1869b1   XSH.recvmsg.010 XSH.recvmsg.013 XSH.recvmsg.014 XSH.recvmsg.015 XSH.recvmsg.016
+ERRORS:2986e2e3         XSH.recvmsg.013
+ERRORS:890a1f27         XSH.recvmsg.014
+ERRORS:b7601858         untestable  a reset by the peer cannot be arranged reliably
+ERRORS:8bf89d67         todo  tested for recv() only (XSH.recv.014)
+ERRORS:695c2272         XSH.recvmsg.012
+ERRORS:e519cab8         XSH.recvmsg.010 XSH.recvmsg.011
+ERRORS:6cb348bb         XSH.recvmsg.016
+ERRORS:548da8fd         XSH.recvmsg.015
+ERRORS:70623854         todo  no flag value is known to be unsupported on every system
+ERRORS:4ca2dfee         untestable  a transmission timeout cannot be arranged
+ERRORS:eae567a3         optional
+ERRORS:f270bfef         optional
+ERRORS:00777f07         optional

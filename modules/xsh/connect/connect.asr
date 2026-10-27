@@ -1,0 +1,204 @@
+# XSH connect()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only loopback and the test's own socket files are used. Timeouts of
+# blocking connections, EINTR and ETIMEDOUT cannot be provoked and are not tested.
+
+assertion  XSH.connect.001
+anchor     functions/connect.html#DESCRIPTION
+anchor     functions/connect.html#RETURN VALUE
+class      required
+since      2001
+says       connect() on an AF_UNIX stream socket to the name of a listening
+           socket returns 0; accept() then returns the other end, and bytes
+           pass both ways.
+test       t/001-unix-stream.c
+
+assertion  XSH.connect.002
+anchor     functions/connect.html#DESCRIPTION
+class      required
+since      2001
+says       connect() on an unbound TCP socket binds it to an unused local
+           address: its name then has family AF_INET and a non-zero port, and
+           the accepted socket's peer address is that name.
+test       t/002-inet-implicit-bind.c
+
+assertion  XSH.connect.003
+anchor     functions/connect.html#ERRORS/ECONNREFUSED
+class      required
+since      2001
+says       connect() to an AF_UNIX name whose socket is bound but not
+           listening, or whose listener has been closed (name left behind),
+           fails with ECONNREFUSED.
+test       t/003-unix-econnrefused.c
+
+assertion  XSH.connect.004
+anchor     functions/connect.html#ERRORS/ECONNREFUSED
+class      required
+since      2001
+says       connect() to a loopback TCP port nobody listens on fails with
+           ECONNREFUSED.
+test       t/004-inet-econnrefused.c
+
+assertion  XSH.connect.005
+anchor     functions/connect.html#ERRORS/ENOENT
+class      required
+since      2001
+says       connect() to an AF_UNIX pathname that does not exist fails with
+           ENOENT.
+test       t/005-enoent.c
+
+assertion  XSH.connect.006
+anchor     functions/connect.html#ERRORS/ENOENT
+anchor     functions/connect.html#DESCRIPTION
+class      required
+since      2001
+says       connect() to an AF_UNIX address with an empty pathname
+           (address_len of offsetof(sun_path) plus 1) fails with ENOENT.
+test       t/006-enoent-empty.c
+
+assertion  XSH.connect.007
+anchor     functions/connect.html#ERRORS/ENOTDIR
+class      required
+since      2001
+says       A prefix component of the AF_UNIX pathname that is a regular file
+           fails with ENOTDIR.
+test       t/007-enotdir.c
+
+assertion  XSH.connect.008
+anchor     functions/connect.html#ERRORS/ELOOP
+class      required
+since      2001
+says       A symbolic link loop in the AF_UNIX pathname fails with ELOOP.
+test       t/008-eloop.c
+
+assertion  XSH.connect.009
+anchor     functions/connect.html#ERRORS/ENAMETOOLONG
+class      required
+since      2001
+says       An AF_UNIX pathname component longer than {NAME_MAX} fails with
+           ENAMETOOLONG; not in use where such a component does not fit in
+           sun_path.
+test       t/009-enametoolong.c
+
+assertion  XSH.connect.010
+anchor     functions/connect.html#ERRORS/EISCONN
+class      required
+since      2001
+says       connect() on a connected stream socket fails with EISCONN and the
+           connection stays usable.
+test       t/010-eisconn.c
+
+assertion  XSH.connect.011
+anchor     functions/connect.html#ERRORS/EAFNOSUPPORT
+class      required
+since      2001
+says       connect() on an AF_UNIX socket with an address of family AF_INET
+           (length sizeof(struct sockaddr_in), valid for both families)
+           fails with EAFNOSUPPORT, or EINVAL (a may-fail error for an
+           invalid address family in the structure).
+test       t/011-eafnosupport-unix-socket.c
+
+assertion  XSH.connect.012
+anchor     functions/connect.html#ERRORS/EAFNOSUPPORT
+class      required
+since      2001
+says       connect() on an AF_INET socket with an address of family AF_UNIX
+           (length sizeof(struct sockaddr_in)) fails with EAFNOSUPPORT, or
+           EINVAL (a may-fail error for an invalid address family in the
+           structure).
+test       t/012-eafnosupport-inet-socket.c
+
+assertion  XSH.connect.013
+anchor     functions/connect.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       connect() on a regular-file descriptor or a pipe end fails with
+           ENOTSOCK.
+test       t/013-enotsock.c
+
+assertion  XSH.connect.014
+anchor     functions/connect.html#ERRORS/EBADF
+class      required
+since      2001
+says       connect() on -1 or on a closed descriptor fails with EBADF.
+test       t/014-ebadf.c
+
+assertion  XSH.connect.015
+anchor     functions/connect.html#DESCRIPTION
+anchor     functions/connect.html#ERRORS/EINPROGRESS
+anchor     functions/V2_chap02.html#2.10.7
+class      required
+since      2001
+says       With O_NONBLOCK set, connect() to a loopback listener returns 0 or
+           fails with EINPROGRESS; in the latter case the descriptor becomes
+           ready for writing, SO_ERROR is then 0, getpeername() shows the
+           listener, and a further connect() gives EISCONN.
+test       t/015-nonblocking.c
+
+assertion  XSH.connect.016
+anchor     functions/connect.html#ERRORS/EINPROGRESS
+anchor     functions/V2_chap02.html#2.10.15
+anchor     functions/V2_chap02.html#2.10.10
+class      required
+since      2001
+says       A non-blocking connect() to a loopback port nobody listens on
+           fails at once with ECONNREFUSED, or with EINPROGRESS followed by
+           SO_ERROR reporting ECONNREFUSED, which a second read of SO_ERROR
+           shows cleared.
+test       t/016-nonblocking-refused.c
+
+assertion  XSH.connect.017
+anchor     functions/connect.html#ERRORS/EALREADY
+anchor     functions/connect.html#DESCRIPTION
+class      required
+since      2001
+says       A second connect() while a non-blocking one is still in progress
+           fails with EALREADY (EISCONN if the connection completed in
+           between); not in use where the first call completes at once.
+test       t/017-ealready.c
+
+assertion  XSH.connect.018
+anchor     functions/connect.html#DESCRIPTION
+class      required
+since      2001
+says       connect() on a datagram socket sets the peer address
+           (getpeername() reports it) without a connection, and send()
+           without an address delivers to that peer.
+test       t/018-udp-peer.c
+
+assertion  XSH.connect.019
+anchor     functions/connect.html#DESCRIPTION
+class      required
+since      2001
+says       connect() on a datagram socket can be repeated: the second call
+           returns 0 and the peer address is the second one.
+test       t/019-udp-reconnect.c
+
+assertion  XSH.connect.020
+anchor     functions/connect.html#DESCRIPTION
+class      required
+since      2008
+says       connect() on a datagram socket with a sockaddr whose family is
+           AF_UNSPEC returns 0 and resets the peer address (getpeername()
+           then fails with ENOTCONN).
+note       The AF_UNSPEC method was set by Austin Group interpretation
+           1003.1-2001 #188.
+test       t/020-udp-unspec-resets.c
+
+assertion  XSH.connect.021
+anchor     functions/connect.html#ERRORS/EPROTOTYPE
+class      required
+since      2001
+says       connect() of an AF_UNIX stream socket to the name of an AF_UNIX
+           datagram socket fails with EPROTOTYPE (ECONNREFUSED tolerated);
+           not in use where AF_UNIX datagram sockets do not exist.
+test       t/021-eprototype.c
+
+assertion  XSH.connect.022
+anchor     functions/connect.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       The name of an existing socket file followed by a slash
+           fails with ENOTDIR.
+test       t/022-trailing-slash.c

@@ -1,0 +1,176 @@
+# XSH getsockopt()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Options are read from fresh sockets (socketpair(), AF_UNIX, loopback
+# AF_INET and, under IP6, AF_INET6). Which option values can be set is
+# tested under setsockopt(); defaults come from XSH 2.10.16. Whether an
+# option exists for a given protocol is protocol-specific, so a read that
+# fails with ENOPROTOOPT is skipped for the options the page lets a
+# protocol leave out (the defaults); SO_TYPE, SO_ERROR, SO_ACCEPTCONN,
+# SO_DOMAIN and SO_PROTOCOL are required to work on the sockets used.
+# Not tested: EACCES, ENOBUFS, EINVAL for a shut-down socket (may-fail),
+# SO_DEBUG and SO_DONTROUTE values, SO_RCVLOWAT and SO_SNDLOWAT beyond the
+# stated default, and the effect of the options (setsockopt()).
+
+assertion  XSH.getsockopt.001
+anchor     functions/getsockopt.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_TYPE on an AF_UNIX stream socket gives SOCK_STREAM and on an
+           AF_UNIX datagram socket SOCK_DGRAM; the option length given as
+           the size of int comes back as the size of int.
+test       t/001-type-unix.c
+
+assertion  XSH.getsockopt.002
+anchor     functions/getsockopt.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_TYPE on an AF_INET stream socket gives SOCK_STREAM and on an
+           AF_INET datagram socket SOCK_DGRAM.
+test       t/002-type-inet.c
+
+assertion  XSH.getsockopt.003
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_ACCEPTCONN on a new stream socket is 0 and, once the socket is
+           bound and listening, non-zero.
+test       t/003-acceptconn.c
+
+assertion  XSH.getsockopt.004
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       SO_ERROR on a socket with no pending error returns 0, with the
+           option length the size of int.
+test       t/004-error-none.c
+
+assertion  XSH.getsockopt.005
+anchor     functions/V2_chap02.html#2.10.16
+anchor     functions/V2_chap02.html#2.10.15
+class      required
+since      2001
+says       After a non-blocking connect() of a TCP socket to a loopback
+           port with nothing listening has completed, SO_ERROR returns
+           ECONNREFUSED. If connect() itself fails at once the test is
+           UNRESOLVED.
+test       t/005-error-pending.c
+
+assertion  XSH.getsockopt.006
+anchor     functions/V2_chap02.html#2.10.16
+anchor     functions/V2_chap02.html#2.10.10
+class      required
+since      2001
+says       SO_ERROR clears the pending error: after one read has returned
+           the error of a refused non-blocking connect, a second read
+           returns 0.
+test       t/006-error-cleared.c
+
+assertion  XSH.getsockopt.007
+anchor     functions/getsockopt.html#DESCRIPTION
+class      required
+since      2001
+says       When option_len is smaller than the option value (1 byte for an
+           int), getsockopt() succeeds and stores no more than 1 byte: the
+           bytes of the buffer after it are untouched.
+test       t/007-length-short.c
+
+assertion  XSH.getsockopt.008
+anchor     functions/getsockopt.html#DESCRIPTION
+class      required
+since      2001
+says       When option_len is larger than the option value (16 bytes for an
+           int), getsockopt() sets it to the size of the value and stores
+           nothing beyond it.
+test       t/008-length-long.c
+
+assertion  XSH.getsockopt.009
+anchor     functions/getsockopt.html#ERRORS/ENOPROTOOPT
+anchor     functions/getsockopt.html#ERRORS/EINVAL
+class      required
+since      2001
+says       getsockopt() with an option name that no protocol defines (the
+           largest int) fails with ENOPROTOOPT or EINVAL.
+test       t/009-unknown-option.c
+
+assertion  XSH.getsockopt.010
+anchor     functions/getsockopt.html#ERRORS/ENOPROTOOPT
+anchor     functions/getsockopt.html#ERRORS/EINVAL
+class      required
+since      2001
+says       getsockopt() with a level that is no protocol's (-1) fails with
+           ENOPROTOOPT or EINVAL.
+test       t/010-bad-level.c
+
+assertion  XSH.getsockopt.011
+anchor     functions/getsockopt.html#ERRORS/EBADF
+class      required
+since      2001
+says       getsockopt() with a descriptor that is not open fails with EBADF
+           (-1, and a closed descriptor).
+test       t/011-ebadf.c
+
+assertion  XSH.getsockopt.012
+anchor     functions/getsockopt.html#ERRORS/ENOTSOCK
+class      required
+since      2001
+says       getsockopt() on a descriptor that is not a socket (a pipe end, a
+           regular file) fails with ENOTSOCK.
+test       t/012-enotsock.c
+
+assertion  XSH.getsockopt.013
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2024
+says       SO_DOMAIN gives AF_UNIX for an AF_UNIX socket and AF_INET for an
+           AF_INET socket.
+test       t/013-domain.c
+
+assertion  XSH.getsockopt.014
+anchor     functions/V2_chap02.html#2.10.16
+anchor     functions/V2_chap02.html#2.10.18
+class      required
+since      2024
+says       SO_PROTOCOL gives IPPROTO_TCP for an AF_INET stream socket and
+           IPPROTO_UDP for an AF_INET datagram socket, both created with
+           protocol 0.
+test       t/014-protocol.c
+
+assertion  XSH.getsockopt.015
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2024
+says       On a new AF_INET stream socket the defaults are: SO_KEEPALIVE,
+           SO_REUSEADDR, SO_OOBINLINE and SO_DEBUG off (0), SO_LINGER off
+           with a linger time of 0, SO_RCVTIMEO and SO_SNDTIMEO zero; on a
+           new datagram socket SO_BROADCAST is off. An option the protocol
+           does not support (ENOPROTOOPT) is skipped.
+test       t/015-defaults.c
+
+assertion  XSH.getsockopt.016
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       The default of SO_RCVLOWAT on a new stream socket is 1 (a read
+           that fails with ENOPROTOOPT leaves the test not in use).
+test       t/016-rcvlowat-default.c
+
+assertion  XSH.getsockopt.017
+anchor     functions/V2_chap02.html#2.10.20
+class      conditional
+when       IP6
+since      2001
+says       IPV6_V6ONLY on a new AF_INET6 socket is 0 (an int used as a
+           Boolean).
+test       t/017-v6only-default.c
+
+assertion  XSH.getsockopt.018
+anchor     functions/V2_chap02.html#2.10.20
+class      conditional
+when       IP6
+since      2001
+says       Reading IPV6_JOIN_GROUP with getsockopt() on an AF_INET6 socket
+           fails with EOPNOTSUPP.
+test       t/018-join-group-eopnotsupp.c

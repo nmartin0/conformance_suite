@@ -1,0 +1,42 @@
+# bind.cov - every requirement unit on functions/bind.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:31627fd2     XSH.bind.001 XSH.bind.020 XSH.bind.022
+DESCRIPTION:73fdf684     none  the name of an unbound socket is unspecified (getsockname page)
+DESCRIPTION:2b9ddd74     none  introduces the arguments
+DESCRIPTION:65fb89b7     none  argument description
+DESCRIPTION:5174f6d5     none  argument description
+DESCRIPTION:b6444ceb     none  argument description
+DESCRIPTION:412b9807     none  argument description
+DESCRIPTION:f94a5da7     none  privilege may be needed; no privileged address is bound
+DESCRIPTION:bfa749a5     app
+DESCRIPTION:d0724e16     XSH.bind.004 XSH.bind.005
+DESCRIPTION:6f3a4ee8     untestable  asynchronous assignment cannot be provoked
+DESCRIPTION:2b16e590     untestable  asynchronous assignment cannot be provoked
+DESCRIPTION:d06e2de3     untestable  asynchronous assignment cannot be provoked
+RETURN_VALUE:1ac008ca    XSH.bind.001 XSH.bind.007 XSH.bind.008
+ERRORS:b5649ad7          XSH.bind.003 XSH.bind.004 XSH.bind.005 XSH.bind.019
+ERRORS:6fb30ed1          XSH.bind.021
+ERRORS:67d7d6e8          XSH.bind.009 XSH.bind.010
+ERRORS:5863a4e1          untestable  asynchronous assignment cannot be provoked
+ERRORS:a6580c4c          XSH.bind.007
+ERRORS:3383563c          untestable  asynchronous assignment cannot be provoked
+ERRORS:fdc9d6ae          partial XSH.bind.006  # the shut-down case is not tested; a second bind is allowed to work
+ERRORS:683f67b2          untestable  resource exhaustion cannot be provoked portably
+ERRORS:548da8fd          XSH.bind.008
+ERRORS:464e7d6f          untestable  no socket type that refuses an address is required
+ERRORS:a84ccf6b          XSH.bind.016 XSH.bind.017
+ERRORS:3cd7484c          XSH.bind.018
+ERRORS:fb6201b2          untestable  needs a file system that refuses names; not portable
+ERRORS:a1a76e92          untestable  an I/O error cannot be provoked
+ERRORS:2ae0771c          XSH.bind.015
+ERRORS:681b232a          XSH.bind.014
+ERRORS:f9f04b33          XSH.bind.011 XSH.bind.012
+ERRORS:69b09960          partial XSH.bind.023  # the existing-file case is also EADDRINUSE and is left out
+ERRORS:9f4eb6fd          partial XSH.bind.013  # the trailing-slash form on an existing file is also EADDRINUSE and is left out
+ERRORS:931803de          todo  needs a read-only file system (environment)
+ERRORS:60fcce70          optional
+ERRORS:54a7ffee          optional
+ERRORS:75d273c1          optional
+ERRORS:54a0b5c2          optional
+ERRORS:c7f415ad          optional
