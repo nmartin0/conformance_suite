@@ -1,0 +1,267 @@
+# XSH lockf()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# lockf() is the XSI record-locking function. The file is a regular file made
+# in the run directory. Locks are held by the test process and probed from a
+# short-lived child that opens the file itself (so the child is "another
+# process"); the child only ever tests (F_TEST) or tries (F_TLOCK) and never
+# waits, except in the two assertions about waiting, where every wait is
+# bounded by alarm() and all children are reaped. Errors that the page lets
+# an implementation choose between (EACCES or EAGAIN) are both accepted.
+
+assertion  XSH.lockf.001
+anchor     functions/lockf.html#DESCRIPTION
+anchor     functions/lockf.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       lockf(F_TLOCK, 100) at offset 0 of a regular file opened O_RDWR
+           returns 0, and F_TEST by another process on that section then
+           fails with EACCES or EAGAIN.
+test       t/001-tlock-locks.c
+
+assertion  XSH.lockf.002
+anchor     functions/lockf.html#DESCRIPTION
+anchor     functions/lockf.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       lockf(F_LOCK, 100) on an available section returns 0 without
+           waiting, and F_TEST by another process on it then fails with
+           EACCES or EAGAIN.
+test       t/002-lock-locks.c
+
+assertion  XSH.lockf.003
+anchor     functions/lockf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       lockf(F_TLOCK) through a descriptor opened O_WRONLY returns 0,
+           and F_TEST by another process on the section then fails with
+           EACCES or EAGAIN.
+test       t/003-wronly.c
+
+assertion  XSH.lockf.004
+anchor     functions/lockf.html#DESCRIPTION
+anchor     functions/lockf.html#ERRORS/EACCES
+class      conditional
+when       XSI
+since      2001
+says       While the test process holds bytes 0 to 99, F_TEST by another
+           process on bytes 100 to 109 returns 0, and so does F_TEST on an
+           unlocked file.
+test       t/004-test-free.c
+
+assertion  XSH.lockf.005
+anchor     functions/lockf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       F_TEST by the process that holds a lock, over that section,
+           returns 0 (only locks of other processes count), and a further
+           F_TLOCK by the holder over an overlapping section returns 0.
+test       t/005-own-lock.c
+
+assertion  XSH.lockf.006
+anchor     functions/lockf.html#DESCRIPTION
+anchor     functions/lockf.html#ERRORS/EACCES
+class      conditional
+when       XSI
+since      2001
+says       While the test process holds bytes 0 to 99, F_TLOCK by another
+           process on that section fails with EACCES or EAGAIN, and
+           F_TLOCK on bytes 100 to 109 succeeds.
+test       t/006-tlock-conflict.c
+
+assertion  XSH.lockf.007
+anchor     functions/lockf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A lock with positive size 20 at offset 50 covers bytes 50 to
+           69: F_TEST by another process of one byte fails for offsets 50
+           and 69 and succeeds for 49 and 70.
+test       t/007-section-forward.c
+
+assertion  XSH.lockf.008
+anchor     functions/lockf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A lock with size -20 at offset 70 covers bytes 50 to 69: F_TEST
+           by another process of one byte fails for offsets 50 and 69 and
+           succeeds for 49 and 70.
+test       t/008-section-backward.c
+
+assertion  XSH.lockf.009
+anchor     functions/lockf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A lock with size 0 at offset 50 on a 20-byte file covers from
+           byte 50 onwards, past the end of the file: F_TEST by another
+           process fails at offsets 50, 100 and 1000000, and succeeds at
+           49.
+test       t/009-section-to-end.c
+
+assertion  XSH.lockf.010
+anchor     functions/lockf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       F_TLOCK of 10 bytes at offset 1000 of an empty file returns 0,
+           the file stays empty, and F_TEST by another process on that
+           section fails with EACCES or EAGAIN.
+test       t/010-past-eof.c
+
+assertion  XSH.lockf.011
+anchor     functions/lockf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       While the test process holds bytes 50 to 69, F_TEST by another
+           process over bytes 40 to 54, over 65 to 80 and over 40 to 80
+           fails with EACCES or EAGAIN; over 40 to 49 and 70 to 80 it
+           returns 0.
+test       t/011-overlap-test.c
+
+assertion  XSH.lockf.012
+anchor     functions/lockf.html#DESCRIPTION
+anchor     functions/lockf.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       After F_ULOCK of exactly the locked section returns 0, F_TEST
+           by another process on it returns 0 and F_TLOCK by that process
+           succeeds.
+test       t/012-unlock-all.c
+
+assertion  XSH.lockf.013
+anchor     functions/lockf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       With bytes 0 to 29 locked, F_ULOCK of bytes 10 to 19 leaves
+           bytes 0 to 9 and 20 to 29 locked (F_TEST by another process
+           fails at 5 and 25) and bytes 10 to 19 free (F_TEST returns 0 at
+           10 and 19).
+test       t/013-unlock-middle.c
+
+assertion  XSH.lockf.014
+anchor     functions/lockf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       With bytes 0 to 99 locked, F_ULOCK with size 0 at offset 40
+           leaves bytes 0 to 39 locked and releases everything from 40 on.
+test       t/014-unlock-zero.c
+
+assertion  XSH.lockf.015
+anchor     functions/lockf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A lock taken by a child process makes F_TEST in the test
+           process fail with EACCES or EAGAIN while the child lives; after
+           the child has terminated and been reaped, F_TEST returns 0.
+timeout    30
+test       t/015-release-on-exit.c
+
+assertion  XSH.lockf.016
+anchor     functions/lockf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       A lock taken through one descriptor is released when the same
+           process closes a different descriptor for the same file: F_TEST
+           by another process fails before the close and returns 0 after
+           it.
+test       t/016-release-on-close.c
+
+assertion  XSH.lockf.017
+anchor     functions/lockf.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       F_LOCK by another process on a section held by the test process
+           has not returned 300 ms after the child announced it was about
+           to call; after the test process unlocks, the child's call
+           returns 0 (within 10 s, else UNRESOLVED).
+note       The page lets any lock attempt by another process "return an
+           error or block"; F_LOCK is the one it says blocks.
+timeout    70
+test       t/017-lock-blocks.c
+
+assertion  XSH.lockf.018
+anchor     functions/lockf.html#DESCRIPTION
+anchor     functions/lockf.html#ERRORS/EINTR
+class      conditional
+when       XSI
+since      2001
+says       F_LOCK waiting for a section held by the test process, with a
+           SIGALRM handler (no SA_RESTART) set up and alarm(1), returns -1
+           with EINTR after the signal is caught.
+timeout    70
+test       t/018-eintr.c
+
+assertion  XSH.lockf.019
+anchor     functions/lockf.html#ERRORS/EBADF
+class      conditional
+when       XSI
+since      2001
+says       lockf() with F_LOCK, F_TLOCK, F_TEST and F_ULOCK on -1 and on a
+           closed descriptor returns -1 with EBADF.
+test       t/019-ebadf-invalid.c
+
+assertion  XSH.lockf.020
+anchor     functions/lockf.html#ERRORS/EBADF
+class      conditional
+when       XSI
+since      2001
+says       lockf() with F_LOCK and with F_TLOCK on a descriptor opened
+           O_RDONLY returns -1 with EBADF.
+test       t/020-ebadf-rdonly.c
+
+assertion  XSH.lockf.021
+anchor     functions/lockf.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2001
+says       lockf() with a function value that is none of F_ULOCK, F_LOCK,
+           F_TLOCK, F_TEST returns -1 with EINVAL.
+test       t/021-einval-function.c
+
+assertion  XSH.lockf.022
+anchor     functions/lockf.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2001
+says       lockf(F_TLOCK, -10) with the file offset at 5, and likewise
+           F_TEST and F_ULOCK, returns -1 with EINVAL (the section would
+           start before byte 0).
+test       t/022-einval-negative.c
+
+assertion  XSH.lockf.023
+anchor     functions/lockf.html#ERRORS/EOVERFLOW
+class      conditional
+when       XSI
+since      2001
+says       lockf(F_TLOCK) at offset 10 with size equal to the largest
+           off_t value returns -1 with EOVERFLOW (the last byte is not
+           representable).
+note       The largest off_t is computed from sizeof(off_t); the call sets
+           no offset near the maximum, so no file size is needed.
+test       t/023-eoverflow.c
+
+assertion  XSH.lockf.024
+anchor     functions/lockf.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       With bytes 0 to 9 locked, a failing lockf() by the holder
+           (invalid function value; size that would start before byte 0)
+           leaves the lock in place: F_TEST by another process still fails
+           at offsets 0 and 9.
+note       The RETURN VALUE text itself states that a failure leaves
+           existing locks unchanged.
+test       t/024-failure-keeps-locks.c

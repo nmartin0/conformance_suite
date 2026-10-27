@@ -1,0 +1,52 @@
+# lockf.cov - every requirement unit on functions/lockf.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:e3765bcb     XSH.lockf.001 XSH.lockf.002 XSH.lockf.003
+DESCRIPTION:ac373021     XSH.lockf.006 XSH.lockf.017
+DESCRIPTION:3423350e     XSH.lockf.015
+DESCRIPTION:3524083b     XSH.lockf.001 XSH.lockf.002
+DESCRIPTION:ec23ec4a     none  a definition
+DESCRIPTION:6bdbb621     XSH.lockf.001 XSH.lockf.003
+DESCRIPTION:e5d9a7b4     none  a definition
+DESCRIPTION:9a983c5f     none  a definition
+DESCRIPTION:dc84c0a6     XSH.lockf.012
+DESCRIPTION:b0c5c03c     XSH.lockf.002
+DESCRIPTION:d0e4adf8     XSH.lockf.001
+DESCRIPTION:14810f00     XSH.lockf.004 XSH.lockf.011
+DESCRIPTION:5008f6f5     XSH.lockf.004 XSH.lockf.011
+DESCRIPTION:c0939b64     XSH.lockf.001 XSH.lockf.002
+DESCRIPTION:995a1c05     XSH.lockf.012 XSH.lockf.013
+DESCRIPTION:6fb4fb48     XSH.lockf.007
+DESCRIPTION:567033af     XSH.lockf.007 XSH.lockf.008
+DESCRIPTION:b80c5561     XSH.lockf.009
+DESCRIPTION:b4a16558     XSH.lockf.010
+DESCRIPTION:ee5106af     partial XSH.lockf.005  # overlap by the same process is accepted; combining is not observable apart from the later release
+DESCRIPTION:982d6afa     untestable  combining adjacent or overlapping sections of one process is not observable except through the later unlock, which gives the same answer either way
+DESCRIPTION:f035eeb1     none  a system-imposed limit: not reachable portably
+DESCRIPTION:ffcecb7f     XSH.lockf.006 XSH.lockf.017
+DESCRIPTION:8d9be1f6     XSH.lockf.017
+DESCRIPTION:a73d3a79     XSH.lockf.006
+DESCRIPTION:876ad999     XSH.lockf.016
+DESCRIPTION:e172e0b9     XSH.lockf.012 XSH.lockf.013
+DESCRIPTION:40dc043e     XSH.lockf.012 XSH.lockf.014
+DESCRIPTION:fdc7e2ef     XSH.lockf.013 XSH.lockf.014
+DESCRIPTION:8adf7b7d     XSH.lockf.013
+DESCRIPTION:9e8d2b6d     none  a system-imposed limit: not reachable portably
+DESCRIPTION:d27e0f8c     none  a remark
+DESCRIPTION:901f141c     untestable  detection of a deadlock is not required to occur, and provoking one risks a hang
+DESCRIPTION:f271b4a6     none  unspecified
+DESCRIPTION:ea0c8b29     XSH.lockf.018
+DESCRIPTION:a11bb0a9     untestable  unlocking to the largest offset cannot be told from unlocking exactly the section through lockf()
+DESCRIPTION:696f1ff9     XSH.lockf.012 XSH.lockf.013
+DESCRIPTION:dd2c4312     none  unspecified
+RETURN_VALUE:439ede19    XSH.lockf.001 XSH.lockf.002 XSH.lockf.003 XSH.lockf.012
+RETURN_VALUE:2e741897    XSH.lockf.019 XSH.lockf.020 XSH.lockf.021 XSH.lockf.022 XSH.lockf.023 XSH.lockf.024
+ERRORS:a60f5b50          XSH.lockf.019 XSH.lockf.020
+ERRORS:f28cbc8b          XSH.lockf.001 XSH.lockf.004 XSH.lockf.006
+ERRORS:1f034a60          untestable  as the detection of deadlock
+ERRORS:3c1bc177          XSH.lockf.018
+ERRORS:846da696          XSH.lockf.021 XSH.lockf.022
+ERRORS:7ddec9ed          XSH.lockf.023
+ERRORS:c1c1af2d          optional
+ERRORS:21b750fb          optional
+ERRORS:303b94b3          optional

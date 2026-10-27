@@ -1,0 +1,150 @@
+# XSH tcsetpgrp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Same arrangement as tcgetpgrp(): a session of its own with a pseudo-terminal
+# (XSI) as controlling terminal, a background caller that is not orphaned
+# (child of the session leader in its own process group) where a signal is
+# the point, and the session leader itself (whose group is orphaned, its
+# parent being outside the session) where EIO is the point. Set-up calls that
+# would be ambiguous for a caller in an orphaned foreground group are made
+# with SIGTTOU ignored, which the page excludes from EIO. Bounded by
+# alarm(); every process is reaped.
+#
+# "when BASE|XSI": the requirements are Base; XSI is named only so that the
+# driver builds these tests with the XSI feature macro (the pseudo-terminal
+# set-up needs it). They run wherever they build, and a set-up that is not
+# available is UNRESOLVED.
+
+assertion  XSH.tcsetpgrp.001
+anchor     functions/tcsetpgrp.html#ERRORS/EBADF
+class      required
+since      1988
+says       tcsetpgrp(-1, getpgrp()) and tcsetpgrp() of a closed descriptor
+           return -1 with EBADF; ENOTTY is also accepted when the process
+           has no controlling terminal that the ctermid() pathname opens
+           (both errors then apply, XSH 2.3).
+test       t/001-ebadf.c
+
+assertion  XSH.tcsetpgrp.002
+anchor     functions/tcsetpgrp.html#ERRORS/ENOTTY
+class      required
+since      1988
+says       tcsetpgrp(fd, getpgrp()) on descriptors for a regular file,
+           both ends of a pipe and /dev/null returns -1 with ENOTTY.
+test       t/002-enotty-file.c
+
+assertion  XSH.tcsetpgrp.003
+anchor     functions/tcsetpgrp.html#DESCRIPTION
+anchor     functions/tcsetpgrp.html#RETURN VALUE
+anchor     basedefs/V1_chap11.html#11.1.2
+class      conditional
+when       BASE|XSI
+since      1988
+says       A process in the foreground group of its controlling terminal
+           (a group that is not orphaned) calls tcsetpgrp() with the
+           session leader's group; it returns 0 and tcgetpgrp() then
+           returns that group.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+timeout    40
+test       t/003-foreground-sets.c
+
+assertion  XSH.tcsetpgrp.004
+anchor     functions/tcsetpgrp.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       A process in a background group that is ignoring SIGTTOU calls
+           tcsetpgrp() with its own group: it returns 0, is not stopped,
+           and tcgetpgrp() then returns its group.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+timeout    40
+test       t/004-bg-ignoring.c
+
+assertion  XSH.tcsetpgrp.005
+anchor     functions/tcsetpgrp.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       A process in a background group whose calling thread blocks
+           SIGTTOU calls tcsetpgrp() with its own group: it returns 0 and
+           SIGTTOU is not pending afterwards.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+timeout    40
+test       t/005-bg-blocking.c
+
+assertion  XSH.tcsetpgrp.006
+anchor     functions/tcsetpgrp.html#DESCRIPTION
+anchor     basedefs/V1_chap11.html#11.1.4
+class      conditional
+when       BASE|XSI
+since      1988
+says       A process in a background group (not orphaned) that catches
+           SIGTTOU calls tcsetpgrp() on its controlling terminal: the
+           handler runs (the signal was sent to its group).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. The
+           handler then ignores SIGTTOU so that a restarted call
+           completes; the call's own result is not examined.
+timeout    40
+test       t/006-bg-signal.c
+
+assertion  XSH.tcsetpgrp.007
+anchor     functions/tcsetpgrp.html#ERRORS/EIO
+anchor     basedefs/V1_chap11.html#11.1.4
+class      conditional
+when       BASE|XSI
+since      1988
+says       A session leader whose process group is orphaned and in the
+           background, neither ignoring nor blocking SIGTTOU, gets -1 with
+           EIO from tcsetpgrp(), and its SIGTTOU handler does not run.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. The caller
+           is in the background, which every reading of the EIO condition
+           covers (see the note on Q-82).
+timeout    40
+test       t/007-orphan-eio.c
+
+assertion  XSH.tcsetpgrp.008
+anchor     functions/tcsetpgrp.html#ERRORS/ENOTTY
+class      conditional
+when       BASE|XSI
+since      1988
+says       In a process with no controlling terminal, tcsetpgrp() on a
+           pseudo-terminal subsidiary descriptor (opened with O_NOCTTY)
+           returns -1 with ENOTTY.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+timeout    40
+test       t/008-enotty-no-ctty.c
+
+assertion  XSH.tcsetpgrp.009
+anchor     functions/tcsetpgrp.html#ERRORS/ENOTTY
+class      conditional
+when       BASE|XSI
+since      1988
+says       In a process whose controlling terminal is one pseudo-terminal,
+           tcsetpgrp() on the subsidiary descriptor of a different pseudo-
+           terminal returns -1 with ENOTTY.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+timeout    40
+test       t/009-enotty-other-tty.c
+
+assertion  XSH.tcsetpgrp.010
+anchor     functions/tcsetpgrp.html#ERRORS/EPERM
+anchor     functions/tcsetpgrp.html#ERRORS/EINVAL
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcsetpgrp() on the controlling terminal with the ID of a
+           process group of another session (the test harness's) returns
+           -1 with EPERM, or with EINVAL if the implementation does not
+           support that value; the caller is ignoring SIGTTOU so that EIO
+           cannot apply.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+timeout    40
+test       t/010-eperm-other-session.c

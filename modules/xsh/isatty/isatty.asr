@@ -1,0 +1,54 @@
+# XSH isatty()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# isatty() on a terminal needs a pseudo-terminal, obtained with posix_openpt(),
+# grantpt(), unlockpt() and ptsname() (XSI); tests that need none are Base.
+# No test relies on the run having a terminal on its standard descriptors.
+#
+# "when BASE|XSI": the requirements are Base; XSI is named only so that the
+# driver builds these tests with the XSI feature macro (the pseudo-terminal
+# set-up needs it). They run wherever they build, and a set-up that is not
+# available is UNRESOLVED.
+
+assertion  XSH.isatty.001
+anchor     functions/isatty.html#DESCRIPTION
+anchor     functions/isatty.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      1988
+says       isatty() on a descriptor for the subsidiary side of a pseudo-
+           terminal (opened with O_NOCTTY) returns 1.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+test       t/001-pty-slave.c
+
+assertion  XSH.isatty.002
+anchor     functions/isatty.html#DESCRIPTION
+anchor     functions/isatty.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      1988
+says       isatty() returns 1 for a dup() of the subsidiary descriptor and
+           for a second, read-only open of the same subsidiary device.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+test       t/002-pty-dup.c
+
+assertion  XSH.isatty.003
+anchor     functions/isatty.html#RETURN VALUE
+class      required
+since      1988
+says       isatty() returns 0 (not 1, not -1) for descriptors of a regular
+           file, a directory, both ends of a pipe, a socket and /dev/null.
+note       errno is not examined: the page lets it be set or left alone.
+test       t/003-not-terminal.c
+
+assertion  XSH.isatty.004
+anchor     functions/isatty.html#RETURN VALUE
+anchor     functions/isatty.html#ERRORS/EBADF
+class      required
+since      1988
+says       isatty() returns 0 for -1 and for a descriptor that has been
+           closed.
+note       errno is not examined: setting EBADF is optional.
+test       t/004-bad-fd.c

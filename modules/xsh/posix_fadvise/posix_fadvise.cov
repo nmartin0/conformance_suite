@@ -1,0 +1,21 @@
+# posix_fadvise.cov - every requirement unit on functions/posix_fadvise.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:6c804482     XSH.posix_fadvise.001 XSH.posix_fadvise.002
+DESCRIPTION:d6e1a373     XSH.posix_fadvise.001
+DESCRIPTION:c49b7b57     partial XSH.posix_fadvise.001  # len 0 is accepted; the range it stands for has no observable effect
+DESCRIPTION:10784393     none  permission, not a requirement
+DESCRIPTION:d35995e9     XSH.posix_fadvise.002
+DESCRIPTION:90bebb59     XSH.posix_fadvise.001
+DESCRIPTION:cf6754b3     XSH.posix_fadvise.001
+DESCRIPTION:2567a817     none  default characteristic: not observable
+DESCRIPTION:5b925b32     XSH.posix_fadvise.001
+DESCRIPTION:65ad6c74     XSH.posix_fadvise.001
+DESCRIPTION:452672f1     XSH.posix_fadvise.001
+DESCRIPTION:fa5ef482     XSH.posix_fadvise.001 XSH.posix_fadvise.002
+DESCRIPTION:c732c398     XSH.posix_fadvise.001
+DESCRIPTION:0978b841     XSH.posix_fadvise.001
+RETURN_VALUE:7d8a783e    XSH.posix_fadvise.001 XSH.posix_fadvise.003 XSH.posix_fadvise.004 XSH.posix_fadvise.005 XSH.posix_fadvise.006
+ERRORS:15c72736          XSH.posix_fadvise.003
+ERRORS:74e90003          XSH.posix_fadvise.004 XSH.posix_fadvise.005
+ERRORS:cb0c2617          XSH.posix_fadvise.006

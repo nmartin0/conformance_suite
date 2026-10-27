@@ -1,0 +1,59 @@
+# XSH ctermid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The test process is never assumed to have a controlling terminal. The one
+# assertion that needs a controlling terminal makes a session of its own and
+# a pseudo-terminal (XSI) to be it.
+#
+# "when BASE|XSI": the requirements are Base; XSI is named only so that the
+# driver builds these tests with the XSI feature macro (the pseudo-terminal
+# set-up needs it). They run wherever they build, and a set-up that is not
+# available is UNRESOLVED.
+
+assertion  XSH.ctermid.001
+anchor     functions/ctermid.html#RETURN VALUE
+class      required
+since      1988
+says       ctermid(buf) with a buffer of L_ctermid bytes returns buf,
+           leaves a null-terminated string within those L_ctermid bytes,
+           and does not write the guard bytes after them.
+test       t/001-buffer.c
+
+assertion  XSH.ctermid.002
+anchor     functions/ctermid.html#RETURN VALUE
+class      required
+since      1988
+says       L_ctermid is defined by <stdio.h> and is greater than 0.
+test       t/002-l_ctermid.c
+
+assertion  XSH.ctermid.003
+anchor     functions/ctermid.html#RETURN VALUE
+class      required
+since      1988
+says       ctermid(NULL) returns a non-null pointer to a null-terminated
+           string (empty if the pathname cannot be determined).
+note       See Q-84: RATIONALE calls the result undefined, RETURN VALUE
+           defines it; the test follows RETURN VALUE. Only one call is
+           made and the string is only read.
+test       t/003-null-arg.c
+
+assertion  XSH.ctermid.004
+anchor     functions/ctermid.html#DESCRIPTION
+anchor     basedefs/V1_chap11.html#11.1.3
+class      conditional
+when       BASE|XSI
+since      1988
+says       In a session leader that has a pseudo-terminal as its
+           controlling terminal, if ctermid() returns a non-empty string
+           and opening it succeeds, the descriptor is the controlling
+           terminal: tcgetpgrp() on it returns the process group of the
+           session leader (the foreground group a new controlling terminal
+           starts with). An empty string or a failed open (access is not
+           guaranteed) is NOTINUSE.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. How a
+           session leader acquires a controlling terminal is
+           implementation-defined (XBD 11.1.3); UNRESOLVED if opening the
+           subsidiary device without O_NOCTTY does not make it the
+           controlling terminal.
+test       t/004-names-ctty.c

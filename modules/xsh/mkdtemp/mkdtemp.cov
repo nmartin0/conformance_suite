@@ -1,0 +1,30 @@
+# mkdtemp.cov - every requirement unit on functions/mkdtemp.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:0577ab18     XSH.mkdtemp.001 XSH.mkdtemp.004
+DESCRIPTION:7586090f     app  # the template must end in six X
+DESCRIPTION:bfd9a217     XSH.mkdtemp.002 XSH.mkdtemp.010
+DESCRIPTION:1c7d71d7     XSH.mkdtemp.004 XSH.mkdtemp.011
+DESCRIPTION:29dfa0b3     XSH.mkdtemp.003
+DESCRIPTION:00611351     XSH.mkdtemp.003
+DESCRIPTION:5876d3be     XSH.mkdtemp.007 XSH.mkdtemp.008 XSH.mkdtemp.011
+DESCRIPTION:7586090f.2   app  # the template must end in six X
+DESCRIPTION:df7338a4     XSH.mkdtemp.010
+DESCRIPTION:aaf611c6     XSH.mkdtemp.011
+DESCRIPTION:0fc17bfe     XSH.mkdtemp.007 XSH.mkdtemp.009 XSH.mkdtemp.014
+DESCRIPTION:be5f9b94     XSH.mkdtemp.009 XSH.mkdtemp.011
+DESCRIPTION:595e9f49     partial XSH.mkdtemp.011  # exclusive creation is shown by existing files not being reused; the race itself is not observable
+DESCRIPTION:e6ddf5a4     XSH.mkdtemp.015
+DESCRIPTION:a6c1701d     none  unspecified behaviour for other flags
+DESCRIPTION:a6a9bd6b     XSH.mkdtemp.017
+DESCRIPTION:a40b4372     XSH.mkdtemp.016
+DESCRIPTION:9a6ba524     XSH.mkdtemp.018
+DESCRIPTION:406c2774     todo  O_DSYNC: option SIO, its effect is not observable without a crash; acceptance of the flag is not required to be tested
+DESCRIPTION:9bfa72fd     todo  O_RSYNC: option SIO, as O_DSYNC
+DESCRIPTION:f6ac055e     todo  O_SYNC: option XSI|SIO, as O_DSYNC
+RETURN_VALUE:cc39ab76    XSH.mkdtemp.001
+RETURN_VALUE:f880784c    XSH.mkdtemp.005 XSH.mkdtemp.006
+RETURN_VALUE:cf2daf0f    XSH.mkdtemp.007
+RETURN_VALUE:64461925    XSH.mkdtemp.012 XSH.mkdtemp.013
+ERRORS:8ab01165          XSH.mkdtemp.005 XSH.mkdtemp.012
+ERRORS:47d8655d          optional

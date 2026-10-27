@@ -1,0 +1,105 @@
+# XSH ttyname() and ttyname_r()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# A terminal needs a pseudo-terminal obtained with posix_openpt(), grantpt(),
+# unlockpt() and ptsname() (XSI); the name returned is compared with the
+# subsidiary device by file identity (stat), not by spelling, because the
+# text asks only for a pathname of the terminal. Tests with no terminal are
+# Base.
+#
+# "when BASE|XSI": the requirements are Base; XSI is named only so that the
+# driver builds these tests with the XSI feature macro (the pseudo-terminal
+# set-up needs it). They run wherever they build, and a set-up that is not
+# available is UNRESOLVED.
+
+assertion  XSH.ttyname.001
+anchor     functions/ttyname.html#DESCRIPTION
+anchor     functions/ttyname.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      1988
+says       ttyname() on the subsidiary descriptor of a pseudo-terminal
+           returns a non-null pointer to a non-empty string which, used as
+           a pathname, names the same device as the descriptor (same file,
+           or same character device number).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+test       t/001-ttyname-pty.c
+
+assertion  XSH.ttyname.002
+anchor     functions/ttyname.html#DESCRIPTION
+anchor     functions/ttyname.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      2001
+says       ttyname_r() on the subsidiary descriptor with a large buffer
+           returns 0 and stores a non-empty string naming the same device
+           as the descriptor.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+test       t/002-ttyname_r-pty.c
+
+assertion  XSH.ttyname.003
+anchor     functions/ttyname.html#DESCRIPTION
+anchor     functions/ttyname.html#ERRORS/ERANGE
+class      conditional
+when       BASE|XSI
+since      2001
+says       ttyname_r() with namesize equal to the string length plus one
+           returns 0, terminates the string within namesize bytes, and
+           does not touch the byte after the array.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+test       t/003-ttyname_r-exact.c
+
+assertion  XSH.ttyname.004
+anchor     functions/ttyname.html#ERRORS/ERANGE
+class      conditional
+when       BASE|XSI
+since      2001
+says       ttyname_r() with namesize equal to the string length, 1, and 0
+           returns ERANGE (as the return value).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. Contents
+           of the array after the failure are not examined.
+test       t/004-ttyname_r-erange.c
+
+assertion  XSH.ttyname.005
+anchor     functions/ttyname.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2001
+says       The string stored by ttyname_r() for a pseudo-terminal
+           subsidiary is no longer (excluding the null byte) than
+           {TTY_NAME_MAX} as reported by sysconf(_SC_TTY_NAME_MAX);
+           NOTINUSE when the system reports no limit.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. Whether
+           the limit counts the null byte is not settled by the text (see
+           the note on Q-81), so the weaker reading is tested.
+test       t/005-name-max.c
+
+assertion  XSH.ttyname.006
+anchor     functions/ttyname.html#RETURN VALUE
+anchor     functions/ttyname.html#ERRORS/ENOTTY
+class      required
+since      1988
+says       On descriptors of a regular file, both ends of a pipe and
+           /dev/null, ttyname() returns a null pointer with errno set
+           (non-zero), and ttyname_r() returns a non-zero error number.
+note       See Q-80: the error list says "may fail", but no pathname of a
+           terminal exists for such a file; the null return is the only
+           reading of the RETURN VALUE text that can hold. The exact error
+           number is not checked.
+test       t/006-not-terminal.c
+
+assertion  XSH.ttyname.007
+anchor     functions/ttyname.html#RETURN VALUE
+anchor     functions/ttyname.html#ERRORS/EBADF
+class      required
+since      1988
+says       On -1 and on a closed descriptor, ttyname() returns a null
+           pointer with errno set (non-zero), and ttyname_r() returns a
+           non-zero error number.
+note       See Q-80 and the preceding assertion.
+test       t/007-bad-fd.c

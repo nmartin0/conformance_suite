@@ -1,0 +1,13 @@
+# ctermid.cov - every requirement unit on functions/ctermid.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:0646b392     XSH.ctermid.004
+DESCRIPTION:b9e9971c     XSH.ctermid.004  # a failed open is NOTINUSE
+DESCRIPTION:3d1c4daa     none  need not be thread-safe: not tested
+RETURN_VALUE:c4593355    partial XSH.ctermid.003  # the static area and its address are not observable; only a usable string is
+RETURN_VALUE:262c3508    app  # the application must not modify the string
+RETURN_VALUE:d7a5f092    none  a remark
+RETURN_VALUE:ad4b2527    none  a remark
+RETURN_VALUE:10e047be    XSH.ctermid.001
+RETURN_VALUE:78e3bfb7    XSH.ctermid.002
+RETURN_VALUE:23e45036    partial XSH.ctermid.003  # the empty string is accepted where the pathname cannot be determined; no process can be shown to be unable to determine it

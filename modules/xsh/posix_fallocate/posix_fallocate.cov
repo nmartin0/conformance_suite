@@ -1,0 +1,23 @@
+# posix_fallocate.cov - every requirement unit on functions/posix_fallocate.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:1f59c7ac     partial XSH.posix_fallocate.001 XSH.posix_fallocate.003  # the allocation itself is not observable except through the length
+DESCRIPTION:6ff1ba87     untestable  later writes not failing for lack of space needs a full file system and is not observable otherwise
+DESCRIPTION:a52650c9     XSH.posix_fallocate.001 XSH.posix_fallocate.003
+DESCRIPTION:87868772     XSH.posix_fallocate.002
+DESCRIPTION:96992360     none  implementation-defined
+DESCRIPTION:46352fec     untestable  the release of space is not observable through the interface
+DESCRIPTION:cdc1acf0     none  permission, not a requirement
+RETURN_VALUE:1e16237b    XSH.posix_fallocate.001 XSH.posix_fallocate.002 XSH.posix_fallocate.003 XSH.posix_fallocate.004 XSH.posix_fallocate.005 XSH.posix_fallocate.006 XSH.posix_fallocate.008 XSH.posix_fallocate.009 XSH.posix_fallocate.010
+ERRORS:15c72736          XSH.posix_fallocate.004
+ERRORS:c67438c0          XSH.posix_fallocate.005
+ERRORS:b4cb2de3          untestable  the maximum file size cannot be exceeded with a representable offset and length on a common file system
+ERRORS:2a554360          partial XSH.posix_fallocate.010  # the SIGXFSZ generation under XSI is tolerated (ignored), not required
+ERRORS:f423d78f          untestable  a signal during the call cannot be arranged
+ERRORS:20032345          XSH.posix_fallocate.006
+ERRORS:4751aad6          untestable  an I/O error cannot be arranged
+ERRORS:d9dac147          XSH.posix_fallocate.009 XSH.posix_fallocate.008
+ERRORS:2aa5bce8          untestable  needs a full file system
+ERRORS:b61eeb73          partial XSH.posix_fallocate.001 XSH.posix_fallocate.002 XSH.posix_fallocate.003 XSH.posix_fallocate.005 XSH.posix_fallocate.006 XSH.posix_fallocate.007 XSH.posix_fallocate.009 XSH.posix_fallocate.010  # accepted where the file system cannot do it (NOTINUSE), not required
+ERRORS:cb0c2617          XSH.posix_fallocate.008
+ERRORS:d0714e43          XSH.posix_fallocate.007

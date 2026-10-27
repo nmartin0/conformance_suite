@@ -1,0 +1,18 @@
+# ttyname.cov - every requirement unit on functions/ttyname.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:01f68776     XSH.ttyname.001
+DESCRIPTION:262c3508     app  # the application must not modify the string
+DESCRIPTION:bc5430b1     none  a remark: the pointer may be invalidated
+DESCRIPTION:e4a08d94     none  a remark: the pointer may be invalidated
+DESCRIPTION:b355ad6c     none  need not be thread-safe: not tested
+DESCRIPTION:9c990d6a     XSH.ttyname.002 XSH.ttyname.003
+DESCRIPTION:ed4f4bfd     XSH.ttyname.003 XSH.ttyname.004
+DESCRIPTION:faaf1d4f     partial XSH.ttyname.005  # the weaker reading (Q-81)
+RETURN_VALUE:8cfb3e28    XSH.ttyname.001
+RETURN_VALUE:1993f4f2    XSH.ttyname.006 XSH.ttyname.007
+RETURN_VALUE:5a98eb42    XSH.ttyname.002 XSH.ttyname.003
+RETURN_VALUE:27ed31a1    XSH.ttyname.004 XSH.ttyname.006 XSH.ttyname.007
+ERRORS:8f957e38          optional  # tested as part of the null return (Q-80): XSH.ttyname.007
+ERRORS:f7a605de          optional  # tested as part of the null return (Q-80): XSH.ttyname.006
+ERRORS:61325257          XSH.ttyname.004

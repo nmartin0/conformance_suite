@@ -1,0 +1,65 @@
+# XSH posix_fadvise()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# posix_fadvise() is the Advisory Information option (ADV). The advice has no
+# observable effect that the text requires, so the assertions check return
+# values, errors, and that the file is left as it was. Errors are returned,
+# not stored in errno.
+
+assertion  XSH.posix_fadvise.001
+anchor     functions/posix_fadvise.html#DESCRIPTION
+anchor     functions/posix_fadvise.html#RETURN VALUE
+class      conditional
+when       ADV
+since      2001
+says       posix_fadvise() on a regular file open for reading returns 0
+           for each of POSIX_FADV_NORMAL, SEQUENTIAL, RANDOM, WILLNEED,
+           DONTNEED, NOREUSE, with offset 0 and len 0, and with a range
+           wholly beyond the end of the file.
+test       t/001-advice-values.c
+
+assertion  XSH.posix_fadvise.002
+anchor     functions/posix_fadvise.html#DESCRIPTION
+class      conditional
+when       ADV
+since      2001
+says       After posix_fadvise() calls with every advice value (some with
+           POSIX_FADV_DONTNEED), the file still has the same length and
+           contents, the file offset of the descriptor is unchanged, and a
+           write through the descriptor is read back correctly.
+test       t/002-no-effect.c
+
+assertion  XSH.posix_fadvise.003
+anchor     functions/posix_fadvise.html#ERRORS/EBADF
+class      conditional
+when       ADV
+since      2001
+says       posix_fadvise() on -1 and on a closed descriptor returns EBADF.
+test       t/003-ebadf.c
+
+assertion  XSH.posix_fadvise.004
+anchor     functions/posix_fadvise.html#ERRORS/EINVAL
+class      conditional
+when       ADV
+since      2001
+says       posix_fadvise() with an advice value equal to none of the six
+           constants returns EINVAL.
+test       t/004-einval-advice.c
+
+assertion  XSH.posix_fadvise.005
+anchor     functions/posix_fadvise.html#ERRORS/EINVAL
+class      conditional
+when       ADV
+since      2001
+says       posix_fadvise() with len -1 and a valid advice on a regular
+           file returns EINVAL.
+test       t/005-einval-len.c
+
+assertion  XSH.posix_fadvise.006
+anchor     functions/posix_fadvise.html#ERRORS/ESPIPE
+class      conditional
+when       ADV
+since      2001
+says       posix_fadvise() on both ends of a pipe and on a FIFO returns
+           ESPIPE.
+test       t/006-espipe.c

@@ -1,0 +1,191 @@
+# XSH mkdtemp(), mkstemp() and mkostemp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# mkdtemp(), mkstemp() and mkostemp() share a page. Tests run in a fresh
+# directory and use templates of exactly six X characters preceded by a
+# non-X character (APPLICATION USAGE), so extra trailing X are never in play.
+
+assertion  XSH.mkdtemp.001
+anchor     functions/mkdtemp.html#DESCRIPTION
+anchor     functions/mkdtemp.html#RETURN VALUE
+class      required
+since      2008
+says       mkdtemp() on a writable template "dXXXXXX" returns the template
+           pointer itself, and a directory exists at the pathname now held
+           in the array.
+test       t/001-mkdtemp-creates.c
+
+assertion  XSH.mkdtemp.002
+anchor     functions/mkdtemp.html#DESCRIPTION
+class      required
+since      2008
+says       mkdtemp() on "sub/pre-XXXXXX" leaves the length and every byte
+           before the six trailing X unchanged, and replaces those six
+           with characters of the portable filename character set
+           (letters, digits, dot, underscore, hyphen).
+test       t/002-mkdtemp-name.c
+
+assertion  XSH.mkdtemp.003
+anchor     functions/mkdtemp.html#DESCRIPTION
+class      required
+since      2008
+says       The directory made by mkdtemp() has permission bits S_IRWXU
+           with the creation mask applied: 0700 under mask 0, 0600 under
+           mask 0100.
+note       The run directory must not carry default ACLs, which some
+           systems apply instead of the mask.
+test       t/003-mkdtemp-mode.c
+
+assertion  XSH.mkdtemp.004
+anchor     functions/mkdtemp.html#DESCRIPTION
+class      required
+since      2008
+says       One hundred mkdtemp() calls on the same template text return
+           one hundred different pathnames, each naming an existing
+           directory, and none of them equals a directory that existed
+           before the calls.
+test       t/004-mkdtemp-unique.c
+
+assertion  XSH.mkdtemp.005
+anchor     functions/mkdtemp.html#ERRORS/EINVAL
+anchor     functions/mkdtemp.html#RETURN VALUE
+class      required
+since      2008
+says       mkdtemp() on templates that do not end in "XXXXXX" ("",
+           "dXXXXX", "dXXXXXXz") returns a null pointer and sets errno to
+           EINVAL.
+test       t/005-mkdtemp-einval.c
+
+assertion  XSH.mkdtemp.006
+anchor     functions/mkdtemp.html#ERRORS
+anchor     functions/mkdir.html#ERRORS/ENOENT
+anchor     functions/mkdir.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       mkdtemp() returns a null pointer with ENOENT when a leading
+           component of the template names nothing, and with ENOTDIR when
+           it names a regular file.
+note       The page defers the other error conditions to mkdir(); these
+           two are exclusive conditions with no other applicable error.
+test       t/006-mkdtemp-path-errors.c
+
+assertion  XSH.mkdtemp.007
+anchor     functions/mkdtemp.html#DESCRIPTION
+anchor     functions/mkdtemp.html#RETURN VALUE
+class      required
+since      2008
+says       mkstemp() on "fXXXXXX" returns a descriptor, and the pathname
+           now in the array names a regular file of length 0 that is the
+           file the descriptor refers to (same device and file serial
+           number).
+test       t/007-mkstemp-creates.c
+
+assertion  XSH.mkdtemp.008
+anchor     functions/mkdtemp.html#DESCRIPTION
+class      required
+since      2008
+says       The descriptor returned by mkstemp() has access mode
+           read/write: writing bytes through it and then reading them back
+           after lseek() to 0 works.
+test       t/008-mkstemp-rdwr.c
+
+assertion  XSH.mkdtemp.009
+anchor     functions/mkdtemp.html#DESCRIPTION
+class      required
+since      2008
+says       The file made by mkstemp() has permission bits S_IRUSR|S_IWUSR
+           with the creation mask applied: 0600 under mask 0 and under
+           mask 077, 0400 under mask 0200.
+note       The run directory must not carry default ACLs, which some
+           systems apply instead of the mask.
+test       t/009-mkstemp-mode.c
+
+assertion  XSH.mkdtemp.010
+anchor     functions/mkdtemp.html#DESCRIPTION
+class      required
+since      2008
+says       mkstemp() on "sub/pre-XXXXXX" leaves the length and every byte
+           before the six trailing X unchanged, and replaces those six
+           with characters of the portable filename character set.
+test       t/010-mkstemp-name.c
+
+assertion  XSH.mkdtemp.011
+anchor     functions/mkdtemp.html#DESCRIPTION
+class      required
+since      2008
+says       One hundred mkstemp() calls on the same template text return
+           different pathnames and one hundred descriptors for different
+           files, none of which existed before.
+test       t/011-mkstemp-unique.c
+
+assertion  XSH.mkdtemp.012
+anchor     functions/mkdtemp.html#ERRORS/EINVAL
+anchor     functions/mkdtemp.html#RETURN VALUE
+class      required
+since      2008
+says       mkstemp() on templates that do not end in "XXXXXX" ("",
+           "fXXXXX", "fXXXXXXz") return -1 and set errno to EINVAL.
+test       t/012-mkstemp-einval.c
+
+assertion  XSH.mkdtemp.013
+anchor     functions/mkdtemp.html#ERRORS
+anchor     functions/open.html#ERRORS/ENOENT
+anchor     functions/open.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       mkstemp() returns -1 with ENOENT when a leading component of
+           the template names nothing, and with ENOTDIR when it names a
+           regular file.
+note       The page defers the other error conditions to open(); these two
+           are exclusive conditions.
+test       t/013-mkstemp-path-errors.c
+
+assertion  XSH.mkdtemp.014
+anchor     functions/mkdtemp.html#DESCRIPTION
+class      required
+since      2008
+says       The descriptor returned by mkstemp() has FD_CLOEXEC clear (and
+           FD_CLOFORK clear where the system defines it).
+note       Follows from the as-if open() call that has neither O_CLOEXEC
+           nor O_CLOFORK.
+test       t/014-mkstemp-cloexec-clear.c
+
+assertion  XSH.mkdtemp.015
+anchor     functions/mkdtemp.html#DESCRIPTION
+class      required
+since      2024
+says       mkostemp(template, 0) behaves as mkstemp(): a read/write
+           descriptor for a new regular file of length 0 and mode 0600
+           (mask 0), FD_CLOEXEC clear, the six X replaced from the
+           portable filename character set, and a template of five X is
+           rejected with -1 and EINVAL.
+note       mkostemp() is new in Issue 8.
+test       t/015-mkostemp-zero.c
+
+assertion  XSH.mkdtemp.016
+anchor     functions/mkdtemp.html#DESCRIPTION
+class      required
+since      2024
+says       mkostemp(template, O_CLOEXEC) returns a descriptor with
+           FD_CLOEXEC set and FD_CLOFORK clear (where defined).
+test       t/016-mkostemp-cloexec.c
+
+assertion  XSH.mkdtemp.017
+anchor     functions/mkdtemp.html#DESCRIPTION
+class      required
+since      2024
+says       mkostemp(template, O_APPEND) returns a descriptor with O_APPEND
+           among its status flags and a read/write access mode; after
+           writing "ab", seeking to 0 and writing "c", the file holds
+           "abc".
+test       t/017-mkostemp-append.c
+
+assertion  XSH.mkdtemp.018
+anchor     functions/mkdtemp.html#DESCRIPTION
+class      required
+since      2024
+says       mkostemp(template, O_CLOFORK) returns a descriptor with
+           FD_CLOFORK set and FD_CLOEXEC clear, and a child created by
+           fork() does not have that descriptor open.
+note       UNRESOLVED when the header does not define O_CLOFORK.
+test       t/018-mkostemp-clofork.c

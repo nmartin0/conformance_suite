@@ -1,0 +1,16 @@
+# tcsetpgrp.cov - every requirement unit on functions/tcsetpgrp.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:c218f546     XSH.tcsetpgrp.003 XSH.tcsetpgrp.004
+DESCRIPTION:ff0131ae     app  # the file must be the controlling terminal; the failures are the ENOTTY cases
+DESCRIPTION:41eea9a3     app  # pgid_id must match a group in the session; the failure is the EPERM case
+DESCRIPTION:4695f4b3     XSH.tcsetpgrp.006
+DESCRIPTION:e3b79686     XSH.tcsetpgrp.004 XSH.tcsetpgrp.005
+RETURN_VALUE:105a0976    XSH.tcsetpgrp.003 XSH.tcsetpgrp.004 XSH.tcsetpgrp.005
+RETURN_VALUE:ce1869b1    XSH.tcsetpgrp.001 XSH.tcsetpgrp.002 XSH.tcsetpgrp.007 XSH.tcsetpgrp.008 XSH.tcsetpgrp.009 XSH.tcsetpgrp.010
+ERRORS:8f957e38          XSH.tcsetpgrp.001
+ERRORS:be563129          untestable  a signal interrupting the call cannot be arranged: the call does not wait
+ERRORS:c8af6f62          partial XSH.tcsetpgrp.010  # an unsupported value is implementation-defined; EINVAL is accepted in place of EPERM
+ERRORS:b3eee278          XSH.tcsetpgrp.007
+ERRORS:53985722          XSH.tcsetpgrp.002 XSH.tcsetpgrp.008 XSH.tcsetpgrp.009  # the case of a terminal no longer associated with the session is not tested
+ERRORS:90813f0f          XSH.tcsetpgrp.010

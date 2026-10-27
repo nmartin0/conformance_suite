@@ -1,0 +1,104 @@
+# XSH tcgetpgrp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests with a controlling terminal build their own session: a child calls
+# setsid() and opens the subsidiary side of a pseudo-terminal (XSI) without
+# O_NOCTTY; whether that makes it the controlling terminal is
+# implementation-defined (XBD 11.1.3), so the test is UNRESOLVED unless the
+# path returned by ctermid() can then be opened. A second child in its own
+# process group (not orphaned, its parent being the session leader) is the
+# background caller. Everything is bounded by alarm() and reaped.
+#
+# "when BASE|XSI": the requirements are Base; XSI is named only so that the
+# driver builds these tests with the XSI feature macro (the pseudo-terminal
+# set-up needs it). They run wherever they build, and a set-up that is not
+# available is UNRESOLVED.
+
+assertion  XSH.tcgetpgrp.001
+anchor     functions/tcgetpgrp.html#ERRORS/EBADF
+class      required
+since      1988
+says       tcgetpgrp(-1) and tcgetpgrp() of a closed descriptor return -1
+           with EBADF; ENOTTY is also accepted when the process has no
+           controlling terminal that the ctermid() pathname opens (both
+           errors then apply, XSH 2.3).
+test       t/001-ebadf.c
+
+assertion  XSH.tcgetpgrp.002
+anchor     functions/tcgetpgrp.html#ERRORS/ENOTTY
+class      required
+since      1988
+says       tcgetpgrp() of descriptors for a regular file, both ends of a
+           pipe and /dev/null returns -1 with ENOTTY.
+test       t/002-enotty-file.c
+
+assertion  XSH.tcgetpgrp.003
+anchor     functions/tcgetpgrp.html#DESCRIPTION
+anchor     functions/tcgetpgrp.html#RETURN VALUE
+anchor     basedefs/V1_chap11.html#11.1.3
+class      conditional
+when       BASE|XSI
+since      1988
+says       In a session leader whose controlling terminal has just been
+           acquired, tcgetpgrp() on that terminal returns the process
+           group ID of the session leader.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+timeout    40
+test       t/003-fg-initial.c
+
+assertion  XSH.tcgetpgrp.004
+anchor     functions/tcgetpgrp.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcgetpgrp() called from a process in a background process group
+           (not orphaned) on its controlling terminal returns the
+           foreground group ID (the session leader's) and the process is
+           not stopped.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+timeout    40
+test       t/004-from-background.c
+
+assertion  XSH.tcgetpgrp.005
+anchor     functions/tcgetpgrp.html#DESCRIPTION
+anchor     basedefs/V1_chap11.html#11.1.2
+class      conditional
+when       BASE|XSI
+since      1988
+says       After the foreground group (set with tcsetpgrp()) has no
+           process left, tcgetpgrp() returns a value greater than 1 that
+           is not the ID of any existing process group (kill(-value, 0)
+           fails with ESRCH).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. The set-up
+           uses tcsetpgrp(); a failure there is UNRESOLVED.
+timeout    40
+test       t/005-no-fg-group.c
+
+assertion  XSH.tcgetpgrp.006
+anchor     functions/tcgetpgrp.html#ERRORS/ENOTTY
+class      conditional
+when       BASE|XSI
+since      1988
+says       In a process that has no controlling terminal (it called
+           setsid() and opened the terminal with O_NOCTTY), tcgetpgrp() on
+           a pseudo-terminal subsidiary descriptor returns -1 with ENOTTY.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+timeout    40
+test       t/006-enotty-no-ctty.c
+
+assertion  XSH.tcgetpgrp.007
+anchor     functions/tcgetpgrp.html#ERRORS/ENOTTY
+class      conditional
+when       BASE|XSI
+since      1988
+says       In a process whose controlling terminal is one pseudo-terminal,
+           tcgetpgrp() on the subsidiary descriptor of a different pseudo-
+           terminal (opened with O_NOCTTY) returns -1 with ENOTTY.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base.
+timeout    40
+test       t/007-enotty-other-tty.c

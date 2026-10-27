@@ -1,0 +1,118 @@
+# XSH posix_fallocate()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# posix_fallocate() is the Advisory Information option (ADV). Errors are
+# returned, not stored in errno. A file system may refuse the operation
+# with ENOTSUP (the page allows it): the tests that need it to work are
+# NOTINUSE then. That later writes will not fail for lack of space cannot be
+# shown without filling a file system and is not tested.
+
+assertion  XSH.posix_fallocate.001
+anchor     functions/posix_fallocate.html#DESCRIPTION
+anchor     functions/posix_fallocate.html#RETURN VALUE
+class      conditional
+when       ADV
+since      2001
+says       On a 10-byte regular file opened O_RDWR, posix_fallocate(fd, 5,
+           100) returns 0 and the file is then 105 bytes long, with its
+           first 10 bytes unchanged.
+note       NOTINUSE if the file system answers ENOTSUP.
+test       t/001-extends.c
+
+assertion  XSH.posix_fallocate.002
+anchor     functions/posix_fallocate.html#DESCRIPTION
+class      conditional
+when       ADV
+since      2001
+says       On a 100-byte file, posix_fallocate(fd, 10, 50) returns 0 and
+           the file length stays 100, its contents unchanged.
+note       NOTINUSE if the file system answers ENOTSUP.
+test       t/002-within-size.c
+
+assertion  XSH.posix_fallocate.003
+anchor     functions/posix_fallocate.html#DESCRIPTION
+class      conditional
+when       ADV
+since      2001
+says       On an empty regular file, posix_fallocate(fd, 0, 4096) returns
+           0 and the file is 4096 bytes long.
+note       NOTINUSE if the file system answers ENOTSUP.
+test       t/003-empty-file.c
+
+assertion  XSH.posix_fallocate.004
+anchor     functions/posix_fallocate.html#ERRORS/EBADF
+class      conditional
+when       ADV
+since      2001
+says       posix_fallocate() on -1 and on a closed descriptor returns
+           EBADF.
+test       t/004-ebadf-invalid.c
+
+assertion  XSH.posix_fallocate.005
+anchor     functions/posix_fallocate.html#ERRORS/EBADF
+class      conditional
+when       ADV
+since      2001
+says       posix_fallocate() on a regular file opened O_RDONLY returns
+           EBADF, and the file length is unchanged.
+note       A file system that cannot do the operation may report ENOTSUP
+           instead (XSH 2.3, both errors apply); that answer is NOTINUSE.
+test       t/005-ebadf-rdonly.c
+
+assertion  XSH.posix_fallocate.006
+anchor     functions/posix_fallocate.html#ERRORS/EINVAL
+class      conditional
+when       ADV
+since      2001
+says       posix_fallocate() with offset -1 (len 10) and with len -1
+           (offset 0) on a regular file opened O_RDWR returns EINVAL.
+note       ENOTSUP from a file system that cannot do the operation is
+           NOTINUSE.
+test       t/006-einval-negative.c
+
+assertion  XSH.posix_fallocate.007
+anchor     functions/posix_fallocate.html#ERRORS/EINVAL
+class      conditional
+when       ADV
+since      2001
+says       posix_fallocate() with len 0 and an offset inside a 100-byte
+           file returns 0 or EINVAL (the page allows both); the file
+           length stays 100.
+note       Tolerant by design: "may fail" EINVAL.
+test       t/007-len-zero.c
+
+assertion  XSH.posix_fallocate.008
+anchor     functions/posix_fallocate.html#ERRORS/ESPIPE
+anchor     functions/posix_fallocate.html#ERRORS/ENODEV
+class      conditional
+when       ADV
+since      2001
+says       posix_fallocate() on the write end of a pipe returns ESPIPE or
+           ENODEV (a pipe is also not a regular file), and on a FIFO
+           opened for writing the same.
+test       t/008-espipe.c
+
+assertion  XSH.posix_fallocate.009
+anchor     functions/posix_fallocate.html#ERRORS/ENODEV
+class      conditional
+when       ADV
+since      2001
+says       posix_fallocate() on /dev/null opened O_RDWR returns ENODEV, or
+           ENOTSUP if the implementation reports its file system as
+           unable.
+note       The ENOTSUP case is reported as NOTINUSE, not as a pass.
+test       t/009-enodev.c
+
+assertion  XSH.posix_fallocate.010
+anchor     functions/posix_fallocate.html#ERRORS/EFBIG
+class      conditional
+when       ADV
+since      2001
+says       In a child with RLIMIT_FSIZE lowered to 1 MiB and SIGXFSZ
+           ignored, posix_fallocate(fd, 0, 2 MiB) on an empty regular file
+           returns EFBIG; ENOTSUP is NOTINUSE.
+note       Run in a child so that the result file is not subject to the
+           limit. Under XSI the SIGXFSZ signal is also generated; it is
+           ignored.
+timeout    30
+test       t/010-efbig-limit.c
