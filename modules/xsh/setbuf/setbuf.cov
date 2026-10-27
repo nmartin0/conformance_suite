@@ -1,0 +1,11 @@
+# setbuf.cov - every requirement unit on functions/setbuf.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:6b60f21f     none  introduces the equivalence
+DESCRIPTION:ba29e44d     none  the call form
+DESCRIPTION:f0c858bf     partial XSH.setbuf.001 XSH.setbuf.002 XSH.setbuf.003  # the equivalence is checked through its observable effects: data arrives intact, the array's size is respected, and a null buffer gives unbuffered output (disputed, Q-33)
+DESCRIPTION:04d4b9bf     partial XSH.setbuf.001 XSH.setbuf.003  # fully buffered with a buffer of BUFSIZ bytes: data intact and the array's size respected; when a full buffer is sent is not checked
+DESCRIPTION:f9da6786     XSH.setbuf.001 XSH.setbuf.003
+DESCRIPTION:6be787d3     partial XSH.setbuf.002 XSH.setbuf.003  # unbuffered with a null buffer (disputed, Q-33); data intact on a stream that is read
+DESCRIPTION:03078177     XSH.setbuf.002 XSH.setbuf.003
+RETURN_VALUE:fb3ce644    untestable  setbuf() is declared void; the absence of a value is a compile-time property

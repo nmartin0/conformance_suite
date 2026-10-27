@@ -1,0 +1,17 @@
+# tmpfile.cov - every requirement unit on functions/tmpfile.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:261374cb     XSH.tmpfile.001 XSH.tmpfile.004
+DESCRIPTION:eb67f3e4     partial XSH.tmpfile.002  # the file is not deleted while a reference is open; its deletion when the last is closed cannot be seen, as the name is not known
+DESCRIPTION:6a7cba4b     XSH.tmpfile.001 XSH.tmpfile.003
+DESCRIPTION:c40ad2c4     none  a permission for the implementation (a permanent file may be left behind)
+DESCRIPTION:938735dd     none  a permission for the implementation
+RETURN_VALUE:8cb5cd7f    XSH.tmpfile.001 XSH.tmpfile.004
+RETURN_VALUE:fd39a752    XSH.tmpfile.005
+ERRORS:7c256e93          todo  EINTR needs a signal arriving inside tmpfile(), which cannot be timed
+ERRORS:62ac5ce0          XSH.tmpfile.005
+ERRORS:e49a6cf7          todo  {STREAM_MAX} streams open (Q-37); the descriptor limit is reached first, and the limit is not known
+ERRORS:68f07062          untestable  the system-wide file table cannot be filled here
+ERRORS:440aec24          todo  no portable way to fill the file system
+ERRORS:2ff9ca59          none  may-fail error: a permission
+ERRORS:5a3b118c          none  may-fail error: a permission

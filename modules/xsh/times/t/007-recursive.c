@@ -84,7 +84,8 @@ static clock_t ticks(struct tms *b)
 }
 
 /* Spends about ms of CPU time (by clock()) on arithmetic: nearly all of it in user mode. */
-static void burn_user(long ms)
+/* Returns 0 if the real-time cap ended it before that much CPU time was used. */
+static int burn_user(long ms)
 {
 	volatile unsigned long x = 1;
 	clock_t end = clock() + (clock_t)((double)ms / 1000.0 * (double)CLOCKS_PER_SEC);
@@ -94,12 +95,33 @@ static void burn_user(long ms)
 	while (clock() < end && now_ms() - real0 < 30000)
 		for (i = 0; i < 1000000; i++)
 			x = x * 1664525UL + 1013904223UL;
+	return clock() >= end;
+}
+
+/*
+ * CPU time to spend, in ms: at least 0.5 s, and at least 20 clock ticks, so
+ * that a coarse tick (sysconf(_SC_CLK_TCK) small) still shows growth of one
+ * tick. A tick rate that cannot be read makes the test UNRESOLVED.
+ */
+static long burn_ms(void)
+{
+	long hz = sysconf(_SC_CLK_TCK), ms;
+
+	if (hz <= 0)
+		pc_unresolved("sysconf(_SC_CLK_TCK) gave %ld", hz);
+	ms = (20L * 1000L + hz - 1) / hz;
+	if (ms < 500)
+		ms = 500;
+	if (ms > 20000)
+		ms = 20000;
+	return ms;
 }
 
 int main(void)
 {
 	struct tms snap, mine;
 	double d;
+	long ms;
 	pid_t c;
 	int p[2], st;
 
@@ -107,6 +129,7 @@ int main(void)
 	guard(90);
 	pc_check(pipe(p) == 0, "pipe failed");
 	pc_test();
+	ms = burn_ms();
 	c = fork();
 	if (c == -1)
 		pc_unresolved("fork failed: %s", pc_errname(errno));
@@ -120,11 +143,12 @@ int main(void)
 		if (g == -1)
 			_exit(91);
 		if (g == 0) {
-			burn_user(500);
-			_exit(0);
+			_exit(burn_user(ms) ? 0 : 95);
 		}
 		if (waitpid(g, &gst, 0) != g)
 			_exit(92);
+		if (!WIFEXITED(gst) || WEXITSTATUS(gst) != 0)
+			_exit(95);
 		if (times(&s) == (clock_t)-1)
 			_exit(93);
 		if (write(p[1], &s, sizeof s) != (ssize_t)sizeof s)
@@ -139,7 +163,7 @@ int main(void)
 	if (!WIFEXITED(st) || WEXITSTATUS(st) != 0)
 		pc_unresolved("the child failed (status %#x)", st);
 	d = (double)snap.tms_cutime + (double)snap.tms_cstime;
-	pc_check(d >= 1, "a child that waited for its own child (0.5 s of CPU) had tms_cutime + tms_cstime of %.0f ticks", d);
+	pc_check(d >= 1, "a child that waited for its own child (at least 0.5 s of CPU) had tms_cutime + tms_cstime of %.0f ticks", d);
 	(void)ticks(&mine);
 	pc_check((double)mine.tms_cutime >= (double)snap.tms_utime + (double)snap.tms_cutime,
 	    "tms_cutime %.0f is below the child's tms_utime + tms_cutime (%.0f + %.0f) read before it ended",

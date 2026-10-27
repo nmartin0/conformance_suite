@@ -55,7 +55,8 @@ static clock_t ticks(struct tms *b)
 }
 
 /* Spends about ms of CPU time (by clock()) in many small system calls. */
-static void burn_system(long ms)
+/* Returns 0 if the real-time cap ended it before that much CPU time was used. */
+static int burn_system(long ms)
 {
 	clock_t end = clock() + (clock_t)((double)ms / 1000.0 * (double)CLOCKS_PER_SEC);
 	long real0 = now_ms();
@@ -68,6 +69,26 @@ static void burn_system(long ms)
 		for (i = 0; i < 2000; i++)
 			put(fd, "x", 1);
 	(void)close(fd);
+	return clock() >= end;
+}
+
+/*
+ * CPU time to spend, in ms: at least 0.5 s, and at least 20 clock ticks, so
+ * that a coarse tick (sysconf(_SC_CLK_TCK) small) still shows growth of one
+ * tick. A tick rate that cannot be read makes the test UNRESOLVED.
+ */
+static long burn_ms(void)
+{
+	long hz = sysconf(_SC_CLK_TCK), ms;
+
+	if (hz <= 0)
+		pc_unresolved("sysconf(_SC_CLK_TCK) gave %ld", hz);
+	ms = (20L * 1000L + hz - 1) / hz;
+	if (ms < 500)
+		ms = 500;
+	if (ms > 20000)
+		ms = 20000;
+	return ms;
 }
 
 int main(void)
@@ -78,9 +99,10 @@ int main(void)
 	pc_begin("XSH.times.003");
 	pc_test();
 	(void)ticks(&a);
-	burn_system(500);
+	if (!burn_system(burn_ms()))
+		pc_unresolved("the machine was too busy to give the process the CPU time the test needs");
 	(void)ticks(&b);
 	d = (double)b.tms_stime - (double)a.tms_stime;
-	pc_check(d >= 1, "tms_stime grew by %.0f ticks over about 0.5 s of CPU time spent mostly in system calls", d);
+	pc_check(d >= 1, "tms_stime grew by %.0f ticks over at least 0.5 s of CPU time spent mostly in system calls", d);
 	pc_pass();
 }

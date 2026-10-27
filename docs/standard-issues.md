@@ -100,6 +100,10 @@ An assertion whose verdict depends on one of these names its ID in its
 | SI-86 | XSH setreuid(), setregid(), setgid(): wording slips | editorial | (none) |
 | SI-87 | XSH nanosleep() against clock_getres(): measured by CLOCK_REALTIME, or independent of it | unclear | XSH.nanosleep.001, .003, .006, .008 |
 | SI-88 | XSH clock_getres() and clock_nanosleep(): wording slips and an overlap | editorial | XSH.clock_getres.008, .009, XSH.clock_nanosleep.005, .008 |
+| SI-89 | XSH waitid(): options with none of WEXITED, WSTOPPED, WCONTINUED: EINVAL not stated (waitid.html#DESCRIPTION, #ERRORS/EINVAL) | unclear | XSH.waitid.018 |
+| SI-90 | XSH popen(): the FD_CLOFORK sentence for mode "w" names STDOUT_FILENO (popen.html#DESCRIPTION) | editorial | (none) |
+| SI-91 | XSH times(): DESCRIPTION says waitid() returns a process ID (times.html#DESCRIPTION) | editorial | (none) |
+| SI-92 | XSH pclose(): the ECHILD list omits waitid() with P_ALL (pclose.html#DESCRIPTION) | unclear | (none) |
 | Q-1 | SIGPIPE after shutdown(SHUT_WR)? | question | XSH.write.017 |
 | Q-2 | lseek() beyond the file system's largest file | question | XSH.lseek.011 |
 | Q-3 | unnamed semaphore (pshared 0) in a fork child | question | (not tested) |
@@ -132,7 +136,7 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-30 | fflush(): position after discarding pushback | question | XSH.fflush.005 |
 | Q-31 | other waiters after the last child | question | XSH._Exit.020 |
 | Q-32 | aio at exit | question | XSH._Exit.019 |
-| Q-33 | buffering against implementation-defined support | question | XSH.setvbuf.003, .004, .006; XSH.fopen.019, .020 |
+| Q-33 | buffering against implementation-defined support | question | XSH.setvbuf.003, .004, .006; XSH.fopen.019, .020; XSH.setbuf.002 |
 | Q-34 | ungetc limit omits fflush() | question | none (permission) |
 | Q-35 | fseek() ERRORS preamble | question | XSH.fseek.009 to .011, XSH.fseek.014 to .017 |
 | Q-36 | fdopen() 'a' modes | question | XSH.fdopen.013 |
@@ -174,3 +178,8 @@ An assertion whose verdict depends on one of these names its ID in its
 | Q-72 | XSH 2.9.5.1: asynchronous cancellation "may be acted upon at any time" | question | XSH.pthread_setcancelstate.006 |
 | Q-73 | XBD <limits.h> and pthread_create()/pthread_key_create(): how {PTHREAD_THREADS_MAX} and {PTHREAD_KEYS_MAX} count | question | XSH.pthread_create.012, XSH.pthread_key_create.005 |
 | Q-74 | XSH sleep(): rounding of the unslept time | question | XSH.sleep.003 |
+| Q-75 | XSH fsync() and fdatasync(): which file types (pipes, directories) give EINVAL is unspecified (fsync.html#ERRORS/EINVAL, fdatasync.html#ERRORS/EINVAL) | question | XSH.fsync, XSH.fdatasync (tolerant) |
+| Q-76 | XSH fsync(): a descriptor open for reading only (fsync.html#DESCRIPTION) | question | (none) |
+| Q-77 | XSH pread(): whether the data of a pipe is consumed by the failed ESPIPE call is unstated (pread.html#ERRORS/ESPIPE) | question | XSH.pread.006, .007 (not checked) |
+| Q-78 | XSH fdatasync(): the EINVAL condition is linked to _PC_SYNC_IO only implicitly (fdatasync.html#ERRORS/EINVAL) | question | XSH.fdatasync |
+| Q-79 | XSH ftrylockfile(): whether a call by the thread that already owns the lock must succeed; the count rule is stated only for flockfile() (flockfile.html#DESCRIPTION) | question | XSH.flockfile.008 (disputed) |

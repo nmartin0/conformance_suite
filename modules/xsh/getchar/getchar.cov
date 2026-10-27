@@ -1,0 +1,5 @@
+# getchar.cov - every requirement unit on functions/getchar.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:2eb24062     XSH.getchar.001 XSH.getchar.002 XSH.getchar.003
+RETURN_VALUE:d5e7bfee    partial XSH.getchar.001 XSH.getchar.003 XSH.getchar.004 XSH.getchar.005 XSH.getchar.006  # by reference to fgetc(): bytes, end of file, EBADF and EAGAIN are checked on stdin; EINTR and the access time are checked for fgetc() only

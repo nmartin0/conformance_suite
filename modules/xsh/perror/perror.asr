@@ -1,0 +1,97 @@
+# XSH perror()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.perror.001
+anchor     functions/perror.html#DESCRIPTION
+class      required
+since      1988
+says       With errno ENOENT, perror("pfx") writes exactly "pfx: ", the
+           string strerror(ENOENT) returns, and a newline to the standard
+           error stream.
+test       t/001-prefix-message.c
+
+assertion  XSH.perror.002
+anchor     functions/perror.html#DESCRIPTION
+class      required
+since      1988
+says       With errno EACCES, perror(NULL) writes exactly the string
+           strerror(EACCES) returns and a newline, with no prefix, colon or
+           space.
+test       t/002-null-string.c
+
+assertion  XSH.perror.003
+anchor     functions/perror.html#DESCRIPTION
+class      required
+since      1988
+says       With errno EINVAL, perror("") writes exactly the string
+           strerror(EINVAL) returns and a newline, with no colon or space.
+test       t/003-empty-string.c
+
+assertion  XSH.perror.004
+anchor     functions/perror.html#DESCRIPTION
+class      required
+since      1988
+says       For errno EPERM, ENOENT, EINTR, EIO, EACCES, EEXIST, EINVAL,
+           ERANGE, 0 and 100000 in turn, perror("p") writes "p: ", the string
+           strerror() returns for that value, and a newline, so that the file
+           holds the ten lines in order.
+note       The message for 0 and for 100000 is whatever strerror() gives (XSH
+           strerror(): any int maps to a message, and for zero the message is
+           empty or says no error); the test compares, it does not name the
+           text.
+test       t/004-same-as-strerror.c
+
+assertion  XSH.perror.005
+anchor     functions/perror.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5
+class      required
+since      1988
+says       On a stderr that has no orientation yet, fwide(stderr, 0) is 0
+           after perror("p") has written its message.
+note       XSH 2.5: with no orientation, perror() behaves as a byte output
+           function except that it does not set the orientation. The test is
+           UNRESOLVED if stderr is already oriented when it starts.
+test       t/005-orientation.c
+
+assertion  XSH.perror.006
+anchor     functions/perror.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5
+class      required
+since      1988
+says       With stderr made byte-oriented by fputc('A', stderr), perror("p")
+           with errno ENOENT then appends to the same stream, so that the
+           file holds "Ap: ", the string strerror(ENOENT) returns, and a
+           newline.
+note       XSH 2.5: on a stream that is already byte-oriented, perror()
+           behaves as the byte output functions, which write as if by
+           successive fputc() calls, so the bytes keep their order on the one
+           stream.
+test       t/006-byte-oriented.c
+
+assertion  XSH.perror.007
+anchor     functions/perror.html#DESCRIPTION
+anchor     functions/perror.html#ERRORS
+class      required
+since      1988
+says       With descriptor 2 open for reading only and stderr unbuffered,
+           perror("p") called with errno ENOENT leaves the error indicator of
+           stderr set and errno EBADF.
+note       The error is that of fputc() (the page refers to it for ERRORS):
+           EBADF for a descriptor not open for writing, which applies whether
+           the stream is unbuffered or its buffer needs flushing. Where
+           setvbuf() refuses _IONBF (XSH 2.5) and the message stays in a
+           buffer, the result is UNRESOLVED.
+test       t/007-error-indicator.c
+
+assertion  XSH.perror.008
+anchor     functions/perror.html#DESCRIPTION
+class      required
+since      1988
+says       With descriptor 2 on a regular file whose modification time is set
+           to 2001-09-09, after perror("p") and a successful fflush(stderr),
+           fstat() shows a later st_mtim.
+note       XBD 4.12: marked timestamps are updated before fstat() returns.
+           The change time is not checked: telling it apart from the
+           futimens() of the setup needs the clock to move past the file
+           system's granularity.
+test       t/008-mtime.c

@@ -1,0 +1,80 @@
+# XSH flockfile(), ftrylockfile() and funlockfile()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.flockfile.001
+anchor     functions/flockfile.html#DESCRIPTION
+anchor     functions/flockfile.html#RETURN VALUE
+class      required
+says       ftrylockfile() on a stream that no thread owns returns 0; after
+           funlockfile(), ftrylockfile() called by another thread on the same
+           stream also returns 0.
+test       t/001-trylock-free.c
+
+assertion  XSH.flockfile.002
+anchor     functions/flockfile.html#DESCRIPTION
+anchor     functions/flockfile.html#RETURN VALUE
+class      required
+says       While the main thread owns a stream through flockfile(),
+           ftrylockfile() called by another thread returns non-zero; after
+           funlockfile() it returns 0.
+test       t/002-owned-by-caller.c
+
+assertion  XSH.flockfile.003
+anchor     functions/flockfile.html#DESCRIPTION
+class      required
+says       After three flockfile() calls by the main thread on one stream,
+           ftrylockfile() by another thread returns non-zero after zero, one
+           and two funlockfile() calls, and 0 after the third.
+test       t/003-nested.c
+
+assertion  XSH.flockfile.004
+anchor     functions/flockfile.html#DESCRIPTION
+class      required
+says       After a successful ftrylockfile() and then flockfile() by the main
+           thread on one stream, ftrylockfile() by another thread returns
+           non-zero after one funlockfile() call and 0 after the second.
+test       t/004-trylock-nests.c
+
+assertion  XSH.flockfile.005
+anchor     functions/flockfile.html#DESCRIPTION
+class      required
+says       While the main thread owns a stream, a second thread's flockfile()
+           on it has not returned after 200 ms; once the main thread calls
+           funlockfile() the second thread's call returns (within 10 s, else
+           the result is UNRESOLVED).
+timeout    70
+test       t/005-flock-blocks.c
+
+assertion  XSH.flockfile.006
+anchor     functions/flockfile.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5
+class      required
+says       While the main thread owns a stream opened "w+" through
+           flockfile(), fputc('B') by a second thread has not returned after
+           200 ms; after the main thread's fputc('A') and funlockfile() it
+           returns, and rewind() then reads 'A' and 'B' in that order.
+note       XSH 2.5 says every stdio function that reads or writes locks the
+           stream as if by flockfile(); the page's APPLICATION USAGE says the
+           owner blocks calls by other threads.
+timeout    70
+test       t/006-io-waits.c
+
+assertion  XSH.flockfile.007
+anchor     functions/flockfile.html#DESCRIPTION
+class      required
+says       While the main thread owns one stream, ftrylockfile() by another
+           thread on a second stream returns 0.
+test       t/007-per-stream.c
+
+assertion  XSH.flockfile.008
+anchor     functions/flockfile.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5
+class      disputed
+says       After flockfile() on a stream, ftrylockfile() by the same thread
+           returns 0.
+note       disputed (new: Q-79): the page calls ftrylockfile()
+           the non-blocking version of flockfile(), which the owner may call
+           again, and XSH 2.5 makes the lock reentrant, but the page states
+           the count rule only for flockfile() and says ftrylockfile()
+           acquires if the object is available; a FAIL is logged as INSPECT.
+test       t/008-trylock-own.c

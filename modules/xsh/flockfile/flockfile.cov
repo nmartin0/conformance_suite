@@ -1,0 +1,19 @@
+# flockfile.cov - every requirement unit on functions/flockfile.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:2a2aa54a     XSH.flockfile.002 XSH.flockfile.005 XSH.flockfile.006
+DESCRIPTION:637a3995     app  # purpose: a sequence of I/O executed as a unit (XSH.flockfile.006 shows another thread's call waits)
+DESCRIPTION:f5b1242f     XSH.flockfile.002 XSH.flockfile.005
+DESCRIPTION:0ffdc638     XSH.flockfile.001 XSH.flockfile.002 XSH.flockfile.007 XSH.flockfile.008
+DESCRIPTION:aefda51c     XSH.flockfile.002 XSH.flockfile.003
+DESCRIPTION:2a480fcc     none  undefined behaviour: not tested
+DESCRIPTION:afd8c039     XSH.flockfile.003 XSH.flockfile.004
+DESCRIPTION:81ba45a3     XSH.flockfile.001  # a stream no thread has locked is available
+DESCRIPTION:683ef8d4     XSH.flockfile.001 XSH.flockfile.003
+DESCRIPTION:ae29c6a1     XSH.flockfile.002 XSH.flockfile.003
+DESCRIPTION:83120d65     partial XSH.flockfile.003 XSH.flockfile.004  # the owner calling again; the count of a free stream is covered by XSH.flockfile.002
+DESCRIPTION:7458230d     XSH.flockfile.005
+DESCRIPTION:40a61aa6     XSH.flockfile.003 XSH.flockfile.004
+DESCRIPTION:e14b45f2     XSH.flockfile.003 XSH.flockfile.004
+RETURN_VALUE:991e922b    none  nothing is returned (void)
+RETURN_VALUE:3433d514    XSH.flockfile.001 XSH.flockfile.002 XSH.flockfile.003 XSH.flockfile.007 XSH.flockfile.008

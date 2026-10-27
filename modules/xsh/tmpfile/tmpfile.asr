@@ -1,0 +1,59 @@
+# XSH tmpfile()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.tmpfile.001
+anchor     functions/tmpfile.html#DESCRIPTION
+anchor     functions/tmpfile.html#RETURN VALUE
+class      required
+since      1988
+says       tmpfile() returns a non-null stream on a regular file of size 0
+           with ftell() 0; after fwrite() of the five bytes 'a', 'b', 0x00,
+           0xff, '\n', fflush() and rewind(), fread() returns the same five
+           bytes; after fseek(f, 0, SEEK_SET), fputc('Z') and fseek(f, 0,
+           SEEK_SET), getc() returns 'Z' and then 'b'.
+test       t/001-update-stream.c
+
+assertion  XSH.tmpfile.002
+anchor     functions/tmpfile.html#DESCRIPTION
+class      required
+since      1988
+says       After tmpfile(), fputs("hello"), fflush() and dup() of the
+           stream's descriptor, fclose() of the stream leaves the data
+           readable: pread() of 5 bytes at offset 0 from the duplicate
+           returns "hello".
+note       The deletion itself, when the last reference is closed, is not
+           checked: the file's name is not known to the caller.
+test       t/002-reference-keeps-file.c
+
+assertion  XSH.tmpfile.003
+anchor     functions/tmpfile.html#DESCRIPTION
+class      required
+since      1988
+says       With umask 0 the permission bits of the file are 0666, 0600 or 0;
+           with umask 022 they are 0644, 0600 or 0.
+note       The page lets an implementation restrict the permissions by
+           clearing the bits or setting them to read and write for the owner;
+           anything else is the fopen() mode for "wb+" (0666 less the umask).
+test       t/003-permissions.c
+
+assertion  XSH.tmpfile.004
+anchor     functions/tmpfile.html#DESCRIPTION
+anchor     functions/tmpfile.html#RETURN VALUE
+class      required
+since      1988
+says       Two tmpfile() calls return two streams on different files
+           (different st_dev or st_ino); after "one" is written to the first
+           and "two" to the second, each reads back only its own text.
+test       t/004-distinct-files.c
+
+assertion  XSH.tmpfile.005
+anchor     functions/tmpfile.html#ERRORS/EMFILE
+anchor     functions/tmpfile.html#RETURN VALUE
+class      required
+since      1988
+says       When every descriptor below the process's descriptor limit is
+           open, tmpfile() returns a null pointer and sets errno to EMFILE.
+note       The only applicable error with every descriptor open; the page
+           lists EMFILE as one that shall be reported. The data of the failed
+           call is not looked at (XSH 2.3).
+test       t/005-emfile.c

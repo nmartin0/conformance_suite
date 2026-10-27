@@ -1,0 +1,41 @@
+# XSH setbuf()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.setbuf.001
+anchor     functions/setbuf.html#DESCRIPTION
+anchor     functions/setvbuf.html#DESCRIPTION
+class      required
+since      1988
+says       With setbuf(f, buf) on a new stream opened "w", where buf is the
+           start of an array of BUFSIZ + 64 bytes filled with '#', after 2 *
+           BUFSIZ + 100 bytes are written with fputc() and the stream is
+           closed, the file holds those bytes and the last 64 bytes of the
+           array are still '#'.
+note       Equivalent to setvbuf(f, buf, _IOFBF, BUFSIZ), whose size argument
+           is the size of the array; the contents of the first BUFSIZ bytes
+           are unspecified at any time, so only the bytes past them are
+           looked at.
+test       t/001-own-buffer.c
+
+assertion  XSH.setbuf.002
+anchor     functions/setbuf.html#DESCRIPTION
+anchor     functions/setvbuf.html#DESCRIPTION
+class      disputed
+since      1988
+says       On a new stream opened "w" after setbuf(f, NULL), once fputc('a')
+           has returned (no fflush()), the file holds "a".
+note       disputed (Q-33): setvbuf() says _IONBF shall cause unbuffered
+           output, but XSH 2.5 and ISO C make support for the buffering
+           characteristics implementation-defined; a FAIL is logged as
+           INSPECT.
+test       t/002-null-unbuffered.c
+
+assertion  XSH.setbuf.003
+anchor     functions/setbuf.html#DESCRIPTION
+class      required
+since      1988
+says       On a new stream opened "r" on a file holding "0123", after
+           setbuf(f, buf) with a BUFSIZ-byte array, and likewise after
+           setbuf(f, NULL), successive getc() calls return '0', '1', '2', '3'
+           and then EOF.
+test       t/003-reading.c

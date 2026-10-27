@@ -65,7 +65,8 @@ static clock_t ticks(struct tms *b)
 }
 
 /* Spends about ms of CPU time (by clock()) on arithmetic: nearly all of it in user mode. */
-static void burn_user(long ms)
+/* Returns 0 if the real-time cap ended it before that much CPU time was used. */
+static int burn_user(long ms)
 {
 	volatile unsigned long x = 1;
 	clock_t end = clock() + (clock_t)((double)ms / 1000.0 * (double)CLOCKS_PER_SEC);
@@ -75,30 +76,53 @@ static void burn_user(long ms)
 	while (clock() < end && now_ms() - real0 < 30000)
 		for (i = 0; i < 1000000; i++)
 			x = x * 1664525UL + 1013904223UL;
+	return clock() >= end;
+}
+
+/*
+ * CPU time to spend, in ms: at least 0.5 s, and at least 20 clock ticks, so
+ * that a coarse tick (sysconf(_SC_CLK_TCK) small) still shows growth of one
+ * tick. A tick rate that cannot be read makes the test UNRESOLVED.
+ */
+static long burn_ms(void)
+{
+	long hz = sysconf(_SC_CLK_TCK), ms;
+
+	if (hz <= 0)
+		pc_unresolved("sysconf(_SC_CLK_TCK) gave %ld", hz);
+	ms = (20L * 1000L + hz - 1) / hz;
+	if (ms < 500)
+		ms = 500;
+	if (ms > 20000)
+		ms = 20000;
+	return ms;
 }
 
 int main(void)
 {
 	struct tms a, b;
 	double d;
+	long ms;
 	pid_t c;
 	int st;
 
 	pc_begin("XSH.times.004");
 	guard(90);
 	pc_test();
+	ms = burn_ms();
 	(void)ticks(&a);
 	c = fork();
 	if (c == -1)
 		pc_unresolved("fork failed: %s", pc_errname(errno));
 	if (c == 0) {
-		burn_user(500);
-		_exit(0);
+		_exit(burn_user(ms) ? 0 : 95);
 	}
 	if (waitpid(c, &st, 0) != c)
 		pc_unresolved("waitpid failed: %s", pc_errname(errno));
+	if (!WIFEXITED(st) || WEXITSTATUS(st) != 0)
+		pc_unresolved("the child did not use the CPU time the test needs (status %#x)", st);
 	(void)ticks(&b);
 	d = ((double)b.tms_cutime + (double)b.tms_cstime) - ((double)a.tms_cutime + (double)a.tms_cstime);
-	pc_check(d >= 1, "tms_cutime + tms_cstime grew by %.0f ticks after waiting for a child that used about 0.5 s of CPU time", d);
+	pc_check(d >= 1, "tms_cutime + tms_cstime grew by %.0f ticks after waiting for a child that used at least 0.5 s of CPU time", d);
 	pc_pass();
 }

@@ -1,0 +1,124 @@
+# XSH getc_unlocked(), getchar_unlocked(), putc_unlocked() and putchar_unlocked()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getc_unlocked.001
+anchor     functions/getc_unlocked.html#DESCRIPTION
+anchor     functions/getc.html#DESCRIPTION
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+says       On a stream reading the bytes 0x41, 0xff, 0x00, 0x42 and owned by
+           the thread through flockfile(), successive getc_unlocked() calls
+           return 0x41, 0xff, 0 and 0x42, ftell() after each is 1, 2, 3 and
+           4, and the next getc_unlocked() returns EOF with feof() true.
+test       t/001-getc-bytes.c
+
+assertion  XSH.getc_unlocked.002
+anchor     functions/getc_unlocked.html#DESCRIPTION
+anchor     functions/getchar.html#DESCRIPTION
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+says       With standard input on a file holding "abcd" and owned by the
+           thread through flockfile(), getchar_unlocked(),
+           getc_unlocked(stdin), getchar_unlocked(), getc_unlocked(stdin)
+           return 'a', 'b', 'c', 'd'; the next getchar_unlocked() returns EOF
+           with feof(stdin) true, and getc_unlocked(stdin) then also returns
+           EOF.
+test       t/002-getchar-bytes.c
+
+assertion  XSH.getc_unlocked.003
+anchor     functions/getc_unlocked.html#DESCRIPTION
+anchor     functions/putc.html#DESCRIPTION
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+says       On a new stream opened "w" and owned by the thread through
+           flockfile(), putc_unlocked('h') returns 'h' with ftell() then 1;
+           putc_unlocked(0x141) returns 0x41, putc_unlocked(-1) returns 0xff
+           and putc_unlocked(0x100) returns 0; after funlockfile() and
+           fclose() the file holds the bytes 'h', 0x41, 0xff, 0x00.
+test       t/003-putc-bytes.c
+
+assertion  XSH.getc_unlocked.004
+anchor     functions/getc_unlocked.html#DESCRIPTION
+anchor     functions/putchar.html#DESCRIPTION
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+says       With standard output on a new file and owned by the thread through
+           flockfile(), putchar_unlocked('a'), putc_unlocked('b', stdout) and
+           putchar_unlocked(0x143) return 'a', 'b' and 0x43; after
+           funlockfile() and fflush(stdout) the file holds "abC".
+test       t/004-putchar-bytes.c
+
+assertion  XSH.getc_unlocked.005
+anchor     functions/getc_unlocked.html#ERRORS
+anchor     functions/fgetc.html#ERRORS/EBADF
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+says       On a stream opened "r" whose descriptor was closed before the
+           first read, getc_unlocked() returns EOF, sets errno to EBADF and
+           sets the error indicator of the stream.
+test       t/005-getc-ebadf.c
+
+assertion  XSH.getc_unlocked.006
+anchor     functions/getc_unlocked.html#ERRORS
+anchor     functions/fgetc.html#ERRORS/EBADF
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+says       With descriptor 0 open for writing only, getchar_unlocked()
+           returns EOF, sets errno to EBADF and sets the error indicator of
+           stdin.
+test       t/006-getchar-ebadf.c
+
+assertion  XSH.getc_unlocked.007
+anchor     functions/getc_unlocked.html#ERRORS
+anchor     functions/fputc.html#ERRORS/EBADF
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+says       On an unbuffered stream opened "w" whose descriptor was closed,
+           putc_unlocked() returns EOF, sets errno to EBADF and sets the
+           error indicator of the stream.
+note       Where setvbuf() refuses _IONBF (support for the buffering modes is
+           implementation-defined, XSH 2.5), the test writes until a call
+           fails, since a buffer that needs flushing brings the same error;
+           if none does within 4 MiB the result is UNRESOLVED.
+test       t/007-putc-ebadf.c
+
+assertion  XSH.getc_unlocked.008
+anchor     functions/getc_unlocked.html#ERRORS
+anchor     functions/fputc.html#ERRORS/EBADF
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+says       On an unbuffered stdout whose descriptor 1 was closed,
+           putchar_unlocked() returns EOF, sets errno to EBADF and sets the
+           error indicator of stdout.
+note       Where setvbuf() refuses _IONBF (support for the buffering modes is
+           implementation-defined, XSH 2.5), the test writes until a call
+           fails, since a buffer that needs flushing brings the same error;
+           if none does within 4 MiB the result is UNRESOLVED.
+test       t/008-putchar-ebadf.c
+
+assertion  XSH.getc_unlocked.009
+anchor     functions/getc_unlocked.html#DESCRIPTION
+anchor     functions/flockfile.html#DESCRIPTION
+class      required
+says       Two threads each call flockfile() on one stream opened "w+", write
+           500 copies of their own byte ('A' or 'B') with putc_unlocked(),
+           and call funlockfile(); the file then holds 1000 bytes, one run of
+           500 bytes of one letter followed by 500 of the other.
+note       The lock held for the whole sequence keeps the other thread's
+           calls out; the order of the two runs is not specified.
+timeout    70
+test       t/009-writers-unmixed.c
+
+assertion  XSH.getc_unlocked.010
+anchor     functions/getc_unlocked.html#DESCRIPTION
+anchor     functions/flockfile.html#DESCRIPTION
+class      required
+says       On a stream opened "r" on a file of 1000 bytes whose byte at
+           offset i is i modulo 251, two threads each call flockfile(), read
+           500 bytes with getc_unlocked(), and call funlockfile(); each
+           thread's bytes are consecutive values of that pattern, and between
+           them they hold the offsets 0 to 499 and 500 to 999.
+note       The lock held for the whole sequence keeps the other thread's
+           reads out; which thread reads the first half is not specified.
+timeout    70
+test       t/010-readers-runs.c

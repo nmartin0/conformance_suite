@@ -1,0 +1,8 @@
+# getc_unlocked.cov - every requirement unit on functions/getc_unlocked.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:dcc4eb0a     partial XSH.getc_unlocked.001 XSH.getc_unlocked.002 XSH.getc_unlocked.003 XSH.getc_unlocked.004 XSH.getc_unlocked.005 XSH.getc_unlocked.006 XSH.getc_unlocked.007 XSH.getc_unlocked.008  # equivalence to getc(), getchar(), putc() and putchar() is checked for bytes, conversion, end of file and EBADF; the rest of fgetc() and fputc() (EAGAIN, EPIPE, EINTR, timestamps) is not repeated; that they need not be thread-safe is a permission
+DESCRIPTION:a89fd3b6     XSH.getc_unlocked.009 XSH.getc_unlocked.010  # for getc_unlocked() and putc_unlocked(); the other two are the same code by the equivalence
+DESCRIPTION:be9f09e2     app  # a condition on applications
+DESCRIPTION:8bab80c2     none  permission for the implementation (a macro may evaluate the stream argument more than once)
+RETURN_VALUE:1e45c62d    partial XSH.getc_unlocked.001 XSH.getc_unlocked.002 XSH.getc_unlocked.003 XSH.getc_unlocked.004  # by reference to getc(), getchar(), putc() and putchar()

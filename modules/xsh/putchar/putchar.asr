@@ -1,0 +1,79 @@
+# XSH putchar()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.putchar.001
+anchor     functions/putchar.html#DESCRIPTION
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+since      1988
+says       With standard output on a new file, putchar('h') returns 'h' with
+           ftell(stdout) then 1, putchar('i') returns 'i' with ftell(stdout)
+           then 2, and after fflush(stdout) the file holds "hi".
+test       t/001-writes.c
+
+assertion  XSH.putchar.002
+anchor     functions/putchar.html#DESCRIPTION
+anchor     functions/fputc.html#DESCRIPTION
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+since      1988
+says       With standard output on a new file, putchar(0x141) returns 0x41,
+           putchar(-1) returns 0xff and putchar(0x100) returns 0, and after
+           fflush(stdout) the file holds the bytes 0x41, 0xff, 0x00.
+test       t/002-converted.c
+
+assertion  XSH.putchar.003
+anchor     functions/putchar.html#DESCRIPTION
+class      required
+since      1988
+says       With standard output on a new file, putc('a', stdout),
+           putchar('b'), putc('c', stdout) and putchar('d') return their
+           arguments, ftell(stdout) is then 4, and after fflush(stdout) the
+           file holds "abcd".
+test       t/003-same-as-putc.c
+
+assertion  XSH.putchar.004
+anchor     functions/putchar.html#ERRORS
+anchor     functions/fputc.html#ERRORS/EBADF
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+since      1988
+says       On an unbuffered stdout whose descriptor 1 was closed, putchar()
+           returns EOF, sets errno to EBADF and sets the error indicator of
+           stdout.
+note       Where setvbuf() refuses _IONBF (support for the buffering modes is
+           implementation-defined, XSH 2.5), the test writes until a call
+           fails, since a buffer that needs flushing brings the same error;
+           if none does within 4 MiB the result is UNRESOLVED.
+test       t/004-ebadf-closed.c
+
+assertion  XSH.putchar.005
+anchor     functions/putchar.html#ERRORS
+anchor     functions/fputc.html#ERRORS/EPIPE
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+since      1988
+says       With SIGPIPE blocked, on an unbuffered stdout that is the write
+           end of a pipe whose read end is closed, putchar() returns EOF with
+           errno EPIPE and the error indicator set, and SIGPIPE is then
+           pending.
+note       As XSH.putchar.004: where setvbuf() refuses _IONBF (support for
+           the buffering modes is implementation-defined, XSH 2.5) the test
+           writes until a call fails, and if none does within 4 MiB the
+           result is UNRESOLVED.
+test       t/005-epipe.c
+
+assertion  XSH.putchar.006
+anchor     functions/putchar.html#ERRORS
+anchor     functions/fputc.html#ERRORS/EAGAIN
+anchor     functions/fputc.html#RETURN VALUE
+class      required
+since      1988
+says       With an unbuffered stdout that is the write end of a pipe filled
+           to capacity with O_NONBLOCK set, putchar() returns EOF with errno
+           EAGAIN and the error indicator set.
+note       As XSH.putchar.004: where setvbuf() refuses _IONBF (support for
+           the buffering modes is implementation-defined, XSH 2.5) the test
+           writes until a call fails, and if none does within 4 MiB the
+           result is UNRESOLVED.
+test       t/006-eagain.c

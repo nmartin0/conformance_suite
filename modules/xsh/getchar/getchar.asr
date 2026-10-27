@@ -1,0 +1,70 @@
+# XSH getchar()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getchar.001
+anchor     functions/getchar.html#DESCRIPTION
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+since      1988
+says       With standard input on a file holding the bytes 0x41, 0xff, 0x00,
+           0x42, successive getchar() calls return 0x41, 0xff, 0 and 0x42,
+           ftell(stdin) after each is 1, 2, 3 and 4, and the next getchar()
+           returns EOF with feof(stdin) true.
+test       t/001-bytes.c
+
+assertion  XSH.getchar.002
+anchor     functions/getchar.html#DESCRIPTION
+class      required
+since      1988
+says       With standard input on a file holding "abcd", getc(stdin),
+           getchar(), getc(stdin), getchar() return 'a', 'b', 'c', 'd'; the
+           next getchar() returns EOF with feof(stdin) true, and getc(stdin)
+           then also returns EOF.
+test       t/002-same-as-getc.c
+
+assertion  XSH.getchar.003
+anchor     functions/getchar.html#DESCRIPTION
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+since      1988
+says       With standard input on a file holding "ab" whose end-of-file
+           indicator is set, after "c" is appended through a separate open(),
+           getchar() returns EOF and feof(stdin) stays true; after
+           clearerr(stdin) getchar() returns 'c'.
+note       The appended byte comes through another open file description, so
+           the handle rules of XSH 2.5.1 do not apply.
+test       t/003-eof-sticky.c
+
+assertion  XSH.getchar.004
+anchor     functions/getchar.html#ERRORS
+anchor     functions/fgetc.html#ERRORS/EBADF
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+since      1988
+says       With descriptor 0 closed before the first read of stdin, getchar()
+           returns EOF, sets errno to EBADF and sets the error indicator of
+           stdin.
+test       t/004-ebadf-closed.c
+
+assertion  XSH.getchar.005
+anchor     functions/getchar.html#ERRORS
+anchor     functions/fgetc.html#ERRORS/EBADF
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+since      1988
+says       With descriptor 0 open for writing only, getchar() returns EOF,
+           sets errno to EBADF and sets the error indicator of stdin.
+test       t/005-ebadf-write-only.c
+
+assertion  XSH.getchar.006
+anchor     functions/getchar.html#ERRORS
+anchor     functions/fgetc.html#ERRORS/EAGAIN
+anchor     functions/fgetc.html#RETURN VALUE
+class      required
+since      1988
+says       With standard input the read end of an empty pipe with O_NONBLOCK
+           set (the write end still open), getchar() returns EOF, sets errno
+           to EAGAIN and sets the error indicator of stdin.
+note       The dup2() onto descriptor 0 shares the open file description of
+           the pipe, so O_NONBLOCK set before it applies to stdin.
+test       t/006-eagain.c
