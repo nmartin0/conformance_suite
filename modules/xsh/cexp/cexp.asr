@@ -1,0 +1,177 @@
+# XSH cexp(), cexpf() and cexpl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only what the page makes exact is tested: special values (signed zeros,
+# infinities, NaN parts), the symmetry rules and the exact results it states.
+# The accuracy of other results is not tested. Arguments are built with
+# CMPLX() and pass through volatile objects, and the three types (name, name
+# with f, name with l) are each tested. The special values on this page carry
+# the tag for the IEC 60559 Complex Floating-Point option and are NOTINUSE
+# where it is not claimed.
+
+assertion  XSH.cexp.001
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of +0 + i0 and of -0 + i0 is 1 + i0.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/001-zero.c
+
+assertion  XSH.cexp.002
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of x + iInf (x finite, including zeros) is NaN + iNaN and the
+           invalid exception is raised.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/002-finite-inf-imag.c
+
+assertion  XSH.cexp.003
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of x + iNaN (x finite, including zeros) is NaN + iNaN.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/003-finite-nan-imag.c
+
+assertion  XSH.cexp.004
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of +Inf + i0 is +Inf + i0.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/004-plus-inf-zero.c
+
+assertion  XSH.cexp.005
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of -Inf + iy (y finite) is a positive zero times cos(y) + i
+           sin(y): each part is a zero whose sign is that of the cosine or
+           sine (y = 1, 2, 4, 5, +0, -0).
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/005-minus-inf-finite.c
+
+assertion  XSH.cexp.006
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of +Inf + iy (y non-zero finite) is positive infinity times
+           cos(y) + i sin(y): each part is an infinity whose sign is that of
+           the cosine or sine (y = 1, 2, 4, 5).
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/006-plus-inf-finite.c
+
+assertion  XSH.cexp.007
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of -Inf + iInf is a zero in each part, with any signs.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/007-minus-inf-inf.c
+
+assertion  XSH.cexp.008
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of +Inf + iInf has an infinite real part (either sign) and a
+           NaN imaginary part, and the invalid exception is raised.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/008-plus-inf-inf.c
+
+assertion  XSH.cexp.009
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of -Inf + iNaN is a zero in each part, with any signs.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/009-minus-inf-nan.c
+
+assertion  XSH.cexp.010
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of +Inf + iNaN has an infinite real part (either sign) and a
+           NaN imaginary part.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/010-plus-inf-nan.c
+
+assertion  XSH.cexp.011
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of NaN + i0 is NaN + i0.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/011-nan-zero.c
+
+assertion  XSH.cexp.012
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of NaN + iy for a non-zero finite y is NaN + iNaN.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/012-nan-nonzero.c
+
+assertion  XSH.cexp.013
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of NaN + iNaN is NaN + iNaN.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/013-nan-nan.c
+
+assertion  XSH.cexp.014
+anchor     functions/cexp.html#RETURN VALUE
+class      required
+says       cexp of the conjugate of z returns the conjugate of cexp of z, part
+           for part (equal values, zero signs included, NaN matching NaN), at
+           ordinary points, at real-axis points where branch cuts lie, and at
+           points with infinite parts and with a NaN real part.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT. Points with a NaN
+           imaginary part are left out (and, for the odd and even rules,
+           points with any NaN part): the sign of a NaN carries no required
+           meaning. See Q-113.
+test       t/014-conjugate-symmetry.c

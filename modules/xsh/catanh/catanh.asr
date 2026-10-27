@@ -1,0 +1,209 @@
+# XSH catanh(), catanhf() and catanhl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only what the page makes exact is tested: special values (signed zeros,
+# infinities, NaN parts), the symmetry rules and the exact results it states.
+# The accuracy of other results is not tested. Arguments are built with
+# CMPLX() and pass through volatile objects, and the three types (name, name
+# with f, name with l) are each tested. The special values on this page carry
+# the tag for the IEC 60559 Complex Floating-Point option and are NOTINUSE
+# where it is not claimed.
+
+assertion  XSH.catanh.001
+anchor     functions/catanh.html#RETURN VALUE
+class      required
+says       For catanh, w is the argument. w = +0 + i0 gives +0 + i0.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/001-zero.c
+
+assertion  XSH.catanh.002
+anchor     functions/catanh.html#RETURN VALUE
+class      required
+says       For catanh, w is the argument. w = +0 + iNaN gives +0 + iNaN.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/002-zero-nan.c
+
+assertion  XSH.catanh.003
+anchor     functions/catanh.html#RETURN VALUE
+class      required
+says       For catanh, w is the argument. w = +1 + i0 gives +Inf + i0 and the
+           divide-by-zero exception is raised.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/003-one.c
+
+assertion  XSH.catanh.004
+anchor     functions/catanh.html#RETURN VALUE
+class      required
+says       For catanh, w is the argument. w = x + iInf (x positive finite: 1,
+           2.5) gives real part +0.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/004-pos-inf-imag.c
+
+assertion  XSH.catanh.005
+anchor     functions/catanh.html#RETURN VALUE
+class      disputed
+says       For catanh, w is the argument. w = x + iInf (x positive finite: 1,
+           2.5) gives imaginary part pi/2.
+note       disputed (Q-111): the page names the numbers pi, pi/2, pi/4 and
+           3pi/4, which no binary type holds, and does not say the value is
+           the nearest representable one. The test expects the decimal value
+           rounded to the type. The tag on this passage is the IEC 60559
+           Complex Floating-Point option; the test is NOTINUSE unless the C
+           implementation claims it (Annex G of the C standard). No error is
+           defined on this page, so errno is not examined; an exception is
+           checked only when math_errhandling includes MATH_ERREXCEPT.
+test       t/005-pos-inf-imag-pi.c
+
+assertion  XSH.catanh.006
+anchor     functions/catanh.html#RETURN VALUE
+class      required
+says       For catanh, w is the argument. w = x + iNaN (x non-zero finite), w
+           = NaN + iy (y finite, including zeros) and w = NaN + iNaN give NaN
+           + iNaN.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/006-nan.c
+
+assertion  XSH.catanh.007
+anchor     functions/catanh.html#RETURN VALUE
+class      required
+says       For catanh, w is the argument. w = +Inf + iy (y positive finite: 1,
+           2.5) gives real part +0.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/007-plus-inf-finite.c
+
+assertion  XSH.catanh.008
+anchor     functions/catanh.html#RETURN VALUE
+class      disputed
+says       For catanh, w is the argument. w = +Inf + iy (y positive finite: 1,
+           2.5) gives imaginary part pi/2.
+note       disputed (Q-111): the page names the numbers pi, pi/2, pi/4 and
+           3pi/4, which no binary type holds, and does not say the value is
+           the nearest representable one. The test expects the decimal value
+           rounded to the type. The tag on this passage is the IEC 60559
+           Complex Floating-Point option; the test is NOTINUSE unless the C
+           implementation claims it (Annex G of the C standard). No error is
+           defined on this page, so errno is not examined; an exception is
+           checked only when math_errhandling includes MATH_ERREXCEPT.
+test       t/008-plus-inf-finite-pi.c
+
+assertion  XSH.catanh.009
+anchor     functions/catanh.html#RETURN VALUE
+class      required
+says       For catanh, w is the argument. w = +Inf + iInf gives real part +0.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/009-plus-inf-inf.c
+
+assertion  XSH.catanh.010
+anchor     functions/catanh.html#RETURN VALUE
+class      disputed
+says       For catanh, w is the argument. w = +Inf + iInf gives imaginary part
+           pi/2.
+note       disputed (Q-111): the page names the numbers pi, pi/2, pi/4 and
+           3pi/4, which no binary type holds, and does not say the value is
+           the nearest representable one. The test expects the decimal value
+           rounded to the type. The tag on this passage is the IEC 60559
+           Complex Floating-Point option; the test is NOTINUSE unless the C
+           implementation claims it (Annex G of the C standard). No error is
+           defined on this page, so errno is not examined; an exception is
+           checked only when math_errhandling includes MATH_ERREXCEPT.
+test       t/010-plus-inf-inf-pi.c
+
+assertion  XSH.catanh.011
+anchor     functions/catanh.html#RETURN VALUE
+class      required
+says       For catanh, w is the argument. w = +Inf + iNaN gives +0 + iNaN.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/011-plus-inf-nan.c
+
+assertion  XSH.catanh.012
+anchor     functions/catanh.html#RETURN VALUE
+class      required
+says       For catanh, w is the argument. w = NaN + iInf gives a zero real
+           part of either sign.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/012-nan-inf.c
+
+assertion  XSH.catanh.013
+anchor     functions/catanh.html#RETURN VALUE
+class      disputed
+says       For catanh, w is the argument. w = NaN + iInf gives imaginary part
+           pi/2.
+note       disputed (Q-111): the page names the numbers pi, pi/2, pi/4 and
+           3pi/4, which no binary type holds, and does not say the value is
+           the nearest representable one. The test expects the decimal value
+           rounded to the type. The tag on this passage is the IEC 60559
+           Complex Floating-Point option; the test is NOTINUSE unless the C
+           implementation claims it (Annex G of the C standard). No error is
+           defined on this page, so errno is not examined; an exception is
+           checked only when math_errhandling includes MATH_ERREXCEPT.
+test       t/013-nan-inf-pi.c
+
+assertion  XSH.catanh.014
+anchor     functions/catanh.html#RETURN VALUE
+class      required
+says       catanh of the conjugate of z returns the conjugate of catanh of z,
+           part for part (equal values, zero signs included, NaN matching
+           NaN), at ordinary points, at real-axis points where branch cuts
+           lie, and at points with infinite parts and with a NaN real part.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT. Points with a NaN
+           imaginary part are left out (and, for the odd and even rules,
+           points with any NaN part): the sign of a NaN carries no required
+           meaning. See Q-113.
+test       t/014-conjugate-symmetry.c
+
+assertion  XSH.catanh.015
+anchor     functions/catanh.html#RETURN VALUE
+class      required
+says       catanh of -z returns the negation of catanh of z, part for part
+           (equal values, zero signs included), at ordinary points, at
+           real-axis points where branch cuts lie, and at points with infinite
+           parts.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT. Points with a NaN
+           imaginary part are left out (and, for the odd and even rules,
+           points with any NaN part): the sign of a NaN carries no required
+           meaning. See Q-113.
+test       t/015-odd-symmetry.c

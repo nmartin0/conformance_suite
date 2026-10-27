@@ -1,0 +1,58 @@
+# XSH cabs(), cabsf() and cabsl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only what the page makes exact is tested: special values (signed zeros,
+# infinities, NaN parts), the symmetry rules and the exact results it states.
+# The accuracy of other results is not tested. Arguments are built with
+# CMPLX() and pass through volatile objects, and the three types (name, name
+# with f, name with l) are each tested. The special values on this page carry
+# the tag for the IEC 60559 Complex Floating-Point option and are NOTINUSE
+# where it is not claimed.
+
+assertion  XSH.cabs.001
+anchor     functions/cabs.html#RETURN VALUE
+class      required
+says       cabs of any zero with any signs of its parts (+0 + i0, -0 + i0, +0
+           - i0, -0 - i0) returns +0.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/001-zero.c
+
+assertion  XSH.cabs.002
+anchor     functions/cabs.html#RETURN VALUE
+class      required
+says       cabs returns +Inf whenever either part is +Inf or -Inf, whatever
+           the other part is: finite, zero, NaN or infinite.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/002-infinite-part.c
+
+assertion  XSH.cabs.003
+anchor     functions/cabs.html#RETURN VALUE
+class      required
+says       cabs returns a NaN when a part is a NaN and the other part is not
+           infinite (finite, zero or NaN).
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/003-nan-part.c
+
+assertion  XSH.cabs.004
+anchor     functions/cabs.html#RETURN VALUE
+class      required
+says       cabs of x + iy, of y + ix and of x - iy are the same value, at
+           ordinary points and at points with an infinite or NaN part.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/004-equal-values.c

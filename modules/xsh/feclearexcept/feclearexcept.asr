@@ -1,0 +1,57 @@
+# XSH feclearexcept()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every exception macro is optional (XBD <fenv.h>): a test that uses one is
+# NOTINUSE when it is not defined. Exceptions are provoked by arithmetic on
+# volatile operands.
+
+assertion  XSH.feclearexcept.001
+anchor     functions/feclearexcept.html#DESCRIPTION
+anchor     functions/feclearexcept.html#RETURN VALUE
+class      required
+since      2001
+says       For each exception the implementation defines, feclearexcept() returns
+           zero when it is called with that exception raised.
+test       t/001-return.c
+
+assertion  XSH.feclearexcept.002
+anchor     functions/feclearexcept.html#DESCRIPTION
+class      required
+since      2001
+says       After feclearexcept() is given an exception that was raised,
+           fetestexcept() reports that exception as not set.
+test       t/002-cleared.c
+
+assertion  XSH.feclearexcept.003
+anchor     functions/feclearexcept.html#DESCRIPTION
+class      required
+since      2001
+says       Clearing one exception leaves another, independent exception that is
+           raised still raised (only the exceptions named by the argument are
+           cleared).
+test       t/003-others-kept.c
+
+assertion  XSH.feclearexcept.004
+anchor     functions/feclearexcept.html#DESCRIPTION
+anchor     functions/feclearexcept.html#RETURN VALUE
+class      required
+since      2001
+says       feclearexcept(0) returns zero and does not clear a raised exception.
+test       t/004-zero.c
+
+assertion  XSH.feclearexcept.005
+anchor     functions/feclearexcept.html#DESCRIPTION
+anchor     functions/feclearexcept.html#RETURN VALUE
+class      required
+since      2001
+says       feclearexcept(FE_ALL_EXCEPT) returns zero and clears every exception
+           the implementation defines.
+test       t/005-all.c
+
+assertion  XSH.feclearexcept.006
+anchor     functions/feclearexcept.html#RETURN VALUE
+class      required
+since      2001
+says       Clearing an exception whose flag is already clear counts as success:
+           feclearexcept() returns zero.
+test       t/006-already-clear.c

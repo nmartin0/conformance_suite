@@ -1,0 +1,41 @@
+# XSH feraiseexcept()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every exception macro is optional (XBD <fenv.h>): a test that uses one is
+# NOTINUSE when it is not defined. Whether raising overflow or underflow also
+# raises inexact is implementation-defined, so no test judges extra flags.
+# No exception is ever unmasked, so no trap is taken.
+
+assertion  XSH.feraiseexcept.001
+anchor     functions/feraiseexcept.html#DESCRIPTION
+anchor     functions/feraiseexcept.html#RETURN VALUE
+class      required
+since      2001
+says       feraiseexcept() returns zero for each exception the implementation
+           defines.
+test       t/001-return.c
+
+assertion  XSH.feraiseexcept.002
+anchor     functions/feraiseexcept.html#DESCRIPTION
+class      required
+since      2001
+says       After feraiseexcept() is given an exception, fetestexcept() reports
+           that exception as set.
+test       t/002-flag-set.c
+
+assertion  XSH.feraiseexcept.003
+anchor     functions/feraiseexcept.html#DESCRIPTION
+anchor     functions/feraiseexcept.html#RETURN VALUE
+class      required
+since      2001
+says       feraiseexcept(0) returns zero and raises no exception.
+test       t/003-zero.c
+
+assertion  XSH.feraiseexcept.004
+anchor     functions/feraiseexcept.html#DESCRIPTION
+anchor     functions/feraiseexcept.html#RETURN VALUE
+class      required
+since      2001
+says       feraiseexcept(FE_ALL_EXCEPT) returns zero and every exception the
+           implementation defines is set afterwards.
+test       t/004-all.c

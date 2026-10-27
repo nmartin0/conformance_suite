@@ -1,0 +1,69 @@
+# XSH fetestexcept()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every exception macro is optional (XBD <fenv.h>): a test that uses one is
+# NOTINUSE when it is not defined. Exceptions are provoked by arithmetic on
+# volatile operands.
+
+assertion  XSH.fetestexcept.001
+anchor     functions/fetestexcept.html#DESCRIPTION
+anchor     functions/fetestexcept.html#RETURN VALUE
+class      required
+since      2001
+says       With all exception flags clear, fetestexcept(FE_ALL_EXCEPT) returns
+           zero.
+test       t/001-none-set.c
+
+assertion  XSH.fetestexcept.002
+anchor     functions/fetestexcept.html#DESCRIPTION
+anchor     functions/fetestexcept.html#RETURN VALUE
+class      required
+since      2001
+says       After an arithmetic operation raises a defined exception (the other
+           flags clear first), fetestexcept() called with that exception's
+           macro returns exactly that macro.
+test       t/002-single.c
+
+assertion  XSH.fetestexcept.003
+anchor     functions/fetestexcept.html#DESCRIPTION
+anchor     functions/fetestexcept.html#RETURN VALUE
+class      required
+since      2001
+says       With one of two independent exceptions raised, querying both returns
+           the macro of the raised one only, and querying the other returns
+           zero.
+test       t/003-subset.c
+
+assertion  XSH.fetestexcept.004
+anchor     functions/fetestexcept.html#DESCRIPTION
+anchor     functions/fetestexcept.html#RETURN VALUE
+class      required
+since      2001
+says       With two independent exceptions raised, querying one of them returns
+           only its macro; the raised exception that was not queried does not
+           appear.
+test       t/004-masked.c
+
+assertion  XSH.fetestexcept.005
+anchor     functions/fetestexcept.html#RETURN VALUE
+class      required
+since      2001
+says       With two independent exceptions raised, querying both returns the
+           bitwise OR of their macros.
+test       t/005-both.c
+
+assertion  XSH.fetestexcept.006
+anchor     functions/fetestexcept.html#DESCRIPTION
+anchor     functions/fetestexcept.html#RETURN VALUE
+class      required
+since      2001
+says       fetestexcept(0) returns zero even when a flag is set.
+test       t/006-zero.c
+
+assertion  XSH.fetestexcept.007
+anchor     functions/fetestexcept.html#DESCRIPTION
+class      required
+since      2001
+says       fetestexcept() only determines the state of the flags: a second call
+           still reports an exception that the first reported.
+test       t/007-no-clear.c

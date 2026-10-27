@@ -1,0 +1,66 @@
+# XSH fegetexceptflag(), fesetexceptflag()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every exception macro is optional (XBD <fenv.h>): a test that uses one is
+# NOTINUSE when it is not defined. The stored representation is
+# implementation-defined, so tests only hand it back to the same functions.
+
+assertion  XSH.fegetexceptflag.001
+anchor     functions/fegetexceptflag.html#DESCRIPTION
+anchor     functions/fegetexceptflag.html#RETURN VALUE
+class      required
+since      2001
+says       fegetexceptflag() returns zero when it stores the state of the flag
+           of each exception the implementation defines.
+test       t/001-get-return.c
+
+assertion  XSH.fegetexceptflag.002
+anchor     functions/fegetexceptflag.html#DESCRIPTION
+class      required
+since      2001
+says       fegetexceptflag() only reads the flags: a raised exception stays
+           raised and a clear one stays clear.
+test       t/002-get-no-change.c
+
+assertion  XSH.fegetexceptflag.003
+anchor     functions/fegetexceptflag.html#DESCRIPTION
+anchor     functions/fegetexceptflag.html#RETURN VALUE
+class      required
+since      2001
+says       fesetexceptflag() returns zero for a value stored by
+           fegetexceptflag() for at least the same exceptions.
+test       t/003-set-return.c
+
+assertion  XSH.fegetexceptflag.004
+anchor     functions/fegetexceptflag.html#DESCRIPTION
+class      required
+since      2001
+says       fesetexceptflag() sets an exception flag that was set when its state
+           was stored, even though it was cleared in between.
+test       t/004-set-restores-set.c
+
+assertion  XSH.fegetexceptflag.005
+anchor     functions/fegetexceptflag.html#DESCRIPTION
+class      required
+since      2001
+says       fesetexceptflag() puts a flag that was clear when stored back to
+           clear, even though the exception was raised in between, and the call
+           raises no other exception.
+test       t/005-set-restores-clear.c
+
+assertion  XSH.fegetexceptflag.006
+anchor     functions/fegetexceptflag.html#DESCRIPTION
+class      required
+since      2001
+says       fesetexceptflag() changes only the flags named by its excepts
+           argument: a different exception that is raised stays raised.
+test       t/006-set-subset.c
+
+assertion  XSH.fegetexceptflag.007
+anchor     functions/fegetexceptflag.html#DESCRIPTION
+anchor     functions/fegetexceptflag.html#RETURN VALUE
+class      required
+since      2001
+says       fesetexceptflag() with an excepts argument of zero returns zero and
+           leaves the flags as they were.
+test       t/007-set-zero.c

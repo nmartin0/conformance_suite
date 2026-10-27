@@ -1,0 +1,39 @@
+# XSH conj(), conjf() and conjl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only what the page makes exact is tested: values returned unchanged or with
+# a stated sign change, including signed zeros, infinities and NaN parts.
+# Arguments are built with CMPLX() and pass through volatile objects, and the
+# three types (name, name with f, name with l) are each tested. Infinite and
+# NaN cases are skipped where the type has none.
+
+assertion  XSH.conj.001
+anchor     functions/conj.html#DESCRIPTION
+anchor     functions/conj.html#RETURN VALUE
+class      required
+since      2001
+says       conj of a finite value keeps the real part and reverses the sign of
+           the imaginary part: 1.5 + 2.5i gives 1.5 - 2.5i, -1 - 3i gives -1 +
+           3i, 0.25 - 0.5i gives 0.25 + 0.5i.
+test       t/001-finite.c
+
+assertion  XSH.conj.002
+anchor     functions/conj.html#DESCRIPTION
+anchor     functions/conj.html#RETURN VALUE
+class      required
+since      2001
+says       conj reverses the sign of a zero imaginary part and leaves the sign
+           of a zero real part alone (for a type with negative zero): +0 + i0
+           gives +0 - i0, -0 + i0 gives -0 - i0, +0 - i0 gives +0 + i0, -0 -
+           i0 gives -0 + i0, 1.5 + i0 gives 1.5 - i0, +0 + 2.5i gives +0 -
+           2.5i.
+test       t/002-signed-zero.c
+
+assertion  XSH.conj.003
+anchor     functions/conj.html#DESCRIPTION
+anchor     functions/conj.html#RETURN VALUE
+class      required
+since      2001
+says       conj keeps an infinite or NaN real part, reverses the sign of an
+           infinite imaginary part, and gives a NaN for a NaN imaginary part.
+test       t/003-infinite-nan.c

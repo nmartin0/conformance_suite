@@ -1,0 +1,39 @@
+# XSH cproj(), cprojf() and cprojl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only what the page makes exact is tested: values returned unchanged or with
+# a stated sign change, including signed zeros, infinities and NaN parts.
+# Arguments are built with CMPLX() and pass through volatile objects, and the
+# three types (name, name with f, name with l) are each tested. Infinite and
+# NaN cases are skipped where the type has none.
+
+assertion  XSH.cproj.001
+anchor     functions/cproj.html#DESCRIPTION
+anchor     functions/cproj.html#RETURN VALUE
+class      required
+since      2001
+says       cproj of a value with no infinite part is that value: finite
+           values, zeros with their signs (for a type with negative zero), and
+           values with a NaN part, parts unchanged.
+test       t/001-non-infinite.c
+
+assertion  XSH.cproj.002
+anchor     functions/cproj.html#DESCRIPTION
+anchor     functions/cproj.html#RETURN VALUE
+class      required
+since      2001
+says       cproj of a value whose real part is +Inf or -Inf, with any
+           imaginary part (finite, zero, infinite or NaN), is +Inf with an
+           imaginary part that is a zero carrying the sign of the imaginary
+           part (either sign for a NaN).
+test       t/002-infinite-real.c
+
+assertion  XSH.cproj.003
+anchor     functions/cproj.html#DESCRIPTION
+anchor     functions/cproj.html#RETURN VALUE
+class      required
+since      2001
+says       cproj of a value whose imaginary part is +Inf or -Inf, with any
+           real part (finite, zero or NaN), is +Inf with an imaginary part
+           that is +0 or -0 following the sign of the infinite part.
+test       t/003-infinite-imag.c

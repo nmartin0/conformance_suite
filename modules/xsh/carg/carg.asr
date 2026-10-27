@@ -1,0 +1,54 @@
+# XSH carg(), cargf() and cargl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only what the page makes exact is tested: special values (signed zeros,
+# infinities, NaN parts), the symmetry rules and the exact results it states.
+# The accuracy of other results is not tested. Arguments are built with
+# CMPLX() and pass through volatile objects, and the three types (name, name
+# with f, name with l) are each tested. The special values on this page carry
+# the tag for the IEC 60559 Complex Floating-Point option and are NOTINUSE
+# where it is not claimed.
+
+assertion  XSH.carg.001
+anchor     functions/carg.html#RETURN VALUE
+class      required
+says       carg returns a zero whose sign is that of the imaginary part when
+           the real part is +0, positive finite or +Inf with the imaginary
+           part a zero or a positive or negative finite value (+0 + i0 gives
+           +0, +0 - i0 gives -0, 2.5 +- i0 gives +-0, +Inf +- iy gives +-0 for
+           y = 1, 2.5).
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/001-zero-valued.c
+
+assertion  XSH.carg.002
+anchor     functions/carg.html#RETURN VALUE
+class      required
+says       carg returns a NaN when either part is a NaN, including NaN with an
+           infinite part.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/002-nan.c
+
+assertion  XSH.carg.003
+anchor     functions/carg.html#RETURN VALUE
+class      disputed
+says       carg returns +-pi for -0 +- i0, x +- i0 (x negative) and -Inf +- iy
+           (y positive finite); +-pi/2 for +-0 + iy (y positive or negative)
+           and x +- iInf (x finite); +-3pi/4 for -Inf +- iInf; +-pi/4 for +Inf
+           +- iInf, each sign following the imaginary part.
+note       disputed (Q-111): the page names the numbers pi, pi/2, pi/4 and
+           3pi/4, which no binary type holds, and does not say the value is
+           the nearest representable one. The test expects the decimal value
+           rounded to the type. The tag on this passage is the IEC 60559
+           Complex Floating-Point option; the test is NOTINUSE unless the C
+           implementation claims it (Annex G of the C standard). No error is
+           defined on this page, so errno is not examined; an exception is
+           checked only when math_errhandling includes MATH_ERREXCEPT.
+test       t/003-pi-valued.c

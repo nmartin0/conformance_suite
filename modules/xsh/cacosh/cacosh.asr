@@ -1,0 +1,218 @@
+# XSH cacosh(), cacoshf() and cacoshl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only what the page makes exact is tested: special values (signed zeros,
+# infinities, NaN parts), the symmetry rules and the exact results it states.
+# The accuracy of other results is not tested. Arguments are built with
+# CMPLX() and pass through volatile objects, and the three types (name, name
+# with f, name with l) are each tested. The special values on this page carry
+# the tag for the IEC 60559 Complex Floating-Point option and are NOTINUSE
+# where it is not claimed.
+
+assertion  XSH.cacosh.001
+anchor     functions/cacosh.html#RETURN VALUE
+class      required
+says       cacosh of +0 + i0 and of -0 + i0 has real part +0.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/001-zero.c
+
+assertion  XSH.cacosh.002
+anchor     functions/cacosh.html#RETURN VALUE
+class      disputed
+says       The imaginary part of cacosh(+-0 + i0) is pi/2.
+note       disputed (Q-111): the page names the numbers pi, pi/2, pi/4 and
+           3pi/4, which no binary type holds, and does not say the value is
+           the nearest representable one. The test expects the decimal value
+           rounded to the type. The tag on this passage is the IEC 60559
+           Complex Floating-Point option; the test is NOTINUSE unless the C
+           implementation claims it (Annex G of the C standard). No error is
+           defined on this page, so errno is not examined; an exception is
+           checked only when math_errhandling includes MATH_ERREXCEPT.
+test       t/002-zero-pi.c
+
+assertion  XSH.cacosh.003
+anchor     functions/cacosh.html#RETURN VALUE
+class      required
+says       cacosh of x + iInf (x finite, including zeros) has real part +Inf.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/003-finite-inf-imag.c
+
+assertion  XSH.cacosh.004
+anchor     functions/cacosh.html#RETURN VALUE
+class      disputed
+says       The imaginary part of cacosh(x + iInf) (x finite, including zeros)
+           is pi/2.
+note       disputed (Q-111): the page names the numbers pi, pi/2, pi/4 and
+           3pi/4, which no binary type holds, and does not say the value is
+           the nearest representable one. The test expects the decimal value
+           rounded to the type. The tag on this passage is the IEC 60559
+           Complex Floating-Point option; the test is NOTINUSE unless the C
+           implementation claims it (Annex G of the C standard). No error is
+           defined on this page, so errno is not examined; an exception is
+           checked only when math_errhandling includes MATH_ERREXCEPT.
+test       t/004-finite-inf-imag-pi.c
+
+assertion  XSH.cacosh.005
+anchor     functions/cacosh.html#RETURN VALUE
+class      required
+says       cacosh of +0 + iNaN has a NaN real part.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT. The page's wording leaves
+           open which zeros, signs or infinities the row covers; only +0,
+           positive values and +Inf are used. See Q-114.
+test       t/005-zero-nan.c
+
+assertion  XSH.cacosh.006
+anchor     functions/cacosh.html#RETURN VALUE
+class      disputed
+says       The imaginary part of cacosh(+0 + iNaN) is pi/2 or -pi/2.
+note       disputed (Q-111): the page names the numbers pi, pi/2, pi/4 and
+           3pi/4, which no binary type holds, and does not say the value is
+           the nearest representable one. The test expects the decimal value
+           rounded to the type. The tag on this passage is the IEC 60559
+           Complex Floating-Point option; the test is NOTINUSE unless the C
+           implementation claims it (Annex G of the C standard). No error is
+           defined on this page, so errno is not examined; an exception is
+           checked only when math_errhandling includes MATH_ERREXCEPT. The
+           page's wording leaves open which zeros, signs or infinities the row
+           covers; only +0, positive values and +Inf are used. See Q-114.
+test       t/006-zero-nan-pi.c
+
+assertion  XSH.cacosh.007
+anchor     functions/cacosh.html#RETURN VALUE
+class      required
+says       cacosh of x + iNaN (x non-zero finite), of NaN + iy (y finite,
+           including zeros) and of NaN + iNaN is NaN + iNaN.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/007-nan.c
+
+assertion  XSH.cacosh.008
+anchor     functions/cacosh.html#RETURN VALUE
+class      required
+says       cacosh of -Inf + iy (y positive finite: 1, 2.5) has real part +Inf.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/008-minus-inf-finite.c
+
+assertion  XSH.cacosh.009
+anchor     functions/cacosh.html#RETURN VALUE
+class      disputed
+says       The imaginary part of cacosh(-Inf + iy) (y positive finite: 1, 2.5)
+           is pi.
+note       disputed (Q-111): the page names the numbers pi, pi/2, pi/4 and
+           3pi/4, which no binary type holds, and does not say the value is
+           the nearest representable one. The test expects the decimal value
+           rounded to the type. The tag on this passage is the IEC 60559
+           Complex Floating-Point option; the test is NOTINUSE unless the C
+           implementation claims it (Annex G of the C standard). No error is
+           defined on this page, so errno is not examined; an exception is
+           checked only when math_errhandling includes MATH_ERREXCEPT.
+test       t/009-minus-inf-finite-pi.c
+
+assertion  XSH.cacosh.010
+anchor     functions/cacosh.html#RETURN VALUE
+class      required
+says       cacosh of +Inf + iy (y positive finite: 1, 2.5) is +Inf + i0.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/010-plus-inf-finite.c
+
+assertion  XSH.cacosh.011
+anchor     functions/cacosh.html#RETURN VALUE
+class      required
+says       cacosh of -Inf + iInf has real part +Inf.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/011-minus-inf-inf.c
+
+assertion  XSH.cacosh.012
+anchor     functions/cacosh.html#RETURN VALUE
+class      disputed
+says       The imaginary part of cacosh(-Inf + iInf) is 3pi/4.
+note       disputed (Q-111): the page names the numbers pi, pi/2, pi/4 and
+           3pi/4, which no binary type holds, and does not say the value is
+           the nearest representable one. The test expects the decimal value
+           rounded to the type. The tag on this passage is the IEC 60559
+           Complex Floating-Point option; the test is NOTINUSE unless the C
+           implementation claims it (Annex G of the C standard). No error is
+           defined on this page, so errno is not examined; an exception is
+           checked only when math_errhandling includes MATH_ERREXCEPT.
+test       t/012-minus-inf-inf-pi.c
+
+assertion  XSH.cacosh.013
+anchor     functions/cacosh.html#RETURN VALUE
+class      required
+says       cacosh of +Inf + iInf has real part +Inf.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/013-plus-inf-inf.c
+
+assertion  XSH.cacosh.014
+anchor     functions/cacosh.html#RETURN VALUE
+class      disputed
+says       The imaginary part of cacosh(+Inf + iInf) is pi/4.
+note       disputed (Q-111): the page names the numbers pi, pi/2, pi/4 and
+           3pi/4, which no binary type holds, and does not say the value is
+           the nearest representable one. The test expects the decimal value
+           rounded to the type. The tag on this passage is the IEC 60559
+           Complex Floating-Point option; the test is NOTINUSE unless the C
+           implementation claims it (Annex G of the C standard). No error is
+           defined on this page, so errno is not examined; an exception is
+           checked only when math_errhandling includes MATH_ERREXCEPT.
+test       t/014-plus-inf-inf-pi.c
+
+assertion  XSH.cacosh.015
+anchor     functions/cacosh.html#RETURN VALUE
+class      required
+says       cacosh of +Inf + iNaN, of -Inf + iNaN and of NaN + iInf is +Inf +
+           iNaN.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/015-inf-nan.c
+
+assertion  XSH.cacosh.016
+anchor     functions/cacosh.html#RETURN VALUE
+class      required
+says       cacosh of the conjugate of z returns the conjugate of cacosh of z,
+           part for part (equal values, zero signs included, NaN matching
+           NaN), at ordinary points, at real-axis points where branch cuts
+           lie, and at points with infinite parts and with a NaN real part.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT. Points with a NaN
+           imaginary part are left out (and, for the odd and even rules,
+           points with any NaN part): the sign of a NaN carries no required
+           meaning. See Q-113.
+test       t/016-conjugate-symmetry.c

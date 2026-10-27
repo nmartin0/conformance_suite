@@ -1,0 +1,168 @@
+# XSH ctanh(), ctanhf() and ctanhl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only what the page makes exact is tested: special values (signed zeros,
+# infinities, NaN parts), the symmetry rules and the exact results it states.
+# The accuracy of other results is not tested. Arguments are built with
+# CMPLX() and pass through volatile objects, and the three types (name, name
+# with f, name with l) are each tested. The special values on this page carry
+# the tag for the IEC 60559 Complex Floating-Point option and are NOTINUSE
+# where it is not claimed.
+
+assertion  XSH.ctanh.001
+anchor     functions/ctanh.html#RETURN VALUE
+class      required
+says       For ctanh, w is the argument. w = +0 + i0 gives +0 + i0.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/001-zero.c
+
+assertion  XSH.ctanh.002
+anchor     functions/ctanh.html#RETURN VALUE
+class      required
+says       For ctanh, w is the argument. w = +0 + iInf gives a zero real part
+           (either sign) and a NaN imaginary part, and the invalid exception
+           is raised.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT. The page's wording leaves
+           open which zeros, signs or infinities the row covers; only +0,
+           positive values and +Inf are used. See Q-114.
+test       t/002-zero-inf.c
+
+assertion  XSH.ctanh.003
+anchor     functions/ctanh.html#RETURN VALUE
+class      required
+says       For ctanh, w is the argument. w = x + iInf (x non-zero finite)
+           gives NaN + iNaN and the invalid exception is raised.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/003-nonzero-inf.c
+
+assertion  XSH.ctanh.004
+anchor     functions/ctanh.html#RETURN VALUE
+class      required
+says       For ctanh, w is the argument. w = +0 + iNaN gives a zero real part
+           (either sign) and a NaN imaginary part.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT. The page's wording leaves
+           open which zeros, signs or infinities the row covers; only +0,
+           positive values and +Inf are used. See Q-114.
+test       t/004-zero-nan.c
+
+assertion  XSH.ctanh.005
+anchor     functions/ctanh.html#RETURN VALUE
+class      required
+says       For ctanh, w is the argument. w = x + iNaN (x non-zero finite)
+           gives NaN + iNaN.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/005-nonzero-nan.c
+
+assertion  XSH.ctanh.006
+anchor     functions/ctanh.html#RETURN VALUE
+class      required
+says       For ctanh, w is the argument. w = +Inf + iy (y positive finite)
+           gives 1 + i0 sin(2y): real part 1 and a zero imaginary part with
+           the sign of sin(2y) (y = 1 gives +0, y = 2 gives -0).
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/006-plus-inf-finite.c
+
+assertion  XSH.ctanh.007
+anchor     functions/ctanh.html#RETURN VALUE
+class      required
+says       For ctanh, w is the argument. w = +Inf + iInf gives real part 1 and
+           a zero imaginary part of either sign.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/007-plus-inf-inf.c
+
+assertion  XSH.ctanh.008
+anchor     functions/ctanh.html#RETURN VALUE
+class      required
+says       For ctanh, w is the argument. w = +Inf + iNaN gives real part 1 and
+           a zero imaginary part of either sign.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/008-plus-inf-nan.c
+
+assertion  XSH.ctanh.009
+anchor     functions/ctanh.html#RETURN VALUE
+class      required
+says       For ctanh, w is the argument. w = NaN + i0 gives NaN + i0.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/009-nan-zero.c
+
+assertion  XSH.ctanh.010
+anchor     functions/ctanh.html#RETURN VALUE
+class      required
+says       For ctanh, w is the argument. w = NaN + iy (y non-zero finite) and
+           w = NaN + iNaN give NaN + iNaN.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT.
+test       t/010-nan-nonzero.c
+
+assertion  XSH.ctanh.011
+anchor     functions/ctanh.html#RETURN VALUE
+class      required
+says       ctanh of the conjugate of z returns the conjugate of ctanh of z,
+           part for part (equal values, zero signs included, NaN matching
+           NaN), at ordinary points, at real-axis points where branch cuts
+           lie, and at points with infinite parts and with a NaN real part.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT. Points with a NaN
+           imaginary part are left out (and, for the odd and even rules,
+           points with any NaN part): the sign of a NaN carries no required
+           meaning. See Q-113.
+test       t/011-conjugate-symmetry.c
+
+assertion  XSH.ctanh.012
+anchor     functions/ctanh.html#RETURN VALUE
+class      required
+says       ctanh of -z returns the negation of ctanh of z, part for part
+           (equal values, zero signs included), at ordinary points, at
+           real-axis points where branch cuts lie, and at points with infinite
+           parts.
+note       The tag on this passage is the IEC 60559 Complex Floating-Point
+           option; the test is NOTINUSE unless the C implementation claims it
+           (Annex G of the C standard). No error is defined on this page, so
+           errno is not examined; an exception is checked only when
+           math_errhandling includes MATH_ERREXCEPT. Points with a NaN
+           imaginary part are left out (and, for the odd and even rules,
+           points with any NaN part): the sign of a NaN carries no required
+           meaning. See Q-113.
+test       t/012-odd-symmetry.c

@@ -1,0 +1,35 @@
+# XSH cimag(), cimagf() and cimagl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only what the page makes exact is tested: values returned unchanged or with
+# a stated sign change, including signed zeros, infinities and NaN parts.
+# Arguments are built with CMPLX() and pass through volatile objects, and the
+# three types (name, name with f, name with l) are each tested. Infinite and
+# NaN cases are skipped where the type has none.
+
+assertion  XSH.cimag.001
+anchor     functions/cimag.html#DESCRIPTION
+anchor     functions/cimag.html#RETURN VALUE
+class      required
+since      2001
+says       cimag returns the imaginary part of a finite value exactly: 1.5 +
+           2.5i gives 2.5, -3 + 4i gives 4, 0.25 - 0.5i gives -0.5.
+test       t/001-finite.c
+
+assertion  XSH.cimag.002
+anchor     functions/cimag.html#DESCRIPTION
+anchor     functions/cimag.html#RETURN VALUE
+class      required
+since      2001
+says       cimag returns a zero imaginary part with its sign (for a type with
+           negative zero), whatever the real part is.
+test       t/002-signed-zero.c
+
+assertion  XSH.cimag.003
+anchor     functions/cimag.html#DESCRIPTION
+anchor     functions/cimag.html#RETURN VALUE
+class      required
+since      2001
+says       cimag returns an infinite or NaN imaginary part as it is, and the
+           imaginary part when the real part is infinite or NaN.
+test       t/003-infinite-nan.c

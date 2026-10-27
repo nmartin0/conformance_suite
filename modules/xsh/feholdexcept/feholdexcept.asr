@@ -1,0 +1,52 @@
+# XSH feholdexcept()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every exception and rounding macro is optional (XBD <fenv.h>): a test that
+# uses one is NOTINUSE when it is not defined, or when fewer than two
+# rounding directions can be selected.
+
+assertion  XSH.feholdexcept.001
+anchor     functions/feholdexcept.html#DESCRIPTION
+anchor     functions/feholdexcept.html#RETURN VALUE
+class      disputed
+since      2001
+says       feholdexcept() returns zero (it returns zero only if a non-stop mode
+           was installed).
+note       disputed (Q-110): the page asks for a non-stop mode only "if
+           available" and does not say whether an implementation may lack one,
+           so a nonzero return cannot be called a failure; the test is
+           UNRESOLVED for it. The tests of the other behaviours do the same.
+test       t/001-return.c
+
+assertion  XSH.feholdexcept.002
+anchor     functions/feholdexcept.html#DESCRIPTION
+class      required
+since      2001
+says       The environment saved by feholdexcept() includes the rounding
+           direction: after it is changed, fesetenv() with the saved
+           environment reinstates the direction in force at the call.
+test       t/002-saves-env.c
+
+assertion  XSH.feholdexcept.003
+anchor     functions/feholdexcept.html#DESCRIPTION
+class      required
+since      2001
+says       When feholdexcept() returns, every exception flag is clear.
+test       t/003-clears-flags.c
+
+assertion  XSH.feholdexcept.004
+anchor     functions/feholdexcept.html#DESCRIPTION
+class      required
+since      2001
+says       The saved environment holds the flags that were set before the call:
+           fesetenv() with it raises them again.
+test       t/004-saves-flags.c
+
+assertion  XSH.feholdexcept.005
+anchor     functions/feholdexcept.html#DESCRIPTION
+class      required
+since      2001
+says       After feholdexcept() has returned zero, each defined exception
+           raised by an arithmetic operation is recorded in the flags and the
+           program continues (non-stop mode).
+test       t/005-non-stop.c

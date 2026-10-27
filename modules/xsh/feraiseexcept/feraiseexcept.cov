@@ -1,0 +1,8 @@
+# feraiseexcept.cov - every requirement unit on functions/feraiseexcept.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:2589300c     XSH.feraiseexcept.001 XSH.feraiseexcept.002 XSH.feraiseexcept.004
+DESCRIPTION:9f28c245     none  the order of raising is unobservable through the flags; the overflow-before-inexact rule has no portable observation
+DESCRIPTION:e637654e     impl  whether inexact is also raised with overflow or underflow is implementation-defined
+RETURN_VALUE:01d8323d    XSH.feraiseexcept.001 XSH.feraiseexcept.003 XSH.feraiseexcept.004
+RETURN_VALUE:ac2ce765    untestable  failure of feraiseexcept() is not provokable: the page defines no error condition

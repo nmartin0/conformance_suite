@@ -1,0 +1,24 @@
+# XSH cpow(), cpowf() and cpowl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only what the page makes exact is tested: special values (signed zeros,
+# infinities, NaN parts), the symmetry rules and the exact results it states.
+# The accuracy of other results is not tested. Arguments are built with
+# CMPLX() and pass through volatile objects, and the three types (name, name
+# with f, name with l) are each tested. The special values on this page carry
+# the tag for the IEC 60559 Complex Floating-Point option and are NOTINUSE
+# where it is not claimed.
+
+assertion  XSH.cpow.001
+anchor     functions/cpow.html#DESCRIPTION
+anchor     functions/cpow.html#RETURN VALUE
+class      untestable
+since      2001
+says       cpow computes the complex power of its first argument raised to its
+           second, with the branch cut for the first argument along the
+           negative real axis, and with the Complex Floating-Point option
+           raises the floating-point exceptions that are appropriate for the
+           calculation of the parts of the result (spurious ones are allowed).
+reason     The page states no special values and no accuracy, and allows
+           spurious exceptions, so no exception can be demanded or ruled out;
+           the cut position alone fixes no result.

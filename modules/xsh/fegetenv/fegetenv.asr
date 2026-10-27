@@ -1,0 +1,60 @@
+# XSH fegetenv(), fesetenv()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every exception and rounding macro is optional (XBD <fenv.h>): a test that
+# uses one is NOTINUSE when it is not defined, or when fewer than two
+# rounding directions can be selected.
+
+assertion  XSH.fegetenv.001
+anchor     functions/fegetenv.html#DESCRIPTION
+anchor     functions/fegetenv.html#RETURN VALUE
+class      required
+since      2001
+says       fegetenv() returns zero when it stores the current environment.
+test       t/001-get.c
+
+assertion  XSH.fegetenv.002
+anchor     functions/fegetenv.html#DESCRIPTION
+anchor     functions/fegetenv.html#RETURN VALUE
+class      required
+since      2001
+says       fesetenv() returns zero for an environment stored by fegetenv().
+test       t/002-set.c
+
+assertion  XSH.fegetenv.003
+anchor     functions/fegetenv.html#DESCRIPTION
+class      required
+since      2001
+says       After the rounding direction is changed, fesetenv() with an
+           environment stored earlier by fegetenv() reinstates the direction
+           that was stored.
+test       t/003-rounding.c
+
+assertion  XSH.fegetenv.004
+anchor     functions/fegetenv.html#DESCRIPTION
+class      required
+since      2001
+says       fesetenv() installs the flag state stored in the environment: an
+           exception that was clear when the environment was stored is clear
+           after the call even though it was raised in between.
+test       t/004-flags-clear.c
+
+assertion  XSH.fegetenv.005
+anchor     functions/fegetenv.html#DESCRIPTION
+class      required
+since      2001
+says       fesetenv() installs the flag state stored in the environment: an
+           exception stored as raised is raised after the call, and the call
+           raises no other exception.
+test       t/005-flags-set.c
+
+assertion  XSH.fegetenv.006
+anchor     functions/fegetenv.html#DESCRIPTION
+anchor     functions/fegetenv.html#RETURN VALUE
+anchor     basedefs/fenv.h.html#DESCRIPTION
+class      required
+since      2001
+says       FE_DFL_ENV is a valid argument of fesetenv(); the call returns zero
+           and installs the environment of program startup, so the rounding
+           direction becomes the one in force at startup.
+test       t/006-default-env.c

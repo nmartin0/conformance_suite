@@ -1,0 +1,73 @@
+# XSH fegetround(), fesetround()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every rounding direction macro is optional (XBD <fenv.h>): a test that uses
+# one is NOTINUSE when it is not defined. The arithmetic and rint() checks
+# use volatile operands and only the directions that are defined.
+
+assertion  XSH.fegetround.001
+anchor     functions/fegetround.html#RETURN VALUE
+class      required
+since      2001
+says       When the implementation defines no rounding direction macro,
+           fegetround() returns a negative value.
+test       t/001-none.c
+
+assertion  XSH.fegetround.002
+anchor     functions/fegetround.html#DESCRIPTION
+anchor     functions/fegetround.html#RETURN VALUE
+anchor     basedefs/fenv.h.html#DESCRIPTION
+class      required
+since      2001
+says       For each rounding direction macro the implementation defines (they
+           exist only when the direction can be set and read),
+           fesetround() with that macro returns zero.
+test       t/002-set-return.c
+
+assertion  XSH.fegetround.003
+anchor     functions/fegetround.html#DESCRIPTION
+anchor     functions/fegetround.html#RETURN VALUE
+class      required
+since      2001
+says       After fesetround() establishes a direction given by a macro,
+           fegetround() returns the value of that macro.
+test       t/003-get-after-set.c
+
+assertion  XSH.fegetround.004
+anchor     functions/fegetround.html#DESCRIPTION
+anchor     functions/fegetround.html#RETURN VALUE
+anchor     basedefs/fenv.h.html#DESCRIPTION
+class      required
+since      2001
+says       fesetround() with a value that equals no rounding direction macro
+           (-1 is used, since the macros are non-negative) returns nonzero,
+           because zero is returned only if the requested direction was
+           established.
+test       t/004-invalid.c
+
+assertion  XSH.fegetround.005
+anchor     functions/fegetround.html#DESCRIPTION
+class      required
+since      2001
+says       When fesetround() is given a value that equals no rounding direction
+           macro, the rounding direction does not change.
+test       t/005-invalid-unchanged.c
+
+assertion  XSH.fegetround.006
+anchor     functions/fegetround.html#DESCRIPTION
+anchor     basedefs/fenv.h.html#DESCRIPTION
+class      required
+since      2001
+says       With upward rounding established, 1.0/3.0 in double is greater than
+           the same quotient with downward rounding established.
+test       t/006-arithmetic.c
+
+assertion  XSH.fegetround.007
+anchor     functions/fegetround.html#DESCRIPTION
+anchor     functions/rint.html#DESCRIPTION
+class      required
+since      2001
+says       rint() takes the current direction: upward gives the ceiling,
+           downward the floor and toward-zero the truncation of 2.5 and -2.5,
+           and to-nearest gives 2 for 2.25 and 3 for 2.75.
+test       t/007-rint.c
