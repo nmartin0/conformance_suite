@@ -72,6 +72,15 @@ unsigned pc_file_mode(const char *path);
 void pc_require_space(void);
 
 /*
+ * Name of an installed locale whose code set (nl_langinfo(CODESET)) is
+ * `codeset` (for example "UTF-8"), or NULL when the system has none. It asks
+ * the system's own `locale -a`, tries each name with setlocale(), and puts
+ * the locale back to "C" before returning. Call it in the setup phase.
+ * With `multibyte` non-zero only locales whose MB_CUR_MAX exceeds 1 count.
+ */
+const char *pc_find_locale(const char *codeset, int multibyte);
+
+/*
  * Low level: write one RESULT line without exiting. Only the driver's
  * self-tests use this, to produce malformed results on purpose.
  */

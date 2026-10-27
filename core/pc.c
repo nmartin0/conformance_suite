@@ -11,6 +11,8 @@
 
 #include <errno.h>
 #include <fcntl.h>
+#include <langinfo.h>
+#include <locale.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -383,4 +385,40 @@ void pc_require_space(void)
 	if (unlink(".pcspace") != 0)
 		pc_setup_broke("require_space/unlink", ".pcspace");
 	pc_internal_leave();
+}
+
+/* ---------- locale discovery ---------- */
+
+const char *pc_find_locale(const char *codeset, int multibyte)
+{
+	static char found[256];
+	char line[256];
+	FILE *p;
+	int ok = 0;
+
+	pc_internal_enter();
+	p = popen("locale -a 2>/dev/null", "r");
+	if (p == NULL) {
+		pc_internal_leave();
+		return NULL;
+	}
+	while (!ok && fgets(line, sizeof line, p) != NULL) {
+		size_t n = strlen(line);
+
+		while (n > 0 && (line[n - 1] == '\n' || line[n - 1] == '\r'))
+			line[--n] = '\0';
+		if (n == 0 || strcmp(line, "C") == 0 || strcmp(line, "POSIX") == 0)
+			continue;
+		if (setlocale(LC_ALL, line) == NULL)
+			continue;
+		if (strcmp(nl_langinfo(CODESET), codeset) == 0 &&
+		    (!multibyte || MB_CUR_MAX > 1)) {
+			(void)snprintf(found, sizeof found, "%s", line);
+			ok = 1;
+		}
+	}
+	(void)pclose(p);
+	(void)setlocale(LC_ALL, "C");
+	pc_internal_leave();
+	return ok ? found : NULL;
 }
