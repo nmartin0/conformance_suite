@@ -1,0 +1,248 @@
+# XSH wordexp(), wordfree()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The expansions are those of the shell command language (XCU 2.6), so the
+# words used are plain: echo and true as the only commands, environment
+# variables set by the test, and a private directory for pathname
+# expansion. Special parameters are unspecified and not used. Tilde
+# expansion is tested only for HOME, which the test sets. WRDE_NOSPACE
+# needs memory exhaustion and is not tested. Where the page lets an
+# unquoted number sign be a comment or an ordinary character both are
+# accepted.
+
+assertion  XSH.wordexp.001
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       wordexp() splits words at unquoted blanks and tabs, ignores
+           leading and trailing blanks, stores the count in we_wordc and a
+           list in we_wordv whose first pointer after the last word is null,
+           and returns 0.
+test       t/001-split.c
+
+assertion  XSH.wordexp.002
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       Quoting works as in the shell: single quotes, double quotes and
+           backslash keep blanks and special characters in one word, the
+           backslash is kept before ordinary characters inside double quotes,
+           and quote removal drops the quote characters.
+test       t/002-quoting.c
+
+assertion  XSH.wordexp.003
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       Parameter expansion is performed: plain, braced, default-value,
+           length and pattern-removal forms; an unquoted result is split into
+           fields at blanks and a quoted one is not; text in single quotes or
+           after a backslash is not expanded.
+test       t/003-parameters.c
+
+assertion  XSH.wordexp.004
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       Command substitution in the dollar-parenthesis and backquote forms
+           is performed; separators and special characters inside it are
+           allowed; an unquoted result is split into words, a quoted one
+           stays one word with embedded newlines kept and trailing ones
+           dropped.
+test       t/004-command-subst.c
+
+assertion  XSH.wordexp.005
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       Arithmetic expansion is performed, including variables from the
+           environment.
+test       t/005-arithmetic.c
+
+assertion  XSH.wordexp.006
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       A tilde that begins an unquoted word, alone or before a slash,
+           expands to the value of HOME; a quoted tilde, one inside a word,
+           and one in single quotes are left alone.
+test       t/006-tilde.c
+
+assertion  XSH.wordexp.007
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       Pathname expansion makes each matching file a separate word in
+           sorted order; a pattern matching nothing is left as written; a
+           quoted or escaped pattern is not expanded; other words in the list
+           keep their place.
+test       t/007-pathname.c
+
+assertion  XSH.wordexp.008
+anchor     functions/wordexp.html#DESCRIPTION
+anchor     functions/wordexp.html#RETURN VALUE
+class      required
+since      1992
+says       An unquoted newline, vertical bar, ampersand, semicolon, less-than
+           or greater-than sign outside command substitution makes wordexp()
+           fail with WRDE_BADCHAR and the number of words is 0.
+test       t/008-badchar.c
+
+assertion  XSH.wordexp.009
+anchor     functions/wordexp.html#DESCRIPTION
+anchor     functions/wordexp.html#RETURN VALUE
+class      required
+since      1992
+says       An unquoted parenthesis or brace in an inappropriate place makes
+           wordexp() fail, with WRDE_BADCHAR or WRDE_SYNTAX, and the number
+           of words is 0.
+test       t/009-badchar-paren.c
+
+assertion  XSH.wordexp.010
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       The characters that are refused unquoted (bar, ampersand,
+           semicolon, angle brackets, newline, parentheses, braces) are
+           accepted when single-quoted, double-quoted or escaped by a
+           backslash, and appear in the word.
+test       t/010-quoted-special.c
+
+assertion  XSH.wordexp.011
+anchor     functions/wordexp.html#RETURN VALUE
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       A word with an unterminated single or double quote makes wordexp()
+           fail with WRDE_SYNTAX.
+test       t/011-syntax.c
+
+assertion  XSH.wordexp.012
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       With WRDE_NOCMD a request for command substitution, in either
+           notation and also inside double quotes, makes wordexp() fail with
+           WRDE_CMDSUB, and the command is not executed.
+test       t/012-nocmd.c
+
+assertion  XSH.wordexp.013
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       With WRDE_NOCMD words that need no command substitution are
+           expanded normally, including text that only looks like one in
+           single quotes or after an escaped dollar sign in double quotes.
+test       t/013-nocmd-allowed.c
+
+assertion  XSH.wordexp.014
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       With WRDE_UNDEF expanding an unset variable fails with
+           WRDE_BADVAL, in plain, quoted and embedded positions; set
+           variables (also empty ones) are fine; without the flag an unset
+           variable expands to nothing. Default-value forms of an unset
+           variable under the flag are not tested: the text on a shell's
+           handling of unset parameters does not say whether they count.
+test       t/014-undef.c
+
+assertion  XSH.wordexp.015
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       With WRDE_APPEND on later calls the new words follow the earlier
+           ones in order, we_wordv stays null-terminated and we_wordc is the
+           total over all the calls.
+test       t/015-append.c
+
+assertion  XSH.wordexp.016
+anchor     functions/wordexp.html#RETURN VALUE
+class      required
+since      1992
+says       When a wordexp() call with WRDE_APPEND fails for a reason other
+           than lack of memory (WRDE_BADCHAR, WRDE_SYNTAX, WRDE_CMDSUB),
+           we_wordc and we_wordv are not modified.
+test       t/016-append-failure.c
+
+assertion  XSH.wordexp.017
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       With WRDE_DOOFFS, we_wordv starts with we_offs null pointers, then
+           the words, then a null pointer, and we_wordc counts only the
+           words, also when there are no words or the offset is 0.
+test       t/017-dooffs.c
+
+assertion  XSH.wordexp.018
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       WRDE_DOOFFS together with WRDE_APPEND keeps the leading null
+           pointers once and appends the new words after the earlier ones.
+test       t/018-dooffs-append.c
+
+assertion  XSH.wordexp.019
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       WRDE_REUSE on a structure from an earlier successful call gives
+           the result of wordfree() followed by a call without it: only the
+           new words are in the list, also with WRDE_DOOFFS.
+test       t/019-reuse.c
+
+assertion  XSH.wordexp.020
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      2024
+says       wordfree() does not change errno for a structure filled in by
+           wordexp() and not yet freed, with or without offsets.
+note       Added in Issue 8 (Austin Group Defect 385).
+test       t/020-wordfree-errno.c
+
+assertion  XSH.wordexp.021
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       Unless WRDE_SHOWERR is given, standard error is redirected to
+           /dev/null for the utilities run for command substitution: a
+           command writing to its standard error in $(...) writes nothing to
+           the standard error of the caller, while its standard output is
+           still substituted.
+test       t/021-stderr-null.c
+
+assertion  XSH.wordexp.022
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       WRDE_SHOWERR is accepted, alone or with WRDE_UNDEF, and expansions
+           still produce the right words.
+test       t/022-showerr.c
+
+assertion  XSH.wordexp.023
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       An unquoted number sign at the start of a token is either an
+           ordinary character or starts a comment (both are accepted); a
+           number sign inside a word, quoted or escaped is an ordinary
+           character.
+test       t/023-comment.c
+
+assertion  XSH.wordexp.024
+anchor     functions/wordexp.html#DESCRIPTION
+class      required
+since      1992
+says       A quoted empty string stays in the list as an empty word; an empty
+           quoted string attached to other text adds nothing.
+test       t/024-empty-word.c
+
+assertion  XSH.wordexp.025
+anchor     functions/wordexp.html#DESCRIPTION
+anchor     functions/wordexp.html#RETURN VALUE
+class      required
+since      1992
+says       The WRDE_ flags are nonzero and do not share bits, the error
+           constants are nonzero and distinct, we_wordc and we_offs are
+           size_t and we_wordv is a char **.
+test       t/025-constants.c

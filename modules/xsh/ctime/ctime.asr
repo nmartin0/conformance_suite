@@ -1,0 +1,47 @@
+# XSH ctime()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests set TZ with setenv() and call tzset() so the local zone is known:
+# "UTC0" has no offset, "EST5", "ABC-3" and "NST3:30" are in the TZ format
+# of XBD 8.3 with no daylight saving. ctime_r() was removed in Issue 8, so
+# only ctime() is tested. The static buffer is read before the next call.
+
+assertion  XSH.ctime.001
+anchor     functions/ctime.html#DESCRIPTION
+anchor     functions/ctime.html#RETURN VALUE
+class      required
+since      1988
+says       With a zone of no offset from UTC ctime() of the time 0 returns
+           the string for the first of January 1970, midnight, a Thursday:
+           "Thu Jan 1 00:00:00 1970" plus a newline.
+test       t/001-epoch.c
+
+assertion  XSH.ctime.002
+anchor     functions/ctime.html#DESCRIPTION
+class      required
+since      1988
+says       ctime() converts a count of seconds since the Epoch to the date
+           and time string correctly for a range of times: the end of the
+           first day, a year later, a leap day, 10^9 seconds, a later date in
+           2009 and the last 32-bit time.
+test       t/002-times.c
+
+assertion  XSH.ctime.003
+anchor     functions/ctime.html#DESCRIPTION
+anchor     functions/ctime.html#RETURN VALUE
+class      required
+since      1988
+says       ctime(t) returns a string equal to the one asctime(localtime(t))
+           produces, in several zones.
+test       t/003-asctime-localtime.c
+
+assertion  XSH.ctime.004
+anchor     functions/ctime.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.3/TZ
+class      required
+since      1988
+says       ctime() uses local time: with TZ naming a zone five hours behind,
+           three hours ahead or three and a half hours behind UTC the string
+           for time 0 is shifted by that offset, crossing the date boundary
+           where needed.
+test       t/004-zones.c

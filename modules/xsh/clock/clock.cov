@@ -1,0 +1,8 @@
+# clock.cov - every requirement unit on functions/clock.html (clock).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:6cdd40ec     XSH.clock.002 XSH.clock.003 XSH.clock.004
+RETURN_VALUE:f6f30c05    XSH.clock.003
+RETURN_VALUE:68bc5933    XSH.clock.001
+RETURN_VALUE:54cde144    untestable  needs a process whose processor time is unavailable or unrepresentable
+ERRORS:626cbcee          untestable  needs a process that has used more time than clock_t holds

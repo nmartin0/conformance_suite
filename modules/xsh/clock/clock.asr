@@ -1,0 +1,37 @@
+# XSH clock()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# A return of (clock_t)-1 is allowed when the processor time is not
+# available, so the tests that need a value report NOTINUSE in that case.
+# EOVERFLOW needs a process that has used more time than clock_t holds.
+# The upper bounds on timing only detect gross errors.
+
+assertion  XSH.clock.001
+anchor     functions/clock.html#RETURN VALUE
+class      conditional
+when       XSI
+says       CLOCKS_PER_SEC is one million.
+test       t/001-clocks-per-sec.c
+
+assertion  XSH.clock.002
+anchor     functions/clock.html#DESCRIPTION
+class      required
+says       Values returned by successive clock() calls in one process never
+           decrease, and a failure is not reported after a success.
+test       t/002-monotonic.c
+
+assertion  XSH.clock.003
+anchor     functions/clock.html#DESCRIPTION
+anchor     functions/clock.html#RETURN VALUE
+class      required
+says       While a single-threaded process computes, clock() advances, and
+           the advance divided by CLOCKS_PER_SEC does not exceed the real
+           time that passed (beyond a margin of a tenth of a second).
+test       t/003-advances.c
+
+assertion  XSH.clock.004
+anchor     functions/clock.html#DESCRIPTION
+class      required
+says       Time the process spends sleeping is not processor time: over a 0.4
+           second sleep clock() advances by less than 0.2 seconds.
+test       t/004-sleep.c

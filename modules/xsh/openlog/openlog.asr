@@ -1,0 +1,97 @@
+# XSH closelog(), openlog(), setlogmask(), syslog() (XSI)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# What syslog() sends goes to an implementation-defined place that a
+# portable test cannot read, and a run must leave nothing behind, so the
+# tests make every syslog() call one the log mask rejects (a mask holding
+# only LOG_EMERG, which is never sent). They check the mask through the
+# return value of setlogmask(), the macros, and the descriptors openlog()
+# may allocate. The message format and the %m conversion, LOG_CONS and the
+# EMFILE and ENFILE errors cannot be observed this way.
+
+assertion  XSH.openlog.001
+anchor     functions/openlog.html#DESCRIPTION
+class      conditional
+when       XSI
+says       In a process that has not set a mask, setlogmask(0) returns a mask
+           containing all eight severities, so every priority is allowed, and
+           no openlog() is needed first.
+test       t/001-default-mask.c
+
+assertion  XSH.openlog.002
+anchor     functions/openlog.html#DESCRIPTION
+class      conditional
+when       XSI
+says       setlogmask() with an argument of 0 returns the current mask and
+           leaves it unchanged, however often it is called.
+test       t/002-zero-query.c
+
+assertion  XSH.openlog.003
+anchor     functions/openlog.html#DESCRIPTION
+anchor     functions/openlog.html#RETURN VALUE
+class      conditional
+when       XSI
+says       setlogmask() installs its non-zero argument as the new mask and
+           returns the mask that was in force before; the new mask is what
+           the next query returns.
+test       t/003-set-previous.c
+
+assertion  XSH.openlog.004
+anchor     functions/openlog.html#DESCRIPTION
+anchor     basedefs/syslog.h.html#DESCRIPTION
+class      conditional
+when       XSI
+says       LOG_UPTO(LOG_WARNING) combined with LOG_MASK(LOG_DEBUG) by or
+           equals LOG_UPTO(LOG_DEBUG) with the masks of LOG_NOTICE and
+           LOG_INFO removed, and LOG_MASK and LOG_UPTO yield int.
+test       t/004-macro-identity.c
+
+assertion  XSH.openlog.005
+anchor     basedefs/syslog.h.html#DESCRIPTION
+class      conditional
+when       XSI
+says       LOG_MASK gives each of the eight severities a nonzero mask
+           different from the others, and LOG_UPTO(p) is the union of the
+           masks from LOG_EMERG through p in the order emergency, alert,
+           critical, error, warning, notice, info, debug.
+test       t/005-upto.c
+
+assertion  XSH.openlog.006
+anchor     functions/openlog.html#DESCRIPTION
+class      conditional
+when       XSI
+says       syslog() calls whose severity is not in the mask (with or without
+           a facility in the priority, with a format using arguments and the
+           m conversion) are rejected: they return and the mask is unchanged.
+test       t/006-masked-syslog.c
+
+assertion  XSH.openlog.007
+anchor     functions/openlog.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       If openlog() with LOG_NDELAY allocates a file descriptor, the
+           descriptor has FD_CLOEXEC set.
+note       The FD_CLOEXEC requirement was added in Issue 8 (Austin Group
+           Defect 368). NOTINUSE if openlog() allocates no descriptor.
+test       t/007-cloexec.c
+
+assertion  XSH.openlog.008
+anchor     functions/openlog.html#DESCRIPTION
+class      conditional
+when       XSI
+says       closelog() closes any descriptor that openlog() allocated: the set
+           of open descriptors afterwards equals the set before openlog(); a
+           further closelog() is harmless.
+note       NOTINUSE if openlog() allocates no descriptor.
+test       t/008-closelog.c
+
+assertion  XSH.openlog.009
+anchor     functions/openlog.html#DESCRIPTION
+anchor     basedefs/syslog.h.html#DESCRIPTION
+class      conditional
+when       XSI
+says       openlog() accepts each of the option constants and their
+           combinations and each facility constant, repeatedly, with a
+           following syslog() and closelog(), without failing or blocking.
+test       t/009-options.c

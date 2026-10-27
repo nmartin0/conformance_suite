@@ -1,0 +1,24 @@
+# XSH difftime()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only differences that a double represents exactly are used. time_t is
+# an arithmetic type, so the arguments are plain non-negative values.
+
+assertion  XSH.difftime.001
+anchor     functions/difftime.html#DESCRIPTION
+anchor     functions/difftime.html#RETURN VALUE
+class      required
+since      1992
+says       difftime(time1, time0) returns time1 minus time0 in seconds,
+           exactly for representable differences, positive, negative and
+           zero.
+test       t/001-values.c
+
+assertion  XSH.difftime.002
+anchor     functions/difftime.html#RETURN VALUE
+class      required
+since      1992
+says       The result has type double, swapping the arguments negates the
+           result, and the difference between a time() value and one an hour
+           earlier is 3600.
+test       t/002-type-sign.c

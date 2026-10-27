@@ -1,0 +1,197 @@
+# XSH getdate(), getdate_err (XSI)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests run with TZ set to "UTC0" (no offset, no daylight saving time)
+# and DATEMSK naming a file the test writes in its private directory, in
+# the POSIX locale. The result of getdate() is copied before any other call,
+# because it may share storage with the localtime() result. Tests that rely
+# on the current time compute what the page says from time() and localtime()
+# and repeat if the clock crosses an hour, day or month boundary meanwhile.
+# getdate_err 5 (a read error), 6 (no memory) and, for lack of a way to
+# arrange it, 3 (no file status) cannot be produced by a test; for a
+# missing template file 2 and 3 are both accepted because the page does not
+# order the open and the status request. Conversion specifications of the
+# page outside the POSIX locale are not tested.
+
+assertion  XSH.getdate.001
+anchor     functions/getdate.html#ERRORS
+class      conditional
+when       XSI
+says       With DATEMSK undefined, getdate() returns a null pointer and sets
+           getdate_err to 1.
+test       t/001-datemsk-unset.c
+
+assertion  XSH.getdate.002
+anchor     functions/getdate.html#ERRORS
+class      conditional
+when       XSI
+says       With DATEMSK set to the empty string, getdate() returns a null
+           pointer and sets getdate_err to 1.
+test       t/002-datemsk-null.c
+
+assertion  XSH.getdate.003
+anchor     functions/getdate.html#ERRORS
+class      conditional
+when       XSI
+says       When DATEMSK names a file that does not exist, getdate() returns a
+           null pointer and sets getdate_err to 2 (it cannot be opened for
+           reading) or 3 (no file status).
+test       t/003-no-file.c
+
+assertion  XSH.getdate.004
+anchor     functions/getdate.html#ERRORS
+class      conditional
+when       XSI
+says       When DATEMSK names a directory, getdate() returns a null pointer
+           and sets getdate_err to 4.
+test       t/004-not-regular.c
+
+assertion  XSH.getdate.005
+anchor     functions/getdate.html#ERRORS
+class      conditional
+when       XSI
+says       When no line of the template file matches the input, getdate()
+           returns a null pointer and sets getdate_err to 7.
+test       t/005-no-match.c
+
+assertion  XSH.getdate.006
+anchor     functions/getdate.html#ERRORS
+class      conditional
+when       XSI
+says       An input that fits a template but names a date that does not exist
+           (31 February, 30 February, 31 April, 29 February of a common year,
+           31 June) makes getdate() return a null pointer and set getdate_err
+           to 8.
+test       t/006-invalid-date.c
+
+assertion  XSH.getdate.007
+anchor     functions/getdate.html#DESCRIPTION
+anchor     functions/getdate.html#RETURN VALUE
+class      conditional
+when       XSI
+says       With the template %m/%d/%y getdate() returns a struct tm holding
+           the date given, with leading zeros optional, and, since no time of
+           day is given, the hour, minute and second of the current local
+           time.
+test       t/007-explicit-date.c
+
+assertion  XSH.getdate.008
+anchor     functions/getdate.html#DESCRIPTION
+class      conditional
+when       XSI
+says       The first line of the template file that matches the input is
+           used: a date that fits two lines is read by the earlier one, and a
+           later line is used when the earlier ones do not match.
+test       t/008-first-line.c
+
+assertion  XSH.getdate.009
+anchor     functions/getdate.html#DESCRIPTION
+class      conditional
+when       XSI
+says       For %y, values 69 to 99 mean the years 1969 to 1999 and values 00
+           to 68 mean 2000 to 2068.
+test       t/009-year-pivot.c
+
+assertion  XSH.getdate.010
+anchor     functions/getdate.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Templates with weekday, month name, day, four-digit year, hour,
+           minute and second convert as the page shows; matching ignores
+           case, the numeric fields may omit a leading zero, a missing second
+           is 0 when the hour and minute are given.
+test       t/010-templates.c
+
+assertion  XSH.getdate.011
+anchor     functions/getdate.html#DESCRIPTION
+class      conditional
+when       XSI
+says       The conversions %D, %T, %R, %e, %h, %n, %t and %% and combinations
+           of %B, %b, %Y, %d, %m with literal punctuation are supported and
+           convert correctly.
+test       t/011-conversions.c
+
+assertion  XSH.getdate.012
+anchor     functions/getdate.html#DESCRIPTION
+class      conditional
+when       XSI
+says       %I with %p gives the 24-hour hour (12 AM is 0, 12 PM is 12, 4 PM
+           is 16), %r in the POSIX locale is %I:%M:%S %p, matching ignores
+           the case of AM and PM, and an hour given alone leaves minute and
+           second 0.
+test       t/012-twelve-hour.c
+
+assertion  XSH.getdate.013
+anchor     functions/getdate.html#DESCRIPTION
+class      conditional
+when       XSI
+says       %C gives the century and %y the year within it, so 19 and 05 mean
+           1905 whatever the %y pivot rule says.
+test       t/013-century.c
+
+assertion  XSH.getdate.014
+anchor     functions/getdate.html#DESCRIPTION
+class      conditional
+when       XSI
+says       If only a weekday is given (as %A, %a or the number %w, in any letter case) the
+           date is the first day from today on that has that weekday, and the
+           time of day is the current one.
+test       t/014-weekday.c
+
+assertion  XSH.getdate.015
+anchor     functions/getdate.html#DESCRIPTION
+class      conditional
+when       XSI
+says       If only a month is given (as %B or %b) the month is the first one
+           from the current month on that has that name, in the current year
+           or the next, the day is the first, and the time of day is the
+           current one.
+test       t/015-month.c
+
+assertion  XSH.getdate.016
+anchor     functions/getdate.html#DESCRIPTION
+class      conditional
+when       XSI
+says       If only an hour and minute are given the result is the first
+           moment from the current hour on with that hour and minute, seconds
+           0: an hour three ahead is on the same day or the next, an hour one
+           behind is on the next day.
+test       t/016-time-only.c
+
+assertion  XSH.getdate.017
+anchor     functions/getdate.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Extra white space in the template file or in the input is ignored.
+test       t/017-white-space.c
+
+assertion  XSH.getdate.018
+anchor     functions/getdate.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5
+class      conditional
+when       XSI
+says       In the POSIX locale %x, %X and %c are %m/%d/%y, %H:%M:%S and %a %b
+           %e %H:%M:%S %Y.
+test       t/018-locale-forms.c
+
+assertion  XSH.getdate.019
+anchor     functions/getdate.html#DESCRIPTION
+class      conditional
+when       XSI
+says       %Z accepts the time zone name that getdate() expects (here the one
+           TZ names) and an unknown name makes getdate() fail with
+           getdate_err 8 (invalid input) or 7 (the line does not match).
+note       The zone expected for TZ set to a name with no daylight saving
+           time is its name; the page leaves how the expected zone is
+           computed to getdate().
+test       t/019-zone.c
+
+assertion  XSH.getdate.020
+anchor     functions/getdate.html#DESCRIPTION
+anchor     functions/getdate.html#RETURN VALUE
+class      conditional
+when       XSI
+says       getdate_err is of type int and readable after including <time.h>
+           alone, and a successful getdate() returns a pointer to a struct tm
+           whose members are in range.
+test       t/020-err-type.c

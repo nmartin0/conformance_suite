@@ -1,0 +1,51 @@
+# XSH asctime()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# asctime_r() and ctime_r() were removed in Issue 8 (the page, shared with
+# them, no longer describes them), so only asctime() is tested. Members
+# outside their normal ranges and years outside 1000 to 9999 are undefined
+# and not used. The shared static buffer is read before the next call.
+
+assertion  XSH.asctime.001
+anchor     functions/asctime.html#DESCRIPTION
+anchor     functions/asctime.html#RETURN VALUE
+class      required
+since      1988
+says       asctime() returns a pointer to the 26-byte string of the form
+           weekday, month, day, hours:minutes:seconds, year and a newline:
+           for second 52, minute 3, hour 1, day 16, month September, year
+           1973, Sunday, it is "Sun Sep 16 01:03:52 1973" plus a newline.
+test       t/001-example.c
+
+assertion  XSH.asctime.002
+anchor     functions/asctime.html#DESCRIPTION
+class      required
+since      1988
+says       The day of the month is printed in a field of width two, padded on
+           the left with a space for 1 to 9 and not padded for 10 to 31.
+test       t/002-day-padding.c
+
+assertion  XSH.asctime.003
+anchor     functions/asctime.html#DESCRIPTION
+class      required
+since      1988
+says       The weekday abbreviation is chosen by tm_wday (Sun to Sat) and the
+           month abbreviation by tm_mon (Jan to Dec), independently of each
+           other and of the day.
+test       t/003-names.c
+
+assertion  XSH.asctime.004
+anchor     functions/asctime.html#DESCRIPTION
+class      required
+since      1988
+says       Hour, minute and second are each printed as two digits with a
+           leading zero.
+test       t/004-time-digits.c
+
+assertion  XSH.asctime.005
+anchor     functions/asctime.html#DESCRIPTION
+class      required
+since      1988
+says       The year printed is 1900 plus tm_year, as four decimal digits, for
+           years 1000 to 9999.
+test       t/005-year.c

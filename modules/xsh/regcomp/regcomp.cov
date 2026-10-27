@@ -1,0 +1,84 @@
+# regcomp.cov - every requirement unit on functions/regcomp.html (regcomp, regerror, regexec, regfree).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:75001716     none  background; the grammar is tested through XSH.regcomp.002 to .017
+DESCRIPTION:fc97fbea     none  cross-reference
+DESCRIPTION:09e8c3b5     XSH.regcomp.051
+DESCRIPTION:c7feaaee     XSH.regcomp.001 XSH.regcomp.051
+DESCRIPTION:4c8352c5     XSH.regcomp.051
+DESCRIPTION:4f804eb8     XSH.regcomp.018 XSH.regcomp.051
+DESCRIPTION:106c5fe5     XSH.regcomp.018 XSH.regcomp.051
+DESCRIPTION:d56deedc     XSH.regcomp.002 XSH.regcomp.035
+DESCRIPTION:97703116     XSH.regcomp.051
+DESCRIPTION:c5a671fc     XSH.regcomp.032
+DESCRIPTION:9b2c3f40     XSH.regcomp.027
+DESCRIPTION:1c38ef88     XSH.regcomp.034
+DESCRIPTION:864f09a4     optional  behaviour of REG_MINIMAL without REG_EXTENDED is not specified
+DESCRIPTION:dec4db62     XSH.regcomp.028
+DESCRIPTION:0b7bd910     XSH.regcomp.029
+DESCRIPTION:5cf4d215     XSH.regcomp.002 XSH.regcomp.032
+DESCRIPTION:642988b3     XSH.regcomp.032
+DESCRIPTION:8eafef68     XSH.regcomp.001 XSH.regcomp.036
+DESCRIPTION:707af71f     XSH.regcomp.035
+DESCRIPTION:db3e434d     XSH.regcomp.035
+DESCRIPTION:6b1217db     XSH.regcomp.051
+DESCRIPTION:959a529a     XSH.regcomp.030
+DESCRIPTION:b60743da     XSH.regcomp.030
+DESCRIPTION:210eab66     XSH.regcomp.031
+DESCRIPTION:d75ceaf1     XSH.regcomp.031
+DESCRIPTION:99329b73     XSH.regcomp.021
+DESCRIPTION:2d78e6e3     XSH.regcomp.018 XSH.regcomp.019 XSH.regcomp.020
+DESCRIPTION:7cad6d25     XSH.regcomp.018
+DESCRIPTION:7213a0db     XSH.regcomp.019
+DESCRIPTION:8d3d3c37     XSH.regcomp.020
+DESCRIPTION:b68105c4     none  background for the rules that follow
+DESCRIPTION:c0eafb51     none  introduces the rules that follow
+DESCRIPTION:d9223d7e     XSH.regcomp.022
+DESCRIPTION:3476bbb8     XSH.regcomp.023
+DESCRIPTION:854efe58     XSH.regcomp.023
+DESCRIPTION:94bf5119     XSH.regcomp.024
+DESCRIPTION:89a2bad3     XSH.regcomp.018 XSH.regcomp.024
+DESCRIPTION:9dea72f5     XSH.regcomp.024
+DESCRIPTION:f623874e     XSH.regcomp.025
+DESCRIPTION:fb0ef5cb     impl  undefined when the locale changes
+DESCRIPTION:ee886efb     XSH.regcomp.029
+DESCRIPTION:3ef0dc62     XSH.regcomp.029
+DESCRIPTION:8e1f634b     XSH.regcomp.029
+DESCRIPTION:8c7da666     none  cross-reference fragment
+DESCRIPTION:67a5539b     XSH.regcomp.029
+DESCRIPTION:8dc20ffe     XSH.regcomp.029
+DESCRIPTION:5a89ca48     untestable  memory use cannot be observed portably
+DESCRIPTION:d4de7439     XSH.regcomp.050
+DESCRIPTION:f46df393     XSH.regcomp.051
+DESCRIPTION:357114fb     XSH.regcomp.041
+DESCRIPTION:f5bca9bd     XSH.regcomp.038 XSH.regcomp.039
+DESCRIPTION:f357c1d2     XSH.regcomp.043
+DESCRIPTION:ef4f6573     XSH.regcomp.041
+DESCRIPTION:959a6e55     XSH.regcomp.042
+DESCRIPTION:ca9a8c73     XSH.regcomp.039
+DESCRIPTION:8da46c40     XSH.regcomp.042
+DESCRIPTION:7d52e539     XSH.regcomp.044
+DESCRIPTION:0beb62a1     XSH.regcomp.040
+DESCRIPTION:43ae0c37     XSH.regcomp.043
+DESCRIPTION:23cdfcf1     untestable  needs memory exhaustion
+DESCRIPTION:923db5c2     XSH.regcomp.038
+DESCRIPTION:6049f048     XSH.regcomp.035
+DESCRIPTION:8ff8d99a     none  unspecified; the error tests accept any nonzero code
+DESCRIPTION:1fe0e3b1     XSH.regcomp.045 XSH.regcomp.049
+DESCRIPTION:0776f2ff     XSH.regcomp.045
+DESCRIPTION:b62fa8c0     none  unspecified
+DESCRIPTION:2eaee43e     XSH.regcomp.048
+DESCRIPTION:b4f204c7     XSH.regcomp.045 XSH.regcomp.046
+DESCRIPTION:9fb8c331     XSH.regcomp.046
+DESCRIPTION:1a32fbf0     XSH.regcomp.047
+DESCRIPTION:ed9ada6d     impl  undefined
+DESCRIPTION:facca14d     none  the object may be reused only by a new regcomp(), see XSH.regcomp.050
+RETURN_VALUE:b114aeb9    XSH.regcomp.001 XSH.regcomp.002 XSH.regcomp.035
+RETURN_VALUE:4ce11027    XSH.regcomp.038 XSH.regcomp.039
+RETURN_VALUE:cea13ea2    XSH.regcomp.051
+RETURN_VALUE:20fd85ee    XSH.regcomp.038 XSH.regcomp.039
+RETURN_VALUE:726e71f0    XSH.regcomp.002 XSH.regcomp.035
+RETURN_VALUE:ff3585a8    XSH.regcomp.035
+RETURN_VALUE:292b7b92    XSH.regcomp.045 XSH.regcomp.047
+RETURN_VALUE:3598ea99    XSH.regcomp.046
+RETURN_VALUE:c1e8490c    none  void function

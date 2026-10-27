@@ -1,0 +1,564 @@
+# XSH regcomp(), regexec(), regerror(), regfree()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests run in the POSIX locale (they never call setlocale()), so range
+# expressions, equivalence classes and the character classes have the
+# POSIX-locale meaning that XBD 9.3.5 gives. Only what XBD chapter 9 states
+# is required: constructs it calls undefined or unspecified are not used,
+# except in the assertions marked disputed, which rest on the error
+# constants of regcomp() for syntax errors that XBD does not call "invalid".
+# REG_STARTEND, asctime_r-style extras and other extensions are not on the
+# page and are not tested. Failure of regcomp() is accepted with any
+# nonzero code: the page lets REG_BADPAT stand for every error.
+
+assertion  XSH.regcomp.001
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       Unless REG_NOSUB is given, regcomp() sets re_nsub to the number of
+           parenthesized subexpressions: groups written with backslash-
+           parentheses in a BRE, plain parentheses in an ERE, nested ones
+           included; escaped or bracketed parentheses and, in a BRE, plain
+           ones do not count.
+test       t/001-nsub.c
+
+assertion  XSH.regcomp.002
+anchor     basedefs/V1_chap09.html#9.1
+anchor     basedefs/V1_chap09.html#9.3.6
+class      required
+since      1992
+says       A BRE of ordinary characters, period, bracket expressions,
+           asterisk and concatenation matches as described: bb* finds
+           characters two to four of abbbc; a* on baaa matches the empty
+           string at offset 0; a period needs a character; [ab]* and [ab][ab]
+           agree on ab.
+test       t/002-bre-basic.c
+
+assertion  XSH.regcomp.003
+anchor     basedefs/V1_chap09.html#9.1
+class      required
+since      1992
+says       The match begins at the earliest possible position and, among
+           those, is the longest: (wee|week)(knights|night) takes all ten
+           characters of weeknights, with the first group wee and the second
+           knights; abba|cde on abbcde finds cde; a|ab on abc finds ab; the
+           sub-matches follow from the overall longest choice.
+test       t/003-leftmost-longest.c
+
+assertion  XSH.regcomp.004
+anchor     basedefs/V1_chap09.html#9.3.6
+class      required
+since      1992
+says       BRE interval expressions \{m\}, \{m,\} and \{m,n\} repeat the
+           preceding item exactly m, at least m, and m to n times: on
+           abababccccccd, c\{3\} is characters seven to nine, \(ab\)\{4,\}
+           does not match and c\{1,3\}d is characters ten to thirteen; zero
+           counts and bracket or group operands work too.
+test       t/004-bre-interval.c
+
+assertion  XSH.regcomp.005
+anchor     basedefs/V1_chap09.html#9.4.6
+class      required
+since      1992
+says       ERE +, *, ? and intervals repeat the preceding item as stated:
+           b+(bc) on acabbbcde is characters four to seven; b*c on cabbbcde
+           is the first character; b*cd on cabbbcdebbbbbbcdbc is characters
+           three to seven; b?c on acabbbcde is the second character; c{3} and
+           (ab){2,} on abababccccccd are characters seven to nine and one to
+           six.
+test       t/005-ere-dup.c
+
+assertion  XSH.regcomp.006
+anchor     basedefs/V1_chap09.html#9.4.7
+anchor     basedefs/V1_chap09.html#9.4.8
+class      required
+since      1992
+says       ERE alternation matches either side, a((bc)|d) matches abc and ad,
+           alternation has the lowest precedence (ab|cd is ab or cd, not a
+           b-or-c d), and a repeated group of alternatives matches a run of
+           them.
+test       t/006-ere-alternation.c
+
+assertion  XSH.regcomp.007
+anchor     basedefs/V1_chap09.html#9.3.8
+anchor     basedefs/V1_chap09.html#9.3.3
+class      required
+since      1992
+says       In a BRE a leading circumflex anchors at the start of the string
+           and a trailing dollar sign at the end (^ab matches abcdef but not
+           cdefab; ab$ the reverse; ^abcdef$ only the whole string); a
+           circumflex or dollar sign elsewhere in the expression, or a
+           leading dollar sign, is an ordinary character.
+test       t/007-bre-anchors.c
+
+assertion  XSH.regcomp.008
+anchor     basedefs/V1_chap09.html#9.4.9
+class      required
+since      1992
+says       In an ERE circumflex and dollar sign are anchors wherever they
+           appear outside a bracket expression, also inside groups and next
+           to alternation: ^ab and (^ab) match abcdef but not cdefab, ef$ and
+           (ef$) the converse, and a^b and e$f are valid but can never match.
+test       t/008-ere-anchors.c
+
+assertion  XSH.regcomp.009
+anchor     basedefs/V1_chap09.html#9.3.3
+class      required
+since      1992
+says       In a BRE an asterisk that is the first character of the
+           expression, follows a leading circumflex, or is the first
+           character of a group matches itself.
+test       t/009-bre-star-literal.c
+
+assertion  XSH.regcomp.010
+anchor     basedefs/V1_chap09.html#9.3.2
+anchor     basedefs/V1_chap09.html#9.5.1
+class      required
+since      1992
+says       A backslash before a BRE special character (period, asterisk,
+           bracket, backslash, circumflex, dollar sign) or before a closing
+           bracket, and before any ERE special character, closing bracket or
+           closing brace, makes it match itself.
+test       t/010-escapes.c
+
+assertion  XSH.regcomp.011
+anchor     basedefs/V1_chap09.html#9.3.4
+anchor     basedefs/V1_chap09.html#9.4.4
+class      required
+since      1992
+says       A period outside a bracket expression matches every one of the
+           characters 1 to 255 of the POSIX locale (a newline included when
+           REG_NEWLINE is not given), in a BRE and an ERE, and does not match
+           the empty string.
+test       t/011-period.c
+
+assertion  XSH.regcomp.012
+anchor     basedefs/V1_chap09.html#9.3.5
+class      required
+since      1992
+says       In a BRE, a matching list matches one of its characters and a non-
+           matching list any other; a closing bracket first in the list is a
+           member; period, asterisk, backslash and left bracket are ordinary
+           inside a list; a circumflex not first is a member.
+test       t/012-bracket-bre.c
+
+assertion  XSH.regcomp.013
+anchor     basedefs/V1_chap09.html#9.3.5
+anchor     basedefs/V1_chap09.html#9.4.5
+class      required
+since      1992
+says       In an ERE bracket expression the operators ( * + ? { | $ . and
+           backslash lose their meaning, a circumflex inside is not an anchor
+           and a closing bracket first is a member.
+test       t/013-bracket-ere.c
+
+assertion  XSH.regcomp.014
+anchor     basedefs/V1_chap09.html#9.3.5
+class      required
+since      1992
+says       In the POSIX locale a hyphen first or last in a list is itself, a
+           range covers the characters between its endpoints in code order
+           ([a-c], [%--], [--@], [0-9]), and a collating symbol can be a
+           range start ([][.-.]-0] holds the closing bracket and the
+           characters from hyphen to 0); this holds in a BRE and an ERE, and
+           a non-matching list is the complement.
+test       t/014-ranges.c
+
+assertion  XSH.regcomp.015
+anchor     basedefs/V1_chap09.html#9.3.5
+class      required
+since      1992
+says       In the POSIX locale a collating symbol [.a.] stands for the
+           character, including punctuation ones such as [.-.] and [.].]; an
+           equivalence class [=a=] matches a and a list mixing them with
+           ordinary characters matches any of the members.
+test       t/015-collating.c
+
+assertion  XSH.regcomp.016
+anchor     basedefs/V1_chap09.html#9.3.5
+class      required
+since      1992
+says       The twelve classes alnum, alpha, blank, cntrl, digit, graph,
+           lower, print, punct, space, upper and xdigit are recognised; in
+           the POSIX locale each matches exactly the characters for which the
+           corresponding ctype function is true, a non-matching list matches
+           the rest, and classes mix with ordinary list members.
+test       t/016-classes.c
+
+assertion  XSH.regcomp.017
+anchor     basedefs/V1_chap09.html#9.3.6
+class      required
+since      1992
+says       A BRE back-reference \n matches the text the nth group matched
+           last: ^\(.*\)\1$ matches adjacent repeats, \(a\)*\1 does not match
+           a, \(a\(b\)*\)*\2 does not match abab, ^\(ab*\)*\1$ matches
+           ababbabb but not ababbab; a group that matched nothing does not
+           satisfy a back-reference, and an empty match can be repeated.
+test       t/017-backrefs.c
+
+assertion  XSH.regcomp.018
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       pmatch[0] holds the offsets of the whole match and pmatch[i] those
+           of the subexpression whose opening parenthesis is the ith,
+           counting nested groups by their opening parenthesis; offsets are
+           bytes from the start of the string, the end being one past the
+           last byte.
+test       t/018-offsets.c
+
+assertion  XSH.regcomp.019
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       Elements of pmatch from the last subexpression up to nmatch-1 that
+           correspond to no subexpression of the pattern have both rm_so and
+           rm_eo equal to -1.
+test       t/019-unused-minus1.c
+
+assertion  XSH.regcomp.020
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       When nmatch is smaller than the number of subexpressions plus one,
+           regexec() still decides the match against the whole expression (a
+           string failing in a later group gives REG_NOMATCH), reports only
+           the first nmatch elements and writes no further element.
+test       t/020-nmatch-small.c
+
+assertion  XSH.regcomp.021
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       With nmatch 0, or with REG_NOSUB given to regcomp(), regexec()
+           does not use pmatch: a null pointer is accepted and a supplied
+           array is left unchanged, while the match result is still reported.
+test       t/021-pmatch-ignored.c
+
+assertion  XSH.regcomp.022
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       A subexpression outside any other that took part in the match
+           several times is reported with the offsets of its last occurrence:
+           (a|b)* on abab gives 3 and 4 for group one; likewise for + ,
+           intervals, and BRE asterisk repetition.
+test       t/022-last-match.c
+
+assertion  XSH.regcomp.023
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       A subexpression that did not take part in an otherwise successful
+           match, because a star, question mark or interval allowed zero
+           repetitions or because another alternative was chosen, has -1 in
+           both members of its pmatch element.
+test       t/023-non-participating.c
+
+assertion  XSH.regcomp.024
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       A group inside a group that is reported as -1 is also -1; a group
+           inside a participating group is judged within the last substring
+           reported for the outer group: (a(b)*)* on aba gives group one at
+           offsets 2 to 3 and group two as -1, though an earlier repetition
+           of the outer group matched b.
+test       t/024-nested.c
+
+assertion  XSH.regcomp.025
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       A subexpression that matched the empty string has both offsets
+           equal to the offset of the character, or of the terminating null,
+           that follows it.
+test       t/025-zero-length.c
+
+assertion  XSH.regcomp.026
+anchor     basedefs/V1_chap09.html#9.1
+class      required
+since      1992
+says       Within the overall longest match each subpattern, left to right,
+           takes the longest string possible and an empty match counts as
+           longer than none: \(.*\).* on abcdef gives group one the whole
+           string, \(a*\)* on bc gives it the empty string at 0, and
+           (a|ab)(c|bcd)(d*) on abcd gives ab, c, d.
+test       t/026-longest-sub.c
+
+assertion  XSH.regcomp.027
+anchor     functions/regcomp.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.1
+class      required
+since      1992
+says       With REG_ICASE a string that matches case-sensitively still
+           matches with any of its characters replaced by their other-case
+           counterpart: literals, ranges, the lower and upper classes and
+           back-references all follow; without the flag case matters.
+test       t/027-icase.c
+
+assertion  XSH.regcomp.028
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       With REG_NOSUB regexec() still reports match (0) or REG_NOMATCH
+           correctly, for BREs and EREs with groups, intervals and anchors,
+           whatever nmatch is.
+test       t/028-nosub.c
+
+assertion  XSH.regcomp.029
+anchor     functions/regcomp.html#DESCRIPTION
+anchor     basedefs/V1_chap09.html#9.2
+class      required
+since      1992
+says       Without REG_NEWLINE a newline in pattern or string is ordinary: a
+           period and a non-matching list match it and the anchors act at the
+           ends of the string only. With it a period and a non-matching list
+           do not match a newline in the string, a circumflex anchor also
+           matches just after a newline and a dollar anchor just before one,
+           whatever REG_NOTBOL and REG_NOTEOL say, and a newline in the
+           pattern still matches a newline.
+test       t/029-newline.c
+
+assertion  XSH.regcomp.030
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       With REG_NOTBOL a circumflex anchor does not match at the start of
+           the string (in a BRE and an ERE) while expressions without anchors
+           and a circumflex that is an ordinary character are unaffected; the
+           idiom of searching on with REG_NOTBOL after the first match finds
+           each match once.
+test       t/030-notbol.c
+
+assertion  XSH.regcomp.031
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       With REG_NOTEOL a dollar anchor does not match at the end of the
+           string; expressions without anchors and a dollar that is an
+           ordinary character are unaffected, and both flags can be given
+           together.
+test       t/031-noteol.c
+
+assertion  XSH.regcomp.032
+anchor     basedefs/V1_chap09.html#9.3.2
+anchor     basedefs/V1_chap09.html#9.4.3
+class      required
+since      1992
+says       Without REG_EXTENDED the characters + ? | ( ) { } are ordinary
+           while a * and \( \) still work; with it they are operators.
+test       t/032-bre-vs-ere.c
+
+assertion  XSH.regcomp.033
+anchor     basedefs/V1_chap09.html#9.4.6
+class      required
+since      2024
+says       In an ERE a duplication symbol followed by a question mark (the
+           repetition modifier) selects the leftmost shortest match for that
+           repetition, including the empty one: .*c on abc abc ends at the
+           last c and .*?c at the first; (.*?).* gives group one the empty
+           string.
+test       t/033-lazy-modifier.c
+
+assertion  XSH.regcomp.034
+anchor     functions/regcomp.html#DESCRIPTION
+anchor     basedefs/V1_chap09.html#9.4.6
+anchor     basedefs/regex.h.html#DESCRIPTION
+class      required
+since      2024
+says       With REG_EXTENDED and REG_MINIMAL the leftmost shortest match is
+           the default for every duplication symbol and the repetition
+           modifier ? selects the longest instead; REG_MINIMAL is a flag bit
+           distinct from the others.
+test       t/034-minimal.c
+
+assertion  XSH.regcomp.035
+anchor     functions/regcomp.html#RETURN VALUE
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       A compiled expression can be used for any number of regexec()
+           calls with different strings and flags, interleaved with another
+           one; regexec() returns 0 for a match and exactly REG_NOMATCH
+           (nonzero) for none.
+test       t/035-reuse.c
+
+assertion  XSH.regcomp.036
+anchor     basedefs/V1_chap09.html#9.2
+class      required
+since      1992
+says       Regular expressions of up to 256 bytes are accepted and work, for
+           a BRE and an ERE, including ones with many groups, which re_nsub
+           counts.
+test       t/036-length-256.c
+
+assertion  XSH.regcomp.037
+anchor     basedefs/V1_chap09.html#9.3.6
+anchor     basedefs/V1_chap09.html#9.4.6
+class      required
+since      1992
+says       Interval counts up to 255 are accepted by regcomp() and mean what
+           they say in a BRE and an ERE.
+test       t/037-dup-max.c
+
+assertion  XSH.regcomp.038
+anchor     basedefs/V1_chap09.html#9.3.6
+anchor     functions/regcomp.html#RETURN VALUE
+class      required
+since      1992
+says       A BRE back-reference \n with fewer than n groups before it is
+           invalid, and regcomp() fails with a nonzero code.
+test       t/038-bad-backref.c
+
+assertion  XSH.regcomp.039
+anchor     basedefs/V1_chap09.html#9.3.5
+anchor     functions/regcomp.html#RETURN VALUE
+class      required
+since      1992
+says       A collating symbol that names no collating element of the POSIX
+           locale makes the expression invalid, and regcomp() fails with a
+           nonzero code.
+test       t/039-bad-collating.c
+
+assertion  XSH.regcomp.040
+anchor     functions/regcomp.html#DESCRIPTION
+anchor     basedefs/V1_chap09.html#9.1
+class      disputed
+since      1992
+says       A BRE with an unclosed backslash-parenthesis and an ERE with an
+           unclosed parenthesis are rejected by regcomp() with a nonzero
+           code.
+note       disputed (Q-162): the error constants list a parenthesis imbalance,
+           but XBD calls such a grammar violation undefined, not invalid, so
+           an implementation could read the stray parenthesis as a literal; a
+           FAIL is logged as INSPECT.
+test       t/040-eparen.c
+
+assertion  XSH.regcomp.041
+anchor     functions/regcomp.html#DESCRIPTION
+anchor     basedefs/V1_chap09.html#9.1
+class      disputed
+since      1992
+says       Interval expressions that are unclosed, not numeric or with the
+           lower bound above the upper are rejected by regcomp() with a
+           nonzero code.
+note       disputed (Q-162): the interval error constants describe an unclosed
+           or non-numeric brace pair and a first bound larger than the
+           second, which XBD does not call invalid; a FAIL is logged as
+           INSPECT.
+test       t/041-ebrace.c
+
+assertion  XSH.regcomp.042
+anchor     functions/regcomp.html#DESCRIPTION
+anchor     basedefs/V1_chap09.html#9.1
+class      disputed
+since      1992
+says       An unclosed bracket expression and a character class name that no
+           locale defines are rejected by regcomp() with a nonzero code.
+note       disputed (Q-162): the bracket and class-type error constants cover
+           an unclosed bracket expression and an unknown class name, which
+           XBD treats as grammar violations (undefined); a FAIL is logged as
+           INSPECT.
+test       t/042-ebrack.c
+
+assertion  XSH.regcomp.043
+anchor     functions/regcomp.html#DESCRIPTION
+anchor     basedefs/V1_chap09.html#9.1
+class      disputed
+since      1992
+says       A reversed range expression and an ERE with a repetition operator
+           at the start or after an alternation bar are rejected by regcomp()
+           with a nonzero code.
+note       disputed (Q-162): REG_ERANGE and REG_BADRPT describe a bad range
+           endpoint and a repetition operator with nothing before it, but XBD
+           calls a leading ERE duplication symbol undefined and does not call
+           a reversed range invalid; a FAIL is logged as INSPECT.
+test       t/043-erange-badrpt.c
+
+assertion  XSH.regcomp.044
+anchor     functions/regcomp.html#DESCRIPTION
+anchor     basedefs/V1_chap09.html#9.1
+class      disputed
+since      1992
+says       A pattern ending in a single backslash is rejected by regcomp()
+           with a nonzero code.
+note       disputed (Q-162): REG_EESCAPE describes a trailing backslash, but
+           XBD defines an escape sequence as a backslash and a following
+           character and does not call the lone backslash invalid; a FAIL is
+           logged as INSPECT.
+test       t/044-eescape.c
+
+assertion  XSH.regcomp.045
+anchor     functions/regcomp.html#DESCRIPTION
+anchor     functions/regcomp.html#RETURN VALUE
+class      required
+since      1992
+says       For an error code from regcomp() or regexec() (with the preg of
+           that call) regerror() returns the number of bytes needed for the
+           whole message including the null, writes the message there when it
+           fits, and the message consists of printable characters.
+test       t/045-regerror-size.c
+
+assertion  XSH.regcomp.046
+anchor     functions/regcomp.html#DESCRIPTION
+anchor     functions/regcomp.html#RETURN VALUE
+class      required
+since      1992
+says       When the buffer is too small regerror() stores the leading part of
+           the message cut to the buffer size minus one and a null, writes
+           nothing beyond the buffer, and still returns the size of the whole
+           message; with a buffer of exactly the needed size the message is
+           whole.
+test       t/046-regerror-truncate.c
+
+assertion  XSH.regcomp.047
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       With errbuf_size 0 regerror() ignores errbuf, writes nothing, and
+           returns the size needed (at least 1), the same value as a full-
+           size call.
+test       t/047-regerror-size0.c
+
+assertion  XSH.regcomp.048
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      1992
+says       regerror() with a null preg still produces a printable, null-
+           terminated message for a code returned by regcomp() or regexec(),
+           with a consistent size.
+test       t/048-regerror-nullpreg.c
+
+assertion  XSH.regcomp.049
+anchor     functions/regcomp.html#DESCRIPTION
+class      disputed
+since      1992
+says       The message regerror() produces for an error code that regcomp()
+           or regexec() returned is not empty, with and without a preg.
+note       disputed (Q-163): the page calls the messages unspecified printable
+           strings and does not say they are non-empty; an empty message
+           would defeat the purpose but is not excluded in words; a FAIL is
+           logged as INSPECT.
+test       t/049-regerror-nonempty.c
+
+assertion  XSH.regcomp.050
+anchor     functions/regcomp.html#DESCRIPTION
+class      required
+since      2024
+says       regfree() does not change errno for a regex_t returned by
+           regcomp() (whatever flags it was compiled with), and the same
+           regex_t can be compiled into again afterwards.
+note       The errno sentence was added in Issue 8 (Austin Group Defect 385).
+test       t/050-regfree-errno.c
+
+assertion  XSH.regcomp.051
+anchor     basedefs/regex.h.html#DESCRIPTION
+class      required
+since      1992
+says       The error constants are nonzero and pairwise distinct, the compile
+           flags are nonzero and do not share bits, as the evaluation flags
+           REG_NOTBOL and REG_NOTEOL; regoff_t is signed and wide enough for
+           ptrdiff_t and ssize_t values; re_nsub is a size_t and rm_so and
+           rm_eo are regoff_t.
+test       t/051-constants.c

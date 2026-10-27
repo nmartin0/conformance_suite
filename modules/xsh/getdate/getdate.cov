@@ -1,0 +1,76 @@
+# getdate.cov - every requirement unit on functions/getdate.html (getdate, getdate_err).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:7294a3e4     XSH.getdate.007 XSH.getdate.010 XSH.getdate.011
+DESCRIPTION:f13a6980     XSH.getdate.020
+DESCRIPTION:8838fd09     none  unspecified
+DESCRIPTION:324b3c4b     impl  undefined
+DESCRIPTION:a34429ae     none  background
+DESCRIPTION:4aac6be7     XSH.getdate.001 XSH.getdate.002 XSH.getdate.003 XSH.getdate.004 XSH.getdate.007
+DESCRIPTION:03d56135     app
+DESCRIPTION:05a62680     XSH.getdate.008
+DESCRIPTION:4b1dcf32     XSH.getdate.010 XSH.getdate.011 XSH.getdate.012 XSH.getdate.013 XSH.getdate.018
+DESCRIPTION:b9c9d08d     XSH.getdate.011
+DESCRIPTION:96a2a8cf     XSH.getdate.014
+DESCRIPTION:ccf4c1c5     XSH.getdate.010 XSH.getdate.014
+DESCRIPTION:867fb98e     XSH.getdate.011 XSH.getdate.015
+DESCRIPTION:2873a061     XSH.getdate.010 XSH.getdate.015
+DESCRIPTION:751d860f     XSH.getdate.018
+DESCRIPTION:21a209c9     XSH.getdate.013
+DESCRIPTION:60ee7a7d     XSH.getdate.007 XSH.getdate.010
+DESCRIPTION:3ccda4c2     XSH.getdate.011
+DESCRIPTION:1d294e5d     XSH.getdate.011
+DESCRIPTION:867fb98e.2   XSH.getdate.011
+DESCRIPTION:6dd0c4bc     XSH.getdate.010 XSH.getdate.016
+DESCRIPTION:f276618e     XSH.getdate.012
+DESCRIPTION:b0c31b16     XSH.getdate.007
+DESCRIPTION:b71a0549     XSH.getdate.010
+DESCRIPTION:5d13e336     XSH.getdate.011
+DESCRIPTION:0e371107     XSH.getdate.012
+DESCRIPTION:af6ca69e     XSH.getdate.012
+DESCRIPTION:0ca7bc30     XSH.getdate.012
+DESCRIPTION:18cc3090     XSH.getdate.011
+DESCRIPTION:bc9f9f76     XSH.getdate.010
+DESCRIPTION:7fe2de30     todo  a seconds value of 60 is not tested: what the broken-down time then holds is not stated
+DESCRIPTION:49b89fef     none  rationale
+DESCRIPTION:fe60abc0     XSH.getdate.011
+DESCRIPTION:61f6f611     XSH.getdate.011
+DESCRIPTION:fce5d99b     XSH.getdate.014
+DESCRIPTION:59c0ceda     XSH.getdate.018
+DESCRIPTION:791e8eb8     XSH.getdate.018
+DESCRIPTION:c8b10a02     XSH.getdate.007 XSH.getdate.009
+DESCRIPTION:47881888     XSH.getdate.009
+DESCRIPTION:59ecf1b4     none  a remark
+DESCRIPTION:5295217a     none  a remark
+DESCRIPTION:c5c1d3a3     XSH.getdate.010
+DESCRIPTION:2c5d094a     XSH.getdate.019
+DESCRIPTION:e293d850     XSH.getdate.019
+DESCRIPTION:dc2568bc     partial XSH.getdate.019  # only the zone TZ names is accepted and an unknown name rejected
+DESCRIPTION:453a73ea     XSH.getdate.010 XSH.getdate.014 XSH.getdate.015
+DESCRIPTION:5fd7fc6c     XSH.getdate.010 XSH.getdate.014 XSH.getdate.015
+DESCRIPTION:84b7ecc2     untestable  needs a locale with other month and weekday names
+DESCRIPTION:28483e76     XSH.getdate.007 XSH.getdate.010
+DESCRIPTION:d3d66c9b     XSH.getdate.005
+DESCRIPTION:b71e38d5     XSH.getdate.017
+DESCRIPTION:f67ae8ad     impl  undefined
+DESCRIPTION:0ad33019     none  introduces the rules that follow
+DESCRIPTION:d2beca93     partial XSH.getdate.019  # the current time in the scanned zone is not compared
+DESCRIPTION:58dff3f1     XSH.getdate.007 XSH.getdate.014 XSH.getdate.015
+DESCRIPTION:bfb67011     XSH.getdate.014
+DESCRIPTION:6d885453     XSH.getdate.015
+DESCRIPTION:b850b775     XSH.getdate.011 XSH.getdate.015
+DESCRIPTION:d78644af     XSH.getdate.007 XSH.getdate.014 XSH.getdate.015
+DESCRIPTION:e8225ed7     XSH.getdate.016
+DESCRIPTION:b808bf91     impl  unspecified
+DESCRIPTION:0c5fc63c     none  not required to be thread-safe
+RETURN_VALUE:07e353f8    XSH.getdate.007 XSH.getdate.020
+RETURN_VALUE:70bf35d6    XSH.getdate.001 XSH.getdate.002 XSH.getdate.003 XSH.getdate.004 XSH.getdate.005 XSH.getdate.006
+ERRORS:9c305bb2          XSH.getdate.001 XSH.getdate.002
+ERRORS:166caeb2          XSH.getdate.003
+ERRORS:80999e9c          partial XSH.getdate.003  # accepted as an alternative for a missing file; a stat failure on an existing file cannot be arranged
+ERRORS:1f198e60          XSH.getdate.004
+ERRORS:2d7a3c12          untestable  needs a read error on the template file
+ERRORS:6468e8cc          untestable  needs memory exhaustion
+ERRORS:ff543228          XSH.getdate.005
+ERRORS:026f0d5b          XSH.getdate.006 XSH.getdate.019
+ERRORS:19ade9fb          partial XSH.getdate.006  # the unrepresentable time is not tested: it needs a 32-bit time_t
