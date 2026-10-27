@@ -69,3 +69,9 @@ An anomaly (a fault MISSED, a variant REJECTED or UNDECIDED) is never
 reported on one run: `ci/mutate.sh` reruns it, five runs in all, and a
 baseline that did not pass is run three times. Runs that disagree give
 FLAKY, which has no verdict and fails the check until the test is fixed.
+
+## Operating assumptions
+
+- The suite runs as root or the equivalent. Permission errors are tested by dropping privilege in a child process. Cases for ordinary-user runs are added only where the standard strictly requires them.
+- A test decides PASS or FAIL against the standard alone and never depends on which system it runs on.
+- Tests keep to their private working directory; the driver removes its own directory when the run ends, so repeated runs leave nothing behind.
