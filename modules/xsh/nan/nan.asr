@@ -1,0 +1,45 @@
+# XSH nan(), nanf(), nanl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.nan.001
+anchor     functions/nan.html#DESCRIPTION
+anchor     functions/nan.html#RETURN VALUE
+class      required
+since      2001
+says       nan(""), nanf("") and nanl("") return a NaN (the same representation
+           that strtod(), strtof() and strtold() give for "NAN()") when quiet
+           NaNs are supported, and zero when they are not.
+test       t/001-empty.c
+
+assertion  XSH.nan.002
+anchor     functions/nan.html#DESCRIPTION
+anchor     functions/nan.html#RETURN VALUE
+class      required
+since      2001
+says       nan("1"), nan("abc"), nan("A_9") and nan("0x1f") (and the f and l
+           forms) return a NaN equivalent to the matching strtod(), strtof() or
+           strtold() call on "NAN(" tag ")", when quiet NaNs are supported.
+test       t/002-n-char.c
+
+assertion  XSH.nan.003
+anchor     functions/nan.html#DESCRIPTION
+anchor     functions/nan.html#RETURN VALUE
+class      required
+since      2001
+says       nan("!") and nan("a b") (and the f and l forms), which are not n-char
+           sequences, return a NaN equivalent to the matching strtod(), strtof()
+           or strtold() call on "NAN".
+test       t/003-not-n-char.c
+
+assertion  XSH.nan.004
+anchor     functions/nan.html#DESCRIPTION
+anchor     functions/nan.html#RETURN VALUE
+class      required
+since      2001
+says       The NaN from nan("") (and the f and l forms) is quiet: adding 1 to it
+           raises no invalid exception.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-quiet.c

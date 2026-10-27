@@ -1,0 +1,52 @@
+# XSH cosh(), coshf() and coshl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Values are tested only where the page fixes them (special values, signed
+# zeros, infinities, NaN propagation, the stated errors). The accuracy of
+# results is not tested. Arguments pass through volatile objects so that
+# nothing is folded at compile time. Error reports follow math_errhandling:
+# errno is tested only when (math_errhandling & MATH_ERRNO) is non-zero and
+# the exception flags only when (math_errhandling & MATH_ERREXCEPT) is
+# non-zero; a test of an error report is NOTINUSE if neither is. Rules shaded
+# as IEC 60559 floating point (MX) are NOTINUSE where __STDC_IEC_559__ is not
+# defined. The three types (name, name with f, name with l) are each tested.
+
+assertion  XSH.cosh.001
+anchor     functions/cosh.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+says       cosh of ordinary arguments (cosh(0.5); cosh(-1.0)) returns without
+           setting errno (which keeps its earlier value, 0 or ERANGE) and
+           without raising an invalid, divide-by-zero or overflow exception.
+test       t/001-ordinary-no-error.c
+
+assertion  XSH.cosh.002
+anchor     functions/cosh.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.24
+class      required
+says       A quiet NaN argument gives a NaN result with no error (errno
+           unchanged, no error exception).
+test       t/002-nan.c
+
+assertion  XSH.cosh.003
+anchor     functions/cosh.html#RETURN VALUE
+class      required
+says       cosh(+0) and cosh(-0) return 1.0.
+test       t/003-zero.c
+
+assertion  XSH.cosh.004
+anchor     functions/cosh.html#RETURN VALUE
+class      required
+says       cosh(+Inf) and cosh(-Inf) return +Inf.
+test       t/004-inf.c
+
+assertion  XSH.cosh.005
+anchor     functions/cosh.html#RETURN VALUE
+anchor     functions/cosh.html#ERRORS/Range Error
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+says       cosh of a large positive or large negative argument returns
+           +HUGE_VAL as an overflow range error: errno is ERANGE where
+           math_errhandling includes MATH_ERRNO, and the overflow exception
+           is raised where it includes MATH_ERREXCEPT.
+test       t/005-overflow.c

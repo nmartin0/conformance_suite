@@ -1,0 +1,89 @@
+# XSH round(), roundf(), roundl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.round.001
+anchor     functions/round.html#DESCRIPTION
+anchor     functions/round.html#RETURN VALUE
+class      required
+since      2001
+says       For arguments of the three floating types (float, double, long double)
+           that are -100.0625, -3.5, -2.75, -2.5, -1.5, -1.25, -0.75, 0.75, 1.25,
+           1.5, 2.5, 2.75, 3, -3, 3.5 and 100.0625, round() returns the nearest
+           integer, halfway cases away from zero.
+test       t/001-values.c
+
+assertion  XSH.round.002
+anchor     functions/round.html#DESCRIPTION
+anchor     functions/round.html#RETURN VALUE
+class      required
+since      2001
+says       For arguments 2^p and -2^p (p being the number of digits of the type),
+           which are integral, round() returns the argument itself.
+test       t/002-large-integral.c
+
+assertion  XSH.round.003
+anchor     functions/round.html#DESCRIPTION
+anchor     functions/round.html#RETURN VALUE
+class      required
+since      2001
+says       For -0.5, -0.25, 0.25 and 0.5 the result has the same sign as the
+           argument, even when it is zero.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/003-sign.c
+
+assertion  XSH.round.004
+anchor     functions/round.html#DESCRIPTION
+anchor     functions/round.html#RETURN VALUE
+class      required
+since      2001
+says       A NaN argument gives a NaN result.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-nan.c
+
+assertion  XSH.round.005
+anchor     functions/round.html#DESCRIPTION
+anchor     functions/round.html#RETURN VALUE
+class      required
+since      2001
+says       For +0 and -0 the result is the argument, with its sign.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/005-zero.c
+
+assertion  XSH.round.006
+anchor     functions/round.html#DESCRIPTION
+anchor     functions/round.html#RETURN VALUE
+class      required
+since      2001
+says       For +Inf and -Inf the result is the argument.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/006-infinity.c
+
+assertion  XSH.round.007
+anchor     functions/round.html#DESCRIPTION
+anchor     functions/round.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      2001
+says       With errno holding EDOM before the call, round(2.5) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/007-no-error.c
+
+assertion  XSH.round.008
+anchor     functions/round.html#DESCRIPTION
+anchor     functions/round.html#RETURN VALUE
+class      required
+since      2001
+says       With each rounding direction that can be selected (at least two are
+           needed), round() of -2.5, -1.5, -0.5, 0.5, 1.5, 2.5, -2.75 and 2.75
+           gives -3, -2, -1, 1, 2, 3, -3 and 3.
+test       t/008-rounding-mode.c

@@ -1,0 +1,49 @@
+# XSH tanh(), tanhf() and tanhl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Values are tested only where the page fixes them (special values, signed
+# zeros, infinities, NaN propagation, the stated errors). The accuracy of
+# results is not tested. Arguments pass through volatile objects so that
+# nothing is folded at compile time. Error reports follow math_errhandling:
+# errno is tested only when (math_errhandling & MATH_ERRNO) is non-zero and
+# the exception flags only when (math_errhandling & MATH_ERREXCEPT) is
+# non-zero; a test of an error report is NOTINUSE if neither is. Rules shaded
+# as IEC 60559 floating point (MX) are NOTINUSE where __STDC_IEC_559__ is not
+# defined. The three types (name, name with f, name with l) are each tested.
+
+assertion  XSH.tanh.001
+anchor     functions/tanh.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+says       tanh of ordinary arguments (tanh(0.5); tanh(-1.0)) returns without
+           setting errno (which keeps its earlier value, 0 or ERANGE) and
+           without raising an invalid, divide-by-zero or overflow exception.
+test       t/001-ordinary-no-error.c
+
+assertion  XSH.tanh.002
+anchor     functions/tanh.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.24
+class      required
+says       A quiet NaN argument gives a NaN result with no error (errno
+           unchanged, no error exception).
+test       t/002-nan.c
+
+assertion  XSH.tanh.003
+anchor     functions/tanh.html#RETURN VALUE
+class      required
+says       tanh(+0) returns +0 and tanh(-0) returns -0.
+test       t/003-zero.c
+
+assertion  XSH.tanh.004
+anchor     functions/tanh.html#RETURN VALUE
+class      required
+says       tanh(+Inf) returns +1 and tanh(-Inf) returns -1.
+test       t/004-inf.c
+
+assertion  XSH.tanh.005
+anchor     functions/tanh.html#RETURN VALUE
+class      required
+says       tanh of a positive and of a negative subnormal value returns a
+           value no greater in magnitude than the type minimum (the argument
+           itself is such a value).
+test       t/005-subnormal.c

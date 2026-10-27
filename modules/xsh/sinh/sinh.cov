@@ -1,0 +1,14 @@
+# sinh.cov - every requirement unit on functions/sinh.html (also its f and l forms).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:c6b7242f     untestable  the accuracy of the result is not specified
+DESCRIPTION:23c13bde     app
+DESCRIPTION:3a9a2e71     app
+RETURN_VALUE:b91a06cb    partial XSH.sinh.001  # the accuracy of the value is not specified; only the absence of an error is tested
+RETURN_VALUE:3fb1a10a    XSH.sinh.004
+RETURN_VALUE:7fcec116    XSH.sinh.002
+RETURN_VALUE:7b78ffd8    XSH.sinh.003
+RETURN_VALUE:b42e77cf    none  "should", not a requirement
+RETURN_VALUE:2929fd95    partial XSH.sinh.005  # the range error is optional; the bound on the value is tested
+ERRORS:624dda13          XSH.sinh.004
+ERRORS:b46fc196          optional

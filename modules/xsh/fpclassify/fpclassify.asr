@@ -1,0 +1,82 @@
+# XSH fpclassify() and the <math.h> classification, error and constant macros
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.fpclassify.001
+anchor     functions/fpclassify.html#DESCRIPTION
+anchor     functions/fpclassify.html#RETURN VALUE
+class      required
+since      2001
+says       fpclassify() of +0 and -0 is FP_ZERO; of 1, -1, 0.1, MIN, -MIN, MAX
+           and -MAX (MIN, MAX the smallest normal and largest finite values of
+           the type) it is FP_NORMAL, for arguments of each of the three floating
+           types.
+test       t/001-zero-normal.c
+
+assertion  XSH.fpclassify.002
+anchor     functions/fpclassify.html#DESCRIPTION
+anchor     functions/fpclassify.html#RETURN VALUE
+class      required
+since      2001
+says       fpclassify() of +Inf and -Inf is FP_INFINITE, for each of the three
+           floating types.
+test       t/002-infinite.c
+
+assertion  XSH.fpclassify.003
+anchor     functions/fpclassify.html#DESCRIPTION
+anchor     functions/fpclassify.html#RETURN VALUE
+class      required
+since      2001
+says       fpclassify() of a NaN and of its negation is FP_NAN, for each of the
+           three floating types.
+test       t/003-nan.c
+
+assertion  XSH.fpclassify.004
+anchor     functions/fpclassify.html#DESCRIPTION
+anchor     functions/fpclassify.html#RETURN VALUE
+class      required
+since      2001
+says       fpclassify() of half the smallest normal value of the type, and of its
+           negation, is FP_SUBNORMAL when the type has subnormal values.
+test       t/004-subnormal.c
+
+assertion  XSH.fpclassify.005
+anchor     functions/fpclassify.html#DESCRIPTION
+anchor     functions/fpclassify.html#RETURN VALUE
+class      required
+since      2001
+says       For float and double, fpclassify(MAX * 2), with MAX the largest finite
+           value of the type, is FP_INFINITE: a product evaluated in a wider
+           format is converted to the semantic type first.
+test       t/005-semantic-type.c
+
+assertion  XSH.fpclassify.006
+anchor     basedefs/math.h.html#DESCRIPTION
+anchor     functions/fpclassify.html#DESCRIPTION
+anchor     functions/fpclassify.html#RETURN VALUE
+class      required
+since      2001
+says       FP_INFINITE, FP_NAN, FP_NORMAL, FP_SUBNORMAL and FP_ZERO are integer
+           constant expressions with distinct values (a switch statement uses
+           them as case labels), and fpclassify() returns one of them for 1.0.
+test       t/006-distinct-macros.c
+
+assertion  XSH.fpclassify.007
+anchor     basedefs/math.h.html#DESCRIPTION
+class      required
+says       MATH_ERRNO is 1 and MATH_ERREXCEPT is 2 (integer constant
+           expressions), math_errhandling is an int equal to 1, 2 or 3, and when
+           its MATH_ERREXCEPT bit is set FE_DIVBYZERO, FE_INVALID and FE_OVERFLOW
+           are defined.
+test       t/007-math-errhandling.c
+
+assertion  XSH.fpclassify.008
+anchor     basedefs/math.h.html#DESCRIPTION
+class      required
+says       HUGE_VAL, HUGE_VALF and HUGE_VALL are greater than zero and, where the
+           IEC 60559 option is claimed, are +Inf; INFINITY is then +Inf and NAN
+           (when defined) is a NaN.
+note       The infinity part of this assertion is for systems that claim the IEC
+           60559 option (Annex F of the C standard); positivity is required
+           everywhere.
+test       t/008-huge-val.c

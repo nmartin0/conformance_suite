@@ -1,0 +1,21 @@
+# ilogb.cov - every requirement unit on functions/ilogb.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:abb94905     XSH.ilogb.001 XSH.ilogb.002
+DESCRIPTION:f71d7350     XSH.ilogb.001 XSH.ilogb.003
+DESCRIPTION:23c13bde     app
+DESCRIPTION:3a9a2e71     app
+RETURN_VALUE:8c9b8c26    XSH.ilogb.001
+RETURN_VALUE:a03f7810    XSH.ilogb.001
+RETURN_VALUE:1a4c0289    todo  exactness is not examined separately
+RETURN_VALUE:cc0c3451    XSH.ilogb.004 XSH.ilogb.007
+RETURN_VALUE:df980103    partial XSH.ilogb.004 XSH.ilogb.005 XSH.ilogb.006 XSH.ilogb.007  # the XSI-conformant side is not selected separately
+RETURN_VALUE:ea073d29    XSH.ilogb.005 XSH.ilogb.007
+RETURN_VALUE:df980103.2  partial XSH.ilogb.004 XSH.ilogb.005 XSH.ilogb.006 XSH.ilogb.007  # the XSI-conformant side is not selected separately
+RETURN_VALUE:0b2b289e    XSH.ilogb.006 XSH.ilogb.007
+RETURN_VALUE:df980103.3  partial XSH.ilogb.004 XSH.ilogb.005 XSH.ilogb.006 XSH.ilogb.007  # the XSI-conformant side is not selected separately
+RETURN_VALUE:88086125    none  unspecified value for results beyond the range of int, which no supported type reaches (RATIONALE)
+RETURN_VALUE:846ac78a    none  results beyond the range of int do not arise for the supported types (RATIONALE)
+RETURN_VALUE:6111f988    none  results beyond the range of int do not arise for the supported types (RATIONALE)
+ERRORS:4a5fa7fb          XSH.ilogb.007
+ERRORS:55ab8e06          optional

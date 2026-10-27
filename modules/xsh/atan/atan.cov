@@ -1,0 +1,13 @@
+# atan.cov - every requirement unit on functions/atan.html (also its f and l forms).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:93731ab3     untestable  the accuracy of the result is not specified
+DESCRIPTION:23c13bde     app
+DESCRIPTION:3a9a2e71     app
+RETURN_VALUE:59cb9eaf    partial XSH.atan.001  # the accuracy of the value is not specified; only the absence of an error is tested
+RETURN_VALUE:7fcec116    XSH.atan.002
+RETURN_VALUE:1e792501    XSH.atan.003
+RETURN_VALUE:36e1bdbd    XSH.atan.004
+RETURN_VALUE:b42e77cf    none  "should", not a requirement
+RETURN_VALUE:94aeb244    partial XSH.atan.005  # the range error is optional; the bound on the value is tested
+ERRORS:d8e43472          optional

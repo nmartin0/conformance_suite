@@ -1,0 +1,16 @@
+# log1p.cov - every requirement unit on functions/log1p.html (also its f and l forms).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:7354cbe3     untestable  the accuracy of the result is not specified
+DESCRIPTION:23c13bde     app
+DESCRIPTION:3a9a2e71     app
+RETURN_VALUE:219fa070    partial XSH.log1p.001  # the accuracy of the value is not specified; only the absence of an error is tested
+RETURN_VALUE:d77bc3cd    XSH.log1p.004
+RETURN_VALUE:778986d2    XSH.log1p.005 XSH.log1p.006
+RETURN_VALUE:7fcec116    XSH.log1p.002
+RETURN_VALUE:f5a88b42    XSH.log1p.003
+RETURN_VALUE:b42e77cf    none  "should", not a requirement
+RETURN_VALUE:6ce915aa    partial XSH.log1p.007  # the range error is optional; the bound on the value is tested
+ERRORS:f6eaac68          XSH.log1p.005 XSH.log1p.006
+ERRORS:56659c21          XSH.log1p.004
+ERRORS:d8e43472          optional

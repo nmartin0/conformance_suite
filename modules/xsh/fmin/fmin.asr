@@ -1,0 +1,59 @@
+# XSH fmin(), fminf(), fminl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.fmin.001
+anchor     functions/fmin.html#DESCRIPTION
+anchor     functions/fmin.html#RETURN VALUE
+class      required
+since      2001
+says       fmin(3, 5), (5, 3), (-3, -5), (-3, 5), (2.5, 2.5), (0.25, -100), (Inf,
+           1) and (-Inf, 1) give 3.0, 3.0, -5.0, -3.0, 2.5, -100.0, 1.0, -INF.
+test       t/001-values.c
+
+assertion  XSH.fmin.002
+anchor     functions/fmin.html#DESCRIPTION
+anchor     functions/fmin.html#RETURN VALUE
+class      required
+since      2001
+says       fmin(NaN, 3), (3, NaN), (NaN, -3), (-3, NaN), (NaN, Inf) and (-Inf,
+           NaN) return the numeric operand.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/002-one-nan.c
+
+assertion  XSH.fmin.003
+anchor     functions/fmin.html#DESCRIPTION
+anchor     functions/fmin.html#RETURN VALUE
+class      required
+since      2001
+says       fmin(NaN, NaN) returns a NaN.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/003-both-nan.c
+
+assertion  XSH.fmin.004
+anchor     functions/fmin.html#DESCRIPTION
+anchor     functions/fmin.html#RETURN VALUE
+class      required
+since      2001
+says       With each rounding direction that can be selected (at least two are
+           needed), fmin(1.1, 2.2) and fmin(-1.1, -2.2) return the operand, as
+           written in the type of the call, that is the smaller one.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-rounding-mode.c
+
+assertion  XSH.fmin.005
+anchor     functions/fmin.html#DESCRIPTION
+anchor     functions/fmin.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      2001
+says       With errno holding EDOM before the call, fmin(3, 5) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/005-no-error.c

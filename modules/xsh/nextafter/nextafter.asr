@@ -1,0 +1,132 @@
+# XSH nextafter() and nexttoward()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.nextafter.001
+anchor     functions/nextafter.html#DESCRIPTION
+anchor     functions/nextafter.html#RETURN VALUE
+class      required
+since      1992
+says       nextafter(1, 2) is 1 + epsilon; nextafter(1, 0) is 1 - epsilon/R;
+           nextafter(-1, -2) is -(1 + epsilon); nextafter(-1, 0) is -(1 -
+           epsilon/R); nextafter(1, 100) is 1 + epsilon; nextafter(1, -100) is 1
+           - epsilon/R (epsilon the type's EPSILON, R the radix).
+test       t/001-na-neighbours.c
+
+assertion  XSH.nextafter.002
+anchor     functions/nextafter.html#DESCRIPTION
+anchor     functions/nextafter.html#RETURN VALUE
+class      required
+since      1992
+says       nextafter(x, x) returns x for x equal to 3, -2.5 and 0.1.
+test       t/002-na-equal.c
+
+assertion  XSH.nextafter.003
+anchor     functions/nextafter.html#DESCRIPTION
+anchor     functions/nextafter.html#RETURN VALUE
+class      required
+since      1992
+says       nextafter(-0, +0) returns +0 and nextafter(+0, -0) returns -0.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/003-na-zero-sign.c
+
+assertion  XSH.nextafter.004
+anchor     functions/nextafter.html#DESCRIPTION
+anchor     functions/nextafter.html#RETURN VALUE
+class      required
+since      1992
+says       nextafter(NaN, 1), (1, NaN) and (NaN, NaN) return a NaN.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-na-nan.c
+
+assertion  XSH.nextafter.005
+anchor     functions/nextafter.html#DESCRIPTION
+anchor     functions/nextafter.html#RETURN VALUE
+anchor     functions/nextafter.html#ERRORS
+class      required
+since      1992
+says       nextafter(MAX, +Inf) and nextafter(-MAX, -Inf), with MAX the largest
+           finite value of the type, overflow: the result is HUGE_VAL, negated
+           for the second, and the range error is reported through errno (ERANGE)
+           and the overflow exception as math_errhandling selects.
+test       t/005-na-overflow.c
+
+assertion  XSH.nextafter.006
+anchor     functions/nextafter.html#DESCRIPTION
+anchor     functions/nextafter.html#RETURN VALUE
+anchor     functions/nextafter.html#ERRORS
+class      required
+since      1992
+says       nextafter(MIN, 0) and nextafter(0, 1), whose correct values are
+           subnormal (or zero when there are no subnormal numbers), are range
+           errors, reported through errno (ERANGE) and the underflow exception as
+           math_errhandling selects; the value returned is between 0 and MIN.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard). Q-106: the text allows either the correct subnormal value
+           or zero, so both are accepted.
+test       t/006-na-underflow.c
+
+assertion  XSH.nextafter.007
+anchor     functions/nextafter.html#DESCRIPTION
+anchor     functions/nextafter.html#RETURN VALUE
+class      required
+since      1992
+says       With each rounding direction that can be selected (at least two are
+           needed), nextafter(1, 2) is 1 + epsilon and nextafter(1, 0) is 1 -
+           epsilon/R.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/007-na-rounding-mode.c
+
+assertion  XSH.nextafter.008
+anchor     functions/nextafter.html#DESCRIPTION
+anchor     functions/nextafter.html#RETURN VALUE
+class      required
+since      1992
+says       nexttoward(1, 2L) is 1 + epsilon and nexttoward(1, 0L) is 1 -
+           epsilon/R in the type of the function; nexttoward(1, 1 +
+           LDBL_EPSILON), whose long double second argument may be
+           indistinguishable from 1 in a narrower type but is still greater than
+           the first, is also 1 + epsilon.
+test       t/008-nt-neighbours.c
+
+assertion  XSH.nextafter.009
+anchor     functions/nextafter.html#DESCRIPTION
+anchor     functions/nextafter.html#RETURN VALUE
+class      required
+since      1992
+says       nexttoward(x, (long double)x) returns x for x equal to 3, -2.5 and 0.1
+           in the type of the function; nexttoward(-0, +0L) returns +0 and
+           nexttoward(+0, -0L) returns -0.
+note       The sign-of-zero part applies only where the IEC 60559 option is
+           claimed.
+test       t/009-nt-equal.c
+
+assertion  XSH.nextafter.010
+anchor     functions/nextafter.html#DESCRIPTION
+anchor     functions/nextafter.html#RETURN VALUE
+anchor     functions/nextafter.html#ERRORS
+class      required
+since      1992
+says       nexttoward(MAX, +Inf) and nexttoward(-MAX, -Inf) with a long double
+           infinity overflow: the result is HUGE_VAL, negated for the second, and
+           the range error is reported through errno (ERANGE) and the overflow
+           exception as math_errhandling selects.
+test       t/010-nt-overflow.c
+
+assertion  XSH.nextafter.011
+anchor     functions/nextafter.html#DESCRIPTION
+anchor     functions/nextafter.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      1992
+says       With errno holding EDOM before the call, nextafter(1, 2) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/011-no-error.c

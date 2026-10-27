@@ -1,0 +1,144 @@
+# XSH atan2(), atan2f() and atan2l()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Values are tested only where the page fixes them (special values, signed
+# zeros, infinities, NaN propagation, the stated errors). The accuracy of
+# results is not tested. Arguments pass through volatile objects so that
+# nothing is folded at compile time. Error reports follow math_errhandling:
+# errno is tested only when (math_errhandling & MATH_ERRNO) is non-zero and
+# the exception flags only when (math_errhandling & MATH_ERREXCEPT) is
+# non-zero; a test of an error report is NOTINUSE if neither is. Rules shaded
+# as IEC 60559 floating point (MX) are NOTINUSE where __STDC_IEC_559__ is not
+# defined. The three types (name, name with f, name with l) are each tested.
+# Results stated as multiples of pi are disputed assertions (see the note on
+# each). The page is 2-argument, so the NaN and no-error rules cover either
+# argument.
+
+assertion  XSH.atan2.001
+anchor     functions/atan2.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+says       atan2 of ordinary arguments (atan2(1.0, 1.0); atan2(-1.0, 2.0);
+           atan2(1.0, -3.0)) returns without setting errno (which keeps its
+           earlier value, 0 or ERANGE) and without raising an invalid,
+           divide-by-zero or overflow exception.
+test       t/001-ordinary-no-error.c
+
+assertion  XSH.atan2.002
+anchor     functions/atan2.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.24
+class      required
+says       A quiet NaN in either argument gives a NaN result with no error.
+test       t/002-nan.c
+
+assertion  XSH.atan2.003
+anchor     functions/atan2.html#RETURN VALUE
+class      required
+says       atan2(+0, x) returns +0 and atan2(-0, x) returns -0 for x = 1, 2.5
+           and the type maximum.
+test       t/003-zero-positive-x.c
+
+assertion  XSH.atan2.004
+anchor     functions/atan2.html#RETURN VALUE
+class      disputed
+says       atan2(+0, x) returns pi and atan2(-0, x) returns -pi for x = -1,
+           -2.5 and the negated type maximum, as the type represents pi.
+note       disputed (Q-101): the page says the result "shall be" the number
+           pi (or pi/2, pi/4, 3pi/4), which no binary type holds; it does not
+           say the value is the nearest representable one. The test expects
+           the value obtained by rounding the decimal expansion to the type.
+test       t/004-zero-negative-x.c
+
+assertion  XSH.atan2.005
+anchor     functions/atan2.html#RETURN VALUE
+class      disputed
+says       atan2(y, +0) and atan2(y, -0) return pi/2 for y = 1 and 2.5 and
+           -pi/2 for y = -1 and -2.5, as the type represents pi/2.
+note       disputed (Q-101): the page says the result "shall be" the number
+           pi (or pi/2, pi/4, 3pi/4), which no binary type holds; it does not
+           say the value is the nearest representable one. The test expects
+           the value obtained by rounding the decimal expansion to the type.
+test       t/005-zero-x-quadrant.c
+
+assertion  XSH.atan2.006
+anchor     functions/atan2.html#RETURN VALUE
+class      required
+says       atan2 with x equal to +0 or -0 (and y = 1, -1, +0 or -0) is not a
+           pole error: errno is not set to ERANGE and the divide-by-zero
+           exception is not raised.
+test       t/006-no-pole-x-zero.c
+
+assertion  XSH.atan2.007
+anchor     functions/atan2.html#RETURN VALUE
+class      required
+says       atan2(+0, +0) returns +0 and atan2(-0, +0) returns -0.
+test       t/007-both-zero-positive.c
+
+assertion  XSH.atan2.008
+anchor     functions/atan2.html#RETURN VALUE
+class      disputed
+says       atan2(+0, -0) returns pi and atan2(-0, -0) returns -pi, as the
+           type represents pi.
+note       disputed (Q-101): the page says the result "shall be" the number
+           pi (or pi/2, pi/4, 3pi/4), which no binary type holds; it does not
+           say the value is the nearest representable one. The test expects
+           the value obtained by rounding the decimal expansion to the type.
+test       t/008-both-zero-negative.c
+
+assertion  XSH.atan2.009
+anchor     functions/atan2.html#RETURN VALUE
+class      required
+says       atan2 with both arguments zero (any signs) is not a domain error:
+           errno is not set to EDOM and the invalid exception is not raised.
+test       t/009-no-domain-both-zero.c
+
+assertion  XSH.atan2.010
+anchor     functions/atan2.html#RETURN VALUE
+class      required
+says       atan2(y, +Inf) returns +0 for y = 1 and 2.5, and -0 for y = -1 and
+           -2.5.
+test       t/010-x-plus-inf.c
+
+assertion  XSH.atan2.011
+anchor     functions/atan2.html#RETURN VALUE
+class      disputed
+says       atan2(y, -Inf) returns pi for y = 1 and 2.5 and -pi for y = -1 and
+           -2.5, as the type represents pi.
+note       disputed (Q-101): the page says the result "shall be" the number
+           pi (or pi/2, pi/4, 3pi/4), which no binary type holds; it does not
+           say the value is the nearest representable one. The test expects
+           the value obtained by rounding the decimal expansion to the type.
+test       t/011-x-minus-inf.c
+
+assertion  XSH.atan2.012
+anchor     functions/atan2.html#RETURN VALUE
+class      disputed
+says       atan2(+Inf, x) returns pi/2 and atan2(-Inf, x) returns -pi/2 for x
+           = 1, -1, +0 (the finite values), as the type represents pi/2.
+note       disputed (Q-101): the page says the result "shall be" the number
+           pi (or pi/2, pi/4, 3pi/4), which no binary type holds; it does not
+           say the value is the nearest representable one. The test expects
+           the value obtained by rounding the decimal expansion to the type.
+test       t/012-y-inf.c
+
+assertion  XSH.atan2.013
+anchor     functions/atan2.html#RETURN VALUE
+class      disputed
+says       atan2(+Inf, -Inf) returns 3pi/4 and atan2(-Inf, -Inf) returns
+           -3pi/4, as the type represents 3pi/4.
+note       disputed (Q-101): the page says the result "shall be" the number
+           pi (or pi/2, pi/4, 3pi/4), which no binary type holds; it does not
+           say the value is the nearest representable one. The test expects
+           the value obtained by rounding the decimal expansion to the type.
+test       t/013-inf-inf-minus.c
+
+assertion  XSH.atan2.014
+anchor     functions/atan2.html#RETURN VALUE
+class      disputed
+says       atan2(+Inf, +Inf) returns pi/4 and atan2(-Inf, +Inf) returns
+           -pi/4, as the type represents pi/4.
+note       disputed (Q-101): the page says the result "shall be" the number
+           pi (or pi/2, pi/4, 3pi/4), which no binary type holds; it does not
+           say the value is the nearest representable one. The test expects
+           the value obtained by rounding the decimal expansion to the type.
+test       t/014-inf-inf-plus.c

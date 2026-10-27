@@ -1,0 +1,41 @@
+# XSH j0(), j1() and jn()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Values are tested only where the page fixes them (special values, signed
+# zeros, infinities, NaN propagation, the stated errors). The accuracy of
+# results is not tested. Arguments pass through volatile objects so that
+# nothing is folded at compile time. Error reports follow math_errhandling:
+# errno is tested only when (math_errhandling & MATH_ERRNO) is non-zero and
+# the exception flags only when (math_errhandling & MATH_ERREXCEPT) is
+# non-zero; a test of an error report is NOTINUSE if neither is. Rules shaded
+# as IEC 60559 floating point (MX, MXX) are NOTINUSE where __STDC_IEC_559__ is not
+# defined. These functions take and return double only.
+# XSI functions, double only. What is "too large in magnitude" is not
+# stated, so the large-argument range error is not tested.
+
+assertion  XSH.j0.001
+anchor     functions/j0.html#RETURN VALUE
+anchor     functions/j0.html#ERRORS
+anchor     basedefs/V1_chap04.html#4.23
+class      conditional
+when       XSI
+says       j0(1), j1(1), jn(2, 1) and jn(0, 2.5) of ordinary arguments return
+           without setting errno (which keeps its earlier value, 0 or ERANGE)
+           and without raising an invalid, divide-by-zero or overflow
+           exception.
+test       t/001-ordinary-no-error.c
+
+assertion  XSH.j0.002
+anchor     functions/j0.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.24
+class      conditional
+when       XSI
+says       j0(NaN), j1(NaN) and jn(2, NaN) return a NaN with no error.
+test       t/002-nan.c
+
+assertion  XSH.j0.003
+anchor     functions/j0.html#RETURN VALUE
+class      conditional
+when       XSI
+says       j0(+Inf), j1(+Inf), jn(0, +Inf) and jn(3, +Inf) return +0.
+test       t/003-plus-inf.c

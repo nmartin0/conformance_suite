@@ -1,0 +1,99 @@
+# XSH frexp(), frexpf(), frexpl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.frexp.001
+anchor     functions/frexp.html#DESCRIPTION
+anchor     functions/frexp.html#RETURN VALUE
+class      required
+since      1988
+says       frexp(8), (1), (-6), (0.1875), (1024), (0.5), (3) and (-0.25) give the
+           fractions 0.5, 0.5, -0.75, 0.75, 0.5, 0.5, 0.75 and -0.5 with
+           exponents 4, 1, 3, -2, 11, 0, 2 and -1.
+note       Q-109: the values are those of a binary radix.
+test       t/001-values.c
+
+assertion  XSH.frexp.002
+anchor     functions/frexp.html#DESCRIPTION
+anchor     functions/frexp.html#RETURN VALUE
+class      required
+since      1988
+says       For the largest finite value and the smallest normal value of the
+           type, the fraction has magnitude in [1/2, 1) and fraction times two to
+           the exponent restores the argument.
+note       The value is rebuilt by repeated doubling or halving, which is exact
+           for these magnitudes. Q-109: binary radix.
+test       t/002-extremes.c
+
+assertion  XSH.frexp.003
+anchor     functions/frexp.html#DESCRIPTION
+anchor     functions/frexp.html#RETURN VALUE
+class      required
+since      1988
+says       frexp(+0) and frexp(-0) return a zero and, where the IEC 60559
+           Floating-Point option is claimed, store 0 in the exponent object
+           (which held 7 before).
+note       The tag on the exponent sentence is the IEC 60559 Floating-Point
+           option; the zero result itself is required everywhere (the general
+           rule allows a zero fraction), the exponent check applies only where
+           the C implementation claims the option (Annex F of the C standard).
+test       t/003-zero.c
+
+assertion  XSH.frexp.004
+anchor     functions/frexp.html#DESCRIPTION
+anchor     functions/frexp.html#RETURN VALUE
+class      required
+since      1988
+says       frexp(+0) returns +0 and frexp(-0) returns -0.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-zero-sign.c
+
+assertion  XSH.frexp.005
+anchor     functions/frexp.html#DESCRIPTION
+anchor     functions/frexp.html#RETURN VALUE
+class      required
+since      1988
+says       frexp(NaN, &e) returns a NaN (the exponent object is unspecified).
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/005-nan.c
+
+assertion  XSH.frexp.006
+anchor     functions/frexp.html#DESCRIPTION
+anchor     functions/frexp.html#RETURN VALUE
+class      required
+since      1988
+says       frexp(+Inf, &e) returns +Inf and frexp(-Inf, &e) returns -Inf (the
+           exponent object is unspecified).
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/006-infinity.c
+
+assertion  XSH.frexp.007
+anchor     functions/frexp.html#DESCRIPTION
+anchor     functions/frexp.html#RETURN VALUE
+class      required
+since      1988
+says       With each rounding direction that can be selected (at least two are
+           needed), frexp(10) returns 0.625 with exponent 4 and frexp(-10)
+           returns -0.625 with exponent 4 (a binary radix).
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard). The page requires exactness when the radix is a power of
+           two; the test needs FLT_RADIX 2.
+test       t/007-rounding-mode.c
+
+assertion  XSH.frexp.008
+anchor     functions/frexp.html#DESCRIPTION
+anchor     functions/frexp.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      1988
+says       With errno holding EDOM before the call, frexp(8, &e) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/008-no-error.c

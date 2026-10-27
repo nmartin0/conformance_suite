@@ -1,0 +1,107 @@
+# XSH fmod(), fmodf(), fmodl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.fmod.001
+anchor     functions/fmod.html#DESCRIPTION
+anchor     functions/fmod.html#RETURN VALUE
+class      required
+since      1988
+says       fmod(5.5, 2), fmod(-5.5, 2), fmod(5.5, -2), fmod(-5.5, -2), fmod(1.5,
+           4), fmod(-1.5, 4), fmod(6, 3), fmod(7, 2.5), fmod(0.75, 0.25) and
+           fmod(100, 7) give 1.5, -1.5, 1.5, -1.5, 1.5, -1.5, 0, 2, 0 and 2.
+test       t/001-values.c
+
+assertion  XSH.fmod.002
+anchor     functions/fmod.html#DESCRIPTION
+anchor     functions/fmod.html#RETURN VALUE
+class      required
+since      1988
+says       With each rounding direction that can be selected (at least two are
+           needed), fmod gives the same results as in the first assertion.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/002-rounding-mode.c
+
+assertion  XSH.fmod.003
+anchor     functions/fmod.html#DESCRIPTION
+anchor     functions/fmod.html#RETURN VALUE
+class      required
+says       fmod(NaN, 2), fmod(2, NaN), fmod(NaN, NaN) and fmod(-NaN, 2) return a
+           NaN.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/003-nan.c
+
+assertion  XSH.fmod.004
+anchor     functions/fmod.html#DESCRIPTION
+anchor     functions/fmod.html#RETURN VALUE
+class      required
+says       fmod(NaN, 0), fmod(Inf, NaN), fmod(NaN, Inf) and fmod(0, NaN) return a
+           NaN and are not domain errors: errno (set to EDOM beforehand) is left
+           alone and the invalid exception is not raised.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard). A quiet NaN is used, which operations do not signal.
+test       t/004-nan-first.c
+
+assertion  XSH.fmod.005
+anchor     functions/fmod.html#DESCRIPTION
+anchor     functions/fmod.html#RETURN VALUE
+anchor     functions/fmod.html#ERRORS
+class      required
+since      1988
+says       For x equal to 5.5, -5.5 and 0, fmod(x, 0) returns a NaN and is a
+           domain error, reported through errno (EDOM) and the invalid exception
+           as math_errhandling selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/005-y-zero.c
+
+assertion  XSH.fmod.006
+anchor     functions/fmod.html#DESCRIPTION
+anchor     functions/fmod.html#RETURN VALUE
+anchor     functions/fmod.html#ERRORS
+class      required
+says       fmod(Inf, 2), fmod(-Inf, 2) and fmod(Inf, Inf) return a NaN and are
+           domain errors, reported as math_errhandling selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/006-x-infinite.c
+
+assertion  XSH.fmod.007
+anchor     functions/fmod.html#DESCRIPTION
+anchor     functions/fmod.html#RETURN VALUE
+class      required
+says       fmod(+0, 2), fmod(-0, 2), fmod(+0, -2) and fmod(-0, -2) return +0, -0,
+           +0 and -0.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/007-x-zero.c
+
+assertion  XSH.fmod.008
+anchor     functions/fmod.html#DESCRIPTION
+anchor     functions/fmod.html#RETURN VALUE
+class      required
+says       fmod(5.5, Inf), fmod(-5.5, Inf), fmod(5.5, -Inf) and fmod(-5.5, -Inf)
+           return 5.5, -5.5, 5.5 and -5.5.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/008-y-infinite.c
+
+assertion  XSH.fmod.009
+anchor     functions/fmod.html#DESCRIPTION
+anchor     functions/fmod.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      1988
+says       With errno holding EDOM before the call, fmod(5.5, 2) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/009-no-error.c

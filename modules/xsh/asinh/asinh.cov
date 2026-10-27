@@ -1,0 +1,12 @@
+# asinh.cov - every requirement unit on functions/asinh.html (also its f and l forms).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:772f815c     untestable  the accuracy of the result is not specified
+DESCRIPTION:23c13bde     app
+DESCRIPTION:3a9a2e71     app
+RETURN_VALUE:216a3c74    partial XSH.asinh.001  # the accuracy of the value is not specified; only the absence of an error is tested
+RETURN_VALUE:7fcec116    XSH.asinh.002
+RETURN_VALUE:0ae7ba25    XSH.asinh.003
+RETURN_VALUE:b42e77cf    none  "should", not a requirement
+RETURN_VALUE:3d1504f3    partial XSH.asinh.004  # the range error is optional; the bound on the value is tested
+ERRORS:d8e43472          optional

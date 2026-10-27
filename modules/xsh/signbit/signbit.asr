@@ -1,0 +1,45 @@
+# XSH signbit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.signbit.001
+anchor     functions/signbit.html#DESCRIPTION
+anchor     functions/signbit.html#RETURN VALUE
+class      required
+since      2001
+says       signbit() of -1, -0.1, -MIN, -MAX and -Inf is non-zero, for each of
+           the three floating types.
+test       t/001-negative.c
+
+assertion  XSH.signbit.002
+anchor     functions/signbit.html#DESCRIPTION
+anchor     functions/signbit.html#RETURN VALUE
+class      required
+since      2001
+says       signbit() of +0, 1, 0.1, MIN, MAX and +Inf is 0, for each of the three
+           floating types.
+test       t/002-non-negative.c
+
+assertion  XSH.signbit.003
+anchor     functions/signbit.html#DESCRIPTION
+anchor     functions/signbit.html#RETURN VALUE
+class      required
+since      2001
+says       signbit() of -0 is non-zero, for each of the three floating types.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/003-negative-zero.c
+
+assertion  XSH.signbit.004
+anchor     functions/signbit.html#DESCRIPTION
+anchor     functions/signbit.html#RETURN VALUE
+class      required
+since      2001
+says       A NaN and its negation have different signbit() results, for each of
+           the three floating types.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard). Negation of a NaN reverses its sign bit under that
+           option.
+test       t/004-nan-sign.c

@@ -1,0 +1,17 @@
+# atanh.cov - every requirement unit on functions/atanh.html (also its f and l forms).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:82bdf45e     untestable  the accuracy of the result is not specified
+DESCRIPTION:23c13bde     app
+DESCRIPTION:3a9a2e71     app
+RETURN_VALUE:7821f8f4    partial XSH.atanh.001  # the accuracy of the value is not specified; only the absence of an error is tested
+RETURN_VALUE:0b70a51c    XSH.atanh.004
+RETURN_VALUE:83110f98    XSH.atanh.005 XSH.atanh.007
+RETURN_VALUE:7fcec116    XSH.atanh.002
+RETURN_VALUE:1e792501    XSH.atanh.003
+RETURN_VALUE:eecf2cfa    XSH.atanh.006 XSH.atanh.007
+RETURN_VALUE:b42e77cf    none  "should", not a requirement
+RETURN_VALUE:3993f35c    partial XSH.atanh.008  # the range error is optional; the bound on the value is tested
+ERRORS:d36871cb          XSH.atanh.005 XSH.atanh.007
+ERRORS:0e9accb7          XSH.atanh.004
+ERRORS:d8e43472          optional

@@ -1,0 +1,21 @@
+# XSH isnan()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.isnan.001
+anchor     functions/isnan.html#DESCRIPTION
+anchor     functions/isnan.html#RETURN VALUE
+class      required
+since      2001
+says       isnan() of a NaN and of its negation is non-zero, for each of the
+           three floating types.
+test       t/001-nan.c
+
+assertion  XSH.isnan.002
+anchor     functions/isnan.html#DESCRIPTION
+anchor     functions/isnan.html#RETURN VALUE
+class      required
+since      2001
+says       isnan() of 0, -0, 1, -1, MIN, MAX, +Inf and -Inf is 0, for each of the
+           three floating types.
+test       t/002-not-nan.c

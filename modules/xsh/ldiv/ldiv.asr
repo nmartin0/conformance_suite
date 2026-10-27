@@ -1,0 +1,68 @@
+# XSH ldiv() and lldiv()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.ldiv.001
+anchor     functions/ldiv.html#DESCRIPTION
+anchor     functions/ldiv.html#RETURN VALUE
+class      required
+says       For inexact divisions of both signs, ldiv() returns the quotient of
+           lesser magnitude nearest to the exact one and the matching remainder
+           (7/2 gives 3 rem 1, -7/2 gives -3 rem -1, 7/-2 gives -3 rem 1).
+test       t/001-ldiv-truncates.c
+
+assertion  XSH.ldiv.002
+anchor     functions/ldiv.html#DESCRIPTION
+anchor     functions/ldiv.html#RETURN VALUE
+class      required
+says       ldiv() of exact divisions and of a zero numerator gives the exact
+           quotient and remainder 0.
+test       t/002-ldiv-exact.c
+
+assertion  XSH.ldiv.003
+anchor     functions/ldiv.html#DESCRIPTION
+anchor     functions/ldiv.html#RETURN VALUE
+class      required
+says       For numerators 0, 1, -1, LONG_MAX, -LONG_MAX, 12345 and denominators
+           1, -1, 2, -2, LONG_MAX, -7, the result satisfies quot*denom+rem ==
+           numer and a non-zero remainder has the sign of the numerator.
+test       t/003-ldiv-identity.c
+
+assertion  XSH.ldiv.004
+anchor     functions/ldiv.html#DESCRIPTION
+anchor     functions/ldiv.html#RETURN VALUE
+class      required
+says       The structure ldiv() returns has members quot and rem of type long
+           holding the quotient and the remainder (ldiv(7, 2) gives 3 and 1).
+test       t/004-ldiv-members.c
+
+assertion  XSH.ldiv.005
+anchor     functions/ldiv.html#DESCRIPTION
+anchor     functions/ldiv.html#RETURN VALUE
+class      required
+since      2001
+says       For inexact divisions of both signs, lldiv() returns the quotient of
+           lesser magnitude nearest to the exact one and the matching remainder,
+           including numerators beyond the range of int (5000000000/3 gives
+           1666666666 rem 2, and -5000000000/3 gives -1666666666 rem -2).
+test       t/005-lldiv-truncates.c
+
+assertion  XSH.ldiv.006
+anchor     functions/ldiv.html#DESCRIPTION
+anchor     functions/ldiv.html#RETURN VALUE
+class      required
+since      2001
+says       For numerators 0, 1, -1, LLONG_MAX, -LLONG_MAX, 12345 and denominators
+           1, -1, 2, -2, LLONG_MAX, -7, the result satisfies quot*denom+rem ==
+           numer and a non-zero remainder has the sign of the numerator.
+test       t/006-lldiv-identity.c
+
+assertion  XSH.ldiv.007
+anchor     functions/ldiv.html#DESCRIPTION
+anchor     functions/ldiv.html#RETURN VALUE
+class      required
+since      2001
+says       The structure lldiv() returns has members quot and rem of type long
+           long holding the quotient and the remainder (lldiv(7, 2) gives 3 and
+           1).
+test       t/007-lldiv-members.c

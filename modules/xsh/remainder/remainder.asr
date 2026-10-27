@@ -1,0 +1,69 @@
+# XSH remainder(), remainderf(), remainderl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.remainder.001
+anchor     functions/remainder.html#DESCRIPTION
+anchor     functions/remainder.html#RETURN VALUE
+class      required
+since      1992
+says       remainder(5, 3), (7, 2), (5, 2), (-5, 2), (1, 4), (3, 4), (6, 3),
+           (1.5, 1), (-1.5, 1), (2.5, 1), (-7, 2) and (5.5, 2) give -1, -1, 1,
+           -1, 1, -1, 0, -0.5, 0.5, 0.5, 1 and -0.5.
+test       t/001-values.c
+
+assertion  XSH.remainder.002
+anchor     functions/remainder.html#DESCRIPTION
+anchor     functions/remainder.html#RETURN VALUE
+class      required
+since      1992
+says       With each rounding direction that can be selected (at least two are
+           needed), remainder gives the same results as in the first assertion.
+test       t/002-rounding-mode.c
+
+assertion  XSH.remainder.003
+anchor     functions/remainder.html#DESCRIPTION
+anchor     functions/remainder.html#RETURN VALUE
+class      required
+says       remainder(NaN, 2), remainder(2, NaN) and remainder(NaN, NaN) return a
+           NaN.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/003-nan.c
+
+assertion  XSH.remainder.004
+anchor     functions/remainder.html#DESCRIPTION
+anchor     functions/remainder.html#RETURN VALUE
+anchor     functions/remainder.html#ERRORS
+class      required
+says       For x equal to 5.5, -5.5 and 0, remainder(x, 0) returns a NaN and is a
+           domain error, reported through errno (EDOM) and the invalid exception
+           as math_errhandling selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-y-zero.c
+
+assertion  XSH.remainder.005
+anchor     functions/remainder.html#DESCRIPTION
+anchor     functions/remainder.html#RETURN VALUE
+anchor     functions/remainder.html#ERRORS
+class      required
+says       remainder(Inf, 2), remainder(-Inf, 2) and remainder(Inf, Inf) return a
+           NaN and are domain errors, reported as math_errhandling selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/005-x-infinite.c
+
+assertion  XSH.remainder.006
+anchor     functions/remainder.html#DESCRIPTION
+anchor     functions/remainder.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      1992
+says       With errno holding EDOM before the call, remainder(5.5, 2) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/006-no-error.c

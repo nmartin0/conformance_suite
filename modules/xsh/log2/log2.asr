@@ -1,0 +1,77 @@
+# XSH log2(), log2f() and log2l()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Values are tested only where the page fixes them (special values, signed
+# zeros, infinities, NaN propagation, the stated errors). The accuracy of
+# results is not tested. Arguments pass through volatile objects so that
+# nothing is folded at compile time. Error reports follow math_errhandling:
+# errno is tested only when (math_errhandling & MATH_ERRNO) is non-zero and
+# the exception flags only when (math_errhandling & MATH_ERREXCEPT) is
+# non-zero; a test of an error report is NOTINUSE if neither is. Rules shaded
+# as IEC 60559 floating point (MX) are NOTINUSE where __STDC_IEC_559__ is not
+# defined. The three types (name, name with f, name with l) are each tested.
+
+assertion  XSH.log2.001
+anchor     functions/log2.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      2001
+says       log2 of ordinary arguments (log2(2.0); log2(0.5); log2(100.0))
+           returns without setting errno (which keeps its earlier value, 0 or
+           ERANGE) and without raising an invalid, divide-by-zero or overflow
+           exception.
+test       t/001-ordinary-no-error.c
+
+assertion  XSH.log2.002
+anchor     functions/log2.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.24
+class      required
+since      2001
+says       A quiet NaN argument gives a NaN result with no error (errno
+           unchanged, no error exception).
+test       t/002-nan.c
+
+assertion  XSH.log2.003
+anchor     functions/log2.html#RETURN VALUE
+class      required
+since      2001
+says       log2(1) returns +0.
+test       t/003-one.c
+
+assertion  XSH.log2.004
+anchor     functions/log2.html#RETURN VALUE
+class      required
+since      2001
+says       log2(+Inf) returns +Inf.
+test       t/004-plus-inf.c
+
+assertion  XSH.log2.005
+anchor     functions/log2.html#RETURN VALUE
+anchor     functions/log2.html#ERRORS/Pole Error
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      2001
+says       log2(+0) and log2(-0) return -HUGE_VAL as a pole error: errno is
+           ERANGE where math_errhandling includes MATH_ERRNO, and the divide-
+           by-zero exception is raised where it includes MATH_ERREXCEPT.
+test       t/005-pole.c
+
+assertion  XSH.log2.006
+anchor     functions/log2.html#ERRORS/Domain Error
+anchor     functions/log2.html#RETURN VALUE
+class      required
+since      2001
+says       log2() of the finite negative values -1, -0.5, the negated
+           smallest normal value and the negated type maximum is a domain
+           error: errno is EDOM where math_errhandling includes MATH_ERRNO,
+           and the invalid exception is raised where it includes
+           MATH_ERREXCEPT.
+test       t/006-negative-domain.c
+
+assertion  XSH.log2.007
+anchor     functions/log2.html#ERRORS/Domain Error
+anchor     functions/log2.html#RETURN VALUE
+class      required
+since      2001
+says       log2(-Inf) is a domain error, reported as for any domain error.
+test       t/007-minus-inf-domain.c

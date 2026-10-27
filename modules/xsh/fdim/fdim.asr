@@ -1,0 +1,66 @@
+# XSH fdim(), fdimf(), fdiml()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.fdim.001
+anchor     functions/fdim.html#DESCRIPTION
+anchor     functions/fdim.html#RETURN VALUE
+class      required
+since      2001
+says       fdim(5, 3), (5.5, 0.5), (-1, -3) and (0.5, -0.5) give 2, 5, 2 and 1.
+test       t/001-greater.c
+
+assertion  XSH.fdim.002
+anchor     functions/fdim.html#DESCRIPTION
+anchor     functions/fdim.html#RETURN VALUE
+class      required
+since      2001
+says       fdim(3, 5), (3, 3), (-2, -2), (-5, 2), (+0, -0) and (-0, +0) give +0
+           (positive zero).
+test       t/002-not-greater.c
+
+assertion  XSH.fdim.003
+anchor     functions/fdim.html#DESCRIPTION
+anchor     functions/fdim.html#RETURN VALUE
+class      required
+since      2001
+says       fdim(NaN, 1), fdim(1, NaN) and fdim(NaN, NaN) return a NaN.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/003-nan.c
+
+assertion  XSH.fdim.004
+anchor     functions/fdim.html#DESCRIPTION
+anchor     functions/fdim.html#RETURN VALUE
+anchor     functions/fdim.html#ERRORS
+class      required
+since      2001
+says       fdim(MAX, -MAX), with MAX the largest finite value of the type,
+           overflows: the result is HUGE_VAL (HUGE_VALF, HUGE_VALL) and the range
+           error is reported through errno (ERANGE) and the overflow exception as
+           math_errhandling selects.
+test       t/004-overflow.c
+
+assertion  XSH.fdim.005
+anchor     functions/fdim.html#DESCRIPTION
+anchor     functions/fdim.html#RETURN VALUE
+class      required
+since      2001
+says       fdim(1.5*MIN, MIN), with MIN the smallest normal value of the type,
+           returns MIN/2 exactly when subnormal numbers exist.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard). A range error may accompany the result; it is not judged.
+test       t/005-subnormal.c
+
+assertion  XSH.fdim.006
+anchor     functions/fdim.html#DESCRIPTION
+anchor     functions/fdim.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      2001
+says       With errno holding EDOM before the call, fdim(5, 3) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/006-no-error.c

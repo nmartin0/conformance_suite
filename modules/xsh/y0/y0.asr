@@ -1,0 +1,68 @@
+# XSH y0(), y1() and yn()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Values are tested only where the page fixes them (special values, signed
+# zeros, infinities, NaN propagation, the stated errors). The accuracy of
+# results is not tested. Arguments pass through volatile objects so that
+# nothing is folded at compile time. Error reports follow math_errhandling:
+# errno is tested only when (math_errhandling & MATH_ERRNO) is non-zero and
+# the exception flags only when (math_errhandling & MATH_ERREXCEPT) is
+# non-zero; a test of an error report is NOTINUSE if neither is. Rules shaded
+# as IEC 60559 floating point (MX, MXX) are NOTINUSE where __STDC_IEC_559__ is not
+# defined. These functions take and return double only.
+# XSI functions, double only. Errors are all "may" errors here, so only the
+# returned values are tested; the large-argument and overflow range errors
+# are not tested.
+
+assertion  XSH.y0.001
+anchor     functions/y0.html#RETURN VALUE
+anchor     functions/y0.html#ERRORS
+anchor     basedefs/V1_chap04.html#4.23
+class      conditional
+when       XSI
+says       y0(1), y1(1), yn(2, 1) and yn(0, 2.5) of ordinary arguments return
+           without setting errno (which keeps its earlier value, 0 or ERANGE)
+           and without raising an invalid, divide-by-zero or overflow
+           exception.
+test       t/001-ordinary-no-error.c
+
+assertion  XSH.y0.002
+anchor     functions/y0.html#RETURN VALUE
+class      conditional
+when       XSI
+says       y0(NaN), y1(NaN) and yn(2, NaN) return a NaN.
+test       t/002-nan.c
+
+assertion  XSH.y0.003
+anchor     functions/y0.html#RETURN VALUE
+class      conditional
+when       XSI
+says       For a negative x the result is a NaN or the value the function
+           gives at zero: y0(-1), y1(-1) and yn(2, -1) are a NaN or
+           -HUGE_VAL, and yn(-1, -1) is a NaN or +HUGE_VAL (n negative and
+           odd).
+test       t/003-negative-argument.c
+
+assertion  XSH.y0.004
+anchor     functions/y0.html#RETURN VALUE
+class      conditional
+when       XSI
+says       y0(0) and y1(0) return -HUGE_VAL; yn(n, 0) returns -HUGE_VAL for n
+           = 0, 2 and -2 and +HUGE_VAL for n = -1 and -3 (n negative and
+           odd).
+test       t/004-zero.c
+
+assertion  XSH.y0.005
+anchor     functions/y0.html#RETURN VALUE
+class      conditional
+when       XSI
+says       y0(+Inf), y1(+Inf), yn(0, +Inf) and yn(3, +Inf) return +0.
+test       t/005-plus-inf.c
+
+assertion  XSH.y0.006
+anchor     functions/y0.html#DESCRIPTION
+class      conditional
+when       XSI
+says       y0(x) gives the same value as yn(0, x) and y1(x) the same as yn(1,
+           x), for x = 0.5, 1 and 2.5.
+test       t/006-equivalences.c

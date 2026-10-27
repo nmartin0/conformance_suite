@@ -1,0 +1,31 @@
+# XSH isinf()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.isinf.001
+anchor     functions/isinf.html#DESCRIPTION
+anchor     functions/isinf.html#RETURN VALUE
+class      required
+since      2001
+says       isinf() of +Inf and -Inf is non-zero, for each of the three floating
+           types.
+test       t/001-infinite.c
+
+assertion  XSH.isinf.002
+anchor     functions/isinf.html#DESCRIPTION
+anchor     functions/isinf.html#RETURN VALUE
+class      required
+since      2001
+says       isinf() of 0, -0, 1, MAX, -MAX, a NaN and its negation is 0, for each
+           of the three floating types.
+test       t/002-not-infinite.c
+
+assertion  XSH.isinf.003
+anchor     functions/isinf.html#DESCRIPTION
+anchor     functions/isinf.html#RETURN VALUE
+class      required
+since      2001
+says       For float and double, isinf(MAX * 2), with MAX the largest finite
+           value of the type, is non-zero: a product evaluated in a wider format
+           is converted to the semantic type first.
+test       t/003-semantic-type.c

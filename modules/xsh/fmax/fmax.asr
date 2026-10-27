@@ -1,0 +1,59 @@
+# XSH fmax(), fmaxf(), fmaxl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.fmax.001
+anchor     functions/fmax.html#DESCRIPTION
+anchor     functions/fmax.html#RETURN VALUE
+class      required
+since      2001
+says       fmax(3, 5), (5, 3), (-3, -5), (-3, 5), (2.5, 2.5), (0.25, -100), (Inf,
+           1) and (-Inf, 1) give 5.0, 5.0, -3.0, 5.0, 2.5, 0.25, INF, 1.0.
+test       t/001-values.c
+
+assertion  XSH.fmax.002
+anchor     functions/fmax.html#DESCRIPTION
+anchor     functions/fmax.html#RETURN VALUE
+class      required
+since      2001
+says       fmax(NaN, 3), (3, NaN), (NaN, -3), (-3, NaN), (NaN, Inf) and (-Inf,
+           NaN) return the numeric operand.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/002-one-nan.c
+
+assertion  XSH.fmax.003
+anchor     functions/fmax.html#DESCRIPTION
+anchor     functions/fmax.html#RETURN VALUE
+class      required
+since      2001
+says       fmax(NaN, NaN) returns a NaN.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/003-both-nan.c
+
+assertion  XSH.fmax.004
+anchor     functions/fmax.html#DESCRIPTION
+anchor     functions/fmax.html#RETURN VALUE
+class      required
+since      2001
+says       With each rounding direction that can be selected (at least two are
+           needed), fmax(1.1, 2.2) and fmax(-1.1, -2.2) return the operand, as
+           written in the type of the call, that is the larger one.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-rounding-mode.c
+
+assertion  XSH.fmax.005
+anchor     functions/fmax.html#DESCRIPTION
+anchor     functions/fmax.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      2001
+says       With errno holding EDOM before the call, fmax(3, 5) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/005-no-error.c

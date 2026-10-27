@@ -1,0 +1,66 @@
+# XSH remquo(), remquof(), remquol()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.remquo.001
+anchor     functions/remquo.html#DESCRIPTION
+anchor     functions/remquo.html#RETURN VALUE
+class      required
+since      2001
+says       remquo(x, y, &q) returns the value remainder(x, y) gives, for the
+           pairs (5, 3), (7, 2), (5, 2), (-5, 2), (1, 4), (3, 4), (6, 3), (1.5,
+           1), (-1.5, 1), (2.5, 1), (-7, 2) and (5.5, 2).
+test       t/001-remainder.c
+
+assertion  XSH.remquo.002
+anchor     functions/remquo.html#DESCRIPTION
+anchor     functions/remquo.html#RETURN VALUE
+class      required
+since      2001
+says       For x/y equal to 2.25, -2.25, -2.25, 2.25, 5, -5, 3.4, 14.28, -14.28
+           and -14.28 (pairs 9/4, -9/4, 9/-4, -9/-4, 10/2, -10/2, 17/5, 100/7,
+           -100/7, 100/-7), the stored value has the sign of x/y and its
+           magnitude agrees with the quotient (2, 2, 2, 2, 5, 5, 3, 14, 14, 14)
+           in the low three bits (the modulus 2^n has n at least 3).
+note       Q-104: only pairs whose quotient has a fractional part under one half
+           are used, so the result does not depend on whether "integral quotient"
+           means the rounded or the truncated quotient.
+test       t/002-quotient.c
+
+assertion  XSH.remquo.003
+anchor     functions/remquo.html#DESCRIPTION
+anchor     functions/remquo.html#RETURN VALUE
+class      required
+since      2001
+says       remquo(NaN, 2, &q), remquo(2, NaN, &q) and remquo(NaN, NaN, &q) return
+           a NaN.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/003-nan.c
+
+assertion  XSH.remquo.004
+anchor     functions/remquo.html#DESCRIPTION
+anchor     functions/remquo.html#RETURN VALUE
+anchor     functions/remquo.html#ERRORS
+class      required
+since      2001
+says       remquo(5.5, 0, &q), remquo(0, 0, &q), remquo(Inf, 2, &q) and
+           remquo(-Inf, 2, &q) return a NaN and are domain errors, reported
+           through errno (EDOM) and the invalid exception as math_errhandling
+           selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-domain.c
+
+assertion  XSH.remquo.005
+anchor     functions/remquo.html#DESCRIPTION
+anchor     functions/remquo.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      2001
+says       With errno holding EDOM before the call, remquo(5.5, 2, &q) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/005-no-error.c

@@ -1,0 +1,18 @@
+# tan.cov - every requirement unit on functions/tan.html (also its f and l forms).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:e7a2dce3     untestable  the accuracy of the result is not specified
+DESCRIPTION:23c13bde     app
+DESCRIPTION:3a9a2e71     app
+RETURN_VALUE:0c5b2e99    partial XSH.tan.001  # the accuracy of the value is not specified; only the absence of an error is tested
+RETURN_VALUE:d1efd6e7    optional
+RETURN_VALUE:7fcec116    XSH.tan.002
+RETURN_VALUE:1e792501    XSH.tan.003
+RETURN_VALUE:5cc5d1b3    impl  the value after this domain error is a NaN or implementation-defined
+RETURN_VALUE:b42e77cf    none  "should", not a requirement
+RETURN_VALUE:b4544390    partial XSH.tan.005  # the range error is optional; the bound on the value is tested
+RETURN_VALUE:8dc51448    optional
+RETURN_VALUE:e46cffcb    untestable  no known representation overflows for a normal argument (APPLICATION USAGE)
+ERRORS:9f9a9ce8          XSH.tan.004
+ERRORS:982c1ef6          untestable  no known representation overflows for a normal argument (APPLICATION USAGE)
+ERRORS:a72a1ff1          optional

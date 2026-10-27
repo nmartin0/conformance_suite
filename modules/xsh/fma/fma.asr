@@ -1,0 +1,99 @@
+# XSH fma(), fmaf(), fmal()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.fma.001
+anchor     functions/fma.html#DESCRIPTION
+anchor     functions/fma.html#RETURN VALUE
+class      required
+since      2001
+says       fma(2, 3, 4), (-2, 3, 1), (0.5, 0.5, 0.25), (1.5, 2, -3), (0, 5, 2)
+           and (3, 0.25, 0.25) give 10, -5, 0.5, 0, 2 and 1.
+test       t/001-values.c
+
+assertion  XSH.fma.002
+anchor     functions/fma.html#DESCRIPTION
+anchor     functions/fma.html#RETURN VALUE
+class      required
+since      2001
+says       For x = y = 1 + epsilon and z the negation of the product x*y after it
+           is rounded to the type, fma(x, y, z) is not zero (the product error
+           survives), and when the rounding direction is to nearest it equals
+           epsilon squared.
+note       Q-108: the rounding direction is taken from fegetround(), not from
+           FLT_ROUNDS; the equality with epsilon squared is asserted only when
+           fegetround() reports to-nearest.
+test       t/002-single-rounding.c
+
+assertion  XSH.fma.003
+anchor     functions/fma.html#DESCRIPTION
+anchor     functions/fma.html#RETURN VALUE
+class      required
+since      2001
+says       fma(NaN, 2, 3), (2, NaN, 3), (NaN, NaN, 3), (NaN, 2, NaN), (2, 3, NaN)
+           and (Inf, 2, NaN) return a NaN.
+test       t/003-nan.c
+
+assertion  XSH.fma.004
+anchor     functions/fma.html#DESCRIPTION
+anchor     functions/fma.html#RETURN VALUE
+anchor     functions/fma.html#ERRORS
+class      required
+since      2001
+says       fma(Inf, 0, 1), (0, Inf, 1), (-Inf, 0, 1), (0, -Inf, Inf) and (Inf, 0,
+           0) return a NaN and are domain errors, reported through errno (EDOM)
+           and the invalid exception as math_errhandling selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-inf-times-zero.c
+
+assertion  XSH.fma.005
+anchor     functions/fma.html#DESCRIPTION
+anchor     functions/fma.html#RETURN VALUE
+anchor     functions/fma.html#ERRORS
+class      required
+since      2001
+says       fma(Inf, 1, -Inf), (-Inf, 1, Inf), (1, Inf, -Inf), (Inf, Inf, -Inf)
+           and (Inf, -1, Inf) return a NaN and are domain errors, reported as
+           math_errhandling selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/005-inf-minus-inf.c
+
+assertion  XSH.fma.006
+anchor     functions/fma.html#DESCRIPTION
+anchor     functions/fma.html#RETURN VALUE
+class      required
+since      2001
+says       fma(Inf, 0, NaN) and fma(0, Inf, NaN) return a NaN (whether a domain
+           error occurs is left open).
+test       t/006-inf-zero-nan.c
+
+assertion  XSH.fma.007
+anchor     functions/fma.html#DESCRIPTION
+anchor     functions/fma.html#RETURN VALUE
+anchor     functions/fma.html#ERRORS
+class      required
+since      2001
+says       fma(MAX, 2, 0) and fma(-MAX, 2, 0), with MAX the largest finite value
+           of the type, overflow: the result is HUGE_VAL (negated for the second)
+           and the range error is reported through errno (ERANGE) and the
+           overflow exception as math_errhandling selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard). The value HUGE_VAL comes from the general rule for
+           overflow (XBD 4.23.3.1).
+test       t/007-overflow.c
+
+assertion  XSH.fma.008
+anchor     functions/fma.html#DESCRIPTION
+anchor     functions/fma.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      2001
+says       With errno holding EDOM before the call, fma(2, 3, 4) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/008-no-error.c

@@ -1,0 +1,21 @@
+# XSH isunordered()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.isunordered.001
+anchor     functions/isunordered.html#DESCRIPTION
+anchor     functions/isunordered.html#RETURN VALUE
+class      required
+since      2001
+says       isunordered() gives 1 for (NaN, 1), (1, NaN), (NaN, NaN), (NaN, Inf),
+           (-Inf, NaN) and (-NaN, 0), for each of the three floating types.
+test       t/001-unordered.c
+
+assertion  XSH.isunordered.002
+anchor     functions/isunordered.html#DESCRIPTION
+anchor     functions/isunordered.html#RETURN VALUE
+class      required
+since      2001
+says       isunordered() gives 0 for (1, 2), (2, 1), (1, 1), (+0, -0), (Inf, 1),
+           (-Inf, Inf) and (MAX, -MAX), for each of the three floating types.
+test       t/002-ordered.c

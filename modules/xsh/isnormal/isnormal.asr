@@ -1,0 +1,30 @@
+# XSH isnormal()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.isnormal.001
+anchor     functions/isnormal.html#DESCRIPTION
+anchor     functions/isnormal.html#RETURN VALUE
+class      required
+since      2001
+says       isnormal() of 1, -1, 0.1, MIN, -MIN, MAX and -MAX is non-zero, for
+           each of the three floating types.
+test       t/001-normal.c
+
+assertion  XSH.isnormal.002
+anchor     functions/isnormal.html#DESCRIPTION
+anchor     functions/isnormal.html#RETURN VALUE
+class      required
+since      2001
+says       isnormal() of 0, -0, +Inf, -Inf, a NaN and its negation is 0, for each
+           of the three floating types.
+test       t/002-not-normal.c
+
+assertion  XSH.isnormal.003
+anchor     functions/isnormal.html#DESCRIPTION
+anchor     functions/isnormal.html#RETURN VALUE
+class      required
+since      2001
+says       isnormal() of half the smallest normal value of the type, and of its
+           negation, is 0 when the type has subnormal values.
+test       t/003-subnormal.c

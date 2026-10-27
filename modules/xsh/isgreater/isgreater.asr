@@ -1,0 +1,106 @@
+# XSH isgreater(), isgreaterequal(), isless(), islessequal(), islessgreater()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.isgreater.001
+anchor     functions/isgreater.html#DESCRIPTION
+anchor     functions/isgreater.html#RETURN VALUE
+class      required
+since      2001
+says       isgreater(x, y) gives 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1 for the
+           ordered pairs (2,1), (1,2), (1,1), (-1,-2), (-2,-1), (+0,-0), (-0,+0),
+           (Inf,1), (1,Inf), (-Inf,1), (Inf,Inf), (-Inf,-Inf) and (0.5,-0.5) (1
+           when x is greater than y, else 0), for each of the three floating
+           types.
+test       t/001-isgreater.c
+
+assertion  XSH.isgreater.002
+anchor     functions/isgreater.html#DESCRIPTION
+anchor     functions/isgreater.html#RETURN VALUE
+class      required
+since      2001
+says       isgreaterequal(x, y) gives 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1 for
+           the ordered pairs (2,1), (1,2), (1,1), (-1,-2), (-2,-1), (+0,-0),
+           (-0,+0), (Inf,1), (1,Inf), (-Inf,1), (Inf,Inf), (-Inf,-Inf) and
+           (0.5,-0.5) (1 when x is greater than or equal to y, else 0), for each
+           of the three floating types.
+test       t/002-isgreaterequal.c
+
+assertion  XSH.isgreater.003
+anchor     functions/isgreater.html#DESCRIPTION
+anchor     functions/isgreater.html#RETURN VALUE
+class      required
+since      2001
+says       isless(x, y) gives 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0 for the
+           ordered pairs (2,1), (1,2), (1,1), (-1,-2), (-2,-1), (+0,-0), (-0,+0),
+           (Inf,1), (1,Inf), (-Inf,1), (Inf,Inf), (-Inf,-Inf) and (0.5,-0.5) (1
+           when x is less than y, else 0), for each of the three floating types.
+test       t/003-isless.c
+
+assertion  XSH.isgreater.004
+anchor     functions/isgreater.html#DESCRIPTION
+anchor     functions/isgreater.html#RETURN VALUE
+class      required
+since      2001
+says       islessequal(x, y) gives 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0 for the
+           ordered pairs (2,1), (1,2), (1,1), (-1,-2), (-2,-1), (+0,-0), (-0,+0),
+           (Inf,1), (1,Inf), (-Inf,1), (Inf,Inf), (-Inf,-Inf) and (0.5,-0.5) (1
+           when x is less than or equal to y, else 0), for each of the three
+           floating types.
+test       t/004-islessequal.c
+
+assertion  XSH.isgreater.005
+anchor     functions/isgreater.html#DESCRIPTION
+anchor     functions/isgreater.html#RETURN VALUE
+class      required
+since      2001
+says       islessgreater(x, y) gives 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1 for
+           the ordered pairs (2,1), (1,2), (1,1), (-1,-2), (-2,-1), (+0,-0),
+           (-0,+0), (Inf,1), (1,Inf), (-Inf,1), (Inf,Inf), (-Inf,-Inf) and
+           (0.5,-0.5) (1 when x is less than or greater than y, else 0), for each
+           of the three floating types.
+test       t/005-islessgreater.c
+
+assertion  XSH.isgreater.006
+anchor     functions/isgreater.html#DESCRIPTION
+anchor     functions/isgreater.html#RETURN VALUE
+class      required
+since      2001
+says       isgreater(), isgreaterequal(), isless(), islessequal() and
+           islessgreater() give 0 for (NaN, 1), (1, NaN), (NaN, NaN), (NaN, Inf)
+           and (-Inf, NaN), for each of the three floating types.
+test       t/006-unordered-zero.c
+
+assertion  XSH.isgreater.007
+anchor     functions/isgreater.html#DESCRIPTION
+anchor     functions/isgreater.html#RETURN VALUE
+class      required
+since      2001
+says       With the invalid flag clear, isgreater(), isgreaterequal(), isless(),
+           islessequal() and islessgreater() of (NaN, 1) and (1, NaN) leave it
+           clear, for each of the three floating types.
+note       A quiet NaN is used: relational operators may raise the invalid
+           exception for it, which is what the macros must not do.
+test       t/007-no-invalid.c
+
+assertion  XSH.isgreater.008
+anchor     functions/isgreater.html#DESCRIPTION
+anchor     functions/isgreater.html#RETURN VALUE
+class      required
+since      2001
+says       islessgreater(a[k++], 5) advances k once and islessgreater(1, a[j++])
+           advances j once, for each of the three floating types.
+test       t/008-islessgreater-once.c
+
+assertion  XSH.isgreater.009
+anchor     functions/isgreater.html#DESCRIPTION
+anchor     functions/isgreater.html#RETURN VALUE
+class      required
+since      2001
+says       For the pairs of 0.1f, 0.1 and 0.1L in both orders, each of the five
+           macros gives the same value as the corresponding operator on the same
+           operands (0.1f and 0.1L are in general different from 0.1, and the
+           comparison is not done in the narrower type).
+note       The expected value in every comparison is the operator's, on the same
+           operands.
+test       t/009-mixed-types.c

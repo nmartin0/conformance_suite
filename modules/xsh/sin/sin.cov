@@ -1,0 +1,14 @@
+# sin.cov - every requirement unit on functions/sin.html (also its f and l forms).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:1edcd857     untestable  the accuracy of the result is not specified
+DESCRIPTION:23c13bde     app
+DESCRIPTION:3a9a2e71     app
+RETURN_VALUE:7ccbf0c0    partial XSH.sin.001  # the accuracy of the value is not specified; only the absence of an error is tested
+RETURN_VALUE:7fcec116    XSH.sin.002
+RETURN_VALUE:1e792501    XSH.sin.003
+RETURN_VALUE:eecf2cfa    XSH.sin.004 XSH.sin.005
+RETURN_VALUE:b42e77cf    none  "should", not a requirement
+RETURN_VALUE:d6948d95    partial XSH.sin.006  # the range error is optional; the bound on the value is tested
+ERRORS:c7c435c0          XSH.sin.005
+ERRORS:1be62dfe          optional

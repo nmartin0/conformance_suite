@@ -1,0 +1,46 @@
+# XSH cbrt(), cbrtf() and cbrtl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Values are tested only where the page fixes them (special values, signed
+# zeros, infinities, NaN propagation, the stated errors). The accuracy of
+# results is not tested. Arguments pass through volatile objects so that
+# nothing is folded at compile time. Error reports follow math_errhandling:
+# errno is tested only when (math_errhandling & MATH_ERRNO) is non-zero and
+# the exception flags only when (math_errhandling & MATH_ERREXCEPT) is
+# non-zero; a test of an error report is NOTINUSE if neither is. Rules shaded
+# as IEC 60559 floating point (MX) are NOTINUSE where __STDC_IEC_559__ is not
+# defined. The three types (name, name with f, name with l) are each tested.
+
+assertion  XSH.cbrt.001
+anchor     functions/cbrt.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+says       cbrt of ordinary arguments (cbrt(2.0); cbrt(-2.0); cbrt(27.0))
+           returns without setting errno (which keeps its earlier value, 0 or
+           ERANGE) and without raising an invalid, divide-by-zero or overflow
+           exception.
+test       t/001-ordinary-no-error.c
+
+assertion  XSH.cbrt.002
+anchor     functions/cbrt.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.24
+class      required
+says       A quiet NaN argument gives a NaN result with no error (errno
+           unchanged, no error exception).
+test       t/002-nan.c
+
+assertion  XSH.cbrt.003
+anchor     functions/cbrt.html#RETURN VALUE
+class      required
+says       cbrt(+0), cbrt(-0), cbrt(+Inf) and cbrt(-Inf) return the argument
+           (a zero keeps its sign).
+test       t/003-zero-inf.c
+
+assertion  XSH.cbrt.004
+anchor     functions/cbrt.html#DESCRIPTION
+anchor     functions/cbrt.html#RETURN VALUE
+anchor     functions/cbrt.html#ERRORS
+class      required
+says       cbrt of the negative values -8 and -2 is negative (the real cube
+           root, not a NaN) and raises no error.
+test       t/004-negative-real-root.c

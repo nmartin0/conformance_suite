@@ -1,0 +1,32 @@
+# XSH isfinite()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.isfinite.001
+anchor     functions/isfinite.html#DESCRIPTION
+anchor     functions/isfinite.html#RETURN VALUE
+class      required
+since      2001
+says       isfinite() of 0, -0, 1, -1, 0.1, MIN, MAX and MIN/2 (MIN the smallest
+           normal value, MAX the largest finite value of the type) is non-zero,
+           for each of the three floating types.
+test       t/001-finite.c
+
+assertion  XSH.isfinite.002
+anchor     functions/isfinite.html#DESCRIPTION
+anchor     functions/isfinite.html#RETURN VALUE
+class      required
+since      2001
+says       isfinite() of +Inf, -Inf, a NaN and its negation is 0, for each of the
+           three floating types.
+test       t/002-not-finite.c
+
+assertion  XSH.isfinite.003
+anchor     functions/isfinite.html#DESCRIPTION
+anchor     functions/isfinite.html#RETURN VALUE
+class      required
+since      2001
+says       For float and double, isfinite(MAX * 2), with MAX the largest finite
+           value of the type, is 0: a product evaluated in a wider format is
+           converted to the semantic type first.
+test       t/003-semantic-type.c

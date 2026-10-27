@@ -1,0 +1,80 @@
+# XSH sqrt(), sqrtf() and sqrtl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Values are tested only where the page fixes them (special values, signed
+# zeros, infinities, NaN propagation, the stated errors). The accuracy of
+# results is not tested. Arguments pass through volatile objects so that
+# nothing is folded at compile time. Error reports follow math_errhandling:
+# errno is tested only when (math_errhandling & MATH_ERRNO) is non-zero and
+# the exception flags only when (math_errhandling & MATH_ERREXCEPT) is
+# non-zero; a test of an error report is NOTINUSE if neither is. Rules shaded
+# as IEC 60559 floating point (MX) are NOTINUSE where __STDC_IEC_559__ is not
+# defined. The three types (name, name with f, name with l) are each tested.
+# The exact-square assertion rests on the IEC 60559 rule that sqrt() depends
+# on the rounding direction, which makes an exactly representable root the
+# only correct result; accuracy of inexact roots is not tested.
+
+assertion  XSH.sqrt.001
+anchor     functions/sqrt.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+says       sqrt of ordinary arguments (sqrt(2.0); sqrt(0.25); sqrt(100.0))
+           returns without setting errno (which keeps its earlier value, 0 or
+           ERANGE) and without raising an invalid, divide-by-zero or overflow
+           exception.
+test       t/001-ordinary-no-error.c
+
+assertion  XSH.sqrt.002
+anchor     functions/sqrt.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.24
+class      required
+says       A quiet NaN argument gives a NaN result with no error (errno
+           unchanged, no error exception).
+test       t/002-nan.c
+
+assertion  XSH.sqrt.003
+anchor     functions/sqrt.html#RETURN VALUE
+class      required
+says       sqrt(+0), sqrt(-0) and sqrt(+Inf) return the argument (a zero
+           keeps its sign).
+test       t/003-zero-plus-inf.c
+
+assertion  XSH.sqrt.004
+anchor     functions/sqrt.html#RETURN VALUE
+class      required
+says       sqrt(-Inf) returns a NaN.
+test       t/004-minus-inf-value.c
+
+assertion  XSH.sqrt.005
+anchor     functions/sqrt.html#ERRORS/Domain Error
+anchor     functions/sqrt.html#RETURN VALUE
+class      required
+says       sqrt(-Inf) is a domain error: errno is EDOM where math_errhandling
+           includes MATH_ERRNO, and the invalid exception is raised where it
+           includes MATH_ERREXCEPT.
+test       t/005-minus-inf-domain.c
+
+assertion  XSH.sqrt.006
+anchor     functions/sqrt.html#ERRORS/Domain Error
+anchor     functions/sqrt.html#RETURN VALUE
+class      required
+says       sqrt() of the finite negative values -1, -4, the negated smallest
+           normal value and the negated type maximum is a domain error: errno
+           is EDOM where math_errhandling includes MATH_ERRNO, and the
+           invalid exception is raised where it includes MATH_ERREXCEPT.
+test       t/006-negative-domain.c
+
+assertion  XSH.sqrt.007
+anchor     functions/sqrt.html#RETURN VALUE
+class      required
+says       sqrt of the exact squares 1, 4, 0.25, 2.25 and 144 returns 1, 2,
+           0.5, 1.5 and 12 exactly.
+test       t/007-exact-squares.c
+
+assertion  XSH.sqrt.008
+anchor     functions/sqrt.html#RETURN VALUE
+class      required
+says       sqrt(2) computed with downward rounding is less than sqrt(2)
+           computed with upward rounding (the value depends on the rounding
+           direction).
+test       t/008-rounding-direction.c

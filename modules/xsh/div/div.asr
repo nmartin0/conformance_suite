@@ -1,0 +1,38 @@
+# XSH div()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.div.001
+anchor     functions/div.html#DESCRIPTION
+anchor     functions/div.html#RETURN VALUE
+class      required
+says       For inexact divisions of both signs, div() returns the quotient of
+           lesser magnitude nearest to the exact one, with the remainder that
+           completes quot*denom+rem == numer (for example 7/2 gives 3 rem 1, -7/2
+           gives -3 rem -1, 7/-2 gives -3 rem 1).
+test       t/001-truncates.c
+
+assertion  XSH.div.002
+anchor     functions/div.html#DESCRIPTION
+anchor     functions/div.html#RETURN VALUE
+class      required
+says       div() of exact divisions and of a zero numerator gives the exact
+           quotient and remainder 0.
+test       t/002-exact.c
+
+assertion  XSH.div.003
+anchor     functions/div.html#DESCRIPTION
+anchor     functions/div.html#RETURN VALUE
+class      required
+says       For numerators 0, 1, -1, INT_MAX, -INT_MAX, 12345 and denominators 1,
+           -1, 2, -2, INT_MAX, -7, the result satisfies quot*denom+rem == numer
+           and a non-zero remainder has the sign of the numerator.
+test       t/003-identity.c
+
+assertion  XSH.div.004
+anchor     functions/div.html#DESCRIPTION
+anchor     functions/div.html#RETURN VALUE
+class      required
+says       The structure div() returns has members quot and rem of type int
+           holding the quotient and the remainder (div(7, 2) gives 3 and 1).
+test       t/004-members.c

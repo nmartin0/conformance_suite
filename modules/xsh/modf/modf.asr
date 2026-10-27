@@ -1,0 +1,72 @@
+# XSH modf(), modff(), modfl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.modf.001
+anchor     functions/modf.html#DESCRIPTION
+anchor     functions/modf.html#RETURN VALUE
+class      required
+since      1988
+says       modf(3.75), (-3.75), (5), (0.25), (-0.25), (100.5), (-2.5) and
+           (0.0625) return the fractions 0.75, -0.75, 0, 0.25, -0.25, 0.5, -0.5
+           and 0.0625 and store the integral parts 3, -3, 5, 0, 0, 100, -2 and 0.
+test       t/001-values.c
+
+assertion  XSH.modf.002
+anchor     functions/modf.html#DESCRIPTION
+anchor     functions/modf.html#RETURN VALUE
+class      required
+since      1988
+says       modf(3) returns +0 and stores 3; modf(-3) returns -0 and stores -3;
+           modf(0.25) stores +0; modf(-0.25) stores -0.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/002-zero-signs.c
+
+assertion  XSH.modf.003
+anchor     functions/modf.html#DESCRIPTION
+anchor     functions/modf.html#RETURN VALUE
+class      required
+since      1988
+says       modf(NaN, &ip) returns a NaN and stores a NaN in ip.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/003-nan.c
+
+assertion  XSH.modf.004
+anchor     functions/modf.html#DESCRIPTION
+anchor     functions/modf.html#RETURN VALUE
+class      required
+since      1988
+says       modf(+Inf, &ip) returns +0 and stores +Inf; modf(-Inf, &ip) returns -0
+           and stores -Inf.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-infinity.c
+
+assertion  XSH.modf.005
+anchor     functions/modf.html#DESCRIPTION
+anchor     functions/modf.html#RETURN VALUE
+class      required
+since      1988
+says       With each rounding direction that can be selected (at least two are
+           needed), modf(2.75) returns 0.75 and stores 2, and modf(-2.75) returns
+           -0.75 and stores -2.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/005-rounding-mode.c
+
+assertion  XSH.modf.006
+anchor     functions/modf.html#DESCRIPTION
+anchor     functions/modf.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      1988
+says       With errno holding EDOM before the call, modf(3.75, &ip) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/006-no-error.c

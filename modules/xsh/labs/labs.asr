@@ -1,0 +1,33 @@
+# XSH labs() and llabs()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.labs.001
+anchor     functions/labs.html#DESCRIPTION
+anchor     functions/labs.html#RETURN VALUE
+class      required
+says       labs(i) returns i for i equal to 0, 1, 5, 123456 and LONG_MAX.
+test       t/001-labs-nonneg.c
+
+assertion  XSH.labs.002
+anchor     functions/labs.html#DESCRIPTION
+anchor     functions/labs.html#RETURN VALUE
+class      required
+says       labs(i) returns -i for i equal to -1, -5, -123456 and -LONG_MAX.
+test       t/002-labs-negative.c
+
+assertion  XSH.labs.003
+anchor     functions/labs.html#DESCRIPTION
+anchor     functions/labs.html#RETURN VALUE
+class      required
+since      2001
+says       llabs(i) returns i for i equal to 0, 1, 5000000000 and LLONG_MAX.
+test       t/003-llabs-nonneg.c
+
+assertion  XSH.labs.004
+anchor     functions/labs.html#DESCRIPTION
+anchor     functions/labs.html#RETURN VALUE
+class      required
+since      2001
+says       llabs(i) returns -i for i equal to -1, -5000000000 and -LLONG_MAX.
+test       t/004-llabs-negative.c

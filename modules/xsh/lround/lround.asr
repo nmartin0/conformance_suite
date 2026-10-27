@@ -1,0 +1,99 @@
+# XSH lround(), lroundf(), lroundl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.lround.001
+anchor     functions/lround.html#DESCRIPTION
+anchor     functions/lround.html#RETURN VALUE
+class      required
+since      2001
+says       lround() of -100.5, -2.75, -2.5, -1.5, -0.5, -0.25, 0.25, 0.5, 1.5,
+           2.5, 2.75 and 100.5 gives -101, -3, -3, -2, -1, 0, 0, 1, 2, 3, 3 and
+           101 in the default rounding direction.
+test       t/001-values.c
+
+assertion  XSH.lround.002
+anchor     functions/lround.html#DESCRIPTION
+anchor     functions/lround.html#RETURN VALUE
+class      required
+since      2001
+says       With each rounding direction that can be selected (at least two are
+           needed), lround() of the same values gives the same results.
+test       t/002-rounding-mode.c
+
+assertion  XSH.lround.003
+anchor     functions/lround.html#DESCRIPTION
+anchor     functions/lround.html#RETURN VALUE
+class      required
+since      2001
+says       lround() of 0, -0, 5, -5, 1048576 and -1048576 returns 0, 0, 5, -5,
+           1048576 and -1048576.
+test       t/003-integral.c
+
+assertion  XSH.lround.004
+anchor     functions/lround.html#DESCRIPTION
+anchor     functions/lround.html#RETURN VALUE
+anchor     functions/lround.html#ERRORS
+class      required
+since      2001
+says       A NaN argument is a domain error: errno is EDOM when it is in use for
+           errors, and the invalid exception is raised when exception flags are
+           in use.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-nan.c
+
+assertion  XSH.lround.005
+anchor     functions/lround.html#DESCRIPTION
+anchor     functions/lround.html#RETURN VALUE
+anchor     functions/lround.html#ERRORS
+class      required
+since      2001
+says       +Inf and -Inf arguments are domain errors, reported through errno
+           (EDOM) and the invalid exception as math_errhandling selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/005-infinity.c
+
+assertion  XSH.lround.006
+anchor     functions/lround.html#DESCRIPTION
+anchor     functions/lround.html#RETURN VALUE
+anchor     functions/lround.html#ERRORS
+class      required
+since      2001
+says       For 2^w, with w the width of long in bits (far above its largest
+           value), a domain error occurs and is reported as math_errhandling
+           selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard). SI-94: one RETURN VALUE sentence on the page lacks the
+           word "error"; the domain error is read as intended.
+test       t/006-too-large-positive.c
+
+assertion  XSH.lround.007
+anchor     functions/lround.html#DESCRIPTION
+anchor     functions/lround.html#RETURN VALUE
+anchor     functions/lround.html#ERRORS
+class      required
+since      2001
+says       For -2^w, with w the width of long in bits (far below its smallest
+           value), a domain error occurs and is reported as math_errhandling
+           selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard). SI-94: one RETURN VALUE sentence on the page lacks the
+           word "error"; the domain error is read as intended.
+test       t/007-too-large-negative.c
+
+assertion  XSH.lround.008
+anchor     functions/lround.html#DESCRIPTION
+anchor     functions/lround.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      2001
+says       With errno holding EDOM before the call, lround(2.5) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/008-no-error.c

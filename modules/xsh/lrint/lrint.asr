@@ -1,0 +1,104 @@
+# XSH lrint(), lrintf(), lrintl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.lrint.001
+anchor     functions/lrint.html#DESCRIPTION
+anchor     functions/lrint.html#RETURN VALUE
+class      required
+since      2001
+says       While the rounding direction is toward negative infinity, toward
+           positive infinity or toward zero (each one that can be selected; at
+           least one is needed), lrint() of -3.5, -2.75, -2.5, -1.5, -1.25,
+           -0.75, 0.75, 1.25, 1.5, 2.5, 2.75 and 3.5 gives the integer below,
+           above or toward zero respectively.
+test       t/001-directed.c
+
+assertion  XSH.lrint.002
+anchor     functions/lrint.html#DESCRIPTION
+anchor     functions/lrint.html#RETURN VALUE
+class      required
+since      2001
+says       While the rounding direction is to nearest, halfway cases go to the
+           even neighbour: lrint(0.5) is 0, lrint(1.5) is 2, lrint(2.5) is 2,
+           lrint(3.5) is 4, lrint(4.5) is 4 and the negative counterparts; other
+           values go to the nearest integer.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard). The test is NOTINUSE when to-nearest cannot be selected.
+test       t/002-nearest-even.c
+
+assertion  XSH.lrint.003
+anchor     functions/lrint.html#DESCRIPTION
+anchor     functions/lrint.html#RETURN VALUE
+class      required
+since      2001
+says       lrint() of 0, -0, 5, -5, 1048576 and -1048576 returns 0, 0, 5, -5,
+           1048576 and -1048576.
+test       t/003-integral.c
+
+assertion  XSH.lrint.004
+anchor     functions/lrint.html#DESCRIPTION
+anchor     functions/lrint.html#RETURN VALUE
+anchor     functions/lrint.html#ERRORS
+class      required
+since      2001
+says       A NaN argument is a domain error: errno is EDOM when it is in use for
+           errors, and the invalid exception is raised when exception flags are
+           in use.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-nan.c
+
+assertion  XSH.lrint.005
+anchor     functions/lrint.html#DESCRIPTION
+anchor     functions/lrint.html#RETURN VALUE
+anchor     functions/lrint.html#ERRORS
+class      required
+since      2001
+says       +Inf and -Inf arguments are domain errors, reported through errno
+           (EDOM) and the invalid exception as math_errhandling selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/005-infinity.c
+
+assertion  XSH.lrint.006
+anchor     functions/lrint.html#DESCRIPTION
+anchor     functions/lrint.html#RETURN VALUE
+anchor     functions/lrint.html#ERRORS
+class      required
+since      2001
+says       For 2^w, with w the width of long in bits (far above its largest
+           value), a domain error occurs and is reported as math_errhandling
+           selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/006-too-large-positive.c
+
+assertion  XSH.lrint.007
+anchor     functions/lrint.html#DESCRIPTION
+anchor     functions/lrint.html#RETURN VALUE
+anchor     functions/lrint.html#ERRORS
+class      required
+since      2001
+says       For -2^w, with w the width of long in bits (far below its smallest
+           value), a domain error occurs and is reported as math_errhandling
+           selects.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/007-too-large-negative.c
+
+assertion  XSH.lrint.008
+anchor     functions/lrint.html#DESCRIPTION
+anchor     functions/lrint.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      2001
+says       With errno holding EDOM before the call, lrint(2.5) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/008-no-error.c

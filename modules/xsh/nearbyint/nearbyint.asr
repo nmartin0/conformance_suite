@@ -1,0 +1,95 @@
+# XSH nearbyint(), nearbyintf(), nearbyintl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.nearbyint.001
+anchor     functions/nearbyint.html#DESCRIPTION
+anchor     functions/nearbyint.html#RETURN VALUE
+class      required
+since      2001
+says       While the rounding direction is toward negative infinity, toward
+           positive infinity or toward zero (each one that can be selected; at
+           least one is needed), nearbyint() of -3.5, -2.75, -2.5, -1.5, -1.25,
+           -0.75, 0.75, 1.25, 1.5, 2.5, 2.75 and 3.5 gives the next integer
+           below, above or toward zero respectively.
+test       t/001-directed.c
+
+assertion  XSH.nearbyint.002
+anchor     functions/nearbyint.html#DESCRIPTION
+anchor     functions/nearbyint.html#RETURN VALUE
+class      required
+since      2001
+says       While the rounding direction is to nearest, halfway cases go to the
+           even neighbour: nearbyint(0.5) is 0, nearbyint(1.5) is 2,
+           nearbyint(2.5) is 2, nearbyint(3.5) is 4, nearbyint(4.5) is 4 and the
+           negative counterparts; other values go to the nearest integer.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard). The test is NOTINUSE when to-nearest cannot be selected.
+test       t/002-nearest-even.c
+
+assertion  XSH.nearbyint.003
+anchor     functions/nearbyint.html#DESCRIPTION
+anchor     functions/nearbyint.html#RETURN VALUE
+class      required
+since      2001
+says       After the inexact flag is cleared, nearbyint(2.5), nearbyint(0.75) and
+           nearbyint(-1.25) leave it clear.
+test       t/003-no-inexact.c
+
+assertion  XSH.nearbyint.004
+anchor     functions/nearbyint.html#DESCRIPTION
+anchor     functions/nearbyint.html#RETURN VALUE
+class      required
+since      2001
+says       In every selectable rounding direction, nearbyint(-0.75),
+           nearbyint(-0.25), nearbyint(0.25) and nearbyint(0.75) have the same
+           sign as the argument, even when the result is zero.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-sign.c
+
+assertion  XSH.nearbyint.005
+anchor     functions/nearbyint.html#DESCRIPTION
+anchor     functions/nearbyint.html#RETURN VALUE
+class      required
+since      2001
+says       A NaN argument gives a NaN result.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/005-nan.c
+
+assertion  XSH.nearbyint.006
+anchor     functions/nearbyint.html#DESCRIPTION
+anchor     functions/nearbyint.html#RETURN VALUE
+class      required
+since      2001
+says       For +0 and -0 the result is the argument, with its sign.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/006-zero.c
+
+assertion  XSH.nearbyint.007
+anchor     functions/nearbyint.html#DESCRIPTION
+anchor     functions/nearbyint.html#RETURN VALUE
+class      required
+since      2001
+says       For +Inf and -Inf the result is the argument.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/007-infinity.c
+
+assertion  XSH.nearbyint.008
+anchor     functions/nearbyint.html#DESCRIPTION
+anchor     functions/nearbyint.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      2001
+says       With errno holding EDOM before the call, nearbyint(2.5) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/008-no-error.c

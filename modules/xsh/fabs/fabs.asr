@@ -1,0 +1,70 @@
+# XSH fabs(), fabsf(), fabsl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.fabs.001
+anchor     functions/fabs.html#DESCRIPTION
+anchor     functions/fabs.html#RETURN VALUE
+class      required
+since      1988
+says       fabs() of -3.5, 3.5, -0.25, 0.25, -100.0625, MAX and -MAX (MAX the
+           largest finite value of the type) returns 3.5, 3.5, 0.25, 0.25,
+           100.0625, MAX and MAX.
+test       t/001-values.c
+
+assertion  XSH.fabs.002
+anchor     functions/fabs.html#DESCRIPTION
+anchor     functions/fabs.html#RETURN VALUE
+class      required
+since      1988
+says       fabs() of a NaN and of its negation returns a NaN.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/002-nan.c
+
+assertion  XSH.fabs.003
+anchor     functions/fabs.html#DESCRIPTION
+anchor     functions/fabs.html#RETURN VALUE
+class      required
+since      1988
+says       fabs(+0) and fabs(-0) return +0 (a zero with the sign bit clear).
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/003-zero.c
+
+assertion  XSH.fabs.004
+anchor     functions/fabs.html#DESCRIPTION
+anchor     functions/fabs.html#RETURN VALUE
+class      required
+since      1988
+says       fabs(+Inf) and fabs(-Inf) return +Inf.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-infinity.c
+
+assertion  XSH.fabs.005
+anchor     functions/fabs.html#DESCRIPTION
+anchor     functions/fabs.html#RETURN VALUE
+class      required
+since      1988
+says       With each rounding direction that can be selected (at least two are
+           needed), fabs(-0.1) is 0.1 and fabs(0.1) is 0.1, as written in the
+           type of the call.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/005-rounding-mode.c
+
+assertion  XSH.fabs.006
+anchor     functions/fabs.html#DESCRIPTION
+anchor     functions/fabs.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      1988
+says       With errno holding EDOM before the call, fabs(-3.5) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/006-no-error.c

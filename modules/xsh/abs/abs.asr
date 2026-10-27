@@ -1,0 +1,19 @@
+# XSH abs()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.abs.001
+anchor     functions/abs.html#DESCRIPTION
+anchor     functions/abs.html#RETURN VALUE
+class      required
+since      1988
+says       abs(i) returns i for i equal to 0, 1, 5, 12345 and INT_MAX.
+test       t/001-nonneg.c
+
+assertion  XSH.abs.002
+anchor     functions/abs.html#DESCRIPTION
+anchor     functions/abs.html#RETURN VALUE
+class      required
+since      1988
+says       abs(i) returns -i for i equal to -1, -5, -12345 and -INT_MAX.
+test       t/002-negative.c

@@ -1,0 +1,13 @@
+# tanh.cov - every requirement unit on functions/tanh.html (also its f and l forms).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:04a71e96     untestable  the accuracy of the result is not specified
+DESCRIPTION:23c13bde     app
+DESCRIPTION:3a9a2e71     app
+RETURN_VALUE:3a56d035    partial XSH.tanh.001  # the accuracy of the value is not specified; only the absence of an error is tested
+RETURN_VALUE:7fcec116    XSH.tanh.002
+RETURN_VALUE:1e792501    XSH.tanh.003
+RETURN_VALUE:4b700aeb    XSH.tanh.004
+RETURN_VALUE:b42e77cf    none  "should", not a requirement
+RETURN_VALUE:b664c12d    partial XSH.tanh.005  # the range error is optional; the bound on the value is tested
+ERRORS:d8e43472          optional

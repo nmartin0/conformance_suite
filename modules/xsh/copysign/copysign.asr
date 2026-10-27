@@ -1,0 +1,74 @@
+# XSH copysign(), copysignf(), copysignl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.copysign.001
+anchor     functions/copysign.html#DESCRIPTION
+anchor     functions/copysign.html#RETURN VALUE
+class      required
+since      2001
+says       copysign(3, -1), (-3, 1), (3, 1), (-3, -1), (2.5, -7) and (0.25, 2)
+           give -3, 3, 3, -3, -2.5 and 0.25.
+test       t/001-values.c
+
+assertion  XSH.copysign.002
+anchor     functions/copysign.html#DESCRIPTION
+anchor     functions/copysign.html#RETURN VALUE
+class      required
+since      2001
+says       copysign(1, -0), (-1, +0), (+0, -1), (-0, 1), (+0, +0) and (-0, -0)
+           give -1, 1, -0, +0, +0 and -0.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard). Without it the sentence about negative zero that is not
+           treated consistently may apply.
+test       t/002-signed-zero.c
+
+assertion  XSH.copysign.003
+anchor     functions/copysign.html#DESCRIPTION
+anchor     functions/copysign.html#RETURN VALUE
+class      required
+since      2001
+says       copysign(NaN, -1) is a NaN with the sign bit set and copysign(NaN, 1)
+           one with it clear; copysign(1, y) for a NaN y has the sign that
+           signbit() reports for y (checked for NaN and -NaN).
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard). NaNs have a sign bit (signbit() page).
+test       t/003-nan.c
+
+assertion  XSH.copysign.004
+anchor     functions/copysign.html#DESCRIPTION
+anchor     functions/copysign.html#RETURN VALUE
+class      required
+since      2001
+says       copysign(Inf, -1), (-Inf, 1), (1, -Inf), (1, Inf) and (Inf, -Inf) give
+           -Inf, Inf, -1, 1 and -Inf.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/004-infinity.c
+
+assertion  XSH.copysign.005
+anchor     functions/copysign.html#DESCRIPTION
+anchor     functions/copysign.html#RETURN VALUE
+class      required
+since      2001
+says       With each rounding direction that can be selected (at least two are
+           needed), copysign(1.1, -1) is -1.1 and copysign(-0.1, 2) is 0.1, as
+           written in the type of the call.
+note       The tag on this passage is the IEC 60559 Floating-Point option; the
+           test is NOTINUSE unless the C implementation claims it (Annex F of the
+           C standard).
+test       t/005-rounding-mode.c
+
+assertion  XSH.copysign.006
+anchor     functions/copysign.html#DESCRIPTION
+anchor     functions/copysign.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+since      2001
+says       With errno holding EDOM before the call, copysign(3, -1) leaves it
+           unchanged and, when exception flags are in use, raises none of the
+           invalid, divide-by-zero and overflow exceptions.
+test       t/006-no-error.c

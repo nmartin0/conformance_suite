@@ -1,0 +1,75 @@
+# XSH lgamma(), lgammaf() and lgammal()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Values are tested only where the page fixes them (special values, signed
+# zeros, infinities, NaN propagation, the stated errors). The accuracy of
+# results is not tested. Arguments pass through volatile objects so that
+# nothing is folded at compile time. Error reports follow math_errhandling:
+# errno is tested only when (math_errhandling & MATH_ERRNO) is non-zero and
+# the exception flags only when (math_errhandling & MATH_ERREXCEPT) is
+# non-zero; a test of an error report is NOTINUSE if neither is. Rules shaded
+# as IEC 60559 floating point (MX) are NOTINUSE where __STDC_IEC_559__ is not
+# defined. The three types (name, name with f, name with l) are each tested.
+# The signgam assertion is XSI. signgam is read right after the call in a
+# single thread.
+
+assertion  XSH.lgamma.001
+anchor     functions/lgamma.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+says       lgamma of ordinary arguments (lgamma(3.5); lgamma(0.5);
+           lgamma(-0.5)) returns without setting errno (which keeps its
+           earlier value, 0 or ERANGE) and without raising an invalid,
+           divide-by-zero or overflow exception.
+test       t/001-ordinary-no-error.c
+
+assertion  XSH.lgamma.002
+anchor     functions/lgamma.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.24
+class      required
+says       A quiet NaN argument gives a NaN result with no error (errno
+           unchanged, no error exception).
+test       t/002-nan.c
+
+assertion  XSH.lgamma.003
+anchor     functions/lgamma.html#RETURN VALUE
+class      required
+says       lgamma(1) and lgamma(2) return +0.
+test       t/003-one-two.c
+
+assertion  XSH.lgamma.004
+anchor     functions/lgamma.html#RETURN VALUE
+class      required
+says       lgamma(+Inf) and lgamma(-Inf) return +Inf.
+test       t/004-inf.c
+
+assertion  XSH.lgamma.005
+anchor     functions/lgamma.html#RETURN VALUE
+anchor     functions/lgamma.html#ERRORS/Pole Error
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+says       lgamma of zero (either sign) and of the negative integers -1, -2
+           and -100 returns +HUGE_VAL as a pole error: errno is ERANGE where
+           math_errhandling includes MATH_ERRNO, and the divide-by-zero
+           exception is raised where it includes MATH_ERREXCEPT.
+test       t/005-pole.c
+
+assertion  XSH.lgamma.006
+anchor     functions/lgamma.html#RETURN VALUE
+anchor     functions/lgamma.html#ERRORS/Range Error
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+says       lgamma of the type maximum returns +HUGE_VAL as an overflow range
+           error: errno is ERANGE where math_errhandling includes MATH_ERRNO,
+           and the overflow exception is raised where it includes
+           MATH_ERREXCEPT.
+test       t/006-overflow.c
+
+assertion  XSH.lgamma.007
+anchor     functions/lgamma.html#RETURN VALUE
+class      conditional
+when       XSI
+says       After lgamma, signgam holds the sign of gamma(x): 1 for x = 0.5, 1
+           and 2.5, -1 for x = -0.5 and -2.5 (gamma is negative there), and 1
+           for x = -1.5.
+test       t/007-signgam.c

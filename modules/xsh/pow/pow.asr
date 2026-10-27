@@ -1,0 +1,147 @@
+# XSH pow(), powf() and powl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Values are tested only where the page fixes them (special values, signed
+# zeros, infinities, NaN propagation, the stated errors). The accuracy of
+# results is not tested. Arguments pass through volatile objects so that
+# nothing is folded at compile time. Error reports follow math_errhandling:
+# errno is tested only when (math_errhandling & MATH_ERRNO) is non-zero and
+# the exception flags only when (math_errhandling & MATH_ERREXCEPT) is
+# non-zero; a test of an error report is NOTINUSE if neither is. Rules shaded
+# as IEC 60559 floating point (MX) are NOTINUSE where __STDC_IEC_559__ is not
+# defined. The three types (name, name with f, name with l) are each tested.
+# The special values of the IEC 60559 section use finite non-integer y such
+# as 0.5 and 2.5 (not odd integers), and 3 and 1 as odd integers.
+
+assertion  XSH.pow.001
+anchor     functions/pow.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+says       pow of ordinary arguments (pow(2.5, 1.5); pow(-2.0, 3.0); pow(0.5,
+           -2.0)) returns without setting errno (which keeps its earlier
+           value, 0 or ERANGE) and without raising an invalid, divide-by-zero
+           or overflow exception.
+test       t/001-ordinary-no-error.c
+
+assertion  XSH.pow.002
+anchor     functions/pow.html#RETURN VALUE
+anchor     basedefs/V1_chap04.html#4.24
+class      required
+says       pow(NaN, 2), pow(2, NaN) and pow(NaN, NaN) return a NaN with no
+           error.
+test       t/002-nan.c
+
+assertion  XSH.pow.003
+anchor     functions/pow.html#RETURN VALUE
+class      required
+says       pow(+1, y) returns 1.0 for y = 2.5, -2.5, +0, -0, +Inf, -Inf and a
+           NaN.
+test       t/003-x-one.c
+
+assertion  XSH.pow.004
+anchor     functions/pow.html#RETURN VALUE
+class      required
+says       pow(x, +0) and pow(x, -0) return 1.0 for x = 2, -3, +0, -0, +Inf,
+           -Inf and a NaN.
+test       t/004-y-zero.c
+
+assertion  XSH.pow.005
+anchor     functions/pow.html#RETURN VALUE
+class      required
+says       pow(+0, y) returns +0 and pow(-0, y) returns -0 for the odd
+           integers y = 1 and 3.
+test       t/005-zero-odd-positive.c
+
+assertion  XSH.pow.006
+anchor     functions/pow.html#RETURN VALUE
+class      required
+says       pow(+0, y) and pow(-0, y) return +0 for y = 0.5, 2, 2.5 and +Inf.
+test       t/006-zero-other-positive.c
+
+assertion  XSH.pow.007
+anchor     functions/pow.html#RETURN VALUE
+class      required
+says       pow(-1, +Inf) and pow(-1, -Inf) return 1.0.
+test       t/007-minus-one-inf.c
+
+assertion  XSH.pow.008
+anchor     functions/pow.html#RETURN VALUE
+class      required
+says       For |x| < 1 (0.5 and -0.5) pow(x, -Inf) returns +Inf and pow(x,
+           +Inf) returns +0; for |x| > 1 (2 and -2) pow(x, -Inf) returns +0
+           and pow(x, +Inf) returns +Inf.
+test       t/008-inf-exponent.c
+
+assertion  XSH.pow.009
+anchor     functions/pow.html#RETURN VALUE
+class      required
+says       pow(-Inf, y) returns -0 for y = -3, +0 for y = -2 and -0.5, -Inf
+           for y = 1 and 3, and +Inf for y = 2 and 0.5.
+test       t/009-minus-inf-base.c
+
+assertion  XSH.pow.010
+anchor     functions/pow.html#RETURN VALUE
+class      required
+says       pow(+Inf, y) returns +0 for y = -1 and -0.5, and +Inf for y = 0.5
+           and 2.
+test       t/010-plus-inf-base.c
+
+assertion  XSH.pow.011
+anchor     functions/pow.html#ERRORS/Domain Error
+anchor     functions/pow.html#RETURN VALUE
+class      required
+says       pow() of a finite negative x and a finite non-integer y (x = -2
+           with y = 0.5 and -1.5, x = -0.5 with y = 2.5) is a domain error:
+           errno is EDOM where math_errhandling includes MATH_ERRNO, and the
+           invalid exception is raised where it includes MATH_ERREXCEPT.
+test       t/011-negative-base-domain.c
+
+assertion  XSH.pow.012
+anchor     functions/pow.html#RETURN VALUE
+anchor     functions/pow.html#ERRORS/Range Error
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+says       pow overflows with the sign of the true result: pow(2, 2e) and
+           pow(0.5, -2e) return +HUGE_VAL, and pow(-2, e+1) returns -HUGE_VAL
+           (e is the exponent limit of the type, so e+1 is an odd integer),
+           each as an overflow range error: errno is ERANGE where
+           math_errhandling includes MATH_ERRNO, and the overflow exception
+           is raised where it includes MATH_ERREXCEPT.
+test       t/012-overflow.c
+
+assertion  XSH.pow.013
+anchor     functions/pow.html#RETURN VALUE
+class      required
+says       pow(2, -2e) and pow(0.5, 2e) (results far below the smallest
+           subnormal) return a value no greater in magnitude than the type
+           minimum, and exactly zero where IEC 60559 floating point is
+           supported.
+test       t/013-underflow-value.c
+
+assertion  XSH.pow.014
+anchor     functions/pow.html#RETURN VALUE
+anchor     functions/pow.html#ERRORS/Pole Error
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+says       pow(+0, y) returns +HUGE_VAL and pow(-0, y) returns -HUGE_VAL for
+           the odd negative integers y = -1 and -3, as a pole error: errno is
+           ERANGE where math_errhandling includes MATH_ERRNO, and the divide-
+           by-zero exception is raised where it includes MATH_ERREXCEPT.
+test       t/014-zero-odd-negative-pole.c
+
+assertion  XSH.pow.015
+anchor     functions/pow.html#RETURN VALUE
+anchor     functions/pow.html#ERRORS/Pole Error
+anchor     basedefs/V1_chap04.html#4.23
+class      required
+says       pow(+0, y) and pow(-0, y) return +HUGE_VAL for the finite negative
+           y that are not odd integers (-2 and -0.5), as a pole error
+           reported as for any pole error.
+test       t/015-zero-other-negative-pole.c
+
+assertion  XSH.pow.016
+anchor     functions/pow.html#RETURN VALUE
+class      required
+says       pow(+0, -Inf) and pow(-0, -Inf) return +HUGE_VAL (a pole error may
+           also be reported; not tested).
+test       t/016-zero-minus-inf.c

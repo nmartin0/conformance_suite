@@ -1,0 +1,16 @@
+# asin.cov - every requirement unit on functions/asin.html (also its f and l forms).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:b1a8ffe9     untestable  the accuracy of the result is not specified
+DESCRIPTION:b9e6f3af     app
+DESCRIPTION:23c13bde     app
+DESCRIPTION:3a9a2e71     app
+RETURN_VALUE:dfa65c16    partial XSH.asin.001  # the accuracy of the value is not specified; only the absence of an error is tested
+RETURN_VALUE:243816d1    XSH.asin.005 XSH.asin.006
+RETURN_VALUE:7fcec116    XSH.asin.002
+RETURN_VALUE:1e792501    XSH.asin.003
+RETURN_VALUE:eecf2cfa    XSH.asin.004 XSH.asin.006
+RETURN_VALUE:b42e77cf    none  "should", not a requirement
+RETURN_VALUE:dc72367a    partial XSH.asin.007  # the range error is optional; the bound on the value is tested
+ERRORS:a27f867e          XSH.asin.005 XSH.asin.006
+ERRORS:d8e43472          optional
