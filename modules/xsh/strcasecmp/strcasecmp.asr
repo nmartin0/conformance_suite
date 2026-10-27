@@ -1,0 +1,72 @@
+# XSH strcasecmp() and strcasecmp_l()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests run in the POSIX locale (setlocale(LC_ALL, "C")); only the
+# portable character set is examined. The _l forms are tested with a locale
+# object from newlocale() for "C"; a failure to make one is UNRESOLVED.
+
+assertion  XSH.strcasecmp.001
+anchor     functions/strcasecmp.html#DESCRIPTION
+anchor     functions/strcasecmp.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+says       strcasecmp() returns 0 for strings that differ only in case, in the
+           POSIX locale: "abc" and "ABC", "AbC" and "aBc", "a1_" and "A1_", two
+           empty strings, each of the 26 letters in the two cases, and the
+           whole alphabet, digits and punctuation in lowercase against the same
+           in uppercase.
+test       t/001-equal.c
+
+assertion  XSH.strcasecmp.002
+anchor     functions/strcasecmp.html#DESCRIPTION
+anchor     functions/strcasecmp.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+says       In the POSIX locale strcasecmp() orders strings as a byte comparison
+           after conversion to lowercase would: the sign for every pair of
+           single letters in either case follows the order of the lowercase
+           letters, a punctuation character against a letter of either case
+           follows the codes of the punctuation character and of the lowercase
+           letter (so "[" against "A" is judged as against "a"), digits against
+           letters and against digits follow their codes, and the first
+           difference decides regardless of what follows.
+note       The expected sign comes from comparing the portable-character
+           literals as unsigned chars.
+test       t/002-order.c
+
+assertion  XSH.strcasecmp.003
+anchor     functions/strcasecmp.html#DESCRIPTION
+anchor     functions/strcasecmp.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+says       strcasecmp() treats the end of a string as lower than any character:
+           "ab" is before "ABC" and "ABC" after "ab", "" before "a" and "A"
+           after "", "abc" before "ABCD"; and the result for swapped arguments
+           has the opposite sign, for every pair of a set of eight strings.
+test       t/003-length.c
+
+assertion  XSH.strcasecmp.004
+anchor     functions/strcasecmp.html#DESCRIPTION
+anchor     functions/strcasecmp.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+since      2008
+says       strcasecmp_l() with a locale object for the POSIX locale gives the
+           same results as strcasecmp(): 0 for case variants, the order of the
+           lowercased bytes (letters, punctuation, digits) and the
+           end-of-string rules.
+note       The locale object comes from newlocale(); UNRESOLVED if it cannot be
+           made.
+test       t/004-locale-object.c
+
+assertion  XSH.strcasecmp.005
+anchor     functions/strcasecmp.html#DESCRIPTION
+anchor     functions/strcasecmp.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+since      2024
+says       In the POSIX locale errno is left unchanged by strcasecmp() and
+           strcasecmp_l() on valid input, for equal, lower and greater results.
+note       Issue 8 sentence (defect 448); errno is preset to a value and
+           compared afterwards.
+test       t/005-errno.c

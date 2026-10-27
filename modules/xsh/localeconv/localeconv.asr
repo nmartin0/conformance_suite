@@ -1,0 +1,66 @@
+# XSH localeconv()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# In the POSIX locale XBD 7.3.3.1 and 7.3.4.1 fix every member of struct lconv:
+# the strings are empty except decimal_point, and every member of type char is
+# {CHAR_MAX}. Nothing is asserted about another locale's values beyond what the
+# page itself says (a char member is non-negative; decimal_point is never
+# empty). Second locales come from pc_find_locale("UTF-8", 0); tests that need
+# one are NOTINUSE without.
+
+assertion  XSH.localeconv.001
+anchor     functions/localeconv.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.4.1
+class      required
+says       In the POSIX locale localeconv() returns a non-null pointer and
+           decimal_point is ".", thousands_sep is "" and grouping is "".
+test       t/001-numeric.c
+
+assertion  XSH.localeconv.002
+anchor     functions/localeconv.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.3.1
+class      required
+says       In the POSIX locale int_curr_symbol, currency_symbol,
+           mon_decimal_point, mon_thousands_sep, mon_grouping, positive_sign
+           and negative_sign are all empty strings.
+test       t/002-monetary-strings.c
+
+assertion  XSH.localeconv.003
+anchor     functions/localeconv.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.3.1
+class      required
+says       In the POSIX locale each of the fourteen members of type char
+           (int_frac_digits, frac_digits, the p_ and n_ cs_precedes,
+           sep_by_space and sign_posn members, and the int_p_ and int_n_
+           ones) equals CHAR_MAX.
+test       t/003-monetary-chars.c
+
+assertion  XSH.localeconv.004
+anchor     functions/localeconv.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.1
+class      required
+says       localeconv() describes the current locale of the calling thread:
+           with a thread-local POSIX-locale object installed with uselocale(),
+           while the global locale is another locale, every member has its
+           POSIX-locale value (as in assertions 001 to 003).
+test       t/004-thread-locale.c
+
+assertion  XSH.localeconv.005
+anchor     functions/localeconv.html#DESCRIPTION
+class      required
+says       In another locale every string member is a non-null pointer,
+           decimal_point is not empty, every char member is non-negative, and
+           the four cs_precedes members are 0, 1 or CHAR_MAX.
+test       t/005-other-locale.c
+
+assertion  XSH.localeconv.006
+anchor     functions/localeconv.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.3
+anchor     basedefs/V1_chap07.html#7.3.4
+class      required
+says       The numeric members (decimal_point, thousands_sep, grouping) come
+           from LC_NUMERIC and the monetary members from LC_MONETARY: with only
+           LC_NUMERIC set to another locale, every monetary member keeps its
+           POSIX value; with only LC_MONETARY set to another locale, the
+           numeric members keep theirs.
+test       t/006-categories.c

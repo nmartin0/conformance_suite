@@ -1,0 +1,67 @@
+# XSH isblank() and isblank_l()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests run in the POSIX locale (setlocale(LC_ALL, "C")); only the
+# portable character set is examined. The _l forms are tested with a locale
+# object from newlocale() for "C"; a failure to make one is UNRESOLVED.
+
+assertion  XSH.isblank.001
+anchor     functions/isblank.html#DESCRIPTION
+anchor     functions/isblank.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      2001
+says       In the POSIX locale isblank() returns non-zero for each portable
+           character of the class as the locale definition lists it: the space
+           and the tab. Checked through the function and through the header
+           form.
+test       t/001-members.c
+
+assertion  XSH.isblank.002
+anchor     functions/isblank.html#DESCRIPTION
+anchor     functions/isblank.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      2001
+says       In the POSIX locale isblank() returns 0 for each portable character
+           the locale definition does not place in the class: letters, digits,
+           the 32 punctuation characters, newline, vertical-tab, form-feed,
+           carriage-return and the other portable control characters.
+note       Only the portable characters are examined; other control codes,
+           bytes above 127 and values outside the domain are unspecified or
+           undefined.
+test       t/002-non-members.c
+
+assertion  XSH.isblank.003
+anchor     functions/isblank.html#DESCRIPTION
+anchor     functions/isblank.html#RETURN VALUE
+class      required
+since      2001
+says       isblank(EOF) is inside the domain and returns 0, since EOF is not a
+           character of the class.
+test       t/003-eof.c
+
+assertion  XSH.isblank.004
+anchor     functions/isblank.html#DESCRIPTION
+anchor     functions/isblank.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      2008
+says       isblank_l() with a locale object for the POSIX locale gives the same
+           answers as isblank() for the portable characters: non-zero for the
+           members, 0 for the others.
+note       The locale object comes from newlocale(); UNRESOLVED if it cannot be
+           made.
+test       t/004-locale-object.c
+
+assertion  XSH.isblank.005
+anchor     functions/isblank.html#DESCRIPTION
+anchor     functions/isblank.html#RETURN VALUE
+class      required
+since      2008
+says       isblank_l(EOF, locale) with a locale object for the POSIX locale
+           returns 0.
+test       t/005-locale-eof.c

@@ -1,0 +1,106 @@
+# XSH setlocale()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only what the text fixes is asserted: the POSIX locale and its two names, the
+# query form, the all-or-nothing behaviour of a failed call, the effect of the
+# environment on setlocale(LC_ALL, ""), and what a returned name can be used for.
+# The text of any name other than "C" and "POSIX" is implementation-defined, so a
+# name returned for another locale is never compared with a fixed string; tests
+# that need a second locale take one from pc_find_locale("UTF-8", 0) and are
+# NOTINUSE when the system has none. A locale name that is certainly not installed
+# is made up for the failure tests; if the system accepts it the test is
+# UNRESOLVED. The tests change the environment of their own process only.
+
+assertion  XSH.setlocale.001
+anchor     functions/setlocale.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.2
+class      required
+says       Before any call to setlocale(), the global locale is the POSIX
+           locale: the langinfo items of the time, numeric and messages
+           categories have the values XBD 7.3.5.3, 7.3.4.1 and 7.3.6.1 give,
+           localeconv() shows the POSIX numeric and monetary values, strcoll()
+           orders "B" before "a", and a query of LC_ALL and of each category
+           returns a non-null pointer.
+test       t/001-initial.c
+
+assertion  XSH.setlocale.002
+anchor     functions/setlocale.html#DESCRIPTION
+anchor     functions/setlocale.html#RETURN VALUE
+class      required
+says       For LC_ALL and for each of the six categories, both "C" and "POSIX"
+           are accepted (non-null return), and afterwards that part of the
+           global locale behaves as the POSIX locale, also when a different
+           locale had been selected for it before.
+test       t/002-names.c
+
+assertion  XSH.setlocale.003
+anchor     functions/setlocale.html#DESCRIPTION
+anchor     functions/setlocale.html#RETURN VALUE
+class      required
+says       A query with a null locale argument returns a non-null string for
+           LC_ALL and for each category, does not change the global locale,
+           and two consecutive queries of the same category give strings with
+           the same content. (The state queried is a mixed one when a second
+           locale is installed, else the POSIX locale.)
+test       t/003-query.c
+
+assertion  XSH.setlocale.004
+anchor     functions/setlocale.html#DESCRIPTION
+anchor     functions/setlocale.html#RETURN VALUE
+class      required
+says       Setting one category to another locale leaves the other five
+           categories as they were (their queried names are unchanged and
+           they still behave as the POSIX locale), the string returned by the
+           call is accepted again by setlocale() for that category, and the
+           langinfo code set follows LC_CTYPE only.
+test       t/004-one-category.c
+
+assertion  XSH.setlocale.005
+anchor     functions/setlocale.html#RETURN VALUE
+class      required
+says       The string a query of LC_ALL returns, passed back with LC_ALL,
+           restores every category as it was (a mixed state with LC_CTYPE and
+           LC_TIME from another locale), and the string a query of one category
+           returns, passed back with that category, restores that part.
+test       t/005-restore.c
+
+assertion  XSH.setlocale.006
+anchor     functions/setlocale.html#RETURN VALUE
+anchor     functions/setlocale.html#DESCRIPTION
+class      required
+says       A call with a name that no locale has, for LC_ALL and for one
+           category, returns a null pointer and leaves every category of the
+           global locale as it was (names unchanged, behaviour unchanged).
+test       t/006-failure.c
+
+assertion  XSH.setlocale.007
+anchor     functions/setlocale.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       setlocale(LC_ALL, "") succeeds and selects the POSIX locale for
+           every category when the environment names it through: LC_ALL (set to
+           "POSIX", with LC_* and LANG naming a missing locale, which shows LC_ALL
+           takes precedence); the six LC_* variables each set to "C" with LANG
+           naming a missing locale; LANG alone set to "POSIX".
+test       t/007-env-success.c
+
+assertion  XSH.setlocale.008
+anchor     functions/setlocale.html#DESCRIPTION
+anchor     functions/setlocale.html#RETURN VALUE
+class      required
+says       setlocale(LC_ALL, "") returns a null pointer and changes nothing
+           (no category, not even one whose variable names a good locale) when
+           the variable that applies to one category names a missing locale:
+           LC_TIME naming it with LANG good; and LC_ALL naming it with the
+           LC_* variables good.
+test       t/008-env-failure.c
+
+assertion  XSH.setlocale.009
+anchor     functions/setlocale.html#DESCRIPTION
+anchor     functions/uselocale.html#DESCRIPTION
+class      required
+says       While a thread has a thread-local locale installed with uselocale(),
+           a change of the global locale with setlocale() does not affect that
+           thread (a POSIX-locale object stays POSIX); once the thread
+           reinstalls LC_GLOBAL_LOCALE it sees the global locale as changed.
+test       t/009-thread-locale.c

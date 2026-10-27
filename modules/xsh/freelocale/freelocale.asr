@@ -1,0 +1,26 @@
+# XSH freelocale()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The function returns nothing and has no errors, so the checks are errno
+# (which the text says is left alone for a valid object) and that other objects
+# stay usable. Using a freed object is undefined and is never done.
+
+assertion  XSH.freelocale.001
+anchor     functions/freelocale.html#DESCRIPTION
+class      required
+since      2024
+says       freelocale() leaves errno as it was (0 and EDOM are tried) for an
+           object returned by newlocale() with base (locale_t)0, for one
+           returned by duplocale(), and for one returned by newlocale() with
+           a base object.
+test       t/001-errno-kept.c
+
+assertion  XSH.freelocale.002
+anchor     functions/freelocale.html#DESCRIPTION
+class      required
+since      2008
+says       Freeing an object does not disturb another one: after freeing the
+           first of two independently made objects (and, in a second round,
+           the second), the other still gives the POSIX values of the day,
+           month, format, numeric and messages items and the POSIX code set.
+test       t/002-others-intact.c

@@ -1,0 +1,69 @@
+# strfmon.cov - every requirement unit on functions/strfmon.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:3a922a54     XSH.strfmon.001 XSH.strfmon.003 XSH.strfmon.012
+DESCRIPTION:1d1ebbde     XSH.strfmon.002
+DESCRIPTION:49cf0222     XSH.strfmon.001 XSH.strfmon.012
+DESCRIPTION:3333a84e     none  undefined behaviour is not tested
+DESCRIPTION:5006e706     XSH.strfmon.001 XSH.strfmon.012
+DESCRIPTION:4978b5b4     app
+DESCRIPTION:ddb6f340     none  part of the sequence an application writes
+DESCRIPTION:f83c9829     none  part of the sequence an application writes
+DESCRIPTION:9d9d4c55     none  part of the sequence an application writes
+DESCRIPTION:c2f4e404     none  part of the sequence an application writes
+DESCRIPTION:759b4063     none  part of the sequence an application writes
+DESCRIPTION:08027ab1     none  part of the sequence an application writes
+DESCRIPTION:7a220963     XSH.strfmon.013
+DESCRIPTION:3dfb9eae     none  introduces the flags
+DESCRIPTION:3836463a     XSH.strfmon.010
+DESCRIPTION:1c0c4eb6     app
+DESCRIPTION:49d1659f     XSH.strfmon.010
+DESCRIPTION:fe7ebbee     XSH.strfmon.009
+DESCRIPTION:f6f95e64     XSH.strfmon.010
+DESCRIPTION:2996d93a     XSH.strfmon.008
+DESCRIPTION:4de414f0     partial XSH.strfmon.008  # the POSIX locale has no grouping, so the default is checked only in a second locale (as far as the unbroken run shows)
+DESCRIPTION:e0ec01a8     XSH.strfmon.004 XSH.strfmon.005 XSH.strfmon.007
+DESCRIPTION:16671a52     app
+DESCRIPTION:7fb5c646     XSH.strfmon.005 XSH.strfmon.006
+DESCRIPTION:0bf58d6a     XSH.strfmon.005 XSH.strfmon.006
+DESCRIPTION:14d1d49e     partial XSH.strfmon.004  # only the POSIX locale's placement before the digits; the placement for other sign_posn values is locale data the tests do not know
+DESCRIPTION:ceb501af     partial XSH.strfmon.004  # only the POSIX locale's placement before the digits
+DESCRIPTION:d2e66a3c     XSH.strfmon.004
+DESCRIPTION:a131b34f     XSH.strfmon.007
+DESCRIPTION:4a26d58f     partial XSH.strfmon.004  # only the POSIX locale, where the style cannot be determined
+DESCRIPTION:14e8a460     partial XSH.strfmon.004  # only the POSIX locale, where the style cannot be determined
+DESCRIPTION:d7edc9f5     XSH.strfmon.004
+DESCRIPTION:9f8b89e6     partial XSH.strfmon.004  # the POSIX locale's currency symbol is empty, so only that the flag changes nothing else is seen
+DESCRIPTION:6d5ac758     XSH.strfmon.009
+DESCRIPTION:ac8059b9     XSH.strfmon.009
+DESCRIPTION:f4ed0cf2     XSH.strfmon.009
+DESCRIPTION:edeb62fa     XSH.strfmon.009
+DESCRIPTION:bf0a3946     XSH.strfmon.009
+DESCRIPTION:41941c63     XSH.strfmon.010
+DESCRIPTION:7a4aaa8e     XSH.strfmon.011
+DESCRIPTION:93385ed7     XSH.strfmon.010
+DESCRIPTION:90be85f8     XSH.strfmon.010
+DESCRIPTION:b939754c     XSH.strfmon.010
+DESCRIPTION:1a174c16     XSH.strfmon.010
+DESCRIPTION:cc030e1b     todo  grouping with a left precision needs a locale with grouping, which no locale fixes
+DESCRIPTION:707338e4     todo  grouping with a left precision needs a locale with grouping, which no locale fixes
+DESCRIPTION:1fc8e3af     partial XSH.strfmon.011  # only the equal length of positive and negative formats
+DESCRIPTION:084fc4bc     XSH.strfmon.003
+DESCRIPTION:1112b4a5     XSH.strfmon.003
+DESCRIPTION:1d8d81a6     impl  the default right precision comes from locale data, which the POSIX locale does not provide
+DESCRIPTION:57866831     XSH.strfmon.003
+DESCRIPTION:b9f41795     none  introduces the conversion specifiers
+DESCRIPTION:185b259a     XSH.strfmon.003 XSH.strfmon.004 XSH.strfmon.012
+DESCRIPTION:c6402e23     none  unspecified result for an infinity or NaN
+DESCRIPTION:f29bfa1d     XSH.strfmon.003 XSH.strfmon.004 XSH.strfmon.012
+DESCRIPTION:c6402e23.2   none  unspecified result for an infinity or NaN
+DESCRIPTION:7cdac8b4     XSH.strfmon.001
+DESCRIPTION:cb6055c8     XSH.strfmon.001
+DESCRIPTION:1c14754c     partial XSH.strfmon.006  # only that the sign fields come from the LC_MONETARY data
+DESCRIPTION:47bb8884     none  a recommendation for the data of other locales
+DESCRIPTION:fca72a6d     impl  a maxsize above SSIZE_MAX has an implementation-defined result
+DESCRIPTION:0e0dfb74     none  undefined behaviour is not tested
+RETURN_VALUE:c3be7456    XSH.strfmon.001 XSH.strfmon.002 XSH.strfmon.003
+RETURN_VALUE:d808addf    XSH.strfmon.002 XSH.strfmon.005
+ERRORS:f5d8ea8e          XSH.strfmon.002
+ERRORS:d5bc33a2          XSH.strfmon.005 XSH.strfmon.006

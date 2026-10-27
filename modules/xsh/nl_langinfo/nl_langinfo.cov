@@ -1,0 +1,18 @@
+# nl_langinfo.cov - every requirement unit on functions/nl_langinfo.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:6f79e621     XSH.nl_langinfo.001 XSH.nl_langinfo.002 XSH.nl_langinfo.003 XSH.nl_langinfo.004 XSH.nl_langinfo.005 XSH.nl_langinfo.008 XSH.nl_langinfo.009 XSH.nl_langinfo.010 XSH.nl_langinfo.011
+DESCRIPTION:69e25db1     XSH.nl_langinfo.006
+DESCRIPTION:07d20acd     none  introduces the example
+DESCRIPTION:f9f9fe76     none  the example call
+DESCRIPTION:0bb17979     none  the example names a language, not the POSIX locale
+DESCRIPTION:9799b528     none  the example call
+DESCRIPTION:ed75d1c1     none  the example names a language, not the POSIX locale
+DESCRIPTION:4a559080     untestable  thread-safety cannot be observed reliably
+DESCRIPTION:4e0f48d9     none  undefined behaviour is not tested
+RETURN_VALUE:6b6cb662    partial XSH.nl_langinfo.006  # only that items the POSIX locale marks not available give a string; no locale without langinfo data is known to the tests
+RETURN_VALUE:97005d2b    XSH.nl_langinfo.007
+RETURN_VALUE:262c3508    app
+RETURN_VALUE:d0501c0b    none  allows invalidation; the tests copy or use each string at once
+RETURN_VALUE:6594c290    none  allows invalidation; the tests copy or use each string at once
+RETURN_VALUE:e4a08d94    none  allows invalidation when the thread ends

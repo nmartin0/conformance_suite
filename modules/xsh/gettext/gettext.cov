@@ -1,0 +1,65 @@
+# gettext.cov - every requirement unit on functions/gettext.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:c423e934    XSH.gettext.008 XSH.gettext.010
+DESCRIPTION:2d07127b    XSH.gettext.008 XSH.gettext.010 XSH.gettext.012 XSH.gettext.013
+DESCRIPTION:36829e05    XSH.gettext.008 XSH.gettext.009 XSH.gettext.010
+DESCRIPTION:1ccde617    XSH.gettext.014 XSH.gettext.015
+DESCRIPTION:8b4fcb1d    XSH.gettext.008 XSH.gettext.010
+DESCRIPTION:d8efd91b    XSH.gettext.001 XSH.gettext.002 XSH.gettext.007
+DESCRIPTION:ed4a0ac9    XSH.gettext.002 XSH.gettext.008 XSH.gettext.011
+DESCRIPTION:4bb5ef27    XSH.gettext.002 XSH.gettext.008
+DESCRIPTION:695a8c19    XSH.gettext.003 XSH.gettext.009
+DESCRIPTION:80abb499    XSH.gettext.009
+DESCRIPTION:2c826bc6    XSH.gettext.003 XSH.gettext.009
+DESCRIPTION:4d50408b    XSH.gettext.003 XSH.gettext.009
+DESCRIPTION:bb7e9e08    XSH.gettext.003 XSH.gettext.009
+DESCRIPTION:6ffcb50b    XSH.gettext.004 XSH.gettext.010
+DESCRIPTION:8ee3c137    none  unspecified; no test relies on it
+DESCRIPTION:83964299    app
+DESCRIPTION:fd9f15c1    none  unspecified; no test relies on it
+DESCRIPTION:96887b95    none  unspecified; no test relies on it
+DESCRIPTION:cb90f1b6    partial XSH.gettext.012 XSH.gettext.013  # the order among the three searches is checked only for LANGUAGE before the current locale and for NLSPATH
+DESCRIPTION:0f462ba1    XSH.gettext.013
+DESCRIPTION:95ee7ef1    XSH.gettext.013
+DESCRIPTION:99f0e52b    XSH.gettext.012
+DESCRIPTION:7f69fb46    partial XSH.gettext.012  # two names are tried in order
+DESCRIPTION:8102f763    XSH.gettext.008
+DESCRIPTION:40eefe53    XSH.gettext.008 XSH.gettext.013
+DESCRIPTION:2ce42ecc    XSH.gettext.012
+DESCRIPTION:2c51a8a4    XSH.gettext.012
+DESCRIPTION:f44bcddc    partial XSH.gettext.012  # the absent-object case only
+DESCRIPTION:95a12f81    none  the case is left unspecified
+DESCRIPTION:7740ccd2    none  the case is left unspecified
+DESCRIPTION:d31f4b68    none  unspecified; no test relies on it
+DESCRIPTION:c0646bd3    XSH.gettext.012
+DESCRIPTION:5245316c    XSH.gettext.008 XSH.gettext.012
+DESCRIPTION:614dde84    XSH.gettext.008 XSH.gettext.011
+DESCRIPTION:23a0a862    impl  the default directory is implementation-defined
+DESCRIPTION:f2f7b693    partial XSH.gettext.012  # the plain language name only
+DESCRIPTION:6dd048d0    XSH.gettext.008 XSH.gettext.010
+DESCRIPTION:d4110530    none  permission to try other spellings
+DESCRIPTION:7efa639b    partial XSH.gettext.008  # LC_MESSAGES only; the directory of another category is not built
+DESCRIPTION:b22d8db2    partial XSH.gettext.010  # LC_MESSAGES only
+DESCRIPTION:bf9ece7e    XSH.gettext.011
+DESCRIPTION:8311c5c5    XSH.gettext.008 XSH.gettext.011
+DESCRIPTION:1afc94f2    XSH.gettext.002 XSH.gettext.011
+DESCRIPTION:d97cb87e    XSH.gettext.002 XSH.gettext.011
+DESCRIPTION:2daf75c4    partial XSH.textdomain.001  # only that the default domain is named "messages"; no object for it is tried
+DESCRIPTION:72e0f839    untestable  when the pathname is resolved is not observable
+DESCRIPTION:c812abb9    none  unspecified; no test relies on it
+DESCRIPTION:62412c1f    untestable  whether bindtextdomain() resolves the directory is unspecified
+DESCRIPTION:856b7728    XSH.gettext.014
+DESCRIPTION:16bfbe2f    XSH.gettext.015
+DESCRIPTION:08a60909    XSH.gettext.014
+DESCRIPTION:576b2f30    partial XSH.gettext.014 XSH.gettext.015  # only a conversion in which every character has an identical counterpart
+DESCRIPTION:93f1a617    untestable  the failing conversion would need a code set pair known not to convert
+DESCRIPTION:821980ae    none  permission, not a requirement
+RETURN_VALUE:c89c4c39   XSH.gettext.008 XSH.gettext.010
+RETURN_VALUE:0fa38e77   XSH.gettext.001 XSH.gettext.002 XSH.gettext.007 XSH.gettext.008
+RETURN_VALUE:bd33b6c7   XSH.gettext.009 XSH.gettext.010
+RETURN_VALUE:479fc1f8   XSH.gettext.003 XSH.gettext.009
+RETURN_VALUE:d7f78da4   app
+RETURN_VALUE:3e120ea8   XSH.gettext.006
+RETURN_VALUE:0b1f8396   none  "may be invalidated": nothing is required
+RETURN_VALUE:9aab4dc3   XSH.gettext.006

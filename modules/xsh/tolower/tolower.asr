@@ -1,0 +1,74 @@
+# XSH tolower() and tolower_l()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests run in the POSIX locale (setlocale(LC_ALL, "C")); only the
+# portable character set is examined. The _l forms are tested with a locale
+# object from newlocale() for "C"; a failure to make one is UNRESOLVED.
+
+assertion  XSH.tolower.001
+anchor     functions/tolower.html#DESCRIPTION
+anchor     functions/tolower.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+since      1988
+says       In the POSIX locale tolower() maps each of the 26 uppercase letters
+           to the 26 lowercase letters at the same place of the alphabet, as
+           the locale definition pairs them. Checked through the function and
+           through the header form.
+test       t/001-letters.c
+
+assertion  XSH.tolower.002
+anchor     functions/tolower.html#DESCRIPTION
+anchor     functions/tolower.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+since      1988
+says       In the POSIX locale tolower() returns every other portable character
+           unchanged: the 26 lowercase letters, the ten digits, the space, the
+           32 punctuation characters and the portable control characters
+           including the null character.
+note       Only portable characters are examined.
+test       t/002-unchanged.c
+
+assertion  XSH.tolower.003
+anchor     functions/tolower.html#DESCRIPTION
+anchor     functions/tolower.html#RETURN VALUE
+class      required
+since      1988
+says       tolower(EOF) is inside the domain and returns EOF.
+test       t/003-eof.c
+
+assertion  XSH.tolower.004
+anchor     functions/tolower.html#DESCRIPTION
+anchor     functions/tolower.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+since      2008
+says       tolower_l() with a locale object for the POSIX locale maps each of
+           the 26 uppercase letters to the 26 lowercase letters at the same
+           place of the alphabet.
+note       The locale object comes from newlocale(); UNRESOLVED if it cannot be
+           made.
+test       t/004-locale-object.c
+
+assertion  XSH.tolower.005
+anchor     functions/tolower.html#DESCRIPTION
+anchor     functions/tolower.html#RETURN VALUE
+class      required
+since      2008
+says       tolower_l() with a locale object for the POSIX locale returns every
+           other portable character and EOF unchanged.
+test       t/005-locale-unchanged.c
+
+assertion  XSH.tolower.006
+anchor     functions/tolower.html#DESCRIPTION
+anchor     functions/tolower.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+since      1988
+says       Converting a letter with tolower() and then back with toupper()
+           gives the original letter, for each of the 26 uppercase letters;
+           likewise through the _l forms.
+note       A consequence of the two POSIX-locale conversion tables, which are
+           inverse to each other.
+test       t/006-round-trip.c

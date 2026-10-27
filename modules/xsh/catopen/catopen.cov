@@ -1,0 +1,26 @@
+# catopen.cov - every requirement unit on functions/catopen.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:ba8a2d60     XSH.catopen.001
+DESCRIPTION:d86d3f36     XSH.catopen.001 XSH.catopen.006
+DESCRIPTION:765f0886     XSH.catopen.001
+DESCRIPTION:8cea232b     XSH.catopen.006 XSH.catopen.007 XSH.catopen.008 XSH.catopen.011
+DESCRIPTION:fd4f863f     impl  undefined behaviour; the NLSPATH tests are UNRESOLVED in that situation
+DESCRIPTION:54bca9ec     untestable  the default path is implementation-defined
+DESCRIPTION:d44ed195     untestable  the default path is implementation-defined
+DESCRIPTION:6e170024     XSH.catopen.009 XSH.catopen.010
+DESCRIPTION:1e5857ee     partial XSH.catclose.002  # validity until closed; the exec case is not tested
+DESCRIPTION:e8b401f2     none  "may invalidate": nothing is required
+DESCRIPTION:3ea7124d     XSH.catopen.005
+DESCRIPTION:a7b92d04     untestable  depends on the implementation-defined default path
+DESCRIPTION:bebbfffc     partial XSH.catopen.011  # %L in NLSPATH follows LC_MESSAGES; the default path is implementation-defined
+RETURN_VALUE:6dd115e9    XSH.catopen.001
+RETURN_VALUE:c4666275    XSH.catopen.002 XSH.catopen.003 XSH.catopen.004 XSH.catopen.010
+ERRORS:f7d77d1c         optional
+ERRORS:1fbbba10         optional
+ERRORS:681b232a         optional
+ERRORS:c7f415ad         optional
+ERRORS:6ed3cdf7         optional
+ERRORS:4a4e1ef1         XSH.catopen.002 XSH.catopen.004 XSH.catopen.010
+ERRORS:b03247c6         optional
+ERRORS:1ac08732         XSH.catopen.003

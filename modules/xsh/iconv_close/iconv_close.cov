@@ -1,0 +1,7 @@
+# iconv_close.cov - every requirement unit on functions/iconv_close.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:7a78be88     partial XSH.iconv_close.002  # only the file descriptor; freeing memory is not observable
+DESCRIPTION:e5a1eb9f     XSH.iconv_close.002
+RETURN_VALUE:f1dcca7a    partial XSH.iconv_close.001  # the failure branch needs an invalid descriptor, whose use is undefined
+ERRORS:186fa78e          optional

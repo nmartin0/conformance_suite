@@ -1,0 +1,130 @@
+# XSH nl_langinfo() and nl_langinfo_l()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The POSIX locale fixes the values of the day, month, AM/PM and format items
+# (XBD 7.3.5.3), of RADIXCHAR (7.3.4.1) and of YESEXPR and NOEXPR (7.3.6.1);
+# those are asserted exactly. Items the POSIX locale marks not available
+# (ALTMON_x, ABALTMON_x, ERA*, ALT_DIGITS, THOUSEP, CRNCYSTR) are only required
+# to give a pointer to a string. The code set name is not fixed; nl_langinfo.005
+# (not empty) is disputed. Second locales come from pc_find_locale("UTF-8", 0):
+# the tests that need one are NOTINUSE without, and UNRESOLVED if the POSIX
+# locale itself were to report that code set (the two could not then be told
+# apart).
+
+assertion  XSH.nl_langinfo.001
+anchor     functions/nl_langinfo.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5.3
+class      required
+says       In the POSIX locale DAY_1 to DAY_7 are "Sunday" to "Saturday" and
+           ABDAY_1 to ABDAY_7 are "Sun" to "Sat".
+test       t/001-days.c
+
+assertion  XSH.nl_langinfo.002
+anchor     functions/nl_langinfo.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5.3
+class      required
+says       In the POSIX locale MON_1 to MON_12 are "January" to "December"
+           and ABMON_1 to ABMON_12 are "Jan" to "Dec".
+test       t/002-months.c
+
+assertion  XSH.nl_langinfo.003
+anchor     functions/nl_langinfo.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5.3
+class      required
+says       In the POSIX locale AM_STR is "AM", PM_STR is "PM", D_T_FMT is
+           "%a %b %e %H:%M:%S %Y", D_FMT is "%m/%d/%y", T_FMT is "%H:%M:%S"
+           and T_FMT_AMPM is "%I:%M:%S %p".
+test       t/003-formats.c
+
+assertion  XSH.nl_langinfo.004
+anchor     functions/nl_langinfo.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.4.1
+anchor     basedefs/V1_chap07.html#7.3.6.1
+class      required
+says       In the POSIX locale RADIXCHAR is ".", YESEXPR is "^[yY]" and NOEXPR
+           is "^[nN]".
+test       t/004-numeric-messages.c
+
+assertion  XSH.nl_langinfo.005
+anchor     functions/nl_langinfo.html#DESCRIPTION
+anchor     basedefs/langinfo.h.html#DESCRIPTION
+class      disputed
+says       In the POSIX locale nl_langinfo(CODESET) returns a non-null pointer
+           to a string that is not empty.
+note       disputed (standard issue candidate, number to be assigned): the
+           text names CODESET "Codeset name" and the POSIX locale tables give
+           it no value, so nothing says the name cannot be empty. A FAIL is
+           logged as INSPECT; only the null pointer is certain.
+test       t/005-codeset.c
+
+assertion  XSH.nl_langinfo.006
+anchor     functions/nl_langinfo.html#RETURN VALUE
+anchor     basedefs/langinfo.h.html#DESCRIPTION
+class      required
+since      2024
+says       Every item <langinfo.h> lists (CODESET, the time items including
+           the alternative-month, era and digit items, RADIXCHAR, THOUSEP,
+           YESEXPR, NOEXPR, CRNCYSTR) gives a non-null pointer to a
+           NUL-terminated string in the POSIX locale, from nl_langinfo() and
+           from nl_langinfo_l() with a POSIX-locale object.
+test       t/006-all-items.c
+
+assertion  XSH.nl_langinfo.007
+anchor     functions/nl_langinfo.html#RETURN VALUE
+class      required
+since      2024
+says       An item that is not one of the defined ones gives a pointer to an
+           empty string, from nl_langinfo() and from nl_langinfo_l(), in the
+           POSIX locale and, when there is one, in another locale. Values
+           that are not the value of any <langinfo.h> item are tried (-1 and
+           INT_MAX); a null return fails, and a non-empty string is taken to be
+           an extension item and skipped; if none of the tried values was
+           reported as invalid the test is UNRESOLVED.
+test       t/007-invalid-item.c
+
+assertion  XSH.nl_langinfo.008
+anchor     functions/nl_langinfo.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5.3
+anchor     basedefs/V1_chap07.html#7.3.4.1
+anchor     basedefs/V1_chap07.html#7.3.6.1
+class      required
+since      2008
+says       nl_langinfo_l() with a locale object made for "C" gives the POSIX
+           values of assertions 001 to 004 (all day, month, AM/PM, format,
+           RADIXCHAR, YESEXPR and NOEXPR items), and a code set equal to the
+           one nl_langinfo() gives in the POSIX locale.
+test       t/008-locale-object.c
+
+assertion  XSH.nl_langinfo.009
+anchor     functions/nl_langinfo.html#DESCRIPTION
+class      required
+since      2008
+says       nl_langinfo_l() reads the locale object it is given and not the
+           global or the thread's current locale: with another locale as the
+           global locale, and again with another locale installed as the
+           thread's locale, an object made for "C" still gives the POSIX code
+           set and the POSIX RADIXCHAR, YESEXPR and DAY_1.
+test       t/009-object-independent.c
+
+assertion  XSH.nl_langinfo.010
+anchor     functions/nl_langinfo.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.1
+class      required
+says       nl_langinfo() reads the current locale of the calling thread: a
+           thread-local object for another locale shows that locale's code set
+           while the global locale is POSIX, a POSIX-locale object shows the
+           POSIX code set while the global locale is another locale, and after
+           uselocale(LC_GLOBAL_LOCALE) the global locale is read again.
+test       t/010-thread-locale.c
+
+assertion  XSH.nl_langinfo.011
+anchor     functions/nl_langinfo.html#DESCRIPTION
+anchor     basedefs/langinfo.h.html#DESCRIPTION
+class      required
+says       An item is read from the category <langinfo.h> assigns it: setting
+           only LC_CTYPE to another locale changes the code set but leaves
+           the time, numeric and messages items at their POSIX values, and
+           setting any one other category leaves the code set at the POSIX
+           one; the same holds for nl_langinfo_l() with objects made with a
+           single category mask.
+test       t/011-categories.c

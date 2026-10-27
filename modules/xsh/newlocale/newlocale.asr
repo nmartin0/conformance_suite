@@ -1,0 +1,102 @@
+# XSH newlocale()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Objects are inspected through nl_langinfo_l(); the
+# contents of the POSIX locale are fixed by XBD 7.3, those of another locale are
+# not, so such tests compare only against the POSIX code set (they are NOTINUSE
+# without a second locale from pc_find_locale("UTF-8", 0), UNRESOLVED if the POSIX
+# locale reported that code set too). The ENOMEM error and the may-fail EINVAL for
+# a bad string pointer are not provoked. A base object is never used after a
+# successful call that took it as base (its contents are then unspecified).
+
+assertion  XSH.newlocale.001
+anchor     functions/newlocale.html#DESCRIPTION
+anchor     functions/newlocale.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.2
+class      required
+since      2008
+says       newlocale(LC_ALL_MASK, "C", (locale_t)0) and the same with "POSIX"
+           return a handle other than (locale_t)0, and nl_langinfo_l() on it
+           gives the POSIX day, month, format, RADIXCHAR and YESEXPR values
+           and the POSIX code set.
+test       t/001-posix.c
+
+assertion  XSH.newlocale.002
+anchor     functions/newlocale.html#DESCRIPTION
+anchor     functions/newlocale.html#RETURN VALUE
+class      required
+since      2008
+says       Each of the six masks LC_CTYPE_MASK, LC_NUMERIC_MASK,
+           LC_TIME_MASK, LC_COLLATE_MASK, LC_MONETARY_MASK and
+           LC_MESSAGES_MASK alone, and the OR of all six, with "C" and base
+           (locale_t)0, gives a usable handle (not (locale_t)0).
+test       t/002-masks.c
+
+assertion  XSH.newlocale.003
+anchor     functions/newlocale.html#DESCRIPTION
+class      required
+since      2008
+says       For a new object (base (locale_t)0) the categories not in the mask
+           come from the POSIX locale: a mask of LC_CTYPE_MASK with another
+           locale gives that locale's code set but POSIX time, numeric and
+           messages items, and a mask of any one other single category with
+           another locale gives the POSIX code set.
+test       t/003-unrequested-posix.c
+
+assertion  XSH.newlocale.004
+anchor     functions/newlocale.html#DESCRIPTION
+class      required
+since      2008
+says       With a non-zero base object made from another locale, newlocale()
+           with LC_CTYPE_MASK and "C" returns a handle (not (locale_t)0) whose
+           code set is the POSIX one (the data replaces the base's), while the
+           LC_TIME, LC_NUMERIC and LC_MESSAGES items of the result (day and
+           month names, formats, RADIXCHAR, YESEXPR, NOEXPR) are the ones the
+           base had (the categories not in the mask are kept). The base is not
+           used afterwards.
+test       t/004-modify-base.c
+
+assertion  XSH.newlocale.005
+anchor     functions/newlocale.html#ERRORS
+anchor     functions/newlocale.html#RETURN VALUE
+class      required
+since      2008
+says       With a name no locale has (and a valid mask) newlocale() returns
+           (locale_t)0 and sets errno to ENOENT; if the system accepts the
+           made-up name the test is UNRESOLVED.
+test       t/005-enoent.c
+
+assertion  XSH.newlocale.006
+anchor     functions/newlocale.html#DESCRIPTION
+anchor     functions/newlocale.html#ERRORS
+class      required
+since      2008
+says       When newlocale() fails with a non-zero base, the base stays valid
+           and unchanged: nl_langinfo_l() on it gives the same code set, day
+           name, month name and RADIXCHAR as before the call.
+test       t/006-failure-base.c
+
+assertion  XSH.newlocale.007
+anchor     functions/newlocale.html#ERRORS
+class      disputed
+since      2008
+says       A mask with a bit outside LC_ALL_MASK (a bit that is no category)
+           makes newlocale() return (locale_t)0 with errno EINVAL; if
+           LC_ALL_MASK covers every bit of an int the test is NOTINUSE.
+note       disputed (Q-135): the text allows implementation-defined mask values
+           and does not say that LC_ALL_MASK includes them, so a bit outside
+           LC_ALL_MASK may be a valid category. A FAIL is logged as INSPECT.
+test       t/007-einval.c
+
+assertion  XSH.newlocale.008
+anchor     functions/newlocale.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.1
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+since      2008
+says       newlocale(LC_ALL_MASK, "", (locale_t)0) takes the locale from the
+           environment: with LC_ALL set to "POSIX" (LC_* and LANG naming a
+           missing locale) and with LANG alone set to "POSIX", it returns a
+           handle for the POSIX locale (POSIX day, month, RADIXCHAR and YESEXPR
+           values and code set).
+test       t/008-env.c

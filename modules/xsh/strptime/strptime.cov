@@ -1,0 +1,143 @@
+# strptime.cov - every requirement unit on functions/strptime.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:12cc7c42    XSH.strptime.009 XSH.strptime.010
+DESCRIPTION:ac8c0e01    app
+DESCRIPTION:e313066d    none  structure of the format
+DESCRIPTION:d86e06fa    none  structure of the format
+DESCRIPTION:64da1194    none  structure of the format
+DESCRIPTION:16de2f9e    XSH.strptime.017
+DESCRIPTION:9f37a964    XSH.strptime.017
+DESCRIPTION:bb3d8f0c    XSH.strptime.017
+DESCRIPTION:6926a11e    XSH.strptime.018
+DESCRIPTION:4f585649    none  structure of the format
+DESCRIPTION:0842e8aa    partial XSH.strptime.001 XSH.strptime.010 XSH.strptime.018  # only the POSIX locale; no other locale is used
+DESCRIPTION:9f3d1238    app
+DESCRIPTION:91822ce9    none  introduces the list of maxima
+DESCRIPTION:d2e36921    XSH.strptime.017
+DESCRIPTION:43366bec    XSH.strptime.007 XSH.strptime.003
+DESCRIPTION:96970c42    XSH.strptime.003 XSH.strptime.004 XSH.strptime.006 XSH.strptime.013 XSH.strptime.014
+DESCRIPTION:04e4d10b    none  introduces the list
+DESCRIPTION:235a3cf4    none  unspecified; no test relies on it
+DESCRIPTION:8d5e8f3b    XSH.strptime.001
+DESCRIPTION:3987a3df    XSH.strptime.001
+DESCRIPTION:8da69df2    XSH.strptime.001
+DESCRIPTION:5ea0276c    partial XSH.strptime.002  # the POSIX locale has no alternative month names
+DESCRIPTION:2a22b696    XSH.strptime.002
+DESCRIPTION:98178e34    XSH.strptime.002
+DESCRIPTION:41f56516    XSH.strptime.010
+DESCRIPTION:bfc1632e    XSH.strptime.010
+DESCRIPTION:7cd3759c    partial XSH.strptime.008 XSH.strptime.017  # leading zeros are not tried for C
+DESCRIPTION:a0ce395e    todo  a sign before the digits is not tested: whether it counts toward the maximum is not stated (Q-131)
+DESCRIPTION:afc2dccf    XSH.strptime.008
+DESCRIPTION:76882ec4    XSH.strptime.008
+DESCRIPTION:62f01b46    XSH.strptime.003
+DESCRIPTION:bec3e1bf    XSH.strptime.003
+DESCRIPTION:473eca7c    XSH.strptime.009
+DESCRIPTION:1d294e5d    XSH.strptime.003
+DESCRIPTION:fca9fac3    XSH.strptime.009
+DESCRIPTION:1f21a865    XSH.strptime.017
+DESCRIPTION:43ca5301    XSH.strptime.009
+DESCRIPTION:c06c843a    XSH.strptime.014
+DESCRIPTION:a04944e7    partial XSH.strptime.014  # leading zeros are not tried for g
+DESCRIPTION:a0ce395e.2  todo  a sign before the digits is not tested: whether it counts toward the maximum is not stated (Q-131)
+DESCRIPTION:4d152da8    none  unspecified; no test relies on it
+DESCRIPTION:4b9838bc    XSH.strptime.014
+DESCRIPTION:a04944e7.2  partial XSH.strptime.014  # leading zeros are not tried for G
+DESCRIPTION:a0ce395e.3  todo  a sign before the digits is not tested: whether it counts toward the maximum is not stated (Q-131)
+DESCRIPTION:4d152da8.2  none  unspecified; no test relies on it
+DESCRIPTION:98178e34.2  XSH.strptime.002
+DESCRIPTION:c028aac4    XSH.strptime.004
+DESCRIPTION:3623fd63    XSH.strptime.004
+DESCRIPTION:9ab6869e    XSH.strptime.005
+DESCRIPTION:81ecd820    XSH.strptime.005
+DESCRIPTION:ad756409    none  unspecified; no test relies on it
+DESCRIPTION:3ce2a19f    XSH.strptime.006
+DESCRIPTION:102876a8    XSH.strptime.006
+DESCRIPTION:ebe8df37    XSH.strptime.004
+DESCRIPTION:2b34bd8f    XSH.strptime.004
+DESCRIPTION:7d0365bd    XSH.strptime.004
+DESCRIPTION:5d1f2520    XSH.strptime.004
+DESCRIPTION:b28af538    XSH.strptime.011
+DESCRIPTION:81541979    XSH.strptime.005
+DESCRIPTION:35d0aabc    XSH.strptime.005
+DESCRIPTION:80a50db7    XSH.strptime.010
+DESCRIPTION:0b1dda39    XSH.strptime.010
+DESCRIPTION:9ca7eb8e    XSH.strptime.009
+DESCRIPTION:ed8a0d40    partial XSH.strptime.015  # only the position after the number
+DESCRIPTION:fd2f675d    none  unspecified; no test relies on it
+DESCRIPTION:19fc4b82    XSH.strptime.004
+DESCRIPTION:360dfddb    XSH.strptime.004
+DESCRIPTION:b28af538.2  XSH.strptime.011
+DESCRIPTION:b67fc215    XSH.strptime.009
+DESCRIPTION:db077de1    XSH.strptime.013
+DESCRIPTION:77a9225f    XSH.strptime.013
+DESCRIPTION:081a45e5    XSH.strptime.014
+DESCRIPTION:232188e0    none  unspecified; no test relies on it
+DESCRIPTION:24897e07    XSH.strptime.014
+DESCRIPTION:a04944e7.3  XSH.strptime.014
+DESCRIPTION:232188e0.2  none  unspecified; no test relies on it
+DESCRIPTION:3c838368    XSH.strptime.013
+DESCRIPTION:788b1f04    XSH.strptime.013
+DESCRIPTION:d2951079    XSH.strptime.014
+DESCRIPTION:232188e0.3  none  unspecified; no test relies on it
+DESCRIPTION:59500d87    XSH.strptime.010
+DESCRIPTION:0715b320    XSH.strptime.010
+DESCRIPTION:b3321d2c    XSH.strptime.010
+DESCRIPTION:4358e9ba    XSH.strptime.010
+DESCRIPTION:505fb618    XSH.strptime.008
+DESCRIPTION:a0ce395e.4  todo  a sign before the digits is not tested: whether it counts toward the maximum is not stated (Q-131)
+DESCRIPTION:05ef560a    XSH.strptime.008
+DESCRIPTION:70c30eec    XSH.strptime.008
+DESCRIPTION:59ecf1b4    none  a note about a future edition
+DESCRIPTION:5295217a    none  a note about a future edition
+DESCRIPTION:e689f88d    XSH.strptime.007
+DESCRIPTION:a0ce395e.5  todo  a sign before the digits is not tested: whether it counts toward the maximum is not stated (Q-131)
+DESCRIPTION:cc15ff62    XSH.strptime.007
+DESCRIPTION:a59e37f3    XSH.strptime.015
+DESCRIPTION:6693af69    XSH.strptime.015
+DESCRIPTION:5f649ed9    none  unspecified; no test relies on it
+DESCRIPTION:9419a249    XSH.strptime.016
+DESCRIPTION:b07e0449    XSH.strptime.016
+DESCRIPTION:ff4b9147    XSH.strptime.016
+DESCRIPTION:b2b7001a    none  unspecified; no test relies on it
+DESCRIPTION:dbc216cf    none  not tested: APPLICATION USAGE says it is unspecified whether a call keeps the other members (Q-131)
+DESCRIPTION:8d86b2c4    XSH.strptime.012
+DESCRIPTION:17dc667f    XSH.strptime.018
+DESCRIPTION:4126af7b    XSH.strptime.018
+DESCRIPTION:64c6cde3    XSH.strptime.018
+DESCRIPTION:609f36b1    XSH.strptime.018
+DESCRIPTION:d289cdfd    XSH.strptime.018
+DESCRIPTION:3df4e33a    XSH.strptime.018
+DESCRIPTION:1079ff4d    XSH.strptime.018
+DESCRIPTION:3f0782fc    XSH.strptime.018
+DESCRIPTION:98178e34.3  XSH.strptime.002
+DESCRIPTION:98178e34.4  XSH.strptime.002
+DESCRIPTION:ad54d9b9    XSH.strptime.003 XSH.strptime.018
+DESCRIPTION:3218a355    XSH.strptime.003
+DESCRIPTION:98178e34.5  XSH.strptime.002
+DESCRIPTION:e5847ee2    XSH.strptime.004 XSH.strptime.018
+DESCRIPTION:d90770f2    XSH.strptime.005 XSH.strptime.018
+DESCRIPTION:50ffdb11    XSH.strptime.004 XSH.strptime.018
+DESCRIPTION:a441a8a8    XSH.strptime.004 XSH.strptime.018
+DESCRIPTION:a08bb36b    XSH.strptime.004 XSH.strptime.018
+DESCRIPTION:d3a0f28b    XSH.strptime.014
+DESCRIPTION:481e9a3f    XSH.strptime.014
+DESCRIPTION:4c8f0d9c    XSH.strptime.013
+DESCRIPTION:aa3cce67    XSH.strptime.014
+DESCRIPTION:e74b2ffd    XSH.strptime.008 XSH.strptime.018
+DESCRIPTION:bcd5fa08    XSH.strptime.014
+DESCRIPTION:210e1f1d    partial XSH.strptime.014  # only the two examples
+DESCRIPTION:ad3fae4b    XSH.strptime.014
+DESCRIPTION:64ff3038    XSH.strptime.014
+DESCRIPTION:11287391    XSH.strptime.011
+DESCRIPTION:a0d1bff1    XSH.strptime.012
+DESCRIPTION:91da9dec    XSH.strptime.012
+DESCRIPTION:acdb9ad0    XSH.strptime.011
+DESCRIPTION:4f8fce4c    partial XSH.strptime.003 XSH.strptime.019  # tests keep delimiters so that the scan limit does not matter (Q-131)
+DESCRIPTION:baa7b360    XSH.strptime.019
+DESCRIPTION:054b81c2    XSH.strptime.001 XSH.strptime.004
+DESCRIPTION:104f18fe    XSH.strptime.001 XSH.strptime.002
+DESCRIPTION:50cde520    partial XSH.strptime.019  # the position after a failure is not defined: a null pointer is returned
+RETURN_VALUE:4561f7b6   XSH.strptime.001 XSH.strptime.002 XSH.strptime.003 XSH.strptime.004 XSH.strptime.005 XSH.strptime.006 XSH.strptime.007 XSH.strptime.008 XSH.strptime.009 XSH.strptime.010 XSH.strptime.011 XSH.strptime.012 XSH.strptime.013 XSH.strptime.014 XSH.strptime.015 XSH.strptime.016 XSH.strptime.017 XSH.strptime.018 XSH.strptime.020
+RETURN_VALUE:2a2da805   XSH.strptime.019

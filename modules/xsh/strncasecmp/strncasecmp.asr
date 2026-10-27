@@ -1,0 +1,69 @@
+# XSH strncasecmp() and strncasecmp_l()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests run in the POSIX locale (setlocale(LC_ALL, "C")); only the
+# portable character set is examined. The _l forms are tested with a locale
+# object from newlocale() for "C"; a failure to make one is UNRESOLVED.
+
+assertion  XSH.strncasecmp.001
+anchor     functions/strncasecmp.html#DESCRIPTION
+anchor     functions/strncasecmp.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+says       strncasecmp() compares at most n bytes in the POSIX locale: "abcd"
+           against "ABXY" gives 0 for n 2, the sign of c against x for n 3 and
+           for n 4, 0 for n 0 (also for wholly different strings), and "a"
+           against "B" with n 1 is negative; arrays with no null byte are
+           compared for exactly n bytes.
+note       n 0 follows from comparing not more than zero bytes.
+test       t/001-count.c
+
+assertion  XSH.strncasecmp.002
+anchor     functions/strncasecmp.html#DESCRIPTION
+anchor     functions/strncasecmp.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+says       strncasecmp() stops at a null byte: {a, b, null, x} against {A, B,
+           null, y} gives 0 for n 4, "ab" against "ABC" with n 5 is negative
+           and the reverse positive, and case variants that are equal within a
+           much larger n give 0.
+test       t/002-null.c
+
+assertion  XSH.strncasecmp.003
+anchor     functions/strncasecmp.html#DESCRIPTION
+anchor     functions/strncasecmp.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+says       With n large enough to reach the ends, strncasecmp() orders strings
+           as a byte comparison after conversion to lowercase would, as for
+           strcasecmp(): single letters of either case, punctuation against
+           letters of either case, digits, and the first difference deciding.
+note       The expected sign comes from comparing the portable-character
+           literals as unsigned chars.
+test       t/003-order.c
+
+assertion  XSH.strncasecmp.004
+anchor     functions/strncasecmp.html#DESCRIPTION
+anchor     functions/strncasecmp.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+since      2008
+says       strncasecmp_l() with a locale object for the POSIX locale behaves as
+           strncasecmp(): "abc" and "ABC" give 0, "a" against "B" is negative,
+           "abcd" against "ABXY" gives 0 for n 2, the sign of c against x for n
+           3, and 0 for n 0; and the order battery agrees.
+note       The locale object comes from newlocale(); UNRESOLVED if it cannot be
+           made.
+test       t/004-locale-object.c
+
+assertion  XSH.strncasecmp.005
+anchor     functions/strncasecmp.html#DESCRIPTION
+anchor     functions/strncasecmp.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+since      2024
+says       In the POSIX locale errno is left unchanged by strncasecmp() and
+           strncasecmp_l() on valid input, including n 0.
+note       Issue 8 sentence (defect 448); errno is preset to a value and
+           compared afterwards.
+test       t/005-errno.c

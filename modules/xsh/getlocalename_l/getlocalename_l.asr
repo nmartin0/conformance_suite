@@ -1,0 +1,65 @@
+# XSH getlocalename_l()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The names returned are implementation-defined (for the POSIX locale it is not
+# stated whether "C" or "POSIX" comes back), so a name is judged by what it can be
+# used for: newlocale() accepts it and the object behaves as the locale it names,
+# and for LC_ALL setlocale(LC_ALL, name) restores the categories. Tests that need a
+# second locale take one from pc_find_locale("UTF-8", 0) and are NOTINUSE
+# without; UNRESOLVED if the POSIX locale reported the same code set.
+
+assertion  XSH.getlocalename_l.001
+anchor     functions/getlocalename_l.html#DESCRIPTION
+anchor     functions/getlocalename_l.html#RETURN VALUE
+class      required
+since      2024
+says       For a POSIX-locale object and for LC_GLOBAL_LOCALE with the POSIX
+           global locale, getlocalename_l() returns a non-null string for
+           LC_ALL and for each of the six categories; each category's name is
+           accepted by newlocale() for that category and gives the POSIX
+           items; the LC_ALL string is accepted by setlocale(LC_ALL, ...) and
+           leaves every category POSIX.
+test       t/001-posix.c
+
+assertion  XSH.getlocalename_l.002
+anchor     functions/getlocalename_l.html#DESCRIPTION
+anchor     functions/getlocalename_l.html#RETURN VALUE
+class      required
+since      2024
+says       A category that is neither LC_ALL nor a category (-1 and INT_MAX are
+           tried) makes getlocalename_l() return a null pointer, for a
+           locale object and for LC_GLOBAL_LOCALE.
+test       t/002-bad-category.c
+
+assertion  XSH.getlocalename_l.003
+anchor     functions/getlocalename_l.html#DESCRIPTION
+class      required
+since      2024
+says       For LC_GLOBAL_LOCALE with LC_CTYPE of the global locale set to
+           another locale, the LC_CTYPE name gives (through newlocale()) that
+           locale's code set and the LC_TIME name gives the POSIX one; the LC_ALL
+           string, passed to setlocale(LC_ALL, ...) after the global locale
+           was set to "C", restores the other code set.
+test       t/003-global.c
+
+assertion  XSH.getlocalename_l.004
+anchor     functions/getlocalename_l.html#DESCRIPTION
+class      required
+since      2024
+says       For an object made with LC_CTYPE from another locale and the other
+           categories from the POSIX locale, the LC_CTYPE name gives that
+           locale's code set and the LC_TIME name does not, and the LC_ALL
+           string passed to setlocale(LC_ALL, ...) makes the global locale
+           show that code set and POSIX time, numeric and messages items.
+test       t/004-object-mixed.c
+
+assertion  XSH.getlocalename_l.005
+anchor     functions/getlocalename_l.html#RETURN VALUE
+class      required
+since      2024
+says       A string returned for an object keeps its content while the object
+           is in use: after other calls (getlocalename_l() on other
+           categories and objects, setlocale(), newlocale() of other
+           objects, uselocale(), duplocale(), nl_langinfo()) the string
+           obtained earlier for the same object still has the same content.
+test       t/005-pointer-valid.c

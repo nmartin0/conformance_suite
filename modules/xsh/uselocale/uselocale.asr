@@ -1,0 +1,65 @@
+# XSH uselocale()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The calling thread's locale is observed through uselocale((locale_t)0) and
+# nl_langinfo(CODESET). Objects for another locale come from
+# pc_find_locale("UTF-8", 0); those tests are NOTINUSE without one, and
+# UNRESOLVED if the POSIX locale reported the same code set. The may-fail EINVAL
+# for an invalid object is not provoked (an invalid handle is not a thing a
+# test can make portably).
+
+assertion  XSH.uselocale.001
+anchor     functions/uselocale.html#DESCRIPTION
+anchor     functions/uselocale.html#RETURN VALUE
+class      required
+since      2008
+says       In a thread that has not installed a locale, uselocale((locale_t)0)
+           returns LC_GLOBAL_LOCALE, repeatedly, and does not change the
+           current locale (the langinfo items stay as they were).
+test       t/001-initial.c
+
+assertion  XSH.uselocale.002
+anchor     functions/uselocale.html#DESCRIPTION
+anchor     functions/uselocale.html#RETURN VALUE
+class      required
+since      2008
+says       Installing an object returns the previous setting (LC_GLOBAL_LOCALE
+           first); the query then returns the object, and still does after a
+           second query; installing a second object returns the first;
+           installing LC_GLOBAL_LOCALE returns the object last installed, and
+           afterwards the query gives LC_GLOBAL_LOCALE again; installing the
+           object that is already installed returns it.
+test       t/002-install-query.c
+
+assertion  XSH.uselocale.003
+anchor     functions/uselocale.html#DESCRIPTION
+class      required
+since      2008
+says       A thread-local locale changes what the thread sees and not the
+           global locale: with the global locale POSIX and an object for
+           another locale installed, nl_langinfo(CODESET) is that locale's
+           code set while the global names (setlocale(LC_ALL, NULL)) are
+           unchanged; after installing LC_GLOBAL_LOCALE the code set is the
+           POSIX one.
+test       t/003-thread-effect.c
+
+assertion  XSH.uselocale.004
+anchor     functions/uselocale.html#DESCRIPTION
+class      required
+since      2008
+says       After uselocale(LC_GLOBAL_LOCALE) the thread follows the global
+           locale: a change made with setlocale() while a POSIX-locale object
+           was installed shows in the thread (code set of the other locale)
+           only after the object is uninstalled, and a further change of the
+           global locale back to "C" shows at once.
+test       t/004-global-follows.c
+
+assertion  XSH.uselocale.005
+anchor     functions/uselocale.html#DESCRIPTION
+class      required
+since      2008
+says       Another thread's current locale is not changed by an install in
+           the calling thread: a thread started before the install, and
+           still without a locale of its own, finds uselocale((locale_t)0)
+           equal to LC_GLOBAL_LOCALE and the POSIX code set afterwards.
+test       t/005-other-thread.c

@@ -1,0 +1,58 @@
+# localeconv.cov - every requirement unit on functions/localeconv.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:f7166645     XSH.localeconv.001 XSH.localeconv.004
+DESCRIPTION:4aac7c91     XSH.localeconv.002 XSH.localeconv.005
+DESCRIPTION:c7e5b499     XSH.localeconv.003 XSH.localeconv.005
+DESCRIPTION:d47d677b     none  introduces the member list
+DESCRIPTION:1b374e14     XSH.localeconv.001 XSH.localeconv.006
+DESCRIPTION:0e216a5e     XSH.localeconv.001 XSH.localeconv.006
+DESCRIPTION:5d7fb89b     XSH.localeconv.001 XSH.localeconv.006
+DESCRIPTION:7bc719d9     XSH.localeconv.002
+DESCRIPTION:ef58aa82     impl  the content of the international currency symbol of another locale is implementation-defined
+DESCRIPTION:27bfe84e     impl  the content of the international currency symbol of another locale is implementation-defined
+DESCRIPTION:b083f214     XSH.localeconv.002
+DESCRIPTION:ad5d6cff     XSH.localeconv.002
+DESCRIPTION:f5638725     XSH.localeconv.002
+DESCRIPTION:a3727305     XSH.localeconv.002
+DESCRIPTION:86a467a5     XSH.localeconv.002
+DESCRIPTION:a056510e     XSH.localeconv.002
+DESCRIPTION:45ba39b6     XSH.localeconv.003
+DESCRIPTION:349b206a     XSH.localeconv.003
+DESCRIPTION:f3c05d72     XSH.localeconv.003 XSH.localeconv.005
+DESCRIPTION:67ef1074     partial XSH.localeconv.005  # only that the value is 0, 1 or CHAR_MAX
+DESCRIPTION:82aae15e     XSH.localeconv.003
+DESCRIPTION:1da8620c     XSH.localeconv.003 XSH.localeconv.005
+DESCRIPTION:67ef1074.2   partial XSH.localeconv.005  # only that the value is 0, 1 or CHAR_MAX
+DESCRIPTION:98a091e2     XSH.localeconv.003
+DESCRIPTION:bcad4c08     XSH.localeconv.003
+DESCRIPTION:2a650d38     XSH.localeconv.003
+DESCRIPTION:f73aedb5     XSH.localeconv.003 XSH.localeconv.005
+DESCRIPTION:bfb4391d     XSH.localeconv.003 XSH.localeconv.005
+DESCRIPTION:f6a507e8     XSH.localeconv.003
+DESCRIPTION:983574e5     XSH.localeconv.003
+DESCRIPTION:10579a36     XSH.localeconv.003
+DESCRIPTION:46368b3f     XSH.localeconv.003
+DESCRIPTION:1393b1e1     impl  grouping values are only meaningful in a locale with grouping; none is fixed
+DESCRIPTION:ef5f6451     impl  no locale with grouping is fixed by the text
+DESCRIPTION:46f1d4ad     impl  no locale with grouping is fixed by the text
+DESCRIPTION:f7ecfe2d     impl  no locale with grouping is fixed by the text
+DESCRIPTION:a40c2505     impl  no locale with grouping is fixed by the text
+DESCRIPTION:0a815915     impl  no locale with these values is fixed by the text
+DESCRIPTION:c4b56be4     impl  no locale with these values is fixed by the text
+DESCRIPTION:ea3d774f     impl  no locale with these values is fixed by the text
+DESCRIPTION:4b6b0423     impl  no locale with these values is fixed by the text
+DESCRIPTION:f79cb545     impl  no locale with these values is fixed by the text
+DESCRIPTION:8ef19724     impl  no locale with these values is fixed by the text
+DESCRIPTION:22907a9a     impl  no locale with these values is fixed by the text
+DESCRIPTION:6715e557     impl  no locale with these values is fixed by the text
+DESCRIPTION:903b7ffb     impl  no locale with these values is fixed by the text
+DESCRIPTION:47d26819     impl  no locale with these values is fixed by the text
+DESCRIPTION:8da50545     impl  no locale with these values is fixed by the text
+DESCRIPTION:df8e8b0f     untestable  an as-if rule on the implementation's own calls
+DESCRIPTION:504ed6d6     untestable  thread-safety and data races cannot be observed reliably
+RETURN_VALUE:e45212e5    XSH.localeconv.001
+RETURN_VALUE:eb021791    app
+RETURN_VALUE:0f8b0246    none  allows invalidation; the tests read the structure at once
+RETURN_VALUE:6919abcf    none  allows invalidation after setlocale() and uselocale()
+RETURN_VALUE:dc8d0684    none  allows invalidation when the thread ends

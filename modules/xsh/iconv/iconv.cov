@@ -1,0 +1,35 @@
+# iconv.cov - every requirement unit on functions/iconv.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:9ae28abc     XSH.iconv.001
+DESCRIPTION:23be991f     XSH.iconv.001
+DESCRIPTION:4af55263     XSH.iconv.001 XSH.iconv.002
+DESCRIPTION:783fd6df     XSH.iconv.001 XSH.iconv.002
+DESCRIPTION:8e31a4c5     partial XSH.iconv.011  # only the non-error outcome; no state-dependent code set name is standardized
+DESCRIPTION:afdb45e6     untestable  needs a state-dependent encoding, and the standard names none
+DESCRIPTION:0472ab2e     untestable  needs a state-dependent encoding, and the standard names none
+DESCRIPTION:8e880eaf     XSH.iconv.002
+DESCRIPTION:bbfd1e42     XSH.iconv.004 XSH.iconv.006
+DESCRIPTION:c4e407f3     XSH.iconv.006
+DESCRIPTION:fc8fe448     XSH.iconv.006
+DESCRIPTION:1020a572     XSH.iconv.004
+DESCRIPTION:3c01a540     XSH.iconv.005
+DESCRIPTION:0d7a4ebe     XSH.iconv.002 XSH.iconv.003
+DESCRIPTION:fa89d4c9     XSH.iconv.001 XSH.iconv.002 XSH.iconv.003 XSH.iconv.004 XSH.iconv.005
+DESCRIPTION:f21e265a     XSH.iconv.001 XSH.iconv.002 XSH.iconv.003 XSH.iconv.004 XSH.iconv.005
+DESCRIPTION:4c73db4d     XSH.iconv.001 XSH.iconv.002 XSH.iconv.003 XSH.iconv.004 XSH.iconv.005
+DESCRIPTION:f69bd17f     XSH.iconv.001 XSH.iconv.002 XSH.iconv.003
+DESCRIPTION:a53c6855     untestable  needs a state-dependent encoding, and the standard names none
+DESCRIPTION:84129168     XSH.iconv.007 XSH.iconv.008 XSH.iconv.009 XSH.iconv.010
+DESCRIPTION:466cdc2c     XSH.iconv.007 XSH.iconv.008
+DESCRIPTION:57a7fb0e     partial XSH.iconv.009  # the output of a transliteration is implementation-defined and not checked
+DESCRIPTION:e26621f3     XSH.iconv.009
+DESCRIPTION:89d3dae2     partial XSH.iconv.010 XSH.iconv.009  # the case "transliteration impossible" cannot be told from "possible" without knowing the table
+RETURN_VALUE:a2315a6f    XSH.iconv.001 XSH.iconv.007 XSH.iconv.008 XSH.iconv.009 XSH.iconv.010
+RETURN_VALUE:ef43a2bc    XSH.iconv.001 XSH.iconv.006
+RETURN_VALUE:1e64ce10    XSH.iconv.002 XSH.iconv.003 XSH.iconv.004 XSH.iconv.005
+RETURN_VALUE:fdc99640    XSH.iconv.002 XSH.iconv.003 XSH.iconv.004 XSH.iconv.005
+ERRORS:68047890          XSH.iconv.004
+ERRORS:6afb7d47          XSH.iconv.002 XSH.iconv.003
+ERRORS:e6a63fca          XSH.iconv.005
+ERRORS:4c9825f6          optional

@@ -1,0 +1,216 @@
+# XSH strptime()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# strptime() is an XSI function. All tests run in the POSIX locale, whose
+# LC_TIME values XBD 7.3.5.3 fixes. Name conversions are followed in the
+# input by a delimiter that the format also has, or end the string, and
+# numeric conversions by a delimiter or a full-width field, so no test
+# depends on how far a conversion scans before it compares (Q-131). Only
+# the tm members the page says a conversion sets are checked; the effect of
+# %U %V %W %g %G %s %z is unspecified and only the returned position is
+# checked, and members a conversion does not name are never checked (it is
+# unspecified whether a call keeps them). Signs and leading spaces before
+# numbers are not tested (Q-131).
+
+assertion  XSH.strptime.001
+anchor     functions/strptime.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5.3
+class      conditional
+when       XSI
+since      1992
+says       %a and %A accept the abbreviated and the full weekday names of the
+           POSIX locale in any letter case, set tm_wday to 0 (Sunday) to 6,
+           and return the position after the name.
+test       t/001-weekday-names.c
+
+assertion  XSH.strptime.002
+anchor     functions/strptime.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5.3
+class      conditional
+when       XSI
+since      1992
+says       %b, %B and %h, and %Ob, %OB and %Oh, accept the abbreviated and
+           full month names in any letter case, set tm_mon to 0 to 11 and
+           return the position after the name.
+test       t/002-month-names.c
+
+assertion  XSH.strptime.003
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       %d and %e (and %Od, %Oe) read a day of the month 1 to 31 with or
+           without a leading zero into tm_mday and stop after at most two
+           digits; 32, 0 and 00 and non-digits fail.
+test       t/003-day-of-month.c
+
+assertion  XSH.strptime.004
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       %m sets tm_mon to the month minus one (1 to 12), %H tm_hour (0 to
+           23), %M tm_min (0 to 59), %S tm_sec (0 to 60), with or without
+           leading zeros and also with the O modifier; 13 or 0 for the
+           month, 24 hours, 60 minutes and 61 seconds fail.
+test       t/004-month-hour-minute-second.c
+
+assertion  XSH.strptime.005
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       %I with %p in either order sets tm_hour on the 24-hour clock: 12 AM
+           is 0, 1 AM 1, 11 AM 11, 12 PM 12, 1 PM 13, 11 PM 23; AM and PM are
+           matched in any letter case; a 12-hour value of 13 or 0 fails.
+test       t/005-twelve-hour-clock.c
+
+assertion  XSH.strptime.006
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       %j reads 1 to 366 (leading zeros optional) and sets tm_yday to the
+           number minus one; 0 and 367 fail.
+test       t/006-day-of-year.c
+
+assertion  XSH.strptime.007
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       %Y sets tm_year to the year minus 1900, accepts leading zeros, and
+           scans at most four characters: from "123456" it reads 1234 and
+           returns the position of "56".
+test       t/007-full-year.c
+
+assertion  XSH.strptime.008
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       %y alone puts 69 to 99 in 1969 to 1999 and 00 to 68 in 2000 to
+           2068; %C alone gives a year ending in 00; with both, in either
+           order, the year is %C's century and %y's last two digits.
+test       t/008-century-and-two-digit-year.c
+
+assertion  XSH.strptime.009
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       %D reads like %m/%d/%y, %T like %H:%M:%S, %R like %H:%M and %F like
+           %Y-%m-%d (the year of %F with no width limit: five digits are
+           read); other separators fail.
+test       t/009-equivalent-formats.c
+
+assertion  XSH.strptime.010
+anchor     functions/strptime.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5.3
+class      conditional
+when       XSI
+since      1992
+says       In the POSIX locale %c reads like "%a %b %e %H:%M:%S %Y" (also with
+           two spaces before a one-digit day and with second 60), %x like
+           "%m/%d/%y", %X like "%H:%M:%S" and %r like "%I:%M:%S %p", setting
+           the members of those conversions.
+test       t/010-locale-formats.c
+
+assertion  XSH.strptime.011
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       White space in the format, %n and %t each skip all white space at
+           the input position, including none, and leave the next
+           non-white-space byte unread; the position returned follows.
+test       t/011-white-space.c
+
+assertion  XSH.strptime.012
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       An ordinary character in the format must equal the input character
+           (case included) and %% matches '%'; a mismatch returns a null
+           pointer.
+test       t/012-literals-and-percent.c
+
+assertion  XSH.strptime.013
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       %u reads 1 to 7 and sets tm_wday to the number modulo 7; %w and %Ow
+           read 0 to 6 and set tm_wday; 0 and 8 for %u and 7 for %w fail.
+test       t/013-weekday-numbers.c
+
+assertion  XSH.strptime.014
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       %U and %W accept 0 to 53, %V 1 to 53 (also with O), and %G and %g
+           digits; values outside the range fail; the position after each is
+           returned; the two ISO week examples ("1998 53 6" and "1998 01 2"
+           with "%G %V %u") set tm_wday to 6 and 2.
+test       t/014-week-numbers.c
+
+assertion  XSH.strptime.015
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       %s reads a decimal number and %z an offset written +hhmm or -hhmm,
+           returning the position after them (their effect on tm is
+           unspecified); %s on letters and %z on a non-offset fail.
+test       t/015-seconds-since-epoch-and-offset.c
+
+assertion  XSH.strptime.016
+anchor     functions/strptime.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.3
+class      conditional
+when       XSI
+since      2024
+says       With TZ naming a standard and a daylight zone (tzname[0] and
+           tzname[1] different), %Z sets tm_isdst to 1 for the daylight name
+           and 0 for the standard name and returns the position after it.
+test       t/016-timezone-name.c
+
+assertion  XSH.strptime.017
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A field width limits the characters read by C, F, G and Y ("%2Y"
+           reads "20" of "2024", "%6Y" six digits, "%10F" the ten characters
+           of a date); the flags 0 and + are ignored.
+test       t/017-field-width-and-flags.c
+
+assertion  XSH.strptime.018
+anchor     functions/strptime.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5.3
+class      conditional
+when       XSI
+since      1992
+says       The POSIX locale has no alternative formats, eras or digits, so
+           %Ec %Ex %EX %EC %Ey %EY %Od %Oe %OH %OI %Om %OM %OS %Ow %Oy
+           behave as the unmodified conversion.
+test       t/018-modifiers-fall-back.c
+
+assertion  XSH.strptime.019
+anchor     functions/strptime.html#RETURN VALUE
+anchor     functions/strptime.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       Unknown names, empty or non-numeric input where a number is read,
+           and a missing separator return a null pointer.
+test       t/019-failures-return-null.c
+
+assertion  XSH.strptime.020
+anchor     functions/strptime.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1992
+says       An empty format converts nothing and returns buf itself.
+test       t/020-empty-format.c

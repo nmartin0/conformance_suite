@@ -1,0 +1,34 @@
+# XSH iconv_open()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The code set names and their combinations are implementation-defined, so
+# the tests rely on a name that no implementation can have, and on pairs
+# probed from a short list of familiar names.
+
+assertion  XSH.iconv_open.001
+anchor     functions/iconv_open.html#RETURN VALUE
+anchor     functions/iconv_open.html#ERRORS
+class      required
+since      1992
+says       A conversion that names an unsupported code set as fromcode, as
+           tocode, or as both returns (iconv_t)-1 with EINVAL.
+test       t/001-unsupported.c
+
+assertion  XSH.iconv_open.002
+anchor     functions/iconv_open.html#DESCRIPTION
+anchor     functions/iconv_open.html#ERRORS
+class      disputed
+since      2024
+says       Appending //IGNORE, //NON_IDENTICAL_DISCARD or //TRANSLIT to the
+           target name of a pair that opens without a suffix still opens.
+note       disputed (Q-128): the DESCRIPTION says any of the three suffixes
+           can be appended, while EINVAL may be reported for a suffix that
+           is "not supported". The test follows the first reading.
+test       t/002-indicator-suffixes.c
+
+assertion  XSH.iconv_open.003
+anchor     functions/iconv_open.html#DESCRIPTION
+class      required
+says       Any file descriptor that exists after iconv_open() and did not
+           before has FD_CLOEXEC set.
+test       t/003-cloexec.c

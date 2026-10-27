@@ -1,0 +1,109 @@
+# XSH catopen()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The catalog format is unspecified, so every catalog a test opens is made
+# by the gencat utility from a message source file. Tests that use NLSPATH
+# are [XSI]; they are UNRESOLVED when NLSPATH was in the environment at
+# start and the process is privileged (the call is then undefined).
+
+assertion  XSH.catopen.001
+anchor     functions/catopen.html#DESCRIPTION
+anchor     functions/catopen.html#RETURN VALUE
+class      required
+since      1988
+says       A name containing a slash is a pathname: the catalog gencat made
+           there opens, with oflag 0 and with NL_CAT_LOCALE, and catgets()
+           retrieves a message from it.
+test       t/001-pathname.c
+
+assertion  XSH.catopen.002
+anchor     functions/catopen.html#ERRORS
+class      required
+says       A name with a slash that names no catalog (missing directory)
+           returns (nl_catd)-1 with ENOENT; if a descriptor is returned
+           instead (the error is a may-fail one), catgets() on it gives the
+           default string and catclose() returns 0.
+note       Q-130: whether success is allowed is not clear.
+test       t/002-missing-file.c
+
+assertion  XSH.catopen.003
+anchor     functions/catopen.html#ERRORS
+class      required
+says       A pathname whose prefix is a regular file returns (nl_catd)-1 with
+           ENOTDIR or ENOENT; a returned descriptor is tolerated as above.
+note       Q-130.
+test       t/003-not-a-directory.c
+
+assertion  XSH.catopen.004
+anchor     functions/catopen.html#ERRORS
+class      required
+says       An empty name returns (nl_catd)-1 with ENOENT; a returned
+           descriptor is tolerated as above.
+note       Q-130.
+test       t/004-empty-name.c
+
+assertion  XSH.catopen.005
+anchor     functions/catopen.html#DESCRIPTION
+class      required
+says       Any file descriptor that exists after catopen() and did not
+           before has FD_CLOEXEC set.
+test       t/005-cloexec.c
+
+assertion  XSH.catopen.006
+anchor     functions/catopen.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.2
+class      conditional
+when       XSI
+says       With NLSPATH="./pc%N.cat" and a name without a slash, the file
+           found is the template with %N replaced by the name, with its
+           prefix and suffix kept.
+test       t/006-nlspath-name.c
+
+assertion  XSH.catopen.007
+anchor     functions/catopen.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.2
+class      conditional
+when       XSI
+says       With two colon-separated templates, the second is used when the
+           first finds no catalog.
+test       t/007-nlspath-next-template.c
+
+assertion  XSH.catopen.008
+anchor     basedefs/V1_chap08.html#8.2
+class      conditional
+when       XSI
+says       A leading, trailing or doubled colon in NLSPATH stands for a
+           template that is just the name, so a catalog of that name in
+           the current directory is found.
+test       t/008-nlspath-empty-element.c
+
+assertion  XSH.catopen.009
+anchor     functions/catopen.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       A file found through NLSPATH that is not a valid catalog is
+           ignored; the next template is searched and its valid catalog opens.
+note       The test file holds bytes no catalog format is likely to accept.
+test       t/009-nlspath-skips-invalid.c
+
+assertion  XSH.catopen.010
+anchor     functions/catopen.html#ERRORS
+class      conditional
+when       XSI
+since      2024
+says       When NLSPATH reaches only a file that is not a valid catalog (and
+           the name exists nowhere else), catopen() returns (nl_catd)-1 with
+           ENOENT; a descriptor means the format accepted the file and the
+           test is UNRESOLVED.
+test       t/010-nlspath-only-invalid.c
+
+assertion  XSH.catopen.011
+anchor     functions/catopen.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.2
+class      conditional
+when       XSI
+says       With NL_CAT_LOCALE, %L in an NLSPATH template stands for the name
+           of the LC_MESSAGES locale (the POSIX locale's name here), so
+           "./%L/%N" finds ./<name>/<catalog>.
+test       t/011-nlspath-locale-name.c

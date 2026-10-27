@@ -1,0 +1,59 @@
+# XSH duplocale()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Copies are inspected through nl_langinfo_l() and getlocalename_l(). Where a
+# test is only meaningful with a second locale (from pc_find_locale("UTF-8", 0))
+# it is NOTINUSE without one, and UNRESOLVED if the POSIX locale reported the
+# same code set. Where 001 and 002 have no second locale to use they build the
+# object from "C" and the checks are weaker (they pass, they do not become
+# NOTINUSE). The ENOMEM error is not provoked.
+
+assertion  XSH.duplocale.001
+anchor     functions/duplocale.html#DESCRIPTION
+anchor     functions/duplocale.html#RETURN VALUE
+class      required
+since      2008
+says       duplocale() of an object returns a handle other than (locale_t)0
+           and different from the original while both exist, and the copy gives
+           the same code set and the same POSIX items as the original did (a
+           mixed object with only LC_CTYPE from another locale).
+test       t/001-copy.c
+
+assertion  XSH.duplocale.002
+anchor     functions/duplocale.html#DESCRIPTION
+anchor     functions/duplocale.html#APPLICATION USAGE
+class      required
+since      2008
+says       After the original is freed with freelocale(), the copy is still
+           usable and still gives the other locale's code set and the
+           POSIX day and RADIXCHAR items.
+test       t/002-survives-free.c
+
+assertion  XSH.duplocale.003
+anchor     functions/duplocale.html#DESCRIPTION
+class      required
+since      2008
+says       Copy and original are independent: after the original is replaced by
+           newlocale(LC_CTYPE_MASK, "C", original), the copy still gives the other
+           locale's code set and the new object the POSIX one.
+test       t/003-independent.c
+
+assertion  XSH.duplocale.004
+anchor     functions/duplocale.html#DESCRIPTION
+class      required
+since      2008
+says       duplocale(LC_GLOBAL_LOCALE) gives a snapshot of the global locale: with
+           LC_CTYPE set to another locale, the copy has that code set and
+           keeps it after the global locale is set back to "C".
+test       t/004-global-snapshot.c
+
+assertion  XSH.duplocale.005
+anchor     functions/duplocale.html#DESCRIPTION
+anchor     functions/duplocale.html#APPLICATION USAGE
+class      required
+since      2008
+says       With the POSIX global locale, duplocale(LC_GLOBAL_LOCALE) and
+           duplocale(uselocale((locale_t)0)) return a handle other than
+           (locale_t)0 that gives the POSIX items and code set, and uselocale()
+           accepts it (installing it returns LC_GLOBAL_LOCALE).
+test       t/005-global-posix.c

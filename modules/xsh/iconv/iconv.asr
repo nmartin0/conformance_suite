@@ -1,0 +1,144 @@
+# XSH iconv()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The standard names no code set: every test probes a short list of
+# familiar names (UTF-8, US-ASCII, ISO-8859-1 and their usual spellings)
+# and is UNRESOLVED when none opens. Text that converts identically is
+# limited to the portable characters, whose single byte values XBD fixes;
+# the tests that need an invalid byte, an incomplete character or a
+# character with no counterpart use UTF-8 as the input code set and
+# US-ASCII (or ISO-8859-1) as the target, with the usual byte values of
+# those code sets. Output bytes for characters without an identical
+# counterpart are not checked.
+
+assertion  XSH.iconv.001
+anchor     functions/iconv.html#DESCRIPTION
+anchor     functions/iconv.html#RETURN VALUE
+class      required
+since      1992
+says       Converting portable-character text between two ASCII-compatible
+           code sets gives the same bytes, returns 0, leaves inbytesleft 0,
+           moves inbuf past the input, advances outbuf by the bytes written
+           and lowers outbytesleft by the same amount.
+test       t/001-portable-identical.c
+
+assertion  XSH.iconv.002
+anchor     functions/iconv.html#DESCRIPTION
+anchor     functions/iconv.html#ERRORS
+class      required
+since      1992
+says       When the output buffer is too small, iconv() returns -1 with
+           E2BIG after converting what fits (three of six single-byte
+           characters), leaving inbuf, inbytesleft, outbuf and outbytesleft
+           describing exactly that; a further call on the remaining input
+           with a larger buffer finishes the text; a buffer of exactly the
+           needed size is enough.
+test       t/002-e2big-resume.c
+
+assertion  XSH.iconv.003
+anchor     functions/iconv.html#DESCRIPTION
+anchor     functions/iconv.html#ERRORS
+class      required
+since      1992
+says       When the next input character needs more output bytes than are
+           left (one byte left, a two-byte result), conversion stops just
+           before that character: -1 with E2BIG, the characters before it
+           converted, inbuf and inbytesleft pointing at it.
+test       t/003-e2big-whole-character.c
+
+assertion  XSH.iconv.004
+anchor     functions/iconv.html#DESCRIPTION
+anchor     functions/iconv.html#ERRORS
+class      required
+since      1992
+says       An input byte that is not valid in the input code set (0xFF in
+           UTF-8) stops conversion with -1 and EILSEQ after the previous
+           converted character; inbuf points at the byte and inbytesleft
+           counts it and the rest.
+test       t/004-eilseq.c
+
+assertion  XSH.iconv.005
+anchor     functions/iconv.html#DESCRIPTION
+anchor     functions/iconv.html#ERRORS
+class      required
+since      1992
+says       An incomplete character at the end of the input (the first byte
+           of a two-byte UTF-8 character) stops conversion with -1 and
+           EINVAL after the previous converted character; inbuf points at
+           the incomplete character.
+test       t/005-einval.c
+
+assertion  XSH.iconv.006
+anchor     functions/iconv.html#DESCRIPTION
+anchor     functions/iconv.html#RETURN VALUE
+class      required
+since      2024
+says       With the //IGNORE suffix on the target name, an invalid input byte
+           that is followed by a valid character is discarded without error:
+           the return value is not -1, inbytesleft is 0 and the output holds
+           the valid characters on both sides.
+note       The return value for the discarded bytes is not checked (Q-129).
+test       t/006-ignore-invalid.c
+
+assertion  XSH.iconv.007
+anchor     functions/iconv.html#DESCRIPTION
+anchor     functions/iconv_open.html#DESCRIPTION
+class      required
+since      2024
+says       With //NON_IDENTICAL_DISCARD, a valid character that has no
+           identical counterpart in the target code set is dropped from the
+           output but counted: the return value is 1, inbytesleft 0 and the
+           output holds the characters on both sides.
+test       t/007-non-identical-discard.c
+
+assertion  XSH.iconv.008
+anchor     functions/iconv.html#DESCRIPTION
+anchor     functions/iconv_open.html#DESCRIPTION
+class      required
+since      2024
+says       With //IGNORE, a valid character with no identical counterpart is
+           also dropped from the output and counted: the return value is 1,
+           inbytesleft 0 and the output holds the characters on both sides.
+test       t/008-ignore-non-identical.c
+
+assertion  XSH.iconv.009
+anchor     functions/iconv.html#DESCRIPTION
+anchor     functions/iconv_open.html#DESCRIPTION
+class      required
+since      2024
+says       With //TRANSLIT, a valid character with no identical counterpart
+           counts once in the return value however many characters replace
+           it (1 here), whether or not a transliteration exists; inbytesleft
+           is 0 and the output starts and ends with the characters around it.
+test       t/009-translit-count.c
+
+assertion  XSH.iconv.010
+anchor     functions/iconv.html#DESCRIPTION
+anchor     functions/iconv.html#RETURN VALUE
+class      required
+since      2024
+says       With no suffix, a valid character with no identical counterpart is
+           converted in an implementation-defined way and counted: the call
+           does not fail, returns 1, leaves inbytesleft 0 and the output
+           starts and ends with the characters around it.
+note       Systems that report EILSEQ for such a character do not follow the
+           stated behaviour.
+test       t/010-no-suffix-counted.c
+
+assertion  XSH.iconv.011
+anchor     functions/iconv.html#DESCRIPTION
+class      required
+since      1992
+says       A call with a null inbuf, and a call with inbuf pointing to a null
+           pointer (with a null outbuf or with an output buffer) is not an
+           error, and the descriptor still converts afterwards.
+test       t/011-reset-forms.c
+
+assertion  XSH.iconv.012
+anchor     functions/iconv.html#APPLICATION USAGE
+class      required
+since      1992
+says       A zero byte inside the input is an ordinary character: three bytes
+           "a", NUL, "b" give three output bytes with the NUL kept and
+           inbytesleft 0.
+test       t/012-nul-is-data.c

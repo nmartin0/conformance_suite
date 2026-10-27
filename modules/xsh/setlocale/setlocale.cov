@@ -1,0 +1,41 @@
+# setlocale.cov - every requirement unit on functions/setlocale.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:8137a94e     XSH.setlocale.003 XSH.setlocale.004 XSH.setlocale.005
+DESCRIPTION:b3f7a677     XSH.setlocale.004
+DESCRIPTION:baf6d8de     XSH.setlocale.002 XSH.setlocale.004
+DESCRIPTION:523c8486     XSH.setlocale.004
+DESCRIPTION:d10f4ada     XSH.setlocale.004
+DESCRIPTION:9b6a026b     impl  may also affect other message functions: nothing is fixed
+DESCRIPTION:d92cb811     XSH.setlocale.004
+DESCRIPTION:c85e41dc     XSH.setlocale.004
+DESCRIPTION:531cd87f     XSH.setlocale.004
+DESCRIPTION:27162c10     none  introduces the locale argument
+DESCRIPTION:0fa152c3     impl  names other than the preset ones are implementation-defined
+DESCRIPTION:3334ffc0     none  introduces the preset values
+DESCRIPTION:47f36488     XSH.setlocale.001 XSH.setlocale.002
+DESCRIPTION:265cb781     XSH.setlocale.001
+DESCRIPTION:42008378     XSH.setlocale.002
+DESCRIPTION:62450b00     impl  the native environment is implementation-defined
+DESCRIPTION:274b3306     XSH.setlocale.007 XSH.setlocale.008
+DESCRIPTION:d65efcfb     none  cross-reference
+DESCRIPTION:1e6b3c43     none  cross-reference
+DESCRIPTION:6c01b101     XSH.setlocale.003
+DESCRIPTION:d6f4b85c     partial XSH.setlocale.006 XSH.setlocale.008  # the all-checks-first behaviour is tested through a failing environment, not for explicit names of several categories
+DESCRIPTION:cd8078bb     none  introduces the example call
+DESCRIPTION:1af7ebf3     none  the example call
+DESCRIPTION:c9e76d71     XSH.setlocale.007 XSH.setlocale.008
+DESCRIPTION:cc0b0ac6     XSH.setlocale.007 XSH.setlocale.008
+DESCRIPTION:a3265a08     XSH.setlocale.008
+DESCRIPTION:26685d48     XSH.setlocale.007
+DESCRIPTION:283b3b50     XSH.setlocale.009
+DESCRIPTION:3b69ed41     untestable  an as-if rule on the implementation's own calls
+DESCRIPTION:d660e14e     untestable  thread-safety and data races cannot be observed reliably
+RETURN_VALUE:8413ecfe    XSH.setlocale.002 XSH.setlocale.004
+RETURN_VALUE:2083dd8f    XSH.setlocale.006 XSH.setlocale.008
+RETURN_VALUE:8244020f    XSH.setlocale.003
+RETURN_VALUE:58d8ebab    XSH.setlocale.003
+RETURN_VALUE:4f58e7bf    XSH.setlocale.005
+RETURN_VALUE:262c3508    app
+RETURN_VALUE:a2e76ab7    none  allows invalidation; the tests copy each string
+RETURN_VALUE:397ecc13    none  allows invalidation when the thread ends

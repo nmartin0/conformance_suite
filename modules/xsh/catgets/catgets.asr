@@ -1,0 +1,54 @@
+# XSH catgets()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Catalogs are made by gencat; the source syntax is the one XCU gencat
+# defines.
+
+assertion  XSH.catgets.001
+anchor     functions/catgets.html#DESCRIPTION
+anchor     functions/catgets.html#RETURN VALUE
+class      required
+since      1988
+says       catgets() returns the stored text of messages in two different
+           sets, with message numbers that are not contiguous, as
+           null-terminated strings, and again on repeated calls.
+test       t/001-retrieves.c
+
+assertion  XSH.catgets.002
+anchor     functions/catgets.html#RETURN VALUE
+anchor     functions/catgets.html#ERRORS
+class      required
+since      2008
+says       A message number missing from an existing set, a number that
+           exists only in another set, and a set that does not exist each
+           return the default string (the same pointer) with errno ENOMSG.
+test       t/002-enomsg-default.c
+
+assertion  XSH.catgets.003
+anchor     functions/catgets.html#RETURN VALUE
+anchor     utilities/gencat.html#EXTENDED DESCRIPTION
+class      required
+since      1988
+says       Messages written with the escape sequences for tab, newline,
+           backslash and an octal value, an unknown escape and a
+           backslash-newline continuation come back as the characters they
+           stand for.
+test       t/003-escapes.c
+
+assertion  XSH.catgets.004
+anchor     functions/catgets.html#RETURN VALUE
+anchor     utilities/gencat.html#EXTENDED DESCRIPTION
+class      required
+since      1988
+says       A message given as a number and a blank only is stored as an
+           empty string: catgets() returns an empty string, not the default.
+test       t/004-empty-message.c
+
+assertion  XSH.catgets.005
+anchor     utilities/gencat.html#EXTENDED DESCRIPTION
+anchor     basedefs/nl_types.h.html#DESCRIPTION
+class      required
+since      1988
+says       Messages in a source file without a set directive are found in
+           the set NL_SETD.
+test       t/005-default-set.c

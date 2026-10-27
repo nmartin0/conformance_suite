@@ -1,0 +1,20 @@
+# iconv_open.cov - every requirement unit on functions/iconv_open.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:e3805b84     XSH.iconv.001
+DESCRIPTION:b633fe41     untestable  needs a state-dependent encoding, and the standard names none
+DESCRIPTION:52aa30a3     impl  code set names and combinations are implementation-defined
+DESCRIPTION:e90c2656     XSH.iconv_open.002
+DESCRIPTION:d493f20b     XSH.iconv_open.002 XSH.iconv.006 XSH.iconv.008
+DESCRIPTION:dc524ef7     XSH.iconv_open.002 XSH.iconv.007
+DESCRIPTION:2e70e34e     XSH.iconv_open.002 XSH.iconv.009
+DESCRIPTION:dfc221e5     none  cross-reference to the iconv() page
+DESCRIPTION:d739aa9f     none  additional suffixes are implementation-defined, so an unknown suffix cannot be required to fail (Q-128)
+DESCRIPTION:df613240     partial XSH.iconv.002  # the descriptor stays usable across several calls; the implicit-close case is not tested
+DESCRIPTION:f98b33a8     XSH.iconv_open.003
+RETURN_VALUE:fdb1bf62    XSH.iconv.001
+RETURN_VALUE:5a86c467    XSH.iconv_open.001
+ERRORS:1fbbba10          optional
+ERRORS:6ed3cdf7          optional
+ERRORS:b03247c6          optional
+ERRORS:9442e519          partial XSH.iconv_open.001  # unsupported conversion; an unrecognized suffix may be a supported extension

@@ -1,0 +1,96 @@
+# XSH textdomain(), bindtextdomain(), bind_textdomain_codeset()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the POSIX locale. A directory given to bindtextdomain() is an
+# existing absolute path (the function may resolve it). Code set names for
+# bind_textdomain_codeset() come from a short probed list and are accepted
+# only when iconv_open() takes them as a target.
+
+assertion  XSH.textdomain.001
+anchor     functions/textdomain.html#RETURN VALUE
+anchor     functions/textdomain.html#DESCRIPTION
+class      required
+since      2024
+says       In a new process textdomain(NULL) returns "messages".
+test       t/001-initial-domain.c
+
+assertion  XSH.textdomain.002
+anchor     functions/textdomain.html#DESCRIPTION
+anchor     functions/textdomain.html#RETURN VALUE
+class      required
+since      2024
+says       textdomain(name) sets the domain and returns a string equal to it;
+           textdomain(NULL) queries without changing it; textdomain("") sets
+           the domain back to "messages".
+test       t/002-set-query-reset.c
+
+assertion  XSH.textdomain.003
+anchor     functions/textdomain.html#DESCRIPTION
+class      required
+since      2024
+says       The domain set by textdomain() stays after setlocale() calls, a
+           uselocale() call and back, and calls of the gettext functions.
+test       t/003-survives-locale-calls.c
+
+assertion  XSH.textdomain.004
+anchor     functions/textdomain.html#DESCRIPTION
+class      required
+since      2024
+says       bindtextdomain(domain, NULL) on a domain never bound returns a
+           non-null, non-empty directory name (the default directory).
+test       t/004-bind-query-default.c
+
+assertion  XSH.textdomain.005
+anchor     functions/textdomain.html#DESCRIPTION
+anchor     functions/textdomain.html#RETURN VALUE
+class      required
+since      2024
+says       bindtextdomain(domain, dir) returns a string equal to dir that is
+           a copy (it does not change when the argument is overwritten); a
+           query with a null dir returns it; binding another directory to the
+           domain replaces the binding and is returned by queries.
+test       t/005-bind-returns-copy.c
+
+assertion  XSH.textdomain.006
+anchor     functions/textdomain.html#DESCRIPTION
+class      required
+since      2024
+says       bindtextdomain() with a null or an empty domain returns a null
+           pointer without changing errno.
+test       t/006-bind-null-domain.c
+
+assertion  XSH.textdomain.007
+anchor     functions/textdomain.html#DESCRIPTION
+class      required
+since      2024
+says       Two domains bound to two directories keep separate bindings.
+test       t/007-bindings-separate.c
+
+assertion  XSH.textdomain.008
+anchor     functions/textdomain.html#DESCRIPTION
+anchor     functions/textdomain.html#RETURN VALUE
+class      required
+since      2024
+says       bind_textdomain_codeset(domain, codeset) returns a string equal to
+           the codeset it bound; a null codeset then returns it; a second
+           call with another codeset overrides the first.
+test       t/008-codeset-binding.c
+
+assertion  XSH.textdomain.009
+anchor     functions/textdomain.html#DESCRIPTION
+class      required
+since      2024
+says       bind_textdomain_codeset() with a null or an empty domain returns a
+           null pointer without changing errno.
+test       t/009-codeset-null-domain.c
+
+assertion  XSH.textdomain.010
+anchor     functions/textdomain.html#DESCRIPTION
+anchor     functions/textdomain.html#RETURN VALUE
+class      required
+since      2024
+says       bind_textdomain_codeset(domain, NULL) for a domain never bound
+           returns a null pointer with errno unchanged, or a non-empty
+           default code set name.
+note       Q-132: the text gives both results; the test accepts either.
+test       t/010-codeset-query-unbound.c

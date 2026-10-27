@@ -1,0 +1,18 @@
+# XSH iconv_close()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.iconv_close.001
+anchor     functions/iconv_close.html#RETURN VALUE
+class      required
+since      1992
+says       iconv_close() of a descriptor returned by iconv_open() returns 0.
+test       t/001-returns-zero.c
+
+assertion  XSH.iconv_close.002
+anchor     functions/iconv_close.html#DESCRIPTION
+class      required
+since      1992
+says       After iconv_open() followed by iconv_close(), the set of open file
+           descriptors is the same as before the open (a file descriptor
+           used for the conversion descriptor is closed).
+test       t/002-releases-descriptor.c

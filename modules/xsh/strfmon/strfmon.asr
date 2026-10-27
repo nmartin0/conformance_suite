@@ -1,0 +1,152 @@
+# XSH strfmon() and strfmon_l()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Run in the POSIX locale, where XBD 7.3.3.1 makes every monetary value
+# unavailable: both signs, the currency symbols and the monetary radix are
+# empty, grouping is absent and the char members of struct lconv are {CHAR_MAX}.
+# What that leaves fixed is asserted and no more: with the default right
+# precision unspecified every conversion that is tested gives an explicit
+# precision; the digits of a conversion are compared after taking out everything
+# that is not a digit (so that the unspecified monetary radix, when a right
+# precision above 0 is given, does not matter); no test asks for a particular
+# separation by spaces. In the POSIX locale neither '+' nor '(' means the sign
+# is the string "-" for a negative value (the page's fallback), placed before
+# the digits, and the '+' flag fails. The infinite and NaN arguments (unspecified)
+# are not used. Tests that need a second locale take one from
+# pc_find_locale("UTF-8", 0): the one that does only that (006) is NOTINUSE
+# without; the others also run in it when there is one and judge only what holds
+# in every locale.
+
+assertion  XSH.strfmon.001
+anchor     functions/strfmon.html#DESCRIPTION
+anchor     functions/strfmon.html#RETURN VALUE
+class      required
+says       Plain characters are copied and "%%" gives one '%': formats
+           "abc", "100%%", "a%%b%%" and "" give "abc", "100%", "a%b%" and
+           "", the return value is the length of the result, and arguments
+           that the format does not use are ignored.
+test       t/001-plain.c
+
+assertion  XSH.strfmon.002
+anchor     functions/strfmon.html#RETURN VALUE
+anchor     functions/strfmon.html#ERRORS
+anchor     functions/strfmon.html#DESCRIPTION
+class      required
+says       The total including the terminating NUL must fit in maxsize: for the
+           format "abc", maxsize 4 gives 3, and maxsize 3, 1 and 0 give -1 with
+           errno E2BIG; for the format "" maxsize 1 gives 0 and maxsize 0 gives
+           -1 with E2BIG; for "%.0n" with 123456.0, taking L as the length the
+           call gives when there is room, maxsize L fails with E2BIG and
+           maxsize L+1 gives L. In every call no byte at or after maxsize is
+           written.
+test       t/002-size.c
+
+assertion  XSH.strfmon.003
+anchor     functions/strfmon.html#DESCRIPTION
+class      required
+says       The right precision sets the digits after the radix and the amount
+           is rounded to it: "%.0n" of 123.0, 123.6 and 123.4 give digits 123,
+           124 and 123 with nothing but digits and spaces around them (no radix
+           character, p being 0); "%.2n" of 123.456 gives digits 12346 and
+           "%.4i" of 1.5 gives digits 15000; "%.0i" of 123.6 gives digits 124.
+test       t/003-precision.c
+
+assertion  XSH.strfmon.004
+anchor     functions/strfmon.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.3.1
+class      required
+since      2024
+says       With neither '+' nor '(' in the POSIX locale a negative amount is
+           written with one '-' placed before its digits and a non-negative
+           amount without any '-': "%.0n", "%!.0n" and "%.0i" of -123.0 and
+           123.0.
+test       t/004-default-sign.c
+
+assertion  XSH.strfmon.005
+anchor     functions/strfmon.html#DESCRIPTION
+anchor     functions/strfmon.html#ERRORS
+class      required
+since      2024
+says       In the POSIX locale (both signs empty) the '+' flag makes strfmon()
+           fail with -1 and errno EINVAL, for the n and the i conversion and
+           for a positive and a negative amount.
+test       t/005-plus-einval.c
+
+assertion  XSH.strfmon.006
+anchor     functions/strfmon.html#DESCRIPTION
+anchor     functions/strfmon.html#ERRORS
+class      required
+since      2024
+says       In another locale (LC_ALL set to it) the '+' flag makes strfmon()
+           fail with EINVAL exactly when localeconv() shows positive_sign and
+           negative_sign both empty; otherwise the call succeeds. The '(' flag
+           never fails for that reason.
+test       t/006-plus-by-locale.c
+
+assertion  XSH.strfmon.007
+anchor     functions/strfmon.html#DESCRIPTION
+class      required
+says       With the '(' flag a negative amount is enclosed in parentheses
+           (first byte '(' , last ')' , digits intact, no '-') and a positive
+           one is not ("%(.0n" of -123.0 and 123.0; "%(.0i" of -45.0).
+test       t/007-parentheses.c
+
+assertion  XSH.strfmon.008
+anchor     functions/strfmon.html#DESCRIPTION
+class      required
+says       The '^' flag leaves out the grouping characters: the digits of
+           1234567.0 under "%^.0n" and "%^.0i" appear as one unbroken run
+           (also when another locale is selected, if there is one).
+test       t/008-no-grouping.c
+
+assertion  XSH.strfmon.009
+anchor     functions/strfmon.html#DESCRIPTION
+class      required
+says       A field width is a minimum: "%10.0n" of 123.0 gives exactly 10
+           bytes starting with a space and, with '-', exactly 10 bytes ending
+           with a space, the digits being 123 in both; the width is filled with spaces
+           whatever the fill character ("%=*10#5.0n" of 123.0 has 10 bytes, a
+           leading space and "**123"); a result wider than the
+           width is not cut ("%2.0n" of 123456.0 keeps all digits); '-' without
+           a width makes no difference ("%-.0n" equals "%.0n").
+test       t/009-width.c
+
+assertion  XSH.strfmon.010
+anchor     functions/strfmon.html#DESCRIPTION
+class      required
+says       A left precision fills the unused digit positions with the fill
+           character: "%=*#5.0n" of 123.0 contains "**123" and not "***123", "%=0#5.0n"
+           contains "00123" and not "000123", the same fill is used for -123.0
+           with the '-' before it, "%#5.0n" contains two spaces before the
+           digits, and a left precision smaller than the digits needed is ignored
+           ("%=*#2.0n" of 12345.0 has no '*' and keeps the digits). The fill
+           character is ignored without a left precision ("%=*.0n" has no '*').
+test       t/010-left-precision.c
+
+assertion  XSH.strfmon.011
+anchor     functions/strfmon.html#DESCRIPTION
+class      required
+says       With a left precision, the positive and the negative format have the
+           same length: "%#5.0n" of 123.0 and -123.0, and "%=*#6.0i" of 7.0 and -7.0.
+test       t/011-alignment.c
+
+assertion  XSH.strfmon.012
+anchor     functions/strfmon.html#DESCRIPTION
+anchor     functions/strfmon.html#RETURN VALUE
+class      required
+says       Several conversions in one format take the arguments in order and
+           keep the plain text between them: "[%.0n][%.0i]" with 1.0 and 22.0
+           gives two bracketed fields whose digits are 1 and 22, the
+           return value is the length, and an extra argument is ignored.
+test       t/012-multiple.c
+
+assertion  XSH.strfmon.013
+anchor     functions/strfmon.html#DESCRIPTION
+class      required
+since      2024
+says       strfmon_l() with a locale object for "C" is equivalent to strfmon() in
+           the POSIX locale: it gives the results of assertions 001, 002, 003,
+           004 and 005 (a sample of each: plain text, size and E2BIG, digits, the
+           default negative sign, the '+' failure), also when the global locale is
+           set to another locale if there is one.
+test       t/013-strfmon-l.c

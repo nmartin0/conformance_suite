@@ -1,0 +1,67 @@
+# XSH iscntrl() and iscntrl_l()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests run in the POSIX locale (setlocale(LC_ALL, "C")); only the
+# portable character set is examined. The _l forms are tested with a locale
+# object from newlocale() for "C"; a failure to make one is UNRESOLVED.
+
+assertion  XSH.iscntrl.001
+anchor     functions/iscntrl.html#DESCRIPTION
+anchor     functions/iscntrl.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      1988
+says       In the POSIX locale iscntrl() returns non-zero for each portable
+           character of the class as the locale definition lists it: the
+           portable control characters (the null character, alert, backspace,
+           tab, newline, vertical-tab, form-feed, carriage-return). Checked
+           through the function and through the header form.
+test       t/001-members.c
+
+assertion  XSH.iscntrl.002
+anchor     functions/iscntrl.html#DESCRIPTION
+anchor     functions/iscntrl.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      1988
+says       In the POSIX locale iscntrl() returns 0 for each portable character
+           the locale definition does not place in the class: the space, the
+           ten digits, the letters and the 32 punctuation characters.
+note       Only the portable characters are examined; other control codes,
+           bytes above 127 and values outside the domain are unspecified or
+           undefined.
+test       t/002-non-members.c
+
+assertion  XSH.iscntrl.003
+anchor     functions/iscntrl.html#DESCRIPTION
+anchor     functions/iscntrl.html#RETURN VALUE
+class      required
+since      1988
+says       iscntrl(EOF) is inside the domain and returns 0, since EOF is not a
+           character of the class.
+test       t/003-eof.c
+
+assertion  XSH.iscntrl.004
+anchor     functions/iscntrl.html#DESCRIPTION
+anchor     functions/iscntrl.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      2008
+says       iscntrl_l() with a locale object for the POSIX locale gives the same
+           answers as iscntrl() for the portable characters: non-zero for the
+           members, 0 for the others.
+note       The locale object comes from newlocale(); UNRESOLVED if it cannot be
+           made.
+test       t/004-locale-object.c
+
+assertion  XSH.iscntrl.005
+anchor     functions/iscntrl.html#DESCRIPTION
+anchor     functions/iscntrl.html#RETURN VALUE
+class      required
+since      2008
+says       iscntrl_l(EOF, locale) with a locale object for the POSIX locale
+           returns 0.
+test       t/005-locale-eof.c

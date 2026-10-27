@@ -1,0 +1,159 @@
+# XSH gettext(), dgettext(), dcgettext(), ngettext(), dngettext(),
+# dcngettext() and the _l forms
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page documents the whole family; they are tested together. Tests 001
+# to 007 run in the POSIX locale, where msgid (or msgid_plural) is returned
+# as the very same pointer. Tests 008 to 011 use a messages object built by
+# the msgfmt utility (the object format is unspecified) in a directory bound
+# with bindtextdomain(), in an installed locale found through
+# pc_find_locale(); the strings are ASCII so no code set conversion arises.
+# NLSPATH and LANGUAGE are removed from the environment in those tests.
+# The _l tests use functions the page declares in <libintl.h>.
+
+assertion  XSH.gettext.001
+anchor     functions/gettext.html#DESCRIPTION
+anchor     functions/gettext.html#RETURN VALUE
+class      required
+since      2024
+says       In the POSIX locale gettext() returns its msgid argument (the same
+           pointer), also after a text domain has been set.
+test       t/001-gettext-msgid.c
+
+assertion  XSH.gettext.002
+anchor     functions/gettext.html#DESCRIPTION
+class      required
+since      2024
+says       In the POSIX locale dgettext() and dcgettext() return msgid for a
+           named domain, "messages", an empty domain and a null domain, and
+           for the categories LC_MESSAGES, LC_CTYPE, LC_TIME, LC_COLLATE,
+           LC_MONETARY and LC_NUMERIC.
+test       t/002-dgettext-dcgettext.c
+
+assertion  XSH.gettext.003
+anchor     functions/gettext.html#DESCRIPTION
+anchor     functions/gettext.html#RETURN VALUE
+class      required
+since      2024
+says       In the POSIX locale ngettext(), dngettext() and dcngettext()
+           return msgid (the same pointer) when n is 1 and msgid_plural
+           otherwise, for n of 0, 2, 3, 100 and the largest unsigned long.
+test       t/003-plural-selection.c
+
+assertion  XSH.gettext.004
+anchor     functions/gettext.html#DESCRIPTION
+class      required
+since      2024
+says       With a POSIX locale object, gettext_l(), dgettext_l(),
+           dcgettext_l(), ngettext_l(), dngettext_l() and dcngettext_l()
+           return msgid, or msgid for n 1 and msgid_plural for other n.
+test       t/004-l-variants-posix.c
+
+assertion  XSH.gettext.005
+anchor     functions/gettext.html#ERRORS
+class      required
+since      2024
+says       None of the twelve functions changes errno.
+test       t/005-errno-kept.c
+
+assertion  XSH.gettext.006
+anchor     functions/gettext.html#RETURN VALUE
+class      required
+since      2024
+says       A returned string is not overwritten or invalidated by later calls
+           of the family (with other messages, domains and categories) or by
+           a uselocale() call.
+test       t/006-result-stays-valid.c
+
+assertion  XSH.gettext.007
+anchor     functions/gettext.html#DESCRIPTION
+class      required
+since      2024
+says       When the locale name in effect is C or POSIX, msgid or msgid_plural
+           is returned although messages objects exist in directories named C
+           and POSIX under the bound directory (and LANGUAGE names them), for
+           gettext, dgettext, dcgettext, ngettext and dngettext.
+test       t/007-posix-locale-ignores-objects.c
+
+assertion  XSH.gettext.008
+anchor     functions/gettext.html#DESCRIPTION
+class      required
+since      2024
+says       In an installed non-POSIX locale, with a messages object under the
+           directory bound to the domain, gettext(), dgettext() and
+           dcgettext() return the translation; a msgid missing from the
+           object, and a domain with no object, give msgid.
+test       t/008-translation.c
+
+assertion  XSH.gettext.009
+anchor     functions/gettext.html#DESCRIPTION
+anchor     utilities/msgfmt.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       In that setting ngettext(), dngettext() and dcngettext() pick the
+           plural form the object's Plural-Forms rule gives (n 1, 2, 5 and 0
+           select forms 0, 1, 2, 2); a missing msgid gives msgid for n 1 and
+           msgid_plural otherwise.
+test       t/009-plural-translation.c
+
+assertion  XSH.gettext.010
+anchor     functions/gettext.html#DESCRIPTION
+class      required
+since      2024
+says       The _l functions locate the object by the locale object given, even
+           when the global locale is the POSIX locale, and return the
+           translations for singular and plural forms.
+test       t/010-l-translation.c
+
+assertion  XSH.gettext.011
+anchor     functions/gettext.html#DESCRIPTION
+anchor     functions/textdomain.html#DESCRIPTION
+class      required
+since      2024
+says       gettext() uses the domain last set with textdomain() and the
+           domain argument of dgettext() overrides it; a null domain argument
+           means the current text domain.
+test       t/011-domain-selection.c
+
+assertion  XSH.gettext.012
+anchor     functions/gettext.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+since      2024
+says       When LANGUAGE is set to a colon-separated list, the locale names
+           are tried in order: with a list whose first name has no object and
+           whose second does, the translation (and the plural form) from the
+           second is returned although the current locale has no object.
+test       t/012-language-search.c
+
+assertion  XSH.gettext.013
+anchor     functions/gettext.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.2
+class      conditional
+when       XSI
+since      2024
+says       With NLSPATH naming a template with %N for the domain, dgettext()
+           finds the messages object there, also when the first of two
+           templates finds nothing and the second does.
+test       t/013-nlspath-search.c
+
+assertion  XSH.gettext.014
+anchor     functions/gettext.html#DESCRIPTION
+class      required
+since      2024
+says       A translation stored in ISO 8859-1 (the object's header names it)
+           is returned in the code set of a UTF-8 locale, the accented
+           letter U+00E9 appearing as its UTF-8 bytes.
+note       UNRESOLVED when the locale's code set is not UTF-8 or iconv_open()
+           takes no such conversion.
+test       t/014-codeset-conversion.c
+
+assertion  XSH.gettext.015
+anchor     functions/gettext.html#DESCRIPTION
+anchor     functions/textdomain.html#DESCRIPTION
+class      required
+since      2024
+says       After bind_textdomain_codeset() binds ISO-8859-1 to the domain, a
+           translation stored in UTF-8 is returned in ISO 8859-1 even though
+           the locale's code set is UTF-8.
+test       t/015-bound-codeset.c
