@@ -44,11 +44,14 @@ test       t/004-null-empty.c
 assertion  XSH.basename.005
 anchor     functions/basename.html#DESCRIPTION
 anchor     functions/basename.html#RETURN VALUE
-class      conditional
+class      disputed
 when       XSI
 says       The result of one call stays valid when basename() is called again
            for another string: the results for "x/aa", "y/bb", a null
            pointer and "" can all be read after the four calls.
 note       The page lets a result be invalidated only when its own input is
-           modified or freed; the inputs here are left alone. See Q-100.
+           modified or freed; the inputs here are left alone. Disputed (Q-100): only the
+           thread-safety rule of XSH 2.9.1 and the sentence on
+           invalidation imply it, so a per-thread result buffer is not
+           clearly excluded.
 test       t/005-results-coexist.c

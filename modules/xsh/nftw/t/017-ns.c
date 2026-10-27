@@ -173,6 +173,8 @@ static int child(void)
 
 int main(void)
 {
+	int rc;
+
 	pc_begin("XSH.nftw.017");
 	pc_searchable();
 	pc_make_dir("t");
@@ -181,7 +183,11 @@ int main(void)
 	/* readable by everyone, searchable by no one */
 	pc_check(chmod("t/n", 0644) == 0, "chmod failed");
 	pc_test();
-	switch (unprivileged(child)) {
+	rc = unprivileged(child);
+	/* restore first, so the driver can remove the tree after a FAIL */
+	if (chmod("t/n", 0700) != 0)
+		pc_unresolved("chmod failed");
+	switch (rc) {
 	case 0:
 		break;
 	case 1:
@@ -193,7 +199,5 @@ int main(void)
 	default:
 		pc_fail("n was not reported with FTW_D");
 	}
-	if (chmod("t/n", 0700) != 0)
-		pc_unresolved("chmod failed");
 	pc_pass();
 }

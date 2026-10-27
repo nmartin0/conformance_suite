@@ -184,6 +184,8 @@ static int child(void)
 
 int main(void)
 {
+	int rc;
+
 	pc_begin("XSH.nftw.016");
 	pc_searchable();
 	pc_make_dir("t");
@@ -192,7 +194,11 @@ int main(void)
 	pc_make_file("t/u/z", "z");
 	pc_check(chmod("t/u", 0) == 0, "chmod failed");
 	pc_test();
-	switch (unprivileged(child)) {
+	rc = unprivileged(child);
+	/* restore first, so the driver can remove the tree after a FAIL */
+	if (chmod("t/u", 0700) != 0)
+		pc_unresolved("chmod failed");
+	switch (rc) {
 	case 0:
 		break;
 	case 1:
@@ -206,7 +212,5 @@ int main(void)
 	default:
 		pc_fail("fn was called for something below the unreadable directory");
 	}
-	if (chmod("t/u", 0700) != 0)
-		pc_unresolved("chmod failed");
 	pc_pass();
 }

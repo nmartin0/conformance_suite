@@ -125,13 +125,19 @@ static int child(void)
 
 int main(void)
 {
+	int rc;
+
 	pc_begin("XSH.nftw.022");
 	pc_searchable();
 	pc_make_dir("p");
 	pc_make_file("p/x", "x");
 	pc_check(chmod("p", 0) == 0, "chmod failed");
 	pc_test();
-	switch (unprivileged(child)) {
+	rc = unprivileged(child);
+	/* restore first, so the driver can remove the tree after a FAIL */
+	if (chmod("p", 0700) != 0)
+		pc_unresolved("chmod failed");
+	switch (rc) {
 	case 0:
 		break;
 	case 1:
@@ -141,7 +147,5 @@ int main(void)
 	default:
 		pc_fail("fn was called after a failed nftw()");
 	}
-	if (chmod("p", 0700) != 0)
-		pc_unresolved("chmod failed");
 	pc_pass();
 }
