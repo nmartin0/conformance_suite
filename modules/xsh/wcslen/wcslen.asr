@@ -1,0 +1,41 @@
+# XSH wcslen() and wcsnlen()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Arrays that end where an inaccessible (PROT_NONE) page begins show any code examined past the allowed ones (the test is killed: FAIL).
+
+assertion  XSH.wcslen.001
+anchor     functions/wcslen.html#DESCRIPTION
+anchor     functions/wcslen.html#RETURN VALUE
+class      required
+says       wcslen() returns 0 for "", 1 for "a", 4095 for a 4095-code
+           string, and 2 for the array {a, b, null, c}.
+test       t/001-wcslen.c
+
+assertion  XSH.wcslen.002
+anchor     functions/wcslen.html#DESCRIPTION
+anchor     functions/wcslen.html#RETURN VALUE
+class      required
+since      2008
+says       wcsnlen("abcdef", m) returns 6 for m 10 and 6, 3 for m 3 and 0
+           for m 0; wcsnlen("", 5) returns 0; for the array {a, b, null, c,
+           d} with m 5 it returns 2.
+test       t/002-wcsnlen.c
+
+assertion  XSH.wcslen.003
+anchor     functions/wcslen.html#DESCRIPTION
+anchor     functions/wcslen.html#RETURN VALUE
+class      required
+since      2008
+says       For an array of 16 non-null codes ending at an inaccessible page,
+           wcsnlen() with maxlen 16 returns 16 and, for the last five codes,
+           with maxlen 5 returns 5; with maxlen 0 at the page start it
+           returns 0; none touches the page.
+test       t/003-wcsnlen-bound.c
+
+assertion  XSH.wcslen.004
+anchor     functions/wcslen.html#DESCRIPTION
+class      required
+since      2024
+says       wcslen() and wcsnlen() leave errno unchanged on valid input, both
+           when it is 0 and when it is EDOM.
+test       t/004-errno-kept.c

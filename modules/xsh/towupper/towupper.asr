@@ -1,0 +1,40 @@
+# XSH towupper()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.towupper.001
+anchor     functions/towupper.html#DESCRIPTION
+anchor     functions/towupper.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In the POSIX locale towupper() maps each of the 26 lowercase
+           letters to the corresponding uppercase letter.
+test       t/001-mapping.c
+
+assertion  XSH.towupper.002
+anchor     functions/towupper.html#DESCRIPTION
+anchor     functions/towupper.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       towupper() returns the other portable characters unchanged: the
+           uppercase letters, the digits, the punctuation, the space and the
+           control characters.
+test       t/002-unchanged.c
+
+assertion  XSH.towupper.003
+anchor     functions/towupper.html#DESCRIPTION
+anchor     functions/towupper.html#RETURN VALUE
+class      required
+says       towupper(WEOF) returns WEOF (an argument of the domain with no
+           mapping is returned unchanged).
+test       t/003-weof.c
+
+assertion  XSH.towupper.004
+anchor     functions/towupper.html#DESCRIPTION
+anchor     functions/towupper.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       For each lowercase letter c, towlower(towupper(c)) equals c and the
+           result of towupper(c) is a uppercase letter in the class sense
+           (iswupper or iswlower as appropriate).
+test       t/004-round-trip.c

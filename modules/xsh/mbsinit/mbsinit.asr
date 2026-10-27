@@ -1,0 +1,34 @@
+# XSH mbsinit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The UTF-8 test uses a locale found with pc_find_locale() and is NOTINUSE when none is
+# installed.
+
+assertion  XSH.mbsinit.001
+anchor     functions/mbsinit.html#RETURN VALUE
+class      required
+says       mbsinit(NULL) returns non-zero.
+test       t/001-null.c
+
+assertion  XSH.mbsinit.002
+anchor     functions/mbsinit.html#APPLICATION USAGE
+class      required
+says       An mbstate_t object set to all zero bytes, and one with
+           static storage, describe an initial conversion state:
+           mbsinit() returns non-zero for both.
+note       Stated in APPLICATION USAGE (a zero-valued object is at
+           least one way to describe the initial state).
+test       t/002-zero-valued.c
+
+assertion  XSH.mbsinit.003
+anchor     functions/mbsinit.html#RETURN VALUE
+anchor     functions/mbsinit.html#APPLICATION USAGE
+class      disputed
+says       In a UTF-8 locale, after mbrtowc() returns (size_t)-2 for
+           the first byte of a two-byte character, mbsinit() on that
+           state returns 0.
+note       The initial conversion state is the one at the start of a
+           new character sequence (APPLICATION USAGE); a state holding
+           part of a character is not at the start of one (Q-124); the
+           normative text does not state it, so the assertion is disputed.
+test       t/003-partial-char.c

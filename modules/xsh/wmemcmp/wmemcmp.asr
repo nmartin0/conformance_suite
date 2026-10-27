@@ -1,0 +1,47 @@
+# XSH wmemcmp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests use values that need not be valid characters (the largest wchar_t value) and the null code as ordinary data.
+# Only the sign of a result is judged.
+
+assertion  XSH.wmemcmp.001
+anchor     functions/wmemcmp.html#DESCRIPTION
+anchor     functions/wmemcmp.html#RETURN VALUE
+class      required
+says       wmemcmp() returns 0 for two distinct arrays with the same content
+           (including null codes), and for n 0 on arrays that differ.
+test       t/001-equal.c
+
+assertion  XSH.wmemcmp.002
+anchor     functions/wmemcmp.html#DESCRIPTION
+anchor     functions/wmemcmp.html#RETURN VALUE
+class      required
+says       {a, b, c} against {a, b, d} with n 3 is negative and the reverse
+           positive; with n 2 it is 0 (a later difference is ignored); {a,
+           z} against {b, a} with n 2 is negative.
+test       t/002-sign.c
+
+assertion  XSH.wmemcmp.003
+anchor     functions/wmemcmp.html#DESCRIPTION
+anchor     functions/wmemcmp.html#RETURN VALUE
+class      required
+says       {a, null, b} against {a, null, c} with n 3 is negative (the
+           comparison goes past a null code) and against {a, null, b} is 0.
+test       t/003-null-not-special.c
+
+assertion  XSH.wmemcmp.004
+anchor     functions/wmemcmp.html#DESCRIPTION
+anchor     functions/wmemcmp.html#RETURN VALUE
+class      required
+says       {WCHAR_MAX} against {1} with n 1 is positive, {null} against
+           {WCHAR_MAX} is negative, and equal sequences containing WCHAR_MAX
+           give 0.
+test       t/004-any-value.c
+
+assertion  XSH.wmemcmp.005
+anchor     functions/wmemcmp.html#DESCRIPTION
+class      required
+since      2024
+says       wmemcmp() leaves errno unchanged on valid input, both when it is
+           0 and when it is EDOM.
+test       t/005-errno-kept.c

@@ -1,0 +1,69 @@
+# XSH wcsftime()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.wcsftime.001
+anchor     functions/wcsftime.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5.3
+class      required
+says       In the POSIX locale %a and %A give L"Sun" to L"Sat" and L"Sunday" to
+           L"Saturday" for tm_wday 0 to 6, %b, %h and %B give L"Jan" to L"Dec"
+           and L"January" to L"December" for tm_mon 0 to 11, and %p gives L"AM"
+           for tm_hour 0 and 11 and L"PM" for 12 and 23.
+test       t/001-names.c
+
+assertion  XSH.wcsftime.002
+anchor     functions/wcsftime.html#DESCRIPTION
+class      required
+says       %d, %H, %M, %S, %m and %y give two digits with a leading zero, %e two
+           characters with a leading space, %I L"12" for hours 0 and 12 and L"01"
+           for 13, %j three digits, %Y the year 1999, %C L"19".
+test       t/002-numeric.c
+
+assertion  XSH.wcsftime.003
+anchor     functions/wcsftime.html#DESCRIPTION
+anchor     basedefs/V1_chap07.html#7.3.5.3
+class      required
+says       In the POSIX locale %c is "%a %b %e %H:%M:%S %Y", %D "%m/%d/%y", %F
+           "%Y-%m-%d", %r "%I:%M:%S %p", %R "%H:%M", %T "%H:%M:%S", %x
+           "%m/%d/%y", %X "%H:%M:%S"; %n, %t and %% give a newline, a tab and
+           '%'; ordinary wide characters are copied.
+test       t/003-composite.c
+
+assertion  XSH.wcsftime.004
+anchor     functions/wcsftime.html#DESCRIPTION
+anchor     functions/wcsftime.html#RETURN VALUE
+class      required
+says       wcsftime() with the format L"%Y-%m-%d" and maxsize 32 returns 10 (the
+           count without the terminator), the array holds the result and a null
+           wide character, and the elements after it are unchanged; an empty
+           format returns 0 with a null wide character stored.
+test       t/004-return.c
+
+assertion  XSH.wcsftime.005
+anchor     functions/wcsftime.html#DESCRIPTION
+anchor     functions/wcsftime.html#RETURN VALUE
+class      required
+says       With the result L"2000-01-02" (10 wide characters), maxsize 11 returns
+           10 with the full result and terminator, and maxsize 10 returns 0; in
+           both cases the elements from the index maxsize on are unchanged;
+           maxsize 0 returns 0 and changes nothing.
+test       t/005-maxsize.c
+
+assertion  XSH.wcsftime.006
+anchor     functions/wcsftime.html#DESCRIPTION
+anchor     functions/strftime.html#DESCRIPTION
+class      required
+since      2024
+says       %010F with the year 1970 gives L"1970-01-02" (returns 10) and %012F
+           gives L"001970-01-02" (the year padded as by %06Y); %05Y with
+           the year 27 gives L"00027" (returns 5); %+6Y with 12345 gives
+           L"+12345".
+test       t/006-width.c
+
+assertion  XSH.wcsftime.007
+anchor     functions/wcsftime.html#DESCRIPTION
+class      required
+says       For Saturday 2000-01-01: %u is 6, %w 6, %U 00, %W 00, %V 52, %G 1999,
+           %g 99, %j 001; for Sunday 2000-01-02: %u 7, %w 0, %U 01, %W 00; for
+           Monday 2000-01-03: %U 01, %W 01, %V 01, %G 2000.
+test       t/007-weeks.c

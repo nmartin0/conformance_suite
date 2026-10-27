@@ -1,0 +1,53 @@
+# XSH wctomb()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+
+assertion  XSH.wctomb.001
+anchor     functions/wctomb.html#DESCRIPTION
+anchor     functions/wctomb.html#RETURN VALUE
+class      required
+says       In the POSIX locale wctomb() of each portable-character-set
+           member returns 1 and stores that member's character value;
+           wctomb() of 0 returns 1 and stores a null byte.
+test       t/001-portable.c
+
+assertion  XSH.wctomb.002
+anchor     functions/wctomb.html#DESCRIPTION
+anchor     functions/wctomb.html#RETURN VALUE
+class      required
+says       In the POSIX locale, for every byte b, wctomb() of the code
+           mbtowc() gave for b returns 1 and stores b.
+test       t/002-roundtrip.c
+
+assertion  XSH.wctomb.003
+anchor     functions/wctomb.html#DESCRIPTION
+anchor     functions/wctomb.html#RETURN VALUE
+anchor     functions/wctomb.html#ERRORS
+class      required
+says       Over the 257 codes 0 to 256 in the POSIX locale (which has
+           256 characters) wctomb() returns 1 or -1; each -1 comes with
+           errno EILSEQ; at least one is -1; no more than MB_CUR_MAX
+           bytes are stored.
+test       t/003-invalid.c
+
+assertion  XSH.wctomb.004
+anchor     functions/wctomb.html#DESCRIPTION
+anchor     functions/wctomb.html#RETURN VALUE
+class      required
+says       In the POSIX locale wctomb(NULL, L'A') returns 0.
+note       The POSIX locale has only single-byte characters, so its
+           encoding is not state-dependent (XBD 6.2).
+test       t/004-null-s.c
+
+assertion  XSH.wctomb.005
+anchor     functions/wctomb.html#DESCRIPTION
+anchor     functions/wctomb.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale wctomb() of the codes mbtowc() gave for a
+           two-byte and a three-byte character returns 2 and 3 and
+           stores the same bytes, never more than MB_CUR_MAX; wctomb()
+           of L'A' returns 1; of 0 returns 1 and stores a null byte;
+           wctomb(NULL, 0) returns 0.
+test       t/005-utf8.c

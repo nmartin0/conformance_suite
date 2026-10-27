@@ -1,0 +1,80 @@
+# XSH ungetwc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.ungetwc.001
+anchor     functions/ungetwc.html#DESCRIPTION
+anchor     functions/ungetwc.html#RETURN VALUE
+class      required
+says       On a stream reading "abc", after fgetwc() returned L'a', ungetwc(L'a',
+           f) returns L'a' and the next two fgetwc() calls return L'a' and L'b'.
+test       t/001-pushback.c
+
+assertion  XSH.ungetwc.002
+anchor     functions/ungetwc.html#DESCRIPTION
+class      required
+says       On a stream opened "r" on "abc", after one fgetwc(), ungetwc(L'Z', f)
+           returns L'Z', the next fgetwc() calls return L'Z' then L'b', and the
+           file still holds "abc".
+test       t/002-different-char.c
+
+assertion  XSH.ungetwc.003
+anchor     functions/ungetwc.html#DESCRIPTION
+class      required
+says       After one fgetwc(), ungetwc(L'1') returns L'1'; a second ungetwc(L'2')
+           either returns WEOF (the next read then gives L'1') or returns L'2'
+           (the next reads give L'2' then L'1').
+test       t/003-reverse-order.c
+
+assertion  XSH.ungetwc.004
+anchor     functions/ungetwc.html#DESCRIPTION
+class      required
+says       On a stream reading "abc", after fgetwc() and a successful
+           ungetwc(L'Z'), a successful fseek(f, 0, SEEK_SET) discards the pushed-
+           back character: the next fgetwc() returns L'a'; the same holds with
+           rewind() in place of fseek().
+test       t/004-seek-discards.c
+
+assertion  XSH.ungetwc.005
+anchor     functions/ungetwc.html#DESCRIPTION
+class      required
+says       As ungetwc seek-discards, with fsetpos() to a position saved by
+           fgetpos() at the start, and with fseeko(f, 0, SEEK_SET) in place of
+           fseek().
+test       t/005-fsetpos-discards.c
+
+assertion  XSH.ungetwc.006
+anchor     functions/ungetwc.html#DESCRIPTION
+anchor     functions/ungetwc.html#RATIONALE
+class      required
+says       On a seekable input stream reading "abc", after fgetwc() and a
+           successful ungetwc(L'Z'), a successful fflush(f) discards the pushed-
+           back character: the next fgetwc() returns the character that follows
+           the one read first, L'b'.
+note       After fflush() the stream is positioned where the application's last
+           read left it (after 'a'), so L'b' follows.
+test       t/006-fflush-discards.c
+
+assertion  XSH.ungetwc.007
+anchor     functions/ungetwc.html#DESCRIPTION
+anchor     functions/ungetwc.html#RETURN VALUE
+class      required
+says       On a stream reading "abc" after one fgetwc(), ungetwc(WEOF, f) returns
+           WEOF and the stream is unchanged: the next fgetwc() returns L'b'.
+test       t/007-weof-fails.c
+
+assertion  XSH.ungetwc.008
+anchor     functions/ungetwc.html#DESCRIPTION
+class      required
+says       On a stream reading "a" read to end of file (feof() true), a
+           successful ungetwc(L'Z') makes feof() false; the next fgetwc() returns
+           L'Z' and the one after returns WEOF.
+test       t/008-clears-eof.c
+
+assertion  XSH.ungetwc.009
+anchor     functions/ungetwc.html#DESCRIPTION
+class      required
+since      2024
+says       On a stream reading "abc", after two fgetwc() (ftell() is 2) and a
+           successful ungetwc(L'b'), once the pushed-back character has been read
+           again, ftell() is 2 again.
+test       t/009-position.c

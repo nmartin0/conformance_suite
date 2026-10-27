@@ -1,0 +1,40 @@
+# XSH wcscmp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only the sign of a result is judged. Expected signs are computed from the
+# values of the portable-character literals used, never from a fixed numeric
+# ordering of letters.
+
+assertion  XSH.wcscmp.001
+anchor     functions/wcscmp.html#DESCRIPTION
+anchor     functions/wcscmp.html#RETURN VALUE
+class      required
+says       wcscmp() returns 0 for two distinct arrays with the same content
+           ("abc", and the empty string).
+test       t/001-equal.c
+
+assertion  XSH.wcscmp.002
+anchor     functions/wcscmp.html#DESCRIPTION
+anchor     functions/wcscmp.html#RETURN VALUE
+class      required
+says       The sign is that of the difference of the first differing codes:
+           "abc" with "abd" and the reverse, "ab" with "abc" and the
+           reverse, "" with "a", "a" with "B" (by the codes of the two
+           characters), and "abz" with "acA" (the first difference decides,
+           not the later ones).
+test       t/002-sign.c
+
+assertion  XSH.wcscmp.003
+anchor     functions/wcscmp.html#DESCRIPTION
+class      required
+says       Codes after a common null code are not compared: {a, b, null, x}
+           and {a, b, null, y} give 0.
+test       t/003-past-null.c
+
+assertion  XSH.wcscmp.004
+anchor     functions/wcscmp.html#DESCRIPTION
+class      required
+since      2024
+says       wcscmp() leaves errno unchanged on valid input, both when it is 0
+           and when it is EDOM.
+test       t/004-errno-kept.c

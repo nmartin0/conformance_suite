@@ -1,0 +1,60 @@
+# XSH wcstombs()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+
+assertion  XSH.wcstombs.001
+anchor     functions/wcstombs.html#DESCRIPTION
+anchor     functions/wcstombs.html#RETURN VALUE
+class      required
+says       wcstombs(s, L"abc", 8) returns 3 and stores "abc" followed
+           by a null byte.
+test       t/001-basic.c
+
+assertion  XSH.wcstombs.002
+anchor     functions/wcstombs.html#DESCRIPTION
+anchor     functions/wcstombs.html#RETURN VALUE
+class      required
+says       wcstombs() modifies no byte beyond the n-th: with n 2 on
+           L"abcd" it returns 2 and the third byte is unchanged; with n
+           3 on L"abc" it returns 3 and stores no terminating null
+           byte.
+test       t/002-limit-n.c
+
+assertion  XSH.wcstombs.003
+anchor     functions/wcstombs.html#DESCRIPTION
+class      required
+says       wcstombs() on L"ab" followed by a null wide character and
+           more characters returns 2 and stores nothing for the
+           characters after it.
+test       t/003-stops-at-null.c
+
+assertion  XSH.wcstombs.004
+anchor     functions/wcstombs.html#DESCRIPTION
+anchor     functions/wcstombs.html#RETURN VALUE
+class      required
+says       wcstombs(NULL, L"abcd", n) returns 4 for n 1 and for n 100.
+test       t/004-null-s.c
+
+assertion  XSH.wcstombs.005
+anchor     functions/wcstombs.html#RETURN VALUE
+anchor     functions/wcstombs.html#ERRORS
+class      required
+says       Over the codes 1 to 257 in the POSIX locale (which has 256
+           characters) a one-code wide string converts to 1 byte or
+           fails with (size_t)-1 and EILSEQ, and at least one fails; a
+           string with such a code between two valid ones also fails
+           with (size_t)-1 and EILSEQ.
+test       t/005-invalid-code.c
+
+assertion  XSH.wcstombs.006
+anchor     functions/wcstombs.html#DESCRIPTION
+anchor     functions/wcstombs.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale wcstombs() of the codes for "a", a two-
+           byte and a three-byte character returns 6 and stores the
+           same 6 bytes and a null byte; with n 5 it returns 3 and
+           stores only whole characters; with n 2 it returns 1; with a
+           null s it returns 6.
+test       t/006-utf8.c

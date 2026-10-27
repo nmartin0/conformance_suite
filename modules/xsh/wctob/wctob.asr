@@ -1,0 +1,48 @@
+# XSH wctob()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+
+assertion  XSH.wctob.001
+anchor     functions/wctob.html#DESCRIPTION
+anchor     functions/wctob.html#RETURN VALUE
+class      required
+says       In the POSIX locale, for every byte value b from 0 to 255,
+           wctob() of the wide character btowc(b) returns b.
+test       t/001-roundtrip.c
+
+assertion  XSH.wctob.002
+anchor     functions/wctob.html#RETURN VALUE
+class      required
+says       In the POSIX locale wctob() of each portable-character-set
+           member returns the member's character value, and wctob(0)
+           returns 0.
+test       t/002-portable.c
+
+assertion  XSH.wctob.003
+anchor     functions/wctob.html#RETURN VALUE
+class      required
+says       wctob(WEOF) returns EOF; over the 257 codes 0 to 256 in the
+           POSIX locale (which has 256 characters) every result is EOF
+           or a value from 0 to 255, and at least one is EOF.
+note       A code with no character of length one gives EOF; at most
+           256 of 257 distinct codes can be characters.
+test       t/003-noncorresponding.c
+
+assertion  XSH.wctob.004
+anchor     functions/wctob.html#DESCRIPTION
+class      required
+since      2024
+says       wctob() leaves errno unchanged for valid input (errno set to
+           0 and to EDOM beforehand; arguments L'A', the null code and
+           the code of byte 0xE1).
+test       t/004-errno.c
+
+assertion  XSH.wctob.005
+anchor     functions/wctob.html#DESCRIPTION
+anchor     functions/wctob.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale wctob(L'A') returns the value of 'A', and
+           wctob() of the code of a two-byte character returns EOF.
+test       t/005-utf8.c

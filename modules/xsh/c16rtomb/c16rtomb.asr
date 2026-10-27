@@ -1,0 +1,101 @@
+# XSH c16rtomb() and c32rtomb()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+# Tests that need the codes to be Unicode are NOTINUSE unless <uchar.h> announces UTF-16 and UTF-32.
+
+assertion  XSH.c16rtomb.001
+anchor     functions/c16rtomb.html#DESCRIPTION
+anchor     functions/c16rtomb.html#RETURN VALUE
+class      required
+since      2024
+says       c32rtomb() and c16rtomb() of the null code return 1, store a
+           null byte and leave the initial state; the same with a null
+           ps.
+test       t/001-nul.c
+
+assertion  XSH.c16rtomb.002
+anchor     functions/c16rtomb.html#DESCRIPTION
+anchor     functions/c16rtomb.html#RETURN VALUE
+class      required
+since      2024
+says       With the Unicode macros defined and an ASCII-based character
+           set, in the POSIX locale c32rtomb() and c16rtomb() of the
+           code of each portable-character-set member return 1 and
+           store that member's character value.
+test       t/002-portable.c
+
+assertion  XSH.c16rtomb.003
+anchor     functions/c16rtomb.html#DESCRIPTION
+class      required
+since      2024
+says       c32rtomb(NULL, 0x41, &st) and c16rtomb(NULL, 0x41, &st) from
+           an initial state return 1 and leave the initial state.
+test       t/003-null-s.c
+
+assertion  XSH.c16rtomb.004
+anchor     functions/c16rtomb.html#DESCRIPTION
+anchor     functions/c16rtomb.html#RETURN VALUE
+anchor     functions/c16rtomb.html#ERRORS
+class      required
+since      2024
+says       Over the codes 0 to 256 in the POSIX locale (256 characters)
+           c32rtomb() and c16rtomb() each return 1 or (size_t)-1; each
+           failure comes with errno EILSEQ; each function fails for at
+           least one code.
+test       t/004-invalid.c
+
+assertion  XSH.c16rtomb.005
+anchor     functions/c16rtomb.html#DESCRIPTION
+anchor     functions/c16rtomb.html#RETURN VALUE
+class      required
+since      2024
+says       In a UTF-8 locale c32rtomb() of U+00E9, U+20AC and U+1F600
+           returns 2, 3 and 4 and stores their UTF-8 forms.
+test       t/005-utf8-c32.c
+
+assertion  XSH.c16rtomb.006
+anchor     functions/c16rtomb.html#DESCRIPTION
+anchor     functions/c16rtomb.html#RETURN VALUE
+class      required
+since      2024
+says       In a UTF-8 locale c16rtomb() of U+00E9 and U+20AC returns 2
+           and 3 and stores their UTF-8 forms.
+test       t/006-utf8-c16.c
+
+assertion  XSH.c16rtomb.007
+anchor     functions/c16rtomb.html#DESCRIPTION
+anchor     functions/c16rtomb.html#RETURN VALUE
+class      disputed
+since      2024
+says       In a UTF-8 locale, in one state, c16rtomb() of 0xD83D and
+           then of 0xDE00 fails neither time, returns 4 bytes in all,
+           and the stored bytes in order are the UTF-8 form of U+1F600.
+note       disputed (Q-120): the page does not say how a pair of 16-bit
+           codes is handled, nor that char16_t holds UTF-16, nor how
+           many bytes each of the two calls returns; only the total is
+           checked, on the reading that the first half is not an error
+           (Q-120).
+test       t/007-utf16-pair.c
+
+assertion  XSH.c16rtomb.008
+anchor     functions/c16rtomb.html#RETURN VALUE
+anchor     functions/c16rtomb.html#ERRORS
+class      required
+since      2024
+says       In a UTF-8 locale c32rtomb() of 0xD800 and of 0x110000 and
+           c16rtomb() of a lone low surrogate 0xDC00 (initial state)
+           return (size_t)-1 with errno EILSEQ.
+test       t/008-utf8-invalid.c
+
+assertion  XSH.c16rtomb.009
+anchor     functions/c16rtomb.html#DESCRIPTION
+class      disputed
+since      2024
+says       A successful c32rtomb() or c16rtomb() (of the null code)
+           leaves errno unchanged.
+note       disputed (Q-121): the errno-unchanged sentence on this page
+           names mbrtoc16() and not the functions it documents; read as
+           a slip for c16rtomb() and c32rtomb() (Q-121).
+test       t/009-errno-kept.c

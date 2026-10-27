@@ -1,0 +1,205 @@
+# XSH fwprintf(), swprintf(), wprintf()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fwprintf.001
+anchor     functions/fwprintf.html#DESCRIPTION
+anchor     functions/fwprintf.html#RETURN VALUE
+class      required
+says       Through fwprintf() to a file, swprintf() and wprintf() to a file, the
+           format L"abc%d%%" with 42 produces "abc42%" and returns 6; an empty
+           format produces nothing and returns 0.
+test       t/001-ordinary.c
+
+assertion  XSH.fwprintf.002
+anchor     functions/fwprintf.html#DESCRIPTION
+class      required
+says       The same three functions give "[hey]" and 5 for L"[%s]" with "hey",
+           and "[x]" and 3 for L"[%c]" with 'x'.
+test       t/002-narrow-args.c
+
+assertion  XSH.fwprintf.003
+anchor     functions/fwprintf.html#DESCRIPTION
+class      required
+says       The same three functions give "[hey]" and 5 for L"[%ls]" with L"hey",
+           "[x]" and 3 for L"[%lc]" with L'x'.
+test       t/003-wide-args.c
+
+assertion  XSH.fwprintf.004
+anchor     functions/fwprintf.html#DESCRIPTION
+class      required
+says       The same three functions give "ab" for L"%.2ls" with L"abcd", "abc"
+           for L"%.3s" with "abcdef", "" for L"%.0ls" with L"abc", and "abcd" for
+           L"%.9ls" with L"abcd".
+test       t/004-precision.c
+
+assertion  XSH.fwprintf.005
+anchor     functions/fwprintf.html#DESCRIPTION
+class      required
+says       The same three functions give "[   ab]" for L"[%5ls]" with L"ab", "[ab
+           ]" for L"[%-5ls]", "[  x]" for L"[%3lc]" with L'x', "[  ab]" for
+           L"[%4s]" with "ab", "[abc]" for L"[%1ls]" with L"abc" (no truncation),
+           and "[ab   ]" for L"[%*ls]" with the width -5.
+test       t/005-width.c
+
+assertion  XSH.fwprintf.006
+anchor     functions/fwprintf.html#DESCRIPTION
+class      required
+says       The same three functions store 3 through L"abc%n" and 2 through
+           L"%ls%n" with L"ab" in an int, and the output is as the text without
+           the %n.
+test       t/006-count-n.c
+
+assertion  XSH.fwprintf.007
+anchor     functions/fwprintf.html#DESCRIPTION
+anchor     functions/fwprintf.html#EXAMPLES
+class      required
+since      2008
+says       The same three functions give "b a" for L"%2$ls %1$ls" with L"a",
+           L"b", "7 7" for L"%1$d %1$d" with 7, and "5%6" for L"%1$d%%%2$d"
+           with 5 and 6 (%% mixed with numbered conversions).
+test       t/007-numbered.c
+
+assertion  XSH.fwprintf.008
+anchor     functions/fwprintf.html#DESCRIPTION
+class      required
+says       L"x" with two extra int arguments produces "x" and returns 1 (through
+           all three functions).
+test       t/008-excess-args.c
+
+assertion  XSH.fwprintf.009
+anchor     functions/fwprintf.html#DESCRIPTION
+class      required
+says       In the POSIX locale L"%.2f" with 1.5 produces "1.50" (radix character
+           '.') through all three functions.
+test       t/009-radix.c
+
+assertion  XSH.fwprintf.010
+anchor     functions/fwprintf.html#DESCRIPTION
+anchor     functions/fwprintf.html#RETURN VALUE
+class      required
+says       fwprintf(f, L"a%lcb", (wint_t)0) returns 3 and the file holds the
+           bytes 'a', 0, 'b'.
+note       Only fwprintf(): the count for swprintf() with an embedded null is not
+           at issue but the array cannot show the end.
+test       t/010-null-char.c
+
+assertion  XSH.fwprintf.011
+anchor     functions/fwprintf.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       After a successful fwprintf() on a new stream, fwide(f, 0) is
+           positive; after wprintf() on stdout (descriptor 1 on a file),
+           fwide(stdout, 0) is positive.
+test       t/011-orientation.c
+
+assertion  XSH.fwprintf.012
+anchor     functions/fwprintf.html#DESCRIPTION
+anchor     functions/fwprintf.html#RETURN VALUE
+class      required
+says       swprintf(buf, 10, L"ab%d", 5) returns 3, buf holds L"ab5" and a null
+           wide character, and the elements after it are unchanged.
+test       t/012-sw-terminator.c
+
+assertion  XSH.fwprintf.013
+anchor     functions/fwprintf.html#DESCRIPTION
+anchor     functions/fwprintf.html#RETURN VALUE
+anchor     functions/fwprintf.html#ERRORS/EOVERFLOW
+class      required
+says       swprintf(buf, 4, L"abcdef") returns a negative value, sets errno to
+           EOVERFLOW, writes no element beyond the fourth, and a null wide
+           character is among the first four.
+test       t/013-sw-overflow.c
+
+assertion  XSH.fwprintf.014
+anchor     functions/fwprintf.html#DESCRIPTION
+anchor     functions/fwprintf.html#RETURN VALUE
+class      required
+says       swprintf(buf, 0, L"abc") returns a negative value and writes nothing
+           into buf.
+test       t/014-sw-zero.c
+
+assertion  XSH.fwprintf.015
+anchor     functions/fwprintf.html#RETURN VALUE
+class      required
+says       swprintf(buf, 4, L"abc") returns 3 with buf holding L"abc";
+           swprintf(buf, 3, L"abc") returns a negative value.
+test       t/015-sw-exact.c
+
+assertion  XSH.fwprintf.016
+anchor     functions/fwprintf.html#ERRORS
+anchor     functions/fputwc.html#ERRORS/EBADF
+anchor     functions/fwprintf.html#RETURN VALUE
+class      required
+says       On a stream opened "w" whose descriptor was closed (unbuffered where
+           allowed, otherwise printed until the buffer needs flushing), the
+           failing fwprintf() returns a negative value and sets errno to EBADF.
+test       t/016-ebadf-closed.c
+
+assertion  XSH.fwprintf.017
+anchor     functions/fwprintf.html#ERRORS
+anchor     functions/fputwc.html#ERRORS/EBADF
+anchor     functions/fwprintf.html#RETURN VALUE
+class      required
+says       With descriptor 1 closed and stdout unbuffered where allowed
+           (otherwise printed until the buffer needs flushing), the failing
+           wprintf() returns a negative value and sets errno to EBADF.
+test       t/017-wprintf-ebadf.c
+
+assertion  XSH.fwprintf.018
+anchor     functions/fwprintf.html#ERRORS/EILSEQ
+anchor     functions/fwprintf.html#RETURN VALUE
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       In a UTF-8 locale, L"%lc" and L"%ls" with a wide-character code that
+           wcrtomb() rejects make fwprintf() to a stream (a new stream for each)
+           return a negative value with errno EILSEQ; L"%s" with the byte 0xff
+           (not a valid multibyte character) makes swprintf() return a negative
+           value and fwprintf() return a negative value with errno EILSEQ.
+note       swprintf() is not tested with a bad wide code: a wide argument
+           stored into a wide array needs no conversion, so the text gives no
+           reason to expect a failure. The %s case needs the multibyte to wide
+           conversion, an encoding error, for which the page requires failure.
+test       t/018-eilseq.c
+
+assertion  XSH.fwprintf.019
+anchor     functions/fwprintf.html#DESCRIPTION
+anchor     functions/fwprintf.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale, with the wide character e that mbrtowc() gives for
+           the bytes 0xc3 0xa9, fwprintf() of L"%s" with those two bytes, of
+           L"%ls" with {e} and of L"%lc" with e each return 1 and write those two
+           bytes; swprintf() of the first and third fills a single element equal
+           to e.
+test       t/019-multibyte.c
+
+assertion  XSH.fwprintf.020
+anchor     functions/fwprintf.html#DESCRIPTION
+class      required
+says       In a UTF-8 locale, L"[%3ls]" with {e} gives two spaces then e (5 wide
+           characters), L"[%-3ls]" e then two spaces, and L".%.1s" with the bytes
+           0xc3 0xa9 'a' gives e alone (precision counted in wide characters, not
+           bytes), through swprintf() and fwprintf().
+test       t/020-multibyte-width.c
+
+assertion  XSH.fwprintf.021
+anchor     functions/fwprintf.html#DESCRIPTION
+class      required
+says       The same three functions give the stated text for: d, i, u, o, x and
+           X with the flags + space - 0 and #, a width, a precision (also
+           from * and a negative * precision), the precision 0 of the value 0,
+           the 0 flag ignored with a precision or with -; hh, h, l, ll, j, z
+           and t on integers (hh and h on unsigned values, converted before
+           printing); f, e, E, g, G with a precision, # and 0 flags, and l and
+           L on floating arguments.
+note       Cases avoid rounding choices, infinity, NaN, grouping and %a, whose
+           results are implementation-defined or unspecified; those stay in
+           the fprintf module.
+test       t/021-numeric.c
+
+assertion  XSH.fwprintf.022
+anchor     functions/fwprintf.html#DESCRIPTION
+class      conditional
+when       XSI
+says       The same three functions treat C as lc and S as ls, width and
+           precision included, in the POSIX locale.
+test       t/022-xsi-C-S.c

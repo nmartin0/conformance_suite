@@ -1,0 +1,73 @@
+# XSH wcstok()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Strings are in writable arrays; returned pointers are checked against the
+# array (a token is a pointer into the string), not only by content.
+
+assertion  XSH.wcstok.001
+anchor     functions/wcstok.html#DESCRIPTION
+anchor     functions/wcstok.html#RETURN VALUE
+class      required
+says       On "  ab,,cd e  " with separators " ," wcstok() returns s+2
+           ("ab"), then with a null first argument s+6 ("cd") and s+9 ("e"),
+           then a null pointer twice.
+test       t/001-sequence.c
+
+assertion  XSH.wcstok.002
+anchor     functions/wcstok.html#DESCRIPTION
+class      required
+says       After that sequence the only codes of the array that changed are
+           the separator ending each token (s[4], s[8] and s[10]), each now
+           a null code; the skipped separators are left alone.
+note       The text says which code each call overwrites; no other change to
+           s is among the effects it describes.
+test       t/002-only-terminators.c
+
+assertion  XSH.wcstok.003
+anchor     functions/wcstok.html#DESCRIPTION
+anchor     functions/wcstok.html#RETURN VALUE
+class      required
+says       On "x;y" with ";" wcstok() returns s, then s+2 ("y", the token
+           running to the end), then a null pointer twice; on "" and on
+           ";;;" the first call returns a null pointer.
+test       t/003-end.c
+
+assertion  XSH.wcstok.004
+anchor     functions/wcstok.html#DESCRIPTION
+class      required
+says       The separators may change between calls: on "a,b c,d" with ",", "
+           ", "," and "," wcstok() returns s, s+2, s+4, s+6, then a null
+           pointer.
+test       t/004-changing-sep.c
+
+assertion  XSH.wcstok.005
+anchor     functions/wcstok.html#DESCRIPTION
+class      required
+says       With an empty separator string, wcstok() on " ab c" returns s
+           (the whole string, unchanged), then a null pointer.
+test       t/005-empty-sep.c
+
+assertion  XSH.wcstok.006
+anchor     functions/wcstok.html#DESCRIPTION
+class      required
+says       Two strings scanned alternately, each with its own save pointer
+           ("a b c" with " ", "1,2,3" with ","), each give their own tokens
+           in order, then null pointers.
+test       t/006-two-states.c
+
+assertion  XSH.wcstok.007
+anchor     functions/wcstok.html#DESCRIPTION
+class      required
+says       A call with a non-null first argument ignores the pointer its
+           save-pointer argument points to: preset to another string, the
+           scan of "p,q" with "," still returns s, s+2, then a null pointer.
+test       t/007-state-ignored.c
+
+assertion  XSH.wcstok.008
+anchor     functions/wcstok.html#DESCRIPTION
+class      required
+since      2024
+says       wcstok() leaves errno unchanged on every call of a sequence,
+           including the call that returns a null pointer, both when errno
+           is 0 and when it is EDOM.
+test       t/008-errno-kept.c

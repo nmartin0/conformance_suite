@@ -1,0 +1,79 @@
+# XSH mbrlen()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+# States are mbstate_t objects of the test, set to all zero bytes (an initial state).
+
+assertion  XSH.mbrlen.001
+anchor     functions/mbrlen.html#DESCRIPTION
+anchor     functions/mbrlen.html#RETURN VALUE
+class      required
+says       In the POSIX locale mbrlen() of the null byte returns 0, of
+           each byte 1 to 255 returns 1, and of "AB" with n 2 returns
+           1.
+test       t/001-posix-bytes.c
+
+assertion  XSH.mbrlen.002
+anchor     functions/mbrlen.html#DESCRIPTION
+anchor     functions/mbrlen.html#RETURN VALUE
+class      required
+says       In the POSIX locale mbrlen() with a null ps returns 1 for
+           "A" and 0 for the null byte.
+test       t/002-null-ps.c
+
+assertion  XSH.mbrlen.003
+anchor     functions/mbrlen.html#DESCRIPTION
+anchor     functions/mbrlen.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale, from the initial state, mbrlen() returns
+           1, 2 and 3 for "A", a two-byte and a three-byte character
+           with n 4.
+test       t/003-utf8-lengths.c
+
+assertion  XSH.mbrlen.004
+anchor     functions/mbrlen.html#DESCRIPTION
+anchor     functions/mbrlen.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale mbrlen() returns (size_t)-2 for the bytes
+           of a character that stop short, and a later call with the
+           next byte(s), same state, returns the number of bytes it was
+           given when they complete the character (1 after one byte of
+           a two-byte character; 1 after two single-byte calls on a
+           three-byte one; 1 after two bytes given together).
+test       t/004-utf8-incomplete.c
+
+assertion  XSH.mbrlen.005
+anchor     functions/mbrlen.html#RETURN VALUE
+anchor     functions/mbrlen.html#ERRORS
+class      required
+says       In a UTF-8 locale mbrlen() returns (size_t)-1 with errno
+           EILSEQ for a lone continuation byte and for a lead byte
+           followed by a non-continuation byte.
+test       t/005-utf8-invalid.c
+
+assertion  XSH.mbrlen.006
+anchor     functions/mbrlen.html#DESCRIPTION
+class      required
+says       A successful mbrlen() (for "A" and for the null byte) leaves
+           errno unchanged.
+note       The sentence is stated for success; results of (size_t)-2
+           are not used.
+test       t/006-errno-kept.c
+
+assertion  XSH.mbrlen.007
+anchor     functions/mbrlen.html#DESCRIPTION
+class      required
+says       In a UTF-8 locale mbrlen() with a null ps keeps its own
+           state between calls: the first byte of a two-byte character
+           gives (size_t)-2 and the second then gives 1.
+test       t/007-null-ps-state.c
+
+assertion  XSH.mbrlen.008
+anchor     functions/mbrlen.html#DESCRIPTION
+class      required
+says       In a UTF-8 locale two mbstate_t objects are independent:
+           with the first holding an unfinished two-byte character, a
+           three-byte character converted through the second returns 3,
+           and the first then completes its character with 1.
+test       t/008-separate-states.c

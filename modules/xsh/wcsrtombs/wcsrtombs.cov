@@ -1,0 +1,28 @@
+# wcsrtombs.cov - every requirement unit on functions/wcsrtombs.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:349b778d     none  alignment with ISO C (a statement about the page)
+DESCRIPTION:5ae5401f     none  alignment with ISO C (a statement about the page)
+DESCRIPTION:4e137535     none  alignment with ISO C (a statement about the page)
+DESCRIPTION:b40c0018     XSH.wcsrtombs.001 XSH.wcsrtombs.002 XSH.wcsrtombs.008
+DESCRIPTION:eddb0ddc     XSH.wcsrtombs.001 XSH.wcsrtombs.004
+DESCRIPTION:1286416d     XSH.wcsrtombs.001
+DESCRIPTION:04e9e278     XSH.wcsrtombs.002 XSH.wcsrtombs.005 XSH.wcsrtombs.008
+DESCRIPTION:3d000a21     XSH.wcsrtombs.005
+DESCRIPTION:580614fb     XSH.wcsrtombs.002 XSH.wcsrtombs.008
+DESCRIPTION:90650068     partial XSH.wcsrtombs.001 XSH.wcsrtombs.008  # equivalence with wcrtomb() checked through results
+DESCRIPTION:9efdf3cc     XSH.wcsrtombs.001 XSH.wcsrtombs.002 XSH.wcsrtombs.005 XSH.wcsrtombs.008
+DESCRIPTION:f0d4a126     XSH.wcsrtombs.001
+DESCRIPTION:90256868     partial XSH.wcsrtombs.004  # null ps converts; start-up value of the internal state not observable
+DESCRIPTION:6dbcc3a6     XSH.wcsrtombs.002
+DESCRIPTION:cc96eb29     untestable  freedom from data races cannot be shown by a finite run
+DESCRIPTION:dd302a2d     XSH.wcsrtombs.007 XSH.wcsrtombs.009
+DESCRIPTION:6949538b     untestable  freedom from data races cannot be shown by a finite run
+DESCRIPTION:c0052dc0     XSH.wcsrtombs.006
+DESCRIPTION:73e6f143     XSH.wcsrtombs.008
+DESCRIPTION:47004995     untestable  whether the implementation calls the function internally cannot be observed by a program
+RETURN_VALUE:e392b05e    XSH.wcsrtombs.005
+RETURN_VALUE:6186e66f    partial XSH.wcsrtombs.005  # errno only; the state after an error is undefined
+RETURN_VALUE:4932ba31    XSH.wcsrtombs.001 XSH.wcsrtombs.002 XSH.wcsrtombs.007 XSH.wcsrtombs.008 XSH.wcsrtombs.009
+ERRORS:3d19b7f9          XSH.wcsrtombs.005
+ERRORS:32753ad4          untestable  an invalid conversion state cannot be built portably, and the error is optional

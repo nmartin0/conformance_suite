@@ -1,0 +1,48 @@
+# XSH wcsncmp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Arrays that end where an inaccessible (PROT_NONE) page begins show any code examined past the allowed ones (the test is killed: FAIL).
+# Only the sign of a result is judged; expected signs are computed from the
+# values of the portable-character literals used.
+
+assertion  XSH.wcsncmp.001
+anchor     functions/wcsncmp.html#DESCRIPTION
+anchor     functions/wcsncmp.html#RETURN VALUE
+class      required
+says       Not more than n codes are compared: "abcd" with "abXY" gives 0
+           for n 2, the sign of the difference of c and X for n 3, and 0 for
+           n 0.
+test       t/001-n-bound.c
+
+assertion  XSH.wcsncmp.002
+anchor     functions/wcsncmp.html#DESCRIPTION
+anchor     functions/wcsncmp.html#RETURN VALUE
+class      required
+says       {a, b, null, x} with {a, b, null, y} gives 0 for n 4; "ab" with
+           "abc" is negative and "abc" with "ab" positive for n 5.
+test       t/002-stops-at-null.c
+
+assertion  XSH.wcsncmp.003
+anchor     functions/wcsncmp.html#DESCRIPTION
+anchor     functions/wcsncmp.html#RETURN VALUE
+class      required
+says       The first differing pair decides the sign: "abz" with "acA" for n
+           3, and the reverse.
+test       t/003-sign.c
+
+assertion  XSH.wcsncmp.004
+anchor     functions/wcsncmp.html#DESCRIPTION
+class      required
+says       For a 3-code array without a null code ending at an inaccessible
+           page and an ordinary array with the same first codes, wcsncmp()
+           with n 3 (and with n 2 on the last two codes) returns 0 in either
+           argument order, without touching the page.
+test       t/004-no-overread.c
+
+assertion  XSH.wcsncmp.005
+anchor     functions/wcsncmp.html#DESCRIPTION
+class      required
+since      2024
+says       wcsncmp() leaves errno unchanged on valid input, both when it is
+           0 and when it is EDOM.
+test       t/005-errno-kept.c

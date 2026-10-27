@@ -1,0 +1,82 @@
+# XSH wcslcpy() and wcslcat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sources are in arrays and destinations are filled with L'X' first, so that codes written past the terminator show.
+# Calls with a destination string at least as long as the size are not made:
+# the text does not define them.
+
+assertion  XSH.wcslcat.001
+anchor     functions/wcslcat.html#DESCRIPTION
+anchor     functions/wcslcat.html#RETURN VALUE
+class      required
+since      2024
+says       wcslcpy() of "abc" into a destination of size 10 copies the
+           string and its null, changes nothing after it, and returns 3.
+test       t/001-lcpy-fits.c
+
+assertion  XSH.wcslcat.002
+anchor     functions/wcslcat.html#DESCRIPTION
+anchor     functions/wcslcat.html#RETURN VALUE
+class      required
+since      2024
+says       wcslcpy() with a destination size smaller than the string stores
+           size-1 codes and a null, changes nothing after, and returns the
+           full source length: "abcdef" with size 4 gives "abc" and 6;
+           "abcd" with size 4 gives "abc" and 4; "abc" with size 4 gives
+           "abc" and 3.
+test       t/002-lcpy-truncates.c
+
+assertion  XSH.wcslcat.003
+anchor     functions/wcslcat.html#DESCRIPTION
+anchor     functions/wcslcat.html#RETURN VALUE
+class      required
+since      2024
+says       wcslcpy() with size 0 writes nothing and returns the source
+           length (6 for "abcdef").
+test       t/003-lcpy-size0.c
+
+assertion  XSH.wcslcat.004
+anchor     functions/wcslcat.html#DESCRIPTION
+class      required
+since      2024
+says       wcslcpy() of the array {a, b, null, c} into a destination of size
+           8 returns 2, stores "ab" and a null, and changes nothing after
+           them (no padding, nothing after the source null copied).
+test       t/004-lcpy-stops-at-null.c
+
+assertion  XSH.wcslcat.005
+anchor     functions/wcslcat.html#DESCRIPTION
+anchor     functions/wcslcat.html#RETURN VALUE
+class      required
+since      2024
+says       wcslcat() of the array {c, d, null, e} onto "ab" in a destination
+           of size 10 gives "abcd", returns 4, and changes nothing after the
+           new null.
+test       t/005-lcat-fits.c
+
+assertion  XSH.wcslcat.006
+anchor     functions/wcslcat.html#DESCRIPTION
+anchor     functions/wcslcat.html#RETURN VALUE
+class      required
+since      2024
+says       wcslcat() of "cdefgh" onto "ab" with size 6 appends only "cde",
+           ends the result with a null at index 5, and returns 8.
+test       t/006-lcat-truncates.c
+
+assertion  XSH.wcslcat.007
+anchor     functions/wcslcat.html#DESCRIPTION
+anchor     functions/wcslcat.html#RETURN VALUE
+class      required
+since      2024
+says       wcslcat() of "xyz" onto "abc" with size 4 (the destination string
+           just fills the size) appends nothing, leaves "abc" with its null,
+           and returns 6.
+test       t/007-lcat-full.c
+
+assertion  XSH.wcslcat.008
+anchor     functions/wcslcat.html#DESCRIPTION
+class      required
+since      2024
+says       wcslcpy() and wcslcat() leave errno unchanged on valid input,
+           both when it is 0 and when it is EDOM.
+test       t/008-errno-kept.c

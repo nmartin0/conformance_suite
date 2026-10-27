@@ -1,0 +1,68 @@
+# XSH vfwprintf(), vswprintf(), vwprintf()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.vfwprintf.001
+anchor     functions/vfwprintf.html#DESCRIPTION
+anchor     functions/fwprintf.html#DESCRIPTION
+class      required
+says       Through vfwprintf() to a file, vswprintf() and vwprintf() to a file,
+           L"%ls|%s|%c|%lc|%d%n" with L"w", "n", 'c', L'l', 12 and an int for %n
+           gives "w|n|c|l|12" and 10, with the int 10.
+test       t/001-equivalence.c
+
+assertion  XSH.vfwprintf.002
+anchor     functions/vfwprintf.html#DESCRIPTION
+anchor     functions/fwprintf.html#DESCRIPTION
+class      required
+says       The same three functions give "b a" for L"%2$ls %1$ls" with L"a",
+           L"b".
+test       t/002-numbered.c
+
+assertion  XSH.vfwprintf.003
+anchor     functions/vfwprintf.html#DESCRIPTION
+anchor     functions/fwprintf.html#RETURN VALUE
+class      required
+says       vswprintf(buf, 10, L"ab%d", 5) returns 3, buf holds L"ab5" and a null
+           wide character, and the elements after it are unchanged; with n 4 and
+           the output L"abc" it returns 3, with n 3 it returns a negative value.
+test       t/003-sw-terminator.c
+
+assertion  XSH.vfwprintf.004
+anchor     functions/vfwprintf.html#DESCRIPTION
+anchor     functions/fwprintf.html#RETURN VALUE
+anchor     functions/fwprintf.html#ERRORS/EOVERFLOW
+class      required
+says       vswprintf(buf, 4, L"abcdef") returns a negative value, sets errno to
+           EOVERFLOW, writes no element beyond the fourth, and a null wide
+           character is among the first four; with n 0 it returns a negative
+           value and writes nothing.
+test       t/004-sw-overflow.c
+
+assertion  XSH.vfwprintf.005
+anchor     functions/vfwprintf.html#ERRORS
+anchor     functions/fwprintf.html#ERRORS
+anchor     functions/fputwc.html#ERRORS/EBADF
+class      required
+says       On a stream opened "w" whose descriptor was closed (unbuffered where
+           allowed, otherwise printed until the buffer needs flushing), the
+           failing vfwprintf() returns a negative value and sets errno to EBADF;
+           likewise vwprintf() with descriptor 1 closed (in the same process, on
+           a different stream).
+test       t/005-ebadf.c
+
+assertion  XSH.vfwprintf.006
+anchor     functions/vfwprintf.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       After a successful vfwprintf() on a new stream, fwide(f, 0) is
+           positive.
+test       t/006-orientation.c
+
+assertion  XSH.vfwprintf.007
+anchor     functions/vfwprintf.html#DESCRIPTION
+anchor     functions/fwprintf.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale, vfwprintf() of L"%s" with the bytes 0xc3 0xa9
+           returns 1 and writes those two bytes, and vswprintf() of it fills a
+           single element equal to the wide character mbrtowc() gives.
+test       t/007-multibyte.c

@@ -1,0 +1,50 @@
+# XSH wcsncpy() and wcpncpy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sources are in arrays and destinations are filled with L'X' first, so that codes written past the terminator show.
+
+assertion  XSH.wcsncpy.001
+anchor     functions/wcsncpy.html#DESCRIPTION
+anchor     functions/wcsncpy.html#RETURN VALUE
+class      required
+says       wcsncpy() of the array {a, b, null, c, d, null} with n 6 stores
+           a, b and four null codes (the codes after the source null are not
+           copied), changes nothing after the sixth, and returns the
+           destination pointer.
+test       t/001-pads.c
+
+assertion  XSH.wcsncpy.002
+anchor     functions/wcsncpy.html#DESCRIPTION
+anchor     functions/wcsncpy.html#RETURN VALUE
+class      required
+says       wcsncpy() of "abcdef" with n 3, and of "abc" with n 3, stores
+           exactly three codes and no terminator (index 3 is unchanged), and
+           returns the destination pointer.
+test       t/002-no-terminator.c
+
+assertion  XSH.wcsncpy.003
+anchor     functions/wcsncpy.html#DESCRIPTION
+anchor     functions/wcsncpy.html#RETURN VALUE
+class      required
+says       wcsncpy() with n 0 writes nothing and returns the destination
+           pointer.
+test       t/003-n-zero.c
+
+assertion  XSH.wcsncpy.004
+anchor     functions/wcsncpy.html#DESCRIPTION
+anchor     functions/wcsncpy.html#RETURN VALUE
+class      required
+since      2008
+says       wcpncpy() copies as wcsncpy() does and returns a pointer to the
+           first null code it wrote (index 2 for "ab" with n 6); where it
+           wrote no null it returns &ws1[n] ("abcdef" and "abc" with n 3
+           give index 3, n 0 gives index 0).
+test       t/004-wcpncpy.c
+
+assertion  XSH.wcsncpy.005
+anchor     functions/wcsncpy.html#DESCRIPTION
+class      required
+since      2024
+says       wcsncpy() and wcpncpy() leave errno unchanged on valid input,
+           both when it is 0 and when it is EDOM.
+test       t/005-errno-kept.c

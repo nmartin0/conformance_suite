@@ -1,0 +1,36 @@
+# XSH wcsrchr()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Strings are in arrays; returned pointers are compared with the array addresses.
+
+assertion  XSH.wcsrchr.001
+anchor     functions/wcsrchr.html#DESCRIPTION
+anchor     functions/wcsrchr.html#RETURN VALUE
+class      required
+says       On "abcabc" wcsrchr() returns ws+3 for L'a', ws+4 for L'b' and
+           ws+5 for L'c'; on "abc" it returns ws+1 for L'b'.
+test       t/001-last.c
+
+assertion  XSH.wcsrchr.002
+anchor     functions/wcsrchr.html#DESCRIPTION
+class      required
+says       The terminating null code is part of the string: wcsrchr(ws, 0)
+           returns ws+wcslen(ws), and ws for an empty string.
+test       t/002-null-is-part.c
+
+assertion  XSH.wcsrchr.003
+anchor     functions/wcsrchr.html#DESCRIPTION
+anchor     functions/wcsrchr.html#RETURN VALUE
+class      required
+says       wcsrchr() returns a null pointer when the code is absent: L'z' in
+           "abc", L'a' in an empty string, and L'c' in the array "ab", null,
+           "cd".
+test       t/003-absent.c
+
+assertion  XSH.wcsrchr.004
+anchor     functions/wcsrchr.html#DESCRIPTION
+class      required
+since      2024
+says       wcsrchr() leaves errno unchanged on valid input, both when it is
+           0 and when it is EDOM.
+test       t/004-errno-kept.c

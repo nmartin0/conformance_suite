@@ -1,0 +1,30 @@
+# XSH wcscat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sources are in arrays and destinations are filled with L'X' first, so that codes written past the terminator show.
+
+assertion  XSH.wcscat.001
+anchor     functions/wcscat.html#DESCRIPTION
+anchor     functions/wcscat.html#RETURN VALUE
+class      required
+says       wcscat() appends the source string, null code included, to the
+           end of the destination string: "ab" and "cd" give "abcd" with a
+           null at index 4, nothing after it is changed, and the call
+           returns the destination pointer.
+test       t/001-append.c
+
+assertion  XSH.wcscat.002
+anchor     functions/wcscat.html#DESCRIPTION
+class      required
+says       wcscat() of "xyz" onto an empty destination gives "xyz"; of an
+           empty string onto "ab" leaves "ab", with the null at index 2 and
+           nothing after it changed.
+test       t/002-empty.c
+
+assertion  XSH.wcscat.003
+anchor     functions/wcscat.html#DESCRIPTION
+class      required
+since      2024
+says       wcscat() leaves errno unchanged on valid input, both when it is 0
+           and when it is EDOM.
+test       t/003-errno-kept.c

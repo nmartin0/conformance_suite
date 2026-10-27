@@ -1,0 +1,58 @@
+# XSH wcwidth()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Run in the POSIX locale (setlocale(LC_ALL, "C")). Only portable characters
+# are used. A printable portable character has width one: XBD 3.75. Nothing is
+# asserted about the widths of other characters.
+
+assertion  XSH.wcwidth.001
+anchor     functions/wcwidth.html#DESCRIPTION
+anchor     functions/wcwidth.html#RETURN VALUE
+class      conditional
+when       XSI
+says       wcwidth(0) returns 0.
+test       t/001-null.c
+
+assertion  XSH.wcwidth.002
+anchor     functions/wcwidth.html#DESCRIPTION
+anchor     functions/wcwidth.html#RETURN VALUE
+anchor     basedefs/V1_chap03.html#3.75
+class      conditional
+when       XSI
+says       Each of the 95 printable portable characters (letters, digits,
+           punctuation and the space) has width 1.
+test       t/002-printable.c
+
+assertion  XSH.wcwidth.003
+anchor     functions/wcwidth.html#DESCRIPTION
+anchor     functions/wcwidth.html#RETURN VALUE
+class      disputed
+when       XSI
+says       The control characters alert, backspace, tab, newline, vertical-
+           tab, form-feed and carriage-return, which are not printable in
+           the POSIX locale, give -1.
+note       disputed (Q-117): RETURN VALUE gives -1 for a code that is not
+           printable, APPLICATION USAGE says the value for a non-printable
+           wide character is not specified; a FAIL is logged as INSPECT.
+test       t/003-non-printable.c
+
+assertion  XSH.wcwidth.004
+anchor     functions/wcwidth.html#DESCRIPTION
+anchor     functions/wcwidth.html#RETURN VALUE
+anchor     basedefs/V1_chap03.html#3.75
+class      conditional
+when       XSI
+says       In a UTF-8 locale (found with the core helper; not in use when
+           there is none) each printable portable character has width 1 and
+           the null code gives 0.
+test       t/004-utf8.c
+
+assertion  XSH.wcwidth.005
+anchor     functions/wcwidth.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       wcwidth() leaves errno unchanged on valid input, both when it is
+           0 and when it is EDOM, for a printable character, the null code
+           and a tab.
+test       t/005-errno-kept.c

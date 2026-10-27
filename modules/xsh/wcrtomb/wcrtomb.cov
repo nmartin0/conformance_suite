@@ -1,0 +1,22 @@
+# wcrtomb.cov - every requirement unit on functions/wcrtomb.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:1e79491b     XSH.wcrtomb.004
+DESCRIPTION:859c1c04     none  code fragment of the neighbouring unit
+DESCRIPTION:d6ee3aaf     none  code fragment of the neighbouring unit
+DESCRIPTION:11358044     none  explains the internal buffer
+DESCRIPTION:b4b0c6cf     XSH.wcrtomb.001 XSH.wcrtomb.002 XSH.wcrtomb.005
+DESCRIPTION:53b117c0     XSH.wcrtomb.003 XSH.wcrtomb.005
+DESCRIPTION:fe414cf5     partial XSH.wcrtomb.001 XSH.wcrtomb.005  # the null byte; shift sequences are not exercised
+DESCRIPTION:615d1ca7     XSH.wcrtomb.001 XSH.wcrtomb.004 XSH.wcrtomb.005
+DESCRIPTION:083f9e29     partial XSH.wcrtomb.001  # null ps converts; start-up value of the internal state not observable
+DESCRIPTION:6dbcc3a6     XSH.wcrtomb.001 XSH.wcrtomb.005
+DESCRIPTION:9eccbc4a     untestable  whether the implementation calls the function internally cannot be observed by a program
+DESCRIPTION:a1d8d85b     untestable  freedom from data races cannot be shown by a finite run
+DESCRIPTION:20ff191d     XSH.wcrtomb.005
+DESCRIPTION:9c300565     XSH.wcrtomb.006
+RETURN_VALUE:872e3fbf    XSH.wcrtomb.001 XSH.wcrtomb.002 XSH.wcrtomb.005
+RETURN_VALUE:48995e33    XSH.wcrtomb.003
+RETURN_VALUE:839c2cb3    partial XSH.wcrtomb.003  # errno only; the state after an error is undefined
+ERRORS:df99b455          XSH.wcrtomb.003
+ERRORS:32753ad4          untestable  an invalid conversion state cannot be built portably, and the error is optional

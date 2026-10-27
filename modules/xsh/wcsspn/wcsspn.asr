@@ -1,0 +1,28 @@
+# XSH wcsspn()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Strings are in arrays.
+
+assertion  XSH.wcsspn.001
+anchor     functions/wcsspn.html#DESCRIPTION
+anchor     functions/wcsspn.html#RETURN VALUE
+class      required
+says       wcsspn("abcabcd", "cba") gives 6; a first string whose first code
+           is not in the set gives 0; a first string wholly in the set gives
+           its length; an empty set gives 0; an empty first string gives 0.
+test       t/001-length.c
+
+assertion  XSH.wcsspn.002
+anchor     functions/wcsspn.html#DESCRIPTION
+class      required
+says       The scan ends at the null code of the first string: for the array
+           {a, b, null, a, b} and the set "ab" the result is 2.
+test       t/002-stops-at-null.c
+
+assertion  XSH.wcsspn.003
+anchor     functions/wcsspn.html#DESCRIPTION
+class      required
+since      2024
+says       wcsspn() leaves errno unchanged on valid input, both when it is 0
+           and when it is EDOM.
+test       t/003-errno-kept.c

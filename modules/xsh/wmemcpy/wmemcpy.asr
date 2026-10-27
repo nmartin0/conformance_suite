@@ -1,0 +1,43 @@
+# XSH wmemcpy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests use values that need not be valid characters (the largest wchar_t value) and the null code as ordinary data.
+# Destinations are filled with L'X' first, so that codes written past n show.
+
+assertion  XSH.wmemcpy.001
+anchor     functions/wmemcpy.html#DESCRIPTION
+anchor     functions/wmemcpy.html#RETURN VALUE
+class      required
+says       wmemcpy() of the array {a, b, null, c, d} with n 5 copies all
+           five elements (the null code too), changes nothing after them,
+           and returns the destination pointer.
+test       t/001-copy.c
+
+assertion  XSH.wmemcpy.002
+anchor     functions/wmemcpy.html#DESCRIPTION
+class      required
+says       With n 2 only two elements are copied; the rest of the
+           destination is unchanged.
+test       t/002-n-bound.c
+
+assertion  XSH.wmemcpy.003
+anchor     functions/wmemcpy.html#DESCRIPTION
+anchor     functions/wmemcpy.html#RETURN VALUE
+class      required
+says       With n 0 nothing is written and the destination pointer is
+           returned.
+test       t/003-n-zero.c
+
+assertion  XSH.wmemcpy.004
+anchor     functions/wmemcpy.html#DESCRIPTION
+class      required
+says       {1, WCHAR_MAX, null} is copied unchanged.
+test       t/004-any-value.c
+
+assertion  XSH.wmemcpy.005
+anchor     functions/wmemcpy.html#DESCRIPTION
+class      required
+since      2024
+says       wmemcpy() leaves errno unchanged on valid input, both when it is
+           0 and when it is EDOM.
+test       t/005-errno-kept.c

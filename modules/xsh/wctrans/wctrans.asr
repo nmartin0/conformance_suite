@@ -1,0 +1,37 @@
+# XSH wctrans()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.wctrans.001
+anchor     functions/wctrans.html#DESCRIPTION
+anchor     functions/wctrans.html#RETURN VALUE
+class      required
+says       wctrans() returns a non-zero value for the names tolower and
+           toupper.
+test       t/001-standard-names.c
+
+assertion  XSH.wctrans.002
+anchor     functions/wctrans.html#RETURN VALUE
+anchor     functions/wctrans.html#ERRORS
+class      required
+says       wctrans() returns 0 for names that are no mapping in the POSIX
+           locale: the empty string, "no such map", "toupper " and "to upper";
+           errno is left at 0 or set to EINVAL.
+test       t/002-unknown-names.c
+
+assertion  XSH.wctrans.003
+anchor     functions/wctrans.html#DESCRIPTION
+anchor     functions/wctrans.html#RETURN VALUE
+class      required
+says       The handle for toupper maps a to A and the handle for tolower maps
+           A to a under towctrans() in the locale it was obtained in.
+test       t/003-handle-usable.c
+
+assertion  XSH.wctrans.004
+anchor     functions/wctrans.html#DESCRIPTION
+anchor     functions/wctrans.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale the names tolower and toupper also give non-zero
+           handles.
+note       Needs an installed multibyte UTF-8 locale.
+test       t/004-utf8-names.c

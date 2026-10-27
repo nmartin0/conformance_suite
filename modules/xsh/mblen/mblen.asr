@@ -1,0 +1,52 @@
+# XSH mblen()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+
+assertion  XSH.mblen.001
+anchor     functions/mblen.html#DESCRIPTION
+anchor     functions/mblen.html#RETURN VALUE
+class      required
+says       In the POSIX locale mblen(NULL, 0) returns 0.
+note       The POSIX locale has only single-byte characters, so its
+           encoding is not state-dependent (XBD 6.2).
+test       t/001-null-posix.c
+
+assertion  XSH.mblen.002
+anchor     functions/mblen.html#RETURN VALUE
+anchor     functions/mblen.html#ERRORS
+class      required
+says       In the POSIX locale mblen() of the null byte returns 0, and
+           of every byte value 1 to 255 returns 1, with n equal to 1
+           and with n equal to 3.
+test       t/002-posix-bytes.c
+
+assertion  XSH.mblen.003
+anchor     functions/mblen.html#DESCRIPTION
+anchor     functions/mblen.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale mblen() returns 1, 2 and 3 for "A", a two-
+           byte and a three-byte character (n 4), 0 for the null byte,
+           never more than n or MB_CUR_MAX; mblen(NULL, 0) returns 0.
+test       t/003-utf8-lengths.c
+
+assertion  XSH.mblen.004
+anchor     functions/mblen.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale mblen() returns -1 when the n bytes are
+           only the start of a character (a two-byte character with n
+           1, a three-byte one with n 2), and 2 for the two-byte
+           character with n 2.
+test       t/004-utf8-short.c
+
+assertion  XSH.mblen.005
+anchor     functions/mblen.html#RETURN VALUE
+anchor     functions/mblen.html#ERRORS
+class      required
+says       In a UTF-8 locale mblen() returns -1 for a lone continuation
+           byte and for a lead byte followed by a non-continuation
+           byte; errno afterwards is either unchanged or EILSEQ.
+note       The page says errno may be set to indicate the error, and
+           lists only EILSEQ.
+test       t/005-utf8-invalid.c

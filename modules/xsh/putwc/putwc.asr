@@ -1,0 +1,33 @@
+# XSH putwc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.putwc.001
+anchor     functions/putwc.html#DESCRIPTION
+anchor     functions/fputwc.html#RETURN VALUE
+class      required
+says       Alternating putwc() and fputwc() of L'h', L'i' on a stream opened "w"
+           return the characters written, ftell() after each is 1 and 2, and
+           after fclose() the file holds "hi".
+test       t/001-writes.c
+
+assertion  XSH.putwc.002
+anchor     functions/putwc.html#ERRORS
+anchor     functions/fputwc.html#ERRORS/EBADF
+anchor     functions/putwc.html#RETURN VALUE
+class      required
+says       On a stream opened "w" whose descriptor was closed (unbuffered where
+           allowed, otherwise written until the buffer needs flushing), the
+           failing putwc() returns WEOF, sets errno to EBADF and sets the error
+           indicator.
+test       t/002-ebadf-closed.c
+
+assertion  XSH.putwc.003
+anchor     functions/putwc.html#ERRORS
+anchor     functions/fputwc.html#ERRORS/EILSEQ
+anchor     functions/putwc.html#RETURN VALUE
+class      required
+since      2024
+says       In a UTF-8 locale, putwc() of a wide-character code that wcrtomb()
+           rejects on an unbuffered stream returns WEOF, sets errno to EILSEQ and
+           sets the error indicator.
+test       t/003-eilseq.c

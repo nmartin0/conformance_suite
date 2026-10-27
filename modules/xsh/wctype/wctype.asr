@@ -1,0 +1,53 @@
+# XSH wctype()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.wctype.001
+anchor     functions/wctype.html#DESCRIPTION
+anchor     functions/wctype.html#RETURN VALUE
+class      required
+says       wctype() returns a non-zero value for each of the twelve standard
+           class names alnum, alpha, blank, cntrl, digit, graph, lower, print,
+           punct, space, upper and xdigit.
+test       t/001-standard-names.c
+
+assertion  XSH.wctype.002
+anchor     functions/wctype.html#RETURN VALUE
+class      required
+says       wctype() returns 0 for names that name no class in the POSIX
+           locale: the empty string, "no such class", "alpha " (trailing
+           space) and "al pha"; none of them can be a class name, which
+           has only alphanumeric characters.
+test       t/002-unknown-names.c
+
+assertion  XSH.wctype.003
+anchor     functions/wctype.html#DESCRIPTION
+anchor     functions/wctype.html#RETURN VALUE
+class      required
+says       A handle obtained for each standard name is accepted by iswctype()
+           in the locale it was obtained in: it gives non-zero for a character
+           of that class and 0 for a character outside it (one of each chosen
+           per class).
+test       t/003-handle-usable.c
+
+assertion  XSH.wctype.004
+anchor     functions/wctype.html#DESCRIPTION
+anchor     functions/wctype.html#RETURN VALUE
+class      required
+says       Asking twice for the same name (with other lookups in between)
+           yields handles that both give the same iswctype() answers over the
+           128 characters.
+test       t/004-repeatable.c
+
+assertion  XSH.wctype.005
+anchor     functions/wctype.html#DESCRIPTION
+anchor     functions/wctype.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale the twelve standard names also give non-zero
+           handles, and each handle gives non-zero from iswctype() for a
+           portable character of the class that is a member in every locale
+           (letters for alpha/alnum/graph/print, upper letters for upper,
+           lower letters for lower, digits for digit/xdigit, space for
+           space/blank).
+note       Needs an installed multibyte UTF-8 locale.
+test       t/005-utf8-names.c

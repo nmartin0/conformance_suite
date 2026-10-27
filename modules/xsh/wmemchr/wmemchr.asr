@@ -1,0 +1,54 @@
+# XSH wmemchr()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests use values that need not be valid characters (the largest wchar_t value) and the null code as ordinary data.
+
+assertion  XSH.wmemchr.001
+anchor     functions/wmemchr.html#DESCRIPTION
+anchor     functions/wmemchr.html#RETURN VALUE
+class      required
+says       On {a, b, c, a, b} wmemchr() returns w+1 for b and w for a with n
+           5; for c it returns a null pointer with n 2 and w+2 with n 3 (the
+           code at index n is not considered).
+test       t/001-first.c
+
+assertion  XSH.wmemchr.002
+anchor     functions/wmemchr.html#DESCRIPTION
+anchor     functions/wmemchr.html#RETURN VALUE
+class      required
+says       On {a, null, b, null} wmemchr() with n 4 finds the null code at
+           w+1 and finds b at w+2 (the search goes past a null code); a code
+           that is absent gives a null pointer.
+test       t/002-null-not-special.c
+
+assertion  XSH.wmemchr.003
+anchor     functions/wmemchr.html#DESCRIPTION
+anchor     functions/wmemchr.html#RETURN VALUE
+class      required
+says       On {1, WCHAR_MAX, 5} wmemchr() with the code WCHAR_MAX and n 3
+           returns w+1, whether or not that value is a valid character.
+test       t/003-any-value.c
+
+assertion  XSH.wmemchr.004
+anchor     functions/wmemchr.html#DESCRIPTION
+anchor     functions/wmemchr.html#RETURN VALUE
+class      required
+says       With n 0 wmemchr() returns a null pointer even when the first
+           element equals the code sought.
+test       t/004-n-zero.c
+
+assertion  XSH.wmemchr.005
+anchor     functions/wmemchr.html#DESCRIPTION
+class      required
+says       On four codes ending at an inaccessible page, with n 4, a code
+           that is absent gives a null pointer and a code present at the
+           first element gives a pointer to it, without touching the page.
+test       t/005-no-overread.c
+
+assertion  XSH.wmemchr.006
+anchor     functions/wmemchr.html#DESCRIPTION
+class      required
+since      2024
+says       wmemchr() leaves errno unchanged on valid input, both when it is
+           0 and when it is EDOM.
+test       t/006-errno-kept.c

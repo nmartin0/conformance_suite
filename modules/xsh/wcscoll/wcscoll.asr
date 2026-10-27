@@ -1,0 +1,45 @@
+# XSH wcscoll() and wcscoll_l()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests run in the POSIX locale (selected with setlocale(LC_ALL, "C")). Its
+# collation order of the characters it lists is given by XBD 7.3.2.6; only
+# those characters are used, and only the sign of a result is judged.
+# The locale-object tests use a locale made with newlocale() for "C"; a
+# failure to make one is UNRESOLVED.
+
+assertion  XSH.wcscoll.001
+anchor     functions/wcscoll.html#DESCRIPTION
+anchor     functions/wcscoll.html#RETURN VALUE
+class      required
+says       wcscoll() returns 0 for two distinct arrays with the same content
+           ("abc", and the empty string).
+test       t/001-equal.c
+
+assertion  XSH.wcscoll.002
+anchor     functions/wcscoll.html#DESCRIPTION
+anchor     functions/wcscoll.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.2.6
+class      required
+says       In the POSIX locale the order is that of the listed collation
+           sequence: a space before 0, 0 before 9, 9 before A, A before Z, Z
+           before a, a before z; "ab" before "abc" and the reverse; and the
+           first differing character decides ("az" before "b").
+test       t/002-order.c
+
+assertion  XSH.wcscoll.003
+anchor     functions/wcscoll.html#DESCRIPTION
+anchor     functions/wcscoll.html#RETURN VALUE
+class      required
+since      2008
+says       wcscoll_l() with a locale object for "C" returns 0 for equal
+           strings and orders "a" before "b", "A" before "a", "ab" before
+           "abc" and the reverse pairs the same way as wcscoll().
+test       t/003-locale-object.c
+
+assertion  XSH.wcscoll.004
+anchor     functions/wcscoll.html#DESCRIPTION
+class      required
+says       wcscoll() and wcscoll_l() leave errno unchanged when they succeed
+           (valid strings in the POSIX locale), both when it is 0 and when
+           it is EDOM.
+test       t/004-errno-kept.c

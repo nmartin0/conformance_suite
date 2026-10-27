@@ -1,0 +1,127 @@
+# XSH wcstod(), wcstof(), wcstold()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.wcstod.001
+anchor     functions/wcstod.html#DESCRIPTION
+anchor     functions/wcstod.html#RETURN VALUE
+class      required
+says       For wcstod(), wcstof() and wcstold(): decimal strings "1.5", "100",
+           ".5", "5.", "0.25e1", "125e-2", "2E+3", "0" give 1.5, 100, 0.5, 5,
+           2.5, 1.25, 2000, 0 and the end pointer is set at the terminating
+           null.
+test       t/001-decimal.c
+
+assertion  XSH.wcstod.002
+anchor     functions/wcstod.html#DESCRIPTION
+anchor     functions/wcstod.html#RETURN VALUE
+class      required
+says       Hexadecimal forms "0x1p4", "0X1P4", "0x1.8p1", "0x.8", "0xA.8p-1",
+           "0x10", "0x1p+1" give 16, 16, 3, 0.5, 5.25, 16, 2 (no exponent
+           means an exponent of zero); the end pointer is at the null.
+test       t/002-hex.c
+
+assertion  XSH.wcstod.003
+anchor     functions/wcstod.html#DESCRIPTION
+anchor     functions/wcstod.html#RETURN VALUE
+class      required
+says       A leading '+' leaves the value and a leading '-' negates it: "+2.5"
+           gives 2.5 and "-2.5" gives -2.5, "-0x1p1" gives -2; "-0" and "-0.0"
+           give a zero with its sign bit set.
+test       t/003-sign.c
+
+assertion  XSH.wcstod.004
+anchor     functions/wcstod.html#DESCRIPTION
+anchor     functions/wcstod.html#RETURN VALUE
+class      required
+says       "inf", "INF", "InFiNiTy", "infinity", "+inf" give HUGE_VAL
+           (HUGE_VALF, HUGE_VALL), "-inf" and "-INFINITY" give its negative,
+           and the end pointer is after the whole word; "infin" converts only
+           "inf" and leaves the end pointer at "in".
+test       t/004-infinity.c
+
+assertion  XSH.wcstod.005
+anchor     functions/wcstod.html#DESCRIPTION
+anchor     functions/wcstod.html#RETURN VALUE
+class      required
+says       "nan", "NAN", "NaN(abc_1)", "-nan", "nan(0x1)", "nan()": either the
+           result is a NaN (comparing unequal to itself) and the end pointer
+           is after the whole word, or (type with no NaN) no conversion
+           happens with value 0 and end pointer at the start; for "nan(",
+           "nan(!)" and "nan(a b)" a converted NaN ends at the character after
+           "nan".
+test       t/005-nan.c
+
+assertion  XSH.wcstod.006
+anchor     functions/wcstod.html#DESCRIPTION
+anchor     functions/wcstod.html#RETURN VALUE
+class      required
+says       Leading white space in the POSIX locale is skipped: each of space,
+           tab, newline, vertical tab, form feed and carriage return, and a
+           run of all six, before "4.5" gives 4.5 with the end pointer at the
+           null.
+test       t/006-white-space.c
+
+assertion  XSH.wcstod.007
+anchor     functions/wcstod.html#DESCRIPTION
+anchor     functions/wcstod.html#RETURN VALUE
+class      required
+says       The end pointer is placed at the first character after the longest
+           valid subject sequence: "1.5abc" gives 1.5 and "abc"; "1e", "1e+"
+           and "1ex" give 1 and end at the 'e'; "0x" and "0xg" give 0 and end
+           at the 'x'; "0x1p" and "0x1p+" give 1 ending at 'p'; "2.5.5" gives
+           2.5 ending at the second period; "  7 " gives 7 ending at the
+           trailing space.
+test       t/007-end-pointer.c
+
+assertion  XSH.wcstod.008
+anchor     functions/wcstod.html#DESCRIPTION
+anchor     functions/wcstod.html#RETURN VALUE
+anchor     functions/wcstod.html#ERRORS
+class      required
+says       For "", "   ", "abc", "+", "-", ".", "e5", "+." and ",5": the
+           result is 0, the end pointer equals the start of the whole string
+           (white space included), and errno is 0 or EINVAL.
+test       t/008-no-conversion.c
+
+assertion  XSH.wcstod.009
+anchor     functions/wcstod.html#RETURN VALUE
+anchor     functions/wcstod.html#ERRORS
+class      required
+says       A value far above the range ("1e100000", "-1e100000", "0x1p100000")
+           gives ERANGE and the huge value of the type with the sign of the
+           number (HUGE_VAL, HUGE_VALF, HUGE_VALL) for all three functions,
+           default rounding; the end pointer is after the whole number.
+test       t/009-overflow.c
+
+assertion  XSH.wcstod.010
+anchor     functions/wcstod.html#RETURN VALUE
+anchor     functions/wcstod.html#ERRORS
+class      required
+says       A nonzero value far below the range ("1e-100000", "-1e-100000",
+           "0x1p-100000") gives ERANGE and a result of magnitude at most the
+           smallest normalized number of the type for all three functions; the
+           end pointer is after the whole number.
+test       t/010-underflow.c
+
+assertion  XSH.wcstod.011
+anchor     functions/wcstod.html#DESCRIPTION
+class      required
+says       A successful conversion ("2.5", "0x1p1", "7.25") leaves errno at the
+           value it had before (EDOM is stored before the call).
+test       t/011-errno-kept.c
+
+assertion  XSH.wcstod.012
+anchor     functions/wcstod.html#DESCRIPTION
+anchor     functions/wcstod.html#RETURN VALUE
+class      required
+says       With a null end pointer the conversion still returns the value:
+           "3.5xyz" gives 3.5, and "junk" gives 0, without crashing.
+test       t/012-null-endptr.c
+
+assertion  XSH.wcstod.013
+anchor     functions/wcstod.html#DESCRIPTION
+class      required
+says       In the POSIX locale the radix character is the period, so "1.25"
+           gives 1.25 while "1,25" converts only the 1 and ends at the comma.
+test       t/013-radix-point.c

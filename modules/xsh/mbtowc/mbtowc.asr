@@ -1,0 +1,55 @@
+# XSH mbtowc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+
+assertion  XSH.mbtowc.001
+anchor     functions/mbtowc.html#DESCRIPTION
+anchor     functions/mbtowc.html#RETURN VALUE
+class      required
+says       In the POSIX locale mbtowc() of every byte 1 to 255 returns
+           1, and of each portable-character-set member also stores the
+           member's own character value.
+test       t/001-posix-bytes.c
+
+assertion  XSH.mbtowc.002
+anchor     functions/mbtowc.html#DESCRIPTION
+anchor     functions/mbtowc.html#RETURN VALUE
+class      required
+says       mbtowc(NULL, "A", 1) returns 1; mbtowc() of the null byte
+           returns 0 and stores the null wide-character code.
+test       t/002-pwc-null-and-nul.c
+
+assertion  XSH.mbtowc.003
+anchor     functions/mbtowc.html#DESCRIPTION
+anchor     functions/mbtowc.html#RETURN VALUE
+class      required
+says       In the POSIX locale mbtowc(NULL, NULL, 0) returns 0.
+note       The POSIX locale has only single-byte characters, so its
+           encoding is not state-dependent (XBD 6.2).
+test       t/003-null-s-posix.c
+
+assertion  XSH.mbtowc.004
+anchor     functions/mbtowc.html#DESCRIPTION
+anchor     functions/mbtowc.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale mbtowc() returns 1, 2 and 3 for "A", a
+           two-byte and a three-byte character (n 4), never more than
+           MB_CUR_MAX, stores the value of 'A' for "A", and wctomb() of
+           each stored code gives back the same bytes; mbtowc(NULL,
+           NULL, 0) returns 0.
+test       t/004-utf8-lengths.c
+
+assertion  XSH.mbtowc.005
+anchor     functions/mbtowc.html#RETURN VALUE
+anchor     functions/mbtowc.html#ERRORS
+class      required
+says       In a UTF-8 locale mbtowc() returns -1 for a lone
+           continuation byte and for a lead byte followed by a non-
+           continuation byte, with errno EILSEQ; it also returns -1
+           when n cuts a two-byte character short.
+note       Whether a character cut short by n is an invalid sequence
+           for the purpose of EILSEQ is not clear, so errno is checked
+           only for the two invalid sequences (Q-122).
+test       t/005-utf8-invalid.c

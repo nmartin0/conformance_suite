@@ -1,0 +1,59 @@
+# XSH wcsxfrm() and wcsxfrm_l()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests run in the POSIX locale (selected with setlocale(LC_ALL, "C")).
+# Only values the text defines are checked: the length returned, the order
+# relation between the transformed strings and the collation function, and
+# that no more than n codes are written. The locale-object test uses a
+# locale made with newlocale() for "C"; a failure to make one is UNRESOLVED.
+# Destinations are filled with L'X' first, so that codes written past n show.
+
+assertion  XSH.wcsxfrm.001
+anchor     functions/wcsxfrm.html#DESCRIPTION
+anchor     functions/wcsxfrm.html#RETURN VALUE
+class      required
+says       With room for the whole result, wcsxfrm() of "abc" returns a
+           length equal to the wcslen() of the string it stored, and a null
+           code ends the result at that index.
+test       t/001-length.c
+
+assertion  XSH.wcsxfrm.002
+anchor     functions/wcsxfrm.html#DESCRIPTION
+class      required
+says       For every pair taken from twelve strings of portable characters,
+           the sign of wcscmp() on the two transformed strings equals the
+           sign of wcscoll() on the originals.
+test       t/002-order.c
+
+assertion  XSH.wcsxfrm.003
+anchor     functions/wcsxfrm.html#DESCRIPTION
+anchor     functions/wcsxfrm.html#RETURN VALUE
+class      required
+says       With n 3 on "abcdef", no code at index 3 or later is written, and
+           the value returned equals the one returned when there is room for
+           everything.
+test       t/003-n-bound.c
+
+assertion  XSH.wcsxfrm.004
+anchor     functions/wcsxfrm.html#DESCRIPTION
+anchor     functions/wcsxfrm.html#RETURN VALUE
+class      required
+says       With n 0 the destination may be a null pointer: the call returns
+           the same length as the call with room for everything.
+test       t/004-n-zero.c
+
+assertion  XSH.wcsxfrm.005
+anchor     functions/wcsxfrm.html#DESCRIPTION
+class      required
+since      2008
+says       wcsxfrm_l() with a locale object for "C" gives, for pairs of
+           strings, transformed strings whose wcscmp() sign equals that of
+           wcscoll_l() on the originals.
+test       t/005-locale-object.c
+
+assertion  XSH.wcsxfrm.006
+anchor     functions/wcsxfrm.html#DESCRIPTION
+class      required
+says       wcsxfrm() and wcsxfrm_l() leave errno unchanged when they
+           succeed, both when it is 0 and when it is EDOM.
+test       t/006-errno-kept.c

@@ -1,0 +1,23 @@
+# XSH wcsdup()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# ENOMEM cannot be provoked portably; a null result is reported UNRESOLVED.
+
+assertion  XSH.wcsdup.001
+anchor     functions/wcsdup.html#DESCRIPTION
+anchor     functions/wcsdup.html#RETURN VALUE
+class      required
+since      2008
+says       wcsdup() of "", "abc" and a 1000-code string returns a non-null
+           pointer to a different array of equal content, which can be
+           passed to free().
+test       t/001-copy.c
+
+assertion  XSH.wcsdup.002
+anchor     functions/wcsdup.html#DESCRIPTION
+class      required
+since      2008
+says       The duplicate is a new object: changing the original after the
+           call leaves the duplicate as it was, and changing the duplicate
+           leaves the original as it was.
+test       t/002-independent.c

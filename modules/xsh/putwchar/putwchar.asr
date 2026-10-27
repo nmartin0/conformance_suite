@@ -1,0 +1,22 @@
+# XSH putwchar()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.putwchar.001
+anchor     functions/putwchar.html#DESCRIPTION
+anchor     functions/fputwc.html#RETURN VALUE
+class      required
+says       With descriptor 1 on a new file, putwchar(L'h') and putwchar(L'i')
+           return L'h' and L'i', ftell(stdout) after each is 1 and 2,
+           fwide(stdout, 0) is positive, and after fflush() the file holds "hi".
+test       t/001-writes.c
+
+assertion  XSH.putwchar.002
+anchor     functions/putwchar.html#ERRORS
+anchor     functions/fputwc.html#ERRORS/EBADF
+anchor     functions/putwchar.html#RETURN VALUE
+class      required
+says       With descriptor 1 closed, and stdout unbuffered where allowed
+           (otherwise written until the buffer needs flushing), the failing
+           putwchar() returns WEOF, sets errno to EBADF and sets the error
+           indicator of stdout.
+test       t/002-ebadf-closed.c

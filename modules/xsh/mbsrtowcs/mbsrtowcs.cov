@@ -1,0 +1,29 @@
+# mbsrtowcs.cov - every requirement unit on functions/mbsrtowcs.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:005e76ce     none  alignment with ISO C (a statement about the page)
+DESCRIPTION:5ae5401f     none  alignment with ISO C (a statement about the page)
+DESCRIPTION:4e137535     none  alignment with ISO C (a statement about the page)
+DESCRIPTION:517ca6a1     XSH.mbsrtowcs.001 XSH.mbsrtowcs.002 XSH.mbsrtowcs.006
+DESCRIPTION:37b55c33     XSH.mbsrtowcs.001 XSH.mbsrtowcs.004
+DESCRIPTION:7b476410     XSH.mbsrtowcs.001
+DESCRIPTION:3b0b96ec     XSH.mbsrtowcs.002 XSH.mbsrtowcs.007
+DESCRIPTION:43dc0138     XSH.mbsrtowcs.007
+DESCRIPTION:cab04693     XSH.mbsrtowcs.002
+DESCRIPTION:64d8e302     partial XSH.mbsrtowcs.001 XSH.mbsrtowcs.006  # equivalence with mbrtowc() checked through results
+DESCRIPTION:1492333d     XSH.mbsrtowcs.001 XSH.mbsrtowcs.002 XSH.mbsrtowcs.006 XSH.mbsrtowcs.007
+DESCRIPTION:8665daa8     XSH.mbsrtowcs.001
+DESCRIPTION:623675ef     partial XSH.mbsrtowcs.004  # null ps converts; start-up value of the internal state not observable
+DESCRIPTION:6dbcc3a6     XSH.mbsrtowcs.002 XSH.mbsrtowcs.009
+DESCRIPTION:1e4da2ea     XSH.mbsrtowcs.008 XSH.mbsrtowcs.009
+DESCRIPTION:1cf35f31     XSH.mbsrtowcs.009
+DESCRIPTION:73e6f143     XSH.mbsrtowcs.006
+DESCRIPTION:4279424d     untestable  whether the implementation calls the function internally cannot be observed by a program
+DESCRIPTION:01e248f3     untestable  freedom from data races cannot be shown by a finite run
+DESCRIPTION:827ff1a0     untestable  freedom from data races cannot be shown by a finite run
+DESCRIPTION:57afb684     XSH.mbsrtowcs.005
+RETURN_VALUE:dcd7590e    XSH.mbsrtowcs.007
+RETURN_VALUE:2bbddc6b    partial XSH.mbsrtowcs.007  # errno only; the state after an error is undefined
+RETURN_VALUE:635f1e8d    XSH.mbsrtowcs.001 XSH.mbsrtowcs.002 XSH.mbsrtowcs.006 XSH.mbsrtowcs.008
+ERRORS:ad70ad8d          XSH.mbsrtowcs.007
+ERRORS:32753ad4          untestable  an invalid conversion state cannot be built portably, and the error is optional

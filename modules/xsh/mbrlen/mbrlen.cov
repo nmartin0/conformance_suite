@@ -1,0 +1,21 @@
+# mbrlen.cov - every requirement unit on functions/mbrlen.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:42a0c836     XSH.mbrlen.001 XSH.mbrlen.003
+DESCRIPTION:ffa3c459     partial XSH.mbrlen.001 XSH.mbrlen.003 XSH.mbrlen.004 XSH.mbrlen.005  # equivalence with mbrtowc() checked through results
+DESCRIPTION:5fe87763     none  code fragment of the neighbouring unit
+DESCRIPTION:16279f77     XSH.mbrlen.002 XSH.mbrlen.007
+DESCRIPTION:6dbcc3a6     XSH.mbrlen.004 XSH.mbrlen.008
+DESCRIPTION:cea08a09     untestable  whether the implementation calls the function internally cannot be observed by a program
+DESCRIPTION:e62b4e41     XSH.mbrlen.003
+DESCRIPTION:b630d2c9     untestable  freedom from data races cannot be shown by a finite run
+DESCRIPTION:59041d9c     XSH.mbrlen.006
+RETURN_VALUE:dc249e10    XSH.mbrlen.001 XSH.mbrlen.004 XSH.mbrlen.005
+RETURN_VALUE:4bea6f9d    XSH.mbrlen.001
+RETURN_VALUE:59688933    XSH.mbrlen.001 XSH.mbrlen.003 XSH.mbrlen.004
+RETURN_VALUE:24bca809    XSH.mbrlen.004
+RETURN_VALUE:3db0daa0    untestable  needs a state-dependent encoding, which no locale is assumed to have
+RETURN_VALUE:3363a841    XSH.mbrlen.005
+RETURN_VALUE:c7616b9d    partial XSH.mbrlen.005  # errno only; the state after an error is undefined
+ERRORS:ad70ad8d          XSH.mbrlen.001 XSH.mbrlen.005
+ERRORS:2a36e86c          untestable  an invalid conversion state cannot be built portably, and the error is optional

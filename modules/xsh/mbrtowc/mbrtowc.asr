@@ -1,0 +1,97 @@
+# XSH mbrtowc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+# States are mbstate_t objects of the test, set to all zero bytes (an initial state).
+
+assertion  XSH.mbrtowc.001
+anchor     functions/mbrtowc.html#DESCRIPTION
+anchor     functions/mbrtowc.html#RETURN VALUE
+class      required
+says       In the POSIX locale mbrtowc() of each byte 1 to 255 returns
+           1, and of each portable-character-set member stores the
+           member's own character value.
+test       t/001-posix-bytes.c
+
+assertion  XSH.mbrtowc.002
+anchor     functions/mbrtowc.html#DESCRIPTION
+anchor     functions/mbrtowc.html#RETURN VALUE
+class      required
+says       mbrtowc() with a null pwc returns 1 for "A" and stores
+           nothing; with a null ps it returns 1 for "A" and stores the
+           value of 'A'.
+test       t/002-null-pwc-and-ps.c
+
+assertion  XSH.mbrtowc.003
+anchor     functions/mbrtowc.html#DESCRIPTION
+anchor     functions/mbrtowc.html#RETURN VALUE
+class      required
+says       mbrtowc() with a null s returns 0, whatever n is (5 and 0),
+           stores nothing through pwc, and leaves the initial state.
+test       t/003-null-s.c
+
+assertion  XSH.mbrtowc.004
+anchor     functions/mbrtowc.html#DESCRIPTION
+anchor     functions/mbrtowc.html#RETURN VALUE
+class      required
+says       mbrtowc() of the null byte returns 0, stores the null wide-
+           character code, and the state is initial afterwards (mbsinit
+           non-zero).
+test       t/004-nul.c
+
+assertion  XSH.mbrtowc.005
+anchor     functions/mbrtowc.html#DESCRIPTION
+anchor     functions/mbrtowc.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale mbrtowc() returns 1, 2 and 3 for "A", a
+           two-byte and a three-byte character (n 4), stores the value
+           of 'A' for "A", and wcrtomb() of each stored code gives the
+           same bytes.
+test       t/005-utf8-lengths.c
+
+assertion  XSH.mbrtowc.006
+anchor     functions/mbrtowc.html#DESCRIPTION
+anchor     functions/mbrtowc.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale mbrtowc() of the first byte of a three-
+           byte character returns (size_t)-2 and stores nothing; so
+           does the second; the third returns 1 and stores the same
+           code as a single call on all three bytes; likewise two bytes
+           then one byte.
+test       t/006-utf8-restart.c
+
+assertion  XSH.mbrtowc.007
+anchor     functions/mbrtowc.html#RETURN VALUE
+anchor     functions/mbrtowc.html#ERRORS
+class      required
+says       In a UTF-8 locale mbrtowc() returns (size_t)-1 with errno
+           EILSEQ and stores nothing for a lone continuation byte and
+           for a lead byte followed by a non-continuation byte.
+test       t/007-utf8-invalid.c
+
+assertion  XSH.mbrtowc.008
+anchor     functions/mbrtowc.html#DESCRIPTION
+class      required
+says       A successful mbrtowc() (for "A" and for the null byte)
+           leaves errno unchanged.
+test       t/008-errno-kept.c
+
+assertion  XSH.mbrtowc.009
+anchor     functions/mbrtowc.html#DESCRIPTION
+class      required
+says       In a UTF-8 locale mbrtowc() with a null ps keeps its own
+           state between calls: the first byte of a two-byte character
+           gives (size_t)-2 and the second gives 1 with the same code
+           as a single call.
+test       t/009-null-ps-state.c
+
+assertion  XSH.mbrtowc.010
+anchor     functions/mbrtowc.html#DESCRIPTION
+class      required
+says       In a UTF-8 locale two mbstate_t objects are independent:
+           with the first holding an unfinished two-byte character, a
+           three-byte character converted through the second returns 3,
+           and the first then completes its character with 1 and the
+           right code.
+test       t/010-separate-states.c

@@ -1,0 +1,61 @@
+# XSH wcswidth()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Run in the POSIX locale (setlocale(LC_ALL, "C")). Only portable characters
+# are used. A printable portable character has width one: XBD 3.75 (the page
+# cites it). Nothing is asserted about the widths of other characters.
+
+assertion  XSH.wcswidth.001
+anchor     functions/wcswidth.html#DESCRIPTION
+anchor     functions/wcswidth.html#RETURN VALUE
+anchor     basedefs/V1_chap03.html#3.75
+class      conditional
+when       XSI
+says       For printable portable characters wcswidth() gives the count of
+           the columns: "abc" with n 3 is 3, with n 2 is 2, and with n 10 is
+           3 (the scan ends at the null code); "a b" with 3 is 3; "0!~" with
+           3 is 3.
+test       t/001-printable.c
+
+assertion  XSH.wcswidth.002
+anchor     functions/wcswidth.html#DESCRIPTION
+anchor     functions/wcswidth.html#RETURN VALUE
+class      conditional
+when       XSI
+says       wcswidth() returns 0 for an empty string with n 5, and for "abc"
+           with n 0.
+test       t/002-zero.c
+
+assertion  XSH.wcswidth.003
+anchor     functions/wcswidth.html#DESCRIPTION
+anchor     functions/wcswidth.html#RETURN VALUE
+class      disputed
+when       XSI
+says       A tab or a newline among the first n codes gives -1 ("a", tab,
+           "b" with n 3; a newline with n 1); a non-printable code beyond n
+           ("a", tab, "b" with n 1) or after a null code ({a, b, null, tab}
+           with n 4, giving 2) does not.
+note       disputed (Q-117): RETURN VALUE gives -1 for a code that is not
+           printable, APPLICATION USAGE says the value for a non-printable
+           wide character is not specified; a FAIL is logged as INSPECT.
+test       t/003-non-printable.c
+
+assertion  XSH.wcswidth.004
+anchor     functions/wcswidth.html#DESCRIPTION
+anchor     functions/wcswidth.html#RETURN VALUE
+anchor     basedefs/V1_chap03.html#3.75
+class      conditional
+when       XSI
+says       In a UTF-8 locale (found with the core helper; not in use when
+           there is none) "abc" with n 3 is 3 and the empty string is 0.
+test       t/004-utf8.c
+
+assertion  XSH.wcswidth.005
+anchor     functions/wcswidth.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       wcswidth() leaves errno unchanged on valid input, both when it is
+           0 and when it is EDOM, for a printable string, an empty string
+           and a string with a non-printable code.
+test       t/005-errno-kept.c

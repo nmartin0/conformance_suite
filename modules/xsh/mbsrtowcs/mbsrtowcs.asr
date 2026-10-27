@@ -1,0 +1,93 @@
+# XSH mbsrtowcs() and mbsnrtowcs()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+# States are mbstate_t objects of the test, set to all zero bytes (an initial state).
+
+assertion  XSH.mbsrtowcs.001
+anchor     functions/mbsrtowcs.html#DESCRIPTION
+anchor     functions/mbsrtowcs.html#RETURN VALUE
+class      required
+says       mbsrtowcs() on "abc" followed by a null byte and more bytes
+           returns 3, stores the codes of a, b, c and the terminating
+           zero, sets *src to a null pointer, and leaves the initial
+           state.
+test       t/001-basic.c
+
+assertion  XSH.mbsrtowcs.002
+anchor     functions/mbsrtowcs.html#DESCRIPTION
+anchor     functions/mbsrtowcs.html#RETURN VALUE
+class      required
+says       With len 2 on "abcd" mbsrtowcs() returns 2, modifies no
+           further element, and leaves *src at the third character; a
+           second call with the same state stores the rest and the
+           terminating zero, returns 2 and sets *src to null; with len
+           3 on "abc" it returns 3, stores no terminating zero and
+           leaves *src at the terminating null byte.
+test       t/002-limit-len.c
+
+assertion  XSH.mbsrtowcs.003
+anchor     functions/mbsrtowcs.html#DESCRIPTION
+anchor     functions/mbsrtowcs.html#RETURN VALUE
+class      required
+says       mbsrtowcs() with a null dst on "abcd" returns 4 for len 1
+           and for len 100.
+test       t/003-null-dst.c
+
+assertion  XSH.mbsrtowcs.004
+anchor     functions/mbsrtowcs.html#DESCRIPTION
+class      required
+says       In the POSIX locale mbsrtowcs() with a null ps converts
+           "abc" to 3 codes and a terminating zero.
+test       t/004-null-ps.c
+
+assertion  XSH.mbsrtowcs.005
+anchor     functions/mbsrtowcs.html#DESCRIPTION
+class      required
+says       A successful mbsrtowcs() leaves errno unchanged.
+test       t/005-errno-kept.c
+
+assertion  XSH.mbsrtowcs.006
+anchor     functions/mbsrtowcs.html#DESCRIPTION
+anchor     functions/mbsrtowcs.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale mbsrtowcs() on a one-, two- and three-byte
+           character in a row returns 3 and sets *src to null; with len
+           2 it returns 2 and leaves *src just past the second
+           character (offset 3); a second call with the same state
+           converts the third (returns 1, *src null).
+test       t/006-utf8-resume.c
+
+assertion  XSH.mbsrtowcs.007
+anchor     functions/mbsrtowcs.html#DESCRIPTION
+anchor     functions/mbsrtowcs.html#RETURN VALUE
+anchor     functions/mbsrtowcs.html#ERRORS
+class      required
+says       In a UTF-8 locale mbsrtowcs() on "a", a stray continuation
+           byte and "b" returns (size_t)-1 with errno EILSEQ, has
+           stored the code of "a", and leaves *src just past it.
+test       t/007-utf8-invalid.c
+
+assertion  XSH.mbsrtowcs.008
+anchor     functions/mbsrtowcs.html#DESCRIPTION
+anchor     functions/mbsrtowcs.html#RETURN VALUE
+class      required
+since      2008
+says       mbsnrtowcs() on "abcdef": with nmc 3 it returns 3, stores
+           nothing beyond three codes and leaves *src at offset 3; with
+           nmc 7 it returns 6, stores the terminating zero and sets
+           *src to null; with a null dst and nmc 3 it returns 3.
+test       t/008-n-limit-bytes.c
+
+assertion  XSH.mbsrtowcs.009
+anchor     functions/mbsrtowcs.html#DESCRIPTION
+anchor     functions/mbsrtowcs.html#RETURN VALUE
+class      required
+since      2024
+says       In a UTF-8 locale mbsnrtowcs() on "a" and the first two
+           bytes of a three-byte character with nmc 3 returns 1 and
+           leaves *src just past the last byte of the buffer; a second
+           call, same state, on the last byte with nmc 1 returns 1 and
+           stores the same code as a single conversion.
+test       t/009-utf8-n-incomplete.c

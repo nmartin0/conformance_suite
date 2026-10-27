@@ -1,0 +1,69 @@
+# XSH fputws()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fputws.001
+anchor     functions/fputws.html#DESCRIPTION
+anchor     functions/fputws.html#RETURN VALUE
+anchor     functions/fputws.html#APPLICATION USAGE
+class      required
+says       fputws(L"hi") on a stream opened "w" returns a non-negative value,
+           ftell() is then 2, and after fclose() the file holds exactly "hi": no
+           null character and no newline.
+test       t/001-writes.c
+
+assertion  XSH.fputws.002
+anchor     functions/fputws.html#DESCRIPTION
+anchor     functions/fputws.html#RETURN VALUE
+class      required
+says       fputws(L"") returns a non-negative value and writes nothing;
+           fputws(L"a") and fputws(L"b") then leave the file holding "ab".
+test       t/002-empty.c
+
+assertion  XSH.fputws.003
+anchor     functions/fputws.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5
+class      required
+says       In a UTF-8 locale, fputws() of a string made of the wide character
+           mbrtowc() gives for 0xc3 0xa9 followed by L'x' returns a non-negative
+           value and the file then holds the bytes 0xc3 0xa9 'x'.
+test       t/003-multibyte.c
+
+assertion  XSH.fputws.004
+anchor     functions/fputws.html#ERRORS
+anchor     functions/fputwc.html#ERRORS/EBADF
+anchor     functions/fputws.html#RETURN VALUE
+class      required
+says       On a stream opened "w" whose descriptor was closed (unbuffered where
+           allowed, otherwise written until the buffer needs flushing), the
+           failing fputws() returns -1, sets errno to EBADF and sets the error
+           indicator.
+test       t/004-ebadf-closed.c
+
+assertion  XSH.fputws.005
+anchor     functions/fputws.html#ERRORS
+anchor     functions/fputwc.html#ERRORS/EPIPE
+anchor     functions/fputws.html#RETURN VALUE
+class      required
+says       With SIGPIPE blocked, on a stream on the write end of a pipe whose
+           read end is closed, the failing fputws() returns -1, sets errno to
+           EPIPE and sets the error indicator.
+test       t/005-epipe.c
+
+assertion  XSH.fputws.006
+anchor     functions/fputws.html#ERRORS
+anchor     functions/fputwc.html#ERRORS/EILSEQ
+anchor     functions/fputws.html#RETURN VALUE
+class      required
+since      2024
+says       In a UTF-8 locale, fputws() of L"a", a wide-character code that
+           wcrtomb() rejects, and L"b" returns -1, sets errno to EILSEQ and sets
+           the error indicator.
+test       t/006-eilseq.c
+
+assertion  XSH.fputws.007
+anchor     functions/fputws.html#DESCRIPTION
+class      required
+says       After the modification time of a file is set to 2001-09-09, fputws()
+           on a stream opened "r+" on it followed by fflush() leaves the
+           modification time later.
+test       t/007-mtime.c

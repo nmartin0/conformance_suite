@@ -1,0 +1,53 @@
+# XSH iswctype()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.iswctype.001
+anchor     functions/iswctype.html#DESCRIPTION
+anchor     functions/iswctype.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+class      required
+says       In the POSIX locale, with the handle wctype(name) for each of the
+           twelve standard names, iswctype() is non-zero for exactly the
+           characters the POSIX locale definition puts in that class and 0 for
+           the other of the 128 characters.
+test       t/001-membership.c
+
+assertion  XSH.iswctype.002
+anchor     functions/iswctype.html#APPLICATION USAGE
+anchor     functions/iswctype.html#RETURN VALUE
+class      required
+says       For each standard name and each of the 128 characters, iswctype(c,
+           wctype(name)) is non-zero exactly when the corresponding isw
+           function (iswalnum() ... iswxdigit()) is non-zero.
+test       t/002-equivalent.c
+
+assertion  XSH.iswctype.003
+anchor     functions/iswctype.html#RETURN VALUE
+class      required
+says       iswctype(c, (wctype_t)0) returns 0 for letters, digits,
+           punctuation, the space and WEOF.
+test       t/003-zero-class.c
+
+assertion  XSH.iswctype.004
+anchor     functions/iswctype.html#DESCRIPTION
+anchor     functions/iswctype.html#RETURN VALUE
+class      required
+says       iswctype(WEOF, h) returns 0 for the handle h of each standard
+           class.
+test       t/004-weof.c
+
+assertion  XSH.iswctype.005
+anchor     functions/iswctype.html#DESCRIPTION
+anchor     functions/iswctype.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In a UTF-8 locale, iswctype() with each handle obtained there is
+           non-zero for the portable characters that belong to the class in
+           every locale (as for the isw functions: letters for
+           alpha/alnum/graph/print, A-Z upper, a-z lower, digits for
+           digit/xdigit/alnum, A-F a-f for xdigit, space and tab for blank,
+           six white-space for space) and, for digit and xdigit, 0 for every
+           other ASCII-range character.
+note       Needs an installed multibyte UTF-8 locale.
+test       t/005-utf8-portable.c

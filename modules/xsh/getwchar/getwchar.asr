@@ -1,0 +1,28 @@
+# XSH getwchar()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getwchar.001
+anchor     functions/getwchar.html#DESCRIPTION
+anchor     functions/fgetwc.html#RETURN VALUE
+class      required
+says       With descriptor 0 on a file holding "ab", getwchar() returns L'a' then
+           L'b', ftell(stdin) after each is 1 and 2, and fwide(stdin, 0) is
+           positive.
+test       t/001-sequence.c
+
+assertion  XSH.getwchar.002
+anchor     functions/getwchar.html#DESCRIPTION
+anchor     functions/fgetwc.html#RETURN VALUE
+class      required
+says       With descriptor 0 on an empty file, getwchar() returns WEOF,
+           feof(stdin) is true and ferror(stdin) false.
+test       t/002-eof.c
+
+assertion  XSH.getwchar.003
+anchor     functions/getwchar.html#ERRORS
+anchor     functions/fgetwc.html#ERRORS/EBADF
+anchor     functions/getwchar.html#RETURN VALUE
+class      required
+says       With descriptor 0 closed before the first read, getwchar() returns
+           WEOF, sets errno to EBADF and sets the error indicator of stdin.
+test       t/003-ebadf-closed.c

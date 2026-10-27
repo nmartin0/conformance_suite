@@ -1,0 +1,18 @@
+# wctomb.cov - every requirement unit on functions/wctomb.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:7e55d931     XSH.wctomb.001 XSH.wctomb.002 XSH.wctomb.005
+DESCRIPTION:1bfc3bc7     XSH.wctomb.001 XSH.wctomb.002 XSH.wctomb.005
+DESCRIPTION:711dd05a     XSH.wctomb.003 XSH.wctomb.005
+DESCRIPTION:18a208ec     partial XSH.wctomb.001 XSH.wctomb.005  # the null byte; shift sequences and the resulting state are not exercised
+DESCRIPTION:e62b4e41     XSH.wctomb.005
+DESCRIPTION:a18c1c47     untestable  needs a state-dependent encoding, which no locale is assumed to have
+DESCRIPTION:4dfddc84     untestable  needs a state-dependent encoding, which no locale is assumed to have
+DESCRIPTION:ab893ead     partial XSH.wctomb.004 XSH.wctomb.005  # null s in stateless locales only
+DESCRIPTION:72411f42     none  unspecified shift state after a locale change, not asserted
+DESCRIPTION:1157ba58     untestable  freedom from data races cannot be shown by a finite run
+DESCRIPTION:7526fbf6     untestable  whether the implementation calls the function internally cannot be observed by a program
+RETURN_VALUE:4bfb3984    partial XSH.wctomb.004 XSH.wctomb.005  # null s in stateless locales only
+RETURN_VALUE:53686cf6    XSH.wctomb.001 XSH.wctomb.002 XSH.wctomb.003 XSH.wctomb.005
+RETURN_VALUE:b7512e1b    XSH.wctomb.003 XSH.wctomb.005
+ERRORS:d12861e1          XSH.wctomb.003

@@ -1,0 +1,108 @@
+# XSH mbrtoc16() and mbrtoc32()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+# States are mbstate_t objects of the test, set to all zero bytes (an initial state).
+# Tests that need the codes to be Unicode are NOTINUSE unless <uchar.h> announces UTF-16 and UTF-32.
+
+assertion  XSH.mbrtoc16.001
+anchor     functions/mbrtoc16.html#DESCRIPTION
+anchor     functions/mbrtoc16.html#RETURN VALUE
+class      required
+since      2024
+says       In the POSIX locale mbrtoc32() and mbrtoc16() of each byte 1
+           to 255 return 1; of the null byte they return 0, store the
+           null code and leave the initial state.
+test       t/001-posix-bytes.c
+
+assertion  XSH.mbrtoc16.002
+anchor     functions/mbrtoc16.html#DESCRIPTION
+anchor     functions/mbrtoc16.html#RETURN VALUE
+class      required
+since      2024
+says       With the Unicode macros defined and an ASCII-based character
+           set, in the POSIX locale mbrtoc32() and mbrtoc16() of each
+           portable-character-set member return 1 and store that
+           member's character value.
+test       t/002-portable.c
+
+assertion  XSH.mbrtoc16.003
+anchor     functions/mbrtoc16.html#DESCRIPTION
+anchor     functions/mbrtoc16.html#RETURN VALUE
+class      required
+since      2024
+says       mbrtoc32() and mbrtoc16() with a null s return 0 (n 5 and n
+           0), store nothing through pc, and leave the initial state.
+test       t/003-null-s.c
+
+assertion  XSH.mbrtoc16.004
+anchor     functions/mbrtoc16.html#DESCRIPTION
+anchor     functions/mbrtoc16.html#RETURN VALUE
+class      required
+since      2024
+says       mbrtoc32() and mbrtoc16() with a null pc return 1 for "A";
+           with a null ps they return 1 for "A".
+test       t/004-null-pc-and-ps.c
+
+assertion  XSH.mbrtoc16.005
+anchor     functions/mbrtoc16.html#DESCRIPTION
+anchor     functions/mbrtoc16.html#RETURN VALUE
+class      required
+since      2024
+says       In a UTF-8 locale mbrtoc32() returns 2, 3 and 4 for U+00E9,
+           U+20AC and U+1F600 (n 4), and when the type holds UTF-32
+           stores those codes.
+test       t/005-utf8-lengths.c
+
+assertion  XSH.mbrtoc16.006
+anchor     functions/mbrtoc16.html#DESCRIPTION
+anchor     functions/mbrtoc16.html#RETURN VALUE
+class      required
+since      2024
+says       With char16_t holding UTF-16, in a UTF-8 locale mbrtoc16()
+           of U+1F600 returns 4 and stores 0xD83D; the next call (any
+           input) returns (size_t)-3 and stores 0xDE00; the next, given
+           "x", returns 1.
+note       char16_t holding UTF-16 is announced by the ISO C macro; see
+           Q-120.
+test       t/006-utf16-pair.c
+
+assertion  XSH.mbrtoc16.007
+anchor     functions/mbrtoc16.html#DESCRIPTION
+anchor     functions/mbrtoc16.html#RETURN VALUE
+class      required
+since      2024
+says       In a UTF-8 locale mbrtoc32() of the three bytes of one
+           character given one at a time returns (size_t)-2, (size_t)-2
+           and 1, stores nothing for the first two, and (when the type
+           holds UTF-32) stores 0x20AC for the third.
+test       t/007-utf8-restart.c
+
+assertion  XSH.mbrtoc16.008
+anchor     functions/mbrtoc16.html#RETURN VALUE
+anchor     functions/mbrtoc16.html#ERRORS
+class      required
+since      2024
+says       In a UTF-8 locale mbrtoc32() and mbrtoc16() return
+           (size_t)-1 with errno EILSEQ and store nothing for a lone
+           continuation byte and for a lead byte followed by a non-
+           continuation byte.
+test       t/008-utf8-invalid.c
+
+assertion  XSH.mbrtoc16.009
+anchor     functions/mbrtoc16.html#DESCRIPTION
+class      required
+since      2024
+says       A successful mbrtoc32() or mbrtoc16() (for "A" and for the
+           null byte) leaves errno unchanged.
+test       t/009-errno-kept.c
+
+assertion  XSH.mbrtoc16.010
+anchor     functions/mbrtoc16.html#DESCRIPTION
+class      required
+since      2024
+says       In a UTF-8 locale mbrtoc32() with a null ps keeps its own
+           state between calls: the first byte of a two-byte character
+           gives (size_t)-2 and the second gives 1.
+test       t/010-null-ps-state.c

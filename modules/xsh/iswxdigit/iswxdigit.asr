@@ -1,0 +1,58 @@
+# XSH iswxdigit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.iswxdigit.001
+anchor     functions/iswxdigit.html#DESCRIPTION
+anchor     functions/iswxdigit.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In the POSIX locale iswxdigit() returns non-zero for each character
+           of the class xdigit as the locale definition lists it: the ten
+           digits, A to F and a to f.
+test       t/001-members.c
+
+assertion  XSH.iswxdigit.002
+anchor     functions/iswxdigit.html#DESCRIPTION
+anchor     functions/iswxdigit.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In the POSIX locale iswxdigit() returns 0 for each of these
+           characters, which the locale definition does not place in the
+           class: the letters G to Z and g to z, the punctuation, the
+           white-space characters and the controls.
+test       t/002-non-members.c
+
+assertion  XSH.iswxdigit.003
+anchor     functions/iswxdigit.html#DESCRIPTION
+anchor     functions/iswxdigit.html#RETURN VALUE
+class      required
+says       iswxdigit(WEOF) is within the domain and returns 0, since WEOF is
+           not a character of the class.
+test       t/003-weof.c
+
+assertion  XSH.iswxdigit.004
+anchor     functions/iswxdigit.html#DESCRIPTION
+anchor     functions/iswxdigit.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       Each of the 22 hexadecimal digit characters is also an alnum
+           character; the ten decimal digits are digit characters and the
+           twelve letters are alpha characters.
+test       t/004-xdigit-relations.c
+
+assertion  XSH.iswxdigit.005
+anchor     functions/iswxdigit.html#DESCRIPTION
+anchor     functions/iswxdigit.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In a UTF-8 locale iswxdigit() is non-zero for the 22 hexadecimal
+           digit characters and 0 for every other ASCII-range character
+           (xdigit has only those members in every locale).
+note       Needs an installed multibyte UTF-8 locale (NOTINUSE otherwise);
+           only ASCII-range characters are examined.
+test       t/005-utf8-portable.c

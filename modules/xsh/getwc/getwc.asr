@@ -1,0 +1,31 @@
+# XSH getwc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getwc.001
+anchor     functions/getwc.html#DESCRIPTION
+anchor     functions/fgetwc.html#RETURN VALUE
+class      required
+says       On a stream reading "abcd", calls alternating between getwc() and
+           fgetwc() return L'a', L'b', L'c', L'd' in turn, and ftell() after each
+           is 1 to 4.
+test       t/001-sequence.c
+
+assertion  XSH.getwc.002
+anchor     functions/getwc.html#DESCRIPTION
+anchor     functions/fgetwc.html#RETURN VALUE
+class      required
+says       On a stream reading "ab" whose end-of-file indicator is set by a
+           getwc() that returned WEOF, after "c" is appended through a separate
+           open(), getwc() returns WEOF and feof() stays true; after clearerr()
+           it returns L'c'.
+test       t/002-eof-sticky.c
+
+assertion  XSH.getwc.003
+anchor     functions/getwc.html#ERRORS
+anchor     functions/fgetwc.html#ERRORS/EBADF
+anchor     functions/getwc.html#RETURN VALUE
+class      required
+says       On a stream opened "r" whose descriptor was closed before the first
+           read, getwc() returns WEOF, sets errno to EBADF and sets the error
+           indicator.
+test       t/003-ebadf-closed.c

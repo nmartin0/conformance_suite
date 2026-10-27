@@ -1,0 +1,51 @@
+# XSH wcscasecmp() and wcsncasecmp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests run in the POSIX locale (selected with setlocale(LC_ALL, "C")).
+# Only the sign of a result is judged; expected signs are computed from the
+# values of the portable-character literals, taking the lowercase of each
+# letter. The locale-object test uses a locale made with newlocale() for "C";
+# a failure to make one is UNRESOLVED.
+
+assertion  XSH.wcscasecmp.001
+anchor     functions/wcscasecmp.html#DESCRIPTION
+anchor     functions/wcscasecmp.html#RETURN VALUE
+class      required
+since      2008
+says       wcscasecmp() returns 0 for strings that differ only in case:
+           "abc" and "ABC", "AbC" and "aBc", "a1_" and "A1_", and two empty
+           strings.
+test       t/001-equal.c
+
+assertion  XSH.wcscasecmp.002
+anchor     functions/wcscasecmp.html#DESCRIPTION
+anchor     functions/wcscasecmp.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      2008
+says       In the POSIX locale the comparison is of the codes after
+           conversion to lowercase: "a" before "B", "B" after "a", "_"
+           against "A" by the codes of _ and a, "Z" against "a" by the codes
+           of z and a, "ab" before "ABC" and "ABC" after "ab".
+test       t/002-lowercase-order.c
+
+assertion  XSH.wcscasecmp.003
+anchor     functions/wcscasecmp.html#DESCRIPTION
+anchor     functions/wcscasecmp.html#RETURN VALUE
+class      required
+since      2008
+says       wcsncasecmp() compares at most n codes: "abcd" with "ABXY" gives
+           0 for n 2, the sign of c against x for n 3 and 0 for n 0; {a, b,
+           null, x} against {A, B, null, y} gives 0 for n 4; "ab" against
+           "ABC" with n 5 is negative and the reverse positive.
+test       t/003-ncasecmp.c
+
+assertion  XSH.wcscasecmp.004
+anchor     functions/wcscasecmp.html#DESCRIPTION
+anchor     functions/wcscasecmp.html#RETURN VALUE
+class      required
+since      2008
+says       wcscasecmp_l() and wcsncasecmp_l() with a locale object for "C"
+           give 0 for "abc" and "ABC", a negative result for "a" against
+           "B", and 0 for "abcd" against "ABXY" with n 2.
+test       t/004-locale-object.c

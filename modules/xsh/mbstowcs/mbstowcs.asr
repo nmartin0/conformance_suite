@@ -1,0 +1,77 @@
+# XSH mbstowcs()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+
+assertion  XSH.mbstowcs.001
+anchor     functions/mbstowcs.html#DESCRIPTION
+anchor     functions/mbstowcs.html#RETURN VALUE
+class      required
+says       mbstowcs(w, "abc", 8) returns 3 and stores the codes of a,
+           b, c followed by the terminating zero.
+test       t/001-basic.c
+
+assertion  XSH.mbstowcs.002
+anchor     functions/mbstowcs.html#DESCRIPTION
+anchor     functions/mbstowcs.html#RETURN VALUE
+class      required
+says       mbstowcs() modifies no element beyond the n-th: with n 2 on
+           "abcd" it returns 2 and the third element is unchanged; with
+           n 3 on "abc" it returns 3 and stores no terminating zero.
+test       t/002-limit-n.c
+
+assertion  XSH.mbstowcs.003
+anchor     functions/mbstowcs.html#DESCRIPTION
+class      required
+says       mbstowcs() on "ab" followed by a null byte and more
+           characters returns 2 and stores nothing for the characters
+           after the null byte.
+test       t/003-stops-at-nul.c
+
+assertion  XSH.mbstowcs.004
+anchor     functions/mbstowcs.html#DESCRIPTION
+anchor     functions/mbstowcs.html#RETURN VALUE
+class      conditional
+when       XSI
+says       mbstowcs(NULL, "abcd", n) returns 4 for n 1 and for n 100.
+test       t/004-null-pwcs.c
+
+assertion  XSH.mbstowcs.005
+anchor     functions/mbstowcs.html#DESCRIPTION
+anchor     functions/mbstowcs.html#RETURN VALUE
+anchor     functions/mbstowcs.html#ERRORS
+class      required
+says       In the POSIX locale a string of all 255 non-null byte values
+           converts without error: the return value is 255 and no
+           element of the first 255 is zero; the terminating zero is
+           stored.
+test       t/005-posix-all-bytes.c
+
+assertion  XSH.mbstowcs.006
+anchor     functions/mbstowcs.html#DESCRIPTION
+anchor     functions/mbstowcs.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale mbstowcs() of a one-, a two- and a three-
+           byte character in a row returns 3 (first element the code of
+           the ASCII character), and 2 with n 2.
+note       The null pwcs form is XSI-shaded and is left to XSH.mbstowcs.004.
+test       t/006-utf8-count.c
+
+assertion  XSH.mbstowcs.007
+anchor     functions/mbstowcs.html#RETURN VALUE
+anchor     functions/mbstowcs.html#ERRORS
+class      required
+says       In a UTF-8 locale mbstowcs() returns (size_t)-1 with errno
+           EILSEQ for a string with a stray continuation byte after
+           "a", and for "a" followed by a lead byte that the null byte
+           then cuts short.
+test       t/007-utf8-invalid.c
+
+assertion  XSH.mbstowcs.008
+anchor     functions/mbstowcs.html#DESCRIPTION
+class      required
+says       In a UTF-8 locale mbstowcs() of "ab", a null byte and then
+           invalid bytes returns 2: nothing after the null byte is
+           examined.
+test       t/008-utf8-after-nul.c

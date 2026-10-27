@@ -1,0 +1,29 @@
+# mbrtoc16.cov - every requirement unit on functions/mbrtoc16.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d7502942     XSH.mbrtoc16.003
+DESCRIPTION:d39c027f     none  code fragment of the neighbouring unit
+DESCRIPTION:d14dafd8     XSH.mbrtoc16.003
+DESCRIPTION:16b4ca64     XSH.mbrtoc16.001 XSH.mbrtoc16.005 XSH.mbrtoc16.007
+DESCRIPTION:eb8fbcba     XSH.mbrtoc16.002 XSH.mbrtoc16.005 XSH.mbrtoc16.006
+DESCRIPTION:1c8fb05c     XSH.mbrtoc16.006
+DESCRIPTION:4868db8e     XSH.mbrtoc16.001
+DESCRIPTION:313d24e5     partial XSH.mbrtoc16.004 XSH.mbrtoc16.010  # null ps converts; start-up value of the internal state not observable
+DESCRIPTION:6dbcc3a6     XSH.mbrtoc16.007
+DESCRIPTION:e62b4e41     XSH.mbrtoc16.005
+DESCRIPTION:bb3aa021     XSH.mbrtoc16.009
+DESCRIPTION:88570de2     XSH.mbrtoc16.001 XSH.mbrtoc16.002 XSH.mbrtoc16.005
+DESCRIPTION:10afe6c0     XSH.mbrtoc16.001 XSH.mbrtoc16.002 XSH.mbrtoc16.005
+DESCRIPTION:88fed47b     untestable  freedom from data races cannot be shown by a finite run
+DESCRIPTION:1d720f58     untestable  freedom from data races cannot be shown by a finite run
+DESCRIPTION:d6df41d1     untestable  whether the implementation calls the function internally cannot be observed by a program
+RETURN_VALUE:ad43c360    XSH.mbrtoc16.001 XSH.mbrtoc16.006
+RETURN_VALUE:381abb13    XSH.mbrtoc16.001
+RETURN_VALUE:dd1fe57b    XSH.mbrtoc16.001 XSH.mbrtoc16.005
+RETURN_VALUE:93fde920    XSH.mbrtoc16.006
+RETURN_VALUE:652f3aab    XSH.mbrtoc16.007
+RETURN_VALUE:3db0daa0    untestable  needs a state-dependent encoding, which no locale is assumed to have
+RETURN_VALUE:8d1d7c02    XSH.mbrtoc16.008
+RETURN_VALUE:c7616b9d    partial XSH.mbrtoc16.008  # errno only; the state after an error is undefined
+ERRORS:ad70ad8d          XSH.mbrtoc16.001 XSH.mbrtoc16.008
+ERRORS:32753ad4          untestable  an invalid conversion state cannot be built portably, and the error is optional

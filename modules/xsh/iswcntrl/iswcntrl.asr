@@ -1,0 +1,44 @@
+# XSH iswcntrl()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.iswcntrl.001
+anchor     functions/iswcntrl.html#DESCRIPTION
+anchor     functions/iswcntrl.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In the POSIX locale iswcntrl() returns non-zero for each character
+           of the class cntrl as the locale definition lists it: the
+           control characters of the portable character set (null, alert,
+           backspace, tab, newline, vertical tab, form feed, carriage return).
+test       t/001-members.c
+
+assertion  XSH.iswcntrl.002
+anchor     functions/iswcntrl.html#DESCRIPTION
+anchor     functions/iswcntrl.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In the POSIX locale iswcntrl() returns 0 for each of these
+           characters, which the locale definition does not place in the
+           class: the letters, digits, punctuation and the space.
+test       t/002-non-members.c
+
+assertion  XSH.iswcntrl.003
+anchor     functions/iswcntrl.html#DESCRIPTION
+anchor     functions/iswcntrl.html#RETURN VALUE
+class      required
+says       iswcntrl(WEOF) is within the domain and returns 0, since WEOF is
+           not a character of the class.
+test       t/003-weof.c
+
+assertion  XSH.iswcntrl.004
+anchor     functions/iswcntrl.html#DESCRIPTION
+anchor     functions/iswcntrl.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       No one of the 128 characters is both a control character and a
+           printable one: iswcntrl() and iswprint() are never both non-zero.
+test       t/004-cntrl-not-print.c

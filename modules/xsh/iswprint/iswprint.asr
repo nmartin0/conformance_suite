@@ -1,0 +1,55 @@
+# XSH iswprint()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.iswprint.001
+anchor     functions/iswprint.html#DESCRIPTION
+anchor     functions/iswprint.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In the POSIX locale iswprint() returns non-zero for each character
+           of the class print as the locale definition lists it: the letters,
+           the digits, the punctuation and the space.
+test       t/001-members.c
+
+assertion  XSH.iswprint.002
+anchor     functions/iswprint.html#DESCRIPTION
+anchor     functions/iswprint.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In the POSIX locale iswprint() returns 0 for each of these
+           characters, which the locale definition does not place in the
+           class: the control characters.
+test       t/002-non-members.c
+
+assertion  XSH.iswprint.003
+anchor     functions/iswprint.html#DESCRIPTION
+anchor     functions/iswprint.html#RETURN VALUE
+class      required
+says       iswprint(WEOF) is within the domain and returns 0, since WEOF is
+           not a character of the class.
+test       t/003-weof.c
+
+assertion  XSH.iswprint.004
+anchor     functions/iswprint.html#DESCRIPTION
+anchor     functions/iswprint.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       For each of the 128 characters, iswprint() is non-zero exactly when
+           iswgraph() is non-zero or the character is the space.
+test       t/004-print-is-graph-or-space.c
+
+assertion  XSH.iswprint.005
+anchor     functions/iswprint.html#DESCRIPTION
+anchor     functions/iswprint.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In a UTF-8 locale, iswprint() is still non-zero for the letters,
+           the digits and the space.
+note       Needs an installed multibyte UTF-8 locale (NOTINUSE otherwise);
+           only ASCII-range characters are examined.
+test       t/005-utf8-portable.c

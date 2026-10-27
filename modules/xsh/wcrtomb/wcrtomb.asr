@@ -1,0 +1,62 @@
+# XSH wcrtomb()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+# States are mbstate_t objects of the test, set to all zero bytes (an initial state).
+
+assertion  XSH.wcrtomb.001
+anchor     functions/wcrtomb.html#DESCRIPTION
+anchor     functions/wcrtomb.html#RETURN VALUE
+class      required
+says       In the POSIX locale wcrtomb() of each portable-character-set
+           member returns 1 and stores its character value, with an
+           explicit state and with a null ps; the null wide character
+           gives 1, a null byte and the initial state.
+test       t/001-portable.c
+
+assertion  XSH.wcrtomb.002
+anchor     functions/wcrtomb.html#DESCRIPTION
+anchor     functions/wcrtomb.html#RETURN VALUE
+class      required
+says       In the POSIX locale, for every byte b, wcrtomb() of the code
+           mbrtowc() gave for b returns 1 and stores b.
+test       t/002-roundtrip.c
+
+assertion  XSH.wcrtomb.003
+anchor     functions/wcrtomb.html#DESCRIPTION
+anchor     functions/wcrtomb.html#RETURN VALUE
+anchor     functions/wcrtomb.html#ERRORS
+class      required
+says       Over the 257 codes 0 to 256 in the POSIX locale (which has
+           256 characters) wcrtomb() returns 1 or (size_t)-1; each
+           failure comes with errno EILSEQ; at least one fails; no more
+           than MB_CUR_MAX bytes are stored.
+test       t/003-invalid.c
+
+assertion  XSH.wcrtomb.004
+anchor     functions/wcrtomb.html#DESCRIPTION
+class      required
+says       wcrtomb(NULL, L'A', &st) from an initial state returns 1 (it
+           acts as a conversion of the null wide character into an
+           internal buffer, whatever wc is) and leaves the initial
+           state.
+test       t/004-null-s.c
+
+assertion  XSH.wcrtomb.005
+anchor     functions/wcrtomb.html#DESCRIPTION
+anchor     functions/wcrtomb.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale wcrtomb() of the codes mbrtowc() gave for
+           a two-byte and a three-byte character returns 2 and 3 and
+           stores the same bytes, never more than MB_CUR_MAX; of L'A'
+           returns 1; of 0 returns 1, stores a null byte and leaves the
+           initial state.
+test       t/005-utf8.c
+
+assertion  XSH.wcrtomb.006
+anchor     functions/wcrtomb.html#DESCRIPTION
+class      required
+says       A successful wcrtomb() (for L'A' and for the null wide
+           character) leaves errno unchanged.
+test       t/006-errno-kept.c

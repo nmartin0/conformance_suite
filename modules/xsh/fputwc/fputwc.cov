@@ -1,0 +1,24 @@
+# fputwc.cov - every requirement unit on functions/fputwc.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:40bf4b1e     XSH.fputwc.001 XSH.fputwc.002 XSH.fputwc.011
+DESCRIPTION:a172494b     XSH.fputwc.003
+DESCRIPTION:d181db2e     none  leaves an undefined state
+DESCRIPTION:6952e41e     XSH.fputwc.004
+DESCRIPTION:99966386     XSH.fputwc.005
+RETURN_VALUE:8a87978c    XSH.fputwc.001
+RETURN_VALUE:c5ae5faf    XSH.fputwc.006 XSH.fputwc.007 XSH.fputwc.008 XSH.fputwc.009 XSH.fputwc.010
+RETURN_VALUE:7dd7b73e    XSH.fputwc.010
+ERRORS:9028629a          XSH.fputwc.006 XSH.fputwc.007 XSH.fputwc.008 XSH.fputwc.009 XSH.fputwc.010
+ERRORS:bebb7770          XSH.fputwc.009
+ERRORS:5feec550          XSH.fputwc.006 XSH.fputwc.007
+ERRORS:80a39d06          todo  a file size limit needs a child with a lowered RLIMIT_FSIZE; the fputc module checks it for the byte form
+ERRORS:9f8472ce          todo  a file size limit needs a child with a lowered RLIMIT_FSIZE; the fputc module checks it for the byte form
+ERRORS:399b8ebf          todo  a file size limit needs a child with a lowered RLIMIT_FSIZE; the fputc module checks it for the byte form
+ERRORS:60e1c67f          XSH.fputwc.010
+ERRORS:c9cace74          todo  needs a blocking write interrupted by a signal; the fputc module checks it for the byte form
+ERRORS:a6bc3395          todo  a physical or background-terminal I/O error cannot be caused portably
+ERRORS:c6294d0e          todo  needs a full file system
+ERRORS:060d5689          XSH.fputwc.008
+ERRORS:5a3b118c          optional
+ERRORS:01ce82ab          optional

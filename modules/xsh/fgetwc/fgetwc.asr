@@ -1,0 +1,116 @@
+# XSH fgetwc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fgetwc.001
+anchor     functions/fgetwc.html#DESCRIPTION
+anchor     functions/fgetwc.html#RETURN VALUE
+class      required
+says       On a stream reading a file that holds "aZ0", successive fgetwc() calls
+           return L'a', L'Z' and L'0', and ftell() after each is 1, 2 and 3.
+test       t/001-sequence.c
+
+assertion  XSH.fgetwc.002
+anchor     functions/fgetwc.html#RETURN VALUE
+anchor     basedefs/V1_chap06.html#6.2
+class      disputed
+says       In the POSIX locale, on a stream reading a file that holds every byte
+           value from 0x01 to 0xff once, fgetwc() returns a value other than WEOF
+           255 times, the error indicator stays clear, and the next call returns
+           WEOF.
+note       disputed (Q-127): the POSIX locale holds 256 single-byte
+           characters (XBD 6.2), but no page says each byte converts to a
+           wide character. Only that the bytes convert is asserted, not the
+           code each one gets.
+test       t/002-all-bytes.c
+
+assertion  XSH.fgetwc.003
+anchor     functions/fgetwc.html#RETURN VALUE
+class      required
+says       On a stream at the end of its file (an empty file, and a file "ab"
+           after two reads), fgetwc() returns WEOF, feof() is then true and
+           ferror() false.
+test       t/003-eof.c
+
+assertion  XSH.fgetwc.004
+anchor     functions/fgetwc.html#RETURN VALUE
+anchor     functions/fgetwc.html#DESCRIPTION
+class      required
+since      2001
+says       On a stream reading "ab" whose end-of-file indicator is set, after "c"
+           is appended through a separate open(), fgetwc() returns WEOF and
+           feof() stays true; after clearerr() the next fgetwc() returns L'c'.
+test       t/004-eof-sticky.c
+
+assertion  XSH.fgetwc.005
+anchor     functions/fgetwc.html#DESCRIPTION
+class      required
+says       With errno set to ERANGE beforehand, a successful fgetwc() leaves
+           errno at ERANGE.
+test       t/005-errno-kept.c
+
+assertion  XSH.fgetwc.006
+anchor     functions/fgetwc.html#ERRORS/EBADF
+anchor     functions/fgetwc.html#RETURN VALUE
+class      required
+says       On a stream opened "r" whose descriptor was closed before the first
+           read, fgetwc() returns WEOF, sets errno to EBADF and sets the error
+           indicator.
+test       t/006-ebadf-closed.c
+
+assertion  XSH.fgetwc.007
+anchor     functions/fgetwc.html#ERRORS/EBADF
+anchor     functions/fgetwc.html#RETURN VALUE
+class      required
+says       On a stream opened "w", fgetwc() returns WEOF, sets errno to EBADF and
+           sets the error indicator.
+test       t/007-ebadf-write-only.c
+
+assertion  XSH.fgetwc.008
+anchor     functions/fgetwc.html#ERRORS/EAGAIN
+anchor     functions/fgetwc.html#RETURN VALUE
+class      required
+says       On a stream on the read end of an empty pipe with O_NONBLOCK set
+           (write end open), fgetwc() returns WEOF, sets errno to EAGAIN and sets
+           the error indicator.
+test       t/008-eagain.c
+
+assertion  XSH.fgetwc.009
+anchor     functions/fgetwc.html#ERRORS/EINTR
+anchor     functions/fgetwc.html#RETURN VALUE
+class      required
+says       On a stream on the read end of an empty pipe (blocking), a SIGALRM
+           caught without SA_RESTART 1 s into fgetwc() makes it return WEOF with
+           errno EINTR and the error indicator set (a byte is written from the
+           second alarm on, so an implementation that restarts the read returns
+           it and is reported).
+test       t/009-eintr.c
+timeout    20
+
+assertion  XSH.fgetwc.010
+anchor     functions/fgetwc.html#ERRORS/EILSEQ
+anchor     functions/fgetwc.html#RETURN VALUE
+class      required
+since      2024
+says       In a UTF-8 locale, on a stream reading a file that holds the single
+           byte 0xff, fgetwc() returns WEOF, sets errno to EILSEQ and sets the
+           error indicator.
+note       The error indicator for an encoding error is required by the Issue 8
+           text (defect 1624).
+test       t/010-eilseq.c
+
+assertion  XSH.fgetwc.011
+anchor     functions/fgetwc.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5
+class      required
+says       In a UTF-8 locale, on a stream reading the bytes 0xc3 0xa9 'x', the
+           first fgetwc() returns the code mbrtowc() gives for those two bytes
+           (not WEOF), ftell() is then 2, and the second call returns L'x'.
+test       t/011-multibyte.c
+
+assertion  XSH.fgetwc.012
+anchor     functions/fgetwc.html#DESCRIPTION
+class      required
+says       After the access time of a file is set to 2001-09-09, the first
+           successful fgetwc() on a stream reading it moves the access time
+           later.
+test       t/012-atime.c

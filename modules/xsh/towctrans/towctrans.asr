@@ -1,0 +1,39 @@
+# XSH towctrans()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.towctrans.001
+anchor     functions/towctrans.html#DESCRIPTION
+anchor     functions/towctrans.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       With the handle from wctrans("toupper") in the POSIX locale,
+           towctrans() maps each lowercase letter to its uppercase partner,
+           returns all other portable characters unchanged, and agrees with
+           towupper() for all 128 characters.
+test       t/001-toupper.c
+
+assertion  XSH.towctrans.002
+anchor     functions/towctrans.html#DESCRIPTION
+anchor     functions/towctrans.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       With the handle from wctrans("tolower"), towctrans() maps each
+           uppercase letter to its lowercase partner, returns all other
+           portable characters unchanged, and agrees with towlower() for all
+           128 characters.
+test       t/002-tolower.c
+
+assertion  XSH.towctrans.003
+anchor     functions/towctrans.html#RETURN VALUE
+class      required
+says       With desc equal to zero (wctrans_t)0, towctrans() returns its first
+           argument unchanged (checked for a, A, 0, space and WEOF).
+test       t/003-zero-desc.c
+
+assertion  XSH.towctrans.004
+anchor     functions/towctrans.html#DESCRIPTION
+anchor     functions/towctrans.html#RETURN VALUE
+class      required
+says       With either handle, towctrans(WEOF, desc) returns WEOF.
+test       t/004-weof.c

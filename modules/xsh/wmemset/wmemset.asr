@@ -1,0 +1,34 @@
+# XSH wmemset()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests use values that need not be valid characters (the largest wchar_t value) and the null code as ordinary data.
+# Destinations are filled with L'X' first, so that codes written past n show.
+
+assertion  XSH.wmemset.001
+anchor     functions/wmemset.html#DESCRIPTION
+anchor     functions/wmemset.html#RETURN VALUE
+class      required
+says       wmemset(buf, q, 4) stores q in the first four elements, changes
+           nothing after them, and returns the pointer.
+test       t/001-set.c
+
+assertion  XSH.wmemset.002
+anchor     functions/wmemset.html#DESCRIPTION
+anchor     functions/wmemset.html#RETURN VALUE
+class      required
+says       With n 0 nothing is written and the pointer is returned.
+test       t/002-n-zero.c
+
+assertion  XSH.wmemset.003
+anchor     functions/wmemset.html#DESCRIPTION
+class      required
+says       The null code and WCHAR_MAX are each stored in all n elements.
+test       t/003-any-value.c
+
+assertion  XSH.wmemset.004
+anchor     functions/wmemset.html#DESCRIPTION
+class      required
+since      2024
+says       wmemset() leaves errno unchanged on valid input, both when it is
+           0 and when it is EDOM.
+test       t/004-errno-kept.c

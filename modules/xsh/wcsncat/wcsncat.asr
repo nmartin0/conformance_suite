@@ -1,0 +1,45 @@
+# XSH wcsncat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sources are in arrays and destinations are filled with L'X' first, so that codes written past the terminator show.
+
+assertion  XSH.wcsncat.001
+anchor     functions/wcsncat.html#DESCRIPTION
+anchor     functions/wcsncat.html#RETURN VALUE
+class      required
+says       wcsncat() of "cdef" with n 2 onto "ab" gives "abcd" and a null at
+           index 4 (always appended), changes nothing after it, and returns
+           the destination pointer.
+test       t/001-short-n.c
+
+assertion  XSH.wcsncat.002
+anchor     functions/wcsncat.html#DESCRIPTION
+class      required
+says       With n larger than the source string, only the string is
+           appended: for the array {c, d, null, z, z} and n 10 the result is
+           "abcd" with the null at index 4 and nothing after it changed (no
+           padding, nothing after the source null).
+test       t/002-long-n.c
+
+assertion  XSH.wcsncat.003
+anchor     functions/wcsncat.html#DESCRIPTION
+class      required
+says       With n 0 the destination "ab" is unchanged, its null stays at
+           index 2, and nothing after it is changed.
+test       t/003-n-zero.c
+
+assertion  XSH.wcsncat.004
+anchor     functions/wcsncat.html#DESCRIPTION
+anchor     functions/wcsncat.html#RETURN VALUE
+class      required
+says       wcsncat() of "abc" with n 2 onto an empty destination gives "ab"
+           and a null.
+test       t/004-empty-dest.c
+
+assertion  XSH.wcsncat.005
+anchor     functions/wcsncat.html#DESCRIPTION
+class      required
+since      2024
+says       wcsncat() leaves errno unchanged on valid input, both when it is
+           0 and when it is EDOM.
+test       t/005-errno-kept.c

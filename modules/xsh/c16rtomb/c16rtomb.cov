@@ -1,0 +1,23 @@
+# c16rtomb.cov - every requirement unit on functions/c16rtomb.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:459966bc     XSH.c16rtomb.003
+DESCRIPTION:5cd66f24     none  code fragment of the neighbouring unit
+DESCRIPTION:11358044     none  explains the internal buffer
+DESCRIPTION:e7e1a484     XSH.c16rtomb.002 XSH.c16rtomb.004 XSH.c16rtomb.005 XSH.c16rtomb.006
+DESCRIPTION:711dd05a     XSH.c16rtomb.005
+DESCRIPTION:cc987080     partial XSH.c16rtomb.001  # the null byte and the initial state; shift sequences are not exercised
+DESCRIPTION:7d9d831a     partial XSH.c16rtomb.001  # null ps converts; start-up value of the internal state not observable
+DESCRIPTION:6dbcc3a6     XSH.c16rtomb.007
+DESCRIPTION:e62b4e41     XSH.c16rtomb.005
+DESCRIPTION:bb3aa021     XSH.c16rtomb.009
+DESCRIPTION:cdf3779e     XSH.c16rtomb.001 XSH.c16rtomb.004 XSH.c16rtomb.005
+DESCRIPTION:3021a912     XSH.c16rtomb.001 XSH.c16rtomb.004 XSH.c16rtomb.005
+DESCRIPTION:0c5663ba     untestable  freedom from data races cannot be shown by a finite run
+DESCRIPTION:d31e12fe     untestable  freedom from data races cannot be shown by a finite run
+DESCRIPTION:dc25551f     untestable  whether the implementation calls the function internally cannot be observed by a program
+RETURN_VALUE:e1e73734    XSH.c16rtomb.001 XSH.c16rtomb.002 XSH.c16rtomb.005 XSH.c16rtomb.006
+RETURN_VALUE:0684929c    XSH.c16rtomb.004 XSH.c16rtomb.008
+RETURN_VALUE:2586ef1f    partial XSH.c16rtomb.004 XSH.c16rtomb.008  # errno only; the state after an error is unspecified
+ERRORS:df99b455          XSH.c16rtomb.004 XSH.c16rtomb.008
+ERRORS:32753ad4          untestable  an invalid conversion state cannot be built portably, and the error is optional

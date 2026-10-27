@@ -1,0 +1,37 @@
+# XSH btowc()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+
+assertion  XSH.btowc.001
+anchor     functions/btowc.html#RETURN VALUE
+class      required
+says       In the POSIX locale btowc() does not return WEOF for any
+           argument from 0 to 255.
+test       t/001-all-bytes.c
+
+assertion  XSH.btowc.002
+anchor     functions/btowc.html#RETURN VALUE
+class      required
+says       btowc(EOF) returns WEOF.
+test       t/002-eof.c
+
+assertion  XSH.btowc.003
+anchor     functions/btowc.html#RETURN VALUE
+class      required
+says       In the POSIX locale btowc() of each member of the portable
+           character set returns the member's own character value, and
+           btowc(0) returns 0.
+note       The wide-character code of a portable-character-set member
+           equals its value as a lone character constant (XBD 6.3).
+test       t/003-portable.c
+
+assertion  XSH.btowc.004
+anchor     functions/btowc.html#DESCRIPTION
+anchor     functions/btowc.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale btowc('A') returns the value of 'A', and
+           bytes 0x80, 0xC3 and 0xFF, none of which is a complete
+           character by itself in UTF-8, give WEOF.
+test       t/004-utf8.c

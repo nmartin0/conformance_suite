@@ -1,0 +1,212 @@
+# XSH fwscanf(), swscanf(), wscanf()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fwscanf.001
+anchor     functions/fwscanf.html#DESCRIPTION
+anchor     functions/fwscanf.html#RETURN VALUE
+class      required
+says       Through swscanf(), fwscanf() on a file and wscanf() on a file as
+           stdin, the format L"%d %ls" on the input "25 hello" returns 2, stores
+           25 and L"hello" with its terminator.
+test       t/001-basic.c
+
+assertion  XSH.fwscanf.002
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       The same three functions, with the format L"%s %c" on "abc d" and char
+           destinations, return 2, store "abc" with a terminator and 'd' (no
+           terminator after it).
+test       t/002-narrow-dest.c
+
+assertion  XSH.fwscanf.003
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       L"%lc" on " x" stores L' ' (no white space is skipped) and returns 1;
+           L"%3lc" on "abcd" stores L"abc" and no terminator (the next element is
+           unchanged); L" %lc" on " x" stores L'x'. Here scan() stands for each
+           of swscanf(), fwscanf() on a file and wscanf() on a file made standard
+           input.
+test       t/003-c-conv.c
+
+assertion  XSH.fwscanf.004
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       L"%l[abc]" on "abcabd" stores L"abcab" with a terminator and returns
+           1; L"%l[^x]" on "ab x" stores L"ab "; L"%l[]a]" on "a]b" stores L"a]";
+           L"%l[abc]" on "xyz" returns 0 and stores nothing. Here scan() stands
+           for each of swscanf(), fwscanf() on a file and wscanf() on a file made
+           standard input.
+test       t/004-scanset.c
+
+assertion  XSH.fwscanf.005
+anchor     functions/fwscanf.html#DESCRIPTION
+anchor     functions/fwscanf.html#RETURN VALUE
+class      required
+says       Scan(L"ab 12", L"%ls%n", ws, &n) returns 1 and stores n = 2; scan(L"12
+           ", L"%d%n", &i, &n) returns 1 with n = 2 (%n is not counted in the
+           return value). Here scan() stands for each of swscanf(), fwscanf() on
+           a file and wscanf() on a file made standard input.
+test       t/005-count-n.c
+
+assertion  XSH.fwscanf.006
+anchor     functions/fwscanf.html#RETURN VALUE
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       Scan(L"12 x", L"%d %d", &a, &b) returns 1 with a = 12; scan(L"x",
+           L"%d", &a) returns 0 and leaves a unchanged. Here scan() stands for
+           each of swscanf(), fwscanf() on a file and wscanf() on a file made
+           standard input.
+test       t/006-match-failure.c
+
+assertion  XSH.fwscanf.007
+anchor     functions/fwscanf.html#RETURN VALUE
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       Scan(L"", L"%d", &a) and scan(L"  ", L"%d", &a) return EOF; scan(L"5",
+           L"%d %d", &a, &b) returns 1 with a = 5. Here scan() stands for each of
+           swscanf(), fwscanf() on a file and wscanf() on a file made standard
+           input.
+test       t/007-eof-return.c
+
+assertion  XSH.fwscanf.008
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       Scan(L"1 2", L"%*d %d", &v) returns 1 with v = 2; scan(L"abc d",
+           L"%*ls %ls", ws) returns 1 with ws = L"d". Here scan() stands for each
+           of swscanf(), fwscanf() on a file and wscanf() on a file made standard
+           input.
+test       t/008-suppress.c
+
+assertion  XSH.fwscanf.009
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       Scan(L"12345", L"%2d%ls", &i, ws) returns 2 with i = 12 and ws =
+           L"345"; scan(L"abcdef", L"%3ls", ws) stores L"abc". Here scan() stands
+           for each of swscanf(), fwscanf() on a file and wscanf() on a file made
+           standard input.
+test       t/009-width.c
+
+assertion  XSH.fwscanf.010
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       Through the three forms (string, stream on a file, standard input on a
+           file): the format "a%d" on "a5" returns 1 with 5; "%%%d" on "%7"
+           returns 1 with 7; "a%d" on "b5" returns 0 with the int unchanged, and
+           for the stream forms the next fgetwc() returns L'b' (the differing
+           character stays unread).
+test       t/010-literal.c
+
+assertion  XSH.fwscanf.011
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       Scan(L"  \n 7", L"%d", &i) returns 1 with i = 7; scan(L"7", L" %d",
+           &i) returns 1 (a white-space directive matches no white space);
+           scan(L"3  4", L"%d %d", &a, &b) returns 2. Here scan() stands for each
+           of swscanf(), fwscanf() on a file and wscanf() on a file made standard
+           input.
+test       t/011-white-space.c
+
+assertion  XSH.fwscanf.012
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       On a stream reading "10 20\n", fwscanf(f, L"%d", &i) returns 1 with i
+           = 10 and the next fgetwc() returns L' ' (the character after the item
+           stays unread); after fwscanf(f, L"%d", &i) gives 20 the next fgetwc()
+           returns L'\n'.
+test       t/012-stream-position.c
+
+assertion  XSH.fwscanf.013
+anchor     functions/fwscanf.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       After a successful fwscanf() on a new stream, fwide(f, 0) is positive;
+           after a wscanf() on stdin (descriptor 0 on a file), fwide(stdin, 0) is
+           positive.
+test       t/013-orientation.c
+
+assertion  XSH.fwscanf.014
+anchor     functions/fwscanf.html#RETURN VALUE
+class      required
+says       On a stream at the end of an empty file, fwscanf(f, L"%d", &i) returns
+           EOF and feof() is true.
+test       t/014-eof-stream.c
+
+assertion  XSH.fwscanf.015
+anchor     functions/fwscanf.html#ERRORS
+anchor     functions/fgetwc.html#ERRORS/EBADF
+anchor     functions/fwscanf.html#RETURN VALUE
+class      required
+says       On a stream opened "r" whose descriptor was closed, fwscanf(f, L"%d",
+           &i) returns EOF, sets errno to EBADF and sets the error indicator.
+test       t/015-ebadf-closed.c
+
+assertion  XSH.fwscanf.016
+anchor     functions/fwscanf.html#ERRORS/EILSEQ
+anchor     functions/fwscanf.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale, on a stream reading the single byte 0xff,
+           fwscanf(f, L"%d", &i) returns EOF and sets errno to EILSEQ.
+test       t/016-eilseq.c
+
+assertion  XSH.fwscanf.017
+anchor     functions/fwscanf.html#DESCRIPTION
+anchor     functions/fwscanf.html#APPLICATION USAGE
+class      required
+since      2008
+says       Scan(L"hello there", L"%mls", &p) returns 1 and p points to an
+           allocated L"hello" with a terminator; scan(L"abc", L"%ml[ab]", &p)
+           gives L"ab" with a terminator. Here scan() stands for each of
+           swscanf(), fwscanf() on a file and wscanf() on a file made standard
+           input.
+test       t/017-allocate.c
+
+assertion  XSH.fwscanf.018
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       In a UTF-8 locale, with e the wide character mbrtowc() gives for 0xc3
+           0xa9: swscanf on {e, 'x'} with L"%s" and a char array stores the bytes
+           0xc3 0xa9 'x' and a terminator; L"%ls%n" gives n = 2; L"%lc" stores e.
+test       t/018-multibyte.c
+
+assertion  XSH.fwscanf.019
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       Scan(L"-12 0x1F 3.5", L"%d %i %f", &a, &b, &x) returns 3 with a = -12,
+           b = 31 and x = 3.5f. Here scan() stands for each of swscanf(),
+           fwscanf() on a file and wscanf() on a file made standard input.
+test       t/019-numeric.c
+
+assertion  XSH.fwscanf.020
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+since      2008
+says       Scan(L"1 2", L"%2$d %1$d", &a, &b) returns 2 with b = 1 and a = 2.
+           Here scan() stands for each of swscanf(), fwscanf() on a file and
+           wscanf() on a file made standard input.
+test       t/020-numbered.c
+
+assertion  XSH.fwscanf.021
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       Through the three forms: the length modifiers hh, h, l, ll, j, z and
+           t on d and u (input "-5 -300 123456789 1234567890123 -9 7 -3" stores
+           those values and returns 7); o, x, X, u and i (with a leading 0)
+           store 15, 255, 255, 42 and 8 and return 5; f, lf, Lf, E, F, G, e and
+           g store 2.5, 2.5, 2.5, 150, 2.5, 0.5, 100 and 0.25 and return 8.
+test       t/021-length-conversions.c
+
+assertion  XSH.fwscanf.022
+anchor     functions/fwscanf.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Through the three forms, L"%C %S" on "x hey" returns 2, stores L'x'
+           and L"hey" with its terminator (C is lc and S is ls).
+test       t/022-xsi-C-S.c
+
+assertion  XSH.fwscanf.023
+anchor     functions/fwscanf.html#DESCRIPTION
+class      required
+says       After the access time of a file is set to 2001-09-09, the first
+           successful fwscanf() on a stream reading it moves the access time
+           later.
+test       t/023-atime.c

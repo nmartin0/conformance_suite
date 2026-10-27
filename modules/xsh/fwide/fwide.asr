@@ -1,0 +1,61 @@
+# XSH fwide()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.fwide.001
+anchor     functions/fwide.html#RETURN VALUE
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       On a stream just opened with fopen(), fwide(f, 0) returns 0, and
+           repeating it still returns 0.
+test       t/001-fresh.c
+
+assertion  XSH.fwide.002
+anchor     functions/fwide.html#DESCRIPTION
+anchor     functions/fwide.html#RETURN VALUE
+class      required
+says       On a new stream, fwide(f, 5) returns a positive value; fwide(f, 0)
+           then returns a positive value, and fwide(f, -1) still returns a
+           positive value (the orientation does not change once set).
+test       t/002-set-wide.c
+
+assertion  XSH.fwide.003
+anchor     functions/fwide.html#DESCRIPTION
+anchor     functions/fwide.html#RETURN VALUE
+class      required
+says       On a new stream, fwide(f, -5) returns a negative value; fwide(f, 0)
+           then returns a negative value, and fwide(f, 1) still returns a
+           negative value.
+test       t/003-set-byte.c
+
+assertion  XSH.fwide.004
+anchor     functions/fwide.html#RETURN VALUE
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       After a successful fgetwc() on a new input stream, and after a
+           successful fputwc() on a new output stream, fwide(f, 0) returns a
+           positive value; after fgetc() on one and fputc() on another it returns
+           a negative value.
+test       t/004-by-io.c
+
+assertion  XSH.fwide.005
+anchor     functions/fwide.html#DESCRIPTION
+class      required
+says       With errno set to ERANGE beforehand, fwide() with modes 0, 1 and -1 on
+           streams that it handles successfully leaves errno at ERANGE.
+test       t/005-errno-kept.c
+
+assertion  XSH.fwide.006
+anchor     functions/V2_chap02.html#2.5.2
+anchor     functions/fwide.html#RETURN VALUE
+class      required
+says       On a wide-oriented stream, a successful freopen() on the same file
+           leaves fwide(f, 0) returning 0.
+test       t/006-freopen.c
+
+assertion  XSH.fwide.007
+anchor     functions/V2_chap02.html#2.5.2
+anchor     functions/fwide.html#RETURN VALUE
+class      required
+says       At the start of the program (before any use), fwide(stdin, 0),
+           fwide(stdout, 0) and fwide(stderr, 0) all return 0.
+test       t/007-std-streams.c

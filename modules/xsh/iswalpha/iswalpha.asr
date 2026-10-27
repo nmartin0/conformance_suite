@@ -1,0 +1,55 @@
+# XSH iswalpha()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.iswalpha.001
+anchor     functions/iswalpha.html#DESCRIPTION
+anchor     functions/iswalpha.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In the POSIX locale iswalpha() returns non-zero for each character
+           of the class alpha as the locale definition lists it: the 26
+           uppercase and the 26 lowercase letters.
+test       t/001-members.c
+
+assertion  XSH.iswalpha.002
+anchor     functions/iswalpha.html#DESCRIPTION
+anchor     functions/iswalpha.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In the POSIX locale iswalpha() returns 0 for each of these
+           characters, which the locale definition does not place in the
+           class: the ten digits, the 32 punctuation characters, the six
+           white-space characters, and the control characters.
+test       t/002-non-members.c
+
+assertion  XSH.iswalpha.003
+anchor     functions/iswalpha.html#DESCRIPTION
+anchor     functions/iswalpha.html#RETURN VALUE
+class      required
+says       iswalpha(WEOF) is within the domain and returns 0, since WEOF is
+           not a character of the class.
+test       t/003-weof.c
+
+assertion  XSH.iswalpha.004
+anchor     functions/iswalpha.html#DESCRIPTION
+anchor     functions/iswalpha.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       For each of the 128 characters, iswalpha() is non-zero exactly when
+           iswupper() or iswlower() is non-zero.
+test       t/004-alpha-is-upper-or-lower.c
+
+assertion  XSH.iswalpha.005
+anchor     functions/iswalpha.html#DESCRIPTION
+anchor     functions/iswalpha.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In a UTF-8 locale, iswalpha() is still non-zero for the 52 letters.
+note       Needs an installed multibyte UTF-8 locale (NOTINUSE otherwise);
+           only ASCII-range characters are examined.
+test       t/005-utf8-portable.c

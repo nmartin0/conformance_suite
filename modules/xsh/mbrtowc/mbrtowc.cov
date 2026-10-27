@@ -1,0 +1,24 @@
+# mbrtowc.cov - every requirement unit on functions/mbrtowc.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:8594df83     XSH.mbrtowc.003
+DESCRIPTION:044e9f9b     none  code fragment of the neighbouring unit
+DESCRIPTION:809803d7     XSH.mbrtowc.003
+DESCRIPTION:3440282f     XSH.mbrtowc.001 XSH.mbrtowc.005 XSH.mbrtowc.006
+DESCRIPTION:2c036ca0     XSH.mbrtowc.001 XSH.mbrtowc.002 XSH.mbrtowc.005
+DESCRIPTION:4868db8e     XSH.mbrtowc.004
+DESCRIPTION:4053738d     XSH.mbrtowc.002 XSH.mbrtowc.009
+DESCRIPTION:6dbcc3a6     XSH.mbrtowc.006 XSH.mbrtowc.010
+DESCRIPTION:c1852655     untestable  whether the implementation calls the function internally cannot be observed by a program
+DESCRIPTION:e62b4e41     XSH.mbrtowc.005
+DESCRIPTION:754f982d     untestable  freedom from data races cannot be shown by a finite run
+DESCRIPTION:9353c8d1     XSH.mbrtowc.008
+RETURN_VALUE:1f6b2072    XSH.mbrtowc.001 XSH.mbrtowc.006 XSH.mbrtowc.007
+RETURN_VALUE:381abb13    XSH.mbrtowc.004
+RETURN_VALUE:dd1fe57b    XSH.mbrtowc.001 XSH.mbrtowc.005
+RETURN_VALUE:652f3aab    XSH.mbrtowc.006
+RETURN_VALUE:3db0daa0    untestable  needs a state-dependent encoding, which no locale is assumed to have
+RETURN_VALUE:8d1d7c02    XSH.mbrtowc.007
+RETURN_VALUE:c7616b9d    partial XSH.mbrtowc.007  # errno only; the state after an error is undefined
+ERRORS:ad70ad8d          XSH.mbrtowc.001 XSH.mbrtowc.007
+ERRORS:32753ad4          untestable  an invalid conversion state cannot be built portably, and the error is optional

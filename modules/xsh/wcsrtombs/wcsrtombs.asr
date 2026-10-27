@@ -1,0 +1,92 @@
+# XSH wcsrtombs() and wcsnrtombs()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that do not name a locale run in the POSIX locale (the startup locale); UTF-8 tests
+# use a locale found with pc_find_locale() and are NOTINUSE when none is installed.
+# States are mbstate_t objects of the test, set to all zero bytes (an initial state).
+
+assertion  XSH.wcsrtombs.001
+anchor     functions/wcsrtombs.html#DESCRIPTION
+anchor     functions/wcsrtombs.html#RETURN VALUE
+class      required
+says       wcsrtombs() on L"abc" followed by a null wide character and
+           more returns 3, stores "abc" and the terminating null byte,
+           sets *src to a null pointer, and leaves the initial state.
+test       t/001-basic.c
+
+assertion  XSH.wcsrtombs.002
+anchor     functions/wcsrtombs.html#DESCRIPTION
+anchor     functions/wcsrtombs.html#RETURN VALUE
+class      required
+says       With len 2 on L"abcd" wcsrtombs() returns 2, modifies no
+           further byte, and leaves *src at the third character; a
+           second call with the same state stores the rest and the
+           terminating null byte, returns 2 and sets *src to null; with
+           len 3 on L"abc" it returns 3, stores no terminating null
+           byte and leaves *src at the terminating null wide character.
+test       t/002-limit-len.c
+
+assertion  XSH.wcsrtombs.003
+anchor     functions/wcsrtombs.html#DESCRIPTION
+anchor     functions/wcsrtombs.html#RETURN VALUE
+class      required
+says       wcsrtombs() with a null dst on L"abcd" returns 4 for len 1
+           and for len 100.
+test       t/003-null-dst.c
+
+assertion  XSH.wcsrtombs.004
+anchor     functions/wcsrtombs.html#DESCRIPTION
+class      required
+says       In the POSIX locale wcsrtombs() with a null ps converts
+           L"abc" to "abc" and a null byte.
+test       t/004-null-ps.c
+
+assertion  XSH.wcsrtombs.005
+anchor     functions/wcsrtombs.html#DESCRIPTION
+anchor     functions/wcsrtombs.html#RETURN VALUE
+anchor     functions/wcsrtombs.html#ERRORS
+class      required
+says       In the POSIX locale (256 characters) some code from 1 to 257
+           is not a character; wcsrtombs() on a string "a", that code,
+           "b" returns (size_t)-1 with errno EILSEQ, has stored "a",
+           and leaves *src just past it.
+test       t/005-invalid-code.c
+
+assertion  XSH.wcsrtombs.006
+anchor     functions/wcsrtombs.html#DESCRIPTION
+class      required
+says       A successful wcsrtombs() or wcsnrtombs() leaves errno
+           unchanged.
+test       t/006-errno-kept.c
+
+assertion  XSH.wcsrtombs.007
+anchor     functions/wcsrtombs.html#DESCRIPTION
+anchor     functions/wcsrtombs.html#RETURN VALUE
+class      required
+since      2008
+says       wcsnrtombs() on L"abcdef": with nwc 3 it returns 3, stores
+           nothing beyond three bytes and leaves *src at offset 3; with
+           nwc 7 it returns 6, stores the terminating null byte and
+           sets *src to null; with a null dst and nwc 3 it returns 3.
+test       t/007-n-limit-chars.c
+
+assertion  XSH.wcsrtombs.008
+anchor     functions/wcsrtombs.html#DESCRIPTION
+anchor     functions/wcsrtombs.html#RETURN VALUE
+class      required
+says       In a UTF-8 locale wcsrtombs() on the codes for a one-, two-
+           and three-byte character returns 6 and stores their 6 bytes;
+           limited to len 2, 3 and 5 it stores only whole characters
+           (returns 1, 3 and 3) and leaves *src at the first character
+           not stored (offsets 1, 2 and 2).
+test       t/008-utf8-boundary.c
+
+assertion  XSH.wcsrtombs.009
+anchor     functions/wcsrtombs.html#DESCRIPTION
+anchor     functions/wcsrtombs.html#RETURN VALUE
+class      required
+since      2008
+says       In a UTF-8 locale wcsrtombs() with a null dst on those codes
+           returns 6, and wcsnrtombs() with nwc 2 returns 3: bytes, not
+           characters, are counted.
+test       t/009-utf8-null-dst.c

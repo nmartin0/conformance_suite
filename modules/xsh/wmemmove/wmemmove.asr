@@ -1,0 +1,55 @@
+# XSH wmemmove()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests use values that need not be valid characters (the largest wchar_t value) and the null code as ordinary data.
+# Overlapping copies are tested here because the page defines them.
+
+assertion  XSH.wmemmove.001
+anchor     functions/wmemmove.html#DESCRIPTION
+anchor     functions/wmemmove.html#RETURN VALUE
+class      required
+says       wmemmove() of five elements between distinct arrays copies them,
+           changes nothing after them, and returns the destination pointer.
+test       t/001-disjoint.c
+
+assertion  XSH.wmemmove.002
+anchor     functions/wmemmove.html#DESCRIPTION
+anchor     functions/wmemmove.html#RETURN VALUE
+class      required
+says       With the destination two elements after the source and n 4 on {a,
+           null, WCHAR_MAX, d, e, f}, the result is {a, null, a, null,
+           WCHAR_MAX, d} and the destination pointer is returned.
+test       t/002-overlap-forward.c
+
+assertion  XSH.wmemmove.003
+anchor     functions/wmemmove.html#DESCRIPTION
+anchor     functions/wmemmove.html#RETURN VALUE
+class      required
+says       With the source two elements after the destination and n 4 on {a,
+           b, c, d, e, f}, the result is {c, d, e, f, e, f} and the
+           destination pointer is returned.
+test       t/003-overlap-backward.c
+
+assertion  XSH.wmemmove.004
+anchor     functions/wmemmove.html#DESCRIPTION
+anchor     functions/wmemmove.html#RETURN VALUE
+class      required
+says       With the same pointer as source and destination the contents are
+           unchanged and the pointer is returned.
+test       t/004-same.c
+
+assertion  XSH.wmemmove.005
+anchor     functions/wmemmove.html#DESCRIPTION
+anchor     functions/wmemmove.html#RETURN VALUE
+class      required
+says       With n 0 nothing is changed and the destination pointer is
+           returned.
+test       t/005-n-zero.c
+
+assertion  XSH.wmemmove.006
+anchor     functions/wmemmove.html#DESCRIPTION
+class      required
+since      2024
+says       wmemmove() leaves errno unchanged on valid input, both when it is
+           0 and when it is EDOM.
+test       t/006-errno-kept.c

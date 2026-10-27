@@ -1,0 +1,57 @@
+# XSH iswupper()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.iswupper.001
+anchor     functions/iswupper.html#DESCRIPTION
+anchor     functions/iswupper.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In the POSIX locale iswupper() returns non-zero for each character
+           of the class upper as the locale definition lists it: the 26
+           uppercase letters.
+test       t/001-members.c
+
+assertion  XSH.iswupper.002
+anchor     functions/iswupper.html#DESCRIPTION
+anchor     functions/iswupper.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In the POSIX locale iswupper() returns 0 for each of these
+           characters, which the locale definition does not place in the
+           class: the lowercase letters, the digits, the punctuation, the
+           white-space characters and the controls.
+test       t/002-non-members.c
+
+assertion  XSH.iswupper.003
+anchor     functions/iswupper.html#DESCRIPTION
+anchor     functions/iswupper.html#RETURN VALUE
+class      required
+says       iswupper(WEOF) is within the domain and returns 0, since WEOF is
+           not a character of the class.
+test       t/003-weof.c
+
+assertion  XSH.iswupper.004
+anchor     functions/iswupper.html#DESCRIPTION
+anchor     functions/iswupper.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       For each uppercase letter c: iswlower(towlower(c)) is non-zero,
+           towupper(towlower(c)) equals c, and iswupper(c) is non-zero while
+           iswlower(c) is 0.
+test       t/004-upper-lower-mapping.c
+
+assertion  XSH.iswupper.005
+anchor     functions/iswupper.html#DESCRIPTION
+anchor     functions/iswupper.html#RETURN VALUE
+anchor     basedefs/V1_chap07.html#7.3.1.1
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+says       In a UTF-8 locale, iswupper() is still non-zero for the 26
+           uppercase letters.
+note       Needs an installed multibyte UTF-8 locale (NOTINUSE otherwise);
+           only ASCII-range characters are examined.
+test       t/005-utf8-portable.c

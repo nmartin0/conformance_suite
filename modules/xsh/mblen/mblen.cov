@@ -1,0 +1,19 @@
+# mblen.cov - every requirement unit on functions/mblen.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:20d8c11f     XSH.mblen.002 XSH.mblen.003
+DESCRIPTION:573bf152     partial XSH.mblen.002 XSH.mblen.003  # equivalence checked through results; the state of mbtowc() is not observable in stateless locales
+DESCRIPTION:8700ef4b     none  code fragment of the neighbouring unit
+DESCRIPTION:479c696f     none  code fragment of the neighbouring unit
+DESCRIPTION:e2086588     untestable  whether the implementation calls the function internally cannot be observed by a program
+DESCRIPTION:e62b4e41     XSH.mblen.003
+DESCRIPTION:aa0ccb80     untestable  needs a state-dependent encoding, which no locale is assumed to have
+DESCRIPTION:4dfddc84     untestable  needs a state-dependent encoding, which no locale is assumed to have
+DESCRIPTION:ab893ead     partial XSH.mblen.001 XSH.mblen.003  # null s in stateless locales only
+DESCRIPTION:16ab0798     untestable  needs a state-dependent encoding, which no locale is assumed to have
+DESCRIPTION:72411f42     none  unspecified shift state after a locale change, not asserted
+DESCRIPTION:6dd4f9a5     untestable  freedom from data races cannot be shown by a finite run
+RETURN_VALUE:849a3f1a    partial XSH.mblen.001 XSH.mblen.003  # null s in stateless locales only
+RETURN_VALUE:5ec2220f    XSH.mblen.002 XSH.mblen.003 XSH.mblen.004 XSH.mblen.005
+RETURN_VALUE:e15ef4e0    XSH.mblen.002 XSH.mblen.003
+ERRORS:641af3a0          XSH.mblen.002 XSH.mblen.005
