@@ -1,0 +1,52 @@
+# semctl.cov - every requirement unit on functions/semctl.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:8131d038     none  introduces the facility
+DESCRIPTION:f3a5f577     impl  whether it interoperates with the realtime IPC functions is unspecified
+DESCRIPTION:a3075352     none  introduces the commands
+DESCRIPTION:60b8a79a     none  describes the argument
+DESCRIPTION:1ab79f49     app
+DESCRIPTION:761b85f8     app
+DESCRIPTION:0b86d514     untestable  atomicity of single operations is not observable
+DESCRIPTION:6fc4a39d     none  introduces the commands
+DESCRIPTION:8597cdfc     none  introduces the commands
+DESCRIPTION:fe4c30e8     none  introduces the commands
+DESCRIPTION:cde6e768     XSH.semctl.001
+DESCRIPTION:e6f510d1     partial XSH.semctl.011  # a mode of 0 denying read; the permitted cases follow from the other tests
+DESCRIPTION:ffae2d3b     XSH.semctl.001
+DESCRIPTION:c6868126     XSH.semctl.013
+DESCRIPTION:29e3afc7     XSH.semctl.005
+DESCRIPTION:542bff6e     partial XSH.semctl.011  # a mode of 0 denying alter; the permitted cases follow from the other tests
+DESCRIPTION:efaabef8     XSH.semctl.003
+DESCRIPTION:e6f510d1.2   partial XSH.semctl.011  # a mode of 0 denying read; the permitted cases follow from the other tests
+DESCRIPTION:9525421b     XSH.semctl.004
+DESCRIPTION:e6f510d1.3   partial XSH.semctl.011  # a mode of 0 denying read; the permitted cases follow from the other tests
+DESCRIPTION:12feb48f     XSH.semctl.004
+DESCRIPTION:e6f510d1.4   partial XSH.semctl.011  # a mode of 0 denying read; the permitted cases follow from the other tests
+DESCRIPTION:e8a77f8c     none  introduces the commands
+DESCRIPTION:5cf7e331     XSH.semctl.001
+DESCRIPTION:e6f510d1.5   partial XSH.semctl.011  # a mode of 0 denying read; the permitted cases follow from the other tests
+DESCRIPTION:b8aabc1d     XSH.semctl.002
+DESCRIPTION:be7de0d0     XSH.semctl.013
+DESCRIPTION:29e3afc7.2   XSH.semctl.005
+DESCRIPTION:559cbe59     partial XSH.semctl.011  # a mode of 0 denying alter; the permitted cases follow from the other tests
+DESCRIPTION:027fadea     none  introduces the commands
+DESCRIPTION:884f32f1     XSH.semctl.005 XSH.semctl.006
+DESCRIPTION:c1bb1b0d     XSH.semctl.006
+DESCRIPTION:e6f510d1.6   partial XSH.semctl.011  # a mode of 0 denying read; the permitted cases follow from the other tests
+DESCRIPTION:02276b6b     XSH.semctl.006 XSH.semctl.007
+DESCRIPTION:9f0793c9     impl  unspecified
+DESCRIPTION:675a5c50     XSH.semctl.005
+DESCRIPTION:0f46ba85     XSH.semctl.012
+DESCRIPTION:24f912e7     XSH.semctl.008
+DESCRIPTION:0f46ba85.2   XSH.semctl.012
+RETURN_VALUE:dc992c6a    none  introduces the items
+RETURN_VALUE:06179cce    XSH.semctl.001
+RETURN_VALUE:2a3762eb    XSH.semctl.003
+RETURN_VALUE:052406e5    XSH.semctl.004
+RETURN_VALUE:1ae74859    XSH.semctl.004
+RETURN_VALUE:957829a8    XSH.semctl.008 XSH.semctl.009 XSH.semctl.010 XSH.semctl.011 XSH.semctl.012
+ERRORS:984f1d23          XSH.semctl.011
+ERRORS:afced132          XSH.semctl.009
+ERRORS:2fde18f2          XSH.semctl.012
+ERRORS:c2922377          partial XSH.semctl.010  # SETVAL above the unsigned short range; SETALL cannot carry such values

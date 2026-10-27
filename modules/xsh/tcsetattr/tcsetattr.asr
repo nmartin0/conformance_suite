@@ -1,0 +1,186 @@
+# XSH tcsetattr()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that change attributes use a pseudo-terminal (XSI) as the terminal; the descriptor
+# tests need none. Held output (output suspended with tcflow(), a byte written) makes
+# the draining wait long enough to observe. Only flags and values every terminal supports
+# (ECHO, ICANON, VMIN, VTIME) are compared after a change: the page lets unsupported
+# requests be silently dropped. Not tested: the B0 effect on modem lines, an input speed of
+# 0, EINVAL when nothing in a request can be honoured (no portable way to build such a
+# request), and the effect when the structure was not derived from tcgetattr().
+# Background tests run a child in a session of its own with the pseudo-terminal as its
+# controlling terminal; how a terminal is acquired is implementation-defined, so a
+# set-up that fails is UNRESOLVED.
+
+assertion  XSH.tcsetattr.001
+anchor     functions/tcsetattr.html#DESCRIPTION
+anchor     functions/tcsetattr.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcsetattr(TCSANOW) on a pseudo-terminal subsidiary returns 0 and
+           tcgetattr() then shows ECHO cleared, set again, ICANON cleared, VMIN
+           equal to 3 and VTIME equal to 7 as requested.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+           Only flags every terminal supports are compared (the page lets
+           unsupported changes be dropped).
+test       t/001-tcsanow-readback.c
+
+assertion  XSH.tcsetattr.002
+anchor     functions/tcsetattr.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       After tcsetattr(TCSANOW) setting ECHO on a non-canonical pseudo-
+           terminal, a byte written to the manager is echoed back to the manager;
+           after tcsetattr(TCSANOW) clearing ECHO, the next byte is not echoed.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+           Echo in non-canonical mode is the ECHO flag of XBD 11.2.5.
+test       t/002-immediate.c
+
+assertion  XSH.tcsetattr.003
+anchor     functions/tcsetattr.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcsetattr() leaves the termios structure it is given unchanged,
+           whatever the optional_actions value (TCSANOW, TCSADRAIN, TCSAFLUSH).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/003-const-arg.c
+
+assertion  XSH.tcsetattr.004
+anchor     functions/tcsetattr.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       With output suspended and one byte written (so not transmitted),
+           tcsetattr(TCSADRAIN) does not return and does not change the
+           attributes; once output is restarted it returns 0 and the change (ECHO
+           toggled) is in effect.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+           Suspension is made with tcflow(TCOOFF); if the held byte reaches the
+           manager anyway the test is UNRESOLVED (tcflow has its own assertions).
+timeout    40
+test       t/004-tcsadrain.c
+
+assertion  XSH.tcsetattr.005
+anchor     functions/tcsetattr.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       Input received but not read is still readable after tcsetattr(TCSANOW)
+           but is gone after tcsetattr(TCSAFLUSH).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/005-tcsaflush.c
+
+assertion  XSH.tcsetattr.006
+anchor     functions/tcsetattr.html#ERRORS/EINVAL
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcsetattr() with an optional_actions value that is none of TCSANOW,
+           TCSADRAIN, TCSAFLUSH (-1, 7, 100, 12345) returns -1 with EINVAL.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/006-einval-action.c
+
+assertion  XSH.tcsetattr.007
+anchor     functions/tcsetattr.html#ERRORS/EBADF
+class      required
+since      1988
+says       tcsetattr(-1) and tcsetattr() of a closed descriptor return -1 with
+           EBADF.
+test       t/007-ebadf.c
+
+assertion  XSH.tcsetattr.008
+anchor     functions/tcsetattr.html#ERRORS/ENOTTY
+class      required
+since      1988
+says       tcsetattr() of descriptors for a regular file, both ends of a pipe and
+           /dev/null returns -1 with ENOTTY.
+test       t/008-enotty-file.c
+
+assertion  XSH.tcsetattr.009
+anchor     functions/tcsetattr.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       A change made through one descriptor of a pseudo-terminal subsidiary
+           is still in effect, as seen through a second descriptor, after the
+           first one is closed (ECHO cleared, ICANON cleared, VMIN equal to 4).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/009-persist.c
+
+assertion  XSH.tcsetattr.010
+anchor     functions/tcsetattr.html#ERRORS/EINTR
+anchor     functions/tcsetattr.html#RATIONALE
+class      conditional
+when       BASE|XSI
+since      1988
+says       With output suspended and one byte written, tcsetattr(TCSADRAIN)
+           waiting for the output is interrupted by a caught signal (no
+           SA_RESTART) and returns -1 with EINTR.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+           The wait is made long by suspending output; if the call does not block
+           the test is UNRESOLVED.
+timeout    40
+test       t/010-eintr.c
+
+assertion  XSH.tcsetattr.011
+anchor     functions/tcsetattr.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in a background process group (not orphaned) whose SIGTTOU
+           is neither blocked nor ignored and which calls tcsetattr(TCSANOW)
+           (toggling ECHO) on its controlling terminal is sent SIGTTOU (default
+           action: stopped).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/011-bg-sigttou.c
+
+assertion  XSH.tcsetattr.012
+anchor     functions/tcsetattr.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in a background process group which calls tcsetattr(TCSANOW)
+           (toggling ECHO) on its controlling terminal while SIGTTOU is blocked,
+           and again while it is ignored, completes normally (returns 0), is not
+           stopped and the change is made.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    60
+test       t/012-bg-quiet.c
+
+assertion  XSH.tcsetattr.013
+anchor     functions/tcsetattr.html#ERRORS/EIO
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in an orphaned process group, with SIGTTOU neither blocked
+           nor ignored, which calls tcsetattr(TCSANOW) (toggling ECHO) on its
+           controlling terminal gets -1 with EIO.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/013-orphan-eio.c

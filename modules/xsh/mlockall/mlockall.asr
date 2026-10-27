@@ -1,0 +1,55 @@
+# XSH mlockall
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# mlockall() and munlockall() share this page. Whether pages are locked is
+# seen through msync() with MS_INVALIDATE, which fails with EBUSY over locked
+# pages (XSH.msync.004), on file mappings; those assertions need XSI or SIO
+# too. Failures for resources or privileges (EAGAIN, ENOMEM, EPERM) are
+# UNRESOLVED.
+
+assertion  XSH.mlockall.001
+anchor     functions/mlockall.html#DESCRIPTION
+anchor     functions/mlockall.html#RETURN VALUE
+class      conditional
+when       ML+XSI|ML+SIO
+since      2001
+says       After mlockall(MCL_CURRENT) returns 0 the pages of a shared file mapping
+           made before are locked, and after munlockall() returns 0 they are not.
+uses       XSH.msync.004
+test       t/001-lock-current.c
+
+assertion  XSH.mlockall.002
+anchor     functions/mlockall.html#DESCRIPTION
+class      conditional
+when       ML+XSI|ML+SIO
+since      2001
+says       After mlockall(MCL_FUTURE), a file mapping made afterwards is locked;
+           after munlockall() that mapping is unlocked, and a mapping made after
+           munlockall() is not locked.
+uses       XSH.msync.004
+test       t/002-lock-future.c
+
+assertion  XSH.mlockall.003
+anchor     functions/mlockall.html#DESCRIPTION
+class      conditional
+when       ML+XSI|ML+SIO
+since      2001
+says       mlockall(MCL_CURRENT|MCL_FUTURE) locks a mapping made before and one made
+           after; munlockall() unlocks both.
+uses       XSH.msync.004
+test       t/003-both-flags.c
+
+assertion  XSH.mlockall.004
+anchor     functions/mlockall.html#ERRORS/EINVAL
+class      conditional
+when       ML
+since      2001
+says       mlockall(0) fails with EINVAL and no mapping becomes locked.
+test       t/004-einval.c
+
+assertion  XSH.mlockall.005
+anchor     functions/mlockall.html#RETURN VALUE
+class      conditional
+when       ML
+since      2001
+says       munlockall() when nothing is locked returns 0.
+test       t/005-unlock-unlocked.c

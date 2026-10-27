@@ -1,0 +1,26 @@
+# mlockall.cov - every requirement unit on functions/mlockall.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:bb91995c     XSH.mlockall.001 XSH.mlockall.002 XSH.mlockall.003
+DESCRIPTION:81f99421     none  introduces the flags
+DESCRIPTION:f24339d1     none  introduces the flags
+DESCRIPTION:4048373d     XSH.mlockall.001 XSH.mlockall.003
+DESCRIPTION:9d21bcae     XSH.mlockall.002 XSH.mlockall.003
+DESCRIPTION:61e8cc7b     impl  behaviour when the limit is exceeded is implementation-defined
+DESCRIPTION:abc53453     impl  implementation-defined
+DESCRIPTION:348b7d8e     XSH.mlockall.001 XSH.mlockall.003
+DESCRIPTION:0f0b049f     XSH.mlockall.002
+DESCRIPTION:a07c1c47     untestable  locks of other processes are not observable here
+DESCRIPTION:c2e741cc     XSH.mlockall.001 XSH.mlockall.003
+DESCRIPTION:ae0fb075     XSH.mlockall.001 XSH.mlockall.002 XSH.mlockall.003
+DESCRIPTION:5eb3dcc4     impl  unspecified
+DESCRIPTION:dd368233     none  a privilege note; failure for privilege is tolerated by the tests
+RETURN_VALUE:a8847047    XSH.mlockall.001 XSH.mlockall.002 XSH.mlockall.003
+RETURN_VALUE:b561f234    XSH.mlockall.004
+RETURN_VALUE:345ed983    impl  unspecified
+RETURN_VALUE:221b103d    XSH.mlockall.001 XSH.mlockall.005
+RETURN_VALUE:7a13bdcb    untestable  munlockall may be unsupported; no way to arrange failure
+ERRORS:0e1c25f5          untestable  memory that cannot be locked cannot be arranged; tolerated as UNRESOLVED
+ERRORS:dc28835c          partial XSH.mlockall.004  # flags of zero; unimplemented flag values are not named by the standard
+ERRORS:c63335ff          optional
+ERRORS:f45e19d4          optional

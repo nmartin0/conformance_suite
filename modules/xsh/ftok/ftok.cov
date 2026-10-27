@@ -1,0 +1,19 @@
+# ftok.cov - every requirement unit on functions/ftok.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:e8185c08     XSH.ftok.001
+DESCRIPTION:71e82ffb     app
+DESCRIPTION:f25c4d01     partial XSH.ftok.001 XSH.ftok.002  # distinct keys for different ids or files ('should') are not required, so not tested
+DESCRIPTION:470adb05     impl  unspecified whether the key is the same after the file is recreated
+DESCRIPTION:0a91d88e     XSH.ftok.003
+DESCRIPTION:8ebafcdd     impl  behaviour unspecified when the low 8 bits of id are 0
+RETURN_VALUE:19aaf263    XSH.ftok.001
+RETURN_VALUE:3d027382    XSH.ftok.004 XSH.ftok.005 XSH.ftok.006 XSH.ftok.007 XSH.ftok.008
+ERRORS:c996c4cf          XSH.ftok.008
+ERRORS:f15d7544          untestable  cannot make a file system read fail
+ERRORS:f39d7871          XSH.ftok.007
+ERRORS:681b232a          XSH.ftok.006
+ERRORS:83c37763          XSH.ftok.004
+ERRORS:df8daa9c          XSH.ftok.005
+ERRORS:811d61dd          optional
+ERRORS:c7f415ad          optional

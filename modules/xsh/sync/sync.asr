@@ -1,0 +1,15 @@
+# XSH sync
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# sync() schedules writes and returns nothing; completion is not required.
+# What can be observed is that the call returns and that file contents are
+# unaffected.
+
+assertion  XSH.sync.001
+anchor     functions/sync.html#DESCRIPTION
+anchor     functions/sync.html#RETURN VALUE
+class      conditional
+when       XSI
+says       After writing 3000 bytes to a file, sync() (declared void, called twice)
+           returns, and the file still reads back as the same 3000 bytes with the
+           same size.
+test       t/001-returns.c

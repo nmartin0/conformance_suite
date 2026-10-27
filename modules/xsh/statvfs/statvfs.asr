@@ -1,0 +1,81 @@
+# XSH statvfs
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# statvfs() and fstatvfs() share this page. The page says it is unspecified
+# whether all structure members have meaningful values, so no relation between
+# block counts is required; the test compare members that stay put between two
+# calls (f_bsize, f_frsize, f_fsid, f_flag, f_namemax); counts that
+# may change with use (blocks, file serial numbers) are not compared.
+# Errors that need a failing disk (EIO), a signal (EINTR) or a value too large
+# (EOVERFLOW) are not tested.
+
+assertion  XSH.statvfs.001
+anchor     functions/statvfs.html#DESCRIPTION
+anchor     functions/statvfs.html#RETURN VALUE
+class      required
+since      2008
+says       statvfs() of "." and of a regular file, and fstatvfs() of a descriptor of
+           that file, return 0, and the members f_bsize, f_frsize, f_fsid, f_flag and
+           f_namemax are the same from the three calls (one file system).
+test       t/001-both-succeed.c
+
+assertion  XSH.statvfs.002
+anchor     functions/statvfs.html#DESCRIPTION
+class      required
+since      2008
+says       statvfs() of a regular file with mode 0 succeeds for a process without
+           privileges, and fstatvfs() of a descriptor opened on that file before its
+           mode was cleared succeeds.
+test       t/002-no-permission.c
+
+assertion  XSH.statvfs.003
+anchor     functions/statvfs.html#DESCRIPTION
+class      required
+since      2008
+says       If f_flag has ST_RDONLY, creating a file in the working directory fails
+           with EROFS; if it has not, creating one succeeds.
+test       t/003-rdonly-flag.c
+
+assertion  XSH.statvfs.004
+anchor     functions/statvfs.html#ERRORS/EBADF
+class      required
+since      2008
+says       fstatvfs() of -1 and of a closed descriptor fails with EBADF.
+test       t/004-ebadf.c
+
+assertion  XSH.statvfs.005
+anchor     functions/statvfs.html#ERRORS/ENOENT
+class      required
+since      2008
+says       statvfs() of a missing name and of the empty string fails with ENOENT.
+test       t/005-enoent.c
+
+assertion  XSH.statvfs.006
+anchor     functions/statvfs.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       statvfs() of "f/x" and of "f/", where f is a regular file, fails with
+           ENOTDIR.
+test       t/006-enotdir.c
+
+assertion  XSH.statvfs.007
+anchor     functions/statvfs.html#ERRORS/ENAMETOOLONG
+class      required
+since      2008
+says       statvfs() of a name whose component is longer than {NAME_MAX} fails with
+           ENAMETOOLONG.
+test       t/007-enametoolong.c
+
+assertion  XSH.statvfs.008
+anchor     functions/statvfs.html#ERRORS/EACCES
+class      required
+since      2008
+says       statvfs() of d/f where d denies search permission fails with EACCES for a
+           process without privileges.
+test       t/008-eacces.c
+
+assertion  XSH.statvfs.009
+anchor     functions/statvfs.html#ERRORS/ELOOP
+class      required
+since      2008
+says       statvfs() of a symbolic link that points at itself fails with ELOOP.
+test       t/009-eloop.c

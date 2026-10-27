@@ -1,0 +1,19 @@
+# shmat.cov - every requirement unit on functions/shmat.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:3526a6e1     none  introduces the facility
+DESCRIPTION:f3a5f577     impl  whether it interoperates with the realtime IPC functions is unspecified
+DESCRIPTION:334b5dbe     XSH.shmat.001 XSH.shmat.002
+DESCRIPTION:7302fa4b     none  introduces the items
+DESCRIPTION:45f2e421     XSH.shmat.001
+DESCRIPTION:59909762     XSH.shmat.006
+DESCRIPTION:f2f1b772     none  explains the notation
+DESCRIPTION:25aa02a8     XSH.shmat.005
+DESCRIPTION:3ecd0f4e     partial XSH.shmat.002 XSH.shmat.004 XSH.shmat.008  # writes through a SHM_RDONLY attachment are not defined by the page
+RETURN_VALUE:c4919eec    XSH.shmat.001 XSH.shmat.002
+RETURN_VALUE:07b35501    XSH.shmat.001
+RETURN_VALUE:3192dd05    XSH.shmat.007
+ERRORS:984f1d23          XSH.shmat.008
+ERRORS:b2ceb97a          partial XSH.shmat.007  # illegal address; the invalid-identifier reading of this error is unclear (see the module note)
+ERRORS:4b84db2d          untestable  the per-process attach limit is not observable
+ERRORS:6e952373          untestable  address space exhaustion cannot be arranged reliably

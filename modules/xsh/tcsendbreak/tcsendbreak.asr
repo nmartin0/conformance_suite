@@ -1,0 +1,91 @@
+# XSH tcsendbreak()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Terminal tests use a pseudo-terminal (XSI). The break duration is observable only on an
+# asynchronous serial line, which a pseudo-terminal is not; whether the call does anything
+# there is implementation-defined, so only its return value is checked.
+
+assertion  XSH.tcsendbreak.001
+anchor     functions/tcsendbreak.html#DESCRIPTION
+anchor     functions/tcsendbreak.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcsendbreak(fd, 0) on a pseudo-terminal subsidiary returns 0 (a
+           pseudo-terminal is not asynchronous serial, so no timing is required;
+           the call is bounded by an alarm).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/001-duration-zero.c
+
+assertion  XSH.tcsendbreak.002
+anchor     functions/tcsendbreak.html#DESCRIPTION
+anchor     functions/tcsendbreak.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcsendbreak(fd, 1) on a pseudo-terminal subsidiary returns 0 (the
+           period is implementation-defined; the call is bounded by an alarm).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/002-duration-nonzero.c
+
+assertion  XSH.tcsendbreak.003
+anchor     functions/tcsendbreak.html#ERRORS/EBADF
+class      required
+since      1988
+says       tcsendbreak(-1) and tcsendbreak() of a closed descriptor return -1
+           with EBADF.
+test       t/003-ebadf.c
+
+assertion  XSH.tcsendbreak.004
+anchor     functions/tcsendbreak.html#ERRORS/ENOTTY
+class      required
+since      1988
+says       tcsendbreak() of descriptors for a regular file, both ends of a pipe
+           and /dev/null returns -1 with ENOTTY.
+test       t/004-enotty-file.c
+
+assertion  XSH.tcsendbreak.005
+anchor     functions/tcsendbreak.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in a background process group (not orphaned) whose SIGTTOU
+           is neither blocked nor ignored and which calls tcsendbreak() on its
+           controlling terminal is sent SIGTTOU (default action: stopped).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/005-bg-sigttou.c
+
+assertion  XSH.tcsendbreak.006
+anchor     functions/tcsendbreak.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in a background process group which calls tcsendbreak() on
+           its controlling terminal while SIGTTOU is blocked, and again while it
+           is ignored, completes normally (returns 0), is not stopped.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    60
+test       t/006-bg-quiet.c
+
+assertion  XSH.tcsendbreak.007
+anchor     functions/tcsendbreak.html#ERRORS/EIO
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in an orphaned process group, with SIGTTOU neither blocked
+           nor ignored, which calls tcsendbreak() on its controlling terminal
+           gets -1 with EIO.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/007-orphan-eio.c

@@ -1,0 +1,112 @@
+# XSH tcsetwinsize()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Terminal tests use a pseudo-terminal (XSI). SIGWINCH goes to the foreground group of the
+# controlling terminal; the test therefore runs in a session leader that has acquired the
+# pseudo-terminal as controlling terminal (implementation-defined, UNRESOLVED if it does not
+# happen) and accepts the signal with sigtimedwait(). That an unchanged size raises no signal is
+# checked after a first, changing call has been seen to raise one.
+
+assertion  XSH.tcsetwinsize.001
+anchor     functions/tcsetwinsize.html#DESCRIPTION
+anchor     functions/tcsetwinsize.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      2024
+says       tcsetwinsize() with 25 rows and 81 columns returns 0 and
+           tcgetwinsize() immediately shows them; so does a second call with 50
+           rows and 132 columns.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/001-set-get.c
+
+assertion  XSH.tcsetwinsize.002
+anchor     functions/tcsetwinsize.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2024
+says       In the foreground process group of the controlling terminal, a
+           tcsetwinsize() that changes the size returns 0 and SIGWINCH is
+           delivered to the group (accepted within 2 s).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/002-sigwinch.c
+
+assertion  XSH.tcsetwinsize.003
+anchor     functions/tcsetwinsize.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2024
+says       A tcsetwinsize() that sets the size the terminal already has returns 0
+           and delivers no SIGWINCH to the foreground group (none within 500 ms),
+           after a first call that changed the size did deliver one.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+           A set-up that gets no signal for the first, changing call is
+           UNRESOLVED (assertion 002 covers it).
+timeout    40
+test       t/003-no-sigwinch-same.c
+
+assertion  XSH.tcsetwinsize.004
+anchor     functions/tcsetwinsize.html#ERRORS/EBADF
+class      required
+since      2024
+says       tcsetwinsize(-1) and tcsetwinsize() of a closed descriptor return -1
+           with EBADF.
+test       t/004-ebadf.c
+
+assertion  XSH.tcsetwinsize.005
+anchor     functions/tcsetwinsize.html#ERRORS/ENOTTY
+class      required
+since      2024
+says       tcsetwinsize() of descriptors for a regular file, both ends of a pipe
+           and /dev/null returns -1 with ENOTTY.
+test       t/005-enotty-file.c
+
+assertion  XSH.tcsetwinsize.006
+anchor     functions/tcsetwinsize.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2024
+says       A process in a background process group (not orphaned) whose SIGTTOU
+           is neither blocked nor ignored and which calls tcsetwinsize()
+           (changing the row count) on its controlling terminal is sent SIGTTOU
+           (default action: stopped).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/006-bg-sigttou.c
+
+assertion  XSH.tcsetwinsize.007
+anchor     functions/tcsetwinsize.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2024
+says       A process in a background process group which calls tcsetwinsize()
+           (changing the row count) on its controlling terminal while SIGTTOU is
+           blocked, and again while it is ignored, completes normally (returns
+           0), is not stopped and the change is made.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    60
+test       t/007-bg-quiet.c
+
+assertion  XSH.tcsetwinsize.008
+anchor     functions/tcsetwinsize.html#ERRORS/EIO
+class      conditional
+when       BASE|XSI
+since      2024
+says       A process in an orphaned process group, with SIGTTOU neither blocked
+           nor ignored, which calls tcsetwinsize() (changing the row count) on
+           its controlling terminal gets -1 with EIO.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/008-orphan-eio.c

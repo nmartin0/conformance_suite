@@ -1,0 +1,25 @@
+# timer_create.cov - every requirement unit on the page for timer_create.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:b76b9bfa     XSH.timer_create.001 XSH.timer_create.005
+DESCRIPTION:179a02e3     XSH.timer_create.001 XSH.timer_create.002
+DESCRIPTION:c4af28ad     XSH.timer_create.002
+DESCRIPTION:20536785     none  restates where the clocks are defined
+DESCRIPTION:34908ba0     XSH.timer_create.001
+DESCRIPTION:26b4a683     none  restates the argument
+DESCRIPTION:fdc2a74f     XSH.timer_create.005 XSH.timer_create.006 XSH.timer_create.007
+DESCRIPTION:bf191127     partial XSH.timer_create.004  # the default signal number and the value are left unchecked: neither is fixed enough to test
+DESCRIPTION:02f5d377     impl  the set of other clocks is implementation-defined
+DESCRIPTION:521b5021     XSH.timer_create.001
+DESCRIPTION:40cb8548     XSH.timer_create.008 XSH.timer_create.009
+DESCRIPTION:74c9b675     XSH.timer_create.010
+DESCRIPTION:6b905485     XSH.timer_create.011
+DESCRIPTION:3245a107     impl  implementation-defined
+DESCRIPTION:78a4bf90     untestable  a fixed stack address makes the result unspecified
+RETURN_VALUE:1342b201    XSH.timer_create.001
+RETURN_VALUE:51517b1b    XSH.timer_create.003
+RETURN_VALUE:e80730ca    impl  undefined
+ERRORS:23bbda5b          untestable  signal-queuing resources cannot be exhausted portably
+ERRORS:841e6f68          untestable  the per-process timer limit is not discoverable; XSH.timer_delete.003 checks that deleted timers do not count
+ERRORS:0ec32617          XSH.timer_create.003
+ERRORS:4cf6bfbc          untestable  needs the CPU-time clock of another process or thread

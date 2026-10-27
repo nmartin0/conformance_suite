@@ -1,0 +1,56 @@
+# XSH setresuid
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# setresuid() is only called in child processes. Values 60001-60003 are used
+# only by privileged children; no EINVAL test (no value is portably invalid).
+
+assertion  XSH.setresuid.001
+anchor     functions/setresuid.html#DESCRIPTION
+anchor     functions/setresuid.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2024
+says       setresuid(-1, -1, -1) returns 0 and none of the three IDs changes.
+test       t/001-minus-one.c
+
+assertion  XSH.setresuid.002
+anchor     functions/setresuid.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       A child calls setresuid() with its current saved, real and effective IDs
+           in that order (each is a value it already holds); it returns 0 and
+           getresuid() then reports real = old saved, effective = old real, saved =
+           old effective.
+test       t/002-own-values.c
+
+assertion  XSH.setresuid.003
+anchor     functions/setresuid.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       A privileged child calls setresuid() with three different values (60001,
+           60002, 60003); it returns 0 and getresuid() reports exactly those.
+needs      root
+test       t/003-any-values.c
+
+assertion  XSH.setresuid.004
+anchor     functions/setresuid.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       After that, setresuid(-1, 60001, -1) returns 0 and changes only the
+           effective ID, setresuid(60003, -1, -1) changes only the real ID.
+needs      root
+test       t/004-minus-one-keeps.c
+
+assertion  XSH.setresuid.005
+anchor     functions/setresuid.html#ERRORS/EPERM
+class      conditional
+when       XSI
+since      2024
+says       A child without privileges calling setresuid() with a value it does not
+           hold, as the real, as the effective or as the saved ID (one call each),
+           fails with EPERM and none of the IDs changes.
+note       When the suite runs as root the child gives up privilege with
+           setuid/setgid first (all three IDs).
+test       t/005-eperm.c

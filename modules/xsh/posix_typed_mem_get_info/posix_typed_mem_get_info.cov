@@ -1,0 +1,13 @@
+# posix_typed_mem_get_info.cov - every requirement unit on functions/posix_typed_mem_get_info.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:689f9369     todo  needs a typed memory object, whose names are implementation-defined
+DESCRIPTION:37391b93     todo  needs a typed memory object
+DESCRIPTION:5058883a     none  explains validity of the value
+DESCRIPTION:9e3ca094     impl  unspecified
+DESCRIPTION:3526999d     impl  implementation-defined
+DESCRIPTION:34c9f937     impl  undefined
+RETURN_VALUE:91a53d78    partial XSH.posix_typed_mem_get_info.001  # only the failure case
+ERRORS:addee83b          XSH.posix_typed_mem_get_info.001
+ERRORS:32dba9a9          untestable  the page says the behaviour is undefined for a non-typed object, so ENODEV cannot be required of one
+ERRORS:28364a9f          untestable  a signal during a short call cannot be arranged

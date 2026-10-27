@@ -1,0 +1,100 @@
+# XSH ptsname()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# This module covers ptsname() and ptsname_r(), which share a page. Everything here is XSI. That
+# ptsname() need not be thread-safe, and what happens to its string after a later call, are not
+# tested. The checks of the "may" errors accept a plain success.
+
+assertion  XSH.ptsname.001
+anchor     functions/ptsname.html#DESCRIPTION
+anchor     functions/ptsname.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       ptsname() on a manager returns a non-empty string, and opening that
+           pathname for reading and writing (without making it the controlling
+           terminal) succeeds and gives a terminal.
+test       t/001-name-opens.c
+
+assertion  XSH.ptsname.002
+anchor     functions/ptsname.html#DESCRIPTION
+anchor     functions/ptsname.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       Repeated ptsname() calls on one manager return the same name; two
+           managers have different names.
+test       t/002-stable-distinct.c
+
+assertion  XSH.ptsname.003
+anchor     functions/ptsname.html#DESCRIPTION
+anchor     functions/ptsname.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       With two managers, bytes written to each manager arrive on the
+           subsidiary that ptsname() named for it and not on the other.
+test       t/003-matches-manager.c
+
+assertion  XSH.ptsname.004
+anchor     functions/ptsname.html#DESCRIPTION
+anchor     functions/ptsname.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2024
+says       ptsname_r() with a large enough buffer returns 0 and stores the same
+           name as ptsname(), which is no longer than {TTY_NAME_MAX} when that
+           limit is known.
+test       t/004-r-success.c
+
+assertion  XSH.ptsname.005
+anchor     functions/ptsname.html#ERRORS/ERANGE
+class      conditional
+when       XSI
+since      2024
+says       ptsname_r() with namesize equal to the name length (no room for the
+           terminating null), 1 and 0 returns ERANGE (the error number is the
+           return value).
+test       t/005-r-erange.c
+
+assertion  XSH.ptsname.006
+anchor     functions/ptsname.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2024
+says       ptsname_r() with a null name pointer and a large namesize returns
+           EINVAL.
+test       t/006-r-einval-null.c
+
+assertion  XSH.ptsname.007
+anchor     functions/ptsname.html#ERRORS/EBADF
+class      conditional
+when       XSI
+since      2024
+says       ptsname_r(-1, ...) and ptsname_r() of a closed descriptor return
+           EBADF.
+test       t/007-r-ebadf.c
+
+assertion  XSH.ptsname.008
+anchor     functions/ptsname.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2001
+says       For a regular file and for /dev/null, ptsname() returns a null pointer
+           or a name, and when it fails with errno set it is EINVAL or ENOTTY;
+           ptsname_r() returns 0 or EINVAL or ENOTTY (these errors are optional).
+note       All of these errors are "may" errors: the test fails only when another
+           code is reported.
+test       t/008-not-manager.c
+
+assertion  XSH.ptsname.009
+anchor     functions/ptsname.html#ERRORS/EBADF
+class      conditional
+when       XSI
+since      2001
+says       ptsname(-1) and ptsname() of a closed descriptor return a null pointer
+           or a name (the failure is optional) and, when errno is set by a
+           failure, it is EBADF.
+note       EBADF is a "may" error and errno need not be set; the test fails only
+           when another code is reported.
+test       t/009-ebadf.c

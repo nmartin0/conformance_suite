@@ -1,0 +1,26 @@
+# XSH getresgid
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# getresgid() stores the real, effective and saved IDs. The saved ID has no
+# other defined relation to the process, so only the real and effective IDs
+# are compared with getgid() and getegid(), and the three values are compared
+# across fork() and after a child changed them.
+
+assertion  XSH.getresgid.001
+anchor     functions/getresgid.html#DESCRIPTION
+anchor     functions/getresgid.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2024
+says       getresgid() returns 0 and the real and effective group IDs it stores equal
+           getgid() and getegid(); a forked child sees the same three values.
+test       t/001-matches.c
+
+assertion  XSH.getresgid.002
+anchor     functions/getresgid.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       After a child changes its group IDs with setresgid() to three different
+           values, getresgid() in the child reports exactly those three.
+needs      root
+test       t/002-after-change.c

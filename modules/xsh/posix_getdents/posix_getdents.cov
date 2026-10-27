@@ -1,0 +1,37 @@
+# posix_getdents.cov - every requirement unit on functions/posix_getdents.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:56fd4812     XSH.posix_getdents.001 XSH.posix_getdents.003
+DESCRIPTION:75e6cb78     XSH.posix_getdents.003
+DESCRIPTION:2827d075     app
+DESCRIPTION:ce07dc4c     XSH.posix_getdents.001 XSH.posix_getdents.003
+DESCRIPTION:9cb9bcb5     app
+DESCRIPTION:e6dea25b     XSH.posix_getdents.001
+DESCRIPTION:4c5eb0d8     XSH.posix_getdents.001 XSH.posix_getdents.007
+DESCRIPTION:dcedd8ae     XSH.posix_getdents.001
+DESCRIPTION:9cc577a7     partial XSH.posix_getdents.001  # the tiling of the returned bytes and the alignment are checked
+DESCRIPTION:21131271     XSH.posix_getdents.001 XSH.posix_getdents.007
+DESCRIPTION:458ae23c     partial XSH.posix_getdents.001 XSH.posix_getdents.007  # the types DT_REG, DT_DIR, DT_LNK, DT_FIFO
+DESCRIPTION:2c2400c0     untestable  needs a file of a type the standard does not define
+DESCRIPTION:9fb2eefd     XSH.posix_getdents.001 XSH.posix_getdents.007
+DESCRIPTION:e5f8913c     XSH.posix_getdents.001 XSH.posix_getdents.007
+DESCRIPTION:ef3b57ab     XSH.posix_getdents.002 XSH.posix_getdents.003
+DESCRIPTION:202bf9ff     XSH.posix_getdents.002 XSH.posix_getdents.003
+DESCRIPTION:ba36875c     impl  unspecified
+DESCRIPTION:de98add0     none  states the interaction with lseek()
+DESCRIPTION:d0fb69eb     impl  unspecified
+DESCRIPTION:c7b8564f     XSH.posix_getdents.001
+DESCRIPTION:6e33431c     XSH.posix_getdents.001 XSH.posix_getdents.003
+DESCRIPTION:b66e83b0     todo  the access time update is not observable on a mount that does not keep it
+DESCRIPTION:f4e208c2     impl  unspecified
+DESCRIPTION:9db538c3     untestable  needs concurrent directory changes with a deterministic outcome
+DESCRIPTION:d57cf085     impl  unspecified
+RETURN_VALUE:b21d0764    XSH.posix_getdents.001 XSH.posix_getdents.002 XSH.posix_getdents.003
+RETURN_VALUE:cb9e5675    XSH.posix_getdents.004 XSH.posix_getdents.005 XSH.posix_getdents.006
+ERRORS:0f422ac6          XSH.posix_getdents.005
+ERRORS:628d730d          XSH.posix_getdents.004
+ERRORS:a46d5b39          untestable  needs an offset that is not at an entry, which lseek() may not set to (unspecified)
+ERRORS:71233c34          XSH.posix_getdents.006
+ERRORS:16aa6b53          untestable  needs a value that cannot be represented
+ERRORS:1220c343          optional
+ERRORS:00777f07          optional

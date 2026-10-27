@@ -1,0 +1,91 @@
+# XSH msgsnd
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# XSI msgsnd(). Queues are IPC_PRIVATE and removed on every exit path;
+# children are reaped, blocking calls run under alarm(). To fill a queue the
+# owner lowers msg_qbytes (IPC_SET may lower it) and sends one-byte messages.
+# Not tested: EINVAL for a message over the system limit (the limit is not
+# observable, and the filling rule is stated for bytes already queued).
+
+assertion  XSH.msgsnd.001
+anchor     functions/msgsnd.html#DESCRIPTION
+anchor     functions/msgsnd.html#RETURN VALUE
+class      conditional
+when       XSI
+says       msgsnd() of a message of type 7 with 5 text bytes returns 0 and a later
+           msgrcv() returns those 5 bytes and type 7; a message with 0 text bytes is
+           sent and received as 0 bytes.
+test       t/001-round-trip.c
+
+assertion  XSH.msgsnd.002
+anchor     functions/msgsnd.html#DESCRIPTION
+class      conditional
+when       XSI
+says       After a successful msgsnd(), IPC_STAT shows msg_qnum one higher, msg_lspid
+           equal to the caller's process ID and msg_stime between the time before and
+           after the call.
+test       t/002-stat-update.c
+
+assertion  XSH.msgsnd.003
+anchor     functions/msgsnd.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+says       msgsnd() with mtype 0 and with a negative mtype fails with EINVAL and
+           nothing is queued (msg_qnum stays 0).
+test       t/003-einval-type.c
+
+assertion  XSH.msgsnd.004
+anchor     functions/msgsnd.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+says       msgsnd() with identifier -1 fails with EINVAL; with the identifier of a
+           removed queue it fails with EINVAL or EIDRM.
+test       t/004-einval-id.c
+
+assertion  XSH.msgsnd.005
+anchor     functions/msgsnd.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With msg_qbytes lowered, one-byte IPC_NOWAIT sends succeed until the call
+           fails; the failing call returns -1 with EAGAIN at the latest after
+           msg_qbytes bytes are queued, and the queue then holds exactly the messages
+           sent.
+note       A failure may come earlier (a system-wide message limit); the filling
+           needs the owner to lower msg_qbytes, otherwise UNRESOLVED.
+test       t/005-full-nowait.c
+
+assertion  XSH.msgsnd.006
+anchor     functions/msgsnd.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A msgsnd() without IPC_NOWAIT on a full queue does not return while the
+           queue stays full, and returns 0 after another process receives a message;
+           the message is then queued.
+timeout    60
+test       t/006-blocks-until-room.c
+
+assertion  XSH.msgsnd.007
+anchor     functions/msgsnd.html#DESCRIPTION
+anchor     functions/msgsnd.html#ERRORS/EIDRM
+class      conditional
+when       XSI
+says       A msgsnd() blocked on a full queue fails with EIDRM when the queue is
+           removed.
+timeout    60
+test       t/007-eidrm.c
+
+assertion  XSH.msgsnd.008
+anchor     functions/msgsnd.html#ERRORS/EINTR
+class      conditional
+when       XSI
+says       A msgsnd() blocked on a full queue is interrupted by a caught signal (no
+           SA_RESTART): it returns -1 with EINTR and the message is not queued.
+timeout    60
+test       t/008-eintr.c
+
+assertion  XSH.msgsnd.009
+anchor     functions/msgsnd.html#ERRORS/EACCES
+class      conditional
+when       XSI
+says       msgsnd() on a queue whose mode is 0 fails with EACCES for a process
+           without privileges, and nothing is queued.
+test       t/009-eacces.c

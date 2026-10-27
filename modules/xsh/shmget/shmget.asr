@@ -1,0 +1,71 @@
+# XSH shmget
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# XSI shmget(). Segments are IPC_PRIVATE or keyed with ftok() on a file in the
+# working directory, and removed on every exit path. Not tested: ENOSPC,
+# ENOMEM for real exhaustion, minimum size.
+
+assertion  XSH.shmget.001
+anchor     functions/shmget.html#DESCRIPTION
+anchor     functions/shmget.html#RETURN VALUE
+class      conditional
+when       XSI
+says       Two shmget(IPC_PRIVATE, 8192, ...) calls return distinct non-negative
+           identifiers, and each segment reads as all zero bytes over 8192 bytes once
+           attached.
+test       t/001-private-zeroed.c
+
+assertion  XSH.shmget.002
+anchor     functions/shmget.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A segment made with shmget(IPC_PRIVATE, 8192, 0640) has, by IPC_STAT,
+           shm_segsz 8192, uid and cuid equal to the effective user ID, gid and cgid
+           equal to the effective group ID, low-order 9 mode bits 0640, shm_cpid this
+           process, shm_nattch, shm_lpid, shm_atime and shm_dtime 0 and shm_ctime
+           between the time before and after the call.
+note       shm_lpid is checked as 0 because the page says so; shm_cpid is a member of
+           the structure.
+test       t/002-initial-state.c
+
+assertion  XSH.shmget.003
+anchor     functions/shmget.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With a key from ftok(), shmget(key, 8192, IPC_CREAT|0600) creates a
+           segment; shmget(key, 8192, 0), shmget(key, 1, 0) and shmget(key, 8192,
+           IPC_CREAT|0600) return that identifier; shmget(key, 8193, 0) fails with
+           EINVAL.
+test       t/003-key-get.c
+
+assertion  XSH.shmget.004
+anchor     functions/shmget.html#ERRORS/EEXIST
+class      conditional
+when       XSI
+says       shmget(key, 4096, IPC_CREAT|IPC_EXCL|0600) for a key that already has a
+           segment fails with EEXIST.
+test       t/004-eexist.c
+
+assertion  XSH.shmget.005
+anchor     functions/shmget.html#ERRORS/ENOENT
+class      conditional
+when       XSI
+says       shmget(key, 1, 0600) for a key with no segment and without IPC_CREAT fails
+           with ENOENT.
+test       t/005-enoent.c
+
+assertion  XSH.shmget.006
+anchor     functions/shmget.html#ERRORS/EACCES
+class      conditional
+when       XSI
+says       shmget(key, 1, 0400) for a key whose segment has mode 0 fails with EACCES
+           for a process without privileges.
+test       t/006-eacces.c
+
+assertion  XSH.shmget.007
+anchor     functions/shmget.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+says       Creating a segment with size SIZE_MAX fails with EINVAL or ENOMEM.
+note       Both describe a size too large for the system; XSH 2.3 lets the
+           implementation choose.
+test       t/007-einval-size.c

@@ -1,0 +1,21 @@
+# msgget.cov - every requirement unit on functions/msgget.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:0b5e7a33     none  introduces the facility
+DESCRIPTION:f3a5f577     impl  whether it interoperates with the realtime IPC functions is unspecified
+DESCRIPTION:49f70a89     XSH.msgget.004
+DESCRIPTION:fd5daddd     XSH.msgget.001 XSH.msgget.004
+DESCRIPTION:2e8c95a9     XSH.msgget.001
+DESCRIPTION:327c121d     XSH.msgget.004
+DESCRIPTION:0fb8e0f2     XSH.msgget.002 XSH.msgget.003
+DESCRIPTION:949f47b1     XSH.msgget.002
+DESCRIPTION:0b3f997d     XSH.msgget.002
+DESCRIPTION:6897ac36     XSH.msgget.003
+DESCRIPTION:1b5397df     XSH.msgget.003
+DESCRIPTION:da5140b4     partial XSH.msgget.003  # the system limit is not known; only that it is above 0 is checked
+RETURN_VALUE:ffd939a5    XSH.msgget.001 XSH.msgget.004
+RETURN_VALUE:34187386    XSH.msgget.005 XSH.msgget.006 XSH.msgget.007
+ERRORS:66ad4e2b          XSH.msgget.007
+ERRORS:3eadc02e          XSH.msgget.005
+ERRORS:9d5c6fd9          XSH.msgget.006
+ERRORS:7713cb2f          untestable  the system-wide queue limit cannot be reached without side effects on other users

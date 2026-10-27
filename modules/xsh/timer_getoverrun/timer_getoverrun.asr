@@ -1,0 +1,145 @@
+# XSH timer_getoverrun()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# This module covers timer_getoverrun(), timer_gettime() and timer_settime(), which share a page.
+# Timers use SIGRTMIN and sigtimedwait(): the signal is blocked and given a do-nothing
+# SA_SIGINFO action, so that an expiration is queued. Lower time bounds are exact apart from
+# one step of the clock's resolution; the upper bounds are hang guards. REALTIME measurements
+# that disagree with MONOTONIC ones (the clock was set) are UNRESOLVED. Not tested: operations
+# on an ID that is invalid (undefined), the effect of re-arming with an expiration pending
+# (unspecified), the optional EINVAL for SIGEV_THREAD with a fixed stack address, and
+# timer_getoverrun() before any delivery (unspecified).
+
+assertion  XSH.timer_getoverrun.001
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+anchor     functions/timer_getoverrun.html#RETURN VALUE
+class      required
+since      2001
+says       timer_gettime() of a timer that was never armed, and of one that was
+           armed and then disarmed with a zero value, returns 0 with a zero
+           it_value.
+test       t/001-gettime-disarmed.c
+
+assertion  XSH.timer_getoverrun.002
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+class      required
+since      2001
+says       After timer_settime() with 500 ms relative, timer_gettime() returns 0
+           with an it_value that is positive and at most 500 ms (one clock step
+           allowed), and 150 ms later it is smaller and at most 350 ms.
+test       t/002-remaining.c
+
+assertion  XSH.timer_getoverrun.003
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+class      required
+since      2001
+says       After timer_settime() with a 1 s value and a 300 ms interval,
+           timer_gettime() returns an it_interval of 300 ms (at most one clock
+           step more, since values are rounded up); after a call with a zero
+           interval it is zero.
+test       t/003-reload.c
+
+assertion  XSH.timer_getoverrun.004
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+class      required
+since      2001
+says       A timer armed for 100 ms and then set with a zero value:
+           timer_settime() returns 0 and no expiration signal is accepted within
+           400 ms.
+test       t/004-disarm.c
+
+assertion  XSH.timer_getoverrun.005
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+class      required
+since      2001
+says       For CLOCK_REALTIME and CLOCK_MONOTONIC, a one-shot timer set to 300 ms
+           relative sends its signal (within 5 s) not earlier than 300 ms by that
+           clock (one clock step allowed).
+test       t/005-relative-lower-bound.c
+
+assertion  XSH.timer_getoverrun.006
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+class      required
+since      2001
+says       For CLOCK_REALTIME and CLOCK_MONOTONIC, TIMER_ABSTIME with the clock's
+           time 300 ms ahead: timer_settime() returns 0 and the signal arrives
+           (within 5 s) when the clock has reached that time (one clock step
+           allowed).
+test       t/006-absolute.c
+
+assertion  XSH.timer_getoverrun.007
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+class      required
+since      2001
+says       For CLOCK_REALTIME and CLOCK_MONOTONIC, TIMER_ABSTIME with a time 1 s
+           in the past succeeds and the expiration notification is made (signal
+           accepted within 2 s).
+test       t/007-absolute-past.c
+
+assertion  XSH.timer_getoverrun.008
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+class      required
+since      2001
+says       For a timer armed with TIMER_ABSTIME 10 s ahead of CLOCK_MONOTONIC,
+           timer_gettime() reports an it_value between 5 s and 10 s (one clock
+           step allowed): the time until expiration, not the absolute time.
+test       t/008-gettime-relative.c
+
+assertion  XSH.timer_getoverrun.009
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+class      required
+since      2001
+says       A timer with value and interval of 100 ms sends its signal repeatedly:
+           three signals are accepted, the k-th not earlier than k times 100 ms
+           after arming (one clock step allowed).
+test       t/009-periodic.c
+
+assertion  XSH.timer_getoverrun.010
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+class      required
+since      2001
+says       timer_settime() of an armed timer (10 s value, 4 s interval) with 200
+           ms and no interval, with ovalue given: stores the old remaining time
+           (5 s to 10 s) and old interval (4 s, one clock step more allowed); the
+           timer then expires after about 200 ms (not earlier), only once; a
+           further setting with ovalue on the now disarmed timer stores zeros.
+note       A one-shot timer that has expired is read as disarmed (nothing left
+           until expiration).
+timeout    40
+test       t/010-rearm.c
+
+assertion  XSH.timer_getoverrun.011
+anchor     functions/timer_getoverrun.html#ERRORS/EINVAL
+class      required
+since      2001
+says       timer_settime() with a non-zero it_value whose tv_nsec is 1000000000
+           or -1, or with a valid it_value and an it_interval whose tv_nsec is
+           1000000000 or -1, returns -1 with EINVAL.
+test       t/011-einval-nsec.c
+
+assertion  XSH.timer_getoverrun.012
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+anchor     functions/timer_getoverrun.html#RETURN VALUE
+class      required
+since      2001
+says       With the signal blocked for 1 s, a periodic timer (interval 50 ms) has
+           one signal queued, not one per expiration: after it is accepted,
+           immediately draining the signal finds at most as many more as the time
+           spent allows; timer_getoverrun() then returns at least 1 and at most
+           DELAYTIMER_MAX when that is defined.
+note       The overrun count is only checked as a lower bound (the time in which
+           the signal was held is much longer than the interval); the queue check
+           allows a signal for every interval that passed while draining.
+timeout    40
+test       t/012-overrun.c
+
+assertion  XSH.timer_getoverrun.013
+anchor     functions/timer_getoverrun.html#DESCRIPTION
+anchor     functions/timer_getoverrun.html#RETURN VALUE
+class      required
+since      2001
+says       For a one-shot timer whose signal is accepted when it arrives,
+           timer_getoverrun() returns 0.
+test       t/013-overrun-zero.c

@@ -1,0 +1,30 @@
+# msgsnd.cov - every requirement unit on functions/msgsnd.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:de142504     none  introduces the facility
+DESCRIPTION:f3a5f577     impl  whether it interoperates with the realtime IPC functions is unspecified
+DESCRIPTION:7f99a6bb     XSH.msgsnd.001
+DESCRIPTION:54f53deb     app
+DESCRIPTION:7f961891     none  example
+DESCRIPTION:326558f0     none  example structure
+DESCRIPTION:6af7f313     app
+DESCRIPTION:b156bcc9     none  describes the argument
+DESCRIPTION:353c8f85     partial XSH.msgsnd.001  # sizes 0 and small ones; the system maximum is not observable
+DESCRIPTION:7f224ffc     none  introduces the items
+DESCRIPTION:9859814c     XSH.msgsnd.005
+DESCRIPTION:22259090     untestable  a system-wide message limit cannot be reached without affecting other users
+DESCRIPTION:b2b1c1f1     none  introduces the items
+DESCRIPTION:0c30d251     XSH.msgsnd.005
+DESCRIPTION:6bbbb031     XSH.msgsnd.006
+DESCRIPTION:20534b76     XSH.msgsnd.007
+DESCRIPTION:ecfb3486     XSH.msgsnd.008
+DESCRIPTION:c15cae24     none  introduces the items
+DESCRIPTION:103f5072     XSH.msgsnd.002
+DESCRIPTION:c42335a5     XSH.msgsnd.002
+DESCRIPTION:022c39b8     XSH.msgsnd.002
+RETURN_VALUE:2808636c    XSH.msgsnd.001 XSH.msgsnd.003 XSH.msgsnd.004 XSH.msgsnd.005 XSH.msgsnd.009
+ERRORS:984f1d23          XSH.msgsnd.009
+ERRORS:0912b6ef          XSH.msgsnd.005
+ERRORS:1bcd2225          XSH.msgsnd.007
+ERRORS:ff517dc3          XSH.msgsnd.008
+ERRORS:d6a77ff7          partial XSH.msgsnd.003 XSH.msgsnd.004  # mtype below 1 and invalid identifiers; a message over the system maximum is not observable

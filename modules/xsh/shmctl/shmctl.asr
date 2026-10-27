@@ -1,0 +1,74 @@
+# XSH shmctl
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# XSI shmctl(). Segments are IPC_PRIVATE or keyed via ftok() and removed on
+# every exit path. Operations that need a user ID other than the suite's need
+# root.
+
+assertion  XSH.shmctl.001
+anchor     functions/shmctl.html#DESCRIPTION
+class      conditional
+when       XSI
+says       IPC_STAT of a 4096-byte segment attached twice returns 0 and reports
+           shm_segsz 4096, shm_nattch 2, shm_cpid this process, and uid, cuid, gid,
+           cgid of the caller.
+test       t/001-stat-fields.c
+
+assertion  XSH.shmctl.002
+anchor     functions/shmctl.html#DESCRIPTION
+class      conditional
+when       XSI
+says       IPC_SET with shm_perm.mode 0600 returns 0; IPC_STAT then shows low-order 9
+           mode bits 0600 and shm_ctime between the time before and after the call.
+test       t/002-set-mode.c
+
+assertion  XSH.shmctl.003
+anchor     functions/shmctl.html#DESCRIPTION
+class      conditional
+when       XSI
+says       IPC_SET with shm_perm.uid and gid 65534 by a privileged process returns 0;
+           IPC_STAT shows them and cuid and cgid unchanged.
+needs      root
+test       t/003-set-owner.c
+
+assertion  XSH.shmctl.004
+anchor     functions/shmctl.html#DESCRIPTION
+class      conditional
+when       XSI
+says       IPC_RMID of a segment that is still attached returns 0; the key it was
+           made from is then free (shmget fails with ENOENT) and the attached memory
+           keeps its data and stays writable.
+test       t/004-rmid-attached.c
+
+assertion  XSH.shmctl.005
+anchor     functions/shmctl.html#DESCRIPTION
+class      conditional
+when       XSI
+says       IPC_RMID of an unattached segment returns 0 and IPC_STAT on the identifier
+           fails with EINVAL at once.
+test       t/005-rmid-unattached.c
+
+assertion  XSH.shmctl.006
+anchor     functions/shmctl.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+says       shmctl() with identifier -1 fails with EINVAL for IPC_STAT, IPC_SET and
+           IPC_RMID, and with an invalid command on a valid segment it fails with
+           EINVAL.
+test       t/006-einval.c
+
+assertion  XSH.shmctl.007
+anchor     functions/shmctl.html#ERRORS/EACCES
+class      conditional
+when       XSI
+says       IPC_STAT on a segment whose mode is 0 fails with EACCES for a process
+           without privileges.
+test       t/007-stat-eacces.c
+
+assertion  XSH.shmctl.008
+anchor     functions/shmctl.html#ERRORS/EPERM
+class      conditional
+when       XSI
+says       IPC_SET and IPC_RMID by a process that is not privileged and whose user ID
+           is neither cuid nor uid fail with EPERM, and the segment still exists.
+needs      root
+test       t/008-eperm-nonowner.c

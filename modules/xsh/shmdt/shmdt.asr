@@ -1,0 +1,30 @@
+# XSH shmdt
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# XSI shmdt(). Segments are IPC_PRIVATE and removed on every exit path.
+
+assertion  XSH.shmdt.001
+anchor     functions/shmdt.html#DESCRIPTION
+anchor     functions/shmdt.html#RETURN VALUE
+class      conditional
+when       XSI
+says       shmdt() of an attached address returns 0, IPC_STAT then shows shm_nattch 0
+           and shm_dtime between the time before and after the call, and bytes
+           written earlier are read again after a new attach.
+test       t/001-detach.c
+
+assertion  XSH.shmdt.002
+anchor     functions/shmdt.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+says       shmdt() of the address one past the start of an attachment, and of an
+           address in ordinary heap memory, fails with EINVAL and the segment stays
+           attached (shm_nattch 1).
+test       t/002-einval.c
+
+assertion  XSH.shmdt.003
+anchor     functions/shmdt.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With a segment attached twice, shmdt() of one attachment leaves shm_nattch
+           1 and the other attachment still readable.
+test       t/003-one-of-two.c

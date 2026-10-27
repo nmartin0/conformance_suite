@@ -1,0 +1,73 @@
+# XSH ftok
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# ftok() is XSI. Files are made in the working directory; ids are the low byte
+# of a character. Not tested: the advice that different files or ids should
+# give different keys (a 'should'), EIO, EOVERFLOW on size, and the 'may fail'
+# limits.
+
+assertion  XSH.ftok.001
+anchor     functions/ftok.html#DESCRIPTION
+class      conditional
+when       XSI
+says       ftok() of the working directory (".") and of a regular file with id 'a'
+           returns a key other than (key_t)-1, and a second call with the same path
+           and id returns the same key.
+test       t/001-same-key.c
+
+assertion  XSH.ftok.002
+anchor     functions/ftok.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A regular file named by "f", by "./f", by a hard link "g" and by a
+           symbolic link "s" gives one and the same key for the same id.
+test       t/002-same-file.c
+
+assertion  XSH.ftok.003
+anchor     functions/ftok.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Only the low-order 8 bits of id count: ftok(path, 0x41) equals ftok(path,
+           0x141) and ftok(path, 0x241).
+test       t/003-low-byte.c
+
+assertion  XSH.ftok.004
+anchor     functions/ftok.html#ERRORS/ENOENT
+class      conditional
+when       XSI
+says       ftok() fails with ENOENT, returning (key_t)-1, for a missing final
+           component and for an empty path.
+test       t/004-enoent.c
+
+assertion  XSH.ftok.005
+anchor     functions/ftok.html#ERRORS/ENOTDIR
+class      conditional
+when       XSI
+says       ftok() fails with ENOTDIR for a path whose prefix component is a regular
+           file ("f/x") and for a regular file named with a trailing slash ("f/").
+test       t/005-enotdir.c
+
+assertion  XSH.ftok.006
+anchor     functions/ftok.html#ERRORS/ENAMETOOLONG
+class      conditional
+when       XSI
+says       ftok() fails with ENAMETOOLONG for a path component longer than
+           {NAME_MAX}.
+test       t/006-enametoolong.c
+
+assertion  XSH.ftok.007
+anchor     functions/ftok.html#ERRORS/ELOOP
+class      conditional
+when       XSI
+says       ftok() fails with ELOOP for a path that is a symbolic link pointing at
+           itself.
+test       t/007-eloop.c
+
+assertion  XSH.ftok.008
+anchor     functions/ftok.html#ERRORS/EACCES
+class      conditional
+when       XSI
+says       ftok() of a file inside a directory that denies search permission fails
+           with EACCES for a process without privileges.
+note       The directory has mode 0 and the call runs in a child with no privileges
+           (privilege dropped when the suite runs as root).
+test       t/008-eacces.c

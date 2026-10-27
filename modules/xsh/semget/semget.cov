@@ -1,0 +1,21 @@
+# semget.cov - every requirement unit on functions/semget.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:3ce59eea     none  introduces the facility
+DESCRIPTION:f3a5f577     impl  whether it interoperates with the realtime IPC functions is unspecified
+DESCRIPTION:405596a5     XSH.semget.004
+DESCRIPTION:b80e84bb     XSH.semget.001 XSH.semget.004
+DESCRIPTION:2e8c95a9     XSH.semget.001
+DESCRIPTION:45adfc08     XSH.semget.004
+DESCRIPTION:138d4db1     XSH.semget.002 XSH.semget.003
+DESCRIPTION:ada59459     XSH.semget.002
+DESCRIPTION:2e34d8b4     XSH.semget.002
+DESCRIPTION:7f918adf     XSH.semget.002
+DESCRIPTION:6d4cdea5     XSH.semget.002
+DESCRIPTION:7b0a1ea6     XSH.semget.003
+RETURN_VALUE:e55e0824    XSH.semget.001 XSH.semget.004 XSH.semget.005 XSH.semget.006 XSH.semget.007 XSH.semget.008 XSH.semget.009
+ERRORS:c276d457          XSH.semget.009
+ERRORS:07c7cceb          XSH.semget.005
+ERRORS:789aed1d          XSH.semget.007 XSH.semget.008
+ERRORS:3594a946          XSH.semget.006
+ERRORS:b9803b58          untestable  the system-wide semaphore limit cannot be reached without affecting other users

@@ -1,0 +1,19 @@
+# msgctl.cov - every requirement unit on functions/msgctl.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:6f423669     none  introduces the facility
+DESCRIPTION:f3a5f577     impl  whether it interoperates with the realtime IPC functions is unspecified
+DESCRIPTION:80d6bb7e     XSH.msgctl.001 XSH.msgctl.002 XSH.msgctl.007
+DESCRIPTION:0c2b78ca     none  introduces the items
+DESCRIPTION:46e3e1b6     XSH.msgctl.001
+DESCRIPTION:bf74703f     XSH.msgctl.001
+DESCRIPTION:fc4c174d     XSH.msgctl.002 XSH.msgctl.003 XSH.msgctl.004
+DESCRIPTION:0886b319     XSH.msgctl.005 XSH.msgctl.006
+DESCRIPTION:f81796f6     XSH.msgctl.005
+DESCRIPTION:eed7b33b     XSH.msgctl.007
+DESCRIPTION:8aeb687e     partial XSH.msgctl.006  # EPERM for a non-owner; the permitted cases follow from the other tests
+RETURN_VALUE:2031b410    XSH.msgctl.001 XSH.msgctl.002 XSH.msgctl.007 XSH.msgctl.008
+ERRORS:844cd9d0          XSH.msgctl.009
+ERRORS:2a929084          XSH.msgctl.008
+ERRORS:50423bbd          XSH.msgctl.006
+ERRORS:32109d1e          XSH.msgctl.005

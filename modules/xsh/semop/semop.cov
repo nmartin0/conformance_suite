@@ -1,0 +1,50 @@
+# semop.cov - every requirement unit on functions/semop.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:ef53d41e     none  introduces the facility
+DESCRIPTION:f3a5f577     impl  whether it interoperates with the realtime IPC functions is unspecified
+DESCRIPTION:be144b81     XSH.semop.001 XSH.semop.002 XSH.semop.003
+DESCRIPTION:3d7c148b     none  describes the argument
+DESCRIPTION:1bf05c36     XSH.semop.001
+DESCRIPTION:178766ed     none  describes the argument
+DESCRIPTION:183f70bd     none  introduces the members
+DESCRIPTION:5a897dd7     none  member table
+DESCRIPTION:03867355     none  member table
+DESCRIPTION:face159d     none  member table
+DESCRIPTION:fa2bb985     XSH.semop.001
+DESCRIPTION:1823e372     XSH.semop.001
+DESCRIPTION:f400d3d1     XSH.semop.003
+DESCRIPTION:0999a24a     partial XSH.semop.009  # only the return to the original count after an interrupted wait is observed
+DESCRIPTION:e9617c86     none  introduces the items
+DESCRIPTION:624f96e1     XSH.semop.005
+DESCRIPTION:cb949d10     XSH.semop.011
+DESCRIPTION:7606e8d6     XSH.semop.002
+DESCRIPTION:42a8c5eb     XSH.semop.003 XSH.semop.004
+DESCRIPTION:ade6b42c     XSH.semop.005
+DESCRIPTION:ddd2f6ec     XSH.semop.007
+DESCRIPTION:d489d5a3     XSH.semop.008
+DESCRIPTION:462475d6     XSH.semop.008
+DESCRIPTION:669b3b30     XSH.semop.009
+DESCRIPTION:84be1446     XSH.semop.009
+DESCRIPTION:9c8f0445     XSH.semop.001 XSH.semop.011
+DESCRIPTION:7606e8d6.2   XSH.semop.002
+DESCRIPTION:4f1162ff     XSH.semop.001 XSH.semop.004 XSH.semop.006
+DESCRIPTION:7606e8d6.3   XSH.semop.002
+DESCRIPTION:3c0ee537     XSH.semop.003 XSH.semop.004
+DESCRIPTION:a61cae6d     XSH.semop.006
+DESCRIPTION:b2529071     XSH.semop.006
+DESCRIPTION:d489d5a3.2   XSH.semop.008
+DESCRIPTION:462475d6.2   XSH.semop.008
+DESCRIPTION:669b3b30.2   XSH.semop.009
+DESCRIPTION:86c6e88a     partial XSH.semop.009  # an interrupted wait-for-zero is not tested
+DESCRIPTION:2af51106     XSH.semop.010
+RETURN_VALUE:4cde0bd9    XSH.semop.001 XSH.semop.004 XSH.semop.013 XSH.semop.014 XSH.semop.015
+ERRORS:489f6009          untestable  the system maximum number of operations is not observable
+ERRORS:984f1d23          XSH.semop.015
+ERRORS:1f350193          XSH.semop.003 XSH.semop.004
+ERRORS:96320829          XSH.semop.013
+ERRORS:8fa5c8fe          XSH.semop.008
+ERRORS:ba0f80a0          XSH.semop.009
+ERRORS:b35be580          partial XSH.semop.014  # invalid identifier; the SEM_UNDO limit is not observable
+ERRORS:96c3dc0d          untestable  the limit on processes requesting SEM_UNDO is not observable
+ERRORS:6f4769cb          partial XSH.semop.016  # semval overflow; semadj overflow is not tested

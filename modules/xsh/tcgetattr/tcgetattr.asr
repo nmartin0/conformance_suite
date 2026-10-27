@@ -1,0 +1,68 @@
+# XSH tcgetattr()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# tcgetattr() needs a terminal. The tests that need one use a pseudo-terminal (XSI), as
+# does the background-group test; the descriptor-error tests need none.
+# The returned baud rates are not tested: whether a terminal supports split rates is
+# not discoverable and a pseudo-terminal need not keep a rate.
+
+assertion  XSH.tcgetattr.001
+anchor     functions/tcgetattr.html#DESCRIPTION
+anchor     functions/tcgetattr.html#RETURN VALUE
+anchor     functions/tcsetattr.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       Two tcgetattr() calls on a pseudo-terminal subsidiary, with data
+           transfer, a flush and the opening and closing of another descriptor in
+           between (no tcsetattr()), return 0 and the same attribute values.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/001-unchanged.c
+
+assertion  XSH.tcgetattr.002
+anchor     functions/tcgetattr.html#ERRORS/EBADF
+class      required
+since      1988
+says       tcgetattr(-1) and tcgetattr() of a closed descriptor return -1 with
+           EBADF.
+test       t/002-ebadf.c
+
+assertion  XSH.tcgetattr.003
+anchor     functions/tcgetattr.html#ERRORS/ENOTTY
+class      required
+since      1988
+says       tcgetattr() of descriptors for a regular file, both ends of a pipe and
+           /dev/null returns -1 with ENOTTY.
+test       t/003-enotty-file.c
+
+assertion  XSH.tcgetattr.004
+anchor     functions/tcgetattr.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcgetattr() is allowed from any process: a process in a background
+           process group (SIGTTOU neither blocked nor ignored) gets 0 on its
+           controlling terminal and is not stopped.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/004-bg-allowed.c
+
+assertion  XSH.tcgetattr.005
+anchor     functions/tcgetattr.html#RATIONALE
+anchor     functions/tcsetattr.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       After tcsetattr() on one descriptor of a pseudo-terminal subsidiary,
+           tcgetattr() on a second descriptor of it returns the same attribute
+           values and shows the change (ECHO toggled).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+           The change is read back only for the ECHO flag, which every terminal
+           supports.
+test       t/005-second-open.c

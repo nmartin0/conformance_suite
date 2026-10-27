@@ -1,0 +1,82 @@
+# XSH semget
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# XSI semget(). Sets are IPC_PRIVATE or keyed with ftok() on a file in the
+# working directory, and removed on every exit path. Not tested: the system
+# limit on nsems except through a value no limit can reach, and ENOSPC.
+
+assertion  XSH.semget.001
+anchor     functions/semget.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Two semget(IPC_PRIVATE, 3, ...) calls return distinct non-negative
+           identifiers.
+test       t/001-private-distinct.c
+
+assertion  XSH.semget.002
+anchor     functions/semget.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A set made with semget(IPC_PRIVATE, 3, 0640) has, by IPC_STAT, sem_nsems
+           3, sem_perm uid and cuid equal to the effective user ID, gid and cgid
+           equal to the effective group ID, low-order 9 mode bits 0640, sem_otime 0
+           and sem_ctime between the time before and after the call.
+test       t/002-initial-state.c
+
+assertion  XSH.semget.003
+anchor     functions/semget.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Every semaphore of a new set has semval, sempid, semncnt and semzcnt equal
+           to 0 (GETALL, and GETPID, GETNCNT, GETZCNT for each).
+test       t/003-initial-values.c
+
+assertion  XSH.semget.004
+anchor     functions/semget.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With a key from ftok(), semget(key, 3, IPC_CREAT|0600) creates a set;
+           semget(key, 3, 0), semget(key, 0, 0), semget(key, 2, 0) and semget(key, 3,
+           IPC_CREAT|0600) return that same identifier.
+test       t/004-key-get.c
+
+assertion  XSH.semget.005
+anchor     functions/semget.html#ERRORS/EEXIST
+class      conditional
+when       XSI
+says       semget(key, 3, IPC_CREAT|IPC_EXCL|0600) for a key that already has a set
+           fails with EEXIST.
+test       t/005-eexist.c
+
+assertion  XSH.semget.006
+anchor     functions/semget.html#ERRORS/ENOENT
+class      conditional
+when       XSI
+says       semget(key, 1, 0600) for a key with no set and without IPC_CREAT fails
+           with ENOENT.
+test       t/006-enoent.c
+
+assertion  XSH.semget.007
+anchor     functions/semget.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+says       Creating a set with nsems 0 and with nsems -1 fails with EINVAL;
+           semget(key, 4, 0) for a key whose set has 3 semaphores fails with EINVAL.
+test       t/007-einval.c
+
+assertion  XSH.semget.008
+anchor     functions/semget.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+says       Creating a set with nsems INT_MAX (above any limit, since sem_nsems is an
+           unsigned short) fails with EINVAL or ENOSPC.
+note       Both errors describe a limit being exceeded; XSH 2.3 lets the
+           implementation choose.
+test       t/008-einval-too-many.c
+
+assertion  XSH.semget.009
+anchor     functions/semget.html#ERRORS/EACCES
+class      conditional
+when       XSI
+says       semget(key, 0, 0400) for a key whose set has mode 0 fails with EACCES for
+           a process without privileges.
+test       t/009-eacces.c

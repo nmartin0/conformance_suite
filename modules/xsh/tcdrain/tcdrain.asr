@@ -1,0 +1,110 @@
+# XSH tcdrain()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Terminal tests use a pseudo-terminal (XSI). Output is made untransmittable by suspending
+# it with tcflow(TCOOFF) and writing a byte; on a pseudo-terminal "transmitted" is taken to
+# mean handed to the manager side. Background tests run in a session of their own with the
+# pseudo-terminal as controlling terminal (implementation-defined acquisition: UNRESOLVED when
+# it does not happen).
+
+assertion  XSH.tcdrain.001
+anchor     functions/tcdrain.html#DESCRIPTION
+anchor     functions/tcdrain.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      1988
+says       After a byte written to a pseudo-terminal subsidiary has been read
+           from the manager, tcdrain() returns 0 (the call is bounded by an
+           alarm).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/001-returns-zero.c
+
+assertion  XSH.tcdrain.002
+anchor     functions/tcdrain.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       With output suspended and one byte written (so not transmitted),
+           tcdrain() does not return; once output is restarted it returns 0 and
+           the byte reaches the manager.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+           Suspension is made with tcflow(TCOOFF); if the held byte reaches the
+           manager anyway the test is UNRESOLVED.
+timeout    40
+test       t/002-blocks.c
+
+assertion  XSH.tcdrain.003
+anchor     functions/tcdrain.html#ERRORS/EINTR
+class      conditional
+when       BASE|XSI
+since      1988
+says       With output suspended and one byte written, tcdrain() waiting for the
+           output is interrupted by a caught signal (no SA_RESTART) and returns
+           -1 with EINTR.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+           If the call does not block the test is UNRESOLVED.
+timeout    40
+test       t/003-eintr.c
+
+assertion  XSH.tcdrain.004
+anchor     functions/tcdrain.html#ERRORS/EBADF
+class      required
+since      1988
+says       tcdrain(-1) and tcdrain() of a closed descriptor return -1 with EBADF.
+test       t/004-ebadf.c
+
+assertion  XSH.tcdrain.005
+anchor     functions/tcdrain.html#ERRORS/ENOTTY
+class      required
+since      1988
+says       tcdrain() of descriptors for a regular file, both ends of a pipe and
+           /dev/null returns -1 with ENOTTY.
+test       t/005-enotty-file.c
+
+assertion  XSH.tcdrain.006
+anchor     functions/tcdrain.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in a background process group (not orphaned) whose SIGTTOU
+           is neither blocked nor ignored and which calls tcdrain() on its
+           controlling terminal is sent SIGTTOU (default action: stopped).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/006-bg-sigttou.c
+
+assertion  XSH.tcdrain.007
+anchor     functions/tcdrain.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in a background process group which calls tcdrain() on its
+           controlling terminal while SIGTTOU is blocked, and again while it is
+           ignored, completes normally (returns 0), is not stopped.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    60
+test       t/007-bg-quiet.c
+
+assertion  XSH.tcdrain.008
+anchor     functions/tcdrain.html#ERRORS/EIO
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in an orphaned process group, with SIGTTOU neither blocked
+           nor ignored, which calls tcdrain() on its controlling terminal gets -1
+           with EIO.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/008-orphan-eio.c

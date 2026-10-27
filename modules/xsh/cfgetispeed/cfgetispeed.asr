@@ -1,0 +1,28 @@
+# XSH cfgetispeed()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# These functions only read or write a field of a termios structure; they are tested on a zeroed
+# structure and need no terminal. Rates are named by the Bxxx constants only; their encoding is
+# not specified. A setter is allowed to refuse a rate (it "may fail"), so only the rates it
+# accepts are compared, and at least one has to be accepted. An input speed of literal 0, and
+# speeds outside the defined set, are not tested: the page leaves what is stored open.
+
+assertion  XSH.cfgetispeed.001
+anchor     functions/cfgetispeed.html#DESCRIPTION
+anchor     functions/cfgetispeed.html#RETURN VALUE
+class      required
+since      1988
+says       For each of B0 B50 B75 B110 B134 B150 B200 B300 B600 B1200 B1800 B2400
+           B4800 B9600 B19200 B38400 that cfsetispeed() accepts (returns 0),
+           cfgetispeed() on the structure returns exactly that value; at least
+           one is accepted.
+test       t/001-readback.c
+
+assertion  XSH.cfgetispeed.002
+anchor     functions/cfgetispeed.html#DESCRIPTION
+class      required
+since      1988
+says       cfgetispeed() does not modify the structure and returns the same value
+           each time it is called on it; a copy of the structure gives the same
+           value.
+test       t/002-pure.c

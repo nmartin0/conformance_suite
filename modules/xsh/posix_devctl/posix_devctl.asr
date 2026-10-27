@@ -1,0 +1,14 @@
+# XSH posix_devctl
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# posix_devctl() returns an error number. Commands are device specific, so
+# only the failure for a closed descriptor is tested.
+
+assertion  XSH.posix_devctl.001
+anchor     functions/posix_devctl.html#ERRORS/EBADF
+class      conditional
+when       DC
+since      2024
+says       posix_devctl() on descriptor -1 and on a closed descriptor, with no data
+           pointer and with a data pointer and nbyte, returns EBADF (as the return
+           value).
+test       t/001-ebadf.c

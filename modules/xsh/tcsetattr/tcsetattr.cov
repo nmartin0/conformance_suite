@@ -1,0 +1,29 @@
+# tcsetattr.cov - every requirement unit on the page for tcsetattr.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:88a14ecf     XSH.tcsetattr.001 XSH.tcsetattr.005
+DESCRIPTION:8dd6d656     XSH.tcsetattr.001 XSH.tcsetattr.002
+DESCRIPTION:0e6dfd4c     XSH.tcsetattr.004
+DESCRIPTION:0539ee69     app  advice to applications
+DESCRIPTION:93dda942     partial XSH.tcsetattr.005  # the wait for output is checked for TCSADRAIN (004) only
+DESCRIPTION:6cef15e0     untestable  modem control lines do not exist on a pseudo-terminal
+DESCRIPTION:bacceeb7     untestable  line disconnection is not observable on a pseudo-terminal
+DESCRIPTION:b23398c3     untestable  the rate given to hardware is not observable; the stored input rate after tcgetattr is left open by the rationale
+DESCRIPTION:25ceef97     untestable  needs a request of which only a part can be honoured; none can be built portably
+DESCRIPTION:bc198797     XSH.tcsetattr.001
+DESCRIPTION:6bd903ef     untestable  needs a request nothing of which can be honoured; none can be built portably
+DESCRIPTION:f40d3b56     untestable  needs a rate combination that is not supported; none is discoverable
+DESCRIPTION:c77e29c5     XSH.tcsetattr.001 XSH.tcsetattr.009
+DESCRIPTION:2dd1a9a8     XSH.tcsetattr.003
+DESCRIPTION:85a1482e     app  undefined behaviour and advice to applications
+DESCRIPTION:b50427c1     partial XSH.tcsetattr.009  # the closing of one of two descriptors is checked; closing the last one and opening the first are not
+DESCRIPTION:35f84931     none  introduces the two cases below
+DESCRIPTION:54fc4236     XSH.tcsetattr.012
+DESCRIPTION:1f79c6c7     XSH.tcsetattr.011
+RETURN_VALUE:105a0976    XSH.tcsetattr.001
+RETURN_VALUE:ce1869b1    XSH.tcsetattr.006 XSH.tcsetattr.007 XSH.tcsetattr.008 XSH.tcsetattr.010 XSH.tcsetattr.013
+ERRORS:8f957e38          XSH.tcsetattr.007
+ERRORS:5e70bc08          XSH.tcsetattr.010
+ERRORS:01df5b26          partial XSH.tcsetattr.006  # only the optional_actions case; an unsupported attribute value cannot be built portably
+ERRORS:b3eee278          XSH.tcsetattr.013
+ERRORS:805c8b2c          XSH.tcsetattr.008

@@ -1,0 +1,24 @@
+# shmget.cov - every requirement unit on functions/shmget.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:215af871     none  introduces the facility
+DESCRIPTION:f3a5f577     impl  whether it interoperates with the realtime IPC functions is unspecified
+DESCRIPTION:18d02b0f     XSH.shmget.003
+DESCRIPTION:34e2197e     XSH.shmget.001 XSH.shmget.003
+DESCRIPTION:2e8c95a9     XSH.shmget.001
+DESCRIPTION:47623c8c     XSH.shmget.003
+DESCRIPTION:ec3d98f7     XSH.shmget.002
+DESCRIPTION:64386727     XSH.shmget.002
+DESCRIPTION:3ad5a068     XSH.shmget.002
+DESCRIPTION:d1a50804     XSH.shmget.002
+DESCRIPTION:3f92c6b1     XSH.shmget.002
+DESCRIPTION:f0c0e008     XSH.shmget.002
+DESCRIPTION:38fe8678     XSH.shmget.001
+RETURN_VALUE:31541f0f    XSH.shmget.001 XSH.shmget.003 XSH.shmget.004 XSH.shmget.005 XSH.shmget.006 XSH.shmget.007
+ERRORS:27b09fa7          XSH.shmget.006
+ERRORS:0fcedede          XSH.shmget.004
+ERRORS:35d744cb          partial XSH.shmget.007  # only a size above any maximum; the minimum is not known
+ERRORS:d8895252          XSH.shmget.003
+ERRORS:2b0e4699          XSH.shmget.005
+ERRORS:90a74450          untestable  exhaustion of physical memory cannot be arranged reliably
+ERRORS:3ed0f093          untestable  the system-wide segment limit cannot be reached without affecting other users

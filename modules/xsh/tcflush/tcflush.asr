@@ -1,0 +1,143 @@
+# XSH tcflush()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Terminal tests use a pseudo-terminal (XSI). Input is placed by writing to the manager side
+# with the subsidiary non-canonical and echo off; output is made untransmittable by
+# suspending it with tcflow(TCOOFF) and writing. If the held output reaches the manager
+# anyway, the test is UNRESOLVED (tcflow has its own assertions).
+
+assertion  XSH.tcflush.001
+anchor     functions/tcflush.html#DESCRIPTION
+anchor     functions/tcflush.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      1988
+says       Input received but not read (non-canonical, VMIN and VTIME zero) is
+           discarded by tcflush(TCIFLUSH), which returns 0: nothing is left to
+           read.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/001-tciflush.c
+
+assertion  XSH.tcflush.002
+anchor     functions/tcflush.html#DESCRIPTION
+anchor     functions/tcflush.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      1988
+says       Output written while output is suspended is discarded by
+           tcflush(TCOFLUSH): after output is restarted nothing reaches the
+           manager, while a later write does.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+           Output is held with tcflow(TCOOFF); if it reaches the manager anyway
+           the test is UNRESOLVED.
+test       t/002-tcoflush.c
+
+assertion  XSH.tcflush.003
+anchor     functions/tcflush.html#DESCRIPTION
+anchor     functions/tcflush.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcflush(TCIOFLUSH) returns 0 and discards both unread input and
+           untransmitted (suspended) output.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/003-tcioflush.c
+
+assertion  XSH.tcflush.004
+anchor     functions/tcflush.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcflush(TCIFLUSH) discards the unread input but not output written
+           while output is suspended: after TCOON the bytes reach the manager.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/004-tciflush-keeps-output.c
+
+assertion  XSH.tcflush.005
+anchor     functions/tcflush.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcflush(TCOFLUSH) discards the output written while output is
+           suspended but not the unread input, which can still be read.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/005-tcoflush-keeps-input.c
+
+assertion  XSH.tcflush.006
+anchor     functions/tcflush.html#ERRORS/EINVAL
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcflush() with a queue_selector that is none of TCIFLUSH, TCOFLUSH,
+           TCIOFLUSH (-1, 7, 100, 12345) returns -1 with EINVAL.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/006-einval-selector.c
+
+assertion  XSH.tcflush.007
+anchor     functions/tcflush.html#ERRORS/EBADF
+class      required
+since      1988
+says       tcflush(-1) and tcflush() of a closed descriptor return -1 with EBADF.
+test       t/007-ebadf.c
+
+assertion  XSH.tcflush.008
+anchor     functions/tcflush.html#ERRORS/ENOTTY
+class      required
+since      1988
+says       tcflush() of descriptors for a regular file, both ends of a pipe and
+           /dev/null returns -1 with ENOTTY.
+test       t/008-enotty-file.c
+
+assertion  XSH.tcflush.009
+anchor     functions/tcflush.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in a background process group (not orphaned) whose SIGTTOU
+           is neither blocked nor ignored and which calls tcflush(TCIFLUSH) on
+           its controlling terminal is sent SIGTTOU (default action: stopped).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/009-bg-sigttou.c
+
+assertion  XSH.tcflush.010
+anchor     functions/tcflush.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in a background process group which calls tcflush(TCIFLUSH)
+           on its controlling terminal while SIGTTOU is blocked, and again while
+           it is ignored, completes normally (returns 0), is not stopped.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    60
+test       t/010-bg-quiet.c
+
+assertion  XSH.tcflush.011
+anchor     functions/tcflush.html#ERRORS/EIO
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in an orphaned process group, with SIGTTOU neither blocked
+           nor ignored, which calls tcflush(TCIFLUSH) on its controlling terminal
+           gets -1 with EIO.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/011-orphan-eio.c

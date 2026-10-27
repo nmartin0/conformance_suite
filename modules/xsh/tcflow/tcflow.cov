@@ -1,0 +1,20 @@
+# tcflow.cov - every requirement unit on the page for tcflow.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:bba211da     XSH.tcflow.002 XSH.tcflow.003 XSH.tcflow.004
+DESCRIPTION:ae0a1397     none  restates the argument
+DESCRIPTION:dede12d2     XSH.tcflow.002
+DESCRIPTION:d108a9b0     XSH.tcflow.003
+DESCRIPTION:3c4dd3fb     partial XSH.tcflow.004  # only the return value; a pseudo-terminal need not transmit the character and no other terminal is available
+DESCRIPTION:19b8add8     impl  a pseudo-terminal may leave the character out
+DESCRIPTION:3b840d98     partial XSH.tcflow.004  # only the return value; a pseudo-terminal need not transmit the character and no other terminal is available
+DESCRIPTION:2eaa2157     impl  a pseudo-terminal may leave the character out
+DESCRIPTION:8f172f1c     XSH.tcflow.001
+DESCRIPTION:3fa24be5     XSH.tcflow.008
+DESCRIPTION:e3b79686     XSH.tcflow.009
+RETURN_VALUE:105a0976    XSH.tcflow.002 XSH.tcflow.003 XSH.tcflow.004
+RETURN_VALUE:ce1869b1    XSH.tcflow.005 XSH.tcflow.006 XSH.tcflow.007 XSH.tcflow.010
+ERRORS:8f957e38          XSH.tcflow.006
+ERRORS:223942a9          XSH.tcflow.005
+ERRORS:b3eee278          XSH.tcflow.010
+ERRORS:805c8b2c          XSH.tcflow.007

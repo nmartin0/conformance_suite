@@ -1,0 +1,110 @@
+# XSH msgrcv
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# XSI msgrcv(). Queues are IPC_PRIVATE and removed on every exit path;
+# blocking calls run in children under alarm(). Messages are two longs' worth
+# of struct: a long type then text.
+
+assertion  XSH.msgrcv.001
+anchor     functions/msgrcv.html#DESCRIPTION
+anchor     functions/msgrcv.html#RETURN VALUE
+class      conditional
+when       XSI
+says       With msgtyp 0, messages of types 3, 1, 2 come back in the order sent, each
+           with its type and text, and the return value is the number of text bytes
+           (also 0 for an empty message).
+test       t/001-type-zero.c
+
+assertion  XSH.msgrcv.002
+anchor     functions/msgrcv.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With msgtyp > 0 the first message of exactly that type is received,
+           leaving the others in order.
+test       t/002-type-positive.c
+
+assertion  XSH.msgrcv.003
+anchor     functions/msgrcv.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With msgtyp < 0 the first message of the lowest type that is at most
+           |msgtyp| is received; with only larger types queued, IPC_NOWAIT gives
+           ENOMSG.
+test       t/003-type-negative.c
+
+assertion  XSH.msgrcv.004
+anchor     functions/msgrcv.html#ERRORS/E2BIG
+class      conditional
+when       XSI
+says       A message longer than msgsz, without MSG_NOERROR, fails with E2BIG and
+           stays queued, and a larger msgsz then receives it whole.
+test       t/004-e2big.c
+
+assertion  XSH.msgrcv.005
+anchor     functions/msgrcv.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With MSG_NOERROR, a message longer than msgsz is truncated: msgrcv()
+           returns msgsz bytes of the first part, nothing is written past msgsz, and
+           the message is gone from the queue.
+test       t/005-noerror.c
+
+assertion  XSH.msgrcv.006
+anchor     functions/msgrcv.html#ERRORS/ENOMSG
+class      conditional
+when       XSI
+says       IPC_NOWAIT msgrcv() on an empty queue fails with ENOMSG at once, and so
+           does one asking for a type that is not queued.
+test       t/006-enomsg.c
+
+assertion  XSH.msgrcv.007
+anchor     functions/msgrcv.html#DESCRIPTION
+class      conditional
+when       XSI
+says       After a successful msgrcv(), IPC_STAT shows msg_qnum one lower, msg_lrpid
+           equal to the caller's process ID and msg_rtime between the time before and
+           after the call.
+test       t/007-stat-update.c
+
+assertion  XSH.msgrcv.008
+anchor     functions/msgrcv.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A msgrcv() without IPC_NOWAIT on a queue with no message of the wanted
+           type does not return when a message of another type arrives, and returns
+           it when a message of the wanted type arrives.
+timeout    60
+test       t/008-blocks.c
+
+assertion  XSH.msgrcv.009
+anchor     functions/msgrcv.html#ERRORS/EIDRM
+class      conditional
+when       XSI
+says       A msgrcv() blocked on an empty queue fails with EIDRM when the queue is
+           removed.
+timeout    60
+test       t/009-eidrm.c
+
+assertion  XSH.msgrcv.010
+anchor     functions/msgrcv.html#ERRORS/EINTR
+class      conditional
+when       XSI
+says       A msgrcv() blocked on an empty queue is interrupted by a caught signal (no
+           SA_RESTART): it returns -1 with EINTR.
+timeout    60
+test       t/010-eintr.c
+
+assertion  XSH.msgrcv.011
+anchor     functions/msgrcv.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+says       msgrcv() with identifier -1 fails with EINVAL; with the identifier of a
+           removed queue it fails with EINVAL or EIDRM.
+test       t/011-einval.c
+
+assertion  XSH.msgrcv.012
+anchor     functions/msgrcv.html#ERRORS/EACCES
+class      conditional
+when       XSI
+says       msgrcv() on a queue holding a message but with mode 0 fails with EACCES
+           for a process without privileges, and the message stays queued.
+test       t/012-eacces.c

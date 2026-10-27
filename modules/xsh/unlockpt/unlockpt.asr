@@ -1,0 +1,30 @@
+# XSH unlockpt()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Everything here is XSI. That the subsidiary must not be opened before unlockpt() is a duty of
+# the application, not an implementation requirement, so it is not tested.
+
+assertion  XSH.unlockpt.001
+anchor     functions/unlockpt.html#DESCRIPTION
+anchor     functions/unlockpt.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       unlockpt() on a manager after grantpt() returns 0, and the subsidiary
+           device named by ptsname() can then be opened for reading and writing
+           without making it the controlling terminal.
+test       t/001-opens.c
+
+assertion  XSH.unlockpt.002
+anchor     functions/unlockpt.html#ERRORS/EBADF
+anchor     functions/unlockpt.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2001
+says       When unlockpt() reports an error it is EBADF for a closed descriptor,
+           EBADF or EINVAL for a descriptor not open for writing, and EINVAL for
+           a regular file and /dev/null opened for writing; these errors are
+           optional, so a call that succeeds is not a failure.
+note       Both errors are "may" errors: the test fails only when an error is
+           reported with another code.
+test       t/002-bad-fd.c

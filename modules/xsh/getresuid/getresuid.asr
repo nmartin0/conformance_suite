@@ -1,0 +1,26 @@
+# XSH getresuid
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# getresuid() stores the real, effective and saved IDs. The saved ID has no
+# other defined relation to the process, so only the real and effective IDs
+# are compared with getuid() and geteuid(), and the three values are compared
+# across fork() and after a child changed them.
+
+assertion  XSH.getresuid.001
+anchor     functions/getresuid.html#DESCRIPTION
+anchor     functions/getresuid.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2024
+says       getresuid() returns 0 and the real and effective user IDs it stores equal
+           getuid() and geteuid(); a forked child sees the same three values.
+test       t/001-matches.c
+
+assertion  XSH.getresuid.002
+anchor     functions/getresuid.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       After a child changes its user IDs with setresuid() to three different
+           values, getresuid() in the child reports exactly those three.
+needs      root
+test       t/002-after-change.c

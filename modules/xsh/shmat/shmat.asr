@@ -1,0 +1,78 @@
+# XSH shmat
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# XSI shmat(). Segments are IPC_PRIVATE and removed on every exit path;
+# attachments are detached before the segment is removed. Not tested: writing
+# through a SHM_RDONLY attachment (the page does not define it), EMFILE,
+# ENOMEM, and EINVAL for an invalid identifier (the page's EINVAL wording
+# joins the identifier and address conditions unclearly).
+
+assertion  XSH.shmat.001
+anchor     functions/shmat.html#DESCRIPTION
+anchor     functions/shmat.html#RETURN VALUE
+class      conditional
+when       XSI
+says       shmat(id, NULL, 0) returns an address other than SHM_FAILED, after which
+           IPC_STAT shows shm_nattch 1 and shm_atime between the time before and
+           after the call.
+test       t/001-attach-null.c
+
+assertion  XSH.shmat.002
+anchor     functions/shmat.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Bytes written through one read-write attachment are read through a second
+           attachment of the same segment in the same process, and shm_nattch is then
+           2.
+test       t/002-read-write.c
+
+assertion  XSH.shmat.003
+anchor     functions/shmat.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A forked child that attaches the segment and writes sees what the parent
+           wrote first, and the parent sees the child's write after reaping it.
+test       t/003-fork-share.c
+
+assertion  XSH.shmat.004
+anchor     functions/shmat.html#DESCRIPTION
+class      conditional
+when       XSI
+says       shmat(id, NULL, SHM_RDONLY) returns an address other than SHM_FAILED
+           through which bytes written earlier through a read-write attachment are
+           read.
+test       t/004-rdonly.c
+
+assertion  XSH.shmat.005
+anchor     functions/shmat.html#DESCRIPTION
+class      conditional
+when       XSI
+says       After a segment is attached at a system-chosen address A (a multiple of
+           SHMLBA) and detached, shmat(id, A, 0) returns A.
+note       UNRESOLVED if A is not a multiple of SHMLBA or the address cannot be
+           reused.
+test       t/005-exact-addr.c
+
+assertion  XSH.shmat.006
+anchor     functions/shmat.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With the same A, shmat(id, A + 1, SHM_RND) returns the address rounded
+           down to a multiple of SHMLBA, which is A.
+note       UNRESOLVED unless A is a multiple of SHMLBA.
+test       t/006-rnd-addr.c
+
+assertion  XSH.shmat.007
+anchor     functions/shmat.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+says       shmat(id, (void *)1, 0) fails with EINVAL, returning SHM_FAILED, and
+           shm_nattch stays 0.
+test       t/007-einval-addr.c
+
+assertion  XSH.shmat.008
+anchor     functions/shmat.html#ERRORS/EACCES
+class      conditional
+when       XSI
+says       For a segment of mode 0444, shmat(id, NULL, SHM_RDONLY) succeeds and
+           shmat(id, NULL, 0) fails with EACCES for a process without privileges.
+test       t/008-eacces.c

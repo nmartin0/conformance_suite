@@ -1,0 +1,121 @@
+# XSH semctl
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# XSI semctl(). Sets are IPC_PRIVATE and removed on every exit path. Blocked
+# children run under alarm(). SETVAL/SETALL value limits other than
+# overflowing unsigned short are not observable; GETNCNT/GETZCNT are read
+# after a child is seen to be waiting by polling.
+
+assertion  XSH.semctl.001
+anchor     functions/semctl.html#DESCRIPTION
+anchor     functions/semctl.html#RETURN VALUE
+class      conditional
+when       XSI
+says       SETVAL of 5 on semaphore 1 of a 3-semaphore set returns 0; GETVAL on it
+           returns 5 and the other semaphores stay 0.
+test       t/001-setval-getval.c
+
+assertion  XSH.semctl.002
+anchor     functions/semctl.html#DESCRIPTION
+class      conditional
+when       XSI
+says       SETALL with values 1, 2, 3 returns 0 and GETALL then returns 1, 2, 3 and
+           returns 0.
+test       t/002-setall-getall.c
+
+assertion  XSH.semctl.003
+anchor     functions/semctl.html#DESCRIPTION
+class      conditional
+when       XSI
+says       After a semop() by this process on semaphore 0, GETPID returns this
+           process's ID; after one by a child, GETPID returns the child's ID.
+test       t/003-getpid.c
+
+assertion  XSH.semctl.004
+anchor     functions/semctl.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With one child blocked in a decrement and another blocked waiting for zero
+           on a different semaphore, GETNCNT of the first is 1 and its GETZCNT 0,
+           GETZCNT of the second is 1 and its GETNCNT 0; after both are released both
+           are 0.
+timeout    60
+test       t/004-ncnt-zcnt.c
+
+assertion  XSH.semctl.005
+anchor     functions/semctl.html#DESCRIPTION
+class      conditional
+when       XSI
+says       SETVAL, SETALL and IPC_SET each set sem_ctime to a time between the time
+           before and after the call.
+test       t/005-ctime.c
+
+assertion  XSH.semctl.006
+anchor     functions/semctl.html#DESCRIPTION/IPC_SET
+class      conditional
+when       XSI
+says       IPC_SET with sem_perm.mode 0600 returns 0 and IPC_STAT then shows low-
+           order 9 mode bits 0600 and the same owner.
+test       t/006-ipc-set.c
+
+assertion  XSH.semctl.007
+anchor     functions/semctl.html#DESCRIPTION/IPC_SET
+class      conditional
+when       XSI
+says       IPC_SET with sem_perm.uid and gid 65534 by a privileged process returns 0;
+           IPC_STAT shows them and cuid and cgid unchanged.
+needs      root
+test       t/007-set-owner.c
+
+assertion  XSH.semctl.008
+anchor     functions/semctl.html#DESCRIPTION/IPC_RMID
+class      conditional
+when       XSI
+says       After IPC_RMID returns 0, semctl(GETVAL) and IPC_STAT on the identifier
+           fail with EINVAL, and semget(key, 0, 0) for the key it was made from fails
+           with ENOENT.
+test       t/008-rmid.c
+
+assertion  XSH.semctl.009
+anchor     functions/semctl.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+says       semctl() with identifier -1 fails with EINVAL; GETVAL and SETVAL with
+           semnum -1 and semnum equal to sem_nsems fail with EINVAL; an invalid
+           command on a valid set fails with EINVAL.
+test       t/009-einval.c
+
+assertion  XSH.semctl.010
+anchor     functions/semctl.html#ERRORS/ERANGE
+class      conditional
+when       XSI
+says       SETVAL of 65536 and of INT_MAX fails with ERANGE.
+note       sem_nsems and semval are unsigned short in <sys/sem.h>, so 65536 exceeds
+           any system maximum.
+test       t/010-erange.c
+
+assertion  XSH.semctl.011
+anchor     functions/semctl.html#ERRORS/EACCES
+class      conditional
+when       XSI
+says       On a set whose mode is 0, GETVAL, GETALL, IPC_STAT, SETVAL and SETALL fail
+           with EACCES for a process without privileges.
+test       t/011-eacces.c
+
+assertion  XSH.semctl.012
+anchor     functions/semctl.html#ERRORS/EPERM
+class      conditional
+when       XSI
+says       IPC_SET and IPC_RMID by a process that is not privileged and whose user ID
+           is neither cuid nor uid fail with EPERM, and the set still exists.
+needs      root
+test       t/012-eperm-nonowner.c
+
+assertion  XSH.semctl.013
+anchor     functions/semctl.html#DESCRIPTION
+class      conditional
+when       XSI
+says       After a child has done a SEM_UNDO increment and the parent then does
+           SETVAL, the child's exit does not change semval (the adjustment is
+           cleared); SETALL clears it likewise.
+timeout    60
+test       t/013-setval-clears-undo.c

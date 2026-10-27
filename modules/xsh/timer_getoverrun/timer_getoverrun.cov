@@ -1,0 +1,35 @@
+# timer_getoverrun.cov - every requirement unit on the page for timer_getoverrun.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:5700d1d1     XSH.timer_getoverrun.002 XSH.timer_getoverrun.003
+DESCRIPTION:8a8e506f     XSH.timer_getoverrun.001 XSH.timer_getoverrun.002
+DESCRIPTION:3a6451e6     XSH.timer_getoverrun.008
+DESCRIPTION:74873ba3     XSH.timer_getoverrun.003
+DESCRIPTION:ff2e51ee     XSH.timer_getoverrun.002 XSH.timer_getoverrun.005
+DESCRIPTION:b494bf16     XSH.timer_getoverrun.010
+DESCRIPTION:7012d299     XSH.timer_getoverrun.001 XSH.timer_getoverrun.004
+DESCRIPTION:3ddb74f0     impl  unspecified
+DESCRIPTION:a50f79f7     XSH.timer_getoverrun.005
+DESCRIPTION:5aa7a40e     XSH.timer_getoverrun.005
+DESCRIPTION:8699783a     XSH.timer_getoverrun.006
+DESCRIPTION:1843065b     XSH.timer_getoverrun.006
+DESCRIPTION:0f2fcbf3     XSH.timer_getoverrun.007
+DESCRIPTION:de26b1db     XSH.timer_getoverrun.003 XSH.timer_getoverrun.009
+DESCRIPTION:a62592a2     XSH.timer_getoverrun.009
+DESCRIPTION:3b2d480a     partial XSH.timer_getoverrun.005  # rounding up is tolerated (one clock step) but not required to be seen
+DESCRIPTION:39db030b     XSH.timer_getoverrun.005 XSH.timer_getoverrun.006
+DESCRIPTION:81fb887e     XSH.timer_getoverrun.010
+DESCRIPTION:14b0d968     XSH.timer_getoverrun.005 XSH.timer_getoverrun.006 XSH.timer_getoverrun.009
+DESCRIPTION:634fd390     XSH.timer_getoverrun.012
+DESCRIPTION:b0d5d93f     XSH.timer_getoverrun.012
+DESCRIPTION:15879f0f     XSH.timer_getoverrun.012 XSH.timer_getoverrun.013
+DESCRIPTION:6644f107     partial XSH.timer_getoverrun.012  # the count is checked as a lower bound only
+DESCRIPTION:db531f78     partial XSH.timer_getoverrun.012  # the cap is only checked as an upper bound; reaching it would take far too many expirations
+DESCRIPTION:3a92566b     XSH.timer_getoverrun.013
+DESCRIPTION:e34813c0     impl  unspecified
+DESCRIPTION:af61f16d     app  undefined behaviour
+RETURN_VALUE:2890c2dd    XSH.timer_getoverrun.012 XSH.timer_getoverrun.013
+RETURN_VALUE:93eb2a39    XSH.timer_getoverrun.001 XSH.timer_getoverrun.002 XSH.timer_getoverrun.003 XSH.timer_getoverrun.004 XSH.timer_getoverrun.005
+RETURN_VALUE:06e28950    XSH.timer_getoverrun.011
+ERRORS:9d94a62e          XSH.timer_getoverrun.011
+ERRORS:ca6f833e          optional

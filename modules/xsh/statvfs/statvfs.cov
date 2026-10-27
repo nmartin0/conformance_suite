@@ -1,0 +1,24 @@
+# statvfs.cov - every requirement unit on functions/statvfs.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:511afb78     XSH.statvfs.001
+DESCRIPTION:8e1f85db     XSH.statvfs.001
+DESCRIPTION:a6f30bd9     XSH.statvfs.001
+DESCRIPTION:054b2ebf     XSH.statvfs.002
+DESCRIPTION:21269e11     none  introduces the items
+DESCRIPTION:7fb5eabd     XSH.statvfs.003
+DESCRIPTION:6d2ad2aa     untestable  needs an exec of a setuid program on a file system with the flag, which the test cannot arrange
+DESCRIPTION:cdff462c     impl  members need not all be meaningful, so no relation between counts is checked
+RETURN_VALUE:8767105a    XSH.statvfs.001
+RETURN_VALUE:34187386    XSH.statvfs.004 XSH.statvfs.005 XSH.statvfs.006 XSH.statvfs.007 XSH.statvfs.008 XSH.statvfs.009
+ERRORS:cf3780d2          untestable  an I/O error cannot be arranged
+ERRORS:3c1bc177          untestable  a signal during a short call cannot be arranged
+ERRORS:49328ead          untestable  a value too large for the structure cannot be arranged
+ERRORS:d7fbc4e5          XSH.statvfs.004
+ERRORS:1cccae07          XSH.statvfs.008
+ERRORS:f39d7871          XSH.statvfs.009
+ERRORS:681b232a          XSH.statvfs.007
+ERRORS:83c37763          XSH.statvfs.005
+ERRORS:df8daa9c          XSH.statvfs.006
+ERRORS:811d61dd          optional
+ERRORS:c7f415ad          optional

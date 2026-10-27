@@ -1,0 +1,65 @@
+# XSH setresgid
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# setresgid() is only called in child processes. Values 60001-60003 are used
+# only by privileged children; no EINVAL test (no value is portably invalid).
+
+assertion  XSH.setresgid.001
+anchor     functions/setresgid.html#DESCRIPTION
+anchor     functions/setresgid.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2024
+says       setresgid(-1, -1, -1) returns 0 and none of the three IDs changes.
+test       t/001-minus-one.c
+
+assertion  XSH.setresgid.002
+anchor     functions/setresgid.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       A child calls setresgid() with its current saved, real and effective IDs
+           in that order (each is a value it already holds); it returns 0 and
+           getresgid() then reports real = old saved, effective = old real, saved =
+           old effective.
+test       t/002-own-values.c
+
+assertion  XSH.setresgid.003
+anchor     functions/setresgid.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       A privileged child calls setresgid() with three different values (60001,
+           60002, 60003); it returns 0 and getresgid() reports exactly those.
+needs      root
+test       t/003-any-values.c
+
+assertion  XSH.setresgid.004
+anchor     functions/setresgid.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       After that, setresgid(-1, 60001, -1) returns 0 and changes only the
+           effective ID, setresgid(60003, -1, -1) changes only the real ID.
+needs      root
+test       t/004-minus-one-keeps.c
+
+assertion  XSH.setresgid.005
+anchor     functions/setresgid.html#ERRORS/EPERM
+class      conditional
+when       XSI
+since      2024
+says       A child without privileges calling setresgid() with a value it does not
+           hold, as the real, as the effective or as the saved ID (one call each),
+           fails with EPERM and none of the IDs changes.
+note       When the suite runs as root the child gives up privilege with
+           setuid/setgid first (all three IDs).
+test       t/005-eperm.c
+
+assertion  XSH.setresgid.006
+anchor     functions/setresgid.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       setresgid() in a child leaves its supplementary group list unchanged
+           (getgroups() before and after are equal).
+test       t/006-groups-kept.c

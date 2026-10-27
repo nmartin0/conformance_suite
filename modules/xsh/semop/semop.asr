@@ -1,0 +1,150 @@
+# XSH semop
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# XSI semop(). Sets are IPC_PRIVATE and removed on every exit path. Blocking
+# operations run in children under alarm(); a child is known to be waiting
+# when GETNCNT/GETZCNT show it. Not tested: E2BIG, EINVAL/ENOSPC for SEM_UNDO
+# limits (limits not observable).
+
+assertion  XSH.semop.001
+anchor     functions/semop.html#DESCRIPTION
+anchor     functions/semop.html#RETURN VALUE
+class      conditional
+when       XSI
+says       semop() with +2, then -1 on semaphore 0 returns 0 and leaves semval 1; a
+           wait-for-zero on a zero semaphore returns 0 at once; the sops array is not
+           modified.
+test       t/001-basic.c
+
+assertion  XSH.semop.002
+anchor     functions/semop.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A single call with +1 then -1 on a zero semaphore (IPC_NOWAIT) returns 0,
+           since operations run in array order, and leaves semval 0.
+test       t/002-array-order.c
+
+assertion  XSH.semop.003
+anchor     functions/semop.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A call whose first operation increments semaphore 1 and whose second, with
+           IPC_NOWAIT, decrements zero semaphore 0 fails with EAGAIN and semaphore 1
+           is still 0.
+test       t/003-all-or-nothing.c
+
+assertion  XSH.semop.004
+anchor     functions/semop.html#ERRORS/EAGAIN
+class      conditional
+when       XSI
+says       With IPC_NOWAIT, a wait-for-zero on a nonzero semaphore fails with EAGAIN
+           and a decrement larger than semval fails with EAGAIN, each leaving semval
+           unchanged.
+test       t/004-eagain-zero.c
+
+assertion  XSH.semop.005
+anchor     functions/semop.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A decrement of 1 on a zero semaphore does not return while the value stays
+           0 and returns 0 after another process increments it; the value ends 0.
+timeout    60
+test       t/005-decrement-blocks.c
+
+assertion  XSH.semop.006
+anchor     functions/semop.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A wait-for-zero on a semaphore of value 1 does not return until another
+           process decrements it to 0, then returns 0.
+timeout    60
+test       t/006-zero-blocks.c
+
+assertion  XSH.semop.007
+anchor     functions/semop.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A decrement of 2 blocked on a semaphore of value 0 stays blocked after +1
+           and completes after a further +1, leaving value 0.
+timeout    60
+test       t/007-reevaluate.c
+
+assertion  XSH.semop.008
+anchor     functions/semop.html#ERRORS/EIDRM
+class      conditional
+when       XSI
+says       A decrement blocked on a zero semaphore and a wait-for-zero blocked on a
+           nonzero one both fail with EIDRM when the set is removed.
+timeout    60
+test       t/008-eidrm.c
+
+assertion  XSH.semop.009
+anchor     functions/semop.html#ERRORS/EINTR
+class      conditional
+when       XSI
+says       A blocked decrement interrupted by a caught signal (no SA_RESTART) returns
+           -1 with EINTR and semncnt for the semaphore is back to 0.
+timeout    60
+test       t/009-eintr.c
+
+assertion  XSH.semop.010
+anchor     functions/semop.html#DESCRIPTION
+class      conditional
+when       XSI
+says       After a successful semop() on semaphores 0 and 2, sempid of each is this
+           process's ID, and sem_otime lies between the time before and after the
+           call.
+test       t/010-sempid-otime.c
+
+assertion  XSH.semop.011
+anchor     functions/semop.html#DESCRIPTION
+anchor     functions/_Exit.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A child that does +3 with SEM_UNDO on one semaphore and -2 with SEM_UNDO
+           on another (initial value 5) and then exits leaves both semaphores at
+           their values before the child ran.
+timeout    60
+test       t/011-undo-exit.c
+
+assertion  XSH.semop.012
+anchor     functions/fork.html#DESCRIPTION
+class      conditional
+when       XSI
+says       After a parent does +1 with SEM_UNDO on a semaphore, a forked child that
+           exits at once leaves semval unchanged (the child starts with no
+           adjustment).
+timeout    60
+test       t/012-undo-fork.c
+
+assertion  XSH.semop.013
+anchor     functions/semop.html#ERRORS/EFBIG
+class      conditional
+when       XSI
+says       semop() on semaphore number equal to sem_nsems and on 65535 fails with
+           EFBIG.
+test       t/013-efbig.c
+
+assertion  XSH.semop.014
+anchor     functions/semop.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+says       semop() with identifier -1 fails with EINVAL; with the identifier of a
+           removed set it fails with EINVAL or EIDRM.
+test       t/014-einval-id.c
+
+assertion  XSH.semop.015
+anchor     functions/semop.html#ERRORS/EACCES
+class      conditional
+when       XSI
+says       On a set whose mode is 0, a decrement (value 1) and a wait-for-zero (value
+           0) each fail with EACCES for a process without privileges.
+test       t/015-eacces.c
+
+assertion  XSH.semop.016
+anchor     functions/semop.html#ERRORS/ERANGE
+class      conditional
+when       XSI
+says       Repeated +32767 operations on a zero semaphore eventually fail with ERANGE
+           (within three tries, since semval is an unsigned short) and the value is
+           then unchanged by the failed call.
+test       t/016-erange.c

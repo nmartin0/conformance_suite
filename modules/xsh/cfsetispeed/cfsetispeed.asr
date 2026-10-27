@@ -1,0 +1,32 @@
+# XSH cfsetispeed()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The setting is made in a termios structure only; the first test uses a zeroed structure and needs
+# no terminal, the second takes the attributes of a pseudo-terminal (XSI) and checks that the
+# terminal is not touched. Rates are named by the Bxxx constants; a setter may refuse a rate (the
+# page says it "may fail"), so only accepted rates are compared. Rates outside the defined
+# set are not tested: the page leaves their handling open.
+
+assertion  XSH.cfsetispeed.001
+anchor     functions/cfsetispeed.html#DESCRIPTION
+anchor     functions/cfsetispeed.html#RETURN VALUE
+class      required
+since      1988
+says       cfsetispeed() with each of B0 B50 B75 B110 B134 B150 B200 B300 B600
+           B1200 B1800 B2400 B4800 B9600 B19200 B38400 returns 0 or -1; when it
+           returns 0, cfgetispeed() on the structure returns that rate; at least
+           one call returns 0.
+test       t/001-stores.c
+
+assertion  XSH.cfsetispeed.002
+anchor     functions/cfsetispeed.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       After cfsetispeed() on a copy of the attributes of a pseudo-terminal,
+           with no tcsetattr(), a new tcgetattr() returns the input rate the
+           terminal had before.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/002-no-hardware-effect.c

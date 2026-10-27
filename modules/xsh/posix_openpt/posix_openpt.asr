@@ -1,0 +1,90 @@
+# XSH posix_openpt()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Everything here is XSI. EAGAIN and ENFILE (resource exhaustion) cannot be provoked portably;
+# an invalid oflag is only a "may" error. Behaviour of oflag values other than the listed
+# ones is unspecified and not tested. Whether opening the manager without O_NOCTTY acquires a
+# controlling terminal is not specified, so only the O_NOCTTY side is checked.
+
+assertion  XSH.posix_openpt.001
+anchor     functions/posix_openpt.html#DESCRIPTION
+anchor     functions/posix_openpt.html#RETURN VALUE
+anchor     functions/V2_chap02.html#2.6
+class      conditional
+when       XSI
+since      2001
+says       posix_openpt(O_RDWR|O_NOCTTY) returns the lowest-numbered unused
+           descriptor, and the file access mode of its open file description is
+           read-write.
+note       Only the descriptor-allocation rule that XSH 2.6 states is checked.
+test       t/001-fd-and-mode.c
+
+assertion  XSH.posix_openpt.002
+anchor     functions/posix_openpt.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       posix_openpt(O_RDWR|O_NOCTTY|O_CLOEXEC) returns a descriptor with
+           FD_CLOEXEC set.
+test       t/002-cloexec.c
+
+assertion  XSH.posix_openpt.003
+anchor     functions/posix_openpt.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       posix_openpt(O_RDWR|O_NOCTTY|O_CLOFORK) returns a descriptor with
+           FD_CLOFORK set, and a child made by fork() does not have it open.
+test       t/003-clofork.c
+
+assertion  XSH.posix_openpt.004
+anchor     functions/posix_openpt.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       posix_openpt(O_RDWR|O_NOCTTY) returns a descriptor with neither
+           FD_CLOEXEC nor FD_CLOFORK set.
+test       t/004-flags-clear.c
+
+assertion  XSH.posix_openpt.005
+anchor     functions/posix_openpt.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       In a new session leader with no controlling terminal,
+           posix_openpt(O_RDWR|O_NOCTTY) does not give the process a controlling
+           terminal (the pathname from ctermid() cannot be opened afterwards).
+note       In a new session the process has no controlling terminal to begin
+           with, so any one it has afterwards came from the call.
+test       t/005-noctty.c
+
+assertion  XSH.posix_openpt.006
+anchor     functions/posix_openpt.html#DESCRIPTION
+anchor     functions/posix_openpt.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       Two successful posix_openpt() calls give different descriptors whose
+           subsidiary devices have different names.
+test       t/006-distinct.c
+
+assertion  XSH.posix_openpt.007
+anchor     functions/posix_openpt.html#ERRORS/EMFILE
+class      conditional
+when       XSI
+since      2001
+says       With RLIMIT_NOFILE lowered to the lowest unused descriptor number
+           (checked in a child), posix_openpt() returns -1 with EMFILE.
+note       Run in a child so that the limit does not touch the result file.
+test       t/007-emfile.c
+
+assertion  XSH.posix_openpt.008
+anchor     functions/posix_openpt.html#DESCRIPTION
+anchor     functions/posix_openpt.html#EXAMPLES
+class      conditional
+when       XSI
+since      2001
+says       After grantpt(), unlockpt() and ptsname(), the subsidiary opens, and
+           bytes written to the manager can be read from the subsidiary and bytes
+           written to the subsidiary can be read from the manager.
+test       t/008-connected.c

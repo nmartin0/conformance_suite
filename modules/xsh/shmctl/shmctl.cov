@@ -1,0 +1,20 @@
+# shmctl.cov - every requirement unit on functions/shmctl.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:3e54d60a     none  introduces the facility
+DESCRIPTION:f3a5f577     impl  whether it interoperates with the realtime IPC functions is unspecified
+DESCRIPTION:8f736403     none  introduces the commands
+DESCRIPTION:e99c4654     none  introduces the items
+DESCRIPTION:720faaf9     XSH.shmctl.001
+DESCRIPTION:a7bdda41     XSH.shmctl.001
+DESCRIPTION:a2c168bd     XSH.shmctl.002 XSH.shmctl.003
+DESCRIPTION:189bc1a7     XSH.shmctl.008
+DESCRIPTION:0ef83b80     XSH.shmctl.004 XSH.shmctl.005
+DESCRIPTION:15163f22     partial XSH.shmctl.004  # the data of the attached segment stays usable; destruction at the last detach is not observable
+DESCRIPTION:b9d7a324     XSH.shmctl.005
+DESCRIPTION:df202878     XSH.shmctl.008
+RETURN_VALUE:6c677bb0    XSH.shmctl.001 XSH.shmctl.002 XSH.shmctl.004 XSH.shmctl.005 XSH.shmctl.006
+ERRORS:e42186a8          XSH.shmctl.007
+ERRORS:a0e2413e          XSH.shmctl.006
+ERRORS:4846efc5          XSH.shmctl.008
+ERRORS:4417dbac          optional

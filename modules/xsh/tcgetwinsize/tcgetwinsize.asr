@@ -1,0 +1,62 @@
+# XSH tcgetwinsize()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Terminal tests use a pseudo-terminal (XSI), for which the page promises a default size
+# and the values last set. Only ws_row and ws_col are compared: the page does not
+# define other members.
+
+assertion  XSH.tcgetwinsize.001
+anchor     functions/tcgetwinsize.html#DESCRIPTION
+anchor     functions/tcgetwinsize.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      2024
+says       tcgetwinsize() on a pseudo-terminal subsidiary whose size was never
+           set returns 0 (the default size is unspecified and is not compared).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/001-default.c
+
+assertion  XSH.tcgetwinsize.002
+anchor     functions/tcgetwinsize.html#DESCRIPTION
+anchor     functions/tcgetwinsize.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      2024
+says       After tcsetwinsize() with 31 rows and 97 columns, and again with 7
+           rows and 200 columns, tcgetwinsize() returns 0 and exactly those
+           values.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/002-after-set.c
+
+assertion  XSH.tcgetwinsize.003
+anchor     functions/tcgetwinsize.html#ERRORS/EBADF
+class      required
+since      2024
+says       tcgetwinsize(-1) and tcgetwinsize() of a closed descriptor return -1
+           with EBADF.
+test       t/003-ebadf.c
+
+assertion  XSH.tcgetwinsize.004
+anchor     functions/tcgetwinsize.html#ERRORS/ENOTTY
+class      required
+since      2024
+says       tcgetwinsize() of descriptors for a regular file, both ends of a pipe
+           and /dev/null returns -1 with ENOTTY.
+test       t/004-enotty-file.c
+
+assertion  XSH.tcgetwinsize.005
+anchor     functions/tcgetwinsize.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2024
+says       A size set through one descriptor of a pseudo-terminal subsidiary is
+           returned by tcgetwinsize() on a second descriptor after the first one
+           is closed.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/005-persist.c

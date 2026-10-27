@@ -1,0 +1,93 @@
+# XSH tcgetsid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# A controlling terminal is built in a session of its own: a child calls setsid() and opens
+# the pseudo-terminal subsidiary without O_NOCTTY. Acquisition that way is
+# implementation-defined (XBD 11.1.3), so the test is UNRESOLVED when the pathname from
+# ctermid() cannot be opened afterwards. The session ID is the process group ID of the
+# session leader, which for a leader is its process ID.
+
+assertion  XSH.tcgetsid.001
+anchor     functions/tcgetsid.html#DESCRIPTION
+anchor     functions/tcgetsid.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      2008
+says       In a session leader whose controlling terminal is a pseudo-terminal,
+           tcgetsid() on the subsidiary descriptor returns the process group ID
+           of the session, which is the leader's own.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/001-leader.c
+
+assertion  XSH.tcgetsid.002
+anchor     functions/tcgetsid.html#DESCRIPTION
+anchor     functions/tcgetsid.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      2008
+says       tcgetsid() called by a process in a background process group of the
+           session returns the same value: the session leader's process group ID.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/002-from-member.c
+
+assertion  XSH.tcgetsid.003
+anchor     functions/tcgetsid.html#ERRORS/EBADF
+class      conditional
+when       BASE|XSI
+since      2008
+says       In a process that has a controlling terminal, tcgetsid(-1) and
+           tcgetsid() of a closed descriptor return -1 with EBADF.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+           The call is made in a process with a controlling terminal so that
+           ENOTTY does not also apply.
+timeout    40
+test       t/003-ebadf.c
+
+assertion  XSH.tcgetsid.004
+anchor     functions/tcgetsid.html#ERRORS/ENOTTY
+class      conditional
+when       BASE|XSI
+since      2008
+says       In a process that has a controlling terminal, tcgetsid() of a regular
+           file, both ends of a pipe and /dev/null returns -1 with ENOTTY.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/004-enotty-file.c
+
+assertion  XSH.tcgetsid.005
+anchor     functions/tcgetsid.html#ERRORS/ENOTTY
+class      conditional
+when       BASE|XSI
+since      2008
+says       In a process that has no controlling terminal (it called setsid() and
+           opened the pseudo-terminal subsidiary with O_NOCTTY), tcgetsid() on
+           that descriptor returns -1 with ENOTTY.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/005-no-ctty.c
+
+assertion  XSH.tcgetsid.006
+anchor     functions/tcgetsid.html#ERRORS/ENOTTY
+class      conditional
+when       BASE|XSI
+since      2008
+says       In a process whose controlling terminal is one pseudo-terminal,
+           tcgetsid() on the subsidiary descriptor of another pseudo-terminal
+           (opened with O_NOCTTY) returns -1 with ENOTTY.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/006-other-tty.c

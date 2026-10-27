@@ -1,0 +1,21 @@
+# tcsetwinsize.cov - every requirement unit on the page for tcsetwinsize.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:f0f955ce     XSH.tcsetwinsize.001
+DESCRIPTION:06ca83f4     XSH.tcsetwinsize.001
+DESCRIPTION:efbc3e57     XSH.tcsetwinsize.002
+DESCRIPTION:f81a48ee     XSH.tcsetwinsize.003
+DESCRIPTION:59c64580     impl  other recipients are implementation-defined
+DESCRIPTION:e6f5ba91     XSH.tcsetwinsize.001
+DESCRIPTION:8abe9fd4     impl  unspecified
+DESCRIPTION:b3da5f9c     app  undefined behaviour and advice to applications
+DESCRIPTION:e6133b08     untestable  the set of actions that must not change the size is open-ended
+DESCRIPTION:123a6773     none  introduces the two cases below
+DESCRIPTION:54fc4236     XSH.tcsetwinsize.007
+DESCRIPTION:1f79c6c7     XSH.tcsetwinsize.006
+RETURN_VALUE:105a0976    XSH.tcsetwinsize.001
+RETURN_VALUE:f0b78742    partial XSH.tcsetwinsize.004 XSH.tcsetwinsize.005 XSH.tcsetwinsize.008  # that the size stays unchanged after a failure is not checked
+ERRORS:8f957e38          XSH.tcsetwinsize.004
+ERRORS:b3eee278          XSH.tcsetwinsize.008
+ERRORS:805c8b2c          XSH.tcsetwinsize.005
+ERRORS:adb80527          optional

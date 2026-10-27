@@ -1,0 +1,89 @@
+# XSH msgctl
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# XSI msgctl(). Queues are IPC_PRIVATE and removed on every exit path.
+# Operations that need another user ID than the suite's (changing the owner,
+# EPERM for a non-owner) need root. Others make a queue's mode 0 and act in a
+# child without privileges.
+
+assertion  XSH.msgctl.001
+anchor     functions/msgctl.html#DESCRIPTION/IPC_STAT
+class      conditional
+when       XSI
+says       IPC_STAT after two msgsnd() calls of 3 bytes each by this process returns
+           0 and reports msg_qnum 2, msg_lspid the caller, msg_qbytes above 0, and
+           the creator and owner IDs of the caller.
+test       t/001-stat-fields.c
+
+assertion  XSH.msgctl.002
+anchor     functions/msgctl.html#DESCRIPTION/IPC_SET
+class      conditional
+when       XSI
+says       IPC_SET with msg_perm.mode 0600 (owner and group unchanged) returns 0;
+           IPC_STAT then shows low-order 9 mode bits 0600 and msg_ctime between the
+           time before and after the call.
+test       t/002-set-mode.c
+
+assertion  XSH.msgctl.003
+anchor     functions/msgctl.html#DESCRIPTION/IPC_SET
+class      conditional
+when       XSI
+says       IPC_SET with msg_perm.uid and msg_perm.gid of 65534 by a privileged
+           process returns 0; IPC_STAT shows the new uid and gid while cuid and cgid
+           are unchanged.
+needs      root
+test       t/003-set-owner.c
+
+assertion  XSH.msgctl.004
+anchor     functions/msgctl.html#DESCRIPTION/IPC_SET
+class      conditional
+when       XSI
+says       IPC_SET lowering msg_qbytes to half its value, by the queue's owner,
+           returns 0 and IPC_STAT shows the new value.
+test       t/004-set-qbytes-lower.c
+
+assertion  XSH.msgctl.005
+anchor     functions/msgctl.html#ERRORS/EPERM
+class      conditional
+when       XSI
+says       IPC_SET raising msg_qbytes back to its original value after it was lowered
+           fails with EPERM for the queue's owner when the owner has no privileges,
+           and msg_qbytes is unchanged.
+note       When the suite runs as root the queue's owner is first changed to 65534
+           and the child runs as that user.
+test       t/005-set-qbytes-raise.c
+
+assertion  XSH.msgctl.006
+anchor     functions/msgctl.html#ERRORS/EPERM
+class      conditional
+when       XSI
+says       IPC_SET and IPC_RMID by a process that is not privileged and whose user ID
+           is neither cuid nor uid of the queue fail with EPERM, and the queue still
+           exists.
+needs      root
+test       t/006-eperm-nonowner.c
+
+assertion  XSH.msgctl.007
+anchor     functions/msgctl.html#DESCRIPTION/IPC_RMID
+class      conditional
+when       XSI
+says       After IPC_RMID returns 0, msgctl(IPC_STAT) and msgsnd() on the identifier
+           fail with EINVAL or EIDRM, and msgget(key, 0) for the key it was made from
+           fails with ENOENT; a queue made again for that key is empty.
+test       t/007-rmid.c
+
+assertion  XSH.msgctl.008
+anchor     functions/msgctl.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+says       msgctl() with identifier -1 fails with EINVAL for IPC_STAT, IPC_SET and
+           IPC_RMID, and with an invalid command on a valid queue it fails with
+           EINVAL.
+test       t/008-einval.c
+
+assertion  XSH.msgctl.009
+anchor     functions/msgctl.html#ERRORS/EACCES
+class      conditional
+when       XSI
+says       IPC_STAT on a queue whose mode is 0 fails with EACCES for a process
+           without privileges.
+test       t/009-stat-eacces.c

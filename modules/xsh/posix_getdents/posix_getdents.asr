@@ -1,0 +1,69 @@
+# XSH posix_getdents
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# posix_getdents() on a directory made by the test (files a, b, c, a long-
+# named file, a subdirectory, a symbolic link, a FIFO). Names are compared
+# with a readdir() listing of the same directory. d_type may be DT_UNKNOWN;
+# when it is not, it must be the right kind. flags is 0.
+
+assertion  XSH.posix_getdents.001
+anchor     functions/posix_getdents.html#DESCRIPTION
+anchor     functions/posix_getdents.html#RETURN VALUE
+class      required
+since      2024
+says       Reading a directory to its end with a large buffer yields the same set of
+           names as readdir() with every name once; for each entry d_ino equals
+           st_ino of the file (of the link itself for a symbolic link), d_reclen is a
+           multiple of the structure alignment, large enough for the name, and the
+           entries tile the returned bytes exactly; d_type is DT_UNKNOWN or the right
+           type.
+test       t/001-entries.c
+
+assertion  XSH.posix_getdents.002
+anchor     functions/posix_getdents.html#RETURN VALUE
+class      required
+since      2024
+says       After the last entries are read, posix_getdents() returns 0, and returns 0
+           again; after lseek(fd, 0, SEEK_SET) it returns the entries again.
+test       t/002-end.c
+
+assertion  XSH.posix_getdents.003
+anchor     functions/posix_getdents.html#DESCRIPTION
+class      required
+since      2024
+says       With nbyte only one byte more than sizeof(struct posix_dent) + {NAME_MAX},
+           each call returns at least one entry, and repeated calls to the end return
+           the same set of names as readdir(), none twice.
+test       t/003-small-buffer.c
+
+assertion  XSH.posix_getdents.004
+anchor     functions/posix_getdents.html#ERRORS/EINVAL
+class      required
+since      2024
+says       posix_getdents() with nbyte 1 on a directory that has entries fails with
+           EINVAL.
+test       t/004-einval.c
+
+assertion  XSH.posix_getdents.005
+anchor     functions/posix_getdents.html#ERRORS/EBADF
+class      required
+since      2024
+says       posix_getdents() on descriptor -1 and on a closed descriptor fails with
+           EBADF.
+test       t/005-ebadf.c
+
+assertion  XSH.posix_getdents.006
+anchor     functions/posix_getdents.html#ERRORS/ENOTDIR
+class      required
+since      2024
+says       posix_getdents() on a descriptor of a regular file opened for reading
+           fails with ENOTDIR.
+test       t/006-enotdir.c
+
+assertion  XSH.posix_getdents.007
+anchor     functions/posix_getdents.html#DESCRIPTION
+class      required
+since      2024
+says       d_name of a file with a name of {NAME_MAX} bytes is that exact name;
+           d_type of the symbolic link is DT_LNK or DT_UNKNOWN, never DT_REG or
+           DT_DIR, and of the FIFO is DT_FIFO or DT_UNKNOWN.
+test       t/007-names-types.c

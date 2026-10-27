@@ -1,0 +1,13 @@
+# XSH posix_typed_mem_open
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# Typed memory object names are implementation-defined and a program cannot
+# create one, so only the failure for a name that cannot be bound is tested.
+
+assertion  XSH.posix_typed_mem_open.001
+anchor     functions/posix_typed_mem_open.html#ERRORS/ENOENT
+class      conditional
+when       TYM
+since      2001
+says       posix_typed_mem_open() of a name made unique with the process ID
+           ("/pctm<pid>nosuch") fails with ENOENT, returning -1.
+test       t/001-enoent.c

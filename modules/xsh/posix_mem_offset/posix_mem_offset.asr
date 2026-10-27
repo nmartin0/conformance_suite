@@ -1,0 +1,15 @@
+# XSH posix_mem_offset
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# posix_mem_offset() returns an error number. Typed memory objects have
+# implementation-defined names, so only the error for an address with no
+# supported mapping can be tested for any system; for an unmapped address no
+# memory object is mapped at all.
+
+assertion  XSH.posix_mem_offset.001
+anchor     functions/posix_mem_offset.html#ERRORS/EACCES
+class      conditional
+when       TYM
+since      2001
+says       posix_mem_offset() for an address inside a page that was mapped and then
+           unmapped returns EACCES (as the return value).
+test       t/001-eacces.c

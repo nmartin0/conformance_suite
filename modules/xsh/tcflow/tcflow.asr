@@ -1,0 +1,127 @@
+# XSH tcflow()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Terminal tests use a pseudo-terminal (XSI). Suspension of input (TCIOFF/TCION) cannot be
+# observed on one: the text lets the STOP and START characters be left out there, so only the
+# return value is checked. A tcflow(TCOOFF) is always undone with TCOON before the test ends.
+
+assertion  XSH.tcflow.001
+anchor     functions/tcflow.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      1988
+says       On a pseudo-terminal opened just now, a byte written to the subsidiary
+           side reaches the manager with no tcflow() call.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/001-default-open.c
+
+assertion  XSH.tcflow.002
+anchor     functions/tcflow.html#DESCRIPTION
+anchor     functions/tcflow.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      1988
+says       After tcflow(TCOOFF) returns 0, bytes written to the subsidiary side
+           are not delivered to the manager (none within 300 ms).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/002-tcooff.c
+
+assertion  XSH.tcflow.003
+anchor     functions/tcflow.html#DESCRIPTION
+anchor     functions/tcflow.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      1988
+says       After tcflow(TCOOFF) and a write, tcflow(TCOON) returns 0 and the
+           bytes written during the suspension then reach the manager, in order.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/003-tcoon.c
+
+assertion  XSH.tcflow.004
+anchor     functions/tcflow.html#DESCRIPTION
+anchor     functions/tcflow.html#RETURN VALUE
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcflow(TCIOFF) and tcflow(TCION) on a pseudo-terminal subsidiary
+           return 0 (whether a STOP or START character is transmitted is left
+           open for a pseudo-terminal).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/004-tcioff-tcion.c
+
+assertion  XSH.tcflow.005
+anchor     functions/tcflow.html#ERRORS/EINVAL
+class      conditional
+when       BASE|XSI
+since      1988
+says       tcflow() with an action that is none of TCOOFF, TCOON, TCIOFF, TCION
+           (-1, 7, 100, 12345) returns -1 with EINVAL.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+test       t/005-einval-action.c
+
+assertion  XSH.tcflow.006
+anchor     functions/tcflow.html#ERRORS/EBADF
+class      required
+since      1988
+says       tcflow(-1) and tcflow() of a closed descriptor return -1 with EBADF.
+test       t/006-ebadf.c
+
+assertion  XSH.tcflow.007
+anchor     functions/tcflow.html#ERRORS/ENOTTY
+class      required
+since      1988
+says       tcflow() of descriptors for a regular file, both ends of a pipe and
+           /dev/null returns -1 with ENOTTY.
+test       t/007-enotty-file.c
+
+assertion  XSH.tcflow.008
+anchor     functions/tcflow.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in a background process group (not orphaned) whose SIGTTOU
+           is neither blocked nor ignored and which calls tcflow(TCOON) on its
+           controlling terminal is sent SIGTTOU (default action: stopped).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/008-bg-sigttou.c
+
+assertion  XSH.tcflow.009
+anchor     functions/tcflow.html#DESCRIPTION
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in a background process group which calls tcflow(TCOON) on
+           its controlling terminal while SIGTTOU is blocked, and again while it
+           is ignored, completes normally (returns 0), is not stopped.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    60
+test       t/009-bg-quiet.c
+
+assertion  XSH.tcflow.010
+anchor     functions/tcflow.html#ERRORS/EIO
+class      conditional
+when       BASE|XSI
+since      2001
+says       A process in an orphaned process group, with SIGTTOU neither blocked
+           nor ignored, which calls tcflow(TCOON) on its controlling terminal
+           gets -1 with EIO.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up that is
+           not available is UNRESOLVED, or NOTINUSE when the facility is absent.
+timeout    40
+test       t/010-orphan-eio.c

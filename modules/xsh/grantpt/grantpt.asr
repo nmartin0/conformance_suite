@@ -1,0 +1,40 @@
+# XSH grantpt()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Everything here is XSI. The behaviour with a signal handler for SIGCHLD installed is
+# unspecified and not tested. EACCES (subsidiary not accessible) cannot be provoked portably.
+# The group given to the subsidiary is unspecified, so it is not compared.
+
+assertion  XSH.grantpt.001
+anchor     functions/grantpt.html#DESCRIPTION
+anchor     functions/grantpt.html#RETURN VALUE
+class      conditional
+when       XSI
+since      2001
+says       grantpt() on a descriptor from posix_openpt() returns 0.
+test       t/001-returns-zero.c
+
+assertion  XSH.grantpt.002
+anchor     functions/grantpt.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       After grantpt(), the subsidiary device is owned by the real user ID of
+           the caller and its permissions include read and write for the owner
+           and write for the group.
+note       Other permission bits and the group are not constrained here: only the
+           three named access bits and the owner are required.
+test       t/002-ownership.c
+
+assertion  XSH.grantpt.003
+anchor     functions/grantpt.html#ERRORS/EBADF
+anchor     functions/grantpt.html#ERRORS/EINVAL
+class      conditional
+when       XSI
+since      2001
+says       When grantpt() reports an error for a closed descriptor it is EBADF,
+           and for a regular file and for /dev/null it is EINVAL; these errors
+           are optional, so a call that succeeds is not a failure.
+note       Both errors are "may" errors: the test fails only when an error is
+           reported with another code.
+test       t/003-bad-fd.c

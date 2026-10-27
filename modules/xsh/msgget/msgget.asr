@@ -1,0 +1,69 @@
+# XSH msgget
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# XSI message queues (msgget). Every queue is made with IPC_PRIVATE or with a
+# key from ftok() on a file in the working directory, and every queue is
+# removed on every exit path. A missing facility (ENOSYS) is NOTINUSE.
+# Permission-denied checks make a queue whose mode is 0 and ask for access in
+# a child without privileges.
+
+assertion  XSH.msgget.001
+anchor     functions/msgget.html#DESCRIPTION
+anchor     functions/msgget.html#RETURN VALUE
+class      conditional
+when       XSI
+says       Two msgget(IPC_PRIVATE, ...) calls return distinct non-negative
+           identifiers.
+test       t/001-private-distinct.c
+
+assertion  XSH.msgget.002
+anchor     functions/msgget.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A queue made with msgget(IPC_PRIVATE, 0640) has, by msgctl(IPC_STAT),
+           msg_perm.uid and cuid equal to the effective user ID, msg_perm.gid and
+           cgid equal to the effective group ID, and low-order 9 mode bits 0640.
+test       t/002-initial-perm.c
+
+assertion  XSH.msgget.003
+anchor     functions/msgget.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A new queue has msg_qnum, msg_lspid, msg_lrpid, msg_stime and msg_rtime
+           all 0, msg_qbytes above 0, and msg_ctime between the time before and the
+           time after the creating call.
+note       msg_qbytes is only the system limit; a value of 0 would make the queue
+           unusable, so only > 0 is checked.
+test       t/003-initial-state.c
+
+assertion  XSH.msgget.004
+anchor     functions/msgget.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With a key from ftok(), msgget(key, IPC_CREAT|0600) creates a queue;
+           msgget(key, 0), and msgget(key, IPC_CREAT|0600) again, return that same
+           identifier.
+test       t/004-key-get.c
+
+assertion  XSH.msgget.005
+anchor     functions/msgget.html#ERRORS/EEXIST
+class      conditional
+when       XSI
+says       msgget(key, IPC_CREAT|IPC_EXCL|0600) for a key that already has a queue
+           fails with EEXIST.
+test       t/005-eexist.c
+
+assertion  XSH.msgget.006
+anchor     functions/msgget.html#ERRORS/ENOENT
+class      conditional
+when       XSI
+says       msgget(key, 0600) for a key with no queue and without IPC_CREAT fails with
+           ENOENT.
+test       t/006-enoent.c
+
+assertion  XSH.msgget.007
+anchor     functions/msgget.html#ERRORS/EACCES
+class      conditional
+when       XSI
+says       msgget(key, 0400) for a key whose queue has mode 0 fails with EACCES for a
+           process without privileges.
+test       t/007-eacces.c

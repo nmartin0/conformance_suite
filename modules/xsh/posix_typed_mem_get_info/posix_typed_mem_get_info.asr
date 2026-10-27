@@ -1,0 +1,14 @@
+# XSH posix_typed_mem_get_info
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# posix_typed_mem_get_info() returns an error number. The page defines ENODEV
+# for a descriptor of a non-typed object and also says the behaviour is
+# undefined then; ENODEV is therefore not tested. Only EBADF is.
+
+assertion  XSH.posix_typed_mem_get_info.001
+anchor     functions/posix_typed_mem_get_info.html#ERRORS/EBADF
+class      conditional
+when       TYM
+since      2001
+says       posix_typed_mem_get_info() with descriptor -1 and with a closed descriptor
+           returns EBADF (as the return value).
+test       t/001-ebadf.c

@@ -1,0 +1,45 @@
+# XSH posix_madvise
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# posix_madvise() returns an error number (not -1). Ranges are inside
+# anonymous private mappings of whole pages, with {PAGESIZE} from sysconf().
+# The advice must not change the contents. A hole inside the address space is
+# not used for ENOMEM (the page says 'outside the range allowed'); a range
+# that runs past the end of the address space is.
+
+assertion  XSH.posix_madvise.001
+anchor     functions/posix_madvise.html#DESCRIPTION
+anchor     functions/posix_madvise.html#RETURN VALUE
+class      conditional
+when       ADV
+since      2001
+says       posix_madvise() over a 4-page mapping returns 0 for each of
+           POSIX_MADV_NORMAL, SEQUENTIAL, RANDOM, WILLNEED and DONTNEED.
+test       t/001-advice-ok.c
+
+assertion  XSH.posix_madvise.002
+anchor     functions/posix_madvise.html#DESCRIPTION
+class      conditional
+when       ADV
+since      2001
+says       Contents of a private anonymous mapping (a pattern written before) are
+           unchanged after each advice value, and can still be written and read back
+           afterwards.
+test       t/002-no-effect.c
+
+assertion  XSH.posix_madvise.003
+anchor     functions/posix_madvise.html#ERRORS/EINVAL
+class      conditional
+when       ADV
+since      2001
+says       posix_madvise() with an advice value that is none of the five returns
+           EINVAL (as the return value) over a valid range.
+test       t/003-einval-advice.c
+
+assertion  XSH.posix_madvise.004
+anchor     functions/posix_madvise.html#ERRORS/ENOMEM
+class      conditional
+when       ADV
+since      2001
+says       posix_madvise() starting inside a mapping with a length that runs past the
+           end of the address space returns ENOMEM.
+test       t/004-enomem.c

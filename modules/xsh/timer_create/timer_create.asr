@@ -1,0 +1,123 @@
+# XSH timer_create()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Timers use SIGRTMIN, SIGUSR1 and sigtimedwait(): the signal is blocked and given a do-nothing
+# SA_SIGINFO action, so that an expiration is queued with its value. Time bounds are lower
+# bounds only (an expiration is never early; allowed to be short by one step of the clock's
+# resolution when measured); the upper bounds are hang guards. EAGAIN (out of signal-queuing
+# resources or timers) cannot be provoked portably. CPU-time clocks of other processes and
+# threads, the default signal number for a null evp, and a fixed thread stack address for
+# SIGEV_THREAD are not tested.
+
+assertion  XSH.timer_create.001
+anchor     functions/timer_create.html#DESCRIPTION
+anchor     functions/timer_create.html#RETURN VALUE
+class      required
+since      2001
+says       timer_create() on CLOCK_REALTIME and on CLOCK_MONOTONIC, with a null
+           evp and with a SIGEV_NONE evp, returns 0 and the timer is disarmed:
+           timer_gettime() reports a zero time until expiration.
+note       All implementations support these two clocks (the monotonic
+           requirement is from 2024).
+test       t/001-clocks-disarmed.c
+
+assertion  XSH.timer_create.002
+anchor     functions/timer_create.html#DESCRIPTION
+class      required
+since      2001
+says       Eight timers created together have eight different timer IDs.
+test       t/002-unique-ids.c
+
+assertion  XSH.timer_create.003
+anchor     functions/timer_create.html#ERRORS/EINVAL
+class      required
+since      2001
+says       timer_create() with clock IDs 1000000 and 0x3fffffff, which no clock
+           has, returns -1 with EINVAL.
+note       The values are chosen to be outside any clock numbering in use; a
+           system that defines one of them would make this test fail wrongly.
+test       t/003-einval-clock.c
+
+assertion  XSH.timer_create.004
+anchor     functions/timer_create.html#DESCRIPTION
+class      required
+since      2001
+says       With a null evp the timer, when it expires, generates a signal for the
+           process (any signal; all signals are blocked and one is accepted
+           within 3 s).
+note       The default signal number is not specified, so any signal is accepted
+           (every signal gets a do-nothing handler first, so that none is ignored
+           by default while blocked). The value delivered is not checked.
+test       t/004-null-evp.c
+
+assertion  XSH.timer_create.005
+anchor     functions/timer_create.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.4.1
+class      required
+since      2001
+says       A timer with SIGEV_SIGNAL, signal number SIGRTMIN (and again SIGUSR1)
+           and value 12345 makes that signal available at expiration with
+           si_signo the chosen number, si_code SI_TIMER and si_value 12345.
+test       t/005-sigev-signal.c
+
+assertion  XSH.timer_create.006
+anchor     functions/timer_create.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.4.1
+class      required
+since      2001
+says       A timer with SIGEV_NONE that has expired generated no signal (none of
+           the signals, all blocked, is accepted within 400 ms of an expiration
+           due at 50 ms), and is disarmed afterwards.
+note       "Disarmed afterwards" is the reading of a one-shot timer that has
+           expired as one with no time left to expiration.
+test       t/006-sigev-none.c
+
+assertion  XSH.timer_create.007
+anchor     functions/timer_create.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.4.1
+class      required
+since      2001
+says       A timer with SIGEV_THREAD calls sigev_notify_function with the
+           sigev_value (4711) at expiration, in a thread other than the one that
+           created the timer.
+note       The wait on the pipe uses a poll(); the helper is shared with the
+           other timer tests.
+test       t/007-sigev-thread.c
+
+assertion  XSH.timer_create.008
+anchor     functions/timer_create.html#DESCRIPTION
+class      required
+since      2001
+says       A child made by fork() while a timer is armed does not receive the
+           timer's expiration signal (blocked signal not accepted within 1.5 s),
+           while the parent does.
+test       t/008-fork-not-inherited.c
+
+assertion  XSH.timer_create.009
+anchor     functions/timer_create.html#DESCRIPTION
+class      required
+since      2001
+says       A timer armed to signal SIGUSR1 (default action: terminate) in 100 ms
+           does not do so after the process has executed another program that
+           lives for a second.
+test       t/009-exec-disarms.c
+
+assertion  XSH.timer_create.010
+anchor     functions/timer_create.html#DESCRIPTION
+class      conditional
+when       CPT
+since      2001
+says       timer_create() on CLOCK_PROCESS_CPUTIME_ID returns 0, the timer
+           expires once the process has used the CPU time asked for (20 ms;
+           waited for with a busy loop bounded to 15 s) and not before.
+test       t/010-cputime-process.c
+
+assertion  XSH.timer_create.011
+anchor     functions/timer_create.html#DESCRIPTION
+class      conditional
+when       TCT
+since      2001
+says       timer_create() on CLOCK_THREAD_CPUTIME_ID returns 0, the timer expires
+           once the calling thread has used the CPU time asked for (20 ms; busy
+           loop bounded to 15 s) and not before.
+test       t/011-cputime-thread.c
