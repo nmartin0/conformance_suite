@@ -48,7 +48,7 @@ says       acosh(-Inf) returns a NaN.
 test       t/005-minus-inf-value.c
 
 assertion  XSH.acosh.006
-anchor     functions/acosh.html#ERRORS/Domain Error
+anchor     functions/acosh.html#ERRORS
 anchor     functions/acosh.html#RETURN VALUE
 class      required
 says       acosh() of the finite values 0.5, 0, -2 and the negated type
@@ -58,7 +58,7 @@ says       acosh() of the finite values 0.5, 0, -2 and the negated type
 test       t/006-below-one-domain.c
 
 assertion  XSH.acosh.007
-anchor     functions/acosh.html#ERRORS/Domain Error
+anchor     functions/acosh.html#ERRORS
 anchor     functions/acosh.html#RETURN VALUE
 class      required
 says       acosh(-Inf) is a domain error, reported as for any domain error.

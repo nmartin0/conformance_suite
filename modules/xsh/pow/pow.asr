@@ -87,7 +87,7 @@ says       pow(+Inf, y) returns +0 for y = -1 and -0.5, and +Inf for y = 0.5
 test       t/010-plus-inf-base.c
 
 assertion  XSH.pow.011
-anchor     functions/pow.html#ERRORS/Domain Error
+anchor     functions/pow.html#ERRORS
 anchor     functions/pow.html#RETURN VALUE
 class      required
 says       pow() of a finite negative x and a finite non-integer y (x = -2
@@ -98,7 +98,7 @@ test       t/011-negative-base-domain.c
 
 assertion  XSH.pow.012
 anchor     functions/pow.html#RETURN VALUE
-anchor     functions/pow.html#ERRORS/Range Error
+anchor     functions/pow.html#ERRORS
 anchor     basedefs/V1_chap04.html#4.23
 class      required
 says       pow overflows with the sign of the true result: pow(2, 2e) and
@@ -120,7 +120,7 @@ test       t/013-underflow-value.c
 
 assertion  XSH.pow.014
 anchor     functions/pow.html#RETURN VALUE
-anchor     functions/pow.html#ERRORS/Pole Error
+anchor     functions/pow.html#ERRORS
 anchor     basedefs/V1_chap04.html#4.23
 class      required
 says       pow(+0, y) returns +HUGE_VAL and pow(-0, y) returns -HUGE_VAL for
@@ -131,7 +131,7 @@ test       t/014-zero-odd-negative-pole.c
 
 assertion  XSH.pow.015
 anchor     functions/pow.html#RETURN VALUE
-anchor     functions/pow.html#ERRORS/Pole Error
+anchor     functions/pow.html#ERRORS
 anchor     basedefs/V1_chap04.html#4.23
 class      required
 says       pow(+0, y) and pow(-0, y) return +HUGE_VAL for the finite negative

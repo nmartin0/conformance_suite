@@ -38,7 +38,7 @@ test       t/003-zero-inf.c
 
 assertion  XSH.log1p.004
 anchor     functions/log1p.html#RETURN VALUE
-anchor     functions/log1p.html#ERRORS/Pole Error
+anchor     functions/log1p.html#ERRORS
 anchor     basedefs/V1_chap04.html#4.23
 class      required
 says       log1p(-1) returns -HUGE_VAL as a pole error: errno is ERANGE where
@@ -47,7 +47,7 @@ says       log1p(-1) returns -HUGE_VAL as a pole error: errno is ERANGE where
 test       t/004-pole.c
 
 assertion  XSH.log1p.005
-anchor     functions/log1p.html#ERRORS/Domain Error
+anchor     functions/log1p.html#ERRORS
 anchor     functions/log1p.html#RETURN VALUE
 class      required
 says       log1p() of the finite values -2, -1.5 and the negated type maximum
@@ -57,7 +57,7 @@ says       log1p() of the finite values -2, -1.5 and the negated type maximum
 test       t/005-below-minus-one-domain.c
 
 assertion  XSH.log1p.006
-anchor     functions/log1p.html#ERRORS/Domain Error
+anchor     functions/log1p.html#ERRORS
 anchor     functions/log1p.html#RETURN VALUE
 class      required
 says       log1p(-Inf) is a domain error, reported as for any domain error.

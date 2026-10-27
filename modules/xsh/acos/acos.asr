@@ -41,7 +41,7 @@ says       acos(+Inf) and acos(-Inf) return a NaN.
 test       t/004-inf-value.c
 
 assertion  XSH.acos.005
-anchor     functions/acos.html#ERRORS/Domain Error
+anchor     functions/acos.html#ERRORS
 anchor     functions/acos.html#RETURN VALUE
 class      required
 says       acos() of the finite values 2, -2, 1.5 and the type maximum is a
@@ -51,7 +51,7 @@ says       acos() of the finite values 2, -2, 1.5 and the type maximum is a
 test       t/005-out-of-range-domain.c
 
 assertion  XSH.acos.006
-anchor     functions/acos.html#ERRORS/Domain Error
+anchor     functions/acos.html#ERRORS
 anchor     functions/acos.html#RETURN VALUE
 class      required
 says       acos(+Inf) and acos(-Inf) are domain errors, reported as for any

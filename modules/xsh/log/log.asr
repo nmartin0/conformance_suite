@@ -43,7 +43,7 @@ test       t/004-plus-inf.c
 
 assertion  XSH.log.005
 anchor     functions/log.html#RETURN VALUE
-anchor     functions/log.html#ERRORS/Pole Error
+anchor     functions/log.html#ERRORS
 anchor     basedefs/V1_chap04.html#4.23
 class      required
 says       log(+0) and log(-0) return -HUGE_VAL as a pole error: errno is
@@ -52,7 +52,7 @@ says       log(+0) and log(-0) return -HUGE_VAL as a pole error: errno is
 test       t/005-pole.c
 
 assertion  XSH.log.006
-anchor     functions/log.html#ERRORS/Domain Error
+anchor     functions/log.html#ERRORS
 anchor     functions/log.html#RETURN VALUE
 class      required
 says       log() of the finite negative values -1, -0.5, the negated smallest
@@ -62,7 +62,7 @@ says       log() of the finite negative values -1, -0.5, the negated smallest
 test       t/006-negative-domain.c
 
 assertion  XSH.log.007
-anchor     functions/log.html#ERRORS/Domain Error
+anchor     functions/log.html#ERRORS
 anchor     functions/log.html#RETURN VALUE
 class      required
 says       log(-Inf) is a domain error, reported as for any domain error.

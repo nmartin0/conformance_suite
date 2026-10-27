@@ -37,7 +37,7 @@ test       t/003-zero.c
 
 assertion  XSH.atanh.004
 anchor     functions/atanh.html#RETURN VALUE
-anchor     functions/atanh.html#ERRORS/Pole Error
+anchor     functions/atanh.html#ERRORS
 anchor     basedefs/V1_chap04.html#4.23
 class      required
 says       atanh(+1) returns +HUGE_VAL and atanh(-1) returns -HUGE_VAL as a
@@ -47,7 +47,7 @@ says       atanh(+1) returns +HUGE_VAL and atanh(-1) returns -HUGE_VAL as a
 test       t/004-pole.c
 
 assertion  XSH.atanh.005
-anchor     functions/atanh.html#ERRORS/Domain Error
+anchor     functions/atanh.html#ERRORS
 anchor     functions/atanh.html#RETURN VALUE
 class      required
 says       atanh() of the finite values 2, -2 and the type maximum is a
@@ -63,7 +63,7 @@ says       atanh(+Inf) and atanh(-Inf) return a NaN.
 test       t/006-inf-value.c
 
 assertion  XSH.atanh.007
-anchor     functions/atanh.html#ERRORS/Domain Error
+anchor     functions/atanh.html#ERRORS
 anchor     functions/atanh.html#RETURN VALUE
 class      required
 says       atanh(+Inf) and atanh(-Inf) are domain errors, reported as for any

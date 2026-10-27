@@ -46,7 +46,7 @@ says       sqrt(-Inf) returns a NaN.
 test       t/004-minus-inf-value.c
 
 assertion  XSH.sqrt.005
-anchor     functions/sqrt.html#ERRORS/Domain Error
+anchor     functions/sqrt.html#ERRORS
 anchor     functions/sqrt.html#RETURN VALUE
 class      required
 says       sqrt(-Inf) is a domain error: errno is EDOM where math_errhandling
@@ -55,7 +55,7 @@ says       sqrt(-Inf) is a domain error: errno is EDOM where math_errhandling
 test       t/005-minus-inf-domain.c
 
 assertion  XSH.sqrt.006
-anchor     functions/sqrt.html#ERRORS/Domain Error
+anchor     functions/sqrt.html#ERRORS
 anchor     functions/sqrt.html#RETURN VALUE
 class      required
 says       sqrt() of the finite negative values -1, -4, the negated smallest

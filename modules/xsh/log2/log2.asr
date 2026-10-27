@@ -47,7 +47,7 @@ test       t/004-plus-inf.c
 
 assertion  XSH.log2.005
 anchor     functions/log2.html#RETURN VALUE
-anchor     functions/log2.html#ERRORS/Pole Error
+anchor     functions/log2.html#ERRORS
 anchor     basedefs/V1_chap04.html#4.23
 class      required
 since      2001
@@ -57,7 +57,7 @@ says       log2(+0) and log2(-0) return -HUGE_VAL as a pole error: errno is
 test       t/005-pole.c
 
 assertion  XSH.log2.006
-anchor     functions/log2.html#ERRORS/Domain Error
+anchor     functions/log2.html#ERRORS
 anchor     functions/log2.html#RETURN VALUE
 class      required
 since      2001
@@ -69,7 +69,7 @@ says       log2() of the finite negative values -1, -0.5, the negated
 test       t/006-negative-domain.c
 
 assertion  XSH.log2.007
-anchor     functions/log2.html#ERRORS/Domain Error
+anchor     functions/log2.html#ERRORS
 anchor     functions/log2.html#RETURN VALUE
 class      required
 since      2001
