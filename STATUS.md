@@ -267,3 +267,7 @@ To start from a bundle alone: `git clone posixcheck-NNNN.bundle posixcheck`.
 - pc_test() calls fflush(NULL), which discards pushback set earlier; flushing only stdout and stderr would be better (core change, not made).
 - Environment: sigtimedwait.008 can show UNRESOLVED when other processes use the user's RLIMIT_SIGPENDING; run serially.
 - kill.012 needs `have kill_uid U` in the profile.
+- Mutation gate for this round was run on one C library only (by decision: Linux is used only to check that the harness fires reliably). The musl pass was skipped; known/linux-musl.known was written from a plain run only.
+- fork.003 used to leave its child blocked forever when a check failed; it now releases and reaps the child first, waits at most about 10 s, and the child ends by itself.
+- Deferred by decision: the empirical gate (ci/mutate.sh on a host C library) was NOT completed for this round. One full pass on glibc ran before the last edits (2807 mutants: 2610 caught, 3 missed, 194 unchecked; 1451 variants: 0 rejected; 2 FLAKY unnamed in the log). The 3 misses were fixed (effect checks restored from UNRESOLVED to pc_check) and re-run singly. After that nothing was run: no further driver or mutate runs. Host C libraries are not conformant and are not the yardstick.
+- Edited after the last execution: fork.003 (rewritten; run once, PASS, and its mutant FAIL, before the run was stopped); dup.012, dup.015 and pipe.010 (compile-checked only; they need names the strict build does not declare, so they have never run here).

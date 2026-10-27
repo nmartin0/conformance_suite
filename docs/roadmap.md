@@ -42,6 +42,8 @@ verified; this file is the plan. Update both when a step finishes.
 
 ## Next
 
+00. **Empirical gate** for the 2024 round (mutate.sh) is deferred by decision; run it on the target OS or a host library when wanted.
+
 0. **Core pages still missing** (files, processes, stdio): creat, fsync, mkstemp, pread/pwrite, readv/writev, pipe2, poll/select, system, popen, waitid, getrlimit, nice, times, posix_spawn, the flockfile family and others; about 45 pages in six groups.
 
 1. **Signals** (remaining): the few signal todos left (`ci/coverage.py
