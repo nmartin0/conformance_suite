@@ -1,0 +1,16 @@
+# dladdr.cov - every requirement unit on functions/dladdr.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:558dded2       XSH.dladdr.001 XSH.dladdr.002 XSH.dladdr.003 XSH.dladdr.004
+DESCRIPTION:48d48251       partial XSH.dladdr.001  # the program image and its libraries are examined; objects loaded by dlopen() are not tried
+DESCRIPTION:195f1c9b       XSH.dladdr.001 XSH.dladdr.003 XSH.dladdr.004
+DESCRIPTION:628facc9       XSH.dladdr.001 XSH.dladdr.003 XSH.dladdr.004
+DESCRIPTION:719d1c1d       XSH.dladdr.001 XSH.dladdr.003
+DESCRIPTION:3776a9bd       none  descriptive text, no requirement of its own
+DESCRIPTION:be4bd7cc       partial XSH.dladdr.001  # only that the base is not above the address and is the same for two addresses of one object
+DESCRIPTION:bc70ac4a       XSH.dladdr.001 XSH.dladdr.003 XSH.dladdr.004
+DESCRIPTION:e41b8432       todo  needs an address with no symbol at or below it
+DESCRIPTION:c6d7af3b       XSH.dladdr.001 XSH.dladdr.003
+RETURN_VALUE:a87ba233      XSH.dladdr.001 XSH.dladdr.003 XSH.dladdr.004
+RETURN_VALUE:9e121559      partial XSH.dladdr.002  # an address in no object (the null address); a failure is not provoked
+RETURN_VALUE:597ff054      untestable  a dladdr failure cannot be provoked

@@ -1,0 +1,33 @@
+# XSH crypt()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The algorithm is implementation-defined; only what the page states is checked: the result begins with the
+# two salt bytes and lives in static data. That the same key and salt give the same result is not stated and
+# is not checked.
+
+assertion  XSH.crypt.001
+anchor     functions/crypt.html#DESCRIPTION
+anchor     functions/crypt.html#RETURN VALUE
+class      conditional
+when       XSI+CRYPT
+since      1988
+says       For each of several valid salts (two bytes, and a longer string) and
+           several keys (including an empty and a long one), crypt() returns a
+           pointer to a string of at least two bytes whose first two bytes are
+           those of the salt.
+note       A null pointer with ENOSYS reports NOTINUSE (the page lets the
+           function be unsupported); a null pointer with another errno is
+           UNRESOLVED. Which characters follow the salt is not examined.
+test       t/001-salt.c
+
+assertion  XSH.crypt.002
+anchor     functions/crypt.html#DESCRIPTION
+class      conditional
+when       XSI+CRYPT
+since      1988
+says       The string crypt() returns is static data that the next call
+           overwrites: after a second call with another key and salt, the pointer
+           from the first call reads as the second result.
+note       The text says the data is overwritten by each call, so the first
+           pointer reads the second result.
+test       t/002-static.c

@@ -1,0 +1,26 @@
+# XSH encrypt()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Obsolescent. The algorithm is implementation-defined; only the round trip with one key, the element values
+# and errno are checked. ENOSYS (an unsupported function, or decoding not provided) gives NOTINUSE.
+
+assertion  XSH.encrypt.001
+anchor     functions/encrypt.html#DESCRIPTION
+class      conditional
+when       XSI+CRYPT
+says       After setkey(key), encrypt(block, 0) followed by encrypt(block, 1)
+           restores the original block, leaving errno unchanged; when decoding is
+           not provided the second call sets ENOSYS instead.
+note       The page lets decoding be absent (ENOSYS), which gives NOTINUSE. The
+           key and blocks are 64-element arrays of 0 and 1.
+test       t/001-roundtrip.c
+
+assertion  XSH.encrypt.002
+anchor     functions/encrypt.html#DESCRIPTION
+anchor     functions/encrypt.html#RETURN VALUE
+class      conditional
+when       XSI+CRYPT
+says       encrypt(block, 0) leaves a block of 64 elements each 0 or 1, and does
+           not change errno.
+note       ENOSYS gives NOTINUSE.
+test       t/002-bits.c

@@ -1,0 +1,83 @@
+# dbm_open.cov - every requirement unit on functions/dbm_open.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:7d3fe4dd       none  descriptive text, no requirement of its own
+DESCRIPTION:5f747ed8       none  descriptive text, no requirement of its own
+DESCRIPTION:d1935420       none  descriptive text, no requirement of its own
+DESCRIPTION:9e6a414c       none  descriptive text, no requirement of its own
+DESCRIPTION:ec7fcb3a       XSH.dbm_open.001
+DESCRIPTION:edf4b6bc       XSH.dbm_open.001
+DESCRIPTION:cf596162       XSH.dbm_open.001
+DESCRIPTION:9a16b1ec       XSH.dbm_open.001 XSH.dbm_open.009
+DESCRIPTION:d1c95410       none  descriptive text, no requirement of its own
+DESCRIPTION:5fe2cf1f       none  descriptive text, no requirement of its own
+DESCRIPTION:586f75ac       app  a duty of the application
+DESCRIPTION:eed53745       XSH.dbm_open.009
+DESCRIPTION:51ebe44f       XSH.dbm_open.002 XSH.dbm_open.009
+DESCRIPTION:e7d8c0de       XSH.dbm_open.015
+DESCRIPTION:d5d9eeef       XSH.dbm_open.015
+DESCRIPTION:44b3bfb1       none  descriptive text, no requirement of its own
+DESCRIPTION:84143349       XSH.dbm_open.013
+DESCRIPTION:e4693d62       XSH.dbm_open.012
+DESCRIPTION:e1c1821a       partial XSH.dbm_open.001 XSH.dbm_open.014  # the group ID is not examined
+DESCRIPTION:03ead13d       todo  the group ID is not examined
+DESCRIPTION:1786d398       impl  unspecified or implementation-defined
+DESCRIPTION:10678e9e       optional  synchronized I/O (SIO); the completion level is not observable
+DESCRIPTION:6b9652ac       XSH.dbm_open.012
+DESCRIPTION:8fdd8bc8       untestable  atomicity of the existence check is not observable by a single process
+DESCRIPTION:e031f44d       untestable  atomicity of the existence check is not observable by a single process
+DESCRIPTION:50989be0       none  a recommendation
+DESCRIPTION:49f0da4e       impl  unspecified or implementation-defined
+DESCRIPTION:0338b506       optional  synchronized I/O (SIO); the completion level is not observable
+DESCRIPTION:02c238ed       optional  synchronized I/O (SIO); the completion level is not observable
+DESCRIPTION:1d81a06c       optional  synchronized I/O (SIO); the completion level is not observable
+DESCRIPTION:19ecfb72       untestable  the completion level of writes is not observable
+DESCRIPTION:2f63ef8c       partial XSH.dbm_open.011  # the mode and owner after truncation are not examined
+DESCRIPTION:eacd217f       partial XSH.dbm_open.011  # the mode and owner after truncation are not examined
+DESCRIPTION:76084ee5       impl  unspecified or implementation-defined
+DESCRIPTION:a887f235       XSH.dbm_open.014
+DESCRIPTION:3c6da98d       impl  unspecified or implementation-defined
+DESCRIPTION:a798b86b       XSH.dbm_open.001 XSH.dbm_open.002 XSH.dbm_open.003 XSH.dbm_open.004 XSH.dbm_open.005 XSH.dbm_open.006 XSH.dbm_open.007 XSH.dbm_open.008 XSH.dbm_open.009 XSH.dbm_open.010 XSH.dbm_open.011 XSH.dbm_open.012 XSH.dbm_open.013 XSH.dbm_open.014 XSH.dbm_open.015
+DESCRIPTION:be840ec5       app  a duty of the application
+DESCRIPTION:a1876727       XSH.dbm_open.008
+DESCRIPTION:95257b97       XSH.dbm_open.002 XSH.dbm_open.005
+DESCRIPTION:eddf11b7       none  descriptive text, no requirement of its own
+DESCRIPTION:046c9c21       none  descriptive text, no requirement of its own
+DESCRIPTION:5165d731       XSH.dbm_open.002
+DESCRIPTION:eddf11b7.2     none  descriptive text, no requirement of its own
+DESCRIPTION:5a50cb3d       none  descriptive text, no requirement of its own
+DESCRIPTION:fcd1fc5c       none  descriptive text, no requirement of its own
+DESCRIPTION:8258490f       none  descriptive text, no requirement of its own
+DESCRIPTION:d6b06b09       app  a duty of the application
+DESCRIPTION:b2218a76       XSH.dbm_open.004
+DESCRIPTION:ea18625d       XSH.dbm_open.003
+DESCRIPTION:70ff20bf       XSH.dbm_open.002 XSH.dbm_open.004
+DESCRIPTION:e1fa3b7b       impl  unspecified or implementation-defined
+DESCRIPTION:21bd0f03       app  a duty of the application
+DESCRIPTION:ee3a8997       untestable  the limits for a full block are unspecified; the pairs used are far below them
+DESCRIPTION:75ff70e0       XSH.dbm_open.006
+DESCRIPTION:eddf11b7.3     none  descriptive text, no requirement of its own
+DESCRIPTION:a3ea90c2       none  descriptive text, no requirement of its own
+DESCRIPTION:9ba1b167       XSH.dbm_open.007
+DESCRIPTION:eddf11b7.4     none  descriptive text, no requirement of its own
+DESCRIPTION:88742aa2       XSH.dbm_open.007
+DESCRIPTION:eddf11b7.5     none  descriptive text, no requirement of its own
+DESCRIPTION:8a046fb0       app  a duty of the application
+DESCRIPTION:4b666f32       XSH.dbm_open.007
+DESCRIPTION:61c6942c       XSH.dbm_open.010
+DESCRIPTION:eddf11b7.6     none  descriptive text, no requirement of its own
+DESCRIPTION:b9ddc947       XSH.dbm_open.010
+DESCRIPTION:eddf11b7.7     none  descriptive text, no requirement of its own
+DESCRIPTION:8bc00752       none  descriptive text, no requirement of its own
+DESCRIPTION:2e1d32a7       impl  unspecified or implementation-defined
+RETURN_VALUE:a2863f38      partial XSH.dbm_open.002 XSH.dbm_open.004 XSH.dbm_open.006  # the negative value on failure is not provoked
+RETURN_VALUE:219f8770      XSH.dbm_open.003
+RETURN_VALUE:b3346ae1      partial XSH.dbm_open.010  # the non-zero value for a set condition cannot be provoked
+RETURN_VALUE:7a40fdf2      impl  unspecified or implementation-defined
+RETURN_VALUE:b659bf50      XSH.dbm_open.006 XSH.dbm_open.007
+RETURN_VALUE:579e3e58      XSH.dbm_open.007 XSH.dbm_open.010
+RETURN_VALUE:ed488452      untestable  a read error cannot be provoked
+RETURN_VALUE:c1fcf9d1      XSH.dbm_open.002
+RETURN_VALUE:6c33d19c      partial XSH.dbm_open.005 XSH.dbm_open.006  # the case of a detected error cannot be provoked
+RETURN_VALUE:0e27fe2a      XSH.dbm_open.001
+RETURN_VALUE:b21b45af      partial XSH.dbm_open.012  # a failure other than a missing or existing database is not provoked

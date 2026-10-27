@@ -1,0 +1,44 @@
+# XSH dladdr()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Dl_info_t is the type the standard names (a system header that only knows Dl_info does not build this test;
+# the module states the standard). Only addresses of symbols found with dlsym() on the program handle are used,
+# with the null address as the one address that is in no mapped object.
+
+assertion  XSH.dladdr.001
+anchor     functions/dladdr.html#DESCRIPTION
+anchor     functions/dladdr.html#RETURN VALUE
+class      required
+since      2024
+says       dladdr() of the address dlsym() gave for getpid() returns non-zero
+           with dli_fname a non-empty pathname, dli_fbase at or below the
+           address, dli_sname non-null and dli_saddr equal to the address.
+note       The object has a symbol table, since dlsym() found getpid in it.
+test       t/001-function.c
+
+assertion  XSH.dladdr.002
+anchor     functions/dladdr.html#RETURN VALUE
+class      required
+since      2024
+says       dladdr() of the null address, which lies in no mapped object, returns
+           0.
+test       t/002-null.c
+
+assertion  XSH.dladdr.003
+anchor     functions/dladdr.html#DESCRIPTION
+anchor     functions/dladdr.html#RETURN VALUE
+class      required
+since      2024
+says       dladdr() of the address dlsym() gave for the data object environ
+           returns non-zero with dli_sname non-null and dli_saddr equal to the
+           address.
+test       t/003-data.c
+
+assertion  XSH.dladdr.004
+anchor     functions/dladdr.html#DESCRIPTION
+class      required
+since      2024
+says       dladdr() of an address one byte into getpid() returns non-zero, names
+           the same object (pathname and base) as for its first byte, and reports
+           a symbol whose address is not above the address asked.
+test       t/004-inside.c

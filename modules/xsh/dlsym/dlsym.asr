@@ -1,0 +1,43 @@
+# XSH dlsym()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The probes are the program's own references to the C library: getpid() and getppid() (functions) and
+# environ (a data object). RTLD_DEFAULT and RTLD_NEXT are reserved by the page and are not used. A handle that
+# is not valid is never passed.
+
+assertion  XSH.dlsym.001
+anchor     functions/dlsym.html#DESCRIPTION
+anchor     functions/dlsym.html#RETURN VALUE
+class      required
+says       dlsym() on the handle from dlopen(NULL) returns the address of
+           getpid() and of getppid(), and calling through it gives the same
+           result as calling the function.
+note       Which symbols the program image exports is left open by the page, so
+           a symbol not found gives UNRESOLVED; a wrong address gives FAIL.
+test       t/001-global.c
+
+assertion  XSH.dlsym.002
+anchor     functions/dlsym.html#RETURN VALUE
+class      required
+says       dlsym() of a name that no object defines returns a null pointer, and
+           dlerror() then returns a diagnostic.
+test       t/002-missing.c
+
+assertion  XSH.dlsym.003
+anchor     functions/dlsym.html#DESCRIPTION
+anchor     functions/dlsym.html#RETURN VALUE
+class      required
+says       dlsym() on the handle from dlopen() of the pathname of the object
+           defining getpid() finds a working getpid() there and finds no symbol
+           of an impossible name.
+test       t/003-object.c
+
+assertion  XSH.dlsym.004
+anchor     functions/dlsym.html#DESCRIPTION
+anchor     functions/dlsym.html#RETURN VALUE
+class      required
+says       dlsym() of the data object environ returns the address of a char **
+           whose value is environ.
+note       The test declares environ itself. Not found gives UNRESOLVED (the set of
+           exported symbols is left open).
+test       t/004-data.c

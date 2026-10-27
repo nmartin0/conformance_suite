@@ -1,0 +1,68 @@
+# XSH getgrent(), setgrent(), endgrent()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All three are XSI (shaded in the synopsis). The database may hide entries, so nothing about its size or
+# content is assumed beyond: an entry the caller can look up exists, and iteration is consistent with it.
+
+assertion  XSH.getgrent.001
+anchor     functions/getgrent.html#DESCRIPTION
+anchor     functions/getgrent.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       After setgrent(), repeated getgrent() calls return entries, each with
+           a name, and finally a null pointer with errno unchanged (errno is set
+           just before the call that ends it).
+note       At least one entry must be visible, else UNRESOLVED (the page lets the
+           system hide entries).
+test       t/001-iterate.c
+
+assertion  XSH.getgrent.002
+anchor     functions/getgrent.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       Reading the entire group database with getgrent() visits the entry
+           that getgrgid() finds for the caller (same name and group ID).
+note       The page lets a system hide entries of other users and groups, not the
+           caller's own.
+test       t/002-own.c
+
+assertion  XSH.getgrent.003
+anchor     functions/getgrent.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       setgrent() makes the next getgrent() return the first entry again:
+           after one or two reads, and after reading up to the end.
+test       t/003-rewind.c
+
+assertion  XSH.getgrent.004
+anchor     functions/getgrent.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       After endgrent() the next getgrent() opens the database again and
+           returns the first entry; endgrent() followed by setgrent() does the
+           same.
+test       t/004-end.c
+
+assertion  XSH.getgrent.005
+anchor     functions/getgrent.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       setgrent() and endgrent() do not change errno when they succeed (open
+           or closed database).
+note       A change to one of the listed errors is a failure of the call and
+           gives UNRESOLVED.
+test       t/005-errno.c
+
+assertion  XSH.getgrent.006
+anchor     functions/getgrent.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       The names of the first entries read with getgrent() are each found by
+           getgrnam().
+test       t/006-lookup.c

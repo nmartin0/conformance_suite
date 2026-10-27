@@ -1,0 +1,157 @@
+# XSH dbm_open(), dbm_close(), dbm_store(), dbm_fetch(), dbm_delete(), dbm_firstkey(), dbm_nextkey(), dbm_error(), dbm_clearerr()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The database is called pcdb in the test's private directory. Which files it makes is implementation-defined
+# beyond the suffixes the page names, so the cleanup removes every file whose name begins with pcdb, on every
+# way out of a test. Pairs stay far below the block size (at most 1000 bytes, alone in the database), and
+# the page guarantees pairs of 1023 bytes. dptr values are copied or compared at once: they may point into
+# static storage.
+
+assertion  XSH.dbm_open.001
+anchor     functions/dbm_open.html#DESCRIPTION
+class      conditional
+when       XSI
+says       dbm_open(O_CREAT) of a new database returns a database pointer and,
+           after dbm_close(), the files exist under the names the page gives:
+           file.db, or both file.dir and file.pag.
+test       t/001-create.c
+
+assertion  XSH.dbm_open.002
+anchor     functions/dbm_open.html#DESCRIPTION
+anchor     functions/dbm_open.html#RETURN VALUE
+class      conditional
+when       XSI
+says       dbm_store(DBM_INSERT) of a new key returns 0 and dbm_fetch() of the
+           key returns the content, with the stored size and bytes.
+test       t/002-store-fetch.c
+
+assertion  XSH.dbm_open.003
+anchor     functions/dbm_open.html#DESCRIPTION
+anchor     functions/dbm_open.html#RETURN VALUE
+class      conditional
+when       XSI
+says       dbm_store(DBM_INSERT) of a key already in the database returns 1 and
+           leaves the old record unchanged.
+test       t/003-insert-existing.c
+
+assertion  XSH.dbm_open.004
+anchor     functions/dbm_open.html#DESCRIPTION
+anchor     functions/dbm_open.html#RETURN VALUE
+class      conditional
+when       XSI
+says       dbm_store(DBM_REPLACE) of an existing key returns 0 and replaces the
+           content (also by one of another size); of a new key it returns 0 and
+           inserts; the database then holds exactly those keys.
+test       t/004-replace.c
+
+assertion  XSH.dbm_open.005
+anchor     functions/dbm_open.html#RETURN VALUE
+class      conditional
+when       XSI
+says       dbm_fetch() of a key with no record returns a datum whose dptr is null
+           (also for a key that is a prefix of a stored one).
+test       t/005-fetch-absent.c
+
+assertion  XSH.dbm_open.006
+anchor     functions/dbm_open.html#DESCRIPTION
+anchor     functions/dbm_open.html#RETURN VALUE
+class      conditional
+when       XSI
+says       dbm_delete() of a stored key returns 0; the record can no longer be
+           fetched, the other records remain, and the key iteration visits
+           exactly the remaining keys.
+test       t/006-delete.c
+
+assertion  XSH.dbm_open.007
+anchor     functions/dbm_open.html#DESCRIPTION
+anchor     functions/dbm_open.html#RETURN VALUE
+class      conditional
+when       XSI
+says       With 200 stored records, dbm_firstkey() followed by dbm_nextkey()
+           until a datum with a null dptr returns every key exactly once; every
+           record still has its content and the error condition is clear.
+note       Keys are 8 bytes, contents 37 bytes. The page guarantees room for one
+           block (1023 bytes) of data only; a store refused after more than
+           that is stored gives UNRESOLVED, a refusal earlier gives FAIL.
+test       t/007-iterate.c
+
+assertion  XSH.dbm_open.008
+anchor     functions/dbm_open.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Keys and contents can hold any byte values, including zero bytes;
+           sizes of one byte and a pair of 1000 bytes (20 + 980) are stored and
+           fetched exactly.
+note       The page promises pairs of at least 1023 bytes; the large pair is
+           stored alone in an emptied database so no colliding pair shares its
+           block.
+test       t/008-binary.c
+
+assertion  XSH.dbm_open.009
+anchor     functions/dbm_open.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Records stored before dbm_close() are found after dbm_open() with
+           O_RDONLY (fetch and key iteration) and again with O_RDWR.
+test       t/009-persist.c
+
+assertion  XSH.dbm_open.010
+anchor     functions/dbm_open.html#DESCRIPTION
+anchor     functions/dbm_open.html#RETURN VALUE
+class      conditional
+when       XSI
+says       dbm_error() returns 0 on a new database, after the end of an empty key
+           iteration, after ordinary calls and after dbm_clearerr().
+note       No way to set the error condition is available to a test, so only the
+           clear state is checked. The return value of dbm_clearerr() is
+           unspecified and ignored.
+test       t/010-error.c
+
+assertion  XSH.dbm_open.011
+anchor     functions/dbm_open.html#DESCRIPTION
+class      conditional
+when       XSI
+says       dbm_open() with O_TRUNC on an existing database opened for reading and
+           writing empties it: no first key and no fetchable record.
+test       t/011-trunc.c
+
+assertion  XSH.dbm_open.012
+anchor     functions/dbm_open.html#DESCRIPTION
+class      conditional
+when       XSI
+says       dbm_open() of a missing database without O_CREAT returns a null
+           pointer; O_CREAT with O_EXCL succeeds when the database is new and
+           returns a null pointer when it exists; O_CREAT alone opens an existing
+           database.
+test       t/012-excl.c
+
+assertion  XSH.dbm_open.013
+anchor     functions/dbm_open.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With O_CLOEXEC every file descriptor that dbm_open() opens, when
+           creating and when opening an existing database, has FD_CLOEXEC set.
+note       The descriptors are those found open after the call and not before,
+           among the first 256.
+test       t/013-cloexec.c
+
+assertion  XSH.dbm_open.014
+anchor     functions/dbm_open.html#DESCRIPTION
+class      conditional
+when       XSI
+says       The files created by dbm_open(O_CREAT) with file_mode 0640 and a
+           cleared umask have mode 0640 and the effective user ID of the process
+           as owner.
+note       The group ID is not checked: it may be that of the directory or of the
+           process.
+test       t/014-mode.c
+
+assertion  XSH.dbm_open.015
+anchor     functions/dbm_open.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A database opened with O_WRONLY accepts dbm_store(), and the record is
+           there when it is read later.
+note       The page says the underlying files are opened for reading and writing
+           in that case; only storing is relied on.
+test       t/015-wronly.c

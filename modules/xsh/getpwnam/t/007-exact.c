@@ -1,0 +1,38 @@
+/*
+ * A lookup matches the whole name: a longer or shorter name finds only an entry with exactly that name.
+ * Copyright (c) 2026 Nicholas Martin. All rights reserved.
+ *
+ * ASSERTION XSH.getpwnam.007
+ */
+#include "pwdb.h"
+
+int main(void)
+{
+	struct xc c;
+	char q[3][600], buf[16384];
+	xent_t e, *res, *p;
+	size_t len;
+	int i, r;
+
+	pc_begin("XSH.getpwnam.007");
+	xc_find(&c);
+	len = strlen(c.name);
+	snprintf(q[0], sizeof q[0], "%sx", c.name);
+	snprintf(q[1], sizeof q[1], "x%s", c.name);
+	snprintf(q[2], sizeof q[2], "%.*s", (int)(len > 1 ? len - 1 : 0), c.name);
+	pc_check(getpwnam(c.name) != NULL, "no entry found for %s", c.name);
+	pc_test();
+	for (i = 0; i < 3; i++) {
+		if (q[i][0] == '\0')
+			continue;
+		p = getpwnam(q[i]);
+		pc_check(p == NULL || (XNAME(p) != NULL && strcmp(XNAME(p), q[i]) == 0),
+		    "the name %s found the entry of %s", q[i], p != NULL && XNAME(p) != NULL ? XNAME(p) : "");
+		memset(&e, 0, sizeof e);
+		res = NULL;
+		r = getpwnam_r(q[i], &e, buf, sizeof buf, &res);
+		pc_check(r != 0 || res == NULL || (XNAME(res) != NULL && strcmp(XNAME(res), q[i]) == 0),
+		    "the reentrant lookup of %s found the entry of %s", q[i], res != NULL && XNAME(res) != NULL ? XNAME(res) : "");
+	}
+	pc_pass();
+}

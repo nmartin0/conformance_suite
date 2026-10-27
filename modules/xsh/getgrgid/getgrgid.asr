@@ -1,0 +1,83 @@
+# XSH getgrgid() and getgrgid_r(), search the group database for an ID
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# See getgrnam for the approach: the entry is the caller's own (or ID 0) and nothing else is assumed.
+# IDs that no entry may carry are found by lookup (a high range is tried until one finds nothing).
+
+assertion  XSH.getgrgid.001
+anchor     functions/getgrgid.html#DESCRIPTION
+anchor     functions/getgrgid.html#RETURN VALUE
+class      required
+since      1988
+says       getgrgid() with the group ID of an existing entry returns an entry
+           with that group ID, and looking up the name of that entry returns an
+           entry with the same group ID.
+test       t/001-chain.c
+
+assertion  XSH.getgrgid.002
+anchor     functions/getgrgid.html#RETURN VALUE
+class      required
+since      2001
+says       When no entry has the group ID, getgrgid() returns a null pointer and
+           does not change errno.
+note       A change of errno to one of the listed "may fail" errors means the
+           lookup failed, not that nothing was found, and gives UNRESOLVED.
+test       t/002-absent.c
+
+assertion  XSH.getgrgid.003
+anchor     functions/getgrgid.html#DESCRIPTION
+anchor     functions/getgrgid.html#RETURN VALUE
+class      required
+says       getgrgid_r() returns 0, stores the address of the structure passed at
+           *result, fills it with the entry that getgrgid() returns, and every
+           pointer in it refers to storage in the buffer.
+test       t/003-r-agrees.c
+
+assertion  XSH.getgrgid.004
+anchor     functions/getgrgid.html#DESCRIPTION
+anchor     functions/getgrgid.html#RETURN VALUE
+class      required
+says       getgrgid_r() with an ID that no entry has returns 0 (not an error) and
+           stores a null pointer at *result.
+test       t/004-r-absent.c
+
+assertion  XSH.getgrgid.005
+anchor     functions/getgrgid.html#ERRORS/ERANGE
+anchor     functions/getgrgid.html#DESCRIPTION
+anchor     functions/getgrgid.html#RETURN VALUE
+class      required
+since      2024
+says       getgrgid_r() with a buffer too small for the entry (1 byte, and 0
+           bytes) returns the error number ERANGE and stores a null pointer at
+           *result.
+note       Any entry needs more than one byte for its name and terminator.
+test       t/005-r-erange.c
+
+assertion  XSH.getgrgid.006
+anchor     functions/getgrgid.html#ERRORS/ERANGE
+anchor     functions/getgrgid.html#DESCRIPTION
+anchor     functions/getgrgid.html#RETURN VALUE
+class      required
+since      2024
+says       Retrying getgrgid_r() with a buffer twice as large after each ERANGE
+           ends with return 0 and the entry, so ERANGE does not repeat without
+           bound.
+note       The example of the page does this; the buffer is stopped at 1 MiB.
+test       t/006-r-retry.c
+
+assertion  XSH.getgrgid.007
+anchor     functions/getgrgid.html#DESCRIPTION
+class      required
+since      1988
+says       An ID one above or one below the ID of an existing entry finds no
+           entry other than one with exactly that ID (getgrgid() and
+           getgrgid_r()).
+note       A negative check: it passes when nothing is found.
+test       t/007-exact.c
+
+assertion  XSH.getgrgid.008
+anchor     functions/getgrgid.html#DESCRIPTION
+class      required
+says       sysconf(_SC_GETGR_R_SIZE_MAX) returns either -1 with errno unchanged,
+           or a non-negative value.
+test       t/008-sysconf.c

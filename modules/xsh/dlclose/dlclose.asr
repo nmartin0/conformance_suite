@@ -1,0 +1,22 @@
+# XSH dlclose()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# What an implementation unloads is left to it, so only the return value and the validity of a second handle
+# are checked. A handle that is not valid is never passed (the result for it is not safe to provoke).
+
+assertion  XSH.dlclose.001
+anchor     functions/dlclose.html#DESCRIPTION
+anchor     functions/dlclose.html#RETURN VALUE
+class      required
+says       dlclose() of a valid handle (from dlopen(NULL)) returns 0.
+test       t/001-close.c
+
+assertion  XSH.dlclose.002
+anchor     functions/dlclose.html#DESCRIPTION
+anchor     functions/dlclose.html#RETURN VALUE
+class      required
+says       With two handles for the object that defines getpid(), dlclose() of
+           each returns 0, and the second handle still finds a working getpid()
+           after the first is closed.
+note       An object may not be removed while a handle for it is open.
+test       t/002-twice.c

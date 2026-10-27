@@ -1,0 +1,48 @@
+# XSH dlerror()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Errors are provoked with a pathname that names no file and a symbol name that cannot exist. The text itself
+# is not specified except that it has no trailing newline. Whether dlerror() is thread-safe is implementation-
+# defined and threads are not used.
+
+assertion  XSH.dlerror.001
+anchor     functions/dlerror.html#DESCRIPTION
+class      required
+says       dlerror() called again with no dynamic linking call between returns a
+           null pointer.
+note       Preceded by one call to discard anything pending.
+test       t/001-clear.c
+
+assertion  XSH.dlerror.002
+anchor     functions/dlerror.html#DESCRIPTION
+anchor     functions/dlerror.html#RETURN VALUE
+class      required
+says       After a failed dlopen(), dlerror() returns a non-empty null-terminated
+           string with no trailing newline, and an immediate second call returns
+           a null pointer.
+test       t/002-open.c
+
+assertion  XSH.dlerror.003
+anchor     functions/dlerror.html#DESCRIPTION
+anchor     functions/dlerror.html#RETURN VALUE
+class      required
+says       After a failed dlsym(), dlerror() returns a non-empty null-terminated
+           string with no trailing newline, and an immediate second call returns
+           a null pointer.
+test       t/003-sym.c
+
+assertion  XSH.dlerror.004
+anchor     functions/dlerror.html#DESCRIPTION
+class      required
+says       After two failed calls, one dlerror() returns a diagnostic and the
+           next returns a null pointer.
+note       The text describes the last error, which is not compared.
+test       t/004-last.c
+
+assertion  XSH.dlerror.005
+anchor     functions/dlerror.html#DESCRIPTION
+anchor     functions/dlerror.html#RETURN VALUE
+class      required
+says       After calls that succeed (dlopen(NULL), dlsym(), dlclose()) with the
+           error state cleared before them, dlerror() returns a null pointer.
+test       t/005-success.c

@@ -1,0 +1,24 @@
+# XSH setkey()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Obsolescent. The algorithm is implementation-defined; only the ignored bits and errno are checked.
+
+assertion  XSH.setkey.001
+anchor     functions/setkey.html#DESCRIPTION
+class      conditional
+when       XSI+CRYPT
+says       In each group of 8 elements of the key the low-order bit is ignored:
+           inverting that element in every group leaves the encoding of a block
+           unchanged.
+note       The page does not say whether the low-order element is the first or
+           the last of a group; either is accepted (the encoding is unchanged for
+           one of the two choices). ENOSYS gives NOTINUSE.
+test       t/001-parity.c
+
+assertion  XSH.setkey.002
+anchor     functions/setkey.html#DESCRIPTION
+class      conditional
+when       XSI+CRYPT
+says       setkey() does not change errno when it succeeds.
+note       ENOSYS gives NOTINUSE.
+test       t/002-errno.c

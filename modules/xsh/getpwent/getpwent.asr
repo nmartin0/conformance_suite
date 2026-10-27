@@ -1,0 +1,68 @@
+# XSH getpwent(), setpwent(), endpwent()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All three are XSI (shaded in the synopsis). The database may hide entries, so nothing about its size or
+# content is assumed beyond: an entry the caller can look up exists, and iteration is consistent with it.
+
+assertion  XSH.getpwent.001
+anchor     functions/getpwent.html#DESCRIPTION
+anchor     functions/getpwent.html#RETURN VALUE
+class      conditional
+when       XSI
+since      1988
+says       After setpwent(), repeated getpwent() calls return entries, each with
+           a name, and finally a null pointer with errno unchanged (errno is set
+           just before the call that ends it).
+note       At least one entry must be visible, else UNRESOLVED (the page lets the
+           system hide entries).
+test       t/001-iterate.c
+
+assertion  XSH.getpwent.002
+anchor     functions/getpwent.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       Reading the entire user database with getpwent() visits the entry that
+           getpwuid() finds for the caller (same name and user ID).
+note       The page lets a system hide entries of other users and groups, not the
+           caller's own.
+test       t/002-own.c
+
+assertion  XSH.getpwent.003
+anchor     functions/getpwent.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       setpwent() makes the next getpwent() return the first entry again:
+           after one or two reads, and after reading up to the end.
+test       t/003-rewind.c
+
+assertion  XSH.getpwent.004
+anchor     functions/getpwent.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       After endpwent() the next getpwent() opens the database again and
+           returns the first entry; endpwent() followed by setpwent() does the
+           same.
+test       t/004-end.c
+
+assertion  XSH.getpwent.005
+anchor     functions/getpwent.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       setpwent() and endpwent() do not change errno when they succeed (open
+           or closed database).
+note       A change to one of the listed errors is a failure of the call and
+           gives UNRESOLVED.
+test       t/005-errno.c
+
+assertion  XSH.getpwent.006
+anchor     functions/getpwent.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1988
+says       The names of the first entries read with getpwent() are each found by
+           getpwnam().
+test       t/006-lookup.c

@@ -1,0 +1,39 @@
+# XSH dlopen()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only the running program image and the objects it was started with are used: no shared object is built or
+# assumed to exist. getpid() is the probe symbol, and the object that defines it is found with dladdr() and
+# opened again by pathname. Flags other than the four defined are never passed.
+
+assertion  XSH.dlopen.001
+anchor     functions/dlopen.html#DESCRIPTION
+anchor     functions/dlopen.html#RETURN VALUE
+class      required
+says       dlopen(NULL, mode) returns a handle for the program image for each of
+           RTLD_LAZY and RTLD_NOW combined with RTLD_GLOBAL and RTLD_LOCAL.
+test       t/001-modes.c
+
+assertion  XSH.dlopen.002
+anchor     functions/dlopen.html#RETURN VALUE
+class      required
+says       dlopen() of a pathname (containing a slash) that names no file returns
+           a null pointer, and dlerror() then returns a diagnostic.
+test       t/002-missing.c
+
+assertion  XSH.dlopen.003
+anchor     functions/dlopen.html#RETURN VALUE
+class      required
+says       dlopen() of an existing file that is not an executable object returns
+           a null pointer, and dlerror() then returns a diagnostic.
+test       t/003-notobject.c
+
+assertion  XSH.dlopen.004
+anchor     functions/dlopen.html#DESCRIPTION
+anchor     functions/dlopen.html#RETURN VALUE
+class      required
+says       The object that defines getpid(), opened twice by its pathname with
+           different modes, gives two handles through which dlsym() finds the
+           same working getpid().
+note       The page says only one copy of an object enters the address space
+           however often it is opened. The handles themselves are not compared.
+test       t/004-single-copy.c

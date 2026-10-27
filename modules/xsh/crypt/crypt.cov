@@ -1,0 +1,14 @@
+# crypt.cov - every requirement unit on functions/crypt.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:81d77c67       none  descriptive text, no requirement of its own
+DESCRIPTION:0b845e84       impl  unspecified or implementation-defined
+DESCRIPTION:5abeaad4       none  descriptive text, no requirement of its own
+DESCRIPTION:cd96bd64       app  a duty of the application
+DESCRIPTION:c74fb843       none  descriptive text, no requirement of its own
+DESCRIPTION:d4b73cc1       none  descriptive text, no requirement of its own
+DESCRIPTION:67744372       XSH.crypt.002
+DESCRIPTION:eaea1c37       impl  unspecified or implementation-defined
+RETURN_VALUE:0f69ecea      XSH.crypt.001
+RETURN_VALUE:fc5fad31      partial XSH.crypt.001  # a null pointer is only recognised (ENOSYS gives NOTINUSE), not provoked
+ERRORS:a0f108b5            partial XSH.crypt.001  # ENOSYS is only recognised, not provoked

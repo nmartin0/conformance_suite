@@ -1,0 +1,65 @@
+# XSH getutxent(), getutxid(), getutxline(), pututxline(), setutxent(), endutxent()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The user accounting database is only read, never written: pututxline() is not called (it needs privilege
+# and could change real records; the one error the page allows, EPERM, is a may-fail case). The database may
+# be absent, empty or hidden from the caller; the tests then report NOTINUSE. What they check is chosen from
+# the entries actually read, so no particular entry is assumed.
+
+assertion  XSH.getutxent.001
+anchor     functions/getutxent.html#DESCRIPTION
+anchor     functions/getutxent.html#RETURN VALUE
+class      conditional
+when       XSI
+says       After setutxent(), getutxent() returns entries one after another and
+           finally a null pointer.
+note       Read-only. An absent, empty or hidden database gives NOTINUSE. An
+           entry whose type is none of the eight defined values gives UNRESOLVED
+           (the page does not forbid other values).
+test       t/001-iterate.c
+
+assertion  XSH.getutxent.002
+anchor     functions/getutxent.html#DESCRIPTION
+class      conditional
+when       XSI
+says       setutxent() resets the reading position: the entry read after it is
+           the first entry again.
+test       t/002-restart.c
+
+assertion  XSH.getutxent.003
+anchor     functions/getutxent.html#DESCRIPTION
+anchor     functions/getutxent.html#RETURN VALUE
+class      conditional
+when       XSI
+says       getutxid() searching from the start finds, for the type of an entry
+           that the database holds, an entry of that type when it is BOOT_TIME,
+           OLD_TIME or NEW_TIME, and for a process type an entry of one of the
+           four process types with the same ut_id.
+test       t/003-getutxid.c
+
+assertion  XSH.getutxent.004
+anchor     functions/getutxent.html#DESCRIPTION
+anchor     functions/getutxent.html#RETURN VALUE
+class      conditional
+when       XSI
+says       With the reading position at the end of the database, getutxid() and
+           getutxline() return a null pointer.
+test       t/004-end.c
+
+assertion  XSH.getutxent.005
+anchor     functions/getutxent.html#DESCRIPTION
+anchor     functions/getutxent.html#RETURN VALUE
+class      conditional
+when       XSI
+says       getutxline() searching from the start finds, for the ut_line of a
+           LOGIN_PROCESS or USER_PROCESS entry that the database holds, an entry
+           of one of those two types with the same ut_line.
+test       t/005-getutxline.c
+
+assertion  XSH.getutxent.006
+anchor     functions/getutxent.html#DESCRIPTION
+class      conditional
+when       XSI
+says       endutxent() closes the database: the next getutxent() opens it again
+           and returns the first entry.
+test       t/006-end.c
