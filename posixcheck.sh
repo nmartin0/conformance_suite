@@ -6,7 +6,9 @@
 # usage: ./posixcheck.sh [options] [module ...]
 #
 #   module            a module path such as xsh/open; default: all modules
-#   --results DIR     where to write results (default: ./results)
+#   --results DIR     keep everything the run produces in DIR (for debugging;
+#                     without it the run uses a private temporary directory
+#                     that is removed when the run ends or is interrupted)
 #   --resume          continue an interrupted run in an existing DIR
 #   --only ID         run just this assertion (prerequisites still run)
 #   --option CODE     run only modules whose option is CODE (repeatable)
@@ -23,9 +25,12 @@
 #   --cache DIR       CI only: reuse compiled helpers, tests and libraries
 #                     kept in DIR by earlier runs (ci/mutate.sh)
 #
-# Needs only this shell, a C compiler and mkdir. Writes DIR/run.log, one
-# line per assertion; it never summarizes, sorts or deletes anything.
-# Analyze the log on another computer with analysis/analyze.py.
+# Needs only this shell, a C compiler and mkdir. Prints one line per
+# assertion and a final SUMMARY line on standard output (redirect it to
+# keep it); diagnostics go to standard error. Nothing is left behind unless
+# --results DIR is given, which keeps DIR/run.log and the test output.
+# The exit status is 1 if any assertion FAILed (without --results), 3 for
+# an aborted run, 2 for a usage error. Run it as root (or the equivalent).
 
 set -u
 LC_ALL=POSIX
@@ -69,7 +74,8 @@ pc_abs() {
 	esac
 }
 
-pc_results=results
+pc_results=
+pc_ephemeral=no
 pc_resume=no
 pc_only=
 pc_sel_options=
@@ -122,6 +128,25 @@ done
 # (posh), though POSIX.1-2024 exempts @ from -u; shifting avoids it.
 while [ $# -gt 0 ]; do pc_args="$pc_args $1"; shift; done
 
+# No --results: work in a private directory that is removed at the end.
+if [ -z "$pc_results" ]; then
+	[ "$pc_resume" = yes ] && pc_die "--resume needs --results DIR"
+	pc_tb=${TMPDIR:-/tmp}
+	pc_n=0
+	while :; do
+		pc_results=$pc_tb/posixcheck.$$.$pc_n
+		(umask 077; mkdir "$pc_results") 2>/dev/null && break
+		pc_n=$((pc_n + 1))
+		[ "$pc_n" -lt 100 ] || pc_die "cannot create a private directory in $pc_tb"
+	done
+	pc_ephemeral=yes
+	pc_cleanup() {
+		trap '' EXIT HUP INT TERM
+		cd / && rm -rf "$pc_results"
+	}
+	trap 'pc_cleanup' EXIT
+	trap 'exit 130' HUP INT TERM
+fi
 pc_abs "$pc_results"; pc_results=$pc_absv
 pc_abs "$pc_modroot"; pc_modroot=$pc_absv
 if [ -n "$pc_profile" ]; then pc_abs "$pc_profile"; pc_profile=$pc_absv; fi
@@ -934,7 +959,7 @@ if [ "$pc_selftest" = yes ]; then
 	pc_n=1
 	while [ -e "$pc_results/selftest.$pc_n" ]; do pc_n=$((pc_n + 1)); done
 	pc_stdir=$pc_results/selftest.$pc_n
-	printf 'posixcheck: harness self-tests (%s)\n' "$pc_stdir"
+	printf 'posixcheck: harness self-tests (%s)\n' "$pc_stdir" >&2
 	(
 		pc_only= pc_sel_options= pc_args= pc_mutant= pc_variant=
 		pc_ctx "$pc_stdir" "$pc_root/core/selftest/modules" yes
@@ -962,7 +987,7 @@ if [ "$pc_selftest" = yes ]; then
 		done <"$pc_stdir/mismatch"
 		pc_abort "harness self-tests failed (see $pc_stdir)"
 	fi
-	printf 'posixcheck: harness self-tests passed\n'
+	printf 'posixcheck: harness self-tests passed\n' >&2
 fi
 [ "$pc_selftest_only" = yes ] && exit 0
 
@@ -995,4 +1020,21 @@ EOF
 fi
 pc_run_modules
 printf '# finished %s\n' "$("$pc_probe" now)" >>"$ctx_log"
-printf 'posixcheck: results in %s\n' "$ctx_log"
+pc_sum=$(awk -F'\t' '
+	/^#/ { next }
+	{ n[$1]++; total++ }
+	END {
+		printf "SUMMARY total %d", total
+		m = split("PASS FAIL INSPECT UNRESOLVED NOTINUSE UNSUPPORTED UNINITIATED", c, " ")
+		for (i = 1; i <= m; i++) printf " %s %d", c[i], n[c[i]]
+		printf "\n"
+	}' "$ctx_log")
+printf '# %s\n' "$pc_sum" >>"$ctx_log"
+printf '%s\n' "$pc_sum"
+if [ "$pc_ephemeral" = yes ]; then
+	# FAIL count is the 7th word of the summary line.
+	set -- $pc_sum
+	[ "${7:-0}" -eq 0 ] || exit 1
+else
+	printf 'posixcheck: results in %s\n' "$ctx_log" >&2
+fi

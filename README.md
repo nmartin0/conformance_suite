@@ -19,14 +19,23 @@ Status and next steps: `STATUS.md`.
 
 Copy this directory to the system under test and run:
 
-    ./posixcheck.sh                     # everything the system claims
+    ./posixcheck.sh > run.txt           # everything the system claims
     ./posixcheck.sh xsh/open xcu/true   # chosen modules
     ./posixcheck.sh --only XSH.open.003 # one assertion
+    ./posixcheck.sh --results DIR       # keep every file of the run in DIR
     ./posixcheck.sh --help
 
 It needs only the system's own `sh`, a C compiler (`c17`, else `cc`) and
-`mkdir`. It writes `results/run.log` and never deletes anything, so each
-run needs a new `--results` directory (or `--resume` to continue one).
+`mkdir`. Run it as root (or the equivalent: `su`, `sudo`, `pfexec`).
+
+It prints one result line per assertion and a final `SUMMARY` line on
+standard output; redirect that to keep it. Diagnostics go to standard
+error. By default the run is ephemeral: it works in a private temporary
+directory that is removed when the run ends or is interrupted, so it leaves
+no build artifacts or remnants and can be repeated. The exit status is 1 if
+any assertion FAILed. `--results DIR` keeps the whole run in `DIR`
+(`run.log`, each test's output, the builds) for debugging, and `--resume`
+continues such a run.
 
 What a run does, in order:
 
@@ -47,7 +56,7 @@ Requirements on the environment:
 
 - The results directory must not carry default ACLs (some systems apply
   them instead of the umask, which breaks the `O_CREAT` mode tests).
-- Running as root is not required. Tests that need it say so
+- Run as root. Tests that need it say so
   (`needs root`) and are UNRESOLVED without it.
 
 A profile (`--profile FILE`) supplies what the environment provides; see
@@ -78,11 +87,11 @@ A `conditional` assertion names its option in `when`, using the codes of
 example `XSI+CRYPT` for crypt(), which also needs the Encryption Option
 Group, or `TSA+TSS`).
 
-`results/out/<ID>.txt` holds each test's full output.
+With `--results DIR`, `DIR/out/<ID>.txt` holds each test's full output.
 
 ## Analyzing results (on another computer)
 
-Copy `results/` off each system, then:
+Run with `--results DIR` on each system, copy `DIR` off, then:
 
     analysis/analyze.py load db.sqlite results-freebsd/ --name freebsd-15
     analysis/analyze.py load db.sqlite results-netbsd/ --name netbsd-11
