@@ -1,0 +1,71 @@
+# XSH be16toh(), be32toh(), be64toh(), htobe16(), htobe32(), htobe64(), htole16(), htole32(), htole64(), le16toh(), le32toh(), le64toh()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# These may be macros, so the tests apply them directly to volatile objects. The host byte order is never assumed: the representation in memory is
+# inspected through unsigned char.
+
+assertion  XSH.be16toh.001
+anchor     functions/be16toh.html#DESCRIPTION
+anchor     functions/be16toh.html#RETURN VALUE
+class      required
+says       htobe16(), htobe32() and htobe64() produce the big-endian
+           representation: stored in memory, the value 0x0102 gives the
+           bytes 01 02, 0x80ff gives 80 ff, 0x01020304 gives 01 02 03 04,
+           0xf0e1d2c3 gives f0 e1 d2 c3, 0x0102030405060708 gives 01 to 08
+           in order, 0xfedcba9876543210 gives fe dc ba 98 76 54 32 10.
+test       t/001-to-big-endian.c
+
+assertion  XSH.be16toh.002
+anchor     functions/be16toh.html#DESCRIPTION
+anchor     functions/be16toh.html#RETURN VALUE
+class      required
+says       htole16(), htole32() and htole64() produce the little-endian
+           representation: stored in memory, the value 0x0102 gives the
+           bytes 02 01, 0x80ff gives ff 80, 0x01020304 gives 04 03 02 01,
+           0xf0e1d2c3 gives c3 d2 e1 f0, 0x0102030405060708 gives 08 down to
+           01, 0xfedcba9876543210 gives 10 32 54 76 98 ba dc fe.
+test       t/002-to-little-endian.c
+
+assertion  XSH.be16toh.003
+anchor     functions/be16toh.html#DESCRIPTION
+anchor     functions/be16toh.html#RETURN VALUE
+class      required
+says       be16toh(), be32toh() and be64toh() read a big-endian
+           representation: memory holding 01 02 gives 0x0102, 80 ff gives
+           0x80ff, 01 02 03 04 gives 0x01020304, f0 e1 d2 c3 gives
+           0xf0e1d2c3, 01 to 08 gives 0x0102030405060708, fe dc ba 98 76 54
+           32 10 gives 0xfedcba9876543210.
+test       t/003-from-big-endian.c
+
+assertion  XSH.be16toh.004
+anchor     functions/be16toh.html#DESCRIPTION
+anchor     functions/be16toh.html#RETURN VALUE
+class      required
+says       le16toh(), le32toh() and le64toh() read a little-endian
+           representation: memory holding 02 01 gives 0x0102, ff 80 gives
+           0x80ff, 04 03 02 01 gives 0x01020304, c3 d2 e1 f0 gives
+           0xf0e1d2c3, 08 down to 01 gives 0x0102030405060708, 10 32 54 76
+           98 ba dc fe gives 0xfedcba9876543210.
+test       t/004-from-little-endian.c
+
+assertion  XSH.be16toh.005
+anchor     functions/be16toh.html#DESCRIPTION
+anchor     functions/be16toh.html#RETURN VALUE
+class      required
+says       For the values 0, 1, 0xff, 0x100, 0x7fff, 0x8000, 0xffff (16
+           bit), 0x12345678, 0x80000000, 0xffffffff (32 bit) and
+           0x0123456789abcdef, 0x8000000000000000, 0xffffffffffffffff (64
+           bit), beNtoh(htobeN(x)) and leNtoh(htoleN(x)) give x back, and
+           the bytes of htobeN(x) are those of htoleN(x) in reverse order.
+test       t/005-round-trips.c
+
+assertion  XSH.be16toh.006
+anchor     functions/be16toh.html#DESCRIPTION
+anchor     functions/be16toh.html#RETURN VALUE
+class      required
+says       The twelve conversions return unsigned integers of the stated
+           sizes: each 16-bit conversion has type uint16_t, each 32-bit one
+           uint32_t and each 64-bit one uint64_t, and a result with the top
+           bit set stays positive.
+test       t/006-result-types.c

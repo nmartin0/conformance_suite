@@ -1,0 +1,51 @@
+# XSH memcmp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Only the sign of a non-zero result is tested.
+
+assertion  XSH.memcmp.001
+anchor     functions/memcmp.html#DESCRIPTION
+anchor     functions/memcmp.html#RETURN VALUE
+class      required
+says       memcmp() returns 0 for two equal 6-byte arrays that contain a
+           zero byte and bytes above 0x7f, and returns 0 for arrays that
+           differ when n is 0.
+test       t/001-equal.c
+
+assertion  XSH.memcmp.002
+anchor     functions/memcmp.html#DESCRIPTION
+anchor     functions/memcmp.html#RETURN VALUE
+class      required
+says       memcmp() returns a negative value when the first differing byte
+           of the first array is smaller (as unsigned char) and a positive
+           value when it is larger: {0x7f} against {0x80} is negative,
+           {0x80} against {0x01} and {0xff} against {0x00} are positive, {1,
+           9} against {2, 0} is negative, and a zero byte is compared like
+           any other ({a, 0, c} against {a, 0, d} is negative).
+test       t/002-sign.c
+
+assertion  XSH.memcmp.003
+anchor     functions/memcmp.html#DESCRIPTION
+anchor     functions/memcmp.html#RETURN VALUE
+class      required
+says       memcmp() looks only at the first n bytes: {a, b, c, X} against
+           {a, b, c, Y} is equal with n 3 and not equal (negative) with n 4.
+test       t/003-n-bound.c
+
+assertion  XSH.memcmp.004
+anchor     functions/memcmp.html#DESCRIPTION
+anchor     functions/memcmp.html#RETURN VALUE
+class      required
+says       memcmp() of two arrays that each end where an inaccessible page
+           begins, with n equal to their size, examines nothing past them,
+           and with n 0 on the page boundary itself touches nothing.
+test       t/004-no-overread.c
+
+assertion  XSH.memcmp.005
+anchor     functions/memcmp.html#DESCRIPTION
+anchor     functions/memcmp.html#RETURN VALUE
+class      required
+says       memcmp() leaves errno unchanged for equal and for different
+           arrays.
+test       t/005-errno-kept.c

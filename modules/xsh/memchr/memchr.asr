@@ -1,0 +1,61 @@
+# XSH memchr()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Calls go through volatile function pointers so that a compiler cannot fold them. A page-boundary
+# test makes any byte examined past the allowed ones fault.
+
+assertion  XSH.memchr.001
+anchor     functions/memchr.html#DESCRIPTION
+anchor     functions/memchr.html#RETURN VALUE
+class      required
+says       memchr() on "abcabc" returns s+1 for b and s for a with n 6, a
+           null pointer for z, and for c with n 2 a null pointer but s+2
+           with n 3 (the byte at index n is not examined).
+test       t/001-first-match.c
+
+assertion  XSH.memchr.002
+anchor     functions/memchr.html#DESCRIPTION
+anchor     functions/memchr.html#RETURN VALUE
+class      required
+says       memchr() converts c to unsigned char and compares bytes as
+           unsigned char: on {1, 0xe9, 0x7f, 0x80, 0xff} the values 489 and
+           -23 find the 0xe9 byte, -1 and 255 find the 0xff byte, 128 finds
+           the 0x80 byte, 0x17f finds the 0x7f byte, 257 finds the byte 1,
+           and 256 (a zero byte, absent) finds nothing.
+test       t/002-unsigned-conversion.c
+
+assertion  XSH.memchr.003
+anchor     functions/memchr.html#DESCRIPTION
+anchor     functions/memchr.html#RETURN VALUE
+class      required
+says       memchr() with n 4 on {a, 0, b, 0} finds the zero byte at index 1
+           and finds b at index 2 (the search does not stop at a zero byte),
+           and with c 256 (converts to 0) finds index 1.
+test       t/003-null-not-special.c
+
+assertion  XSH.memchr.004
+anchor     functions/memchr.html#DESCRIPTION
+anchor     functions/memchr.html#RETURN VALUE
+class      required
+says       memchr() with n 0 returns a null pointer even though the first
+           byte is the one searched for.
+test       t/004-n-zero.c
+
+assertion  XSH.memchr.005
+anchor     functions/memchr.html#DESCRIPTION
+anchor     functions/memchr.html#RETURN VALUE
+class      required
+says       memchr() examines no byte beyond the first n, and stops at the
+           first match: a four-byte array ending where an inaccessible page
+           begins is searched with n 4 for a present and an absent byte, and
+           a match at its first byte is found even when n extends far into
+           the inaccessible page.
+test       t/005-no-overread.c
+
+assertion  XSH.memchr.006
+anchor     functions/memchr.html#DESCRIPTION
+anchor     functions/memchr.html#RETURN VALUE
+class      required
+says       memchr() leaves errno unchanged.
+test       t/006-errno-kept.c

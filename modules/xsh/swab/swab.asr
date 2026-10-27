@@ -1,0 +1,74 @@
+# XSH swab()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# swab() is XSI. The disposition of the last byte of an odd count is unspecified and never examined.
+# Calls go through volatile function pointers.
+
+assertion  XSH.swab.001
+anchor     functions/swab.html#DESCRIPTION
+anchor     functions/swab.html#RETURN VALUE
+class      conditional
+when       XSI
+says       swab() copies nbytes bytes exchanging each adjacent pair:
+           "abcdef" with nbytes 6 gives "badcfe", and with nbytes 2 on "ab"
+           gives "ba"; the bytes after the nbytes in the destination are
+           unchanged.
+test       t/001-even-count.c
+
+assertion  XSH.swab.002
+anchor     functions/swab.html#DESCRIPTION
+anchor     functions/swab.html#RETURN VALUE
+class      conditional
+when       XSI
+says       swab() treats bytes as plain data: the six bytes {0x00, 0xff,
+           0x80, 0x7f, 0x01, 0xfe} become {0xff, 0x00, 0x7f, 0x80, 0xfe,
+           0x01}, and the source is not modified.
+test       t/002-patterns.c
+
+assertion  XSH.swab.003
+anchor     functions/swab.html#DESCRIPTION
+anchor     functions/swab.html#RETURN VALUE
+class      conditional
+when       XSI
+says       swab() of 1000 bytes of a changing pattern, with source offsets 0
+           to 3 and destination offsets 0 to 3, exchanges each adjacent pair
+           of the 1000 bytes and writes nothing around them.
+test       t/003-large.c
+
+assertion  XSH.swab.004
+anchor     functions/swab.html#DESCRIPTION
+anchor     functions/swab.html#RETURN VALUE
+class      conditional
+when       XSI
+says       swab() with nbytes 0 writes nothing.
+test       t/004-nbytes-zero.c
+
+assertion  XSH.swab.005
+anchor     functions/swab.html#DESCRIPTION
+anchor     functions/swab.html#RETURN VALUE
+class      conditional
+when       XSI
+says       swab() with a negative nbytes (-2, -1 and the most negative
+           ssize_t value) does nothing.
+test       t/005-nbytes-negative.c
+
+assertion  XSH.swab.006
+anchor     functions/swab.html#DESCRIPTION
+anchor     functions/swab.html#RETURN VALUE
+class      conditional
+when       XSI
+says       swab() with an odd nbytes of 5 on "abcde" exchanges the first
+           nbytes-1 bytes: the destination begins "badc" (the disposition of
+           the fifth byte is unspecified and not examined).
+test       t/006-odd-count.c
+
+assertion  XSH.swab.007
+anchor     functions/swab.html#DESCRIPTION
+anchor     functions/swab.html#RETURN VALUE
+class      conditional
+when       XSI
+says       swab() reads no byte beyond the first nbytes and writes none
+           beyond them: a 4-byte source ends at an inaccessible page and a
+           4-byte destination ends at another one.
+test       t/007-no-overread.c

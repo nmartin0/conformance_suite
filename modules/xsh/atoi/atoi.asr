@@ -1,0 +1,48 @@
+# XSH atoi()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Values that cannot be represented are not tested (undefined). Calls go through volatile function pointers.
+
+assertion  XSH.atoi.001
+anchor     functions/atoi.html#DESCRIPTION
+anchor     functions/atoi.html#RETURN VALUE
+class      required
+says       atoi() converts "0", "7", "42", "007", "-17", "+5", "-0" to 0, 7,
+           42, 7, -17, 5, 0.
+test       t/001-values.c
+
+assertion  XSH.atoi.002
+anchor     functions/atoi.html#DESCRIPTION
+anchor     functions/atoi.html#RETURN VALUE
+class      required
+says       atoi() skips leading white space (space, tab, newline, vertical
+           tab, form feed, carriage return) and stops at the first byte that
+           cannot be part of the number: " \t\n\v\f\r12" gives 12, "99
+           bottles" gives 99, "5-3" gives 5, "12abc" gives 12, "-8x" gives
+           -8.
+test       t/002-white-space-and-trailing.c
+
+assertion  XSH.atoi.003
+anchor     functions/atoi.html#DESCRIPTION
+anchor     functions/atoi.html#RETURN VALUE
+class      required
+says       atoi() returns 0 when no conversion can be made: "", " ", "abc",
+           "+", "-", "+ 1".
+test       t/003-no-conversion.c
+
+assertion  XSH.atoi.004
+anchor     functions/atoi.html#DESCRIPTION
+anchor     functions/atoi.html#RETURN VALUE
+class      required
+says       atoi() reads base 10 only: "0x1A" gives 0, "010" gives 10, "1e3"
+           gives 1, "0b11" gives 0.
+test       t/004-base-ten-only.c
+
+assertion  XSH.atoi.005
+anchor     functions/atoi.html#DESCRIPTION
+anchor     functions/atoi.html#RETURN VALUE
+class      required
+says       atoi() converts the decimal text of INT_MAX and of INT_MIN
+           exactly.
+test       t/005-int-limits.c

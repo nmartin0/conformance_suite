@@ -1,0 +1,45 @@
+# XSH imaxdiv()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Results that cannot be represented are not tested (undefined). Calls go through volatile function pointers.
+
+assertion  XSH.imaxdiv.001
+anchor     functions/imaxdiv.html#DESCRIPTION
+anchor     functions/imaxdiv.html#RETURN VALUE
+class      required
+says       imaxdiv() gives quotient truncated toward zero and the remainder
+           that goes with it: (7, 2) gives 3 and 1; (-7, 2) gives -3 and -1;
+           (7, -2) gives -3 and 1; (-7, -2) gives 3 and -1; (1, 5) gives 0
+           and 1; (-1, 5) gives 0 and -1; (6, 3) gives 2 and 0; (0, 5) gives
+           0 and 0.
+test       t/001-truncation.c
+
+assertion  XSH.imaxdiv.002
+anchor     functions/imaxdiv.html#DESCRIPTION
+anchor     functions/imaxdiv.html#RETURN VALUE
+class      required
+says       For many pairs of numerator and denominator of either sign,
+           imaxdiv() gives quot * denom + rem equal to numer, with rem
+           smaller in magnitude than denom and, when non-zero, with the sign
+           of numer.
+test       t/002-identity.c
+
+assertion  XSH.imaxdiv.003
+anchor     functions/imaxdiv.html#DESCRIPTION
+anchor     functions/imaxdiv.html#RETURN VALUE
+class      required
+says       imaxdiv() works beyond 32 bits: (5000000000, 3) gives 1666666666
+           and 2; (-5000000000, 3) gives -1666666666 and -2; (INTMAX_MAX, 1)
+           gives INTMAX_MAX and 0; (INTMAX_MAX, INTMAX_MAX) gives 1 and 0;
+           (-INTMAX_MAX, INTMAX_MAX) gives -1 and 0; (INTMAX_MAX, 2) gives
+           INTMAX_MAX / 2 and 1.
+test       t/003-large-values.c
+
+assertion  XSH.imaxdiv.004
+anchor     functions/imaxdiv.html#DESCRIPTION
+anchor     functions/imaxdiv.html#RETURN VALUE
+class      required
+says       The quot and rem members of the imaxdiv_t result have type
+           intmax_t.
+test       t/004-member-types.c

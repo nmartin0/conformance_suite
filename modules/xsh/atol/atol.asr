@@ -1,0 +1,42 @@
+# XSH atol() and atoll()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Values that cannot be represented are not tested (undefined). Calls go through volatile function pointers.
+
+assertion  XSH.atol.001
+anchor     functions/atol.html#DESCRIPTION
+anchor     functions/atol.html#RETURN VALUE
+class      required
+says       atol() and atoll() convert "0", "42", "-17", "+5", "007",
+           "123456" to 0, 42, -17, 5, 7, 123456.
+test       t/001-values.c
+
+assertion  XSH.atol.002
+anchor     functions/atol.html#DESCRIPTION
+anchor     functions/atol.html#RETURN VALUE
+class      required
+says       atoll() converts "3000000000", "-3000000000" and "5000000000000"
+           exactly, and atol() converts "3000000000" and "-3000000000"
+           exactly when long is wider than 32 bits (otherwise those two are
+           skipped).
+test       t/002-wide-values.c
+
+assertion  XSH.atol.003
+anchor     functions/atol.html#DESCRIPTION
+anchor     functions/atol.html#RETURN VALUE
+class      required
+says       atol() and atoll() skip leading white space of the POSIX locale
+           and stop at the first byte that cannot be part of the number, and
+           return 0 when no conversion can be made: " \t\n\v\f\r12" gives
+           12, "99 bottles" gives 99, "-8x" gives -8, "0x1A" gives 0, "" and
+           "abc" and "+" give 0.
+test       t/003-white-space-and-trailing.c
+
+assertion  XSH.atol.004
+anchor     functions/atol.html#DESCRIPTION
+anchor     functions/atol.html#RETURN VALUE
+class      required
+says       atol() converts the decimal text of LONG_MAX and LONG_MIN
+           exactly; atoll() does the same for LLONG_MAX and LLONG_MIN.
+test       t/004-type-limits.c

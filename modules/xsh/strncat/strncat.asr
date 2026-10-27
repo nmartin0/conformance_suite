@@ -1,0 +1,72 @@
+# XSH strncat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Overlapping arrays are never used (undefined). Calls go through volatile function pointers.
+
+assertion  XSH.strncat.001
+anchor     functions/strncat.html#DESCRIPTION
+anchor     functions/strncat.html#RETURN VALUE
+class      required
+says       strncat() on "ab" with the source "cdef" and n 2 gives "abcd",
+           with a terminator written after d (the byte there was X before),
+           and returns the destination.
+test       t/001-truncated.c
+
+assertion  XSH.strncat.002
+anchor     functions/strncat.html#DESCRIPTION
+anchor     functions/strncat.html#RETURN VALUE
+class      required
+says       strncat() of "c" onto "ab" with n 1000 gives "abc" and writes
+           nothing beyond the terminator: the destination holds exactly 4
+           bytes and ends at an inaccessible page.
+test       t/002-short-source-large-n.c
+
+assertion  XSH.strncat.003
+anchor     functions/strncat.html#DESCRIPTION
+anchor     functions/strncat.html#RETURN VALUE
+class      required
+says       strncat() with n 0 leaves the destination string "ab" unchanged
+           and terminated and returns the destination.
+test       t/003-n-zero.c
+
+assertion  XSH.strncat.004
+anchor     functions/strncat.html#DESCRIPTION
+anchor     functions/strncat.html#RETURN VALUE
+class      required
+says       strncat() of "cd" onto "ab" with n 2 gives "abcd" and still
+           appends the terminator (the byte after d was X before).
+test       t/004-n-equals-length.c
+
+assertion  XSH.strncat.005
+anchor     functions/strncat.html#DESCRIPTION
+anchor     functions/strncat.html#RETURN VALUE
+class      required
+says       strncat() with the 3-byte source {c, 0, d} and n 3 appends only
+           c: the result is "abc" with a terminator.
+test       t/005-null-stops.c
+
+assertion  XSH.strncat.006
+anchor     functions/strncat.html#DESCRIPTION
+anchor     functions/strncat.html#RETURN VALUE
+class      required
+says       The first source byte overwrites the destination terminator: the
+           destination bytes {a, 0, Z, Z} and the source "bc" with n 2 give
+           {a, b, c, 0}.
+test       t/006-overwrites-terminator.c
+
+assertion  XSH.strncat.007
+anchor     functions/strncat.html#DESCRIPTION
+anchor     functions/strncat.html#RETURN VALUE
+class      required
+says       strncat() leaves errno unchanged.
+test       t/007-errno-kept.c
+
+assertion  XSH.strncat.008
+anchor     functions/strncat.html#DESCRIPTION
+anchor     functions/strncat.html#RETURN VALUE
+class      required
+says       strncat() reads no more than n source bytes: a 3-byte source
+           without terminator ends at an inaccessible page and is appended
+           with n 3.
+test       t/008-no-overread.c

@@ -1,0 +1,65 @@
+# XSH memmove()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Overlap is the point of this function: both directions are tested.
+
+assertion  XSH.memmove.001
+anchor     functions/memmove.html#DESCRIPTION
+anchor     functions/memmove.html#RETURN VALUE
+class      required
+says       memmove() copies n bytes between separate objects, returns the
+           first argument, and leaves neighbouring bytes unchanged.
+test       t/001-disjoint.c
+
+assertion  XSH.memmove.002
+anchor     functions/memmove.html#DESCRIPTION
+anchor     functions/memmove.html#RETURN VALUE
+class      required
+says       memmove() of 6 bytes of "0123456789" from offset 0 to offset 2
+           (destination above the source, overlapping) gives "0101234589"
+           and returns the destination.
+test       t/002-overlap-up.c
+
+assertion  XSH.memmove.003
+anchor     functions/memmove.html#DESCRIPTION
+anchor     functions/memmove.html#RETURN VALUE
+class      required
+says       memmove() of 6 bytes of "0123456789" from offset 2 to offset 0
+           (destination below the source, overlapping) gives "2345676789"
+           and returns the destination.
+test       t/003-overlap-down.c
+
+assertion  XSH.memmove.004
+anchor     functions/memmove.html#DESCRIPTION
+anchor     functions/memmove.html#RETURN VALUE
+class      required
+says       memmove() with the destination equal to the source leaves the
+           bytes unchanged and returns it.
+test       t/004-same-pointer.c
+
+assertion  XSH.memmove.005
+anchor     functions/memmove.html#DESCRIPTION
+anchor     functions/memmove.html#RETURN VALUE
+class      required
+says       For every source offset 0 to 15, destination offset 0 to 15 and
+           sizes 0, 1, 2, 5, 8, 13 and 16 inside one 64-byte array,
+           memmove() leaves the array as if the source bytes had been copied
+           through a separate temporary array.
+test       t/005-overlap-sweep.c
+
+assertion  XSH.memmove.006
+anchor     functions/memmove.html#DESCRIPTION
+anchor     functions/memmove.html#RETURN VALUE
+class      required
+says       memmove() with n 0 leaves the destination unchanged and returns
+           it.
+test       t/006-n-zero.c
+
+assertion  XSH.memmove.007
+anchor     functions/memmove.html#DESCRIPTION
+anchor     functions/memmove.html#RETURN VALUE
+class      required
+says       memmove() leaves errno unchanged, for disjoint and for
+           overlapping objects.
+test       t/007-errno-kept.c

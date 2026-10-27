@@ -1,0 +1,59 @@
+# XSH strstr()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Calls go through volatile function pointers.
+
+assertion  XSH.strstr.001
+anchor     functions/strstr.html#DESCRIPTION
+anchor     functions/strstr.html#RETURN VALUE
+class      required
+says       strstr() on "abcabc" returns s+2 for "ca", s for "abc", s+1 for
+           "bc", s+2 for "c"; a null pointer for "abd" and "x"; the whole
+           string finds itself (s).
+test       t/001-first-occurrence.c
+
+assertion  XSH.strstr.002
+anchor     functions/strstr.html#DESCRIPTION
+anchor     functions/strstr.html#RETURN VALUE
+class      required
+says       strstr() with an empty second string returns the first string
+           pointer, also when the first string is empty.
+test       t/002-empty-needle.c
+
+assertion  XSH.strstr.003
+anchor     functions/strstr.html#DESCRIPTION
+anchor     functions/strstr.html#RETURN VALUE
+class      required
+says       strstr() returns a null pointer when the needle is longer than
+           the haystack ("abc", "abcd"), when the haystack is empty and the
+           needle is not, and when the needle is only a prefix match at the
+           end ("abc", "cd"); the final byte alone is found ("abc", "c" at
+           index 2).
+test       t/003-absent.c
+
+assertion  XSH.strstr.004
+anchor     functions/strstr.html#DESCRIPTION
+anchor     functions/strstr.html#RETURN VALUE
+class      required
+says       strstr() finds the first full match after partial ones: "aab" in
+           "aaab" is at index 1, "abac" in "ababac" at index 2, "issip" in
+           "mississippi" at index 4, "issi" in "mississippi" at index 1,
+           "aaa" in "aabaaa" at index 3.
+test       t/004-partial-matches.c
+
+assertion  XSH.strstr.005
+anchor     functions/strstr.html#DESCRIPTION
+anchor     functions/strstr.html#RETURN VALUE
+class      required
+says       strstr() leaves errno unchanged.
+test       t/005-errno-kept.c
+
+assertion  XSH.strstr.006
+anchor     functions/strstr.html#DESCRIPTION
+anchor     functions/strstr.html#RETURN VALUE
+class      required
+says       strstr() reads no byte beyond the terminators: the haystack "abc"
+           ends at an inaccessible page and the needle "cx" ends at another
+           one.
+test       t/006-no-overread.c

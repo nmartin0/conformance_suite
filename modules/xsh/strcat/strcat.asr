@@ -1,0 +1,66 @@
+# XSH strcat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Overlapping arrays are never used (undefined). Calls go through volatile function pointers.
+
+assertion  XSH.strcat.001
+anchor     functions/strcat.html#DESCRIPTION
+anchor     functions/strcat.html#RETURN VALUE
+class      required
+says       strcat() appends the source including its terminator to the end
+           of the destination string and returns the destination: "ab" and
+           "cd" give "abcd" with a terminator after d.
+test       t/001-append.c
+
+assertion  XSH.strcat.002
+anchor     functions/strcat.html#DESCRIPTION
+anchor     functions/strcat.html#RETURN VALUE
+class      required
+says       strcat() of an empty source leaves "ab" unchanged and terminated;
+           of "xyz" onto an empty destination gives "xyz"; of an empty
+           string onto an empty destination gives an empty string.
+test       t/002-empty-operands.c
+
+assertion  XSH.strcat.003
+anchor     functions/strcat.html#DESCRIPTION
+anchor     functions/strcat.html#RETURN VALUE
+class      required
+says       The first byte of the source overwrites the terminator of the
+           destination: with the destination bytes {a, 0, Z, Z, Z} strcat()
+           of "bc" gives {a, b, c, 0, Z}.
+test       t/003-overwrites-terminator.c
+
+assertion  XSH.strcat.004
+anchor     functions/strcat.html#DESCRIPTION
+anchor     functions/strcat.html#RETURN VALUE
+class      required
+says       strcat() preserves bytes above 0x7f: appending the bytes {0x80,
+           0xff, 0xe9} to "a" gives {a, 0x80, 0xff, 0xe9, 0}.
+test       t/004-high-bytes.c
+
+assertion  XSH.strcat.005
+anchor     functions/strcat.html#DESCRIPTION
+anchor     functions/strcat.html#RETURN VALUE
+class      required
+says       The returned pointer can be used to append again:
+           strcat(strcat(strcat(d, "a"), "bc"), "def") on an empty
+           destination gives "abcdef".
+test       t/005-chained.c
+
+assertion  XSH.strcat.006
+anchor     functions/strcat.html#DESCRIPTION
+anchor     functions/strcat.html#RETURN VALUE
+class      required
+says       strcat() leaves errno unchanged.
+test       t/006-errno-kept.c
+
+assertion  XSH.strcat.007
+anchor     functions/strcat.html#DESCRIPTION
+anchor     functions/strcat.html#RETURN VALUE
+class      required
+says       strcat() touches nothing beyond the result and the source
+           terminator: the destination "ab" has room for exactly "abcd" and
+           a terminator, ending at an inaccessible page, and the source "cd"
+           ends at another one with its terminator as the last byte.
+test       t/007-no-overread-overwrite.c

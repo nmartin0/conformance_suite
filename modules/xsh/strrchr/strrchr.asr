@@ -1,0 +1,55 @@
+# XSH strrchr()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Bytes above 0x7f are passed as the value of a char, so that the conversion to char is exact. Calls go through volatile function pointers.
+
+assertion  XSH.strrchr.001
+anchor     functions/strrchr.html#DESCRIPTION
+anchor     functions/strrchr.html#RETURN VALUE
+class      required
+says       strrchr() on "abcabc" returns s+4 for b, s+3 for a and s+5 for c,
+           a null pointer for z; for a byte that occurs once it returns that
+           position (d in "abcd" is s+3).
+test       t/001-last-occurrence.c
+
+assertion  XSH.strrchr.002
+anchor     functions/strrchr.html#DESCRIPTION
+anchor     functions/strrchr.html#RETURN VALUE
+class      required
+says       strrchr() with c 0 returns the address of the terminator: s+6 for
+           "abcabc" and s for the empty string.
+test       t/002-terminator.c
+
+assertion  XSH.strrchr.003
+anchor     functions/strrchr.html#DESCRIPTION
+anchor     functions/strrchr.html#RETURN VALUE
+class      required
+says       strrchr() finds a byte above 0x7f given as the value of a char:
+           in {0xe9, a, 0xe9, 0} the char 0xe9 is last at index 2.
+test       t/003-high-byte.c
+
+assertion  XSH.strrchr.004
+anchor     functions/strrchr.html#DESCRIPTION
+anchor     functions/strrchr.html#RETURN VALUE
+class      required
+says       strrchr() does not look past the terminator: in the array {a, b,
+           0, a, y} the last a is at index 0.
+test       t/004-stops-at-terminator.c
+
+assertion  XSH.strrchr.005
+anchor     functions/strrchr.html#DESCRIPTION
+anchor     functions/strrchr.html#RETURN VALUE
+class      required
+says       strrchr() leaves errno unchanged for a found, a missing and a
+           terminator search.
+test       t/005-errno-kept.c
+
+assertion  XSH.strrchr.006
+anchor     functions/strrchr.html#DESCRIPTION
+anchor     functions/strrchr.html#RETURN VALUE
+class      required
+says       strrchr() reads no byte beyond the terminator: the string "abc"
+           with its terminator ends at an inaccessible page and is searched
+           for an absent byte, a present byte and the terminator.
+test       t/006-no-overread.c

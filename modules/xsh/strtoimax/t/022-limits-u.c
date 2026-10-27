@@ -1,0 +1,55 @@
+/*
+ * strtoimax: limits u.
+ * Copyright (c) 2026 Nicholas Martin. All rights reserved.
+ *
+ * ASSERTION XSH.strtoimax.022
+ */
+#define IC_UMAX
+#include "ic.h"
+#include <stdio.h>
+#include <string.h>
+
+/* Adds one to the magnitude of the decimal number in s (a leading minus is kept). */
+static void inc_dec(char *s)
+{
+	size_t n = strlen(s);
+
+	while (n > 0) {
+		n--;
+		if (s[n] == '9') {
+			s[n] = '0';
+			continue;
+		}
+		if (s[n] >= '0' && s[n] <= '8') {
+			s[n]++;
+			return;
+		}
+	}
+	pc_unresolved("cannot increment a number string");
+}
+
+int main(void)
+{
+	int j, err;
+	char *e;
+	R r;
+	char smax[IC_N][64], sover[IC_N][64];
+	pc_begin("XSH.strtoimax.022");
+	for (j = 0; j < IC_N; j++) {
+		pc_check(snprintf(smax[j], 64, "%ju", (uintmax_t)ic_fns[j].max) > 0, "snprintf failed");
+		strcpy(sover[j], smax[j]);
+		inc_dec(sover[j]);
+	}
+	pc_test();
+	for (j = 0; j < IC_N; j++) {
+		errno = EDOM;
+		r = ic_fns[j].f(smax[j], &e, 10);
+		err = errno;
+		pc_check(r == ic_fns[j].max && err == EDOM && e == smax[j] + strlen(smax[j]), "%s() of the maximum's digits was not converted exactly", ic_fns[j].name);
+		errno = 0;
+		r = ic_fns[j].f(sover[j], &e, 10);
+		err = errno;
+		pc_check(r == ic_fns[j].max && err == ERANGE, "%s() of one above the maximum did not give the maximum with ERANGE", ic_fns[j].name);
+	}
+	pc_pass();
+}

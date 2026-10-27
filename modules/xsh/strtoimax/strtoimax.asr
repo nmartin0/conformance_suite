@@ -1,0 +1,247 @@
+# XSH strtoimax(), strtoumax()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+
+assertion  XSH.strtoimax.001
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoimax(): base 10 strings "0", "7", "42", "0042", "+17" give 0,
+           7, 42, 42, 17 with the end pointer at the null; base 0 "123" gives
+           123.
+test       t/001-decimal.c
+
+assertion  XSH.strtoimax.002
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoimax(): base 2 "1011" gives 11; base 8 "777" gives 511; base
+           16 "ff", "FF", "0xff", "0XfF" give 255; base 36 "zz" and "ZZ" give
+           1295; base 12 "b9" gives 141.
+test       t/002-bases.c
+
+assertion  XSH.strtoimax.003
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoimax() with base 0: "0x1F" and "0X1f" give 31, "017" gives 15,
+           "0" gives 0, "10" gives 10; "08" converts only the "0" and ends at
+           the 8; "0x" and "0xg" convert only the "0" and end at the x.
+test       t/003-base-zero.c
+
+assertion  XSH.strtoimax.004
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoimax(): digits not below the base end the number: base 2
+           "1012" gives 5 ending at '2'; base 8 "789" gives 7 ending at '8';
+           base 16 "1fg" gives 31 ending at 'g'; base 10 "12ab" gives 12
+           ending at 'a'; base 16 "0x" gives 0 ending at the 'x'.
+test       t/004-digit-limits.c
+
+assertion  XSH.strtoimax.005
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoimax() skip leading white space of the POSIX locale (space,
+           tab, newline, vertical tab, form feed, carriage return, singly or
+           in a run) before "12" (also before "+12") and put the end pointer
+           at the null; white space after the digits is left unconsumed.
+test       t/005-white-space.c
+
+assertion  XSH.strtoimax.006
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoimax(): "99 bottles" (base 10) gives 99 with the end pointer
+           at the space; "5-3" gives 5 ending at '-'; "1_000" gives 1 ending
+           at '_'.
+test       t/006-end-pointer.c
+
+assertion  XSH.strtoimax.007
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+anchor     functions/strtoimax.html#ERRORS
+class      required
+says       strtoimax(): for "", "   ", "xyz", "+", "-", "+ 1" the result is 0,
+           the end pointer equals the start of the whole string (white space
+           included), and errno is 0 or EINVAL.
+test       t/007-no-conversion.c
+
+assertion  XSH.strtoimax.008
+anchor     functions/strtoimax.html#RETURN VALUE
+anchor     functions/strtoimax.html#ERRORS
+class      required
+says       strtoimax(): a decimal string of 41 nines gives the maximum of the
+           type with ERANGE; with a leading minus it gives the minimum of the
+           type with ERANGE; the end pointer is after the digits.
+test       t/008-overflow.c
+
+assertion  XSH.strtoimax.009
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+anchor     functions/strtoimax.html#ERRORS
+class      required
+says       strtoimax(): the decimal string of the type's maximum converts
+           exactly with errno unchanged; the string one above it gives the
+           maximum with ERANGE; likewise the string of the minimum converts
+           exactly and the string one below it gives the minimum with ERANGE.
+test       t/009-limits.c
+
+assertion  XSH.strtoimax.010
+anchor     functions/strtoimax.html#DESCRIPTION
+class      required
+says       strtoimax(): a successful conversion leaves errno at the value it
+           had before (EDOM is stored before the call).
+test       t/010-errno-kept.c
+
+assertion  XSH.strtoimax.011
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoimax() with a null end pointer return 77 for "77xyz" and 0 for
+           "junk" without crashing.
+test       t/011-null-endptr.c
+
+assertion  XSH.strtoimax.012
+anchor     functions/strtoimax.html#ERRORS
+class      disputed
+says       strtoimax() with base 37, base 1 and base -1 on "10" fail with
+           errno EINVAL.
+note       disputed (Q-119): the page defines subject sequences only for base 0
+           and for 2 to 36 and requires EINVAL when the base is 'not
+           supported'; it does not say that every other base is unsupported,
+           so an implementation might give base 1 or 37 a meaning without
+           violating the text. The test requires EINVAL for 1, 37 and -1.
+test       t/012-bad-base.c
+
+assertion  XSH.strtoimax.013
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoimax(): with a minus sign the value is negated: base 10 "-17"
+           gives -17, base 16 "-0x1f" gives -31, base 0 "-017" gives -15, base
+           2 "-101" gives -5, and "-0" gives 0.
+test       t/013-negative.c
+
+assertion  XSH.strtoimax.014
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoumax(): base 10 strings "0", "7", "42", "0042", "+17" give 0,
+           7, 42, 42, 17 with the end pointer at the null; base 0 "123" gives
+           123.
+test       t/014-decimal-u.c
+
+assertion  XSH.strtoimax.015
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoumax(): base 2 "1011" gives 11; base 8 "777" gives 511; base
+           16 "ff", "FF", "0xff", "0XfF" give 255; base 36 "zz" and "ZZ" give
+           1295; base 12 "b9" gives 141.
+test       t/015-bases-u.c
+
+assertion  XSH.strtoimax.016
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoumax() with base 0: "0x1F" and "0X1f" give 31, "017" gives 15,
+           "0" gives 0, "10" gives 10; "08" converts only the "0" and ends at
+           the 8; "0x" and "0xg" convert only the "0" and end at the x.
+test       t/016-base-zero-u.c
+
+assertion  XSH.strtoimax.017
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoumax(): digits not below the base end the number: base 2
+           "1012" gives 5 ending at '2'; base 8 "789" gives 7 ending at '8';
+           base 16 "1fg" gives 31 ending at 'g'; base 10 "12ab" gives 12
+           ending at 'a'; base 16 "0x" gives 0 ending at the 'x'.
+test       t/017-digit-limits-u.c
+
+assertion  XSH.strtoimax.018
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoumax() skip leading white space of the POSIX locale (space,
+           tab, newline, vertical tab, form feed, carriage return, singly or
+           in a run) before "12" (also before "+12") and put the end pointer
+           at the null; white space after the digits is left unconsumed.
+test       t/018-white-space-u.c
+
+assertion  XSH.strtoimax.019
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoumax(): "99 bottles" (base 10) gives 99 with the end pointer
+           at the space; "5-3" gives 5 ending at '-'; "1_000" gives 1 ending
+           at '_'.
+test       t/019-end-pointer-u.c
+
+assertion  XSH.strtoimax.020
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+anchor     functions/strtoimax.html#ERRORS
+class      required
+says       strtoumax(): for "", "   ", "xyz", "+", "-", "+ 1" the result is 0,
+           the end pointer equals the start of the whole string (white space
+           included), and errno is 0 or EINVAL.
+test       t/020-no-conversion-u.c
+
+assertion  XSH.strtoimax.021
+anchor     functions/strtoimax.html#RETURN VALUE
+anchor     functions/strtoimax.html#ERRORS
+class      required
+says       strtoumax(): a decimal string of 41 nines gives the maximum of the
+           type with ERANGE; with a leading minus it gives the maximum as well
+           (negation is done in the unsigned type) with ERANGE; the end
+           pointer is after the digits.
+test       t/021-overflow-u.c
+
+assertion  XSH.strtoimax.022
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+anchor     functions/strtoimax.html#ERRORS
+class      required
+says       strtoumax(): the decimal string of the type's maximum converts
+           exactly with errno unchanged; the string one above it gives the
+           maximum with ERANGE.
+test       t/022-limits-u.c
+
+assertion  XSH.strtoimax.023
+anchor     functions/strtoimax.html#DESCRIPTION
+class      required
+says       strtoumax(): a successful conversion leaves errno at the value it
+           had before (EDOM is stored before the call).
+test       t/023-errno-kept-u.c
+
+assertion  XSH.strtoimax.024
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoumax() with a null end pointer return 77 for "77xyz" and 0 for
+           "junk" without crashing.
+test       t/024-null-endptr-u.c
+
+assertion  XSH.strtoimax.025
+anchor     functions/strtoimax.html#ERRORS
+class      disputed
+says       strtoumax() with base 37, base 1 and base -1 on "10" fail with
+           errno EINVAL.
+note       disputed (Q-119): the page defines subject sequences only for base 0
+           and for 2 to 36 and requires EINVAL when the base is 'not
+           supported'; it does not say that every other base is unsupported,
+           so an implementation might give base 1 or 37 a meaning without
+           violating the text. The test requires EINVAL for 1, 37 and -1.
+test       t/025-bad-base-u.c
+
+assertion  XSH.strtoimax.026
+anchor     functions/strtoimax.html#DESCRIPTION
+anchor     functions/strtoimax.html#RETURN VALUE
+class      required
+says       strtoumax(): a minus sign negates in the unsigned type: "-1" gives
+           the maximum of the type and "-2" the maximum minus one, both with
+           errno unchanged; "-0" gives 0; base 16 "-0x1" gives the maximum.
+test       t/026-negative-u.c

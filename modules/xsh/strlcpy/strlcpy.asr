@@ -1,0 +1,146 @@
+# XSH strlcpy() and strlcat()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Overlapping arrays are never used (undefined). A destination holding no terminator is used only for the return value of strlcat().
+# Calls go through volatile function pointers.
+
+assertion  XSH.strlcpy.001
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcpy() of "abc" into a 16-byte array with dstsize 16 stores
+           "abc" and a terminator and returns 3.
+test       t/001-copy-fits.c
+
+assertion  XSH.strlcpy.002
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcpy() of "abcdef" with dstsize 4 stores "abc" and a
+           terminator, leaves the byte after unchanged, and returns 6 (the
+           length of the source).
+test       t/002-copy-truncated.c
+
+assertion  XSH.strlcpy.003
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcpy() with dstsize 0 returns the length of the source
+           ("abcdef" gives 6) and writes nothing.
+test       t/003-copy-dstsize-zero.c
+
+assertion  XSH.strlcpy.004
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcpy() with dstsize 1 stores only a terminator, leaves the
+           next byte unchanged, and returns the length of the source.
+test       t/004-copy-dstsize-one.c
+
+assertion  XSH.strlcpy.005
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcpy() of "abc": dstsize 4 stores "abc" and a terminator and
+           returns 3; dstsize 3 stores "ab" and a terminator and returns 3.
+test       t/005-copy-exact-fit.c
+
+assertion  XSH.strlcpy.006
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcpy() of an empty source stores only a terminator and returns
+           0; of the array {a, b, 0, c, d} it copies "ab", a terminator and
+           not the bytes after, leaving the following destination byte
+           unchanged, and returns 2.
+test       t/006-copy-empty-and-nul.c
+
+assertion  XSH.strlcpy.007
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcpy() leaves errno unchanged, with and without truncation.
+test       t/007-copy-errno-kept.c
+
+assertion  XSH.strlcpy.008
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcat() of "cd" onto "ab" in a 16-byte array with dstsize 16
+           gives "abcd" and a terminator and returns 4.
+test       t/008-cat-fits.c
+
+assertion  XSH.strlcpy.009
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcat() of "cdefg" onto "ab" with dstsize 5 gives "abcd" and a
+           terminator, leaves the following byte unchanged, and returns 7 (2
+           plus the length of the source).
+test       t/009-cat-truncated.c
+
+assertion  XSH.strlcpy.010
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcat() onto "ab" with dstsize 3 (no room for more) leaves
+           "ab", appends nothing and returns 2 plus the length of the source
+           (5 for "xyz"); with dstsize 2 (no room even for a terminator
+           after "ab") it returns 2 plus the length of the source too, and
+           the first two bytes remain a and b.
+test       t/010-cat-no-room.c
+
+assertion  XSH.strlcpy.011
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcat() onto a destination with no terminator within dstsize (4
+           non-null bytes, dstsize 4) returns 4 plus the length of the
+           source (7 for "xyz"), the value strnlen(dst, dstsize) +
+           strlen(src).
+test       t/011-cat-unterminated-dst.c
+
+assertion  XSH.strlcpy.012
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcat() with dstsize 0 returns the length of the source ("xyz"
+           gives 3) and writes nothing to the destination "ab".
+test       t/012-cat-dstsize-zero.c
+
+assertion  XSH.strlcpy.013
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcat() of an empty source leaves "ab" unchanged and returns 2;
+           onto an empty destination "xyz" is copied (return 3) with a
+           terminator.
+test       t/013-cat-empty-operands.c
+
+assertion  XSH.strlcpy.014
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcat() appends only up to the source terminator: the array {c,
+           0, d} onto "ab" gives "abc", a terminator, and returns 3, leaving
+           the byte after the terminator unchanged.
+test       t/014-cat-nul-stops.c
+
+assertion  XSH.strlcpy.015
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcat() leaves errno unchanged, with and without truncation.
+test       t/015-cat-errno-kept.c
+
+assertion  XSH.strlcpy.016
+anchor     functions/strlcpy.html#DESCRIPTION
+anchor     functions/strlcpy.html#RETURN VALUE
+class      required
+says       strlcpy() and strlcat() write no byte beyond dstsize: the
+           destination has exactly dstsize bytes and ends at an inaccessible
+           page (strlcpy of "abcdef" into 4 bytes, strlcat of "cdefg" onto
+           "ab" in 5 bytes), and the source string "cdefg" is stored just
+           before another inaccessible page.
+test       t/016-no-overwrite.c

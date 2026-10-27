@@ -1,0 +1,31 @@
+# XSH imaxabs()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# imaxabs(INTMAX_MIN) is undefined and not tested. Calls go through volatile function pointers.
+
+assertion  XSH.imaxabs.001
+anchor     functions/imaxabs.html#DESCRIPTION
+anchor     functions/imaxabs.html#RETURN VALUE
+class      required
+says       imaxabs() returns 0 for 0, 1 for 1 and -1, 12345 for 12345 and
+           -12345, and 127 for -127.
+test       t/001-small.c
+
+assertion  XSH.imaxabs.002
+anchor     functions/imaxabs.html#DESCRIPTION
+anchor     functions/imaxabs.html#RETURN VALUE
+class      required
+says       imaxabs() works on values beyond 32 bits: -5000000000 and
+           5000000000 both give 5000000000, and -4294967296 gives
+           4294967296.
+test       t/002-large.c
+
+assertion  XSH.imaxabs.003
+anchor     functions/imaxabs.html#DESCRIPTION
+anchor     functions/imaxabs.html#RETURN VALUE
+class      required
+says       imaxabs() of INTMAX_MAX is INTMAX_MAX, of -INTMAX_MAX is
+           INTMAX_MAX, and of INTMAX_MIN+1 is INTMAX_MAX (INTMAX_MIN itself
+           is not tested).
+test       t/003-extremes.c

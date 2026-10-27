@@ -1,0 +1,54 @@
+# XSH memset()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Calls go through volatile function pointers.
+
+assertion  XSH.memset.001
+anchor     functions/memset.html#DESCRIPTION
+anchor     functions/memset.html#RETURN VALUE
+class      required
+says       memset() stores the byte in exactly the first n bytes and leaves
+           the others unchanged (5 bytes of 0x5a into the middle of a
+           12-byte array of 0xaa) and returns its first argument.
+test       t/001-fill.c
+
+assertion  XSH.memset.002
+anchor     functions/memset.html#DESCRIPTION
+anchor     functions/memset.html#RETURN VALUE
+class      required
+says       memset() converts the value to unsigned char: 0x1a5 stores 0xa5,
+           -1 stores 0xff, 256 stores 0, 0x80 stores 0x80.
+test       t/002-unsigned-conversion.c
+
+assertion  XSH.memset.003
+anchor     functions/memset.html#DESCRIPTION
+anchor     functions/memset.html#RETURN VALUE
+class      required
+says       memset() with n 0 changes nothing and returns its first argument.
+test       t/003-n-zero.c
+
+assertion  XSH.memset.004
+anchor     functions/memset.html#DESCRIPTION
+anchor     functions/memset.html#RETURN VALUE
+class      required
+says       memset() fills exactly n bytes for offsets 0 to 7 and sizes 1, 3,
+           7, 8, 9, 15, 16, 17, 31, 33 and 257 and leaves the bytes around
+           them unchanged.
+test       t/004-alignments.c
+
+assertion  XSH.memset.005
+anchor     functions/memset.html#DESCRIPTION
+anchor     functions/memset.html#RETURN VALUE
+class      required
+says       memset() writes no byte beyond the n requested: the last 8 bytes
+           before an inaccessible page are filled, and n 0 at the boundary
+           writes nothing.
+test       t/005-no-overwrite.c
+
+assertion  XSH.memset.006
+anchor     functions/memset.html#DESCRIPTION
+anchor     functions/memset.html#RETURN VALUE
+class      required
+says       memset() leaves errno unchanged.
+test       t/006-errno-kept.c

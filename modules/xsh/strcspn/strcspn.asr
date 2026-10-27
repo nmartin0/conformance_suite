@@ -1,0 +1,50 @@
+# XSH strcspn()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Calls go through volatile function pointers.
+
+assertion  XSH.strcspn.001
+anchor     functions/strcspn.html#DESCRIPTION
+anchor     functions/strcspn.html#RETURN VALUE
+class      required
+says       strcspn() returns the length of the initial segment free of bytes
+           from the second string: ("abcdef", "dc") gives 2, ("abc", "a")
+           gives 0, ("abc", "xyz") gives 3 (the whole string), ("hello
+           world", " ") gives 5, ("a,b;c", ";,") gives 1.
+test       t/001-basic.c
+
+assertion  XSH.strcspn.002
+anchor     functions/strcspn.html#DESCRIPTION
+anchor     functions/strcspn.html#RETURN VALUE
+class      required
+says       strcspn() with an empty second string returns the length of the
+           first ("abc" gives 3, "" gives 0), and with an empty first string
+           returns 0; the terminator of the first string is not a member of
+           any set.
+test       t/002-empty-operands.c
+
+assertion  XSH.strcspn.003
+anchor     functions/strcspn.html#DESCRIPTION
+anchor     functions/strcspn.html#RETURN VALUE
+class      required
+says       strcspn() handles bytes above 0x7f as ordinary values: ({0xe9, a,
+           0}, {0xe9, 0}) gives 0, ({a, 0xe9, 0}, {0xe9, 0}) gives 1, ({a,
+           0xff, 0}, {0xe9, 0}) gives 2.
+test       t/003-high-bytes.c
+
+assertion  XSH.strcspn.004
+anchor     functions/strcspn.html#DESCRIPTION
+anchor     functions/strcspn.html#RETURN VALUE
+class      required
+says       strcspn() leaves errno unchanged.
+test       t/004-errno-kept.c
+
+assertion  XSH.strcspn.005
+anchor     functions/strcspn.html#DESCRIPTION
+anchor     functions/strcspn.html#RETURN VALUE
+class      required
+says       strcspn() reads no byte beyond the terminators: the first string
+           "abc" ends at an inaccessible page and the second string "cx"
+           ends at another one.
+test       t/005-no-overread.c

@@ -1,0 +1,59 @@
+# XSH strncmp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Only the sign of a non-zero result is tested.
+
+assertion  XSH.strncmp.001
+anchor     functions/strncmp.html#DESCRIPTION
+anchor     functions/strncmp.html#RETURN VALUE
+class      required
+says       strncmp() compares at most n bytes: "abcX" and "abcY" are equal
+           with n 3 and the first is less with n 4; "abc" and "abd" are
+           equal with n 2 and different with n 3.
+test       t/001-n-bound.c
+
+assertion  XSH.strncmp.002
+anchor     functions/strncmp.html#DESCRIPTION
+anchor     functions/strncmp.html#RETURN VALUE
+class      required
+says       strncmp() stops at a terminator in both: {a, b, 0, X} and {a, b,
+           0, Y} are equal with n 4, and "ab" against "ab" with n 100 is
+           equal; a terminator against a byte is a difference ("ab" against
+           "abc" with n 3 is negative).
+test       t/002-stops-at-terminator.c
+
+assertion  XSH.strncmp.003
+anchor     functions/strncmp.html#DESCRIPTION
+anchor     functions/strncmp.html#RETURN VALUE
+class      required
+says       strncmp() compares bytes as unsigned char: {0x7f} is less than
+           {0x80}, {0xff} is greater than "a", and only the sign of the
+           first differing pair counts ("a9" against "b0" with n 2 is
+           negative).
+test       t/003-unsigned-sign.c
+
+assertion  XSH.strncmp.004
+anchor     functions/strncmp.html#DESCRIPTION
+anchor     functions/strncmp.html#RETURN VALUE
+class      required
+says       strncmp() with n 0 returns 0 for different strings.
+test       t/004-n-zero.c
+
+assertion  XSH.strncmp.005
+anchor     functions/strncmp.html#DESCRIPTION
+anchor     functions/strncmp.html#RETURN VALUE
+class      required
+says       strncmp() leaves errno unchanged for equal and for different
+           strings.
+test       t/005-errno-kept.c
+
+assertion  XSH.strncmp.006
+anchor     functions/strncmp.html#DESCRIPTION
+anchor     functions/strncmp.html#RETURN VALUE
+class      required
+says       strncmp() reads no byte beyond n: two 4-byte arrays without
+           terminator end at inaccessible pages and are compared with n 4
+           (equal, then different in the last byte), and a pair with
+           terminators ending at the pages is compared with n 1000.
+test       t/006-no-overread.c

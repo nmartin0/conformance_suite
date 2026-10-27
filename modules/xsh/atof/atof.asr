@@ -1,0 +1,34 @@
+# XSH atof()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Values that cannot be represented are not tested (undefined). Calls go through volatile function pointers.
+
+assertion  XSH.atof.001
+anchor     functions/atof.html#DESCRIPTION
+anchor     functions/atof.html#RETURN VALUE
+class      required
+says       atof() converts "0", "1.5", "-2.25", "+2.5", ".5", "5.", "100",
+           "0.25e1", "125e-2", "2E+3" to 0, 1.5, -2.25, 2.5, 0.5, 5, 100,
+           2.5, 1.25, 2000.
+test       t/001-values.c
+
+assertion  XSH.atof.002
+anchor     functions/atof.html#DESCRIPTION
+anchor     functions/atof.html#RETURN VALUE
+class      required
+says       atof() skips leading white space and stops at the first byte that
+           cannot be part of the number: " \t\n\v\f\r4.5" gives 4.5,
+           "3.5xyz" gives 3.5, "1e" gives 1, "2.5.5" gives 2.5; it returns 0
+           when no conversion can be made: "", " ", "abc", ".", "e5".
+test       t/002-prefix-and-no-conversion.c
+
+assertion  XSH.atof.003
+anchor     functions/atof.html#DESCRIPTION
+anchor     functions/atof.html#RETURN VALUE
+class      required
+says       atof() accepts what strtod() accepts: "0x1p4" gives 16, "0x1.8p1"
+           gives 3, "0x10" gives 16, "inf" and "INFINITY" give HUGE_VAL,
+           "-inf" gives -HUGE_VAL, "-0" gives a zero with its sign bit set;
+           "nan" gives either a NaN or (no NaN support) 0.
+test       t/003-hex-inf-nan-negative-zero.c

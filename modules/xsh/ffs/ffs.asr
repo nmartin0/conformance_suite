@@ -1,0 +1,46 @@
+# XSH ffs(), ffsl() and ffsll()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# These functions are XSI. Calls go through volatile function pointers.
+
+assertion  XSH.ffs.001
+anchor     functions/ffs.html#DESCRIPTION
+anchor     functions/ffs.html#RETURN VALUE
+class      conditional
+when       XSI
+says       ffs(), ffsl() and ffsll() return 0 for the value 0.
+test       t/001-zero.c
+
+assertion  XSH.ffs.002
+anchor     functions/ffs.html#DESCRIPTION
+anchor     functions/ffs.html#RETURN VALUE
+class      conditional
+when       XSI
+says       For every bit k of an int, long and long long (counting the sign
+           bit as the highest), ffs(), ffsl() and ffsll() of the value with
+           only that bit set return k+1, bits being numbered from one at the
+           least significant bit.
+test       t/002-single-bits.c
+
+assertion  XSH.ffs.003
+anchor     functions/ffs.html#DESCRIPTION
+anchor     functions/ffs.html#RETURN VALUE
+class      conditional
+when       XSI
+says       The index returned is that of the least significant set bit:
+           ffs() of 6 is 2, of 0x18 is 4, of 0xf0 is 5, of -1 is 1, of -2 is
+           2, of INT_MAX is 1, of INT_MAX-1 is 2, of INT_MIN+8 is 4; ffsl()
+           and ffsll() agree on the same values.
+test       t/003-lowest-of-several.c
+
+assertion  XSH.ffs.004
+anchor     functions/ffs.html#DESCRIPTION
+anchor     functions/ffs.html#RETURN VALUE
+class      conditional
+when       XSI
+says       ffsll() finds bits above the int range: the value 2^32 gives 33,
+           2^40 gives 41, 2^40 + 2^50 gives 41, 2^62 gives 63; ffsl() does
+           the same on the values that fit in a long (checked when long has
+           more than 40 value bits).
+test       t/004-beyond-int.c

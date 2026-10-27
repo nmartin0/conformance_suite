@@ -1,0 +1,83 @@
+# XSH strncpy() and stpncpy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Overlapping arrays are never used (undefined). Calls go through volatile function pointers.
+
+assertion  XSH.strncpy.001
+anchor     functions/strncpy.html#DESCRIPTION
+anchor     functions/strncpy.html#RETURN VALUE
+class      required
+says       strncpy() on "ab" with n 6 stores a, b and four zero bytes,
+           leaves the bytes after the sixth unchanged, and returns the
+           destination.
+test       t/001-pad-with-null.c
+
+assertion  XSH.strncpy.002
+anchor     functions/strncpy.html#DESCRIPTION
+anchor     functions/strncpy.html#RETURN VALUE
+class      required
+says       strncpy() on "abcdef" with n 3 stores a, b, c only: no terminator
+           is written and the fourth byte is unchanged; the return value is
+           the destination.
+test       t/002-n-less-than-length.c
+
+assertion  XSH.strncpy.003
+anchor     functions/strncpy.html#DESCRIPTION
+anchor     functions/strncpy.html#RETURN VALUE
+class      required
+says       strncpy() on "abc" with n 3 stores a, b, c, writes no terminator,
+           and leaves the fourth byte unchanged.
+test       t/003-n-equals-length.c
+
+assertion  XSH.strncpy.004
+anchor     functions/strncpy.html#DESCRIPTION
+anchor     functions/strncpy.html#RETURN VALUE
+class      required
+says       strncpy() on the 5-byte array {a, b, 0, c, d} with n 5 stores a,
+           b and three zero bytes: the bytes after the zero byte are not
+           copied.
+test       t/004-after-null-not-copied.c
+
+assertion  XSH.strncpy.005
+anchor     functions/strncpy.html#DESCRIPTION
+anchor     functions/strncpy.html#RETURN VALUE
+class      required
+says       strncpy() and stpncpy() with n 0 leave the destination unchanged
+           and return the destination.
+test       t/005-n-zero.c
+
+assertion  XSH.strncpy.006
+anchor     functions/strncpy.html#DESCRIPTION
+anchor     functions/strncpy.html#RETURN VALUE
+class      required
+says       stpncpy() on "ab" with n 6 copies and pads like strncpy() and
+           returns the address of the first zero byte written (d+2); on ""
+           with n 4 it returns d and stores four zero bytes.
+test       t/006-stpncpy-null-written.c
+
+assertion  XSH.strncpy.007
+anchor     functions/strncpy.html#DESCRIPTION
+anchor     functions/strncpy.html#RETURN VALUE
+class      required
+says       stpncpy() returns d+n when no zero byte is written: "abcdef" with
+           n 3 gives d+3 and stores a, b, c only; "abc" with n 3 gives d+3
+           with no terminator stored.
+test       t/007-stpncpy-no-null.c
+
+assertion  XSH.strncpy.008
+anchor     functions/strncpy.html#DESCRIPTION
+anchor     functions/strncpy.html#RETURN VALUE
+class      required
+says       strncpy() and stpncpy() leave errno unchanged.
+test       t/008-errno-kept.c
+
+assertion  XSH.strncpy.009
+anchor     functions/strncpy.html#DESCRIPTION
+anchor     functions/strncpy.html#RETURN VALUE
+class      required
+says       strncpy() and stpncpy() read no more than n source bytes and
+           write no more than n destination bytes: a 4-byte source with no
+           terminator ends at an inaccessible page and the 4-byte
+           destination ends at another one.
+test       t/009-no-overread-overwrite.c

@@ -1,0 +1,48 @@
+# XSH strpbrk()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Calls go through volatile function pointers.
+
+assertion  XSH.strpbrk.001
+anchor     functions/strpbrk.html#DESCRIPTION
+anchor     functions/strpbrk.html#RETURN VALUE
+class      required
+says       strpbrk() returns the first byte of the first string that is in
+           the second: ("abcdef", "fd") gives s+3, ("abc", "a") gives s,
+           ("abc", "cbx") gives s+1, ("a b", " ") gives s+1.
+test       t/001-first-of-any.c
+
+assertion  XSH.strpbrk.002
+anchor     functions/strpbrk.html#DESCRIPTION
+anchor     functions/strpbrk.html#RETURN VALUE
+class      required
+says       strpbrk() returns a null pointer when no byte matches: ("abc",
+           "xyz"), ("abc", ""), ("", "abc") and ("", ""). The terminator of
+           the first string is not matched.
+test       t/002-none-found.c
+
+assertion  XSH.strpbrk.003
+anchor     functions/strpbrk.html#DESCRIPTION
+anchor     functions/strpbrk.html#RETURN VALUE
+class      required
+says       strpbrk() handles bytes above 0x7f as ordinary values: in {a,
+           0xe9, 0xff, 0} the set {0xff, 0} finds index 2 and the set {0xe9,
+           0xff, 0} finds index 1.
+test       t/003-high-bytes.c
+
+assertion  XSH.strpbrk.004
+anchor     functions/strpbrk.html#DESCRIPTION
+anchor     functions/strpbrk.html#RETURN VALUE
+class      required
+says       strpbrk() leaves errno unchanged.
+test       t/004-errno-kept.c
+
+assertion  XSH.strpbrk.005
+anchor     functions/strpbrk.html#DESCRIPTION
+anchor     functions/strpbrk.html#RETURN VALUE
+class      required
+says       strpbrk() reads no byte beyond the terminators: the first string
+           "abc" ends at an inaccessible page and the second string "cx"
+           ends at another one.
+test       t/005-no-overread.c

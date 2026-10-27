@@ -1,0 +1,72 @@
+# XSH memmem()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Calls go through volatile function pointers.
+
+assertion  XSH.memmem.001
+anchor     functions/memmem.html#DESCRIPTION
+anchor     functions/memmem.html#RETURN VALUE
+class      required
+says       memmem() on "abcabcabc" returns h+2 for "cab", h for "abc", h+1
+           for "bc", h+2 for "c" (also when the search starts at an inner
+           pointer), and a null pointer for "abd" and "x".
+test       t/001-first-occurrence.c
+
+assertion  XSH.memmem.002
+anchor     functions/memmem.html#DESCRIPTION
+anchor     functions/memmem.html#RETURN VALUE
+class      required
+says       memmem() treats zero bytes as data in both sequences: on {1, 0,
+           2, 0, 3} the needle {0, 2} is at index 1, {0, 3} at index 3, {0}
+           at index 1, {0, 0} is absent, and the needle {1, 0, 2} (with a
+           zero byte inside) is at index 0.
+test       t/002-zero-bytes.c
+
+assertion  XSH.memmem.003
+anchor     functions/memmem.html#DESCRIPTION
+anchor     functions/memmem.html#RETURN VALUE
+class      required
+says       memmem() with needlelen 0 returns the haystack pointer, whatever
+           the haystack length (including 0) and for a non-matching
+           haystack.
+test       t/003-empty-needle.c
+
+assertion  XSH.memmem.004
+anchor     functions/memmem.html#DESCRIPTION
+anchor     functions/memmem.html#RETURN VALUE
+class      required
+says       memmem() returns a null pointer when haystacklen is less than
+           needlelen, even if the haystack is a prefix of the needle, and
+           when haystacklen is 0 and the needle is not empty; equal lengths
+           and equal contents give the haystack.
+test       t/004-haystack-shorter.c
+
+assertion  XSH.memmem.005
+anchor     functions/memmem.html#DESCRIPTION
+anchor     functions/memmem.html#RETURN VALUE
+class      required
+says       memmem() looks only inside the first haystacklen bytes: on "abcd"
+           with haystacklen 3 the needle "cd" is absent while "bc" is at
+           index 1.
+test       t/005-bound.c
+
+assertion  XSH.memmem.006
+anchor     functions/memmem.html#DESCRIPTION
+anchor     functions/memmem.html#RETURN VALUE
+class      required
+says       memmem() finds the first full match after partial ones: "aab" in
+           "aaab" is at index 1, "abac" in "ababac" at index 2, "issip" in
+           "mississippi" at index 4, and "aaa" in "aabaaa" at index 3.
+test       t/006-overlapping-candidates.c
+
+assertion  XSH.memmem.007
+anchor     functions/memmem.html#DESCRIPTION
+anchor     functions/memmem.html#RETURN VALUE
+class      required
+says       memmem() examines nothing outside the haystack and the needle:
+           both end where an inaccessible page begins (a search for the
+           needle that is the last 3 bytes, a search for an absent needle of
+           the same length, and an empty needle with haystacklen 0 on the
+           boundary).
+test       t/007-no-overread.c

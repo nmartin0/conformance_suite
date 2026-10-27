@@ -1,0 +1,57 @@
+# XSH strcmp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 
+# Only the sign of a non-zero result is tested.
+
+assertion  XSH.strcmp.001
+anchor     functions/strcmp.html#DESCRIPTION
+anchor     functions/strcmp.html#RETURN VALUE
+class      required
+says       strcmp() returns 0 for equal strings, including two empty strings
+           and strings with bytes above 0x7f.
+test       t/001-equal.c
+
+assertion  XSH.strcmp.002
+anchor     functions/strcmp.html#DESCRIPTION
+anchor     functions/strcmp.html#RETURN VALUE
+class      required
+says       strcmp() is negative when the first string is smaller and
+           positive when larger: "a" against "b", "abc" against "abd", "ab"
+           against "abc" and "" against "a" are negative, and the reversed
+           pairs are positive.
+test       t/002-sign.c
+
+assertion  XSH.strcmp.003
+anchor     functions/strcmp.html#DESCRIPTION
+anchor     functions/strcmp.html#RETURN VALUE
+class      required
+says       strcmp() compares bytes as unsigned char: the string {0x7f, 0} is
+           less than {0x80, 0}, {0xff, 0} is greater than "a", and {a, 0xe9,
+           0} is greater than {a, b, 0}.
+test       t/003-unsigned-bytes.c
+
+assertion  XSH.strcmp.004
+anchor     functions/strcmp.html#DESCRIPTION
+anchor     functions/strcmp.html#RETURN VALUE
+class      required
+says       strcmp() ignores everything after the terminator: {a, b, 0, X}
+           and {a, b, 0, Y} compare equal.
+test       t/004-stops-at-terminator.c
+
+assertion  XSH.strcmp.005
+anchor     functions/strcmp.html#DESCRIPTION
+anchor     functions/strcmp.html#RETURN VALUE
+class      required
+says       strcmp() leaves errno unchanged for equal and for different
+           strings.
+test       t/005-errno-kept.c
+
+assertion  XSH.strcmp.006
+anchor     functions/strcmp.html#DESCRIPTION
+anchor     functions/strcmp.html#RETURN VALUE
+class      required
+says       strcmp() reads no byte past a terminator: equal strings, and
+           strings differing in their last byte, each ending (with the
+           terminator) at an inaccessible page, are compared.
+test       t/006-no-overread.c
