@@ -1,0 +1,75 @@
+# posix_spawn.cov - every requirement unit on functions/posix_spawn.html
+# (posix_spawn, posix_spawnp).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:adeeaccd        XSH.posix_spawn.001 XSH.posix_spawn.002 XSH.posix_spawn.003
+DESCRIPTION:0aeaae10        XSH.posix_spawn.001  # a regular executable file: only regular files are run; a non-regular image is not tested (see exec SI-18)
+DESCRIPTION:95156e02        XSH.posix_spawn.005
+DESCRIPTION:f9eae208        XSH.posix_spawn.005
+DESCRIPTION:d23732ac        XSH.posix_spawn.005
+DESCRIPTION:dece0158        XSH.posix_spawn.005
+DESCRIPTION:4411f357        none  introduces environ
+DESCRIPTION:424081bb        none  introduces environ
+DESCRIPTION:11e0fe34        XSH.posix_spawn.006 XSH.posix_spawn.007
+DESCRIPTION:9bc9e406        none  describes the argument
+DESCRIPTION:48652813        XSH.posix_spawn.005
+DESCRIPTION:cd1bfc57        XSH.posix_spawn.005
+DESCRIPTION:025eb647        app  # a "should" for the application; the test passes an argv[0] unrelated to the file name and sees it arrive
+DESCRIPTION:528a533e        none  describes the argument
+DESCRIPTION:70c0d153        XSH.posix_spawn.006 XSH.posix_spawn.007
+DESCRIPTION:c0fd6872        XSH.posix_spawn.006 XSH.posix_spawn.007
+DESCRIPTION:ac4c3c0e        partial XSH.posix_spawn.065  # the limit itself; E2BIG is disputed (Q-9)
+DESCRIPTION:b5ef8970        impl  documentation of the list overhead
+DESCRIPTION:0c3874ba        impl  documentation of the list overhead
+DESCRIPTION:859437e4        XSH.posix_spawn.008 XSH.posix_spawn.009
+DESCRIPTION:3e820101        XSH.posix_spawn.010 XSH.posix_spawn.011
+DESCRIPTION:e5f8e535        XSH.posix_spawn.010
+DESCRIPTION:9e7b75df        XSH.posix_spawn.011 XSH.posix_spawn.012
+DESCRIPTION:47e478fc        XSH.posix_spawn.013
+DESCRIPTION:094a3123        none  implementation-defined search when PATH is not defined
+DESCRIPTION:503c9e2a        XSH.posix_spawn.014 XSH.posix_spawn.064
+DESCRIPTION:aea782fb        XSH.posix_spawn.015 XSH.posix_spawn.016 XSH.posix_spawn.017
+DESCRIPTION:9ba332a4        partial XSH.posix_spawn.015 XSH.posix_spawn.019  # attributes of the description (mode, flags, offset) and process-owned locks; open-file-description locks not tested (Q-92)
+DESCRIPTION:6d0afaa9        XSH.posix_spawn.031
+DESCRIPTION:1c182b2f        XSH.posix_spawn.018 XSH.posix_spawn.021 XSH.posix_spawn.028
+DESCRIPTION:e915ddd2        none  introduces the ordered list
+DESCRIPTION:c5488b7d        XSH.posix_spawn.018 XSH.posix_spawn.016 XSH.posix_spawn.017
+DESCRIPTION:b8ee30a4        partial XSH.posix_spawn.020  # process-owned locks only (Q-92)
+DESCRIPTION:29f96ac7        XSH.posix_spawn.035 XSH.posix_spawn.037 XSH.posix_spawn.045 XSH.posix_spawn.046
+DESCRIPTION:c7caf167        XSH.posix_spawn.029 XSH.posix_spawn.030 XSH.posix_spawn.034 XSH.posix_spawn.032
+DESCRIPTION:153e87e3        XSH.posix_spawn.032 XSH.posix_spawn.033 XSH.posix_spawn.034
+DESCRIPTION:c2e9ba01        XSH.posix_spawn.016 XSH.posix_spawn.027 XSH.posix_spawn.028 XSH.posix_spawn.033
+DESCRIPTION:3ada39a7        untestable  implementations may open an unspecified file; no requirement
+DESCRIPTION:9c552f89        none  deems an environment non-conforming; no requirement on the implementation
+DESCRIPTION:dca82537        none  defines the type (header content is another page)
+DESCRIPTION:1e303640        none  the attributes are those of the posix_spawnattr_* pages
+DESCRIPTION:c302adf6        XSH.posix_spawn.042
+DESCRIPTION:0a8d7beb        XSH.posix_spawn.041
+DESCRIPTION:6b450dd4        partial XSH.posix_spawn.043  # session and group leader; no controlling terminal is not tested (Q-93)
+DESCRIPTION:5a6a8570        XSH.posix_spawn.043
+DESCRIPTION:0c71b623        partial XSH.posix_spawn.043  # the new group and session are the child's own IDs; other members are not looked for
+DESCRIPTION:7400fedc        untestable  unspecified behaviour
+DESCRIPTION:5503484c        XSH.posix_spawn.044
+DESCRIPTION:6f5304f6        XSH.posix_spawn.052
+DESCRIPTION:daf84c45        XSH.posix_spawn.051
+DESCRIPTION:698c4b6d        XSH.posix_spawn.045 XSH.posix_spawn.047
+DESCRIPTION:d9091d89        XSH.posix_spawn.047
+DESCRIPTION:e918403b        XSH.posix_spawn.045
+DESCRIPTION:05c0107e        XSH.posix_spawn.049
+DESCRIPTION:dc54d98c        XSH.posix_spawn.046 XSH.posix_spawn.048
+DESCRIPTION:784b7076        XSH.posix_spawn.048
+DESCRIPTION:5877fee9        XSH.posix_spawn.046
+DESCRIPTION:ebefc889        XSH.posix_spawn.050
+DESCRIPTION:13acccaa        XSH.posix_spawn.035 XSH.posix_spawn.036
+DESCRIPTION:88428318        XSH.posix_spawn.037 XSH.posix_spawn.038
+DESCRIPTION:3cc48a5b        XSH.posix_spawn.039
+DESCRIPTION:3b9933e0        XSH.posix_spawn.039
+DESCRIPTION:4d7d2daa        XSH.posix_spawn.039 XSH.posix_spawn.037 XSH.posix_spawn.038
+DESCRIPTION:38db0c7c        partial XSH.posix_spawn.040  # unspecified when ignored; only the SETSIGDEF case is required and tested
+DESCRIPTION:24bd034f        XSH.posix_spawn.036 XSH.posix_spawn.038 XSH.posix_spawn.044
+DESCRIPTION:583df242        XSH.posix_spawn.054 XSH.posix_spawn.055 XSH.posix_spawn.056 XSH.posix_spawn.057
+DESCRIPTION:0b5baffc        untestable  implementation-defined whether fork handlers run
+RETURN_VALUE:5b22504c       XSH.posix_spawn.001 XSH.posix_spawn.003 XSH.posix_spawn.004
+RETURN_VALUE:67e6ed27       partial XSH.posix_spawn.058 XSH.posix_spawn.059 XSH.posix_spawn.060 XSH.posix_spawn.061 XSH.posix_spawn.062 XSH.posix_spawn.063 XSH.posix_spawn.064 XSH.posix_spawn.065  # no child when an error is returned; *pid unspecified, not looked at
+RETURN_VALUE:b9d354bd       XSH.posix_spawn.004
+ERRORS:04ca1055             untestable  may fail for an invalid object, which the test cannot make portably; the other errors of the page are tested in the assertions of the exec, setpgid, sched and file-action errors

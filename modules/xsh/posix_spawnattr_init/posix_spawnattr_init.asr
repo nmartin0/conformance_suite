@@ -1,0 +1,64 @@
+# XSH posix_spawnattr_init() and posix_spawnattr_destroy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Effects are shown by really spawning this program as a child image (the
+# test file re-runs itself with "img <mode>" arguments and reports over a
+# pipe). The broad behaviour of posix_spawn() is in xsh/posix_spawn. The
+# functions return the error number; errno is not used.
+
+assertion  XSH.posix_spawnattr_init.001
+anchor     functions/posix_spawnattr_init.html#RETURN VALUE
+anchor     functions/posix_spawnattr_init.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawnattr_init() on an object whose bytes are arbitrary returns 0.
+test       t/001-init-ok.c
+
+assertion  XSH.posix_spawnattr_init.002
+anchor     functions/posix_spawnattr_init.html#RETURN VALUE
+anchor     functions/posix_spawnattr_init.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawnattr_destroy() on an initialised object returns 0.
+test       t/002-destroy-ok.c
+
+assertion  XSH.posix_spawnattr_init.003
+anchor     functions/posix_spawnattr_init.html#DESCRIPTION
+class      required
+since      2001
+says       An object that had a non-default flags value, was destroyed and
+           initialised again returns 0 from both calls and has the
+           default (empty) flags.
+test       t/003-reinit.c
+
+assertion  XSH.posix_spawnattr_init.004
+anchor     functions/posix_spawnattr_init.html#DESCRIPTION
+anchor     functions/posix_spawnattr_getflags.html#DESCRIPTION
+anchor     functions/posix_spawnattr_getpgroup.html#DESCRIPTION
+anchor     functions/posix_spawnattr_getsigdefault.html#DESCRIPTION
+class      required
+since      2001
+says       After posix_spawnattr_init() on an arbitrary-bytes object, the spawn-
+           flags attribute is 0, the spawn-pgroup attribute is 0 and the
+           spawn-sigdefault attribute is an empty set.
+test       t/004-defaults.c
+
+assertion  XSH.posix_spawnattr_init.005
+anchor     functions/posix_spawnattr_init.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       A child spawned with a freshly initialised attributes object keeps the
+           parent's process group, the parent's signal mask and an
+           ignored signal ignored, as with a null attributes pointer.
+test       t/005-default-acts.c
+
+assertion  XSH.posix_spawnattr_init.006
+anchor     functions/posix_spawnattr_init.html#DESCRIPTION
+class      required
+since      2001
+says       After a child was spawned with an attributes object (signal mask
+           attribute applied), changing the object and then destroying
+           it does not change the signal mask the already running child
+           reports.
+test       t/006-after-use.c

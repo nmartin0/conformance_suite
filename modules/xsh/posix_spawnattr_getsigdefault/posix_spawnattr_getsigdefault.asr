@@ -1,0 +1,47 @@
+# XSH posix_spawnattr_getsigdefault() and posix_spawnattr_setsigdefault()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Effects are shown by really spawning this program as a child image. The
+# functions return the error number; errno is not used. SIGKILL and SIGSTOP
+# are not put in sets.
+
+assertion  XSH.posix_spawnattr_getsigdefault.001
+anchor     functions/posix_spawnattr_getsigdefault.html#DESCRIPTION
+anchor     functions/posix_spawnattr_getsigdefault.html#RETURN VALUE
+class      required
+since      2001
+says       posix_spawnattr_getsigdefault() on a newly initialised object returns 0
+           and stores an empty signal set (the destination was filled
+           first).
+test       t/001-default.c
+
+assertion  XSH.posix_spawnattr_getsigdefault.002
+anchor     functions/posix_spawnattr_getsigdefault.html#DESCRIPTION
+anchor     functions/posix_spawnattr_getsigdefault.html#RETURN VALUE
+class      required
+since      2001
+says       posix_spawnattr_setsigdefault() with a set of SIGUSR1, SIGTERM and
+           SIGRTMIN returns 0 and posix_spawnattr_getsigdefault()
+           returns 0 and stores exactly that set; a second object keeps
+           its own different set.
+test       t/002-roundtrip.c
+
+assertion  XSH.posix_spawnattr_getsigdefault.003
+anchor     functions/posix_spawnattr_getsigdefault.html#DESCRIPTION
+class      required
+since      2001
+says       A later posix_spawnattr_setsigdefault() replaces the set (an empty set
+           after a non-empty one reads back empty), and the attribute is
+           a copy: changing the caller's set variable after the call
+           does not change what is read back.
+test       t/003-replace-copy.c
+
+assertion  XSH.posix_spawnattr_getsigdefault.004
+anchor     functions/posix_spawnattr_getsigdefault.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With POSIX_SPAWN_SETSIGDEF set and SIGUSR1 in the spawn-sigdefault set,
+           a child of a parent that ignores SIGUSR1 and SIGUSR2 has
+           SIGUSR1 at its default action while SIGUSR2 stays ignored.
+test       t/004-effect.c

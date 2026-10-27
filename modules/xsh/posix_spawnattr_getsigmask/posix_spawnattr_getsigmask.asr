@@ -1,0 +1,47 @@
+# XSH posix_spawnattr_getsigmask() and posix_spawnattr_setsigmask()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Effects are shown by really spawning this program as a child image. The
+# functions return the error number; errno is not used. SIGKILL and SIGSTOP
+# are not put in sets.
+
+assertion  XSH.posix_spawnattr_getsigmask.001
+anchor     functions/posix_spawnattr_getsigmask.html#RETURN VALUE
+anchor     functions/posix_spawnattr_getsigmask.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawnattr_getsigmask() on a newly initialised object returns 0
+           (the set stored is unspecified and not examined).
+test       t/001-default.c
+
+assertion  XSH.posix_spawnattr_getsigmask.002
+anchor     functions/posix_spawnattr_getsigmask.html#DESCRIPTION
+anchor     functions/posix_spawnattr_getsigmask.html#RETURN VALUE
+class      required
+since      2001
+says       posix_spawnattr_setsigmask() with a set of SIGUSR1, SIGTERM and SIGRTMIN
+           returns 0 and posix_spawnattr_getsigmask() returns 0 and
+           stores exactly that set; a second object keeps its own
+           different set.
+test       t/002-roundtrip.c
+
+assertion  XSH.posix_spawnattr_getsigmask.003
+anchor     functions/posix_spawnattr_getsigmask.html#DESCRIPTION
+class      required
+since      2001
+says       A later posix_spawnattr_setsigmask() replaces the set (an empty set
+           after a non-empty one reads back empty), and the attribute is
+           a copy: changing the caller's set variable after the call
+           does not change what is read back.
+test       t/003-replace-copy.c
+
+assertion  XSH.posix_spawnattr_getsigmask.004
+anchor     functions/posix_spawnattr_getsigmask.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With POSIX_SPAWN_SETSIGMASK set and the spawn-sigmask set holding
+           SIGUSR1, a child of a parent whose mask is empty has SIGUSR1
+           blocked and SIGUSR2 not blocked, and the parent's own mask is
+           unchanged.
+test       t/004-effect.c

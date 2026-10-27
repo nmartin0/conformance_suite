@@ -1,0 +1,182 @@
+# XSH posix_spawn_file_actions_addclose() and posix_spawn_file_actions_addopen()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Effects are shown by really spawning this program as a child image (the
+# test file re-runs itself with "img <mode>" arguments and reports over a
+# pipe). The broad behaviour of posix_spawn() is in xsh/posix_spawn; here a
+# spawn only shows what the action under test did. A descriptor number that
+# is "closed" is one that was opened and closed again, which is in range.
+# The functions return the error number; errno is not used.
+
+assertion  XSH.posix_spawn_file_actions_addclose.001
+anchor     functions/posix_spawn_file_actions_addclose.html#RETURN VALUE
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawn_file_actions_addclose() with an open descriptor returns 0.
+test       t/001-close-ok.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.002
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       A child spawned with a close action for descriptor fd (open and without
+           FD_CLOEXEC in the parent) has fd closed, while another open
+           descriptor without an action stays open and the parent's fd
+           is still open afterwards.
+test       t/002-close-effect.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.003
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+class      required
+since      2024
+says       A close action for a descriptor that was open when the action was added
+           but is already closed when the child is spawned (in range) is
+           ignored: posix_spawn() returns 0, the child runs and the
+           descriptor is closed in it.
+test       t/003-close-ignored.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.004
+anchor     functions/posix_spawn_file_actions_addclose.html#ERRORS/EBADF
+class      required
+since      2001
+says       posix_spawn_file_actions_addclose() with a negative descriptor (-1, and
+           the most negative int) returns EBADF.
+test       t/004-close-ebadf.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.005
+anchor     functions/posix_spawn_file_actions_addclose.html#ERRORS
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawn_file_actions_addclose() with a non-negative descriptor
+           number that is not open at the time of the call returns 0,
+           and a spawn with that action succeeds.
+test       t/005-close-notopen.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.006
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+anchor     functions/posix_spawn.html#ERRORS
+class      disputed
+since      2024
+says       Two close actions for the same open descriptor: posix_spawn() returns 0,
+           and the descriptor is closed in the child.
+note       disputed (Q-89): whether a descriptor closed by an earlier action of the
+           same object is "already closed at the time when the new
+           process is spawned".
+test       t/006-close-twice.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.007
+anchor     functions/posix_spawn_file_actions_addclose.html#RETURN VALUE
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawn_file_actions_addopen() with a valid descriptor number, a
+           pathname, flags and a mode returns 0.
+test       t/007-open-ok.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.008
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       A child spawned with an open action (O_RDONLY, a descriptor number not
+           open in the parent) can read from that descriptor the
+           contents of the named file.
+test       t/008-open-effect.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.009
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+class      required
+since      2001
+says       Adding an open action with O_WRONLY|O_CREAT|O_EXCL does not create the
+           file; after the spawn the file exists, with mode 0640 under a
+           zero creation mask, and the child could write to the
+           descriptor.
+note       The run directory must not carry default ACLs (same caveat as the open()
+           mode tests).
+test       t/009-open-deferred.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.010
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+class      required
+since      2001
+says       An open action whose descriptor is already open in the parent (the write
+           end of a pipe, no FD_CLOEXEC) leaves that number, in the
+           child, referring to the newly opened file (read-only, with
+           its contents), not to the pipe.
+test       t/010-open-replaces.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.011
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawn_file_actions_addopen() copies the pathname: overwriting the
+           caller's buffer after the call and before the spawn does not
+           change which file the child gets.
+test       t/011-open-copies.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.012
+anchor     functions/posix_spawn_file_actions_addclose.html#ERRORS/EBADF
+class      required
+since      2001
+says       posix_spawn_file_actions_addopen() with a negative descriptor (-1, and
+           the most negative int) returns EBADF.
+test       t/012-open-ebadf-neg.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.013
+anchor     functions/posix_spawn_file_actions_addclose.html#ERRORS/EBADF
+class      required
+since      2001
+says       posix_spawn_file_actions_addopen() with a descriptor number equal to
+           {OPEN_MAX} (and with the largest int) returns EBADF.
+note       See Q-90 (the RATIONALE of addclose against the shall of addopen); the
+           ERRORS text is unambiguous for addopen, so the assertion is
+           required.
+test       t/013-open-ebadf-max.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.014
+anchor     functions/posix_spawn_file_actions_addclose.html#ERRORS
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+anchor     functions/posix_spawn.html#ERRORS
+class      required
+since      2001
+says       posix_spawn_file_actions_addopen() for a pathname that does not exist
+           returns 0; a spawn with that action does not run the image:
+           posix_spawn() returns an error number, or the child exits
+           with status 127.
+test       t/014-open-missing.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.015
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       An open action with a relative pathname and no earlier action that
+           changes directory opens the file relative to the parent's
+           working directory.
+test       t/015-open-relative.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.016
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2024
+says       With a chdir action to a directory followed by an open action for a
+           relative name, the child opens the file of that name in that
+           directory, not one of the same name in the parent's
+           directory.
+note       Needs posix_spawn_file_actions_addchdir(), new in Issue 8; a system
+           without it fails to build this test.
+test       t/016-open-after-chdir.c
+
+assertion  XSH.posix_spawn_file_actions_addclose.017
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       Actions are performed in the order added: a dup2 action of descriptor a
+           to b followed by a close action for a leaves b open (the same
+           file) and a closed in the child.
+test       t/017-order.c

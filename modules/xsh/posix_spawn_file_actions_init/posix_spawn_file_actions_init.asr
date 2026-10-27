@@ -1,0 +1,68 @@
+# XSH posix_spawn_file_actions_init() and posix_spawn_file_actions_destroy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Effects are shown by really spawning this program as a child image (the
+# test file re-runs itself with "img <mode>" arguments and reports over a
+# pipe). The broad behaviour of posix_spawn() is in xsh/posix_spawn; here a
+# spawn only shows that an object holds, or does not hold, the actions the
+# function under test put in it.
+
+assertion  XSH.posix_spawn_file_actions_init.001
+anchor     functions/posix_spawn_file_actions_init.html#RETURN VALUE
+anchor     functions/posix_spawn_file_actions_init.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawn_file_actions_init() on an object whose bytes are arbitrary
+           (not previously initialised) returns 0.
+test       t/001-init-ok.c
+
+assertion  XSH.posix_spawn_file_actions_init.002
+anchor     functions/posix_spawn_file_actions_init.html#RETURN VALUE
+anchor     functions/posix_spawn_file_actions_init.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawn_file_actions_destroy() on an initialised object that holds
+           no actions returns 0.
+test       t/002-destroy-ok.c
+
+assertion  XSH.posix_spawn_file_actions_init.003
+anchor     functions/posix_spawn_file_actions_init.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       A freshly initialised object holds no actions: spawning a child with it
+           (and no attributes) leaves a descriptor opened without
+           FD_CLOEXEC open in the child, closes one with FD_CLOEXEC, and
+           leaves the working directory the same as the parent's.
+note       The effect is observed through posix_spawn(); a null file_actions gives
+           the same result and is covered in xsh/posix_spawn.
+test       t/003-empty.c
+
+assertion  XSH.posix_spawn_file_actions_init.004
+anchor     functions/posix_spawn_file_actions_init.html#DESCRIPTION
+class      required
+since      2001
+says       An object that held a close action, was destroyed and was initialised
+           again returns 0 from both calls and holds no actions: a child
+           spawned with it still has the descriptor the old action would
+           have closed.
+test       t/004-reinit.c
+
+assertion  XSH.posix_spawn_file_actions_init.005
+anchor     functions/posix_spawn_file_actions_init.html#DESCRIPTION
+class      required
+since      2001
+says       Two initialised objects are independent: after a close action is added
+           to one, a child spawned with the other still has the
+           descriptor open and a child spawned with the first has it
+           closed.
+test       t/005-independent.c
+
+assertion  XSH.posix_spawn_file_actions_init.006
+anchor     functions/posix_spawn_file_actions_init.html#RETURN VALUE
+anchor     functions/posix_spawn_file_actions_init.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawn_file_actions_destroy() on an object holding close, open and
+           dup2 actions returns 0.
+test       t/006-destroy-full.c

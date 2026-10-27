@@ -1,0 +1,44 @@
+# XSH posix_spawnattr_getschedparam() and posix_spawnattr_setschedparam()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Both functions belong to the Spawn and Process Scheduling options, so the
+# assertions are conditional on SPN+PS. Effects are shown by really spawning
+# this program as a child image; changing the scheduler may need privilege,
+# and a spawn that is refused for that reason is UNRESOLVED. The functions
+# return the error number; errno is not used.
+
+assertion  XSH.posix_spawnattr_getschedparam.001
+anchor     functions/posix_spawnattr_getschedparam.html#RETURN VALUE
+anchor     functions/posix_spawnattr_getschedparam.html#DESCRIPTION
+class      conditional
+when       SPN+PS
+since      2001
+says       posix_spawnattr_getschedparam() on a newly initialised object returns 0
+           (the value stored is unspecified and not examined).
+test       t/001-default.c
+
+assertion  XSH.posix_spawnattr_getschedparam.002
+anchor     functions/posix_spawnattr_getschedparam.html#RETURN VALUE
+anchor     functions/posix_spawnattr_getschedparam.html#DESCRIPTION
+class      conditional
+when       SPN+PS
+since      2001
+says       posix_spawnattr_setschedparam() with the calling process's own
+           scheduling parameters returns 0 and
+           posix_spawnattr_getschedparam() returns 0 and stores the same
+           priority; other priorities that setschedparam accepts also
+           read back; two objects keep their own values.
+test       t/002-roundtrip.c
+
+assertion  XSH.posix_spawnattr_getschedparam.003
+anchor     functions/posix_spawnattr_getschedparam.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      conditional
+when       SPN+PS
+since      2001
+says       A child spawned with POSIX_SPAWN_SETSCHEDULER, a spawn-schedpolicy and
+           the spawn-schedparam set through
+           posix_spawnattr_setschedparam() has that priority.
+note       Changing the scheduler may need privilege (implementation-defined); a
+           refusal is UNRESOLVED.
+test       t/003-effect.c

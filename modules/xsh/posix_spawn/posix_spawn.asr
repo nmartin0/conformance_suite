@@ -1,0 +1,735 @@
+# XSH posix_spawn() and posix_spawnp()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The module's option is SPN (the Spawn option). Each test runs itself again
+# as the new process image ("img" mode), which checks what it got and reports
+# through a pipe (or its exit status), so that a test knows the image really
+# ran. Copies of the test binary with different tag bytes tell apart the
+# files found by a path search. The posix_spawn_file_actions_*() and
+# posix_spawnattr_*() functions are used only to set up the call; their own
+# requirements belong to other modules, and a set-up call that fails makes the
+# test UNRESOLVED.
+#
+# A spawn error may be reported by the return value or, for an error found
+# in the child after the call returned, by exit status 127 (the page's
+# ERRORS and RATIONALE); every error test accepts both and also checks that
+# the image did not run and that, when an error value is returned, no child
+# exists. The value stored in *pid after an error is unspecified and is never
+# looked at. Tests that need privilege to change IDs or scheduling say so in
+# "needs root" and run those changes in a helper process.
+#
+# The tests that stand on the Issue 8 additions (FD_CLOFORK, SETSID, chdir
+# and fchdir actions, ignoring a close of a closed descriptor, no fallback to
+# sh) carry since 2024.
+
+assertion  XSH.posix_spawn.001
+anchor     functions/posix_spawn.html#DESCRIPTION
+anchor     functions/posix_spawn.html#RETURN VALUE
+class      required
+since      2001
+says       posix_spawn() of an executable file with valid arguments returns 0 and
+           stores the child's process ID in *pid: a positive value, not the
+           caller's own, and the process ID that the new image sees as its own.
+test       t/001-returns-pid.c
+
+assertion  XSH.posix_spawn.002
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       The new process is a child of the caller: the parent process ID that
+           the new image sees is the caller's process ID.
+test       t/002-child-of-caller.c
+
+assertion  XSH.posix_spawn.003
+anchor     functions/posix_spawn.html#DESCRIPTION
+anchor     functions/posix_spawn.html#RETURN VALUE
+class      required
+since      2001
+says       The process ID stored by posix_spawn() can be waited for with
+           waitpid(): it returns that ID and a status showing normal termination
+           with the exit status 42 that the new image chose, after the image has
+           reported that it ran.
+test       t/003-wait-status.c
+
+assertion  XSH.posix_spawn.004
+anchor     functions/posix_spawn.html#RETURN VALUE
+class      required
+since      2001
+says       With a null pid argument posix_spawn() still returns 0 and creates the
+           process: the image runs, and wait() returns the process ID the image
+           reported as its own, with the image's exit status 42.
+test       t/004-null-pid.c
+
+assertion  XSH.posix_spawn.005
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       The strings of posix_spawn()'s argv array, argv[0] included (here not
+           the file name), an empty one, one with a space and a 2000-byte one,
+           reach the new image's main() in order; argc counts them and argv[argc]
+           is a null pointer.
+test       t/005-argv.c
+
+assertion  XSH.posix_spawn.006
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       The strings of posix_spawn()'s envp array ("PC_A=1", "PC_B=two words",
+           "PC_EMPTY=") are the new image's whole environment, as seen through
+           environ; a variable set in the caller's own environment is not there.
+test       t/006-envp.c
+
+assertion  XSH.posix_spawn.007
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With an envp array holding only the terminating null pointer, the new
+           image's environ points to an array whose first element is a null
+           pointer: the environment is empty.
+test       t/007-envp-empty.c
+
+assertion  XSH.posix_spawn.008
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       A path that does not start with a slash, with no file actions, names
+           the file relative to the caller's working directory: "d/prog" runs the
+           copy of the image in d.
+test       t/008-path-relative.c
+
+assertion  XSH.posix_spawn.009
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2024
+says       A relative path is resolved against the child's working directory
+           after all the file actions: with a chdir action to "w", the path
+           "prog" runs w/prog, not the prog in the caller's directory, and the
+           new image's working directory is w.
+test       t/009-path-after-chdir.c
+
+assertion  XSH.posix_spawn.010
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawnp() with a file argument containing a slash uses it as the
+           pathname without searching PATH: "bin/prog" runs ./bin/prog, not the
+           bin/prog found under a directory named by PATH.
+note       The caller's PATH and the PATH in envp are the same here, because the
+           page does not say which one posix_spawnp() searches (standard question
+           Q-91).
+test       t/010-spawnp-slash.c
+
+assertion  XSH.posix_spawn.011
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawnp() with a file argument without a slash searches the
+           directories of PATH: with PATH naming a missing directory, then a
+           directory without the file, then one holding it, the file there runs.
+note       The caller's PATH and the PATH in envp are the same here, because the
+           page does not say which one posix_spawnp() searches (standard question
+           Q-91).
+test       t/011-spawnp-search.c
+
+assertion  XSH.posix_spawn.012
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawnp() takes the first match in PATH order: with PATH naming
+           b1 then b2, each holding a different prog, the one in b1 runs.
+note       The caller's PATH and the PATH in envp are the same here, because the
+           page does not say which one posix_spawnp() searches (standard question
+           Q-91).
+test       t/012-spawnp-order.c
+
+assertion  XSH.posix_spawn.013
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2024
+says       A relative directory in PATH is taken in the child's working directory
+           after all the file actions: with PATH "rel" and a chdir action to "w",
+           posix_spawnp("prog") runs w/rel/prog, not the ./rel/prog of the
+           caller's directory.
+note       The caller's PATH and the PATH in envp are the same here, because the
+           page does not say which one posix_spawnp() searches (standard question
+           Q-91).
+test       t/013-spawnp-relative-dir.c
+
+assertion  XSH.posix_spawn.014
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2024
+says       posix_spawnp() of an executable file that is not in any executable
+           format (a text file of shell commands) does not fall back to running
+           it with sh: the commands do not run (a marker file is not made), and
+           the call fails, by returning ENOEXEC or with the child ending with
+           status 127.
+note       The caller's PATH and the PATH in envp are the same here, because the
+           page does not say which one posix_spawnp() searches (standard question
+           Q-91).
+test       t/014-spawnp-no-sh-fallback.c
+
+assertion  XSH.posix_spawn.015
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With a null file_actions pointer a descriptor without FD_CLOEXEC stays
+           open in the child with the same open file description: same access
+           mode, O_APPEND still set, the same offset (3), FD_CLOEXEC clear; a
+           write by the child moves the offset the caller sees.
+test       t/015-fd-kept.c
+
+assertion  XSH.posix_spawn.016
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With a null file_actions pointer a descriptor with FD_CLOEXEC set is
+           closed in the child, while a descriptor without it stays open.
+test       t/016-fd-cloexec-closed.c
+
+assertion  XSH.posix_spawn.017
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2024
+says       With a null file_actions pointer a descriptor with FD_CLOFORK set is
+           closed in the child, while a descriptor without it stays open.
+test       t/017-fd-clofork-closed.c
+
+assertion  XSH.posix_spawn.018
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2024
+says       With a file_actions object that holds no actions, the child has the
+           caller's descriptors except those with FD_CLOEXEC or FD_CLOFORK set: a
+           plain one is open, the other two are closed.
+test       t/018-fd-empty-actions.c
+
+assertion  XSH.posix_spawn.019
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With a null file_actions pointer the child does not inherit the
+           caller's process-owned record lock: the child, using the inherited
+           descriptor, finds the lock held by the caller (F_GETLK reports it,
+           with the caller's process ID).
+note       Only process-owned locks are tested; open-file-description locks
+           belong to the shared description, and the page's wording for them is
+           unclear (standard question Q-92).
+test       t/019-lock-not-inherited.c
+
+assertion  XSH.posix_spawn.020
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With a non-null file_actions object holding no actions the child does
+           not inherit the caller's process-owned record lock either (F_GETLK in
+           the child reports it held by the caller).
+note       Only process-owned locks are tested (standard question Q-92).
+test       t/020-lock-not-inherited-actions.c
+
+assertion  XSH.posix_spawn.021
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       A close action closes the descriptor in the child only: the child has
+           the named descriptor closed and another open, and the caller's
+           descriptor is still open afterwards.
+test       t/021-addclose.c
+
+assertion  XSH.posix_spawn.022
+anchor     functions/posix_spawn.html#DESCRIPTION
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+class      required
+since      2024
+says       A close action naming a descriptor that is in range but not open is
+           not an error: posix_spawn() returns 0 and the image runs with that
+           descriptor closed.
+test       t/022-addclose-closed.c
+
+assertion  XSH.posix_spawn.023
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       An open action opens the named file on the given descriptor number in
+           the child (readable, with FD_CLOEXEC clear), while the caller does not
+           gain that descriptor.
+test       t/023-addopen.c
+
+assertion  XSH.posix_spawn.024
+anchor     functions/posix_spawn.html#DESCRIPTION
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+class      required
+since      2001
+says       An open action on a descriptor number that is already open closes that
+           descriptor first: the child reads the newly opened file's contents
+           from it, and the caller's descriptor still reads its own file.
+test       t/024-addopen-replaces.c
+
+assertion  XSH.posix_spawn.025
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       An open action with O_WRONLY|O_CREAT|O_EXCL and mode 0640 creates the
+           file in the child's context: with the caller's umask 0 (inherited),
+           the new file has permission bits 0640, and the child's write through
+           the descriptor reaches it.
+test       t/025-addopen-creat.c
+
+assertion  XSH.posix_spawn.026
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       dup2 actions to descriptors 0 and 1 redirect the child's standard
+           input and output: the child reads "abc" sent by the caller from
+           descriptor 0 and writes it back with "!" to descriptor 1.
+test       t/026-adddup2-stdio.c
+
+assertion  XSH.posix_spawn.027
+anchor     functions/posix_spawn_file_actions_adddup2.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2024
+says       A dup2 action whose two descriptors are the same, on a descriptor with
+           FD_CLOEXEC set, leaves it open in the child with FD_CLOEXEC clear.
+test       t/027-adddup2-same.c
+
+assertion  XSH.posix_spawn.028
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       FD_CLOEXEC is applied after the file actions: a dup2 action from a
+           descriptor with FD_CLOEXEC set to another number leaves the new number
+           open (the copy has FD_CLOEXEC clear, reading the same file) and the
+           original closed in the child.
+test       t/028-adddup2-cloexec-source.c
+
+assertion  XSH.posix_spawn.029
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       File actions are performed in the order they were added: open A on N,
+           dup2 N to M, open B on N leaves M reading A and N reading B.
+test       t/029-actions-in-order.c
+
+assertion  XSH.posix_spawn.030
+anchor     functions/posix_spawn.html#DESCRIPTION
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+class      required
+since      2024
+says       A file actions object is performed in the child only and can be used
+           again: two spawns with the same chdir-and-open actions give the same
+           result in each child, and the caller's working directory and
+           descriptors are unchanged after each.
+test       t/030-actions-reusable.c
+
+assertion  XSH.posix_spawn.031
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With null file_actions and attrp pointers the child's working
+           directory is the caller's.
+test       t/031-cwd-inherited.c
+
+assertion  XSH.posix_spawn.032
+anchor     functions/posix_spawn.html#DESCRIPTION
+anchor     functions/posix_spawn_file_actions_addchdir.html#DESCRIPTION
+class      required
+since      2024
+says       Chdir actions "a" then "b" leave the child in a/b (the second relative
+           path is taken in the directory the first set), and the caller's
+           working directory is unchanged.
+test       t/032-addchdir-sequence.c
+
+assertion  XSH.posix_spawn.033
+anchor     functions/posix_spawn.html#DESCRIPTION
+anchor     functions/posix_spawn_file_actions_addchdir.html#DESCRIPTION
+class      required
+since      2024
+says       An fchdir action puts the child in the directory open on the
+           descriptor even when that descriptor has FD_CLOEXEC set (which is
+           applied after the actions, so the descriptor is closed in the image);
+           a chdir action after it is taken relative to that directory.
+test       t/033-addfchdir.c
+
+assertion  XSH.posix_spawn.034
+anchor     functions/posix_spawn.html#DESCRIPTION
+anchor     functions/posix_spawn_file_actions_addclose.html#DESCRIPTION
+class      required
+since      2024
+says       A relative path in an open action is interpreted in the working
+           directory determined by the earlier actions: after a chdir action to
+           "d", opening "f" gives d/f (content "inner"), not the caller's ./f.
+test       t/034-addopen-tracked-cwd.c
+
+assertion  XSH.posix_spawn.035
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With POSIX_SPAWN_SETSIGMASK the child starts with exactly the signal
+           mask of the attributes object (SIGUSR2 and SIGTERM blocked), not the
+           caller's (SIGUSR1 and SIGHUP blocked).
+test       t/035-sigmask-set.c
+
+assertion  XSH.posix_spawn.036
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       Without POSIX_SPAWN_SETSIGMASK the child has the caller's signal mask
+           (SIGUSR1 and SIGUSR2 blocked), both with a null attrp and with an
+           attributes object whose sigmask attribute is set (to SIGTERM) but
+           whose flags are clear.
+test       t/036-sigmask-inherited.c
+
+assertion  XSH.posix_spawn.037
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With POSIX_SPAWN_SETSIGDEF the signals in the sigdefault attribute
+           (SIGUSR1 and SIGQUIT, both ignored by the caller) get the default
+           action in the child, while an ignored signal outside the set (SIGUSR2)
+           stays ignored.
+test       t/037-sigdefault-set.c
+
+assertion  XSH.posix_spawn.038
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       Without POSIX_SPAWN_SETSIGDEF a signal ignored by the caller (SIGUSR1)
+           stays ignored in the child, both with a null attrp and with an
+           attributes object that lists it in sigdefault but has the flags clear.
+test       t/038-sigdefault-flag-clear.c
+
+assertion  XSH.posix_spawn.039
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With a null attrp the child has the default action for signals the
+           caller left at the default (SIGHUP) and for signals the caller catches
+           (SIGUSR2), and ignores signals the caller ignores (SIGUSR1).
+test       t/039-signal-dispositions.c
+
+assertion  XSH.posix_spawn.040
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       When the caller ignores SIGCHLD and the sigdefault attribute lists it
+           with POSIX_SPAWN_SETSIGDEF set, SIGCHLD has the default action in the
+           child.
+note       The child of an ignoring caller may be reaped automatically, so the
+           wait accepts ECHILD.
+test       t/040-sigchld-default.c
+
+assertion  XSH.posix_spawn.041
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With POSIX_SPAWN_SETPGROUP and a pgroup attribute of 0 the child is in
+           a new process group whose ID is its own process ID, different from the
+           caller's group.
+test       t/041-setpgroup-new.c
+
+assertion  XSH.posix_spawn.042
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With POSIX_SPAWN_SETPGROUP and a non-zero pgroup attribute naming an
+           existing process group of the caller's session, the child joins that
+           group.
+note       The group is a helper process's own, made with setpgid() and kept
+           alive until the check ends.
+test       t/042-setpgroup-join.c
+
+assertion  XSH.posix_spawn.043
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2024
+says       With POSIX_SPAWN_SETSID the child is the leader of a new session and
+           of a new process group, both with its own process ID as ID, different
+           from the caller's session and group.
+note       That the child has no controlling terminal is not tested: the pathname
+           for the controlling terminal does not say what opening it does when
+           there is none.
+test       t/043-setsid.c
+
+assertion  XSH.posix_spawn.044
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       Without POSIX_SPAWN_SETPGROUP and POSIX_SPAWN_SETSID the child stays
+           in the caller's process group and session, both with a null attrp and
+           with an attributes object whose flags are clear (although a pgroup
+           attribute is set).
+test       t/044-group-inherited.c
+
+assertion  XSH.posix_spawn.045
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With POSIX_SPAWN_RESETIDS the child's effective user ID is the
+           caller's real user ID: a caller with real user ID 0 and effective user
+           ID 65534 gets a child with effective user ID 0.
+note       Run by a privileged process whose helper process changes its own IDs;
+           the image file is made readable and executable for others.
+needs      root
+test       t/045-resetids-user.c
+
+assertion  XSH.posix_spawn.046
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With POSIX_SPAWN_RESETIDS the child's effective group ID is the
+           caller's real group ID: a caller with real group ID 0 and effective
+           group ID 65534 gets a child with effective group ID 0.
+note       Run by a privileged process whose helper process changes its own IDs;
+           the image file is made readable and executable for others.
+needs      root
+test       t/046-resetids-group.c
+
+assertion  XSH.posix_spawn.047
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       Without POSIX_SPAWN_RESETIDS the child inherits the caller's effective
+           user ID: a caller with real user ID 0 and effective user ID 65534 gets
+           a child with real user ID 0 and effective user ID 65534.
+note       Run by a privileged process whose helper process changes its own IDs;
+           the image file is made readable and executable for others.
+needs      root
+test       t/047-ids-user-inherited.c
+
+assertion  XSH.posix_spawn.048
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       Without POSIX_SPAWN_RESETIDS the child inherits the caller's effective
+           group ID: a caller with real group ID 0 and effective group ID 65534
+           gets a child with real group ID 0 and effective group ID 65534.
+note       Run by a privileged process whose helper process changes its own IDs;
+           the image file is made readable and executable for others.
+needs      root
+test       t/048-ids-group-inherited.c
+
+assertion  XSH.posix_spawn.049
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       When the image file has the set-user-ID bit and another owner (65534),
+           the child's effective user ID is that owner, whether or not
+           POSIX_SPAWN_RESETIDS is set, and its real user ID stays 0.
+note       Unresolved where the file system ignores set-ID bits (ST_NOSUID).
+needs      root
+test       t/049-setuid-image.c
+
+assertion  XSH.posix_spawn.050
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       When the image file has the set-group-ID bit and another group
+           (65534), the child's effective group ID is that group, whether or not
+           POSIX_SPAWN_RESETIDS is set, and its real group ID stays 0.
+note       Unresolved where the file system ignores set-ID bits (ST_NOSUID).
+needs      root
+test       t/050-setgid-image.c
+
+assertion  XSH.posix_spawn.051
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      conditional
+when       SPN+PS
+since      2001
+says       With POSIX_SPAWN_SETSCHEDULER the child has the scheduling policy and
+           parameters of the attributes object: SCHED_RR at its minimum priority.
+note       Unresolved if the caller may not set this policy (the call returns
+           EPERM or the child ends with status 127).
+needs      root
+test       t/051-setscheduler.c
+
+assertion  XSH.posix_spawn.052
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      conditional
+when       SPN+PS
+since      2001
+says       With POSIX_SPAWN_SETSCHEDPARAM alone the child keeps the caller's
+           scheduling policy (SCHED_RR) and gets the parameters of the attributes
+           object (priority one above the minimum).
+note       Unresolved if the caller cannot be put in SCHED_RR or the policy has
+           one priority only.
+needs      root
+test       t/052-setschedparam.c
+
+assertion  XSH.posix_spawn.053
+anchor     functions/posix_spawn.html#ERRORS
+class      conditional
+when       SPN+PS
+since      2001
+says       With POSIX_SPAWN_SETSCHEDULER and a policy that does not exist, the
+           call fails as sched_setscheduler() does (EINVAL, or EPERM when the
+           caller lacks privilege), or returns 0 and the child ends with status
+           127; the image does not run and no child is left when an error is
+           returned.
+note       The attribute setters may refuse the value (EINVAL); then the test is
+           unresolved.
+test       t/053-setscheduler-invalid.c
+
+assertion  XSH.posix_spawn.054
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       A pending alarm of the caller (the test's own, set to 40 seconds) is
+           not inherited: in the child alarm(0) reports nothing pending.
+test       t/054-alarm-not-inherited.c
+
+assertion  XSH.posix_spawn.055
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       Signals pending for the caller are not pending for the child: with
+           SIGUSR1 blocked and pending in the caller, the child (which inherits
+           the mask) has nothing pending.
+test       t/055-pending-not-inherited.c
+
+assertion  XSH.posix_spawn.056
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       The child has the caller's file mode creation mask (here 027).
+test       t/056-umask-inherited.c
+
+assertion  XSH.posix_spawn.057
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       The child has the caller's resource limits: a soft RLIMIT_CORE of 7777
+           set by the caller is the child's soft limit.
+note       Unresolved when the hard limit is below 7777.
+test       t/057-rlimit-inherited.c
+
+assertion  XSH.posix_spawn.058
+anchor     functions/posix_spawn.html#ERRORS
+anchor     functions/exec.html#ERRORS/ENOENT
+class      required
+since      2001
+says       posix_spawn() of a path that does not exist, and of an empty path,
+           fails as exec does, with ENOENT returned (or returns 0 with the child
+           ending with status 127); the image does not run, and when an error is
+           returned no child exists.
+test       t/058-err-enoent.c
+
+assertion  XSH.posix_spawn.059
+anchor     functions/posix_spawn.html#ERRORS
+anchor     functions/exec.html#ERRORS/ENOENT
+class      required
+since      2001
+says       posix_spawnp() of a name found in no directory of PATH fails with
+           ENOENT returned (or returns 0 with the child ending with status 127).
+test       t/059-err-spawnp-enoent.c
+
+assertion  XSH.posix_spawn.060
+anchor     functions/posix_spawn.html#ERRORS
+anchor     functions/exec.html#ERRORS/EACCES
+class      required
+since      2001
+says       posix_spawn() of a regular file with mode 0644 (no execute permission
+           for anyone, so even a privileged process may not run it) fails with
+           EACCES returned (or returns 0 with the child ending with status 127).
+test       t/060-err-eacces.c
+
+assertion  XSH.posix_spawn.061
+anchor     functions/posix_spawn.html#ERRORS
+anchor     functions/exec.html#ERRORS/ENOTDIR
+class      required
+since      2008
+says       posix_spawn() of "prog/", where prog is an executable regular file,
+           fails with ENOTDIR returned (or returns 0 with the child ending with
+           status 127).
+test       t/061-err-enotdir.c
+
+assertion  XSH.posix_spawn.062
+anchor     functions/posix_spawn.html#ERRORS
+anchor     functions/exec.html#ERRORS/ELOOP
+class      required
+since      2001
+says       posix_spawn() of a symbolic link that is part of a loop (a -> b, b ->
+           a) fails with ELOOP returned (or returns 0 with the child ending with
+           status 127).
+test       t/062-err-eloop.c
+
+assertion  XSH.posix_spawn.063
+anchor     functions/posix_spawn.html#ERRORS
+anchor     functions/exec.html#ERRORS/ENAMETOOLONG
+class      required
+since      2001
+says       posix_spawn() of a path whose last component is {NAME_MAX}+1 bytes
+           long fails with ENAMETOOLONG returned, or with ENOENT, which also
+           applies because no such file can exist (or returns 0 with the child
+           ending with status 127).
+note       NOTINUSE where names are truncated instead (_PC_NO_TRUNC is 0) or
+           there is no limit.
+test       t/063-err-enametoolong.c
+
+assertion  XSH.posix_spawn.064
+anchor     functions/posix_spawn.html#ERRORS
+anchor     functions/exec.html#ERRORS/ENOEXEC
+class      required
+since      2001
+says       posix_spawn() of a file with execute permission whose contents are in
+           no recognized format (64 bytes of 0x01) fails with ENOEXEC returned
+           (or returns 0 with the child ending with status 127); posix_spawn()
+           does not hand the file to sh.
+note       A rule of the environment that interprets the file (a registered
+           format handler) would be the environment, not posix_spawn() (as for
+           exec).
+test       t/064-err-enoexec.c
+
+assertion  XSH.posix_spawn.065
+anchor     functions/posix_spawn.html#ERRORS
+anchor     functions/exec.html#ERRORS/E2BIG
+class      disputed
+since      2001
+says       posix_spawn() with arguments totalling more than {ARG_MAX} bytes (as
+           sysconf() reports it) fails with E2BIG returned (or returns 0 with the
+           child ending with status 127).
+note       disputed (Q-9): which {ARG_MAX} applies is open (as for exec). ENOMEM
+           is also accepted when the arguments exceed the stack limit (XSH 2.3).
+           Strings of 4096 bytes are used. An indeterminate {ARG_MAX} makes the
+           test NOTINUSE, one over 64 MiB UNRESOLVED.
+test       t/065-err-e2big.c
+
+assertion  XSH.posix_spawn.066
+anchor     functions/posix_spawn.html#ERRORS
+class      required
+since      2024
+says       When an open action fails (the file does not exist) after an earlier
+           chdir action succeeded, posix_spawn() returns ENOENT (or returns 0
+           with the child ending with status 127), the image does not run, and
+           the caller's working directory is unchanged.
+test       t/066-err-addopen.c
+
+assertion  XSH.posix_spawn.067
+anchor     functions/posix_spawn.html#ERRORS
+class      required
+since      2024
+says       A chdir action to a directory that does not exist makes posix_spawn()
+           return ENOENT (or return 0 with the child ending with status 127), and
+           the image does not run.
+test       t/067-err-addchdir.c
+
+assertion  XSH.posix_spawn.068
+anchor     functions/posix_spawn.html#ERRORS
+class      required
+since      2001
+says       A dup2 action whose source descriptor is not open makes posix_spawn()
+           return EBADF (or return 0 with the child ending with status 127), and
+           the image does not run.
+test       t/068-err-adddup2.c
+
+assertion  XSH.posix_spawn.069
+anchor     functions/posix_spawn.html#ERRORS
+class      required
+since      2001
+says       With POSIX_SPAWN_SETPGROUP and a pgroup that is the ID of no process
+           group in the caller's session, posix_spawn() fails as setpgid() does
+           (EPERM), returning it (or returns 0 with the child ending with status
+           127); the image does not run.
+note       The group ID is chosen from values near the caller's process ID that
+           name no process; the attribute setter may refuse it, then unresolved.
+test       t/069-err-setpgroup.c

@@ -1,0 +1,83 @@
+# XSH posix_spawn_file_actions_adddup2()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Effects are shown by really spawning this program as a child image (the
+# test file re-runs itself with "img <mode>" arguments and reports over a
+# pipe). The function returns the error number; errno is not used.
+
+assertion  XSH.posix_spawn_file_actions_adddup2.001
+anchor     functions/posix_spawn_file_actions_adddup2.html#RETURN VALUE
+anchor     functions/posix_spawn_file_actions_adddup2.html#DESCRIPTION
+class      required
+since      2001
+says       posix_spawn_file_actions_adddup2() with an open descriptor and a
+           different number returns 0.
+test       t/001-ok.c
+
+assertion  XSH.posix_spawn_file_actions_adddup2.002
+anchor     functions/posix_spawn_file_actions_adddup2.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       A child spawned with a dup2 action from fildes (a file read to offset 3)
+           to newfildes (not open in the parent) can read at newfildes
+           the bytes that follow in the file, and the parent's offset on
+           fildes then reflects that read (one open file description).
+test       t/002-effect.c
+
+assertion  XSH.posix_spawn_file_actions_adddup2.003
+anchor     functions/posix_spawn_file_actions_adddup2.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       When fildes has FD_CLOEXEC set and newfildes differs, the child has
+           newfildes open with FD_CLOEXEC clear (it was made by dup2)
+           and fildes closed.
+test       t/003-cloexec-source.c
+
+assertion  XSH.posix_spawn_file_actions_adddup2.004
+anchor     functions/posix_spawn_file_actions_adddup2.html#DESCRIPTION
+anchor     functions/posix_spawn_file_actions_adddup2.html#RATIONALE
+class      required
+since      2024
+says       When fildes and newfildes are the same open descriptor with FD_CLOEXEC
+           set, the child has it open (same file) with FD_CLOEXEC clear.
+test       t/004-equal-clears.c
+
+assertion  XSH.posix_spawn_file_actions_adddup2.005
+anchor     functions/posix_spawn_file_actions_adddup2.html#DESCRIPTION
+class      required
+since      2001
+says       When newfildes is already open in the parent (on another file), the
+           child's newfildes refers to the file of fildes.
+test       t/005-replaces.c
+
+assertion  XSH.posix_spawn_file_actions_adddup2.006
+anchor     functions/posix_spawn_file_actions_adddup2.html#ERRORS/EBADF
+class      required
+since      2001
+says       posix_spawn_file_actions_adddup2() with a negative fildes, and with a
+           negative newfildes (each -1 and the most negative int),
+           returns EBADF.
+test       t/006-ebadf-neg.c
+
+assertion  XSH.posix_spawn_file_actions_adddup2.007
+anchor     functions/posix_spawn_file_actions_adddup2.html#ERRORS/EBADF
+class      required
+since      2001
+says       posix_spawn_file_actions_adddup2() with fildes equal to {OPEN_MAX}, and
+           with newfildes equal to {OPEN_MAX}, returns EBADF.
+note       See Q-90 (the RATIONALE of addclose against the shall of adddup2).
+test       t/007-ebadf-max.c
+
+assertion  XSH.posix_spawn_file_actions_adddup2.008
+anchor     functions/posix_spawn_file_actions_adddup2.html#ERRORS
+anchor     functions/posix_spawn_file_actions_adddup2.html#DESCRIPTION
+anchor     functions/posix_spawn.html#ERRORS
+class      required
+since      2001
+says       posix_spawn_file_actions_adddup2() with a source number that is not open
+           at the time of the call returns 0; a spawn with that action
+           does not run the image: posix_spawn() returns an error
+           number, or the child exits with status 127.
+test       t/008-notopen.c

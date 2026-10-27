@@ -1,0 +1,65 @@
+# XSH posix_spawnattr_getflags() and posix_spawnattr_setflags()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Flags tied to Process Scheduling (POSIX_SPAWN_SETSCHEDPARAM and
+# POSIX_SPAWN_SETSCHEDULER) and POSIX_SPAWN_SETSID are used only when the
+# header defines them. Effects are shown by really spawning this program as
+# a child image. The functions return the error number; errno is not used.
+
+assertion  XSH.posix_spawnattr_getflags.001
+anchor     functions/posix_spawnattr_getflags.html#DESCRIPTION
+anchor     functions/posix_spawnattr_getflags.html#RETURN VALUE
+class      required
+since      2001
+says       posix_spawnattr_getflags() on a newly initialised object returns 0 and
+           stores 0.
+test       t/001-default.c
+
+assertion  XSH.posix_spawnattr_getflags.002
+anchor     functions/posix_spawnattr_getflags.html#DESCRIPTION
+anchor     functions/posix_spawnattr_getflags.html#RETURN VALUE
+class      required
+since      2001
+says       For each flag the header defines, posix_spawnattr_setflags() with that
+           flag alone returns 0 and posix_spawnattr_getflags() then
+           returns 0 and stores that value.
+test       t/002-roundtrip-each.c
+
+assertion  XSH.posix_spawnattr_getflags.003
+anchor     functions/posix_spawnattr_getflags.html#DESCRIPTION
+anchor     functions/posix_spawnattr_getflags.html#RETURN VALUE
+class      required
+since      2001
+says       posix_spawnattr_setflags() with the bitwise OR of POSIX_SPAWN_RESETIDS,
+           POSIX_SPAWN_SETSIGDEF and POSIX_SPAWN_SETSIGMASK returns 0
+           and posix_spawnattr_getflags() stores exactly that value.
+test       t/003-roundtrip-or.c
+
+assertion  XSH.posix_spawnattr_getflags.004
+anchor     functions/posix_spawnattr_getflags.html#DESCRIPTION
+class      required
+since      2001
+says       A later posix_spawnattr_setflags() replaces the earlier value: after
+           setting a flag and then 0 the stored value is 0, and after
+           setting one flag and then another the stored value is the
+           second only.
+test       t/004-replaces.c
+
+assertion  XSH.posix_spawnattr_getflags.005
+anchor     functions/posix_spawnattr_getflags.html#DESCRIPTION
+class      required
+since      2001
+says       Two initialised objects keep their own flags: different values set in
+           each are read back unchanged from each.
+test       t/005-two-objects.c
+
+assertion  XSH.posix_spawnattr_getflags.006
+anchor     functions/posix_spawnattr_getflags.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       A child spawned with the flag POSIX_SPAWN_SETPGROUP set (spawn-pgroup 0)
+           is the leader of a new process group, and after
+           posix_spawnattr_setflags() with 0 a child spawned with the
+           same object stays in the parent's group.
+test       t/006-effect.c

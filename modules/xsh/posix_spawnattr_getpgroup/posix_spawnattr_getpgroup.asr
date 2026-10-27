@@ -1,0 +1,44 @@
+# XSH posix_spawnattr_getpgroup() and posix_spawnattr_setpgroup()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Effects are shown by really spawning this program as a child image. The
+# functions return the error number; errno is not used.
+
+assertion  XSH.posix_spawnattr_getpgroup.001
+anchor     functions/posix_spawnattr_getpgroup.html#DESCRIPTION
+anchor     functions/posix_spawnattr_getpgroup.html#RETURN VALUE
+class      required
+since      2001
+says       posix_spawnattr_getpgroup() on a newly initialised object returns 0 and
+           stores 0.
+test       t/001-default.c
+
+assertion  XSH.posix_spawnattr_getpgroup.002
+anchor     functions/posix_spawnattr_getpgroup.html#DESCRIPTION
+anchor     functions/posix_spawnattr_getpgroup.html#RETURN VALUE
+class      required
+since      2001
+says       posix_spawnattr_setpgroup() with the caller's own process group ID
+           returns 0 and posix_spawnattr_getpgroup() stores it; setting
+           0 afterwards makes it read back 0; two objects keep their own
+           values.
+test       t/002-roundtrip.c
+
+assertion  XSH.posix_spawnattr_getpgroup.003
+anchor     functions/posix_spawnattr_getpgroup.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With POSIX_SPAWN_SETPGROUP set and spawn-pgroup the ID of an existing
+           process group (led by an earlier spawned child), the child
+           spawned joins that group.
+test       t/003-join.c
+
+assertion  XSH.posix_spawnattr_getpgroup.004
+anchor     functions/posix_spawnattr_getpgroup.html#DESCRIPTION
+anchor     functions/posix_spawn.html#DESCRIPTION
+class      required
+since      2001
+says       With a non-zero spawn-pgroup but POSIX_SPAWN_SETPGROUP clear, the child
+           stays in the parent's process group.
+test       t/004-unused-without-flag.c
