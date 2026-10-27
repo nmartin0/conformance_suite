@@ -1,0 +1,47 @@
+# XSH sem_close()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Closing an unnamed semaphore, using a closed handle and closing with
+# blocked threads are undefined and not tried. When sem_open() returns the
+# same handle twice, closing one would close both, so the test that needs
+# two handles reports NOTINUSE. The case of a semaphore unlinked before the
+# close is in sem_unlink.
+
+assertion  XSH.sem_close.001
+anchor     functions/sem_close.html#DESCRIPTION
+anchor     functions/sem_close.html#RETURN VALUE
+class      required
+says       sem_close() of a handle from sem_open() returns 0.
+test       t/001-close.c
+
+assertion  XSH.sem_close.002
+anchor     functions/sem_close.html#DESCRIPTION
+class      required
+says       A named semaphore that has not been unlinked keeps its state
+           across sem_close(): after two posts and a close, sem_open(name,
+           0) succeeds and the value is 2 (sem_getvalue() and trywait).
+test       t/002-state-kept.c
+
+assertion  XSH.sem_close.003
+anchor     functions/sem_close.html#DESCRIPTION
+class      required
+says       With two distinct handles of one named semaphore, closing one
+           leaves the other usable: a post through it works and trywait
+           counts the semaphore's value (2 after a post on value 1).
+test       t/003-other-handle.c
+
+assertion  XSH.sem_close.004
+anchor     functions/sem_close.html#DESCRIPTION
+class      required
+says       Where a named semaphore uses a file descriptor, sem_close()
+           closes it; observable as an unchanged lowest free descriptor
+           after twenty open/close cycles (after one warming cycle).
+test       t/004-no-descriptor-left.c
+
+assertion  XSH.sem_close.005
+anchor     functions/sem_close.html#DESCRIPTION
+class      required
+says       A child that opens a named semaphore, posts it once and closes it
+           leaves the semaphore in place for the parent: the parent's handle
+           still works and counts the child's post.
+test       t/005-close-in-child.c

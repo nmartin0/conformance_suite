@@ -1,0 +1,13 @@
+# sem_destroy.cov - every requirement unit on functions/sem_destroy.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:848053c7     XSH.sem_destroy.001 XSH.sem_destroy.002 XSH.sem_destroy.003
+DESCRIPTION:b8b5f1c4     XSH.sem_destroy.004
+DESCRIPTION:83e43824     none  undefined behaviour
+DESCRIPTION:700f8a37     partial XSH.sem_destroy.002  # only the re-initialization that makes the semaphore usable again
+DESCRIPTION:9bb29232     XSH.sem_destroy.001 XSH.sem_destroy.003
+DESCRIPTION:7f493922     none  undefined behaviour
+RETURN_VALUE:0dae8796    XSH.sem_destroy.001
+RETURN_VALUE:def0b338    none  the errors are permissions
+ERRORS:d3187e08          none  may fail
+ERRORS:321fed35          none  may fail; destroying with blocked threads is undefined

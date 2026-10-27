@@ -1,0 +1,46 @@
+# XSH sem_getvalue()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# For a locked semaphore the page allows zero or a negative number whose
+# size is a count of waiters at some time during the call; no particular
+# negative convention is required. EINVAL is a permission. The page lists
+# no EOVERFLOW.
+
+assertion  XSH.sem_getvalue.001
+anchor     functions/sem_getvalue.html#DESCRIPTION
+anchor     functions/sem_getvalue.html#RETURN VALUE
+class      required
+says       sem_getvalue() of an unlocked semaphore returns 0 and stores the
+           semaphore's value (1, 5, and {SEM_VALUE_MAX} where it fits an
+           int), the same on a second call, and does not change the state
+           (the small ones then still give that many trywait successes).
+test       t/001-reports-value.c
+
+assertion  XSH.sem_getvalue.002
+anchor     functions/sem_getvalue.html#DESCRIPTION
+class      required
+says       sem_getvalue() of a semaphore of value 0 with no thread waiting
+           stores 0 (the "negative number" for no waiters is zero), both
+           for a new one and after a post and a wait.
+test       t/002-zero.c
+
+assertion  XSH.sem_getvalue.003
+anchor     functions/sem_getvalue.html#DESCRIPTION
+class      required
+says       Single-threaded, the value stored follows the operations:
+           5, 4 after a wait, 5 after a post, 0 after five trywaits,
+           1 after another post.
+test       t/003-tracks.c
+
+assertion  XSH.sem_getvalue.004
+anchor     functions/sem_getvalue.html#DESCRIPTION
+class      required
+says       With two threads blocked in sem_wait() on the semaphore,
+           sem_getvalue() returns 0 and stores 0, -1 or -2 (never a
+           positive number or a larger count); the waiters are not
+           disturbed (two posts then release both) and the value is 0
+           afterwards.
+note       -1 is accepted too: the count is of waiters at some time during
+           the call, and a helper thread may not yet be blocked. No
+           negative convention is required.
+test       t/004-waiters.c

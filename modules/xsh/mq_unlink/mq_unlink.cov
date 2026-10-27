@@ -1,0 +1,13 @@
+# mq_unlink.cov - every requirement unit on functions/mq_unlink.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:b26a6ce8        XSH.mq_unlink.001
+DESCRIPTION:81f09160        XSH.mq_unlink.002 XSH.mq_unlink.003
+DESCRIPTION:06bbb73a        none  unspecified
+DESCRIPTION:22d343ad        XSH.mq_unlink.001 XSH.mq_unlink.002
+RETURN_VALUE:f6402798       XSH.mq_unlink.001 XSH.mq_unlink.004
+RETURN_VALUE:8d0f50e1       partial XSH.mq_unlink.004  # only the ENOENT failure; the queue is unchanged trivially
+ERRORS:22c9504f             untestable  the condition for denying permission is not stated
+ERRORS:2459144e             todo  needs a waiting mq_unlink(), which the page makes optional
+ERRORS:4b3138f9             XSH.mq_unlink.004
+ERRORS:d0636731             XSH.mq_unlink.005

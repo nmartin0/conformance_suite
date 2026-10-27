@@ -1,0 +1,12 @@
+# aio_return.cov - every requirement unit on functions/aio_return.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:951b5376        XSH.aio_return.001 XSH.aio_return.002
+DESCRIPTION:95ff0e5f        partial XSH.aio_return.001 XSH.aio_return.002  # the fsync() status is tested on aio_fsync
+DESCRIPTION:2ba54071        none  unspecified
+DESCRIPTION:ad189b8e        none  unspecified after the first retrieval (the second call is only made)
+DESCRIPTION:73a4ec6c        XSH.aio_return.003
+RETURN_VALUE:854b4e63       XSH.aio_return.001 XSH.aio_return.002 XSH.aio_return.003
+RETURN_VALUE:912e1c1c       none  unspecified
+RETURN_VALUE:36f79846       XSH.aio_return.004
+ERRORS:02a272d1             none  may fail; the outcome is not specified

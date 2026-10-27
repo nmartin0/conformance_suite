@@ -1,0 +1,71 @@
+# XSH lio_listio()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.lio_listio.001
+anchor     functions/lio_listio.html#DESCRIPTION
+anchor     functions/lio_listio.html#RETURN VALUE
+class      required
+since      2001
+says       LIO_WAIT with a write, a read of a file and a read of a pipe
+           (fed 200 ms later by another thread) returns 0 only after all
+           three have completed (error status 0, the byte counts, the data),
+           and the sig argument (SIGEV_SIGNAL) is ignored: no signal comes.
+test       t/001-wait-mixture.c
+
+assertion  XSH.lio_listio.002
+anchor     functions/lio_listio.html#DESCRIPTION
+class      required
+since      2001
+says       Null entries and a LIO_NOP entry (descriptor -1) in the list are
+           ignored: LIO_WAIT returns 0 and the write entry is carried out.
+test       t/002-nop-null.c
+
+assertion  XSH.lio_listio.003
+anchor     functions/lio_listio.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.4.2
+class      required
+since      2001
+says       LIO_NOWAIT with a SIGEV_SIGNAL (SIGRTMIN, SA_SIGINFO) sig returns
+           0; no notification comes while one request (a pipe read) is
+           pending; after it completes the signal is delivered with the
+           sigev_value pointer, and all requests are complete.
+test       t/003-nowait-notify.c
+
+assertion  XSH.lio_listio.004
+anchor     functions/lio_listio.html#DESCRIPTION
+anchor     functions/lio_listio.html#RETURN VALUE
+class      required
+since      2001
+says       LIO_NOWAIT with a null sig returns 0 at once while a request (a
+           pipe read) is still in progress; it completes when data arrives.
+test       t/004-nowait-pending.c
+
+assertion  XSH.lio_listio.005
+anchor     functions/lio_listio.html#ERRORS/EINVAL
+anchor     functions/lio_listio.html#DESCRIPTION
+class      required
+since      2001
+says       A mode that is neither LIO_WAIT nor LIO_NOWAIT makes lio_listio()
+           fail with EINVAL, and no operation of the list is carried out.
+test       t/005-einval-mode.c
+
+assertion  XSH.lio_listio.006
+anchor     functions/lio_listio.html#ERRORS/EIO
+anchor     functions/lio_listio.html#RETURN VALUE
+anchor     functions/lio_listio.html#DESCRIPTION
+class      required
+since      2001
+says       In a LIO_WAIT list with a read on a write-only descriptor and a
+           good write, lio_listio() returns -1 with EIO; the failing request
+           has error status EBADF and return status -1; the good one is
+           still carried out (error status 0, return status 4).
+test       t/006-individual-failure.c
+
+assertion  XSH.lio_listio.007
+anchor     functions/lio_listio.html#ERRORS/EINVAL
+class      required
+since      2001
+says       A list of one more entry than AIO_LISTIO_MAX (as sysconf() gives
+           it; all null) makes lio_listio() fail with EINVAL; with no
+           determinate value the test reports NOTINUSE.
+test       t/007-nent-max.c

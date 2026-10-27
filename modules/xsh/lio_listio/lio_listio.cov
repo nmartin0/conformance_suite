@@ -1,0 +1,43 @@
+# lio_listio.cov - every requirement unit on functions/lio_listio.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:f2260218        XSH.lio_listio.001 XSH.lio_listio.002
+DESCRIPTION:9e7aa2da        XSH.lio_listio.001 XSH.lio_listio.004
+DESCRIPTION:0ece1b0d        XSH.lio_listio.001
+DESCRIPTION:8effe464        XSH.lio_listio.003 XSH.lio_listio.004
+DESCRIPTION:f99fb96e        partial XSH.lio_listio.004  # the absence of a notification is not checked
+DESCRIPTION:e096fcfa        XSH.lio_listio.003
+DESCRIPTION:e81523a7        none  unspecified
+DESCRIPTION:39da5db9        none  a remark
+DESCRIPTION:daef7478        none  a remark
+DESCRIPTION:e1e3e78a        XSH.lio_listio.002
+DESCRIPTION:59fc8792        app   undefined behaviour
+DESCRIPTION:a4d678c4        app   undefined behaviour
+DESCRIPTION:fcaf75a4        XSH.lio_listio.001 XSH.lio_listio.002
+DESCRIPTION:4941b8c3        none  a remark
+DESCRIPTION:ae5acac7        XSH.lio_listio.002
+DESCRIPTION:0b88a923        XSH.lio_listio.001 XSH.lio_listio.003
+DESCRIPTION:d8c7d0cc        XSH.lio_listio.001
+DESCRIPTION:85c3408e        XSH.lio_listio.001
+DESCRIPTION:92db256f        XSH.lio_listio.001
+DESCRIPTION:3f58daf5        XSH.lio_listio.001
+DESCRIPTION:216bc2c4        XSH.lio_listio.006
+DESCRIPTION:27429e20        XSH.lio_listio.002
+DESCRIPTION:7cda58b5        todo  synchronized I/O completion is not observable without a crash
+DESCRIPTION:97a5813c        todo  environment: needs an open file description with a known offset maximum
+DESCRIPTION:004119e2        app   undefined behaviour
+RETURN_VALUE:53eff757       XSH.lio_listio.003 XSH.lio_listio.004
+RETURN_VALUE:a11448aa       XSH.lio_listio.001 XSH.lio_listio.002
+RETURN_VALUE:c571f4a1       XSH.lio_listio.005 XSH.lio_listio.006 XSH.lio_listio.007
+RETURN_VALUE:cc9c8801       XSH.lio_listio.006
+RETURN_VALUE:02669f9b       XSH.lio_listio.006
+RETURN_VALUE:5ca1b5b7       XSH.lio_listio.006
+RETURN_VALUE:9a982a53       XSH.lio_listio.006
+RETURN_VALUE:bf33c7bf       XSH.lio_listio.006
+ERRORS:8fd43f2f             todo  environment: resource exhaustion
+ERRORS:94c2c4c5             todo  environment: the system-wide AIO_MAX limit
+ERRORS:ffd02adf             XSH.lio_listio.005 XSH.lio_listio.007
+ERRORS:d43e5b6f             todo  environment: a signal during LIO_WAIT (interrupted wait not arranged)
+ERRORS:fbd09507             XSH.lio_listio.006
+ERRORS:f084a492             todo  environment: resource exhaustion for one request
+ERRORS:c32e8486             todo  the status of a request still in progress at return is not observable after LIO_WAIT

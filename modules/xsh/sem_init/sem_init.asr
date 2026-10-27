@@ -1,0 +1,70 @@
+# XSH sem_init()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semaphores are in the Base since Issue 7, with no option shading. The
+# initial value is observed with sem_trywait() counts (and, for the
+# maximum, sem_getvalue()). Initializing an already initialized semaphore
+# is undefined and not tried. The descriptor-based implementation is a
+# permission, not a requirement.
+
+assertion  XSH.sem_init.001
+anchor     functions/sem_init.html#DESCRIPTION
+anchor     functions/sem_init.html#RETURN VALUE
+class      required
+says       sem_init(sem, 0, value) returns 0 and the semaphore holds value:
+           for 0, 1 and 3, exactly that many sem_trywait() calls succeed
+           and the next one fails with EAGAIN.
+test       t/001-initial-value.c
+
+assertion  XSH.sem_init.002
+anchor     functions/sem_init.html#DESCRIPTION
+class      required
+says       An initialized unnamed semaphore can be used with sem_wait(),
+           sem_trywait(), sem_post(), sem_timedwait() and sem_clockwait()
+           (CLOCK_REALTIME and CLOCK_MONOTONIC), each returning 0, and is
+           then destroyed by sem_destroy() returning 0; the posts and
+           waits balance.
+test       t/002-usable.c
+
+assertion  XSH.sem_init.003
+anchor     functions/sem_init.html#DESCRIPTION
+class      required
+says       With pshared 0 the semaphore is shared by the threads of the
+           process: one thread blocked in sem_wait() on a semaphore of
+           value 0 is released by a sem_post() from another, and posts
+           the reply semaphore in turn.
+timeout    90
+test       t/003-threads.c
+
+assertion  XSH.sem_init.004
+anchor     functions/sem_init.html#DESCRIPTION
+class      required
+says       With pshared non-zero, semaphores placed in a MAP_SHARED mapping
+           are shared between a process and its forked child: the child's
+           timed wait is released by the parent's sem_post(), and the
+           child's sem_post() on a second such semaphore is seen by the
+           parent.
+note       The page has no option shading for process-shared semaphores
+           (unlike the process-shared mutex, which is TSH). The mapping is
+           a temporary file of the private working directory.
+timeout    90
+test       t/004-processes.c
+
+assertion  XSH.sem_init.005
+anchor     functions/sem_init.html#ERRORS/EINVAL
+class      required
+says       sem_init() with a value one above {SEM_VALUE_MAX} (and with
+           UINT_MAX) returns -1 with errno EINVAL.
+note       NOTINUSE where {SEM_VALUE_MAX} is not below UINT_MAX (no such
+           value exists); UNRESOLVED if it is indeterminate.
+test       t/005-einval.c
+
+assertion  XSH.sem_init.006
+anchor     functions/sem_init.html#DESCRIPTION
+anchor     functions/sem_init.html#ERRORS/EINVAL
+class      required
+says       sem_init() with the value {SEM_VALUE_MAX} itself returns 0, and
+           sem_getvalue() then reports that value.
+note       Only the larger values fail with EINVAL. UNRESOLVED where
+           {SEM_VALUE_MAX} is indeterminate or exceeds INT_MAX.
+test       t/006-max-value.c

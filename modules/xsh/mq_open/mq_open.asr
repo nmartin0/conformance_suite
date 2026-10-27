@@ -1,0 +1,186 @@
+# XSH mq_open()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Message passing option (MSG). Names are "/pcmq<pid>x<tag>", unlinked on
+# every exit path. The invalid descriptor used elsewhere is (mqd_t)-1, the
+# value mq_open() itself returns on failure. Not tested: the group and owner
+# of a created queue (not observable through the interface), file mode
+# bits, names without a leading slash and slashes inside names
+# (implementation-defined), EINTR, ENFILE and ENOSPC (cannot be arranged).
+
+assertion  XSH.mq_open.001
+anchor     functions/mq_open.html#DESCRIPTION
+anchor     functions/mq_open.html#DESCRIPTION/O_CREAT
+anchor     functions/mq_open.html#RETURN VALUE
+class      conditional
+when       MSG
+since      2001
+says       mq_open() with O_RDWR|O_CREAT|O_EXCL and an attr for a name not in
+           use returns a descriptor, and the new queue holds no messages.
+test       t/001-create.c
+
+assertion  XSH.mq_open.002
+anchor     functions/mq_open.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       Opening the same leading-slash name again, in the same process or
+           in another one, reaches the same queue: a message sent through
+           one descriptor is received through another.
+test       t/002-same-queue.c
+
+assertion  XSH.mq_open.003
+anchor     functions/mq_open.html#DESCRIPTION/O_EXCL
+anchor     functions/mq_open.html#ERRORS/EEXIST
+class      conditional
+when       MSG
+since      2001
+says       With O_CREAT and O_EXCL, mq_open() of a name that is in use fails
+           with EEXIST.
+test       t/003-eexist.c
+
+assertion  XSH.mq_open.004
+anchor     functions/mq_open.html#DESCRIPTION/O_CREAT
+anchor     functions/mq_open.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       O_CREAT without O_EXCL on a name already in use returns a
+           descriptor to the existing queue and has no other effect: the
+           attr given is not applied (mq_maxmsg and mq_msgsize stay) and the
+           messages in the queue are left alone.
+test       t/004-creat-existing.c
+
+assertion  XSH.mq_open.005
+anchor     functions/mq_open.html#DESCRIPTION/O_CREAT
+class      conditional
+when       MSG
+since      2001
+says       A queue created with attr non-NULL has the mq_maxmsg and
+           mq_msgsize that attr gives (tried with 4 and 64, and 3 and 10).
+test       t/005-attr-honoured.c
+
+assertion  XSH.mq_open.006
+anchor     functions/mq_open.html#DESCRIPTION/O_CREAT
+class      conditional
+when       MSG
+since      2001
+says       The mq_flags and mq_curmsgs members of attr are ignored at
+           creation: a queue created with attr.mq_flags set to O_NONBLOCK
+           and attr.mq_curmsgs set to 7 has no messages, and the new
+           description does not have O_NONBLOCK.
+test       t/006-attr-ignored.c
+
+assertion  XSH.mq_open.007
+anchor     functions/mq_open.html#ERRORS/EINVAL
+class      conditional
+when       MSG
+since      2001
+says       O_CREAT with attr non-NULL and mq_maxmsg or mq_msgsize equal to
+           zero or negative fails with EINVAL (each of the four cases).
+test       t/007-einval-attr.c
+
+assertion  XSH.mq_open.008
+anchor     functions/mq_open.html#DESCRIPTION/O_CREAT
+class      conditional
+when       MSG
+since      2001
+says       With attr NULL the queue is created, empty, with positive
+           mq_maxmsg and mq_msgsize, and a one-byte message can be sent and
+           received with a buffer of mq_msgsize bytes.
+note       The default values are implementation-defined; only their being
+           usable is checked.
+test       t/008-default-attr.c
+
+assertion  XSH.mq_open.009
+anchor     functions/mq_open.html#DESCRIPTION/O_NONBLOCK
+class      conditional
+when       MSG
+since      2001
+says       O_NONBLOCK in oflag puts O_NONBLOCK in the description's mq_flags
+           and makes mq_receive() on the empty queue fail with EAGAIN; a
+           descriptor opened without it has no O_NONBLOCK.
+test       t/009-nonblock.c
+
+assertion  XSH.mq_open.010
+anchor     functions/mq_open.html#DESCRIPTION/O_RDONLY
+class      conditional
+when       MSG
+since      2001
+says       A descriptor opened O_RDONLY receives messages, and mq_send() on
+           it fails with EBADF.
+test       t/010-rdonly.c
+
+assertion  XSH.mq_open.011
+anchor     functions/mq_open.html#DESCRIPTION/O_WRONLY
+class      conditional
+when       MSG
+since      2001
+says       A descriptor opened O_WRONLY sends messages, and mq_receive() on
+           it fails with EBADF.
+test       t/011-wronly.c
+
+assertion  XSH.mq_open.012
+anchor     functions/mq_open.html#DESCRIPTION/O_RDWR
+class      conditional
+when       MSG
+since      2001
+says       A descriptor opened O_RDWR both sends and receives.
+test       t/012-rdwr.c
+
+assertion  XSH.mq_open.013
+anchor     functions/mq_open.html#ERRORS/ENOENT
+anchor     functions/mq_open.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       Without O_CREAT, mq_open() of a name that is not in use fails with
+           ENOENT.
+test       t/013-enoent.c
+
+assertion  XSH.mq_open.014
+anchor     functions/mq_open.html#ERRORS/ENAMETOOLONG
+anchor     functions/mq_unlink.html#ERRORS/ENAMETOOLONG
+class      conditional
+when       MSG
+since      2008
+says       With a name of 4200 bytes (past the largest limit the page names),
+           mq_open() either fails with ENAMETOOLONG (or EINVAL, the name not
+           being supported), or succeeds, in which case mq_unlink() of the
+           same name succeeds and does not fail with ENAMETOOLONG.
+note       ENAMETOOLONG is a may-fail error since Issue 7.
+test       t/014-enametoolong.c
+
+assertion  XSH.mq_open.015
+anchor     functions/mq_open.html#ERRORS/EACCES
+class      conditional
+when       MSG
+since      2001
+needs      root
+says       A queue created with mode 0600 cannot be opened O_RDONLY by a
+           process of another user without privileges: mq_open() fails with
+           EACCES.
+note       Run as root, so that the child can take another user ID.
+test       t/015-eacces.c
+
+assertion  XSH.mq_open.016
+anchor     functions/mq_open.html#ERRORS/EMFILE
+anchor     functions/mq_open.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       With every file descriptor of the process in use, mq_open() fails
+           with EMFILE; NOTINUSE where the open succeeds, the descriptor then
+           not being a file descriptor.
+test       t/016-emfile.c
+
+assertion  XSH.mq_open.017
+anchor     functions/mq_open.html#DESCRIPTION/O_EXCL
+class      conditional
+when       MSG
+since      2001
+says       Three threads that each try to create the same 40 names with
+           O_CREAT|O_EXCL: for every name exactly one create succeeds and the
+           others fail with EEXIST.
+note       Atomicity is only checked for the outcome; a race may not show.
+test       t/017-excl-atomic.c

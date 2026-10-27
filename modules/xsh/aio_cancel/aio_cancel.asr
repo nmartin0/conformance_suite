@@ -1,0 +1,52 @@
+# XSH aio_cancel()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Which requests can be canceled is implementation-defined, so a request
+# that cannot complete (a read of an empty pipe) gives AIO_CANCELED or
+# AIO_NOTCANCELED, and the test follows the state each result implies.
+
+assertion  XSH.aio_cancel.001
+anchor     functions/aio_cancel.html#RETURN VALUE
+anchor     functions/aio_cancel.html#DESCRIPTION
+class      required
+since      2001
+says       For a request that has completed, aio_cancel() with its control
+           block returns AIO_ALLDONE, and the request's error and return
+           statuses are unchanged.
+note       A null control block with nothing outstanding is not tested: the
+           page's AIO_ALLDONE rule (all operations already completed) is
+           vacuous there and it does not say whether AIO_CANCELED or
+           AIO_ALLDONE results.
+test       t/001-alldone.c
+
+assertion  XSH.aio_cancel.002
+anchor     functions/aio_cancel.html#RETURN VALUE
+anchor     functions/aio_cancel.html#DESCRIPTION
+class      required
+since      2001
+says       For a request that cannot complete, aio_cancel() returns
+           AIO_CANCELED, and the request then has error status ECANCELED
+           and return status -1; or it returns AIO_NOTCANCELED, and the
+           request is untouched (still in progress, completing normally
+           when data arrives). Any other result fails.
+test       t/002-pending.c
+
+assertion  XSH.aio_cancel.003
+anchor     functions/aio_cancel.html#ERRORS/EBADF
+class      required
+since      2001
+says       aio_cancel() with descriptor -1, and with a closed descriptor,
+           returns -1 with EBADF.
+test       t/003-ebadf.c
+
+assertion  XSH.aio_cancel.004
+anchor     functions/aio_cancel.html#DESCRIPTION
+anchor     functions/aio_cancel.html#RETURN VALUE
+class      required
+since      2001
+says       With two requests that cannot complete on one descriptor,
+           aio_cancel() with a null control block returns AIO_CANCELED and
+           both end with ECANCELED and -1; or it returns AIO_NOTCANCELED
+           and each request then ends either canceled or completed. Any
+           other result fails.
+test       t/004-all.c

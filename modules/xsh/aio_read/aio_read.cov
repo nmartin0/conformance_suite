@@ -1,0 +1,28 @@
+# aio_read.cov - every requirement unit on functions/aio_read.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:096e5e8f        XSH.aio_read.001 XSH.aio_read.002
+DESCRIPTION:2ecc6523        XSH.aio_read.009
+DESCRIPTION:36ae09d8        todo  the priority a request is submitted at is not observable
+DESCRIPTION:59e475b7        none  a definition of the base priority
+DESCRIPTION:f7480bf1        none  a definition of the base priority
+DESCRIPTION:eb66a8f5        XSH.aio_read.009
+DESCRIPTION:e17e2094        partial XSH.aio_read.005 XSH.aio_read.006  # a request refused at the call is not queued; no separate check that nothing was started
+DESCRIPTION:6bcd0f59        XSH.aio_read.001
+DESCRIPTION:17fd3ad0        none  unspecified
+DESCRIPTION:518234f6        XSH.aio_read.008
+DESCRIPTION:c6271cd0        XSH.aio_read.004
+DESCRIPTION:245f6970        none  a remark
+DESCRIPTION:6788d8f8        app   undefined behaviour
+DESCRIPTION:83e4ad7f        app   undefined behaviour
+DESCRIPTION:61409e7e        todo  synchronized I/O completion is not observable without a crash
+DESCRIPTION:3ca54590        app   undefined behaviour
+DESCRIPTION:97a5813c        todo  environment: needs a file system or open file description with a known offset maximum
+RETURN_VALUE:331ebce4       XSH.aio_read.001 XSH.aio_read.005 XSH.aio_read.006 XSH.aio_read.009
+ERRORS:9add4afa             todo  environment: resource exhaustion
+ERRORS:6b74e170             XSH.aio_read.005
+ERRORS:997085fc             partial XSH.aio_read.003 XSH.aio_read.006 XSH.aio_read.007  # the invalid aio_nbytes values are not stated (candidate issue)
+ERRORS:6b74e170.2           XSH.aio_read.005
+ERRORS:10d3f1ac             todo  covered with the cancel tests of aio_cancel (XSH.aio_cancel.002, .004)
+ERRORS:dea87833             XSH.aio_read.006
+ERRORS:3fde527b             todo  environment: needs an open file description with an offset maximum

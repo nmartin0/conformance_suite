@@ -1,0 +1,31 @@
+# aio_write.cov - every requirement unit on functions/aio_write.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:f25d6e76        XSH.aio_write.001 XSH.aio_write.003
+DESCRIPTION:c588d5c9        none  a request that is already complete when the call returns cannot be told from one that was queued; the pending-return case is XSH.aio_read.009
+DESCRIPTION:36ae09d8        todo  the priority a request is submitted at is not observable
+DESCRIPTION:59e475b7        none  a definition of the base priority
+DESCRIPTION:f7480bf1        none  a definition of the base priority
+DESCRIPTION:47f3537b        XSH.aio_write.001
+DESCRIPTION:245f6970        none  a remark
+DESCRIPTION:6788d8f8        app   undefined behaviour
+DESCRIPTION:0585a5df        XSH.aio_write.001
+DESCRIPTION:8ecf0c14        partial XSH.aio_write.002  # the call order is not required (the ordering restriction may be relaxed)
+DESCRIPTION:17fd3ad0        none  unspecified
+DESCRIPTION:518234f6        XSH.aio_write.006 XSH.aio_write.007
+DESCRIPTION:c20256b4        XSH.aio_write.003
+DESCRIPTION:83e4ad7f        app   undefined behaviour
+DESCRIPTION:1f15f1a1        todo  synchronized I/O completion is not observable without a crash
+DESCRIPTION:3ca54590        app   undefined behaviour
+DESCRIPTION:97a5813c        todo  environment: needs an open file description with a known offset maximum
+DESCRIPTION:4ccd2c7e        todo  environment: needs a lowered file size limit (run in a child, SIGXFSZ)
+RETURN_VALUE:843e12b4       XSH.aio_write.001 XSH.aio_write.004 XSH.aio_write.005
+ERRORS:9add4afa             todo  environment: resource exhaustion
+ERRORS:31fcdd63             XSH.aio_write.004
+ERRORS:997085fc             partial XSH.aio_write.005  # aio_nbytes and aio_reqprio values are not tested for writes (see XSH.aio_read.003, .007)
+ERRORS:31fcdd63.2           XSH.aio_write.004
+ERRORS:dea87833             XSH.aio_write.005
+ERRORS:10d3f1ac             todo  covered with the cancel tests of aio_cancel
+ERRORS:1e96e953             todo  environment: needs an open file description with an offset maximum
+ERRORS:4881a4a4             todo  environment: needs a lowered file size limit (run in a child, SIGXFSZ)
+ERRORS:2e17e7fa             todo  environment: needs a file at the implementation's maximum size

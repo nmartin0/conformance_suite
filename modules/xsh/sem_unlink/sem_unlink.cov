@@ -1,0 +1,13 @@
+# sem_unlink.cov - every requirement unit on functions/sem_unlink.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:7109d766     XSH.sem_unlink.001
+DESCRIPTION:45c5a292     XSH.sem_unlink.004 XSH.sem_unlink.006
+DESCRIPTION:172f4edc     XSH.sem_unlink.004 XSH.sem_unlink.005 XSH.sem_unlink.006
+DESCRIPTION:e015c8f2     XSH.sem_unlink.001 XSH.sem_unlink.003
+DESCRIPTION:c4c71f2e     XSH.sem_unlink.006
+RETURN_VALUE:3fbaacdc    XSH.sem_unlink.001 XSH.sem_unlink.003
+RETURN_VALUE:88a2a55b    partial XSH.sem_unlink.002  # the error and the return value; that the semaphore is unchanged is not separately observed
+ERRORS:c6243c44          todo  EACCES needs a name with permissions, which a semaphore name need not have
+ERRORS:50d8774a          XSH.sem_unlink.001 XSH.sem_unlink.002
+ERRORS:eb03f7ca          XSH.sem_unlink.007

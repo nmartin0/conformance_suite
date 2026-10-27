@@ -1,0 +1,19 @@
+# aio_cancel.cov - every requirement unit on functions/aio_cancel.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d01886f7        XSH.aio_cancel.002 XSH.aio_cancel.004
+DESCRIPTION:7d05a69f        XSH.aio_cancel.002
+DESCRIPTION:f1c0ba83        partial XSH.aio_cancel.004  # which requests are cancelable is implementation-defined, so AIO_NOTCANCELED is accepted
+DESCRIPTION:5cfbc3ac        todo  notification of a canceled request (SIGEV_SIGNAL, SIGEV_THREAD) not tested
+DESCRIPTION:716732b5        partial XSH.aio_cancel.002 XSH.aio_cancel.004  # completion afterwards is checked by its statuses, not by a notification
+DESCRIPTION:7a012427        XSH.aio_cancel.002 XSH.aio_cancel.004
+DESCRIPTION:5ee2445f        partial XSH.aio_cancel.002  # the observable statuses stay as they were; the control block's private state cannot be compared
+DESCRIPTION:43664b0c        none  unspecified
+DESCRIPTION:055d1784        none  implementation-defined
+RETURN_VALUE:5a6ec1cb       XSH.aio_cancel.002 XSH.aio_cancel.004
+RETURN_VALUE:90ed53dc       XSH.aio_cancel.002 XSH.aio_cancel.004
+RETURN_VALUE:8c0cdbde       none  a remark
+RETURN_VALUE:83834f5d       XSH.aio_cancel.004
+RETURN_VALUE:9df42b88       XSH.aio_cancel.001
+RETURN_VALUE:202ddf38       XSH.aio_cancel.003
+ERRORS:8f957e38             XSH.aio_cancel.003

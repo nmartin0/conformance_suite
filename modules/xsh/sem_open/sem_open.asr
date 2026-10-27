@@ -1,0 +1,119 @@
+# XSH sem_open()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Names are "/pcsem<pid><tag>" (a leading slash, at most 14 bytes after
+# it) and are unlinked on every exit path. Whether one process that opens
+# a name twice gets the same handle or two is implementation-defined, so
+# a handle is closed once if both are equal. The name's visibility in the
+# file system, the permission bits actually stored (unobservable through
+# this interface) and flags other than O_CREAT/O_EXCL are not tested.
+
+assertion  XSH.sem_open.001
+anchor     functions/sem_open.html#DESCRIPTION/O_CREAT
+anchor     functions/sem_open.html#DESCRIPTION/O_EXCL
+anchor     functions/sem_open.html#RETURN VALUE
+class      required
+says       sem_open(name, O_CREAT|O_EXCL, 0600, value) of a new name returns
+           a handle that is not SEM_FAILED and the semaphore holds value
+           (0 and 2 for two names); a post to one name's semaphore does
+           not show in the other's.
+test       t/001-create-excl.c
+
+assertion  XSH.sem_open.002
+anchor     functions/sem_open.html#DESCRIPTION/O_EXCL
+anchor     functions/sem_open.html#ERRORS/EEXIST
+anchor     functions/sem_open.html#RETURN VALUE
+class      required
+says       sem_open(name, O_CREAT|O_EXCL, ...) of a name that exists returns
+           SEM_FAILED with errno EEXIST, and the existing semaphore keeps
+           its value.
+test       t/002-eexist.c
+
+assertion  XSH.sem_open.003
+anchor     functions/sem_open.html#DESCRIPTION/O_CREAT
+class      required
+says       sem_open(name, O_CREAT, mode, value) of a name that exists
+           connects to the existing semaphore: value has no effect (the
+           value stays that of creation) and a post through one handle is
+           seen through the other.
+test       t/003-creat-existing.c
+
+assertion  XSH.sem_open.004
+anchor     functions/sem_open.html#DESCRIPTION
+anchor     functions/sem_open.html#RETURN VALUE
+class      required
+says       sem_open(name, 0) of an existing name returns a usable handle to
+           the same semaphore: a post through it is seen by a trywait
+           through the first handle, and posts through the first are
+           counted through it, by sem_getvalue() and by trywait.
+note       Whether the second handle equals the first is implementation-
+           defined and not checked.
+test       t/004-reopen-same.c
+
+assertion  XSH.sem_open.005
+anchor     functions/sem_open.html#DESCRIPTION
+class      required
+says       A forked child that opens the same names (leading slash) refers
+           to the same semaphores: its post of one is seen by the parent's
+           timed wait, and the parent's post of the other releases the
+           child's timed wait.
+timeout    90
+test       t/005-other-process.c
+
+assertion  XSH.sem_open.006
+anchor     functions/sem_open.html#ERRORS/ENOENT
+anchor     functions/sem_open.html#RETURN VALUE
+class      required
+says       sem_open(name, 0) of a name that does not exist returns SEM_FAILED
+           with errno ENOENT.
+test       t/006-enoent.c
+
+assertion  XSH.sem_open.007
+anchor     functions/sem_open.html#ERRORS/EINVAL
+anchor     functions/sem_open.html#RETURN VALUE
+class      required
+says       sem_open(name, O_CREAT|O_EXCL, mode, {SEM_VALUE_MAX}+1) returns
+           SEM_FAILED with errno EINVAL.
+note       NOTINUSE where {SEM_VALUE_MAX} is not below UINT_MAX; UNRESOLVED
+           where it is indeterminate.
+test       t/007-einval-value.c
+
+assertion  XSH.sem_open.008
+anchor     functions/sem_open.html#ERRORS/ENAMETOOLONG
+anchor     functions/sem_open.html#RETURN VALUE
+class      required
+says       With a name of 5000 bytes (past every path limit the page names),
+           a sem_open() that fails returns SEM_FAILED with ENAMETOOLONG,
+           or with EINVAL (an unsupported name), ENOMEM or ENOSPC; a system
+           that accepts the name has no limit that short.
+note       ENAMETOOLONG is a "may fail" error: when the call succeeds the
+           name is closed and unlinked again and the result is NOTINUSE,
+           as nothing was checked.
+test       t/008-name-too-long.c
+
+assertion  XSH.sem_open.009
+anchor     functions/sem_open.html#ERRORS/EACCES
+anchor     functions/sem_open.html#DESCRIPTION/O_CREAT
+class      disputed
+note       disputed (Q-152): oflag cannot carry an access mode (anything
+           other than O_CREAT and O_EXCL is unspecified), yet EACCES is
+           required when the permissions "specified by oflag" are denied.
+           Read here: opening with oflag 0 asks to read the semaphore, so
+           a semaphore created with mode 0 denies it to a process with
+           no permission. As root, the check runs in a child that has
+           dropped to another user.
+says       A semaphore created with mode 0 cannot be opened by sem_open(name,
+           0) in a child that holds no permission to it: SEM_FAILED with
+           errno EACCES.
+test       t/009-eacces.c
+
+assertion  XSH.sem_open.010
+anchor     functions/sem_open.html#DESCRIPTION/O_EXCL
+anchor     functions/sem_open.html#ERRORS/EEXIST
+class      required
+says       Six processes, started together, each doing sem_open(name,
+           O_CREAT|O_EXCL, ...) on one name: exactly one returns a handle
+           and the other five fail with EEXIST (three rounds, each with a
+           new name).
+timeout    90
+test       t/010-excl-race.c

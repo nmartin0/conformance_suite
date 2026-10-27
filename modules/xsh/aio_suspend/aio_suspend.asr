@@ -1,0 +1,63 @@
+# XSH aio_suspend()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The timeout is a time interval measured with CLOCK_MONOTONIC; its
+# expiry is reported as EAGAIN (not ETIMEDOUT). A request that cannot
+# complete is a read of an empty pipe.
+
+assertion  XSH.aio_suspend.001
+anchor     functions/aio_suspend.html#DESCRIPTION
+anchor     functions/aio_suspend.html#ERRORS/EAGAIN
+class      required
+since      2001
+says       With one request that cannot complete and a 300 ms timeout,
+           aio_suspend() returns -1 with EAGAIN, and not before 300 ms
+           have passed.
+test       t/001-timeout.c
+
+assertion  XSH.aio_suspend.002
+anchor     functions/aio_suspend.html#DESCRIPTION
+anchor     functions/aio_suspend.html#RETURN VALUE
+class      required
+since      2001
+says       With a list of one pending request and one that completes (a
+           file read) and a 5 s timeout, aio_suspend() returns 0 and the
+           completed request is no longer in progress; the pending one
+           still is.
+test       t/002-one-completes.c
+
+assertion  XSH.aio_suspend.003
+anchor     functions/aio_suspend.html#DESCRIPTION
+class      required
+since      2001
+says       When a request in the list has already completed, aio_suspend()
+           returns 0 at once, even with a zero timeout.
+test       t/003-already-done.c
+
+assertion  XSH.aio_suspend.004
+anchor     functions/aio_suspend.html#DESCRIPTION
+class      required
+since      2001
+says       Null entries are ignored: a list {NULL, request, NULL} with a
+           request that completes returns 0, and a list of only null
+           entries with a 100 ms timeout fails with EAGAIN.
+test       t/004-null-entries.c
+
+assertion  XSH.aio_suspend.005
+anchor     functions/aio_suspend.html#DESCRIPTION
+class      required
+since      2001
+says       With a null timeout, aio_suspend() waits until a request
+           completes (a byte is written by another thread 200 ms later) and
+           returns 0, with the request no longer in progress.
+test       t/005-wait-thread.c
+
+assertion  XSH.aio_suspend.006
+anchor     functions/aio_suspend.html#ERRORS/EINTR
+anchor     functions/aio_suspend.html#DESCRIPTION
+class      required
+since      2001
+says       A signal with a handler, sent repeatedly to the calling thread
+           while it waits with no timeout on a request that cannot
+           complete, makes aio_suspend() return -1 with EINTR.
+test       t/006-eintr.c

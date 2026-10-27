@@ -1,0 +1,56 @@
+# XSH mq_unlink()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Message passing option (MSG). The page lets mq_unlink() return at once or
+# wait for the last close, with EINTR if interrupted; tests that unlink a
+# queue that is open guard the call with an alarm and are UNRESOLVED if it
+# waits. EACCES has no stated condition and is not tested.
+
+assertion  XSH.mq_unlink.001
+anchor     functions/mq_unlink.html#DESCRIPTION
+anchor     functions/mq_unlink.html#RETURN VALUE
+class      conditional
+when       MSG
+since      2001
+says       mq_unlink() of an existing queue returns 0 and the name is gone at
+           once, even while a descriptor is open: mq_open() without O_CREAT
+           then fails with ENOENT.
+test       t/001-removes-name.c
+
+assertion  XSH.mq_unlink.002
+anchor     functions/mq_unlink.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       After mq_unlink() the name creates a new, empty queue with
+           O_CREAT|O_EXCL (no EEXIST) while the old queue lives on,
+           with its message, for the descriptor still open.
+test       t/002-name-reuse.c
+
+assertion  XSH.mq_unlink.003
+anchor     functions/mq_unlink.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       Descriptors open when mq_unlink() is called keep sending and
+           receiving on the unlinked queue.
+test       t/003-descriptors-work.c
+
+assertion  XSH.mq_unlink.004
+anchor     functions/mq_unlink.html#ERRORS/ENOENT
+class      conditional
+when       MSG
+since      2001
+says       mq_unlink() of a name that is not in use fails with ENOENT, and so
+           does a second mq_unlink() of a name just removed.
+test       t/004-enoent.c
+
+assertion  XSH.mq_unlink.005
+anchor     functions/mq_unlink.html#ERRORS/ENAMETOOLONG
+class      conditional
+when       MSG
+since      2008
+says       mq_unlink() of a name that mq_open() accepted (the longest of
+           4200, 1500, 255 and 100 bytes that it takes) does not fail with
+           ENAMETOOLONG and removes the queue.
+test       t/005-same-name-accepted.c

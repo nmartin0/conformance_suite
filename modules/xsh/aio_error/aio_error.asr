@@ -1,0 +1,48 @@
+# XSH aio_error()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.aio_error.001
+anchor     functions/aio_error.html#DESCRIPTION
+anchor     functions/aio_error.html#RETURN VALUE
+class      required
+since      2001
+says       For a read of an empty pipe aio_error() returns EINPROGRESS; once
+           a byte has been written and the request has completed it returns
+           0.
+test       t/001-inprogress.c
+
+assertion  XSH.aio_error.002
+anchor     functions/aio_error.html#RETURN VALUE
+class      required
+since      2001
+says       For a request that completed successfully aio_error() returns 0,
+           and may be called repeatedly before aio_return() with the same
+           result.
+test       t/002-success.c
+
+assertion  XSH.aio_error.003
+anchor     functions/aio_error.html#DESCRIPTION
+anchor     functions/aio_error.html#RETURN VALUE
+class      required
+since      2001
+says       For an aio_write() to a pipe with no reader that fails, the error
+           status is EPIPE (the error write() sets) and aio_return() gives
+           -1.
+note       A failure already reported by the call leaves no status to
+           examine; the test is then UNRESOLVED.
+test       t/003-failed.c
+
+assertion  XSH.aio_error.004
+anchor     functions/aio_error.html#ERRORS/EINVAL
+class      required
+since      2001
+says       After aio_return() has retrieved a request's status, a further
+           aio_error() for the same control block is made; whatever it
+           returns is accepted.
+note       The page says the call may fail with EINVAL and leaves the
+           results undefined for a block not tied to a scheduled
+           operation, and an implementation may add errors of its own, so
+           nothing about the outcome can be required; the test only checks
+           the first retrieval and that the call can be made.
+nomutant   the outcome is unspecified; there is nothing to plant
+test       t/004-retrieved.c

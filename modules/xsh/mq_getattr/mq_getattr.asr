@@ -1,0 +1,36 @@
+# XSH mq_getattr()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Message passing option (MSG). EBADF is a may-fail error here and is not
+# tested.
+
+assertion  XSH.mq_getattr.001
+anchor     functions/mq_getattr.html#DESCRIPTION
+anchor     functions/mq_getattr.html#RETURN VALUE
+class      conditional
+when       MSG
+since      2001
+says       mq_getattr() on a fresh queue created with 4 and 64 and opened
+           without O_NONBLOCK returns 0 with mq_maxmsg 4, mq_msgsize 64,
+           mq_curmsgs 0 and no O_NONBLOCK in mq_flags.
+test       t/001-fresh.c
+
+assertion  XSH.mq_getattr.002
+anchor     functions/mq_getattr.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       mq_curmsgs is the number of messages on the queue: 0, then 3 after
+           three sends (also seen through a write-only descriptor), then 2
+           after a receive.
+test       t/002-curmsgs.c
+
+assertion  XSH.mq_getattr.003
+anchor     functions/mq_getattr.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       mq_flags is that of the open description: a description opened
+           with O_NONBLOCK shows it, another one of the same queue does not,
+           and both report the same mq_maxmsg and mq_msgsize.
+test       t/003-flags-per-description.c

@@ -1,0 +1,71 @@
+# XSH sem_unlink()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Names are "/pcsem<pid><tag>" and are unlinked again on every exit path.
+# EACCES (permission to unlink) cannot be arranged for a name that need
+# not be in the file system and is not tested.
+
+assertion  XSH.sem_unlink.001
+anchor     functions/sem_unlink.html#DESCRIPTION
+anchor     functions/sem_unlink.html#RETURN VALUE
+anchor     functions/sem_unlink.html#ERRORS/ENOENT
+class      required
+says       sem_unlink() of an existing name returns 0; sem_open(name, 0)
+           then fails with ENOENT, and a second sem_unlink() fails with
+           ENOENT.
+test       t/001-removes-name.c
+
+assertion  XSH.sem_unlink.002
+anchor     functions/sem_unlink.html#ERRORS/ENOENT
+anchor     functions/sem_unlink.html#RETURN VALUE
+class      required
+says       sem_unlink() of a name that never existed returns -1 with
+           errno ENOENT.
+test       t/002-enoent.c
+
+assertion  XSH.sem_unlink.003
+anchor     functions/sem_unlink.html#DESCRIPTION
+class      required
+says       After sem_unlink() of a name whose semaphore is still open, the
+           name can be created again with O_CREAT|O_EXCL; the new
+           semaphore has the new value and is a different semaphore from
+           the open one, which keeps its own.
+test       t/003-name-reusable.c
+
+assertion  XSH.sem_unlink.004
+anchor     functions/sem_unlink.html#DESCRIPTION
+class      required
+says       sem_unlink() has no effect on the state of the semaphore a handle
+           is open to: sem_wait(), sem_post() and sem_timedwait() on that
+           handle go on working with the right counts, and sem_close()
+           of it returns 0.
+test       t/004-open-handle-works.c
+
+assertion  XSH.sem_unlink.005
+anchor     functions/sem_unlink.html#DESCRIPTION
+anchor     functions/sem_close.html#DESCRIPTION
+class      required
+says       After sem_unlink() and the sem_close() of the only handle, the
+           name is created again with O_CREAT|O_EXCL (no EEXIST) and the
+           new semaphore has the new value, not the old one.
+test       t/005-after-last-close.c
+
+assertion  XSH.sem_unlink.006
+anchor     functions/sem_unlink.html#DESCRIPTION
+class      required
+says       sem_unlink() of a name while another process has the semaphore
+           open returns 0 at once (it does not wait for that process), and
+           the other process's open semaphore still holds its value
+           afterwards.
+timeout    90
+test       t/006-other-process-holds.c
+
+assertion  XSH.sem_unlink.007
+anchor     functions/sem_unlink.html#ERRORS/ENAMETOOLONG
+anchor     functions/sem_unlink.html#RETURN VALUE
+class      required
+says       With a name of 5000 bytes: if sem_open() created it, sem_unlink()
+           of the same name returns 0 (no ENAMETOOLONG for a name used in
+           a successful sem_open()); if sem_open() refused it, sem_unlink()
+           returns -1 with ENAMETOOLONG or ENOENT.
+test       t/007-name-too-long.c

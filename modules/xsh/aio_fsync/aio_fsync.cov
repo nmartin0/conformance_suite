@@ -1,0 +1,26 @@
+# aio_fsync.cov - every requirement unit on functions/aio_fsync.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:738a11c3        XSH.aio_fsync.001 XSH.aio_fsync.002
+DESCRIPTION:671b7a70        partial XSH.aio_fsync.001 XSH.aio_fsync.002  # a synchronization that completes before the call returns cannot be told from a queued one
+DESCRIPTION:56851047        partial XSH.aio_fsync.001  # that data reached a storage device is not observable without a crash
+DESCRIPTION:ec7901d2        partial XSH.aio_fsync.002  # that data reached a storage device is not observable without a crash
+DESCRIPTION:2a49702f        untestable  synchronized I/O completion is not observable without a crash
+DESCRIPTION:3359ddf8        none  not guaranteed (a permission)
+DESCRIPTION:afde2184        untestable  which I/O reached the completion state is not observable without a crash
+DESCRIPTION:1ce09071        none  not guaranteed (a permission)
+DESCRIPTION:a7f85a36        none  a remark
+DESCRIPTION:eb66a8f5        XSH.aio_fsync.001 XSH.aio_fsync.002
+DESCRIPTION:dfbb11f7        todo  the in-progress window of a synchronization cannot be held open deterministically
+DESCRIPTION:1421a546        XSH.aio_fsync.001 XSH.aio_fsync.002
+DESCRIPTION:6ba4f05b        todo  environment: a synchronization that fails (an I/O error on the device)
+DESCRIPTION:64e2a47c        todo  notification of a synchronization (aio_sigevent) not tested
+DESCRIPTION:7999a184        XSH.aio_fsync.001 XSH.aio_fsync.002
+DESCRIPTION:2dc86aa4        app   undefined behaviour
+DESCRIPTION:3ea69097        none  not guaranteed (a permission)
+RETURN_VALUE:5a36eae3       XSH.aio_fsync.001 XSH.aio_fsync.002 XSH.aio_fsync.003 XSH.aio_fsync.004
+ERRORS:4aca0924             todo  environment: resource exhaustion
+ERRORS:33f24688             XSH.aio_fsync.003
+ERRORS:1060eda9             todo  environment: a file that does not support synchronized I/O (which files is implementation-defined)
+ERRORS:21f6521b             todo  environment: a file on which fsync is not possible (which files is not stated)
+ERRORS:66102315             partial XSH.aio_fsync.004  # the unsupported-option cases are not exercised

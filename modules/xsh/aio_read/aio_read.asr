@@ -1,0 +1,109 @@
+# XSH aio_read()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The control blocks and buffers are static and stay valid until the
+# request has completed. Every wait is bounded. EBADF and EINVAL may be
+# found by the call or reported as the request's error status (the page
+# allows both), so each test accepts both. A request that cannot complete
+# is made with a read of an empty pipe.
+
+assertion  XSH.aio_read.001
+anchor     functions/aio_read.html#DESCRIPTION
+anchor     functions/aio_read.html#RETURN VALUE
+class      required
+since      2001
+says       With the descriptor's own offset elsewhere, aio_read() of 4
+           bytes at aio_offset 6 returns 0, the request completes with error
+           status 0 and return status 4, and the buffer holds the bytes at
+           offset 6.
+test       t/001-offset.c
+
+assertion  XSH.aio_read.002
+anchor     functions/aio_read.html#ERRORS
+anchor     functions/aio_read.html#DESCRIPTION
+class      required
+since      2001
+says       Reading 8 bytes at 4 bytes before the end of a regular file
+           transfers the 4 bytes that remain (return status 4); at the end
+           and beyond it the return status is 0 and the buffer is left as it
+           was.
+note       The return status is one of the values read() returns, and
+           read() of a regular file at or past the end gives 0.
+test       t/002-eof.c
+
+assertion  XSH.aio_read.003
+anchor     functions/aio_read.html#ERRORS/EINVAL
+anchor     functions/aio_read.html#DESCRIPTION
+class      required
+since      2001
+says       With aio_nbytes 0 the call either fails with EINVAL or the
+           request completes with error status 0, return status 0 and the
+           buffer unchanged; the other outcome of an EINVAL error status
+           comes with return status -1.
+note       The page calls an invalid aio_nbytes EINVAL but does not say
+           whether zero is invalid (Q-154), so both outcomes are
+           accepted.
+test       t/003-zero.c
+
+assertion  XSH.aio_read.004
+anchor     functions/aio_read.html#DESCRIPTION
+class      required
+since      2001
+says       aio_lio_opcode is ignored: with LIO_WRITE or LIO_NOP in it, a
+           request submitted by aio_read() on a read-only descriptor still
+           reads, and the file is not changed.
+test       t/004-opcode.c
+
+assertion  XSH.aio_read.005
+anchor     functions/aio_read.html#ERRORS/EBADF
+class      required
+since      2001
+says       A descriptor of -1, a closed descriptor and a write-only
+           descriptor are each rejected with EBADF by the call, or the
+           request has error status EBADF and return status -1.
+test       t/005-ebadf.c
+
+assertion  XSH.aio_read.006
+anchor     functions/aio_read.html#ERRORS/EINVAL
+class      required
+since      2001
+says       A negative aio_offset on a regular file is rejected with EINVAL
+           by the call, or the request has error status EINVAL and return
+           status -1.
+test       t/006-einval-offset.c
+
+assertion  XSH.aio_read.007
+anchor     functions/aio_read.html#ERRORS/EINVAL
+anchor     functions/V2_chap02.html#2.8.2
+class      disputed
+when       PIO
+since      2001
+says       A negative aio_reqprio is rejected with EINVAL by the call, or
+           the request has error status EINVAL and return status -1.
+note       disputed (Q-153): the EINVAL entry for an invalid priority is
+           unconditional on the file, but the priority applies only to
+           files for which the implementation supports prioritization, and
+           which those are is implementation-defined. Read strictly here
+           (a regular file is used).
+test       t/007-reqprio.c
+
+assertion  XSH.aio_read.008
+anchor     functions/aio_read.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.4.2
+class      required
+since      2001
+says       With SIGEV_SIGNAL, SIGRTMIN with SA_SIGINFO set, and a
+           sigev_value pointer, a signal SIGRTMIN carrying that pointer in
+           si_value is delivered, and the request is complete (error status
+           0, return status 4, data read) when it is.
+test       t/008-sigev-signal.c
+
+assertion  XSH.aio_read.009
+anchor     functions/aio_read.html#DESCRIPTION
+class      required
+since      2001
+says       aio_read() of an empty pipe returns 0 although no data can be
+           delivered; the request is then in progress (EINPROGRESS) until a
+           byte is written, and then completes with error status 0, return
+           status 1 and that byte.
+test       t/009-pending.c

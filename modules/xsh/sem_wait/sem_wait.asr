@@ -1,0 +1,66 @@
+# XSH sem_wait() and sem_trywait()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page shares one HTML file with sem_trywait, so both functions live
+# in this module. EINTR, EDEADLK and EINVAL are "may fail" errors; the
+# signal test accepts EINTR or continued waiting. The timed waits are in
+# the sem_clockwait module.
+
+assertion  XSH.sem_wait.001
+anchor     functions/sem_wait.html#DESCRIPTION
+anchor     functions/sem_wait.html#RETURN VALUE
+class      required
+says       sem_wait() on a semaphore of positive value returns 0 without
+           waiting and lowers the value by exactly one (value 3 leaves 2,
+           value 1 leaves 0).
+test       t/001-wait-positive.c
+
+assertion  XSH.sem_wait.002
+anchor     functions/sem_wait.html#DESCRIPTION
+class      required
+says       sem_wait() on a semaphore of value 0 does not return while no
+           post is made (300 ms), and returns 0 once a sem_post() is
+           made; the post is consumed (value 0 afterwards).
+test       t/002-wait-blocks.c
+
+assertion  XSH.sem_wait.003
+anchor     functions/sem_wait.html#DESCRIPTION
+anchor     functions/sem_wait.html#ERRORS/EINTR
+anchor     functions/sem_wait.html#RETURN VALUE
+class      required
+says       When a handler runs in a thread blocked in sem_wait() on a value
+           0 semaphore, the call either returns -1 with EINTR and leaves
+           the semaphore unchanged (value 0; one later post gives exactly
+           one lock), or keeps waiting and returns 0 after a post.
+note       The handler is installed without SA_RESTART, and must be seen
+           to run (UNRESOLVED if not). A return of 0 with no post is a
+           FAIL.
+test       t/003-wait-signal.c
+
+assertion  XSH.sem_wait.004
+anchor     functions/sem_wait.html#DESCRIPTION
+anchor     functions/sem_wait.html#RETURN VALUE
+class      required
+says       sem_trywait() on a semaphore of positive value returns 0 and
+           lowers the value by one (value 3: two successes leave 1).
+test       t/004-trywait-positive.c
+
+assertion  XSH.sem_wait.005
+anchor     functions/sem_wait.html#DESCRIPTION
+anchor     functions/sem_wait.html#ERRORS/EAGAIN
+anchor     functions/sem_wait.html#RETURN VALUE
+class      required
+says       sem_trywait() on a semaphore of value 0 returns -1 with errno
+           EAGAIN without waiting, each of three times, and the failed
+           calls leave the state unchanged (one post then gives exactly
+           one success).
+test       t/005-trywait-zero.c
+
+assertion  XSH.sem_wait.006
+anchor     functions/sem_wait.html#DESCRIPTION
+class      required
+says       A semaphore of value 1 used as a lock: four threads each doing
+           2000 rounds of sem_wait(), a section, sem_post(), are never in
+           the section together, and an update in the section is never lost.
+timeout    90
+test       t/006-mutual-exclusion.c

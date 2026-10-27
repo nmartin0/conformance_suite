@@ -1,0 +1,17 @@
+# aio_suspend.cov - every requirement unit on functions/aio_suspend.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:725733f9        XSH.aio_suspend.002 XSH.aio_suspend.005 XSH.aio_suspend.006
+DESCRIPTION:38cf3531        XSH.aio_suspend.003
+DESCRIPTION:82c7a6df        none  a remark
+DESCRIPTION:5286a1ae        none  a remark
+DESCRIPTION:f1eb47aa        none  a remark
+DESCRIPTION:29ffb3d6        XSH.aio_suspend.004
+DESCRIPTION:a271bc70        app   undefined behaviour
+DESCRIPTION:f5f63a19        XSH.aio_suspend.001
+DESCRIPTION:859aaaba        partial XSH.aio_suspend.001  # measured with CLOCK_MONOTONIC; a clock jump cannot be arranged
+RETURN_VALUE:f53b629c       XSH.aio_suspend.002 XSH.aio_suspend.003 XSH.aio_suspend.004 XSH.aio_suspend.005
+RETURN_VALUE:7a13bdcb       XSH.aio_suspend.001 XSH.aio_suspend.006
+RETURN_VALUE:e2136390       XSH.aio_suspend.002
+ERRORS:833a020a             XSH.aio_suspend.001 XSH.aio_suspend.004
+ERRORS:57ae2cec             XSH.aio_suspend.006

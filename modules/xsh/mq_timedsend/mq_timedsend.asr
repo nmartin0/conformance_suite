@@ -1,0 +1,102 @@
+# XSH mq_timedsend()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Message passing option (MSG). The page is shared with mq_send(), whose
+# module tests the common rules through mq_send(). Timeouts are absolute
+# CLOCK_REALTIME times; the lower bound (not before abstime) is exact, the
+# upper bound (8 s over) only detects a hang. Whether an invalid abstime is
+# looked at when there is room is left open by the page and not tested.
+
+assertion  XSH.mq_timedsend.001
+anchor     functions/mq_send.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       With room in the queue mq_timedsend() succeeds and queues the
+           message even if abstime is long past.
+test       t/001-room-past.c
+
+assertion  XSH.mq_timedsend.002
+anchor     functions/mq_send.html#DESCRIPTION
+anchor     functions/mq_send.html#ERRORS/ETIMEDOUT
+class      conditional
+when       MSG
+since      2001
+says       On a full queue without O_NONBLOCK, mq_timedsend() with an abstime
+           300 ms ahead fails with ETIMEDOUT, not before CLOCK_REALTIME has
+           reached abstime, and queues nothing.
+test       t/002-etimedout.c
+
+assertion  XSH.mq_timedsend.003
+anchor     functions/mq_send.html#DESCRIPTION
+anchor     functions/mq_send.html#ERRORS/ETIMEDOUT
+class      conditional
+when       MSG
+since      2001
+says       On a full queue an abstime already passed gives ETIMEDOUT.
+test       t/003-past-full.c
+
+assertion  XSH.mq_timedsend.004
+anchor     functions/mq_send.html#ERRORS/EINVAL
+class      conditional
+when       MSG
+since      2001
+says       When the call would block, a tv_nsec of -1 or 1000000000 fails with
+           EINVAL, queuing nothing.
+test       t/004-einval-nsec.c
+
+assertion  XSH.mq_timedsend.005
+anchor     functions/mq_send.html#DESCRIPTION
+anchor     functions/mq_send.html#ERRORS/EAGAIN
+class      conditional
+when       MSG
+since      2001
+says       With O_NONBLOCK a full queue gives EAGAIN at once (not
+           ETIMEDOUT), before abstime 4 s ahead.
+test       t/005-nonblock.c
+
+assertion  XSH.mq_timedsend.006
+anchor     functions/mq_send.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       On a full queue the wait ends with success when a message is
+           received before abstime (a child receives after 300 ms), not
+           before that.
+test       t/006-wakes.c
+
+assertion  XSH.mq_timedsend.007
+anchor     functions/mq_send.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       mq_timedsend() orders messages as mq_send() does: larger priority
+           first, FIFO among equals.
+test       t/007-priority.c
+
+assertion  XSH.mq_timedsend.008
+anchor     functions/mq_send.html#DESCRIPTION
+anchor     functions/mq_send.html#ERRORS/EMSGSIZE
+class      conditional
+when       MSG
+since      2001
+says       mq_msgsize bytes are accepted; one more fails with EMSGSIZE and
+           queues nothing.
+test       t/008-emsgsize.c
+
+assertion  XSH.mq_timedsend.009
+anchor     functions/mq_send.html#ERRORS/EINVAL
+class      conditional
+when       MSG
+since      2001
+says       Priority {MQ_PRIO_MAX}-1 is accepted; priority {MQ_PRIO_MAX} fails
+           with EINVAL and queues nothing.
+test       t/009-eprio.c
+
+assertion  XSH.mq_timedsend.010
+anchor     functions/mq_send.html#ERRORS/EBADF
+class      conditional
+when       MSG
+since      2001
+says       An invalid descriptor, and one opened O_RDONLY, fail with EBADF.
+test       t/010-ebadf.c

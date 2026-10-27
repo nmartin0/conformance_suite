@@ -1,0 +1,12 @@
+# aio_error.cov - every requirement unit on functions/aio_error.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:5d2e266d        XSH.aio_error.001 XSH.aio_error.002 XSH.aio_error.003
+DESCRIPTION:b75847f8        partial XSH.aio_error.003  # only write(); fdatasync and fsync statuses are tested on aio_fsync
+DESCRIPTION:f61d2dce        XSH.aio_error.001
+DESCRIPTION:a787452e        app   undefined behaviour
+RETURN_VALUE:d47aeb4b       XSH.aio_error.001 XSH.aio_error.002
+RETURN_VALUE:ee66b5ca       partial XSH.aio_error.003  # only the write() status EPIPE
+RETURN_VALUE:0e84aaa9       XSH.aio_error.001
+RETURN_VALUE:3e34ecb2       XSH.aio_error.004
+ERRORS:02a272d1             none  may fail; the outcome is not specified

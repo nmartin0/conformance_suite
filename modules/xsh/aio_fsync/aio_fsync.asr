@@ -1,0 +1,46 @@
+# XSH aio_fsync()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# That data reached a device cannot be observed without a crash; the
+# assertions check the statuses, the errors and that the file keeps its
+# data. O_DSYNC belongs to the Synchronized Input and Output option and
+# O_SYNC to the File Synchronization option.
+
+assertion  XSH.aio_fsync.001
+anchor     functions/aio_fsync.html#DESCRIPTION
+anchor     functions/aio_fsync.html#RETURN VALUE
+class      conditional
+when       SIO
+since      2001
+says       After an aio_write() of 5 bytes, aio_fsync(O_DSYNC) returns 0 and
+           the request completes with error status 0 and return status 0,
+           with the data intact; the control block's other members (here a
+           huge aio_nbytes, a null buffer, a negative offset, an opcode)
+           are ignored.
+test       t/001-dsync.c
+
+assertion  XSH.aio_fsync.002
+anchor     functions/aio_fsync.html#DESCRIPTION
+anchor     functions/aio_fsync.html#RETURN VALUE
+class      conditional
+when       FSC
+since      2001
+says       The same as XSH.aio_fsync.001 with O_SYNC.
+test       t/002-sync.c
+
+assertion  XSH.aio_fsync.003
+anchor     functions/aio_fsync.html#ERRORS/EBADF
+class      conditional
+when       FSC
+since      2001
+says       aio_fsync(O_SYNC) with aio_fildes -1, and with a closed
+           descriptor, returns -1 with EBADF.
+test       t/003-ebadf.c
+
+assertion  XSH.aio_fsync.004
+anchor     functions/aio_fsync.html#ERRORS/EINVAL
+class      required
+since      2001
+says       An op that is neither O_DSYNC nor O_SYNC (0, and -1) makes
+           aio_fsync() return -1 with EINVAL.
+test       t/004-einval-op.c

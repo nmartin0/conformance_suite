@@ -1,0 +1,19 @@
+# sem_init.cov - every requirement unit on functions/sem_init.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:2299b23a     XSH.sem_init.001 XSH.sem_init.002
+DESCRIPTION:c085c968     XSH.sem_init.001 XSH.sem_init.006
+DESCRIPTION:cae093e9     XSH.sem_init.002
+DESCRIPTION:2b43cb48     XSH.sem_init.002
+DESCRIPTION:812a957b     none  a permission
+DESCRIPTION:c3bf5dda     partial XSH.sem_init.004  # wait and post across a fork; sem_destroy and the other operations from a process are not each tried
+DESCRIPTION:4235d3d9     partial XSH.sem_init.003  # wait and post between threads
+DESCRIPTION:c14f5ce5     todo  the 2.9.9 copy and mapping rules are tested with the mutex pages
+DESCRIPTION:176e6187     none  undefined behaviour
+RETURN_VALUE:21ce3c48    XSH.sem_init.001
+RETURN_VALUE:34187386    XSH.sem_init.005
+ERRORS:141b9235          XSH.sem_init.005 XSH.sem_init.006
+ERRORS:f2965c0f          untestable  resource exhaustion and {SEM_NSEMS_MAX} cannot be reached portably
+ERRORS:97911e2c          untestable  the privileges needed are not stated
+ERRORS:1fbbba10          untestable  may fail; descriptors cannot be assumed to be used
+ERRORS:78d47d0e          untestable  may fail; the system limit cannot be reached portably

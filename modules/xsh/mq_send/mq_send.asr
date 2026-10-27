@@ -1,0 +1,100 @@
+# XSH mq_send()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Message passing option (MSG). The page is shared with mq_timedsend(),
+# tested in its own module. The number of priorities is MQ_PRIO_MAX (or
+# sysconf(_SC_MQ_PRIO_MAX)); a test is UNRESOLVED if it is unknown. Blocking
+# calls are guarded with an alarm and a handler without SA_RESTART. Not
+# tested: the thread-selection rule for several waiting senders (needs
+# threads of known priorities).
+
+assertion  XSH.mq_send.001
+anchor     functions/mq_send.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       Messages sent with priorities 1,5,3,5,1,0 come out in the order of
+           larger priority first and, among equal priorities, the order
+           sent.
+test       t/001-priority-order.c
+
+assertion  XSH.mq_send.002
+anchor     functions/mq_send.html#DESCRIPTION
+anchor     functions/mq_send.html#RETURN VALUE
+class      conditional
+when       MSG
+since      2001
+says       mq_send() returns 0 and queues msg_len bytes with the priority;
+           changing the buffer after the call does not alter the queued
+           message.
+test       t/002-roundtrip.c
+
+assertion  XSH.mq_send.003
+anchor     functions/mq_send.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       A message of length 0 is accepted (0 is not above mq_msgsize) and
+           comes back with length 0.
+test       t/003-zero-length.c
+
+assertion  XSH.mq_send.004
+anchor     functions/mq_send.html#DESCRIPTION
+anchor     functions/mq_send.html#ERRORS/EMSGSIZE
+anchor     functions/mq_send.html#RETURN VALUE
+class      conditional
+when       MSG
+since      2001
+says       A message of exactly mq_msgsize bytes is accepted; one byte more
+           fails with EMSGSIZE and nothing is enqueued.
+test       t/004-emsgsize.c
+
+assertion  XSH.mq_send.005
+anchor     functions/mq_send.html#DESCRIPTION
+anchor     functions/mq_send.html#ERRORS/EINVAL
+class      conditional
+when       MSG
+since      2001
+says       Priority {MQ_PRIO_MAX}-1 is accepted and comes back; priority
+           {MQ_PRIO_MAX} fails with EINVAL and nothing is enqueued.
+test       t/005-eprio.c
+
+assertion  XSH.mq_send.006
+anchor     functions/mq_send.html#DESCRIPTION
+anchor     functions/mq_send.html#ERRORS/EAGAIN
+class      conditional
+when       MSG
+since      2001
+says       On a full queue with O_NONBLOCK set, mq_send() fails with EAGAIN,
+           the message is not queued and the queued ones are unchanged.
+test       t/006-eagain.c
+
+assertion  XSH.mq_send.007
+anchor     functions/mq_send.html#ERRORS/EBADF
+class      conditional
+when       MSG
+since      2001
+says       mq_send() with an invalid descriptor, and with one opened
+           O_RDONLY, fails with EBADF and queues nothing.
+test       t/007-ebadf.c
+
+assertion  XSH.mq_send.008
+anchor     functions/mq_send.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       On a full queue without O_NONBLOCK, mq_send() waits until a
+           message is received (a child receives after 300 ms), then
+           succeeds and the queue is full again; it does not return before
+           the child made room.
+test       t/008-blocks.c
+
+assertion  XSH.mq_send.009
+anchor     functions/mq_send.html#DESCRIPTION
+anchor     functions/mq_send.html#ERRORS/EINTR
+class      conditional
+when       MSG
+since      2001
+says       A blocked mq_send() on a full queue interrupted by a signal whose
+           handler is not restarting fails with EINTR and queues nothing.
+test       t/009-eintr.c

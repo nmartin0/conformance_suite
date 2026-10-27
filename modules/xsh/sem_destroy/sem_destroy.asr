@@ -1,0 +1,41 @@
+# XSH sem_destroy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Using a destroyed semaphore, destroying one with blocked threads, and
+# destroying a named semaphore are undefined and not tried. The EINVAL
+# and EBUSY errors are permissions ("may fail").
+
+assertion  XSH.sem_destroy.001
+anchor     functions/sem_destroy.html#DESCRIPTION
+anchor     functions/sem_destroy.html#RETURN VALUE
+class      required
+says       sem_destroy() of an initialized semaphore on which no thread is
+           blocked (value 0, and value 3) returns 0.
+test       t/001-destroy.c
+
+assertion  XSH.sem_destroy.002
+anchor     functions/sem_destroy.html#DESCRIPTION
+anchor     functions/sem_init.html#DESCRIPTION
+class      required
+says       After sem_destroy(), a new sem_init() on the same object works
+           and gives a semaphore with the newly given value (it is not the
+           old value), usable with sem_post(), and it can be destroyed
+           again.
+test       t/002-reinit.c
+
+assertion  XSH.sem_destroy.003
+anchor     functions/sem_destroy.html#DESCRIPTION
+class      required
+says       sem_destroy() of a semaphore on which a thread waited, and was
+           released by a post and has returned, returns 0.
+test       t/003-after-waiter.c
+
+assertion  XSH.sem_destroy.004
+anchor     functions/sem_destroy.html#DESCRIPTION
+class      required
+says       Where an unnamed semaphore uses a file descriptor, sem_destroy()
+           closes it; observable as an unchanged lowest free descriptor
+           after twenty init/destroy cycles (after one warming cycle of each kind, pshared 0 and non-zero).
+note       A system that holds one descriptor for all semaphores keeps it
+           open across the warming cycle too.
+test       t/004-no-descriptor-left.c

@@ -1,0 +1,46 @@
+# sem_open.cov - every requirement unit on functions/sem_open.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:1187bf2d     XSH.sem_open.001 XSH.sem_open.004
+DESCRIPTION:8f16b939     none  a permission
+DESCRIPTION:cd87c3de     XSH.sem_open.004
+DESCRIPTION:844d1bf8     partial XSH.sem_open.001 XSH.sem_open.004  # post, trywait, getvalue and timed waits are used; each is tried on a named semaphore in some test, not all together
+DESCRIPTION:46f3f7d0     partial XSH.sem_open.005  # usable until sem_close(); the end by _exit() is seen in the parent after the child exits; exec not tried
+DESCRIPTION:7f8eb7f1     XSH.sem_open.001 XSH.sem_open.006
+DESCRIPTION:e48ae094     none  introduces the flags
+DESCRIPTION:49b8b63b     XSH.sem_open.001
+DESCRIPTION:674b72c9     XSH.sem_open.003
+DESCRIPTION:3fe69c72     XSH.sem_open.001
+DESCRIPTION:333ec1bc     app
+DESCRIPTION:73f8e9a6     XSH.sem_open.001 XSH.sem_open.003
+DESCRIPTION:afc4b081     XSH.sem_open.007
+DESCRIPTION:96b49dea     todo  the owner of a named semaphore is not observable through this interface
+DESCRIPTION:43f6d41b     todo  the group of a named semaphore is not observable through this interface
+DESCRIPTION:42e05ec3     partial XSH.sem_open.009  # mode 0 only, through the access check; the umask is not observable
+DESCRIPTION:15a3a328     none  unspecified
+DESCRIPTION:e44d1535     XSH.sem_open.005
+DESCRIPTION:3002094b     XSH.sem_open.002
+DESCRIPTION:915f63c6     XSH.sem_open.010
+DESCRIPTION:d2f3a34f     none  undefined behaviour
+DESCRIPTION:56ee2468     none  unspecified
+DESCRIPTION:fb318912     none  defines the argument
+DESCRIPTION:f7dcf45a     none  unspecified
+DESCRIPTION:1db11134     impl  slashes after the first and the length limits are implementation-defined; names keep within 14 bytes after the leading slash
+DESCRIPTION:3d17ea61     XSH.sem_open.005 XSH.sem_open.004
+DESCRIPTION:715fd280     impl  names without a leading slash are implementation-defined
+DESCRIPTION:403843ee     none  implementation-defined whether the handle is the same
+DESCRIPTION:5503b451     none  undefined behaviour
+RETURN_VALUE:1da3c3b4    XSH.sem_open.001 XSH.sem_open.004
+RETURN_VALUE:f28e6653    XSH.sem_open.002 XSH.sem_open.006 XSH.sem_open.007
+RETURN_VALUE:a969cea4    XSH.sem_open.006
+RETURN_VALUE:12e57db7    XSH.sem_open.001
+ERRORS:382984dd          partial XSH.sem_open.009  # the existing-semaphore case; permission to create is denied only through directory permissions, which the name need not have
+ERRORS:0eaba6a7          XSH.sem_open.002 XSH.sem_open.010
+ERRORS:84f06560          untestable  an interrupt cannot be arranged within a call that does not block
+ERRORS:4d85ba42          partial XSH.sem_open.007  # the value too large; "not supported for the given name" is not arranged
+ERRORS:e28ffffb          XSH.sem_open.006
+ERRORS:2fb69802          untestable  memory exhaustion cannot be arranged portably
+ERRORS:3cd4fa75          untestable  a full storage device cannot be arranged portably
+ERRORS:e817f93d          untestable  may fail; the limit is not known
+ERRORS:7cee3038          XSH.sem_open.008
+ERRORS:8c35ef5a          untestable  may fail; the system limit cannot be reached portably

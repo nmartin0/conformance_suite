@@ -1,0 +1,89 @@
+# XSH sem_clockwait() and sem_timedwait()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The pages of sem_clockwait and sem_timedwait are one file, so both
+# functions live in this module. Every test that is not about a single
+# function runs three forms: sem_timedwait(), sem_clockwait() with
+# CLOCK_REALTIME and with CLOCK_MONOTONIC. A timeout is checked against
+# its clock from below only (it must not end before the time); the upper
+# bounds only detect a hang. The validity of abstime when the semaphore
+# can be locked at once need not be checked, so it is not tested.
+
+assertion  XSH.sem_clockwait.001
+anchor     functions/sem_clockwait.html#DESCRIPTION
+anchor     functions/sem_clockwait.html#RETURN VALUE
+class      required
+says       Each of the three forms, called on a semaphore of value 2 with
+           an absolute time long passed (the epoch), returns 0 and lowers
+           the value by one (a timeout never beats a lock that can be had
+           at once).
+test       t/001-immediate.c
+
+assertion  XSH.sem_clockwait.002
+anchor     functions/sem_clockwait.html#DESCRIPTION
+anchor     functions/sem_clockwait.html#ERRORS/ETIMEDOUT
+class      required
+says       Each form on a semaphore of value 0, with an absolute time 200
+           ms ahead on its clock (the real-time clock for sem_timedwait()),
+           returns -1 with ETIMEDOUT, and that clock then reads at least
+           the absolute time.
+test       t/002-times-out.c
+
+assertion  XSH.sem_clockwait.003
+anchor     functions/sem_clockwait.html#DESCRIPTION
+anchor     functions/sem_clockwait.html#ERRORS/ETIMEDOUT
+class      required
+says       Each form on a semaphore of value 0, with an absolute time that
+           has already passed (the epoch; one second ago), returns -1 with
+           ETIMEDOUT.
+test       t/003-expired.c
+
+assertion  XSH.sem_clockwait.004
+anchor     functions/sem_clockwait.html#RETURN VALUE
+class      required
+says       After a timed wait has failed with ETIMEDOUT, the semaphore is
+           unchanged: it is still 0, and one post then gives exactly one
+           successful lock.
+test       t/004-state-unchanged.c
+
+assertion  XSH.sem_clockwait.005
+anchor     functions/sem_clockwait.html#DESCRIPTION
+anchor     functions/sem_clockwait.html#RETURN VALUE
+class      required
+says       Each form, blocked in a thread on a semaphore of value 0 with a
+           timeout 30 s ahead, does not return before a post and returns 0
+           after the sem_post(); the post is consumed.
+timeout    90
+test       t/005-post-wakes.c
+
+assertion  XSH.sem_clockwait.006
+anchor     functions/sem_clockwait.html#ERRORS/EINVAL
+class      required
+says       Each form on a semaphore of value 0, with an absolute time a few
+           seconds ahead but a nanoseconds field of -1, 1000000000 or
+           2000000000, returns -1 with EINVAL.
+note       A system that does not check the field waits the seconds and
+           reports ETIMEDOUT, which fails.
+test       t/006-bad-nanoseconds.c
+
+assertion  XSH.sem_clockwait.007
+anchor     functions/sem_clockwait.html#ERRORS/EINVAL
+class      required
+says       sem_clockwait() on a semaphore of value 0 with a clock_id that
+           names no clock (one clock_gettime() rejects with EINVAL) returns
+           -1 with EINVAL.
+note       UNRESOLVED if every candidate identifier names a clock.
+test       t/007-bad-clock.c
+
+assertion  XSH.sem_clockwait.008
+anchor     functions/sem_clockwait.html#ERRORS/EINTR
+anchor     functions/sem_clockwait.html#RETURN VALUE
+class      required
+says       When a handler runs in a thread in a timed wait on a semaphore of
+           value 0 (timeout 1.5 s ahead, no post), the call returns -1 with
+           EINTR, or goes on and returns -1 with ETIMEDOUT after the time;
+           it does not return 0, and the semaphore is unchanged.
+note       The handler is installed without SA_RESTART and must be seen to
+           run (UNRESOLVED if not).
+timeout    90
+test       t/008-signal.c

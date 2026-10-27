@@ -1,0 +1,77 @@
+# XSH aio_write()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# See aio_read.asr for the conventions: static control blocks, bounded
+# waits, EBADF and EINVAL accepted from the call or as the error status.
+
+assertion  XSH.aio_write.001
+anchor     functions/aio_write.html#DESCRIPTION
+anchor     functions/aio_write.html#RETURN VALUE
+class      required
+since      2001
+says       Without O_APPEND and with the descriptor's own offset elsewhere,
+           a 3-byte aio_write() at aio_offset 4 puts the bytes at offset 4
+           (error status 0, return status 3); a 1-byte write at offset 12,
+           past the end of a 10-byte file, makes the file 13 bytes long.
+test       t/001-offset.c
+
+assertion  XSH.aio_write.002
+anchor     functions/aio_write.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.8.2
+class      required
+since      2001
+says       With O_APPEND, three 1-byte aio_write() requests (aio_offset 0)
+           all complete, leave the old contents in place and add the three
+           bytes after them; their order is not checked.
+note       The page keeps the call order except where 2.8.2 allows the
+           ordering restriction to be relaxed, which a strictly conforming
+           program cannot rule out.
+test       t/002-append.c
+
+assertion  XSH.aio_write.003
+anchor     functions/aio_write.html#DESCRIPTION
+class      required
+since      2001
+says       aio_lio_opcode is ignored: with LIO_READ or LIO_NOP in it, a
+           request submitted by aio_write() on a write-only descriptor
+           still writes.
+test       t/003-opcode.c
+
+assertion  XSH.aio_write.004
+anchor     functions/aio_write.html#ERRORS/EBADF
+class      required
+since      2001
+says       A descriptor of -1, a closed descriptor and a read-only
+           descriptor are each rejected with EBADF by the call, or the
+           request has error status EBADF and return status -1; no file is
+           changed.
+test       t/004-ebadf.c
+
+assertion  XSH.aio_write.005
+anchor     functions/aio_write.html#ERRORS/EINVAL
+class      required
+since      2001
+says       A negative aio_offset on a regular file is rejected with EINVAL
+           by the call, or the request has error status EINVAL and return
+           status -1; the file is not changed.
+test       t/005-einval-offset.c
+
+assertion  XSH.aio_write.006
+anchor     functions/aio_write.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.8.2
+class      required
+since      2001
+says       With SIGEV_NONE no signal at all is pending after the request
+           completes (every signal but SIGALRM blocked), and the error and
+           return statuses are set (0 and the byte count).
+test       t/006-sigev-none.c
+
+assertion  XSH.aio_write.007
+anchor     functions/aio_write.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.4.2
+class      required
+since      2001
+says       With SIGEV_THREAD the notification function is called once, with
+           the sigev_value pointer, in a thread other than the caller's, and
+           the request is complete by then.
+test       t/007-sigev-thread.c

@@ -1,0 +1,93 @@
+# XSH mq_timedreceive()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Message passing option (MSG). The page is shared with mq_receive(), whose
+# module tests the common rules through mq_receive(). Timeouts are absolute
+# CLOCK_REALTIME times; the lower bound is exact, the upper bound (8 s over)
+# only detects a hang.
+
+assertion  XSH.mq_timedreceive.001
+anchor     functions/mq_receive.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       With a message queued mq_timedreceive() succeeds even if abstime
+           is long past: it returns the length, copies the message, stores
+           the priority and removes it.
+test       t/001-message-past.c
+
+assertion  XSH.mq_timedreceive.002
+anchor     functions/mq_receive.html#DESCRIPTION
+anchor     functions/mq_receive.html#ERRORS/ETIMEDOUT
+class      conditional
+when       MSG
+since      2001
+says       On an empty queue without O_NONBLOCK, mq_timedreceive() with an
+           abstime 300 ms ahead fails with ETIMEDOUT, not before
+           CLOCK_REALTIME has reached abstime.
+test       t/002-etimedout.c
+
+assertion  XSH.mq_timedreceive.003
+anchor     functions/mq_receive.html#DESCRIPTION
+anchor     functions/mq_receive.html#ERRORS/ETIMEDOUT
+class      conditional
+when       MSG
+since      2001
+says       On an empty queue an abstime already passed gives ETIMEDOUT.
+test       t/003-past-empty.c
+
+assertion  XSH.mq_timedreceive.004
+anchor     functions/mq_receive.html#ERRORS/EINVAL
+class      conditional
+when       MSG
+since      2001
+says       When the call would block, a tv_nsec of -1 or 1000000000 fails with
+           EINVAL.
+test       t/004-einval-nsec.c
+
+assertion  XSH.mq_timedreceive.005
+anchor     functions/mq_receive.html#DESCRIPTION
+anchor     functions/mq_receive.html#ERRORS/EAGAIN
+class      conditional
+when       MSG
+since      2001
+says       With O_NONBLOCK an empty queue gives EAGAIN at once (not
+           ETIMEDOUT), before abstime 4 s ahead.
+test       t/005-nonblock.c
+
+assertion  XSH.mq_timedreceive.006
+anchor     functions/mq_receive.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       On an empty queue the wait ends with the message when one is sent
+           before abstime (a child sends after 300 ms), not before that.
+test       t/006-wakes.c
+
+assertion  XSH.mq_timedreceive.007
+anchor     functions/mq_receive.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       mq_timedreceive() takes the oldest message of the highest
+           priority (order 2,3,5,1,4 for priorities 2,9,9,2,9).
+test       t/007-priority.c
+
+assertion  XSH.mq_timedreceive.008
+anchor     functions/mq_receive.html#DESCRIPTION
+anchor     functions/mq_receive.html#ERRORS/EMSGSIZE
+class      conditional
+when       MSG
+since      2001
+says       A buffer of 63 bytes for mq_msgsize 64 fails with EMSGSIZE and the
+           message stays queued; a buffer of 64 bytes receives it.
+test       t/008-emsgsize.c
+
+assertion  XSH.mq_timedreceive.009
+anchor     functions/mq_receive.html#ERRORS/EBADF
+class      conditional
+when       MSG
+since      2001
+says       An invalid descriptor, and one opened O_WRONLY, fail with EBADF and
+           remove nothing.
+test       t/009-ebadf.c

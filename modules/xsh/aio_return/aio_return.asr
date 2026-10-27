@@ -1,0 +1,46 @@
+# XSH aio_return()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.aio_return.001
+anchor     functions/aio_return.html#DESCRIPTION
+anchor     functions/aio_return.html#RETURN VALUE
+class      required
+since      2001
+says       After completion aio_return() gives the count write() or read()
+           would: 5 for a 5-byte aio_write(), and 7 for an aio_read() of 10
+           bytes from a file with 7 bytes.
+test       t/001-count.c
+
+assertion  XSH.aio_return.002
+anchor     functions/aio_return.html#DESCRIPTION
+anchor     functions/aio_return.html#RETURN VALUE
+class      required
+since      2001
+says       For an aio_write() to a pipe with no reader that has failed,
+           aio_return() gives -1, as write() would.
+note       A failure already reported by the call leaves no return status
+           to examine; the test is then UNRESOLVED.
+test       t/002-failed.c
+
+assertion  XSH.aio_return.003
+anchor     functions/aio_return.html#DESCRIPTION
+class      required
+since      2001
+says       After the status of a read has been retrieved, the same control
+           block can be used for another request, and aio_return() then
+           gives that request's status (2 for a 2-byte read).
+test       t/003-reuse.c
+
+assertion  XSH.aio_return.004
+anchor     functions/aio_return.html#ERRORS/EINVAL
+anchor     functions/aio_return.html#DESCRIPTION
+class      required
+since      2001
+says       A second aio_return() for a request whose status was retrieved
+           is made after the first returned the right count; the call must
+           return, and whatever it returns is accepted.
+note       The page says an error may be returned and the value of a call
+           that does not fail is unspecified, and an implementation may add
+           errors of its own, so neither a value nor an errno is required.
+nomutant   the outcome is unspecified; there is nothing to plant
+test       t/004-twice.c

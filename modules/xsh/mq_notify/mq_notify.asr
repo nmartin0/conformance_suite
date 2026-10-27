@@ -1,0 +1,114 @@
+# XSH mq_notify()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Message passing option (MSG). Notifications by signal use SIGRTMIN, blocked
+# and collected with sigtimedwait(). A check that no notification came waits
+# 300 ms after the event; the event itself is synchronous with mq_send().
+# Not tested: EINVAL is a may-fail error for a NULL notification when not
+# registered, and is accepted there; registration by a process that then
+# exits is not exercised.
+
+assertion  XSH.mq_notify.001
+anchor     functions/mq_notify.html#DESCRIPTION
+anchor     functions/mq_notify.html#RETURN VALUE
+anchor     functions/V2_chap02.html#2.4.1
+class      conditional
+when       MSG
+since      2001
+says       After mq_notify() with SIGEV_SIGNAL (SIGRTMIN, value 42) returns
+           0, no signal comes while the queue stays empty; a message sent to
+           the empty queue then raises the signal with si_code SI_MESGQ and
+           si_value 42.
+test       t/001-signal.c
+
+assertion  XSH.mq_notify.002
+anchor     functions/mq_notify.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       After a notification the registration is removed: the next
+           message to an empty queue raises no signal, and the queue can be
+           registered again (the new registration then notifies).
+test       t/002-registration-ends.c
+
+assertion  XSH.mq_notify.003
+anchor     functions/mq_notify.html#DESCRIPTION
+anchor     functions/mq_notify.html#ERRORS/EBUSY
+class      conditional
+when       MSG
+since      2001
+says       While the process is registered for a queue, mq_notify() by the
+           same process through the same or another descriptor fails with
+           EBUSY.
+test       t/003-ebusy.c
+
+assertion  XSH.mq_notify.004
+anchor     functions/mq_notify.html#DESCRIPTION
+anchor     functions/mq_notify.html#ERRORS/EBUSY
+class      conditional
+when       MSG
+since      2001
+says       When one process is registered for a queue, mq_notify() by another
+           process fails with EBUSY.
+test       t/004-ebusy-other-process.c
+
+assertion  XSH.mq_notify.005
+anchor     functions/mq_notify.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       mq_notify() with a NULL notification removes the registration: it
+           returns 0, a message to the empty queue raises no signal, and the
+           queue can be registered through another descriptor.
+test       t/005-null-removes.c
+
+assertion  XSH.mq_notify.006
+anchor     functions/mq_notify.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       Registered while the queue holds a message, a second message sent
+           to the non-empty queue raises no signal; after both are received a
+           message sent to the empty queue raises it, with the registered
+           value.
+test       t/006-nonempty.c
+
+assertion  XSH.mq_notify.007
+anchor     functions/mq_notify.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       With a thread blocked in mq_receive() on the queue, a message sent
+           is received by that thread, no notification is sent, and the
+           registration remains (a further mq_notify() fails with EBUSY).
+note       The thread is given 300 ms to block before the registration.
+test       t/007-blocked-receiver.c
+
+assertion  XSH.mq_notify.008
+anchor     functions/mq_notify.html#ERRORS/EBADF
+class      conditional
+when       MSG
+since      2001
+says       mq_notify() with an invalid descriptor fails with EBADF.
+test       t/008-ebadf.c
+
+assertion  XSH.mq_notify.009
+anchor     functions/mq_notify.html#ERRORS/EINVAL
+class      conditional
+when       MSG
+since      2008
+says       mq_notify() with a NULL notification when the process is not
+           registered returns 0 or fails with EINVAL.
+note       EINVAL is a may-fail error (added in Issue 7).
+test       t/009-null-unregistered.c
+
+assertion  XSH.mq_notify.010
+anchor     functions/mq_notify.html#DESCRIPTION
+anchor     functions/mq_notify.html#EXAMPLES
+class      conditional
+when       MSG
+since      2001
+says       With SIGEV_THREAD, a message sent to the empty queue runs the
+           notification function with the registered value; it does not run
+           before.
+test       t/010-sigev-thread.c

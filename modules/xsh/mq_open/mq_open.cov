@@ -1,0 +1,54 @@
+# mq_open.cov - every requirement unit on functions/mq_open.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:69b1b1d0        XSH.mq_open.001 XSH.mq_open.002
+DESCRIPTION:a28d90a9        XSH.mq_open.001 XSH.mq_open.009
+DESCRIPTION:5ec4b657        none  a remark
+DESCRIPTION:ccb008d8        none  a definition
+DESCRIPTION:8147d603        none  unspecified
+DESCRIPTION:1db11134        none  implementation-defined
+DESCRIPTION:41df17af        XSH.mq_open.002
+DESCRIPTION:715fd280        none  implementation-defined
+DESCRIPTION:25b5f7a0        XSH.mq_open.013
+DESCRIPTION:3925e453        partial XSH.mq_open.016  # the OPEN_MAX count is not tested
+DESCRIPTION:b9ea0ffa        none  a remark
+DESCRIPTION:da6cbaca        partial XSH.mq_open.015  # only the denial of read access to another user
+DESCRIPTION:8c033585        none  a remark
+DESCRIPTION:4c20ac5d        app   a requirement on applications
+DESCRIPTION:09c53852        XSH.mq_open.010
+DESCRIPTION:bfb92919        XSH.mq_open.010
+DESCRIPTION:81802fc1        XSH.mq_open.002 XSH.mq_open.010
+DESCRIPTION:dd0743b4        XSH.mq_open.011
+DESCRIPTION:65f7abd3        XSH.mq_open.011
+DESCRIPTION:3a47328e        XSH.mq_open.002 XSH.mq_open.011
+DESCRIPTION:7c59795d        XSH.mq_open.012
+DESCRIPTION:aedad02c        XSH.mq_open.012
+DESCRIPTION:3a47328e.2      XSH.mq_open.002
+DESCRIPTION:b2328aa6        none  a remark
+DESCRIPTION:8e2270ee        XSH.mq_open.001
+DESCRIPTION:0dc73c04        XSH.mq_open.001
+DESCRIPTION:c26558e2        XSH.mq_open.004
+DESCRIPTION:f25fb9b5        XSH.mq_open.001
+DESCRIPTION:740477ba        untestable  the owner of a queue cannot be read through the interface
+DESCRIPTION:40c10fab        untestable  the group of a queue cannot be read through the interface
+DESCRIPTION:15a3a328        none  unspecified
+DESCRIPTION:1107d164        XSH.mq_open.008
+DESCRIPTION:3ce89745        XSH.mq_open.005
+DESCRIPTION:52d5e5ff        XSH.mq_open.006
+DESCRIPTION:5b5485cd        untestable  "appropriate privileges on name" is not defined
+DESCRIPTION:508db0d1        XSH.mq_open.003
+DESCRIPTION:b4ca52d8        XSH.mq_open.017
+DESCRIPTION:49f0da4e        none  undefined
+DESCRIPTION:48b4690f        XSH.mq_open.009
+DESCRIPTION:8d6c6123        XSH.mq_open.004
+RETURN_VALUE:6ed3da1e       XSH.mq_open.001 XSH.mq_open.003 XSH.mq_open.007 XSH.mq_open.013
+ERRORS:4eb7d8aa             partial XSH.mq_open.015  # the creation-denied case is not tested
+ERRORS:560d3000             XSH.mq_open.003
+ERRORS:56ee537d             todo  needs a signal arriving while mq_open() waits, which cannot be arranged
+ERRORS:78816615             partial XSH.mq_open.014  # accepted for a very long name
+ERRORS:647806bf             XSH.mq_open.007
+ERRORS:f90f4286             XSH.mq_open.016
+ERRORS:ba52df74             untestable  system-wide exhaustion cannot be arranged by a test
+ERRORS:6c0351a6             XSH.mq_open.013
+ERRORS:db39462c             untestable  exhausting the space for queues cannot be arranged by a test
+ERRORS:c715b2cb             XSH.mq_open.014

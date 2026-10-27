@@ -1,0 +1,62 @@
+# XSH mq_setattr()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Message passing option (MSG). Only O_NONBLOCK is used in mq_flags;
+# implementation-defined flags are not tested.
+
+assertion  XSH.mq_setattr.001
+anchor     functions/mq_setattr.html#DESCRIPTION
+anchor     functions/mq_setattr.html#RETURN VALUE
+class      conditional
+when       MSG
+since      2001
+says       mq_setattr() with mq_flags O_NONBLOCK sets it (mq_getattr() shows
+           it and mq_receive() on the empty queue fails with EAGAIN); with
+           mq_flags 0 it clears it (mq_getattr() shows it clear and a timed
+           receive on the empty queue ends with ETIMEDOUT, not EAGAIN).
+test       t/001-nonblock.c
+
+assertion  XSH.mq_setattr.002
+anchor     functions/mq_setattr.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       The mq_maxmsg, mq_msgsize and mq_curmsgs of the input are ignored:
+           afterwards the queue still has 4, 64 and its one real message.
+test       t/002-others-ignored.c
+
+assertion  XSH.mq_setattr.003
+anchor     functions/mq_setattr.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       With omqstat non-NULL it receives the previous mq_flags, the
+           mq_maxmsg and mq_msgsize, and the current mq_curmsgs; a second
+           call shows the O_NONBLOCK the first set.
+test       t/003-old-attr.c
+
+assertion  XSH.mq_setattr.004
+anchor     functions/mq_setattr.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       omqstat may be NULL: the call returns 0 and the flags are set.
+test       t/004-null-old.c
+
+assertion  XSH.mq_setattr.005
+anchor     functions/mq_setattr.html#DESCRIPTION
+class      conditional
+when       MSG
+since      2001
+says       The attributes set are those of the open description of the
+           descriptor: another description of the same queue keeps its
+           flags.
+test       t/005-per-description.c
+
+assertion  XSH.mq_setattr.006
+anchor     functions/mq_setattr.html#ERRORS/EBADF
+class      conditional
+when       MSG
+since      2001
+says       mq_setattr() of an invalid descriptor fails with EBADF.
+test       t/006-ebadf.c

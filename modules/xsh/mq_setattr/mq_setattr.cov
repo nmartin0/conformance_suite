@@ -1,0 +1,12 @@
+# mq_setattr.cov - every requirement unit on functions/mq_setattr.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:5cddacb8        XSH.mq_setattr.001 XSH.mq_setattr.005
+DESCRIPTION:2bb75e78        XSH.mq_setattr.001
+DESCRIPTION:7e113819        partial XSH.mq_setattr.001  # only O_NONBLOCK; other flags are implementation-defined
+DESCRIPTION:6a10b8d3        XSH.mq_setattr.002
+DESCRIPTION:45381743        XSH.mq_setattr.003 XSH.mq_setattr.004
+DESCRIPTION:910e075f        partial XSH.mq_setattr.003  # members checked one by one against known values
+RETURN_VALUE:cf1346bf       XSH.mq_setattr.001 XSH.mq_setattr.004
+RETURN_VALUE:a4671083       partial XSH.mq_setattr.006  # the attributes of an invalid descriptor cannot be observed
+ERRORS:13c5f4e6             XSH.mq_setattr.006
