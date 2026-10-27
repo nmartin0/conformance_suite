@@ -30,7 +30,9 @@
 # keep it); diagnostics go to standard error. Nothing is left behind unless
 # --results DIR is given, which keeps DIR/run.log and the test output.
 # The exit status is 1 if any assertion FAILed (without --results), 3 for
-# an aborted run, 2 for a usage error. Run it as root (or the equivalent).
+# an aborted run, 2 for a usage error. Run it with elevated privilege (root,
+# su, sudo, pfexec); as an ordinary user it still runs, and the assertions
+# that need root are skipped and reported as such (UNRESOLVED, "skipped").
 
 set -u
 LC_ALL=POSIX
@@ -582,7 +584,11 @@ pc_assertion() {
 	fi
 	for pc_n in $a_needs; do
 		if ! pc_have "$pc_n"; then
-			pc_log UNRESOLVED "$pc_id" 0 "needs $pc_n"
+			case $pc_n in
+			root) pc_nn="skipped: needs root privilege, which this run was not granted" ;;
+			*) pc_nn="skipped: needs $pc_n, which this system or run does not provide" ;;
+			esac
+			pc_log UNRESOLVED "$pc_id" 0 "$pc_nn"
 			return 0
 		fi
 	done

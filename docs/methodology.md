@@ -72,6 +72,7 @@ FLAKY, which has no verdict and fails the check until the test is fixed.
 
 ## Operating assumptions
 
-- The suite runs as root or the equivalent. Permission errors are tested by dropping privilege in a child process. Cases for ordinary-user runs are added only where the standard strictly requires them.
+- The suite is meant to be run with elevated privilege (root, su, sudo, pfexec) and must also run as an ordinary user. Every test runs as whoever started the suite.
+- A test that really needs root declares `needs root`; without privilege the driver skips it and reports it as skipped. All other tests give the same verdict as root and as an ordinary user: a test of a permission error drops privilege in a child when it runs as root.
 - A test decides PASS or FAIL against the standard alone and never depends on which system it runs on.
 - Tests keep to their private working directory; the driver removes its own directory when the run ends, so repeated runs leave nothing behind.

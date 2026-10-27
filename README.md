@@ -26,7 +26,9 @@ Copy this directory to the system under test and run:
     ./posixcheck.sh --help
 
 It needs only the system's own `sh`, a C compiler (`c17`, else `cc`) and
-`mkdir`. Run it as root (or the equivalent: `su`, `sudo`, `pfexec`).
+`mkdir`. Run it with elevated privilege (root, `su`, `sudo`, `pfexec`). It
+still runs as an ordinary user: the assertions that need root are then
+skipped and reported as skipped.
 
 It prints one result line per assertion and a final `SUMMARY` line on
 standard output; redirect that to keep it. Diagnostics go to standard
@@ -56,7 +58,7 @@ Requirements on the environment:
 
 - The results directory must not carry default ACLs (some systems apply
   them instead of the umask, which breaks the `O_CREAT` mode tests).
-- Run as root. Tests that need it say so
+- Run with elevated privilege where you can. Tests that need root say so
   (`needs root`) and are UNRESOLVED without it.
 
 A profile (`--profile FILE`) supplies what the environment provides; see
