@@ -1,0 +1,53 @@
+# XSH call_once()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Racing callers, the signal case: the page's recursion, longjmp and
+# cancellation notes are undefined or CX-cancel (not tested).
+# Every once_flag has static storage and ONCE_FLAG_INIT.
+
+assertion  XSH.call_once.001
+anchor     functions/call_once.html#DESCRIPTION
+class      required
+since      2024
+says       For each once_flag, the first call_once() runs init_routine and
+           later calls with the same flag (from the same thread or another)
+           do not run it again; a second flag has its own first call.
+test       t/001-once.c
+
+assertion  XSH.call_once.002
+anchor     functions/call_once.html#DESCRIPTION
+class      required
+since      2024
+says       Four threads calling call_once() together with one flag all return
+           only after init_routine (200 ms long) has completed, and it ran
+           once; each then sees the plain data init_routine wrote.
+test       t/002-race.c
+
+assertion  XSH.call_once.003
+anchor     functions/call_once.html#DESCRIPTION
+class      required
+since      2024
+says       A thread waiting in call_once() while another thread's
+           init_routine runs, and taking a caught signal (SIGUSR1, no
+           SA_RESTART), still returns only after init_routine has completed.
+note       The signal comes 100 ms into a 600 ms initialization.
+test       t/003-signal.c
+
+assertion  XSH.call_once.004
+anchor     functions/call_once.html#DESCRIPTION
+class      required
+since      2024
+says       A thread with a deferred cancellation request pending calls
+           call_once() with an init_routine that has no cancellation point:
+           the call returns and the routine ran once; the thread is canceled
+           only at its next pthread_testcancel().
+test       t/004-not-cancel-point.c
+
+assertion  XSH.call_once.005
+anchor     functions/call_once.html#DESCRIPTION
+class      required
+since      2024
+says       When init_routine is canceled at a cancellation point, the next
+           call_once() with the flag calls init_routine again (it runs a
+           second time) and returns.
+test       t/005-canceled-init.c

@@ -1,0 +1,50 @@
+# XSH tss_get(), tss_set()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Setting a value from a destructor beyond the second call (lost storage or
+# endless repetition) is unspecified and not exercised.
+
+assertion  XSH.tss_get.001
+anchor     functions/tss_get.html#DESCRIPTION
+anchor     functions/tss_get.html#RETURN VALUE
+class      required
+since      2024
+says       tss_set() returns thrd_success and tss_get() then returns the
+           pointer stored, including after it is replaced by another and by a
+           null pointer.
+test       t/001-set-get.c
+
+assertion  XSH.tss_get.002
+anchor     functions/tss_get.html#DESCRIPTION
+anchor     functions/tss_get.html#RETURN VALUE
+class      required
+since      2024
+says       A value set in one thread is not seen in another: a new thread
+           sees null, sets its own, and the creator's value is unchanged
+           while the new thread still holds its own.
+test       t/002-per-thread.c
+
+assertion  XSH.tss_get.003
+anchor     functions/tss_get.html#DESCRIPTION
+class      required
+since      2024
+says       Replacing a non-null value with tss_set() calls no destructor; at
+           the thread's end the destructor is called once, with the last
+           value.
+test       t/003-set-no-destructor.c
+
+assertion  XSH.tss_get.004
+anchor     functions/tss_get.html#DESCRIPTION
+class      required
+since      2024
+says       While a key's destructor runs at thread exit, tss_get() for that
+           key returns a null pointer.
+test       t/004-null-in-destructor.c
+
+assertion  XSH.tss_get.005
+anchor     functions/tss_get.html#DESCRIPTION
+class      required
+since      2024
+says       A destructor that calls tss_set() for its own key (once) sees
+           tss_get() return the new value.
+test       t/005-set-in-destructor.c

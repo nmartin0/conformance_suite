@@ -1,0 +1,58 @@
+# XSH clock_getcpuclockid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Which processes' clocks the caller may obtain is implementation-defined,
+# so the EPERM case is not provoked and a refusal in the child test is
+# UNRESOLVED. ESRCH is a may-fail error and is not required. CPU-time clocks
+# tick in implementation-defined steps, so a clock is checked only to be
+# readable, not to go backwards, and against readings made earlier.
+
+assertion  XSH.clock_getcpuclockid.001
+anchor     functions/clock_getcpuclockid.html#DESCRIPTION
+anchor     functions/clock_getcpuclockid.html#RETURN VALUE
+class      conditional
+when       CPT
+since      2001
+says       clock_getcpuclockid(0, &id) returns 0 and id can be read with
+           clock_gettime(); 50 successive reads, with work between them,
+           never decrease.
+test       t/001-pid-zero.c
+
+assertion  XSH.clock_getcpuclockid.002
+anchor     functions/clock_getcpuclockid.html#DESCRIPTION
+anchor     functions/clock_getcpuclockid.html#RETURN VALUE
+class      conditional
+when       CPT
+since      2001
+says       clock_getcpuclockid(getpid(), &id) returns 0 and id can be read
+           with clock_gettime(); 50 successive reads, with work between
+           them, never decrease.
+test       t/002-own-pid.c
+
+assertion  XSH.clock_getcpuclockid.003
+anchor     functions/clock_getcpuclockid.html#DESCRIPTION
+anchor     functions/clock_getcpuclockid.html#RETURN VALUE
+class      conditional
+when       CPT
+since      2001
+says       For a live child process, clock_getcpuclockid(child, &id) called
+           by the parent returns 0 and clock_gettime(id) is not below the
+           reading the child made of its own process CPU-time clock earlier.
+note       The assertion's EPERM outcome is UNRESOLVED: the permission
+           rule is implementation-defined.
+timeout    60
+test       t/003-child.c
+
+assertion  XSH.clock_getcpuclockid.004
+anchor     functions/clock_getcpuclockid.html#DESCRIPTION
+anchor     functions/pthread_getcpuclockid.html#DESCRIPTION
+class      conditional
+when       CPT+TCT
+since      2001
+says       In a single-threaded process, after CPU time has been used, the
+           reading of the process CPU-time clock from clock_getcpuclockid(0)
+           is not below the reading of the thread's own CPU-time clock
+           (from pthread_getcpuclockid(pthread_self())) taken just before.
+note       The process clock accounts the CPU time of all its threads
+           (XBD 3.x CPU-time clock definitions).
+test       t/004-process-vs-thread.c

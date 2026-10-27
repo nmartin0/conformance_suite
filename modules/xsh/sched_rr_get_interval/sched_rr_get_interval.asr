@@ -1,0 +1,40 @@
+# XSH sched_rr_get_interval()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The quantum is checked only for a process the test puts under SCHED_RR
+# (in a child; that needs privilege). Outside SCHED_RR the page gives no
+# value, only that the structure is updated.
+
+assertion  XSH.sched_rr_get_interval.001
+anchor     functions/sched_rr_get_interval.html#DESCRIPTION
+anchor     functions/sched_rr_get_interval.html#RETURN VALUE
+anchor     functions/V2_chap02.html#2.8.4/SCHED_RR
+class      conditional
+when       PS|TPS
+since      2001
+says       In a process under SCHED_RR, sched_rr_get_interval(0, &ts)
+           returns 0 and ts holds a valid time (the quantum).
+needs      root
+timeout    60
+test       t/001-round-robin.c
+
+assertion  XSH.sched_rr_get_interval.002
+anchor     functions/sched_rr_get_interval.html#DESCRIPTION
+anchor     functions/sched_rr_get_interval.html#RETURN VALUE
+class      conditional
+when       PS|TPS
+since      2001
+says       sched_rr_get_interval(0, &ts) returns 0 and replaces the contents
+           of ts by a valid time (non-negative seconds, nanoseconds below
+           one second).
+test       t/002-default-policy.c
+
+assertion  XSH.sched_rr_get_interval.003
+anchor     functions/sched_rr_get_interval.html#ERRORS/ESRCH
+anchor     functions/sched_rr_get_interval.html#RETURN VALUE
+class      conditional
+when       PS|TPS
+since      2001
+says       For the pid of a child that has been reaped,
+           sched_rr_get_interval() returns -1 with ESRCH.
+test       t/003-esrch.c

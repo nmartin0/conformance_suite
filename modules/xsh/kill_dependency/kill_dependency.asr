@@ -1,0 +1,25 @@
+# XSH kill_dependency()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.kill_dependency.001
+anchor     functions/kill_dependency.html#RETURN VALUE
+anchor     basedefs/stdatomic.h.html#DESCRIPTION
+class      required
+since      2024
+says       <stdatomic.h> defines the macro kill_dependency, and
+           kill_dependency(y) is the value of y for int, long, unsigned long
+           long, double, _Bool, char, an expression, and object, structure
+           and function pointers.
+test       t/001-value.c
+
+assertion  XSH.kill_dependency.002
+anchor     functions/kill_dependency.html#DESCRIPTION
+anchor     functions/kill_dependency.html#RETURN VALUE
+class      required
+since      2024
+says       A pointer published with atomic_store_explicit(release) and read by
+           another thread with atomic_load_explicit(consume) points to
+           the published data: kill_dependency() of a member read through it
+           is the data written before publication (2000 messages).
+note       The wait is bounded (20 s); not seeing a message is UNRESOLVED.
+test       t/002-consume-chain.c

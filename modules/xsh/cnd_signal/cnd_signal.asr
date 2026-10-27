@@ -1,0 +1,48 @@
+# XSH cnd_signal(), cnd_broadcast()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Waiters wait once with no predicate: a spurious wakeup can only make
+# the wake-up checks pass early, never fail them. The signal is sent
+# only once every waiter is inside its wait (it holds the mutex the
+# waiters released there).
+
+assertion  XSH.cnd_signal.001
+anchor     functions/cnd_broadcast.html#DESCRIPTION
+anchor     functions/cnd_broadcast.html#RETURN VALUE
+class      required
+since      2024
+says       With no thread blocked on the condition variable, cnd_signal() and
+           cnd_broadcast() have no effect and return thrd_success (the mutex
+           held or not).
+test       t/001-no-waiters.c
+
+assertion  XSH.cnd_signal.002
+anchor     functions/cnd_broadcast.html#DESCRIPTION
+anchor     functions/cnd_broadcast.html#RETURN VALUE
+class      required
+since      2024
+says       With three threads blocked in cnd_wait() on one condition
+           variable, a single cnd_signal() (called without owning the mutex)
+           returns thrd_success and at least one of them returns, with
+           thrd_success, within 5 s.
+note       The other waiters are released afterwards by cnd_broadcast().
+test       t/002-signal-wakes.c
+
+assertion  XSH.cnd_signal.003
+anchor     functions/cnd_broadcast.html#DESCRIPTION
+anchor     functions/cnd_broadcast.html#RETURN VALUE
+class      required
+since      2024
+says       With four threads blocked in cnd_wait() on one condition variable,
+           one cnd_broadcast() returns thrd_success and all four return from
+           cnd_wait() with thrd_success within 5 s.
+test       t/003-broadcast-wakes.c
+
+assertion  XSH.cnd_signal.004
+anchor     functions/cnd_broadcast.html#DESCRIPTION
+class      required
+since      2024
+says       A thread unblocked from cnd_wait() by cnd_signal() (called with
+           the mutex held) returns owning the mutex: while it keeps it for
+           300 ms, the signaller's mtx_trylock() returns thrd_busy.
+test       t/004-woken-owns-mutex.c

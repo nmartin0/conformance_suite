@@ -1,0 +1,58 @@
+# XSH atomic_load(), atomic_load_explicit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# ISO C interface (the page defers to ISO C). The generic functions are
+# tried on every atomic integer type of <stdatomic.h> and on atomic
+# pointer types. Objects are initialized with ordinary initializers and
+# reached through volatile pointers; the object is observed with plain
+# reads where a test must not rely on atomic_load() itself.
+
+assertion  XSH.atomic_load.001
+anchor     functions/atomic_load.html#DESCRIPTION
+anchor     functions/atomic_load.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_load() returns the value held by the object, for atomic_bool
+           and every atomic integer type of <stdatomic.h>, with the values 0,
+           1, the type's minimum and its maximum.
+test       t/001-load-values.c
+
+assertion  XSH.atomic_load.002
+anchor     functions/atomic_load.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_load() on atomic object pointers (to int, char, void,
+           a structure, a null pointer, a function) returns the pointer held.
+test       t/002-load-pointer.c
+
+assertion  XSH.atomic_load.003
+anchor     functions/atomic_load.html#DESCRIPTION
+anchor     functions/atomic_load.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_load_explicit() with memory_order_relaxed, _consume,
+           _acquire and _seq_cst (the orders allowed for a load) returns the
+           value held, for every atomic integer type.
+test       t/003-load-explicit-orders.c
+
+assertion  XSH.atomic_load.004
+anchor     functions/atomic_load.html#SYNOPSIS
+anchor     functions/atomic_load.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_load() and atomic_load_explicit() accept a pointer to a
+           const and/or volatile qualified atomic object (also a const
+           object), return its value, and leave the object unchanged.
+test       t/004-load-qualified.c
+
+assertion  XSH.atomic_load.005
+anchor     functions/atomic_load.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.15.1.1
+class      required
+since      2024
+says       While another thread stores 1, 2, ..., N in turn to an atomic int,
+           relaxed loads by one thread (taken in pairs) never see a value
+           lower than one seen earlier, and the final value N is seen.
+note       The wait for N is bounded (20 s); not seeing it is UNRESOLVED,
+           since the page does not bound the delay.
+test       t/005-load-coherence.c

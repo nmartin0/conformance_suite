@@ -1,0 +1,120 @@
+# XSH pthread_getschedparam(), pthread_setschedparam()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that change a thread's policy run in child processes and need
+# privilege to enter a real-time policy; they are UNRESOLVED when the system
+# refuses even then. For the error tests, the page's shall-fail ENOTSUP and
+# its may-fail EINVAL and EPERM are all accepted: XSH 2.9.4 requires the
+# implementation to keep dynamically modified priorities within the policy's
+# range, so success is not. SCHED_OTHER's parameters are implementation-
+# defined (only its policy is read back), ESRCH for a thread whose lifetime
+# ended is not tested, and the sporadic server and priority-ceiling effects
+# are not tested.
+
+assertion  XSH.pthread_getschedparam.001
+anchor     functions/pthread_getschedparam.html#DESCRIPTION
+anchor     functions/pthread_getschedparam.html#RETURN VALUE
+class      conditional
+when       TPS
+since      2001
+says       pthread_getschedparam(pthread_self(), ...) returns 0, a policy,
+           and a priority that lies in the range of that policy.
+note       UNRESOLVED if the policy has no range to compare with.
+test       t/001-self.c
+
+assertion  XSH.pthread_getschedparam.002
+anchor     functions/V2_chap02.html#2.9.4
+anchor     functions/pthread_getschedparam.html#DESCRIPTION
+class      conditional
+when       TPS+PS
+since      2001
+says       In the initial thread of a process whose policy has not been
+           changed, pthread_getschedparam() returns the policy and priority
+           that sched_getscheduler(0) and sched_getparam(0, ...) give for
+           the process.
+test       t/002-initial-thread.c
+
+assertion  XSH.pthread_getschedparam.003
+anchor     functions/pthread_getschedparam.html#DESCRIPTION
+anchor     functions/pthread_getschedparam.html#RETURN VALUE
+class      conditional
+when       TPS
+since      2001
+says       pthread_setschedparam(self, ...) returns 0 for SCHED_FIFO,
+           SCHED_RR (with priorities from the range) and SCHED_OTHER, and
+           pthread_getschedparam(self, ...) then returns that policy and,
+           for FIFO and RR, that priority.
+needs      root
+timeout    60
+test       t/003-self-round-trip.c
+
+assertion  XSH.pthread_getschedparam.004
+anchor     functions/pthread_getschedparam.html#DESCRIPTION
+class      conditional
+when       TPS
+since      2001
+says       pthread_setschedparam(t, SCHED_FIFO, p) on another thread t
+           returns 0, and pthread_getschedparam(t, ...) called by the setter
+           and by t itself then returns SCHED_FIFO and p.
+needs      root
+timeout    60
+test       t/004-other-thread.c
+
+assertion  XSH.pthread_getschedparam.005
+anchor     functions/pthread_getschedparam.html#ERRORS/EINVAL
+anchor     functions/pthread_getschedparam.html#ERRORS/ENOTSUP
+anchor     functions/pthread_getschedparam.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.4
+class      conditional
+when       TPS
+since      2001
+says       pthread_setschedparam() with a priority one above the maximum or
+           one below the minimum of the policy fails with EINVAL, ENOTSUP or
+           EPERM (never EINTR, never success) and the thread's policy and
+           priority are unchanged.
+needs      root
+timeout    60
+test       t/005-bad-priority.c
+
+assertion  XSH.pthread_getschedparam.006
+anchor     functions/pthread_getschedparam.html#ERRORS/EINVAL
+anchor     functions/pthread_getschedparam.html#ERRORS/ENOTSUP
+anchor     functions/pthread_getschedparam.html#DESCRIPTION
+class      conditional
+when       TPS
+since      2001
+says       pthread_setschedparam() with a policy value that no policy has
+           fails with EINVAL, ENOTSUP or EPERM and the thread's policy and
+           priority are unchanged.
+needs      root
+timeout    60
+test       t/006-bad-policy.c
+
+assertion  XSH.pthread_getschedparam.007
+anchor     functions/pthread_getschedparam.html#DESCRIPTION
+class      conditional
+when       TPS
+since      2001
+says       For a thread created with explicit inheritance, SCHED_FIFO and a
+           chosen priority, pthread_getschedparam() returns those values;
+           after pthread_setschedparam(t, SCHED_RR, p) it returns the new
+           ones.
+needs      root
+timeout    60
+test       t/007-from-create.c
+
+assertion  XSH.pthread_getschedparam.008
+anchor     functions/pthread_getschedparam.html#ERRORS/EPERM
+anchor     functions/pthread_getschedparam.html#ERRORS/ENOTSUP
+anchor     functions/pthread_getschedparam.html#DESCRIPTION
+class      conditional
+when       TPS
+since      2001
+says       A thread of a process without privilege (a child that dropped it
+           when the suite is privileged) that sets itself to SCHED_FIFO with
+           the minimum priority either succeeds, so that the policy and
+           priority read back, or fails with EPERM or ENOTSUP and keeps its
+           policy and priority.
+note       The page lets implementations restrict who may enter a policy.
+timeout    60
+test       t/008-unprivileged.c

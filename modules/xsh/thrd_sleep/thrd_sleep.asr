@@ -1,0 +1,47 @@
+# XSH thrd_sleep()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only lower bounds on the elapsed time are checked (TIME_UTC); the
+# upper end is a hang guard. The remaining time is checked against what
+# the page defines: requested minus time actually slept.
+
+assertion  XSH.thrd_sleep.001
+anchor     functions/thrd_sleep.html#DESCRIPTION
+anchor     functions/thrd_sleep.html#RETURN VALUE
+class      required
+since      2024
+says       thrd_sleep() for 200 ms returns 0 and the TIME_UTC clock has
+           advanced by at least 200 ms; a zero duration returns 0, and so
+           does a completed sleep with a non-null remaining.
+test       t/001-elapsed.c
+
+assertion  XSH.thrd_sleep.002
+anchor     functions/thrd_sleep.html#DESCRIPTION
+anchor     functions/thrd_sleep.html#RETURN VALUE
+anchor     functions/thrd_sleep.html#ERRORS
+class      required
+since      2024
+says       thrd_sleep(5 s) interrupted by a caught signal (SIGUSR1, no
+           SA_RESTART) returns -1 with errno EINTR; the remaining time is
+           greater than zero and at most 5 s, and the time slept plus the
+           remaining time is at least the 5 s requested.
+test       t/002-interrupted.c
+
+assertion  XSH.thrd_sleep.003
+anchor     functions/thrd_sleep.html#DESCRIPTION
+class      required
+since      2024
+says       With duration and remaining pointing to the same object, an
+           interrupted thrd_sleep() returns -1 (EINTR) and leaves the
+           remaining time in it: more than zero, at most 5 s, and with the
+           time slept at least the 5 s requested.
+test       t/003-same-object.c
+
+assertion  XSH.thrd_sleep.004
+anchor     functions/thrd_sleep.html#ERRORS
+anchor     functions/thrd_sleep.html#RETURN VALUE
+class      required
+since      2024
+says       thrd_sleep() with tv_nsec equal to 1000000000, and with tv_nsec
+           equal to -1, returns a negative value and sets errno to EINVAL.
+test       t/004-einval.c

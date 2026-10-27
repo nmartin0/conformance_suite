@@ -1,0 +1,9 @@
+# atomic_store.cov - every requirement unit on functions/atomic_store.html
+# (atomic_store, atomic_store_explicit; atomic_store_explicit.html is a copy).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d1665587    none  permission for __STDC_NO_ATOMICS__ implementations; every test reports NOTINUSE there
+DESCRIPTION:7f51904f    XSH.atomic_store.001 XSH.atomic_store.002 XSH.atomic_store.003 XSH.atomic_store.004
+DESCRIPTION:68a0f5ca    partial XSH.atomic_store.002 XSH.atomic_store.005  # allowed orders only; the forbidden ones are the application's
+DESCRIPTION:32f9b826    XSH.atomic_store.001 XSH.atomic_store.005
+RETURN_VALUE:05e50020   untestable  that no value is returned is a compile-level property that C cannot observe portably

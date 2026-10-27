@@ -1,0 +1,41 @@
+# XSH atomic_flag_clear(), atomic_flag_clear_explicit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The state of a flag can only be observed with atomic_flag_test_and_set(),
+# so these tests use it; setup checks on it are UNRESOLVED if they fail.
+
+assertion  XSH.atomic_flag_clear.001
+anchor     functions/atomic_flag_clear.html#DESCRIPTION
+class      required
+since      2024
+says       After atomic_flag_clear() on a set flag, atomic_flag_test_and_set()
+           returns false, and sets the flag again (repeated five times).
+test       t/001-clear.c
+
+assertion  XSH.atomic_flag_clear.002
+anchor     functions/atomic_flag_clear.html#DESCRIPTION
+class      required
+since      2024
+says       atomic_flag_clear_explicit() with memory_order_relaxed, _release
+           and _seq_cst (the orders allowed for it) clears a set flag, also
+           when called repeatedly on a clear one.
+test       t/002-clear-explicit-orders.c
+
+assertion  XSH.atomic_flag_clear.003
+anchor     functions/atomic_flag_clear.html#DESCRIPTION
+class      required
+since      2024
+says       Clearing a clear flag leaves it clear (plain and explicit forms);
+           clearing one flag of an array leaves the other four set.
+test       t/003-clear-isolated.c
+
+assertion  XSH.atomic_flag_clear.004
+anchor     functions/atomic_flag_clear.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.15.1
+class      required
+since      2024
+says       Ordinary data written before atomic_flag_clear_explicit(release) is
+           visible to a thread whose atomic_flag_test_and_set_explicit
+           (acquire) then returns false, over 2000 hand-offs.
+note       A stalled hand-off (20 s) is UNRESOLVED.
+test       t/004-clear-release-handoff.c

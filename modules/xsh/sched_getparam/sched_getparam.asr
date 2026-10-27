@@ -1,0 +1,49 @@
+# XSH sched_getparam()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# A negative pid is unspecified and not tested. Which processes the caller
+# may query is implementation-defined, so EPERM is not provoked; the
+# other-process test runs privileged and treats a refusal as UNRESOLVED.
+
+assertion  XSH.sched_getparam.001
+anchor     functions/sched_getparam.html#DESCRIPTION
+anchor     functions/sched_getparam.html#RETURN VALUE
+class      conditional
+when       PS
+since      2001
+says       sched_getparam(0, &sp) returns 0 and stores a priority that lies
+           within the range sched_get_priority_min()/max() give for the
+           caller's current policy.
+note       UNRESOLVED if the policy has no range to compare with.
+test       t/001-self.c
+
+assertion  XSH.sched_getparam.002
+anchor     functions/sched_getparam.html#DESCRIPTION
+class      conditional
+when       PS
+since      2001
+says       sched_getparam(getpid(), ...) returns 0 and the same priority as
+           sched_getparam(0, ...).
+test       t/002-own-pid.c
+
+assertion  XSH.sched_getparam.003
+anchor     functions/sched_getparam.html#ERRORS/ESRCH
+anchor     functions/sched_getparam.html#RETURN VALUE
+class      conditional
+when       PS
+since      2001
+says       For the pid of a child that has been reaped, sched_getparam()
+           returns -1 with ESRCH.
+test       t/003-esrch.c
+
+assertion  XSH.sched_getparam.004
+anchor     functions/sched_getparam.html#DESCRIPTION
+class      conditional
+when       PS
+since      2001
+says       sched_getparam(pid, ...) of another existing process returns that
+           process's priority (a child under SCHED_FIFO with a chosen
+           priority), not the caller's.
+needs      root
+timeout    60
+test       t/004-other-process.c

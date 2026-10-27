@@ -1,0 +1,54 @@
+# XSH pthread_setschedprio()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests run in child processes under a real-time policy, which needs
+# privilege; they are UNRESOLVED when the system refuses even then. The
+# position of the thread in its list is a scheduling-order effect and is not
+# tested. ESRCH for a thread past the end of its lifetime is not tested.
+
+assertion  XSH.pthread_setschedprio.001
+anchor     functions/pthread_setschedprio.html#DESCRIPTION
+anchor     functions/pthread_setschedprio.html#RETURN VALUE
+anchor     functions/V2_chap02.html#2.8.4
+class      conditional
+when       TPS
+since      2001
+says       For a thread under SCHED_FIFO, pthread_setschedprio(self, p)
+           with p at the minimum, the maximum and between returns 0, and
+           pthread_getschedparam() then returns SCHED_FIFO (the policy is
+           not changed) and p.
+needs      root
+timeout    60
+test       t/001-sets-priority.c
+
+assertion  XSH.pthread_setschedprio.002
+anchor     functions/pthread_setschedprio.html#ERRORS/EINVAL
+anchor     functions/pthread_setschedprio.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.4
+class      conditional
+when       TPS
+since      2001
+says       pthread_setschedprio() with a priority one above the maximum or
+           one below the minimum of the thread's policy fails with EINVAL
+           or EPERM (never EINTR) and the thread's priority is unchanged;
+           a success is accepted only if the priority afterwards lies in
+           the range of the policy.
+note       The page makes EINVAL a may-fail error; XSH 2.9.4 requires the
+           implementation to keep a dynamically modified priority within
+           the range of the policy, so a stored out-of-range value is not
+           accepted.
+needs      root
+timeout    60
+test       t/002-bad-priority.c
+
+assertion  XSH.pthread_setschedprio.003
+anchor     functions/pthread_setschedprio.html#DESCRIPTION
+class      conditional
+when       TPS
+since      2001
+says       pthread_setschedprio(t, p) on another thread t under SCHED_RR
+           returns 0, and t's pthread_getschedparam(), called by the setter
+           and by t itself, then returns SCHED_RR and p.
+needs      root
+timeout    60
+test       t/003-other-thread.c

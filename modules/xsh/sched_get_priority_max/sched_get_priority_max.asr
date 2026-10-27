@@ -1,0 +1,72 @@
+# XSH sched_get_priority_max(), sched_get_priority_min()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# SCHED_OTHER has no stated minimum range: only that the pair is not
+# inverted is checked. A policy value for the EINVAL test is taken from the
+# top of the int range, skipping the four standard constants.
+
+assertion  XSH.sched_get_priority_max.001
+anchor     functions/sched_get_priority_max.html#DESCRIPTION
+anchor     functions/sched_get_priority_max.html#RETURN VALUE
+anchor     functions/V2_chap02.html#2.8.4/SCHED_FIFO
+class      conditional
+when       PS|TPS
+since      2001
+says       For SCHED_FIFO both functions succeed, the minimum is below the
+           maximum, and the range holds at least 32 priorities.
+test       t/001-fifo-range.c
+
+assertion  XSH.sched_get_priority_max.002
+anchor     functions/sched_get_priority_max.html#DESCRIPTION
+anchor     functions/sched_get_priority_max.html#RETURN VALUE
+anchor     functions/V2_chap02.html#2.8.4/SCHED_RR
+class      conditional
+when       PS|TPS
+since      2001
+says       For SCHED_RR both functions succeed, the minimum is below the
+           maximum, and the range holds at least 32 priorities.
+test       t/002-rr-range.c
+
+assertion  XSH.sched_get_priority_max.003
+anchor     functions/sched_get_priority_max.html#DESCRIPTION
+anchor     functions/sched_get_priority_max.html#RETURN VALUE
+anchor     functions/V2_chap02.html#2.8.4/SCHED_OTHER
+class      conditional
+when       PS|TPS
+since      2001
+says       For SCHED_OTHER both functions succeed and the minimum is not
+           above the maximum.
+note       The page names no size for this range; an inclusive range
+           cannot be inverted.
+test       t/003-other-range.c
+
+assertion  XSH.sched_get_priority_max.004
+anchor     basedefs/sched.h.html#DESCRIPTION
+class      conditional
+when       PS|TPS
+since      2001
+says       SCHED_FIFO, SCHED_RR, SCHED_OTHER (and SCHED_SPORADIC when
+           defined) have pairwise different values.
+test       t/004-distinct.c
+
+assertion  XSH.sched_get_priority_max.005
+anchor     functions/sched_get_priority_max.html#ERRORS/EINVAL
+anchor     functions/sched_get_priority_max.html#RETURN VALUE
+class      conditional
+when       PS|TPS
+since      2001
+says       With a policy value that no policy has, both functions return -1
+           with EINVAL.
+note       The value is the largest int that is not a standard constant,
+           and INT_MIN.
+test       t/005-einval.c
+
+assertion  XSH.sched_get_priority_max.006
+anchor     functions/sched_get_priority_max.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.8.4/SCHED_SPORADIC
+class      conditional
+when       SS|TSP
+since      2001
+says       For SCHED_SPORADIC both functions succeed and the range holds at
+           least 32 priorities.
+test       t/006-sporadic-range.c

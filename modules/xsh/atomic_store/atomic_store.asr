@@ -1,0 +1,55 @@
+# XSH atomic_store(), atomic_store_explicit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# ISO C interface. The stored value is observed with a plain read of the
+# atomic object (itself an atomic load), not with atomic_load().
+
+assertion  XSH.atomic_store.001
+anchor     functions/atomic_store.html#DESCRIPTION
+class      required
+since      2024
+says       atomic_store() replaces the value of an atomic object, for
+           atomic_bool and every atomic integer type, with the values 0, 1,
+           the type's minimum and its maximum.
+test       t/001-store-values.c
+
+assertion  XSH.atomic_store.002
+anchor     functions/atomic_store.html#DESCRIPTION
+class      required
+since      2024
+says       atomic_store_explicit() with memory_order_relaxed, _release and
+           _seq_cst (the orders allowed for a store) replaces the value, for
+           every atomic integer type.
+test       t/002-store-explicit-orders.c
+
+assertion  XSH.atomic_store.003
+anchor     functions/atomic_store.html#DESCRIPTION
+class      required
+since      2024
+says       atomic_store() and atomic_store_explicit() replace the pointer
+           held by atomic pointer objects (int, structure, function
+           pointers, a null pointer).
+test       t/003-store-pointer.c
+
+assertion  XSH.atomic_store.004
+anchor     functions/atomic_store.html#DESCRIPTION
+class      required
+since      2024
+says       A store changes only the object it names: in an array of five
+           atomic objects of each type, storing to one element leaves the
+           others unchanged, with all-ones-like and all-zeros-like
+           neighbours.
+test       t/004-store-isolated.c
+
+assertion  XSH.atomic_store.005
+anchor     functions/atomic_store.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.15.1
+class      required
+since      2024
+says       Ordinary data written before atomic_store_explicit(release) (or
+           before atomic_store()) is visible to a thread whose
+           atomic_load_explicit(acquire) (or atomic_load()) returns the
+           stored value, in 20000 messages, for both spellings.
+note       The wait for the last message is bounded (20 s); not seeing it is
+           UNRESOLVED, since the page does not bound the delay.
+test       t/005-store-release-acquire.c

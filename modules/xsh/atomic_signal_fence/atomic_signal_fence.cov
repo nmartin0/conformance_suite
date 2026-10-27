@@ -1,0 +1,19 @@
+# atomic_signal_fence.cov - every requirement unit on functions/atomic_signal_fence.html
+# (atomic_signal_fence and atomic_thread_fence; atomic_thread_fence.html is a copy).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d1665587    none  permission for __STDC_NO_ATOMICS__ implementations; every test reports NOTINUSE there
+DESCRIPTION:59c4fad5    none  introduces the term fence
+DESCRIPTION:8de56f5c    none  introduces acquire and release semantics
+DESCRIPTION:9a2723e2    none  definitions of acquire fence and release fence
+DESCRIPTION:38366649    XSH.atomic_signal_fence.003
+DESCRIPTION:08a85f18    XSH.atomic_signal_fence.004
+DESCRIPTION:603bd70d    XSH.atomic_signal_fence.005
+DESCRIPTION:affd982a    XSH.atomic_signal_fence.001
+DESCRIPTION:6d36cf1c    partial XSH.atomic_signal_fence.001  # that the call returns; "no effects" cannot be observed
+DESCRIPTION:bee3467c    partial XSH.atomic_signal_fence.003 XSH.atomic_signal_fence.004  # acquire only; memory_order_consume is not given an effect check
+DESCRIPTION:c8a68952    XSH.atomic_signal_fence.003 XSH.atomic_signal_fence.004
+DESCRIPTION:11ac1919    partial XSH.atomic_signal_fence.001  # that the call returns; the combined effect is not isolated
+DESCRIPTION:20aab9f9    XSH.atomic_signal_fence.006
+DESCRIPTION:334e49c1    XSH.atomic_signal_fence.002 XSH.atomic_signal_fence.007
+RETURN_VALUE:dccd4ff2   untestable  that no value is returned is a compile-level property that C cannot observe portably

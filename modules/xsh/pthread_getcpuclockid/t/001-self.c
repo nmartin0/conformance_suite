@@ -1,0 +1,35 @@
+/*
+ * pthread_getcpuclockid(pthread_self()) gives a clock that clock_gettime()
+ * reads, and that does not go backwards.
+ * Copyright (c) 2026 Nicholas Martin. All rights reserved.
+ *
+ * ASSERTION XSH.pthread_getcpuclockid.001
+ */
+#include "cpuh.h"
+#include <pthread.h>
+
+int main(void)
+{
+	clockid_t id;
+	long long prev, now;
+	volatile unsigned long x = 0;
+	unsigned long k;
+	int e, i;
+
+	pc_begin("XSH.pthread_getcpuclockid.001");
+	pc_test();
+	id = (clockid_t)-12345;
+	e = pthread_getcpuclockid(pthread_self(), &id);
+	pc_check(e == 0, "pthread_getcpuclockid failed: %s", pc_errname(e));
+	prev = cpu_ns(id);
+	pc_check(prev >= 0, "clock_gettime on the returned clock failed or gave an invalid time");
+	for (i = 0; i < 50; i++) {
+		for (k = 0; k < 100000; k++)
+			x += k;
+		now = cpu_ns(id);
+		pc_check(now >= 0, "read %d of the clock failed", i);
+		pc_check(now >= prev, "read %d (%lld ns) is below the previous one (%lld ns)", i, now, prev);
+		prev = now;
+	}
+	pc_pass();
+}

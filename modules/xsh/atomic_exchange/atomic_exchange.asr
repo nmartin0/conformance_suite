@@ -1,0 +1,41 @@
+# XSH atomic_exchange(), atomic_exchange_explicit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.atomic_exchange.001
+anchor     functions/atomic_exchange.html#DESCRIPTION
+anchor     functions/atomic_exchange.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_exchange() stores the new value and returns the value held
+           before, for atomic_bool and every atomic integer type, with the
+           values 0, 1, the type's minimum and maximum.
+test       t/001-exchange-values.c
+
+assertion  XSH.atomic_exchange.002
+anchor     functions/atomic_exchange.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_exchange() on atomic pointer objects returns the pointer held
+           before; in a chain of calls each returns what the previous call
+           stored, also when the same value is stored again.
+test       t/002-exchange-chain.c
+
+assertion  XSH.atomic_exchange.003
+anchor     functions/atomic_exchange.html#DESCRIPTION
+anchor     functions/atomic_exchange.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_exchange_explicit() stores the new value and returns the
+           value held before with each of the six memory orders, for atomic
+           _Bool and every atomic integer type.
+test       t/003-exchange-explicit-orders.c
+
+assertion  XSH.atomic_exchange.004
+anchor     functions/atomic_exchange.html#DESCRIPTION
+class      required
+since      2024
+says       Four threads exchanging 5000 unique tokens each into one atomic int
+           (plain and acq_rel forms): every token and the initial 0 is
+           returned to exactly one call or remains as the final value, so the
+           exchanges are atomic read-modify-write operations.
+test       t/004-exchange-contention.c

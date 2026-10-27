@@ -1,0 +1,48 @@
+# XSH atomic_init(), and the ATOMIC_VAR_INIT macro of <stdatomic.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Objects are filled with junk bytes first, so that atomic_init() has to
+# supply the value (and any other state) itself.
+
+assertion  XSH.atomic_init.001
+anchor     functions/atomic_init.html#DESCRIPTION
+class      required
+since      2024
+says       After atomic_init(&obj, v) on an automatic atomic object whose
+           storage held junk, the object holds v (read plainly and with
+           atomic_load()), for atomic_bool and every atomic integer type with
+           the values 0, 1, minimum and maximum; also the page's example
+           (atomic_int guide; atomic_init(&guide, 42)).
+test       t/001-init-automatic.c
+
+assertion  XSH.atomic_init.002
+anchor     functions/atomic_init.html#DESCRIPTION
+class      required
+since      2024
+says       An atomic object in malloc()ed memory that held junk, after
+           atomic_init(), supports atomic_load(), atomic_fetch_add(),
+           atomic_exchange(), atomic_compare_exchange_strong() and
+           atomic_store() with the expected results, for every atomic
+           integer type but atomic_bool.
+test       t/002-init-heap-then-use.c
+
+assertion  XSH.atomic_init.003
+anchor     functions/atomic_init.html#DESCRIPTION
+class      required
+since      2024
+says       atomic_init() on atomic pointer objects (to int, a structure, a
+           function; null included) makes them hold the pointer, and
+           atomic_exchange() and atomic_load() then work on them.
+test       t/003-init-pointer.c
+
+assertion  XSH.atomic_init.004
+anchor     basedefs/stdatomic.h.html#DESCRIPTION
+class      required
+since      2024
+says       The macro ATOMIC_VAR_INIT(value) exists and initializes atomic
+           objects of automatic and static duration (int, bool, unsigned long
+           long, char, long, unsigned int, int pointer) to the value.
+note       The macro belongs to <stdatomic.h> (obsolescent, shaded OB); it is
+           tested here because it is an initializer of atomic objects like
+           atomic_init().
+test       t/004-var-init.c

@@ -1,0 +1,51 @@
+# XSH thrd_join()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Detecting deadlock is implementation-defined and joining a thread that
+# was not created by thrd_create() is undefined: neither is tested.
+
+assertion  XSH.thrd_join.001
+anchor     functions/thrd_join.html#DESCRIPTION
+anchor     functions/thrd_join.html#RETURN VALUE
+class      required
+since      2024
+says       thrd_join() returns thrd_success and stores the thread's exit
+           status: the value returned by func (0, 123456, -1) and the value
+           given to thrd_exit() (-77).
+test       t/001-status.c
+
+assertion  XSH.thrd_join.002
+anchor     functions/thrd_join.html#DESCRIPTION
+anchor     functions/thrd_join.html#RETURN VALUE
+class      required
+since      2024
+says       thrd_join(t, NULL) returns thrd_success.
+test       t/002-null-res.c
+
+assertion  XSH.thrd_join.003
+anchor     functions/thrd_join.html#DESCRIPTION
+anchor     functions/thrd_join.html#RETURN VALUE
+class      required
+since      2024
+says       A thrd_join() on a running thread (made from a thread of its own)
+           has not returned 300 ms later; once the thread ends it returns
+           thrd_success with the exit status.
+test       t/003-blocks.c
+
+assertion  XSH.thrd_join.004
+anchor     functions/thrd_join.html#DESCRIPTION
+class      required
+since      2024
+says       Plain (non-atomic) data written by a thread before it ends is seen
+           in full by the thread that joined it.
+test       t/004-synchronizes.c
+
+assertion  XSH.thrd_join.005
+anchor     functions/thrd_join.html#DESCRIPTION
+anchor     functions/thrd_join.html#RETURN VALUE
+class      required
+since      2024
+says       A thread blocked in thrd_join() that takes a caught signal
+           (SIGUSR1, no SA_RESTART) is still waiting 300 ms later, and
+           returns thrd_success with the exit status once the target ends.
+test       t/005-signal.c

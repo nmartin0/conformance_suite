@@ -1,0 +1,39 @@
+# XSH sched_getscheduler()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# A negative pid is unspecified and not tested. Which processes the caller
+# may query is implementation-defined: the EPERM case cannot be provoked
+# portably, so the other-process test runs privileged and treats a refusal
+# as UNRESOLVED.
+
+assertion  XSH.sched_getscheduler.001
+anchor     functions/sched_getscheduler.html#DESCRIPTION
+anchor     functions/sched_getscheduler.html#RETURN VALUE
+class      conditional
+when       PS
+since      2001
+says       sched_getscheduler(0) returns a non-negative policy, and
+           sched_getscheduler(getpid()) returns the same one.
+test       t/001-self.c
+
+assertion  XSH.sched_getscheduler.002
+anchor     functions/sched_getscheduler.html#ERRORS/ESRCH
+anchor     functions/sched_getscheduler.html#RETURN VALUE
+class      conditional
+when       PS
+since      2001
+says       For the pid of a child that has been reaped, sched_getscheduler()
+           returns -1 with ESRCH.
+test       t/002-esrch.c
+
+assertion  XSH.sched_getscheduler.003
+anchor     functions/sched_getscheduler.html#DESCRIPTION
+class      conditional
+when       PS
+since      2001
+says       sched_getscheduler(pid) of another existing process returns the
+           policy of that process (SCHED_FIFO for a child that set it), not
+           the caller's.
+needs      root
+timeout    60
+test       t/003-other-process.c

@@ -1,0 +1,53 @@
+# XSH atomic_flag_test_and_set(), atomic_flag_test_and_set_explicit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# ATOMIC_FLAG_INIT (<stdatomic.h>) is used to make flags that start clear.
+
+assertion  XSH.atomic_flag_test_and_set.001
+anchor     functions/atomic_flag_test_and_set.html#DESCRIPTION
+anchor     functions/atomic_flag_test_and_set.html#RETURN VALUE
+anchor     basedefs/stdatomic.h.html#DESCRIPTION
+class      required
+since      2024
+says       A flag initialized with ATOMIC_FLAG_INIT (automatic, static, a
+           structure member, array elements) is clear: the first
+           atomic_flag_test_and_set() returns false and sets it, and every
+           later call returns true.
+test       t/001-test-and-set.c
+
+assertion  XSH.atomic_flag_test_and_set.002
+anchor     functions/atomic_flag_test_and_set.html#DESCRIPTION
+anchor     functions/atomic_flag_test_and_set.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_flag_test_and_set_explicit() with each of the six memory
+           orders returns false for a clear flag (setting it) and true
+           afterwards; the plain form then also returns true.
+test       t/002-explicit-orders.c
+
+assertion  XSH.atomic_flag_test_and_set.003
+anchor     functions/atomic_flag_test_and_set.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.15.1
+class      required
+since      2024
+says       A spin lock taking a flag with atomic_flag_test_and_set() (acquire
+           or default order) and releasing it with atomic_flag_clear()
+           (release or default order) excludes: four threads incrementing an
+           ordinary counter 5000 times each under it never overlap and the
+           counter ends at 20000.
+note       A thread that cannot take the lock within 30 s makes the test
+           UNRESOLVED (a flag that never sets, or one that is never
+           cleared, is judged by XSH.atomic_flag_test_and_set.001 and
+           XSH.atomic_flag_clear.001).
+test       t/003-spinlock.c
+
+assertion  XSH.atomic_flag_test_and_set.004
+anchor     functions/atomic_flag_test_and_set.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.15.1
+class      required
+since      2024
+says       Four threads calling atomic_flag_test_and_set() on a clear flag at
+           the same time, over 1024 rounds with a fresh flag each, never
+           see false more than once nor fewer: exactly one thread sees the
+           flag clear in each round.
+test       t/004-single-winner.c

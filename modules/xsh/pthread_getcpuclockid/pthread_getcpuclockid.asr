@@ -1,0 +1,31 @@
+# XSH pthread_getcpuclockid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page defines no errors. A thread ID past the end of its lifetime is
+# not tested (the page only recommends ESRCH). CPU-time clocks tick in
+# implementation-defined steps, so a clock is checked only to be readable and
+# not to go backwards, and against a reading the thread itself made.
+
+assertion  XSH.pthread_getcpuclockid.001
+anchor     functions/pthread_getcpuclockid.html#DESCRIPTION
+anchor     functions/pthread_getcpuclockid.html#RETURN VALUE
+class      conditional
+when       TCT
+since      2001
+says       pthread_getcpuclockid(pthread_self(), &id) returns 0 and id can
+           be read with clock_gettime(); 50 successive reads, with work
+           between them, never decrease.
+test       t/001-self.c
+
+assertion  XSH.pthread_getcpuclockid.002
+anchor     functions/pthread_getcpuclockid.html#DESCRIPTION
+anchor     functions/pthread_getcpuclockid.html#RETURN VALUE
+class      conditional
+when       TCT
+since      2001
+says       For a live thread t, pthread_getcpuclockid(t, &id) called by
+           another thread returns 0 and clock_gettime(id) is not below the
+           reading t made of its own CPU-time clock earlier; two reads in a
+           row do not decrease.
+timeout    60
+test       t/002-other-thread.c

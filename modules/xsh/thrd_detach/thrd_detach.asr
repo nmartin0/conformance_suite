@@ -1,0 +1,24 @@
+# XSH thrd_detach()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Detached threads are never joined: completion is observed through an
+# atomic flag. thrd_error cannot be provoked without undefined behaviour.
+
+assertion  XSH.thrd_detach.001
+anchor     functions/thrd_detach.html#DESCRIPTION
+anchor     functions/thrd_detach.html#RETURN VALUE
+class      required
+since      2024
+says       thrd_detach() on a running thread returns thrd_success, and the
+           thread, released afterwards, still runs to completion (it sets a
+           flag).
+test       t/001-detach-live.c
+
+assertion  XSH.thrd_detach.002
+anchor     functions/thrd_detach.html#DESCRIPTION
+anchor     functions/thrd_detach.html#RETURN VALUE
+class      required
+since      2024
+says       thrd_detach() on a thread that has terminated and was not joined
+           returns thrd_success.
+test       t/002-detach-finished.c

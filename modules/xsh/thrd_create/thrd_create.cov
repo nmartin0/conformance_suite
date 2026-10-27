@@ -1,0 +1,16 @@
+# thrd_create.cov - every requirement unit on the page of thrd_create.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:92966037  XSH.thrd_create.001
+DESCRIPTION:0e599312  XSH.thrd_create.002
+DESCRIPTION:7945245f  partial XSH.thrd_create.001  # data written before the call is seen by the new thread
+DESCRIPTION:6152314f  XSH.thrd_create.004 XSH.thrd_create.005 XSH.thrd_create.006 XSH.thrd_create.007
+DESCRIPTION:d69e852d  XSH.thrd_create.004
+DESCRIPTION:4f6b79cd  XSH.thrd_create.005
+DESCRIPTION:d8f6a360  todo  needs an installed second locale
+DESCRIPTION:06d91e63  partial XSH.thrd_create.007  # the rounding direction
+DESCRIPTION:aebb1d21  XSH.thrd_create.006
+DESCRIPTION:7276cef7  XSH.thrd_create.003
+DESCRIPTION:7610aa3d  untestable  failure cannot be forced
+DESCRIPTION:c54c32f8  todo  signal during thrd_create(): too short to interrupt
+RETURN_VALUE:25032411 partial XSH.thrd_create.001  # thrd_nomem and thrd_error cannot be forced

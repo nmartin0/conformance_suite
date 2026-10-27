@@ -1,0 +1,15 @@
+# atomic_compare_exchange_strong.cov - every requirement unit on
+# functions/atomic_compare_exchange_strong.html (strong, weak and _explicit forms;
+# the other three page files are identical copies).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d1665587    none  permission for __STDC_NO_ATOMICS__ implementations; every test reports NOTINUSE there
+DESCRIPTION:3b819cd0    XSH.atomic_compare_exchange_strong.001 XSH.atomic_compare_exchange_strong.002 XSH.atomic_compare_exchange_strong.003 XSH.atomic_compare_exchange_strong.004
+DESCRIPTION:52d252f4    XSH.atomic_compare_exchange_strong.008 XSH.atomic_compare_exchange_strong.009 XSH.atomic_compare_exchange_strong.010
+DESCRIPTION:1c9a286d    partial XSH.atomic_compare_exchange_strong.004  # that both outcomes work with each order pair; memory effects are not observed per order
+DESCRIPTION:7371da62    app
+DESCRIPTION:015858d9    XSH.atomic_compare_exchange_strong.001 XSH.atomic_compare_exchange_strong.002 XSH.atomic_compare_exchange_strong.008 XSH.atomic_compare_exchange_strong.010
+DESCRIPTION:a2f5db8f    XSH.atomic_compare_exchange_strong.004 XSH.atomic_compare_exchange_strong.005 XSH.atomic_compare_exchange_strong.006 XSH.atomic_compare_exchange_strong.007
+DESCRIPTION:58d57321    XSH.atomic_compare_exchange_strong.006
+DESCRIPTION:74d8ff02    XSH.atomic_compare_exchange_strong.005 XSH.atomic_compare_exchange_strong.006 XSH.atomic_compare_exchange_strong.007 XSH.atomic_compare_exchange_strong.009
+RETURN_VALUE:45263803   XSH.atomic_compare_exchange_strong.001 XSH.atomic_compare_exchange_strong.002 XSH.atomic_compare_exchange_strong.003 XSH.atomic_compare_exchange_strong.005 XSH.atomic_compare_exchange_strong.006

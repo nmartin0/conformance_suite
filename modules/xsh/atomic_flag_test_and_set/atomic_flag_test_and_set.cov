@@ -1,0 +1,11 @@
+# atomic_flag_test_and_set.cov - every requirement unit on
+# functions/atomic_flag_test_and_set.html (plain and _explicit forms; the other page file is a copy).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d1665587    none  permission for __STDC_NO_ATOMICS__ implementations; every test reports NOTINUSE there
+DESCRIPTION:11a7794e    XSH.atomic_flag_test_and_set.001 XSH.atomic_flag_test_and_set.002 XSH.atomic_flag_test_and_set.003 XSH.atomic_flag_test_and_set.004
+DESCRIPTION:3b9cd2bc    XSH.atomic_flag_test_and_set.003 XSH.atomic_flag_test_and_set.004
+DESCRIPTION:3344ea21    partial XSH.atomic_flag_test_and_set.002  # that every order is accepted; memory effects are observed only through the spin lock test
+DESCRIPTION:1504807b    XSH.atomic_flag_test_and_set.001 XSH.atomic_flag_test_and_set.003 XSH.atomic_flag_test_and_set.004
+RETURN_VALUE:6392f2ef  XSH.atomic_flag_test_and_set.001 XSH.atomic_flag_test_and_set.002 XSH.atomic_flag_test_and_set.004
+RETURN_VALUE:83f6ca80  XSH.atomic_flag_test_and_set.001 XSH.atomic_flag_test_and_set.002

@@ -1,0 +1,132 @@
+# XSH mtx_lock(), mtx_timedlock(), mtx_trylock(), mtx_unlock()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# mtx_trylock() may spuriously return thrd_busy on an unused mutex, so
+# success is awaited over repeated calls and 'busy' answers are only
+# required where the mutex is really held. Misuse the page leaves
+# undefined (relocking a non-recursive mutex, unlocking one not owned)
+# is not tested. Helper threads report through atomic flags only.
+
+assertion  XSH.mtx_lock.001
+anchor     functions/mtx_lock.html#DESCRIPTION
+anchor     functions/mtx_lock.html#RETURN VALUE
+class      required
+since      2024
+says       mtx_lock() on an unlocked mutex returns thrd_success; the mutex is
+           then locked, so another thread's mtx_trylock() returns thrd_busy.
+test       t/001-lock-holds.c
+
+assertion  XSH.mtx_lock.002
+anchor     functions/mtx_lock.html#DESCRIPTION
+class      required
+since      2024
+says       mtx_lock() on a mutex another thread holds does not return while
+           that thread holds it; once it is unlocked the call returns
+           thrd_success.
+note       The holder keeps the mutex for 300 ms after the waiter started.
+test       t/002-lock-blocks.c
+
+assertion  XSH.mtx_lock.003
+anchor     functions/mtx_lock.html#DESCRIPTION
+anchor     functions/mtx_lock.html#RETURN VALUE
+class      required
+since      2024
+says       mtx_trylock() on an unlocked mutex returns thrd_success (it may
+           return thrd_busy spuriously, so it is repeated up to 1000 times;
+           never thrd_error), and the mutex is then locked: another thread's
+           mtx_trylock() returns thrd_busy.
+test       t/003-trylock-free.c
+
+assertion  XSH.mtx_lock.004
+anchor     functions/mtx_lock.html#DESCRIPTION
+anchor     functions/mtx_lock.html#RETURN VALUE
+class      required
+since      2024
+says       mtx_trylock() on a mutex another thread holds returns thrd_busy
+           without waiting for it to be released.
+note       The holder keeps the mutex until the call has returned; a call not
+           back within 10 s is a FAIL.
+test       t/004-trylock-busy.c
+
+assertion  XSH.mtx_lock.005
+anchor     functions/mtx_lock.html#DESCRIPTION
+anchor     functions/mtx_lock.html#RETURN VALUE
+class      required
+since      2024
+says       mtx_trylock() on a non-recursive mutex the caller already holds
+           returns thrd_busy without blocking, and does not add a lock: a
+           single mtx_unlock() releases the mutex (another thread then locks
+           it).
+test       t/005-trylock-own.c
+
+assertion  XSH.mtx_lock.006
+anchor     functions/mtx_lock.html#DESCRIPTION
+anchor     functions/mtx_lock.html#RETURN VALUE
+class      required
+since      2024
+says       mtx_unlock() by the owner returns thrd_success and makes the mutex
+           available: another thread's mtx_lock() then succeeds.
+test       t/006-unlock-releases.c
+
+assertion  XSH.mtx_lock.007
+anchor     functions/mtx_lock.html#DESCRIPTION
+anchor     functions/mtx_lock.html#RETURN VALUE
+class      required
+since      2024
+says       A recursive mutex (mtx_plain|mtx_recursive, and with mtx_timed)
+           locked by mtx_lock(), again by mtx_lock() and again by
+           mtx_trylock() by its owner returns thrd_success each time; it
+           stays locked (another thread's mtx_trylock() returns thrd_busy)
+           after the first two mtx_unlock() calls and is available after the
+           third.
+test       t/007-recursive.c
+
+assertion  XSH.mtx_lock.008
+anchor     functions/mtx_lock.html#DESCRIPTION
+anchor     functions/mtx_lock.html#RETURN VALUE
+class      required
+since      2024
+says       mtx_timedlock() on an unlocked mtx_timed mutex returns
+           thrd_success, with a time 1 s in the past as well as with one 10 s
+           ahead, and leaves it locked by the caller.
+test       t/008-timedlock-free.c
+
+assertion  XSH.mtx_lock.009
+anchor     functions/mtx_lock.html#DESCRIPTION
+anchor     functions/mtx_lock.html#RETURN VALUE
+class      required
+since      2024
+says       mtx_timedlock() on an mtx_timed mutex another thread holds, with
+           the TIME_UTC time 300 ms ahead, returns thrd_timedout, and the
+           TIME_UTC clock has reached that time when it does.
+test       t/009-timedlock-timeout.c
+
+assertion  XSH.mtx_lock.010
+anchor     functions/mtx_lock.html#DESCRIPTION
+anchor     functions/mtx_lock.html#RETURN VALUE
+class      required
+since      2024
+says       mtx_timedlock() on an mtx_timed mutex another thread releases
+           after 150 ms, with a time 10 s ahead, returns thrd_success and the
+           caller then holds the mutex (another thread's mtx_trylock()
+           returns thrd_busy).
+test       t/010-timedlock-acquires.c
+
+assertion  XSH.mtx_lock.011
+anchor     functions/mtx_lock.html#DESCRIPTION
+class      required
+since      2024
+says       Four threads each doing 2000 non-atomic increments of a shared
+           counter between mtx_lock() and mtx_unlock() leave it at 8000, and
+           every call returns thrd_success.
+test       t/011-exclusion.c
+
+assertion  XSH.mtx_lock.012
+anchor     functions/mtx_lock.html#DESCRIPTION
+class      required
+since      2024
+says       A thread blocked in mtx_lock() that takes a caught signal
+           (SIGUSR1, no SA_RESTART) goes on waiting: it has not returned 300
+           ms after the handler ran, and once the holder unlocks, the call
+           returns thrd_success.
+test       t/012-signal-waiting.c

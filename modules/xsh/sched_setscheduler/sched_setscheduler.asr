@@ -1,0 +1,101 @@
+# XSH sched_setscheduler()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that change the policy run in child processes (the suite's process
+# is never changed) and need privilege to enter a real-time policy; the
+# child is UNRESOLVED when the system refuses even then. Which processes
+# may be changed, and the effect on a process whose current policy is
+# neither SCHED_FIFO nor SCHED_RR, are implementation-defined; a negative
+# pid is unspecified. Sporadic server parameters are not tested.
+
+assertion  XSH.sched_setscheduler.001
+anchor     functions/sched_setscheduler.html#RETURN VALUE
+class      conditional
+when       PS
+since      2001
+says       sched_setscheduler(0, ...) returns the policy the process had
+           before the call: successive changes to SCHED_FIFO, SCHED_RR and
+           SCHED_OTHER return the previous policy each time.
+needs      root
+timeout    60
+test       t/001-returns-former.c
+
+assertion  XSH.sched_setscheduler.002
+anchor     functions/sched_setscheduler.html#DESCRIPTION
+anchor     functions/sched_setscheduler.html#RETURN VALUE
+class      conditional
+when       PS
+since      2001
+says       After a successful sched_setscheduler(0, policy, {priority})
+           with SCHED_FIFO or SCHED_RR and a priority from the range,
+           sched_getscheduler(0) returns that policy and sched_getparam(0,
+           ...) that priority.
+needs      root
+timeout    60
+test       t/002-sets-both.c
+
+assertion  XSH.sched_setscheduler.003
+anchor     functions/sched_setscheduler.html#ERRORS/EINVAL
+anchor     functions/sched_setscheduler.html#RETURN VALUE
+class      conditional
+when       PS
+since      2001
+says       With a policy value that no policy has, sched_setscheduler()
+           returns -1 with EINVAL and the policy and priority stay as they
+           were.
+needs      root
+timeout    60
+test       t/003-bad-policy.c
+
+assertion  XSH.sched_setscheduler.004
+anchor     functions/sched_setscheduler.html#ERRORS/EINVAL
+anchor     functions/sched_setscheduler.html#DESCRIPTION
+anchor     functions/sched_setscheduler.html#RETURN VALUE
+class      conditional
+when       PS
+since      2001
+says       With a priority one above the maximum or one below the minimum
+           of the new policy's range, sched_setscheduler() returns -1 with
+           EINVAL and the policy and priority stay as they were.
+needs      root
+timeout    60
+test       t/004-bad-priority.c
+
+assertion  XSH.sched_setscheduler.005
+anchor     functions/sched_setscheduler.html#ERRORS/ESRCH
+anchor     functions/sched_setscheduler.html#RETURN VALUE
+class      conditional
+when       PS
+since      2001
+says       For the pid of a child that has been reaped, sched_setscheduler()
+           returns -1 with ESRCH.
+test       t/005-esrch.c
+
+assertion  XSH.sched_setscheduler.006
+anchor     functions/sched_setscheduler.html#ERRORS/EPERM
+anchor     functions/sched_setscheduler.html#DESCRIPTION
+anchor     functions/sched_setscheduler.html#RETURN VALUE
+class      conditional
+when       PS
+since      2001
+says       A process without privilege (a child that dropped it when the
+           suite is privileged) that asks for SCHED_FIFO with the minimum
+           priority either succeeds, returning its former policy, or fails
+           with EPERM and keeps its policy and priority.
+note       The page lets implementations restrict who may enter a policy,
+           so success is allowed; EPERM is the only error that applies to
+           this call.
+timeout    60
+test       t/006-unprivileged.c
+
+assertion  XSH.sched_setscheduler.007
+anchor     functions/sched_setscheduler.html#DESCRIPTION
+class      conditional
+when       PS
+since      2001
+says       With privilege, sched_setscheduler(pid, SCHED_RR, ...) on another
+           process returns the former policy (not -1) and that process then
+           runs SCHED_RR at the priority given.
+needs      root
+timeout    60
+test       t/007-other-process.c

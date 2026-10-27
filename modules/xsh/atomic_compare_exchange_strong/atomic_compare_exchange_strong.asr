@@ -1,0 +1,121 @@
+# XSH atomic_compare_exchange_strong(), atomic_compare_exchange_weak() and their _explicit forms
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The four spellings share one page (the other three page files are copies).
+# The weak form may fail spuriously, so every weak test either accepts both
+# outcomes or retries.
+
+assertion  XSH.atomic_compare_exchange_strong.001
+anchor     functions/atomic_compare_exchange_strong.html#DESCRIPTION
+anchor     functions/atomic_compare_exchange_strong.html#RETURN VALUE
+class      required
+since      2024
+says       When the object equals *expected, atomic_compare_exchange_strong()
+           returns true, stores desired in the object and leaves *expected
+           unchanged, for atomic_bool and every atomic integer type.
+test       t/001-strong-equal.c
+
+assertion  XSH.atomic_compare_exchange_strong.002
+anchor     functions/atomic_compare_exchange_strong.html#DESCRIPTION
+anchor     functions/atomic_compare_exchange_strong.html#RETURN VALUE
+class      required
+since      2024
+says       When the object differs from *expected,
+           atomic_compare_exchange_strong() returns false, leaves the object
+           unchanged and stores the object's value in *expected, for
+           atomic_bool and every atomic integer type.
+test       t/002-strong-unequal.c
+
+assertion  XSH.atomic_compare_exchange_strong.003
+anchor     functions/atomic_compare_exchange_strong.html#DESCRIPTION
+class      required
+since      2024
+says       Both outcomes of atomic_compare_exchange_strong() and its
+           _explicit form on atomic pointer objects (to int and to a
+           structure, a null expected pointer included).
+test       t/003-strong-pointer.c
+
+assertion  XSH.atomic_compare_exchange_strong.004
+anchor     functions/atomic_compare_exchange_strong.html#DESCRIPTION
+class      required
+since      2024
+says       atomic_compare_exchange_strong_explicit() and
+           atomic_compare_exchange_weak_explicit() with each (success,
+           failure) memory order pair that the page allows (failure neither
+           release nor acq_rel and not stronger than success: 14 pairs) act
+           as the plain forms: true, new value stored and *expected kept for
+           equal values; false, object kept and *expected set for different
+           ones; for every atomic integer type.
+note       The weak form is retried up to 100000 times for the equal-values
+           case; no success is UNRESOLVED (see Q-155).
+test       t/004-explicit-orders.c
+
+assertion  XSH.atomic_compare_exchange_strong.005
+anchor     functions/atomic_compare_exchange_strong.html#DESCRIPTION
+anchor     functions/atomic_compare_exchange_strong.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_compare_exchange_weak() with an object that differs from
+           *expected returns false, leaves the object unchanged and sets
+           *expected to the object's value (spurious failure is the only
+           allowed deviation, and it applies to equal values only), for
+           every atomic integer type.
+test       t/005-weak-unequal.c
+
+assertion  XSH.atomic_compare_exchange_strong.006
+anchor     functions/atomic_compare_exchange_strong.html#DESCRIPTION
+class      required
+since      2024
+says       atomic_compare_exchange_weak() with an object equal to *expected
+           either succeeds (object takes desired, *expected untouched) or
+           fails spuriously (returns false, object unchanged and *expected
+           still equal to the old value); no other outcome occurs.
+test       t/006-weak-equal.c
+
+assertion  XSH.atomic_compare_exchange_strong.007
+anchor     functions/atomic_compare_exchange_strong.html#DESCRIPTION
+anchor     functions/atomic_compare_exchange_strong.html#APPLICATION USAGE
+class      disputed
+since      2024
+says       A loop of atomic_compare_exchange_weak() with equal values succeeds
+           within a million attempts, for every atomic integer type.
+note       disputed (Q-155): the page gives a weak exchange no progress
+           guarantee, so the expectation rests on the advice that it be used
+           in loops.
+test       t/007-weak-loop-succeeds.c
+
+assertion  XSH.atomic_compare_exchange_strong.008
+anchor     functions/atomic_compare_exchange_strong.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.15.1
+class      required
+since      2024
+says       Four threads each advancing an atomic int 10000 times only with
+           atomic_compare_exchange_strong() loops make it reach exactly
+           40000: the exchange is an atomic read-modify-write.
+note       A strong exchange returns false only when the values differ, so a
+           false return that leaves *expected unchanged is a FAIL. A thread
+           that makes no progress for 30 s is UNRESOLVED: the page promises
+           no fairness.
+test       t/008-strong-counter.c
+
+assertion  XSH.atomic_compare_exchange_strong.009
+anchor     functions/atomic_compare_exchange_strong.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.15.1
+class      required
+since      2024
+says       The same with atomic_compare_exchange_weak() loops: the counter
+           reaches exactly 40000.
+note       No progress for 30 s in a weak loop is UNRESOLVED (see Q-155).
+test       t/009-weak-counter.c
+
+assertion  XSH.atomic_compare_exchange_strong.010
+anchor     functions/atomic_compare_exchange_strong.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.15.1
+class      required
+since      2024
+says       Four threads race, in each of 5000 rounds, to change a fresh atomic
+           int from 0 to their own number with
+           atomic_compare_exchange_strong(): exactly one succeeds in each
+           round, the object holds the winner's number, and every loser's
+           *expected receives that number.
+test       t/010-strong-race.c

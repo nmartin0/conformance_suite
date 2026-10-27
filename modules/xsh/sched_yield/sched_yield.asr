@@ -1,0 +1,23 @@
+# XSH sched_yield()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# That the caller moves to the tail of its priority list cannot be observed
+# without real-time privileges and a fixed CPU count, and no order of
+# execution between equal-priority threads is required to be seen by a
+# test; only the result is checked.
+
+assertion  XSH.sched_yield.001
+anchor     functions/sched_yield.html#RETURN VALUE
+anchor     functions/sched_yield.html#ERRORS
+class      required
+since      2008
+says       sched_yield() called 100 times in a row returns 0 each time.
+test       t/001-returns-zero.c
+
+assertion  XSH.sched_yield.002
+anchor     functions/sched_yield.html#RETURN VALUE
+anchor     functions/sched_yield.html#DESCRIPTION
+class      required
+since      2008
+says       sched_yield() called from a second thread returns 0 each time.
+test       t/002-other-thread.c

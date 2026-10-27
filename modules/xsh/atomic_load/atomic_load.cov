@@ -1,0 +1,9 @@
+# atomic_load.cov - every requirement unit on functions/atomic_load.html
+# (atomic_load, atomic_load_explicit; atomic_load_explicit.html is a copy).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d1665587    none  permission for __STDC_NO_ATOMICS__ implementations; every test reports NOTINUSE there
+DESCRIPTION:00add777    XSH.atomic_load.001 XSH.atomic_load.002 XSH.atomic_load.003 XSH.atomic_load.004 XSH.atomic_load.005
+DESCRIPTION:bbb36349    partial XSH.atomic_load.003  # allowed orders only; the forbidden ones are the application's
+DESCRIPTION:33a4246c    XSH.atomic_load.001 XSH.atomic_load.004 XSH.atomic_load.005
+RETURN_VALUE:28468af1   XSH.atomic_load.001 XSH.atomic_load.002 XSH.atomic_load.003 XSH.atomic_load.004

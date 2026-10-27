@@ -1,0 +1,10 @@
+# atomic_exchange.cov - every requirement unit on functions/atomic_exchange.html
+# (atomic_exchange, atomic_exchange_explicit; atomic_exchange_explicit.html is a copy).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d1665587    none  permission for __STDC_NO_ATOMICS__ implementations; every test reports NOTINUSE there
+DESCRIPTION:775a2f77    XSH.atomic_exchange.001 XSH.atomic_exchange.002 XSH.atomic_exchange.003
+DESCRIPTION:52d252f4    XSH.atomic_exchange.004
+DESCRIPTION:3344ea21    partial XSH.atomic_exchange.003  # that the call succeeds with every order; the memory effects are observed only through XSH.atomic_exchange.004
+DESCRIPTION:606b6aeb    XSH.atomic_exchange.001 XSH.atomic_exchange.002 XSH.atomic_exchange.004
+RETURN_VALUE:60d971c6   XSH.atomic_exchange.001 XSH.atomic_exchange.002 XSH.atomic_exchange.003 XSH.atomic_exchange.004

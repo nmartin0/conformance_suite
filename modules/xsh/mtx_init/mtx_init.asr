@@ -1,0 +1,41 @@
+# XSH mtx_init(), mtx_destroy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The types are mtx_plain, mtx_timed, and either with mtx_recursive.
+# Failure returns (thrd_error) cannot be forced and are not tested.
+
+assertion  XSH.mtx_init.001
+anchor     functions/mtx_destroy.html#DESCRIPTION
+anchor     functions/mtx_destroy.html#RETURN VALUE
+class      required
+since      2024
+says       mtx_init() returns thrd_success for mtx_plain, mtx_timed,
+           mtx_plain|mtx_recursive and mtx_timed|mtx_recursive; the mutex can
+           then be locked and unlocked (both succeed) and destroyed.
+test       t/001-types.c
+
+assertion  XSH.mtx_init.002
+anchor     functions/mtx_destroy.html#DESCRIPTION
+class      required
+since      2024
+says       After a successful mtx_init() the mutex is unlocked: another
+           thread's mtx_lock() on it succeeds without waiting (checked for
+           each of the four types).
+test       t/002-unlocked.c
+
+assertion  XSH.mtx_init.003
+anchor     functions/mtx_destroy.html#DESCRIPTION
+class      required
+since      2024
+says       An initialized unlocked mutex can be destroyed with mtx_destroy(),
+           and mtx_init() then initializes it again: it can be locked and
+           unlocked, and another thread can lock it (done twice).
+test       t/003-reinit.c
+
+assertion  XSH.mtx_init.004
+anchor     functions/mtx_destroy.html#DESCRIPTION
+class      required
+since      2024
+says       With one mutex locked by the caller, another thread's mtx_lock()
+           on a second initialized mutex succeeds without waiting.
+test       t/004-independent.c

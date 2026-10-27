@@ -1,0 +1,115 @@
+# XSH atomic_fetch_add(), _sub, _and, _or, _xor and their _explicit forms
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The ten spellings share one page (the other nine page files are copies).
+# Integer tests run on every atomic integer type but atomic_bool, which
+# the page excludes.
+
+assertion  XSH.atomic_fetch_add.001
+anchor     functions/atomic_fetch_add.html#DESCRIPTION
+anchor     functions/atomic_fetch_add.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_fetch_add() adds the operand to the object and returns the
+           value held before, for every atomic integer type (20 + 7 gives 27
+           with 20 returned; adding 0; 27 + 100).
+test       t/001-add.c
+
+assertion  XSH.atomic_fetch_add.002
+anchor     functions/atomic_fetch_add.html#DESCRIPTION
+anchor     functions/atomic_fetch_add.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_fetch_sub() subtracts the operand from the object and
+           returns the value held before, for every atomic integer type
+           (127 - 7, - 0, - 120).
+test       t/002-sub.c
+
+assertion  XSH.atomic_fetch_add.003
+anchor     functions/atomic_fetch_add.html#DESCRIPTION
+anchor     functions/atomic_fetch_add.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_fetch_and(), atomic_fetch_or() and atomic_fetch_xor() apply
+           bitwise AND, inclusive OR and exclusive OR of the operand and
+           return the value held before, for every atomic integer type
+           (0x55 with 0x33 gives 0x11, 0x77, 0x66).
+test       t/003-bitwise.c
+
+assertion  XSH.atomic_fetch_add.004
+anchor     functions/atomic_fetch_add.html#DESCRIPTION
+class      required
+since      2024
+says       For unsigned atomic integer types addition and subtraction wrap
+           around: max + 1 gives 0, 0 - 1 gives max, max + max gives max - 1,
+           1 - 2 gives max.
+note       Signed types are skipped in this test (XSH.atomic_fetch_add.005);
+           fewer than four unsigned types found is UNRESOLVED.
+test       t/004-wrap-unsigned.c
+
+assertion  XSH.atomic_fetch_add.005
+anchor     functions/atomic_fetch_add.html#DESCRIPTION
+class      required
+since      2024
+says       For signed atomic integer types the computation wraps silently on
+           overflow: max + 1 gives min, min - 1 gives max, max + max gives
+           -2; negative operands work (5 + -8 gives -3, -3 - -4 gives 1).
+note       Two's complement is taken from the page's silent wrap-around.
+test       t/005-wrap-signed.c
+
+assertion  XSH.atomic_fetch_add.006
+anchor     functions/atomic_fetch_add.html#DESCRIPTION
+anchor     functions/atomic_fetch_add.html#APPLICATION USAGE
+class      disputed
+since      2024
+says       atomic_fetch_add() and atomic_fetch_sub() on atomic pointers
+           (to char, short, int, long, double and a 24-byte structure) move
+           the pointer by whole objects, return the previous pointer, and
+           accept negative and zero operands; the _explicit forms likewise.
+note       disputed (Q-156): that the pointer moves in units of the pointed-to
+           type is read from APPLICATION USAGE (nearly equivalent to += and
+           -=) and from the operand type ptrdiff_t.
+test       t/006-pointer-arith.c
+
+assertion  XSH.atomic_fetch_add.007
+anchor     functions/atomic_fetch_add.html#DESCRIPTION
+class      required
+since      2024
+says       atomic_fetch_add_explicit(), _sub_explicit, _and_explicit,
+           _or_explicit and _xor_explicit with each of the six memory orders
+           give the same result and return value as the plain forms, for
+           every atomic integer type.
+test       t/007-explicit-orders.c
+
+assertion  XSH.atomic_fetch_add.008
+anchor     functions/atomic_fetch_add.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.15.1
+class      required
+since      2024
+says       Four threads each calling atomic_fetch_add() 10000 times on an
+           atomic int (and on an atomic long long, adding 2): the object
+           ends at exactly 40000 (80000), and every previous value 0 to
+           39999 is returned exactly once; the same for atomic_fetch_sub()
+           counting back to 0 (plain and _explicit forms mixed).
+test       t/008-add-sub-contention.c
+
+assertion  XSH.atomic_fetch_add.009
+anchor     functions/atomic_fetch_add.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.15.1
+class      required
+since      2024
+says       Three threads calling atomic_fetch_xor() 10001 times on a shared
+           bit and each on a private bit: each thread finds its private bit
+           alternating as it left it, and the final value is exactly 0xf.
+test       t/009-xor-parity.c
+
+assertion  XSH.atomic_fetch_add.010
+anchor     functions/atomic_fetch_add.html#DESCRIPTION
+anchor     basedefs/V1_chap04.html#4.15.1
+class      required
+since      2024
+says       Four threads setting (atomic_fetch_or) and clearing
+           (atomic_fetch_and) their own bit of one atomic unsigned int 20000
+           times always find the bit clear before setting and set before
+           clearing, and the object ends at 0.
+test       t/010-or-and-ownership.c

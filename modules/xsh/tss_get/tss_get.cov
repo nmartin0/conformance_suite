@@ -1,0 +1,15 @@
+# tss_get.cov - every requirement unit on the page of tss_get.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:c9b44f3a  XSH.tss_get.001 XSH.tss_get.002
+DESCRIPTION:44d3e8fe  XSH.tss_get.001 XSH.tss_get.002
+DESCRIPTION:d9d2b212  XSH.tss_get.003
+DESCRIPTION:09c32757  app
+DESCRIPTION:7e5bf5f9  none  undefined behaviour
+DESCRIPTION:c570a628  XSH.tss_get.004 XSH.tss_get.005
+DESCRIPTION:b3a39d1e  XSH.tss_get.004 XSH.tss_get.005
+DESCRIPTION:09008c24  none  unspecified outcome (lost storage or repetition)
+DESCRIPTION:b94e171d  todo  signal during tss_get()/tss_set(): too short to interrupt
+RETURN_VALUE:7dd83686 XSH.tss_get.001 XSH.tss_get.002
+RETURN_VALUE:daa66668 XSH.tss_get.001 XSH.tss_get.002 XSH.tss_get.004
+RETURN_VALUE:d1295c3f partial XSH.tss_get.001  # thrd_error cannot be forced

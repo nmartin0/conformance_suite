@@ -1,0 +1,60 @@
+# XSH thrd_exit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Calling thrd_exit() from a destructor and the exact number of passes
+# beyond those a test can rely on are not tested.
+
+assertion  XSH.thrd_exit.001
+anchor     functions/thrd_exit.html#DESCRIPTION
+class      required
+since      2024
+says       A thread that calls thrd_exit(v) (from a function it called) stops
+           there: nothing after the call runs, and thrd_join() obtains v
+           (tried with 42, -9 and 0).
+test       t/001-status.c
+
+assertion  XSH.thrd_exit.002
+anchor     functions/thrd_exit.html#DESCRIPTION
+class      required
+since      2024
+says       For a key with a destructor and a non-null value, thrd_exit() sets
+           the value to null and calls the destructor once with the old
+           value: tss_get() in the destructor returns null.
+test       t/002-destructor.c
+
+assertion  XSH.thrd_exit.003
+anchor     functions/thrd_exit.html#DESCRIPTION
+class      required
+since      2024
+says       A destructor that sets the key's value again (twice) is called
+           again for each new value: three calls in all.
+note       NOTINUSE when the destructor iteration limit reported by sysconf()
+           is below three.
+test       t/003-repeat.c
+
+assertion  XSH.thrd_exit.004
+anchor     functions/thrd_exit.html#DESCRIPTION
+class      required
+since      2024
+says       When a thread ends with thrd_exit(), a pipe it opened stays open
+           in the process and an atexit() routine has not run.
+test       t/004-no-process-cleanup.c
+
+assertion  XSH.thrd_exit.005
+anchor     functions/thrd_exit.html#DESCRIPTION
+class      required
+since      2024
+says       A process whose only thread calls thrd_exit(7) exits with status
+           0, and its atexit() routines run.
+note       The child writes a byte from its atexit routine; the parent waits
+           up to 10 s for the child to end, then kills it (FAIL).
+test       t/005-last-thread.c
+
+assertion  XSH.thrd_exit.006
+anchor     functions/thrd_exit.html#DESCRIPTION
+class      required
+since      2024
+says       A key made by pthread_key_create() with a destructor, holding a
+           non-null value in a thread that ends with thrd_exit(), has its
+           destructor called once with that value.
+test       t/006-pthread-key.c

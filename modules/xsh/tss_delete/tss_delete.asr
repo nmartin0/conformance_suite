@@ -1,0 +1,37 @@
+# XSH tss_delete()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Using a key after deleting it is undefined and not tested.
+
+assertion  XSH.tss_delete.001
+anchor     functions/tss_delete.html#DESCRIPTION
+class      required
+since      2024
+says       A thread that sets a non-null value for a key and deletes the key
+           calls no destructor at the deletion, and none when it ends.
+test       t/001-no-destructor.c
+
+assertion  XSH.tss_delete.002
+anchor     functions/tss_delete.html#DESCRIPTION
+class      required
+since      2024
+says       A thread that holds a non-null value for a key which another
+           thread then deletes calls no destructor for it when it ends.
+test       t/002-other-thread.c
+
+assertion  XSH.tss_delete.003
+anchor     functions/tss_delete.html#DESCRIPTION
+class      required
+since      2024
+says       A destructor that deletes another key (one with no value) returns
+           normally: the thread ends and is joined, the destructor having run
+           once.
+test       t/003-from-destructor.c
+
+assertion  XSH.tss_delete.004
+anchor     functions/tss_delete.html#DESCRIPTION
+class      required
+since      2024
+says       Creating a key and deleting it 2000 times in a row, with and
+           without a destructor, never makes tss_create() fail.
+test       t/004-releases.c

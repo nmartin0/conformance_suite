@@ -1,0 +1,93 @@
+# XSH cnd_wait(), cnd_timedwait()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# A return of thrd_success with nothing signalled is a permitted spurious
+# wakeup, so unsignalled timed waits are repeated until they stop
+# returning thrd_success. Cancellation and the mutex binding rules are
+# not tested here. thrd_error returns cannot be forced.
+
+assertion  XSH.cnd_wait.001
+anchor     functions/cnd_timedwait.html#DESCRIPTION
+anchor     functions/cnd_timedwait.html#RETURN VALUE
+class      required
+since      2024
+says       A thread in cnd_wait() has released the mutex (another thread can
+           lock it), and after cnd_signal() it does not return while the
+           signaller still holds the mutex (200 ms); once the signaller
+           unlocks, cnd_wait() returns thrd_success.
+test       t/001-releases-relocks.c
+
+assertion  XSH.cnd_wait.002
+anchor     functions/cnd_timedwait.html#DESCRIPTION
+class      required
+since      2024
+says       Over 100 rounds, a signal sent by a thread that has locked the
+           mutex the waiter released in cnd_wait() always wakes it: the
+           waiter returns within 5 s each time.
+test       t/002-atomic-release.c
+
+assertion  XSH.cnd_wait.003
+anchor     functions/cnd_timedwait.html#DESCRIPTION
+anchor     functions/cnd_timedwait.html#RETURN VALUE
+class      required
+since      2024
+says       cnd_timedwait() with nothing signalled and a time 300 ms ahead
+           returns thrd_timedout (a thrd_success return is a spurious wakeup
+           and the wait is repeated), not before the TIME_UTC clock has
+           reached that time, and the caller owns the mutex when it returns
+           (kept 300 ms: the main thread's mtx_trylock() returns thrd_busy).
+test       t/003-timedwait-timeout.c
+
+assertion  XSH.cnd_wait.004
+anchor     functions/cnd_timedwait.html#DESCRIPTION
+anchor     functions/cnd_timedwait.html#RETURN VALUE
+class      required
+since      2024
+says       cnd_timedwait() with a time 30 s ahead, signalled by cnd_signal(),
+           returns thrd_success within 5 s.
+test       t/004-timedwait-signaled.c
+
+assertion  XSH.cnd_wait.005
+anchor     functions/cnd_timedwait.html#DESCRIPTION
+anchor     functions/cnd_timedwait.html#RETURN VALUE
+class      required
+since      2024
+says       cnd_timedwait() with a TIME_UTC time 1 s in the past and nothing
+           signalled returns thrd_timedout (a thrd_success return is a
+           spurious wakeup and the wait is repeated, up to 20 times), and the
+           caller owns the mutex when it returns (main thread's mtx_trylock()
+           returns thrd_busy while it keeps it 200 ms).
+test       t/005-timedwait-past.c
+
+assertion  XSH.cnd_wait.006
+anchor     functions/cnd_timedwait.html#DESCRIPTION
+anchor     functions/cnd_timedwait.html#RETURN VALUE
+class      required
+since      2024
+says       A thread in cnd_wait() that takes a caught signal (SIGUSR1, no
+           SA_RESTART) either resumes waiting or returns thrd_success (a
+           spurious wakeup); never an error. If it resumed, a later
+           cnd_signal() makes it return thrd_success within 5 s.
+test       t/006-signal-handler.c
+
+assertion  XSH.cnd_wait.007
+anchor     functions/cnd_timedwait.html#DESCRIPTION
+class      required
+since      2024
+says       After every thread waiting on a condition variable with one mutex
+           has been unblocked, a thread that waits on it with another mutex
+           is woken by cnd_signal() and returns holding that other mutex
+           (while it keeps it 200 ms, the main thread's mtx_trylock() returns
+           thrd_busy).
+test       t/007-new-binding.c
+
+assertion  XSH.cnd_wait.008
+anchor     functions/cnd_timedwait.html#DESCRIPTION
+class      required
+since      2024
+says       A condition wait is a cancellation point: a thread canceled in
+           cnd_wait() runs its cleanup handler owning the mutex
+           (mtx_trylock() there returns thrd_busy) and ends as canceled.
+note       If the thread is not canceled within 5 s the test wakes it and
+           fails.
+test       t/008-cancel-reacquires.c

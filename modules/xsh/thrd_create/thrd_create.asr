@@ -1,0 +1,71 @@
+# XSH thrd_create()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# thrd_nomem / thrd_error (resource limits) cannot be forced portably and
+# are not tested. The locale case needs an installed second locale and is
+# left out. A thread's ID is compared only while the thread is alive.
+
+assertion  XSH.thrd_create.001
+anchor     functions/thrd_create.html#DESCRIPTION
+anchor     functions/thrd_create.html#RETURN VALUE
+class      required
+since      2024
+says       thrd_create() returns thrd_success; the new thread calls func
+           exactly once, with arg; data the creator wrote before the call is
+           seen by the new thread; thrd_join() returns thrd_success with
+           func's return value.
+test       t/001-runs-func.c
+
+assertion  XSH.thrd_create.002
+anchor     functions/thrd_create.html#DESCRIPTION
+class      required
+since      2024
+says       The identifier stored by thrd_create() equals (thrd_equal()) what
+           thrd_current() returns in the new thread; two threads alive at the
+           same time have different identifiers, and neither equals the
+           creator's.
+test       t/002-stores-id.c
+
+assertion  XSH.thrd_create.003
+anchor     functions/thrd_create.html#DESCRIPTION
+class      required
+since      2024
+says       When func returns, the thread ends as if thrd_exit() had been
+           called with that value: thrd_join() obtains the value (a negative
+           one too), and the destructor of a thread-specific key the thread
+           had set is called once with the value.
+test       t/003-return-is-exit.c
+
+assertion  XSH.thrd_create.004
+anchor     functions/thrd_create.html#DESCRIPTION
+class      required
+since      2024
+says       A thread created while SIGUSR1 is blocked and SIGUSR2 is unblocked
+           in the creator starts with SIGUSR1 blocked and SIGUSR2 unblocked.
+test       t/004-sigmask.c
+
+assertion  XSH.thrd_create.005
+anchor     functions/thrd_create.html#DESCRIPTION
+class      required
+since      2024
+says       A signal pending for the creator (blocked SIGUSR1, sent to it with
+           pthread_kill()) is not pending in the new thread.
+test       t/005-pending-empty.c
+
+assertion  XSH.thrd_create.006
+anchor     functions/thrd_create.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       With an alternate signal stack set in the creator, the new thread
+           has none (sigaltstack() reports it disabled).
+test       t/006-altstack.c
+
+assertion  XSH.thrd_create.007
+anchor     functions/thrd_create.html#DESCRIPTION
+class      required
+since      2024
+says       A thread created after the creator's rounding direction was
+           changed starts with that rounding direction.
+note       NOTINUSE when no direction other than the current one can be set.
+test       t/007-fenv.c

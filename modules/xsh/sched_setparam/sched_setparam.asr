@@ -1,0 +1,56 @@
+# XSH sched_setparam()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests that change the priority run in child processes under SCHED_FIFO,
+# which needs privilege. The result for a process that is not under
+# SCHED_FIFO or SCHED_RR is implementation-defined and not tested, and so is
+# a negative pid. Which processes may be changed is implementation-defined,
+# so EPERM is not provoked.
+
+assertion  XSH.sched_setparam.001
+anchor     functions/sched_setparam.html#DESCRIPTION
+anchor     functions/sched_setparam.html#RETURN VALUE
+class      conditional
+when       PS
+since      2001
+says       In a process under SCHED_FIFO, sched_setparam(0, ...) with the
+           minimum, the maximum and one more priority of the range returns
+           0 each time, and sched_getparam(0, ...) then reads that priority.
+needs      root
+timeout    60
+test       t/001-round-trip.c
+
+assertion  XSH.sched_setparam.002
+anchor     functions/sched_setparam.html#ERRORS/EINVAL
+anchor     functions/sched_setparam.html#RETURN VALUE
+class      conditional
+when       PS
+since      2001
+says       In a process under SCHED_FIFO, sched_setparam(0, ...) with a
+           priority one above the maximum or one below the minimum returns
+           -1 with EINVAL, and the policy and priority stay as they were.
+needs      root
+timeout    60
+test       t/002-out-of-range.c
+
+assertion  XSH.sched_setparam.003
+anchor     functions/sched_setparam.html#ERRORS/ESRCH
+anchor     functions/sched_setparam.html#RETURN VALUE
+class      conditional
+when       PS
+since      2001
+says       For the pid of a child that has been reaped, sched_setparam()
+           returns -1 with ESRCH.
+test       t/003-esrch.c
+
+assertion  XSH.sched_setparam.004
+anchor     functions/sched_setparam.html#DESCRIPTION
+class      conditional
+when       PS
+since      2001
+says       With privilege, sched_setparam(pid, ...) on another process under
+           SCHED_FIFO returns 0 and changes that process's priority: it
+           reads the new value itself.
+needs      root
+timeout    60
+test       t/004-other-process.c

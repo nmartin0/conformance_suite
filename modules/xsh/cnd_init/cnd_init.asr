@@ -1,0 +1,37 @@
+# XSH cnd_init(), cnd_destroy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# thrd_nomem and thrd_error from cnd_init() cannot be forced and are not
+# tested. Waiters use the wt helper (atomic counters only).
+
+assertion  XSH.cnd_init.001
+anchor     functions/cnd_destroy.html#RETURN VALUE
+anchor     functions/cnd_destroy.html#DESCRIPTION
+class      required
+since      2024
+says       cnd_init() returns thrd_success; the condition variable can be
+           destroyed with cnd_destroy().
+test       t/001-init.c
+
+assertion  XSH.cnd_init.002
+anchor     functions/cnd_destroy.html#DESCRIPTION
+class      disputed
+since      2024
+says       A thread that calls cnd_wait() on a newly initialized condition
+           variable blocks: with no signal sent, it has not returned 300 ms
+           later; it returns thrd_success once cnd_broadcast() is called.
+note       disputed (Q-157): the page says the wait shall block, while
+           cnd_wait() may return early for an unspecified reason (spurious
+           wakeup); a return with nothing signalled is read here as not
+           blocking.
+test       t/002-fresh-blocks.c
+
+assertion  XSH.cnd_init.003
+anchor     functions/cnd_destroy.html#DESCRIPTION
+anchor     functions/cnd_destroy.html#RETURN VALUE
+class      required
+since      2024
+says       cnd_destroy() of an initialized condition variable with no waiters
+           is safe; cnd_init() then succeeds on it again, and a waiter on it
+           is woken by cnd_signal().
+test       t/003-reinit.c

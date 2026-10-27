@@ -1,0 +1,27 @@
+# pthread_getschedparam.cov - every requirement unit on functions/pthread_getschedparam.html
+# (pthread_getschedparam, pthread_setschedparam).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:08d37c50     XSH.pthread_getschedparam.001 XSH.pthread_getschedparam.003
+DESCRIPTION:32caf263     none  a statement
+DESCRIPTION:ebfc9628     none  implementation-defined
+DESCRIPTION:ae35851c     XSH.pthread_getschedparam.001 XSH.pthread_getschedparam.002 XSH.pthread_getschedparam.004
+DESCRIPTION:61589068     XSH.pthread_getschedparam.003 XSH.pthread_getschedparam.007
+DESCRIPTION:213389cd     todo  needs a priority-inheritance or priority-ceiling mutex (TPI or TPP)
+DESCRIPTION:06d6d618     XSH.pthread_getschedparam.003 XSH.pthread_getschedparam.004
+DESCRIPTION:6a04e676     none  a permission
+DESCRIPTION:00ffa412     none  implementation-defined
+DESCRIPTION:dec3ba78     XSH.pthread_getschedparam.003
+DESCRIPTION:0d689fa1     none  unspecified
+DESCRIPTION:71924d20     none  a statement
+DESCRIPTION:ec1a4a26     todo  sporadic server parameters (needs TSP)
+DESCRIPTION:97b33849     todo  sporadic server parameters (needs TSP)
+DESCRIPTION:69d2a4a3     none  unspecified
+DESCRIPTION:0915a26d     XSH.pthread_getschedparam.005 XSH.pthread_getschedparam.006 XSH.pthread_getschedparam.008
+RETURN_VALUE:47b1d69d    XSH.pthread_getschedparam.001 XSH.pthread_getschedparam.003 XSH.pthread_getschedparam.005 XSH.pthread_getschedparam.006
+ERRORS:f59a2387          partial XSH.pthread_getschedparam.005 XSH.pthread_getschedparam.006 XSH.pthread_getschedparam.008  # which values a system does not support is its own
+ERRORS:6dfc3274          todo  SCHED_SPORADIC change (needs TSP)
+ERRORS:5a30e5a5          optional
+ERRORS:e3207b68          optional
+ERRORS:b544570a          optional
+ERRORS:0a906269          XSH.pthread_getschedparam.005 XSH.pthread_getschedparam.006 XSH.pthread_getschedparam.008

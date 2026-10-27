@@ -1,0 +1,16 @@
+# cnd_init.cov - every requirement unit on the page of cnd_init.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:e485c212  untestable  the release of resources is not observable
+DESCRIPTION:ea9cbf73  XSH.cnd_init.003
+DESCRIPTION:e042b7a8  none  undefined behaviour
+DESCRIPTION:b1b45991  XSH.cnd_init.003
+DESCRIPTION:8a88b0cc  none  undefined behaviour
+DESCRIPTION:8950a88f  XSH.cnd_init.001
+DESCRIPTION:ea3fb009  partial XSH.cnd_init.002 XSH.cnd_init.003  # distinct condition variables are not told apart
+DESCRIPTION:64a2f4ea  none  undefined behaviour
+DESCRIPTION:0bbba544  XSH.cnd_init.002
+DESCRIPTION:eaa6b286  todo  2.9.9 copies of synchronization objects
+DESCRIPTION:b94e171d  todo  signal during cnd_init()/cnd_destroy(): too short to interrupt
+RETURN_VALUE:f1d02a26 none  void function
+RETURN_VALUE:cd6eaba6 partial XSH.cnd_init.001  # thrd_nomem and thrd_error cannot be forced

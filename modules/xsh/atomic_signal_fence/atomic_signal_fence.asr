@@ -1,0 +1,83 @@
+# XSH atomic_signal_fence(), atomic_thread_fence()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The two functions share one page (atomic_thread_fence.html is a copy).
+# Fences are tested for what the synchronization rules oblige: data
+# published before a release fence is visible after an acquire fence, and
+# seq_cst fences forbid the store-buffering outcome.
+
+assertion  XSH.atomic_signal_fence.001
+anchor     functions/atomic_signal_fence.html#DESCRIPTION
+anchor     functions/atomic_signal_fence.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_thread_fence() can be called with each of the six memory
+           orders and returns.
+test       t/001-thread-fence-orders.c
+
+assertion  XSH.atomic_signal_fence.002
+anchor     functions/atomic_signal_fence.html#DESCRIPTION
+anchor     functions/atomic_signal_fence.html#RETURN VALUE
+class      required
+since      2024
+says       atomic_signal_fence() can be called with each of the six memory
+           orders and returns.
+test       t/002-signal-fence-orders.c
+
+assertion  XSH.atomic_signal_fence.003
+anchor     functions/atomic_signal_fence.html#DESCRIPTION
+class      required
+since      2024
+says       A release fence followed by a relaxed atomic store of M
+           synchronizes with a thread that reads that value of M with a
+           relaxed load and then runs an acquire fence: ordinary data
+           written before the release fence is visible after the acquire
+           fence (20000 messages).
+note       The wait for the last message is bounded (20 s); not seeing it is
+           UNRESOLVED.
+test       t/003-release-acquire-fences.c
+
+assertion  XSH.atomic_signal_fence.004
+anchor     functions/atomic_signal_fence.html#DESCRIPTION
+class      required
+since      2024
+says       A release fence followed by a relaxed atomic store synchronizes
+           with a thread whose acquire load reads that value: data written
+           before the fence is visible after the load (20000 messages).
+note       Bounded wait as in XSH.atomic_signal_fence.003.
+test       t/004-release-fence-acquire-load.c
+
+assertion  XSH.atomic_signal_fence.005
+anchor     functions/atomic_signal_fence.html#DESCRIPTION
+class      required
+since      2024
+says       A release store synchronizes with a thread that reads the stored
+           value with a relaxed load and then runs an acquire fence: data
+           written before the store is visible after the fence (20000
+           messages).
+note       Bounded wait as in XSH.atomic_signal_fence.003.
+test       t/005-release-store-acquire-fence.c
+
+assertion  XSH.atomic_signal_fence.006
+anchor     functions/atomic_signal_fence.html#DESCRIPTION
+class      required
+since      2024
+says       Two threads that each store 1 (relaxed) to their own object, run
+           atomic_thread_fence(memory_order_seq_cst), and then load (relaxed)
+           the other's object never both load 0 (20000 rounds, each started
+           together).
+note       The outcome is ruled out by the ISO C rule for a pair of seq_cst
+           fences, which the page defers to; XBD 4.15.1.2 states only the
+           single-fence forms (candidate standard issue).
+test       t/006-seqcst-fences.c
+
+assertion  XSH.atomic_signal_fence.007
+anchor     functions/atomic_signal_fence.html#DESCRIPTION
+class      required
+since      2024
+says       A write to ordinary data, atomic_signal_fence(release) and a relaxed
+           store, followed by raise() of a signal whose handler (same
+           thread) reads the stored value relaxed, runs
+           atomic_signal_fence(acquire) and reads the data, sees the data
+           (2000 rounds).
+test       t/007-signal-fence-handler.c

@@ -1,0 +1,55 @@
+# XSH tss_create()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# thrd_error from tss_create() cannot be forced and is not tested.
+
+assertion  XSH.tss_create.001
+anchor     functions/tss_create.html#DESCRIPTION
+anchor     functions/tss_create.html#RETURN VALUE
+class      required
+since      2024
+says       tss_create() returns thrd_success, with a destructor and without;
+           tss_get() on the new key in the creating thread returns a null
+           pointer.
+test       t/001-creates.c
+
+assertion  XSH.tss_create.002
+anchor     functions/tss_create.html#DESCRIPTION
+class      required
+since      2024
+says       After tss_create(), a thread that already existed sees a null
+           value for the key, and so does a thread created after the creator
+           had set a value for it.
+test       t/002-null-everywhere.c
+
+assertion  XSH.tss_create.003
+anchor     functions/tss_create.html#DESCRIPTION
+anchor     functions/thrd_exit.html#DESCRIPTION
+class      required
+since      2024
+says       A thread that ends with a non-null value for a key calls the key's
+           destructor once with that value; a thread whose value is null, or
+           was set back to null, calls none.
+test       t/003-destructor-at-exit.c
+
+assertion  XSH.tss_create.004
+anchor     functions/tss_create.html#DESCRIPTION
+class      required
+since      2024
+says       A process that calls exit(0) from its initial thread with a non-
+           null value for a key that has a destructor does not call the
+           destructor.
+note       The destructor would write a byte to a pipe; the parent expects
+           none before end of file (waiting up to 10 s, then killing the
+           child: FAIL).
+test       t/004-no-dtor-at-termination.c
+
+assertion  XSH.tss_create.005
+anchor     functions/tss_create.html#DESCRIPTION
+anchor     functions/tss_create.html#RETURN VALUE
+class      required
+since      2024
+says       Two keys created by tss_create() keep separate values in one
+           thread, and at its exit each key's destructor is called once with
+           its own value.
+test       t/005-two-keys.c

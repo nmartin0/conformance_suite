@@ -1,0 +1,23 @@
+# XSH thrd_equal()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only identifiers of live threads are compared.
+
+assertion  XSH.thrd_equal.001
+anchor     functions/thrd_equal.html#DESCRIPTION
+anchor     functions/thrd_equal.html#RETURN VALUE
+class      required
+since      2024
+says       thrd_equal() returns non-zero for a thread's identifier and
+           itself, for a copy of it, and for the identifier thrd_create()
+           stored against that thread's own thrd_current().
+test       t/001-equal.c
+
+assertion  XSH.thrd_equal.002
+anchor     functions/thrd_equal.html#DESCRIPTION
+anchor     functions/thrd_equal.html#RETURN VALUE
+class      required
+since      2024
+says       thrd_equal() returns zero for the identifiers of two threads alive
+           together, and for either of them against the creator's.
+test       t/002-different.c

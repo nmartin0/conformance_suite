@@ -1,0 +1,14 @@
+# XSH thrd_yield()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page fixes no observable effect beyond returning; the test
+# checks that repeated calls return and leave the other thread able to run.
+
+assertion  XSH.thrd_yield.001
+anchor     functions/thrd_yield.html#DESCRIPTION
+class      required
+since      2024
+says       A thread calling thrd_yield() repeatedly (1000 times) gets control
+           back each time, while another thread, started meanwhile, runs and
+           sets a flag that the yielding thread sees within 10 s.
+test       t/001-returns.c

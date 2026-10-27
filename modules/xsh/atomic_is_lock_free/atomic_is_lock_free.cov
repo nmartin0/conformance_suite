@@ -1,0 +1,7 @@
+# atomic_is_lock_free.cov - every requirement unit on functions/atomic_is_lock_free.html
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d1665587    none  permission for __STDC_NO_ATOMICS__ implementations; every test reports NOTINUSE there
+DESCRIPTION:a1823c1d    XSH.atomic_is_lock_free.001 XSH.atomic_is_lock_free.003
+RETURN_VALUE:dd0f4f56   partial XSH.atomic_is_lock_free.003  # only where a macro gives the answer (0 or 2); which types are lock-free is up to the implementation
+RETURN_VALUE:25bea2fd   XSH.atomic_is_lock_free.001

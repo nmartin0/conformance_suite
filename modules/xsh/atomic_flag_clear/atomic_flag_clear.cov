@@ -1,0 +1,9 @@
+# atomic_flag_clear.cov - every requirement unit on functions/atomic_flag_clear.html
+# (plain and _explicit forms; the other page file is a copy).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d1665587    none  permission for __STDC_NO_ATOMICS__ implementations; every test reports NOTINUSE there
+DESCRIPTION:21dd6242    XSH.atomic_flag_clear.001 XSH.atomic_flag_clear.002 XSH.atomic_flag_clear.003 XSH.atomic_flag_clear.004
+DESCRIPTION:9cd83a36    partial XSH.atomic_flag_clear.002 XSH.atomic_flag_clear.004  # allowed orders only; the forbidden ones are the application's
+DESCRIPTION:8b085cbc    XSH.atomic_flag_clear.001 XSH.atomic_flag_clear.003
+RETURN_VALUE:dccd4ff2   untestable  that no value is returned is a compile-level property that C cannot observe portably

@@ -1,0 +1,24 @@
+# XSH thrd_current()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Identifiers are compared only while the threads are alive.
+
+assertion  XSH.thrd_current.001
+anchor     functions/thrd_current.html#DESCRIPTION
+anchor     functions/thrd_current.html#RETURN VALUE
+class      required
+since      2024
+says       Two calls in one thread return equal identifiers (in the creator
+           and in a created thread), and in a created thread the result
+           equals the identifier thrd_create() stored for it.
+test       t/001-same-thread.c
+
+assertion  XSH.thrd_current.002
+anchor     functions/thrd_current.html#DESCRIPTION
+anchor     functions/thrd_current.html#RETURN VALUE
+class      required
+since      2024
+says       A created thread's thrd_current() differs from the creator's, and
+           the creator's is unchanged (still equal to its earlier value) once
+           the thread has run.
+test       t/002-distinct.c

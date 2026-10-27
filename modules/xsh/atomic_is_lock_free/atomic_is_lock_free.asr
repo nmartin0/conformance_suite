@@ -1,0 +1,42 @@
+# XSH atomic_is_lock_free(), and the ATOMIC_*_LOCK_FREE macros
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Whether a type is lock-free is the implementation's business; the page
+# and <stdatomic.h> fix only consistency and the meaning of the macros.
+
+assertion  XSH.atomic_is_lock_free.001
+anchor     functions/atomic_is_lock_free.html#RETURN VALUE
+anchor     functions/atomic_is_lock_free.html#DESCRIPTION
+class      required
+since      2024
+says       For atomic_bool, every atomic integer type and four atomic
+           pointer types, atomic_is_lock_free() answers the same (as true or
+           false) when called twice on one object, on a second object, on an
+           automatic object, through a const volatile pointer, and with a
+           null pointer.
+test       t/001-consistent.c
+
+assertion  XSH.atomic_is_lock_free.002
+anchor     basedefs/stdatomic.h.html#DESCRIPTION
+class      required
+since      2024
+says       ATOMIC_BOOL_, CHAR_, CHAR16_T_, CHAR32_T_, WCHAR_T_, SHORT_, INT_,
+           LONG_, LLONG_ and POINTER_LOCK_FREE are defined and usable in #if
+           with a value of 0, 1 or 2.
+note       The macros belong to <stdatomic.h>; they are tested here with
+           atomic_is_lock_free() because their meaning is the lock-free
+           property it reports.
+test       t/002-macros-values.c
+
+assertion  XSH.atomic_is_lock_free.003
+anchor     basedefs/stdatomic.h.html#DESCRIPTION
+anchor     functions/atomic_is_lock_free.html#RETURN VALUE
+class      required
+since      2024
+says       Where a lock-free macro is 2, atomic_is_lock_free() is true for the
+           signed and unsigned atomic types and pointer types it covers;
+           where it is 0, it is false for them. A macro of 1 is not
+           constrained.
+note       If every macro is 1 the test reports NOTINUSE (nothing to
+           compare).
+test       t/003-macros-agree.c
