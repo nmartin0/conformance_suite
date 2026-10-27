@@ -1,0 +1,34 @@
+# XSH getegid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getegid.001
+anchor     functions/getegid.html#DESCRIPTION
+anchor     functions/getegid.html#RETURN VALUE
+class      required
+since      1988
+says       getegid() returns the effective group ID: the number the id
+           utility prints for "id -g" in the same process environment
+           (read through popen()).
+note       The test is UNRESOLVED if the id output is not one decimal
+           number.
+test       t/001-matches-id.c
+
+assertion  XSH.getegid.002
+anchor     functions/getegid.html#DESCRIPTION
+anchor     functions/getegid.html#RETURN VALUE
+class      required
+since      1988
+says       In a child of a privileged test, after setegid(65534) getegid()
+           returns 65534 while getgid() is still 0, and after setegid(0) and
+           setgid(65534) it returns 65534 too.
+needs      root
+note       The IDs are set in the setup phase; the child is UNRESOLVED when
+           the system does not let it make those changes.
+test       t/002-effective.c
+
+assertion  XSH.getegid.003
+anchor     functions/getegid.html#DESCRIPTION
+class      required
+since      2008
+says       getegid() leaves errno as it was (two different values tried).
+test       t/003-errno.c

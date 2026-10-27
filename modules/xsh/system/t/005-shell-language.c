@@ -1,0 +1,40 @@
+/*
+ * The command is read as shell command language.
+ * Copyright (c) 2026 Nicholas Martin. All rights reserved.
+ *
+ * ASSERTION XSH.system.005
+ */
+#include "pc.h"
+#include <errno.h>
+#include <fcntl.h>
+#include <limits.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <unistd.h>
+
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
+
+int main(void)
+{
+	/* an assignment, if, test, for, case, a pipeline, a redirection and expansions */
+	static const char cmd[] =
+	    "x=5; if test \"$x\" = 5; then for i in 1 2 3; do :; done; "
+	    "case $i in 3) { echo a | cat > /dev/null; } && exit 11;; esac; fi; exit 12";
+	int r;
+
+	pc_begin("XSH.system.005");
+	pc_test();
+	r = system(cmd);
+	pc_check(r != -1, "system() failed: %s", pc_errname(errno));
+	pc_check(WIFEXITED(r), "status %#x is not a normal exit status", r);
+	pc_check(WEXITSTATUS(r) == 11, "exit status %d, expected 11", WEXITSTATUS(r));
+	pc_pass();
+}

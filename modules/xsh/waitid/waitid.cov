@@ -1,0 +1,35 @@
+# waitid.cov - every requirement unit on functions/waitid.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:7d69f90c        XSH.waitid.001 XSH.waitid.002
+DESCRIPTION:f9fdd95a        XSH.waitid.004
+DESCRIPTION:0190763b        XSH.waitid.010 XSH.waitid.011 XSH.waitid.012
+DESCRIPTION:2472fca0        XSH.waitid.015
+DESCRIPTION:1a88f6da        XSH.waitid.005
+DESCRIPTION:a50e8e17        none  unspecified
+DESCRIPTION:eba6989f        XSH.waitid.005 XSH.waitid.006
+DESCRIPTION:a8853456        none  cross-reference to XSH 2.12 (which thread obtains the status is unspecified or racy)
+DESCRIPTION:b931bde6        XSH.waitid.001
+DESCRIPTION:5776d901        XSH.waitid.001 XSH.waitid.002 XSH.waitid.003 XSH.waitid.013 XSH.waitid.016
+DESCRIPTION:b532104b        XSH.waitid.010 XSH.waitid.011 XSH.waitid.012
+DESCRIPTION:4179141c        XSH.waitid.011
+DESCRIPTION:a33c7248        XSH.waitid.012
+DESCRIPTION:cf122245        XSH.waitid.010
+DESCRIPTION:921fa417        XSH.waitid.015
+DESCRIPTION:c44da8dd        none  introduces the flags
+DESCRIPTION:2eeea30a        XSH.waitid.016
+DESCRIPTION:5e818fce        XSH.waitid.001 XSH.waitid.002
+DESCRIPTION:d9e57f08        XSH.waitid.008 XSH.waitid.009
+DESCRIPTION:388e0a93        XSH.waitid.005
+DESCRIPTION:f37cdae7        XSH.waitid.005
+DESCRIPTION:c748f815        XSH.waitid.013 XSH.waitid.014
+DESCRIPTION:5913626e        partial XSH.waitid.018  # an obligation on the application; the call without any of the flags is the disputed assertion
+DESCRIPTION:f298adf5        app
+DESCRIPTION:5161835c        XSH.waitid.001 XSH.waitid.002 XSH.waitid.003 XSH.waitid.009 XSH.waitid.013
+DESCRIPTION:63692042        XSH.waitid.008
+RETURN_VALUE:e47760d1       XSH.waitid.008
+RETURN_VALUE:e4db9ba6       XSH.waitid.001
+RETURN_VALUE:ce1869b1       XSH.waitid.007 XSH.waitid.017
+ERRORS:d8e95e25             XSH.waitid.006 XSH.waitid.007
+ERRORS:e78c0963             XSH.waitid.017
+ERRORS:b3723151             partial XSH.waitid.018  # an invalid idtype/id set is not tested: an implementation may define more id types, so no value is certainly invalid

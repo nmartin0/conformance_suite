@@ -1,0 +1,109 @@
+# XSH pclose()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Streams come from popen() (xsh/popen). Every wait is guarded by an alarm
+# that fails the test, so a pclose() that never returns is a failure, not a
+# hang.
+
+assertion  XSH.pclose.001
+anchor     functions/pclose.html#DESCRIPTION
+anchor     functions/pclose.html#RETURN VALUE
+class      required
+since      1988
+says       pclose() returns the termination status of the shell in wait
+           format: for "exit 7" WIFEXITED is true and WEXITSTATUS is 7.
+test       t/001-status.c
+
+assertion  XSH.pclose.002
+anchor     functions/pclose.html#RETURN VALUE
+class      required
+since      1988
+says       For a shell killed by a signal ("kill -s KILL $$") pclose()
+           returns a status with WIFSIGNALED true and WTERMSIG SIGKILL.
+test       t/002-signalled.c
+
+assertion  XSH.pclose.003
+anchor     functions/pclose.html#RETURN VALUE
+anchor     utilities/V3_chap02.html#2.9.1.4
+class      required
+since      1988
+says       For a command naming a utility that does not exist the status
+           is WIFEXITED with WEXITSTATUS 127.
+test       t/003-not-found.c
+
+assertion  XSH.pclose.004
+anchor     functions/pclose.html#DESCRIPTION
+class      required
+since      1988
+says       pclose() waits for the command to end: after a command that
+           sleeps 1 s and then writes a file, the file exists when
+           pclose() returns, and the call took about 1 s.
+test       t/004-waits.c
+
+assertion  XSH.pclose.005
+anchor     functions/pclose.html#DESCRIPTION
+class      required
+since      1988
+says       pclose() closes the stream: the descriptor that was under it is
+           no longer open afterwards (fcntl(fd, F_GETFD) fails with EBADF).
+test       t/005-closes.c
+
+assertion  XSH.pclose.006
+anchor     functions/pclose.html#DESCRIPTION
+class      required
+since      1988
+says       Data written to a "w" stream and not flushed reaches the command
+           by the time pclose() has returned ("cat > out").
+note       Closing a stream flushes it (XSH 2.5 / fclose()).
+test       t/006-flushes.c
+
+assertion  XSH.pclose.007
+anchor     functions/pclose.html#DESCRIPTION
+class      required
+since      1988
+says       pclose() does not affect the status of other children: one that
+           exited before the call and one that exits during it can both be
+           waited for afterwards with their own exit values.
+test       t/007-other-children.c
+
+assertion  XSH.pclose.008
+anchor     functions/pclose.html#DESCRIPTION
+anchor     functions/pclose.html#ERRORS/ECHILD
+class      required
+since      1988
+says       When the caller itself has reaped the command's shell with
+           waitpid(-1, ...), pclose() returns -1 with errno ECHILD.
+test       t/008-echild.c
+
+assertion  XSH.pclose.009
+anchor     functions/pclose.html#DESCRIPTION
+anchor     functions/pclose.html#RATIONALE
+class      required
+since      1988
+says       pclose() does not give up when a signal is caught while it waits
+           (SIGALRM without SA_RESTART, after 1 s): it returns the shell's
+           status after a 2 s command has ended, not -1.
+test       t/009-signal.c
+
+assertion  XSH.pclose.010
+anchor     functions/pclose.html#DESCRIPTION
+anchor     functions/pclose.html#RETURN VALUE
+class      required
+since      1988
+says       With two popen() streams open, pclose() of each returns the status
+           of its own command, whichever is closed first (exit 3 and exit
+           4, closed in the reverse of the opening order).
+test       t/010-two-streams.c
+
+assertion  XSH.pclose.011
+anchor     functions/pclose.html#DESCRIPTION
+class      required
+since      1988
+says       pclose() of a "r" stream whose command would write forever
+           returns: the stream is closed so that the command stops (is
+           killed by SIGPIPE, or fails), and the status then is that of a
+           shell that has ended.
+note       The caller restores the default action of SIGPIPE before
+           popen(), so the command inherits it. Only the return is
+           required: either end of the command is allowed.
+test       t/011-closes-first.c

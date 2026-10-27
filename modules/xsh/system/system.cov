@@ -1,0 +1,25 @@
+# system.cov - every requirement unit on functions/system.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:67195cc6        XSH.system.001
+DESCRIPTION:079eb0f1        XSH.system.002 XSH.system.005
+DESCRIPTION:11c024b0        XSH.system.005 XSH.system.006 XSH.system.007 XSH.system.008 XSH.system.009 XSH.system.010 XSH.system.011 XSH.system.014
+DESCRIPTION:2a043711        XSH.system.006
+DESCRIPTION:35be0745        XSH.system.006
+DESCRIPTION:52327646        none  unspecified
+DESCRIPTION:7f004eac        impl  whether pthread_atfork() handlers run is implementation-defined
+DESCRIPTION:acfc2513        XSH.system.012 XSH.system.013 XSH.system.015
+DESCRIPTION:3d963436        app
+DESCRIPTION:b4b6a574        XSH.system.016
+DESCRIPTION:c072fc7b        XSH.system.017 XSH.system.018
+DESCRIPTION:3d09b06a        none  unspecified
+DESCRIPTION:859a5c79        none  unspecified
+DESCRIPTION:c3d3bc85        none  unspecified
+DESCRIPTION:a3124db1        none  unspecified
+RETURN_VALUE:29156445       XSH.system.001
+RETURN_VALUE:2295de16       XSH.system.001
+RETURN_VALUE:45c27ec8       XSH.system.002 XSH.system.003
+RETURN_VALUE:6a27b645       XSH.system.002 XSH.system.003 XSH.system.004
+RETURN_VALUE:74df1550       todo  the shell failing to execute cannot be arranged: the shell's path is unspecified and the suite must not damage it
+RETURN_VALUE:697395f6       todo  environment: needs fork() to fail (a process limit; RLIMIT_NPROC is not POSIX), or a status that cannot be obtained
+ERRORS:80d82fbd             optional

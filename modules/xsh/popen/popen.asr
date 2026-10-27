@@ -1,0 +1,190 @@
+# XSH popen()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# pclose() is used to end every stream (its own module is xsh/pclose). The
+# commands use only POSIX shell syntax and standard utilities (cat, echo,
+# test, true, sleep). Tests that could wait on a child that never ends are
+# guarded by an alarm that fails the test.
+
+assertion  XSH.popen.001
+anchor     functions/popen.html#DESCRIPTION
+anchor     functions/popen.html#RETURN VALUE
+class      required
+since      1988
+says       popen(command, "r") returns a stream from which the command's
+           standard output can be read: for "x=ab; echo ${x}c" the stream
+           yields "abc\n" and then end-of-file (the command is run by the
+           shell language).
+test       t/001-read.c
+
+assertion  XSH.popen.002
+anchor     functions/popen.html#DESCRIPTION
+anchor     functions/popen.html#RETURN VALUE
+class      required
+since      1988
+says       popen(command, "w") returns a stream whose data becomes the
+           command's standard input: "cat > out" ends up with the bytes
+           written once pclose() has returned.
+test       t/002-write.c
+
+assertion  XSH.popen.003
+anchor     functions/popen.html#DESCRIPTION
+class      required
+since      1988
+says       With mode "r" the command's standard input is the caller's
+           (descriptor 0, redirected here to a file): "cat" yields the
+           file's contents on the stream.
+test       t/003-read-stdin.c
+
+assertion  XSH.popen.004
+anchor     functions/popen.html#DESCRIPTION
+class      required
+since      1988
+says       With mode "w" the command's standard output is the caller's
+           (descriptor 1, redirected here to a file) and its standard
+           error is the caller's descriptor 2.
+test       t/004-write-stdout.c
+
+assertion  XSH.popen.005
+anchor     functions/popen.html#DESCRIPTION
+class      required
+since      1988
+says       With mode "r", the descriptor fileno(stream) is the readable end
+           of the pipe: read() on it returns the command's output.
+note       Whether the descriptor is also open for writing is unspecified
+           (the pipe() page), so write() on it is not tried.
+test       t/005-read-fileno.c
+
+assertion  XSH.popen.006
+anchor     functions/popen.html#DESCRIPTION
+class      required
+since      1988
+says       With mode "w", fileno(stream) is the writable end of the pipe:
+           write() on it delivers bytes to the command ("cat > out").
+note       Whether the descriptor is also open for reading is unspecified
+           (the pipe() page), so read() on it is not tried.
+test       t/006-write-fileno.c
+
+assertion  XSH.popen.007
+anchor     functions/popen.html#DESCRIPTION
+class      required
+since      2024
+says       With mode "r" or "w" (no second character) the descriptor
+           under the stream has FD_CLOEXEC clear.
+test       t/007-cloexec-clear.c
+
+assertion  XSH.popen.008
+anchor     functions/popen.html#DESCRIPTION
+class      required
+since      2024
+says       With mode "re" or "we" the descriptor under the stream has
+           FD_CLOEXEC set, and the stream works as before (a read or a
+           write still transfers data).
+test       t/008-cloexec-set.c
+
+assertion  XSH.popen.009
+anchor     functions/popen.html#DESCRIPTION
+class      required
+since      2024
+says       The descriptor under the returned stream has FD_CLOFORK clear,
+           for modes "r" and "w".
+test       t/009-clofork-stream.c
+
+assertion  XSH.popen.010
+anchor     functions/popen.html#DESCRIPTION
+class      required
+since      2024
+says       With mode "r", the command's standard output descriptor has
+           FD_CLOFORK clear: a utility the shell starts by fork (the
+           command "cat file; true") still has the pipe as its standard
+           output and its output arrives on the stream.
+note       Observing a descriptor flag in the command itself has no
+           portable means; a forked descendant that lost the descriptor
+           would show it.
+test       t/010-clofork-child.c
+
+assertion  XSH.popen.011
+anchor     functions/popen.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.5.2
+class      disputed
+says       Right after popen(), fwide(stream, 0) returns a negative value
+           (the stream is byte-oriented), for both modes.
+note       disputed (Q-64): the page says pipe streams are byte-oriented;
+           XSH 2.5.2 says orientation begins undetermined and is fixed by
+           the first operation. Under that reading fwide() returns 0 here
+           and the stream becomes byte-oriented on first use. Both
+           readings agree that a wide-oriented stream is wrong. A FAIL is
+           logged as INSPECT.
+test       t/011-byte-oriented.c
+
+assertion  XSH.popen.012
+anchor     functions/popen.html#DESCRIPTION
+class      required
+since      1988
+says       The parent and the command run independently: popen() returns
+           while a command that waits for input ("cat > out") is still
+           running, and the parent can then write to it and close it.
+test       t/012-independent.c
+
+assertion  XSH.popen.013
+anchor     functions/popen.html#DESCRIPTION
+class      required
+since      1988
+says       A command started by a later popen() does not hold the streams of
+           earlier ones: with "cat > out" open for writing and a second
+           popen("cat", "w") started, pclose() of the first returns (its
+           command sees end-of-file) while the second stream is still open.
+test       t/013-earlier-streams.c
+
+assertion  XSH.popen.014
+anchor     functions/popen.html#ERRORS/EMFILE
+class      required
+since      2008
+says       With {STREAM_MAX} streams open (stdin, stdout and stderr count)
+           popen() returns a null pointer with errno EMFILE.
+note       SD5-XSH-ERN-149 (Issue 7) made this a required error. NOTINUSE
+           when {STREAM_MAX} is indeterminate. Q-37 is the same question
+           for fopen(); here a failure for lack of descriptors is the same
+           errno and also accepted. The failed call may have partly run
+           (XSH 2.3), so nothing else is examined.
+test       t/014-stream-max.c
+
+assertion  XSH.popen.015
+anchor     functions/popen.html#DESCRIPTION
+anchor     functions/popen.html#RATIONALE
+class      required
+since      2024
+says       The command is passed after "--": a command word that begins with
+           a hyphen-minus or a plus sign runs as a command (executable
+           files -pcdash and +pcplus found through PATH, each printing a
+           line).
+note       Austin Group defect 1440 (Issue 8).
+test       t/015-dashdash.c
+
+assertion  XSH.popen.016
+anchor     functions/popen.html#DESCRIPTION
+class      required
+since      1988
+says       The command has the caller's working directory and environment
+           variables and its standard error is the caller's descriptor 2
+           (here a file): a command that tests a file in the working
+           directory, an environment variable the caller set, and writes a
+           line to standard error, behaves accordingly.
+test       t/016-inherits.c
+
+assertion  XSH.popen.017
+anchor     functions/popen.html#DESCRIPTION
+class      required
+since      1988
+says       A descriptor of the caller with FD_CLOEXEC set is closed in the
+           command, and one without it is open (a redirection from each).
+test       t/017-cloexec-caller.c
+
+assertion  XSH.popen.018
+anchor     functions/popen.html#DESCRIPTION
+class      required
+since      2024
+says       A descriptor of the caller with FD_CLOFORK set is closed in the
+           command.
+note       UNRESOLVED when <fcntl.h> lacks FD_CLOFORK.
+test       t/018-clofork-caller.c

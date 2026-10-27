@@ -1,0 +1,36 @@
+# XSH getgid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.getgid.001
+anchor     functions/getgid.html#DESCRIPTION
+anchor     functions/getgid.html#RETURN VALUE
+class      required
+since      1988
+says       getgid() returns the real group ID: the number the id utility
+           prints for "id -g -r" in the same process environment (read
+           through popen()).
+note       The id utility is the standard's own second source for the
+           value; the test is UNRESOLVED if its output is not one decimal
+           number.
+test       t/001-matches-id.c
+
+assertion  XSH.getgid.002
+anchor     functions/getgid.html#DESCRIPTION
+anchor     functions/getgid.html#RETURN VALUE
+class      required
+since      1988
+says       In a child of a privileged test, after setegid(65534) getgid()
+           still returns 0, and after setgid(65534) (with privileges, all
+           three group IDs) it returns 65534.
+needs      root
+note       The IDs are set in the setup phase with setegid() and setgid();
+           the child is UNRESOLVED when the system does not let it make
+           those changes.
+test       t/002-real.c
+
+assertion  XSH.getgid.003
+anchor     functions/getgid.html#DESCRIPTION
+class      required
+since      2008
+says       getgid() leaves errno as it was (two different values tried).
+test       t/003-errno.c

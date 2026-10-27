@@ -1,0 +1,60 @@
+# XSH atexit()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Each test forks a child that registers handlers and ends in the way under
+# test; the handlers report through a pipe, and the parent judges. A handler
+# only writes bytes (write() is async-signal-safe and needs no stdio).
+
+assertion  XSH.atexit.001
+anchor     functions/atexit.html#DESCRIPTION
+anchor     functions/atexit.html#RETURN VALUE
+class      required
+since      1992
+says       atexit() of a function returns 0, and when the process then
+           calls exit() the function is called, once.
+note       The process exit status the child gives to exit() is still
+           what waitpid() reports (a handler does not change it).
+test       t/001-exit-calls.c
+
+assertion  XSH.atexit.002
+anchor     functions/atexit.html#DESCRIPTION
+class      required
+since      1992
+says       A function registered with atexit() is called after the
+           initial call to main() returns.
+test       t/002-main-return.c
+
+assertion  XSH.atexit.003
+anchor     functions/atexit.html#DESCRIPTION
+class      required
+since      2024
+says       A function registered with atexit() is called when the last
+           thread of the process terminates, and not earlier: with a
+           second thread still running, the main thread's pthread_exit()
+           does not run it.
+note       The "last thread termination" wording came with the ISO C
+           alignment of Issue 8 (defect 1302).
+test       t/003-last-thread.c
+
+assertion  XSH.atexit.004
+anchor     functions/atexit.html#DESCRIPTION
+anchor     functions/atexit.html#RETURN VALUE
+class      required
+since      1992
+says       At least 32 different functions can be registered: 32
+           registrations all return 0, and exit() calls all 32.
+test       t/004-thirty-two.c
+
+assertion  XSH.atexit.005
+anchor     functions/atexit.html#DESCRIPTION
+anchor     functions/atexit.html#RETURN VALUE
+class      required
+since      1992
+says       Every registration that returned 0 is honoured and none that
+           returned a non-zero value is: after up to 4096 registrations
+           of one function, exit() calls it exactly as many times as
+           registrations succeeded.
+note       Registering past the limit may succeed or fail; the test
+           accepts both. It does not assume {ATEXIT_MAX} is exact (an
+           implementation may have registered functions of its own).
+test       t/005-count-matches.c

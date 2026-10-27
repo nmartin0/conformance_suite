@@ -1,0 +1,84 @@
+# XSH times()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page leaves the accuracy of the times unspecified, so the tests ask for
+# the effect of about half a second of work to show as at least one tick, and
+# no more. A time value that cannot be compared because clock_t wrapped, or a
+# times() that fails with EOVERFLOW (allowed), makes the test UNRESOLVED.
+
+assertion  XSH.times.001
+anchor     functions/times.html#RETURN VALUE
+anchor     functions/times.html#DESCRIPTION
+class      required
+since      1988
+says       times() returns elapsed real time in clock ticks from a fixed
+           reference: two calls 1.5 s apart (by CLOCK_MONOTONIC, around a
+           nanosleep) differ by between 0.5 s and 6 s worth of ticks
+           ({CLK_TCK} from sysconf(_SC_CLK_TCK)), and a call in between
+           lies between them.
+note       The page states no accuracy; the bounds are generous (a third
+           to four times the interval) and would only catch a wrong unit.
+test       t/001-elapsed.c
+
+assertion  XSH.times.002
+anchor     functions/times.html#DESCRIPTION
+class      required
+since      1988
+says       tms_utime counts CPU time spent in user instructions: after the
+           process has used about 0.5 s of CPU time in a loop of
+           arithmetic (clock() as the measure), tms_utime has grown by at
+           least one tick.
+test       t/002-utime.c
+
+assertion  XSH.times.003
+anchor     functions/times.html#DESCRIPTION
+class      required
+since      1988
+says       tms_stime counts CPU time the system spends for the process:
+           after about 0.5 s of CPU time spent mostly in system calls
+           (many one-byte writes to /dev/null), tms_stime has grown by at
+           least one tick.
+test       t/003-stime.c
+
+assertion  XSH.times.004
+anchor     functions/times.html#DESCRIPTION
+anchor     functions/times.html#RATIONALE
+class      required
+since      1988
+says       When waitpid() returns a terminated child, tms_cutime and
+           tms_cstime include its time: after a child that used about 0.5 s
+           of CPU time, their sum has grown by at least one tick.
+test       t/004-child-included.c
+
+assertion  XSH.times.005
+anchor     functions/times.html#DESCRIPTION
+anchor     functions/times.html#RATIONALE
+class      required
+since      1988
+says       Before the parent has waited for it, a terminated child's time is
+           not in tms_cutime or tms_cstime: for a child that has ended but
+           not been waited for, both are still 0.
+test       t/005-not-before-wait.c
+
+assertion  XSH.times.006
+anchor     functions/times.html#DESCRIPTION
+class      required
+since      1988
+says       If a child has not waited for its own children, their times are
+           not in its times: a child whose own child used about 0.5 s of
+           CPU time and ended, but was not waited for, reads tms_cutime and
+           tms_cstime as 0.
+test       t/006-grandchild-not-included.c
+
+assertion  XSH.times.007
+anchor     functions/times.html#DESCRIPTION
+anchor     functions/times.html#RATIONALE
+class      required
+since      1988
+says       Child times are added up through the generations: when a child
+           has waited for its own child (0.5 s of CPU), its tms_cutime plus
+           tms_cstime is at least one tick, and after the parent has waited
+           for that child the parent's tms_cutime plus tms_cstime is at
+           least what the child had seen of its own plus its own
+           tms_utime plus tms_stime at its last reading.
+test       t/007-recursive.c

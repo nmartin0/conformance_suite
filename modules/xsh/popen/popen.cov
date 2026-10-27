@@ -1,0 +1,27 @@
+# popen.cov - every requirement unit on functions/popen.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:e1b093ab        XSH.popen.001 XSH.popen.002
+DESCRIPTION:1a3d69a8        XSH.popen.001 XSH.popen.002 XSH.popen.005 XSH.popen.006
+DESCRIPTION:581a1b41        XSH.popen.003 XSH.popen.004 XSH.popen.015 XSH.popen.016 XSH.popen.017 XSH.popen.018
+DESCRIPTION:2a043711        XSH.popen.015
+DESCRIPTION:35be0745        XSH.popen.015
+DESCRIPTION:52327646        none  unspecified
+DESCRIPTION:7f004eac        impl  whether pthread_atfork() handlers run is implementation-defined
+DESCRIPTION:79f737ee        XSH.popen.013
+DESCRIPTION:5aae9175        none  introduces the modes
+DESCRIPTION:30f66fba        XSH.popen.001 XSH.popen.003 XSH.popen.005
+DESCRIPTION:3b1a96a9        XSH.popen.009 XSH.popen.010
+DESCRIPTION:2263c402        XSH.popen.002 XSH.popen.004 XSH.popen.006
+DESCRIPTION:3b1a96a9.2      partial XSH.popen.009  # the descriptor under the stream is tested for mode "w"; the sentence names STDOUT_FILENO although the child's end in mode "w" is standard input (candidate editorial issue), so the child side is tested for mode "r" only
+DESCRIPTION:3dab1903        XSH.popen.008
+DESCRIPTION:9976e199        untestable  a descriptor that the implementation holds in the parent for the child is not observable from outside
+DESCRIPTION:6c8e6907        XSH.popen.007
+DESCRIPTION:a839db61        none  unspecified
+DESCRIPTION:8c5602ac        XSH.popen.012
+DESCRIPTION:062e9066        XSH.popen.011
+RETURN_VALUE:005daaaa       XSH.popen.001 XSH.popen.002
+RETURN_VALUE:8006caec       partial XSH.popen.014  # the null return is tested for the EMFILE case only; errno "may" be set
+ERRORS:e214d1ec             XSH.popen.014
+ERRORS:e2d4be0e             optional
+ERRORS:8c8e200e             optional

@@ -1,0 +1,75 @@
+# XSH getlogin(), getlogin_r()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# What the login name is depends on the login activity that started the test
+# run, which the suite cannot arrange; many environments (batch, container,
+# no controlling terminal) have none. The page lets getlogin() return a
+# null pointer then, and allows getlogin_r() to fail. The tests therefore
+# check what holds in every case: the form of what is returned, agreement
+# between the two functions and between repeated calls, ERANGE when a name
+# exists, and the thread-safety of getlogin_r().
+
+assertion  XSH.getlogin.001
+anchor     functions/getlogin.html#DESCRIPTION
+anchor     functions/getlogin.html#RETURN VALUE
+class      required
+since      1988
+says       getlogin() returns either a null pointer or a pointer to a
+           non-empty null-terminated string no longer than {LOGIN_NAME_MAX}
+           (when sysconf(_SC_LOGIN_NAME_MAX) reports a limit), both in the
+           test process and in a child that has called setsid() (no
+           controlling terminal).
+note       A null pointer is a valid result in both (the name cannot be
+           found); errno is not looked at.
+test       t/001-form.c
+
+assertion  XSH.getlogin.002
+anchor     functions/getlogin.html#DESCRIPTION
+class      required
+since      1988
+says       Repeated calls to getlogin() agree: either all return null or
+           all return the same name.
+test       t/002-stable.c
+
+assertion  XSH.getlogin.003
+anchor     functions/getlogin.html#RETURN VALUE
+class      required
+since      2008
+says       getlogin_r() returns 0, or a positive error number (the value is
+           returned, not -1); when it returns 0 the buffer holds a
+           non-empty null-terminated name that fits in the namesize
+           given.
+test       t/003-getlogin-r-form.c
+
+assertion  XSH.getlogin.004
+anchor     functions/getlogin.html#DESCRIPTION
+class      required
+since      2008
+says       When getlogin() and getlogin_r() both succeed in the same
+           process, they give the same name.
+note       If either does not succeed here, the test is UNRESOLVED (there
+           is nothing to compare).
+test       t/004-agree.c
+
+assertion  XSH.getlogin.005
+anchor     functions/getlogin.html#ERRORS/ERANGE
+class      required
+since      2024
+says       When getlogin_r() succeeds with a large buffer and the name is n
+           bytes, a call with namesize n (one short of the name and its
+           null byte) returns ERANGE, and a call with namesize n+1
+           succeeds.
+note       Needs an environment with a login name; UNRESOLVED otherwise.
+           ERANGE became a shall-fail in Issue 8 (defect 398).
+test       t/005-erange.c
+
+assertion  XSH.getlogin.006
+anchor     functions/getlogin.html#APPLICATION USAGE
+anchor     functions/V2_chap02.html#2.9.1
+class      required
+since      2008
+says       getlogin_r() is thread-safe: four threads that call it 500 times
+           each into buffers of their own get the same results as one
+           call in the main thread (same return value and, on success,
+           the same name).
+test       t/006-threads.c

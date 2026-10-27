@@ -1,0 +1,205 @@
+# XSH waitid()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Children are forked by the test and end in a known way (exit status,
+# SIGKILL, SIGSTOP). Waits are bounded by an alarm that fails the test, and
+# every child is reaped or killed before the test ends. A call that is
+# expected to fail is judged only by -1 and errno; the contents of *infop
+# after an error are not looked at (the failed call may have done part of its
+# work, XSH 2.3).
+
+assertion  XSH.waitid.001
+anchor     functions/waitid.html#DESCRIPTION
+anchor     functions/waitid.html#RETURN VALUE
+anchor     functions/V2_chap02.html#Pointer to a Function
+anchor     basedefs/signal.h.html#DESCRIPTION
+class      required
+since      2008
+says       waitid(P_PID, c, &si, WEXITED) for a child that called _exit(5)
+           returns 0 and fills si: si_signo is SIGCHLD, si_pid is c,
+           si_code is CLD_EXITED and si_status is 5.
+test       t/001-exited.c
+
+assertion  XSH.waitid.002
+anchor     functions/waitid.html#DESCRIPTION
+anchor     basedefs/signal.h.html#DESCRIPTION
+class      required
+since      2008
+says       For a child killed by SIGKILL (default action: terminate with no
+           additional actions), waitid() with WEXITED returns 0 and si has
+           si_signo SIGCHLD, si_pid the child, si_code CLD_KILLED and
+           si_status SIGKILL.
+test       t/002-killed.c
+
+assertion  XSH.waitid.003
+anchor     functions/waitid.html#DESCRIPTION
+anchor     basedefs/signal.h.html#DESCRIPTION
+anchor     functions/exit.html#DESCRIPTION
+class      required
+since      2008
+says       For a child that called _exit(263), si_status is 263, the full
+           value and not its low 8 bits.
+note       wait() and waitpid() give 263 & 0377 = 7; waitid() and the
+           SIGCHLD siginfo give the full value (XBD signal.h, exit()).
+test       t/003-full-status.c
+
+assertion  XSH.waitid.004
+anchor     functions/waitid.html#DESCRIPTION
+class      required
+since      2008
+says       Without WNOHANG, waitid(P_PID, c, ..., WEXITED) blocks until the
+           child terminates: for a child that lives about 0.4 s, the call
+           does not return before that time has passed, and then returns 0
+           with si_pid c.
+test       t/004-blocks.c
+
+assertion  XSH.waitid.005
+anchor     functions/waitid.html#DESCRIPTION/WNOWAIT
+anchor     functions/waitid.html#DESCRIPTION
+class      required
+since      2008
+says       With WNOWAIT the child stays waitable: after a call with
+           WEXITED|WNOWAIT reports it (return immediate when the status is
+           already there), a second call with WEXITED|WNOWAIT reports it
+           again, and a plain waitid(WEXITED) then reports it with the
+           same si_status.
+test       t/005-wnowait.c
+
+assertion  XSH.waitid.006
+anchor     functions/waitid.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.12
+class      required
+since      2008
+says       Without WNOWAIT the status is consumed: after waitid() reported
+           a child, waitid(P_ALL, 0, ..., WEXITED) fails with ECHILD (no
+           other child), and waitpid() of that child fails with ECHILD.
+test       t/006-consumed.c
+
+assertion  XSH.waitid.007
+anchor     functions/waitid.html#ERRORS/ECHILD
+class      required
+since      2008
+says       In a process that has never had a child, waitid(P_ALL, 0, ...,
+           WEXITED) returns -1 with errno ECHILD.
+test       t/007-echild.c
+
+assertion  XSH.waitid.008
+anchor     functions/waitid.html#DESCRIPTION
+anchor     functions/waitid.html#RETURN VALUE
+class      required
+since      2008
+says       With WNOHANG and a child that has not terminated, waitid()
+           returns 0 at once, and si_signo and si_pid in *infop are 0 (they
+           are set to 0 even though the structure was filled with other
+           bytes beforehand).
+test       t/008-wnohang-none.c
+
+assertion  XSH.waitid.009
+anchor     functions/waitid.html#DESCRIPTION
+anchor     functions/waitid.html#RETURN VALUE
+class      required
+since      2008
+says       With WNOHANG and a child whose termination status is already
+           available, waitid() returns 0 and fills si like a blocking
+           call: si_pid is the child, si_signo SIGCHLD, si_code CLD_EXITED
+           and si_status the exit value.
+test       t/009-wnohang-ready.c
+
+assertion  XSH.waitid.010
+anchor     functions/waitid.html#DESCRIPTION
+class      required
+since      2008
+says       With P_ALL the id argument is ignored: with an unrelated value
+           as id, two calls report the two children (each once, in either
+           order), each with its own exit value.
+test       t/010-p-all.c
+
+assertion  XSH.waitid.011
+anchor     functions/waitid.html#DESCRIPTION
+class      required
+since      2008
+says       With P_PID only the named child is waited for: with one child
+           that has already exited and another that exits later,
+           waitid(P_PID, later, ...) reports the later one, and the earlier
+           one can still be waited for afterwards.
+test       t/011-p-pid.c
+
+assertion  XSH.waitid.012
+anchor     functions/waitid.html#DESCRIPTION
+class      required
+since      2008
+says       With P_PGID only children in that process group are waited for:
+           with a child in its own group that exits late and a child in the
+           caller's group that has already exited, waitid(P_PGID, own
+           group, ...) reports the first child; the second one can still be
+           waited for afterwards.
+test       t/012-p-pgid.c
+
+assertion  XSH.waitid.013
+anchor     functions/waitid.html#DESCRIPTION/WSTOPPED
+anchor     basedefs/signal.h.html#DESCRIPTION
+class      required
+since      2008
+says       With WSTOPPED, a child that stopped on SIGSTOP is reported:
+           return 0, si_signo SIGCHLD, si_pid the child, si_code
+           CLD_STOPPED and si_status SIGSTOP.
+test       t/013-wstopped.c
+
+assertion  XSH.waitid.014
+anchor     functions/waitid.html#DESCRIPTION/WSTOPPED
+anchor     functions/waitid.html#DESCRIPTION/WNOWAIT
+class      required
+since      2008
+says       A stop reported only by calls with WNOWAIT is reported again by
+           a further WSTOPPED call; once reported by a call without
+           WNOWAIT it is not reported again (WSTOPPED|WNOHANG returns 0
+           with si_pid 0).
+test       t/014-stop-once.c
+
+assertion  XSH.waitid.015
+anchor     functions/waitid.html#DESCRIPTION
+class      required
+since      2008
+says       Only the state changes named in options match: a stopped child
+           is not reported to WEXITED|WNOHANG (0, si_pid 0), and a child
+           that has terminated is not reported to WSTOPPED|WNOHANG (0,
+           si_pid 0).
+test       t/015-options-select.c
+
+assertion  XSH.waitid.016
+anchor     functions/waitid.html#DESCRIPTION/WCONTINUED
+anchor     basedefs/signal.h.html#DESCRIPTION
+anchor     basedefs/sys_wait.h.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2008
+says       XSI: with WCONTINUED, a child continued by SIGCONT after a stop
+           is reported: return 0, si_signo SIGCHLD, si_pid the child,
+           si_code CLD_CONTINUED and si_status SIGCONT.
+note       XBD sys/wait.h shades WCONTINUED as XSI; the waitid() page does
+           not (candidate editorial issue, reported). The child stays alive
+           after the continue, so no newer status replaces it (XSH 2.12).
+test       t/016-wcontinued.c
+
+assertion  XSH.waitid.017
+anchor     functions/waitid.html#ERRORS/EINTR
+class      required
+since      2008
+says       waitid() blocked on a child that lives for 3 s and interrupted
+           by a caught SIGALRM (installed without SA_RESTART) returns -1
+           with errno EINTR.
+test       t/017-eintr.c
+
+assertion  XSH.waitid.018
+anchor     functions/waitid.html#ERRORS/EINVAL
+anchor     functions/waitid.html#DESCRIPTION
+class      disputed
+since      2008
+says       waitid(P_PID, c, &si, WNOHANG) with none of WEXITED, WSTOPPED,
+           WCONTINUED returns -1 with errno EINVAL.
+note       disputed (new): the page tells applications to give at least one
+           of the three flags and says EINVAL is for "an invalid value" of
+           options, but does not say a call without any of them is such a
+           value. The test accepts only -1/EINVAL; a call that blocks for
+           the 3 s the child lives is a FAIL too (logged INSPECT).
+test       t/018-no-event-flag.c

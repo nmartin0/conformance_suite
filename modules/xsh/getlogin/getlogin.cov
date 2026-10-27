@@ -1,0 +1,24 @@
+# getlogin.cov - every requirement unit on functions/getlogin.html (getlogin, getlogin_r).
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:743bfebe        XSH.getlogin.001
+DESCRIPTION:c675321b        untestable  the suite cannot create a login activity with several names for one user ID
+DESCRIPTION:41d748f4        none  a permission
+DESCRIPTION:dbdf4feb        XSH.getlogin.003 XSH.getlogin.005
+DESCRIPTION:ed4f4bfd        app
+DESCRIPTION:2b2a98d0        XSH.getlogin.001 XSH.getlogin.003
+DESCRIPTION:e600dc4f        untestable  as for the getlogin() sentence: a login with several names for one user ID is not available
+DESCRIPTION:569b2bff        none  a permission
+DESCRIPTION:f9e8a9fd        none  a permission
+DESCRIPTION:b143db44        none  a permission
+RETURN_VALUE:8071b167       XSH.getlogin.001 XSH.getlogin.002 XSH.getlogin.004
+RETURN_VALUE:fc5fad31       partial XSH.getlogin.001  # errno of a null return is not examined: the page does not say which null returns set it (candidate issue)
+RETURN_VALUE:262c3508       app
+RETURN_VALUE:96f4bb24       none  a permission
+RETURN_VALUE:e4a08d94       none  a permission
+RETURN_VALUE:b2f649ec       XSH.getlogin.003
+ERRORS:1fbbba10             optional
+ERRORS:78d47d0e             optional
+ERRORS:4464a4ff             optional
+ERRORS:5f748053             optional
+ERRORS:61325257             XSH.getlogin.005

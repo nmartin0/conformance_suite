@@ -1,0 +1,201 @@
+# XSH system()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The commands handed to system() use only POSIX shell syntax and standard
+# utilities (exit, kill, true, test, echo, sleep). Tests that watch signal
+# behaviour of the caller run in the test process itself and restore every
+# disposition before they end. A test that blocks fails by an alarm and
+# never hangs.
+
+assertion  XSH.system.001
+anchor     functions/system.html#RETURN VALUE
+class      required
+since      1988
+says       system(NULL) returns a non-zero value.
+test       t/001-null.c
+
+assertion  XSH.system.002
+anchor     functions/system.html#RETURN VALUE
+anchor     utilities/V3_chap02.html#2.8.2
+class      required
+since      1988
+says       The return value of system() is a wait status: for the commands
+           "exit 0", "exit 42" and "exit 1", WIFEXITED is true and
+           WEXITSTATUS is 0, 42 and 1.
+test       t/002-exit-status.c
+
+assertion  XSH.system.003
+anchor     functions/system.html#RETURN VALUE
+anchor     utilities/sh.html#EXIT STATUS
+class      required
+since      1988
+says       When the shell itself is killed by a signal (command "kill -s
+           KILL $$"), the value is a wait status with WIFSIGNALED true and
+           WTERMSIG SIGKILL.
+test       t/003-signalled.c
+
+assertion  XSH.system.004
+anchor     functions/system.html#RETURN VALUE
+anchor     utilities/V3_chap02.html#2.9.1.4
+class      required
+since      1988
+says       A command naming a utility that does not exist gives status
+           WIFEXITED with WEXITSTATUS 127.
+test       t/004-not-found.c
+
+assertion  XSH.system.005
+anchor     functions/system.html#DESCRIPTION
+class      required
+since      1988
+says       The string is a command in the shell command language: a list
+           with an assignment, a pipeline, an if, a for loop, a case, a
+           parameter expansion and a redirection gives the exit status the
+           language defines.
+test       t/005-shell-language.c
+
+assertion  XSH.system.006
+anchor     functions/system.html#DESCRIPTION
+anchor     functions/system.html#RATIONALE
+class      required
+since      2024
+says       The command is passed after "--": a command word that begins with
+           a hyphen-minus or a plus sign is run as a command (executable
+           files named -pcdash and +pcplus found through PATH, each
+           exiting with its own status), not read as options.
+note       Austin Group defect 1440 (Issue 8).
+test       t/006-dashdash.c
+
+assertion  XSH.system.007
+anchor     functions/system.html#DESCRIPTION
+anchor     functions/system.html#APPLICATION USAGE
+class      required
+since      1988
+says       The command runs as a child that behaves like fork() plus exec:
+           it has the caller's working directory and environment
+           variables, and its standard output and standard error are the
+           caller's descriptors 1 and 2 (redirected to files here).
+test       t/007-inherits.c
+
+assertion  XSH.system.008
+anchor     functions/system.html#DESCRIPTION
+anchor     functions/system.html#APPLICATION USAGE
+class      required
+since      1988
+says       A change the command makes to its working directory or to an
+           environment variable is not visible in the caller.
+test       t/008-not-reflected.c
+
+assertion  XSH.system.009
+anchor     functions/system.html#DESCRIPTION
+anchor     functions/system.html#APPLICATION USAGE
+class      required
+since      1988
+says       The shell has its own process ID (not the caller's) and its
+           parent is the caller: the values $$ and $PPID the command writes
+           are different from getpid() and equal to getpid().
+test       t/009-ids.c
+
+assertion  XSH.system.010
+anchor     functions/system.html#APPLICATION USAGE
+anchor     functions/system.html#DESCRIPTION
+class      required
+since      1988
+says       A descriptor with FD_CLOEXEC set is closed in the command and one
+           without it is open (tested by a redirection from each).
+test       t/010-cloexec.c
+
+assertion  XSH.system.011
+anchor     functions/system.html#APPLICATION USAGE
+anchor     functions/system.html#DESCRIPTION
+class      required
+since      2024
+says       A descriptor with FD_CLOFORK set is closed in the command.
+note       FD_CLOFORK is new in Issue 8; the test is UNRESOLVED when
+           <fcntl.h> lacks it.
+test       t/011-clofork.c
+
+assertion  XSH.system.012
+anchor     functions/system.html#DESCRIPTION
+class      required
+since      1988
+says       While system() waits, the caller ignores SIGINT and SIGQUIT: with
+           handlers installed for both, a command that sends each to its
+           parent does not make the handlers run and does not kill the
+           caller.
+test       t/012-ignores.c
+
+assertion  XSH.system.013
+anchor     functions/system.html#DESCRIPTION
+class      required
+since      1988
+says       After system() returns, the caller's actions for SIGINT and
+           SIGQUIT are what they were before: a handler, SIG_IGN or SIG_DFL
+           (tried in turn).
+test       t/013-restored.c
+
+assertion  XSH.system.014
+anchor     functions/system.html#APPLICATION USAGE
+anchor     functions/system.html#DESCRIPTION
+class      required
+since      1988
+says       The command starts with the signal handling fork and exec give
+           it: a signal the caller catches is at its default action in the
+           command (a command that sends SIGINT or SIGQUIT to itself is
+           killed by it, or the shell reports the signal with an exit
+           status above 128; either way it does not go on to its own
+           exit status), and one the caller ignores stays ignored (the
+           same command goes on and exits with its own status).
+test       t/014-child-signals.c
+
+assertion  XSH.system.015
+anchor     functions/system.html#DESCRIPTION
+anchor     functions/system.html#APPLICATION USAGE
+class      required
+since      1988
+says       SIGCHLD is blocked while system() waits: with a SIGCHLD handler
+           that reaps any child with waitpid(-1, ..., WNOHANG), system() of
+           a command that lasts 1 s still returns that command's status.
+test       t/015-sigchld-blocked.c
+
+assertion  XSH.system.016
+anchor     functions/system.html#DESCRIPTION
+class      required
+since      1988
+says       system() does not affect the status of other children: one that
+           exited before the call and one that exits during it can both be
+           waited for afterwards with their own exit values.
+test       t/016-other-children.c
+
+assertion  XSH.system.017
+anchor     functions/system.html#DESCRIPTION
+class      required
+since      1988
+says       system() does not return before the command has terminated: after
+           a command that sleeps 1 s and then writes a file, the file is
+           complete when the call returns, and the call took at least about
+           1 s.
+test       t/017-waits.c
+
+assertion  XSH.system.018
+anchor     functions/system.html#DESCRIPTION
+anchor     functions/system.html#RATIONALE
+class      required
+since      1988
+says       A signal caught by the caller while system() waits (SIGALRM
+           without SA_RESTART, after 1 s) does not end the call early: it
+           returns the command's own status, after the 2 s command is done,
+           not -1.
+test       t/018-signal-interrupts.c
+
+assertion  XSH.system.019
+anchor     functions/system.html#APPLICATION USAGE
+anchor     functions/V2_chap02.html#2.9.1
+class      required
+since      2008
+says       system() can be called from four threads at once: each call
+           returns the status of its own command ("sleep 1; exit k" with k
+           1 to 4).
+note       Thread-safety has been required since Issue 7 (interpretation
+           #055 and the APPLICATION USAGE); the dispositions after
+           overlapping calls are unspecified and are not looked at.
+test       t/019-threads.c
