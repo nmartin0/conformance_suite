@@ -1,0 +1,41 @@
+# XSH pthread_rwlockattr_init(), pthread_rwlockattr_destroy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The only attribute the standard names is the process-shared attribute
+# (TSH).
+
+assertion  XSH.pthread_rwlockattr_init.001
+anchor     functions/pthread_rwlockattr_init.html#DESCRIPTION
+anchor     functions/pthread_rwlockattr_init.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_rwlockattr_init() returns 0,
+           pthread_rwlockattr_destroy() of the initialized object returns
+           0, and the destroyed object can be initialized again (0) and
+           destroyed again (0).
+test       t/001-init-destroy.c
+
+assertion  XSH.pthread_rwlockattr_init.002
+anchor     functions/pthread_rwlockattr_init.html#DESCRIPTION
+anchor     functions/pthread_rwlockattr_getpshared.html#DESCRIPTION
+class      conditional
+when       TSH
+since      2008
+says       pthread_rwlockattr_init() sets the process-shared attribute to
+           its default: on storage holding other bytes (0x00, 0xFF,
+           0xA5), and on an object that was set to
+           PTHREAD_PROCESS_SHARED and destroyed,
+           pthread_rwlockattr_getpshared() returns 0 and stores
+           PTHREAD_PROCESS_PRIVATE.
+test       t/002-default-pshared.c
+
+assertion  XSH.pthread_rwlockattr_init.003
+anchor     functions/pthread_rwlockattr_init.html#DESCRIPTION
+class      required
+since      2008
+says       A read-write lock initialized from an attributes object keeps
+           working when the object is destroyed afterwards: two read
+           locks can be held (0, 0), a try for a write lock then gives
+           EBUSY, and after both unlocks (0, 0) a write lock is taken
+           (0) and released (0).
+test       t/003-lock-unaffected.c

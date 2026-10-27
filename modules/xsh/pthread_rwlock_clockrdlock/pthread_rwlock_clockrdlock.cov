@@ -1,0 +1,22 @@
+# pthread_rwlock_clockrdlock.cov - every requirement unit on functions/pthread_rwlock_clockrdlock.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d339f9bd     XSH.pthread_rwlock_clockrdlock.001 XSH.pthread_rwlock_clockrdlock.004
+DESCRIPTION:ae40b9f5     XSH.pthread_rwlock_clockrdlock.002 XSH.pthread_rwlock_clockrdlock.003 XSH.pthread_rwlock_clockrdlock.005
+DESCRIPTION:7a9960ad     XSH.pthread_rwlock_clockrdlock.002 XSH.pthread_rwlock_clockrdlock.003
+DESCRIPTION:fed55afa     XSH.pthread_rwlock_clockrdlock.002
+DESCRIPTION:28360d4e     XSH.pthread_rwlock_clockrdlock.003
+DESCRIPTION:69172c78     none  the resolution of a clock is implementation-defined
+DESCRIPTION:531f668f     XSH.pthread_rwlock_clockrdlock.001 XSH.pthread_rwlock_clockrdlock.003
+DESCRIPTION:6ce6bf45     XSH.pthread_rwlock_clockrdlock.001
+DESCRIPTION:4213e76d     none  undefined or unspecified behaviour
+DESCRIPTION:7b0a28f8     todo  needs a signal handler to run in a thread blocked in a timed read lock
+DESCRIPTION:de70770d     none  a permission to deadlock
+DESCRIPTION:24a812ae     none  undefined or unspecified behaviour
+RETURN_VALUE:ee271f9a    XSH.pthread_rwlock_clockrdlock.001 XSH.pthread_rwlock_clockrdlock.004 XSH.pthread_rwlock_clockrdlock.005
+RETURN_VALUE:27ed31a1    none  no error is named for success
+ERRORS:bf814edb          XSH.pthread_rwlock_clockrdlock.002 XSH.pthread_rwlock_clockrdlock.003
+ERRORS:482f66bd          optional
+ERRORS:592901ac          optional
+ERRORS:4ea4c30f          optional
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

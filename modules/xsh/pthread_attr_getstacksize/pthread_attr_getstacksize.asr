@@ -1,0 +1,51 @@
+# XSH pthread_attr_getstacksize(), pthread_attr_setstacksize()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The default size and the system-imposed upper limit are not specified;
+# "the minimum stack size allocated" is not observable without running
+# out of stack.
+
+assertion  XSH.pthread_attr_getstacksize.001
+anchor     functions/pthread_attr_getstacksize.html#RETURN VALUE
+class      conditional
+when       TSS
+since      2001
+says       pthread_attr_getstacksize() on a newly initialized attributes
+           object returns 0.
+note       The default size is not compared.
+test       t/001-default.c
+
+assertion  XSH.pthread_attr_getstacksize.002
+anchor     functions/pthread_attr_getstacksize.html#DESCRIPTION
+anchor     functions/pthread_attr_getstacksize.html#RETURN VALUE
+class      conditional
+when       TSS
+since      2001
+says       pthread_attr_setstacksize() with {PTHREAD_STACK_MIN} returns 0
+           and pthread_attr_getstacksize() then returns 0 and stores that
+           size; a size set from the value the default object reports
+           and a size of {PTHREAD_STACK_MIN} plus 1 MiB are read back
+           the same when the set returns 0.
+note       The sizes above the minimum may exceed a system-imposed limit
+           (EINVAL) and are then not checked.
+test       t/002-round-trip.c
+
+assertion  XSH.pthread_attr_getstacksize.003
+anchor     functions/pthread_attr_getstacksize.html#ERRORS/EINVAL
+class      conditional
+when       TSS
+since      2001
+says       pthread_attr_setstacksize() with {PTHREAD_STACK_MIN} - 1 and
+           with 0 returns EINVAL.
+test       t/003-too-small.c
+
+assertion  XSH.pthread_attr_getstacksize.004
+anchor     functions/pthread_attr_getstacksize.html#DESCRIPTION
+class      conditional
+when       TSS
+since      2001
+says       A thread created with a stack size of {PTHREAD_STACK_MIN} is
+           created (0), runs a start routine that only returns a value,
+           and can be joined, handing the value back.
+note       pthread_create() failing with EAGAIN is UNRESOLVED.
+test       t/004-create.c

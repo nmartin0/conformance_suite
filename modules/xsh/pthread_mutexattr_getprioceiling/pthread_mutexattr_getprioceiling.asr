@@ -1,0 +1,32 @@
+# XSH pthread_mutexattr_getprioceiling(), pthread_mutexattr_setprioceiling()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The default ceiling is not specified; an out-of-range ceiling and a
+# missing privilege are may-fail errors. The ceilings used are the lowest
+# and the highest SCHED_FIFO priority, the range the page names.
+
+assertion  XSH.pthread_mutexattr_getprioceiling.001
+anchor     functions/pthread_mutexattr_getprioceiling.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_getprioceiling.html#RETURN VALUE
+class      conditional
+when       RPP|TPP
+since      2001
+says       pthread_mutexattr_setprioceiling() with the lowest and then
+           the highest SCHED_FIFO priority returns 0, and
+           pthread_mutexattr_getprioceiling() returns 0 and stores that
+           priority each time.
+note       EINVAL or EPERM from the set leave the test UNRESOLVED.
+test       t/001-round-trip.c
+
+assertion  XSH.pthread_mutexattr_getprioceiling.002
+anchor     functions/pthread_mutexattr_getprioceiling.html#DESCRIPTION
+class      conditional
+when       RPP|TPP
+since      2001
+says       A mutex initialized with an attributes object whose protocol is
+           PTHREAD_PRIO_PROTECT and whose priority ceiling is the highest
+           SCHED_FIFO priority has that ceiling:
+           pthread_mutex_getprioceiling() returns 0 and stores it.
+note       A refusal of the protocol or of the mutex (EPERM, ENOTSUP,
+           EINVAL) leaves the test UNRESOLVED.
+test       t/002-mutex-ceiling.c

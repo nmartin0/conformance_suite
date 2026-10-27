@@ -1,0 +1,36 @@
+# XSH pthread_attr_getschedparam(), pthread_attr_setschedparam()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Which priorities are valid for the default policy is not specified. The
+# SCHED_SPORADIC members need the TSP option and are not tested. How the
+# stored parameters apply to a created thread is tested with
+# xsh/pthread_attr_getinheritsched.
+
+assertion  XSH.pthread_attr_getschedparam.001
+anchor     functions/pthread_attr_getschedparam.html#DESCRIPTION
+anchor     functions/pthread_attr_getschedparam.html#RETURN VALUE
+class      required
+since      2008
+says       On a newly initialized attributes object,
+           pthread_attr_getschedparam() returns 0; storing the result
+           back with pthread_attr_setschedparam() returns 0, and
+           pthread_attr_getschedparam() then returns 0 and stores the
+           same sched_priority.
+note       EINVAL or ENOTSUP from the set is a may-fail or unsupported
+           case and leaves the test UNRESOLVED.
+test       t/001-default-round-trip.c
+
+assertion  XSH.pthread_attr_getschedparam.002
+anchor     functions/pthread_attr_getschedparam.html#DESCRIPTION
+anchor     functions/pthread_attr_getschedparam.html#RETURN VALUE
+class      conditional
+when       TPS
+since      2001
+says       With the policy of the attributes object set to SCHED_FIFO,
+           pthread_attr_setschedparam() with the lowest and then the
+           highest SCHED_FIFO priority returns 0, and
+           pthread_attr_getschedparam() returns 0 and stores that
+           sched_priority each time.
+note       Priorities in the policy's range are valid; a refusal
+           (EINVAL, ENOTSUP, EPERM) leaves the test UNRESOLVED.
+test       t/002-fifo-range.c

@@ -1,0 +1,33 @@
+# XSH pthread_mutex_getprioceiling(), pthread_mutex_setprioceiling()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The ceilings used are the lowest and the highest SCHED_FIFO priority.
+# Priority-protect locking effects need realtime scheduling and privilege
+# and are not tested.
+
+assertion  XSH.pthread_mutex_getprioceiling.001
+anchor     functions/pthread_mutex_getprioceiling.html#DESCRIPTION
+anchor     functions/pthread_mutex_getprioceiling.html#RETURN VALUE
+class      conditional
+when       RPP|TPP
+since      2001
+says       For a PTHREAD_PRIO_PROTECT mutex whose ceiling is the highest
+           SCHED_FIFO priority, pthread_mutex_getprioceiling() returns 0
+           and stores it; pthread_mutex_setprioceiling() to the lowest
+           SCHED_FIFO priority returns 0 and stores the previous ceiling
+           (the highest) in old_ceiling, the mutex is unlocked
+           afterwards (another thread's trylock gives 0), and
+           pthread_mutex_getprioceiling() then stores the lowest.
+note       EPERM, EINVAL (out of range) and ENOTSUP are may-fail or
+           unsupported cases and leave the test UNRESOLVED.
+test       t/001-get-set.c
+
+assertion  XSH.pthread_mutex_getprioceiling.002
+anchor     functions/pthread_mutex_getprioceiling.html#ERRORS/EINVAL
+class      conditional
+when       RPP|TPP
+since      2008
+says       For a mutex with the protocol PTHREAD_PRIO_NONE (the
+           default), both pthread_mutex_getprioceiling() and
+           pthread_mutex_setprioceiling() return EINVAL.
+test       t/002-protocol-none.c

@@ -1,0 +1,11 @@
+# pthread_attr_getschedpolicy.cov - every requirement unit on functions/pthread_attr_getschedpolicy.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:f911869b     XSH.pthread_attr_getschedpolicy.001
+DESCRIPTION:a5a15c86     XSH.pthread_attr_getschedpolicy.001
+DESCRIPTION:119e0f75     none  mutex acquisition order by priority needs privilege to set realtime policies and is not tested here
+DESCRIPTION:ff9bf092     none  undefined or unspecified behaviour
+RETURN_VALUE:596de730    XSH.pthread_attr_getschedpolicy.001 XSH.pthread_attr_getschedpolicy.002
+ERRORS:7f0f7595          none  which values a system does not support is its own
+ERRORS:601bd60d          optional
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

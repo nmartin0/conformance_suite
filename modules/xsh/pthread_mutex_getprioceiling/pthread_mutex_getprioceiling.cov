@@ -1,0 +1,21 @@
+# pthread_mutex_getprioceiling.cov - every requirement unit on functions/pthread_mutex_getprioceiling.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:cf4aac2d     XSH.pthread_mutex_getprioceiling.001
+DESCRIPTION:44c8ca98     XSH.pthread_mutex_getprioceiling.001
+DESCRIPTION:b9cf8c35     XSH.pthread_mutex_getprioceiling.001
+DESCRIPTION:2a8d06d7     XSH.pthread_mutex_getprioceiling.001
+DESCRIPTION:3c63f9cb     none  only a failure that can be provoked would show this, and the only provokable one leaves the ceiling unread
+RETURN_VALUE:49435c67    XSH.pthread_mutex_getprioceiling.001
+ERRORS:60b5d604          XSH.pthread_mutex_getprioceiling.002
+ERRORS:2e836538          untestable  needs a caller without privilege on a system that requires it
+ERRORS:d7223ae9          untestable  the maximum number of recursive locks is not known
+ERRORS:27359bc4          untestable  resource exhaustion cannot be provoked
+ERRORS:070fe76a          untestable  the ceiling functions are tested on a normal mutex only
+ERRORS:8c79ef2a          untestable  needs a thread above the ceiling, which needs realtime privilege
+ERRORS:9f92a033          none  robust-mutex results are tested in xsh/pthread_mutexattr_getrobust
+ERRORS:83f8f284          none  robust-mutex results are tested in xsh/pthread_mutexattr_getrobust
+ERRORS:cca22a22          optional
+ERRORS:45ba906c          optional
+ERRORS:f94f524d          optional
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

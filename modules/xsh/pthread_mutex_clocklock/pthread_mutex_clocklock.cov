@@ -1,0 +1,32 @@
+# pthread_mutex_clocklock.cov - every requirement unit on functions/pthread_mutex_clocklock.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:5826f515     XSH.pthread_mutex_clocklock.001 XSH.pthread_mutex_clocklock.005
+DESCRIPTION:9f42a6cb     XSH.pthread_mutex_clocklock.005
+DESCRIPTION:ea5fb27b     XSH.pthread_mutex_clocklock.002 XSH.pthread_mutex_clocklock.003
+DESCRIPTION:7a9960ad     XSH.pthread_mutex_clocklock.002 XSH.pthread_mutex_clocklock.003
+DESCRIPTION:71f50211     XSH.pthread_mutex_clocklock.002
+DESCRIPTION:10ab0460     XSH.pthread_mutex_clocklock.003
+DESCRIPTION:69172c78     none  the resolution of a clock is implementation-defined
+DESCRIPTION:e2efb0b3     XSH.pthread_mutex_clocklock.001 XSH.pthread_mutex_clocklock.003
+DESCRIPTION:0ae0f3da     XSH.pthread_mutex_clocklock.001
+DESCRIPTION:f52c3f5a     none  undefined or unspecified behaviour
+DESCRIPTION:28fe2620     untestable  priority inheritance effects need realtime privilege and cannot be observed portably
+DESCRIPTION:5cbb3ce3     none  robust-mutex results are tested in xsh/pthread_mutexattr_getrobust
+DESCRIPTION:9b5f9c79     none  a permission
+DESCRIPTION:dc49fe3e     none  robust-mutex results are tested in xsh/pthread_mutexattr_getrobust
+DESCRIPTION:af2e12cd     none  advice to the application
+DESCRIPTION:de276387     none  advice to the application
+DESCRIPTION:cfc4e3e4     none  undefined or unspecified behaviour
+RETURN_VALUE:dc303cee    XSH.pthread_mutex_clocklock.001 XSH.pthread_mutex_clocklock.005
+ERRORS:d7223ae9          untestable  the maximum number of recursive locks is not known
+ERRORS:27359bc4          untestable  resource exhaustion cannot be provoked
+ERRORS:070fe76a          XSH.pthread_mutex_clocklock.006
+ERRORS:c76c43f3          untestable  needs a priority-protection mutex and a thread above its ceiling, which needs realtime privilege
+ERRORS:7e18d3e5          XSH.pthread_mutex_clocklock.004
+ERRORS:527f2ebb          none  robust-mutex results are tested in xsh/pthread_mutexattr_getrobust
+ERRORS:af160977          none  robust-mutex results are tested in xsh/pthread_mutexattr_getrobust
+ERRORS:0a220b5e          XSH.pthread_mutex_clocklock.002 XSH.pthread_mutex_clocklock.003
+ERRORS:cca22a22          optional
+ERRORS:c184a54d          optional
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

@@ -1,0 +1,11 @@
+# pthread_kill.cov - every requirement unit on functions/pthread_kill.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:000c7ccc     XSH.pthread_kill.001
+DESCRIPTION:cbc40bf2     XSH.pthread_kill.004
+RETURN_VALUE:f6402798    XSH.pthread_kill.001 XSH.pthread_kill.002 XSH.pthread_kill.004
+RETURN_VALUE:9fd594be    XSH.pthread_kill.003
+RETURN_VALUE:65329d66    XSH.pthread_kill.003
+ERRORS:f462fae1          XSH.pthread_kill.002
+ERRORS:0f048e64          XSH.pthread_kill.003
+ERRORS:804fcc67          untestable  the function does not wait, so no signal can interrupt it

@@ -1,0 +1,31 @@
+# XSH pthread_spin_init(), pthread_spin_destroy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Destroying a held lock, re-initializing an initialized one, using an
+# uninitialized one and using copies are undefined. The EAGAIN and ENOMEM
+# resource failures cannot be provoked.
+
+assertion  XSH.pthread_spin_init.001
+anchor     functions/pthread_spin_init.html#DESCRIPTION
+anchor     functions/pthread_spin_init.html#RETURN VALUE
+class      required
+since      2001
+says       pthread_spin_init() with PTHREAD_PROCESS_PRIVATE returns 0 and
+           gives an unlocked lock (pthread_spin_trylock() returns 0 and
+           the lock then unlocks with 0); pthread_spin_destroy() returns
+           0, and after it the object can be initialized again (0) and
+           locked.
+test       t/001-init-destroy.c
+
+assertion  XSH.pthread_spin_init.002
+anchor     functions/pthread_spin_init.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.9
+class      conditional
+when       TSH
+since      2001
+says       A spin lock initialized with PTHREAD_PROCESS_SHARED in memory
+           shared with a child process works between the two processes:
+           while the parent holds it, the child's pthread_spin_trylock()
+           returns EBUSY; after the parent unlocks it, the child's
+           pthread_spin_trylock() returns 0.
+test       t/002-between-processes.c

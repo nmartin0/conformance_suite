@@ -1,0 +1,47 @@
+# XSH pthread_attr_getdetachstate(), pthread_attr_setdetachstate()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# That the ID of a detached thread may not be joined or detached is an
+# error with undefined behaviour (XSH 2.9.2), so it is not tested.
+
+assertion  XSH.pthread_attr_getdetachstate.001
+anchor     functions/pthread_attr_getdetachstate.html#DESCRIPTION
+anchor     functions/pthread_attr_getdetachstate.html#RETURN VALUE
+class      required
+since      2008
+says       In a newly initialized attributes object,
+           pthread_attr_getdetachstate() returns 0 and stores
+           PTHREAD_CREATE_JOINABLE.
+test       t/001-default.c
+
+assertion  XSH.pthread_attr_getdetachstate.002
+anchor     functions/pthread_attr_getdetachstate.html#DESCRIPTION
+anchor     functions/pthread_attr_getdetachstate.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_attr_setdetachstate() with PTHREAD_CREATE_DETACHED,
+           PTHREAD_CREATE_JOINABLE and PTHREAD_CREATE_DETACHED again
+           each returns 0, and pthread_attr_getdetachstate() then
+           returns 0 and stores the value set.
+test       t/002-round-trip.c
+
+assertion  XSH.pthread_attr_getdetachstate.003
+anchor     functions/pthread_attr_getdetachstate.html#ERRORS/EINVAL
+class      required
+since      2008
+says       pthread_attr_setdetachstate() with a value that is neither
+           PTHREAD_CREATE_DETACHED nor PTHREAD_CREATE_JOINABLE returns
+           EINVAL.
+test       t/003-invalid.c
+
+assertion  XSH.pthread_attr_getdetachstate.004
+anchor     functions/pthread_attr_getdetachstate.html#DESCRIPTION
+class      required
+since      2008
+says       A thread created with attributes set to
+           PTHREAD_CREATE_JOINABLE can be joined (pthread_join() returns
+           0 and gives the routine's return value); a thread created with
+           attributes set to PTHREAD_CREATE_DETACHED is created (0) and
+           runs its routine once.
+note       pthread_create() failing with EAGAIN is UNRESOLVED.
+test       t/004-create.c

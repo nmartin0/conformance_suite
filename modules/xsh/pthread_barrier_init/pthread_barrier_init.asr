@@ -1,0 +1,37 @@
+# XSH pthread_barrier_init(), pthread_barrier_destroy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# How a barrier blocks and releases is tested in
+# xsh/pthread_barrier_wait. Destroying or re-initializing a barrier that
+# threads are blocked on, and using a barrier that was not initialized,
+# are undefined and not tested. Waits run in helper threads, with 10 s
+# limits.
+
+assertion  XSH.pthread_barrier_init.001
+anchor     functions/pthread_barrier_init.html#DESCRIPTION
+anchor     functions/pthread_barrier_init.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_barrier_init() with a null attributes pointer and count
+           2 returns 0, two threads then pass the barrier (one getting
+           PTHREAD_BARRIER_SERIAL_THREAD, one 0), and
+           pthread_barrier_destroy() returns 0.
+test       t/001-init-null-attr.c
+
+assertion  XSH.pthread_barrier_init.002
+anchor     functions/pthread_barrier_init.html#DESCRIPTION
+class      required
+since      2008
+says       A destroyed barrier can be initialized again, with a different
+           count: after destroy of a barrier for 2 threads,
+           pthread_barrier_init() with count 3 returns 0, and three
+           threads then pass it (exactly one getting
+           PTHREAD_BARRIER_SERIAL_THREAD).
+test       t/002-reinit.c
+
+assertion  XSH.pthread_barrier_init.003
+anchor     functions/pthread_barrier_init.html#ERRORS/EINVAL
+class      required
+since      2008
+says       pthread_barrier_init() with a count of 0 returns EINVAL.
+test       t/003-count-zero.c

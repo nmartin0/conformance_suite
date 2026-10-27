@@ -1,0 +1,9 @@
+# pthread_spin_unlock.cov - every requirement unit on functions/pthread_spin_unlock.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:089785be     XSH.pthread_spin_unlock.001
+DESCRIPTION:6a354c35     none  undefined or unspecified behaviour
+DESCRIPTION:c6f6477b     XSH.pthread_spin_unlock.002
+DESCRIPTION:87f529d4     none  undefined or unspecified behaviour
+RETURN_VALUE:083afd14    XSH.pthread_spin_unlock.001 XSH.pthread_spin_unlock.002
+ERRORS:28364a9f          untestable  the function does not wait, so no signal can interrupt it

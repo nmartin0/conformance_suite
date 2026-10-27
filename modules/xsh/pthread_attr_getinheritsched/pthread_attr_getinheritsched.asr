@@ -1,0 +1,60 @@
+# XSH pthread_attr_getinheritsched(), pthread_attr_setinheritsched()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The default inheritsched is not given on this page. The scheduling
+# attributes are compared through pthread_getschedparam().
+
+assertion  XSH.pthread_attr_getinheritsched.001
+anchor     functions/pthread_attr_getinheritsched.html#DESCRIPTION
+anchor     functions/pthread_attr_getinheritsched.html#RETURN VALUE
+class      conditional
+when       TPS
+since      2001
+says       pthread_attr_setinheritsched() with PTHREAD_INHERIT_SCHED and
+           with PTHREAD_EXPLICIT_SCHED (each a supported value) returns
+           0, and pthread_attr_getinheritsched() then returns 0 and
+           stores the value set.
+test       t/001-round-trip.c
+
+assertion  XSH.pthread_attr_getinheritsched.002
+anchor     functions/pthread_attr_getinheritsched.html#DESCRIPTION
+anchor     functions/pthread_attr_getinheritsched.html#ERRORS
+class      disputed
+when       TPS
+since      2001
+says       pthread_attr_setinheritsched() with a value that is neither
+           PTHREAD_INHERIT_SCHED nor PTHREAD_EXPLICIT_SCHED fails, with
+           ENOTSUP or EINVAL.
+note       disputed (Q-158): the page lists the supported values and makes
+           an unsupported value a shall-fail ENOTSUP, but also has a
+           may-fail EINVAL for an invalid value, and does not say whether
+           a value that is no constant of the interface is "unsupported"
+           (then it must fail) or only invalid (then it may be accepted).
+test       t/002-invalid.c
+
+assertion  XSH.pthread_attr_getinheritsched.003
+anchor     functions/pthread_attr_getinheritsched.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.4
+class      conditional
+when       TPS
+since      2001
+says       A thread created with an attributes object whose inheritsched
+           is PTHREAD_INHERIT_SCHED gets the scheduling policy and
+           priority of its creator, whatever policy and priority the
+           attributes object holds (a different policy and its highest
+           priority are set); the creation succeeds.
+note       pthread_create() failing with EAGAIN is UNRESOLVED.
+test       t/003-inherit.c
+
+assertion  XSH.pthread_attr_getinheritsched.004
+anchor     functions/pthread_attr_getinheritsched.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.4
+class      conditional
+when       TPS
+since      2001
+says       A thread created with an attributes object whose inheritsched
+           is PTHREAD_EXPLICIT_SCHED and whose policy and parameters are
+           those of the creator gets that policy and priority.
+note       pthread_create() failing with EAGAIN, EPERM or ENOTSUP is
+           UNRESOLVED (privileges are implementation-defined).
+test       t/004-explicit.c

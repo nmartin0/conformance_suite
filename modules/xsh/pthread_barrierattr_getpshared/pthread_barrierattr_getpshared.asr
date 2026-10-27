@@ -1,0 +1,41 @@
+# XSH pthread_barrierattr_getpshared(), pthread_barrierattr_setpshared()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# An out-of-range value is a may-fail error and is not tested.
+
+assertion  XSH.pthread_barrierattr_getpshared.001
+anchor     functions/pthread_barrierattr_getpshared.html#DESCRIPTION
+anchor     functions/pthread_barrierattr_getpshared.html#RETURN VALUE
+class      conditional
+when       TSH
+since      2001
+says       In a newly initialized attributes object,
+           pthread_barrierattr_getpshared() returns 0 and stores
+           PTHREAD_PROCESS_PRIVATE.
+test       t/001-default.c
+
+assertion  XSH.pthread_barrierattr_getpshared.002
+anchor     functions/pthread_barrierattr_getpshared.html#DESCRIPTION
+anchor     functions/pthread_barrierattr_getpshared.html#RETURN VALUE
+class      conditional
+when       TSH
+since      2001
+says       pthread_barrierattr_setpshared() with PTHREAD_PROCESS_SHARED,
+           PTHREAD_PROCESS_PRIVATE and PTHREAD_PROCESS_SHARED again each
+           returns 0, and pthread_barrierattr_getpshared() then returns 0
+           and stores the value set.
+test       t/002-round-trip.c
+
+assertion  XSH.pthread_barrierattr_getpshared.003
+anchor     functions/pthread_barrierattr_getpshared.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.9
+class      conditional
+when       TSH
+since      2001
+says       A barrier for two threads initialized with
+           PTHREAD_PROCESS_SHARED in memory shared with a child process
+           works between the two: the parent's and the child's
+           pthread_barrier_wait() both return, one with
+           PTHREAD_BARRIER_SERIAL_THREAD and one with 0.
+test       t/003-between-processes.c
+timeout    60

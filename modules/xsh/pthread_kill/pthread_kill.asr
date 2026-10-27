@@ -1,0 +1,43 @@
+# XSH pthread_kill()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Blocked-signal behaviour and the mask are tested with
+# xsh/pthread_sigmask; the signal action as a whole is tested with
+# xsh/2.4.3-signal-actions.
+
+assertion  XSH.pthread_kill.001
+anchor     functions/pthread_kill.html#DESCRIPTION
+anchor     functions/pthread_kill.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_kill() of SIGUSR1 at another thread returns 0 and the
+           handler (installed without SA_RESTART) runs in the target
+           thread, not in the caller.
+test       t/001-delivered-to-thread.c
+
+assertion  XSH.pthread_kill.002
+anchor     functions/pthread_kill.html#ERRORS/EINVAL
+class      required
+since      2024
+says       pthread_kill() with signal number 0 returns 0 or EINVAL and
+           sends no signal (no handler runs).
+note       Issue 8 makes EINVAL a may-fail error for sig 0; before, 0
+           meant error checking only.
+test       t/002-signal-zero.c
+
+assertion  XSH.pthread_kill.003
+anchor     functions/pthread_kill.html#ERRORS/EINVAL
+class      required
+since      2008
+says       pthread_kill() with a non-zero signal number that no system
+           defines (-1 and INT_MAX) returns EINVAL.
+test       t/003-invalid-signal.c
+
+assertion  XSH.pthread_kill.004
+anchor     functions/pthread_kill.html#DESCRIPTION
+class      required
+since      2024
+says       pthread_kill() with the thread ID of a thread that has
+           terminated but not been joined (a zombie thread) is not an
+           error: with SIGUSR1 ignored it returns 0.
+test       t/004-zombie-thread.c

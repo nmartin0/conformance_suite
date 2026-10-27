@@ -1,0 +1,94 @@
+# XSH pthread_condattr_getclock(), pthread_condattr_setclock()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# An unknown clock identifier is a may-fail error and is not tested; a
+# CPU-time clock must be refused (the DESCRIPTION says the call "shall
+# fail", ERRORS lists EINVAL as may-fail; any failure is accepted). Waits
+# run in a helper thread and are given 10 s, so that a wrong clock fails
+# the test instead of hanging it.
+
+assertion  XSH.pthread_condattr_getclock.001
+anchor     functions/pthread_condattr_getclock.html#DESCRIPTION
+anchor     functions/pthread_cond_timedwait.html#DESCRIPTION
+class      required
+since      2008
+says       In a newly initialized attributes object,
+           pthread_condattr_getclock() returns 0 and stores
+           CLOCK_REALTIME.
+test       t/001-default.c
+
+assertion  XSH.pthread_condattr_getclock.002
+anchor     functions/pthread_condattr_getclock.html#DESCRIPTION
+anchor     functions/pthread_condattr_getclock.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_condattr_setclock() with CLOCK_MONOTONIC,
+           CLOCK_REALTIME and CLOCK_MONOTONIC again each returns 0, and
+           pthread_condattr_getclock() then returns 0 and stores the
+           clock set.
+test       t/002-round-trip.c
+
+assertion  XSH.pthread_condattr_getclock.003
+anchor     functions/pthread_condattr_getclock.html#DESCRIPTION
+class      disputed
+when       CPT
+since      2008
+says       pthread_condattr_setclock() with CLOCK_PROCESS_CPUTIME_ID, and
+           with the CPU-time clock of the process obtained from
+           clock_getcpuclockid(), fails (returns non-zero).
+note       disputed (standard issue Q-159): the
+           DESCRIPTION says the call "shall fail" for a CPU-time clock,
+           while the ERRORS section lists EINVAL for it among the "may
+           fail" errors; read as a required failure (any error number),
+           a call that succeeds is wrong, read as a permitted failure it
+           is allowed.
+test       t/003-process-cpu-clock.c
+
+assertion  XSH.pthread_condattr_getclock.004
+anchor     functions/pthread_condattr_getclock.html#DESCRIPTION
+class      disputed
+when       TCT
+since      2008
+says       pthread_condattr_setclock() with CLOCK_THREAD_CPUTIME_ID, and
+           with the CPU-time clock of the calling thread obtained from
+           pthread_getcpuclockid(), fails (returns non-zero).
+note       disputed (standard issue Q-159): the
+           DESCRIPTION says the call "shall fail" for a CPU-time clock,
+           while the ERRORS section lists EINVAL for it among the "may
+           fail" errors; read as a required failure (any error number),
+           a call that succeeds is wrong, read as a permitted failure it
+           is allowed.
+test       t/004-thread-cpu-clock.c
+
+assertion  XSH.pthread_condattr_getclock.005
+anchor     functions/pthread_condattr_getclock.html#DESCRIPTION
+anchor     functions/pthread_cond_timedwait.html#DESCRIPTION
+class      required
+since      2008
+says       With a condition variable initialized from attributes left at
+           their default, pthread_cond_timedwait() with an absolute time
+           150 ms ahead on CLOCK_REALTIME returns ETIMEDOUT, and not
+           before that time has passed on CLOCK_REALTIME.
+test       t/005-timedwait-realtime.c
+
+assertion  XSH.pthread_condattr_getclock.006
+anchor     functions/pthread_condattr_getclock.html#DESCRIPTION
+class      required
+since      2008
+says       With a condition variable initialized from attributes whose
+           clock is CLOCK_MONOTONIC, pthread_cond_timedwait() with an
+           absolute time 150 ms ahead on CLOCK_MONOTONIC returns
+           ETIMEDOUT, and not before that time has passed on
+           CLOCK_MONOTONIC.
+test       t/006-timedwait-monotonic.c
+
+assertion  XSH.pthread_condattr_getclock.007
+anchor     functions/pthread_condattr_getclock.html#DESCRIPTION
+class      required
+since      2024
+says       The clock attribute has no effect on pthread_cond_clockwait():
+           with a condition variable whose clock is CLOCK_MONOTONIC,
+           pthread_cond_clockwait() with CLOCK_REALTIME and an absolute
+           time 150 ms ahead returns ETIMEDOUT, and not before that time
+           has passed on CLOCK_REALTIME.
+test       t/007-clockwait-ignores-attribute.c

@@ -1,0 +1,11 @@
+# pthread_attr_getscope.cov - every requirement unit on functions/pthread_attr_getscope.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:49007512     XSH.pthread_attr_getscope.001 XSH.pthread_attr_getscope.002
+DESCRIPTION:2bd3cba4     XSH.pthread_attr_getscope.001 XSH.pthread_attr_getscope.002
+DESCRIPTION:df46bfc4     XSH.pthread_attr_getscope.002
+DESCRIPTION:57aa7cea     none  undefined or unspecified behaviour
+RETURN_VALUE:2a846a3c    XSH.pthread_attr_getscope.001 XSH.pthread_attr_getscope.002
+ERRORS:7f0f7595          partial XSH.pthread_attr_getscope.002 # a value reported unsupported is accepted, at least one must be supported
+ERRORS:ec42b9fd          optional
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

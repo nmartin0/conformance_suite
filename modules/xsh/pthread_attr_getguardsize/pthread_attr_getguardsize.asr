@@ -1,0 +1,47 @@
+# XSH pthread_attr_getguardsize(), pthread_attr_setguardsize()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The default size and which sizes are invalid are not specified; the
+# overflow protection itself cannot be observed portably.
+
+assertion  XSH.pthread_attr_getguardsize.001
+anchor     functions/pthread_attr_getguardsize.html#DESCRIPTION
+anchor     functions/pthread_attr_getguardsize.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_attr_setguardsize() with 0 (no guard area) returns 0,
+           and pthread_attr_getguardsize() then returns 0 and stores 0.
+test       t/001-zero.c
+
+assertion  XSH.pthread_attr_getguardsize.002
+anchor     functions/pthread_attr_getguardsize.html#DESCRIPTION
+class      required
+since      2008
+says       When pthread_attr_setguardsize() accepts the page size (and
+           the page size plus 1), pthread_attr_getguardsize() stores
+           exactly the value that was set, whether or not the
+           implementation rounds the guard area up.
+note       Whether a size is acceptable is not specified; a call that
+           fails with EINVAL leaves the case unchecked, and the test is
+           UNRESOLVED if the page size itself is refused.
+test       t/002-round-trip.c
+
+assertion  XSH.pthread_attr_getguardsize.003
+anchor     functions/pthread_attr_getguardsize.html#DESCRIPTION
+class      required
+since      2008
+says       A thread created with a guard size of 0, and one with a guard
+           size of one page, is created (0), runs its routine and can be
+           joined, handing back the routine's return value.
+note       pthread_create() failing with EAGAIN is UNRESOLVED.
+test       t/003-create.c
+
+assertion  XSH.pthread_attr_getguardsize.004
+anchor     functions/pthread_attr_getguardsize.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_attr_getguardsize() on a newly initialized attributes
+           object returns 0.
+note       The default value is implementation-defined and is not
+           compared.
+test       t/004-default.c

@@ -1,0 +1,15 @@
+# pthread_rwlock_unlock.cov - every requirement unit on functions/pthread_rwlock_unlock.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:bfcefbc8     XSH.pthread_rwlock_unlock.001 XSH.pthread_rwlock_unlock.002
+DESCRIPTION:e8f0edad     none  undefined or unspecified behaviour
+DESCRIPTION:9f35ac1e     XSH.pthread_rwlock_unlock.001
+DESCRIPTION:79711906     XSH.pthread_rwlock_unlock.001
+DESCRIPTION:9b8e4fc3     XSH.pthread_rwlock_unlock.002
+DESCRIPTION:0ce8a679     XSH.pthread_rwlock_unlock.003
+DESCRIPTION:9496532f     untestable  priority order needs realtime policies, which need privilege
+DESCRIPTION:d47d1e74     untestable  priority order needs realtime policies, which need privilege
+DESCRIPTION:cefd6d51     none  undefined or unspecified behaviour
+DESCRIPTION:19966ec6     none  undefined or unspecified behaviour
+RETURN_VALUE:61c8c50a    XSH.pthread_rwlock_unlock.001 XSH.pthread_rwlock_unlock.002 XSH.pthread_rwlock_unlock.003
+ERRORS:6b5a11d4          untestable  the function does not wait, so no signal can interrupt it

@@ -1,0 +1,37 @@
+# XSH pthread_rwlock_unlock()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Unlocking a lock the caller does not hold is undefined. The priority
+# order for realtime policies (TPS) needs privilege and is not tested;
+# which blocked thread gets the lock is left to the scheduling policy.
+
+assertion  XSH.pthread_rwlock_unlock.001
+anchor     functions/pthread_rwlock_unlock.html#DESCRIPTION
+anchor     functions/pthread_rwlock_unlock.html#RETURN VALUE
+class      required
+since      2008
+says       With two threads holding read locks, one pthread_rwlock_unlock()
+           returns 0 and the lock stays read-locked: a try for a write
+           lock still returns EBUSY and a try for a read lock returns 0;
+           after the second unlock (0) a try for a write lock by a third
+           thread returns 0.
+test       t/001-last-reader.c
+
+assertion  XSH.pthread_rwlock_unlock.002
+anchor     functions/pthread_rwlock_unlock.html#DESCRIPTION
+anchor     functions/pthread_rwlock_unlock.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_rwlock_unlock() of a write lock returns 0 and leaves
+           the lock unlocked: another thread's try for a read lock and a
+           try for a write lock then return 0.
+test       t/002-write-unlock.c
+
+assertion  XSH.pthread_rwlock_unlock.003
+anchor     functions/pthread_rwlock_unlock.html#DESCRIPTION
+class      required
+since      2008
+says       A thread blocked in pthread_rwlock_wrlock() because readers
+           hold the lock does not get it while a reader remains, and gets
+           it (returns 0) after the last reader unlocks.
+test       t/003-blocked-writer.c

@@ -1,0 +1,25 @@
+# XSH pthread_spin_unlock()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Unlocking a lock the caller does not hold is undefined. Which spinning
+# thread gets the lock is unspecified; only that one does is tested.
+
+assertion  XSH.pthread_spin_unlock.001
+anchor     functions/pthread_spin_unlock.html#DESCRIPTION
+anchor     functions/pthread_spin_unlock.html#RETURN VALUE
+class      required
+since      2001
+says       pthread_spin_unlock() of a lock taken with pthread_spin_lock()
+           and of one taken with pthread_spin_trylock() each return 0, and
+           the lock is then free: another thread's pthread_spin_trylock()
+           returned EBUSY before the unlock and returns 0 after it.
+test       t/001-releases.c
+
+assertion  XSH.pthread_spin_unlock.002
+anchor     functions/pthread_spin_unlock.html#DESCRIPTION
+class      required
+since      2001
+says       A thread spinning in pthread_spin_lock() on a lock the main
+           thread holds does not return while it is held, and returns 0
+           (holding the lock) after pthread_spin_unlock().
+test       t/002-spinner-acquires.c

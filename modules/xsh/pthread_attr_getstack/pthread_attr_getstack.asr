@@ -1,0 +1,43 @@
+# XSH pthread_attr_getstack(), pthread_attr_setstack()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The stack regions are page-aligned and page-multiple (alignment
+# requirements are implementation-defined) and are never freed, because
+# the implementation owns an application-managed stack once it is used
+# (XSH 2.9.8). pthread_attr_getstack() before the stack is set is not
+# called (unspecified).
+
+assertion  XSH.pthread_attr_getstack.001
+anchor     functions/pthread_attr_getstack.html#DESCRIPTION
+anchor     functions/pthread_attr_getstack.html#RETURN VALUE
+class      conditional
+when       TSA+TSS
+since      2001
+says       pthread_attr_setstack() with a readable and writable region
+           (page-aligned, a whole number of pages, larger than
+           {PTHREAD_STACK_MIN}) returns 0, and pthread_attr_getstack()
+           then returns 0 and stores that address and size.
+note       EINVAL or EACCES from the set are may-fail errors and leave
+           the test UNRESOLVED.
+test       t/001-round-trip.c
+
+assertion  XSH.pthread_attr_getstack.002
+anchor     functions/pthread_attr_getstack.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.8
+class      conditional
+when       TSA+TSS
+since      2001
+says       A thread created with such an attributes object (pthread_create()
+           returns 0) runs on the region: the address of an automatic
+           variable of its start routine lies inside it.
+note       pthread_create() failing with EAGAIN is UNRESOLVED.
+test       t/002-runs-on-stack.c
+
+assertion  XSH.pthread_attr_getstack.003
+anchor     functions/pthread_attr_getstack.html#ERRORS/EINVAL
+class      conditional
+when       TSA+TSS
+since      2001
+says       pthread_attr_setstack() with a size one less than
+           {PTHREAD_STACK_MIN} returns EINVAL.
+test       t/003-too-small.c

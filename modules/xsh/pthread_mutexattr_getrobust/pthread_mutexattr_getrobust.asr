@@ -1,0 +1,69 @@
+# XSH pthread_mutexattr_getrobust(), pthread_mutexattr_setrobust()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page makes termination of a lock-holding thread a "may" case; only
+# termination of the holding process is tested, with a process-shared
+# mutex in memory shared with a child. pthread_mutex_consistent() has its
+# own module. Waits use pthread_mutex_timedlock() so that a mutex that
+# stalls fails the test instead of hanging it.
+
+assertion  XSH.pthread_mutexattr_getrobust.001
+anchor     functions/pthread_mutexattr_getrobust.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_getrobust.html#RETURN VALUE
+class      required
+since      2008
+says       In a newly initialized attributes object,
+           pthread_mutexattr_getrobust() returns 0 and stores
+           PTHREAD_MUTEX_STALLED.
+test       t/001-default.c
+
+assertion  XSH.pthread_mutexattr_getrobust.002
+anchor     functions/pthread_mutexattr_getrobust.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_getrobust.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_mutexattr_setrobust() with PTHREAD_MUTEX_ROBUST,
+           PTHREAD_MUTEX_STALLED and PTHREAD_MUTEX_ROBUST again each
+           returns 0, and pthread_mutexattr_getrobust() then returns 0
+           and stores the value set.
+test       t/002-round-trip.c
+
+assertion  XSH.pthread_mutexattr_getrobust.003
+anchor     functions/pthread_mutexattr_getrobust.html#ERRORS/EINVAL
+class      required
+since      2008
+says       pthread_mutexattr_setrobust() with a value that is neither
+           PTHREAD_MUTEX_STALLED nor PTHREAD_MUTEX_ROBUST (values far
+           from both) returns EINVAL.
+note       "Valid values include" lets an implementation add values, so
+           the values tried are 0x7ffffff0 and -0x7ffffff0.
+test       t/003-invalid.c
+
+assertion  XSH.pthread_mutexattr_getrobust.004
+anchor     functions/pthread_mutexattr_getrobust.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.3
+class      conditional
+when       TSH
+since      2008
+says       When the child process holding a robust, process-shared mutex
+           (in shared memory) terminates, the parent's next
+           pthread_mutex_timedlock() returns EOWNERDEAD with the mutex
+           locked; after pthread_mutex_consistent() (0) and
+           pthread_mutex_unlock() (0) the mutex locks (0) and unlocks (0)
+           normally.
+test       t/004-owner-dies.c
+timeout    60
+
+assertion  XSH.pthread_mutexattr_getrobust.005
+anchor     functions/pthread_mutexattr_getrobust.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.3
+class      conditional
+when       TSH
+since      2008
+says       When the lock holder's process has terminated and the new
+           owner (which got EOWNERDEAD) unlocks the robust mutex without
+           calling pthread_mutex_consistent(), the mutex is unusable:
+           pthread_mutex_timedlock() and pthread_mutex_trylock() then
+           return ENOTRECOVERABLE.
+test       t/005-not-recoverable.c
+timeout    60

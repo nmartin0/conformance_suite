@@ -1,0 +1,53 @@
+# XSH pthread_rwlock_wrlock(), pthread_rwlock_trywrlock()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Blocking calls are made in helper threads that report through atomic
+# flags; a call that has not returned 10 s after it could have is a
+# failure. A lock the caller already owns may deadlock or give EDEADLK,
+# so it is not tested. Priority order for realtime policies is not tested.
+
+assertion  XSH.pthread_rwlock_wrlock.001
+anchor     functions/pthread_rwlock_wrlock.html#DESCRIPTION
+anchor     functions/pthread_rwlock_wrlock.html#RETURN VALUE
+anchor     functions/pthread_rwlock_wrlock.html#ERRORS/EBUSY
+class      required
+since      2008
+says       pthread_rwlock_trywrlock() on a free lock returns 0; while it
+           is held for writing, and while a thread holds it for reading,
+           and while another thread holds it for writing, another
+           thread's trywrlock returns EBUSY without waiting (and so does
+           its tryrdlock when the lock is write-held); after all unlocks
+           trywrlock returns 0 again.
+test       t/001-trywrlock.c
+
+assertion  XSH.pthread_rwlock_wrlock.002
+anchor     functions/pthread_rwlock_wrlock.html#DESCRIPTION
+anchor     functions/pthread_rwlock_wrlock.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_rwlock_wrlock() on a free lock returns 0 and holds it
+           for writing (another thread's tryrdlock returns EBUSY); after
+           the unlock that tryrdlock returns 0.
+test       t/002-wrlock-acquires.c
+
+assertion  XSH.pthread_rwlock_wrlock.003
+anchor     functions/pthread_rwlock_wrlock.html#DESCRIPTION
+anchor     functions/pthread_rwlock_wrlock.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_rwlock_wrlock() while another thread holds the lock for
+           writing, and while another thread holds it for reading, does
+           not return while it is held (300 ms), and returns 0 after the
+           holder unlocks.
+test       t/003-wrlock-waits.c
+
+assertion  XSH.pthread_rwlock_wrlock.004
+anchor     functions/pthread_rwlock_wrlock.html#DESCRIPTION
+anchor     functions/pthread_rwlock_wrlock.html#ERRORS
+class      required
+since      2008
+says       A thread blocked in pthread_rwlock_wrlock() that takes a caught
+           signal (without SA_RESTART) goes on waiting: it has not
+           returned 300 ms after the handler ran, and after the holder
+           unlocks the call returns 0 (never EINTR).
+test       t/004-signal-wait.c

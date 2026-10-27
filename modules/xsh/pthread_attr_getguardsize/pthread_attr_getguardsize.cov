@@ -1,0 +1,22 @@
+# pthread_attr_getguardsize.cov - every requirement unit on functions/pthread_attr_getguardsize.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:54b2c397     XSH.pthread_attr_getguardsize.002 XSH.pthread_attr_getguardsize.004
+DESCRIPTION:d8755031     XSH.pthread_attr_getguardsize.002 XSH.pthread_attr_getguardsize.004
+DESCRIPTION:2ce46c0f     XSH.pthread_attr_getguardsize.002
+DESCRIPTION:ebcb9692     XSH.pthread_attr_getguardsize.002
+DESCRIPTION:f319cfe4     XSH.pthread_attr_getguardsize.001 XSH.pthread_attr_getguardsize.003
+DESCRIPTION:f8d156f0     XSH.pthread_attr_getguardsize.003
+DESCRIPTION:8d7d2bb4     untestable the size of the guard area cannot be observed portably
+DESCRIPTION:4281c07c     untestable a statement of purpose
+DESCRIPTION:2c7f01db     untestable how the implementation allocates memory is not observable
+DESCRIPTION:d44e9530     untestable overflowing the stack cannot be done safely and the result is an unspecified error
+DESCRIPTION:e44489c3     none a permission
+DESCRIPTION:de315d26     XSH.pthread_attr_getguardsize.002
+DESCRIPTION:e71fd8b8     none  undefined or unspecified behaviour
+DESCRIPTION:a2e495ed     untestable needs a user stack and an overflow, not observable
+DESCRIPTION:c4d33833     none a statement about the application
+DESCRIPTION:75a447b3     none  undefined or unspecified behaviour
+RETURN_VALUE:b668d508    XSH.pthread_attr_getguardsize.001 XSH.pthread_attr_getguardsize.002 XSH.pthread_attr_getguardsize.004
+ERRORS:bff0a951          partial XSH.pthread_attr_getguardsize.002 # the page does not say which values are invalid, so no value is known to fail
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

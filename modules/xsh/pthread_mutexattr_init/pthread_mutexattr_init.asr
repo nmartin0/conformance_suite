@@ -1,0 +1,60 @@
+# XSH pthread_mutexattr_init(), pthread_mutexattr_destroy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The defaults compared are the ones the standard fixes (type, robust,
+# protocol, process-shared); the priority ceiling has none.
+
+assertion  XSH.pthread_mutexattr_init.001
+anchor     functions/pthread_mutexattr_init.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_init.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_mutexattr_init() returns 0, pthread_mutexattr_destroy()
+           of the initialized object returns 0, and the destroyed object
+           can be initialized again (0) and destroyed again (0).
+test       t/001-init-destroy.c
+
+assertion  XSH.pthread_mutexattr_init.002
+anchor     functions/pthread_mutexattr_init.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_gettype.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_getrobust.html#DESCRIPTION
+class      required
+since      2008
+says       pthread_mutexattr_init() sets every attribute to its default: on
+           storage holding other bytes (0x00, 0xFF, 0xA5), and on an
+           object that was changed (ERRORCHECK, ROBUST) and destroyed,
+           the type reads PTHREAD_MUTEX_DEFAULT and the robust attribute
+           PTHREAD_MUTEX_STALLED.
+test       t/002-defaults.c
+
+assertion  XSH.pthread_mutexattr_init.003
+anchor     functions/pthread_mutexattr_init.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_getprotocol.html#DESCRIPTION
+class      conditional
+when       TPP|TPI|RPP|RPI
+since      2008
+says       As in 002, the protocol attribute of a new or re-initialized
+           object reads PTHREAD_PRIO_NONE.
+test       t/003-default-protocol.c
+
+assertion  XSH.pthread_mutexattr_init.004
+anchor     functions/pthread_mutexattr_init.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_getpshared.html#DESCRIPTION
+class      conditional
+when       TSH
+since      2008
+says       As in 002, the process-shared attribute of a new or
+           re-initialized object reads PTHREAD_PROCESS_PRIVATE.
+test       t/004-default-pshared.c
+
+assertion  XSH.pthread_mutexattr_init.005
+anchor     functions/pthread_mutexattr_init.html#DESCRIPTION
+class      required
+since      2008
+says       A mutex initialized from an attributes object keeps its type
+           when the object is changed and destroyed afterwards: a
+           recursive mutex (attributes then set to ERRORCHECK) can be
+           locked twice by its owner, an error-checking mutex (attributes
+           then set to RECURSIVE) gives EDEADLK to its owner's second
+           lock.
+test       t/005-mutex-unaffected.c

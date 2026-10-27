@@ -1,0 +1,21 @@
+# pthread_mutexattr_getrobust.cov - every requirement unit on functions/pthread_mutexattr_getrobust.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:7f04b81e     XSH.pthread_mutexattr_getrobust.001 XSH.pthread_mutexattr_getrobust.002
+DESCRIPTION:f0d80018     XSH.pthread_mutexattr_getrobust.001 XSH.pthread_mutexattr_getrobust.002
+DESCRIPTION:64e811c8     XSH.pthread_mutexattr_getrobust.002
+DESCRIPTION:e69d351c     untestable  a stalled mutex stays stuck, which a test cannot wait out
+DESCRIPTION:d31b63d7     untestable  a stalled mutex stays stuck, which a test cannot wait out
+DESCRIPTION:8ba10a44     XSH.pthread_mutexattr_getrobust.001
+DESCRIPTION:7f2be6c8     XSH.pthread_mutexattr_getrobust.004
+DESCRIPTION:722e4ed8     none  a permission
+DESCRIPTION:42174f9d     XSH.pthread_mutexattr_getrobust.004
+DESCRIPTION:8a2b670b     XSH.pthread_mutexattr_getrobust.004
+DESCRIPTION:be4b4fb7     XSH.pthread_mutexattr_getrobust.005
+DESCRIPTION:0c9ebd86     none  destroy semantics are not tested
+DESCRIPTION:be2df577     none  undefined or unspecified behaviour
+RETURN_VALUE:93b63394    XSH.pthread_mutexattr_getrobust.001 XSH.pthread_mutexattr_getrobust.002
+RETURN_VALUE:6be3e8f2    XSH.pthread_mutexattr_getrobust.003
+RETURN_VALUE:300257b4    XSH.pthread_mutexattr_getrobust.002
+ERRORS:913802c9          XSH.pthread_mutexattr_getrobust.003
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

@@ -1,0 +1,28 @@
+# XSH pthread_attr_getschedpolicy(), pthread_attr_setschedpolicy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The default policy is not specified. The priority-order acquisition of
+# mutexes by threads of the realtime policies cannot be observed without
+# privilege and is not tested.
+
+assertion  XSH.pthread_attr_getschedpolicy.001
+anchor     functions/pthread_attr_getschedpolicy.html#DESCRIPTION
+anchor     functions/pthread_attr_getschedpolicy.html#RETURN VALUE
+class      conditional
+when       TPS
+since      2001
+says       pthread_attr_setschedpolicy() with each of SCHED_FIFO,
+           SCHED_RR and SCHED_OTHER (the policies a system must
+           support) returns 0, and pthread_attr_getschedpolicy() then
+           returns 0 and stores that policy.
+test       t/001-round-trip.c
+
+assertion  XSH.pthread_attr_getschedpolicy.002
+anchor     functions/pthread_attr_getschedpolicy.html#RETURN VALUE
+class      conditional
+when       TPS
+since      2001
+says       pthread_attr_getschedpolicy() on a newly initialized
+           attributes object returns 0.
+note       The default policy is not compared.
+test       t/002-default.c

@@ -1,0 +1,77 @@
+# XSH pthread_mutex_clocklock(), pthread_mutex_timedlock()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# A mutex another thread holds is locked by the main thread; the timed
+# call is made in a helper thread, which gets 10 s before the test fails.
+# Robust-mutex results of these calls (EOWNERDEAD, ENOTRECOVERABLE) are
+# tested with xsh/pthread_mutexattr_getrobust; priority protocols need
+# realtime privilege and are not tested.
+
+assertion  XSH.pthread_mutex_clocklock.001
+anchor     functions/pthread_mutex_clocklock.html#DESCRIPTION
+anchor     functions/pthread_mutex_clocklock.html#RETURN VALUE
+class      required
+since      2008
+says       On an unlocked mutex, pthread_mutex_timedlock() with an
+           absolute time long past, and pthread_mutex_clocklock() with
+           CLOCK_REALTIME and with CLOCK_MONOTONIC and a time long past,
+           each return 0 and lock it (another thread's trylock gives
+           EBUSY until it is unlocked): a lock that is possible at once
+           does not time out.
+test       t/001-immediate.c
+
+assertion  XSH.pthread_mutex_clocklock.002
+anchor     functions/pthread_mutex_clocklock.html#DESCRIPTION
+anchor     functions/pthread_mutex_clocklock.html#ERRORS/ETIMEDOUT
+class      required
+since      2008
+says       pthread_mutex_timedlock() of a mutex another thread holds, with
+           an absolute CLOCK_REALTIME time 150 ms ahead, returns
+           ETIMEDOUT, and not before that time has passed on
+           CLOCK_REALTIME; the mutex is still locked by its holder.
+test       t/002-timedlock-timeout.c
+
+assertion  XSH.pthread_mutex_clocklock.003
+anchor     functions/pthread_mutex_clocklock.html#DESCRIPTION
+anchor     functions/pthread_mutex_clocklock.html#ERRORS/ETIMEDOUT
+class      required
+since      2024
+says       pthread_mutex_clocklock() of a mutex another thread holds, with
+           CLOCK_REALTIME and with CLOCK_MONOTONIC and an absolute time
+           150 ms ahead on that clock, returns ETIMEDOUT, and not before
+           that time has passed on that clock.
+test       t/003-clocklock-timeout.c
+
+assertion  XSH.pthread_mutex_clocklock.004
+anchor     functions/pthread_mutex_clocklock.html#ERRORS/EINVAL
+class      required
+since      2008
+says       When the call would block, a tv_nsec of -1 or of 1000000000
+           makes pthread_mutex_timedlock() and pthread_mutex_clocklock()
+           (CLOCK_REALTIME and CLOCK_MONOTONIC) return EINVAL, and a
+           clock ID that clock_gettime() rejects with EINVAL makes
+           pthread_mutex_clocklock() return EINVAL.
+note       The unknown clock is found by trying a few IDs with
+           clock_gettime(); none rejected leaves that part unchecked
+           (UNRESOLVED only if no nanosecond case ran, which cannot
+           happen).
+test       t/004-einval.c
+
+assertion  XSH.pthread_mutex_clocklock.005
+anchor     functions/pthread_mutex_clocklock.html#DESCRIPTION
+class      required
+since      2008
+says       A pthread_mutex_timedlock() (limit 10 s ahead) waiting for a
+           mutex another thread holds returns 0, owning the mutex, once
+           the holder unlocks it 150 ms later.
+test       t/005-woken-by-unlock.c
+
+assertion  XSH.pthread_mutex_clocklock.006
+anchor     functions/pthread_mutex_clocklock.html#ERRORS/EDEADLK
+class      required
+since      2008
+says       On an error-checking mutex the calling thread already owns,
+           pthread_mutex_timedlock() and pthread_mutex_clocklock() return
+           EDEADLK; on a recursive mutex it owns they return 0 and the
+           mutex then needs the matching number of unlocks.
+test       t/006-owner-relock.c

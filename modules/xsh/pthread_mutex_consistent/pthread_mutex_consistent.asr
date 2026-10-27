@@ -1,0 +1,43 @@
+# XSH pthread_mutex_consistent()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The inconsistent state is produced by terminating a child process that
+# holds a robust, process-shared mutex in shared memory (TSH); locks use
+# pthread_mutex_timedlock() with a 10 s limit so that a stalled mutex
+# fails the test instead of hanging it. Termination of a lock-holding
+# thread is a "may" case and is not tested.
+
+assertion  XSH.pthread_mutex_consistent.001
+anchor     functions/pthread_mutex_consistent.html#ERRORS/EINVAL
+class      required
+since      2008
+says       pthread_mutex_consistent() returns EINVAL for a mutex that is
+           not robust (default attributes, unlocked and locked), and for a
+           robust mutex that does not protect an inconsistent state
+           (never owned by a terminated process; unlocked and locked).
+test       t/001-einval.c
+
+assertion  XSH.pthread_mutex_consistent.002
+anchor     functions/pthread_mutex_consistent.html#DESCRIPTION
+anchor     functions/pthread_mutex_consistent.html#RETURN VALUE
+class      conditional
+when       TSH
+since      2008
+says       After the owner process of a robust mutex terminated and the
+           parent's lock returned EOWNERDEAD, pthread_mutex_consistent()
+           returns 0; a second call then returns EINVAL (the state is
+           consistent); after unlock the mutex locks and unlocks normally
+           (0, 0, 0).
+test       t/002-consistent.c
+timeout    60
+
+assertion  XSH.pthread_mutex_consistent.003
+anchor     functions/pthread_mutex_consistent.html#DESCRIPTION
+class      conditional
+when       TSH
+since      2008
+says       When the process that acquired a robust mutex with EOWNERDEAD
+           terminates before calling pthread_mutex_consistent() or
+           pthread_mutex_unlock(), the next lock returns EOWNERDEAD again.
+test       t/003-second-owner-dies.c
+timeout    60

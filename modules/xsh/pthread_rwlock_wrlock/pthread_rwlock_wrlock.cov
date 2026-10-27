@@ -1,0 +1,16 @@
+# pthread_rwlock_wrlock.cov - every requirement unit on functions/pthread_rwlock_wrlock.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:c8c5f501     XSH.pthread_rwlock_wrlock.001
+DESCRIPTION:1614045c     XSH.pthread_rwlock_wrlock.002 XSH.pthread_rwlock_wrlock.003
+DESCRIPTION:b9d4a059     XSH.pthread_rwlock_wrlock.002
+DESCRIPTION:0b6c10ac     XSH.pthread_rwlock_wrlock.003
+DESCRIPTION:00beb9f2     none deadlock or EDEADLK are both allowed, so neither is required
+DESCRIPTION:68e84a37     none  undefined or unspecified behaviour
+DESCRIPTION:aa8fb1ca     XSH.pthread_rwlock_wrlock.004
+RETURN_VALUE:b1c90006    XSH.pthread_rwlock_wrlock.001
+RETURN_VALUE:27ed31a1    none no error is named for success
+RETURN_VALUE:13cb1090    XSH.pthread_rwlock_wrlock.002 XSH.pthread_rwlock_wrlock.003
+ERRORS:1ee3c994          XSH.pthread_rwlock_wrlock.001
+ERRORS:cd966fee          optional
+ERRORS:0a906269          XSH.pthread_rwlock_wrlock.004

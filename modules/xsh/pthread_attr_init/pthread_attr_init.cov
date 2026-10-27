@@ -1,0 +1,14 @@
+# pthread_attr_init.cov - every requirement unit on functions/pthread_attr_init.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:634fff03     XSH.pthread_attr_init.001
+DESCRIPTION:62511b30     none  undefined or unspecified behaviour
+DESCRIPTION:f4682d83     none  reinitializing a destroyed object is exercised by .001; the rest is undefined
+DESCRIPTION:397e5f10     XSH.pthread_attr_init.002
+DESCRIPTION:8f0dc9e7     XSH.pthread_attr_init.003
+DESCRIPTION:e7de3cb7     XSH.pthread_attr_init.003
+DESCRIPTION:dfc88cd4     none  undefined or unspecified behaviour
+DESCRIPTION:8337c967     none  undefined or unspecified behaviour
+RETURN_VALUE:975a9ef8    XSH.pthread_attr_init.001
+ERRORS:430f2feb          untestable  memory exhaustion cannot be provoked
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

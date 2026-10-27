@@ -1,0 +1,49 @@
+# XSH pthread_rwlock_clockwrlock(), pthread_rwlock_timedwrlock()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The timed call is made in a helper thread, which gets 10 s before the
+# test fails. Reader/writer priority is unspecified and not tested.
+
+assertion  XSH.pthread_rwlock_clockwrlock.001
+anchor     functions/pthread_rwlock_clockwrlock.html#DESCRIPTION
+anchor     functions/pthread_rwlock_clockwrlock.html#RETURN VALUE
+class      required
+since      2008
+says       On an unlocked lock, pthread_rwlock_timedwrlock() with an
+           absolute time long past, and pthread_rwlock_clockwrlock() with
+           CLOCK_REALTIME and with CLOCK_MONOTONIC and a time long past,
+           each return 0 and take the write lock: a lock that can be had
+           at once does not time out.
+test       t/001-immediate.c
+
+assertion  XSH.pthread_rwlock_clockwrlock.002
+anchor     functions/pthread_rwlock_clockwrlock.html#DESCRIPTION
+anchor     functions/pthread_rwlock_clockwrlock.html#ERRORS/ETIMEDOUT
+class      required
+since      2008
+says       pthread_rwlock_timedwrlock() on a lock another thread holds for
+           writing, and on one another thread holds for reading, with an
+           absolute CLOCK_REALTIME time 150 ms ahead, returns ETIMEDOUT
+           and not before that time has passed on CLOCK_REALTIME.
+test       t/002-timedlock-timeout.c
+
+assertion  XSH.pthread_rwlock_clockwrlock.003
+anchor     functions/pthread_rwlock_clockwrlock.html#DESCRIPTION
+anchor     functions/pthread_rwlock_clockwrlock.html#ERRORS/ETIMEDOUT
+class      required
+since      2024
+says       pthread_rwlock_clockwrlock() on a lock held by another thread,
+           with CLOCK_REALTIME and with CLOCK_MONOTONIC and an absolute
+           time 150 ms ahead on that clock, returns ETIMEDOUT and not
+           before the time has passed on that clock.
+test       t/003-clocklock-timeout.c
+
+assertion  XSH.pthread_rwlock_clockwrlock.004
+anchor     functions/pthread_rwlock_clockwrlock.html#DESCRIPTION
+anchor     functions/pthread_rwlock_clockwrlock.html#RETURN VALUE
+class      required
+since      2008
+says       A timed write lock that waits on a locked lock returns 0, not
+           ETIMEDOUT, when the lock is released before the (generous)
+           time passes.
+test       t/004-released-while-waiting.c

@@ -1,0 +1,28 @@
+# XSH pthread_rwlock_init(), pthread_rwlock_destroy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# How read and write locks exclude each other is tested in
+# xsh/pthread_rwlock_rdlock. Destroying a held lock, re-initializing an
+# initialized one and using an uninitialized one are undefined.
+
+assertion  XSH.pthread_rwlock_init.001
+anchor     functions/pthread_rwlock_init.html#DESCRIPTION
+anchor     functions/pthread_rwlock_init.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_rwlock_init() with a null attributes pointer returns 0
+           and gives an unlocked lock (a try for a write lock, and a try
+           for a read lock, each return 0 and can be unlocked);
+           pthread_rwlock_destroy() returns 0, and the destroyed object
+           can be initialized again (0) and locked.
+test       t/001-init-destroy.c
+
+assertion  XSH.pthread_rwlock_init.002
+anchor     functions/pthread_rwlock_init.html#DESCRIPTION
+class      required
+since      2008
+says       A lock made with PTHREAD_RWLOCK_INITIALIZER is unlocked and
+           works: a write lock held by the calling thread makes another
+           thread's try for a read lock return EBUSY, and after the
+           unlock that try returns 0.
+test       t/002-static-initializer.c

@@ -1,0 +1,12 @@
+# pthread_mutex_consistent.cov - every requirement unit on functions/pthread_mutex_consistent.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:dc517a26     XSH.pthread_mutex_consistent.002
+DESCRIPTION:510ff774     XSH.pthread_mutex_consistent.002 XSH.pthread_mutex_consistent.003
+DESCRIPTION:6189e24a     XSH.pthread_mutex_consistent.002
+DESCRIPTION:851cb429     XSH.pthread_mutex_consistent.003
+DESCRIPTION:645b6957     none  undefined or unspecified behaviour
+RETURN_VALUE:ca5e8778    XSH.pthread_mutex_consistent.002
+RETURN_VALUE:6be3e8f2    XSH.pthread_mutex_consistent.001
+ERRORS:65a9c520          XSH.pthread_mutex_consistent.001 XSH.pthread_mutex_consistent.002
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

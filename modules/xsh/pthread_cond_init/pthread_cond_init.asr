@@ -1,0 +1,37 @@
+# XSH pthread_cond_init(), pthread_cond_destroy()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Blocking and waking are tested in xsh/pthread_cond_wait and
+# xsh/pthread_cond_signal; here only that an initialized variable works.
+# Destroying a variable that threads wait on and re-initializing an
+# initialized one are undefined and not tested. Waits are timed (10 s).
+
+assertion  XSH.pthread_cond_init.001
+anchor     functions/pthread_cond_init.html#DESCRIPTION
+anchor     functions/pthread_cond_init.html#RETURN VALUE
+class      required
+since      2008
+says       pthread_cond_init() with a null attributes pointer returns 0
+           and the variable works: a thread waiting on it with
+           pthread_cond_timedwait() (10 s limit) is woken by
+           pthread_cond_signal() from another thread before the limit.
+test       t/001-init-null-attr.c
+
+assertion  XSH.pthread_cond_init.002
+anchor     functions/pthread_cond_init.html#DESCRIPTION
+anchor     functions/pthread_cond_init.html#RETURN VALUE
+class      required
+since      2008
+says       A variable made with PTHREAD_COND_INITIALIZER works the same
+           way: a waiting thread is woken by pthread_cond_signal().
+test       t/002-static-initializer.c
+
+assertion  XSH.pthread_cond_init.003
+anchor     functions/pthread_cond_init.html#DESCRIPTION
+anchor     functions/pthread_cond_init.html#RETURN VALUE
+class      required
+since      2008
+says       A used condition variable with no waiting threads can be
+           destroyed (pthread_cond_destroy() returns 0), and initialized
+           again (0), after which it works.
+test       t/003-destroy-reinit.c

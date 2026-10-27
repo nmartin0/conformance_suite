@@ -1,0 +1,66 @@
+# XSH pthread_mutexattr_getprotocol(), pthread_mutexattr_setprotocol()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The scheduling effects of the protocols (priority inheritance and
+# ceiling) need realtime scheduling and privilege to observe and are not
+# tested.
+
+assertion  XSH.pthread_mutexattr_getprotocol.001
+anchor     functions/pthread_mutexattr_getprotocol.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_getprotocol.html#RETURN VALUE
+class      conditional
+when       TPP|TPI|RPP|RPI
+since      2008
+says       In a newly initialized attributes object,
+           pthread_mutexattr_getprotocol() returns 0 and stores
+           PTHREAD_PRIO_NONE.
+test       t/001-default.c
+
+assertion  XSH.pthread_mutexattr_getprotocol.002
+anchor     functions/pthread_mutexattr_getprotocol.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_getprotocol.html#RETURN VALUE
+class      conditional
+when       TPP|TPI|RPP|RPI
+since      2008
+says       pthread_mutexattr_setprotocol() with PTHREAD_PRIO_NONE returns
+           0, and pthread_mutexattr_getprotocol() then returns 0 and
+           stores PTHREAD_PRIO_NONE.
+test       t/002-none.c
+
+assertion  XSH.pthread_mutexattr_getprotocol.003
+anchor     functions/pthread_mutexattr_getprotocol.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_getprotocol.html#RETURN VALUE
+class      conditional
+when       TPI|RPI
+since      2008
+says       pthread_mutexattr_setprotocol() with PTHREAD_PRIO_INHERIT
+           returns 0, and pthread_mutexattr_getprotocol() then returns 0
+           and stores PTHREAD_PRIO_INHERIT.
+note       EPERM (privilege) leaves the test UNRESOLVED.
+test       t/003-inherit.c
+
+assertion  XSH.pthread_mutexattr_getprotocol.004
+anchor     functions/pthread_mutexattr_getprotocol.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_getprotocol.html#RETURN VALUE
+class      conditional
+when       TPP|RPP
+since      2008
+says       pthread_mutexattr_setprotocol() with PTHREAD_PRIO_PROTECT
+           returns 0, and pthread_mutexattr_getprotocol() then returns 0
+           and stores PTHREAD_PRIO_PROTECT.
+note       EPERM (privilege) leaves the test UNRESOLVED.
+test       t/004-protect.c
+
+assertion  XSH.pthread_mutexattr_getprotocol.005
+anchor     functions/pthread_mutexattr_getprotocol.html#DESCRIPTION
+anchor     functions/pthread_mutexattr_getprotocol.html#ERRORS
+class      disputed
+when       TPP|TPI|RPP|RPI
+since      2008
+says       pthread_mutexattr_setprotocol() with a value that is none of
+           the protocol constants fails, with ENOTSUP or EINVAL.
+note       disputed (Q-158): an unsupported value is a shall-fail ENOTSUP,
+           an invalid value a may-fail EINVAL, and the page does not say
+           which a value that is no constant is; read as unsupported, it
+           must fail, read as invalid, it may be accepted.
+test       t/005-invalid.c

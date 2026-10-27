@@ -1,0 +1,30 @@
+# XSH pthread_attr_getscope(), pthread_attr_setscope()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The default scope is implementation-defined (XSH 2.9.4); a system
+# supports one scope or both.
+
+assertion  XSH.pthread_attr_getscope.001
+anchor     functions/pthread_attr_getscope.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.4
+class      conditional
+when       TPS
+since      2001
+says       On a newly initialized attributes object,
+           pthread_attr_getscope() returns 0 and stores
+           PTHREAD_SCOPE_SYSTEM or PTHREAD_SCOPE_PROCESS.
+test       t/001-default.c
+
+assertion  XSH.pthread_attr_getscope.002
+anchor     functions/pthread_attr_getscope.html#DESCRIPTION
+anchor     functions/pthread_attr_getscope.html#ERRORS/ENOTSUP
+anchor     functions/V2_chap02.html#2.9.4
+class      conditional
+when       TPS
+since      2001
+says       pthread_attr_setscope() with each of PTHREAD_SCOPE_SYSTEM and
+           PTHREAD_SCOPE_PROCESS either returns 0, after which
+           pthread_attr_getscope() returns 0 and stores that scope, or
+           returns ENOTSUP (an unsupported value); at least one of the
+           two is supported.
+test       t/002-set-get.c

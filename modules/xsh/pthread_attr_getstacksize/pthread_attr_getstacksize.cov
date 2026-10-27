@@ -1,0 +1,10 @@
+# pthread_attr_getstacksize.cov - every requirement unit on functions/pthread_attr_getstacksize.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:77b1bc09     XSH.pthread_attr_getstacksize.001 XSH.pthread_attr_getstacksize.002
+DESCRIPTION:fa12449e     XSH.pthread_attr_getstacksize.004
+DESCRIPTION:9215761e     none  undefined or unspecified behaviour
+RETURN_VALUE:6018d9ff    XSH.pthread_attr_getstacksize.001 XSH.pthread_attr_getstacksize.002 XSH.pthread_attr_getstacksize.003 XSH.pthread_attr_getstacksize.004
+RETURN_VALUE:2bf556de    XSH.pthread_attr_getstacksize.001 XSH.pthread_attr_getstacksize.002
+ERRORS:d2584f77          partial XSH.pthread_attr_getstacksize.003 # a size above a system-imposed limit is not known to exist
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

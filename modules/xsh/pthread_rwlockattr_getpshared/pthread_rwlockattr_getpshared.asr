@@ -1,0 +1,44 @@
+# XSH pthread_rwlockattr_getpshared(), pthread_rwlockattr_setpshared()
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# An out-of-range value is a may-fail error and is not tested.
+
+assertion  XSH.pthread_rwlockattr_getpshared.001
+anchor     functions/pthread_rwlockattr_getpshared.html#DESCRIPTION
+anchor     functions/pthread_rwlockattr_getpshared.html#RETURN VALUE
+class      conditional
+when       TSH
+since      2001
+says       In a newly initialized attributes object,
+           pthread_rwlockattr_getpshared() returns 0 and stores
+           PTHREAD_PROCESS_PRIVATE.
+test       t/001-default.c
+
+assertion  XSH.pthread_rwlockattr_getpshared.002
+anchor     functions/pthread_rwlockattr_getpshared.html#DESCRIPTION
+anchor     functions/pthread_rwlockattr_getpshared.html#RETURN VALUE
+class      conditional
+when       TSH
+since      2001
+says       pthread_rwlockattr_setpshared() with PTHREAD_PROCESS_SHARED,
+           PTHREAD_PROCESS_PRIVATE and PTHREAD_PROCESS_SHARED again each
+           returns 0, and pthread_rwlockattr_getpshared() then returns 0
+           and stores the value set.
+test       t/002-round-trip.c
+
+assertion  XSH.pthread_rwlockattr_getpshared.003
+anchor     functions/pthread_rwlockattr_getpshared.html#DESCRIPTION
+anchor     functions/V2_chap02.html#2.9.9
+class      conditional
+when       TSH
+since      2001
+says       A read-write lock initialized with PTHREAD_PROCESS_SHARED in
+           memory shared with a child process works between the two:
+           while the parent holds a write lock, the child's
+           pthread_rwlock_tryrdlock() returns EBUSY; once the parent has
+           released it, the child's tryrdlock succeeds (0) and, while the
+           child holds the read lock, the parent's
+           pthread_rwlock_trywrlock() returns EBUSY; after the child
+           unlocks, the parent can take the write lock (0).
+test       t/003-between-processes.c
+timeout    60

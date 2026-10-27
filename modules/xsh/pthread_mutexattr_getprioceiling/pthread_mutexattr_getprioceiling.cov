@@ -1,0 +1,14 @@
+# pthread_mutexattr_getprioceiling.cov - every requirement unit on functions/pthread_mutexattr_getprioceiling.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:4d282352     XSH.pthread_mutexattr_getprioceiling.001
+DESCRIPTION:aabf65f7     XSH.pthread_mutexattr_getprioceiling.002
+DESCRIPTION:194bd60d     XSH.pthread_mutexattr_getprioceiling.001
+DESCRIPTION:d379a1a2     none  the effect on execution priority needs realtime privilege and cannot be observed portably
+DESCRIPTION:b3327e52     none  a requirement on the application
+DESCRIPTION:e7f9e3bd     XSH.pthread_mutexattr_getprioceiling.001
+DESCRIPTION:486325f9     none  undefined or unspecified behaviour
+RETURN_VALUE:5ac3fcf4    XSH.pthread_mutexattr_getprioceiling.001 XSH.pthread_mutexattr_getprioceiling.002
+ERRORS:23c79e53          optional
+ERRORS:155f13a4          optional
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

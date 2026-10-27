@@ -1,0 +1,21 @@
+# pthread_barrier_init.cov - every requirement unit on functions/pthread_barrier_init.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:bd3aaf64     XSH.pthread_barrier_init.001 XSH.pthread_barrier_init.002
+DESCRIPTION:379083ce     none  undefined or unspecified behaviour
+DESCRIPTION:9e3f2916     none  a permission
+DESCRIPTION:7499be52     none  undefined or unspecified behaviour
+DESCRIPTION:2d6a137c     XSH.pthread_barrier_init.001 XSH.pthread_barrier_init.002
+DESCRIPTION:55abd87c     XSH.pthread_barrier_init.001
+DESCRIPTION:0fa9fde1     none  undefined or unspecified behaviour
+DESCRIPTION:9064802e     none  undefined or unspecified behaviour
+DESCRIPTION:696976b4     none  undefined or unspecified behaviour
+DESCRIPTION:6476404d     none  barrier waiting is tested in xsh/pthread_barrier_wait
+DESCRIPTION:89707488     XSH.pthread_barrier_init.003
+DESCRIPTION:ec1cf4a0     none  the contents are undefined after a failure
+DESCRIPTION:c14f5ce5     none  a cross-reference
+RETURN_VALUE:c5040278    XSH.pthread_barrier_init.001 XSH.pthread_barrier_init.002
+ERRORS:071725e3          untestable  resource exhaustion cannot be provoked
+ERRORS:050ee19d          XSH.pthread_barrier_init.003
+ERRORS:5dfdfab1          untestable  memory exhaustion cannot be provoked
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them

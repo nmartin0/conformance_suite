@@ -1,0 +1,17 @@
+# pthread_attr_getstack.cov - every requirement unit on functions/pthread_attr_getstack.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:06cf00b7     XSH.pthread_attr_getstack.001
+DESCRIPTION:6014c1a7     XSH.pthread_attr_getstack.002
+DESCRIPTION:c51d9dd4     XSH.pthread_attr_getstack.001 XSH.pthread_attr_getstack.002
+DESCRIPTION:6c1de245     XSH.pthread_attr_getstack.003
+DESCRIPTION:adaca3f2     none  undefined or unspecified behaviour
+DESCRIPTION:42432bde     XSH.pthread_attr_getstack.002
+DESCRIPTION:7f64fd8c     none  undefined or unspecified behaviour
+DESCRIPTION:97cfd70d     none  undefined or unspecified behaviour
+RETURN_VALUE:a5604f04    XSH.pthread_attr_getstack.001 XSH.pthread_attr_getstack.002 XSH.pthread_attr_getstack.003
+RETURN_VALUE:56df3903    XSH.pthread_attr_getstack.001
+ERRORS:89878fb0          XSH.pthread_attr_getstack.003
+ERRORS:70c12d31          optional
+ERRORS:22de5f00          optional
+ERRORS:0a906269          untestable  the functions do not wait, so no signal can interrupt them
