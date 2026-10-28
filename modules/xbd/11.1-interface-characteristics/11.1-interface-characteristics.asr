@@ -532,10 +532,14 @@ anchor     basedefs/V1_chap11.html#11.1.7
 class      conditional
 when       BASE|XSI
 since      1988
-says       With MIN 3 and TIME 0, two queued bytes do not satisfy a read (an
-           alarm after one second interrupts it: -1 with EINTR); after a
-           third byte the read returns abc.
-note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+says       With MIN 3 and TIME 0, two queued bytes do not satisfy a read: it
+           stays blocked until an alarm after one second interrupts it (-1
+           with EINTR, or the two bytes as a read cut short); after a third
+           byte (or three fresh bytes) the read returns exactly the queued
+           bytes.
+note       The read page lets a read that a signal ends after it took some
+           data return the count, so both endings of the interrupted read
+           are accepted; it may not end before the alarm. XSI only for the pseudo-terminal set-up (posix_openpt() and its
            companions are XSI); the requirement itself is Base. A set-up
            that is not available is UNRESOLVED, or NOTINUSE when the
            facility is absent.

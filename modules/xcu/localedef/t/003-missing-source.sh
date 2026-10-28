@@ -16,5 +16,7 @@ pc_test
 localedef -i "$d/nosuchsource" "$d/loc" >"$d/out" 2>"$d/err" </dev/null
 rc=$?
 [ "$rc" -gt 0 ] || pc_fail "localedef with a missing source file exited with status 0"
+# an empty directory left at NAME holds no locale data and is accepted (see the note of the assertion)
+rmdir "$d/loc" 2>/dev/null
 [ -e "$d/loc" ] && pc_fail "a locale was created although the source file was missing"
 pc_pass

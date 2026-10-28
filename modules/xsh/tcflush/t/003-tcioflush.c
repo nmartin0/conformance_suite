@@ -123,6 +123,26 @@ static void raw_mode(int s, int vmin, int vtime)
 		pc_unresolved("tcsetattr failed: %s", pc_errname(errno));
 }
 
+/*
+ * Output is suspended: a system may hold the writer until output resumes
+ * instead of queuing the bytes. The write is therefore made without
+ * blocking, and a system that does not queue it leaves the test unable to
+ * go on (UNRESOLVED), not hung.
+ */
+static void write_held(int s, const char *p, size_t n)
+{
+	int fl = fcntl(s, F_GETFL);
+	ssize_t r;
+	int e;
+
+	NEED(fl != -1 && fcntl(s, F_SETFL, fl | O_NONBLOCK) == 0, "fcntl failed: %s", pc_errname(errno));
+	r = write(s, p, n);
+	e = errno;
+	NEED(fcntl(s, F_SETFL, fl) == 0, "fcntl failed: %s", pc_errname(errno));
+	NEED(r == (ssize_t)n, "output written while suspended is not queued (write returned %ld, errno %s)", (long)r,
+	     r < 0 ? pc_errname(e) : "unchanged");
+}
+
 int main(void)
 {
 	char b[16];
@@ -134,7 +154,7 @@ int main(void)
 	NEED(write(m, "in", 2) == 2, "write to the manager failed");
 	NEED(wait_in(s, 2000), "the input did not arrive");
 	NEED(tcflow(s, TCOOFF) == 0, "tcflow(TCOOFF) failed: %s", pc_errname(errno));
-	NEED(write(s, "abc", 3) == 3, "write failed");
+	write_held(s, "abc", 3);
 	NEED(!wait_in(m, 300), "the suspended output was transmitted");
 	pc_test();
 	pc_check(tcflush(s, TCIOFLUSH) == 0, "tcflush() failed: %s", pc_errname(errno));

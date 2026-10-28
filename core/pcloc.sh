@@ -342,6 +342,38 @@ pcloc__localedef() {
 	*) pc_unresolved "localedef refused the test locale source $2 (status $pcloc_rc)" ;;
 	esac
 	[ -e "$3" ] || pc_unresolved "localedef reported success but nothing exists at $3"
+	pcloc__verify "$3" "$4"
+}
+
+# pcloc__verify LOC TAG : what localedef made must be in effect when named as
+# a locale, or a test that uses it would blame the utility under test for a
+# locale that was never selected (localedef may issue warnings, status 1, and
+# still leave a locale that does not hold what the source said, and a system
+# may not accept the name of the locale). The locale utility is asked for the
+# radix character of the single-byte locale (a comma, the POSIX locale has a
+# period) and, for the multibyte one, for a charmap name that differs from the
+# POSIX locale's. A system that leaves the values out (the page lets it) gives
+# nothing to check, so the locale is trusted then.
+pcloc__verify() {
+	command -v locale >/dev/null 2>&1 || return 0
+	case $2 in
+	mb)
+		pcloc_vg=$(LC_ALL=$1 locale charmap 2>/dev/null </dev/null)
+		pcloc_vp=$(LC_ALL=POSIX locale charmap 2>/dev/null </dev/null)
+		if [ -n "$pcloc_vg" ] && [ "$pcloc_vg" = "$pcloc_vp" ]; then
+			pc_unresolved "setup: the multibyte locale made by localedef is not in effect (charmap '$pcloc_vg', as in the POSIX locale)"
+		fi
+		;;
+	*)
+		pcloc_vg=$(LC_ALL=$1 locale -k decimal_point 2>/dev/null </dev/null)
+		pcloc_vg=${pcloc_vg#*=}
+		pcloc_vg=${pcloc_vg#\"}
+		pcloc_vg=${pcloc_vg%\"}
+		if [ -n "$pcloc_vg" ] && [ "$pcloc_vg" != , ]; then
+			pc_unresolved "setup: the locale made by localedef is not in effect (its radix character reads '$pcloc_vg', not a comma)"
+		fi
+		;;
+	esac
 }
 
 # pcloc_make [y|t] : make the single-byte locale; PCLOC is its name. With the

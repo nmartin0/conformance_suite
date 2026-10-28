@@ -39,7 +39,12 @@ int main(void)
 	for (i = 0; i < 6; i++)
 		lc_env_set(v[i], "C");
 	lc_env_set("LANG", LC_NOSUCH);
-	pc_check(setlocale(LC_ALL, "") != NULL, "setlocale(LC_ALL, \"\") failed with every LC_* set to C");
+	/*
+	 * Category by category: LC_ALL would also consult LANG for any
+	 * further, implementation-defined category that has no variable set.
+	 */
+	for (i = 0; i < 6; i++)
+		pc_check(setlocale(lc_cat[i], "") != NULL, "setlocale(%s, \"\") failed with %s set to C", v[i], v[i]);
 	lc_check_cat((locale_t)0, LC_ALL, "LC_* = C");
 
 	/* LANG alone. */

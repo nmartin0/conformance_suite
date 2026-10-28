@@ -1,0 +1,2026 @@
+root FAIL        XBD.11.1-interface-characteristics.004 the first leader's tcgetpgrp() returned 741, not its own group -1
+root FAIL        XBD.11.1-interface-characteristics.005 the old session's leader lost the terminal too: tcgetpgrp() returned 754, expected -1
+root FAIL        XBD.11.1-interface-characteristics.006 the reopened terminal is not the controlling terminal: tcgetpgrp() returned 767, expected -1
+root FAIL        XBD.11.1-interface-characteristics.007 the foreground group at the start was 780, not the leader's -1
+root UNRESOLVED  XBD.11.1-interface-characteristics.010 the parent did not end
+root UNRESOLVED  XBD.11.1-interface-characteristics.015 the parent did not end
+root FAIL        XBD.11.1-interface-characteristics.031 two bytes with MIN 3 satisfied the read: it returned 2 (errno 0)
+root FAIL        XBD.11.1-interface-characteristics.035 the session leader received SIGINT 2 times, expected once
+root FAIL        XBD.11.1-interface-characteristics.036 the session leader received SIGQUIT 2 times, expected once
+root FAIL        XBD.11.1-interface-characteristics.037 the session leader received SIGTSTP 2 times, expected once
+root FAIL        XBD.11.1-interface-characteristics.039 ERASE after a backslash: got [61 62 0a ]
+root FAIL        XBD.11.1-interface-characteristics.045 input sent before the last close could be read after the reopen: 3 bytes (errno 0)
+root UNRESOLVED  XBD.11.2-terminal-parameters.007 timed out after 60s
+root UNRESOLVED  XBD.11.2-terminal-parameters.009 timed out after 60s
+root FAIL        XBD.11.2-terminal-parameters.016 NL1 with OFILL: got [61 0a ], expected [61 0a 00 00 ]
+root UNRESOLVED  XBD.11.2-terminal-parameters.025 timed out after 60s
+root FAIL        XBD.2-conformance.001 not found with PATH from getconf PATH: at batch crontab gettext lp msgfmt ngettext pax time uudecode uuencode write
+root FAIL        XBD.2-conformance.002 utilities of a supported option not found: POSIX2_C_DEV:c17 POSIX2_C_DEV:lex
+root FAIL        XBD.2-conformance.003 getconf POSIX2_UPE wrote 'undefined' on an XSI system
+root FAIL        XBD.2-conformance.005 _POSIX_MEMLOCK is not 202405L
+root FAIL        XBD.2-conformance.006 _POSIX_THREAD_PRIO_INHERIT is not 202405L
+root FAIL        XBD.2-conformance.008 c17 could not build a program from two files that define and use four external names differing at byte 31 or in case only
+root FAIL        XBD.4.1-case-insensitive-comparisons.002 find -iname '[[:lower:]]ulu' found 0 names, expected 1
+root FAIL        XBD.4.11-file-system-cache.002 a read of 262144 bytes, concurrent with writes of 262144 bytes, returned data that is neither all old nor all new (or fewer bytes)
+root FAIL        XBD.5-file-format-notation.009 awk printf "%.s|", "abc" wrote 'abc|', expected '|'
+root FAIL        XBD.5-file-format-notation.010 awk printf "%F|", "1.5" wrote '', expected '1.500000|'
+root FAIL        XBD.5-file-format-notation.013 awk printf "%a", 0 wrote '', expected 0x0 and a zero exponent in lowercase
+root FAIL        XBD.6.2-character-encoding.001 byte 128: mbrtowc gave 18446744073709551615
+root UNRESOLVED  XBD.6.4-charmap-description.001 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.6.4-charmap-description.002 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.6.4-charmap-description.003 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.6.4-charmap-description.004 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.6.4-charmap-description.005 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.6.4-charmap-description.006 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.6.4-charmap-description.007 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.6.4-charmap-description.008 the locale localedef created cannot be selected through LC_ALL
+root FAIL        XBD.7.1-locale-general.001 setlocale(LC_ALL, "") failed with LC_ALL naming the locale pathname /tmp/pcl2/res/root/tmp/pc.xWsSik/pathloc.loc
+root FAIL        XBD.7.1-locale-general.002 newlocale(LC_ALL_MASK, "") failed (ENOENT) with LC_ALL naming the locale pathname /tmp/pcl2/res/root/tmp/pc.2DNhvj/pathloc.loc
+root UNRESOLVED  XBD.7.2-posix-locale.002 the locale localedef created cannot be selected through LC_ALL
+root FAIL        XBD.7.3.1-lc-ctype.002 byte 128 is not a character of the POSIX locale
+root FAIL        XBD.7.3.1-lc-ctype.003 byte 128 is not a character of the POSIX locale
+root FAIL        XBD.7.3.1-lc-ctype.004 byte 128 is not a character of the POSIX locale
+root UNRESOLVED  XBD.7.3.1-lc-ctype.006 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.1-lc-ctype.007 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.1-lc-ctype.008 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.1-lc-ctype.009 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.1-lc-ctype.010 the locale localedef created cannot be selected through LC_ALL
+root FAIL        XBD.7.3.2-lc-collate.001 wcscoll disagrees with strcoll for bytes 1 and 128
+root FAIL        XBD.7.3.2-lc-collate.002 wcscoll: the code of byte 127 does not collate before that of byte 128
+root UNRESOLVED  XBD.7.3.2-lc-collate.004 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.2-lc-collate.005 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.2-lc-collate.006 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.2-lc-collate.007 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.2-lc-collate.008 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.2-lc-collate.009 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.2-lc-collate.010 localedef refused the test source ellini.src (status 139)
+root UNRESOLVED  XBD.7.3.2-lc-collate.011 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.2-lc-collate.013 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.3-lc-monetary.001 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.3-lc-monetary.002 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.3-lc-monetary.003 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.3-lc-monetary.004 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.3-lc-monetary.005 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.4-lc-numeric.001 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.4-lc-numeric.002 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.4-lc-numeric.003 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.4-lc-numeric.004 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.5-lc-time.001 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.5-lc-time.002 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.5-lc-time.003 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.5-lc-time.004 the locale localedef created cannot be selected through LC_ALL
+root FAIL        XBD.7.3.5-lc-time.005 date wrote "Wednesday|October|Wed|Oct" with the locale in LC_ALL, not "udday|monj|ud|mj"
+root UNRESOLVED  XBD.7.3.5-lc-time.006 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.5-lc-time.008 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.5-lc-time.009 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.3.6-lc-messages.001 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.4-locale-grammar.001 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.4-locale-grammar.002 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.4-locale-grammar.003 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.4-locale-grammar.004 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.4-locale-grammar.005 the locale localedef created cannot be selected through LC_ALL
+root UNRESOLVED  XBD.7.4-locale-grammar.006 the locale localedef created cannot be selected through LC_ALL
+root FAIL        XBD.8.1-environment-variable-definition.004 readonly LINENO accepted but LINENO does not change between lines: :
+root UNRESOLVED  XBD.8.2-internationalization-variables.001 the locale named by the environment cannot be selected
+root UNRESOLVED  XBD.8.2-internationalization-variables.002 the locale named by the environment cannot be selected
+root UNRESOLVED  XBD.8.2-internationalization-variables.003 the locale named by the environment cannot be selected
+root FAIL        XBD.8.2-internationalization-variables.006 case 2 (LC_ALL/LC_TIME/LANG order): the weekday is "Wednesday", not locale X's "udday"
+root UNRESOLVED  XBD.9.3-bre.006 regcomp ran out of memory on a count of 32767
+root UNRESOLVED  XBD.9.4-ere.007 regcomp ran out of memory on a count of 32767
+root FAIL        XBD.aio.h.008 lio_listio() is not declared as int lio_listio(int, struct aiocb *restrict const [restrict], int, struct sigevent *restrict)
+root FAIL        XBD.complex.h.006 imaginary or _Imaginary_I is not defined although the IEC 60559 complex option is claimed
+root UNRESOLVED  XBD.dirent.h.001 a constant is missing (the header check reports it): DT_BLK DT_CHR DT_DIR DT_FIFO DT_LNK DT_REG DT_SOCK DT_UNKNOWN
+root UNRESOLVED  XBD.dirent.h.002 a DT_ constant is missing (the header check reports it)
+root FAIL        XBD.dirent.h.003 does not compile: unknown type name 'ino_t'
+root FAIL        XBD.dirent.h.004 does not compile: unknown type name 'reclen_t'
+root FAIL        XBD.dirent.h.005 does not compile: unknown type name 'ino_t'
+root FAIL        XBD.dirent.h.006 does not compile: invalid application of 'sizeof' to incomplete type 'struct posix_dent'
+root FAIL        XBD.dirent.h.008 does not compile: 'posix_getdents' undeclared (first use in this function)
+root FAIL        XBD.dlfcn.h.002 does not compile: 'Dl_info_t' undeclared here (not in a function)
+root FAIL        XBD.dlfcn.h.004 does not compile: 'dladdr' undeclared (first use in this function)
+root FAIL        XBD.fcntl.h.002 <fcntl.h> does not define FD_CLOFORK
+root UNRESOLVED  XBD.fcntl.h.003 blocked by XBD.fcntl.h.002 (FAIL)
+root FAIL        XBD.fcntl.h.005 <fcntl.h> does not define O_CLOFORK
+root FAIL        XBD.fcntl.h.006 <fcntl.h> does not define F_OFD_GETLK
+root FAIL        XBD.fcntl.h.007 <fcntl.h> does not define O_TTY_INIT
+root FAIL        XBD.fcntl.h.008 <fcntl.h> does not define F_GETOWN_EX and F_SETOWN_EX
+root UNRESOLVED  XBD.fcntl.h.011 a constant is missing (the header check reports it): O_CLOEXEC O_CREAT O_DIRECTORY O_EXCL O_NOCTTY O_NOFOLLOW O_TRUNC O_TTY_INIT
+root UNRESOLVED  XBD.fnmatch.h.002 FNM_CASEFOLD, FNM_IGNORECASE or FNM_PATHNAME is missing (the header check reports it)
+root UNRESOLVED  XBD.ftw.h.002 a constant is missing (the header check reports it): FTW_PHYS FTW_MOUNT FTW_XDEV FTW_DEPTH FTW_CHDIR
+root FAIL        XBD.inttypes.h.006 does not compile: unknown type name 'wchar_t'
+root FAIL        XBD.inttypes.h.007 does not compile: unknown type name 'wchar_t'
+root FAIL        XBD.langinfo.h.003 does not compile: 'ALTMON_1' undeclared (first use in this function); did you mean 'ABMON_1'?
+root FAIL        XBD.langinfo.h.004 does not compile: 'ALTMON_1' undeclared here (not in a function); did you mean 'ABMON_1'?
+root FAIL        XBD.limits.h.004 does not compile: #error "_XOPEN_IOV_MAX is missing or not the required value"
+root FAIL        XBD.limits.h.007 does not compile: #error "LONG_BIT is below 32"
+root FAIL        XBD.limits.h.008 does not compile: #error "LONG_BIT or WORD_BIT is below 2"
+root FAIL        XBD.limits.h.011 does not compile: #error "HOST_NAME_MAX is below its minimum acceptable value"
+root FAIL        XBD.limits.h.014 does not compile: #error "GETENTROPY_MAX is not defined"
+root FAIL        XBD.locale.h.006 does not compile: 'getlocalename_l' undeclared (first use in this function)
+root FAIL        XBD.math.h.014 does not compile: 'M_EGAMMA' undeclared here (not in a function)
+root FAIL        XBD.math.h.015 does not compile: 'M_El' undeclared here (not in a function); did you mean 'M_E'?
+root FAIL        XBD.netdb.h.002 <netdb.h> does not define NI_NUMERICSCOPE
+root FAIL        XBD.netinet_in.h.002 IPPROTO_ICMP and SOL_SOCKET are both 1
+root UNRESOLVED  XBD.netinet_in.h.003 blocked by XBD.netinet_in.h.002 (FAIL)
+root UNRESOLVED  XBD.netinet_in.h.004 blocked by XBD.netinet_in.h.002 (FAIL)
+root FAIL        XBD.poll.h.007 does not compile: unknown type name 'sigset_t'
+root FAIL        XBD.poll.h.008 does not compile: invalid application of 'sizeof' to incomplete type 'struct timespec'
+root FAIL        XBD.poll.h.009 does not compile: 'ppoll' undeclared (first use in this function); did you mean 'poll'?
+root UNRESOLVED  XBD.pthread.h.004 a constant is missing (the header check reports it): PTHREAD_MUTEX_NORMAL PTHREAD_MUTEX_ERRORCHECK PTHREAD_MUTEX_RECURSIVE
+root UNRESOLVED  XBD.pthread.h.005 a constant is missing (the header check reports it): PTHREAD_MUTEX_ROBUST PTHREAD_MUTEX_STALLED
+root UNRESOLVED  XBD.pthread.h.009 a constant is missing (the header check reports it): PTHREAD_PRIO_NONE
+root UNRESOLVED  XBD.pthread.h.012 PTHREAD_NULL is missing (the header check reports it)
+root FAIL        XBD.pthread.h.015 does not compile: 'pthread_cond_clockwait' undeclared (first use in this function); did you mean 'pthread_cond_timedwait'?
+root FAIL        XBD.regex.h.002 <regex.h> does not define REG_MINIMAL
+root FAIL        XBD.regex.h.005 regoff_t cannot hold PTRDIFF_MAX
+root FAIL        XBD.semaphore.h.004 <semaphore.h> does not define O_CREAT
+root FAIL        XBD.semaphore.h.005 does not compile: 'sem_clockwait' undeclared (first use in this function); did you mean 'sem_trywait'?
+root FAIL        XBD.signal.h.006 SIGRTMIN..SIGRTMAX holds 31 signals; {RTSIG_MAX} is 32
+root FAIL        XBD.signal.h.007 <unistd.h> does not define _SC_NSIG
+root FAIL        XBD.signal.h.008 <signal.h> does not define SIG2STR_MAX
+root FAIL        XBD.signal.h.028 does not compile: 'sig2str' undeclared (first use in this function)
+root UNRESOLVED  XBD.spawn.h.001 a constant is missing (the header check reports it): POSIX_SPAWN_RESETIDS POSIX_SPAWN_SETPGROUP POSIX_SPAWN_SETSIGDEF POSIX_SPAWN_SETSIGMASK POSIX_SPAWN_SETSID
+root FAIL        XBD.spawn.h.007 does not compile: 'posix_spawn_file_actions_addchdir' undeclared (first use in this function); did you mean 'posix_spawn_file_actions_addclose'?
+root FAIL        XBD.stdlib.h.007 does not compile: 'mkostemp' undeclared (first use in this function); did you mean 'mkstemp'?
+root FAIL        XBD.stdlib.h.008 does not compile: 'ptsname_r' undeclared (first use in this function); did you mean 'ptsname'?
+root FAIL        XBD.stdlib.h.009 does not compile: 'realpath' undeclared (first use in this function)
+root FAIL        XBD.sys_mman.h.011 <sys/mman.h> does not define O_RDONLY
+root FAIL        XBD.sys_mman.h.013 <sys/mman.h> does not define O_CREAT
+root FAIL        XBD.sys_sem.h.003 struct semid_ds member sem_nsems is not of type unsigned short
+root UNRESOLVED  XBD.sys_shm.h.003 SHM_FAILED is missing (the header check reports it)
+root FAIL        XBD.sys_socket.h.006 <sys/socket.h> does not define SOCK_CLOFORK
+root FAIL        XBD.sys_socket.h.007 the headers do not define SO_DOMAIN
+root FAIL        XBD.sys_socket.h.008 the headers do not define MSG_CMSG_CLOFORK
+root FAIL        XBD.sys_socket.h.016 killed by signal 11 during the test
+root FAIL        XBD.sys_socket.h.018 struct msghdr member msg_iovlen is not of type int
+root FAIL        XBD.sys_socket.h.020 struct cmsghdr member cmsg_len is not of type socklen_t
+root FAIL        XBD.sys_socket.h.024 does not compile: 'accept4' undeclared (first use in this function); did you mean 'accept'?
+root UNRESOLVED  XBD.sys_stat.h.004 a constant is missing (the header check reports it): S_IFBLK S_IFCHR S_IFIFO S_IFREG S_IFDIR S_IFLNK S_IFSOCK
+root UNRESOLVED  XBD.sys_stat.h.005 a file type constant or test macro is missing (the header check reports it)
+root FAIL        XBD.sys_types.h.007 does not compile: 'reclen_t' undeclared here (not in a function)
+root FAIL        XBD.sys_types.h.008 does not compile: unknown type name 'suseconds_t'
+root FAIL        XBD.sys_types.h.009 does not compile: unknown type name 'suseconds_t'
+root FAIL        XBD.sys_types.h.011 does not compile: unknown type name 'reclen_t'
+root UNRESOLVED  XBD.sys_wait.h.006 WCOREDUMP is missing (the header check reports it)
+root FAIL        XBD.termios.h.015 does not compile: invalid application of 'sizeof' to incomplete type 'struct winsize'
+root FAIL        XBD.termios.h.017 does not compile: 'tcgetwinsize' undeclared (first use in this function)
+root FAIL        XBD.unistd.h.001 <unistd.h> does not define POSIX_CLOSE_RESTART
+root FAIL        XBD.unistd.h.002 <unistd.h> does not define SEEK_HOLE and SEEK_DATA as macros
+root FAIL        XBD.unistd.h.004 does not compile: #error "_POSIX_VERSION is not defined as 202405L"
+root FAIL        XBD.unistd.h.005 does not compile: #error "_XOPEN_VERSION is not defined as 800"
+root FAIL        XBD.unistd.h.006 does not compile: #error "_POSIX_ADVISORY_INFO has a value its description does not allow"
+root FAIL        XBD.unistd.h.007 does not compile: #error "_POSIX_ASYNCHRONOUS_IO is not defined as 202405L"
+root FAIL        XBD.unistd.h.010 does not compile: '_SC_DEVICE_CONTROL' undeclared (first use in this function); did you mean '_SC_DEVICE_IO'?
+root FAIL        XBD.unistd.h.011 _POSIX_THREAD_ROBUST_PRIO_INHERIT is greater than zero but sysconf(_SC_THREAD_ROBUST_PRIO_INHERIT) is -1
+root FAIL        XBD.unistd.h.014 does not compile: '_SC_XOPEN_UUCP' undeclared (first use in this function); did you mean '_SC_XOPEN_UNIX'?
+root FAIL        XBD.unistd.h.015 does not compile: '_PC_TIMESTAMP_RESOLUTION' undeclared (first use in this function)
+root FAIL        XBD.unistd.h.016 does not compile: '_CS_POSIX_V7_THREADS_CFLAGS' undeclared (first use in this function); did you mean '_CS_POSIX_V7_LP64_OFF64_CFLAGS'?
+root FAIL        XBD.unistd.h.019 does not compile: '_SC_DEVICE_CONTROL' undeclared here (not in a function); did you mean '_SC_DEVICE_IO'?
+root FAIL        XBD.unistd.h.021 <unistd.h> does not define O_CLOEXEC
+root FAIL        XBD.unistd.h.024 does not compile: 'dup3' undeclared (first use in this function); did you mean 'dup2'?
+root FAIL        XBD.unistd.h.025 does not compile: 'getresgid' undeclared (first use in this function); did you mean 'setregid'?
+root FAIL        XBD.utmpx.h.002 struct utmpx member ut_tv is not of type struct timeval
+root FAIL        XBD.wchar.h.008 does not compile: 'wcslcat' undeclared (first use in this function); did you mean 'wcsncat'?
+root UNRESOLVED  XBD.wordexp.h.001 a constant is missing (the header check reports it): WRDE_APPEND WRDE_DOOFFS WRDE_NOCMD WRDE_REUSE WRDE_SHOWERR WRDE_UNDEF
+root UNRESOLVED  XBD.wordexp.h.002 a constant is missing (the header check reports it): WRDE_BADCHAR WRDE_BADVAL WRDE_CMDSUB WRDE_NOSPACE WRDE_SYNTAX
+root FAIL        XCU.1.4-utility-defaults.012 sh reading a script from standard input: got ''
+root FAIL        XCU.1.4-utility-defaults.013 (awk 'NR == 2 { exit }'; cat): got ''
+root FAIL        XCU.2.2-quoting.012 standard output was []
+root FAIL        XCU.2.2-quoting.013 standard output was [$\cA
+root FAIL        XCU.2.2-quoting.014 standard output was [$\x41\x4a
+root FAIL        XCU.2.2-quoting.015 standard output was [$\101
+root FAIL        XCU.2.2-quoting.016 standard output was [$$x * ? `y` $(z) a  b\tc]
+root FAIL        XCU.2.2-quoting.017 standard output was []
+root FAIL        XCU.2.4-reserved-words.007 standard output was [rc=127
+root FAIL        XCU.2.5-parameters.017 standard output was [a
+root FAIL        XCU.2.6-word-expansions.009 standard output was [pcg*
+root FAIL        XCU.2.6-word-expansions.029 standard output was []
+root FAIL        XCU.2.6-word-expansions.043 standard output was [2 a b
+root UNRESOLVED  XCU.admin.001 setup: get is not available
+root UNRESOLVED  XCU.admin.002 setup: get is not available
+root UNRESOLVED  XCU.admin.003 setup: prs is not available
+root UNRESOLVED  XCU.admin.004 setup: prs is not available
+root UNRESOLVED  XCU.admin.005 setup: prs is not available
+root UNRESOLVED  XCU.admin.006 setup: prs is not available
+root UNRESOLVED  XCU.admin.007 setup: admin could not create s.f
+root UNRESOLVED  XCU.admin.008 setup: get is not available
+root FAIL        XCU.ar.002 ar -t a sub/f2 listed 'f2', expected the operand as given
+root FAIL        XCU.ar.007 an older file replaced the archived member
+root FAIL        XCU.ar.008 mode field is 'rw-r--r--'
+root UNRESOLVED  XCU.at.001 at refused the job (status 127): the user may not be allowed to use it
+root UNRESOLVED  XCU.at.002 setup: at could not submit a job (status 127)
+root UNRESOLVED  XCU.at.003 setup: at could not submit a job (status 127)
+root UNRESOLVED  XCU.at.004 at -f with a good file failed (status 127): the user may not be allowed to use at
+root UNRESOLVED  XCU.at.005 at refused 'at noon Dec 9, 2035' (status 127)
+root UNRESOLVED  XCU.at.007 setup: at could not submit a job (status 127)
+root FAIL        XCU.awk.005 with RS null a newline was not a field separator under FS=:
+root FAIL        XCU.awk.013 srand did not repeat the sequence or rand was out of range
+root FAIL        XCU.awk.032 a missing field: 0 1 1
+root FAIL        XCU.awk.036 LC_COLLATE: with LC_COLLATE set to the locale the result was [0], not [1]
+root FAIL        XCU.awk.037 LC_CTYPE: with LC_CTYPE set to the locale the result was [e10a|], not [c10a|y]
+root FAIL        XCU.awk.038 LC_NUMERIC: with LC_NUMERIC set to the locale the result was [1.5], not [1,5]
+root FAIL        XCU.awk.039 LC_CTYPE: with LC_CTYPE set to the locale the result was [4], not [3]
+root UNRESOLVED  XCU.batch.001 batch exited with status 127: the user may not be allowed to use it
+root FAIL        XCU.bc.005 quit inside a loop did not stop execution
+root FAIL        XCU.bc.006 quit inside a function did not stop the program
+root FAIL        XCU.c17.001 c17 p.c: exit status 127
+root FAIL        XCU.c17.002 c17 -c a.c b.c: exit status 127
+root FAIL        XCU.c17.003 -D: nonzero status
+root FAIL        XCU.c17.004 c17 -E: exit status 127
+root FAIL        XCU.c17.005 -I inc1 -I inc2: nonzero status
+root UNRESOLVED  XCU.c17.006 setup: c17 -c failed
+root FAIL        XCU.c17.007 c17 -O 0: exit status 127
+root FAIL        XCU.c17.008 the good source was not compiled after the error
+root UNRESOLVED  XCU.c17.009 setup: c17 -E failed
+root FAIL        XCU.c17.010 m3.c: nonzero status
+root FAIL        XCU.c17.011 -l m: nonzero status
+root FAIL        XCU.c17.012 linking two 31-byte names: nonzero status
+root FAIL        XCU.c17.013 the language-level check failed to compile: exit status 127
+root FAIL        XCU.c17.014 c17 a.c -D PCV=3 -o pa failed
+root FAIL        XCU.c17.015 linking with -l pthread failed
+root UNRESOLVED  XCU.c17.016 setup: c17 -c failed
+root FAIL        XCU.c17.017 c17 -G -c failed
+root FAIL        XCU.c17.018 the default environment does not compile the size program
+root FAIL        XCU.c17.019 a translation unit with 4095 external identifiers was rejected
+root FAIL        XCU.cal.001 cal 2 2024 failed
+root FAIL        XCU.cal.002 cal 2 1100 failed
+root FAIL        XCU.cal.003 cal 9 1752 failed
+root FAIL        XCU.cal.004 cal 2023 failed
+root FAIL        XCU.cal.005 cal failed
+root FAIL        XCU.cal.007 cal 2 2024 exited with status 127
+root FAIL        XCU.cd.012 cd '' exited 0
+root FAIL        XCU.cd.013 cd nosuch/.. exited 0
+root FAIL        XCU.cflow.001 cflow: nonzero status
+root FAIL        XCU.cflow.002 cflow: nonzero status
+root FAIL        XCU.cflow.003 cflow -r: nonzero status
+root FAIL        XCU.cflow.004 cflow: nonzero status
+root FAIL        XCU.cflow.005 cflow: nonzero status
+root FAIL        XCU.cflow.006 cflow: nonzero status
+root UNRESOLVED  XCU.cflow.008 setup: c17 is not available
+root FAIL        XCU.comm.006 LC_COLLATE: with LC_COLLATE set to the locale the result was [], not [a]
+root FAIL        XCU.command.004 command -v wrote './bin/pccmd', not an absolute pathname
+root FAIL        XCU.compress.001 compress: exit status 127
+root FAIL        XCU.compress.002 compress -c: exit status 127
+root FAIL        XCU.compress.003 compress -g: exit status 127
+root FAIL        XCU.compress.004 compress -g of a one-byte file: exit status 127, expected 2
+root FAIL        XCU.compress.005 compress -b 12: exit status 127
+root FAIL        XCU.compress.006 compress f1 f2: exit status 127
+root FAIL        XCU.compress.007 compress -g -m lzw: exit status 127
+root FAIL        XCU.compress.009 compress with no operand: exit status 127
+root UNRESOLVED  XCU.compress.010 setup: compress -c failed
+root FAIL        XCU.compress.011 compress -f: exit status 127
+root FAIL        XCU.compress.012 compress -v: exit status 127
+root FAIL        XCU.compress.013 exit status 127
+root FAIL        XCU.cp.009 cp -i exited with status 1 after a negative reply
+root FAIL        XCU.cp.029 LC_MESSAGES: with LC_MESSAGES set to the locale the result was [NY], not [YN]
+root FAIL        XCU.cp.030 LC_COLLATE: with LC_COLLATE set to the locale the result was [N], not [Y]
+root FAIL        XCU.cp.031 LC_CTYPE: with LC_CTYPE set to the locale the result was [N], not [Y]
+root UNRESOLVED  XCU.crontab.001 crontab FILE exited with status 127: the user may not be allowed to use it
+root UNRESOLVED  XCU.crontab.002 crontab from standard input exited with status 127: the user may not be allowed to use it
+root UNRESOLVED  XCU.crontab.003 setup: crontab could not install an entry (the user may not be allowed to use it)
+root UNRESOLVED  XCU.crontab.004 setup: crontab could not install an entry (the user may not be allowed to use it)
+root UNRESOLVED  XCU.crontab.005 setup: crontab could not install an entry (the user may not be allowed to use it)
+root FAIL        XCU.csplit.009 LC_COLLATE: with LC_COLLATE set to the locale the result was [], not [x]
+root FAIL        XCU.csplit.010 LC_CTYPE: with LC_CTYPE set to the locale the result was [], not [310a]
+root FAIL        XCU.ctags.001 ctags: nonzero status
+root FAIL        XCU.ctags.002 ctags: nonzero status
+root FAIL        XCU.ctags.003 ctags: nonzero status
+root FAIL        XCU.ctags.004 ctags -f: nonzero status
+root FAIL        XCU.ctags.005 ctags -x: nonzero status
+root FAIL        XCU.ctags.006 ctags: nonzero status
+root FAIL        XCU.cut.002 -c 1,4-5,8 gave the wrong result
+root FAIL        XCU.cut.005 -b 3-9 gave the wrong result
+root FAIL        XCU.cut.007 -d : -f 2,4 gave the wrong result
+root FAIL        XCU.cut.013 LC_CTYPE: with LC_CTYPE set to the locale the result was [e10a], not [e1e20a]
+root FAIL        XCU.cxref.001 cxref: nonzero status
+root FAIL        XCU.cxref.002 cxref: nonzero status
+root FAIL        XCU.cxref.003 cxref: nonzero status
+root FAIL        XCU.cxref.004 cxref: nonzero status
+root FAIL        XCU.cxref.005 cxref: nonzero status
+root FAIL        XCU.cxref.006 cxref -w 51: nonzero status
+root FAIL        XCU.cxref.007 cxref: nonzero status
+root FAIL        XCU.date.010 LC_TIME: with LC_TIME set to the locale the result was [names [Wednesday Wed October Oct PM] expected [udday ud monj mj post]], not [OK]
+root FAIL        XCU.dd.020 dd iflags=fullblock exited with status 1
+root UNRESOLVED  XCU.delta.001 setup: admin could not create s.f
+root UNRESOLVED  XCU.delta.002 setup: admin could not create s.f
+root UNRESOLVED  XCU.delta.003 setup: admin could not create s.f
+root UNRESOLVED  XCU.delta.004 setup: admin could not create s.f
+root UNRESOLVED  XCU.delta.005 setup: admin could not create s.f
+root UNRESOLVED  XCU.delta.006 setup: admin could not create s.f
+root FAIL        XCU.df.001 header is: Filesystem 1024-blocks Used Available Capacity Mounted on
+root FAIL        XCU.df.005 total is 264212084 in 512-byte units but 264212084 in 1024-byte units
+root FAIL        XCU.df.008 df -t exited with status 1
+root FAIL        XCU.diff.003 the -c header lines are not '*** f1 <date>' and '--- f2 <date>' with the file times
+root FAIL        XCU.diff.011 with TZ=PCA0 the first header line was [*** f	Tue Jun 15 10:30:00 2021]
+root FAIL        XCU.dot.006 interactive shell did not continue (out='')
+root FAIL        XCU.du.005 512-byte units: 104, 1024-byte units: 104
+root FAIL        XCU.echo.005 echo -n wrote something other than what was wanted
+root FAIL        XCU.echo.006 exec echo a\tb wrote something other than what was wanted
+root FAIL        XCU.echo.007 exec echo ab\c wrote something other than what was wanted
+root FAIL        XCU.echo.008 exec echo \0101 wrote something other than what was wanted
+root FAIL        XCU.ed.013 q on a changed buffer wrote '24
+root FAIL        XCU.ed.017 an invalid command gave '?', expected ? then the line count 5
+root FAIL        XCU.ed.019 separators gave 'one two three four five two two three four five three one two four four one one two three five four two three four one two two three four ', expected 'one two three four five two two three four five three one two four four one one two three five four two three four one two two three four'
+root FAIL        XCU.ed.021 omitted delimiters gave 'uno two three uno two three two three ? ', expected 'uno two three uno two three two three '
+root FAIL        XCU.ed.024 m gave 'three four one two five 5 ? ', expected 'three four one two five 4 ? '
+root FAIL        XCU.ed.025 s results were 'uno [w]two thrEE f0ur fivE ? ', expected 'uno [w]two thrEE f0ur fivE '
+root FAIL        XCU.exec.005 got '' (status 127)
+root FAIL        XCU.expr.005 expr 1 + + 2 exited 0, wanted 2 to 2
+root FAIL        XCU.expr.010 LC_COLLATE: with LC_COLLATE set to the locale the result was [0], not [1]
+root FAIL        XCU.expr.011 LC_COLLATE: with LC_COLLATE set to the locale the result was [ ], not [2 0]
+root FAIL        XCU.expr.012 LC_CTYPE: with LC_CTYPE set to the locale the result was [0], not [1]
+root FAIL        XCU.file.006 first line is: f: text/plain; charset=us-ascii
+root FAIL        XCU.file.008 link to a directory: ld: symbolic link to d
+root FAIL        XCU.file.009 -M: matching file: 
+root FAIL        XCU.find.034 LC_MESSAGES: with LC_MESSAGES set to the locale the result was [NY], not [YN]
+root FAIL        XCU.find.035 LC_COLLATE: with LC_COLLATE set to the locale the result was [|N], not [fnd/ch|Y]
+root FAIL        XCU.find.036 LC_CTYPE: with LC_CTYPE set to the locale the result was [|N], not [666e632fe10a|Y]
+root UNRESOLVED  XCU.gencat.001 setup: c17 is not available
+root UNRESOLVED  XCU.gencat.002 setup: c17 is not available
+root UNRESOLVED  XCU.gencat.003 setup: c17 is not available
+root UNRESOLVED  XCU.gencat.004 setup: c17 is not available
+root UNRESOLVED  XCU.gencat.005 setup: c17 is not available
+root UNRESOLVED  XCU.get.001 setup: admin could not create s.f
+root UNRESOLVED  XCU.get.002 setup: admin could not create s.f
+root UNRESOLVED  XCU.get.003 setup: admin could not create s.f
+root UNRESOLVED  XCU.get.004 setup: admin could not create s.f
+root UNRESOLVED  XCU.get.005 setup: admin could not create s.f
+root UNRESOLVED  XCU.get.006 setup: admin could not create s.f
+root UNRESOLVED  XCU.get.007 setup: admin could not create s.f
+root UNRESOLVED  XCU.get.008 setup: admin could not create s.f
+root UNRESOLVED  XCU.get.009 setup: admin failed for s.a
+root FAIL        XCU.getconf.005 getconf POSIX2_C_BIND gave '200809
+root FAIL        XCU.getconf.006 getconf NPROCESSORS_CONF exited 2
+root FAIL        XCU.getconf.007 shell: getconf _POSIX_ARG_MAX wrote '2097152', wanted 4096
+root FAIL        XCU.getopts.011 OPTARG is set to '' after a flag
+root FAIL        XCU.getopts.016 diagnostic 'Illegal option -Q' does not name the program (016-diagnostic.sh)
+root FAIL        XCU.gettext.001 form 1: exit status 127
+root FAIL        XCU.gettext.002 -e: nonzero status
+root FAIL        XCU.gettext.003 -s: nonzero status
+root FAIL        XCU.grep.009 LC_COLLATE: with LC_COLLATE set to the locale the result was [], not [ch]
+root FAIL        XCU.grep.010 LC_CTYPE: with LC_CTYPE set to the locale the result was [0|1], not [1|2]
+root FAIL        XCU.ipcs.001 the first line '' is not of the form 'IPC status from SOURCE as of DATE'
+root FAIL        XCU.ipcs.005 ipcs -o exited with status 1
+root FAIL        XCU.join.011 LC_COLLATE: with LC_COLLATE set to the locale the result was [], not [a 2 3]
+root UNRESOLVED  XCU.lex.001 setup: c17 is not available
+root UNRESOLVED  XCU.lex.002 setup: c17 is not available
+root UNRESOLVED  XCU.lex.003 setup: c17 is not available
+root UNRESOLVED  XCU.lex.004 setup: c17 is not available
+root UNRESOLVED  XCU.lex.005 setup: c17 is not available
+root UNRESOLVED  XCU.lex.006 setup: c17 is not available
+root UNRESOLVED  XCU.lex.007 setup: c17 is not available
+root UNRESOLVED  XCU.lex.008 setup: c17 is not available
+root UNRESOLVED  XCU.lex.009 setup: c17 is not available
+root FAIL        XCU.localedef.003 a locale was created although the source file was missing
+root FAIL        XCU.localedef.004 a locale was created from a source with an error
+root FAIL        XCU.ls.018 total is 256 in 512-byte units but 256 with -k
+root FAIL        XCU.ls.039 ls -f -t gives another order than ls -f: '.. . .h a c b ' against 'b . c .h .. a '
+root FAIL        XCU.ls.043 ls -lF writes 's1 -> f1' for s1, expected 's1@ -> f1' with or without the indicator ''
+root FAIL        XCU.ls.044 ls -i -s -1 wrote 'total 4
+root FAIL        XCU.ls.053 LC_COLLATE: with LC_COLLATE set to the locale the result was [a
+root FAIL        XCU.ls.054 LC_CTYPE: with LC_CTYPE set to the locale the result was [613f620a], not [61e1620a]
+root FAIL        XCU.m4.001 m4: nonzero status
+root FAIL        XCU.m4.007 m4wrap: output differs: body
+root FAIL        XCU.m4.016 exit status 0 although a file could not be created
+root FAIL        XCU.make.008 -q on an out-of-date target with a + command: exit status 0, expected 1
+root FAIL        XCU.make.011 make: nonzero status
+root FAIL        XCU.make.020 .WAIT: exit status 2 (y ran before x finished?)
+root FAIL        XCU.make.027 with .PRECIOUS and no prerequisites a target was removed after SIGTERM
+root FAIL        XCU.msgfmt.001 msgfmt: exit status 127
+root FAIL        XCU.msgfmt.002 msgfmt -S: nonzero status
+root FAIL        XCU.msgfmt.003 msgfmt -S -o out: nonzero status
+root FAIL        XCU.msgfmt.004 -D sub did not find sub/a.po (status 127)
+root FAIL        XCU.msgfmt.005 a consistent entry was diagnosed
+root FAIL        XCU.msgfmt.006 msgfmt (fuzzy input): nonzero status
+root FAIL        XCU.mv.005 mv -i exited with status 1 after a negative reply
+root FAIL        XCU.mv.015 LC_MESSAGES: with LC_MESSAGES set to the locale the result was [NY], not [YN]
+root FAIL        XCU.mv.016 LC_COLLATE: with LC_COLLATE set to the locale the result was [N], not [Y]
+root FAIL        XCU.mv.017 LC_CTYPE: with LC_CTYPE set to the locale the result was [N], not [Y]
+root FAIL        XCU.newgrp.003 newgrp 0 exited with status 1 and the shell did not run
+root FAIL        XCU.ngettext.001 form 1, n=1: exit status 127
+root FAIL        XCU.ngettext.002 -e plural: nonzero status
+root FAIL        XCU.ngettext.003 large n: nonzero status
+root FAIL        XCU.nl.002 the empty line was not written as an empty line
+root FAIL        XCU.nl.009 LC_COLLATE: with LC_COLLATE set to the locale the result was [], not [ch]
+root FAIL        XCU.nl.010 LC_CTYPE: with LC_CTYPE set to the locale the result was [], not [e10a]
+root UNRESOLVED  XCU.nm.001 setup: c17 is not available
+root UNRESOLVED  XCU.nm.002 setup: c17 is not available
+root UNRESOLVED  XCU.nm.003 setup: c17 is not available
+root UNRESOLVED  XCU.nm.004 setup: c17 is not available
+root UNRESOLVED  XCU.nm.005 setup: c17 is not available
+root UNRESOLVED  XCU.nm.006 setup: c17 is not available
+root UNRESOLVED  XCU.nm.007 setup: c17 is not available
+root UNRESOLVED  XCU.nm.008 setup: c17 is not available
+root UNRESOLVED  XCU.nm.009 setup: c17 is not available
+root FAIL        XCU.od.011 od -b f1 +2. gave status 1
+root FAIL        XCU.paste.009 LC_CTYPE: with LC_CTYPE set to the locale the result was [61e1630a62e1640a], not [61e1e2630a62e1e2640a]
+root FAIL        XCU.patch.005 -b -o with an existing outfile did not create outfile.orig
+root FAIL        XCU.patch.010 -N: an already-applied patch was written to a reject file
+root FAIL        XCU.pax.001 pax -w: nonzero status
+root FAIL        XCU.pax.002 pax -w -f: nonzero status
+root UNRESOLVED  XCU.pax.003 setup: pax -w failed
+root UNRESOLVED  XCU.pax.004 setup: pax -w failed
+root FAIL        XCU.pax.005 pax -w with names on standard input: nonzero status
+root FAIL        XCU.pax.006 pax -w -x ustar: nonzero status
+root FAIL        XCU.pax.007 pax -w -x cpio: nonzero status
+root FAIL        XCU.pax.008 pax -w -x pax: nonzero status
+root FAIL        XCU.pax.009 pax -rw: nonzero status
+root FAIL        XCU.pax.010 write with -s: nonzero status
+root UNRESOLVED  XCU.pax.011 setup: pax -w failed
+root UNRESOLVED  XCU.pax.012 setup: pax -w failed
+root UNRESOLVED  XCU.pax.013 setup: pax -w failed
+root UNRESOLVED  XCU.pax.014 setup: pax -w failed
+root UNRESOLVED  XCU.pax.015 setup: pax -w failed
+root FAIL        XCU.pax.016 pax -w -f A: nonzero status
+root FAIL        XCU.pax.017 pax -w: nonzero status
+root FAIL        XCU.pax.018 pax -w sl: nonzero status
+root FAIL        XCU.pax.019 pax -w d h: nonzero status
+root UNRESOLVED  XCU.pax.020 setup: pax -w failed
+root FAIL        XCU.pax.021 pax -w -b 4096 -x ustar: nonzero status
+root UNRESOLVED  XCU.pax.022 setup: pax -w failed
+root FAIL        XCU.pax.023 pax -rw -l: nonzero status
+root FAIL        XCU.pax.025 -s with &: nonzero status
+root UNRESOLVED  XCU.pax.026 setup: pax -w failed
+root UNRESOLVED  XCU.pax.027 setup: pax -w failed
+root FAIL        XCU.pax.028 pax -w -t: nonzero status
+root FAIL        XCU.pax.029 pax -w t: nonzero status
+root UNRESOLVED  XCU.pax.030 setup: pax -w failed
+root UNRESOLVED  XCU.pax.031 setup: pax -w failed
+root FAIL        XCU.pax.032 pax -w -x ustar: nonzero status
+root FAIL        XCU.pax.033 pax -w -x ustar of a 152-character path: nonzero status
+root FAIL        XCU.pax.034 pax -w -x cpio: nonzero status
+root FAIL        XCU.pax.035 -o comment:=hello: nonzero status
+root FAIL        XCU.pax.036 pax -w -x pax -o comment=one -o comment=two: nonzero status
+root UNRESOLVED  XCU.pax.037 setup: pax -w with a global gname failed
+root FAIL        XCU.pax.038 pax -w -x ustar: nonzero status
+root UNRESOLVED  XCU.pax.039 setup: pax -w failed
+root UNRESOLVED  XCU.pax.040 setup: pax -w failed
+root UNRESOLVED  XCU.pax.041 setup: pax -w failed
+root UNRESOLVED  XCU.pax.042 setup: pax -w with a long path record failed
+root FAIL        XCU.pax.043 pax -w -x pax: nonzero status
+root FAIL        XCU.pax.044 pax -w -x pax of the long names: nonzero status
+root FAIL        XCU.pax.045 pax -w -x pax: nonzero status
+root UNRESOLVED  XCU.pax.046 setup: pax -w failed
+root FAIL        XCU.pr.001 the first page is not a 5-line header, 56 lines and a 5-line trailer
+root FAIL        XCU.pr.002 -l 15 did not give 5-line page bodies between headers and trailers
+root FAIL        XCU.pr.003 -h did not replace the file name in the header
+root FAIL        XCU.pr.012 each file does not have a header with its own name
+root FAIL        XCU.pr.013 with TZ=PCA0 the header line was [2021-06-15 10:30                        f                         Page 1], not [Jun 15 10:30 2021 f Page 1]
+root FAIL        XCU.printf.012 printf %2$s %1$s a b did not write what was wanted, or did not exit zero
+root FAIL        XCU.printf.015 LC_NUMERIC: with LC_NUMERIC set to the locale the result was [1.0], not [1,0]
+root UNRESOLVED  XCU.prs.001 setup: admin could not create s.f
+root UNRESOLVED  XCU.prs.002 setup: admin could not create s.f
+root UNRESOLVED  XCU.prs.003 setup: admin could not create s.f
+root UNRESOLVED  XCU.prs.004 setup: admin could not create s.f
+root UNRESOLVED  XCU.prs.005 setup: admin could not create s.f
+root UNRESOLVED  XCU.prs.006 setup: admin failed for s.a
+root FAIL        XCU.ps.015 process 32099 was not marked defunct: '    PID TTY          TIME CMD
+root FAIL        XCU.pwd.003 exec pwd wrote '/tmp/pcl2/res/root/tmp/pc.ea98R3/real', expected '/tmp/pcl2/res/root/tmp/pc.ea98R3/lnk'
+root FAIL        XCU.read.009 read -d exited 2
+root FAIL        XCU.read.010 read -d '' exited 2
+root FAIL        XCU.readlink.004 no diagnostic for a regular file
+root FAIL        XCU.realpath.004 realpath -E real/new exited with status 1
+root FAIL        XCU.realpath.006 realpath -e -E exited with status 1
+root FAIL        XCU.renice.005 renice wrote to standard output
+root UNRESOLVED  XCU.rm.015 setup: cannot enter level 338
+root FAIL        XCU.rm.016 LC_MESSAGES: with LC_MESSAGES set to the locale the result was [NY], not [YN]
+root FAIL        XCU.rm.017 LC_COLLATE: with LC_COLLATE set to the locale the result was [N], not [Y]
+root FAIL        XCU.rm.018 LC_CTYPE: with LC_CTYPE set to the locale the result was [N], not [Y]
+root UNRESOLVED  XCU.rmdel.001 setup: admin could not create s.f
+root UNRESOLVED  XCU.rmdel.002 setup: admin could not create s.f
+root UNRESOLVED  XCU.rmdel.003 setup: admin could not create s.f
+root UNRESOLVED  XCU.rmdel.004 setup: admin could not create s.f
+root UNRESOLVED  XCU.rmdel.005 setup: admin could not create s.f
+root UNRESOLVED  XCU.sact.001 setup: admin could not create s.f
+root UNRESOLVED  XCU.sact.002 setup: admin could not create s.f
+root UNRESOLVED  XCU.sact.003 setup: admin failed for s.a
+root FAIL        XCU.sed.014 N on the last line did not quit without writing the pattern space
+root FAIL        XCU.sed.021 r did not read the file as of the time of output: L1
+root FAIL        XCU.sed.022 LC_COLLATE: with LC_COLLATE set to the locale the result was [], not [ch]
+root FAIL        XCU.sed.023 LC_CTYPE: with LC_CTYPE set to the locale the result was [], not [e10a]
+root FAIL        XCU.sed.024 LC_CTYPE: with LC_CTYPE set to the locale the result was [XXXX], not [XXX]
+root FAIL        XCU.set.018 got ''
+root FAIL        XCU.sh-compound.009 fall through from b: got '', expected BC
+root FAIL        XCU.sh-errors.010 echo (: the interactive shell did not go on (out='')
+root FAIL        XCU.sh-errors.011 the shell did not go on: ''
+root FAIL        XCU.sh-patterns.002 'c' should match the pattern 'a[a-c]'
+root FAIL        XCU.sh-pipelines.004 got '', expected 'a=1
+root FAIL        XCU.sh-pipelines.005 got 'a=2', expected a=0
+root FAIL        XCU.sh.008 status 2, expected 127
+root FAIL        XCU.sh.015 -o pipefail: status 2, expected 1
+root FAIL        XCU.sh.017 cat got '', expected A and B
+root FAIL        XCU.sort.017 LC_COLLATE: with LC_COLLATE set to the locale the result was [a
+root FAIL        XCU.sort.018 LC_NUMERIC: with LC_NUMERIC set to the locale the result was [1], not [2]
+root FAIL        XCU.sort.019 LC_CTYPE: with LC_CTYPE set to the locale the result was [2], not [1]
+root FAIL        XCU.strings.003 -t d did not give '4 defgh' and '13 klmn'
+root FAIL        XCU.strings.004 the string after 131072 NUL bytes was not found with its offset
+root UNRESOLVED  XCU.strip.001 setup: c17 is not available
+root UNRESOLVED  XCU.strip.002 setup: c17 is not available
+root UNRESOLVED  XCU.strip.004 setup: c17 is not available
+root FAIL        XCU.stty.012 raw left erase enabled
+root FAIL        XCU.tail.004 -r did not reverse all lines
+root FAIL        XCU.test.005 exec test a < b gave status 2, wanted 0
+root FAIL        XCU.test.009 test new -nt none gave status 1, wanted 0
+root FAIL        XCU.test.015 LC_COLLATE: with LC_COLLATE set to the locale the result was [2], not [0]
+root FAIL        XCU.time.001 time -p true exited 127
+root FAIL        XCU.time.002 time -p sh -c 'exit 6' exited 127, wanted 6
+root FAIL        XCU.time.003 time exited 127
+root FAIL        XCU.time.004 time -p sleep 2 exited 127
+root FAIL        XCU.time.005 time of a file that cannot be run exited 127, wanted 126
+root FAIL        XCU.timeout.003 timeout -s KILL exited 137, wanted 124
+root FAIL        XCU.timeout.004 timeout -p exited 125, wanted the utility's status 9
+root FAIL        XCU.timeout.010 timeout -f 1 sleep 30 exited 125, wanted 124
+root FAIL        XCU.tr.009 LC_CTYPE: with LC_CTYPE set to the locale the result was [e1420a|e10a], not [420a|c10a]
+root FAIL        XCU.trap.010 setup shell failed with 2
+root INSPECT     XCU.trap.011 disputed (see the assertion's note): setup shell failed with 2
+root FAIL        XCU.trap.012 setup shell failed with 2
+root FAIL        XCU.trap.017 USR1, ignored on entry, is not in the listing
+root FAIL        XCU.trap.019 got 'no'
+root FAIL        XCU.tsort.004 -w with two separate cycles gave status 1, not 2
+root UNRESOLVED  XCU.uncompress.001 setup: compress failed
+root UNRESOLVED  XCU.uncompress.002 setup: compress failed
+root UNRESOLVED  XCU.uncompress.003 setup: compress failed
+root UNRESOLVED  XCU.uncompress.004 setup: compress failed
+root UNRESOLVED  XCU.uncompress.005 setup: compress failed
+root UNRESOLVED  XCU.uncompress.006 setup: compress failed
+root UNRESOLVED  XCU.uncompress.007 setup: compress -g failed
+root UNRESOLVED  XCU.unget.001 setup: admin could not create s.f
+root UNRESOLVED  XCU.unget.002 setup: admin could not create s.f
+root UNRESOLVED  XCU.unget.003 setup: admin could not create s.f
+root FAIL        XCU.uudecode.001 exit status 127
+root FAIL        XCU.uudecode.002 exit status 127
+root FAIL        XCU.uudecode.003 name /dev/stdout: exit status 127
+root FAIL        XCU.uudecode.004 exit status 127
+root FAIL        XCU.uudecode.005 exit status 127
+root FAIL        XCU.uudecode.006 uuencode failed for 0 bytes
+root FAIL        XCU.uudecode.007 exit status 127
+root FAIL        XCU.uudecode.008 exit status 127
+root FAIL        XCU.uudecode.010 exit status 127
+root FAIL        XCU.uudecode.011 name '-': exit status 127
+root FAIL        XCU.uuencode.001 exit status 127
+root FAIL        XCU.uuencode.002 exit status 127
+root FAIL        XCU.uuencode.003 exit status 127
+root FAIL        XCU.uuencode.004 exit status 127
+root FAIL        XCU.uuencode.005 standard input form: exit status 127
+root FAIL        XCU.uuencode.006 exit status 127
+root FAIL        XCU.uuencode.007 one byte: exit status 127
+root FAIL        XCU.uuencode.008 exit status 127
+root FAIL        XCU.uuencode.009 -m: exit status 127
+root UNRESOLVED  XCU.val.001 setup: admin could not create s.f
+root UNRESOLVED  XCU.val.002 setup: admin could not create s.f
+root UNRESOLVED  XCU.val.003 setup: admin could not create s.f
+root UNRESOLVED  XCU.val.004 setup: admin could not create s.f
+root UNRESOLVED  XCU.val.005 setup: admin could not create s.f
+root UNRESOLVED  XCU.val.006 setup: admin could not create s.f
+root FAIL        XCU.wait.005 second wait exited 0, wanted 127
+root FAIL        XCU.wc.009 the readable file was not counted
+root FAIL        XCU.wc.010 LC_CTYPE: with LC_CTYPE set to the locale the result was [5], not [4]
+root FAIL        XCU.what.001 what: exit status 127
+root FAIL        XCU.what.002 what -s: nonzero status
+root FAIL        XCU.what.003 a file without a match: exit status 127, expected 1
+root FAIL        XCU.what.004 what with matches in two files: exit status 127
+root UNRESOLVED  XCU.what.005 setup: admin could not create s.f
+root FAIL        XCU.who.003 who of a nonexistent file exited with status 0
+root FAIL        XCU.xgettext.001 xgettext: nonzero status
+root FAIL        XCU.xgettext.002 xgettext -d: nonzero status
+root FAIL        XCU.xgettext.003 xgettext -n: nonzero status
+root FAIL        XCU.xgettext.004 -K tr: nonzero status
+root FAIL        XCU.xgettext.005 xgettext -a: nonzero status
+root FAIL        XCU.xgettext.006 first xgettext: nonzero status
+root FAIL        XCU.xgettext.007 xgettext -x: nonzero status
+root FAIL        XCU.xgettext.008 xgettext -: nonzero status
+root UNRESOLVED  XCU.yacc.001 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.002 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.003 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.004 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.005 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.006 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.007 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.008 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.009 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.010 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.011 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.013 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.014 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.015 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.016 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.017 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.018 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.019 setup: c17 is not available
+root UNRESOLVED  XCU.yacc.020 setup: c17 is not available
+root UNRESOLVED  XCU.zcat.001 setup: compress failed
+root UNRESOLVED  XCU.zcat.002 setup: compress failed
+root UNRESOLVED  XCU.zcat.003 setup: compress failed
+root UNRESOLVED  XCU.zcat.005 setup: compress -g failed
+root INSPECT     XSH.2.10-sockets.005 disputed (see the assertion's note): a receive for six bytes returned 6 bytes while the first segment has three
+root UNRESOLVED  XSH.2.10-sockets.012 the send queue is not full
+root FAIL        XSH.2.10-sockets.015 creating a raw socket without privilege failed with an error other than EACCES or EPERM (status 2)
+root FAIL        XSH.2.11-data-types.002 does not compile: 'reclen_t' undeclared here (not in a function)
+root FAIL        XSH.2.11-data-types.004 the smallest id_t, 0, is above the smallest pid_t, -2147483648
+root FAIL        XSH.2.2-compilation-environment.006 does not compile: #error "_POSIX_VERSION is below 202405L with _XOPEN_SOURCE 800"
+root INSPECT     XSH.fgetwc.002 disputed (see the assertion's note): fgetwc() returned WEOF for byte 0x80 (errno EILSEQ)
+root FAIL        XSH.fputwc.010 fputwc() of an invalid wide-character code returned 0xd800, expected WEOF
+root UNRESOLVED  XSH.2.5.2-stream-orientation.006 the single-byte locale does not decode the bytes (C)
+root UNRESOLVED  XSH.2.5.2-stream-orientation.007 blocked by XSH.2.5.2-stream-orientation.006 (UNRESOLVED)
+root UNRESOLVED  XSH.2.5.2-stream-orientation.010 blocked by XSH.fputwc.010 (FAIL)
+root INSPECT     XSH.2.7-xsi-ipc.001 disputed (see the assertion's note): message queue identifier 0 is not positive
+root INSPECT     XSH.msync.007 disputed (see the assertion's note): msync(flags 0): returned 0, expected -1 with EINVAL
+root INSPECT     XSH.msync.008 disputed (see the assertion's note): msync(MS_INVALIDATE): returned 0, expected -1 with EINVAL
+root FAIL        XSH.2.9-threads.021 with a cancellation request pending and cancelability enabled the thread was not canceled in: aio_suspend (returned)
+root FAIL        XSH.2.9-threads.026 after pthread_exit(): the cancelability state seen in the cleanup handler was not DISABLE
+root FAIL        XSH._Exit.002 si_status is 0x34, expected the full value 0x1234
+root FAIL        XSH._Exit.014 si_status 0x34, expected 0x1234
+root INSPECT     XSH._Exit.019 disputed (see the assertion's note): the file holds 0 bytes, not 65536
+root FAIL        XSH.a64l.007 a64l("zzzzz1") was not -1
+root UNRESOLVED  XSH.accept.012 blocked by XBD.fcntl.h.002 (FAIL)
+root UNRESOLVED  XSH.accept.017 blocked by XBD.fcntl.h.002 (FAIL)
+root UNRESOLVED  XSH.access.018 <fcntl.h> does not define O_SEARCH
+root FAIL        XSH.aio_suspend.004 aio_suspend returned 0 for a list of null entries
+root INSPECT     XSH.atomic_fetch_add.006 disputed (see the assertion's note): shr: adding 3 moved the pointer by 3 bytes, not 3 objects (6 bytes)
+root FAIL        XSH.bind.009 bind() of an AF_INET address on an AF_UNIX socket gave EINVAL, expected EAFNOSUPPORT
+root FAIL        XSH.bind.012 bind() of an empty pathname gave success, expected ENOENT
+root FAIL        XSH.bind.018 bind() with a null address gave EFAULT, expected EDESTADDRREQ or EISDIR
+root FAIL        XSH.btowc.001 btowc(128) returned WEOF in the POSIX locale
+root FAIL        XSH.c16rtomb.008 c32rtomb() of 0x110000 returned 4, expected (size_t)-1
+root FAIL        XSH.catan.014 catan [double]: at (-1.5, 0.75) the result is (-1.05714, 0.207933), at (-1.5, -0.75) it is (-1.05714, -0.207933), expected (-1.05714, -0.207933)
+root FAIL        XSH.catan.015 catan [double]: at (-1.5, 0.75) the result is (-1.05714, 0.207933), at (1.5, -0.75) it is (1.05714, -0.207933), expected (1.05714, -0.207933)
+root FAIL        XSH.catanh.015 catanh [double]: at (0.5, 0.25) the result is (0.50037, 0.314398), at (-0.5, -0.25) it is (-0.50037, -0.314398), expected (-0.50037, -0.314398)
+root FAIL        XSH.catopen.009 catopen did not skip the file that is not a catalog: 0
+root FAIL        XSH.catopen.010 errno 0, expected ENOENT
+root FAIL        XSH.ccos.012 ccos [double]: at (inf, 0) the result is (-nan, 0), at (inf, -0) it is (-nan, 0), expected (-nan, -0)
+root FAIL        XSH.ccosh.012 ccosh [double]: at (0, inf) the result is (-nan, 0), at (0, -inf) it is (-nan, 0), expected (-nan, -0)
+root UNRESOLVED  XSH.chmod.019 <fcntl.h> does not define O_SEARCH
+root INSPECT     XSH.chown.008 disputed (see the assertion's note): chown(-1, -1) of another user's file succeeded
+root UNRESOLVED  XSH.chown.021 <fcntl.h> does not define O_SEARCH
+root UNRESOLVED  XSH.close.007 blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED  XSH.close.009 blocked by XBD.unistd.h.001 (FAIL)
+root UNRESOLVED  XSH.close.010 blocked by XBD.unistd.h.001 (FAIL)
+root FAIL        XSH.close.014 operation 2 failed with EBADF (neither completed nor canceled)
+root UNRESOLVED  XSH.confstr.006 <unistd.h> does not define _CS_V8_ENV
+root FAIL        XSH.connect.006 connect() to an empty pathname gave ECONNREFUSED, expected ENOENT
+root FAIL        XSH.connect.015 connect() on the established socket gave success, expected EISCONN
+root FAIL        XSH.connect.017 second connect() gave success, expected EALREADY (or EISCONN if complete)
+root FAIL        XSH.creat.012 creat("f/") of an existing file: errno EISDIR, expected ENOTDIR
+root FAIL        XSH.creat.013 creat("new/") failed with EISDIR, not ENOENT or ENOTDIR
+root FAIL        XSH.csin.012 csin [double]: at (inf, inf) the result is (-nan, inf), at (inf, -inf) it is (-nan, inf), expected (-nan, -inf)
+root FAIL        XSH.csin.013 csin [double]: at (inf, inf) the result is (-nan, inf), at (-inf, -inf) it is (-nan, inf), expected (nan, -inf)
+root FAIL        XSH.csinh.013 csinh [double]: at (inf, inf) the result is (inf, -nan), at (-inf, -inf) it is (inf, -nan), expected (-inf, nan)
+root UNRESOLVED  XSH.exec.010 blocked by XBD.fcntl.h.002 (FAIL)
+root FAIL        XSH.exec.028 the new image reports: the initial thread's CPU-time clock reads 2001 ms; the calling thread had used 2000 ms
+root UNRESOLVED  XSH.exec.056 blocked by XBD.fcntl.h.006 (FAIL)
+root FAIL        XSH.exit.002 si_status 0x34, expected 0x1234
+root FAIL        XSH.exit.012 si_status 0x34, expected 0x1234
+root UNRESOLVED  XSH.fchmod.007 <fcntl.h> does not define O_SEARCH
+root FAIL        XSH.fclose.003 the offset is 4096, not the stream's position 1
+root FAIL        XSH.fclose.010 the offset is 4096, expected 1
+root FAIL        XSH.fclose.011 the offset is 4096, expected the stream's position 1
+root FAIL        XSH.fclose.012 fclose() set errno 0, expected ENOSPC
+root UNRESOLVED  XSH.fcntl.016 blocked by XBD.fcntl.h.008 (FAIL)
+root UNRESOLVED  XSH.fcntl.037 blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED  XSH.fcntl.038 blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED  XSH.fcntl.039 blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED  XSH.fcntl.040 blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED  XSH.fcntl.041 blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED  XSH.fcntl.042 blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED  XSH.fcntl.043 blocked by XBD.fcntl.h.006 (FAIL)
+root FAIL        XSH.fdopen.005 "re": FD_CLOEXEC is clear
+root FAIL        XSH.fdopen.009 fdopen() succeeded with {STREAM_MAX} streams open
+root INSPECT     XSH.fdopen.013 disputed (see the assertion's note): "a": ftell() is 6, expected 2
+root FAIL        XSH.fflush.005 the descriptor's offset is 4095, expected 1
+root INSPECT     XSH.fflush.011 disputed (see the assertion's note): the input stream's descriptor offset is 4096, expected 1
+root FAIL        XSH.fflush.013 fflush() set errno 0, expected ENOSPC
+root FAIL        XSH.fgets.006 fgets() returned s although the read after "ab" could not be done without waiting
+root FAIL        XSH.fma.004 fma: domain error, errno is 0, expected EDOM
+root FAIL        XSH.fma.005 fma: domain error, errno is 0, expected EDOM
+root FAIL        XSH.fma.007 fma(MAX, 2, 0): overflow, errno is 0, expected ERANGE
+root FAIL        XSH.fmemopen.004 after fmemopen("w") the buffer starts "abc\000", expected a null byte
+root FAIL        XSH.fmemopen.006 fmemopen(buf, 0, "w+") changed the byte at buf to 0
+root FAIL        XSH.fmemopen.021 "w": the buffer holds "abc\000", expected "abcd"
+root FAIL        XSH.fmemopen.023 "r": fwide(f, 0) right after fmemopen() returned -1, expected 0
+root FAIL        XSH.fmemopen.024 fmemopen() succeeded with {STREAM_MAX} streams open
+root FAIL        XSH.fmtmsg.003 severity:text:action: fmtmsg() did not return MM_OK (code 1)
+root FAIL        XSH.fmtmsg.004 MSGVERB "": fmtmsg() did not return MM_OK (code 1)
+root FAIL        XSH.fopen.027 fopen("f/", "w") failed with EISDIR, expected ENOTDIR
+root FAIL        XSH.fopen.028 fopen("new/", "w") failed with EISDIR, expected ENOENT or ENOTDIR
+root FAIL        XSH.fopen.032 fopen("s", "r") succeeded
+root UNRESOLVED  XSH.fork.005 blocked by XBD.fcntl.h.002 (FAIL)
+root UNRESOLVED  XSH.fpathconf.006 <unistd.h> does not define _PC_TIMESTAMP_RESOLUTION
+root UNRESOLVED  XSH.fpathconf.007 no controlling terminal: open("/dev/tty") failed with ENXIO
+root FAIL        XSH.fputws.006 fputws() of a string with an invalid wide-character code returned 1, expected -1
+root FAIL        XSH.freopen.008 FD_CLOEXEC is set after freopen() with "r"
+root FAIL        XSH.freopen.011 the stream's descriptor is 6 after freopen(); the lowest available was 4
+root FAIL        XSH.freopen.022 with every descriptor in use, freopen() failed (it must close the old one first)
+root FAIL        XSH.fscanf.014 sscanf("100ergs", "%f%n") returned 1 (stored 100), expected 0
+root FAIL        XSH.fscanf.015 sscanf("0xg", "%x%n") returned 1, expected 0
+root FAIL        XSH.fscanf.043 sscanf("1", "%*d%d") returned -1, expected 0 (the %*d conversion completed)
+root INSPECT     XSH.fseek.004 disputed (see the assertion's note): "r": the descriptor's offset is 10, expected 7
+root INSPECT     XSH.fseek.016 disputed (see the assertion's note): fseeko() beyond the largest off_t failed with EINVAL, expected EOVERFLOW
+root UNRESOLVED  XSH.fstatat.013 <fcntl.h> does not define O_SEARCH
+root UNRESOLVED  XSH.futimens.025 <fcntl.h> does not define O_SEARCH
+root FAIL        XSH.fwprintf.013 swprintf() set errno E2BIG, expected EOVERFLOW
+root FAIL        XSH.fwprintf.018 fwprintf(%lc) of an invalid wide-character code returned 1, expected a negative value
+root FAIL        XSH.getaddrinfo.004 socket(2, 3, 0) failed: EPROTONOSUPPORT
+root FAIL        XSH.getaddrinfo.030 socket(2, 3, 0) failed: EPROTONOSUPPORT
+root FAIL        XSH.getdate.015 October: tm_mday is 4, expected 1
+root FAIL        XSH.getdate.019 getdate with an unknown zone name returned a pointer
+root FAIL        XSH.getdelim.012 with the error indicator set and "ab:" in the pipe, getdelim() returned -1 (errno 0), expected 3
+root UNRESOLVED  XSH.getgrgid.002 no unused group ID found
+root UNRESOLVED  XSH.getgrgid.004 no unused group ID found
+root FAIL        XSH.getgrnam.002 errno changed to 0 by a lookup that found nothing
+root UNRESOLVED  XSH.getlogin.004 getlogin() found no login name here
+root UNRESOLVED  XSH.getlogin.005 getlogin_r() found no login name here
+root FAIL        XSH.getnameinfo.008 no node and no service gave 0 (Success), expected EAI_NONAME
+root FAIL        XSH.getopt.002 optstring "a:b", arguments "-a...": got "a=-- |3 rest=x", expected "a=-- |4 rest=x"
+root FAIL        XSH.getpeername.008 getpeername() after SHUT_RDWR gave success, expected EINVAL
+root FAIL        XSH.getpriority.013 after setpriority(..., 1) in one thread, getpriority(PRIO_PROCESS, 0) in another thread returned 0, the calling thread sees 1 (before: 0)
+root FAIL        XSH.getpwnam.002 errno changed to 0 by a lookup that found nothing
+root UNRESOLVED  XSH.getpwuid.002 no unused user ID found
+root UNRESOLVED  XSH.getpwuid.004 no unused user ID found
+root FAIL        XSH.getsockopt.010 errno is ENOTSUP, expected ENOPROTOOPT or EINVAL
+root UNRESOLVED  XSH.gettext.007 the msgfmt utility could not build the test messages object
+root UNRESOLVED  XSH.gettext.008 the only locale found has a name that may stand for the POSIX locale
+root UNRESOLVED  XSH.gettext.009 the only locale found has a name that may stand for the POSIX locale
+root UNRESOLVED  XSH.gettext.011 the only locale found has a name that may stand for the POSIX locale
+root UNRESOLVED  XSH.gettext.012 the only locale found has a name that may stand for the POSIX locale
+root UNRESOLVED  XSH.gettext.013 the only locale found has a name that may stand for the POSIX locale
+root UNRESOLVED  XSH.gettext.014 the only locale found has a name that may stand for the POSIX locale
+root UNRESOLVED  XSH.gettext.015 the only locale found has a name that may stand for the POSIX locale
+root FAIL        XSH.glob.019 name 0 is "//", expected "/"
+root FAIL        XSH.grantpt.002 the permissions are 600, lacking owner read/write or group write
+root FAIL        XSH.iconv.006 discarding an invalid byte was treated as an error: EILSEQ
+root FAIL        XSH.iconv.007 failed: EILSEQ
+root FAIL        XSH.iconv.008 failed: EILSEQ
+root FAIL        XSH.iconv.010 a valid character without an identical counterpart gave an error (EILSEQ); the text asks for an implementation-defined conversion
+root FAIL        XSH.inet_ntop.002 inet_pton(AF_INET, "001.002.003.004") returned 0, expected 1
+root UNRESOLVED  XSH.kill.005 skipped: needs kill_uid, which this system or run does not provide
+root UNRESOLVED  XSH.kill.012 skipped: needs kill_uid, which this system or run does not provide
+root FAIL        XSH.unlink.005 unlink() of a directory did not fail with EPERM
+root FAIL        XSH.unlink.010 unlinkat(c/d, 0) of a directory did not fail with EPERM
+root UNRESOLVED  XSH.unlink.021 <fcntl.h> does not define O_SEARCH
+root INSPECT     XSH.link.019 disputed (see the assertion's note): link() of another user's readable file failed with EPERM
+root UNRESOLVED  XSH.link.021 <fcntl.h> does not define O_SEARCH
+root FAIL        XSH.listen.003 listen() on an unbound AF_UNIX socket failed with EINVAL, expected success or EDESTADDRREQ
+root FAIL        XSH.llrint.004 llrint: domain error, errno is 0, expected EDOM
+root FAIL        XSH.llrint.005 llrint: domain error, errno is 0, expected EDOM
+root FAIL        XSH.llrint.006 llrint: domain error, errno is 0, expected EDOM
+root FAIL        XSH.llrint.007 llrint: domain error, errno is 0, expected EDOM
+root FAIL        XSH.llround.004 llround: domain error, errno is 0, expected EDOM
+root FAIL        XSH.llround.005 llround: domain error, errno is 0, expected EDOM
+root FAIL        XSH.llround.006 llround: domain error, errno is 0, expected EDOM
+root FAIL        XSH.llround.007 llround: domain error, errno is 0, expected EDOM
+root FAIL        XSH.localtime.006 TZ=PCS5PCD,0/0,J365/25: localtime(1609470000): gave 2020-12-31 22:00:00 (yday 365), whose XBD 4.19 value is 1609452000, expected 1609455600
+root FAIL        XSH.logb.005 logb: pole error, errno is 0, expected ERANGE
+root FAIL        XSH.lrint.004 lrint: domain error, errno is 0, expected EDOM
+root FAIL        XSH.lrint.005 lrint: domain error, errno is 0, expected EDOM
+root FAIL        XSH.lrint.006 lrint: domain error, errno is 0, expected EDOM
+root FAIL        XSH.lrint.007 lrint: domain error, errno is 0, expected EDOM
+root FAIL        XSH.lround.004 lround: domain error, errno is 0, expected EDOM
+root FAIL        XSH.lround.005 lround: domain error, errno is 0, expected EDOM
+root FAIL        XSH.lround.006 lround: domain error, errno is 0, expected EDOM
+root FAIL        XSH.lround.007 lround: domain error, errno is 0, expected EDOM
+root INSPECT     XSH.lseek.011 disputed (see the assertion's note): lseek(fd, <largest off_t>, SEEK_CUR) from offset 1: errno EINVAL, expected EOVERFLOW
+root UNRESOLVED  XSH.lseek.012 blocked by XBD.unistd.h.002 (FAIL)
+root UNRESOLVED  XSH.lseek.013 blocked by XBD.unistd.h.002 (FAIL)
+root UNRESOLVED  XSH.lseek.014 blocked by XBD.unistd.h.002 (FAIL)
+root FAIL        XSH.mblen.002 mblen() of byte 128 with n 1 returned -1, expected 1
+root FAIL        XSH.mbrlen.001 mbrlen() of byte 128 returned 18446744073709551615, expected 1
+root FAIL        XSH.mbrtoc16.001 mbrtoc32() of byte 128 returned 18446744073709551615, expected 1
+root FAIL        XSH.mbrtowc.001 mbrtowc() of byte 128 returned 18446744073709551615, expected 1
+root FAIL        XSH.mbstowcs.005 mbstowcs() of the 255 non-null bytes returned 18446744073709551615, expected 255
+root FAIL        XSH.mbtowc.001 mbtowc() of byte 128 returned -1, expected 1
+root UNRESOLVED  XSH.mkdir.018 <fcntl.h> does not define O_SEARCH
+root FAIL        XSH.mkdtemp.018 O_CLOFORK or FD_CLOFORK is not defined by the headers
+root UNRESOLVED  XSH.mkfifo.016 <fcntl.h> does not define O_SEARCH
+root UNRESOLVED  XSH.mknod.016 <fcntl.h> does not define O_SEARCH
+root INSPECT     XSH.mknod.019 disputed (see the assertion's note): an unprivileged mknod() with dev 0: S_IFREG succeeded; S_IFCHR succeeded (EPERM expected)
+root FAIL        XSH.mlock.004 the failed mlock() locked the first page
+root FAIL        XSH.msgctl.005 raising msg_qbytes in the unprivileged child: the call succeeded
+root FAIL        XSH.nextafter.006 nextafter: underflow, errno is 0, expected ERANGE
+root FAIL        XSH.nftw.003 fn was called 3 times, expected 5
+root FAIL        XSH.nice.005 after nice(1) returned 1 in one thread, getpriority(PRIO_PROCESS, 0) in another thread returned 0
+root UNRESOLVED  XSH.open.011 blocked by XBD.fcntl.h.002 (FAIL)
+root UNRESOLVED  XSH.open.012 blocked by XBD.fcntl.h.002 (FAIL)
+root FAIL        XSH.open.044 open("n/", O_WRONLY|O_CREAT): errno EISDIR, expected ENOENT or ENOTDIR
+root FAIL        XSH.open.045 open("f/", O_WRONLY|O_CREAT|O_TRUNC): errno EISDIR, expected ENOTDIR
+root UNRESOLVED  XSH.open.050 blocked by XBD.fcntl.h.007 (FAIL)
+root FAIL        XSH.open_memstream.011 open_memstream() succeeded with {STREAM_MAX} streams open
+root FAIL        XSH.open_memstream.015 killed by signal 11 during the test
+root UNRESOLVED  XSH.opendir.012 <fcntl.h> does not define O_SEARCH
+root FAIL        XSH.perror.005 fwide(stderr, 0) is -1 after perror(): the orientation changed
+root UNRESOLVED  XSH.popen.009 setup: <fcntl.h> does not define FD_CLOFORK
+root UNRESOLVED  XSH.popen.010 setup: <fcntl.h> does not define FD_CLOFORK
+root FAIL        XSH.popen.014 popen() succeeded with {STREAM_MAX} streams open
+root UNRESOLVED  XSH.popen.018 setup: <fcntl.h> does not define FD_CLOFORK
+root FAIL        XSH.posix_madvise.004 posix_madvise over a range past the address space returned 22, expected ENOMEM (12)
+root UNRESOLVED  XSH.posix_spawn.017 setup: <fcntl.h> does not define FD_CLOFORK
+root UNRESOLVED  XSH.posix_spawn.018 setup: <fcntl.h> does not define FD_CLOFORK
+root UNRESOLVED  XSH.posix_spawn.043 <spawn.h> does not define POSIX_SPAWN_SETSID
+root UNRESOLVED  XSH.posix_spawn.053 posix_spawnattr_setschedpolicy failed (EINVAL)
+root INSPECT     XSH.psiginfo.003 disputed (see the assertion's note): psiginfo() wrote "pc: User defined signal 1 (Signal sent by kill() 104511 0) " but psignal() "pc: User defined signal 1 "
+root FAIL        XSH.psiginfo.004 psignal() gave standard error an orientation
+root FAIL        XSH.psiginfo.007 the error indicator of stderr is not set
+root FAIL        XSH.pthread_cancel.005 in the cleanup handler the cancelability state was PTHREAD_CANCEL_ENABLE, not PTHREAD_CANCEL_DISABLE
+root UNRESOLVED  XSH.pthread_mutex_getprioceiling.001 the other thread's trylock returned EINVAL (its priority exceeds the lowered ceiling)
+root FAIL        XSH.pthread_mutex_lock.014 the second (after the trylock) pthread_mutex_lock() of the unusable mutex, which no thread owns, had not returned after 10 s
+root FAIL        XSH.putwc.003 putwc() of an invalid wide-character code returned 0xd800, expected WEOF
+root FAIL        XSH.pwrite.002 pwrite() did not write at the offset given
+root FAIL        XSH.read.021 read() on an unconnected stream socket: errno EINVAL, expected ENOTCONN
+root FAIL        XSH.readlink.003 readlink() into 0 bytes returned -1
+root UNRESOLVED  XSH.readlink.018 <fcntl.h> does not define O_SEARCH
+root FAIL        XSH.readv.010 readv() with two buffers of SSIZE_MAX: errno EFAULT, expected EINVAL
+root FAIL        XSH.realloc.004 realloc(p, 0) returned null with errno 0, expected EINVAL
+root FAIL        XSH.recv.010 recv() on an unconnected stream socket: errno EINVAL, expected ENOTCONN
+root FAIL        XSH.recvfrom.014 recvfrom() on an unconnected stream socket: errno EINVAL, expected ENOTCONN
+root FAIL        XSH.recvmsg.010 recvmsg() with msg_iovlen 0: returned 0, expected -1 with EMSGSIZE
+root FAIL        XSH.recvmsg.012 recvmsg() with two buffers of SSIZE_MAX: errno EFAULT, expected EINVAL
+root FAIL        XSH.recvmsg.016 recvmsg() on an unconnected stream socket: errno EINVAL, expected ENOTCONN
+root FAIL        XSH.recvmsg.028 killed by signal 11 during the test
+root FAIL        XSH.regcomp.017 case 5: "\(a\(b\)*\)*\2" on "abab" should not match, got 0 [0,4]
+root FAIL        XSH.regcomp.024 case 3: "(a(b)*)*" on "aba": pmatch[2] is [1,2], expected [-1,-1]
+root FAIL        XSH.regcomp.026 case 2: "(a|ab)(c|bcd)(d*)" on "abcd": pmatch[1] is [0,1], expected [0,2]
+root FAIL        XSH.regcomp.033 case 1: ".*?c" on "abc abc" matched [0,7], expected [0,3]
+root FAIL        XSH.regcomp.051 regoff_t cannot hold PTRDIFF_MAX
+root FAIL        XSH.remquo.004 remquo: domain error, errno is 0, expected EDOM
+root FAIL        XSH.rename.012 rename("p/d/.", "x"): errno EBUSY, expected EINVAL
+root FAIL        XSH.rename.014 rename(d, "nd/") succeeded
+root UNRESOLVED  XSH.rename.027 <fcntl.h> does not define O_SEARCH
+root FAIL        XSH.sched_setscheduler.001 returned 0, the former policy was 1
+root FAIL        XSH.select.009 select returned 2 (errno -), expected 3
+root FAIL        XSH.select.012 select with nfds FD_SETSIZE+1 returned 2, expected -1
+root INSPECT     XSH.sendmsg.003 disputed (see the assertion's note): sendmsg() with msg_iovlen 0: returned 0, expected -1 with EMSGSIZE
+root FAIL        XSH.sendmsg.005 sendmsg() with two buffers of SSIZE_MAX: errno EFAULT, expected EINVAL
+root FAIL        XSH.sendmsg.013 sendmsg() on an AF_UNIX socket with an AF_INET address: errno EINVAL, expected EAFNOSUPPORT
+root FAIL        XSH.sendto.007 sendto() on an AF_UNIX socket with an AF_INET address: errno EINVAL, expected EAFNOSUPPORT
+root FAIL        XSH.setegid.004 setegid(<effective ID, neither real nor saved>) without privileges returned 0, expected -1
+root FAIL        XSH.seteuid.004 seteuid(<effective ID, neither real nor saved>) without privileges returned 0, expected -1
+root FAIL        XSH.setlocale.007 setlocale(LC_ALL, "") failed with every LC_* set to C
+root FAIL        XSH.setregid.006 setregid(<saved set-group-ID from exec>, -1) without privileges failed with EPERM
+root FAIL        XSH.setsockopt.018 errno is ENOTSUP, expected ENOPROTOOPT or EINVAL
+root FAIL        XSH.setsockopt.019 setsockopt on a socket shut down in both directions returned 0
+root FAIL        XSH.shutdown.008 shutdown() on a fresh AF_UNIX socket gave success, expected ENOTCONN
+root INSPECT     XSH.sigaction.021 disputed (see the assertion's note): 1 deliveries for 3 signals queued with sigqueue()
+root FAIL        XSH.sigaction.023 SA_SIGINFO was still set inside the handler
+root FAIL        XSH.sigaltstack.005 sigaltstack() with ss_flags SS_ONSTACK: returned 0, expected -1 with EINVAL
+root FAIL        XSH.sigaltstack.010 the child with a MINSIGSTKSZ alternate stack ended with status 0xb (SIGSEGV: the signal frame did not fit)
+root UNRESOLVED  XSH.socket.009 blocked by XBD.fcntl.h.002 (FAIL)
+root FAIL        XSH.socket.013 socket(2, SOCK_STREAM, 99999) failed with EINVAL
+root UNRESOLVED  XSH.socketpair.008 blocked by XBD.fcntl.h.002 (FAIL)
+root FAIL        XSH.socketpair.009 socket_vector changed to 4, 5
+root FAIL        XSH.socketpair.010 socket_vector changed to 4, 5
+root FAIL        XSH.socketpair.012 socket_vector changed to 4, 5
+root FAIL        XSH.strfmon.005 strfmon("%+.0n", 123) returned 3, expected -1
+root FAIL        XSH.strfmon.006 both signs are empty but strfmon("%+.0n", 123) returned 3, errno 0
+root FAIL        XSH.strfmon.013 POSIX global locale: strfmon_l("%+.0n") returned 1, errno 0, expected -1 and EINVAL
+root FAIL        XSH.strftime.002 strftime("%C") for 270-06-01 12:00:00 (wday 3, yday 151) gave "2" (return 1), expected "02"
+root FAIL        XSH.strftime.007 strftime("%+4Y") for 1970-01-02 12:00:00 (wday 5, yday 1) gave "%+4Y" (return 4), expected "1970"
+root FAIL        XSH.strftime.012 after strftime() tzname[0] is "PCT", expected "PCE"
+root FAIL        XSH.strftime.014 strftime() with maxsize 10 for 10 bytes set errno to 0, expected ERANGE
+root FAIL        XSH.strptime.004 strptime("61,", "%S,") did not return a null pointer
+root FAIL        XSH.strptime.009 strptime("12345-06-07", "%F") returned a null pointer
+root FAIL        XSH.strptime.014 strptime("00,", "%V,") did not return a null pointer
+root FAIL        XSH.strptime.016 strptime("PCB", "%Z"): tm_isdst is -7777, expected 1
+root FAIL        XSH.strptime.017 strptime("2024", "%2Y") returned offset 4, expected 2
+root FAIL        XSH.strptime.018 strptime("99,", "%Ey,") returned a null pointer
+root FAIL        XSH.strsignal.002 for SIGRTMIN psignal() wrote "pc: Unknown signal 34 " but strsignal() gave "Real-time signal 0"
+root FAIL        XSH.symlink.003 symlink("", "e") failed: ENOENT
+root UNRESOLVED  XSH.symlink.020 <fcntl.h> does not define O_SEARCH
+root FAIL        XSH.sysconf.001 sysconf(_SC_THREAD_ROBUST_PRIO_INHERIT) failed with EINVAL: the name is not supported
+root FAIL        XSH.sysconf.002 sysconf(_SC_HOST_NAME_MAX) returned 64, below the minimum acceptable value 255
+root FAIL        XSH.sysconf.004 <unistd.h> defines _POSIX_THREAD_ROBUST_PRIO_INHERIT as 200809 (always supported) but sysconf(_SC_THREAD_ROBUST_PRIO_INHERIT) returns -1
+root FAIL        XSH.sysconf.005 sysconf(_SC_VERSION) returned 200809, expected 202405
+root FAIL        XSH.sysconf.007 sysconf(_SC_ADVISORY_INFO) returned 200809, expected -1 or 202405
+root FAIL        XSH.sysconf.009 sysconf(_SC_ARG_MAX) returned 2097152, and 4194304 after the RLIMIT_STACK and RLIMIT_NOFILE soft limits changed
+root UNRESOLVED  XSH.sysconf.015 <unistd.h> lacks _SC_NSIG or <limits.h> lacks NSIG_MAX
+root UNRESOLVED  XSH.system.011 setup: <fcntl.h> does not define FD_CLOFORK
+root UNRESOLVED  XSH.tcdrain.003 the child could not hold the output
+root UNRESOLVED  XSH.tcdrain.008 the parent did not end
+root UNRESOLVED  XSH.tcflow.002 timed out after 60s
+root UNRESOLVED  XSH.tcflow.003 timed out after 60s
+root UNRESOLVED  XSH.tcflow.010 the parent did not end
+root UNRESOLVED  XSH.tcflush.002 timed out after 60s
+root UNRESOLVED  XSH.tcflush.003 timed out after 60s
+root UNRESOLVED  XSH.tcflush.004 timed out after 60s
+root UNRESOLVED  XSH.tcflush.005 timed out after 60s
+root UNRESOLVED  XSH.tcflush.011 the parent did not end
+root UNRESOLVED  XSH.tcsendbreak.007 the parent did not end
+root UNRESOLVED  XSH.tcsetattr.010 the child could not hold the output
+root UNRESOLVED  XSH.tcsetattr.013 the parent did not end
+root FAIL        XSH.tcsetpgrp.007 tcsetpgrp() returned -1, errno ENOTTY, expected -1 with EIO
+root FAIL        XSH.thrd_sleep.002 errno is 0, expected EINTR
+root FAIL        XSH.thrd_sleep.003 errno is 0, expected EINTR
+root FAIL        XSH.thrd_sleep.004 errno is 0, expected EINVAL
+root FAIL        XSH.timer_getoverrun.001 a disarmed timer reports time left
+root FAIL        XSH.ttyname.004 ttyname_r() with namesize 10 (name needs 11) returned ENODEV, expected ERANGE
+root FAIL        XSH.vfwprintf.004 vswprintf() set errno E2BIG, expected EOVERFLOW
+root FAIL        XSH.wait.019 SIGCHLD is still pending after wait() reported the only child
+root FAIL        XSH.waitid.003 si_status is 7 for _exit(263), expected 263
+root FAIL        XSH.waitid.015 waitid(WSTOPPED|WNOHANG) of a terminated child returned -1 (ECHILD), expected 0
+root UNRESOLVED  XSH.wcrtomb.002 setup: setup: mbrtowc() of byte 128 returned 18446744073709551615
+root FAIL        XSH.wcsftime.006 wcsftime("%+6Y") returned 4, expected 6
+root FAIL        XSH.wcstok.008 wcstok() call 3 changed errno from 0 to EINVAL
+root UNRESOLVED  XSH.wctob.001 setup: btowc(128) returned WEOF
+root UNRESOLVED  XSH.wctob.004 setup: btowc(0xE1) returned WEOF
+root UNRESOLVED  XSH.wctomb.002 setup: setup: mbtowc() of byte 128 returned -1
+root FAIL        XSH.wordexp.005 case 2: wordexp("$((PCW_N+1))") returned 5
+root FAIL        XSH.wordexp.008 wordexp("a|b") failed but we_wordc is 99
+root FAIL        XSH.wordexp.009 wordexp("(a)") failed but we_wordc is 99
+root FAIL        XSH.wordexp.014 case 2: wordexp(""$PCW_E"") returned 1
+root FAIL        XSH.write.022 pwrite with O_APPEND did not write at offset 3
+root FAIL        XSH.writev.005 writev() with SSIZE_MAX and 1: errno EFAULT, expected EINVAL
+user UNRESOLVED  XBD.10.1-directory-structure-and-files.007 /dev/console cannot be opened here (EACCES); it need not be readable
+user FAIL        XBD.11.1-interface-characteristics.004 the first leader's tcgetpgrp() returned 142822, not its own group -1
+user FAIL        XBD.11.1-interface-characteristics.005 the old session's leader lost the terminal too: tcgetpgrp() returned 142835, expected -1
+user FAIL        XBD.11.1-interface-characteristics.006 the reopened terminal is not the controlling terminal: tcgetpgrp() returned 142848, expected -1
+user FAIL        XBD.11.1-interface-characteristics.007 the foreground group at the start was 142861, not the leader's -1
+user UNRESOLVED  XBD.11.1-interface-characteristics.010 the parent did not end
+user FAIL        XBD.11.1-interface-characteristics.031 two bytes with MIN 3 satisfied the read: it returned 2 (errno 0)
+user FAIL        XBD.11.1-interface-characteristics.039 ERASE after a backslash: got [61 62 0a ]
+user FAIL        XBD.11.1-interface-characteristics.045 input sent before the last close could be read after the reopen: 3 bytes (errno 0)
+user UNRESOLVED  XBD.11.2-terminal-parameters.007 timed out after 60s
+user UNRESOLVED  XBD.11.2-terminal-parameters.009 timed out after 60s
+user FAIL        XBD.11.2-terminal-parameters.016 NL1 with OFILL: got [61 0a ], expected [61 0a 00 00 ]
+user UNRESOLVED  XBD.11.2-terminal-parameters.025 timed out after 60s
+user FAIL        XBD.2-conformance.001 not found with PATH from getconf PATH: at batch crontab gettext lp msgfmt ngettext pax time uudecode uuencode write
+user FAIL        XBD.2-conformance.002 utilities of a supported option not found: POSIX2_C_DEV:c17 POSIX2_C_DEV:lex
+user FAIL        XBD.2-conformance.003 getconf POSIX2_UPE wrote 'undefined' on an XSI system
+user FAIL        XBD.2-conformance.005 _POSIX_MEMLOCK is not 202405L
+user FAIL        XBD.2-conformance.006 _POSIX_THREAD_PRIO_INHERIT is not 202405L
+user FAIL        XBD.2-conformance.008 c17 could not build a program from two files that define and use four external names differing at byte 31 or in case only
+user FAIL        XBD.4.1-case-insensitive-comparisons.002 find -iname '[[:lower:]]ulu' found 0 names, expected 1
+user FAIL        XBD.4.11-file-system-cache.002 a read of 262144 bytes, concurrent with writes of 262144 bytes, returned data that is neither all old nor all new (or fewer bytes)
+user UNRESOLVED  XBD.4.5-directory-protection.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XBD.4.5-directory-protection.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XBD.4.7-file-access-permissions.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XBD.4.7-file-access-permissions.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XBD.4.7-file-access-permissions.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XBD.4.7-file-access-permissions.006 skipped: needs root privilege, which this run was not granted
+user FAIL        XBD.5-file-format-notation.009 awk printf "%.s|", "abc" wrote 'abc|', expected '|'
+user FAIL        XBD.5-file-format-notation.010 awk printf "%F|", "1.5" wrote '', expected '1.500000|'
+user FAIL        XBD.5-file-format-notation.013 awk printf "%a", 0 wrote '', expected 0x0 and a zero exponent in lowercase
+user FAIL        XBD.6.2-character-encoding.001 byte 128: mbrtowc gave 18446744073709551615
+user UNRESOLVED  XBD.6.4-charmap-description.001 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.6.4-charmap-description.002 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.6.4-charmap-description.003 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.6.4-charmap-description.004 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.6.4-charmap-description.005 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.6.4-charmap-description.006 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.6.4-charmap-description.007 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.6.4-charmap-description.008 the locale localedef created cannot be selected through LC_ALL
+user FAIL        XBD.7.1-locale-general.001 setlocale(LC_ALL, "") failed with LC_ALL naming the locale pathname /tmp/pcl2/res/user/tmp/pc.23lgrU/pathloc.loc
+user FAIL        XBD.7.1-locale-general.002 newlocale(LC_ALL_MASK, "") failed (ENOENT) with LC_ALL naming the locale pathname /tmp/pcl2/res/user/tmp/pc.y9Cfgk/pathloc.loc
+user UNRESOLVED  XBD.7.2-posix-locale.002 the locale localedef created cannot be selected through LC_ALL
+user FAIL        XBD.7.3.1-lc-ctype.002 byte 128 is not a character of the POSIX locale
+user FAIL        XBD.7.3.1-lc-ctype.003 byte 128 is not a character of the POSIX locale
+user FAIL        XBD.7.3.1-lc-ctype.004 byte 128 is not a character of the POSIX locale
+user UNRESOLVED  XBD.7.3.1-lc-ctype.006 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.1-lc-ctype.007 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.1-lc-ctype.008 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.1-lc-ctype.009 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.1-lc-ctype.010 the locale localedef created cannot be selected through LC_ALL
+user FAIL        XBD.7.3.2-lc-collate.001 wcscoll disagrees with strcoll for bytes 1 and 128
+user FAIL        XBD.7.3.2-lc-collate.002 wcscoll: the code of byte 127 does not collate before that of byte 128
+user UNRESOLVED  XBD.7.3.2-lc-collate.004 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.2-lc-collate.005 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.2-lc-collate.006 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.2-lc-collate.007 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.2-lc-collate.008 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.2-lc-collate.009 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.2-lc-collate.010 localedef refused the test source ellini.src (status 139)
+user UNRESOLVED  XBD.7.3.2-lc-collate.011 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.2-lc-collate.013 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.3-lc-monetary.001 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.3-lc-monetary.002 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.3-lc-monetary.003 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.3-lc-monetary.004 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.3-lc-monetary.005 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.4-lc-numeric.001 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.4-lc-numeric.002 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.4-lc-numeric.003 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.4-lc-numeric.004 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.5-lc-time.001 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.5-lc-time.002 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.5-lc-time.003 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.5-lc-time.004 the locale localedef created cannot be selected through LC_ALL
+user FAIL        XBD.7.3.5-lc-time.005 date wrote "Wednesday|October|Wed|Oct" with the locale in LC_ALL, not "udday|monj|ud|mj"
+user UNRESOLVED  XBD.7.3.5-lc-time.006 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.5-lc-time.008 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.5-lc-time.009 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.3.6-lc-messages.001 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.4-locale-grammar.001 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.4-locale-grammar.002 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.4-locale-grammar.003 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.4-locale-grammar.004 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.4-locale-grammar.005 the locale localedef created cannot be selected through LC_ALL
+user UNRESOLVED  XBD.7.4-locale-grammar.006 the locale localedef created cannot be selected through LC_ALL
+user FAIL        XBD.8.1-environment-variable-definition.004 readonly LINENO accepted but LINENO does not change between lines: :
+user UNRESOLVED  XBD.8.2-internationalization-variables.001 the locale named by the environment cannot be selected
+user UNRESOLVED  XBD.8.2-internationalization-variables.002 the locale named by the environment cannot be selected
+user UNRESOLVED  XBD.8.2-internationalization-variables.003 the locale named by the environment cannot be selected
+user FAIL        XBD.8.2-internationalization-variables.006 case 2 (LC_ALL/LC_TIME/LANG order): the weekday is "Wednesday", not locale X's "udday"
+user UNRESOLVED  XBD.9.3-bre.006 regcomp ran out of memory on a count of 32767
+user UNRESOLVED  XBD.9.4-ere.007 regcomp ran out of memory on a count of 32767
+user FAIL        XBD.aio.h.008 lio_listio() is not declared as int lio_listio(int, struct aiocb *restrict const [restrict], int, struct sigevent *restrict)
+user FAIL        XBD.complex.h.006 imaginary or _Imaginary_I is not defined although the IEC 60559 complex option is claimed
+user UNRESOLVED  XBD.dirent.h.001 a constant is missing (the header check reports it): DT_BLK DT_CHR DT_DIR DT_FIFO DT_LNK DT_REG DT_SOCK DT_UNKNOWN
+user UNRESOLVED  XBD.dirent.h.002 a DT_ constant is missing (the header check reports it)
+user FAIL        XBD.dirent.h.003 does not compile: unknown type name 'ino_t'
+user FAIL        XBD.dirent.h.004 does not compile: unknown type name 'reclen_t'
+user FAIL        XBD.dirent.h.005 does not compile: unknown type name 'ino_t'
+user FAIL        XBD.dirent.h.006 does not compile: invalid application of 'sizeof' to incomplete type 'struct posix_dent'
+user FAIL        XBD.dirent.h.008 does not compile: 'posix_getdents' undeclared (first use in this function)
+user FAIL        XBD.dlfcn.h.002 does not compile: 'Dl_info_t' undeclared here (not in a function)
+user FAIL        XBD.dlfcn.h.004 does not compile: 'dladdr' undeclared (first use in this function)
+user FAIL        XBD.fcntl.h.002 <fcntl.h> does not define FD_CLOFORK
+user UNRESOLVED  XBD.fcntl.h.003 blocked by XBD.fcntl.h.002 (FAIL)
+user FAIL        XBD.fcntl.h.005 <fcntl.h> does not define O_CLOFORK
+user FAIL        XBD.fcntl.h.006 <fcntl.h> does not define F_OFD_GETLK
+user FAIL        XBD.fcntl.h.007 <fcntl.h> does not define O_TTY_INIT
+user FAIL        XBD.fcntl.h.008 <fcntl.h> does not define F_GETOWN_EX and F_SETOWN_EX
+user UNRESOLVED  XBD.fcntl.h.011 a constant is missing (the header check reports it): O_CLOEXEC O_CREAT O_DIRECTORY O_EXCL O_NOCTTY O_NOFOLLOW O_TRUNC O_TTY_INIT
+user UNRESOLVED  XBD.fnmatch.h.002 FNM_CASEFOLD, FNM_IGNORECASE or FNM_PATHNAME is missing (the header check reports it)
+user UNRESOLVED  XBD.ftw.h.002 a constant is missing (the header check reports it): FTW_PHYS FTW_MOUNT FTW_XDEV FTW_DEPTH FTW_CHDIR
+user FAIL        XBD.inttypes.h.006 does not compile: unknown type name 'wchar_t'
+user FAIL        XBD.inttypes.h.007 does not compile: unknown type name 'wchar_t'
+user FAIL        XBD.langinfo.h.003 does not compile: 'ALTMON_1' undeclared (first use in this function); did you mean 'ABMON_1'?
+user FAIL        XBD.langinfo.h.004 does not compile: 'ALTMON_1' undeclared here (not in a function); did you mean 'ABMON_1'?
+user FAIL        XBD.limits.h.004 does not compile: #error "_XOPEN_IOV_MAX is missing or not the required value"
+user FAIL        XBD.limits.h.007 does not compile: #error "LONG_BIT is below 32"
+user FAIL        XBD.limits.h.008 does not compile: #error "LONG_BIT or WORD_BIT is below 2"
+user FAIL        XBD.limits.h.011 does not compile: #error "HOST_NAME_MAX is below its minimum acceptable value"
+user FAIL        XBD.limits.h.014 does not compile: #error "GETENTROPY_MAX is not defined"
+user FAIL        XBD.locale.h.006 does not compile: 'getlocalename_l' undeclared (first use in this function)
+user FAIL        XBD.math.h.014 does not compile: 'M_EGAMMA' undeclared here (not in a function)
+user FAIL        XBD.math.h.015 does not compile: 'M_El' undeclared here (not in a function); did you mean 'M_E'?
+user FAIL        XBD.netdb.h.002 <netdb.h> does not define NI_NUMERICSCOPE
+user FAIL        XBD.netinet_in.h.002 IPPROTO_ICMP and SOL_SOCKET are both 1
+user UNRESOLVED  XBD.netinet_in.h.003 blocked by XBD.netinet_in.h.002 (FAIL)
+user UNRESOLVED  XBD.netinet_in.h.004 blocked by XBD.netinet_in.h.002 (FAIL)
+user FAIL        XBD.poll.h.007 does not compile: unknown type name 'sigset_t'
+user FAIL        XBD.poll.h.008 does not compile: invalid application of 'sizeof' to incomplete type 'struct timespec'
+user FAIL        XBD.poll.h.009 does not compile: 'ppoll' undeclared (first use in this function); did you mean 'poll'?
+user UNRESOLVED  XBD.pthread.h.004 a constant is missing (the header check reports it): PTHREAD_MUTEX_NORMAL PTHREAD_MUTEX_ERRORCHECK PTHREAD_MUTEX_RECURSIVE
+user UNRESOLVED  XBD.pthread.h.005 a constant is missing (the header check reports it): PTHREAD_MUTEX_ROBUST PTHREAD_MUTEX_STALLED
+user UNRESOLVED  XBD.pthread.h.009 a constant is missing (the header check reports it): PTHREAD_PRIO_NONE
+user UNRESOLVED  XBD.pthread.h.012 PTHREAD_NULL is missing (the header check reports it)
+user FAIL        XBD.pthread.h.015 does not compile: 'pthread_cond_clockwait' undeclared (first use in this function); did you mean 'pthread_cond_timedwait'?
+user FAIL        XBD.regex.h.002 <regex.h> does not define REG_MINIMAL
+user FAIL        XBD.regex.h.005 regoff_t cannot hold PTRDIFF_MAX
+user FAIL        XBD.semaphore.h.004 <semaphore.h> does not define O_CREAT
+user FAIL        XBD.semaphore.h.005 does not compile: 'sem_clockwait' undeclared (first use in this function); did you mean 'sem_trywait'?
+user FAIL        XBD.signal.h.006 SIGRTMIN..SIGRTMAX holds 31 signals; {RTSIG_MAX} is 32
+user FAIL        XBD.signal.h.007 <unistd.h> does not define _SC_NSIG
+user FAIL        XBD.signal.h.008 <signal.h> does not define SIG2STR_MAX
+user FAIL        XBD.signal.h.028 does not compile: 'sig2str' undeclared (first use in this function)
+user UNRESOLVED  XBD.spawn.h.001 a constant is missing (the header check reports it): POSIX_SPAWN_RESETIDS POSIX_SPAWN_SETPGROUP POSIX_SPAWN_SETSIGDEF POSIX_SPAWN_SETSIGMASK POSIX_SPAWN_SETSID
+user FAIL        XBD.spawn.h.007 does not compile: 'posix_spawn_file_actions_addchdir' undeclared (first use in this function); did you mean 'posix_spawn_file_actions_addclose'?
+user FAIL        XBD.stdlib.h.007 does not compile: 'mkostemp' undeclared (first use in this function); did you mean 'mkstemp'?
+user FAIL        XBD.stdlib.h.008 does not compile: 'ptsname_r' undeclared (first use in this function); did you mean 'ptsname'?
+user FAIL        XBD.stdlib.h.009 does not compile: 'realpath' undeclared (first use in this function)
+user FAIL        XBD.sys_mman.h.011 <sys/mman.h> does not define O_RDONLY
+user FAIL        XBD.sys_mman.h.013 <sys/mman.h> does not define O_CREAT
+user FAIL        XBD.sys_sem.h.003 struct semid_ds member sem_nsems is not of type unsigned short
+user UNRESOLVED  XBD.sys_shm.h.003 SHM_FAILED is missing (the header check reports it)
+user FAIL        XBD.sys_socket.h.006 <sys/socket.h> does not define SOCK_CLOFORK
+user FAIL        XBD.sys_socket.h.007 the headers do not define SO_DOMAIN
+user FAIL        XBD.sys_socket.h.008 the headers do not define MSG_CMSG_CLOFORK
+user FAIL        XBD.sys_socket.h.016 killed by signal 11 during the test
+user FAIL        XBD.sys_socket.h.018 struct msghdr member msg_iovlen is not of type int
+user FAIL        XBD.sys_socket.h.020 struct cmsghdr member cmsg_len is not of type socklen_t
+user FAIL        XBD.sys_socket.h.024 does not compile: 'accept4' undeclared (first use in this function); did you mean 'accept'?
+user UNRESOLVED  XBD.sys_stat.h.004 a constant is missing (the header check reports it): S_IFBLK S_IFCHR S_IFIFO S_IFREG S_IFDIR S_IFLNK S_IFSOCK
+user UNRESOLVED  XBD.sys_stat.h.005 a file type constant or test macro is missing (the header check reports it)
+user FAIL        XBD.sys_types.h.007 does not compile: 'reclen_t' undeclared here (not in a function)
+user FAIL        XBD.sys_types.h.008 does not compile: unknown type name 'suseconds_t'
+user FAIL        XBD.sys_types.h.009 does not compile: unknown type name 'suseconds_t'
+user FAIL        XBD.sys_types.h.011 does not compile: unknown type name 'reclen_t'
+user UNRESOLVED  XBD.sys_wait.h.006 WCOREDUMP is missing (the header check reports it)
+user FAIL        XBD.termios.h.015 does not compile: invalid application of 'sizeof' to incomplete type 'struct winsize'
+user FAIL        XBD.termios.h.017 does not compile: 'tcgetwinsize' undeclared (first use in this function)
+user FAIL        XBD.unistd.h.001 <unistd.h> does not define POSIX_CLOSE_RESTART
+user FAIL        XBD.unistd.h.002 <unistd.h> does not define SEEK_HOLE and SEEK_DATA as macros
+user FAIL        XBD.unistd.h.004 does not compile: #error "_POSIX_VERSION is not defined as 202405L"
+user FAIL        XBD.unistd.h.005 does not compile: #error "_XOPEN_VERSION is not defined as 800"
+user FAIL        XBD.unistd.h.006 does not compile: #error "_POSIX_ADVISORY_INFO has a value its description does not allow"
+user FAIL        XBD.unistd.h.007 does not compile: #error "_POSIX_ASYNCHRONOUS_IO is not defined as 202405L"
+user FAIL        XBD.unistd.h.010 does not compile: '_SC_DEVICE_CONTROL' undeclared (first use in this function); did you mean '_SC_DEVICE_IO'?
+user FAIL        XBD.unistd.h.011 _POSIX_THREAD_ROBUST_PRIO_INHERIT is greater than zero but sysconf(_SC_THREAD_ROBUST_PRIO_INHERIT) is -1
+user FAIL        XBD.unistd.h.014 does not compile: '_SC_XOPEN_UUCP' undeclared (first use in this function); did you mean '_SC_XOPEN_UNIX'?
+user FAIL        XBD.unistd.h.015 does not compile: '_PC_TIMESTAMP_RESOLUTION' undeclared (first use in this function)
+user FAIL        XBD.unistd.h.016 does not compile: '_CS_POSIX_V7_THREADS_CFLAGS' undeclared (first use in this function); did you mean '_CS_POSIX_V7_LP64_OFF64_CFLAGS'?
+user FAIL        XBD.unistd.h.019 does not compile: '_SC_DEVICE_CONTROL' undeclared here (not in a function); did you mean '_SC_DEVICE_IO'?
+user FAIL        XBD.unistd.h.021 <unistd.h> does not define O_CLOEXEC
+user FAIL        XBD.unistd.h.024 does not compile: 'dup3' undeclared (first use in this function); did you mean 'dup2'?
+user FAIL        XBD.unistd.h.025 does not compile: 'getresgid' undeclared (first use in this function); did you mean 'setregid'?
+user FAIL        XBD.utmpx.h.002 struct utmpx member ut_tv is not of type struct timeval
+user FAIL        XBD.wchar.h.008 does not compile: 'wcslcat' undeclared (first use in this function); did you mean 'wcsncat'?
+user UNRESOLVED  XBD.wordexp.h.001 a constant is missing (the header check reports it): WRDE_APPEND WRDE_DOOFFS WRDE_NOCMD WRDE_REUSE WRDE_SHOWERR WRDE_UNDEF
+user UNRESOLVED  XBD.wordexp.h.002 a constant is missing (the header check reports it): WRDE_BADCHAR WRDE_BADVAL WRDE_CMDSUB WRDE_NOSPACE WRDE_SYNTAX
+user FAIL        XCU.1.4-utility-defaults.012 sh reading a script from standard input: got ''
+user FAIL        XCU.1.4-utility-defaults.013 (awk 'NR == 2 { exit }'; cat): got ''
+user FAIL        XCU.2.2-quoting.012 standard output was []
+user FAIL        XCU.2.2-quoting.013 standard output was [$\cA
+user FAIL        XCU.2.2-quoting.014 standard output was [$\x41\x4a
+user FAIL        XCU.2.2-quoting.015 standard output was [$\101
+user FAIL        XCU.2.2-quoting.016 standard output was [$$x * ? `y` $(z) a  b\tc]
+user FAIL        XCU.2.2-quoting.017 standard output was []
+user FAIL        XCU.2.4-reserved-words.007 standard output was [rc=127
+user FAIL        XCU.2.5-parameters.017 standard output was [a
+user FAIL        XCU.2.6-word-expansions.009 standard output was [pcg*
+user FAIL        XCU.2.6-word-expansions.029 standard output was []
+user FAIL        XCU.2.6-word-expansions.043 standard output was [2 a b
+user UNRESOLVED  XCU.admin.001 setup: get is not available
+user UNRESOLVED  XCU.admin.002 setup: get is not available
+user UNRESOLVED  XCU.admin.003 setup: prs is not available
+user UNRESOLVED  XCU.admin.004 setup: prs is not available
+user UNRESOLVED  XCU.admin.005 setup: prs is not available
+user UNRESOLVED  XCU.admin.006 setup: prs is not available
+user UNRESOLVED  XCU.admin.007 setup: admin could not create s.f
+user UNRESOLVED  XCU.admin.008 setup: get is not available
+user FAIL        XCU.ar.002 ar -t a sub/f2 listed 'f2', expected the operand as given
+user FAIL        XCU.ar.007 an older file replaced the archived member
+user FAIL        XCU.ar.008 mode field is 'rw-r--r--'
+user UNRESOLVED  XCU.at.001 at refused the job (status 127): the user may not be allowed to use it
+user UNRESOLVED  XCU.at.002 setup: at could not submit a job (status 127)
+user UNRESOLVED  XCU.at.003 setup: at could not submit a job (status 127)
+user UNRESOLVED  XCU.at.004 at -f with a good file failed (status 127): the user may not be allowed to use at
+user UNRESOLVED  XCU.at.005 at refused 'at noon Dec 9, 2035' (status 127)
+user UNRESOLVED  XCU.at.007 setup: at could not submit a job (status 127)
+user FAIL        XCU.awk.005 with RS null a newline was not a field separator under FS=:
+user FAIL        XCU.awk.013 srand did not repeat the sequence or rand was out of range
+user FAIL        XCU.awk.032 a missing field: 0 1 1
+user FAIL        XCU.awk.036 LC_COLLATE: with LC_COLLATE set to the locale the result was [0], not [1]
+user FAIL        XCU.awk.037 LC_CTYPE: with LC_CTYPE set to the locale the result was [e10a|], not [c10a|y]
+user FAIL        XCU.awk.038 LC_NUMERIC: with LC_NUMERIC set to the locale the result was [1.5], not [1,5]
+user FAIL        XCU.awk.039 LC_CTYPE: with LC_CTYPE set to the locale the result was [4], not [3]
+user UNRESOLVED  XCU.batch.001 batch exited with status 127: the user may not be allowed to use it
+user FAIL        XCU.bc.005 quit inside a loop did not stop execution
+user FAIL        XCU.bc.006 quit inside a function did not stop the program
+user FAIL        XCU.c17.001 c17 p.c: exit status 127
+user FAIL        XCU.c17.002 c17 -c a.c b.c: exit status 127
+user FAIL        XCU.c17.003 -D: nonzero status
+user FAIL        XCU.c17.004 c17 -E: exit status 127
+user FAIL        XCU.c17.005 -I inc1 -I inc2: nonzero status
+user UNRESOLVED  XCU.c17.006 setup: c17 -c failed
+user FAIL        XCU.c17.007 c17 -O 0: exit status 127
+user FAIL        XCU.c17.008 the good source was not compiled after the error
+user UNRESOLVED  XCU.c17.009 setup: c17 -E failed
+user FAIL        XCU.c17.010 m3.c: nonzero status
+user FAIL        XCU.c17.011 -l m: nonzero status
+user FAIL        XCU.c17.012 linking two 31-byte names: nonzero status
+user FAIL        XCU.c17.013 the language-level check failed to compile: exit status 127
+user FAIL        XCU.c17.014 c17 a.c -D PCV=3 -o pa failed
+user FAIL        XCU.c17.015 linking with -l pthread failed
+user UNRESOLVED  XCU.c17.016 setup: c17 -c failed
+user FAIL        XCU.c17.017 c17 -G -c failed
+user FAIL        XCU.c17.018 the default environment does not compile the size program
+user FAIL        XCU.c17.019 a translation unit with 4095 external identifiers was rejected
+user FAIL        XCU.cal.001 cal 2 2024 failed
+user FAIL        XCU.cal.002 cal 2 1100 failed
+user FAIL        XCU.cal.003 cal 9 1752 failed
+user FAIL        XCU.cal.004 cal 2023 failed
+user FAIL        XCU.cal.005 cal failed
+user FAIL        XCU.cal.007 cal 2 2024 exited with status 127
+user FAIL        XCU.cd.012 cd '' exited 0
+user FAIL        XCU.cd.013 cd nosuch/.. exited 0
+user FAIL        XCU.cflow.001 cflow: nonzero status
+user FAIL        XCU.cflow.002 cflow: nonzero status
+user FAIL        XCU.cflow.003 cflow -r: nonzero status
+user FAIL        XCU.cflow.004 cflow: nonzero status
+user FAIL        XCU.cflow.005 cflow: nonzero status
+user FAIL        XCU.cflow.006 cflow: nonzero status
+user UNRESOLVED  XCU.cflow.008 setup: c17 is not available
+user UNRESOLVED  XCU.chgrp.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XCU.chgrp.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XCU.chgrp.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XCU.chgrp.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XCU.chgrp.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XCU.chown.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XCU.chown.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XCU.chown.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XCU.chown.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XCU.chown.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XCU.chown.006 skipped: needs root privilege, which this run was not granted
+user FAIL        XCU.comm.006 LC_COLLATE: with LC_COLLATE set to the locale the result was [], not [a]
+user FAIL        XCU.command.004 command -v wrote './bin/pccmd', not an absolute pathname
+user FAIL        XCU.compress.001 compress: exit status 127
+user FAIL        XCU.compress.002 compress -c: exit status 127
+user FAIL        XCU.compress.003 compress -g: exit status 127
+user FAIL        XCU.compress.004 compress -g of a one-byte file: exit status 127, expected 2
+user FAIL        XCU.compress.005 compress -b 12: exit status 127
+user FAIL        XCU.compress.006 compress f1 f2: exit status 127
+user FAIL        XCU.compress.007 compress -g -m lzw: exit status 127
+user FAIL        XCU.compress.009 compress with no operand: exit status 127
+user UNRESOLVED  XCU.compress.010 setup: compress -c failed
+user FAIL        XCU.compress.011 compress -f: exit status 127
+user FAIL        XCU.compress.012 compress -v: exit status 127
+user FAIL        XCU.compress.013 exit status 127
+user FAIL        XCU.cp.009 cp -i exited with status 1 after a negative reply
+user UNRESOLVED  XCU.cp.027 skipped: needs root privilege, which this run was not granted
+user FAIL        XCU.cp.029 LC_MESSAGES: with LC_MESSAGES set to the locale the result was [NY], not [YN]
+user FAIL        XCU.cp.030 LC_COLLATE: with LC_COLLATE set to the locale the result was [N], not [Y]
+user FAIL        XCU.cp.031 LC_CTYPE: with LC_CTYPE set to the locale the result was [N], not [Y]
+user UNRESOLVED  XCU.crontab.001 crontab FILE exited with status 127: the user may not be allowed to use it
+user UNRESOLVED  XCU.crontab.002 crontab from standard input exited with status 127: the user may not be allowed to use it
+user UNRESOLVED  XCU.crontab.003 setup: crontab could not install an entry (the user may not be allowed to use it)
+user UNRESOLVED  XCU.crontab.004 setup: crontab could not install an entry (the user may not be allowed to use it)
+user UNRESOLVED  XCU.crontab.005 setup: crontab could not install an entry (the user may not be allowed to use it)
+user FAIL        XCU.csplit.009 LC_COLLATE: with LC_COLLATE set to the locale the result was [], not [x]
+user FAIL        XCU.csplit.010 LC_CTYPE: with LC_CTYPE set to the locale the result was [], not [310a]
+user FAIL        XCU.ctags.001 ctags: nonzero status
+user FAIL        XCU.ctags.002 ctags: nonzero status
+user FAIL        XCU.ctags.003 ctags: nonzero status
+user FAIL        XCU.ctags.004 ctags -f: nonzero status
+user FAIL        XCU.ctags.005 ctags -x: nonzero status
+user FAIL        XCU.ctags.006 ctags: nonzero status
+user FAIL        XCU.cut.002 -c 1,4-5,8 gave the wrong result
+user FAIL        XCU.cut.005 -b 3-9 gave the wrong result
+user FAIL        XCU.cut.007 -d : -f 2,4 gave the wrong result
+user FAIL        XCU.cut.013 LC_CTYPE: with LC_CTYPE set to the locale the result was [e10a], not [e1e20a]
+user FAIL        XCU.cxref.001 cxref: nonzero status
+user FAIL        XCU.cxref.002 cxref: nonzero status
+user FAIL        XCU.cxref.003 cxref: nonzero status
+user FAIL        XCU.cxref.004 cxref: nonzero status
+user FAIL        XCU.cxref.005 cxref: nonzero status
+user FAIL        XCU.cxref.006 cxref -w 51: nonzero status
+user FAIL        XCU.cxref.007 cxref: nonzero status
+user FAIL        XCU.date.010 LC_TIME: with LC_TIME set to the locale the result was [names [Wednesday Wed October Oct PM] expected [udday ud monj mj post]], not [OK]
+user FAIL        XCU.dd.020 dd iflags=fullblock exited with status 1
+user UNRESOLVED  XCU.delta.001 setup: admin could not create s.f
+user UNRESOLVED  XCU.delta.002 setup: admin could not create s.f
+user UNRESOLVED  XCU.delta.003 setup: admin could not create s.f
+user UNRESOLVED  XCU.delta.004 setup: admin could not create s.f
+user UNRESOLVED  XCU.delta.005 setup: admin could not create s.f
+user UNRESOLVED  XCU.delta.006 setup: admin could not create s.f
+user FAIL        XCU.df.001 header is: Filesystem 1024-blocks Used Available Capacity Mounted on
+user FAIL        XCU.df.005 total is 264212084 in 512-byte units but 264212084 in 1024-byte units
+user FAIL        XCU.df.008 df -t exited with status 1
+user FAIL        XCU.diff.003 the -c header lines are not '*** f1 <date>' and '--- f2 <date>' with the file times
+user FAIL        XCU.diff.011 with TZ=PCA0 the first header line was [*** f	Tue Jun 15 10:30:00 2021]
+user FAIL        XCU.dot.006 interactive shell did not continue (out='')
+user FAIL        XCU.du.005 512-byte units: 104, 1024-byte units: 104
+user FAIL        XCU.echo.005 echo -n wrote something other than what was wanted
+user FAIL        XCU.echo.006 exec echo a\tb wrote something other than what was wanted
+user FAIL        XCU.echo.007 exec echo ab\c wrote something other than what was wanted
+user FAIL        XCU.echo.008 exec echo \0101 wrote something other than what was wanted
+user FAIL        XCU.ed.013 q on a changed buffer wrote '24
+user FAIL        XCU.ed.017 an invalid command gave '?', expected ? then the line count 5
+user FAIL        XCU.ed.019 separators gave 'one two three four five two two three four five three one two four four one one two three five four two three four one two two three four ', expected 'one two three four five two two three four five three one two four four one one two three five four two three four one two two three four'
+user FAIL        XCU.ed.021 omitted delimiters gave 'uno two three uno two three two three ? ', expected 'uno two three uno two three two three '
+user FAIL        XCU.ed.024 m gave 'three four one two five 5 ? ', expected 'three four one two five 4 ? '
+user FAIL        XCU.ed.025 s results were 'uno [w]two thrEE f0ur fivE ? ', expected 'uno [w]two thrEE f0ur fivE '
+user FAIL        XCU.exec.005 got '' (status 127)
+user FAIL        XCU.expr.005 expr 1 + + 2 exited 0, wanted 2 to 2
+user FAIL        XCU.expr.010 LC_COLLATE: with LC_COLLATE set to the locale the result was [0], not [1]
+user FAIL        XCU.expr.011 LC_COLLATE: with LC_COLLATE set to the locale the result was [ ], not [2 0]
+user FAIL        XCU.expr.012 LC_CTYPE: with LC_CTYPE set to the locale the result was [0], not [1]
+user FAIL        XCU.file.006 first line is: f: text/plain; charset=us-ascii
+user FAIL        XCU.file.008 link to a directory: ld: symbolic link to d
+user FAIL        XCU.file.009 -M: matching file: 
+user UNRESOLVED  XCU.find.013 skipped: needs root privilege, which this run was not granted
+user FAIL        XCU.find.034 LC_MESSAGES: with LC_MESSAGES set to the locale the result was [NY], not [YN]
+user FAIL        XCU.find.035 LC_COLLATE: with LC_COLLATE set to the locale the result was [|N], not [fnd/ch|Y]
+user FAIL        XCU.find.036 LC_CTYPE: with LC_CTYPE set to the locale the result was [|N], not [666e632fe10a|Y]
+user UNRESOLVED  XCU.gencat.001 setup: c17 is not available
+user UNRESOLVED  XCU.gencat.002 setup: c17 is not available
+user UNRESOLVED  XCU.gencat.003 setup: c17 is not available
+user UNRESOLVED  XCU.gencat.004 setup: c17 is not available
+user UNRESOLVED  XCU.gencat.005 setup: c17 is not available
+user UNRESOLVED  XCU.get.001 setup: admin could not create s.f
+user UNRESOLVED  XCU.get.002 setup: admin could not create s.f
+user UNRESOLVED  XCU.get.003 setup: admin could not create s.f
+user UNRESOLVED  XCU.get.004 setup: admin could not create s.f
+user UNRESOLVED  XCU.get.005 setup: admin could not create s.f
+user UNRESOLVED  XCU.get.006 setup: admin could not create s.f
+user UNRESOLVED  XCU.get.007 setup: admin could not create s.f
+user UNRESOLVED  XCU.get.008 setup: admin could not create s.f
+user UNRESOLVED  XCU.get.009 setup: admin failed for s.a
+user FAIL        XCU.getconf.005 getconf POSIX2_C_BIND gave '200809
+user FAIL        XCU.getconf.006 getconf NPROCESSORS_CONF exited 2
+user FAIL        XCU.getconf.007 shell: getconf _POSIX_ARG_MAX wrote '2097152', wanted 4096
+user FAIL        XCU.getopts.011 OPTARG is set to '' after a flag
+user FAIL        XCU.getopts.016 diagnostic 'Illegal option -Q' does not name the program (016-diagnostic.sh)
+user FAIL        XCU.gettext.001 form 1: exit status 127
+user FAIL        XCU.gettext.002 -e: nonzero status
+user FAIL        XCU.gettext.003 -s: nonzero status
+user FAIL        XCU.grep.009 LC_COLLATE: with LC_COLLATE set to the locale the result was [], not [ch]
+user FAIL        XCU.grep.010 LC_CTYPE: with LC_CTYPE set to the locale the result was [0|1], not [1|2]
+user UNRESOLVED  XCU.id.007 skipped: needs root privilege, which this run was not granted
+user FAIL        XCU.ipcs.001 the first line '' is not of the form 'IPC status from SOURCE as of DATE'
+user FAIL        XCU.ipcs.005 ipcs -o exited with status 1
+user FAIL        XCU.join.011 LC_COLLATE: with LC_COLLATE set to the locale the result was [], not [a 2 3]
+user UNRESOLVED  XCU.lex.001 setup: c17 is not available
+user UNRESOLVED  XCU.lex.002 setup: c17 is not available
+user UNRESOLVED  XCU.lex.003 setup: c17 is not available
+user UNRESOLVED  XCU.lex.004 setup: c17 is not available
+user UNRESOLVED  XCU.lex.005 setup: c17 is not available
+user UNRESOLVED  XCU.lex.006 setup: c17 is not available
+user UNRESOLVED  XCU.lex.007 setup: c17 is not available
+user UNRESOLVED  XCU.lex.008 setup: c17 is not available
+user UNRESOLVED  XCU.lex.009 setup: c17 is not available
+user FAIL        XCU.localedef.003 a locale was created although the source file was missing
+user FAIL        XCU.localedef.004 a locale was created from a source with an error
+user FAIL        XCU.ls.018 total is 256 in 512-byte units but 256 with -k
+user FAIL        XCU.ls.039 ls -f -t gives another order than ls -f: '.. . .h a c b ' against 'b . c .h .. a '
+user FAIL        XCU.ls.043 ls -lF writes 's1 -> f1' for s1, expected 's1@ -> f1' with or without the indicator ''
+user FAIL        XCU.ls.044 ls -i -s -1 wrote 'total 4
+user FAIL        XCU.ls.053 LC_COLLATE: with LC_COLLATE set to the locale the result was [a
+user FAIL        XCU.ls.054 LC_CTYPE: with LC_CTYPE set to the locale the result was [613f620a], not [61e1620a]
+user FAIL        XCU.m4.001 m4: nonzero status
+user FAIL        XCU.m4.007 m4wrap: output differs: body
+user FAIL        XCU.m4.016 exit status 0 although a file could not be created
+user FAIL        XCU.make.008 -q on an out-of-date target with a + command: exit status 0, expected 1
+user FAIL        XCU.make.011 make: nonzero status
+user FAIL        XCU.make.020 .WAIT: exit status 2 (y ran before x finished?)
+user FAIL        XCU.make.027 with .PRECIOUS and no prerequisites a target was removed after SIGTERM
+user FAIL        XCU.msgfmt.001 msgfmt: exit status 127
+user FAIL        XCU.msgfmt.002 msgfmt -S: nonzero status
+user FAIL        XCU.msgfmt.003 msgfmt -S -o out: nonzero status
+user FAIL        XCU.msgfmt.004 -D sub did not find sub/a.po (status 127)
+user FAIL        XCU.msgfmt.005 a consistent entry was diagnosed
+user FAIL        XCU.msgfmt.006 msgfmt (fuzzy input): nonzero status
+user FAIL        XCU.mv.005 mv -i exited with status 1 after a negative reply
+user FAIL        XCU.mv.015 LC_MESSAGES: with LC_MESSAGES set to the locale the result was [NY], not [YN]
+user FAIL        XCU.mv.016 LC_COLLATE: with LC_COLLATE set to the locale the result was [N], not [Y]
+user FAIL        XCU.mv.017 LC_CTYPE: with LC_CTYPE set to the locale the result was [N], not [Y]
+user UNRESOLVED  XCU.newgrp.001 newgrp did not create the shell (status 1)
+user UNRESOLVED  XCU.newgrp.002 newgrp exited with status 1 before running the commands
+user FAIL        XCU.newgrp.003 newgrp 65534 exited with status 1 and the shell did not run
+user FAIL        XCU.ngettext.001 form 1, n=1: exit status 127
+user FAIL        XCU.ngettext.002 -e plural: nonzero status
+user FAIL        XCU.ngettext.003 large n: nonzero status
+user FAIL        XCU.nl.002 the empty line was not written as an empty line
+user FAIL        XCU.nl.009 LC_COLLATE: with LC_COLLATE set to the locale the result was [], not [ch]
+user FAIL        XCU.nl.010 LC_CTYPE: with LC_CTYPE set to the locale the result was [], not [e10a]
+user UNRESOLVED  XCU.nm.001 setup: c17 is not available
+user UNRESOLVED  XCU.nm.002 setup: c17 is not available
+user UNRESOLVED  XCU.nm.003 setup: c17 is not available
+user UNRESOLVED  XCU.nm.004 setup: c17 is not available
+user UNRESOLVED  XCU.nm.005 setup: c17 is not available
+user UNRESOLVED  XCU.nm.006 setup: c17 is not available
+user UNRESOLVED  XCU.nm.007 setup: c17 is not available
+user UNRESOLVED  XCU.nm.008 setup: c17 is not available
+user UNRESOLVED  XCU.nm.009 setup: c17 is not available
+user FAIL        XCU.od.011 od -b f1 +2. gave status 1
+user FAIL        XCU.paste.009 LC_CTYPE: with LC_CTYPE set to the locale the result was [61e1630a62e1640a], not [61e1e2630a62e1e2640a]
+user FAIL        XCU.patch.005 -b -o with an existing outfile did not create outfile.orig
+user FAIL        XCU.patch.010 -N: an already-applied patch was written to a reject file
+user FAIL        XCU.pax.001 pax -w: nonzero status
+user FAIL        XCU.pax.002 pax -w -f: nonzero status
+user UNRESOLVED  XCU.pax.003 setup: pax -w failed
+user UNRESOLVED  XCU.pax.004 setup: pax -w failed
+user FAIL        XCU.pax.005 pax -w with names on standard input: nonzero status
+user FAIL        XCU.pax.006 pax -w -x ustar: nonzero status
+user FAIL        XCU.pax.007 pax -w -x cpio: nonzero status
+user FAIL        XCU.pax.008 pax -w -x pax: nonzero status
+user FAIL        XCU.pax.009 pax -rw: nonzero status
+user FAIL        XCU.pax.010 write with -s: nonzero status
+user UNRESOLVED  XCU.pax.011 setup: pax -w failed
+user UNRESOLVED  XCU.pax.012 setup: pax -w failed
+user UNRESOLVED  XCU.pax.013 setup: pax -w failed
+user UNRESOLVED  XCU.pax.014 setup: pax -w failed
+user UNRESOLVED  XCU.pax.015 setup: pax -w failed
+user FAIL        XCU.pax.016 pax -w -f A: nonzero status
+user FAIL        XCU.pax.017 pax -w: nonzero status
+user FAIL        XCU.pax.018 pax -w sl: nonzero status
+user FAIL        XCU.pax.019 pax -w d h: nonzero status
+user UNRESOLVED  XCU.pax.020 setup: pax -w failed
+user FAIL        XCU.pax.021 pax -w -b 4096 -x ustar: nonzero status
+user UNRESOLVED  XCU.pax.022 setup: pax -w failed
+user FAIL        XCU.pax.023 pax -rw -l: nonzero status
+user FAIL        XCU.pax.025 -s with &: nonzero status
+user UNRESOLVED  XCU.pax.026 setup: pax -w failed
+user UNRESOLVED  XCU.pax.027 setup: pax -w failed
+user FAIL        XCU.pax.028 pax -w -t: nonzero status
+user FAIL        XCU.pax.029 pax -w t: nonzero status
+user UNRESOLVED  XCU.pax.030 setup: pax -w failed
+user UNRESOLVED  XCU.pax.031 setup: pax -w failed
+user FAIL        XCU.pax.032 pax -w -x ustar: nonzero status
+user FAIL        XCU.pax.033 pax -w -x ustar of a 152-character path: nonzero status
+user FAIL        XCU.pax.034 pax -w -x cpio: nonzero status
+user FAIL        XCU.pax.035 -o comment:=hello: nonzero status
+user FAIL        XCU.pax.036 pax -w -x pax -o comment=one -o comment=two: nonzero status
+user UNRESOLVED  XCU.pax.037 setup: pax -w with a global gname failed
+user FAIL        XCU.pax.038 pax -w -x ustar: nonzero status
+user UNRESOLVED  XCU.pax.039 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XCU.pax.040 setup: pax -w failed
+user UNRESOLVED  XCU.pax.041 setup: pax -w failed
+user UNRESOLVED  XCU.pax.042 setup: pax -w with a long path record failed
+user FAIL        XCU.pax.043 pax -w -x pax: nonzero status
+user FAIL        XCU.pax.044 pax -w -x pax of the long names: nonzero status
+user FAIL        XCU.pax.045 pax -w -x pax: nonzero status
+user UNRESOLVED  XCU.pax.046 setup: pax -w failed
+user FAIL        XCU.pr.001 the first page is not a 5-line header, 56 lines and a 5-line trailer
+user FAIL        XCU.pr.002 -l 15 did not give 5-line page bodies between headers and trailers
+user FAIL        XCU.pr.003 -h did not replace the file name in the header
+user FAIL        XCU.pr.012 each file does not have a header with its own name
+user FAIL        XCU.pr.013 with TZ=PCA0 the header line was [2021-06-15 10:30                        f                         Page 1], not [Jun 15 10:30 2021 f Page 1]
+user FAIL        XCU.printf.012 printf %2$s %1$s a b did not write what was wanted, or did not exit zero
+user FAIL        XCU.printf.015 LC_NUMERIC: with LC_NUMERIC set to the locale the result was [1.0], not [1,0]
+user UNRESOLVED  XCU.prs.001 setup: admin could not create s.f
+user UNRESOLVED  XCU.prs.002 setup: admin could not create s.f
+user UNRESOLVED  XCU.prs.003 setup: admin could not create s.f
+user UNRESOLVED  XCU.prs.004 setup: admin could not create s.f
+user UNRESOLVED  XCU.prs.005 setup: admin could not create s.f
+user UNRESOLVED  XCU.prs.006 setup: admin failed for s.a
+user FAIL        XCU.ps.015 process 173942 was not marked defunct: '    PID TTY          TIME CMD
+user FAIL        XCU.pwd.003 exec pwd wrote '/tmp/pcl2/res/user/tmp/pc.KUhtYj/real', expected '/tmp/pcl2/res/user/tmp/pc.KUhtYj/lnk'
+user FAIL        XCU.read.009 read -d exited 2
+user FAIL        XCU.read.010 read -d '' exited 2
+user FAIL        XCU.readlink.004 no diagnostic for a regular file
+user FAIL        XCU.realpath.004 realpath -E real/new exited with status 1
+user FAIL        XCU.realpath.006 realpath -e -E exited with status 1
+user FAIL        XCU.renice.005 renice wrote to standard output
+user UNRESOLVED  XCU.rm.015 setup: cannot enter level 338
+user FAIL        XCU.rm.016 LC_MESSAGES: with LC_MESSAGES set to the locale the result was [NY], not [YN]
+user FAIL        XCU.rm.017 LC_COLLATE: with LC_COLLATE set to the locale the result was [N], not [Y]
+user FAIL        XCU.rm.018 LC_CTYPE: with LC_CTYPE set to the locale the result was [N], not [Y]
+user UNRESOLVED  XCU.rmdel.001 setup: admin could not create s.f
+user UNRESOLVED  XCU.rmdel.002 setup: admin could not create s.f
+user UNRESOLVED  XCU.rmdel.003 setup: admin could not create s.f
+user UNRESOLVED  XCU.rmdel.004 setup: admin could not create s.f
+user UNRESOLVED  XCU.rmdel.005 setup: admin could not create s.f
+user UNRESOLVED  XCU.sact.001 setup: admin could not create s.f
+user UNRESOLVED  XCU.sact.002 setup: admin could not create s.f
+user UNRESOLVED  XCU.sact.003 setup: admin failed for s.a
+user FAIL        XCU.sed.014 N on the last line did not quit without writing the pattern space
+user FAIL        XCU.sed.021 r did not read the file as of the time of output: L1
+user FAIL        XCU.sed.022 LC_COLLATE: with LC_COLLATE set to the locale the result was [], not [ch]
+user FAIL        XCU.sed.023 LC_CTYPE: with LC_CTYPE set to the locale the result was [], not [e10a]
+user FAIL        XCU.sed.024 LC_CTYPE: with LC_CTYPE set to the locale the result was [XXXX], not [XXX]
+user FAIL        XCU.set.018 got ''
+user FAIL        XCU.sh-compound.009 fall through from b: got '', expected BC
+user FAIL        XCU.sh-errors.010 echo (: the interactive shell did not go on (out='')
+user FAIL        XCU.sh-errors.011 the shell did not go on: ''
+user FAIL        XCU.sh-patterns.002 'c' should match the pattern 'a[a-c]'
+user FAIL        XCU.sh-pipelines.004 got '', expected 'a=1
+user FAIL        XCU.sh-pipelines.005 got 'a=2', expected a=0
+user FAIL        XCU.sh.008 status 2, expected 127
+user FAIL        XCU.sh.015 -o pipefail: status 2, expected 1
+user FAIL        XCU.sh.017 cat got '', expected A and B
+user FAIL        XCU.sort.017 LC_COLLATE: with LC_COLLATE set to the locale the result was [a
+user FAIL        XCU.sort.018 LC_NUMERIC: with LC_NUMERIC set to the locale the result was [1], not [2]
+user FAIL        XCU.sort.019 LC_CTYPE: with LC_CTYPE set to the locale the result was [2], not [1]
+user FAIL        XCU.strings.003 -t d did not give '4 defgh' and '13 klmn'
+user FAIL        XCU.strings.004 the string after 131072 NUL bytes was not found with its offset
+user UNRESOLVED  XCU.strip.001 setup: c17 is not available
+user UNRESOLVED  XCU.strip.002 setup: c17 is not available
+user UNRESOLVED  XCU.strip.004 setup: c17 is not available
+user FAIL        XCU.stty.012 raw left erase enabled
+user FAIL        XCU.tail.004 -r did not reverse all lines
+user FAIL        XCU.test.005 exec test a < b gave status 2, wanted 0
+user FAIL        XCU.test.009 test new -nt none gave status 1, wanted 0
+user FAIL        XCU.test.015 LC_COLLATE: with LC_COLLATE set to the locale the result was [2], not [0]
+user FAIL        XCU.time.001 time -p true exited 127
+user FAIL        XCU.time.002 time -p sh -c 'exit 6' exited 127, wanted 6
+user FAIL        XCU.time.003 time exited 127
+user FAIL        XCU.time.004 time -p sleep 2 exited 127
+user FAIL        XCU.time.005 time of a file that cannot be run exited 127, wanted 126
+user FAIL        XCU.timeout.003 timeout -s KILL exited 137, wanted 124
+user FAIL        XCU.timeout.004 timeout -p exited 125, wanted the utility's status 9
+user FAIL        XCU.timeout.010 timeout -f 1 sleep 30 exited 125, wanted 124
+user FAIL        XCU.tr.009 LC_CTYPE: with LC_CTYPE set to the locale the result was [e1420a|e10a], not [420a|c10a]
+user FAIL        XCU.trap.010 setup shell failed with 2
+user INSPECT     XCU.trap.011 disputed (see the assertion's note): setup shell failed with 2
+user FAIL        XCU.trap.012 setup shell failed with 2
+user FAIL        XCU.trap.017 USR1, ignored on entry, is not in the listing
+user FAIL        XCU.trap.019 got 'no'
+user FAIL        XCU.tsort.004 -w with two separate cycles gave status 1, not 2
+user UNRESOLVED  XCU.uncompress.001 setup: compress failed
+user UNRESOLVED  XCU.uncompress.002 setup: compress failed
+user UNRESOLVED  XCU.uncompress.003 setup: compress failed
+user UNRESOLVED  XCU.uncompress.004 setup: compress failed
+user UNRESOLVED  XCU.uncompress.005 setup: compress failed
+user UNRESOLVED  XCU.uncompress.006 setup: compress failed
+user UNRESOLVED  XCU.uncompress.007 setup: compress -g failed
+user UNRESOLVED  XCU.unget.001 setup: admin could not create s.f
+user UNRESOLVED  XCU.unget.002 setup: admin could not create s.f
+user UNRESOLVED  XCU.unget.003 setup: admin could not create s.f
+user FAIL        XCU.uudecode.001 exit status 127
+user FAIL        XCU.uudecode.002 exit status 127
+user FAIL        XCU.uudecode.003 name /dev/stdout: exit status 127
+user FAIL        XCU.uudecode.004 exit status 127
+user FAIL        XCU.uudecode.005 exit status 127
+user FAIL        XCU.uudecode.006 uuencode failed for 0 bytes
+user FAIL        XCU.uudecode.007 exit status 127
+user FAIL        XCU.uudecode.008 exit status 127
+user FAIL        XCU.uudecode.010 exit status 127
+user FAIL        XCU.uudecode.011 name '-': exit status 127
+user FAIL        XCU.uuencode.001 exit status 127
+user FAIL        XCU.uuencode.002 exit status 127
+user FAIL        XCU.uuencode.003 exit status 127
+user FAIL        XCU.uuencode.004 exit status 127
+user FAIL        XCU.uuencode.005 standard input form: exit status 127
+user FAIL        XCU.uuencode.006 exit status 127
+user FAIL        XCU.uuencode.007 one byte: exit status 127
+user FAIL        XCU.uuencode.008 exit status 127
+user FAIL        XCU.uuencode.009 -m: exit status 127
+user UNRESOLVED  XCU.val.001 setup: admin could not create s.f
+user UNRESOLVED  XCU.val.002 setup: admin could not create s.f
+user UNRESOLVED  XCU.val.003 setup: admin could not create s.f
+user UNRESOLVED  XCU.val.004 setup: admin could not create s.f
+user UNRESOLVED  XCU.val.005 setup: admin could not create s.f
+user UNRESOLVED  XCU.val.006 setup: admin could not create s.f
+user FAIL        XCU.wait.005 second wait exited 0, wanted 127
+user FAIL        XCU.wc.009 the readable file was not counted
+user FAIL        XCU.wc.010 LC_CTYPE: with LC_CTYPE set to the locale the result was [5], not [4]
+user FAIL        XCU.what.001 what: exit status 127
+user FAIL        XCU.what.002 what -s: nonzero status
+user FAIL        XCU.what.003 a file without a match: exit status 127, expected 1
+user FAIL        XCU.what.004 what with matches in two files: exit status 127
+user UNRESOLVED  XCU.what.005 setup: admin could not create s.f
+user FAIL        XCU.who.003 who of a nonexistent file exited with status 0
+user FAIL        XCU.xgettext.001 xgettext: nonzero status
+user FAIL        XCU.xgettext.002 xgettext -d: nonzero status
+user FAIL        XCU.xgettext.003 xgettext -n: nonzero status
+user FAIL        XCU.xgettext.004 -K tr: nonzero status
+user FAIL        XCU.xgettext.005 xgettext -a: nonzero status
+user FAIL        XCU.xgettext.006 first xgettext: nonzero status
+user FAIL        XCU.xgettext.007 xgettext -x: nonzero status
+user FAIL        XCU.xgettext.008 xgettext -: nonzero status
+user UNRESOLVED  XCU.yacc.001 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.002 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.003 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.004 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.005 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.006 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.007 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.008 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.009 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.010 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.011 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.013 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.014 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.015 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.016 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.017 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.018 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.019 setup: c17 is not available
+user UNRESOLVED  XCU.yacc.020 setup: c17 is not available
+user UNRESOLVED  XCU.zcat.001 setup: compress failed
+user UNRESOLVED  XCU.zcat.002 setup: compress failed
+user UNRESOLVED  XCU.zcat.003 setup: compress failed
+user UNRESOLVED  XCU.zcat.005 setup: compress -g failed
+user INSPECT     XSH.2.10-sockets.005 disputed (see the assertion's note): a receive for six bytes returned 6 bytes while the first segment has three
+user UNRESOLVED  XSH.2.10-sockets.012 the send queue is not full
+user UNRESOLVED  XSH.2.10-sockets.014 skipped: needs root privilege, which this run was not granted
+user FAIL        XSH.2.10-sockets.015 creating a raw socket without privilege failed with an error other than EACCES or EPERM (status 2)
+user FAIL        XSH.2.11-data-types.002 does not compile: 'reclen_t' undeclared here (not in a function)
+user FAIL        XSH.2.11-data-types.004 the smallest id_t, 0, is above the smallest pid_t, -2147483648
+user FAIL        XSH.2.2-compilation-environment.006 does not compile: #error "_POSIX_VERSION is below 202405L with _XOPEN_SOURCE 800"
+user UNRESOLVED  XSH.sigqueue.007 skipped: needs root privilege, which this run was not granted
+user INSPECT     XSH.fgetwc.002 disputed (see the assertion's note): fgetwc() returned WEOF for byte 0x80 (errno EILSEQ)
+user FAIL        XSH.fputwc.010 fputwc() of an invalid wide-character code returned 0xd800, expected WEOF
+user UNRESOLVED  XSH.2.5.2-stream-orientation.006 the single-byte locale does not decode the bytes (C)
+user UNRESOLVED  XSH.2.5.2-stream-orientation.007 blocked by XSH.2.5.2-stream-orientation.006 (UNRESOLVED)
+user UNRESOLVED  XSH.2.5.2-stream-orientation.010 blocked by XSH.fputwc.010 (FAIL)
+user UNRESOLVED  XSH.2.7-xsi-ipc.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.2.7-xsi-ipc.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.2.7-xsi-ipc.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.2.7-xsi-ipc.005 skipped: needs root privilege, which this run was not granted
+user INSPECT     XSH.msync.007 disputed (see the assertion's note): msync(flags 0): returned 0, expected -1 with EINVAL
+user INSPECT     XSH.msync.008 disputed (see the assertion's note): msync(MS_INVALIDATE): returned 0, expected -1 with EINVAL
+user FAIL        XSH.2.9-threads.021 with a cancellation request pending and cancelability enabled the thread was not canceled in: aio_suspend (returned)
+user FAIL        XSH.2.9-threads.026 after pthread_exit(): the cancelability state seen in the cleanup handler was not DISABLE
+user FAIL        XSH.2.9-threads.031 4205 of 27743 pread() calls returned a block that mixed two pwrite() calls
+user FAIL        XSH.2.9-threads.032 fstat() saw access and modification times that futimens() never set together
+user FAIL        XSH._Exit.002 si_status is 0x34, expected the full value 0x1234
+user FAIL        XSH._Exit.014 si_status 0x34, expected 0x1234
+user INSPECT     XSH._Exit.019 disputed (see the assertion's note): the file holds 0 bytes, not 65536
+user FAIL        XSH.a64l.007 a64l("zzzzz1") was not -1
+user UNRESOLVED  XSH.accept.012 blocked by XBD.fcntl.h.002 (FAIL)
+user UNRESOLVED  XSH.accept.017 blocked by XBD.fcntl.h.002 (FAIL)
+user UNRESOLVED  XSH.access.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.access.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.access.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.access.018 <fcntl.h> does not define O_SEARCH
+user UNRESOLVED  XSH.access.019 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.access.020 skipped: needs root privilege, which this run was not granted
+user FAIL        XSH.aio_suspend.004 aio_suspend returned 0 for a list of null entries
+user INSPECT     XSH.atomic_fetch_add.006 disputed (see the assertion's note): shr: adding 3 moved the pointer by 3 bytes, not 3 objects (6 bytes)
+user FAIL        XSH.bind.009 bind() of an AF_INET address on an AF_UNIX socket gave EINVAL, expected EAFNOSUPPORT
+user FAIL        XSH.bind.012 bind() of an empty pathname gave success, expected ENOENT
+user FAIL        XSH.bind.018 bind() with a null address gave EFAULT, expected EDESTADDRREQ or EISDIR
+user FAIL        XSH.btowc.001 btowc(128) returned WEOF in the POSIX locale
+user FAIL        XSH.c16rtomb.008 c32rtomb() of 0x110000 returned 4, expected (size_t)-1
+user FAIL        XSH.catan.014 catan [double]: at (-1.5, 0.75) the result is (-1.05714, 0.207933), at (-1.5, -0.75) it is (-1.05714, -0.207933), expected (-1.05714, -0.207933)
+user FAIL        XSH.catan.015 catan [double]: at (-1.5, 0.75) the result is (-1.05714, 0.207933), at (1.5, -0.75) it is (1.05714, -0.207933), expected (1.05714, -0.207933)
+user FAIL        XSH.catanh.015 catanh [double]: at (0.5, 0.25) the result is (0.50037, 0.314398), at (-0.5, -0.25) it is (-0.50037, -0.314398), expected (-0.50037, -0.314398)
+user FAIL        XSH.catopen.009 catopen did not skip the file that is not a catalog: 0
+user FAIL        XSH.catopen.010 errno 0, expected ENOENT
+user FAIL        XSH.ccos.012 ccos [double]: at (inf, 0) the result is (-nan, 0), at (inf, -0) it is (-nan, 0), expected (-nan, -0)
+user FAIL        XSH.ccosh.012 ccosh [double]: at (0, inf) the result is (-nan, 0), at (0, -inf) it is (-nan, 0), expected (-nan, -0)
+user UNRESOLVED  XSH.chmod.006 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.chmod.007 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.chmod.019 <fcntl.h> does not define O_SEARCH
+user UNRESOLVED  XSH.chmod.021 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.chown.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.chown.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.chown.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.chown.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.chown.007 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.chown.008 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.chown.009 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.chown.010 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.chown.011 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.chown.021 <fcntl.h> does not define O_SEARCH
+user UNRESOLVED  XSH.close.007 blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED  XSH.close.009 blocked by XBD.unistd.h.001 (FAIL)
+user UNRESOLVED  XSH.close.010 blocked by XBD.unistd.h.001 (FAIL)
+user FAIL        XSH.close.014 operation 2 failed with EBADF (neither completed nor canceled)
+user UNRESOLVED  XSH.confstr.006 <unistd.h> does not define _CS_V8_ENV
+user FAIL        XSH.connect.006 connect() to an empty pathname gave ECONNREFUSED, expected ENOENT
+user FAIL        XSH.connect.015 connect() on the established socket gave success, expected EISCONN
+user FAIL        XSH.connect.017 second connect() gave success, expected EALREADY (or EISCONN if complete)
+user FAIL        XSH.creat.012 creat("f/") of an existing file: errno EISDIR, expected ENOTDIR
+user FAIL        XSH.creat.013 creat("new/") failed with EISDIR, not ENOENT or ENOTDIR
+user FAIL        XSH.csin.012 csin [double]: at (inf, inf) the result is (-nan, inf), at (inf, -inf) it is (-nan, inf), expected (-nan, -inf)
+user FAIL        XSH.csin.013 csin [double]: at (inf, inf) the result is (-nan, inf), at (-inf, -inf) it is (-nan, inf), expected (nan, -inf)
+user FAIL        XSH.csinh.013 csinh [double]: at (inf, inf) the result is (inf, -nan), at (-inf, -inf) it is (inf, -nan), expected (-inf, nan)
+user UNRESOLVED  XSH.exec.010 blocked by XBD.fcntl.h.002 (FAIL)
+user FAIL        XSH.exec.028 the new image reports: the initial thread's CPU-time clock reads 2000 ms; the calling thread had used 2000 ms
+user UNRESOLVED  XSH.exec.052 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.exec.053 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.exec.056 blocked by XBD.fcntl.h.006 (FAIL)
+user FAIL        XSH.exit.002 si_status 0x34, expected 0x1234
+user FAIL        XSH.exit.012 si_status 0x34, expected 0x1234
+user UNRESOLVED  XSH.fchmod.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.fchmod.007 <fcntl.h> does not define O_SEARCH
+user UNRESOLVED  XSH.fchown.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.fchown.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.fchown.003 skipped: needs root privilege, which this run was not granted
+user FAIL        XSH.fclose.003 the offset is 4096, not the stream's position 1
+user FAIL        XSH.fclose.010 the offset is 4096, expected 1
+user FAIL        XSH.fclose.011 the offset is 4096, expected the stream's position 1
+user FAIL        XSH.fclose.012 fclose() set errno 0, expected ENOSPC
+user UNRESOLVED  XSH.fcntl.016 blocked by XBD.fcntl.h.008 (FAIL)
+user UNRESOLVED  XSH.fcntl.037 blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED  XSH.fcntl.038 blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED  XSH.fcntl.039 blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED  XSH.fcntl.040 blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED  XSH.fcntl.041 blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED  XSH.fcntl.042 blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED  XSH.fcntl.043 blocked by XBD.fcntl.h.006 (FAIL)
+user FAIL        XSH.fdopen.005 "re": FD_CLOEXEC is clear
+user FAIL        XSH.fdopen.009 fdopen() succeeded with {STREAM_MAX} streams open
+user INSPECT     XSH.fdopen.013 disputed (see the assertion's note): "a": ftell() is 6, expected 2
+user FAIL        XSH.fflush.005 the descriptor's offset is 4095, expected 1
+user INSPECT     XSH.fflush.011 disputed (see the assertion's note): the input stream's descriptor offset is 4096, expected 1
+user FAIL        XSH.fflush.013 fflush() set errno 0, expected ENOSPC
+user FAIL        XSH.fgets.006 fgets() returned s although the read after "ab" could not be done without waiting
+user FAIL        XSH.fma.004 fma: domain error, errno is 0, expected EDOM
+user FAIL        XSH.fma.005 fma: domain error, errno is 0, expected EDOM
+user FAIL        XSH.fma.007 fma(MAX, 2, 0): overflow, errno is 0, expected ERANGE
+user FAIL        XSH.fmemopen.004 after fmemopen("w") the buffer starts "abc\000", expected a null byte
+user FAIL        XSH.fmemopen.006 fmemopen(buf, 0, "w+") changed the byte at buf to 0
+user FAIL        XSH.fmemopen.021 "w": the buffer holds "abc\000", expected "abcd"
+user FAIL        XSH.fmemopen.023 "r": fwide(f, 0) right after fmemopen() returned -1, expected 0
+user FAIL        XSH.fmemopen.024 fmemopen() succeeded with {STREAM_MAX} streams open
+user FAIL        XSH.fmtmsg.003 severity:text:action: fmtmsg() did not return MM_OK (code 1)
+user FAIL        XSH.fmtmsg.004 MSGVERB "": fmtmsg() did not return MM_OK (code 1)
+user FAIL        XSH.fopen.027 fopen("f/", "w") failed with EISDIR, expected ENOTDIR
+user FAIL        XSH.fopen.028 fopen("new/", "w") failed with EISDIR, expected ENOENT or ENOTDIR
+user FAIL        XSH.fopen.032 fopen("s", "r") succeeded
+user UNRESOLVED  XSH.fork.005 blocked by XBD.fcntl.h.002 (FAIL)
+user UNRESOLVED  XSH.fpathconf.006 <unistd.h> does not define _PC_TIMESTAMP_RESOLUTION
+user UNRESOLVED  XSH.fpathconf.007 no controlling terminal: open("/dev/tty") failed with ENXIO
+user FAIL        XSH.fputws.006 fputws() of a string with an invalid wide-character code returned 1, expected -1
+user FAIL        XSH.freopen.008 FD_CLOEXEC is set after freopen() with "r"
+user FAIL        XSH.freopen.011 the stream's descriptor is 6 after freopen(); the lowest available was 4
+user FAIL        XSH.freopen.022 with every descriptor in use, freopen() failed (it must close the old one first)
+user FAIL        XSH.fscanf.014 sscanf("100ergs", "%f%n") returned 1 (stored 100), expected 0
+user FAIL        XSH.fscanf.015 sscanf("0xg", "%x%n") returned 1, expected 0
+user FAIL        XSH.fscanf.043 sscanf("1", "%*d%d") returned -1, expected 0 (the %*d conversion completed)
+user INSPECT     XSH.fseek.004 disputed (see the assertion's note): "r": the descriptor's offset is 10, expected 7
+user INSPECT     XSH.fseek.016 disputed (see the assertion's note): fseeko() beyond the largest off_t failed with EINVAL, expected EOVERFLOW
+user UNRESOLVED  XSH.fstatat.013 <fcntl.h> does not define O_SEARCH
+user UNRESOLVED  XSH.futimens.010 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.futimens.011 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.futimens.012 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.futimens.019 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.futimens.021 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.futimens.025 <fcntl.h> does not define O_SEARCH
+user UNRESOLVED  XSH.futimens.026 skipped: needs root privilege, which this run was not granted
+user FAIL        XSH.fwprintf.013 swprintf() set errno E2BIG, expected EOVERFLOW
+user FAIL        XSH.fwprintf.018 fwprintf(%lc) of an invalid wide-character code returned 1, expected a negative value
+user FAIL        XSH.getaddrinfo.004 socket(2, 3, 0) failed: EPROTONOSUPPORT
+user FAIL        XSH.getaddrinfo.030 socket(2, 3, 0) failed: EPROTONOSUPPORT
+user FAIL        XSH.getdate.015 October: tm_mday is 4, expected 1
+user FAIL        XSH.getdate.019 getdate with an unknown zone name returned a pointer
+user FAIL        XSH.getdelim.012 with the error indicator set and "ab:" in the pipe, getdelim() returned -1 (errno 0), expected 3
+user UNRESOLVED  XSH.getegid.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.getenv.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.geteuid.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.getgid.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.getgrgid.002 no unused group ID found
+user UNRESOLVED  XSH.getgrgid.004 no unused group ID found
+user FAIL        XSH.getgrnam.002 errno changed to 0 by a lookup that found nothing
+user UNRESOLVED  XSH.getgroups.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.getgroups.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.getgroups.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.getlogin.004 getlogin() found no login name here
+user UNRESOLVED  XSH.getlogin.005 getlogin_r() found no login name here
+user FAIL        XSH.getnameinfo.008 no node and no service gave 0 (Success), expected EAI_NONAME
+user FAIL        XSH.getopt.002 optstring "a:b", arguments "-a...": got "a=-- |3 rest=x", expected "a=-- |4 rest=x"
+user FAIL        XSH.getpeername.008 getpeername() after SHUT_RDWR gave success, expected EINVAL
+user FAIL        XSH.getpriority.013 after setpriority(..., 1) in one thread, getpriority(PRIO_PROCESS, 0) in another thread returned 0, the calling thread sees 1 (before: 0)
+user FAIL        XSH.getpwnam.002 errno changed to 0 by a lookup that found nothing
+user UNRESOLVED  XSH.getpwuid.002 no unused user ID found
+user UNRESOLVED  XSH.getpwuid.004 no unused user ID found
+user UNRESOLVED  XSH.getresgid.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.getresuid.002 skipped: needs root privilege, which this run was not granted
+user FAIL        XSH.getsockopt.010 errno is ENOTSUP, expected ENOPROTOOPT or EINVAL
+user UNRESOLVED  XSH.gettext.007 the msgfmt utility could not build the test messages object
+user UNRESOLVED  XSH.gettext.008 the only locale found has a name that may stand for the POSIX locale
+user UNRESOLVED  XSH.gettext.009 the only locale found has a name that may stand for the POSIX locale
+user UNRESOLVED  XSH.gettext.011 the only locale found has a name that may stand for the POSIX locale
+user UNRESOLVED  XSH.gettext.012 the only locale found has a name that may stand for the POSIX locale
+user UNRESOLVED  XSH.gettext.013 the only locale found has a name that may stand for the POSIX locale
+user UNRESOLVED  XSH.gettext.014 the only locale found has a name that may stand for the POSIX locale
+user UNRESOLVED  XSH.gettext.015 the only locale found has a name that may stand for the POSIX locale
+user UNRESOLVED  XSH.getuid.001 skipped: needs root privilege, which this run was not granted
+user FAIL        XSH.glob.019 name 0 is "//", expected "/"
+user FAIL        XSH.grantpt.002 the permissions are 600, lacking owner read/write or group write
+user FAIL        XSH.iconv.006 discarding an invalid byte was treated as an error: EILSEQ
+user FAIL        XSH.iconv.007 failed: EILSEQ
+user FAIL        XSH.iconv.008 failed: EILSEQ
+user FAIL        XSH.iconv.010 a valid character without an identical counterpart gave an error (EILSEQ); the text asks for an implementation-defined conversion
+user FAIL        XSH.inet_ntop.002 inet_pton(AF_INET, "001.002.003.004") returned 0, expected 1
+user UNRESOLVED  XSH.kill.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.kill.009 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.kill.010 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.kill.011 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.kill.012 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.kill.013 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.kill.014 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.kill.016 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.killpg.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.lchown.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.lchown.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.lchown.003 skipped: needs root privilege, which this run was not granted
+user FAIL        XSH.unlink.005 unlink() of a directory did not fail with EPERM
+user FAIL        XSH.unlink.010 unlinkat(c/d, 0) of a directory did not fail with EPERM
+user UNRESOLVED  XSH.unlink.018 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.unlink.020 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.unlink.021 <fcntl.h> does not define O_SEARCH
+user UNRESOLVED  XSH.link.019 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.link.021 <fcntl.h> does not define O_SEARCH
+user FAIL        XSH.listen.003 listen() on an unbound AF_UNIX socket failed with EINVAL, expected success or EDESTADDRREQ
+user FAIL        XSH.llrint.004 llrint: domain error, errno is 0, expected EDOM
+user FAIL        XSH.llrint.005 llrint: domain error, errno is 0, expected EDOM
+user FAIL        XSH.llrint.006 llrint: domain error, errno is 0, expected EDOM
+user FAIL        XSH.llrint.007 llrint: domain error, errno is 0, expected EDOM
+user FAIL        XSH.llround.004 llround: domain error, errno is 0, expected EDOM
+user FAIL        XSH.llround.005 llround: domain error, errno is 0, expected EDOM
+user FAIL        XSH.llround.006 llround: domain error, errno is 0, expected EDOM
+user FAIL        XSH.llround.007 llround: domain error, errno is 0, expected EDOM
+user FAIL        XSH.localtime.006 TZ=PCS5PCD,0/0,J365/25: localtime(1609470000): gave 2020-12-31 22:00:00 (yday 365), whose XBD 4.19 value is 1609452000, expected 1609455600
+user FAIL        XSH.logb.005 logb: pole error, errno is 0, expected ERANGE
+user FAIL        XSH.lrint.004 lrint: domain error, errno is 0, expected EDOM
+user FAIL        XSH.lrint.005 lrint: domain error, errno is 0, expected EDOM
+user FAIL        XSH.lrint.006 lrint: domain error, errno is 0, expected EDOM
+user FAIL        XSH.lrint.007 lrint: domain error, errno is 0, expected EDOM
+user FAIL        XSH.lround.004 lround: domain error, errno is 0, expected EDOM
+user FAIL        XSH.lround.005 lround: domain error, errno is 0, expected EDOM
+user FAIL        XSH.lround.006 lround: domain error, errno is 0, expected EDOM
+user FAIL        XSH.lround.007 lround: domain error, errno is 0, expected EDOM
+user INSPECT     XSH.lseek.011 disputed (see the assertion's note): lseek(fd, <largest off_t>, SEEK_CUR) from offset 1: errno EINVAL, expected EOVERFLOW
+user UNRESOLVED  XSH.lseek.012 blocked by XBD.unistd.h.002 (FAIL)
+user UNRESOLVED  XSH.lseek.013 blocked by XBD.unistd.h.002 (FAIL)
+user UNRESOLVED  XSH.lseek.014 blocked by XBD.unistd.h.002 (FAIL)
+user FAIL        XSH.mblen.002 mblen() of byte 128 with n 1 returned -1, expected 1
+user FAIL        XSH.mbrlen.001 mbrlen() of byte 128 returned 18446744073709551615, expected 1
+user FAIL        XSH.mbrtoc16.001 mbrtoc32() of byte 128 returned 18446744073709551615, expected 1
+user FAIL        XSH.mbrtowc.001 mbrtowc() of byte 128 returned 18446744073709551615, expected 1
+user FAIL        XSH.mbstowcs.005 mbstowcs() of the 255 non-null bytes returned 18446744073709551615, expected 255
+user FAIL        XSH.mbtowc.001 mbtowc() of byte 128 returned -1, expected 1
+user UNRESOLVED  XSH.mkdir.018 <fcntl.h> does not define O_SEARCH
+user FAIL        XSH.mkdtemp.018 O_CLOFORK or FD_CLOFORK is not defined by the headers
+user UNRESOLVED  XSH.mkfifo.016 <fcntl.h> does not define O_SEARCH
+user UNRESOLVED  XSH.mknod.016 <fcntl.h> does not define O_SEARCH
+user INSPECT     XSH.mknod.019 disputed (see the assertion's note): an unprivileged mknod() with dev 0: S_IFREG succeeded; S_IFCHR succeeded (EPERM expected)
+user FAIL        XSH.mlock.004 the failed mlock() locked the first page
+user UNRESOLVED  XSH.mq_open.015 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.msgctl.003 skipped: needs root privilege, which this run was not granted
+user FAIL        XSH.msgctl.005 raising msg_qbytes in the unprivileged child: the call succeeded
+user UNRESOLVED  XSH.msgctl.006 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.msgctl.009 msgctl(IPC_STAT) failed: EACCES
+user UNRESOLVED  XSH.msgrcv.012 msgctl(IPC_STAT) failed: EACCES
+user UNRESOLVED  XSH.msgsnd.009 msgctl(IPC_STAT) failed: EACCES
+user FAIL        XSH.nextafter.006 nextafter: underflow, errno is 0, expected ERANGE
+user FAIL        XSH.nftw.003 fn was called 3 times, expected 5
+user FAIL        XSH.nice.005 after nice(1) returned 1 in one thread, getpriority(PRIO_PROCESS, 0) in another thread returned 0
+user UNRESOLVED  XSH.open.011 blocked by XBD.fcntl.h.002 (FAIL)
+user UNRESOLVED  XSH.open.012 blocked by XBD.fcntl.h.002 (FAIL)
+user FAIL        XSH.open.044 open("n/", O_WRONLY|O_CREAT): errno EISDIR, expected ENOENT or ENOTDIR
+user FAIL        XSH.open.045 open("f/", O_WRONLY|O_CREAT|O_TRUNC): errno EISDIR, expected ENOTDIR
+user UNRESOLVED  XSH.open.050 blocked by XBD.fcntl.h.007 (FAIL)
+user FAIL        XSH.open_memstream.011 open_memstream() succeeded with {STREAM_MAX} streams open
+user FAIL        XSH.open_memstream.015 killed by signal 11 during the test
+user UNRESOLVED  XSH.opendir.012 <fcntl.h> does not define O_SEARCH
+user FAIL        XSH.perror.005 fwide(stderr, 0) is -1 after perror(): the orientation changed
+user UNRESOLVED  XSH.popen.009 setup: <fcntl.h> does not define FD_CLOFORK
+user UNRESOLVED  XSH.popen.010 setup: <fcntl.h> does not define FD_CLOFORK
+user FAIL        XSH.popen.014 popen() succeeded with {STREAM_MAX} streams open
+user UNRESOLVED  XSH.popen.018 setup: <fcntl.h> does not define FD_CLOFORK
+user FAIL        XSH.posix_madvise.004 posix_madvise over a range past the address space returned 22, expected ENOMEM (12)
+user UNRESOLVED  XSH.posix_spawn.017 setup: <fcntl.h> does not define FD_CLOFORK
+user UNRESOLVED  XSH.posix_spawn.018 setup: <fcntl.h> does not define FD_CLOFORK
+user UNRESOLVED  XSH.posix_spawn.043 <spawn.h> does not define POSIX_SPAWN_SETSID
+user UNRESOLVED  XSH.posix_spawn.045 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.posix_spawn.046 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.posix_spawn.047 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.posix_spawn.048 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.posix_spawn.049 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.posix_spawn.050 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.posix_spawn.051 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.posix_spawn.052 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.posix_spawn.053 posix_spawnattr_setschedpolicy failed (EINVAL)
+user UNRESOLVED  XSH.posix_spawnattr_getschedparam.003 posix_spawn() with the new scheduler returned EPERM (privilege is implementation-defined)
+user UNRESOLVED  XSH.posix_spawnattr_getschedpolicy.003 posix_spawn() with the new scheduler returned EPERM (privilege is implementation-defined)
+user INSPECT     XSH.psiginfo.003 disputed (see the assertion's note): psiginfo() wrote "pc: User defined signal 1 (Signal sent by kill() 245009 65534) " but psignal() "pc: User defined signal 1 "
+user FAIL        XSH.psiginfo.004 psignal() gave standard error an orientation
+user FAIL        XSH.psiginfo.007 the error indicator of stderr is not set
+user FAIL        XSH.pthread_cancel.005 in the cleanup handler the cancelability state was PTHREAD_CANCEL_ENABLE, not PTHREAD_CANCEL_DISABLE
+user UNRESOLVED  XSH.pthread_getschedparam.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.pthread_getschedparam.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.pthread_getschedparam.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.pthread_getschedparam.006 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.pthread_getschedparam.007 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.pthread_mutex_getprioceiling.001 the other thread's trylock returned EINVAL (its priority exceeds the lowered ceiling)
+user FAIL        XSH.pthread_mutex_lock.014 the second (after the trylock) pthread_mutex_lock() of the unusable mutex, which no thread owns, had not returned after 10 s
+user UNRESOLVED  XSH.pthread_setschedprio.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.pthread_setschedprio.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.pthread_setschedprio.003 skipped: needs root privilege, which this run was not granted
+user FAIL        XSH.putwc.003 putwc() of an invalid wide-character code returned 0xd800, expected WEOF
+user FAIL        XSH.pwrite.002 pwrite() did not write at the offset given
+user FAIL        XSH.read.021 read() on an unconnected stream socket: errno EINVAL, expected ENOTCONN
+user FAIL        XSH.readlink.003 readlink() into 0 bytes returned -1
+user UNRESOLVED  XSH.readlink.018 <fcntl.h> does not define O_SEARCH
+user FAIL        XSH.readv.010 readv() with two buffers of SSIZE_MAX: errno EFAULT, expected EINVAL
+user FAIL        XSH.realloc.004 realloc(p, 0) returned null with errno 0, expected EINVAL
+user FAIL        XSH.recv.010 recv() on an unconnected stream socket: errno EINVAL, expected ENOTCONN
+user FAIL        XSH.recvfrom.014 recvfrom() on an unconnected stream socket: errno EINVAL, expected ENOTCONN
+user FAIL        XSH.recvmsg.010 recvmsg() with msg_iovlen 0: returned 0, expected -1 with EMSGSIZE
+user FAIL        XSH.recvmsg.012 recvmsg() with two buffers of SSIZE_MAX: errno EFAULT, expected EINVAL
+user FAIL        XSH.recvmsg.016 recvmsg() on an unconnected stream socket: errno EINVAL, expected ENOTCONN
+user FAIL        XSH.recvmsg.028 killed by signal 11 during the test
+user FAIL        XSH.regcomp.017 case 5: "\(a\(b\)*\)*\2" on "abab" should not match, got 0 [0,4]
+user FAIL        XSH.regcomp.024 case 3: "(a(b)*)*" on "aba": pmatch[2] is [1,2], expected [-1,-1]
+user FAIL        XSH.regcomp.026 case 2: "(a|ab)(c|bcd)(d*)" on "abcd": pmatch[1] is [0,1], expected [0,2]
+user FAIL        XSH.regcomp.033 case 1: ".*?c" on "abc abc" matched [0,7], expected [0,3]
+user FAIL        XSH.regcomp.051 regoff_t cannot hold PTRDIFF_MAX
+user FAIL        XSH.remquo.004 remquo: domain error, errno is 0, expected EDOM
+user FAIL        XSH.rename.012 rename("p/d/.", "x"): errno EBUSY, expected EINVAL
+user FAIL        XSH.rename.014 rename(d, "nd/") succeeded
+user UNRESOLVED  XSH.rename.027 <fcntl.h> does not define O_SEARCH
+user UNRESOLVED  XSH.rename.028 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.rename.029 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.rename.030 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.rmdir.012 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.rmdir.013 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.sched_getparam.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.sched_getscheduler.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.sched_rr_get_interval.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.sched_setparam.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.sched_setparam.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.sched_setparam.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.sched_setscheduler.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.sched_setscheduler.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.sched_setscheduler.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.sched_setscheduler.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.sched_setscheduler.007 skipped: needs root privilege, which this run was not granted
+user FAIL        XSH.select.009 select returned 2 (errno -), expected 3
+user FAIL        XSH.select.012 select with nfds FD_SETSIZE+1 returned 2, expected -1
+user UNRESOLVED  XSH.semctl.007 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.semctl.011 semctl(IPC_STAT) failed: EACCES
+user UNRESOLVED  XSH.semctl.012 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.semop.015 semctl(IPC_STAT) failed: EACCES
+user INSPECT     XSH.sendmsg.003 disputed (see the assertion's note): sendmsg() with msg_iovlen 0: returned 0, expected -1 with EMSGSIZE
+user FAIL        XSH.sendmsg.005 sendmsg() with two buffers of SSIZE_MAX: errno EFAULT, expected EINVAL
+user FAIL        XSH.sendmsg.013 sendmsg() on an AF_UNIX socket with an AF_INET address: errno EINVAL, expected EAFNOSUPPORT
+user FAIL        XSH.sendto.007 sendto() on an AF_UNIX socket with an AF_INET address: errno EINVAL, expected EAFNOSUPPORT
+user UNRESOLVED  XSH.setegid.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setegid.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setegid.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setegid.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setegid.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setegid.006 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setegid.007 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.seteuid.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.seteuid.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.seteuid.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.seteuid.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.seteuid.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.seteuid.006 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.seteuid.007 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setgid.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setgid.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setgid.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setgid.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setgid.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setgid.006 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setgid.007 skipped: needs root privilege, which this run was not granted
+user FAIL        XSH.setlocale.007 setlocale(LC_ALL, "") failed with every LC_* set to C
+user UNRESOLVED  XSH.setregid.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setregid.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setregid.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setregid.004 needs a test process whose user and group IDs are all 0
+user UNRESOLVED  XSH.setregid.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setregid.006 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setregid.007 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setregid.008 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setregid.009 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setresgid.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setresgid.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setresuid.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setresuid.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setreuid.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setreuid.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setreuid.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setreuid.004 needs a test process whose user and group IDs are all 0
+user UNRESOLVED  XSH.setreuid.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setreuid.006 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setreuid.007 skipped: needs root privilege, which this run was not granted
+user FAIL        XSH.setsockopt.018 errno is ENOTSUP, expected ENOPROTOOPT or EINVAL
+user FAIL        XSH.setsockopt.019 setsockopt on a socket shut down in both directions returned 0
+user UNRESOLVED  XSH.setuid.001 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setuid.002 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setuid.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setuid.004 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setuid.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setuid.006 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.setuid.007 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.shm_open.013 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.shm_unlink.005 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.shmctl.003 skipped: needs root privilege, which this run was not granted
+user UNRESOLVED  XSH.shmctl.008 skipped: needs root privilege, which this run was not granted
+user FAIL        XSH.shutdown.008 shutdown() on a fresh AF_UNIX socket gave success, expected ENOTCONN
+user INSPECT     XSH.sigaction.021 disputed (see the assertion's note): 1 deliveries for 3 signals queued with sigqueue()
+user FAIL        XSH.sigaction.023 SA_SIGINFO was still set inside the handler
+user FAIL        XSH.sigaltstack.005 sigaltstack() with ss_flags SS_ONSTACK: returned 0, expected -1 with EINVAL
+user FAIL        XSH.sigaltstack.010 the child with a MINSIGSTKSZ alternate stack ended with status 0xb (SIGSEGV: the signal frame did not fit)
+user UNRESOLVED  XSH.socket.009 blocked by XBD.fcntl.h.002 (FAIL)
+user FAIL        XSH.socket.013 socket(2, SOCK_STREAM, 99999) failed with EINVAL
+user UNRESOLVED  XSH.socketpair.008 blocked by XBD.fcntl.h.002 (FAIL)
+user FAIL        XSH.socketpair.009 socket_vector changed to 4, 5
+user FAIL        XSH.socketpair.010 socket_vector changed to 4, 5
+user FAIL        XSH.socketpair.012 socket_vector changed to 4, 5
+user FAIL        XSH.strfmon.005 strfmon("%+.0n", 123) returned 3, expected -1
+user FAIL        XSH.strfmon.006 both signs are empty but strfmon("%+.0n", 123) returned 3, errno 0
+user FAIL        XSH.strfmon.013 POSIX global locale: strfmon_l("%+.0n") returned 1, errno 0, expected -1 and EINVAL
+user FAIL        XSH.strftime.002 strftime("%C") for 270-06-01 12:00:00 (wday 3, yday 151) gave "2" (return 1), expected "02"
+user FAIL        XSH.strftime.007 strftime("%+4Y") for 1970-01-02 12:00:00 (wday 5, yday 1) gave "%+4Y" (return 4), expected "1970"
+user FAIL        XSH.strftime.012 after strftime() tzname[0] is "PCT", expected "PCE"
+user FAIL        XSH.strftime.014 strftime() with maxsize 10 for 10 bytes set errno to 0, expected ERANGE
+user FAIL        XSH.strptime.004 strptime("61,", "%S,") did not return a null pointer
+user FAIL        XSH.strptime.009 strptime("12345-06-07", "%F") returned a null pointer
+user FAIL        XSH.strptime.014 strptime("00,", "%V,") did not return a null pointer
+user FAIL        XSH.strptime.016 strptime("PCB", "%Z"): tm_isdst is -7777, expected 1
+user FAIL        XSH.strptime.017 strptime("2024", "%2Y") returned offset 4, expected 2
+user FAIL        XSH.strptime.018 strptime("99,", "%Ey,") returned a null pointer
+user FAIL        XSH.strsignal.002 for SIGRTMIN psignal() wrote "pc: Unknown signal 34 " but strsignal() gave "Real-time signal 0"
+user FAIL        XSH.symlink.003 symlink("", "e") failed: ENOENT
+user UNRESOLVED  XSH.symlink.020 <fcntl.h> does not define O_SEARCH
+user FAIL        XSH.sysconf.001 sysconf(_SC_THREAD_ROBUST_PRIO_INHERIT) failed with EINVAL: the name is not supported
+user FAIL        XSH.sysconf.002 sysconf(_SC_HOST_NAME_MAX) returned 64, below the minimum acceptable value 255
+user FAIL        XSH.sysconf.004 <unistd.h> defines _POSIX_THREAD_ROBUST_PRIO_INHERIT as 200809 (always supported) but sysconf(_SC_THREAD_ROBUST_PRIO_INHERIT) returns -1
+user FAIL        XSH.sysconf.005 sysconf(_SC_VERSION) returned 200809, expected 202405
+user FAIL        XSH.sysconf.007 sysconf(_SC_ADVISORY_INFO) returned 200809, expected -1 or 202405
+user FAIL        XSH.sysconf.009 sysconf(_SC_ARG_MAX) returned 2097152, and 4194304 after the RLIMIT_STACK and RLIMIT_NOFILE soft limits changed
+user UNRESOLVED  XSH.sysconf.015 <unistd.h> lacks _SC_NSIG or <limits.h> lacks NSIG_MAX
+user UNRESOLVED  XSH.system.011 setup: <fcntl.h> does not define FD_CLOFORK
+user UNRESOLVED  XSH.tcdrain.003 the child could not hold the output
+user UNRESOLVED  XSH.tcdrain.008 the parent did not end
+user UNRESOLVED  XSH.tcflow.002 timed out after 60s
+user UNRESOLVED  XSH.tcflow.003 timed out after 60s
+user UNRESOLVED  XSH.tcflow.010 the parent did not end
+user UNRESOLVED  XSH.tcflush.002 timed out after 60s
+user UNRESOLVED  XSH.tcflush.003 timed out after 60s
+user UNRESOLVED  XSH.tcflush.004 timed out after 60s
+user UNRESOLVED  XSH.tcflush.005 timed out after 60s
+user UNRESOLVED  XSH.tcflush.011 the parent did not end
+user UNRESOLVED  XSH.tcsendbreak.007 the parent did not end
+user UNRESOLVED  XSH.tcsetattr.010 the child could not hold the output
+user UNRESOLVED  XSH.tcsetattr.013 the parent did not end
+user FAIL        XSH.tcsetpgrp.007 tcsetpgrp() returned -1, errno ENOTTY, expected -1 with EIO
+user FAIL        XSH.thrd_sleep.002 errno is 0, expected EINTR
+user FAIL        XSH.thrd_sleep.003 errno is 0, expected EINTR
+user FAIL        XSH.thrd_sleep.004 errno is 0, expected EINVAL
+user FAIL        XSH.timer_getoverrun.001 a disarmed timer reports time left
+user FAIL        XSH.ttyname.004 ttyname_r() with namesize 10 (name needs 11) returned ENODEV, expected ERANGE
+user FAIL        XSH.vfwprintf.004 vswprintf() set errno E2BIG, expected EOVERFLOW
+user FAIL        XSH.wait.019 SIGCHLD is still pending after wait() reported the only child
+user FAIL        XSH.waitid.003 si_status is 7 for _exit(263), expected 263
+user FAIL        XSH.waitid.015 waitid(WSTOPPED|WNOHANG) of a terminated child returned -1 (ECHILD), expected 0
+user UNRESOLVED  XSH.wcrtomb.002 setup: setup: mbrtowc() of byte 128 returned 18446744073709551615
+user FAIL        XSH.wcsftime.006 wcsftime("%+6Y") returned 4, expected 6
+user FAIL        XSH.wcstok.008 wcstok() call 3 changed errno from 0 to EINVAL
+user UNRESOLVED  XSH.wctob.001 setup: btowc(128) returned WEOF
+user UNRESOLVED  XSH.wctob.004 setup: btowc(0xE1) returned WEOF
+user UNRESOLVED  XSH.wctomb.002 setup: setup: mbtowc() of byte 128 returned -1
+user FAIL        XSH.wordexp.005 case 2: wordexp("$((PCW_N+1))") returned 5
+user FAIL        XSH.wordexp.008 wordexp("a|b") failed but we_wordc is 99
+user FAIL        XSH.wordexp.009 wordexp("(a)") failed but we_wordc is 99
+user FAIL        XSH.wordexp.014 case 2: wordexp(""$PCW_E"") returned 1
+user FAIL        XSH.write.022 pwrite with O_APPEND did not write at offset 3
+user FAIL        XSH.writev.005 writev() with SSIZE_MAX and 1: errno EFAULT, expected EINVAL

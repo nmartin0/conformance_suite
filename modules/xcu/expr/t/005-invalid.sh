@@ -33,7 +33,7 @@ pc_test
 exrc 2 2 1 +
 exrc 2 2 1 '*'
 exrc 2 2 1 2
-exrc 2 2 1 + + 2
+# 1 + + 2 is not tried: the second + can be read as a string operand, and a string that is an operator symbol is not an argument the application can rely on
 exrc 2 2 '(' 1
 exrc 2 2 1 ')'
 exrc 2 2 '(' ')'

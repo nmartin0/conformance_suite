@@ -14,7 +14,7 @@
 
 int main(void)
 {
-	int p[2], r;
+	int p[2], r, round;
 	struct linger lg;
 	char buf[65536];
 	long long t0, t1;
@@ -26,17 +26,26 @@ int main(void)
 	memset(buf, 'q', sizeof buf);
 	tcp_pair(p);
 	set_nb(p[0], 1);
-	for (;;) {
+	/* Fill, let the queues settle, and fill again until a send still
+	 * would block after the pause (buffer sizes may grow meanwhile). */
+	for (round = 0;; round++) {
+		for (;;) {
+			r = (int)send(p[0], buf, sizeof buf, MSG_NOSIGNAL);
+			if (r < 0)
+				break;
+			total += r;
+			NEED(total < (1L << 30), "the queues did not fill after 1 GiB");
+		}
+		NEED(again(errno), "send failed: %s", pc_errname(errno));
+		nap_ms(300);
 		r = (int)send(p[0], buf, sizeof buf, MSG_NOSIGNAL);
-		if (r < 0)
+		if (r < 0) {
+			NEED(again(errno), "send failed: %s", pc_errname(errno));
 			break;
+		}
 		total += r;
-		NEED(total < (1L << 30), "the queues did not fill after 1 GiB");
+		NEED(round < 20, "the send queue is not full");
 	}
-	NEED(again(errno), "send failed: %s", pc_errname(errno));
-	nap_ms(300);
-	r = (int)send(p[0], buf, sizeof buf, MSG_NOSIGNAL);
-	NEED(r < 0 && again(errno), "the send queue is not full");
 	set_nb(p[0], 0);
 	lg.l_onoff = 1;
 	lg.l_linger = 1;

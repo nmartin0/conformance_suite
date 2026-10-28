@@ -105,7 +105,7 @@ static inline void xc_find(struct xc *c)
 	pc_unresolved("the group database has no entry for the real or effective group ID, or for 0");
 }
 
-/* Setup: an ID that no entry carries (a lookup that finds nothing and leaves errno alone). */
+/* Setup: an ID that no entry carries (a lookup that finds nothing; what it does to errno is for the tests to judge). */
 static inline xid_t xc_absent_id(void)
 {
 	unsigned i;
@@ -113,8 +113,7 @@ static inline xid_t xc_absent_id(void)
 
 	for (i = 0; i < 64; i++) {
 		id = (xid_t)(0x7ffff000u + 17u * i);
-		errno = XSENTINEL;
-		if (getgrgid(id) == NULL && errno == XSENTINEL)
+		if (getgrgid(id) == NULL)
 			return id;
 	}
 	pc_unresolved("no unused group ID found");

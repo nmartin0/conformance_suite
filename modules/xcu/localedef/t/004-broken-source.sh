@@ -17,5 +17,7 @@ pc_test
 localedef -i "$d/src" "$d/loc" >"$d/out" 2>"$d/err" </dev/null
 rc=$?
 [ "$rc" -gt 0 ] || pc_fail "localedef using an undefined symbolic name in LC_NUMERIC exited with status 0"
+# an empty directory left at NAME holds no locale data and is accepted (see the note of the assertion)
+rmdir "$d/loc" 2>/dev/null
 [ -e "$d/loc" ] && pc_fail "a locale was created from a source with an error"
 pc_pass

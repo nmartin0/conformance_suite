@@ -20,7 +20,12 @@ b() { printf '%b\n' "$1" | bc 2>/dev/null; }
 [ "$(b 'for (i=1; i<=2; i++) {\nfor (j=1; j<=2; j++) {\ni*10+j\n}\n}')" = "11${NL}12${NL}21${NL}22" ] || pc_fail "nested loops wrong"
 [ "$(b 'i=5\nwhile (i>0) i=i-2\ni')" = "-1" ] || pc_fail "while with a simple body wrong"
 [ "$(b '1\nquit\n2')" = "1" ] || pc_fail "quit did not stop execution"
-[ "$(b 'for (i=0; i<5; i++) {\nif (i==2) quit\ni\n}\n99')" = "0${NL}1" ] || pc_fail "quit inside a loop did not stop execution"
+# the text can be read as quit taking effect when it is executed (the loop prints 0 and 1 and stops) or when it is read (nothing of the loop runs)
+got=$(b 'for (i=0; i<5; i++) {\nif (i==2) quit\ni\n}\n99')
+case $got in
+"" | "0${NL}1") ;;
+*) pc_fail "quit inside a loop did not stop execution: [$got]" ;;
+esac
 got=$(printf '"hello"\n' | bc 2>/dev/null; printf 'rc=%s' "$?")
 [ "$got" = "hello${NL}rc=0" ] || [ "$got" = "hellorc=0" ] || pc_fail "a string was not written as given"
 got=$(printf '"x = "\n5\n' | bc 2>/dev/null)

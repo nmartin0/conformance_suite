@@ -139,7 +139,7 @@ int main(void)
 	CASE("a:b", "b a=foo |4 rest=bar", "-b", "-a", "foo", "bar");
 	CASE("a:b", "a=-b |3 rest=", "-a", "-b");
 	CASE("a:b", "a=-- |3 rest=", "-a", "--");
-	CASE("a:b", "a=-- |4 rest=x", "-a", "--", "x");
+	CASE("a:b", "a=-- |3 rest=x", "-a", "--", "x");
 	CASE("a:b:", "a=1 b=2 |5 rest=", "-a", "1", "-b", "2");
 	CASE("a:b:", "a=1 b=2 |3 rest=", "-a1", "-b2");
 	pc_pass();

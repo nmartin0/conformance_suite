@@ -80,8 +80,10 @@ class      required
 says       setlocale(LC_ALL, "") succeeds and selects the POSIX locale for
            every category when the environment names it through: LC_ALL (set to
            "POSIX", with LC_* and LANG naming a missing locale, which shows LC_ALL
-           takes precedence); the six LC_* variables each set to "C" with LANG
-           naming a missing locale; LANG alone set to "POSIX".
+           takes precedence); LANG alone set to "POSIX". With the six LC_*
+           variables each set to "C" and LANG naming a missing locale,
+           setlocale(c, "") succeeds for each of the six categories c and
+           selects the POSIX locale.
 test       t/007-env-success.c
 
 assertion  XSH.setlocale.008

@@ -59,7 +59,7 @@ struct rep {
 #define SS_CTTY 0	/* S opens the subsidiary side without O_NOCTTY and must get a controlling terminal */
 
 static int up[2] = {-1, -1}, dn[2] = {-1, -1};
-static pid_t g_sess = -1;
+static pid_t g_sess = -1, g_leader = -1;
 
 static void rep_set(struct rep *r, int status, const char *fmt, ...)
 {
@@ -203,7 +203,7 @@ static void start_session(int how, sbodyfn body)
 		(void)dn_wait(40000);
 		_exit(0);
 	}
-	g_sess = s;
+	g_sess = g_leader = s;
 	close(up[1]);
 	close(dn[0]);
 	rep_get(&r, 30000);
@@ -280,6 +280,6 @@ int main(void)
 	rep_get(&r, 30000);
 	end_session();
 	settle(&r);
-	pc_check(r.v[0] == (int)g_sess, "the old session's leader lost the terminal too: tcgetpgrp() returned %d, expected %d", r.v[0], (int)g_sess);
+	pc_check(r.v[0] == (int)g_leader, "the old session's leader lost the terminal too: tcgetpgrp() returned %d, expected %d", r.v[0], (int)g_leader);
 	pc_pass();
 }

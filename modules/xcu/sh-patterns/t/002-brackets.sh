@@ -27,6 +27,6 @@ pcno() {
 	done
 }
 pc_test
-pcyes b '[abc]' b '[a-c]' b '[!a]' x '[!a-c]' ']' '[]]' a '[]a]' - '[a-]' - '[-a]' 5 '[[:digit:]]' a '[[:alpha:]]' A '[[:upper:]]' a '[![:digit:]]' _ '[_[:alpha:]]' c 'a[a-c]' 'ab' 'a[bc]'
+pcyes b '[abc]' b '[a-c]' b '[!a]' x '[!a-c]' ']' '[]]' a '[]a]' - '[a-]' - '[-a]' 5 '[[:digit:]]' a '[[:alpha:]]' A '[[:upper:]]' a '[![:digit:]]' _ '[_[:alpha:]]' ac 'a[a-c]' 'ab' 'a[bc]'
 pcno d '[abc]' a '[!a]' b '[!a-c]' a '[[:digit:]]' 5 '[![:digit:]]' ']' '[a]' B '[a-z]' a '[A-Z]' '' '[a]' ab '[ab]'
 pc_pass

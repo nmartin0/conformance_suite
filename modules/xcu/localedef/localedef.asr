@@ -31,19 +31,29 @@ assertion  XCU.localedef.003
 anchor     utilities/localedef.html#OPTIONS
 anchor     utilities/localedef.html#CONSEQUENCES OF ERRORS
 anchor     utilities/localedef.html#EXIT STATUS
-class      required
+class      disputed
 says       When the -i file does not exist localedef exits with a status above
            zero and creates nothing at NAME.
+note       disputed (Q-203): an error is to leave no permanent output, and a name
+           with a slash is the pathname where a locale is stored, but the
+           text does not say whether an empty directory left at that
+           pathname is output; it is accepted here, anything with content
+           is not.
 test       t/003-missing-source.sh
 
 assertion  XCU.localedef.004
 anchor     utilities/localedef.html#CONSEQUENCES OF ERRORS
 anchor     utilities/localedef.html#EXIT STATUS
-class      required
+class      disputed
 says       A source that uses, in a category other than LC_CTYPE and
            LC_COLLATE, a symbolic character name that the character map does
            not define is an error: localedef exits with a status above zero
            and creates no permanent output at NAME.
+note       disputed (Q-203): an error is to leave no permanent output, and a name
+           with a slash is the pathname where a locale is stored, but the
+           text does not say whether an empty directory left at that
+           pathname is output; it is accepted here, anything with content
+           is not.
 test       t/004-broken-source.sh
 
 assertion  XCU.localedef.005

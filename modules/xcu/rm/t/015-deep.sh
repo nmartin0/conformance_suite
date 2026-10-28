@@ -6,11 +6,11 @@
 pc_begin XCU.rm.015
 base=$(pwd -P) || pc_fail "cannot determine the directory"
 mkdir top || pc_fail "cannot create top"
-cd top || pc_fail "cannot enter top"
+cd -P top || pc_fail "cannot enter top"
 i=0
 while [ "$i" -lt 450 ]; do
 	mkdir abcdefghijk || pc_fail "cannot create level $i"
-	cd abcdefghijk || pc_fail "cannot enter level $i"
+	cd -P abcdefghijk || pc_fail "cannot enter level $i"
 	i=$((i + 1))
 done
 printf x >leaf || pc_fail "cannot create leaf"

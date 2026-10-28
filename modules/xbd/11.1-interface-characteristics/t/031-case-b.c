@@ -213,6 +213,8 @@ int main(void)
 	char b[16];
 	int m, s;
 	ssize_t r;
+	struct timespec t0, t1;
+	long ms;
 
 	pc_begin("XBD.11.1-interface-characteristics.031");
 	s = open_pty(&m);
@@ -220,9 +222,23 @@ int main(void)
 	pc_test();
 	PUT(m, "ab");
 	msleep(100);
+	clock_gettime(CLOCK_MONOTONIC, &t0);
 	r = rd(s, b, sizeof b, 1);
-	pc_check(r == -1 && errno == EINTR, "two bytes with MIN 3 satisfied the read: it returned %ld (errno %s)", (long)r, pc_errname(errno));
-	PUT(m, "c");
-	expect_read(s, "the read after MIN bytes were there", "abc", 3);
+	clock_gettime(CLOCK_MONOTONIC, &t1);
+	ms = (long)(t1.tv_sec - t0.tv_sec) * 1000 + (t1.tv_nsec - t0.tv_nsec) / 1000000L;
+	/*
+	 * Only the signal may end the wait. A read that a signal ends after it has taken the two
+	 * bytes may return them (the read page: the number of bytes read), or return -1 with EINTR.
+	 */
+	if (r == -1) {
+		pc_check(errno == EINTR, "two bytes with MIN 3: the read failed with %s, expected EINTR", pc_errname(errno));
+		PUT(m, "c");
+		expect_read(s, "the read after MIN bytes were there", "abc", 3);
+	} else {
+		pc_check(ms >= 800, "two bytes with MIN 3 satisfied the read after %ld ms: it returned %ld", ms, (long)r);
+		want("the read ended by the signal", b, (int)r, "ab", 2);
+		PUT(m, "xyz");
+		expect_read(s, "the read after MIN bytes were there", "xyz", 3);
+	}
 	pc_pass();
 }

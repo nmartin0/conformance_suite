@@ -33,10 +33,14 @@ test       t/003-integer-types.c
 
 assertion  XSH.2.11-data-types.004
 anchor     functions/V2_chap02.html#2.11
-class      required
+class      disputed
 says       id_t can hold every value of pid_t, uid_t and gid_t: its range
            includes theirs (its maximum is at least the largest of theirs, and
-           where it is signed its minimum is at most the smallest of theirs).
+           its minimum is at most the smallest of theirs).
+note       Q-200: 'at least the largest of a pid_t, uid_t or gid_t' can be read
+           as a width (the largest of the three types) or as a range that
+           includes the negative values of a signed pid_t; the test asserts
+           the range reading.
 test       t/004-id-range.c
 
 assertion  XSH.2.11-data-types.005

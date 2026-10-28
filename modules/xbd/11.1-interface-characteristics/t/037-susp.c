@@ -338,11 +338,13 @@ static void end_session(void)
 
 
 static int sigp[2];
-static char who;
+/* Who a handler runs in is found by process and group, not by a variable the children set after fork. */
+static pid_t g_spid, g_spgrp;
 
 static void h(int sig)
 {
 	int e = errno;
+	char who = getpid() == g_spid ? 'S' : getpgrp() == g_spgrp ? 'F' : 'B';
 
 	(void)sig;
 	(void)!write(sigp[1], &who, 1);
@@ -400,15 +402,14 @@ static void sb(int slave)
 	sigemptyset(&sa.sa_mask);
 	sa.sa_handler = h;
 	sigaction(SIGTSTP, &sa, NULL);
-	who = 'S';
+	g_spid = getpid();
+	g_spgrp = getpgrp();
 	f = fork();
 	if (f == 0) {
-		who = 'F';
 		wait_child(hold[0]);
 	}
 	b = fork();
 	if (b == 0) {
-		who = 'B';
 		(void)setpgid(0, 0);
 		wait_child(hold[0]);
 	}

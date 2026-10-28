@@ -19,7 +19,9 @@ do
 	pcl_tz=${pcl_z%:*}
 	pcl_h=${pcl_z#*:}
 	pcl_line=$(TZ=$pcl_tz diff -c f g 2>/dev/null | sed -n 1p)
+	set -f
 	set -- $pcl_line
+	set +f
 	[ $# -eq 7 ] || pc_fail "with TZ=$pcl_tz the first header line was [$pcl_line]"
 	[ "$4 $5 $6 $7" = "Jun 15 $pcl_h:30:00 2021" ] || pc_fail "with TZ=$pcl_tz the timestamp was [$4 $5 $6 $7], not [Jun 15 $pcl_h:30:00 2021]"
 done

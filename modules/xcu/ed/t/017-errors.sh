@@ -20,16 +20,21 @@ printf 'xyz\nh\nQ\n' >s3
 printf 'H\nxyz\nQ\n' >s4
 printf '1s/nomatch/x/\nQ\n' >s5
 printf '?\n5\n' >exp
+printf '?\n' >exp2
 pc_test
 ed -s f <s1 >o1 2>err
 rc=$?
-cmp -s o1 exp || pc_fail "an invalid command gave '$(cat o1)', expected ? then the line count 5"
+# ed may stop reading a script at a command error, so the = after it is optional
+cmp -s o1 exp || cmp -s o1 exp2 || pc_fail "an invalid command gave '$(cat o1)', expected ? and optionally the line count 5"
 [ "$rc" -ne 0 ] || pc_fail "exit status 0 after a command error"
 ed -s f <s2 >o2 2>err
 [ "$(sed -n 1p o2)" = '?' ] || pc_fail "an out-of-range address gave '$(cat o2)', expected ? first"
 ed -s f <s3 >o3 2>err
 [ "$(sed -n 1p o3)" = '?' ] || pc_fail "no ? for the invalid command"
-[ -n "$(sed -n 2p o3)" ] || pc_fail "h wrote no explanation"
+# ed may stop reading a script at the error, before the h; if it goes on, h must write an explanation
+if [ "$(sed -n '$=' o3)" -ge 2 ]; then
+	[ -n "$(sed -n 2p o3)" ] || pc_fail "h wrote an empty explanation"
+fi
 ed -s f <s4 >o4 2>err
 [ "$(sed -n 1p o4)" = '?' ] || pc_fail "H mode: no ? for the invalid command"
 [ -n "$(sed -n 2p o4)" ] || pc_fail "H mode wrote no explanation after the ?"

@@ -81,21 +81,27 @@ test       t/007-pathname.c
 assertion  XSH.wordexp.008
 anchor     functions/wordexp.html#DESCRIPTION
 anchor     functions/wordexp.html#RETURN VALUE
-class      required
+class      disputed
 since      1992
 says       An unquoted newline, vertical bar, ampersand, semicolon, less-than
            or greater-than sign outside command substitution makes wordexp()
            fail with WRDE_BADCHAR and the number of words is 0.
+note       Q-205: "the number of expanded words shall be 0" reads as we_wordc
+           stored as 0 by the failing call, or as no words produced with
+           we_wordc left as it was; the test takes the first (we_wordc is
+           preset to a non-zero value). A FAIL is logged as INSPECT.
 test       t/008-badchar.c
 
 assertion  XSH.wordexp.009
 anchor     functions/wordexp.html#DESCRIPTION
 anchor     functions/wordexp.html#RETURN VALUE
-class      required
+class      disputed
 since      1992
 says       An unquoted parenthesis or brace in an inappropriate place makes
            wordexp() fail, with WRDE_BADCHAR or WRDE_SYNTAX, and the number
            of words is 0.
+note       Q-205: as XSH.wordexp.008, on the stored we_wordc. A FAIL is
+           logged as INSPECT.
 test       t/009-badchar-paren.c
 
 assertion  XSH.wordexp.010

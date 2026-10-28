@@ -29,6 +29,12 @@ m10=${3%"${3#??????????}"}
 [ "$m10" = '-rw-r-----' ] || pc_fail "the third field '$3' is not the mode string"
 [ "${11}" = f ] || pc_fail "the last field is '${11}', expected f"
 ls -i -s -1 d >out 2>err </dev/null || pc_fail "ls -i -s -1 failed"
-set -- $(cat out)
-[ "$#" -eq 3 ] && [ "$1" = "$ino" ] && [ "$2" = "$blk" ] && [ "$3" = f ] || pc_fail "ls -i -s -1 wrote '$(cat out)', expected '$ino $blk f'"
+# -s also puts the status line "total N" before the list of a directory
+case $(sed -n 1p out) in
+"total "[0-9]*) ;;
+*) pc_fail "the first line of ls -i -s -1 is not a total line: $(sed -n 1p out)" ;;
+esac
+[ "$(sed -n '$=' out)" = 2 ] || pc_fail "ls -i -s -1 wrote '$(cat out)', expected the total line and one line"
+set -- $(sed -n 2p out)
+[ "$#" -eq 3 ] && [ "$1" = "$ino" ] && [ "$2" = "$blk" ] && [ "$3" = f ] || pc_fail "ls -i -s -1 wrote '$(sed -n 2p out)', expected '$ino $blk f'"
 pc_pass

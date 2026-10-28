@@ -25,5 +25,10 @@ b() { printf '%b\n' "$1" | bc 2>/dev/null; }
 [ "$(b 'define f(a, b) {\nreturn(a-b)\n}\nf(10, 3)')" = "7" ] || pc_fail "two parameters wrong"
 [ "$(b 'define p(x) {\nif (x<0) return(0-x)\nreturn(x)\n}\np(-5)\np(5)')" = "5${NL}5" ] || pc_fail "return from inside an if wrong"
 [ "$(b 'define q(x) {\nwhile (1) {\nif (x>3) return(x)\nx=x+1\n}\n}\nq(0)')" = "4" ] || pc_fail "return from inside a loop wrong"
-[ "$(b 'define f(x) {\nquit\n}\n1\nf(0)\n2')" = "1" ] || pc_fail "quit inside a function did not stop the program"
+# quit in a function body: stops the program when read (nothing printed) or when called (1 printed first)
+got=$(b 'define f(x) {\nquit\n}\n1\nf(0)\n2')
+case $got in
+"" | 1) ;;
+*) pc_fail "quit inside a function did not stop the program: [$got]" ;;
+esac
 pc_pass

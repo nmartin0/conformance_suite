@@ -14,7 +14,7 @@ pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 cat >in <<'EOM'
-define(`f',`<$1|$2|$#|$0>')dnl
+define(`f',`<$1|$2|$#|`$0'>')dnl
 f(a, b)f
 define(`a1',`b1')define(`b1',`c1')a1
 define(`ab',X)abc ab_ ab1 ab

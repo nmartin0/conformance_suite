@@ -109,7 +109,7 @@ int main(void)
 	guard(60);
 	pc_test();
 	for (i = 0; verbs[i]; i++) {
-		int r = run(verbs[i], PRINT, "LBLQ", MM_WARNING, "bad thing", "fix it", "XSI:vb:77", out, sizeof out);
+		int r = run(verbs[i], PRINT, "LBLQ:sub", MM_WARNING, "bad thing", "fix it", "XSI:vb:77", out, sizeof out);
 
 		pc_check(r == 0, "MSGVERB \"%s\": fmtmsg() did not return MM_OK (code %d)", verbs[i], r);
 		pc_check(at(out, "WARNING") && at(out, "bad thing") && at(out, "TO FIX:") && at(out, "fix it") && at(out, "XSI:vb:77"),

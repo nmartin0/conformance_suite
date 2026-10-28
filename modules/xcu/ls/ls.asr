@@ -351,8 +351,10 @@ since      1992
 says       "ls -lF" of symbolic links writes name, @, arrow and contents,
            optionally followed by the indicator of the target (/ for a
            directory, * for an executable file, nothing for a plain file or
-           a missing target, which is not an error); "ls -lp" writes no @
-           and, optionally, the slash of a directory target only.
+           a missing target, which is not an error), or else name, arrow,
+           contents and the indicator of the target without the @; "ls -lp"
+           writes no @ and, optionally, the slash of a directory target
+           only.
 test       t/043-symlink-indicators.sh
 
 assertion  XCU.ls.044

@@ -263,6 +263,41 @@ static void sput(int s, const char *p, int n)
 	NEED(write(s, p, (size_t)n) == n, "write to the subsidiary side failed: %s", pc_errname(errno));
 }
 
+/*
+ * A write on the subsidiary side while output is suspended may block until output is restarted
+ * (the data are not yet scheduled for transmission), so it is made by a child; reap_wr() checks
+ * that it completed once the output was released.
+ */
+static pid_t g_wr = -1;
+
+static void sput_bg(int s, const char *p, int n)
+{
+	fflush(NULL);
+	g_wr = fork();
+	NEED(g_wr != -1, "fork failed: %s", pc_errname(errno));
+	if (g_wr == 0) {
+		alarm(20);
+		_exit(write(s, p, (size_t)n) == (ssize_t)n ? 0 : 1);
+	}
+}
+
+static void reap_wr(void)
+{
+	int st = 0;
+	pid_t w;
+
+	catch_alarm();
+	alarm(10);
+	w = waitpid(g_wr, &st, 0);
+	alarm(0);
+	if (w != g_wr) {
+		kill(g_wr, SIGKILL);
+		waitpid(g_wr, NULL, 0);
+		pc_fail("the write on the subsidiary side did not complete after the output was restarted");
+	}
+	pc_check(WIFEXITED(st) && WEXITSTATUS(st) == 0, "the write on the subsidiary side failed after the output was restarted");
+}
+
 /* What the subsidiary side wrote, as the manager receives it, must be exactly exp. */
 static void expect_out(int m, const char *what, const char *exp, int en)
 {
@@ -311,10 +346,11 @@ int main(void)
 	expect_out(m, "output before STOP", "y", 1);
 	put_in(m, &stop, 1);
 	msleep(150);
-	sput(s, "x", 1);
+	sput_bg(s, "x", 1);
 	expect_quiet(m, "output while suspended");
 	put_in(m, &start, 1);
 	expect_out(m, "output after START", "x", 1);
+	reap_wr();
 	r = rd(s, b, sizeof b, 5);
 	pc_check(r == 0, "STOP and START were read as data (%ld bytes)", (long)r);
 	pc_pass();

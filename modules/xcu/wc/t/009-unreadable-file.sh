@@ -14,8 +14,13 @@ pc_test
 out=$(wc -l nosuchfile g 2>/dev/null </dev/null)
 rc=$?
 [ "$rc" -ne 0 ] || pc_fail "status 0 although a file could not be read"
-case " $out " in
-*" 1 g "*) ;;
-*) pc_fail "the readable file was not counted" ;;
-esac
+# the entry for g is a line of the count and the name (blanks around them are not fixed)
+found=
+while IFS= read -r line; do
+	set -- $line
+	if [ "$#" -eq 2 ] && [ "$1" = 1 ] && [ "$2" = g ]; then found=1; fi
+done <<EOF
+$out
+EOF
+[ -n "$found" ] || pc_fail "the readable file was not counted"
 pc_pass

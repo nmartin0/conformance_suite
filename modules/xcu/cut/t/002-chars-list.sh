@@ -19,5 +19,5 @@ got=$(cut -c -2 in 2>/dev/null; printf 'rc=%s' "$?")
 got=$(cut -c 7- in 2>/dev/null; printf 'rc=%s' "$?")
 [ "$got" = "gh${NL}op${NL}rc=0" ] || pc_fail "-c 7- gave the wrong result"
 got=$(cut -c 1,4-5,8 in 2>/dev/null; printf 'rc=%s' "$?")
-[ "$got" = "adeh${NL}lmp${NL}rc=0" ] || pc_fail "-c 1,4-5,8 gave the wrong result"
+[ "$got" = "adeh${NL}ilmp${NL}rc=0" ] || pc_fail "-c 1,4-5,8 gave the wrong result"
 pc_pass

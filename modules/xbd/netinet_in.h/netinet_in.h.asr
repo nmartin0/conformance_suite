@@ -21,13 +21,16 @@ nomutant   compile-time check; needs the Tier 0 header mutants
 assertion  XBD.netinet_in.h.002
 anchor     basedefs/netinet_in.h.html#DESCRIPTION/IPPROTO_IP
 anchor     basedefs/sys_socket.h.html#DESCRIPTION/SOL_SOCKET
-class      required
+class      disputed
 since      2001
 says       IPPROTO_IP, IPPROTO_ICMP, IPPROTO_TCP and IPPROTO_UDP are defined and,
            with SOL_SOCKET, are five different values, since all serve as the
            level argument of getsockopt() and setsockopt().
-note       That the levels differ is inferred from their having to be told apart
-           in one argument (Q-169); it is not stated.
+note       disputed (Q-169): that the levels differ is inferred from their having
+           to be told apart in one argument; it is not stated, and a system whose
+           IPPROTO_ICMP equals SOL_SOCKET (neither has an option the other
+           could be confused with) is not contradicted by any sentence; a FAIL
+           is logged as INSPECT.
 test       t/002-ipproto-distinct.c
 nomutant   compile-time check; needs the Tier 0 header mutants
 

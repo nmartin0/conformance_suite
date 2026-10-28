@@ -23,8 +23,9 @@ for pair in 's1:f1:' 's2:dd:/' 's3:ex:*' 's4:nowhere:'; do
 	n=${pair%%:*}; rest=${pair#*:}
 	c=${rest%%:*}; ind=${rest#*:}
 	got=$(tail_of outF $n)
-	if [ "$got" != "$n@ -> $c" ] && [ "$got" != "$n@ -> $c$ind" ]; then
-		pc_fail "ls -lF writes '$got' for $n, expected '$n@ -> $c' with or without the indicator '$ind'"
+	# the second form of the page has no link indicator but ends in the indicator of the target
+	if [ "$got" != "$n@ -> $c" ] && [ "$got" != "$n@ -> $c$ind" ] && [ "$got" != "$n -> $c$ind" ]; then
+		pc_fail "ls -lF writes '$got' for $n, expected '$n@ -> $c', '$n@ -> $c$ind' or '$n -> $c$ind'"
 	fi
 	pind=
 	[ "$ind" = / ] && pind=/

@@ -37,16 +37,28 @@ test       t/004-variables-and-arrays.sh
 
 assertion  XCU.bc.005
 anchor     utilities/bc.html#EXTENDED DESCRIPTION
-class      required
+class      disputed
 since      1992
 says       if, while, for, break and quit work, relational operators are valid in them, strings are written as given, comments have no effect, and statements run in sequence.
+note       disputed (Q-202): quit is said to stop the program where the statement
+           stands in the input, even inside a function, if, for or while,
+           which reads either as stopping when the statement is read
+           (nothing of the enclosing construct runs) or when it is executed;
+           both outcomes are accepted here, and the rest of the assertion
+           is judged as usual.
 test       t/005-control-flow-strings-comments.sh
 
 assertion  XCU.bc.006
 anchor     utilities/bc.html#EXTENDED DESCRIPTION
-class      required
+class      disputed
 since      1992
 says       Functions take parameters by value (arrays by name), have auto locals, return a value or zero, may recurse, are replaced on redefinition, and names refer to the newest binding.
+note       disputed (Q-202): quit is said to stop the program where the statement
+           stands in the input, even inside a function, if, for or while,
+           which reads either as stopping when the statement is read
+           (nothing of the enclosing construct runs) or when it is executed;
+           both outcomes are accepted here, and the rest of the assertion
+           is judged as usual.
 test       t/006-functions.sh
 
 assertion  XCU.bc.007

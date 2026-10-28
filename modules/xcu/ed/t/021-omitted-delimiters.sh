@@ -13,7 +13,7 @@ pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 printf 'one\ntwo\nthree\nfour\nfive\n' >f || pc_unresolved "setup: cannot write f"
-printf '1s/one/uno\ng/^t\nv/f\n?o\n\n' >s
+printf '1s/one/uno\ng/^t\nv/f\n?o\n\nQ\n' >s
 printf 'uno\ntwo\nthree\nuno\ntwo\nthree\ntwo\nthree\n' >exp
 pc_test
 ed -s f <s >o 2>err

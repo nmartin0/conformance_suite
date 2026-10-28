@@ -295,6 +295,20 @@ static void send_fds(int sock, const int *fds, int n, char data)
 }
 
 
+/*
+ * The buffers described are far larger than any storage there is, so an
+ * invalid address may be detected too; with two errors present any one may
+ * be returned (XSH 2.3). The overflow error is the one asserted, EFAULT is
+ * the other that is tolerated.
+ */
+static void expect_overflow_err(long r, const char *what)
+{
+	int e = errno;
+
+	pc_check(r == -1, "%s: returned %ld, expected -1 with EINVAL", what, r);
+	pc_check(e == EINVAL || e == EFAULT, "%s: errno %s, expected EINVAL (or EFAULT for the invalid buffers)", what, pc_errname(e));
+}
+
 int main(void)
 {
 	int sv[2];
@@ -311,6 +325,6 @@ int main(void)
 	iov[1].iov_base = buf; iov[1].iov_len = (size_t)SSIZE_MAX;
 	mhdr(&m, NULL, 0, iov, 2);
 	pc_test();
-	pc_expect_err(recvmsg(sv[1], &m, 0), EINVAL, "recvmsg() with two buffers of SSIZE_MAX");
+	expect_overflow_err(recvmsg(sv[1], &m, 0), "recvmsg() with two buffers of SSIZE_MAX");
 	pc_pass();
 }

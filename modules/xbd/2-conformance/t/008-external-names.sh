@@ -26,6 +26,8 @@ int main(void)
 }
 EOC
 pc_test
+# Without c17 the names cannot be tried; its absence is XBD.2-conformance.002's finding.
+command -v c17 >/dev/null 2>&1 </dev/null || pc_unresolved "the c17 utility was not found"
 c17 -o prog a.c b.c >cc.out 2>&1 </dev/null || pc_fail "c17 could not build a program from two files that define and use four external names differing at byte 31 or in case only"
 got=$(./prog 2>/dev/null </dev/null)
 [ "$got" = "11 22 33 44" ] || pc_fail "the program printed '$got', expected 11 22 33 44"

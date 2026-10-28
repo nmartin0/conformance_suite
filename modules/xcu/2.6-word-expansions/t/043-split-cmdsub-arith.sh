@@ -14,9 +14,9 @@ trap 'cd "$PCW" 2>/dev/null; rm -rf "$PCD"' 0
 mkdir "$PCD" && cd "$PCD" || pc_fail "cannot make a working directory"
 {
 	printf 'IFS=x\n'
-	printf 'set -- $(echo axb); echo $# "$1" "$2"\n'
+	printf 'set -- $(echo axb); echo "$#" "$1" "$2"\n'
 	printf 'IFS=2\n'
-	printf 'set -- $((123)); echo $# "$1" "$2"\n'
+	printf 'set -- $((123)); echo "$#" "$1" "$2"\n'
 } >s.sh || pc_fail "cannot write the test script"
 pc_test
 "$PCSH" ./s.sh </dev/null >out 2>err

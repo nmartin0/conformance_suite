@@ -21,11 +21,13 @@ printf 'a\n.\nq\n' >sc
 printf 'a\nx\n.\nq\nQ\n' >sd
 printf '1d\nQ\n' >se
 printf '24\n?\ntwo\n' >expa
+printf '24\n?\n' >expa2
 printf '?\n' >expd
 pc_test
 ed f <sa >oa 2>err
 rc=$?
-cmp -s oa expa || pc_fail "q on a changed buffer wrote '$(cat oa)', expected 24, ? and two"
+# after the error of the first q, ed may stop reading a script (CONSEQUENCES OF ERRORS), so the later 1p is optional
+cmp -s oa expa || cmp -s oa expa2 || pc_fail "q on a changed buffer wrote '$(cat oa)', expected 24, ? and optionally two"
 cmp -s f f.keep || pc_fail "the file changed without a w command"
 ed -s f <sb >ob 2>err
 [ -s ob ] && pc_fail "q on an unmodified buffer wrote output"

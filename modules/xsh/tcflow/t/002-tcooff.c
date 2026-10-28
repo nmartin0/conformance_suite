@@ -123,18 +123,47 @@ static void raw_mode(int s, int vmin, int vtime)
 		pc_unresolved("tcsetattr failed: %s", pc_errname(errno));
 }
 
+/*
+ * Output is suspended: a system may hold the writer until output resumes
+ * instead of queuing the bytes, so the write is made by a child (ended by
+ * the alarm if it is still held).
+ */
+static pid_t start_writer(int s)
+{
+	pid_t w;
+
+	fflush(NULL);
+	w = fork();
+	if (w == 0) {
+		alarm(20);
+		_exit(write(s, "abc", 3) == 3 ? 0 : 1);
+	}
+	NEED(w != -1, "fork failed: %s", pc_errname(errno));
+	return w;
+}
+
+static void end_writer(pid_t w)
+{
+	int st;
+
+	while (waitpid(w, &st, 0) == -1 && errno == EINTR)
+		;
+}
+
 int main(void)
 {
 	char b[8];
 	int m, s, n;
+	pid_t w;
 
 	pc_begin("XSH.tcflow.002");
 	s = open_pty(&m);
 	pc_test();
 	pc_check(tcflow(s, TCOOFF) == 0, "tcflow(TCOOFF) failed: %s", pc_errname(errno));
-	NEED(write(s, "abc", 3) == 3, "write failed");
+	w = start_writer(s);
 	n = collect(m, b, sizeof b, 300);
 	NEED(tcflow(s, TCOON) == 0, "tcflow(TCOON) failed: %s", pc_errname(errno));
+	end_writer(w);
 	pc_check(n == 0, "%d byte(s) reached the manager while output was suspended", n);
 	pc_pass();
 }

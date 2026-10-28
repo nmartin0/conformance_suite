@@ -314,13 +314,13 @@ static int orph_run(int slave, bodyfn body, struct rep *r)
 		return 0;
 	}
 	if (m == 0) {
-		pid_t c;
+		pid_t c, mpid = getpid();
 
 		alarm(25);
 		(void)setpgid(0, 0);
 		c = fork();
 		if (c == 0) {
-			pid_t mp = getppid();
+			pid_t mp = mpid;
 			pid_t d;
 			int i, dst;
 

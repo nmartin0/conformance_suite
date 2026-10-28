@@ -271,12 +271,12 @@ static int orph_run(int slave, bodyfn body, struct rep *r)
 	}
 	if (m == 0) {
 		pid_t c;
+		pid_t mp = getpid();	/* M itself: C may run only after M has ended */
 
 		alarm(25);
 		(void)setpgid(0, 0);
 		c = fork();
 		if (c == 0) {
-			pid_t mp = getppid();
 			int i;
 
 			alarm(20);

@@ -31,7 +31,7 @@ cat >s <<'XX'
 2,/o/p
 1,2,4p
 XX
-printf 'one two three four five two two three four five three one two four four one one two three five four two three four one two two three four' | tr ' ' '\n' >exp
+printf 'one two three four five two two three four five three one two four four one one two three five four two three four one two two three four ' | tr ' ' '\n' >exp
 printf '1q\n' >e1
 pc_test
 ed -s f <s >o 2>err

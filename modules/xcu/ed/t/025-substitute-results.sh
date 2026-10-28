@@ -14,11 +14,12 @@ pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 printf 'one\ntwo\nthree\nfour\nfive\n' >f || pc_unresolved "setup: cannot write f"
-printf '1s,one,uno,\n2s#t\\(w\\)o#[\\1]&#\n3s/e/E/2\n4s/o/0/g\n1,5s/e/E/\n4s/u/u/\n,p\n' >s1
+# the buffers are changed, so scripts that expect exact output end with Q (end of input acts as q, which warns on a changed buffer)
+printf '1s,one,uno,\n2s#t\\(w\\)o#[\\1]&#\n3s/e/E/2\n4s/o/0/g\n1,5s/e/E/\n4s/u/u/\n,p\nQ\n' >s1
 printf 'uno\n[w]two\nthrEE\nf0ur\nfivE\n' >exp1
-printf '1,5s/o/0/\n.=\n' >s2
+printf '1,5s/o/0/\n.=\nQ\n' >s2
 printf '4\n' >exp2
-printf '1s/one/X/\n2s/two/%%/\n3s/three/%%%%/\n4s/four/\\%%/\n,p\n' >s3
+printf '1s/one/X/\n2s/two/%%/\n3s/three/%%%%/\n4s/four/\\%%/\n,p\nQ\n' >s3
 printf 'X\nX\n%%%%\n%%\nfive\n' >exp3
 printf '1s/one/%%/\n' >s4
 printf '5s/zzz/x/\n' >s5

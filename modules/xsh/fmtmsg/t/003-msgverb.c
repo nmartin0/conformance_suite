@@ -102,7 +102,7 @@ static const char *at(const char *out, const char *s)
 static void show(const char *verb, int l, int s, int t, int a, int g, const char *name)
 {
 	char out[2048];
-	int r = run(verb, PRINT, "LBLQ", MM_WARNING, "bad thing", "fix it", "TAGZ77", out, sizeof out);
+	int r = run(verb, PRINT, "LBLQ:sub", MM_WARNING, "bad thing", "fix it", "TAGZ77", out, sizeof out);
 
 	pc_check(r == 0, "%s: fmtmsg() did not return MM_OK (code %d)", name, r);
 	pc_check((at(out, "LBLQ") != NULL) == (l != 0), "%s: the label is %s: \"%s\"", name, l ? "missing" : "present", out);

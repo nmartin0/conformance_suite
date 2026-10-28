@@ -232,11 +232,17 @@ test       t/022-seek-bounds.c
 
 assertion  XSH.fmemopen.023
 anchor     functions/V2_chap02.html#2.5
-class      required
+class      disputed
 since      2008
 says       Streams from fmemopen() with "r" and "w+" have no orientation
            (fwide(f, 0) returns 0); after fgetc() on the "r" stream
            fwide(f, 0) returns a negative value.
+note       Q-201: 2.5.2 gives a stream no orientation after it is associated
+           with an 'external file' and before any operation, while an
+           fmemopen() stream is associated with a memory buffer, and
+           open_memstream() says outright that its stream is byte-oriented
+           where fmemopen() says nothing; the test takes the 2.5.2 rule. A
+           FAIL is logged as INSPECT.
 test       t/023-orientation.c
 
 assertion  XSH.fmemopen.024
