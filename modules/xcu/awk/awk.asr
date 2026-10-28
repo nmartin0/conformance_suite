@@ -146,3 +146,156 @@ class      required
 since      2024
 says       nextfile abandons the current file, fflush returns 0, and FILENAME is - for standard input.
 test       t/019-later-additions.sh
+
+assertion  XCU.awk.020
+anchor     utilities/awk.html#Lexical Conventions
+anchor     utilities/awk.html#Grammar
+class      required
+since      1992
+says       A comment runs to the end of the line and has no effect, a backslash-
+           newline has no effect, and a newline may follow a comma, an open
+           brace, the logical AND and OR operators, the do and else keywords and
+           the closing parenthesis of an if, for or while statement.
+test       t/020-comments-newlines.sh
+
+assertion  XCU.awk.021
+anchor     utilities/awk.html#Regular Expressions
+anchor     utilities/awk.html#Lexical Conventions
+class      required
+since      1992
+says       A string constant takes the escapes for alert, backspace, form-feed,
+           newline, carriage return, tab, vertical tab, double quote, backslash
+           and octal ddd with the longest one to three digits; in regular
+           expressions the escapes also work inside brackets, a slash is written
+           \/, and a backslash before a special character makes it literal, in
+           constants and in dynamic strings.
+test       t/021-escape-sequences.sh
+
+assertion  XCU.awk.022
+anchor     utilities/awk.html#Regular Expressions
+class      required
+since      1992
+says       With a record separator other than newline an ERE can match a newline
+           inside a record, with the default separator no expression matches
+           across the separator, and against an ordinary string any character,
+           newline and the separator included, can be matched.
+test       t/022-newline-in-matching.sh
+
+assertion  XCU.awk.023
+anchor     utilities/awk.html#Lexical Conventions
+class      required
+since      1992
+says       Numeric constants take the forms of decimal floating constants written
+           with a period (1. .5 1e3 1E-2 2.E1) or plain decimal digits, which are
+           decimal even with a leading zero.
+test       t/023-numeric-constants.sh
+
+assertion  XCU.awk.024
+anchor     utilities/awk.html#Lexical Conventions
+class      required
+since      1992
+says       A word is made of underscores, digits and letters, so a name that
+           merely starts with a keyword or built-in function name is an ordinary
+           name; a built-in function name may be followed by blanks before its
+           parenthesis and a user function is called with the parenthesis right
+           after the name.
+test       t/024-words-and-tokens.sh
+
+assertion  XCU.awk.025
+anchor     utilities/awk.html#Lexical Conventions
+anchor     utilities/awk.html#Grammar
+class      required
+since      1992
+says       A slash where division could appear is division (and /= an
+           assignment), elsewhere it starts an ERE; the longest token is taken so
+           that x+++y is x++ + y; an else goes with the nearest preceding if.
+test       t/025-slash-and-longest-token.sh
+
+assertion  XCU.awk.026
+anchor     utilities/awk.html#Expressions in awk
+class      required
+since      1992
+says       Post-increment and post-decrement give the old numeric value and pre-
+           increment and pre-decrement the new one, for numbers, uninitialized
+           variables, strings converted to numbers, array elements and fields.
+test       t/026-increment-operands.sh
+
+assertion  XCU.awk.027
+anchor     utilities/awk.html#Expressions in awk
+class      required
+since      1992
+says       Text counts as a number when it reads as a decimal number with an
+           optional sign and optional blanks around it, possibly with a period or
+           exponent, and otherwise is a string, for fields and records.
+test       t/027-numeric-string-forms.sh
+
+assertion  XCU.awk.028
+anchor     utilities/awk.html#DESCRIPTION
+class      required
+since      1992
+says       A valid program with no patterns and no actions does not read its file
+           operands and awk exits with status 0.
+test       t/028-no-actions.sh
+
+assertion  XCU.awk.029
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Records of up to {LINE_MAX} bytes are supported with a newline or
+           another character as separator, and print and printf can write
+           {LINE_MAX} bytes.
+test       t/029-line-max.sh
+
+assertion  XCU.awk.030
+anchor     utilities/awk.html#ENVIRONMENT VARIABLES
+class      required
+since      1992
+says       Commands run by system, by output pipes and by command input are found
+           through PATH and see the environment that awk started with.
+test       t/030-commands-environment.sh
+
+assertion  XCU.awk.031
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Output files and pipes with textually identical names are one stream
+           and names that differ even by a blank are different streams.
+test       t/031-stream-names.sh
+
+assertion  XCU.awk.032
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       An unset variable, array element, missing function argument or missing
+           field is 0 as a number and empty as a string; referring to a missing
+           field creates nothing, but assigning past the last field creates empty
+           fields in between.
+test       t/032-uninitialized.sh
+
+assertion  XCU.awk.033
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Elements of ARGV are processed as operands after BEGIN: a null element
+           is skipped, standard input is read when no file was given, an element
+           added in BEGIN is read, an assignment element is applied when reached,
+           and a deleted element is skipped.
+test       t/033-argv-iteration.sh
+
+assertion  XCU.awk.034
+anchor     utilities/awk.html#OPTIONS
+class      required
+since      1992
+says       -F and -v take their argument attached or separate, repeated -v works,
+           -f can have its argument attached, and -- ends the options before the
+           program.
+test       t/034-option-syntax.sh
+
+assertion  XCU.awk.035
+anchor     utilities/awk.html#Expressions in awk
+class      required
+since      1992
+says       The operators <, <=, >, >=, == and != compare numbers numerically,
+           strings by collation and numeric strings from input numerically, and a
+           string constant forces a string comparison.
+test       t/035-comparison-operators.sh

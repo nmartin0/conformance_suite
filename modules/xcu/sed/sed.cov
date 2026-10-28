@@ -6,7 +6,7 @@
 
 DESCRIPTION:2a5e69b8             XCU.sed.001 XCU.sed.002
 DESCRIPTION:81ee6cdf             XCU.sed.001 XCU.sed.002
-OPTIONS:f234a007                 todo  syntax guidelines not checked (order of -e and -f is exercised in 002)
+OPTIONS:f234a007                  XCU.sed.016
 OPTIONS:e2947e20                 none  introductory sentence
 OPTIONS:e7f8c693                 XCU.sed.007
 OPTIONS:233cd09e                 XCU.sed.007
@@ -29,18 +29,18 @@ STDIN:59ec88a4                   none  the standard input is used only with no f
 STDIN:fc1111c9                   none  the standard input is used only with no file operand, and '-' is optional
 INPUT_FILES:3eee12be             none  regular text files
 INPUT_FILES:e08014b7             XCU.sed.002
-ENVIRONMENT_VARIABLES:f0625aae   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8cbf3293   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:cb0a8ed7   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:f0625aae    none  introduces the list of variables
+ENVIRONMENT_VARIABLES:221d4f1a    none  cross-reference to the locale variables
+ENVIRONMENT_VARIABLES:8aece102    none  cross-reference to the locale rules
+ENVIRONMENT_VARIABLES:b96c5038    none  cross-reference to the locale rules
+ENVIRONMENT_VARIABLES:8cbf3293    untestable  needs a locale with collation that differs from the POSIX locale
+ENVIRONMENT_VARIABLES:cb0a8ed7    untestable  needs a multibyte locale that the system is not required to provide
+ENVIRONMENT_VARIABLES:fb479014    untestable  the text of diagnostics is unspecified
+ENVIRONMENT_VARIABLES:d838b9f5    untestable  message catalogs of the implementation are not known
 ASYNCHRONOUS_EVENTS:d92f27bd     none  default
 STDOUT:7f8311d3                  XCU.sed.001
 STDOUT:93fa731e                  XCU.sed.001
-STDERR:439d68e1                  todo  only emptiness of diagnostics could be observed
+STDERR:439d68e1                   none  restates that standard error is for diagnostics
 OUTPUT_FILES:47ebff85            XCU.sed.005 XCU.sed.010
 EXTENDED_DESCRIPTION:a635af36    none  introduction of the command form
 EXTENDED_DESCRIPTION:295e60f8    none  command form
@@ -54,11 +54,11 @@ EXTENDED_DESCRIPTION:3bdcaeb2    XCU.sed.008
 EXTENDED_DESCRIPTION:15acba6b    XCU.sed.001
 EXTENDED_DESCRIPTION:fd520d8f    XCU.sed.001
 EXTENDED_DESCRIPTION:857560bc    XCU.sed.009
-EXTENDED_DESCRIPTION:f5183ba3    todo  capacity not tested
+EXTENDED_DESCRIPTION:f5183ba3     XCU.sed.017
 EXTENDED_DESCRIPTION:9929e398    XCU.sed.003
 EXTENDED_DESCRIPTION:36de0b2a    XCU.sed.003
 EXTENDED_DESCRIPTION:55375686    XCU.sed.003
-EXTENDED_DESCRIPTION:75c49a2c    todo  only the non-special delimiter case is used
+EXTENDED_DESCRIPTION:75c49a2c     XCU.sed.020
 EXTENDED_DESCRIPTION:f833cb5b    XCU.sed.003
 EXTENDED_DESCRIPTION:ebeca9a1    XCU.sed.003
 EXTENDED_DESCRIPTION:488f44a5    XCU.sed.001
@@ -81,17 +81,17 @@ EXTENDED_DESCRIPTION:b5e80011    XCU.sed.010
 EXTENDED_DESCRIPTION:07d02973    XCU.sed.010
 EXTENDED_DESCRIPTION:6a06714f    XCU.sed.010
 EXTENDED_DESCRIPTION:61d70fcd    none  unspecified
-EXTENDED_DESCRIPTION:7ec7d787    todo  zero separation is an optional extension; blank separation is used
+EXTENDED_DESCRIPTION:7ec7d787     XCU.sed.018
 EXTENDED_DESCRIPTION:911c172f    XCU.sed.010
 EXTENDED_DESCRIPTION:0d225d4b    XCU.sed.005
-EXTENDED_DESCRIPTION:6b3473b3    todo  the number of wfiles is not tested
+EXTENDED_DESCRIPTION:6b3473b3     XCU.sed.018
 EXTENDED_DESCRIPTION:47765c29    XCU.sed.005 XCU.sed.010
 EXTENDED_DESCRIPTION:212f9138    XCU.sed.010 XCU.sed.011
-EXTENDED_DESCRIPTION:18862afc    todo  a single space is used throughout
+EXTENDED_DESCRIPTION:18862afc     app
 EXTENDED_DESCRIPTION:0347cbdf    XCU.sed.010
 EXTENDED_DESCRIPTION:ccfa901f    XCU.sed.010
 EXTENDED_DESCRIPTION:c6b8cebd    XCU.sed.010
-EXTENDED_DESCRIPTION:bd1f2853    todo  the time of reading is not distinguished
+EXTENDED_DESCRIPTION:bd1f2853     XCU.sed.021
 EXTENDED_DESCRIPTION:0d43feea    XCU.sed.010
 EXTENDED_DESCRIPTION:34502883    XCU.sed.002 XCU.sed.008
 EXTENDED_DESCRIPTION:b1655e6e    none  unspecified
@@ -124,7 +124,7 @@ EXTENDED_DESCRIPTION:f589885a    XCU.sed.010
 EXTENDED_DESCRIPTION:87d75ada    XCU.sed.012
 EXTENDED_DESCRIPTION:c6dc3e39    XCU.sed.012
 EXTENDED_DESCRIPTION:451c03e3    XCU.sed.012
-EXTENDED_DESCRIPTION:30107f0f    todo  folding length is unspecified
+EXTENDED_DESCRIPTION:30107f0f     XCU.sed.019
 EXTENDED_DESCRIPTION:469a4a08    XCU.sed.012
 EXTENDED_DESCRIPTION:68bda392    XCU.sed.008
 EXTENDED_DESCRIPTION:3960c6bc    XCU.sed.014
@@ -178,7 +178,7 @@ EXTENDED_DESCRIPTION:6d21fe78    none  unspecified
 EXTENDED_DESCRIPTION:ab52055d    XCU.sed.011
 EXTENDED_DESCRIPTION:7d6cf868    XCU.sed.011
 EXTENDED_DESCRIPTION:1f32d662    XCU.sed.010
-EXTENDED_DESCRIPTION:8e18517e    todo  an empty command is not tried separately
+EXTENDED_DESCRIPTION:8e18517e     XCU.sed.002
 EXTENDED_DESCRIPTION:b90128a4    XCU.sed.012
 EXIT_STATUS:db823381             none  introductory sentence
 EXIT_STATUS:8b075da2             XCU.sed.015

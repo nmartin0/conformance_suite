@@ -116,3 +116,53 @@ class      required
 since      1992
 says       sed exits above zero for a script it cannot use or a file it cannot read, and with 0 on success.
 test       t/015-errors.sh
+
+assertion  XCU.sed.016
+anchor     utilities/sed.html#OPTIONS
+class      required
+since      2024
+says       Options can be grouped (-ne, -nE), -e takes its script attached or
+           separate, and -- ends the options before a script operand.
+test       t/016-option-syntax.sh
+
+assertion  XCU.sed.017
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       The pattern space and the hold space can each hold at least 8192
+           bytes.
+test       t/017-space-size.sh
+
+assertion  XCU.sed.018
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       The r and w commands and the w flag of s take a file name separated
+           from the command by one or more blanks, and a script can use at least
+           ten different w files.
+test       t/018-wfiles.sh
+
+assertion  XCU.sed.019
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       The l command folds a long line, marking each fold with a backslash
+           and a newline, and ends its output with a dollar sign.
+test       t/019-l-folding.sh
+
+assertion  XCU.sed.020
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       In an address \cREc an escaped c is a literal c that does not end the
+           RE, and so is an escaped slash in /RE/.
+test       t/020-address-delimiter.sh
+
+assertion  XCU.sed.021
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       The contents of the file named by r are taken when the output is
+           written and not when the r command ran, so lines that a w command
+           wrote to that file in the same cycle are included.
+test       t/021-r-file-time.sh

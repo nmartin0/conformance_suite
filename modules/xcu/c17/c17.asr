@@ -139,3 +139,64 @@ since      2024
 says       A source file that requires __STDC__ to be 1 and __STDC_VERSION__
            to be at least 201710L compiles without error.
 test       t/013-language-level.sh
+
+assertion  XCU.c17.014
+anchor     utilities/c17.html#OPTIONS
+anchor     utilities/c17.html#DESCRIPTION
+class      conditional
+when       CD
+since      2024
+says       Options can follow pathname operands, and a definition of main with no
+           parameters or two parameters compiles because no prototype is declared
+           for main.
+test       t/014-options-interspersed.sh
+
+assertion  XCU.c17.015
+anchor     utilities/c17.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      2024
+says       The libraries pthread, rt, xnet and m named with -l make the thread,
+           semaphore and socket interfaces available, alone or together, and the
+           programs run.
+test       t/015-standard-libraries.sh
+
+assertion  XCU.c17.016
+anchor     utilities/c17.html#OPTIONS
+class      conditional
+when       CD
+since      2024
+says       At least 256 -D names with more than 2048 bytes of definitions, ten -I
+           options and ten -L options are accepted in one invocation and take
+           effect.
+test       t/016-minimum-limits.sh
+
+assertion  XCU.c17.017
+anchor     utilities/c17.html#OPTIONS
+class      conditional
+when       CD
+since      2024
+says       -G creates a shared library and with -c suitable objects, -B dynamic
+           with -L, -l and -R links a program that uses it, and a shared library
+           is preferred to an archive of the same name.
+test       t/017-shared-library.sh
+
+assertion  XCU.c17.018
+anchor     utilities/c17.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      2024
+says       The default environment and each supported named environment have the
+           type sizes of the table, the width-restricted environments are listed
+           by getconf and their flags work with c17, and the threaded environment
+           flags can be obtained and used.
+test       t/018-programming-environments.sh
+
+assertion  XCU.c17.019
+anchor     utilities/c17.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      2024
+says       A translation unit with 4095 external identifiers compiles, links and
+           runs.
+test       t/019-external-identifiers.sh

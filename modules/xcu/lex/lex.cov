@@ -8,13 +8,13 @@ DESCRIPTION:11cfe370             XCU.lex.002
 DESCRIPTION:eca1f38c             XCU.lex.002
 DESCRIPTION:3c6c4036             XCU.lex.001
 DESCRIPTION:7fb064ad             XCU.lex.002
-OPTIONS:846f77fb                 todo  utility syntax guidelines not exercised
-OPTIONS:e2947e20                 todo  utility syntax guidelines not exercised
+OPTIONS:846f77fb                  XCU.lex.009
+OPTIONS:e2947e20                  XCU.lex.009
 OPTIONS:9ce867c6                 XCU.lex.009
 OPTIONS:b813acd9                 XCU.lex.009
 OPTIONS:4b046304                 XCU.lex.001
 OPTIONS:32a89297                 XCU.lex.009
-OPTIONS:3a6c7146                 todo  not covered by this build
+OPTIONS:3a6c7146                  XCU.lex.009
 OPTIONS:0ad4c718                 XCU.lex.009
 OPERANDS:4ec2d2a9                XCU.lex.006
 OPERANDS:f3933a2c                XCU.lex.006
@@ -23,15 +23,15 @@ OPERANDS:528164f5                XCU.lex.006
 STDIN:9fde5c5e                   XCU.lex.006 XCU.lex.001
 STDIN:438520f5                   XCU.lex.006 XCU.lex.001
 INPUT_FILES:eef9580b             XCU.lex.006
-ENVIRONMENT_VARIABLES:d4552382   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8cbf3293   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:cb0a8ed7   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:7608b917   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:d4552382    none  introduces the list of variables
+ENVIRONMENT_VARIABLES:221d4f1a    none  cross-reference to the locale variables
+ENVIRONMENT_VARIABLES:b96c5038    none  cross-reference to the locale rules
+ENVIRONMENT_VARIABLES:8cbf3293    untestable  needs a locale with collation that differs from the POSIX locale
+ENVIRONMENT_VARIABLES:cb0a8ed7    untestable  needs a multibyte locale that the system is not required to provide
+ENVIRONMENT_VARIABLES:fb479014    untestable  the text of diagnostics is unspecified
+ENVIRONMENT_VARIABLES:d838b9f5    untestable  message catalogs of the implementation are not known
+ENVIRONMENT_VARIABLES:7608b917    none  unspecified behaviour is not required
+ENVIRONMENT_VARIABLES:8aece102    none  cross-reference to the locale rules
 ASYNCHRONOUS_EVENTS:d92f27bd     none  default
 STDOUT:02cb5042                  XCU.lex.001 XCU.lex.009
 STDOUT:1e224c7c                  XCU.lex.001 XCU.lex.009

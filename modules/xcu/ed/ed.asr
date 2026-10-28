@@ -186,3 +186,95 @@ says       An invalid command writes "?" and ed stays in command mode with
            on, the explanation follows each "?"; the exit status after a
            command error is nonzero.
 test       t/017-errors.sh
+
+assertion  XCU.ed.018
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Addresses in ed
+class      required
+since      1992
+says       Offsets with or without a number add to an address, "+" and "-" alone
+           move one line, an intermediate value out of range is allowed but a
+           final one is an error, and an unset mark or a mark on a deleted line
+           is an error.
+test       t/018-address-offsets.sh
+
+assertion  XCU.ed.019
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Addresses in ed
+class      required
+since      1992
+says       Omitted sides of a comma or semicolon pair take the defaults, a
+           semicolon makes the first address current before the second is
+           evaluated, extra addresses are dropped, and an address on a command
+           that takes none is an error.
+test       t/019-address-separators.sh
+
+assertion  XCU.ed.020
+anchor     utilities/ed.html#EXTENDED DESCRIPTION
+anchor     utilities/ed.html#EXIT STATUS
+class      required
+since      1992
+says       End-of-file on standard input in command mode acts as q with status 0
+           and in input mode ends the input; ed ends and does not write the file.
+test       t/020-end-of-file.sh
+
+assertion  XCU.ed.021
+anchor     utilities/ed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       A closing delimiter at the end of the line may be left out of s, g, v
+           and a ?RE? address; s, g and v then print, and an empty line acts as
+           +1p.
+test       t/021-omitted-delimiters.sh
+
+assertion  XCU.ed.022
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Append Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Insert Command
+class      required
+since      1992
+says       a and i with empty text leave the buffer change flag alone so q does
+           not warn, and the lone dot ending the text is not part of it.
+test       t/022-empty-text.sh
+
+assertion  XCU.ed.023
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/List Command
+class      required
+since      1992
+says       l writes alert, backspace, form-feed, carriage-return and vertical-tab
+           characters as \a \b \f \r \v.
+test       t/023-list-escapes.sh
+
+assertion  XCU.ed.024
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Move Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Copy Command
+class      required
+since      1992
+says       m makes the last moved line current and rejects a destination inside
+           the moved range; t copies after 0 or after the last line and makes the
+           last copy current.
+test       t/024-move-copy.sh
+
+assertion  XCU.ed.025
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Substitute Command
+class      required
+since      1992
+says       s is an error only if it fails on every addressed line, an identical
+           replacement still counts, the current line is the last line
+           substituted, a lone % with no earlier s is an error and % in a longer
+           or escaped replacement is literal.
+test       t/025-substitute-results.sh
+
+assertion  XCU.ed.026
+anchor     utilities/ed.html#ASYNCHRONOUS EVENTS
+class      required
+since      1992
+says       On SIGHUP with a changed non-empty buffer ed writes a copy of the
+           buffer to ed.hup in the working directory or the home directory and
+           exits without writing the remembered file.
+test       t/026-sighup.sh
+
+assertion  XCU.ed.027
+anchor     utilities/ed.html#OPTIONS
+class      required
+since      1992
+says       -s and -p STR in attached or separate form may precede the file
+           operand and -- ends the options.
+test       t/027-option-syntax.sh

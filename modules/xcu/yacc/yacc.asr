@@ -131,3 +131,81 @@ since      1992
 says       A missing grammar file, a missing operand and a non-terminal
            without a rule give a non-zero exit status.
 test       t/012-errors.sh
+
+assertion  XCU.yacc.013
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       Grammar text is free form: comments may stand between symbols, names
+           may contain periods, underscores and non-initial digits, names
+           differing in case are different, rule bodies may be empty,
+           alternatives share a left-hand side, and the file may end after the
+           last rule without a second double percent.
+test       t/013-grammar-syntax.sh
+
+assertion  XCU.yacc.014
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       Character literals accept the escape sequences of C character
+           constants and stand for the numeric value of the character.
+test       t/014-char-escapes.sh
+
+assertion  XCU.yacc.015
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       A zero or negative number in an action addresses the stack entries to
+           the left of the rule, in the plain form and with a tag.
+test       t/015-left-context.sh
+
+assertion  XCU.yacc.016
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       Actions run as rules are recognised, may hold nested blocks and braces
+           inside string literals, declarations in the percent-brace section have
+           global scope, program-section code is copied, and values are int by
+           default.
+test       t/016-actions-and-code.sh
+
+assertion  XCU.yacc.017
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       Linking with -l y supplies a main that calls yyparse and a yyerror
+           that writes its argument and a newline to standard error.
+test       t/017-library.sh
+
+assertion  XCU.yacc.018
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       The code file defines YYDEBUG as 1 with -t and 0 without it when it is
+           not already defined, and a definition on the compile line is kept.
+test       t/018-yydebug.sh
+
+assertion  XCU.yacc.019
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       A grammar with 120 tokens, 150 non-terminals and 211 rules is accepted
+           and its parser compiles.
+test       t/019-table-limits.sh
+
+assertion  XCU.yacc.020
+anchor     utilities/yacc.html#OPTIONS
+class      conditional
+when       CD
+since      1992
+says       -b and -p take their value attached or separate, options can be
+           grouped, -- ends the options, and a specification with empty
+           declarations and no programs section is accepted.
+test       t/020-option-syntax.sh

@@ -170,3 +170,345 @@ reason     Delivery needs a mail transfer agent and recipients, the system
            mailbox has an unspecified location and need not be a file, and
            input mode is defined for a terminal; none of these can be set up
            or inspected portably from a script.
+
+assertion  XCU.mailx.015
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       Command arguments can be quoted with paired double or single quotes,
+           which keep white space and dollar signs literally and leave the other
+           quote kind literal; a backslash outside quotes is dropped and the next
+           character stays literal; a backslash at the end of a line joins the
+           next line to the command.
+test       t/015-quoting.sh
+
+assertion  XCU.mailx.016
+anchor     utilities/mailx.html#Commands in mailx
+anchor     utilities/mailx.html#Internal Variables in mailx
+class      conditional
+when       UP
+since      2024
+says       A file name starting with an unquoted + is placed in the folder
+           directory (a relative folder name is taken from HOME), is left alone
+           when folder is unset, shell word expansion applies to file names, and
+           quoted characters stay literal.
+test       t/016-filenames.sh
+
+assertion  XCU.mailx.017
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       cd and chdir change the directory used for relative file names, and
+           with no argument go to HOME.
+test       t/017-cd.sh
+
+assertion  XCU.mailx.018
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       The file command takes & for the current mbox, the file named by MBOX.
+test       t/018-file-mbox.sh
+
+assertion  XCU.mailx.019
+anchor     utilities/mailx.html#EXTENDED DESCRIPTION
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       Deleted messages are ignored by message lists and shown by no command
+           but undelete; undelete can name them with /string, :d or, with no
+           list, the next deleted message after the current one else the last one
+           before it; after a delete the current message is the first remaining
+           one after the deleted ones, else the one before.
+test       t/019-deleted-state.sh
+
+assertion  XCU.mailx.020
+anchor     utilities/mailx.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       A message written by print or top is in state read, and :r in a
+           message list selects the read messages.
+test       t/020-read-state.sh
+
+assertion  XCU.mailx.021
+anchor     utilities/mailx.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       When mailx quits, read messages of a secondary mailbox stay in that
+           file and are not moved to the mbox.
+test       t/021-quit-keeps-read.sh
+
+assertion  XCU.mailx.022
+anchor     utilities/mailx.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       A command line with no command is taken as next.
+test       t/022-empty-command.sh
+
+assertion  XCU.mailx.023
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       set name, set name= and set name=string define variables that set
+           lists (a quoted value keeps its blanks), set noname erases a variable
+           like unset, and unset takes several names.
+test       t/023-set-forms.sh
+
+assertion  XCU.mailx.024
+anchor     utilities/mailx.html#Internal Variables in mailx
+anchor     utilities/mailx.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       The command mode prompt is written to standard output and is by
+           default "? "; prompt=string changes it, and a null prompt or noprompt
+           turns it off.
+test       t/024-prompt.sh
+
+assertion  XCU.mailx.025
+anchor     utilities/mailx.html#Start-Up in mailx
+anchor     utilities/mailx.html#ENVIRONMENT VARIABLES
+class      conditional
+when       UP
+since      1992
+says       The commands in the start-up file named by MAILRC are executed at
+           start-up and a blank line in it is ignored.
+test       t/025-startup-file.sh
+
+assertion  XCU.mailx.026
+anchor     utilities/mailx.html#Commands in mailx
+anchor     utilities/mailx.html#ENVIRONMENT VARIABLES
+class      conditional
+when       UP
+since      2024
+says       The ! command and the pipe command run their command through the
+           program named by SHELL, called with exactly the three arguments -c, --
+           and the command.
+test       t/026-shell-invocation.sh
+
+assertion  XCU.mailx.027
+anchor     utilities/mailx.html#Internal Variables in mailx
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       By default pipe adds nothing between messages; with page set it
+           inserts a form-feed after each message it sends to the command.
+test       t/027-pipe-page.sh
+
+assertion  XCU.mailx.028
+anchor     utilities/mailx.html#Internal Variables in mailx
+anchor     utilities/mailx.html#Commands in mailx
+anchor     utilities/mailx.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       With autoprint set, delete writes the current message and undelete the
+           last message restored (both leaving the written message in state
+           read); by default neither writes; dp and dt write the message that
+           becomes current only when it follows the deleted ones, ignore
+           autoprint, and mark it read.
+test       t/028-autoprint-dp.sh
+
+assertion  XCU.mailx.029
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       if r runs the following commands in Receive Mode and if s does not;
+           else reverses that, and endif or en ends the block.
+test       t/029-if-else.sh
+
+assertion  XCU.mailx.030
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       help and ? write a summary of commands and list writes the names of
+           the available commands, all to standard output.
+test       t/030-help-list.sh
+
+assertion  XCU.mailx.031
+anchor     utilities/mailx.html#Commands in mailx
+anchor     utilities/mailx.html#Internal Variables in mailx
+class      conditional
+when       UP
+since      1992
+says       With screen set to 1, headers n writes only the page holding message n
+           and makes it current, headers alone does not change the current
+           message, and z, z+ and z- scroll the header display by one page.
+test       t/031-headers-z.sh
+
+assertion  XCU.mailx.032
+anchor     utilities/mailx.html#Commands in mailx
+anchor     utilities/mailx.html#ENVIRONMENT VARIABLES
+class      conditional
+when       UP
+since      1992
+says       edit and visual put each named message in a temporary file and run the
+           program named by EDITOR or VISUAL on it in turn, without changing the
+           messages in the mailbox.
+test       t/032-edit-visual.sh
+
+assertion  XCU.mailx.033
+anchor     utilities/mailx.html#Commands in mailx
+anchor     utilities/mailx.html#ENVIRONMENT VARIABLES
+class      conditional
+when       UP
+since      1992
+says       folders writes the names of the files in the folder directory using
+           the command named by LISTER, or ls when LISTER is null.
+test       t/033-folders.sh
+
+assertion  XCU.mailx.034
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       size writes the size in bytes of a message: two messages whose headers
+           have the same length and whose bodies differ by 96 bytes differ by 96
+           in size.
+test       t/034-size.sh
+
+assertion  XCU.mailx.035
+anchor     utilities/mailx.html#ENVIRONMENT VARIABLES
+anchor     utilities/mailx.html#Internal Variables in mailx
+class      conditional
+when       UP
+since      2024
+says       When standard output is a terminal and crt is set below the number of
+           lines in a message the message is written through the command named by
+           PAGER; by default (no crt) or with a larger crt it is written
+           directly.
+test       t/035-crt-pager.sh
+
+assertion  XCU.mailx.036
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       Save and Copy write the messages, with all their header fields even if
+           some are ignored for display, to a file named for the author of the
+           first message with the network address removed.
+test       t/036-save-author.sh
+
+assertion  XCU.mailx.037
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       When both retain and ignore are given, only the retained fields are
+           shown, whichever came first.
+test       t/037-retain-over-ignore.sh
+
+assertion  XCU.mailx.038
+anchor     utilities/mailx.html#Internal Variables in mailx
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      2024
+says       By default an exclamation mark in a ! command is literal; with bang
+           set each unescaped one is replaced by the previous ! command.
+test       t/038-bang.sh
+
+assertion  XCU.mailx.039
+anchor     utilities/mailx.html#Internal Variables in mailx
+class      conditional
+when       UP
+since      1992
+says       By default an address in a message list selects only messages from
+           exactly that address; with allnet set, network names with the same
+           login name match.
+test       t/039-allnet.sh
+
+assertion  XCU.mailx.040
+anchor     utilities/mailx.html#Internal Variables in mailx
+class      conditional
+when       UP
+since      1992
+says       The header summary is written on entering Receive Mode by default, and
+           not when header is unset.
+test       t/040-header-variable.sh
+
+assertion  XCU.mailx.041
+anchor     utilities/mailx.html#OPTIONS
+class      conditional
+when       UP
+since      1992
+says       Options can be grouped in one argument and -- ends the options before
+           the file operand.
+test       t/041-option-syntax.sh
+
+assertion  XCU.mailx.042
+anchor     utilities/mailx.html#ENVIRONMENT VARIABLES
+class      conditional
+when       UP
+since      1992
+says       With MAILRC unset the start-up file is .mailrc in HOME, and with MBOX
+           unset the mbox is the file mbox in HOME.
+test       t/042-default-files.sh
+
+assertion  XCU.mailx.043
+anchor     utilities/mailx.html#Internal Variables in mailx
+class      conditional
+when       UP
+since      1992
+says       When every message of a secondary mailbox has been deleted, quitting
+           removes the file by default and truncates it to zero length when keep
+           is set.
+test       t/043-keep.sh
+
+assertion  XCU.mailx.044
+anchor     utilities/mailx.html#Internal Variables in mailx
+class      conditional
+when       UP
+since      1992
+says       By default the header summary line shows the author of a message; with
+           showto set, a message sent by the invoking user shows the To field
+           instead.
+test       t/044-showto.sh
+
+assertion  XCU.mailx.045
+anchor     utilities/mailx.html#Internal Variables in mailx
+class      conditional
+when       UP
+since      1992
+says       On entering Receive Mode mailx writes an opening message unless quiet
+           is set.
+test       t/045-quiet.sh
+
+assertion  XCU.mailx.046
+anchor     utilities/mailx.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       In a message list, a period stands for the current message.
+test       t/046-dot-message.sh
+
+assertion  XCU.mailx.047
+anchor     utilities/mailx.html#Start-Up in mailx
+class      conditional
+when       UP
+since      1992
+says       An error in the start-up file, such as an unknown command or a command
+           invalid there like !, either ends mailx with a diagnostic and a non-
+           zero status or lets it continue after a diagnostic while ignoring the
+           rest of the file; an invalid command is not carried out.
+test       t/047-startup-errors.sh
+
+assertion  XCU.mailx.048
+anchor     utilities/mailx.html#Internal Variables in mailx
+class      conditional
+when       UP
+since      1992
+says       At start-up the variables whose default is no... are not defined and
+           the ones whose default is set (header, save, asksub) are, as set
+           shows.
+test       t/048-default-variables.sh

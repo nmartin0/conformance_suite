@@ -5,63 +5,63 @@
 # from XCU 1.4 Utility Description Defaults.
 
 DESCRIPTION:6e802611             XCU.make.003 XCU.make.014
-DESCRIPTION:d3f964bb             todo  not covered by this build
+DESCRIPTION:d3f964bb              none  explanatory remark
 DESCRIPTION:cc58100a             XCU.make.003 XCU.make.014
 DESCRIPTION:c9a12b45             XCU.make.003 XCU.make.014
 DESCRIPTION:8516387e             XCU.make.003 XCU.make.014
 DESCRIPTION:029ef5a2             XCU.make.003 XCU.make.014
-DESCRIPTION:17bae68e             todo  not covered by this build
-DESCRIPTION:55a22b18             todo  not covered by this build
+DESCRIPTION:17bae68e              none  definition of an inference rule, exercised by XCU.make.014
+DESCRIPTION:55a22b18              XCU.make.033
 DESCRIPTION:e5a3bcc4             XCU.make.003 XCU.make.014
 DESCRIPTION:88c65aec             XCU.make.015
 DESCRIPTION:1d94decf             XCU.make.015
 DESCRIPTION:5b674371             XCU.make.015
 DESCRIPTION:c97b2560             XCU.make.015
-OPTIONS:7c08c902                 todo  utility syntax guidelines not exercised
+OPTIONS:7c08c902                  XCU.make.043
 OPTIONS:e2947e20                 none  introduces the list
 OPTIONS:65a489ad                 XCU.make.010
 OPTIONS:cd651a57                 XCU.make.001
-OPTIONS:a6f7ea53                 todo  not covered by this build
+OPTIONS:a6f7ea53                  XCU.make.001
 OPTIONS:631692f8                 XCU.make.001
 OPTIONS:6324fe72                 XCU.make.001
-OPTIONS:c4e6c92c                 todo  not covered by this build
+OPTIONS:c4e6c92c                  impl  giving the same makefile twice has unspecified effects
 OPTIONS:f44fd90b                 XCU.make.006
 OPTIONS:aea92bdd                 XCU.make.006
 OPTIONS:65d1448e                 XCU.make.020
 OPTIONS:8d6cf19e                 XCU.make.020
 OPTIONS:5730b3db                 XCU.make.020
-OPTIONS:92bce765                 todo  not covered by this build
-OPTIONS:53fe97f8                 todo  not covered by this build
-OPTIONS:b91f7042                 todo  not covered by this build
-OPTIONS:0df79173                 todo  token pools and sub-make job sharing are not observable
-OPTIONS:c67d88be                 todo  token pools and sub-make job sharing are not observable
-OPTIONS:0039592f                 todo  not covered by this build
-OPTIONS:deeab538                 todo  not covered by this build
-OPTIONS:c05de494                 todo  token pools and sub-make job sharing are not observable
-OPTIONS:3ab3a740                 todo  token pools and sub-make job sharing are not observable
-OPTIONS:e4a892b8                 todo  token pools and sub-make job sharing are not observable
+OPTIONS:92bce765                  impl  a non-positive maxjobs has unspecified behaviour
+OPTIONS:53fe97f8                  untestable  the token pool is internal and running targets in parallel is only optional
+OPTIONS:b91f7042                  none  note that the pool size is not fixed
+OPTIONS:0df79173                  none  note that a pool may be omitted
+OPTIONS:c67d88be                  untestable  parallel updating is something make may attempt, so it cannot be required
+OPTIONS:0039592f                  untestable  parallel updating is something make may attempt, so it cannot be required
+OPTIONS:deeab538                  none  states that a token need not be taken
+OPTIONS:c05de494                  untestable  sharing of the token pool with a sub-make cannot be observed
+OPTIONS:3ab3a740                  impl  whether a sub-make shares the pool is unspecified
+OPTIONS:e4a892b8                  impl  several asynchronous sub-makes behave in an unspecified way
 OPTIONS:190df41f                 XCU.make.007
 OPTIONS:165ec3f2                 XCU.make.005
-OPTIONS:7e7ab213                 todo  not covered by this build
+OPTIONS:7e7ab213                  XCU.make.005 XCU.make.018 XCU.make.047
 OPTIONS:6319ebb4                 XCU.make.005
 OPTIONS:2e4550e6                 untestable  output format unspecified
-OPTIONS:7ac39b77                 todo  not covered by this build
+OPTIONS:7ac39b77                  impl  the -p output format is unspecified
 OPTIONS:3116801e                 XCU.make.008
 OPTIONS:72b9289f                 XCU.make.008
-OPTIONS:c27c39d6                 todo  not covered by this build
+OPTIONS:c27c39d6                  XCU.make.008
 OPTIONS:36a12156                 XCU.make.014
 OPTIONS:dde69379                 XCU.make.007
-OPTIONS:9e725195                 todo  not covered by this build
+OPTIONS:9e725195                  XCU.make.007
 OPTIONS:ea8de9ea                 XCU.make.004
-OPTIONS:006f83d5                 todo  not covered by this build
+OPTIONS:006f83d5                  XCU.make.004
 OPTIONS:4466425f                 XCU.make.009
 OPTIONS:d66b95cb                 XCU.make.009
-OPTIONS:fc25d880                 todo  not covered by this build
+OPTIONS:fc25d880                  XCU.make.009 XCU.make.051
 OPTIONS:c8552cb5                 XCU.make.009
-OPTIONS:f76d6307                 todo  not covered by this build
+OPTIONS:f76d6307                  XCU.make.051
 OPTIONS:7b38cc73                 XCU.make.018 XCU.make.007
-OPTIONS:8e30a75c                 todo  not covered by this build
-OPTIONS:5181322a                 todo  not covered by this build
+OPTIONS:8e30a75c                  XCU.make.007 XCU.make.028
+OPTIONS:5181322a                  impl  the result is undefined when -f or -p are in MAKEFLAGS
 OPERANDS:51b44f3c                none  introduces the list
 OPERANDS:39f5d387                XCU.make.002
 OPERANDS:1099c5cc                XCU.make.002
@@ -72,72 +72,72 @@ STDIN:91c1140f                   XCU.make.001
 STDIN:fc1111c9                   XCU.make.001
 INPUT_FILES:c146fb35             XCU.make.001
 INPUT_FILES:969889e3             XCU.make.001
-ENVIRONMENT_VARIABLES:37a1c254   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8586e6ac   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:37a1c254    none  introduces the list of variables
+ENVIRONMENT_VARIABLES:221d4f1a    none  cross-reference to the locale variables
+ENVIRONMENT_VARIABLES:8aece102    none  cross-reference to the locale rules
+ENVIRONMENT_VARIABLES:b96c5038    none  cross-reference to the locale rules
+ENVIRONMENT_VARIABLES:8586e6ac    untestable  needs a multibyte locale that the system is not required to provide
+ENVIRONMENT_VARIABLES:fb479014    untestable  the text of diagnostics is unspecified
 ENVIRONMENT_VARIABLES:49b010be   XCU.make.018
 ENVIRONMENT_VARIABLES:9a423e7f   XCU.make.018
 ENVIRONMENT_VARIABLES:d0b6b2c9   XCU.make.018
-ENVIRONMENT_VARIABLES:0ef4ec70   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:0ef4ec70    XCU.make.028
 ENVIRONMENT_VARIABLES:f55bbe77   XCU.make.018
-ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:d838b9f5    untestable  message catalogs of the implementation are not known
 ENVIRONMENT_VARIABLES:4ec26f97   untestable  SCCS file search, XSI, needs the SCCS utilities
 ENVIRONMENT_VARIABLES:d4aa9b8b   untestable  SCCS file search, XSI, needs the SCCS utilities
 ENVIRONMENT_VARIABLES:6158fca1   untestable  SCCS file search, XSI, needs the SCCS utilities
-ENVIRONMENT_VARIABLES:5dbf7d9f   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:82ad3ec5   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:5dbf7d9f    untestable  needs SCCS files and the XSI option for PROJECTDIR
+ENVIRONMENT_VARIABLES:82ad3ec5    untestable  needs SCCS files and the XSI option for PROJECTDIR
 ENVIRONMENT_VARIABLES:577378f6   untestable  SCCS file search, XSI, needs the SCCS utilities
 ENVIRONMENT_VARIABLES:f0e5f47d   untestable  SCCS file search, XSI, needs the SCCS utilities
 ENVIRONMENT_VARIABLES:30ef2fee   XCU.make.019 XCU.make.010
 ENVIRONMENT_VARIABLES:6f42c8ee   XCU.make.019 XCU.make.010
-ASYNCHRONOUS_EVENTS:fedc0ad4     todo  signal handling during a target update is not exercised
-ASYNCHRONOUS_EVENTS:444a81b5     todo  signal handling during a target update is not exercised
-ASYNCHRONOUS_EVENTS:ad6fb662     todo  signal handling during a target update is not exercised
-ASYNCHRONOUS_EVENTS:4e1a514f     todo  signal handling during a target update is not exercised
-ASYNCHRONOUS_EVENTS:1f5634b2     todo  signal handling during a target update is not exercised
+ASYNCHRONOUS_EVENTS:fedc0ad4      XCU.make.027
+ASYNCHRONOUS_EVENTS:444a81b5      XCU.make.027
+ASYNCHRONOUS_EVENTS:ad6fb662      impl  the format of the removal message is unspecified
+ASYNCHRONOUS_EVENTS:4e1a514f      XCU.make.027
+ASYNCHRONOUS_EVENTS:1f5634b2      none  default signal action, see the utility defaults
 STDOUT:ca6752b9                  none  may write a message
 STDOUT:d102e012                  XCU.make.004 XCU.make.009
-STDERR:bff8b396                  todo  diagnostics are not examined
+STDERR:bff8b396                   none  restates that diagnostics go to standard error
 OUTPUT_FILES:4517d565            XCU.make.009
 OUTPUT_FILES:6e6da308            XCU.make.009
 EXTENDED_DESCRIPTION:a11c220d    XCU.make.001
 EXTENDED_DESCRIPTION:a35b2c0e    XCU.make.001
-EXTENDED_DESCRIPTION:47e30459    todo  not covered by this build
+EXTENDED_DESCRIPTION:47e30459     impl  other default makefiles may be tried
 EXTENDED_DESCRIPTION:46cf3aff    untestable  SCCS defaults, XSI, need SCCS files
 EXTENDED_DESCRIPTION:14d62fab    XCU.make.015
-EXTENDED_DESCRIPTION:8b1ba22f    todo  not covered by this build
+EXTENDED_DESCRIPTION:8b1ba22f     XCU.make.001
 EXTENDED_DESCRIPTION:df893549    none  definition
 EXTENDED_DESCRIPTION:9454130b    XCU.make.003 XCU.make.002
-EXTENDED_DESCRIPTION:63206252    todo  not covered by this build
+EXTENDED_DESCRIPTION:63206252     impl  a target of the same age may be taken as up to date
 EXTENDED_DESCRIPTION:2fffcc9a    XCU.make.003 XCU.make.002
 EXTENDED_DESCRIPTION:765ea091    XCU.make.003 XCU.make.002
 EXTENDED_DESCRIPTION:e318c9cd    XCU.make.003 XCU.make.002
-EXTENDED_DESCRIPTION:1785fbea    todo  not covered by this build
+EXTENDED_DESCRIPTION:1785fbea     XCU.make.003
 EXTENDED_DESCRIPTION:b04a9f17    XCU.make.003 XCU.make.002
 EXTENDED_DESCRIPTION:4edfeba9    XCU.make.003 XCU.make.002
 EXTENDED_DESCRIPTION:041e7298    XCU.make.003 XCU.make.002
-EXTENDED_DESCRIPTION:394c03ce    todo  not covered by this build
+EXTENDED_DESCRIPTION:394c03ce     none  list of what a makefile contains
 EXTENDED_DESCRIPTION:461cbe62    XCU.make.014
 EXTENDED_DESCRIPTION:3231b64e    XCU.make.014
 EXTENDED_DESCRIPTION:25e3728b    XCU.make.014
-EXTENDED_DESCRIPTION:c21830c0    todo  not covered by this build
-EXTENDED_DESCRIPTION:302f7fc9    todo  not covered by this build
-EXTENDED_DESCRIPTION:44006dfe    todo  not covered by this build
+EXTENDED_DESCRIPTION:c21830c0     XCU.make.031
+EXTENDED_DESCRIPTION:302f7fc9     XCU.make.031
+EXTENDED_DESCRIPTION:44006dfe     none  cross-reference to Macros
 EXTENDED_DESCRIPTION:b0df2bdd    XCU.make.017
-EXTENDED_DESCRIPTION:647ef170    todo  not covered by this build
+EXTENDED_DESCRIPTION:647ef170     XCU.make.032
 EXTENDED_DESCRIPTION:f47a5f13    XCU.make.014
-EXTENDED_DESCRIPTION:3a53e00c    todo  not covered by this build
+EXTENDED_DESCRIPTION:3a53e00c     XCU.make.004
 EXTENDED_DESCRIPTION:40b00457    XCU.make.017
 EXTENDED_DESCRIPTION:8dacdbdf    XCU.make.017
 EXTENDED_DESCRIPTION:dd6c3f10    XCU.make.017
 EXTENDED_DESCRIPTION:ba264f19      XCU.make.016 XCU.make.025
 EXTENDED_DESCRIPTION:ee3bb3ca    XCU.make.011
-EXTENDED_DESCRIPTION:11893f86    todo  not covered by this build
-EXTENDED_DESCRIPTION:7d3a7120    todo  not covered by this build
-EXTENDED_DESCRIPTION:47d51f44    todo  not covered by this build
+EXTENDED_DESCRIPTION:11893f86     impl  double quotes in an include line have unspecified results
+EXTENDED_DESCRIPTION:7d3a7120     XCU.make.016
+EXTENDED_DESCRIPTION:47d51f44     XCU.make.045
 EXTENDED_DESCRIPTION:3f24f499    XCU.make.016
 EXTENDED_DESCRIPTION:abc431a5    XCU.make.016
 EXTENDED_DESCRIPTION:812af9d7    XCU.make.016
@@ -145,22 +145,22 @@ EXTENDED_DESCRIPTION:b90f740f    XCU.make.016
 EXTENDED_DESCRIPTION:e7789e58    XCU.make.016
 EXTENDED_DESCRIPTION:1369e4a6    XCU.make.016
 EXTENDED_DESCRIPTION:dc3fef90    XCU.make.016
-EXTENDED_DESCRIPTION:186e4f7a    todo  not covered by this build
+EXTENDED_DESCRIPTION:186e4f7a     partial XCU.make.047  # only the observable outcome of making the file is tested
 EXTENDED_DESCRIPTION:27b773d3    XCU.make.016
-EXTENDED_DESCRIPTION:fa0b254e    todo  not covered by this build
+EXTENDED_DESCRIPTION:fa0b254e     XCU.make.047
 EXTENDED_DESCRIPTION:b254f1aa    XCU.make.014
-EXTENDED_DESCRIPTION:fb7e344c    todo  not covered by this build
+EXTENDED_DESCRIPTION:fb7e344c     partial XCU.make.047  # the rules for prerequisites of the first targets are not separately checked
 EXTENDED_DESCRIPTION:8a13fda4    XCU.make.016
-EXTENDED_DESCRIPTION:486f324a    todo  not covered by this build
+EXTENDED_DESCRIPTION:486f324a     XCU.make.016 XCU.make.025
 EXTENDED_DESCRIPTION:e1b9a53c      XCU.make.025
-EXTENDED_DESCRIPTION:98fccb1d    todo  not covered by this build
+EXTENDED_DESCRIPTION:98fccb1d     XCU.make.016
 EXTENDED_DESCRIPTION:0978dad3    XCU.make.016
 EXTENDED_DESCRIPTION:6bb0fc60    XCU.make.016
-EXTENDED_DESCRIPTION:d58ce085    todo  not covered by this build
+EXTENDED_DESCRIPTION:d58ce085     XCU.make.046
 EXTENDED_DESCRIPTION:5ebc36ec    XCU.make.016
 EXTENDED_DESCRIPTION:cfc70764    XCU.make.004 XCU.make.005 XCU.make.006
 EXTENDED_DESCRIPTION:5fe4bf6f    XCU.make.004 XCU.make.005 XCU.make.006
-EXTENDED_DESCRIPTION:a6990f90    todo  not covered by this build
+EXTENDED_DESCRIPTION:a6990f90     XCU.make.004 XCU.make.006
 EXTENDED_DESCRIPTION:25057343    XCU.make.004 XCU.make.005 XCU.make.006
 EXTENDED_DESCRIPTION:cb70adb4    XCU.make.004 XCU.make.005 XCU.make.006
 EXTENDED_DESCRIPTION:34fbd0bd    XCU.make.004 XCU.make.005 XCU.make.006
@@ -170,66 +170,66 @@ EXTENDED_DESCRIPTION:6e579e14    XCU.make.004 XCU.make.005 XCU.make.006
 EXTENDED_DESCRIPTION:eef8cacd    XCU.make.004 XCU.make.005 XCU.make.006
 EXTENDED_DESCRIPTION:db5e38bd    XCU.make.004 XCU.make.005 XCU.make.006
 EXTENDED_DESCRIPTION:b83266d4    XCU.make.004 XCU.make.005 XCU.make.006
-EXTENDED_DESCRIPTION:159f25d8    todo  not covered by this build
-EXTENDED_DESCRIPTION:99d4a8f3    todo  not covered by this build
-EXTENDED_DESCRIPTION:ba79de09    todo  not covered by this build
-EXTENDED_DESCRIPTION:e53f3be9    todo  not covered by this build
-EXTENDED_DESCRIPTION:8ae8298d    todo  not covered by this build
-EXTENDED_DESCRIPTION:8ae8298d.2  todo  not covered by this build
-EXTENDED_DESCRIPTION:99d4a8f3.2  todo  not covered by this build
+EXTENDED_DESCRIPTION:159f25d8     none  syntax of target rules
+EXTENDED_DESCRIPTION:99d4a8f3     none  syntax line
+EXTENDED_DESCRIPTION:ba79de09     none  syntax line
+EXTENDED_DESCRIPTION:e53f3be9     none  syntax line
+EXTENDED_DESCRIPTION:8ae8298d     none  syntax line
+EXTENDED_DESCRIPTION:8ae8298d.2   none  syntax line
+EXTENDED_DESCRIPTION:99d4a8f3.2   none  syntax line
 EXTENDED_DESCRIPTION:92e259d0    XCU.make.003 XCU.make.002
 EXTENDED_DESCRIPTION:4ac233b2    XCU.make.003 XCU.make.002
 EXTENDED_DESCRIPTION:902c0086    XCU.make.003 XCU.make.002
-EXTENDED_DESCRIPTION:f1627867    todo  not covered by this build
+EXTENDED_DESCRIPTION:f1627867     impl  whether a comment line ends a rule is not fixed
 EXTENDED_DESCRIPTION:ebf290f3    XCU.make.003 XCU.make.002
-EXTENDED_DESCRIPTION:8b3e83bb    todo  not covered by this build
-EXTENDED_DESCRIPTION:330d14fa    todo  not covered by this build
+EXTENDED_DESCRIPTION:8b3e83bb     impl  other characters in target names are extensions
+EXTENDED_DESCRIPTION:330d14fa     impl  targets with percent signs or quotes are implementation-defined
 EXTENDED_DESCRIPTION:ea86178f    XCU.make.003 XCU.make.002
 EXTENDED_DESCRIPTION:a8a07a3d    XCU.make.003 XCU.make.002
-EXTENDED_DESCRIPTION:16127606    todo  not covered by this build
-EXTENDED_DESCRIPTION:1b6476ac    todo  not covered by this build
-EXTENDED_DESCRIPTION:bbe6548d    todo  not covered by this build
+EXTENDED_DESCRIPTION:16127606     none  introduces the special targets
+EXTENDED_DESCRIPTION:1b6476ac     app
+EXTENDED_DESCRIPTION:bbe6548d     XCU.make.015
 EXTENDED_DESCRIPTION:325a5eec    XCU.make.006
 EXTENDED_DESCRIPTION:1ee84110    XCU.make.006
 EXTENDED_DESCRIPTION:c979df73    XCU.make.006
-EXTENDED_DESCRIPTION:3d7cfb6e    todo  not covered by this build
-EXTENDED_DESCRIPTION:7a346ab8    todo  not covered by this build
+EXTENDED_DESCRIPTION:3d7cfb6e     app
+EXTENDED_DESCRIPTION:7a346ab8     XCU.make.041
 EXTENDED_DESCRIPTION:62d4f323    XCU.make.018
 EXTENDED_DESCRIPTION:df1fb360      XCU.make.024
 EXTENDED_DESCRIPTION:f263cafd      XCU.make.024
 EXTENDED_DESCRIPTION:53b67b1e      XCU.make.024
 EXTENDED_DESCRIPTION:1787ef6e      XCU.make.024
 EXTENDED_DESCRIPTION:3bb5148f      XCU.make.024
-EXTENDED_DESCRIPTION:1ef8d08c    todo  not covered by this build
-EXTENDED_DESCRIPTION:3d7cfb6e.2  todo  not covered by this build
+EXTENDED_DESCRIPTION:1ef8d08c     XCU.make.027
+EXTENDED_DESCRIPTION:3d7cfb6e.2   app
 EXTENDED_DESCRIPTION:16a58f52    XCU.make.015
-EXTENDED_DESCRIPTION:e3aafba3    todo  not covered by this build
-EXTENDED_DESCRIPTION:bf9c0e5f    todo  not covered by this build
-EXTENDED_DESCRIPTION:ad87011d    todo  not covered by this build
-EXTENDED_DESCRIPTION:06f2eda7    todo  not covered by this build
+EXTENDED_DESCRIPTION:e3aafba3     XCU.make.027
+EXTENDED_DESCRIPTION:bf9c0e5f     partial XCU.make.027  # a second .PRECIOUS line is not tried
+EXTENDED_DESCRIPTION:ad87011d     XCU.make.027
+EXTENDED_DESCRIPTION:06f2eda7     app
 EXTENDED_DESCRIPTION:93ba5835    XCU.make.015
 EXTENDED_DESCRIPTION:81a5803e    untestable  SCCS rules, XSI, need the SCCS utilities
-EXTENDED_DESCRIPTION:ff993035    todo  not covered by this build
-EXTENDED_DESCRIPTION:378e0668    todo  not covered by this build
-EXTENDED_DESCRIPTION:f6739fe1    todo  not covered by this build
+EXTENDED_DESCRIPTION:ff993035     XCU.make.015
+EXTENDED_DESCRIPTION:378e0668     none  remark that source files need no entry
+EXTENDED_DESCRIPTION:f6739fe1     XCU.make.015
 EXTENDED_DESCRIPTION:4c03d665    untestable  SCCS defaults, XSI, need SCCS files
 EXTENDED_DESCRIPTION:331a0a9e    untestable  SCCS rules, XSI, need the SCCS utilities
-EXTENDED_DESCRIPTION:32013a01    todo  not covered by this build
-EXTENDED_DESCRIPTION:d8d60cb2    todo  not covered by this build
+EXTENDED_DESCRIPTION:32013a01     untestable  needs SCCS files and the XSI option
+EXTENDED_DESCRIPTION:d8d60cb2     XCU.make.004
 EXTENDED_DESCRIPTION:93a9a35f    XCU.make.004
-EXTENDED_DESCRIPTION:4d3f11f7    todo  not covered by this build
+EXTENDED_DESCRIPTION:4d3f11f7     XCU.make.004
 EXTENDED_DESCRIPTION:f1dd08ab    XCU.make.014
 EXTENDED_DESCRIPTION:6acff8c7    XCU.make.014
-EXTENDED_DESCRIPTION:7474bf69    todo  not covered by this build
+EXTENDED_DESCRIPTION:7474bf69     app
 EXTENDED_DESCRIPTION:a6803033    XCU.make.020
 EXTENDED_DESCRIPTION:27afc90a    XCU.make.020
-EXTENDED_DESCRIPTION:42c57e70    todo  not covered by this build
+EXTENDED_DESCRIPTION:42c57e70     impl  extra ordering of prerequisites for .WAIT is allowed
 EXTENDED_DESCRIPTION:3501d73b    XCU.make.015
 EXTENDED_DESCRIPTION:50ac00a6    XCU.make.015
-EXTENDED_DESCRIPTION:09f2f8e9    todo  not covered by this build
+EXTENDED_DESCRIPTION:09f2f8e9     app
 EXTENDED_DESCRIPTION:1d736fb9    XCU.make.011
 EXTENDED_DESCRIPTION:8580ba16    XCU.make.011
-EXTENDED_DESCRIPTION:266e543c    todo  not covered by this build
+EXTENDED_DESCRIPTION:266e543c     none  syntax line
 EXTENDED_DESCRIPTION:76797361    XCU.make.011
 EXTENDED_DESCRIPTION:b541daa8    XCU.make.011
 EXTENDED_DESCRIPTION:8580ba16.2  XCU.make.011
@@ -238,8 +238,8 @@ EXTENDED_DESCRIPTION:d70e5a0a    XCU.make.011
 EXTENDED_DESCRIPTION:8580ba16.3  XCU.make.011
 EXTENDED_DESCRIPTION:f504af56    XCU.make.011
 EXTENDED_DESCRIPTION:a525b88d    XCU.make.011
-EXTENDED_DESCRIPTION:3779a82a    todo  not covered by this build
-EXTENDED_DESCRIPTION:9807b114    todo  not covered by this build
+EXTENDED_DESCRIPTION:3779a82a     XCU.make.011
+EXTENDED_DESCRIPTION:9807b114     XCU.make.011
 EXTENDED_DESCRIPTION:60426b0e    XCU.make.011
 EXTENDED_DESCRIPTION:25968815    XCU.make.011
 EXTENDED_DESCRIPTION:406c50df    XCU.make.011
@@ -251,18 +251,18 @@ EXTENDED_DESCRIPTION:e8f13cd7    XCU.make.011
 EXTENDED_DESCRIPTION:21b0f2f1    XCU.make.011
 EXTENDED_DESCRIPTION:379c84d2    XCU.make.004 XCU.make.005 XCU.make.006
 EXTENDED_DESCRIPTION:4551c7cc    XCU.make.017
-EXTENDED_DESCRIPTION:33d4914e    todo  not covered by this build
-EXTENDED_DESCRIPTION:af5fcb84    todo  not covered by this build
+EXTENDED_DESCRIPTION:33d4914e     app
+EXTENDED_DESCRIPTION:af5fcb84     impl  other macro name characters are extensions
 EXTENDED_DESCRIPTION:0551ed4e    XCU.make.012
 EXTENDED_DESCRIPTION:15e236f6    XCU.make.012
 EXTENDED_DESCRIPTION:5aa27b40    XCU.make.011
 EXTENDED_DESCRIPTION:92cfd29c    XCU.make.011
-EXTENDED_DESCRIPTION:84c25e12    todo  not covered by this build
-EXTENDED_DESCRIPTION:9c69996d    todo  not covered by this build
+EXTENDED_DESCRIPTION:84c25e12     XCU.make.034
+EXTENDED_DESCRIPTION:9c69996d     partial XCU.make.034  # only target lines, commands and definitions are tried
 EXTENDED_DESCRIPTION:2bec383e    XCU.make.012
-EXTENDED_DESCRIPTION:1eef8407    todo  not covered by this build
-EXTENDED_DESCRIPTION:e3955ebd    todo  not covered by this build
-EXTENDED_DESCRIPTION:d69e7350    todo  not covered by this build
+EXTENDED_DESCRIPTION:1eef8407     XCU.make.034
+EXTENDED_DESCRIPTION:e3955ebd     XCU.make.034
+EXTENDED_DESCRIPTION:d69e7350     XCU.make.034
 EXTENDED_DESCRIPTION:c1ea67c9    XCU.make.011
 EXTENDED_DESCRIPTION:139d7199    XCU.make.011
 EXTENDED_DESCRIPTION:9dc76edf    XCU.make.012
@@ -272,18 +272,18 @@ EXTENDED_DESCRIPTION:4e4da840    XCU.make.012
 EXTENDED_DESCRIPTION:fab677ee    XCU.make.014
 EXTENDED_DESCRIPTION:db076037      XCU.make.023
 EXTENDED_DESCRIPTION:0312b5d8    XCU.make.014
-EXTENDED_DESCRIPTION:d53c5a01    todo  not covered by this build
+EXTENDED_DESCRIPTION:d53c5a01     none  notation
 EXTENDED_DESCRIPTION:b2749b5c      XCU.make.023
-EXTENDED_DESCRIPTION:0b78ec37    todo  not covered by this build
+EXTENDED_DESCRIPTION:0b78ec37     XCU.make.035
 EXTENDED_DESCRIPTION:0699bcd5    XCU.make.012
 EXTENDED_DESCRIPTION:efdf6b5f    XCU.make.012
 EXTENDED_DESCRIPTION:14b5145e    XCU.make.012
 EXTENDED_DESCRIPTION:0a0224df    XCU.make.012
 EXTENDED_DESCRIPTION:65e151a8    XCU.make.012
-EXTENDED_DESCRIPTION:0307aa53    todo  not covered by this build
-EXTENDED_DESCRIPTION:2c47b763    todo  not covered by this build
-EXTENDED_DESCRIPTION:435aba67    todo  not covered by this build
-EXTENDED_DESCRIPTION:a316e40b    todo  not covered by this build
+EXTENDED_DESCRIPTION:0307aa53     XCU.make.035
+EXTENDED_DESCRIPTION:2c47b763     XCU.make.035
+EXTENDED_DESCRIPTION:435aba67     none  remark about unset macros
+EXTENDED_DESCRIPTION:a316e40b     none  cross-reference
 EXTENDED_DESCRIPTION:2b2e3dae    XCU.make.010
 EXTENDED_DESCRIPTION:0fb56166    XCU.make.010
 EXTENDED_DESCRIPTION:8a788bbe    XCU.make.013 XCU.make.021
@@ -291,7 +291,7 @@ EXTENDED_DESCRIPTION:2f03af9b    XCU.make.018
 EXTENDED_DESCRIPTION:8a788bbe.2  XCU.make.013 XCU.make.021
 EXTENDED_DESCRIPTION:98fc991d    XCU.make.018
 EXTENDED_DESCRIPTION:ed825e3a    XCU.make.014
-EXTENDED_DESCRIPTION:d1e40c44    todo  not covered by this build
+EXTENDED_DESCRIPTION:d1e40c44     XCU.make.010
 EXTENDED_DESCRIPTION:6ee37380    XCU.make.018
 EXTENDED_DESCRIPTION:0bbc999f    XCU.make.010
 EXTENDED_DESCRIPTION:6a9ed382    XCU.make.010
@@ -303,7 +303,7 @@ EXTENDED_DESCRIPTION:492d9c37    XCU.make.018
 EXTENDED_DESCRIPTION:d3c04ac1    XCU.make.019
 EXTENDED_DESCRIPTION:99baafd5    XCU.make.010
 EXTENDED_DESCRIPTION:c6ff268e    XCU.make.018
-EXTENDED_DESCRIPTION:7928e29b    todo  not covered by this build
+EXTENDED_DESCRIPTION:7928e29b     impl  whether such macros update an existing environment variable is unspecified
 EXTENDED_DESCRIPTION:c835df5e    XCU.make.018
 EXTENDED_DESCRIPTION:06ec5823    XCU.make.018
 EXTENDED_DESCRIPTION:334b3b52    XCU.make.016
@@ -312,7 +312,7 @@ EXTENDED_DESCRIPTION:f78425b5    XCU.make.019
 EXTENDED_DESCRIPTION:6dbc6b09    XCU.make.016
 EXTENDED_DESCRIPTION:1ef34849    XCU.make.019
 EXTENDED_DESCRIPTION:0d0e4a1b    XCU.make.019
-EXTENDED_DESCRIPTION:8890b841    todo  not covered by this build
+EXTENDED_DESCRIPTION:8890b841     impl  other effects of SHELL are implementation-defined
 EXTENDED_DESCRIPTION:d250f4d0    XCU.make.019
 EXTENDED_DESCRIPTION:4e03092b    XCU.make.016
 EXTENDED_DESCRIPTION:336830b1    XCU.make.016
@@ -320,25 +320,25 @@ EXTENDED_DESCRIPTION:da00dcab    XCU.make.019
 EXTENDED_DESCRIPTION:09df4897    XCU.make.019
 EXTENDED_DESCRIPTION:8f3b4534    XCU.make.019
 EXTENDED_DESCRIPTION:9e46738e    XCU.make.014
-EXTENDED_DESCRIPTION:1b75fee8    todo  not covered by this build
-EXTENDED_DESCRIPTION:65731d11    todo  not covered by this build
-EXTENDED_DESCRIPTION:ee5c3f7e    todo  not covered by this build
-EXTENDED_DESCRIPTION:296a2990    todo  not covered by this build
+EXTENDED_DESCRIPTION:1b75fee8     none  syntax line
+EXTENDED_DESCRIPTION:65731d11     none  syntax line
+EXTENDED_DESCRIPTION:ee5c3f7e     none  syntax line
+EXTENDED_DESCRIPTION:296a2990     none  syntax line
 EXTENDED_DESCRIPTION:2dfe720d    XCU.make.014
 EXTENDED_DESCRIPTION:eff933a6    XCU.make.014
 EXTENDED_DESCRIPTION:d66e7d41    XCU.make.014
 EXTENDED_DESCRIPTION:4e0f064e    XCU.make.014
-EXTENDED_DESCRIPTION:b7a72f50    todo  not covered by this build
+EXTENDED_DESCRIPTION:b7a72f50     XCU.make.014
 EXTENDED_DESCRIPTION:2768ea29    XCU.make.014
 EXTENDED_DESCRIPTION:38fecdfb    XCU.make.014
 EXTENDED_DESCRIPTION:d3926a86    XCU.make.014
-EXTENDED_DESCRIPTION:7b8b0912    todo  not covered by this build
-EXTENDED_DESCRIPTION:dbeddd1e    todo  not covered by this build
-EXTENDED_DESCRIPTION:0317062a    todo  not covered by this build
+EXTENDED_DESCRIPTION:7b8b0912     XCU.make.039
+EXTENDED_DESCRIPTION:dbeddd1e     XCU.make.039
+EXTENDED_DESCRIPTION:0317062a     XCU.make.039
 EXTENDED_DESCRIPTION:693ac0cd    XCU.make.014
 EXTENDED_DESCRIPTION:29972304    XCU.make.014
 EXTENDED_DESCRIPTION:d8e62953    XCU.make.015
-EXTENDED_DESCRIPTION:65bf5927    todo  not covered by this build
+EXTENDED_DESCRIPTION:65bf5927     XCU.make.014 XCU.make.031
 EXTENDED_DESCRIPTION:66a63a3e    XCU.make.014
 EXTENDED_DESCRIPTION:9962ba39    XCU.make.014
 EXTENDED_DESCRIPTION:c2615540    XCU.make.014
@@ -368,24 +368,24 @@ EXTENDED_DESCRIPTION:a294c7a1    XCU.make.014
 EXTENDED_DESCRIPTION:00085f7f    XCU.make.014
 EXTENDED_DESCRIPTION:f75f9c27    XCU.make.014
 EXTENDED_DESCRIPTION:7842d414    XCU.make.014
-EXTENDED_DESCRIPTION:6bd8e22c    todo  not covered by this build
+EXTENDED_DESCRIPTION:6bd8e22c     none  definition
 EXTENDED_DESCRIPTION:44d66224    XCU.make.014
-EXTENDED_DESCRIPTION:f9c17842    todo  not covered by this build
+EXTENDED_DESCRIPTION:f9c17842     none  definition
 EXTENDED_DESCRIPTION:61fcf966    XCU.make.014
 EXTENDED_DESCRIPTION:a65f1486    XCU.make.014
-EXTENDED_DESCRIPTION:b9dced26    todo  not covered by this build
-EXTENDED_DESCRIPTION:b17ad998    todo  not covered by this build
-EXTENDED_DESCRIPTION:4bedff84    todo  not covered by this build
-EXTENDED_DESCRIPTION:5222cb08    todo  not covered by this build
+EXTENDED_DESCRIPTION:b9dced26     none  definition
+EXTENDED_DESCRIPTION:b17ad998     XCU.make.003
+EXTENDED_DESCRIPTION:4bedff84     XCU.make.003
+EXTENDED_DESCRIPTION:5222cb08     XCU.make.003
 EXTENDED_DESCRIPTION:fc5d476e    XCU.make.014
 EXTENDED_DESCRIPTION:0c6ace16    XCU.make.014
-EXTENDED_DESCRIPTION:89f5fef5    todo  not covered by this build
-EXTENDED_DESCRIPTION:a8f8686a    todo  not covered by this build
-EXTENDED_DESCRIPTION:b20a0add    todo  not covered by this build
-EXTENDED_DESCRIPTION:105b6a79    todo  not covered by this build
-EXTENDED_DESCRIPTION:de5b342a    todo  not covered by this build
-EXTENDED_DESCRIPTION:ce005893    todo  not covered by this build
-EXTENDED_DESCRIPTION:0a4456ce    todo  not covered by this build
+EXTENDED_DESCRIPTION:89f5fef5     XCU.make.003
+EXTENDED_DESCRIPTION:a8f8686a     none  definition
+EXTENDED_DESCRIPTION:b20a0add     none  definition
+EXTENDED_DESCRIPTION:105b6a79     none  definition
+EXTENDED_DESCRIPTION:de5b342a     none  definition
+EXTENDED_DESCRIPTION:ce005893     none  definition
+EXTENDED_DESCRIPTION:0a4456ce     none  definition
 EXTENDED_DESCRIPTION:edba1f77    XCU.make.014
 EXTENDED_DESCRIPTION:77cfe80a    XCU.make.013 XCU.make.021
 EXTENDED_DESCRIPTION:d42d9617    XCU.make.013 XCU.make.021
@@ -416,14 +416,14 @@ EXTENDED_DESCRIPTION:fb469239    XCU.make.013 XCU.make.021
 EXTENDED_DESCRIPTION:71d018d7    XCU.make.013 XCU.make.021
 EXTENDED_DESCRIPTION:b42c7b60    XCU.make.013 XCU.make.021
 EXTENDED_DESCRIPTION:5b3ca268    XCU.make.013 XCU.make.021
-EXTENDED_DESCRIPTION:a699334e    todo  not covered by this build
-EXTENDED_DESCRIPTION:6467baa3    todo  not covered by this build
-EXTENDED_DESCRIPTION:a699334e.2  todo  not covered by this build
-EXTENDED_DESCRIPTION:a699334e.3  todo  not covered by this build
-EXTENDED_DESCRIPTION:eba31297    todo  not covered by this build
+EXTENDED_DESCRIPTION:a699334e     XCU.make.040
+EXTENDED_DESCRIPTION:6467baa3     XCU.make.040
+EXTENDED_DESCRIPTION:a699334e.2   XCU.make.040
+EXTENDED_DESCRIPTION:a699334e.3   XCU.make.040
+EXTENDED_DESCRIPTION:eba31297     XCU.make.040
 EXTENDED_DESCRIPTION:a5b56135    XCU.make.015
 EXTENDED_DESCRIPTION:4e962718    XCU.make.014
-EXTENDED_DESCRIPTION:8c2b82e7    todo  not covered by this build
+EXTENDED_DESCRIPTION:8c2b82e7     impl  extra macros and rules are allowed
 EXTENDED_DESCRIPTION:7bd780af    XCU.make.014
 EXTENDED_DESCRIPTION:92999f23    XCU.make.014
 EXTENDED_DESCRIPTION:d84227a4    XCU.make.014

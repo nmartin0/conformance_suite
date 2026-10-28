@@ -271,3 +271,254 @@ since      2024
 says       A missing file named on an -include line is ignored, and a file
            that exists is still read.
 test       t/025-silent-include.sh
+
+assertion  XCU.make.026
+anchor     utilities/make.html#OPTIONS
+class      conditional
+when       SD
+since      1992
+says       With -p make writes the macro definitions and target descriptions to
+           standard output; the layout is not specified.
+test       t/026-print-database.sh
+
+assertion  XCU.make.027
+anchor     utilities/make.html#ASYNCHRONOUS EVENTS
+class      conditional
+when       SD
+since      2024
+says       When make receives SIGTERM while a command of a target runs, it
+           removes that target if its modification time changed, unless the
+           target is a prerequisite of .PRECIOUS or .PHONY (or .PRECIOUS has no
+           prerequisites), and it ends with an error status or by the signal.
+test       t/027-signal-removal.sh
+
+assertion  XCU.make.028
+anchor     utilities/make.html#ENVIRONMENT VARIABLES
+anchor     utilities/make.html#OPTIONS
+class      conditional
+when       SD
+since      1992
+says       MAKEFLAGS can hold option letters with or without leading hyphens, its
+           options are taken before those of the command line, and of -k and -S
+           given together the last one wins.
+test       t/028-makeflags-options.sh
+
+assertion  XCU.make.029
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       Macros given on the command line are added to the environment of the
+           commands while macros defined only in the makefile are not, and the
+           options and command line macros are passed to a sub-make.
+test       t/029-environment-and-submake.sh
+
+assertion  XCU.make.030
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       .IGNORE with prerequisites makes errors from the commands of those
+           targets ignored only, and later .IGNORE lines add targets to the list.
+test       t/030-ignore-prerequisites.sh
+
+assertion  XCU.make.031
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       Prerequisites given for a target on several lines add up while one
+           rule supplies the commands, and an inference rule defined twice has
+           the last definition.
+test       t/031-rule-accumulation.sh
+
+assertion  XCU.make.032
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       A number sign starts a comment that is not part of a macro value nor
+           of the prerequisites of a target; blank lines and lines beginning with
+           # are skipped.
+test       t/032-comments.sh
+
+assertion  XCU.make.033
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       A rule naming several targets gives each of them the commands, a
+           command after a semicolon is the first command and tab lines add more,
+           and a rule with only a semicolon is an empty rule that does nothing.
+test       t/033-multiple-targets.sh
+
+assertion  XCU.make.034
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       Macros in a target line are expanded when the line is read and in
+           command lines when they run, a macro in the name part of a definition
+           is expanded at the definition, and at least 100 levels of indirection
+           work.
+test       t/034-macro-timing.sh
+
+assertion  XCU.make.035
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       A substitution on an unset or empty macro gives an empty string, the
+           first equals sign after the colon is the separator, and words that do
+           not match are left unchanged.
+test       t/035-substitution-edges.sh
+
+assertion  XCU.make.036
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       A CURDIR variable in the environment does not change the CURDIR macro
+           unless -e is given and is itself set to the macro value otherwise, and
+           CURDIR on the command line replaces the macro without changing the
+           directory.
+test       t/036-curdir-environment.sh
+
+assertion  XCU.make.037
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       Defining SHELL in the makefile or on the command line does not change
+           the SHELL environment variable seen by commands.
+test       t/037-shell-macro.sh
+
+assertion  XCU.make.038
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       The built-in .sh rule copies a script and makes the copy executable,
+           and a .c.o rule in the makefile replaces the built-in rule.
+test       t/038-default-rules.sh
+
+assertion  XCU.make.039
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       An inference rule made only of a semicolon is an empty rule that is
+           found and runs without effect, so no file is made and there is no
+           error.
+test       t/039-empty-inference-rule.sh
+
+assertion  XCU.make.040
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       For lib.a(m.o) made by a .x.a rule the internal macros are m.x for $<,
+           m for $*, lib.a for $@, m.x for $^ and $?, and m.o for $%.
+test       t/040-library-inference.sh
+
+assertion  XCU.make.041
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       With .NOTPARALLEL in the makefile make updates one target at a time
+           even when -j asks for more.
+test       t/041-notparallel.sh
+
+assertion  XCU.make.042
+anchor     utilities/make.html#OPTIONS
+class      conditional
+when       SD
+since      2024
+says       With -j 1 targets are updated one at a time, and when -j is given
+           several times the last value is used.
+test       t/042-jobs-one.sh
+
+assertion  XCU.make.043
+anchor     utilities/make.html#OPTIONS
+class      conditional
+when       SD
+since      1992
+says       Options can be grouped, an option-argument can be attached to its
+           option or separate, and -- ends the options before the operands.
+test       t/043-option-syntax.sh
+
+assertion  XCU.make.044
+anchor     utilities/make.html#OPERANDS
+class      conditional
+when       SD
+since      2024
+says       Macro definition operands in the delayed and immediate forms are
+           processed in the order given, later ones replacing earlier ones.
+test       t/044-macro-operands.sh
+
+assertion  XCU.make.045
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       An include line can name several files and end in a comment, and a
+           relative name is taken from the working directory and not from the
+           directory of the makefile.
+test       t/045-include-forms.sh
+
+assertion  XCU.make.046
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       Include files can be nested to a depth of sixteen.
+test       t/046-include-depth.sh
+
+assertion  XCU.make.047
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       An include file that does not exist is made with the rule for it and
+           then read, and with -n the commands that make it are still run.
+test       t/047-include-generated.sh
+
+assertion  XCU.make.048
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       A backslash-newline in a target line joins the next line to it so that
+           its words are prerequisites.
+test       t/048-target-continuation.sh
+
+assertion  XCU.make.049
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       A target that does not exist after its commands succeeded is treated
+           as newer than the targets that need it, so those are made too.
+test       t/049-target-not-created.sh
+
+assertion  XCU.make.050
+anchor     utilities/make.html#ENVIRONMENT VARIABLES
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       Variables of the environment, also those with a null value, are macros
+           and are in the environment of the commands.
+test       t/050-environment-macros.sh
+
+assertion  XCU.make.051
+anchor     utilities/make.html#OPTIONS
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       With -t a phony target is neither touched nor run, while an ordinary
+           target with commands is touched; a command with a + prefix is
+           still run.
+test       t/051-touch-phony.sh

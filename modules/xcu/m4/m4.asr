@@ -121,3 +121,51 @@ since      2024
 says       m4exit with no argument or a zero argument, after an error has
            occurred, leaves the exit status non-zero.
 test       t/012-m4exit-after-error.sh
+
+assertion  XCU.m4.013
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       The defining text of a macro is scanned together with the input that
+           follows it, and a token that is not a macro name, even if it contains
+           one, is copied unchanged.
+test       t/013-rescan-and-plain-text.sh
+
+assertion  XCU.m4.014
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       Quote strings and comment strings of five characters are supported.
+test       t/014-long-delimiters.sh
+
+assertion  XCU.m4.015
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       Diversions 1 to 9 all exist and are written in numeric order at the
+           end of input.
+test       t/015-nine-diversions.sh
+
+assertion  XCU.m4.016
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       When mkstemp cannot create its file m4 writes a diagnostic, goes on,
+           the defining text is empty and the final exit status is non-zero.
+test       t/016-mkstemp-failure.sh
+
+assertion  XCU.m4.017
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       The result of syscmd is not scanned for macros and m4 does not
+           redirect the output of the command.
+test       t/017-syscmd-result.sh
+
+assertion  XCU.m4.018
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       Built-in macros with no stated value expand to nothing, and traceon
+           writes its trace to standard error and not standard output.
+test       t/018-null-values-and-trace.sh
