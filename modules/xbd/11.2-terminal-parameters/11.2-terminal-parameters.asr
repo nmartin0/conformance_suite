@@ -1,0 +1,422 @@
+# XBD 11.2 Parameters that Can be Set
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests use a private pseudo-terminal (XSI) and set the input, output and local flags and the
+# special characters through tcsetattr(); the manager side plays the user at the terminal.
+# Control modes (c_cflag) and the baud rates of a pseudo-terminal are unspecified by the page
+# (non-default values may be unsupported or have no effect), and break and parity errors cannot
+# be injected through a pseudo-terminal, so those parts are accounted for in the .cov file. The
+# header constants (distinct bits, values) are XBD.termios.h.001 to .013.
+
+assertion  XBD.11.2-terminal-parameters.001
+anchor     basedefs/V1_chap11.html#11.2.1
+class      required
+since      1988
+says       struct termios has members c_iflag, c_oflag, c_cflag and c_lflag
+           of type tcflag_t and an array c_cc of NCCS elements of type cc_t.
+note       Checked at compile time with _Generic; no terminal is needed.
+           Unsigned-ness of the types is XBD.termios.h.001.
+test       t/001-struct-members.c
+
+assertion  XBD.11.2-terminal-parameters.002
+anchor     basedefs/V1_chap11.html#11.2.2
+anchor     basedefs/V1_chap11.html#11.1.9
+class      conditional
+when       BASE|XSI
+since      1988
+says       In canonical mode with ICRNL set and IGNCR clear, ab and a
+           carriage return is read as ab and a newline; with ICRNL clear a
+           carriage return is neither a delimiter nor translated (cd,
+           carriage return does not complete a read; after a newline it is
+           read as cd, carriage return, newline).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL.
+test       t/002-icrnl-canon.c
+
+assertion  XBD.11.2-terminal-parameters.003
+anchor     basedefs/V1_chap11.html#11.2.2
+class      conditional
+when       BASE|XSI
+since      1988
+says       In non-canonical mode with IGNCR clear, a carriage return sent
+           from the manager is read as a newline when ICRNL is set and as a
+           carriage return when it is clear.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL.
+test       t/003-icrnl-noncanon.c
+
+assertion  XBD.11.2-terminal-parameters.004
+anchor     basedefs/V1_chap11.html#11.2.2
+class      conditional
+when       BASE|XSI
+since      1988
+says       In non-canonical mode with ICRNL and IGNCR clear, a newline sent
+           from the manager is read as a carriage return when INLCR is set
+           and as a newline when it is clear.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL.
+test       t/004-inlcr.c
+
+assertion  XBD.11.2-terminal-parameters.005
+anchor     basedefs/V1_chap11.html#11.2.2
+class      conditional
+when       BASE|XSI
+since      1988
+says       In non-canonical mode with IGNCR set, a carriage return between a
+           and b sent from the manager is dropped (ab is read), both with
+           ICRNL clear and with ICRNL set.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL.
+test       t/005-igncr.c
+
+assertion  XBD.11.2-terminal-parameters.006
+anchor     basedefs/V1_chap11.html#11.2.2
+class      conditional
+when       BASE|XSI
+since      1988
+says       In non-canonical mode with CS8, the bytes c1 and e9 sent from the
+           manager are read as 41 and 69 when ISTRIP is set and unchanged
+           when it is clear.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL.
+           UNRESOLVED when the terminal does not keep CS8.
+test       t/006-istrip.c
+
+assertion  XBD.11.2-terminal-parameters.007
+anchor     basedefs/V1_chap11.html#11.2.2
+anchor     basedefs/V1_chap11.html#11.1.9
+class      conditional
+when       BASE|XSI
+since      1988
+says       With IXON set (IXANY clear), the STOP byte in use sent from the
+           manager holds back what the subsidiary side writes next (nothing
+           arrives within 0.4 s) until the START byte is sent, and neither
+           byte can be read on the subsidiary side.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL.
+           Whether START and STOP can be changed is implementation-defined,
+           so the bytes in use are read from the terminal.
+test       t/007-ixon-flow.c
+
+assertion  XBD.11.2-terminal-parameters.008
+anchor     basedefs/V1_chap11.html#11.2.2
+class      conditional
+when       BASE|XSI
+since      1988
+says       With IXON clear, the STOP and START bytes in use sent from the
+           manager are read on the subsidiary side as two data bytes, and
+           what the subsidiary side writes after the STOP byte still reaches
+           the manager.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL.
+test       t/008-ixon-clear-read.c
+
+assertion  XBD.11.2-terminal-parameters.009
+anchor     basedefs/V1_chap11.html#11.2.2
+class      conditional
+when       BASE|XSI
+since      1988
+says       With IXON and IXANY set, after the STOP byte has suspended output
+           (nothing arrives within 0.4 s), an ordinary byte (q) sent from
+           the manager lets the held output through.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL.
+test       t/009-ixany.c
+
+assertion  XBD.11.2-terminal-parameters.010
+anchor     basedefs/V1_chap11.html#11.2.3
+class      conditional
+when       BASE|XSI
+since      1988
+says       With OPOST clear, even with ONLCR, OCRNL, ONOCR and ONLRET set,
+           the bytes a, newline, b, carriage return, c, tab, d, newline
+           written on the subsidiary side arrive at the manager unchanged.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The output flags other than OPOST are XSI.
+test       t/010-opost-clear.c
+
+assertion  XBD.11.2-terminal-parameters.011
+anchor     basedefs/V1_chap11.html#11.2.3
+class      conditional
+when       XSI
+since      1988
+says       XSI: with OPOST and ONLCR set, a, carriage return, b, newline
+           written on the subsidiary side arrive at the manager as a,
+           carriage return, b, carriage return, newline.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL.
+test       t/011-onlcr.c
+
+assertion  XBD.11.2-terminal-parameters.012
+anchor     basedefs/V1_chap11.html#11.2.3
+class      conditional
+when       XSI
+since      1988
+says       XSI: with OPOST and OCRNL set (ONLCR clear), a, carriage return,
+           b, newline written on the subsidiary side arrive at the manager
+           as a, newline, b, newline.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL.
+test       t/012-ocrnl.c
+
+assertion  XBD.11.2-terminal-parameters.013
+anchor     basedefs/V1_chap11.html#11.2.3
+class      conditional
+when       XSI
+since      1988
+says       XSI: with OPOST and ONOCR set (ONLCR, OCRNL, ONLRET clear), after
+           a first carriage return has put the column at 0, the output
+           carriage return, a, b, c, carriage return, carriage return, d
+           arrives as a, b, c, carriage return, d: the carriage return at
+           column 0 is dropped, the one after text is sent, and the second
+           of two in a row is at column 0 again.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL. The
+           first carriage return is output only to make the column 0
+           whatever it was; what arrives for it is not checked.
+test       t/013-onocr.c
+
+assertion  XBD.11.2-terminal-parameters.014
+anchor     basedefs/V1_chap11.html#11.2.3
+class      conditional
+when       XSI
+since      1988
+says       XSI: with OPOST and ONOCR set, the output a, b, newline, carriage
+           return, c arrives as a, b, newline, c when ONLRET is set (the
+           newline put the column at 0, so the carriage return is dropped)
+           and in full when ONLRET is clear (the newline leaves the column
+           unchanged).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL. Each
+           run starts with a carriage return to bring the column to 0; what
+           arrives for it is not checked.
+test       t/014-onlret.c
+
+assertion  XBD.11.2-terminal-parameters.015
+anchor     basedefs/V1_chap11.html#11.2.3
+class      conditional
+when       BASE|XSI
+since      1988
+says       With OPOST and the tab delay type TAB3, a, tab, b written on
+           the subsidiary side arrive as a, one or more spaces, b, with no
+           tab.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The number of spaces is not stated.
+           UNRESOLVED when the terminal does not keep TAB3 (delay fields are
+           not guaranteed to be kept).
+test       t/015-tab3.c
+
+assertion  XBD.11.2-terminal-parameters.016
+anchor     basedefs/V1_chap11.html#11.2.3
+class      conditional
+when       BASE|XSI
+since      1988
+says       With OPOST and OFILL set, text with no delay field set
+           arrives unchanged; a newline with delay NL1 is followed by 2 fill
+           characters, a carriage return with CR2 by 4, a backspace with BS1
+           by 1 and a tab with TAB2 by 2; the fill character is NUL, or DEL
+           when OFDEL is set.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The delay fields are not guaranteed to be
+           kept by tcsetattr(): a delay type that is not kept is skipped,
+           and the test is UNRESOLVED when none is kept. The fill follows
+           the character that causes the delay.
+test       t/016-ofill.c
+
+assertion  XBD.11.2-terminal-parameters.017
+anchor     basedefs/V1_chap11.html#11.2.5
+class      conditional
+when       BASE|XSI
+since      1988
+says       In canonical mode with ECHO set (and the other echo flags and
+           OPOST clear), abc and a newline sent from the manager come back
+           to the manager as abc and a newline; with ECHO clear nothing
+           comes back.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL.
+test       t/017-echo-canon.c
+
+assertion  XBD.11.2-terminal-parameters.018
+anchor     basedefs/V1_chap11.html#11.2.5
+class      conditional
+when       BASE|XSI
+since      1988
+says       In canonical mode with ECHO and ECHOE set, abc followed by ERASE
+           sent from the manager comes back as abc and at least one more
+           byte (the erasing).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The form of the erasing is not stated (a
+           typical one is backspace, space, backspace), so only the presence
+           of output beyond the echo of the typed text is checked. The case
+           of nothing to erase is left to the implementation.
+           See Q-187.
+test       t/018-echoe.c
+
+assertion  XBD.11.2-terminal-parameters.019
+anchor     basedefs/V1_chap11.html#11.2.5
+class      conditional
+when       BASE|XSI
+since      1988
+says       In canonical mode with ECHO and ECHOK set, abc followed by KILL
+           sent from the manager comes back as abc and at least one more
+           byte (the line erasing or a newline).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The form is one of two the page allows; only
+           the presence of output beyond the echo of the typed text is
+           checked.
+           See Q-187.
+test       t/019-echok.c
+
+assertion  XBD.11.2-terminal-parameters.020
+anchor     basedefs/V1_chap11.html#11.2.5
+class      conditional
+when       BASE|XSI
+since      1988
+says       In canonical mode with ECHO clear and ECHONL set (OPOST clear),
+           ab and a newline sent from the manager come back as just the
+           newline; with ECHONL clear nothing comes back.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL.
+test       t/020-echonl.c
+
+assertion  XBD.11.2-terminal-parameters.021
+anchor     basedefs/V1_chap11.html#11.2.5
+class      conditional
+when       BASE|XSI
+since      1988
+says       With ISIG clear, the INTR, QUIT and SUSP bytes sent from the
+           manager cause no SIGINT, SIGQUIT or SIGTSTP in the session leader
+           or in a child in the foreground group (0.4 s watched), and are
+           read on the subsidiary side as three data bytes.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED.
+test       t/021-isig-clear.c
+timeout    40
+
+assertion  XBD.11.2-terminal-parameters.022
+anchor     basedefs/V1_chap11.html#11.2.5
+class      conditional
+when       BASE|XSI
+since      1988
+says       With ISIG and NOFLSH set, the input abc, INTR, d sent from the
+           manager makes SIGINT arrive at the session leader and the bytes
+           a, b, c, d (INTR discarded) are all still readable.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED. Only the NOFLSH-set case is tested: the flush that
+           happens without NOFLSH is not described in detail.
+test       t/022-noflsh.c
+
+assertion  XBD.11.2-terminal-parameters.023
+anchor     basedefs/V1_chap11.html#11.2.6
+anchor     basedefs/V1_chap11.html#11.1.9
+class      conditional
+when       BASE|XSI
+since      1988
+says       When the terminal has a disabling value (fpathconf _PC_VDISABLE),
+           setting ERASE, KILL, EOF and EOL to it is kept, and in canonical
+           mode the former ERASE, KILL, EOF and EOL bytes inside a line are
+           then read as plain data with the line ending only at the newline.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. NOTINUSE when the terminal has no disabling
+           value.
+test       t/023-vdisable.c
+
+assertion  XBD.11.2-terminal-parameters.024
+anchor     basedefs/V1_chap11.html#11.2.6
+class      conditional
+when       BASE|XSI
+since      1988
+says       When the terminal has a disabling value v, with ICANON clear MIN
+           set to v makes a read of one queued byte return it if v is 0 or 1
+           and wait otherwise, and TIME set to v (MIN 0) makes an empty read
+           return 0 after about v tenths of a second (at once for 0, still
+           waiting after 3 s when v is above 35).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. NOTINUSE when the terminal has no disabling
+           value; a value of 20 to 35 is UNRESOLVED (too close to the
+           alarm). Timing bounds are generous.
+test       t/024-vmin-vdisable.c
+
+assertion  XBD.11.2-terminal-parameters.025
+anchor     basedefs/V1_chap11.html#11.2.6
+class      conditional
+when       BASE|XSI
+since      1988
+says       After tcsetattr() asks for other START and STOP bytes (1f and
+           1d), the values tcgetattr() returns are the ones that work: with
+           IXON set, sending the returned STOP byte holds back output and
+           the returned START byte releases it.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A flag the interface lists must be kept by
+           tcsetattr(); a terminal that drops it makes the test FAIL. An
+           implementation that cannot change them may ignore the request but
+           must return the bytes in use.
+test       t/025-startstop-readback.c

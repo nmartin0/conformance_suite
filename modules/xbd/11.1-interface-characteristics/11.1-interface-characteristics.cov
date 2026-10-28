@@ -1,0 +1,168 @@
+# 11.1-interface-characteristics.cov - every requirement unit in XBD 11.1.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The chapter introduction is part of this module (section 11.1+) and is classified at the end.
+
+11.1:8b7a0517     untestable  the wait for a connection applies to a line with a modem; a pseudo-terminal subsidiary is always ready
+11.1:6a545ebe     none   background on how programs obtain a terminal
+11.1:aa7910c9     none   introduces the list of cases below
+11.1:27d8726d     XBD.11.1-interface-characteristics.006
+11.1:5e478c7f     XBD.11.1-interface-characteristics.001
+11.1:a615d167     untestable  no serial line or modem exists behind a pseudo-terminal
+11.1:949b9cdd     impl   initialisation between the last close and the next open is optional (may)
+11.1:b99b34ad     XSH.open.050 XCU.stty.008
+11.1:2a6242a5     untestable  a pseudo-terminal subsidiary is always ready, so a blocked open cannot be provoked
+11.1:e208e3d1     untestable  a connection to wait for exists only on a serial line with modem lines
+11.1:b841805d     XBD.11.1-interface-characteristics.001
+11.1:00a3435a     XBD.11.1-interface-characteristics.007
+11.1:5bbfc492     XBD.11.1-interface-characteristics.035 XBD.11.1-interface-characteristics.036 XBD.11.1-interface-characteristics.037
+11.1:68a48ff5     none   describes how a job-control shell uses the interface
+11.1:ffa9c123     XSH.tcgetpgrp.007 XSH.tcsetpgrp.009
+11.1:70b81b9a     XBD.11.1-interface-characteristics.008 XBD.11.1-interface-characteristics.012
+11.1:8b117a8c     XSH.tcgetpgrp.005
+11.1:50a64b6d     impl   unspecified whether a foreground group exists
+11.1:1791ce1f     XBD.11.1-interface-characteristics.007
+11.1:c7c8e833     XBD.11.1-interface-characteristics.003
+11.1:f20e667c     XBD.11.1-interface-characteristics.003
+11.1:682c7559     XBD.11.1-interface-characteristics.004
+11.1:fbfc6547     impl   how the controlling terminal is allocated is implementation-defined
+11.1:5c7323e6     impl   implementation-defined whether the terminal becomes the controlling terminal
+11.1:f2f915f8     partial XBD.11.1-interface-characteristics.002  # the same refusal when a session leader opens with O_NOCTTY
+11.1:ed81ffc8     XSH.tcgetpgrp.003 XBD.11.1-interface-characteristics.007
+11.1:145c73b2     XBD.11.1-interface-characteristics.003
+11.1:9d51e6ac     XBD.11.1-interface-characteristics.005
+11.1:209cf5d3     impl   unspecified effect of the last close
+11.1:d67fe4c1     impl   reacquiring a terminal after relinquishing it is unspecified
+11.1:a36cc2ac     XBD.11.1-interface-characteristics.006
+11.1:6249f167     untestable  the dissociation shows only through a later acquisition, and whether a new leader gets the terminal is implementation-defined (11.1.3)
+11.1:76744e22     impl   access by the earlier session may (not shall) be denied
+11.1:c9564baf     XBD.11.1-interface-characteristics.011
+11.1:7fc9f266     XBD.11.1-interface-characteristics.008 XBD.11.1-interface-characteristics.009 XBD.11.1-interface-characteristics.010
+11.1:98ed3ca4     XBD.11.1-interface-characteristics.008
+11.1:b1db6e22     none   cross-reference
+11.1:6a5d990d     XBD.11.1-interface-characteristics.011
+11.1:3c6ed16b     XBD.11.1-interface-characteristics.012 XBD.11.1-interface-characteristics.013 XBD.11.1-interface-characteristics.014 XBD.11.1-interface-characteristics.015
+11.1:304c956b     XBD.11.1-interface-characteristics.015
+11.1:a83f1f35     XBD.11.1-interface-characteristics.016
+11.1:818a1774     impl   full-duplex operation is permitted (may), not required
+11.1:d02fb215     XBD.11.1-interface-characteristics.019 XBD.11.1-interface-characteristics.020
+11.1:d35eb379     XBD.11.1-interface-characteristics.028
+11.1:7e41ab43     impl   behaviour when the input limit is exceeded is implementation-defined
+11.1:8e474933     XBD.11.1-interface-characteristics.020 XBD.11.1-interface-characteristics.026
+11.1:fba79b1b     none   cross-reference
+11.1:558042de     XBD.11.2-terminal-parameters.002 XBD.11.2-terminal-parameters.006 XBD.11.2-terminal-parameters.017
+11.1:47866f81     XBD.11.2-terminal-parameters.017
+11.1:f65ced57     none   remark on usefulness
+11.1:67b7775f     XBD.11.1-interface-characteristics.017 XBD.11.1-interface-characteristics.018 XBD.11.1-interface-characteristics.020 XBD.11.1-interface-characteristics.026
+11.1:ef05b3a7     XBD.11.1-interface-characteristics.017
+11.1:d1e7de42     XBD.11.1-interface-characteristics.018 XBD.11.1-interface-characteristics.019
+11.1:165e9fc3     XBD.11.1-interface-characteristics.019
+11.1:22f049d4     XBD.11.1-interface-characteristics.019
+11.1:c0b38e6c     XBD.11.1-interface-characteristics.018
+11.1:79912776     none   cross-reference
+11.1:d937fb52     XBD.11.1-interface-characteristics.021
+11.1:b349dfc6     XBD.11.1-interface-characteristics.021 XBD.11.1-interface-characteristics.022 XBD.11.1-interface-characteristics.025
+11.1:c32c0264     none   cross-reference
+11.1:74035e77     XBD.11.1-interface-characteristics.020
+11.1:412ab567     XBD.11.1-interface-characteristics.021
+11.1:35d29322     partial XBD.11.1-interface-characteristics.021  # reading a line in pieces of one byte or a few bytes
+11.1:49d691d1     XBD.11.1-interface-characteristics.027
+11.1:7e41ab43.2   impl   behaviour when the line limit is exceeded is implementation-defined
+11.1:419787d1     untestable  the absence of a limit cannot be shown by a finite test
+11.1:3795a7b5     XBD.11.1-interface-characteristics.023 XBD.11.1-interface-characteristics.024
+11.1:03e7b0b4     XBD.11.1-interface-characteristics.023 XBD.11.1-interface-characteristics.024 XBD.11.1-interface-characteristics.025
+11.1:e51be7a5     XBD.11.1-interface-characteristics.023
+11.1:1e601729     XBD.11.1-interface-characteristics.023
+11.1:79e394ee     XBD.11.1-interface-characteristics.024
+11.1:6632ead1     XBD.11.1-interface-characteristics.023 XBD.11.1-interface-characteristics.024
+11.1:47ca41db     XBD.11.1-interface-characteristics.023 XBD.11.1-interface-characteristics.024
+11.1:1c268764     XBD.11.1-interface-characteristics.026
+11.1:0845935d     XBD.11.1-interface-characteristics.029 XBD.11.1-interface-characteristics.030 XBD.11.1-interface-characteristics.031 XBD.11.1-interface-characteristics.032 XBD.11.1-interface-characteristics.033 XBD.11.1-interface-characteristics.034
+11.1:79563f85     impl   the precedence of O_NONBLOCK over MIN and TIME is explicitly unspecified
+11.1:c989ef94     impl   explicitly unspecified (may)
+11.1:0933798c     impl   explicitly unspecified (may)
+11.1:27a82c00     XBD.11.1-interface-characteristics.031
+11.1:08114af3     XBD.11.1-interface-characteristics.029 XBD.11.1-interface-characteristics.030
+11.1:e5e66434     impl   undefined response when MIN exceeds the input limit
+11.1:3e581c6c     none   introduces the four cases
+11.1:bfe93da4     XBD.11.1-interface-characteristics.030
+11.1:c0fbf81f     XBD.11.1-interface-characteristics.030
+11.1:93587f5c     none   introduces the steps below
+11.1:eaee8692     XBD.11.1-interface-characteristics.029 XBD.11.1-interface-characteristics.030
+11.1:77a6fd48     XBD.11.1-interface-characteristics.029 XBD.11.1-interface-characteristics.030
+11.1:02ab1cb1     XBD.11.1-interface-characteristics.029
+11.1:b01f0d5e     XBD.11.1-interface-characteristics.029
+11.1:6c91bde2     XBD.11.1-interface-characteristics.030
+11.1:165d804d     XBD.11.1-interface-characteristics.029
+11.1:4ac3418d     none   explanatory
+11.1:6b68de29     XBD.11.1-interface-characteristics.031
+11.1:e478149f     none   warning to programs
+11.1:f84efd50     none   explanatory
+11.1:a2ae93c5     XBD.11.1-interface-characteristics.032
+11.1:6c5ef14a     XBD.11.1-interface-characteristics.032 XBD.11.1-interface-characteristics.034
+11.1:bc5ccba9     XBD.11.1-interface-characteristics.032
+11.1:d63f3e3e     none   explanatory
+11.1:eda0ffdf     XBD.11.1-interface-characteristics.032
+11.1:eee8fdbb     XBD.11.1-interface-characteristics.034
+11.1:599cccc8     partial XBD.11.1-interface-characteristics.034  # case D (MIN 0, TIME 0) with data queued, returning the smaller of the request and the data available
+11.1:365488f3     XBD.11.1-interface-characteristics.033
+11.1:af04513b     XBD.11.2-terminal-parameters.010 XBD.11.2-terminal-parameters.011 XBD.11.2-terminal-parameters.012 XBD.11.2-terminal-parameters.013 XBD.11.2-terminal-parameters.014
+11.1:8e2243ac     impl   buffering of output is optional (may)
+11.1:2276b148     none   cross-reference to write()
+11.1:29ff4432     none   introduces the list
+11.1:6f566a4a     none   introduces the list
+11.1:9e30a9c6     XBD.11.1-interface-characteristics.035 XBD.11.2-terminal-parameters.021
+11.1:ff5572e6     XBD.11.1-interface-characteristics.035
+11.1:92ed3a5e     XBD.11.1-interface-characteristics.035
+11.1:9e30a9c6.2   XBD.11.1-interface-characteristics.036 XBD.11.2-terminal-parameters.021
+11.1:5d7fb831     XBD.11.1-interface-characteristics.036
+11.1:2028cc1b     XBD.11.1-interface-characteristics.036
+11.1:6a62b783     XBD.11.1-interface-characteristics.023 XBD.11.1-interface-characteristics.024 XBD.11.1-interface-characteristics.025
+11.1:bb33ce40     XBD.11.1-interface-characteristics.023
+11.1:62041284     XBD.11.1-interface-characteristics.023
+11.1:1ace6e4a     XBD.11.1-interface-characteristics.023
+11.1:6a62b783.2   XBD.11.1-interface-characteristics.024
+11.1:832b9e7b     XBD.11.1-interface-characteristics.024
+11.1:06f58e03     XBD.11.1-interface-characteristics.024
+11.1:6a62b783.3   XBD.11.1-interface-characteristics.025
+11.1:cae5332f     XBD.11.1-interface-characteristics.025
+11.1:9aa8996d     XBD.11.1-interface-characteristics.025
+11.1:294184aa     XBD.11.1-interface-characteristics.025
+11.1:6a62b783.4   XBD.11.1-interface-characteristics.021
+11.1:5ae1b798     XBD.11.1-interface-characteristics.021
+11.1:ab83ee85     untestable  the newline character cannot be changed, and a statement that something cannot be done is not shown by trying
+11.1:6a62b783.5   XBD.11.1-interface-characteristics.022
+11.1:8c455cda     XBD.11.1-interface-characteristics.022
+11.1:1b15c51e     XBD.11.1-interface-characteristics.037
+11.1:3c5ca6ad     XBD.11.2-terminal-parameters.007
+11.1:6685bc62     XBD.11.2-terminal-parameters.007
+11.1:6e31e59a     none   remark on usefulness
+11.1:85c882fa     XBD.11.2-terminal-parameters.007 XBD.11.2-terminal-parameters.008
+11.1:3c5ca6ad.2   XBD.11.2-terminal-parameters.007
+11.1:2d7db297     XBD.11.2-terminal-parameters.007 XBD.11.2-terminal-parameters.009
+11.1:98d4ec78     XBD.11.2-terminal-parameters.007
+11.1:3f88d166     XBD.11.2-terminal-parameters.002
+11.1:8b3be1fa     XBD.11.2-terminal-parameters.002
+11.1:ab83ee85.2   untestable  the carriage-return character cannot be changed, see above
+11.1:0eab02d6     untestable  the NL and CR characters cannot be changed, see above
+11.1:3ee5c2e9     impl   implementation-defined whether START and STOP can be changed (B25 only checks what tcgetattr returns)
+11.1:91dbd359     XBD.11.1-interface-characteristics.038
+11.1:b68ba9ab     XBD.11.2-terminal-parameters.023
+11.1:30a96b58     impl   undefined when two special characters have the same value
+11.1:e279d8df     impl   context-dependent special characters are implementation-defined
+11.1:c390d857     impl   additional single-byte functions are implementation-defined
+11.1:cd00e2b9     XBD.11.1-interface-characteristics.040
+11.1:8a34ccdb     XBD.11.1-interface-characteristics.039
+11.1:6c823470     XBD.11.1-interface-characteristics.041
+11.1:0805ab5e     XBD.11.1-interface-characteristics.042
+11.1:52d812c8     XBD.11.1-interface-characteristics.043
+11.1:3216432c     none   consequence remark
+11.1:e0730215     impl   unspecified whether end-of-file or EIO is returned
+11.1:0fbfa295     XBD.11.1-interface-characteristics.044
+11.1:7dae93c8     XBD.11.1-interface-characteristics.045
+11.1:8886284a     untestable  HUPCL needs a communications port with a disconnect function
+
+# chapter introduction (section 11.1+ includes it)
+11.1:d9542dec     none   states that the interface exists; every assertion of this chapter exercises it
+11.1:82e5b52c     untestable  needs an asynchronous communications port, which a pseudo-terminal is not
+11.1:02e23047     impl   whether network connections or synchronous ports are supported is implementation-defined

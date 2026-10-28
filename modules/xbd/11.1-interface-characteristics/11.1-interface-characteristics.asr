@@ -1,0 +1,810 @@
+# XBD 11.1 Interface Characteristics
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every test uses a private pseudo-terminal (XSI): the test process holds the manager side and
+# a subsidiary side is read and written, or a child session leader owns it as controlling
+# terminal. Tests that need job control run a session leader S as a child with the
+# subsidiary side as controlling terminal; S forks the foreground, background and orphaned
+# callers. Time bounds are generous and every blocking call is guarded by an alarm, a poll or
+# the driver's timeout. Not tested here because other modules do: the terminal functions'
+# own behaviour (tcgetpgrp, tcsetpgrp, tcflush, tcflow, tcdrain, tcsendbreak, tcsetattr), the
+# foreground group of a new controlling terminal (XSH.tcgetpgrp.003) and the group that has no
+# process left (XSH.tcgetpgrp.005).
+
+assertion  XBD.11.1-interface-characteristics.001
+anchor     basedefs/V1_chap11.html#11.1.1
+class      conditional
+when       BASE|XSI
+since      1988
+says       open() of a pseudo-terminal subsidiary with O_NONBLOCK returns a
+           descriptor (the call is bounded by an alarm); with CLOCAL set in
+           the terminal an open() without O_NONBLOCK also returns.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. A pseudo-terminal never makes an open wait
+           for a modem, so the test shows only that the call returns; the
+           CLOCAL half is skipped when the terminal does not keep CLOCAL
+           (control modes of a pseudo-terminal are unspecified, XBD 11.2.4).
+test       t/001-open-nonblock.c
+
+assertion  XBD.11.1-interface-characteristics.002
+anchor     basedefs/V1_chap11.html#11.1.3
+class      conditional
+when       BASE|XSI
+since      1988
+says       A child of a session leader that has no controlling terminal
+           opens the subsidiary side of a pseudo-terminal without O_NOCTTY:
+           the terminal does not become its controlling terminal
+           (tcgetpgrp() on it returns -1 with ENOTTY).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The O_NOCTTY case for a session leader is
+           covered by XSH.tcgetpgrp.006 and XSH.posix_openpt.005.
+test       t/002-noctty-nonleader.c
+
+assertion  XBD.11.1-interface-characteristics.003
+anchor     basedefs/V1_chap11.html#11.1.3
+class      conditional
+when       BASE|XSI
+since      1988
+says       In a session whose leader has a pseudo-terminal as controlling
+           terminal, a child of the leader in the leader's process group and
+           a child in a group of its own both have that terminal as their
+           controlling terminal: on the inherited descriptor tcgetpgrp()
+           gives the leader's group and tcgetsid() gives the leader's
+           process ID.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED.
+test       t/003-ctty-inherited.c
+
+assertion  XBD.11.1-interface-characteristics.004
+anchor     basedefs/V1_chap11.html#11.1.3
+class      conditional
+when       BASE|XSI
+since      1988
+says       While a session leader holds a pseudo-terminal as controlling
+           terminal, a second session leader (a child that called setsid())
+           that opens the subsidiary side without O_NOCTTY does not get it
+           as controlling terminal (tcgetpgrp() returns -1 with ENOTTY), and
+           the first leader keeps it (tcgetpgrp() still returns its group).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED.
+test       t/004-ctty-one-session.c
+
+assertion  XBD.11.1-interface-characteristics.005
+anchor     basedefs/V1_chap11.html#11.1.3
+class      conditional
+when       BASE|XSI
+since      1988
+says       A child of the session leader that calls setsid() no longer has
+           the pseudo-terminal as controlling terminal (tcgetpgrp() on its
+           inherited descriptor returns -1 with ENOTTY); the leader, which
+           stays in the old session, still has it (tcgetpgrp() returns its
+           group).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED.
+test       t/005-setsid-relinquish.c
+
+assertion  XBD.11.1-interface-characteristics.006
+anchor     basedefs/V1_chap11.html#11.1.3
+class      conditional
+when       BASE|XSI
+since      1988
+says       A session leader that has closed every descriptor it had for its
+           controlling terminal, while a child still has one open, can still
+           open the ctermid() pathname and the descriptor is its controlling
+           terminal (tcgetpgrp() returns its group).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED.
+test       t/006-close-not-relinquish.c
+
+assertion  XBD.11.1-interface-characteristics.007
+anchor     basedefs/V1_chap11.html#11.1.2
+class      conditional
+when       BASE|XSI
+since      1988
+says       After the session leader acquires a pseudo-terminal, the
+           foreground process group stays the leader's group while children
+           create a process group (setpgid), another child joins it, a child
+           creates a new session and exits, and the new group's processes
+           exit.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED. The group that has no process left is covered by
+           XSH.tcgetpgrp.005.
+test       t/007-fg-unchanged.c
+
+assertion  XBD.11.1-interface-characteristics.008
+anchor     basedefs/V1_chap11.html#11.1.4
+class      conditional
+when       BASE|XSI
+since      1988
+says       A process in a background process group (not orphaned) that reads
+           its controlling terminal, with SIGTTIN neither blocked nor
+           ignored, is stopped by SIGTTIN.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED. The reader is a child of the session leader in a
+           group of its own; it is bounded by an alarm so a missing signal
+           is a FAIL, not a hang.
+test       t/008-bg-read-sigttin.c
+
+assertion  XBD.11.1-interface-characteristics.009
+anchor     basedefs/V1_chap11.html#11.1.4
+class      conditional
+when       BASE|XSI
+since      1988
+says       A process in a background process group that reads its
+           controlling terminal while the reading thread blocks SIGTTIN, and
+           again while the process ignores SIGTTIN, gets -1 with EIO, is not
+           stopped, and (blocked case) has no SIGTTIN pending.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED.
+test       t/009-bg-read-eio.c
+
+assertion  XBD.11.1-interface-characteristics.010
+anchor     basedefs/V1_chap11.html#11.1.4
+class      conditional
+when       BASE|XSI
+since      1988
+says       A process whose process group is orphaned, with SIGTTIN caught
+           (neither blocked nor ignored), that reads its controlling
+           terminal gets -1 with EIO and its SIGTTIN handler does not run.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED. The orphaned group is made by a process that forks a
+           grandchild into a group of its own and ends.
+test       t/010-orphan-read-eio.c
+timeout    40
+
+assertion  XBD.11.1-interface-characteristics.011
+anchor     basedefs/V1_chap11.html#11.1.4
+class      conditional
+when       BASE|XSI
+since      1988
+says       The session leader, in the foreground group, with TOSTOP set and
+           handlers for SIGTTIN and SIGTTOU, reads three bytes sent from the
+           manager and writes three bytes that reach the manager; neither
+           signal arrives.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED.
+test       t/011-fg-read-write.c
+
+assertion  XBD.11.1-interface-characteristics.012
+anchor     basedefs/V1_chap11.html#11.1.4
+anchor     basedefs/V1_chap11.html#11.2.5
+class      conditional
+when       BASE|XSI
+since      1988
+says       A process in a background process group (not orphaned), SIGTTOU
+           neither blocked nor ignored, that writes to its controlling
+           terminal while TOSTOP is set is stopped by SIGTTOU.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED.
+test       t/012-bg-write-tostop.c
+
+assertion  XBD.11.1-interface-characteristics.013
+anchor     basedefs/V1_chap11.html#11.1.4
+class      conditional
+when       BASE|XSI
+since      1988
+says       A process in a background process group that writes to its
+           controlling terminal while TOSTOP is clear and SIGTTOU is caught
+           writes its byte (it reaches the manager) and the handler does not
+           run.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED.
+test       t/013-bg-write-no-tostop.c
+
+assertion  XBD.11.1-interface-characteristics.014
+anchor     basedefs/V1_chap11.html#11.1.4
+class      conditional
+when       BASE|XSI
+since      1988
+says       A process in a background process group that writes to its
+           controlling terminal while TOSTOP is set, once with SIGTTOU
+           blocked and once with it ignored, writes its byte (it reaches the
+           manager), is not stopped, and (blocked case) has no SIGTTOU
+           pending.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED.
+test       t/014-bg-write-quiet.c
+
+assertion  XBD.11.1-interface-characteristics.015
+anchor     basedefs/V1_chap11.html#11.1.4
+class      conditional
+when       BASE|XSI
+since      1988
+says       A process whose process group is orphaned, with TOSTOP set and
+           SIGTTOU caught, that writes to its controlling terminal gets -1
+           with EIO and its SIGTTOU handler does not run.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED.
+test       t/015-orphan-write-eio.c
+timeout    40
+
+assertion  XBD.11.1-interface-characteristics.016
+anchor     basedefs/V1_chap11.html#11.1.4
+class      conditional
+when       BASE|XSI
+since      1988
+says       With TOSTOP clear, a process in a background process group (not
+           orphaned) that calls tcsetattr(), tcdrain(), tcflow(TCOON),
+           tcflush(TCIFLUSH) or tcsendbreak() on its controlling terminal is
+           stopped by SIGTTOU.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED. The functions' own assertions (for example
+           XSH.tcsetattr.011) do not clear TOSTOP first, so they cannot show
+           that it is ignored.
+test       t/016-setparams-ignore-tostop.c
+timeout    60
+
+assertion  XBD.11.1-interface-characteristics.017
+anchor     basedefs/V1_chap11.html#11.1.5
+class      conditional
+when       BASE|XSI
+since      1988
+says       With O_NONBLOCK clear and no input queued, read() on a pseudo-
+           terminal subsidiary in canonical mode, and in non-canonical mode
+           with MIN 1 and TIME 0, does not return until a caught signal (an
+           alarm after one second) interrupts it: -1 with EINTR.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent.
+test       t/017-read-blocks.c
+
+assertion  XBD.11.1-interface-characteristics.018
+anchor     basedefs/V1_chap11.html#11.1.5
+class      conditional
+when       BASE|XSI
+since      1988
+says       With O_NONBLOCK set and no input queued, read() on a pseudo-
+           terminal subsidiary in canonical mode returns -1 with EAGAIN.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The non-canonical case may instead return 0
+           (XBD 11.1.7), so only canonical mode is tested.
+test       t/018-nonblock-eagain.c
+
+assertion  XBD.11.1-interface-characteristics.019
+anchor     basedefs/V1_chap11.html#11.1.5
+class      conditional
+when       BASE|XSI
+since      1988
+says       With O_NONBLOCK set and the line abcdef (and a newline) queued in
+           canonical mode, read(3) returns abc and a following read(100)
+           returns the 4 bytes that are left.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. Readiness is awaited with poll().
+test       t/019-nonblock-partial.c
+
+assertion  XBD.11.1-interface-characteristics.020
+anchor     basedefs/V1_chap11.html#11.1.6
+class      conditional
+when       BASE|XSI
+since      1988
+says       In canonical mode three bytes without a newline queued at the
+           manager do not satisfy a blocking read (an alarm interrupts it:
+           -1 with EINTR); once the newline arrives the read returns the
+           whole line abc and the newline.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent.
+test       t/020-canon-line-wait.c
+
+assertion  XBD.11.1-interface-characteristics.021
+anchor     basedefs/V1_chap11.html#11.1.6
+class      conditional
+when       BASE|XSI
+since      1988
+says       With two lines queued in canonical mode a read of 100 bytes
+           returns only the first; a line xyz read with four reads of one
+           byte each gives x, y, z and the newline.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent.
+test       t/021-canon-one-line.c
+
+assertion  XBD.11.1-interface-characteristics.022
+anchor     basedefs/V1_chap11.html#11.1.6
+anchor     basedefs/V1_chap11.html#11.1.9
+class      conditional
+when       BASE|XSI
+since      1988
+says       In canonical mode with VEOL set to a chosen byte, the input ab,
+           that byte, cd and a newline is read as two lines: the first ends
+           at the EOL byte (ab, with or without the EOL byte itself) and the
+           second is cd and the newline.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. Whether the EOL byte is returned with its
+           line is not stated (EOF is said to be discarded, EOL is described
+           as a delimiter like NL), so both forms are accepted.
+           See Q-185.
+test       t/022-canon-eol.c
+
+assertion  XBD.11.1-interface-characteristics.023
+anchor     basedefs/V1_chap11.html#11.1.6
+anchor     basedefs/V1_chap11.html#11.1.9
+class      conditional
+when       BASE|XSI
+since      1988
+says       In canonical mode input abc, ERASE, d and a newline is read as
+           abd and the newline; ERASE on an empty line has no effect and is
+           not queued; ERASE after a completed line does not touch that line
+           (still unread); several ERASE characters delete no more than the
+           line holds.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent.
+test       t/023-canon-erase.c
+
+assertion  XBD.11.1-interface-characteristics.024
+anchor     basedefs/V1_chap11.html#11.1.6
+anchor     basedefs/V1_chap11.html#11.1.9
+class      conditional
+when       BASE|XSI
+since      1988
+says       In canonical mode input abc, KILL, def and a newline is read as
+           def and the newline; KILL on an empty line has no effect and is
+           not queued; KILL after a completed line does not touch that line
+           (still unread); two KILL characters in a row do no harm.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent.
+test       t/024-canon-kill.c
+
+assertion  XBD.11.1-interface-characteristics.025
+anchor     basedefs/V1_chap11.html#11.1.9
+class      conditional
+when       BASE|XSI
+since      1988
+says       In canonical mode abc followed by EOF is read as abc without a
+           newline; EOF alone at the start of a line makes read() return 0;
+           ab, EOF, cd and a newline are read as ab and then cd and the
+           newline.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent.
+test       t/025-canon-eof.c
+
+assertion  XBD.11.1-interface-characteristics.026
+anchor     basedefs/V1_chap11.html#11.1.7
+class      conditional
+when       BASE|XSI
+since      1988
+says       With ICANON clear (MIN 7, TIME 0) the seven bytes a, ERASE, b,
+           KILL, c, newline, d sent from the manager are all read back
+           unchanged in one read.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent.
+test       t/026-noncanon-no-edit.c
+
+assertion  XBD.11.1-interface-characteristics.027
+anchor     basedefs/V1_chap11.html#11.1.6
+class      conditional
+when       BASE|XSI
+since      1988
+says       When fpathconf() gives a value n of MAX_CANON for the terminal
+           (at most 4096), a canonical line of n-1 bytes including its
+           newline is read back whole.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. NOTINUSE when MAX_CANON has no limit for the
+           terminal; a value above 4096 is not tested (UNRESOLVED). The line
+           is one byte shorter than the limit so that it fits whether or not
+           the newline counts.
+test       t/027-canon-max-canon.c
+
+assertion  XBD.11.1-interface-characteristics.028
+anchor     basedefs/V1_chap11.html#11.1.5
+class      conditional
+when       BASE|XSI
+since      1988
+says       When fpathconf() gives a value n of MAX_INPUT for the terminal
+           (at most 4096), n bytes sent from the manager to a non-canonical
+           subsidiary that is not reading can all be read back unchanged.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. NOTINUSE when MAX_INPUT has no limit; a value
+           above 4096 is UNRESOLVED.
+test       t/028-max-input.c
+
+assertion  XBD.11.1-interface-characteristics.029
+anchor     basedefs/V1_chap11.html#11.1.7
+class      conditional
+when       BASE|XSI
+since      1988
+says       With MIN 4 and TIME 5 two bytes already queued are returned by a
+           read of 10 after about half a second (not at once, not never);
+           with MIN 4 and TIME 20, four queued bytes are returned at once,
+           well before the 2 s timer.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. Timing bounds are generous: 0.3 s to 4 s for
+           the expiry, under 1.5 s for the immediate case.
+test       t/029-case-a-expiry.c
+
+assertion  XBD.11.1-interface-characteristics.030
+anchor     basedefs/V1_chap11.html#11.1.7
+class      conditional
+when       BASE|XSI
+since      1988
+says       With MIN 4 and TIME 3 a read with nothing queued is not ended by
+           the timer (an alarm after one second interrupts it); with MIN 5
+           and TIME 15, four bytes sent 0.6 s apart are all returned by one
+           read, which ends about 1.5 s after the last of them.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The delays are generous (a byte is late by up
+           to 0.9 s before the result changes). A late scheduler can only
+           make this FAIL; rerun once before acting.
+test       t/030-case-a-timer.c
+timeout    40
+
+assertion  XBD.11.1-interface-characteristics.031
+anchor     basedefs/V1_chap11.html#11.1.7
+class      conditional
+when       BASE|XSI
+since      1988
+says       With MIN 3 and TIME 0, two queued bytes do not satisfy a read (an
+           alarm after one second interrupts it: -1 with EINTR); after a
+           third byte the read returns abc.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent.
+test       t/031-case-b.c
+
+assertion  XBD.11.1-interface-characteristics.032
+anchor     basedefs/V1_chap11.html#11.1.7
+class      conditional
+when       BASE|XSI
+since      1988
+says       With MIN 0 and TIME 5 a read with nothing queued returns 0 after
+           about half a second; with MIN 0 and TIME 20 a read returns the
+           single byte that arrives after 0.2 s, long before the 2 s timer.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. Bounds: 0.4 s to 3 s for the empty read,
+           under 1.5 s for the byte.
+test       t/032-case-c.c
+
+assertion  XBD.11.1-interface-characteristics.033
+anchor     basedefs/V1_chap11.html#11.1.7
+class      conditional
+when       BASE|XSI
+since      1988
+says       With MIN 0 and TIME 0 a read with nothing queued returns 0 at
+           once; with three bytes queued a read of 2 returns 2, a read of 10
+           returns the remaining 1 and the next read returns 0.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. Readiness is awaited with poll() before
+           reading data.
+test       t/033-case-d.c
+
+assertion  XBD.11.1-interface-characteristics.034
+anchor     basedefs/V1_chap11.html#11.1.7
+class      conditional
+when       BASE|XSI
+since      1988
+says       With MIN 0 and TIME 20 a read when one byte is already queued
+           returns that byte in under one second (not after the 2 s timer).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent.
+test       t/034-case-c-buffered.c
+
+assertion  XBD.11.1-interface-characteristics.035
+anchor     basedefs/V1_chap11.html#11.1.9
+class      conditional
+when       BASE|XSI
+since      1988
+says       With ISIG set, the INTR character sent from the manager makes
+           SIGINT arrive once at the session leader and once at a child in
+           its (foreground) process group, not at a child in another process
+           group of the session, and the INTR byte itself is not read (a
+           byte sent after it is the only one read).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED. The handlers are installed before the children are
+           forked, so all of them have it; each handler writes a letter to a
+           pipe.
+test       t/035-intr.c
+timeout    40
+
+assertion  XBD.11.1-interface-characteristics.036
+anchor     basedefs/V1_chap11.html#11.1.9
+class      conditional
+when       BASE|XSI
+since      1988
+says       With ISIG set, the QUIT character sent from the manager makes
+           SIGQUIT arrive once at the session leader and once at a child in
+           its (foreground) process group, not at a child in another process
+           group of the session, and the QUIT byte itself is not read (a
+           byte sent after it is the only one read).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED. The handlers are installed before the children are
+           forked, so all of them have it; each handler writes a letter to a
+           pipe.
+test       t/036-quit.c
+timeout    40
+
+assertion  XBD.11.1-interface-characteristics.037
+anchor     basedefs/V1_chap11.html#11.1.9
+class      conditional
+when       BASE|XSI
+since      1988
+says       With ISIG set, the SUSP character sent from the manager makes
+           SIGTSTP arrive once at the session leader and once at a child in
+           its (foreground) process group, not at a child in another process
+           group of the session, and the SUSP byte itself is not read (a
+           byte sent after it is the only one read).
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED. The handlers are installed before the children are
+           forked, so all of them have it; each handler writes a letter to a
+           pipe.
+test       t/037-susp.c
+timeout    40
+
+assertion  XBD.11.1-interface-characteristics.038
+anchor     basedefs/V1_chap11.html#11.1.9
+class      conditional
+when       BASE|XSI
+since      1988
+says       Two different sets of values for the seven characters INTR, QUIT,
+           ERASE, KILL, EOF, EOL and SUSP can be set on a canonical pseudo-
+           terminal with tcsetattr() and are read back unchanged by
+           tcgetattr().
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The values avoid the NL and CR bytes and the
+           usual START and STOP bytes.
+test       t/038-chars-changeable.c
+
+assertion  XBD.11.1-interface-characteristics.039
+anchor     basedefs/V1_chap11.html#11.1.9
+class      conditional
+when       XSI
+since      1988
+says       XSI: with ICANON and IEXTEN set, the input a, backslash, ERASE, b
+           and a newline is read as one line that still contains the ERASE
+           byte (and a and b; the backslash may be dropped); the same for
+           KILL, and for EOF, which does not end the read early.
+note       The escape is an XSI feature (shaded text). The page does not say
+           whether the backslash itself stays in the data, so only the facts
+           that a, the special byte and b are all there, in one line, are
+           required. XSI only for the pseudo-terminal set-up (posix_openpt()
+           and its companions are XSI); the requirement itself is Base. A
+           set-up that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent.
+           See Q-186.
+test       t/039-iexten-escape.c
+
+assertion  XBD.11.1-interface-characteristics.040
+anchor     basedefs/V1_chap11.html#11.1.9
+class      conditional
+when       BASE|XSI
+since      1988
+says       With ICANON, ISIG, IEXTEN, IXON, IXOFF, ISTRIP, ICRNL, INLCR,
+           IGNCR, PARMRK and INPCK clear and CS8 set, all 256 byte values
+           sent from the manager are read back unchanged and in order.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. UNRESOLVED when the terminal does not keep
+           CS8 (eight bits per byte cannot be assumed).
+test       t/040-iexten-clear-raw.c
+
+assertion  XBD.11.1-interface-characteristics.041
+anchor     basedefs/V1_chap11.html#11.1.10
+anchor     functions/close.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2001
+says       XSI: when the test process closes the last manager descriptor,
+           the session leader that has the subsidiary side as controlling
+           terminal (CLOCAL clear, SIGHUP caught) receives SIGHUP.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED. Closing the last manager descriptor is how a pseudo-
+           terminal disconnects (XSH close()). The leader is a child of the
+           test process, so the test process holds the only manager
+           descriptor; CLOCAL is cleared first where the terminal allows it.
+test       t/041-hup-sighup.c
+
+assertion  XBD.11.1-interface-characteristics.042
+anchor     basedefs/V1_chap11.html#11.1.10
+class      conditional
+when       XSI
+since      2001
+says       XSI: when the test process closes the last manager descriptor,
+           the session leader, which has not changed the action for SIGHUP,
+           is terminated by SIGHUP within 5 s.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The controlling terminal is acquired by
+           opening the subsidiary side in a session leader; how a terminal
+           is acquired is implementation-defined, so a refusal is
+           UNRESOLVED. Closing the last manager descriptor is how a pseudo-
+           terminal disconnects (XSH close()). The leader is a child of the
+           test process, so the test process holds the only manager
+           descriptor; CLOCAL is cleared first where the terminal allows it.
+test       t/042-hup-terminates.c
+
+assertion  XBD.11.1-interface-characteristics.043
+anchor     basedefs/V1_chap11.html#11.1.10
+class      disputed
+when       XSI
+says       XSI: after the test process closes the last manager descriptor
+           and the session leader ignores SIGHUP, a read of the subsidiary
+           side by the leader returns 0 (end-of-file), or -1 with EIO when
+           the EIO condition of read() also exists; it does not wait and
+           returns no data.
+note       disputed (new): the text speaks of a modem disconnect detected by
+           the terminal interface and does not say that closing the manager
+           side of a pseudo-terminal is one, although the page of close()
+           makes it send the same SIGHUP and its rationale wants pseudo-
+           terminals to behave as like real ones as possible. The leader's
+           group is orphaned and, with the hang-up, no group is the
+           foreground group, so the EIO condition may exist and either
+           result is accepted. XSI only for the pseudo-terminal set-up
+           (posix_openpt() and its companions are XSI); the requirement
+           itself is Base. A set-up that is not available is UNRESOLVED, or
+           NOTINUSE when the facility is absent. The controlling terminal is
+           acquired by opening the subsidiary side in a session leader; how
+           a terminal is acquired is implementation-defined, so a refusal is
+           UNRESOLVED. Closing the last manager descriptor is how a pseudo-
+           terminal disconnects (XSH close()). The leader is a child of the
+           test process, so the test process holds the only manager
+           descriptor; CLOCAL is cleared first where the terminal allows it.
+           See Q-184.
+test       t/043-hup-read-eof.c
+
+assertion  XBD.11.1-interface-characteristics.044
+anchor     basedefs/V1_chap11.html#11.1.10
+class      disputed
+when       XSI
+says       XSI: after the test process closes the last manager descriptor
+           and the session leader ignores SIGHUP, two writes to the
+           subsidiary side by the leader both return -1 with EIO.
+note       disputed (new): as for the read after a hang-up, the text speaks
+           of a modem disconnect and does not say that closing the manager
+           side of a pseudo-terminal is one (see the note of the read
+           assertion). XSI only for the pseudo-terminal set-up
+           (posix_openpt() and its companions are XSI); the requirement
+           itself is Base. A set-up that is not available is UNRESOLVED, or
+           NOTINUSE when the facility is absent. The controlling terminal is
+           acquired by opening the subsidiary side in a session leader; how
+           a terminal is acquired is implementation-defined, so a refusal is
+           UNRESOLVED. Closing the last manager descriptor is how a pseudo-
+           terminal disconnects (XSH close()). The leader is a child of the
+           test process, so the test process holds the only manager
+           descriptor; CLOCAL is cleared first where the terminal allows it.
+           See Q-184.
+test       t/044-hup-write-eio.c
+
+assertion  XBD.11.1-interface-characteristics.045
+anchor     basedefs/V1_chap11.html#11.1.11
+class      conditional
+when       BASE|XSI
+since      1988
+says       After the subsidiary side writes xyz and the manager sends abc
+           (unread), closing the only subsidiary descriptor leaves xyz
+           readable at the manager, and after the subsidiary side is opened
+           again no byte of abc can be read from it.
+note       XSI only for the pseudo-terminal set-up (posix_openpt() and its
+           companions are XSI); the requirement itself is Base. A set-up
+           that is not available is UNRESOLVED, or NOTINUSE when the
+           facility is absent. The terminal's parameters may be reset by the
+           last close, so the mode is set again after the reopen.
+test       t/045-close-flush.c

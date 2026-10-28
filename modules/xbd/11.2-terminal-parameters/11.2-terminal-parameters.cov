@@ -1,0 +1,220 @@
+# 11.2-terminal-parameters.cov - every requirement unit in XBD 11.2.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Header rows (names, distinct bits, values) are covered by XBD.termios.h. Behaviour is tested on a
+# private pseudo-terminal (XSI); control modes, parity, break, baud rate, hang-up on close and the
+# timed delays cannot be observed or are left unspecified there, and are classified accordingly.
+
+11.2:1731e691     app
+11.2:557ed596     app
+11.2:d61aaf05     app
+11.2:2c2cae6f     XBD.11.2-terminal-parameters.001
+11.2:4113bb77     XBD.11.2-terminal-parameters.001
+11.2:2919e9a8     XBD.11.2-terminal-parameters.001
+11.2:ad390a8b     XBD.11.2-terminal-parameters.001
+11.2:9b2255d0     XBD.11.2-terminal-parameters.001
+11.2:0985481e     XBD.11.2-terminal-parameters.001 XBD.termios.h.002
+11.2:d063f317     XBD.termios.h.001
+11.2:0d5c4d94     XBD.termios.h.001
+11.2:dd78e1e1     XBD.termios.h.004
+11.2:0b487ad8     XBD.termios.h.004
+11.2:63882cab     XBD.termios.h.004
+11.2:abc61d2d     XBD.termios.h.004 XBD.11.2-terminal-parameters.002 XBD.11.2-terminal-parameters.003
+11.2:f4f95274     XBD.termios.h.004
+11.2:aa473972     XBD.termios.h.004 XBD.11.2-terminal-parameters.005
+11.2:0699399f     XBD.termios.h.004
+11.2:c9d0a443     XBD.termios.h.004 XBD.11.2-terminal-parameters.004
+11.2:61eb5a3d     XBD.termios.h.004
+11.2:68f2fa1e     XBD.termios.h.004 XBD.11.2-terminal-parameters.006
+11.2:6324cd04     XBD.termios.h.004 XBD.11.2-terminal-parameters.009
+11.2:ab9a0715     XBD.termios.h.004
+11.2:ddbf3458     XBD.termios.h.004 XBD.11.2-terminal-parameters.007 XBD.11.2-terminal-parameters.008
+11.2:51ff4895     XBD.termios.h.004
+11.2:e094f773     untestable  a break condition cannot be injected through a pseudo-terminal
+11.2:f6633d43     untestable  a break condition cannot be injected through a pseudo-terminal
+11.2:220a1a7b     impl   definition of a break condition outside serial lines is implementation-defined
+11.2:ebd1020f     untestable  a break condition cannot be injected through a pseudo-terminal
+11.2:0f87598b     untestable  a break condition cannot be injected through a pseudo-terminal
+11.2:ebb1bef0     untestable  a break condition cannot be injected through a pseudo-terminal
+11.2:1e5fb1a3     untestable  a pseudo-terminal need not honour non-default control modes (the page says so) and parity or framing errors cannot be injected through it
+11.2:9e30d10f     untestable  a pseudo-terminal need not honour non-default control modes (the page says so) and parity or framing errors cannot be injected through it
+11.2:5c51796d     todo   doubling of a valid 0xff byte with PARMRK set: needs a test that sets PARMRK on a pseudo-terminal and reads back 0xff 0xff; whether PARMRK is honoured there is unspecified, so the verdict would need a NOTINUSE rule
+11.2:ae5c7f36     untestable  a pseudo-terminal need not honour non-default control modes (the page says so) and parity or framing errors cannot be injected through it
+11.2:2b44910f     untestable  a pseudo-terminal need not honour non-default control modes (the page says so) and parity or framing errors cannot be injected through it
+11.2:4be8135f     untestable  a pseudo-terminal need not honour non-default control modes (the page says so) and parity or framing errors cannot be injected through it
+11.2:00346d26     none   remark on the independence of two settings
+11.2:02f7ba91     untestable  a pseudo-terminal need not honour non-default control modes (the page says so) and parity or framing errors cannot be injected through it
+11.2:9740a8b5     XBD.11.2-terminal-parameters.006
+11.2:0cc0304f     XBD.11.2-terminal-parameters.004
+11.2:fcf51b76     XBD.11.2-terminal-parameters.005
+11.2:c571c824     XBD.11.2-terminal-parameters.002 XBD.11.2-terminal-parameters.003
+11.2:e04806c2     XBD.11.2-terminal-parameters.009
+11.2:5ddaacbb     XBD.11.2-terminal-parameters.007
+11.2:8ee203c1     XBD.11.2-terminal-parameters.007
+11.2:b545267d     XBD.11.2-terminal-parameters.007 XBD.11.2-terminal-parameters.008
+11.2:4f858e7b     XBD.11.2-terminal-parameters.008
+11.2:2b22e41d     untestable  the STOP byte is sent only when the input queue is about to overflow, a capacity and a condition the page leaves implementation-defined
+11.2:40c14b78     untestable  overflow of the input queue cannot be forced portably: the limit is unknown and what happens beyond it is implementation-defined (11.1:7e41ab43)
+11.2:c7c1b1c6     impl   conditions for sending STOP and START are implementation-defined
+11.2:0cd8f625     impl   initial input control value is implementation-defined
+11.2:75581b47     XBD.termios.h.005
+11.2:6365823a     XBD.termios.h.005
+11.2:155086f4     XBD.termios.h.005 XBD.11.2-terminal-parameters.010 XBD.11.2-terminal-parameters.011
+11.2:0c0a0203     XBD.termios.h.005 XBD.11.2-terminal-parameters.011
+11.2:25693aa2     XBD.termios.h.005 XBD.11.2-terminal-parameters.012
+11.2:c11ea26d     XBD.termios.h.005 XBD.11.2-terminal-parameters.013 XBD.11.2-terminal-parameters.014
+11.2:d0c2df5f     XBD.termios.h.005 XBD.11.2-terminal-parameters.014
+11.2:62dc6535     XBD.termios.h.005 XBD.11.2-terminal-parameters.016
+11.2:0519556c     XBD.termios.h.005 XBD.11.2-terminal-parameters.016
+11.2:75e3b354     XBD.termios.h.006
+11.2:605476cf     XBD.termios.h.006
+11.2:93eac9eb     XBD.termios.h.006 XBD.11.2-terminal-parameters.016
+11.2:e8eb76bb     XBD.termios.h.006
+11.2:91f8d0a2     XBD.termios.h.006
+11.2:bf7d0115     XBD.termios.h.006
+11.2:8ac00fcd     XBD.termios.h.006 XBD.11.2-terminal-parameters.016
+11.2:3b4eb0be     XBD.termios.h.006
+11.2:4dcd6c19     XBD.termios.h.006
+11.2:1f59b21b     XBD.termios.h.006
+11.2:ce4edeb3     XBD.termios.h.006
+11.2:6178a140     XBD.termios.h.006 XBD.11.2-terminal-parameters.016
+11.2:51320b24     XBD.termios.h.006 XBD.11.2-terminal-parameters.015
+11.2:f7155d29     XBD.termios.h.006
+11.2:c0dda64a     XBD.termios.h.006
+11.2:a9e48d3e     XBD.termios.h.006 XBD.11.2-terminal-parameters.016
+11.2:991ff9fe     XBD.termios.h.006
+11.2:88038f0c     XBD.termios.h.006
+11.2:f9c6f128     XBD.termios.h.006
+11.2:dfea8727     XBD.termios.h.006
+11.2:554042b2     XBD.termios.h.006
+11.2:a6b02b3a     XBD.termios.h.006
+11.2:84d55fbd     XBD.11.2-terminal-parameters.010 XBD.11.2-terminal-parameters.011
+11.2:7954083e     XBD.11.2-terminal-parameters.011
+11.2:a8d95229     XBD.11.2-terminal-parameters.012
+11.2:0b586966     XBD.11.2-terminal-parameters.013 XBD.11.2-terminal-parameters.014
+11.2:04fcc39e     XBD.11.2-terminal-parameters.014
+11.2:8496f4e3     XBD.11.2-terminal-parameters.014
+11.2:077452dc     XBD.11.2-terminal-parameters.013
+11.2:a4570006     untestable  a delay of about so many seconds is neither required to be exact nor observable apart from fill characters
+11.2:3acae9eb     XBD.11.2-terminal-parameters.016
+11.2:48cc9758     XBD.11.2-terminal-parameters.016
+11.2:8f4bf1ec     none   remark on usefulness
+11.2:a006aba2     XBD.11.2-terminal-parameters.016
+11.2:b428c158     untestable  a delay of about so many seconds is neither required to be exact nor observable apart from fill characters
+11.2:55802ec5     untestable  a delay of about so many seconds is neither required to be exact nor observable apart from fill characters
+11.2:12826d96     todo   the carriage-return delay replacing the newline delay under ONLRET: needs OFILL with NL1 set and CR0 and counting fill characters; not written
+11.2:e9551c53     XBD.11.2-terminal-parameters.016
+11.2:af6acf25     partial XBD.11.2-terminal-parameters.016  # CR1 (column dependent) and the 0.15 second type 3; only CR2 fill characters are counted
+11.2:a1d89a59     partial XBD.11.2-terminal-parameters.016  # CR1 giving two fill characters; only CR2 giving four is checked
+11.2:e0bfd116     untestable  the delay depends on the column and its length is not stated
+11.2:71153491     untestable  a delay of about so many seconds is neither required to be exact nor observable apart from fill characters
+11.2:a95f1798     XBD.11.2-terminal-parameters.015
+11.2:ebacbff5     XBD.11.2-terminal-parameters.016
+11.2:18760157     untestable  a delay of about so many seconds is neither required to be exact nor observable apart from fill characters
+11.2:435318dc     XBD.11.2-terminal-parameters.016
+11.2:f65bd232     none   remark on delays
+11.2:4e138c06     impl   initial output control value is implementation-defined
+11.2:0397e78b     XBD.termios.h.007
+11.2:c8004086     impl   not every control mode need be supported
+11.2:dd5736a9     impl   unspecified for a pseudo-terminal
+11.2:98280b6b     XBD.termios.h.007 XBD.11.1-interface-characteristics.001
+11.2:f38b2bd4     XBD.termios.h.007
+11.2:c4814571     XBD.termios.h.008
+11.2:9cf05724     XBD.termios.h.008
+11.2:9e4eada8     XBD.termios.h.008
+11.2:8fef98b1     XBD.termios.h.008
+11.2:5f83ba32     XBD.termios.h.008
+11.2:2dc0e15f     XBD.termios.h.007
+11.2:aca03127     XBD.termios.h.007
+11.2:4046b65b     XBD.termios.h.007
+11.2:37145c6b     XBD.termios.h.007
+11.2:3111e8cd     XSH.cfsetospeed.002
+11.2:c0692a60     XBD.termios.h.010
+11.2:156a5f41     impl   not every baud rate need be supported
+11.2:2f5a1f04     impl   a pseudo-terminal need not honour the baud rates
+11.2:77e63618     none   note on terminology
+11.2:0513cf95     none   note on terminology
+11.2:fa1ba851     none   note on terminology
+11.2:e546b366     XBD.termios.h.010
+11.2:7706e5e3     XBD.termios.h.010
+11.2:581adb2f     XBD.termios.h.010
+11.2:2509df65     XBD.termios.h.010
+11.2:2aa7e8b9     XBD.termios.h.010
+11.2:659e403e     XBD.termios.h.010
+11.2:3ff682a8     XBD.termios.h.010
+11.2:d6f07616     XBD.termios.h.010
+11.2:d743b51f     XSH.cfsetospeed.002
+11.2:fe100187     XSH.cfsetospeed.002
+11.2:105e6d22     untestable  a pseudo-terminal need not honour non-default control modes (the page says so) and parity or framing errors cannot be injected through it
+11.2:695b8673     impl   the other bits are unspecified without ISTRIP
+11.2:9595f9c7     XBD.11.2-terminal-parameters.006
+11.2:d6f83906     untestable  a pseudo-terminal need not honour non-default control modes (the page says so) and parity or framing errors cannot be injected through it
+11.2:bba8e2c1     untestable  a pseudo-terminal need not honour non-default control modes (the page says so) and parity or framing errors cannot be injected through it
+11.2:d42346d9     none   example
+11.2:80e1a59b     untestable  a pseudo-terminal need not honour non-default control modes (the page says so) and parity or framing errors cannot be injected through it
+11.2:92362b89     untestable  a pseudo-terminal need not honour non-default control modes (the page says so) and parity or framing errors cannot be injected through it
+11.2:b5881f79     untestable  a pseudo-terminal need not honour non-default control modes (the page says so) and parity or framing errors cannot be injected through it
+11.2:328d6432     untestable  no serial line or modem exists behind a pseudo-terminal
+11.2:813ce2a1     untestable  no serial line or modem exists behind a pseudo-terminal
+11.2:cd3db277     untestable  no serial line or modem exists behind a pseudo-terminal
+11.2:5810952c     untestable  no serial line or modem exists behind a pseudo-terminal
+11.2:be1d263c     untestable  no serial line or modem exists behind a pseudo-terminal
+11.2:e9c40fad     XBD.11.1-interface-characteristics.001
+11.2:d2925a38     impl   some modes may be ignored on a line that is not a serial connection
+11.2:6f9c8909     impl   initial hardware control value is implementation-defined
+11.2:fd1e1d6a     none   introduction of the local modes
+11.2:26eb77b4     XBD.termios.h.009
+11.2:8a396db1     XBD.termios.h.009
+11.2:507bab0c     XBD.termios.h.009 XBD.11.2-terminal-parameters.017
+11.2:8177dc81     XBD.termios.h.009 XBD.11.2-terminal-parameters.018
+11.2:34ef1c67     XBD.termios.h.009 XBD.11.2-terminal-parameters.019
+11.2:30ba4a4c     XBD.termios.h.009 XBD.11.2-terminal-parameters.020
+11.2:e2eef90b     XBD.termios.h.009 XBD.11.1-interface-characteristics.020
+11.2:8bbe4e6c     XBD.termios.h.009 XBD.11.1-interface-characteristics.039 XBD.11.1-interface-characteristics.040
+11.2:792a597d     XBD.termios.h.009 XBD.11.2-terminal-parameters.021 XBD.11.1-interface-characteristics.035
+11.2:94aed786     XBD.termios.h.009 XBD.11.2-terminal-parameters.022
+11.2:aa87ec54     XBD.termios.h.009 XBD.11.1-interface-characteristics.012
+11.2:79c888a7     XBD.11.2-terminal-parameters.017
+11.2:84952822     XBD.11.2-terminal-parameters.017
+11.2:98fcef06     XBD.11.2-terminal-parameters.018
+11.2:71c4e26c     impl   may echo an indication or do nothing
+11.2:03021c38     XBD.11.2-terminal-parameters.019
+11.2:f90294e3     XBD.11.2-terminal-parameters.020
+11.2:f1dfc36d     XBD.11.1-interface-characteristics.020 XBD.11.1-interface-characteristics.023
+11.2:f6385e12     XBD.11.1-interface-characteristics.020 XBD.11.1-interface-characteristics.023 XBD.11.1-interface-characteristics.024
+11.2:4ca6367b     XBD.11.1-interface-characteristics.026
+11.2:dcde5913     XBD.11.1-interface-characteristics.029 XBD.11.1-interface-characteristics.031
+11.2:dc5afa79     XBD.11.1-interface-characteristics.029 XBD.11.1-interface-characteristics.032
+11.2:c1549d9b     none   cross-reference
+11.2:6e6fe2b0     impl   the implementation-defined functions are not named
+11.2:2f47bf15     impl   interaction with other modes is implementation-defined
+11.2:16784b72     XBD.11.1-interface-characteristics.040
+11.2:a71fb139     XBD.11.1-interface-characteristics.035 XBD.11.1-interface-characteristics.036 XBD.11.1-interface-characteristics.037
+11.2:a5c15e56     XBD.11.1-interface-characteristics.035 XBD.11.1-interface-characteristics.036 XBD.11.1-interface-characteristics.037
+11.2:8bcd6c12     XBD.11.2-terminal-parameters.021
+11.2:4e5b89de     XBD.11.2-terminal-parameters.021
+11.2:e2aca70f     XBD.11.2-terminal-parameters.022
+11.2:87e8fbf3     XBD.11.1-interface-characteristics.012
+11.2:ae3151be     XBD.11.1-interface-characteristics.012
+11.2:3db0e71f     XBD.11.1-interface-characteristics.011 XBD.11.1-interface-characteristics.013
+11.2:6ad0451f     XBD.11.1-interface-characteristics.014
+11.2:ecc47f28     impl   initial local control value is implementation-defined
+11.2:88d627fe     XBD.11.1-interface-characteristics.038 XBD.termios.h.003
+11.2:a821d71b     XBD.termios.h.003
+11.2:81dcfbba     XBD.termios.h.003 XBD.11.1-interface-characteristics.025
+11.2:0d7a967a     XBD.termios.h.003 XBD.11.1-interface-characteristics.022
+11.2:4d6ab9c4     XBD.termios.h.003 XBD.11.1-interface-characteristics.023
+11.2:f5131eda     XBD.termios.h.003 XBD.11.1-interface-characteristics.035
+11.2:d02dbeee     XBD.termios.h.003 XBD.11.1-interface-characteristics.024
+11.2:bf5602ed     XBD.termios.h.003 XBD.11.1-interface-characteristics.031
+11.2:38e0034d     XBD.termios.h.003 XBD.11.1-interface-characteristics.036
+11.2:c0f78468     XBD.termios.h.003 XBD.11.1-interface-characteristics.037
+11.2:81c17993     XBD.termios.h.003 XBD.11.1-interface-characteristics.032
+11.2:049a33ee     XBD.termios.h.003 XBD.11.2-terminal-parameters.007
+11.2:e9580d6e     XBD.termios.h.003 XBD.11.2-terminal-parameters.007
+11.2:6fabb44d     XBD.termios.h.003
+11.2:5769d6d7     impl   an implementation that cannot change START and STOP may ignore them (B25 checks only what tcgetattr returns)
+11.2:b6a57a4f     impl   initial values of the control characters are implementation-defined
+11.2:1f2383d9     XBD.11.2-terminal-parameters.023
+11.2:fd654077     XBD.11.2-terminal-parameters.024
+11.2:3830670c     none   page navigation link, not a requirement
