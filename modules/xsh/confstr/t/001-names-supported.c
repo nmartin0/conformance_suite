@@ -236,8 +236,9 @@ static void note_missing(void)
 
 int main(void)
 {
-	size_t i, n;
+	size_t i, j, n, m;
 	int e;
+	char buf[64];
 
 	pc_begin("XSH.confstr.001");
 	note_missing();
@@ -248,6 +249,21 @@ int main(void)
 		e = errno;
 		pc_check(n > 0 || e == SENTINEL, "confstr(%s, NULL, 0) returned 0 with errno %s: the name is not supported",
 			 vars[i].name, pc_errname(e));
+		if (n == 0)
+			continue;
+		/* A value was reported: the size it names is that of the string the call then stores (cut to the buffer, with a terminator). */
+		for (j = 0; j < sizeof buf; j++)
+			buf[j] = 'x';
+		m = confstr(vars[i].cs, buf, sizeof buf);
+		pc_check(m == n, "confstr(%s, buf, %zu) returned %zu, but confstr(%s, NULL, 0) returned %zu",
+			 vars[i].name, sizeof buf, m, vars[i].name, n);
+		if (m == n && n <= sizeof buf) {
+			for (j = 0; j < sizeof buf && buf[j] != '\0'; j++)
+				;
+			pc_check(j == n - 1, "confstr(%s): the string stored is not %zu bytes with its terminator", vars[i].name, n);
+		}
+		else if (m == n)
+			pc_check(buf[sizeof buf - 1] == '\0', "confstr(%s): the truncated string is not terminated", vars[i].name);
 	}
 	pc_pass();
 }

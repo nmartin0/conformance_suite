@@ -12,6 +12,12 @@ int main(void)
 {
 	pc_begin("XSH.strpbrk.002");
 	pc_test();
+	/* control: a byte of the set that occurs is found */
+	{
+		static const char s[] = "abc";
+
+		pc_check(f_strpbrk(s, "xc") == s + 2, "(\"abc\", \"xc\") did not point at the c");
+	}
 	pc_check(f_strpbrk("abc", "xyz") == NULL, "(\"abc\", \"xyz\") did not give null");
 	pc_check(f_strpbrk("abc", "") == NULL, "(\"abc\", \"\") did not give null");
 	pc_check(f_strpbrk("", "abc") == NULL, "(\"\", \"abc\") did not give null");

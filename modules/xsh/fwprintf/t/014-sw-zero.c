@@ -31,12 +31,15 @@ int main(void)
 	pc_begin("XSH.fwprintf.014");
 	{
 		wchar_t buf[8];
-		int r, i;
+		int r, i, e;
 
 		wmemset(buf, L'#', 8);
 		pc_test();
+		errno = 0;
 		r = swprintf(buf, 0, L"abc");
+		e = errno;
 		pc_check(r < 0, "swprintf() with n 0 returned %d, expected a negative value", r);
+		pc_check(e == EOVERFLOW, "swprintf() with n 0: errno is %s, expected EOVERFLOW", pc_errname(e));
 		for (i = 0; i < 8; i++)
 			pc_check(buf[i] == L'#', "element %d was changed with n 0", i);
 	}

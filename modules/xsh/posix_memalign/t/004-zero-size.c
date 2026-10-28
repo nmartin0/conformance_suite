@@ -21,8 +21,10 @@ int main(void)
 
 		a[i] = sentinel;
 		rc = posix_memalign(&a[i], 16, 0);
-		if (rc != 0)
+		if (rc != 0) {
+			pc_check(rc > 0, "posix_memalign() returned %d, not an error number", rc);
 			pc_check(a[i] == sentinel || a[i] == NULL, "non-zero return %d but *memptr was set to %p", rc, a[i]);
+		}
 		else if (a[i] == sentinel)
 			pc_fail("returned 0 but *memptr was not set");
 	}

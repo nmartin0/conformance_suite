@@ -21,6 +21,13 @@ int main(void)
 		(void)wctype("alpha");
 		h2 = wctype(nm[k]);
 		pc_check(h1 != (wctype_t)0 && h2 != (wctype_t)0, "wctype(\"%s\") returned 0", nm[k]);
+		/* both handles are usable: they separate a member of the class from a character outside it */
+		for (i = 0; i < 128 && !wc_in(k, i); i++)
+			;
+		pc_check(i < 128 && iswctype(wc_ch[i], h1) != 0 && iswctype(wc_ch[i], h2) != 0, "the %s handles gave 0 for a member", nm[k]);
+		for (i = 0; i < 128 && wc_in(k, i); i++)
+			;
+		pc_check(i < 128 && iswctype(wc_ch[i], h1) == 0 && iswctype(wc_ch[i], h2) == 0, "the %s handles gave non-zero for a non-member", nm[k]);
 		for (i = 0; i < 128; i++)
 			pc_check((iswctype(wc_ch[i], h1) != 0) == (iswctype(wc_ch[i], h2) != 0), "two handles for \"%s\" disagree at position %d", nm[k], i);
 	}

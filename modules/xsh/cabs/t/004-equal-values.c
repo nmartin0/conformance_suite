@@ -44,6 +44,8 @@ int main(void)
 			w_cabs(ty, x, y, &a, &u);
 			w_cabs(ty, y, x, &b, &u);
 			w_cabs(ty, x, -y, &c, &u);
+			if (i < 4)
+				pc_check(!isnan(a), "cabs [%s]: (%Lg, %Lg) at an ordinary point gives a NaN", ct_tyname[ty], x, y);
 			pc_check(ct_same(a, b) && ct_same(a, c), "cabs [%s]: (%Lg, %Lg) gives %Lg, swapped parts give %Lg, negated imaginary part gives %Lg",
 				ct_tyname[ty], x, y, a, b, c);
 		}

@@ -17,6 +17,9 @@ int main(void)
 			bit = 1 << b;
 	pc_check(bit != 0, "every flag bit is taken");
 	pc_test();
+	/* control: the same call without the extra bit succeeds, so EAI_BADFLAGS below is caused by the bit */
+	rc = gai_rc("127.0.0.1", "80", NUMH, AF_INET, SOCK_STREAM, 0);
+	pc_check(rc == 0, "the call without the extra flag bit failed: %s", gai_strerror(rc));
 	rc = gai_rc("127.0.0.1", "80", NUMH | bit, AF_INET, SOCK_STREAM, 0);
 	pc_check(rc == EAI_BADFLAGS, "flags with unlisted bit %#x gave %d (%s), expected EAI_BADFLAGS", (unsigned)bit, rc, gai_strerror(rc));
 	pc_pass();

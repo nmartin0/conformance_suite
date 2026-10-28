@@ -16,6 +16,8 @@ int main(void)
 
 	pc_begin("XSH.wcspbrk.002");
 	pc_test();
+	/* control: a code of the set that occurs is found */
+	pc_check(wcspbrk(abc, a) == abc, "wcspbrk(\"abc\", \"a\") did not point at the a");
 	r[0] = wcspbrk(abc, xyz);
 	r[1] = wcspbrk(abc, none);
 	r[2] = wcspbrk(none, a);

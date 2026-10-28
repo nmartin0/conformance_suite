@@ -39,6 +39,8 @@ int main(void)
 	for (i = 0; i < N; i++)
 		mq[i] = ss[i] = hm[i] = -1;
 	(void)atexit(cleanup);
+	pc_test();
+	/* The get functions are called after pc_test(): a failure is UNRESOLVED, never PASS. */
 	for (i = 0; i < N; i++) {
 		mq[i] = msgget(IPC_PRIVATE, IPC_CREAT | IPC_EXCL | 0600);
 		NEED(mq[i] >= 0, "msgget failed: %s", pc_errname(errno));
@@ -47,7 +49,6 @@ int main(void)
 		hm[i] = shmget(IPC_PRIVATE, 4096, IPC_CREAT | IPC_EXCL | 0600);
 		NEED(hm[i] >= 0, "shmget failed: %s", pc_errname(errno));
 	}
-	pc_test();
 	for (i = 0; i < N; i++) {
 		pc_check(mq[i] > 0, "message queue identifier %d is not positive", mq[i]);
 		pc_check(ss[i] > 0, "semaphore set identifier %d is not positive", ss[i]);

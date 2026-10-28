@@ -19,6 +19,13 @@ int main(void)
 	d[1] = L'b';
 	d[2] = 0;
 	pc_test();
+	/* control: with n 2 the two codes are appended (on a copy), so n 0 leaving d alone is the function's doing */
+	{
+		wchar_t c[8] = { L'a', L'b', 0 };
+
+		(void)wcsncat(c, src, 2);
+		pc_check(c[2] == L'c' && c[3] == L'd' && c[4] == 0, "wcsncat() with n 2 did not append the two codes");
+	}
 	(void)wcsncat(d, src, 0);
 	pc_check(d[0] == L'a' && d[1] == L'b', "the string was changed");
 	pc_check(d[2] == 0, "the null code at index 2 is gone");

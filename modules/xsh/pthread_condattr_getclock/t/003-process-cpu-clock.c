@@ -24,9 +24,9 @@ int main(void)
 	NEED(clock_getcpuclockid(getpid(), &id) == 0, "clock_getcpuclockid failed");
 	pc_test();
 	r = pthread_condattr_setclock(&a, CLOCK_PROCESS_CPUTIME_ID);
-	pc_check(r != 0, "pthread_condattr_setclock(CLOCK_PROCESS_CPUTIME_ID) returned 0, expected a failure");
+	pc_check(r > 0, "pthread_condattr_setclock(CLOCK_PROCESS_CPUTIME_ID) returned %d, expected an error number (a positive value)", r);
 	r = pthread_condattr_setclock(&a, id);
-	pc_check(r != 0, "pthread_condattr_setclock() with the process CPU-time clock from clock_getcpuclockid() returned 0, expected a failure");
+	pc_check(r > 0, "pthread_condattr_setclock() with the process CPU-time clock from clock_getcpuclockid() returned %d, expected an error number (a positive value)", r);
 	(void)pthread_condattr_destroy(&a);
 	pc_pass();
 }

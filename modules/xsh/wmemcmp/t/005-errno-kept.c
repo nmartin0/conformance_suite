@@ -8,6 +8,9 @@
 #include <errno.h>
 #include <wchar.h>
 
+/* The result is kept so that the call cannot be dropped as unused. */
+static volatile long sink;
+
 static wchar_t a[] = { L'a', L'b' }, b[] = { L'a', L'c' };
 
 int main(void)
@@ -19,11 +22,11 @@ int main(void)
 	pc_test();
 	for (i = 0; i < 2; i++) {
 		errno = before[i];
-		(void)wmemcmp(a, a, 2);
+		sink = (long)wmemcmp(a, a, 2);
 		e = errno;
 		pc_check(e == before[i], "wmemcmp() (equal) changed errno from %s to %s", pc_errname(before[i]), pc_errname(e));
 		errno = before[i];
-		(void)wmemcmp(a, b, 2);
+		sink = (long)wmemcmp(a, b, 2);
 		e = errno;
 		pc_check(e == before[i], "wmemcmp() (different) changed errno from %s to %s", pc_errname(before[i]), pc_errname(e));
 	}

@@ -18,8 +18,15 @@ int main(void)
 		pc_check(h[k] != (wctype_t)0, "wctype(\"%s\") returned 0", wc_cname[k]);
 	}
 	pc_test();
-	for (k = 0; k < C_N; k++)
-		for (i = 0; i < 128; i++)
+	for (k = 0; k < C_N; k++) {
+		int nz = 0;
+
+		for (i = 0; i < 128; i++) {
 			pc_check((iswctype(wc_ch[i], h[k]) != 0) == (wc_isw[k](wc_ch[i]) != 0), "iswctype() and isw%s() differ at position %d", wc_cname[k], i);
+			nz += iswctype(wc_ch[i], h[k]) != 0;
+		}
+		/* the class has members and non-members among the 128, so the equality is not met by answering the same for all */
+		pc_check(nz > 0 && nz < 128, "iswctype() with the %s handle gave the same answer for all 128 characters", wc_cname[k]);
+	}
 	pc_pass();
 }

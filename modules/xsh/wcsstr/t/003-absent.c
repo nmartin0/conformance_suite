@@ -17,6 +17,8 @@ int main(void)
 
 	pc_begin("XSH.wcsstr.003");
 	pc_test();
+	/* control: a string that is present is found */
+	pc_check(wcsstr(s, bc) == s + 1, "\"bc\" was not found in \"abcabc\"");
 	r[0] = wcsstr(s, bd);
 	r[1] = wcsstr(abc, abcd);
 	r[2] = wcsstr(split, bc);

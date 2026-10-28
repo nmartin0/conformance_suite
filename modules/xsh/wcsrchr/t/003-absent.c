@@ -16,6 +16,8 @@ int main(void)
 
 	pc_begin("XSH.wcsrchr.003");
 	pc_test();
+	/* control: a code that is present is found */
+	pc_check(wcsrchr(abc, L'c') == abc + 2, "L'c' was not found in \"abc\"");
 	r[0] = wcsrchr(abc, L'z');
 	r[1] = wcsrchr(empty, L'a');
 	r[2] = wcsrchr(beyond, L'c');

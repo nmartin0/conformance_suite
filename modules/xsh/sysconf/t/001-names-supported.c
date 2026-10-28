@@ -757,6 +757,10 @@ int main(void)
 		e = errno;
 		pc_check(!(r == -1 && e == EINVAL), "sysconf(%s) failed with EINVAL: the name is not supported",
 			 vars[i].name);
+		/* a limit with no bound gives -1 and leaves errno alone; any other errno means the call failed */
+		if (vars[i].kind == 'L' && r == -1)
+			pc_check(e == 0, "sysconf(%s) returned -1 and changed errno to %s: a limit without a bound leaves it alone",
+				 vars[i].name, pc_errname(e));
 	}
 	pc_pass();
 }

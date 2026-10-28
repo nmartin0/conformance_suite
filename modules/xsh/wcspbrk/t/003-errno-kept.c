@@ -8,6 +8,9 @@
 #include <errno.h>
 #include <wchar.h>
 
+/* The result is kept so that the call cannot be dropped as unused. */
+static volatile long sink;
+
 static wchar_t s[] = { L'a', L'b', L'c', 0 }, hit[] = { L'c', 0 }, miss[] = { L'z', 0 };
 
 int main(void)
@@ -19,11 +22,11 @@ int main(void)
 	pc_test();
 	for (i = 0; i < 2; i++) {
 		errno = before[i];
-		(void)wcspbrk(s, hit);
+		sink = (long)wcspbrk(s, hit);
 		e = errno;
 		pc_check(e == before[i], "wcspbrk() (found) changed errno from %s to %s", pc_errname(before[i]), pc_errname(e));
 		errno = before[i];
-		(void)wcspbrk(s, miss);
+		sink = (long)wcspbrk(s, miss);
 		e = errno;
 		pc_check(e == before[i], "wcspbrk() (not found) changed errno from %s to %s", pc_errname(before[i]), pc_errname(e));
 	}

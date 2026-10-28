@@ -173,16 +173,36 @@ static const char *const missing[] = {
 	NULL
 };
 
+/*
+ * Plain loops, not library calls: a call that fails must not make the test skip names.
+ */
+static int has(const char *set, char c)
+{
+	for (; *set != '\0'; set++)
+		if (*set == c)
+			return 1;
+	return 0;
+}
+
+static int same(const char *a, const char *b)
+{
+	while (*a != '\0' && *a == *b) {
+		a++;
+		b++;
+	}
+	return *a == *b;
+}
+
 /* 1 if the option a variable depends on is supported. */
 static int supported(const char *dep)
 {
 	if (dep == NULL)
 		return 1;
-	if (strcmp(dep, "ADV") == 0)
+	if (same(dep, "ADV"))
 		return sysconf(_SC_ADVISORY_INFO) > 0;
-	if (strcmp(dep, "PIO") == 0)
+	if (same(dep, "PIO"))
 		return sysconf(_SC_PRIORITIZED_IO) > 0;
-	if (strcmp(dep, "SIO") == 0)
+	if (same(dep, "SIO"))
 		return sysconf(_SC_SYNCHRONIZED_IO) > 0;
 	return 0;
 }
@@ -233,7 +253,7 @@ int main(void)
 	pc_check(fd >= 0, "cannot open d: %s", pc_errname(errno));
 	pc_test();
 	for (i = 0; i < sizeof vars / sizeof vars[0]; i++)
-		if (strchr(vars[i].where, 'D') != NULL && supported(vars[i].dep))
+		if (has(vars[i].where, 'D') && supported(vars[i].dep))
 			ask(&vars[i], "d", fd, "a directory");
 	pc_pass();
 }

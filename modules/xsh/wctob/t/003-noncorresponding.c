@@ -30,5 +30,7 @@ int main(void)
 	}
 	pc_check(badv < 0, "wctob(%d) returned %d, neither EOF nor an unsigned char value", badv, badr);
 	pc_check(nof > 0, "wctob() accepted all 257 codes 0 to 256, but the locale has 256 characters");
+	/* the codes of the portable characters do correspond to a byte, so not every result is EOF */
+	pc_check(wctob(L'a') == 'a' && wctob(L'0') == '0', "wctob() of the code of a portable character did not give its byte");
 	pc_pass();
 }

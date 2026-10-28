@@ -84,7 +84,7 @@ int main(void)
 		(void)dup2(saved, 2);
 		clearerr(stderr);
 		pc_check(fe != 0, "the error indicator of stderr is not set");
-		pc_check(e != 0, "errno was not set");
+		pc_check(e == EBADF, "errno is %s, expected EBADF (the descriptor of stderr is not valid)", pc_errname(e));
 	}
 	pc_pass();
 }

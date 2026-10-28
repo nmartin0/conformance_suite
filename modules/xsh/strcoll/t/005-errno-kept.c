@@ -6,6 +6,9 @@
  */
 #include "coll.h"
 
+/* The results are kept so that the calls cannot be dropped as unused. */
+static volatile int sink;
+
 int main(void)
 {
 	static const int before[2] = { 0, EDOM };
@@ -22,11 +25,11 @@ int main(void)
 	pc_test();
 	for (i = 0; i < 2; i++) {
 		errno = before[i];
-		(void)strcoll("ab", "ac");
+		sink = strcoll("ab", "ac");
 		e = errno;
 		pc_check(e == before[i], "strcoll() changed errno from %s to %s", pc_errname(before[i]), pc_errname(e));
 		errno = before[i];
-		(void)strcoll_l("ab", "ac", obj);
+		sink = strcoll_l("ab", "ac", obj);
 		e = errno;
 		pc_check(e == before[i], "strcoll_l() changed errno from %s to %s", pc_errname(before[i]), pc_errname(e));
 	}

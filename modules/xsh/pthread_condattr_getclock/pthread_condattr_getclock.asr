@@ -35,7 +35,8 @@ when       CPT
 since      2008
 says       pthread_condattr_setclock() with CLOCK_PROCESS_CPUTIME_ID, and
            with the CPU-time clock of the process obtained from
-           clock_getcpuclockid(), fails (returns non-zero).
+           clock_getcpuclockid(), fails (returns an error number, a positive
+           value).
 note       disputed (standard issue Q-159): the
            DESCRIPTION says the call "shall fail" for a CPU-time clock,
            while the ERRORS section lists EINVAL for it among the "may
@@ -51,7 +52,8 @@ when       TCT
 since      2008
 says       pthread_condattr_setclock() with CLOCK_THREAD_CPUTIME_ID, and
            with the CPU-time clock of the calling thread obtained from
-           pthread_getcpuclockid(), fails (returns non-zero).
+           pthread_getcpuclockid(), fails (returns an error number, a
+           positive value).
 note       disputed (standard issue Q-159): the
            DESCRIPTION says the call "shall fail" for a CPU-time clock,
            while the ERRORS section lists EINVAL for it among the "may

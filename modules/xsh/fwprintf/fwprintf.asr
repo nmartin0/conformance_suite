@@ -113,9 +113,11 @@ test       t/013-sw-overflow.c
 assertion  XSH.fwprintf.014
 anchor     functions/fwprintf.html#DESCRIPTION
 anchor     functions/fwprintf.html#RETURN VALUE
+anchor     functions/fwprintf.html#ERRORS
 class      required
-says       swprintf(buf, 0, L"abc") returns a negative value and writes nothing
-           into buf.
+says       swprintf(buf, 0, L"abc") returns a negative value with errno
+           EOVERFLOW (more wide characters were requested than n) and writes
+           nothing into buf.
 test       t/014-sw-zero.c
 
 assertion  XSH.fwprintf.015

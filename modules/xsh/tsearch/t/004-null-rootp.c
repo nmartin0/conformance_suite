@@ -134,9 +134,16 @@ static void permute(int *p, int n)
 int main(void)
 {
 	int k = 3;
+	void *root = NULL;
 
 	pc_begin("XSH.tsearch.004");
 	pc_test();
+	/* control: with a real rootp the same call enters the key, so a null result for a null rootp is meaningful */
+	{
+		void *n = tsearch(&k, &root, cmp);
+
+		pc_check(n != NULL && root != NULL && tfind(&k, &root, cmp) == n, "tsearch() with a real rootp did not enter the key");
+	}
 	pc_check(tsearch(&k, NULL, cmp) == NULL, "tsearch() with a null rootp returned a pointer");
 	pc_check(tfind(&k, NULL, cmp) == NULL, "tfind() with a null rootp returned a pointer");
 	pc_check(tdelete(&k, NULL, cmp) == NULL, "tdelete() with a null rootp returned a pointer");

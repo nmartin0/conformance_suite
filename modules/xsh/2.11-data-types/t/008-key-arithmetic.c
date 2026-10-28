@@ -14,11 +14,12 @@ int main(void)
 	key_t k, f;
 
 	pc_begin("XSH.2.11-data-types.008");
+	pc_test();
 	k = (key_t)d;
+	/* ftok() is called after pc_test(): a system where it fails is UNRESOLVED, not PASS. */
 	f = ftok(".", 'k');
 	if (f == (key_t)-1)
 		pc_unresolved("ftok() failed on the working directory");
-	pc_test();
 	pc_check(k == 1 || (k >= 1 && k < 2), "key_t: 1.5 converted to the type is neither 1 nor in [1, 2)");
 	pc_check(k + 1 > k, "key_t does not take arithmetic");
 	pc_check(f + 0 == f && f - f == 0, "a key from ftok() does not take arithmetic");

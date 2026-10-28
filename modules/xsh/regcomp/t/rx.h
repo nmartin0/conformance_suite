@@ -132,6 +132,11 @@ static inline void rx_bad(const char *pat, int cf)
 	if (r == 0)
 		regfree(&re);
 	pc_check(r != 0, "regcomp(\"%s\", flags 0x%x) accepted the pattern", pat, (unsigned)cf);
+	/* the code is one the header defines for a regcomp() failure (REG_NOMATCH is for regexec()) */
+	pc_check(r == 0 || r == REG_BADPAT || r == REG_ECOLLATE || r == REG_ECTYPE || r == REG_EESCAPE ||
+	    r == REG_ESUBREG || r == REG_EBRACK || r == REG_EPAREN || r == REG_EBRACE || r == REG_BADBR ||
+	    r == REG_ERANGE || r == REG_ESPACE || r == REG_BADRPT,
+	    "regcomp(\"%s\", flags 0x%x) returned %d, not an error value of <regex.h>", pat, (unsigned)cf, r);
 	pc_note("regcomp(\"%s\") returned %d", pat, r);
 }
 

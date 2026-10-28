@@ -10,6 +10,14 @@ int main(void)
 {
 	pc_begin("XSH.strptime.019");
 	pc_test();
+	/* control: a valid input is converted, so a null result for a bad one is a judgement */
+	{
+		struct tm tm = sp_blank();
+		static const char ok[] = "12:30";
+		char *e = strptime(ok, "%H:%M", &tm);
+
+		pc_check(e == ok + 5 && tm.tm_hour == 12 && tm.tm_min == 30, "strptime(\"12:30\", \"%%H:%%M\") did not convert");
+	}
 	sp_null("Foo,", "%a,");
 	sp_null("Sundae,", "%A,");
 	sp_null("Janu,", "%b,");

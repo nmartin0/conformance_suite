@@ -15,7 +15,7 @@ static void run_d(void)
 	p = x * y;
 	z = -p;
 	r = fma(x, y, z);
-	pc_check(r != 0, "fma(1+eps, 1+eps, -(product)) returned %g: the product was rounded before the addition", (double)r);
+	pc_check(!isnan(r) && r != 0, "fma(1+eps, 1+eps, -(product)) returned %g: the product was rounded before the addition", (double)r);
 #ifdef FE_TONEAREST
 	if (fegetround() == FE_TONEAREST) {
 		e2 = DBL_EPSILON * DBL_EPSILON;
@@ -34,7 +34,7 @@ static void run_f(void)
 	p = x * y;
 	z = -p;
 	r = fmaf(x, y, z);
-	pc_check(r != 0, "fmaf(1+eps, 1+eps, -(product)) returned %g: the product was rounded before the addition", (double)r);
+	pc_check(!isnan(r) && r != 0, "fmaf(1+eps, 1+eps, -(product)) returned %g: the product was rounded before the addition", (double)r);
 #ifdef FE_TONEAREST
 	if (fegetround() == FE_TONEAREST) {
 		e2 = FLT_EPSILON * FLT_EPSILON;
@@ -53,7 +53,7 @@ static void run_l(void)
 	p = x * y;
 	z = -p;
 	r = fmal(x, y, z);
-	pc_check(r != 0, "fmal(1+eps, 1+eps, -(product)) returned %g: the product was rounded before the addition", (double)r);
+	pc_check(!isnan(r) && r != 0, "fmal(1+eps, 1+eps, -(product)) returned %g: the product was rounded before the addition", (double)r);
 #ifdef FE_TONEAREST
 	if (fegetround() == FE_TONEAREST) {
 		e2 = LDBL_EPSILON * LDBL_EPSILON;

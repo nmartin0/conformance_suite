@@ -19,6 +19,9 @@ int main(void)
 	for (i = 0; i < 50; i++)
 		b[i] = rand();
 	for (i = 0; i < 50; i++)
+		pc_check(a[i] >= 0 && a[i] <= RAND_MAX && b[i] >= 0 && b[i] <= RAND_MAX,
+		    "value %d is outside 0 to RAND_MAX: %d without srand(), %d after srand(1)", i, a[i], b[i]);
+	for (i = 0; i < 50; i++)
 		pc_check(a[i] == b[i], "value %d differs: %d without srand(), %d after srand(1)", i, a[i], b[i]);
 	pc_pass();
 }

@@ -22,6 +22,18 @@ int main(void)
 	snprintf(q[2], sizeof q[2], "%.*s", (int)(len > 1 ? len - 1 : 0), c.name);
 	pc_check(getpwnam(c.name) != NULL, "no entry found for %s", c.name);
 	pc_test();
+	/* control: the lookup works, so a null result for a changed name means something */
+	errno = 0;
+	p = getpwnam(c.name);
+	if (p == NULL && xc_mayfail(errno))
+		pc_unresolved("getpwnam() of an existing name failed: %s", pc_errname(errno));
+	pc_check(p != NULL && XNAME(p) != NULL && strcmp(XNAME(p), c.name) == 0, "getpwnam() of the existing name %s did not find its entry", c.name);
+	memset(&e, 0, sizeof e);
+	res = NULL;
+	r = getpwnam_r(c.name, &e, buf, sizeof buf, &res);
+	if (r != 0 && xc_mayfail(r))
+		pc_unresolved("getpwnam_r() of an existing name failed: %s", pc_errname(r));
+	pc_check(r == 0 && res != NULL && XNAME(res) != NULL && strcmp(XNAME(res), c.name) == 0, "getpwnam_r() of the existing name %s did not find its entry", c.name);
 	for (i = 0; i < 3; i++) {
 		if (q[i][0] == '\0')
 			continue;
