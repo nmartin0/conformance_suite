@@ -1,0 +1,183 @@
+# 2.9-threads.cov - every requirement unit in XSH 2.9.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+2.9:dd9c2c7f          none prose, definition, list or restatement
+2.9:1811ecbc          none prose, definition, list or restatement
+2.9:89402268          none prose, definition, list or restatement
+2.9:22fd0918          none prose, definition, list or restatement
+2.9:20da6a88          none prose, definition, list or restatement
+2.9:9787e661          partial XSH.2.9-threads.001 XSH.2.9-threads.002 XSH.2.9-threads.003  # a sample of functions only (allocation, reentrant, stdio); not every function is exercised under concurrency
+2.9:b5e671dd          none prose, definition, list or restatement
+2.9:7a4eba3e          none behaviour left unspecified, undefined or to the implementation
+2.9:d943a07d          none behaviour left unspecified, undefined or to the implementation
+2.9:9b4fbe4c          todo lgamma() family thread-safety (XSI) not exercised; needs concurrent calls on distinct arguments, ignoring signgam
+2.9:20966b5e          none behaviour left unspecified, undefined or to the implementation
+2.9:c34ee75d          none behaviour left unspecified, undefined or to the implementation
+2.9:4ce8a042          none prose, definition, list or restatement
+2.9:e1051c8b          partial XSH.2.9-threads.001 XSH.2.9-threads.002 XSH.2.9-threads.003  # a sample of functions only (allocation, reentrant, stdio); not every function is exercised under concurrency
+2.9:0348c160          app
+2.9:8ffb66c7          app
+2.9:144b6ebc          none behaviour left unspecified, undefined or to the implementation
+2.9:48021eac          XSH.2.9-threads.004
+2.9:1ee10d0f          none prose, definition, list or restatement
+2.9:eea91875          none behaviour left unspecified, undefined or to the implementation
+2.9:0bd829e8          none prose, definition, list or restatement
+2.9:29a747af          XSH.2.9-threads.008
+2.9:fb5a9399          none prose, definition, list or restatement
+2.9:682785d7          XSH.2.9-threads.006
+2.9:b6a1d4ff          XSH.2.9-threads.006
+2.9:07efa0e4          todo EOWNERDEAD from pthread_mutex_setprioceiling() needs a robust protect-protocol mutex whose owner died; not built this round
+2.9:4da0a21a          XSH.2.9-threads.006
+2.9:40a7234d          XSH.2.9-threads.006
+2.9:b1f748a8          XSH.2.9-threads.006
+2.9:1e738b9c          XSH.2.9-threads.006
+2.9:0bfc3430          XSH.2.9-threads.007
+2.9:bcc9a389          XSH.2.9-threads.007
+2.9:03c24ec8          XSH.2.9-threads.007
+2.9:b64e00a0          XSH.2.9-threads.007
+2.9:f6fa9378          XSH.2.9-threads.007
+2.9:0b796e6c          XSH.2.9-threads.007
+2.9:40a7234d.2        XSH.2.9-threads.007
+2.9:c891098e          XSH.2.9-threads.007
+2.9:58b4181a          XSH.2.9-threads.007
+2.9:6a93992f          XSH.2.9-threads.007
+2.9:eb84a346          XSH.2.9-threads.005
+2.9:63a2000d          none prose, definition, list or restatement
+2.9:18526714          none prose, definition, list or restatement
+2.9:cf10c0da          none prose, definition, list or restatement
+2.9:85f67079          none prose, definition, list or restatement
+2.9:a5601b91          none prose, definition, list or restatement
+2.9:e54e6189          none prose, definition, list or restatement
+2.9:8fd1be78          none prose, definition, list or restatement
+2.9:7fa76b0e          none prose, definition, list or restatement
+2.9:0c19d20b          none prose, definition, list or restatement
+2.9:5885651a          none prose, definition, list or restatement
+2.9:d665152e          none option gate: the section is required where the Thread Execution Scheduling option is supported
+2.9:9f82f211          none prose, definition, list or restatement
+2.9:32611c9a          none prose, definition, list or restatement
+2.9:a115a90a          none prose, definition, list or restatement
+2.9:a88da363          none prose, definition, list or restatement
+2.9:28b0ba77          none prose, definition, list or restatement
+2.9:caa3294b          none prose, definition, list or restatement
+2.9:4d526220          none prose, definition, list or restatement
+2.9:ba96a7f6          XSH.2.9-threads.010
+2.9:26ed7d7f          none prose, definition, list or restatement
+2.9:fd509f71          XSH.2.9-threads.009
+2.9:23496128          XSH.2.9-threads.009
+2.9:a39e49cb          none meaning of the members is that of XSH 2.8.4, covered with the scheduling policies
+2.9:5285b727          todo the first thread of a process has the process policy: needs a comparison of pthread_getschedparam() on the main thread with sched_getscheduler(); not written this round
+2.9:7c1aa40c          none behaviour left unspecified, undefined or to the implementation
+2.9:b8fb1e9e          none behaviour left unspecified, undefined or to the implementation
+2.9:57f0ac4c          none prose, definition, list or restatement
+2.9:e1628c5b          none prose, definition, list or restatement
+2.9:d67b6a26          none prose, definition, list or restatement
+2.9:5fd3422d          untestable the outcome of contention depends on processor count, privilege and scope support; nothing a portable program can require
+2.9:dd4fb1df          untestable the outcome of contention depends on processor count, privilege and scope support; nothing a portable program can require
+2.9:0053d735          none behaviour left unspecified, undefined or to the implementation
+2.9:234e14da          untestable the outcome of contention depends on processor count, privilege and scope support; nothing a portable program can require
+2.9:34d33383          untestable the outcome of contention depends on processor count, privilege and scope support; nothing a portable program can require
+2.9:e5fc2522          none behaviour left unspecified, undefined or to the implementation
+2.9:f8e4dd71          todo support for at least one of the two contention scopes: needs a successful pthread_attr_setscope() with each scope; not asserted here
+2.9:61de147a          untestable scheduling allocation domains and processor assignment cannot be observed or set by a portable program
+2.9:6c7248e9          none prose, definition, list or restatement
+2.9:82feb9c0          none prose, definition, list or restatement
+2.9:1a4f75fb          none prose, definition, list or restatement
+2.9:5c7fbb47          none prose, definition, list or restatement
+2.9:56cf7457          none behaviour left unspecified, undefined or to the implementation
+2.9:0d5ea89a          none prose, definition, list or restatement
+2.9:d6476c9b          untestable scheduling allocation domains and processor assignment cannot be observed or set by a portable program
+2.9:81d7ae86          none prose, definition, list or restatement
+2.9:33b4045c          none prose, definition, list or restatement
+2.9:3c36178f          untestable scheduling allocation domains and processor assignment cannot be observed or set by a portable program
+2.9:21b017ea          none behaviour left unspecified, undefined or to the implementation
+2.9:d84a175d          none prose, definition, list or restatement
+2.9:99960d7c          untestable scheduling allocation domains and processor assignment cannot be observed or set by a portable program
+2.9:6294e1a6          none behaviour left unspecified, undefined or to the implementation
+2.9:b919664f          impl documentation of scheduling allocation domain effects
+2.9:db4a9fcb          none prose, definition, list or restatement
+2.9:47824d43          none prose, definition, list or restatement
+2.9:bfaaf32a          none prose, definition, list or restatement
+2.9:0a9bc162          none prose, definition, list or restatement
+2.9:835d1795          none prose, definition, list or restatement
+2.9:c38db7a0          none prose, definition, list or restatement
+2.9:11ba0b7a          app
+2.9:6b76b3bb          none behaviour left unspecified, undefined or to the implementation
+2.9:7c0f132f          none prose, definition, list or restatement
+2.9:3e3419fa          none prose, definition, list or restatement
+2.9:86e0aec7          none prose, definition, list or restatement
+2.9:9ef376f9          none prose, definition, list or restatement
+2.9:d87b6056          none prose, definition, list or restatement
+2.9:6a7e3fe1          XSH.pthread_setcancelstate.004 XSH.pthread_testcancel.003
+2.9:2d85000d          XSH.pthread_setcancelstate.001
+2.9:61a514c5          XSH.pthread_setcancelstate.006
+2.9:a2638373          XSH.pthread_setcancelstate.005
+2.9:608a3a5d          XSH.pthread_setcancelstate.004
+2.9:bebc1221          partial XSH.2.9-threads.011 XSH.pthread_setcancelstate.001  # all new threads including the one running main(): both covered; no further gap
+2.9:2b682fc4          XSH.2.9-threads.012 XSH.2.9-threads.013 XSH.2.9-threads.014 XSH.2.9-threads.015 XSH.2.9-threads.016 XSH.2.9-threads.017 XSH.2.9-threads.018 XSH.2.9-threads.019 XSH.2.9-threads.020 XSH.2.9-threads.021 XSH.2.9-threads.022 XSH.2.9-threads.023 XSH.2.9-threads.024 XSH.pthread_testcancel.001
+2.9:8f144d2b          XSH.2.9-threads.012 XSH.2.9-threads.013 XSH.2.9-threads.014 XSH.2.9-threads.015 XSH.2.9-threads.016 XSH.2.9-threads.017 XSH.2.9-threads.018 XSH.2.9-threads.019 XSH.2.9-threads.020 XSH.2.9-threads.021 XSH.2.9-threads.022 XSH.2.9-threads.023 XSH.2.9-threads.024 XSH.pthread_testcancel.001
+2.9:8feba0e0          none prose, definition, list or restatement
+2.9:0dec10b1          none prose, definition, list or restatement
+2.9:ca5848a8          none prose, definition, list or restatement
+2.9:64825cf1          none prose, definition, list or restatement
+2.9:5f837421          none behaviour left unspecified, undefined or to the implementation
+2.9:4988273a          XSH.2.9-threads.025
+2.9:590e4771          XSH.2.9-threads.028
+2.9:dcd0da24          XSH.2.9-threads.028
+2.9:c6bc30be          none behaviour left unspecified, undefined or to the implementation
+2.9:5568ad40          XSH.2.9-threads.012 XSH.2.9-threads.013 XSH.2.9-threads.014 XSH.2.9-threads.015 XSH.2.9-threads.016 XSH.2.9-threads.017 XSH.2.9-threads.018 XSH.2.9-threads.019 XSH.2.9-threads.020 XSH.2.9-threads.021 XSH.2.9-threads.022 XSH.2.9-threads.023 XSH.2.9-threads.024
+2.9:ef89bd2f          XSH.2.9-threads.024
+2.9:e3d6954a          none behaviour left unspecified, undefined or to the implementation
+2.9:872b904e          none prose, definition, list or restatement
+2.9:a9a61d80          none prose, definition, list or restatement
+2.9:7ca2e6f1          none prose, definition, list or restatement
+2.9:ad1228ee          none prose, definition, list or restatement
+2.9:bf0b5ede          none prose, definition, list or restatement
+2.9:07248fd0          XSH.2.9-threads.026 XSH.pthread_cancel.005
+2.9:d74a2d10          XSH.2.9-threads.026 XSH.pthread_cancel.005
+2.9:5f5652a6          none behaviour left unspecified, undefined or to the implementation
+2.9:3b28046c          XSH.pthread_cleanup_pop.001 XSH.pthread_exit.002
+2.9:1d574eb9          none prose, definition, list or restatement
+2.9:e6f28c6c          XSH.pthread_exit.003 XSH.pthread_cancel.002
+2.9:b90d867b          none prose, definition, list or restatement
+2.9:f0d2a061          XSH.pthread_exit.001
+2.9:101e8ef1          XSH.2.9-threads.027
+2.9:dffd8da4          XSH.2.9-threads.027
+2.9:6583bbf5          XSH.pthread_cond_wait.008 XSH.pthread_cond_wait.009
+2.9:85b7d4b5          XSH.pthread_cond_wait.008 XSH.pthread_cond_wait.009
+2.9:ad6f9cee          none prose, definition, list or restatement
+2.9:aede8d6e          untestable whether a function is async-cancel safe cannot be shown by running a program
+2.9:48be8fe3          untestable whether a function is async-cancel safe cannot be shown by running a program
+2.9:f4273a6e          none behaviour left unspecified, undefined or to the implementation
+2.9:2c939632          none behaviour left unspecified, undefined or to the implementation
+2.9:fb4ae0e6          none prose, definition, list or restatement
+2.9:d27db9f1          none prose, definition, list or restatement
+2.9:39ee8cd2          none prose, definition, list or restatement
+2.9:cb3304d6          none prose, definition, list or restatement
+2.9:b57768e5          none prose, definition, list or restatement
+2.9:2c0a7c00          XSH.2.9-threads.008
+2.9:c32a5b1b          none restates the progress rule covered by XSH.2.9-threads.008
+2.9:b9a1090c          XSH.2.9-threads.035 XSH.2.9-threads.036
+2.9:31d48e51          partial XSH.2.9-threads.032 XSH.2.9-threads.033  # stat, open, rename, link, symlink, readlink, ftruncate and futimens are exercised; the other functions of the list (chmod, chown, truncate, utimes, ...) are not
+2.9:d4f856f1          partial XSH.2.9-threads.032 XSH.2.9-threads.033  # stat, open, rename, link, symlink, readlink, ftruncate and futimens are exercised; the other functions of the list (chmod, chown, truncate, utimes, ...) are not
+2.9:951706ed          partial XSH.2.9-threads.032 XSH.2.9-threads.033  # stat, open, rename, link, symlink, readlink, ftruncate and futimens are exercised; the other functions of the list (chmod, chown, truncate, utimes, ...) are not
+2.9:d9a4d4ba          partial XSH.2.9-threads.029 XSH.2.9-threads.030 XSH.2.9-threads.031 XSH.2.9-threads.032  # read, write, pread, pwrite, ftruncate, futimens, fstat are exercised; lseek, dup2, dup3, fcntl, open, close not
+2.9:3d20d9f5          partial XSH.2.9-threads.029 XSH.2.9-threads.030 XSH.2.9-threads.031 XSH.2.9-threads.032  # read, write, pread, pwrite, ftruncate, futimens, fstat are exercised; lseek, dup2, dup3, fcntl, open, close not
+2.9:951706ed.2        partial XSH.2.9-threads.029 XSH.2.9-threads.030 XSH.2.9-threads.031 XSH.2.9-threads.032  # read, write, pread, pwrite, ftruncate, futimens, fstat are exercised; lseek, dup2, dup3, fcntl, open, close not
+2.9:fd289b13          todo close() atomicity whenever a descriptor is closed by any means (dup2 over it, exec with close-on-exec) against another thread; not exercised
+2.9:ab247c62          XSH.2.9-threads.034  # sigevent route; pthread_create route is XSH.pthread_attr_getstack.002
+2.9:35c215f0          none prose, definition, list or restatement
+2.9:7f944a73          none prose, definition, list or restatement
+2.9:d8ee56b9          app
+2.9:65bd71ba          app
+2.9:505ec590          none behaviour left unspecified, undefined or to the implementation
+2.9:4945d0d9          app
+2.9:43d096bc          app
+2.9:410c3f74          none prose, definition, list or restatement
+2.9:3da5ed33          app
+2.9:26471566          app
+2.9:eb35c24a          none behaviour left unspecified, undefined or to the implementation
+2.9:9470e314          XSH.2.9-threads.035 XSH.2.9-threads.036
+2.9:e1ff453f          none behaviour left unspecified, undefined or to the implementation
+2.9:1588c43a          XSH.2.9-threads.035
+2.9:8b9df2c3          XSH.2.9-threads.035
+2.9:3e0019dc          none the C11 types are process-private; the statement only restricts copies and other mappings, whose effect is undefined

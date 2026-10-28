@@ -1,0 +1,534 @@
+# XSH 2.9 Threads
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# What XSH 2.9 requires of the system as a whole: thread safety, thread IDs,
+# mutex ownership, scheduling attributes, cancellation (states, points,
+# cleanup), the atomicity of file operations between threads, application
+# managed stacks and process-shared objects in other mappings. Facts a
+# function page already tests are not repeated; the .cov file points to the
+# assertions that cover them.
+#
+# The cancellation point tests (012 to 023) share a harness (t/pccp.h):
+# each function runs in a thread of its own, with the request made while
+# cancelability is still disabled; 024 makes the request while the thread
+# is blocked.
+
+assertion  XSH.2.9-threads.001
+anchor     functions/V2_chap02.html#2.9.1
+anchor     functions/V2_chap02.html#2.6
+class      required
+since      2001
+says       Four threads released together that each take 200 blocks with malloc()
+           and open and dup 25 descriptors each end with blocks that do not
+           overlap and still hold their owner's value, and with 200 different
+           descriptor numbers.
+note       Thread safety of malloc(), open() and dup() (none is on the list of
+           functions that need not be thread-safe); handing one descriptor to two
+           callers would break the lowest-free-number rule of XSH 2.6 as well.
+test       t/001-alloc-concurrent.c
+
+assertion  XSH.2.9-threads.002
+anchor     functions/V2_chap02.html#2.9.1
+class      required
+since      2001
+says       strerror_r(), gmtime_r(), rand_r(), strtok_r() and snprintf(), called
+           300 times each by four threads at once on data of their own, give
+           every thread the results the main thread got before any thread
+           started.
+test       t/002-reentrant-concurrent.c
+
+assertion  XSH.2.9-threads.003
+anchor     functions/V2_chap02.html#2.9.1
+anchor     functions/flockfile.html#DESCRIPTION
+class      required
+since      2001
+says       Four threads calling fputs() 500 times each on one stream with a line
+           of 40 identical letters leave a file of 2000 whole lines, each
+           uniform, 500 per thread.
+note       fputs() is thread-safe (2.9.1) and, like the other stdio calls,
+           behaves as if it held the stream's lock for the call, so one call's
+           output is not split by another's.
+test       t/003-stdio-same-file.c
+
+assertion  XSH.2.9-threads.004
+anchor     functions/V2_chap02.html#2.9.2
+class      required
+since      2001
+says       Eight live threads have different IDs, each equal to the one
+           pthread_create() stored for it and pthread_self() gives in it, and
+           different from the main thread's; the ID of a thread that has
+           terminated but not been joined still works with pthread_join(), which
+           returns its value.
+note       The lifetime of a thread ID ends after the later of termination and
+           the end of being joinable, so the unjoined terminated thread's ID is
+           still valid.
+test       t/004-thread-ids.c
+
+assertion  XSH.2.9-threads.005
+anchor     functions/V2_chap02.html#2.9.3
+anchor     functions/V2_chap02.html#2.9.6
+class      required
+says       A pthread_mutex_t, an mtx_t and a write-locked pthread_rwlock_t each
+           have one owner at a time: four threads that take the lock 20000 times
+           and update a shared counter in two steps never find another thread
+           inside and lose no update; readers holding the read-write lock never
+           see a writer inside.
+note       since is left out: the mtx_t part is from 2024, the others from 2001.
+test       t/005-mutual-exclusion.c
+
+assertion  XSH.2.9-threads.006
+anchor     functions/V2_chap02.html#2.9.3
+class      required
+says       A thread owns a pthread_mutex_t after pthread_mutex_lock(),
+           pthread_mutex_trylock(), pthread_mutex_timedlock() and
+           pthread_mutex_clocklock() succeed and after pthread_cond_timedwait()
+           returns (0 or ETIMEDOUT), as shown by another thread's trylock
+           returning EBUSY; it does not own it after pthread_mutex_unlock()
+           (trylock by another thread returns 0) or while blocked in the
+           condition wait (another thread can lock it).
+note       Ownership is observed through trylock by a probe thread, whose result
+           must be exactly 0 or EBUSY. The timed wait has a 2 s limit and nobody
+           signals.
+test       t/006-pthread-mutex-owner.c
+
+assertion  XSH.2.9-threads.007
+anchor     functions/V2_chap02.html#2.9.3
+class      required
+since      2024
+says       A thread owns an mtx_t after mtx_lock(), mtx_trylock(),
+           mtx_timedlock() succeed and after cnd_wait() or cnd_timedwait()
+           returns (thrd_success, or thrd_timedout for the timed one), as shown
+           by another thread's mtx_trylock() returning thrd_busy; it does not own
+           it after mtx_unlock() or while blocked in the wait.
+note       As XSH.2.9-threads.006 for the C11 mutex type; the observer is
+           mtx_trylock() in a probe thread.
+test       t/007-mtx-owner.c
+
+assertion  XSH.2.9-threads.008
+anchor     functions/V2_chap02.html#2.9.3
+anchor     functions/V2_chap02.html#2.9.6
+class      required
+says       While one thread is blocked taking a mutex (and, separately, a read-
+           write lock for writing) that the main thread holds, a third thread
+           that never waits finishes three million loop steps within 30 s.
+note       The sentence says a blocked thread shall not prevent an unblocked
+           eligible thread from eventually making progress; eligibility depends
+           on the scheduling policy, and the 30 s bound is a generous stand-in
+           for 'eventually' for a task that needs milliseconds.
+test       t/008-blocked-no-starvation.c
+
+assertion  XSH.2.9-threads.009
+anchor     functions/V2_chap02.html#2.9.4
+class      conditional
+when       TSP
+since      2001
+says       struct sched_param has the members sched_ss_low_priority (int),
+           sched_ss_repl_period and sched_ss_init_budget (struct timespec) and
+           sched_ss_max_repl (int), which keep the values stored in them.
+note       Compile-time and storage check only; the meaning of the values is that
+           of the sporadic server policy (XSH 2.8.4).
+test       t/009-sporadic-members.c
+
+assertion  XSH.2.9-threads.010
+anchor     functions/V2_chap02.html#2.9.4
+class      conditional
+when       TPS+PS
+since      2001
+says       An attributes object asking for explicit scheduling with the creator's
+           own policy and a priority one above that policy's maximum does not
+           give a thread with a priority outside the range of its policy:
+           pthread_create() fails, or the thread it creates has a priority in
+           the range.
+note       The text says the implementation ensures the priority is in range when
+           the attributes are used; it does not say by failing. If
+           pthread_attr_setschedpolicy() or pthread_attr_setschedparam() already
+           refuses the values the test is not in use, since the value never
+           reaches thread creation.
+test       t/010-priority-range-create.c
+
+assertion  XSH.2.9-threads.011
+anchor     functions/V2_chap02.html#2.9.5.1
+class      required
+since      2001
+says       A thread created by a thread whose cancelability state is DISABLE and
+           type ASYNCHRONOUS starts with state ENABLE and type DEFERRED.
+note       The text gives ENABLE as the default state and DEFERRED as the type in
+           all new threads; XSH.pthread_setcancelstate.001 checks the plain case.
+test       t/011-new-thread-state.c
+
+assertion  XSH.2.9-threads.012
+anchor     functions/V2_chap02.html#2.9.5.2
+class      required
+says       A thread with cancelability enabled (deferred) and a cancellation
+           request pending is canceled in open(), openat(), creat(), close(),
+           posix_close(), read(), write(), pread(), pwrite(), readv(), writev()
+           and fcntl() with F_SETLKW: the call does not return and the cleanup
+           handler runs.
+note       The assertion rests on the sentence that a call to a cancellation
+           point acts on a request already made before it returns. The functions
+           are called with arguments that let them finish at once, so a function
+           that returns has not acted on the request; side effects of the call
+           are not checked (they are those of a call interrupted by a signal). A
+           function that blocks despite the request is caught by a 5 s wait and
+           counts as a failure, and the names of all failing functions are
+           reported.
+timeout    300
+test       t/012-cp-descriptors.c
+
+assertion  XSH.2.9-threads.013
+anchor     functions/V2_chap02.html#2.9.5.2
+class      required
+says       As XSH.2.9-threads.012, for accept(), accept4(), connect(), recv(),
+           recvfrom(), recvmsg(), send(), sendto() and sendmsg().
+note       The assertion rests on the sentence that a call to a cancellation
+           point acts on a request already made before it returns. The functions
+           are called with arguments that let them finish at once, so a function
+           that returns has not acted on the request; side effects of the call
+           are not checked (they are those of a call interrupted by a signal). A
+           function that blocks despite the request is caught by a 5 s wait and
+           counts as a failure, and the names of all failing functions are
+           reported.
+timeout    300
+test       t/013-cp-sockets.c
+
+assertion  XSH.2.9-threads.014
+anchor     functions/V2_chap02.html#2.9.5.2
+class      required
+says       As XSH.2.9-threads.012, for nanosleep(), clock_nanosleep(), sleep(),
+           thrd_sleep(), pause(), poll(), ppoll(), select(), pselect(),
+           sigsuspend(), sigtimedwait(), sigwait(), sigwaitinfo(), wait(),
+           waitpid() and waitid().
+note       The assertion rests on the sentence that a call to a cancellation
+           point acts on a request already made before it returns. The functions
+           are called with arguments that let them finish at once, so a function
+           that returns has not acted on the request; side effects of the call
+           are not checked (they are those of a call interrupted by a signal). A
+           function that blocks despite the request is caught by a 5 s wait and
+           counts as a failure, and the names of all failing functions are
+           reported.
+timeout    300
+test       t/014-cp-wait-sleep.c
+
+assertion  XSH.2.9-threads.015
+anchor     functions/V2_chap02.html#2.9.5.2
+class      required
+says       As XSH.2.9-threads.012, for pthread_cond_wait(),
+           pthread_cond_timedwait(), pthread_cond_clockwait(), cnd_wait(),
+           cnd_timedwait(), pthread_join() and thrd_join().
+note       The assertion rests on the sentence that a call to a cancellation
+           point acts on a request already made before it returns. The functions
+           are called with arguments that let them finish at once, so a function
+           that returns has not acted on the request; side effects of the call
+           are not checked (they are those of a call interrupted by a signal). A
+           function that blocks despite the request is caught by a 5 s wait and
+           counts as a failure, and the names of all failing functions are
+           reported. Each condition wait is made with its mutex locked by the
+           calling thread.
+timeout    300
+test       t/015-cp-sync.c
+
+assertion  XSH.2.9-threads.016
+anchor     functions/V2_chap02.html#2.9.5.2
+class      conditional
+when       XSI
+since      2001
+says       As XSH.2.9-threads.012, for tcdrain() on the slave side of a pseudo-
+           terminal with output written to it.
+note       The assertion rests on the sentence that a call to a cancellation
+           point acts on a request already made before it returns. The functions
+           are called with arguments that let them finish at once, so a function
+           that returns has not acted on the request; side effects of the call
+           are not checked (they are those of a call interrupted by a signal). A
+           function that blocks despite the request is caught by a 5 s wait and
+           counts as a failure, and the names of all failing functions are
+           reported. The pseudo-terminal functions need XSI; the test is not in
+           use when no pseudo-terminal can be made.
+test       t/016-cp-tcdrain.c
+
+assertion  XSH.2.9-threads.017
+anchor     functions/V2_chap02.html#2.9.5.2
+class      conditional
+when       FSC
+since      2001
+says       As XSH.2.9-threads.012, for fsync().
+note       The assertion rests on the sentence that a call to a cancellation
+           point acts on a request already made before it returns. The functions
+           are called with arguments that let them finish at once, so a function
+           that returns has not acted on the request; side effects of the call
+           are not checked (they are those of a call interrupted by a signal). A
+           function that blocks despite the request is caught by a 5 s wait and
+           counts as a failure, and the names of all failing functions are
+           reported.
+test       t/017-cp-fsync.c
+
+assertion  XSH.2.9-threads.018
+anchor     functions/V2_chap02.html#2.9.5.2
+class      conditional
+when       SIO
+since      2001
+says       As XSH.2.9-threads.012, for fdatasync().
+note       The assertion rests on the sentence that a call to a cancellation
+           point acts on a request already made before it returns. The functions
+           are called with arguments that let them finish at once, so a function
+           that returns has not acted on the request; side effects of the call
+           are not checked (they are those of a call interrupted by a signal). A
+           function that blocks despite the request is caught by a 5 s wait and
+           counts as a failure, and the names of all failing functions are
+           reported.
+test       t/018-cp-fdatasync.c
+
+assertion  XSH.2.9-threads.019
+anchor     functions/V2_chap02.html#2.9.5.2
+class      conditional
+when       XSI|SIO
+since      2001
+says       As XSH.2.9-threads.012, for msync() on a shared mapping of a file.
+note       The assertion rests on the sentence that a call to a cancellation
+           point acts on a request already made before it returns. The functions
+           are called with arguments that let them finish at once, so a function
+           that returns has not acted on the request; side effects of the call
+           are not checked (they are those of a call interrupted by a signal). A
+           function that blocks despite the request is caught by a 5 s wait and
+           counts as a failure, and the names of all failing functions are
+           reported.
+test       t/019-cp-msync.c
+
+assertion  XSH.2.9-threads.020
+anchor     functions/V2_chap02.html#2.9.5.2
+class      conditional
+when       MSG
+since      2001
+says       As XSH.2.9-threads.012, for mq_send(), mq_receive(), mq_timedsend()
+           and mq_timedreceive().
+note       The assertion rests on the sentence that a call to a cancellation
+           point acts on a request already made before it returns. The functions
+           are called with arguments that let them finish at once, so a function
+           that returns has not acted on the request; side effects of the call
+           are not checked (they are those of a call interrupted by a signal). A
+           function that blocks despite the request is caught by a 5 s wait and
+           counts as a failure, and the names of all failing functions are
+           reported. The queue is opened non-blocking and its name removed at
+           once.
+timeout    300
+test       t/020-cp-mq.c
+
+assertion  XSH.2.9-threads.021
+anchor     functions/V2_chap02.html#2.9.5.2
+class      required
+since      2001
+says       As XSH.2.9-threads.012, for aio_suspend() given a list whose only
+           entry is null.
+note       The assertion rests on the sentence that a call to a cancellation
+           point acts on a request already made before it returns. The functions
+           are called with arguments that let them finish at once, so a function
+           that returns has not acted on the request; side effects of the call
+           are not checked (they are those of a call interrupted by a signal). A
+           function that blocks despite the request is caught by a 5 s wait and
+           counts as a failure, and the names of all failing functions are
+           reported.
+test       t/021-cp-aio-suspend.c
+
+assertion  XSH.2.9-threads.022
+anchor     functions/V2_chap02.html#2.9.5.2
+class      conditional
+when       XSI
+since      2001
+says       As XSH.2.9-threads.012, for msgsnd() and msgrcv() with IPC_NOWAIT.
+note       The assertion rests on the sentence that a call to a cancellation
+           point acts on a request already made before it returns. The functions
+           are called with arguments that let them finish at once, so a function
+           that returns has not acted on the request; side effects of the call
+           are not checked (they are those of a call interrupted by a signal). A
+           function that blocks despite the request is caught by a 5 s wait and
+           counts as a failure, and the names of all failing functions are
+           reported. The message queue is removed when the test ends.
+test       t/022-cp-sysv-msg.c
+
+assertion  XSH.2.9-threads.023
+anchor     functions/V2_chap02.html#2.9.5.2
+class      conditional
+when       XSI
+since      2001
+says       As XSH.2.9-threads.012, for lockf() with F_LOCK on an unlocked file.
+note       The assertion rests on the sentence that a call to a cancellation
+           point acts on a request already made before it returns. The functions
+           are called with arguments that let them finish at once, so a function
+           that returns has not acted on the request; side effects of the call
+           are not checked (they are those of a call interrupted by a signal). A
+           function that blocks despite the request is caught by a 5 s wait and
+           counts as a failure, and the names of all failing functions are
+           reported.
+test       t/023-cp-lockf.c
+
+assertion  XSH.2.9-threads.024
+anchor     functions/V2_chap02.html#2.9.5.2
+class      required
+says       A thread blocked in read() of an empty pipe, recv(), accept(), poll(),
+           ppoll(), select(), pselect(), sigwait(), sigsuspend(), pause(),
+           nanosleep(), clock_nanosleep(), sleep(), wait(), waitpid(), waitid(),
+           pthread_join(), write() to a full pipe, pthread_cond_wait() or
+           cnd_wait() is awakened by a cancellation request made 150 ms later and
+           is canceled there: the call does not return.
+note       Each blocked call has no end or a limit 30 s ahead. The wait for the
+           effect is 5 s per function, and the names of all failing functions are
+           reported. The text leaves open only what happens if the awaited event
+           occurs first, which the test avoids.
+timeout    300
+test       t/024-cp-blocked.c
+
+assertion  XSH.2.9-threads.025
+anchor     functions/V2_chap02.html#2.9.5.2
+class      required
+says       About fifty functions that are in neither of the two lists of
+           cancellation points (getpid(), dup(), pipe(), kill(), malloc(),
+           sigaction(), pthread_mutex_lock(), sem_post(), socket(),
+           getsockname(), ftruncate(), rmdir() and so on) return normally in a
+           thread with cancelability enabled and a request pending; the request
+           is then acted on by pthread_testcancel().
+note       Implementations shall not add cancellation points to any other
+           function. The functions were checked against both lists, and none can
+           block. Whether a request stays pending through all calls is shown by
+           the final pthread_testcancel() acting on it.
+test       t/025-no-other-cp.c
+
+assertion  XSH.2.9-threads.026
+anchor     functions/V2_chap02.html#2.9.5.3
+class      required
+since      2001
+says       When a thread calls pthread_exit() (having set the asynchronous type)
+           and when a thread is canceled in read(), the cleanup handler and the
+           key's destructor each find the cancelability state DISABLE and the
+           type DEFERRED (pthread_setcancelstate(DISABLE) and
+           pthread_setcanceltype(DEFERRED) report them as previous values).
+note       The cleanup handler and destructor are the ones the standard says run
+           with cancellation disabled; XSH.pthread_cancel.005 covers the handler
+           after a cancellation only, and the destructor and pthread_exit() cases
+           are added here. The test never enables cancelability in a handler
+           (undefined).
+test       t/026-cleanup-state.c
+
+assertion  XSH.2.9-threads.027
+anchor     functions/V2_chap02.html#2.9.5.3
+class      required
+since      2001
+says       PTHREAD_CANCELED has type void *, can initialize an object with static
+           storage duration, is not null and differs from the address of a global
+           object, a static and an automatic object, a heap block and stdout; a
+           thread canceled in read() is joined with exactly that value, and a
+           thread that returned a null pointer is not.
+test       t/027-canceled-constant.c
+
+assertion  XSH.2.9-threads.028
+anchor     functions/V2_chap02.html#2.9.5.2
+class      required
+since      2001
+says       When a cancellation request ends a blocked write() of 8 MiB to a pipe,
+           the bytes that reached the pipe are the beginning of the data written,
+           they are all there before the cleanup handler runs (the handler reads
+           them out; nothing more arrives afterwards), and the thread ends with
+           PTHREAD_CANCELED.
+note       The text says the side effects of acting on a request in a suspended
+           call are those of the call interrupted by a signal (a partial transfer
+           of the beginning of the data), and that they occur before the cleanup
+           handlers. Not in use if the pipe took all 8 MiB or if nothing had been
+           transferred.
+test       t/028-cancel-write-prefix.c
+
+assertion  XSH.2.9-threads.029
+anchor     functions/V2_chap02.html#2.9.7
+class      required
+since      2001
+says       Four threads that each write 1500 blocks of 4096 bytes (one letter per
+           thread) with write() to one descriptor of a regular file leave a file
+           of 6000 whole blocks, each uniform, 1500 per letter.
+note       write() calls on one descriptor are atomic with respect to each other,
+           so neither the data of two calls nor the file offset updates can
+           interleave.
+test       t/029-fileop-write-write.c
+
+assertion  XSH.2.9-threads.030
+anchor     functions/V2_chap02.html#2.9.7
+class      required
+since      2001
+says       Four threads that read a file of 60000 four-byte records to its end
+           with read() on one descriptor read every record exactly once and
+           whole.
+note       read() calls on one descriptor are atomic with respect to each other,
+           including the shared file offset.
+test       t/030-fileop-read-read.c
+
+assertion  XSH.2.9-threads.031
+anchor     functions/V2_chap02.html#2.9.7
+class      required
+since      2001
+says       While one thread repeatedly writes 16384 'A' and 16384 'B' at offset 0
+           with pwrite(), two threads reading the block with pread() always get a
+           uniform block of 16384 bytes.
+test       t/031-fileop-pwrite-pread.c
+
+assertion  XSH.2.9-threads.032
+anchor     functions/V2_chap02.html#2.9.7
+class      required
+since      2001
+says       While one thread truncates a file alternately to 0 and 1 MiB with
+           ftruncate() and another sets a second file's access and modification
+           times to the same whole second with futimens(), fstat() in other
+           threads always sees a size of 0 or 1 MiB and equal access and
+           modification times.
+test       t/032-fileop-trunc-times.c
+
+assertion  XSH.2.9-threads.033
+anchor     functions/V2_chap02.html#2.9.7
+class      required
+since      2001
+says       Against a thread that makes a new file and rename()s it over a name,
+           stat() and open() of the name always succeed and see a one byte file;
+           against link() and unlink() of a second name, stat() sees a link count
+           of 1 or 2; against symlink() and unlink() of a link name, readlink()
+           and lstat() see either no such file or a whole link to one of two 200
+           character targets.
+timeout    120
+test       t/033-fileop-hierarchy.c
+
+assertion  XSH.2.9-threads.034
+anchor     functions/V2_chap02.html#2.9.8
+class      conditional
+when       TSA+TSS
+since      2001
+says       A notification function run for a SIGEV_THREAD timer whose
+           sigev_notify_attributes holds an application-managed stack runs on
+           that stack: the address of one of its automatic variables lies in the
+           region.
+note       XSH.pthread_attr_getstack.002 covers pthread_create(); this covers the
+           sigevent route. The timer is one-shot because the text makes repeated
+           generation undefined.
+test       t/034-stack-sigevent.c
+
+assertion  XSH.2.9-threads.035
+anchor     functions/V2_chap02.html#2.9.9
+class      conditional
+when       TSH
+since      2001
+says       A process-shared read-write lock, spin lock and semaphore in a file
+           mapped twice at different addresses, initialized through the first
+           mapping, work through the second: a write lock taken through one
+           blocks tryrdlock through the other, unlock through either releases, a
+           spin lock held through one makes trylock through the other fail with
+           EBUSY, and sem_post through one is taken by sem_trywait through the
+           other.
+note       XSH.pthread_mutex_init.005 does the same for the mutex.
+test       t/035-altmap-rwlock-spin-sem.c
+
+assertion  XSH.2.9-threads.036
+anchor     functions/V2_chap02.html#2.9.9
+class      conditional
+when       TSH
+since      2001
+says       A process-shared condition variable and barrier (and their mutex) in a
+           file mapped twice, initialized through the first mapping, work through
+           the second: a signal sent through the second mapping wakes a thread
+           waiting through the first, and a barrier for two released by one
+           thread waiting through the first mapping and the main thread arriving
+           through the second, with exactly one of them getting
+           PTHREAD_BARRIER_SERIAL_THREAD.
+test       t/036-altmap-cond-barrier.c

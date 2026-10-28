@@ -1,0 +1,237 @@
+# XSH 2.10 Sockets
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# What XSH 2.10 requires of sockets as a whole: address names, I/O mode,
+# owner, pending errors, the receive queue, out-of-band data, signals,
+# options, and the local, IPv4 and IPv6 uses. Loopback and UNIX-domain
+# sockets only. The socket functions' own pages are tested by their
+# modules; the .cov file points to those assertions.
+
+assertion  XSH.2.10-sockets.001
+anchor     functions/V2_chap02.html#2.10.17
+class      required
+since      2001
+says       The address that getsockname() and getpeername() give for a bound
+           AF_UNIX socket and for the two ends of a connected AF_UNIX pair has
+           sa_family AF_UNIX, and a bound name comes back as the path that was
+           bound.
+test       t/001-unix-family.c
+
+assertion  XSH.2.10-sockets.002
+anchor     functions/V2_chap02.html#2.10.7
+class      required
+since      2001
+says       O_NONBLOCK is off on a new socket and on both ends of a socketpair();
+           F_SETFL sets and clears it; a dup() of the descriptor shares it, and
+           the other end of a pair is not affected.
+test       t/002-nonblock-flag.c
+
+assertion  XSH.2.10-sockets.003
+anchor     functions/V2_chap02.html#2.10.8
+class      required
+since      2001
+says       F_GETOWN gives 0 on a new stream socket, a new datagram socket and the
+           ends of socketpair() pairs (AF_UNIX and AF_INET).
+test       t/003-owner-unset.c
+
+assertion  XSH.2.10-sockets.004
+anchor     functions/V2_chap02.html#2.10.6
+class      required
+since      2001
+says       On an AF_UNIX SOCK_SEQPACKET pair, records of 3, 5 and 2 bytes sent
+           back to back come out one per receive with a large buffer, in both
+           directions.
+note       Not in use if the system has no such pair. The short-buffer case is
+           not tested: the text of 2.10.6 and the receive pages disagree about
+           the rest of the record (see docs/standard-issues.md).
+test       t/004-seqpacket-records.c
+
+assertion  XSH.2.10-sockets.005
+anchor     functions/V2_chap02.html#2.10.11
+class      disputed
+since      2001
+says       On an AF_UNIX stream pair, a receive for six bytes after three plain
+           bytes and three bytes sent with a descriptor returns no more than the
+           first three bytes and no control message, and a following one-byte
+           receive gets the first byte of the second group together with the
+           descriptor.
+note       Depends on reading 2.10.11 as applying to local stream sockets
+           (Q-149).
+test       t/005-stream-segment-ancillary.c
+
+assertion  XSH.2.10-sockets.006
+anchor     functions/V2_chap02.html#2.10.10
+anchor     functions/V2_chap02.html#2.10.15
+class      required
+since      2001
+says       After a non-blocking connect() to an unused loopback TCP port ends in
+           failure, recv() (and, on a fresh socket, send()) fails with
+           ECONNREFUSED, and SO_ERROR then reads 0.
+note       ENOTCONN and EPIPE are accepted as the other errors the call may give
+           (XSH 2.3 on several errors) and leave the test not in use.
+test       t/006-pending-error-ops.c
+
+assertion  XSH.2.10-sockets.007
+anchor     functions/V2_chap02.html#2.10.10
+anchor     functions/V2_chap02.html#2.10.19
+class      required
+since      2001
+says       After the peer aborts a loopback TCP connection (linger time 0 and
+           close), SO_ERROR on the other side reads ECONNRESET, then 0.
+note       Not in use if the close ended the connection in an orderly way.
+test       t/007-pending-reset.c
+
+assertion  XSH.2.10-sockets.008
+anchor     functions/V2_chap02.html#2.10.10
+anchor     functions/V2_chap02.html#2.10.15
+class      required
+since      2001
+says       After a datagram sent on a connected UDP socket to an unused loopback
+           port is refused, the error that shows up is ECONNREFUSED, once.
+note       Whether the refusal is reported is left to the network layer; not in
+           use if nothing shows up within 2 s.
+test       t/008-pending-udp-refused.c
+
+assertion  XSH.2.10-sockets.009
+anchor     functions/V2_chap02.html#2.10.14
+anchor     functions/V2_chap02.html#2.10.8
+class      required
+since      2001
+says       Out-of-band data arriving on a TCP socket sends SIGURG to the process
+           that owns the socket (F_SETOWN) and to nobody when the socket has no
+           owner.
+note       Not in use where sending out-of-band data is refused.
+test       t/009-sigurg-owner.c
+
+assertion  XSH.2.10-sockets.010
+anchor     functions/V2_chap02.html#2.10.12
+anchor     functions/V2_chap02.html#2.10.11
+class      required
+since      2001
+says       After "abc", one out-of-band byte and "def" arrive on a TCP
+           connection, a receive never returns data across the mark, sockatmark()
+           is 1 once "abc" is consumed, "def" follows and sockatmark() is then 0.
+note       Not in use if out-of-band data is refused or no mark ever appears.
+test       t/010-oob-mark.c
+
+assertion  XSH.2.10-sockets.011
+anchor     functions/V2_chap02.html#2.10.12
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       With SO_OOBINLINE set, "abc", an out-of-band 'X' and "def" are read by
+           ordinary receives as "abcXdef".
+test       t/011-oob-inline.c
+
+assertion  XSH.2.10-sockets.012
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       With SO_LINGER on and a time of 1 s, close() of a blocking TCP sender
+           with unsent data that cannot be delivered returns after at least half
+           a second and at most 10 s.
+note       The upper bound is only a cap that catches a hang; the time may be
+           rounded.
+timeout    120
+test       t/012-linger-close.c
+
+assertion  XSH.2.10-sockets.013
+anchor     functions/V2_chap02.html#2.10.16
+class      required
+since      2001
+says       On a new UDP socket and a new AF_UNIX datagram socket, SO_BROADCAST,
+           SO_DEBUG and SO_REUSEADDR read 0 and SO_RCVTIMEO and SO_SNDTIMEO read
+           zero.
+test       t/013-defaults-datagram.c
+
+assertion  XSH.2.10-sockets.014
+anchor     functions/V2_chap02.html#2.10.19
+class      conditional
+when       RS
+needs      root
+since      2001
+says       A raw IPv4 socket made with protocol 0 has IPPROTO_RAW as its
+           protocol, and IPPROTO_ICMP can be used as a raw protocol.
+test       t/014-raw-default-protocol.c
+
+assertion  XSH.2.10-sockets.015
+anchor     functions/V2_chap02.html#2.10.19
+class      conditional
+when       RS
+since      2001
+says       A process without appropriate privileges cannot create a raw IPv4
+           socket: socket() fails with EACCES or EPERM, for protocol 0 and for
+           IPPROTO_ICMP.
+note       The test runs in a child that gives up privilege when started as root.
+test       t/015-raw-needs-privilege.c
+
+assertion  XSH.2.10-sockets.016
+anchor     functions/V2_chap02.html#2.10.20
+class      conditional
+when       IP6
+since      2001
+says       An AF_INET6 socket with IPV6_V6ONLY off can be bound to the
+           IPv4-mapped form of 127.0.0.1, and getsockname() returns that mapped
+           address and the chosen port.
+test       t/016-v4mapped-bind.c
+
+assertion  XSH.2.10-sockets.017
+anchor     functions/V2_chap02.html#2.10.20
+class      conditional
+when       IP6
+since      2001
+says       An AF_INET6 TCP client reaches an AF_INET listener through the mapped
+           form of 127.0.0.1, and an AF_INET6 listener bound to the mapped
+           address accepts an AF_INET client and reports it as a mapped address.
+test       t/017-v4mapped-tcp.c
+
+assertion  XSH.2.10-sockets.018
+anchor     functions/V2_chap02.html#2.10.20
+class      conditional
+when       IP6
+since      2001
+says       An AF_INET6 listener with IPV6_V6ONLY on, bound to the wildcard
+           address, takes connections to the IPv6 loopback address but none to
+           127.0.0.1 on the same port.
+note       Not in use where the IPv6 loopback address cannot be used.
+test       t/018-v6only-excludes-ipv4.c
+
+assertion  XSH.2.10-sockets.019
+anchor     functions/V2_chap02.html#2.10.20
+class      conditional
+when       IP6
+since      2001
+says       Datagrams pass between an AF_INET UDP socket and an AF_INET6 UDP
+           socket through the mapped form of 127.0.0.1 in both directions, with
+           the sender shown as a mapped address.
+test       t/019-v4mapped-udp.c
+
+assertion  XSH.2.10-sockets.020
+anchor     functions/V2_chap02.html#2.10.20
+class      conditional
+when       IP6
+since      2001
+says       On a new AF_INET6 datagram socket IPV6_MULTICAST_HOPS is 1,
+           IPV6_MULTICAST_IF is 0 and IPV6_MULTICAST_LOOP is 1; hops accepts 5
+           and rejects 256 with EINVAL; an interface index set for multicast
+           reads back.
+test       t/020-ipv6-option-defaults.c
+
+assertion  XSH.2.10-sockets.021
+anchor     functions/V2_chap02.html#2.10.20
+anchor     functions/V2_chap02.html#2.10.16
+class      conditional
+when       IP6
+since      2001
+says       getsockopt() of IPV6_LEAVE_GROUP on an AF_INET6 socket fails with
+           EOPNOTSUPP.
+test       t/021-leave-group-eopnotsupp.c
+
+assertion  XSH.2.10-sockets.022
+anchor     functions/V2_chap02.html#2.10.20
+class      conditional
+when       IP6
+since      2001
+says       IN6_IS_ADDR_V4COMPAT() is zero for the unspecified address and for the
+           loopback address.
+test       t/022-v4compat-special.c
