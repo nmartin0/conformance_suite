@@ -1,0 +1,123 @@
+# XCU 2.3-token-recognition
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.2.3-token-recognition.001
+anchor     utilities/V3_chap02.html#2.3
+class      required
+says       An operator character that is not quoted ends the token before it
+           and starts an operator token, so operators need no blanks around
+           them: ; && || | ( ) and > all work when written tight against
+           words, and a brace group closes with a semicolon written tight.
+test       t/001-operators-delimit.sh
+
+assertion  XCU.2.3-token-recognition.002
+anchor     utilities/V3_chap02.html#2.3
+class      required
+says       Characters that can be joined into a longer operator are read as
+           that operator: >> appends rather than being two redirections, ;;
+           ends a case item, && and || are the list operators, << starts a
+           here-document and >& is one operator.
+test       t/002-operators-longest.sh
+
+assertion  XCU.2.3-token-recognition.003
+anchor     utilities/V3_chap02.html#2.3
+class      required
+says       Unquoted blanks (spaces and tabs) end a token and are discarded,
+           however many there are.
+test       t/003-blanks-delimit.sh
+
+assertion  XCU.2.3-token-recognition.004
+anchor     utilities/V3_chap02.html#2.3
+class      required
+says       An unquoted hash that begins a word starts a comment that runs to
+           the end of the line, without removing the newline; a hash inside
+           a word, or a quoted or escaped one, is an ordinary character.
+test       t/004-comments.sh
+
+assertion  XCU.2.3-token-recognition.005
+anchor     utilities/V3_chap02.html#2.3
+class      required
+says       The end of quoted text does not end the token: quoted and
+           unquoted pieces written together form one word.
+test       t/005-quoting-not-delimiter.sh
+
+assertion  XCU.2.3-token-recognition.006
+anchor     utilities/V3_chap02.html#2.3
+class      required
+says       A word made of quoted and unquoted pieces, or ending in a
+           substitution, is one token, and its quotes are removed only
+           afterwards; a command name can therefore be written with quotes
+           inside it.
+test       t/006-token-continues.sh
+
+assertion  XCU.2.3-token-recognition.007
+anchor     utilities/V3_chap02.html#2.3
+anchor     utilities/V3_chap02.html#2.2.3
+class      required
+says       To find the end of a $( ) the shell tokenizes its text, so a
+           closing parenthesis that is quoted, escaped, or the end of a case
+           pattern does not end the substitution.
+test       t/007-cmdsub-recursive-tokens.sh
+
+assertion  XCU.2.3-token-recognition.008
+anchor     utilities/V3_chap02.html#2.3
+anchor     utilities/V3_chap02.html#2.2.3
+class      required
+since      2024
+says       The shell's tokenizing of the text of a $( ) recognizes a
+           comment, so a closing parenthesis inside a comment there does not
+           end the substitution.
+test       t/008-cmdsub-comment-paren.sh
+
+assertion  XCU.2.3-token-recognition.009
+anchor     utilities/V3_chap02.html#2.3
+anchor     utilities/V3_chap02.html#2.7.4
+class      required
+says       After a here-document operator the rest of that line is read as
+           ordinary tokens and kept; the body is taken from the lines after
+           the next newline, and the saved tokens are then run; with two
+           operators on a line the first body comes first.
+test       t/009-heredoc-token-order.sh
+
+assertion  XCU.2.3-token-recognition.010
+anchor     utilities/V3_chap02.html#2.3
+class      required
+says       Each complete command is executed before the next one is
+           tokenized and parsed, so a command that precedes a syntax error
+           still runs.
+test       t/010-execute-before-parse.sh
+
+assertion  XCU.2.3-token-recognition.011
+anchor     utilities/V3_chap02.html#2.3
+anchor     utilities/V3_chap02.html#2.3.1
+class      required
+says       An alias defined by one command is in effect for the commands
+           read after it completes: a following line that uses it is
+           substituted.
+test       t/011-alias-takes-effect.sh
+
+assertion  XCU.2.3-token-recognition.012
+anchor     utilities/V3_chap02.html#2.3.1
+class      required
+says       A word in command-name position that names an alias is replaced
+           by the alias value, which is read as new input (it can hold
+           several commands); a word that is only an argument is not
+           replaced; an alias value ending in a blank makes the next word
+           eligible too.
+test       t/012-alias-substitution.sh
+
+assertion  XCU.2.3-token-recognition.013
+anchor     utilities/V3_chap02.html#2.3.1
+class      required
+says       A word containing any quoting is not replaced by an alias, and
+           alias definitions are not inherited by a separate invocation of
+           the shell.
+test       t/013-alias-quoted-and-inherited.sh
+
+assertion  XCU.2.3-token-recognition.014
+anchor     utilities/V3_chap02.html#2.3.1
+class      required
+says       A word produced by replacing an alias is not replaced again by
+           the same alias, so an alias may name the very command it expands
+           to.
+test       t/014-alias-not-recursive.sh

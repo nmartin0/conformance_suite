@@ -1,0 +1,205 @@
+# XCU 2.7-redirection
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.2.7-redirection.001
+anchor     utilities/V3_chap02.html#2.7.1
+anchor     utilities/V3_chap02.html#2.7
+class      required
+says       The < operator opens the file named by its word for reading on
+           standard input, or on the descriptor number written just before
+           it.
+test       t/001-input.sh
+
+assertion  XCU.2.7-redirection.002
+anchor     utilities/V3_chap02.html#2.7.2
+anchor     utilities/V3_chap02.html#2.7
+class      required
+says       The > operator opens the named file for writing on standard
+           output (or the descriptor written before it), creating it when
+           absent and emptying it when present, and the redirection stays in
+           effect for a descriptor opened with exec.
+test       t/002-output.sh
+
+assertion  XCU.2.7-redirection.003
+anchor     utilities/V3_chap02.html#2.7
+class      required
+says       Redirections can name any descriptor from 0 to 9: a file opened
+           on each of 3 to 9 and written through that number receives the
+           data.
+test       t/003-descriptors-0-to-9.sh
+
+assertion  XCU.2.7-redirection.004
+anchor     utilities/V3_chap02.html#2.7.2
+class      required
+says       With set -C a > redirection does not replace an existing regular
+           file (the command is not given the file and the file is
+           unchanged), while >| does, a missing file is created, and a file
+           that is not a regular file such as the null device is opened.
+test       t/004-noclobber.sh
+
+assertion  XCU.2.7-redirection.005
+anchor     utilities/V3_chap02.html#2.7.3
+class      required
+says       The >> operator opens the named file for appending, so each write
+           goes to the end, and creates it when absent.
+test       t/005-append.sh
+
+assertion  XCU.2.7-redirection.006
+anchor     utilities/V3_chap02.html#2.7.7
+class      required
+says       The <> operator opens the named file for reading and writing on
+           standard input (or the descriptor written before it) and creates
+           it when absent.
+test       t/006-read-write.sh
+
+assertion  XCU.2.7-redirection.007
+anchor     utilities/V3_chap02.html#2.7.5
+class      required
+says       The <& operator with a descriptor number makes the left
+           descriptor (standard input by default) a copy of that open
+           descriptor, and with - closes it; closing a descriptor that is
+           not open is not an error.
+test       t/007-dup-input.sh
+
+assertion  XCU.2.7-redirection.008
+anchor     utilities/V3_chap02.html#2.7.6
+anchor     utilities/V3_chap02.html#2.7
+class      required
+says       The >& operator with a descriptor number makes the left
+           descriptor (standard output by default) a copy of that open
+           descriptor, with - closes it (closing a descriptor that is not
+           open is no error), and redirections are processed from left to
+           right so the order of 2>&1 and a file redirection matters.
+test       t/008-dup-output.sh
+
+assertion  XCU.2.7-redirection.009
+anchor     utilities/V3_chap02.html#2.7
+class      required
+says       A descriptor number must stand directly before the operator and
+           be unquoted; a quoted number, a quoted operator, or a number set
+           apart by a blank is not part of the redirection, and the
+           redirection operator and its word do not reach the command as
+           arguments.
+test       t/009-number-and-quoting.sh
+
+assertion  XCU.2.7-redirection.010
+anchor     utilities/V3_chap02.html#2.7
+class      required
+says       The word after > and similar operators undergoes tilde expansion,
+           parameter expansion, command substitution, arithmetic expansion
+           and quote removal.
+test       t/010-target-expansions.sh
+
+assertion  XCU.2.7-redirection.011
+anchor     utilities/V3_chap02.html#2.7
+class      required
+says       A non-interactive shell does not do filename expansion on the
+           word of a redirection, so a pattern is used as the file name as
+           written.
+test       t/011-target-no-pathname.sh
+
+assertion  XCU.2.7-redirection.012
+anchor     utilities/V3_chap02.html#2.7
+class      required
+says       When a command has several redirections they are carried out from
+           first to last: with two output redirections both files are
+           created and the last one is used; with two input redirections the
+           last one is read.
+test       t/012-order-of-evaluation.sh
+
+assertion  XCU.2.7-redirection.013
+anchor     utilities/V3_chap02.html#2.7
+class      disputed
+says       When a redirection fails (a file that cannot be opened, a
+           descriptor that is not open) the command is not run and the
+           status is nonzero, and the shell goes on with the next command.
+note       disputed (Q-170): the text says a failure to open a file, or a
+           copy of a descriptor that is not open, makes the redirection
+           fail, and the error table says the shell goes on after such an
+           error in a utility, but it never says in words that the command
+           is then not run, nor what status it gets (only the exec page and
+           the no-command-name case give 1 to 125 or more than zero).
+           Refusal to run and a nonzero status are read here as meant.
+test       t/013-failed-redirection.sh
+
+assertion  XCU.2.7-redirection.014
+anchor     utilities/V3_chap02.html#2.7.4
+class      required
+says       A here-document ends at the first line that holds only the
+           delimiter: a line with the delimiter and a trailing blank, or
+           with a leading blank, is part of the text.
+test       t/014-here-delimiter-line.sh
+
+assertion  XCU.2.7-redirection.015
+anchor     utilities/V3_chap02.html#2.7.4
+anchor     utilities/V3_chap02.html#2.2.3
+class      required
+says       When no part of the delimiter word is quoted, the lines of a
+           here-document undergo parameter expansion, command substitution
+           and arithmetic expansion, a backslash acts as in double quotes
+           (so it escapes a dollar sign, backquote, backslash or newline and
+           is otherwise literal), and quotation marks are ordinary
+           characters.
+test       t/015-here-unquoted.sh
+
+assertion  XCU.2.7-redirection.016
+anchor     utilities/V3_chap02.html#2.7.4
+class      required
+says       If any part of the delimiter word is quoted, the delimiter is the
+           word with quote removal and the lines of the here-document are
+           used as they are, with no expansion and backslash-newline kept.
+test       t/016-here-quoted.sh
+
+assertion  XCU.2.7-redirection.017
+anchor     utilities/V3_chap02.html#2.7.4
+class      required
+says       With <<- leading tab characters are removed from each line of the
+           text and from the delimiter line (spaces are not), and tabs that
+           come from expansions are kept.
+test       t/017-here-strip-tabs.sh
+
+assertion  XCU.2.7-redirection.018
+anchor     utilities/V3_chap02.html#2.7.4
+class      required
+says       With two here-document operators on one line the text of the
+           first is read first and belongs to the first, the next lines to
+           the second.
+test       t/018-here-two-on-a-line.sh
+
+assertion  XCU.2.7-redirection.019
+anchor     utilities/V3_chap02.html#2.7.4
+class      required
+says       A here-document of a command that is not executed is still read
+           from the input, without any expansion being performed.
+test       t/019-here-not-executed.sh
+
+assertion  XCU.2.7-redirection.020
+anchor     utilities/V3_chap02.html#2.7.4
+class      required
+says       A here-document can be attached to a descriptor number written
+           before the operator.
+test       t/020-here-descriptor.sh
+
+assertion  XCU.2.7-redirection.021
+anchor     utilities/V3_chap02.html#2.7.4
+anchor     utilities/V3_chap02.html#2.3
+class      required
+says       A here-document inside a $( ) takes its text from the lines
+           inside the substitution, up to its delimiter line.
+test       t/021-here-in-cmdsub.sh
+
+assertion  XCU.2.7-redirection.022
+anchor     utilities/V3_chap02.html#2.7.4
+class      required
+says       For finding the delimiter line, the end of a command string given
+           to sh -c counts as a newline.
+test       t/022-here-command-string.sh
+
+assertion  XCU.2.7-redirection.023
+anchor     utilities/V3_chap02.html#2.7.4
+anchor     utilities/V3_chap02.html#2.2.1
+class      required
+says       With an unquoted delimiter, backslash-newline is removed while
+           the delimiter line is looked for, so a delimiter that line
+           continuation has glued to the line before it is not recognized.
+test       t/023-here-continuation.sh

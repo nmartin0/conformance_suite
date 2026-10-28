@@ -1,0 +1,20 @@
+# XCU stty
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The utility acts on the terminal that is its standard input, and the driver
+# gives scripts none. Nothing about its operands can be observed without
+# changing a terminal, so the page is recorded as untestable.
+
+assertion  XCU.stty.001
+anchor     utilities/stty.html#DESCRIPTION
+anchor     utilities/stty.html#OPTIONS
+anchor     utilities/stty.html#OPERANDS
+anchor     utilities/stty.html#STDOUT
+class      untestable
+says       stty without operands reports settings, -a reports all of them, -g
+           writes a one-line form that restores them, and the operands change
+           the control, input, output and local modes, the special characters
+           and the combination modes.
+reason     It needs a terminal as standard input whose settings the test may read
+           and change; the driver supplies none and a test must not alter a
+           person's terminal.

@@ -1,0 +1,68 @@
+# XCU ipcs
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The whole utility is XSI-shaded. Whether any message queue, shared memory
+# segment or semaphore set exists is not under the control of a script (no
+# POSIX utility creates one), so the tests judge the introductory line, the
+# selection of reports by -q, -m and -s, and the status. Column contents
+# are not checked.
+
+assertion  XCU.ipcs.001
+anchor     utilities/ipcs.html#STDOUT
+class      conditional
+when       XSI
+says       The first output line is "IPC status from" a source, "as of" and a
+           date in the form of the POSIX-locale date output (weekday, month,
+           day, time, zone, year), and ipcs exits with status zero.
+test       t/001-intro-line.sh
+
+assertion  XCU.ipcs.002
+anchor     utilities/ipcs.html#OPTIONS
+anchor     utilities/ipcs.html#STDOUT
+class      conditional
+when       XSI
+says       With -q only the message queue report is written: after the first
+           line the output mentions Message Queue and neither Shared Memory
+           nor Semaphore.
+test       t/002-queues-only.sh
+
+assertion  XCU.ipcs.003
+anchor     utilities/ipcs.html#OPTIONS
+anchor     utilities/ipcs.html#STDOUT
+class      conditional
+when       XSI
+says       With -m only the shared memory report is written: after the first
+           line the output mentions Shared Memory and neither Message Queue
+           nor Semaphore.
+test       t/003-shared-memory-only.sh
+
+assertion  XCU.ipcs.004
+anchor     utilities/ipcs.html#OPTIONS
+anchor     utilities/ipcs.html#STDOUT
+class      conditional
+when       XSI
+says       With -s only the semaphore report is written: after the first line
+           the output mentions Semaphore and neither Message Queue nor Shared
+           Memory.
+test       t/004-semaphores-only.sh
+
+assertion  XCU.ipcs.005
+anchor     utilities/ipcs.html#DESCRIPTION
+anchor     utilities/ipcs.html#STDOUT
+class      conditional
+when       XSI
+says       With none of -q, -m and -s all three reports are written, and the
+           print options -a, -b, -c, -o, -p and -t, alone or with the
+           selecting options, do not change which reports appear.
+test       t/005-all-reports.sh
+
+assertion  XCU.ipcs.006
+anchor     utilities/ipcs.html#STDOUT
+class      untestable
+when       XSI
+says       Each present facility is shown with the columns T, ID, KEY, MODE,
+           OWNER, GROUP and, depending on the options, the creator, byte
+           count, process ID and time columns, in the stated formats.
+reason     No POSIX utility can create a message queue, shared memory segment
+           or semaphore set for the report to describe, and a script cannot
+           rely on what other processes created.

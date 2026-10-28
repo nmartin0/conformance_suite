@@ -1,0 +1,383 @@
+# XCU 2.6-word-expansions
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.2.6-word-expansions.001
+anchor     utilities/V3_chap02.html#2.6
+anchor     utilities/V3_chap02.html#2.6.2
+class      required
+says       The result of a parameter expansion is not expanded again (no
+           further tilde, parameter, command or arithmetic expansion); only
+           field splitting and filename expansion follow it.
+test       t/001-no-reexpansion.sh
+
+assertion  XCU.2.6-word-expansions.002
+anchor     utilities/V3_chap02.html#2.6
+anchor     utilities/V3_chap02.html#2.6.5
+anchor     utilities/V3_chap02.html#2.6.6
+class      required
+says       Field splitting comes before filename expansion: the unquoted
+           result of an expansion is split into fields and each field that
+           holds pattern characters is then matched against file names.
+test       t/002-split-then-glob.sh
+
+assertion  XCU.2.6-word-expansions.003
+anchor     utilities/V3_chap02.html#2.6.6
+class      required
+says       Filename expansion applies to unquoted fields with pattern
+           characters (including those from expansions) and gives sorted
+           matches, leaves a pattern that matches nothing as it was, is not
+           done for quoted or escaped pattern characters, and is turned off
+           by set -f.
+test       t/003-pathname-switch.sh
+
+assertion  XCU.2.6-word-expansions.004
+anchor     utilities/V3_chap02.html#2.6.6
+anchor     utilities/V3_chap02.html#2.14.3
+class      required
+says       In filename expansion a star or question mark does not match a
+           leading period, so a leading period needs an explicit period in
+           the pattern, and a slash is matched only by a slash in the
+           pattern.
+test       t/004-pathname-rules.sh
+
+assertion  XCU.2.6-word-expansions.005
+anchor     utilities/V3_chap02.html#2.6
+class      required
+says       A dollar sign that is not quoted and is followed by a space, tab
+           or newline, or by nothing, stands for itself.
+test       t/005-dollar-literal.sh
+
+assertion  XCU.2.6-word-expansions.006
+anchor     utilities/V3_chap02.html#2.6
+class      required
+says       Expansions of a command's name and arguments are carried out in
+           the current shell environment, so an assignment made by ${v:=w}
+           or by $((n=5)) stays in effect, while one made inside a command
+           substitution does not.
+test       t/006-current-environment.sh
+
+assertion  XCU.2.6-word-expansions.007
+anchor     utilities/V3_chap02.html#2.6.1
+class      required
+says       An unquoted tilde at the start of a word, alone or up to the
+           first slash, is replaced by the value of HOME; a tilde that is
+           quoted or is not at the start of a word is not expanded.
+test       t/007-tilde-home.sh
+
+assertion  XCU.2.6-word-expansions.008
+anchor     utilities/V3_chap02.html#2.6.1
+class      required
+says       In a variable assignment a tilde-prefix is also recognized after
+           the equals sign and after each unquoted colon, and ends at the
+           next colon or slash or at the end of the word.
+test       t/008-tilde-assignment.sh
+
+assertion  XCU.2.6-word-expansions.009
+anchor     utilities/V3_chap02.html#2.6.1
+class      required
+says       The replacement for a tilde-prefix is treated as quoted, so it is
+           not split into fields and not matched against file names, and an
+           empty HOME gives one empty field.
+test       t/009-tilde-result-quoted.sh
+
+assertion  XCU.2.6-word-expansions.010
+anchor     utilities/V3_chap02.html#2.6.2
+class      required
+says       Braces are optional around a name except where the next character
+           could continue it, and an unbraced name is the longest valid
+           name; for positional parameters of more than one digit braces are
+           needed.
+test       t/010-braces-and-names.sh
+
+assertion  XCU.2.6-word-expansions.011
+anchor     utilities/V3_chap02.html#2.6.2
+class      required
+says       ${p:-w} gives w when p is unset or null and ${p-w} only when p is
+           unset; otherwise both give the value of p.
+test       t/011-use-default.sh
+
+assertion  XCU.2.6-word-expansions.012
+anchor     utilities/V3_chap02.html#2.6.2
+class      required
+says       ${p:=w} assigns w to p when p is unset or null and ${p=w} only
+           when p is unset; in all cases the final value of p is the result,
+           and the assigned value has had quote removal.
+test       t/012-assign-default.sh
+
+assertion  XCU.2.6-word-expansions.013
+anchor     utilities/V3_chap02.html#2.6.2
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       ${p:?w} gives an error when p is unset or null and ${p?w} only
+           when p is unset: the shell writes the word to standard error and
+           a non-interactive shell exits with a nonzero status before
+           running the command; otherwise the value of p is the result.
+test       t/013-error-if-unset.sh
+
+assertion  XCU.2.6-word-expansions.014
+anchor     utilities/V3_chap02.html#2.6.2
+class      required
+says       ${p:+w} gives w when p is set and not null, and ${p+w} gives w
+           when p is set; in the other cases the result is null.
+test       t/014-use-alternative.sh
+
+assertion  XCU.2.6-word-expansions.015
+anchor     utilities/V3_chap02.html#2.6.2
+class      required
+says       The word of a ${ } modifier is expanded only when its value is
+           needed: with the parameter set and not null no side effect of the
+           word takes place.
+test       t/015-word-when-needed.sh
+
+assertion  XCU.2.6-word-expansions.016
+anchor     utilities/V3_chap02.html#2.6.2
+class      required
+says       The word of a ${ } modifier undergoes tilde expansion, parameter
+           expansion, command substitution, arithmetic expansion and quote
+           removal.
+test       t/016-word-expansions.sh
+
+assertion  XCU.2.6-word-expansions.017
+anchor     utilities/V3_chap02.html#2.6.2
+class      required
+says       ${#p} is the decimal length in characters of the value of p, 0
+           for a null value; ${#} is the number of positional parameters.
+test       t/017-string-length.sh
+
+assertion  XCU.2.6-word-expansions.018
+anchor     utilities/V3_chap02.html#2.6.2
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       With set -u in effect the expansions ${#p} and the substring
+           forms (${p%w}, ${p#w}) of an unset parameter fail: a
+           non-interactive shell writes a diagnostic and exits with a
+           nonzero status before the command runs.
+test       t/018-nounset-fails.sh
+
+assertion  XCU.2.6-word-expansions.019
+anchor     utilities/V3_chap02.html#2.6.2
+class      required
+says       ${p%w} removes the smallest suffix matching the pattern w and
+           ${p%%w} the largest; the pattern is a shell pattern, and a value
+           with no matching suffix, or an empty pattern, leaves p unchanged.
+test       t/019-remove-suffix.sh
+
+assertion  XCU.2.6-word-expansions.020
+anchor     utilities/V3_chap02.html#2.6.2
+class      required
+says       ${p#w} removes the smallest prefix matching the pattern w and
+           ${p##w} the largest; a value with no matching prefix, or an empty
+           pattern, leaves p unchanged.
+test       t/020-remove-prefix.sh
+
+assertion  XCU.2.6-word-expansions.021
+anchor     utilities/V3_chap02.html#2.6.2
+class      required
+says       In the substring forms, pattern characters written unquoted, or
+           arriving from an unquoted expansion, are special, also when the
+           whole expansion is inside double quotes, and quoting a character
+           inside the braces (or quoting the expansion that supplies the
+           pattern) makes it literal.
+test       t/021-pattern-quoting.sh
+
+assertion  XCU.2.6-word-expansions.022
+anchor     utilities/V3_chap02.html#2.6.2
+class      required
+says       The brace that ends a ${ } expansion is the first one not escaped
+           by a backslash, not inside quotes and not inside an embedded
+           expansion or command substitution.
+test       t/022-closing-brace-search.sh
+
+assertion  XCU.2.6-word-expansions.023
+anchor     utilities/V3_chap02.html#2.6.3
+class      required
+says       A command substitution is replaced by the standard output of its
+           commands in both forms, $( ) and backquotes, with every trailing
+           newline removed and all other newlines kept.
+test       t/023-cmdsub-basic.sh
+
+assertion  XCU.2.6-word-expansions.024
+anchor     utilities/V3_chap02.html#2.6.3
+class      required
+says       The commands of a command substitution run in a subshell
+           environment: a variable they set or a directory they change to
+           does not affect the current shell.
+test       t/024-cmdsub-subshell.sh
+
+assertion  XCU.2.6-word-expansions.025
+anchor     utilities/V3_chap02.html#2.6.3
+class      required
+says       The result of a command substitution is not processed for further
+           tilde expansion, parameter expansion, command substitution or
+           arithmetic expansion.
+test       t/025-cmdsub-not-reprocessed.sh
+
+assertion  XCU.2.6-word-expansions.026
+anchor     utilities/V3_chap02.html#2.6.3
+anchor     utilities/V3_chap02.html#2.6.5
+class      required
+says       The result of an unquoted command substitution is subject to
+           field splitting (newlines split by default), and a quoted one
+           gives a single field.
+test       t/026-cmdsub-splitting.sh
+
+assertion  XCU.2.6-word-expansions.027
+anchor     utilities/V3_chap02.html#2.6.3
+class      required
+says       In the backquote form, a backslash keeps its literal meaning
+           except before a dollar sign, backquote or backslash, where it is
+           removed; inner backquotes are nested by escaping them with
+           backslashes.
+test       t/027-backquote-backslash.sh
+
+assertion  XCU.2.6-word-expansions.028
+anchor     utilities/V3_chap02.html#2.6.3
+class      required
+says       Command substitutions nest, and a substitution that starts with a
+           subshell can be written with a space after the opening $(; its
+           exit status is the status of the assignment it belongs to.
+test       t/028-cmdsub-nesting.sh
+
+assertion  XCU.2.6-word-expansions.029
+anchor     utilities/V3_chap02.html#2.6.3
+class      required
+since      2024
+says       For an expansion beginning with $(( the shell treats it as
+           arithmetic only if it can be parsed that way; text that cannot be
+           an arithmetic expression, such as two subshells in a row, is a
+           command substitution.
+test       t/029-cmdsub-or-arithmetic.sh
+
+assertion  XCU.2.6-word-expansions.030
+anchor     utilities/V3_chap02.html#2.6.4
+anchor     utilities/V3_chap01.html#1.1.2.1
+class      required
+says       Arithmetic expansion evaluates the integer operators + - * / %
+           and unary + and - with C precedence, parentheses, and C rules for
+           division and remainder (the quotient is truncated toward zero and
+           the remainder has the sign of the dividend).
+test       t/030-arith-basic.sh
+
+assertion  XCU.2.6-word-expansions.031
+anchor     utilities/V3_chap02.html#2.6.4
+anchor     utilities/V3_chap01.html#1.1.2.1
+class      required
+says       Arithmetic expansion has the C shift, relational, equality,
+           bitwise and logical operators, which yield 1 or 0 for the
+           relational, equality and logical ones.
+test       t/031-arith-operators.sh
+
+assertion  XCU.2.6-word-expansions.032
+anchor     utilities/V3_chap02.html#2.6.4
+anchor     utilities/V3_chap01.html#1.1.2.1
+class      required
+says       Arithmetic expansion has the conditional operator, takes decimal,
+           octal (leading 0) and hexadecimal (0x) constants, reads variables
+           by name, and expands parameters, command substitutions and blanks
+           inside the expression.
+test       t/032-arith-more.sh
+
+assertion  XCU.2.6-word-expansions.033
+anchor     utilities/V3_chap02.html#2.6.4
+anchor     utilities/V3_chap01.html#1.1.2.1
+class      required
+says       The assignment operators = += -= *= /= %= <<= >>= &= ^= |= change
+           the variable, the new value is the value of the expression, and
+           the change is in effect after the expansion.
+test       t/033-arith-assignment.sh
+
+assertion  XCU.2.6-word-expansions.034
+anchor     utilities/V3_chap02.html#2.6.4
+anchor     utilities/V3_chap01.html#1.1.2.1
+class      required
+says       As in C, the right side of && and || and the unchosen branch of
+           the conditional operator are not evaluated.
+test       t/034-arith-short-circuit.sh
+
+assertion  XCU.2.6-word-expansions.035
+anchor     utilities/V3_chap02.html#2.6.4
+class      required
+says       When a variable holds an integer constant, optionally with a
+           leading plus or minus, $((x)) and $(($x)) give the same value.
+test       t/035-arith-variable-forms.sh
+
+assertion  XCU.2.6-word-expansions.036
+anchor     utilities/V3_chap02.html#2.6.4
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       When the expression is invalid the expansion fails: the shell
+           writes a diagnostic to standard error and a non-interactive shell
+           exits with a nonzero status before running the command.
+test       t/036-arith-invalid.sh
+
+assertion  XCU.2.6-word-expansions.037
+anchor     utilities/V3_chap02.html#2.6.5
+class      required
+says       With the default IFS a run of spaces, tabs and newlines in an
+           unquoted expansion result separates fields, and leading or
+           trailing white space gives no empty field.
+test       t/037-split-default.sh
+
+assertion  XCU.2.6-word-expansions.038
+anchor     utilities/V3_chap02.html#2.6.5
+class      required
+says       Each non-white-space IFS character ends a field, so adjacent ones
+           give empty fields, a leading one gives an empty first field, and
+           a single trailing one adds no field; a lone one gives one empty
+           field.
+test       t/038-split-nonwhite.sh
+
+assertion  XCU.2.6-word-expansions.039
+anchor     utilities/V3_chap02.html#2.6.5
+class      required
+says       IFS white space next to a non-white-space IFS character is part
+           of one delimiter, and leading and trailing IFS white space is
+           ignored.
+test       t/039-split-mixed.sh
+
+assertion  XCU.2.6-word-expansions.040
+anchor     utilities/V3_chap02.html#2.6.5
+class      required
+says       With IFS set to the empty string no field splitting happens, but
+           an unquoted expansion that gives an empty field is removed
+           (unless quoting is also present in that field).
+test       t/040-split-null-ifs.sh
+
+assertion  XCU.2.6-word-expansions.041
+anchor     utilities/V3_chap02.html#2.6.5
+class      required
+says       Only the results of unquoted expansions are split: delimiter
+           characters written literally in the word, or coming from a quoted
+           expansion, do not split it.
+test       t/041-split-only-results.sh
+
+assertion  XCU.2.6-word-expansions.042
+anchor     utilities/V3_chap02.html#2.6.5
+class      required
+says       An unquoted expansion that gives nothing or only IFS white space
+           gives zero fields, not one empty field.
+test       t/042-split-zero-fields.sh
+
+assertion  XCU.2.6-word-expansions.043
+anchor     utilities/V3_chap02.html#2.6.5
+class      required
+says       The results of unquoted command substitutions and arithmetic
+           expansions are split at IFS characters like those of parameter
+           expansions.
+test       t/043-split-cmdsub-arith.sh
+
+assertion  XCU.2.6-word-expansions.044
+anchor     utilities/V3_chap02.html#2.6.5
+class      required
+says       A tab alone in IFS is a delimiter and space is then an ordinary
+           character.
+test       t/044-split-tab-only.sh
+
+assertion  XCU.2.6-word-expansions.045
+anchor     utilities/V3_chap02.html#2.6.7
+anchor     utilities/V3_chap02.html#2.2
+class      required
+says       Quote removal deletes the quoting backslashes, single quotes and
+           double quotes of the word as written, but not a quote character
+           that was itself quoted or that came out of an expansion.
+test       t/045-quote-removal.sh

@@ -1,0 +1,43 @@
+# XCU newgrp
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# newgrp starts a new shell, so the tests feed that shell commands on a pipe
+# and read what it prints. The shell that runs is not named by the page, so
+# only plain commands are fed to it. Password prompts, the group database and
+# -l are not exercised. The group operand test names the group the process is
+# already in, so a refusal cannot be told from success; the assertion allows
+# either, as the page lets the new shell be created in both cases.
+
+assertion  XCU.newgrp.001
+anchor     utilities/newgrp.html#EXIT STATUS
+anchor     utilities/newgrp.html#DESCRIPTION
+class      required
+says       When newgrp creates the new shell, newgrp exits with the exit status
+           of that shell.
+test       t/001-shell-status.sh
+
+assertion  XCU.newgrp.002
+anchor     utilities/newgrp.html#DESCRIPTION
+class      required
+says       The new shell keeps the exported variables, the working directory and
+           the file creation mask of the shell that ran newgrp.
+test       t/002-environment-kept.sh
+
+assertion  XCU.newgrp.003
+anchor     utilities/newgrp.html#OPERANDS
+anchor     utilities/newgrp.html#DESCRIPTION
+class      required
+says       newgrp given a numeric group of the invoking process still creates the
+           shell, and in it the real and effective group IDs are equal and are
+           either that group or what they were before.
+test       t/003-group-operand.sh
+
+assertion  XCU.newgrp.004
+anchor     utilities/newgrp.html#DESCRIPTION
+anchor     utilities/newgrp.html#OPTIONS
+class      untestable
+says       Without an operand the group goes back to the user's entry; -l gives
+           the environment of a new login; a password is read from the terminal
+           when the group needs one and the user is not a member.
+reason     The outcome depends on the group database and its passwords, which
+           a test must not change, and the password is read from the terminal.

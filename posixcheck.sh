@@ -365,6 +365,7 @@ if [ -z "$pc_sut_sh" ]; then
 	IFS=$pc_oldifs
 	[ -n "$pc_sut_sh" ] || pc_abort "no sh on _CS_PATH ($pc_cspath)"
 fi
+PC_SH=$pc_sut_sh; export PC_SH
 pc_t=$("$pc_sut_sh" "$pc_root/core/trust.sh" "$pc_trustdir/sut")
 [ -z "$pc_t" ] || pc_abort "tests cannot run reliably: $pc_sut_sh check '$pc_t' failed"
 

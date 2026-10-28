@@ -1,0 +1,19 @@
+# XCU tput
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The sequences are terminal dependent and the page leaves the results
+# undefined when standard output is not a terminal, so nothing observable is
+# left for a script. The exit codes for a usage error and an unknown terminal
+# are not exercised, since the page gives no result for a non-terminal output.
+
+assertion  XCU.tput.001
+anchor     utilities/tput.html#DESCRIPTION
+anchor     utilities/tput.html#OPERANDS
+anchor     utilities/tput.html#EXIT STATUS
+class      untestable
+says       tput clear, init and reset write the terminal's clear, initialise and
+           reset sequences, a terminal that lacks one is not an error, and the
+           exit status classes name usage errors, unknown terminals and invalid
+           operands.
+reason     The sequences depend on the terminal type, and the page leaves the
+           results undefined when standard output is not a terminal.

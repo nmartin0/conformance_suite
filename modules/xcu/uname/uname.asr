@@ -1,0 +1,53 @@
+# XCU uname
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The values are implementation-defined; the tests compare the forms with
+# each other and check the line structure.
+
+assertion  XCU.uname.001
+anchor     utilities/uname.html#DESCRIPTION
+anchor     utilities/uname.html#OPTIONS
+anchor     utilities/uname.html#STDOUT
+class      required
+says       With no options uname writes the same text as uname -s.
+test       t/001-default-is-s.sh
+
+assertion  XCU.uname.002
+anchor     utilities/uname.html#OPTIONS
+anchor     utilities/uname.html#STDOUT
+class      required
+says       uname -a writes one line that begins with the output of
+           uname -mnrsv; anything more it writes comes after those symbols,
+           separated by a blank.
+test       t/002-all-option.sh
+
+assertion  XCU.uname.003
+anchor     utilities/uname.html#STDOUT
+class      required
+says       Selected symbols are written in the order system name, node name,
+           release, version, machine, separated by single blanks with no
+           trailing blank, whatever the order of the options.
+test       t/003-order.sh
+
+assertion  XCU.uname.004
+anchor     utilities/uname.html#OPTIONS
+anchor     utilities/uname.html#STDOUT
+class      required
+says       Each of -m, -n, -r, -s and -v writes a single line ending in a
+           newline.
+test       t/004-one-line.sh
+
+assertion  XCU.uname.005
+anchor     utilities/uname.html#EXIT STATUS
+anchor     utilities/uname.html#OPTIONS
+class      required
+says       An option uname does not support gives a status above zero.
+test       t/005-bad-option.sh
+
+assertion  XCU.uname.006
+anchor     utilities/uname.html#EXIT STATUS
+anchor     utilities/uname.html#STDERR
+class      required
+says       uname with each supported option exits with status zero and writes
+           nothing to standard error.
+test       t/006-status-and-stderr.sh

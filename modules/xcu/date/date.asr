@@ -1,0 +1,85 @@
+# XCU date
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the POSIX locale and with a TZ the test chooses. The
+# time-setting operand (XSI) is not exercised: it changes the system clock.
+
+assertion  XCU.date.001
+anchor     utilities/date.html#STDOUT
+anchor     utilities/date.html#DESCRIPTION
+class      required
+says       With no operand, in the POSIX locale, date writes the same text
+           as date with the format operand "+%a %b %e %H:%M:%S %Z %Y".
+test       t/001-default-format.sh
+
+assertion  XCU.date.002
+anchor     utilities/date.html#OPERANDS
+class      required
+says       The output for a +format operand is the formatted text followed by
+           one newline: a bare "+" gives only a newline, ordinary text is
+           copied, %n gives a newline, %t a tab and %% a percent sign, and a
+           newline is still added after a format that ends in %n.
+test       t/002-format-newline.sh
+
+assertion  XCU.date.003
+anchor     utilities/date.html#OPERANDS
+class      required
+says       Within one invocation, the compound conversions agree with their
+           definitions in the POSIX locale: %D with %m/%d/%y, %T with
+           %H:%M:%S, %R with %H:%M, %F with %Y-%m-%d, %h with %b, %C%y with %Y,
+           %r with %I:%M:%S %p, %x with %m/%d/%y, %X with %H:%M:%S and %c with
+           %a %b %e %H:%M:%S %Y.
+test       t/003-compound-conversions.sh
+
+assertion  XCU.date.004
+anchor     utilities/date.html#OPERANDS
+class      required
+says       In the POSIX locale %a, %A, %b, %B and %p give the English names
+           and AM or PM, the numeric conversions stay in their ranges (%H,
+           %I, %M, %S, %d, %m, %j, %u, %w, %U, %W, %V), %e is %d with a
+           leading zero replaced by a space, and the weekday name, %w, %u, %H,
+           %I and %p agree with each other.
+test       t/004-names-and-ranges.sh
+
+assertion  XCU.date.005
+anchor     utilities/date.html#OPTIONS
+class      required
+says       With -u the time is shown as UTC whatever TZ holds: with TZ set to
+           an offset zone, "date -u +%H%M" equals the same conversion run with
+           TZ=UTC0, and %Z is UTC or GMT.
+test       t/005-utc-option.sh
+
+assertion  XCU.date.006
+anchor     utilities/date.html#ENVIRONMENT VARIABLES
+anchor     utilities/date.html#OPTIONS
+class      required
+says       Without -u the zone in TZ is used: with TZ=XYZ5, %Z is XYZ, %z is
+           -0500 and the hour is five hours behind the hour shown for UTC.
+test       t/006-tz-honoured.sh
+
+assertion  XCU.date.007
+anchor     utilities/date.html#OPERANDS
+anchor     utilities/date.html#EXIT STATUS
+class      conditional
+when       XSI
+says       A time-setting operand whose month is 13 cannot be applied: date
+           exits with a status above zero.
+test       t/007-bad-set-operand.sh
+
+assertion  XCU.date.008
+anchor     utilities/date.html#EXIT STATUS
+anchor     utilities/date.html#STDERR
+class      required
+says       A successful "date +%Y" exits with status zero, writes a four digit
+           year to standard output and nothing to standard error.
+test       t/008-status-and-stderr.sh
+
+assertion  XCU.date.009
+anchor     utilities/date.html#OPERANDS
+class      untestable
+when       XSI
+says       The mmddhhmm[[cc]yy] operand sets the system date and time, with
+           two-digit years 69 to 99 meaning 1969 to 1999 and 00 to 68 meaning
+           2000 to 2068, the current year when the year is omitted.
+reason     Setting the system clock changes the state of the machine under
+           test and needs privilege; the effect cannot be undone exactly.

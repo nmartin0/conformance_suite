@@ -1,0 +1,135 @@
+# XCU xargs
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Output is produced with echo and printf, which the test passes as the
+# utility. -I and -L are XSI. -p reads /dev/tty and is not testable here.
+# Command line lengths are those defined on the page: the bytes of the
+# utility name and each argument, each with a terminating null byte.
+
+assertion  XCU.xargs.001
+anchor     utilities/xargs.html#DESCRIPTION
+anchor     utilities/xargs.html#OPERANDS
+class      required
+says       Without a utility operand xargs runs echo with the arguments read
+           from standard input, and initial arguments of the utility operand
+           come before them.
+test       t/001-default-echo.sh
+
+assertion  XCU.xargs.002
+anchor     utilities/xargs.html#DESCRIPTION
+class      required
+says       Without -0 arguments are separated by blanks and newlines (runs of
+           separators count once), single quotes and double quotes keep blanks
+           and the other quote character literal, and a backslash makes the
+           next character literal.
+test       t/002-delimiters-and-quotes.sh
+
+assertion  XCU.xargs.003
+anchor     utilities/xargs.html#OPTIONS
+class      required
+says       -n NUMBER runs the utility with at most NUMBER arguments each time
+           and a final run with the remainder.
+test       t/003-max-args.sh
+
+assertion  XCU.xargs.004
+anchor     utilities/xargs.html#OPTIONS
+anchor     utilities/xargs.html#DESCRIPTION
+class      required
+says       Without arguments on standard input the utility runs exactly once;
+           with -r it does not run at all.
+test       t/004-no-input.sh
+
+assertion  XCU.xargs.005
+anchor     utilities/xargs.html#OPTIONS
+anchor     utilities/xargs.html#DESCRIPTION
+class      required
+says       -E STRING makes an argument that is only STRING (after quote
+           processing) the end of input and the arguments before it are
+           used; -E with an empty string switches this off so an underscore is
+           an ordinary argument.
+test       t/005-eof-string.sh
+
+assertion  XCU.xargs.006
+anchor     utilities/xargs.html#OPTIONS
+anchor     utilities/xargs.html#DESCRIPTION
+class      required
+says       With -0 arguments end at null bytes only, so blanks, newlines and
+           quote characters are part of the argument, and adjacent null bytes
+           give an empty argument between them.
+test       t/006-null-separated.sh
+
+assertion  XCU.xargs.007
+anchor     utilities/xargs.html#OPTIONS
+anchor     utilities/xargs.html#STDERR
+class      required
+says       -t writes each command line to standard error, as the utility and
+           its arguments, before running it, and the command still runs.
+test       t/007-trace.sh
+
+assertion  XCU.xargs.008
+anchor     utilities/xargs.html#OPTIONS
+anchor     utilities/xargs.html#DESCRIPTION
+class      required
+says       -s SIZE keeps each command line, counted as utility name plus
+           arguments with a null byte each, below SIZE bytes, so that fewer
+           arguments are used per run when more would not fit.
+test       t/008-size.sh
+
+assertion  XCU.xargs.009
+anchor     utilities/xargs.html#OPTIONS
+class      required
+says       With -x xargs terminates with a status between 1 and 125 when a
+           command line with the requested number of arguments does not fit
+           in the size; without -x it uses fewer arguments and succeeds.
+test       t/009-exact-size.sh
+
+assertion  XCU.xargs.010
+anchor     utilities/xargs.html#OPTIONS
+class      conditional
+when       XSI
+says       -I STR runs the utility once for each input line, replaces STR in
+           the arguments by the whole line with leading blanks removed (a line
+           may hold blanks), and replaces it in more than one argument.
+test       t/010-replace.sh
+
+assertion  XCU.xargs.011
+anchor     utilities/xargs.html#OPTIONS
+class      conditional
+when       XSI
+says       -L NUMBER runs the utility for each NUMBER input lines, ignoring
+           empty lines, with a short last run, and a line ending in a blank
+           continues onto the next line.
+test       t/011-lines.sh
+
+assertion  XCU.xargs.012
+anchor     utilities/xargs.html#EXIT STATUS
+class      required
+says       xargs exits with status 127 when the utility cannot be found and
+           126 when it is found but cannot be invoked.
+test       t/012-not-found-not-executable.sh
+
+assertion  XCU.xargs.013
+anchor     utilities/xargs.html#EXIT STATUS
+anchor     utilities/xargs.html#CONSEQUENCES OF ERRORS
+class      required
+says       When an invocation of the utility exits with a non-zero status other
+           than 255, xargs goes on with the remaining input and exits with a
+           status between 1 and 125.
+test       t/013-failing-utility.sh
+
+assertion  XCU.xargs.014
+anchor     utilities/xargs.html#CONSEQUENCES OF ERRORS
+anchor     utilities/xargs.html#DESCRIPTION
+class      required
+says       When an invocation exits with status 255, xargs writes a diagnostic
+           message, processes no more input and exits with a status between 1
+           and 125.
+test       t/014-status-255.sh
+
+assertion  XCU.xargs.015
+anchor     utilities/xargs.html#OPTIONS
+class      untestable
+says       -p writes the command line and a prompt to standard error and runs
+           the command only on an affirmative answer read from /dev/tty.
+reason     The answer is read from the controlling terminal, which a script
+           run by the harness has no way to supply.

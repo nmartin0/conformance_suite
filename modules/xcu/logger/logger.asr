@@ -1,0 +1,59 @@
+# XCU logger
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Where the messages go is implementation-defined, so a script cannot read
+# them back; the tests judge the exit status, the silence of the standard
+# streams and the handling of input sources. The level emerg is not
+# exercised because it may be forwarded to every user's terminal. Messages
+# carry the tag posixcheck.
+
+assertion  XCU.logger.001
+anchor     utilities/logger.html#OPERANDS
+anchor     utilities/logger.html#EXIT STATUS
+anchor     utilities/logger.html#STDOUT
+class      required
+says       logger with string operands (and a tag) exits with status zero and
+           writes nothing to standard output or standard error.
+test       t/001-string-operands.sh
+
+assertion  XCU.logger.002
+anchor     utilities/logger.html#OPTIONS
+class      required
+says       -p accepts the facilities user and local0 to local7 and the levels
+           alert, crit, err, warning, notice, info and debug.
+test       t/002-priorities.sh
+
+assertion  XCU.logger.003
+anchor     utilities/logger.html#STDIN
+anchor     utilities/logger.html#EXIT STATUS
+class      required
+says       Without string operands and without -f, logger reads message lines
+           from standard input and exits with status zero, writing nothing to
+           standard output.
+test       t/003-standard-input.sh
+
+assertion  XCU.logger.004
+anchor     utilities/logger.html#OPTIONS
+anchor     utilities/logger.html#EXIT STATUS
+class      required
+says       -f FILE reads the message lines from FILE, with status zero, and a
+           FILE that cannot be read gives a status above zero.
+test       t/004-file-option.sh
+
+assertion  XCU.logger.005
+anchor     utilities/logger.html#OPTIONS
+class      required
+says       -i and -t TAG together with a string operand are accepted: status
+           zero and nothing written to standard output or standard error.
+test       t/005-pid-and-tag.sh
+
+assertion  XCU.logger.006
+anchor     utilities/logger.html#DESCRIPTION
+anchor     utilities/logger.html#OPTIONS
+class      untestable
+says       The messages are sent to the logging facility with a header holding
+           at least a timestamp and the tag, at the given facility and level
+           (user.notice by default), and each non-empty input line is a
+           separate message.
+reason     The logging facility and the place the messages end up are
+           implementation-defined, so a script cannot find what was logged.

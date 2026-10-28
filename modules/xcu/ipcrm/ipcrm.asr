@@ -1,0 +1,38 @@
+# XCU ipcrm
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The whole utility is XSI-shaded. No POSIX utility creates a message queue,
+# semaphore set or shared memory segment for ipcrm to remove, so the tests
+# cover the no-option form and the error for identifiers and keys that no
+# facility has (values chosen far above and away from usual ones).
+
+assertion  XCU.ipcrm.001
+anchor     utilities/ipcrm.html#DESCRIPTION
+anchor     utilities/ipcrm.html#EXIT STATUS
+class      conditional
+when       XSI
+says       ipcrm without options removes nothing and exits with status zero,
+           writing nothing to standard output.
+test       t/001-no-options.sh
+
+assertion  XCU.ipcrm.002
+anchor     utilities/ipcrm.html#OPTIONS
+anchor     utilities/ipcrm.html#EXIT STATUS
+class      conditional
+when       XSI
+says       Removing a message queue, semaphore set or shared memory segment
+           by an identifier or a key that no facility has (-q, -s, -m, -Q,
+           -S, -M) cannot be done: ipcrm exits with a status above zero.
+test       t/002-no-such-facility.sh
+
+assertion  XCU.ipcrm.003
+anchor     utilities/ipcrm.html#OPTIONS
+anchor     utilities/ipcrm.html#DESCRIPTION
+class      untestable
+when       XSI
+says       ipcrm removes the facility named by -q, -m or -s (identifier) or
+           -Q, -M or -S (key), a shared memory segment being destroyed after
+           the last detach, and only a process with appropriate privileges may
+           remove a facility it does not own.
+reason     No POSIX utility creates one of these facilities to remove, and
+           ownership by another user cannot be arranged portably.

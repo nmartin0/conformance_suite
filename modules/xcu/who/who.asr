@@ -1,0 +1,42 @@
+# XCU who
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The default output format and the user database are implementation-defined,
+# and the interesting options are XSI; only the exit status and the error
+# path can be judged by a script.
+
+assertion  XCU.who.001
+anchor     utilities/who.html#EXIT STATUS
+anchor     utilities/who.html#STDERR
+class      required
+says       who with no options or operands exits with status zero and writes
+           nothing to standard error.
+test       t/001-plain.sh
+
+assertion  XCU.who.002
+anchor     utilities/who.html#OPTIONS
+anchor     utilities/who.html#EXIT STATUS
+class      conditional
+when       XSI
+says       who -q exits with status zero and writes nothing to standard error.
+test       t/002-quick.sh
+
+assertion  XCU.who.003
+anchor     utilities/who.html#OPERANDS
+anchor     utilities/who.html#EXIT STATUS
+class      conditional
+when       XSI
+says       who given the name of a file that does not exist as its database
+           exits with a status above zero.
+test       t/003-missing-file.sh
+
+assertion  XCU.who.004
+anchor     utilities/who.html#STDOUT
+anchor     utilities/who.html#OPTIONS
+class      untestable
+when       XSI
+says       who -T writes name, a terminal state character, terminal name and
+           login time in the stated format; -b, -d, -l, -p, -r, -t, -u, -a, -H
+           and -s select and label the entries of the database.
+reason     The contents of the user database are not under the control of a
+           script, and the file operand's format is implementation-defined.

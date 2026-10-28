@@ -1,0 +1,70 @@
+# XCU cal
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The whole utility is XSI-shaded and the layout of the calendar is
+# unspecified. The tests read the output as words and look at the words that
+# are decimal numbers up to 31: those are the day numbers of the month (the
+# year in a heading is larger, the names are not numbers).
+
+assertion  XCU.cal.001
+anchor     utilities/cal.html#DESCRIPTION
+anchor     utilities/cal.html#OPERANDS
+class      conditional
+when       XSI
+says       For month M and year Y, cal M Y writes each day number of the month
+           once and no other number up to 31: 1 to 29 for 2 2024, 1 to 28 for
+           2 2023, 1 to 30 for 4 2023, 1 to 31 for 1 2023 and 12 2023.
+test       t/001-month-lengths.sh
+
+assertion  XCU.cal.002
+anchor     utilities/cal.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Up to September 2, 1752 the Julian calendar applies, so February
+           has 29 days in 1100, 1500, 1600 and 1700, and from September 14,
+           1752 the Gregorian calendar, so February has 28 days in 1800 and
+           1900 and 29 days in 2000.
+test       t/002-julian-gregorian.sh
+
+assertion  XCU.cal.003
+anchor     utilities/cal.html#DESCRIPTION
+class      conditional
+when       XSI
+says       cal 9 1752 shows the days 1, 2 and 14 to 30 and none of 3 to 13.
+test       t/003-september-1752.sh
+
+assertion  XCU.cal.004
+anchor     utilities/cal.html#DESCRIPTION
+anchor     utilities/cal.html#OPERANDS
+class      conditional
+when       XSI
+says       A single operand is a year and gives all twelve months: for 2023,
+           28 occurs twelve times, 29 and 30 eleven times and 31 seven times;
+           cal 12 is the year 12 (twelve months, February with 29 days).
+test       t/004-whole-year.sh
+
+assertion  XCU.cal.005
+anchor     utilities/cal.html#DESCRIPTION
+class      conditional
+when       XSI
+says       cal with no operands writes the calendar of the current month: the
+           same day numbers as cal with that month and year as operands.
+test       t/005-current-month.sh
+
+assertion  XCU.cal.006
+anchor     utilities/cal.html#OPERANDS
+anchor     utilities/cal.html#EXIT STATUS
+class      conditional
+when       XSI
+says       Operands outside the stated ranges (month 0 or 13, year 0 or
+           10000, or a non-numeric operand) give a status above zero.
+test       t/006-invalid-operands.sh
+
+assertion  XCU.cal.007
+anchor     utilities/cal.html#EXIT STATUS
+anchor     utilities/cal.html#STDERR
+class      conditional
+when       XSI
+says       cal with valid operands exits with status zero and writes nothing
+           to standard error.
+test       t/007-status.sh

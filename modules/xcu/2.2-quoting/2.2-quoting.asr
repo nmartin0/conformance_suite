@@ -1,0 +1,162 @@
+# XCU 2.2-quoting
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.2.2-quoting.001
+anchor     utilities/V3_chap02.html#2.2.1
+class      required
+says       An unquoted backslash makes the next character stand for itself:
+           each of | & ; < > ( ) $ backquote backslash double-quote
+           single-quote space * ? [ # ~ written after a backslash reaches
+           the command as that character.
+test       t/001-backslash-literal.sh
+
+assertion  XCU.2.2-quoting.002
+anchor     utilities/V3_chap02.html#2.2.1
+class      required
+says       A backslash followed by a newline is removed entirely before the
+           input is split into tokens, so it joins the text on both sides
+           and does not separate tokens; a blank written after the removed
+           pair still does.
+test       t/002-line-continuation.sh
+
+assertion  XCU.2.2-quoting.003
+anchor     utilities/V3_chap02.html#2.2.2
+class      required
+says       Characters inside single quotes keep their literal value,
+           including every character that is special elsewhere and a
+           newline; a single quote can be added to a word only outside
+           single quotes.
+test       t/003-single-quotes.sh
+
+assertion  XCU.2.2-quoting.004
+anchor     utilities/V3_chap02.html#2.2.3
+class      required
+says       Inside double quotes the characters other than dollar sign,
+           backquote and backslash keep their literal value: operators, glob
+           characters, a single quote, a hash, a tilde, white space and
+           newlines are not special, and no filename expansion happens.
+test       t/004-double-quotes-literal.sh
+
+assertion  XCU.2.2-quoting.005
+anchor     utilities/V3_chap02.html#2.2.3
+class      required
+says       Inside double quotes the dollar sign still introduces parameter
+           expansion, command substitution and arithmetic expansion, and the
+           backquote still introduces the old form of command substitution.
+test       t/005-double-quotes-dollar.sh
+
+assertion  XCU.2.2-quoting.006
+anchor     utilities/V3_chap02.html#2.2.3
+class      required
+says       Inside double quotes a backslash is an escape only before a
+           dollar sign, backquote, backslash, double quote or newline;
+           before any other character both the backslash and that character
+           stay.
+test       t/006-double-quotes-backslash.sh
+
+assertion  XCU.2.2-quoting.007
+anchor     utilities/V3_chap02.html#2.2.3
+class      required
+since      2024
+says       Inside double quotes a dollar sign followed by a single quote
+           does not start dollar-single-quotes: the dollar sign, the quotes
+           and the text between them are all literal.
+test       t/007-double-quotes-dollar-single.sh
+
+assertion  XCU.2.2-quoting.008
+anchor     utilities/V3_chap02.html#2.2.3
+class      required
+says       The commands inside a $( ) that sits within double quotes are not
+           affected by those double quotes: they can hold their own quotes,
+           and a quoted parenthesis does not end the substitution.
+test       t/008-double-quotes-cmdsub-nesting.sh
+
+assertion  XCU.2.2-quoting.009
+anchor     utilities/V3_chap02.html#2.2.3
+class      required
+says       When double quotes enclose a parameter expansion or a command
+           substitution, every character of the result keeps its literal
+           value: no field splitting, no filename expansion and no further
+           expansion.
+test       t/009-double-quotes-expansion-result.sh
+
+assertion  XCU.2.2-quoting.010
+anchor     utilities/V3_chap02.html#2.2.3
+class      required
+says       Inside double quotes, in the text of a ${ } expansion such as
+           ${u:-word}, characters other than double quote, backquote, dollar
+           sign and backslash keep their literal value (a single quote is
+           literal), a backslash before a closing brace is an escape that
+           hides it from the search for the end, and a nested $( ) has its
+           own quoting.
+test       t/010-double-quotes-braces.sh
+
+assertion  XCU.2.2-quoting.011
+anchor     utilities/V3_chap02.html#2.2.3
+anchor     utilities/V3_chap02.html#2.6.2
+class      required
+says       For the four substring forms (# ## % %%) the enclosing double
+           quotes have no effect on special characters inside the braces:
+           pattern characters stay active, while quotes or a backslash
+           inside the braces make a character literal.
+test       t/011-double-quotes-substring-forms.sh
+
+assertion  XCU.2.2-quoting.012
+anchor     utilities/V3_chap02.html#2.2.4
+class      required
+since      2024
+says       Inside dollar-single-quotes the sequences backslash-double-quote,
+           backslash-single-quote, double backslash, and backslash followed
+           by a, b, e, f, n, r, t or v yield the double quote, single quote,
+           backslash, alert, backspace, escape, form-feed, newline,
+           carriage-return, tab and vertical-tab characters.
+test       t/012-dollar-single-escapes.sh
+
+assertion  XCU.2.2-quoting.013
+anchor     utilities/V3_chap02.html#2.2.4
+class      required
+since      2024
+says       In dollar-single-quotes, backslash-c followed by a letter yields
+           the matching control character (A gives value 1, Z gives value
+           26), and backslash-c followed by two backslashes yields the FS
+           control character (value 28).
+test       t/013-dollar-single-control.sh
+
+assertion  XCU.2.2-quoting.014
+anchor     utilities/V3_chap02.html#2.2.4
+class      required
+since      2024
+says       In dollar-single-quotes, backslash-x followed by hexadecimal
+           digits yields the byte with that value, and the digits end at the
+           first character that is not a hexadecimal digit (tested with one
+           and two digits).
+test       t/014-dollar-single-hex.sh
+
+assertion  XCU.2.2-quoting.015
+anchor     utilities/V3_chap02.html#2.2.4
+class      required
+since      2024
+says       In dollar-single-quotes, a backslash followed by one to three
+           octal digits yields the byte with that value; the sequence ends
+           after three digits or at the first character that is not an octal
+           digit.
+test       t/015-dollar-single-octal.sh
+
+assertion  XCU.2.2-quoting.016
+anchor     utilities/V3_chap02.html#2.2.4
+class      required
+since      2024
+says       Other characters inside dollar-single-quotes keep their literal
+           value, so dollar signs, backquotes, parentheses and glob
+           characters are not expanded, and the result is a single word that
+           is not split.
+test       t/016-dollar-single-literal.sh
+
+assertion  XCU.2.2-quoting.017
+anchor     utilities/V3_chap02.html#2.2.4
+class      required
+since      2024
+says       In dollar-single-quotes an escaped single quote does not end the
+           quoted text, and the quoted text can be joined with neighbouring
+           quoted or unquoted text into one word.
+test       t/017-dollar-single-quote-end.sh

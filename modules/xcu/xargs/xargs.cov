@@ -1,0 +1,94 @@
+# xargs.cov - every requirement unit on utilities/xargs.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sections listed as "None.", "Not used." or "Default." take their meaning
+# from XCU 1.4 Utility Description Defaults.
+
+DESCRIPTION:b1e7fe0f             XCU.xargs.001 XCU.xargs.003 XCU.xargs.008
+DESCRIPTION:a6c5b61f             XCU.xargs.001
+DESCRIPTION:7b56a08f             XCU.xargs.001
+DESCRIPTION:23eb83d6             XCU.xargs.001
+DESCRIPTION:95859cd2             XCU.xargs.005
+DESCRIPTION:62a297cf             XCU.xargs.005
+DESCRIPTION:b8270f49             XCU.xargs.014
+DESCRIPTION:e7345c9e             XCU.xargs.002
+DESCRIPTION:3a75c5d4             XCU.xargs.002
+DESCRIPTION:fdf08f54             XCU.xargs.002
+DESCRIPTION:212bd037             XCU.xargs.002
+DESCRIPTION:f68a3be6             XCU.xargs.002
+DESCRIPTION:3a9f0a03             impl  undefined input is not tested
+DESCRIPTION:afb0aaa7             XCU.xargs.006
+DESCRIPTION:b59c4271             XCU.xargs.006
+DESCRIPTION:6190fdb4             none  should/may behaviour
+DESCRIPTION:b8550e3a             XCU.xargs.001 XCU.xargs.004
+DESCRIPTION:062f51a2             XCU.xargs.004
+DESCRIPTION:6db43c4c             impl  unspecified
+DESCRIPTION:103bc18d             XCU.xargs.008 XCU.xargs.009
+DESCRIPTION:c02b8fb6             todo  needs an environment large enough to approach ARG_MAX
+DESCRIPTION:225c0b1f             todo  needs input of at least LINE_MAX bytes with unknown limits
+OPTIONS:18e556fb                 todo  utility syntax conformance is not tested here
+OPTIONS:e2947e20                 none  introduces the option list
+OPTIONS:3b9b0ae5                 XCU.xargs.005
+OPTIONS:9a799e93                 impl  unspecified
+OPTIONS:fbe10991                 XCU.xargs.005
+OPTIONS:371f9e2d                 XCU.xargs.010
+OPTIONS:f2c4cfa4                 XCU.xargs.010
+OPTIONS:65e7c9a9                 XCU.xargs.010
+OPTIONS:b9fbde4f                 todo  limits of -I replacement are not probed
+OPTIONS:b7fc637e                 todo  limits of -I replacement are not probed
+OPTIONS:a8305f28                 XCU.xargs.010
+OPTIONS:2fa3dc5a                 XCU.xargs.011
+OPTIONS:73e31086                 XCU.xargs.011
+OPTIONS:b88b95a0                 XCU.xargs.011
+OPTIONS:55e5747a                 XCU.xargs.003
+OPTIONS:617e60ae                 XCU.xargs.003 XCU.xargs.008
+OPTIONS:5d55a9b5                 XCU.xargs.003
+OPTIONS:ad112c80                 XCU.xargs.015
+OPTIONS:9c39a28d                 XCU.xargs.015
+OPTIONS:dd26b86b                 XCU.xargs.015
+OPTIONS:5c5003bb                 XCU.xargs.004
+OPTIONS:4458de0d                 XCU.xargs.008
+OPTIONS:57c5f6e4                 XCU.xargs.008 XCU.xargs.009
+OPTIONS:6f8562ad                 XCU.xargs.008 XCU.xargs.009
+OPTIONS:97d797a7                 XCU.xargs.008
+OPTIONS:e55bfe67                 todo  needs a size of LINE_MAX bytes
+OPTIONS:53c386ef                 todo  needs a size beyond the implementation limit
+OPTIONS:2bfb44a7                 XCU.xargs.007
+OPTIONS:19990423                 XCU.xargs.007
+OPTIONS:f175717c                 XCU.xargs.009
+OPTIONS:86f9635c                 XCU.xargs.006
+OPTIONS:f1c61ddd                 XCU.xargs.005
+OPERANDS:51b44f3c                none  introduces the operand list
+OPERANDS:39e3a4ab                todo  PATH search for the utility is not probed
+OPERANDS:1e6b3c43                none  cross-reference
+OPERANDS:4de177c7                XCU.xargs.001
+OPERANDS:98260b51                impl  undefined
+OPERANDS:4c5eb422                XCU.xargs.001
+STDIN:7aa5c802                   impl  input not satisfying the requirement is unspecified
+STDIN:77c8ab95                   XCU.xargs.006
+INPUT_FILES:142930c9             XCU.xargs.015
+ENVIRONMENT_VARIABLES:14b63504   none  introduces the list
+ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:8aece102   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:5d64a535   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:18e71e9f   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:1bda213e   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:20a34d1a   todo  PATH is not varied
+ENVIRONMENT_VARIABLES:1e6b3c43   todo  PATH is not varied
+ASYNCHRONOUS_EVENTS:d92f27bd     none  XCU 1.4 default or empty section
+STDOUT:3f472296                  none  XCU 1.4 default or empty section
+STDERR:41516136                  XCU.xargs.007
+STDERR:3eb38b7a                  XCU.xargs.007
+STDERR:66bd4db8                  XCU.xargs.015
+STDERR:1c9f6b9d                  XCU.xargs.015
+STDERR:a130d567                  XCU.xargs.015
+OUTPUT_FILES:eb724aff            none  XCU 1.4 default or empty section
+EXTENDED_DESCRIPTION:eb724aff    none  XCU 1.4 default or empty section
+EXIT_STATUS:db823381             none  introduces the list
+EXIT_STATUS:8b075da2             XCU.xargs.001
+EXIT_STATUS:0df59650             XCU.xargs.009 XCU.xargs.013
+EXIT_STATUS:c6a9a77e             XCU.xargs.012
+EXIT_STATUS:0d62913f             XCU.xargs.012
+CONSEQUENCES_OF_ERRORS:a507897a  XCU.xargs.009 XCU.xargs.014

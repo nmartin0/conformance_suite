@@ -1,0 +1,73 @@
+# XCU crontab
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tests replace the invoking user's crontab entry, so each of them first
+# saves the existing one with crontab -l and puts it back (or removes it with
+# crontab -r when there was none) on every exit path. The entries used run the
+# command true on 30 February, a day that does not exist, so no job can run.
+# A user who is not allowed to use crontab (the XSI access files) makes the
+# first installation fail; the tests then report UNRESOLVED. The default
+# environment of a job, the run of a job and mail are not exercised. -e is
+# shaded UP.
+
+assertion  XCU.crontab.001
+anchor     utilities/crontab.html#DESCRIPTION
+anchor     utilities/crontab.html#OPTIONS
+anchor     utilities/crontab.html#STDOUT
+class      required
+says       crontab FILE installs the entries of FILE and crontab -l then writes
+           them to standard output with exit status zero (comment and blank
+           lines may differ).
+test       t/001-install-and-list.sh
+
+assertion  XCU.crontab.002
+anchor     utilities/crontab.html#DESCRIPTION
+anchor     utilities/crontab.html#STDIN
+class      required
+says       Without a file operand crontab reads the entries from standard input
+           and installs them.
+test       t/002-install-from-stdin.sh
+
+assertion  XCU.crontab.003
+anchor     utilities/crontab.html#DESCRIPTION
+class      required
+says       Installing a second entry file replaces the first: after it, the
+           listing holds the lines of the second file and none of the first.
+test       t/003-replace.sh
+
+assertion  XCU.crontab.004
+anchor     utilities/crontab.html#OPTIONS
+class      required
+says       crontab -r removes the entry with exit status zero, after which the
+           listing holds none of the removed entries.
+test       t/004-remove.sh
+
+assertion  XCU.crontab.005
+anchor     utilities/crontab.html#CONSEQUENCES OF ERRORS
+anchor     utilities/crontab.html#EXIT STATUS
+class      required
+says       crontab of a file that does not exist exits with a status above
+           zero and leaves the installed entry as it was.
+test       t/005-missing-file.sh
+
+assertion  XCU.crontab.006
+anchor     utilities/crontab.html#OPTIONS
+anchor     utilities/crontab.html#ENVIRONMENT VARIABLES
+class      conditional
+when       UP
+says       crontab -e runs the editor named by EDITOR on a copy of the entry
+           and installs the result: an editor that appends a line gives an
+           entry that holds the old lines and the new one.
+test       t/006-edit.sh
+
+assertion  XCU.crontab.007
+anchor     utilities/crontab.html#DESCRIPTION
+anchor     utilities/crontab.html#INPUT FILES
+class      untestable
+says       A job runs with HOME, LOGNAME, PATH and SHELL set (SHELL naming sh)
+           whatever the values when crontab was run; the fields of a line
+           select minutes, hours, days, months and weekdays as stated, a percent
+           sign in the command becomes a newline, and the remaining lines are
+           standard input of the command.
+reason     A job runs only when its time comes, under the scheduler daemon;
+           a test cannot wait for it within a bounded time.

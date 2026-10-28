@@ -1,0 +1,57 @@
+# XCU renice
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Each test starts a sleeping child of its own and reads its nice value with
+# ps -o nice. Only raising the nice value is done, which needs no privilege.
+# -g and -u act on whole groups or users and would touch processes of the
+# harness, so they are not exercised.
+
+assertion  XCU.renice.001
+anchor     utilities/renice.html#OPTIONS
+anchor     utilities/renice.html#DESCRIPTION
+class      required
+says       renice -n 1 PID, with the process ID given as an operand and no
+           other option, exits with status zero and raises the nice value of
+           that process by one, or leaves it at the upper limit when it was
+           there already.
+test       t/001-increment.sh
+
+assertion  XCU.renice.002
+anchor     utilities/renice.html#OPTIONS
+class      required
+says       renice -n 2 -p PID acts on the process with that ID in the same way
+           as the form without -p: status zero and a nice value two higher or
+           at the upper limit.
+test       t/002-p-option.sh
+
+assertion  XCU.renice.003
+anchor     utilities/renice.html#DESCRIPTION
+class      required
+says       An increment that would go beyond the implementation's upper limit
+           for the nice value is not an error: renice -n 1000 PID exits with
+           status zero and the nice value does not go down.
+test       t/003-bounded-increment.sh
+
+assertion  XCU.renice.004
+anchor     utilities/renice.html#EXIT STATUS
+anchor     utilities/renice.html#OPTIONS
+class      required
+says       renice of a process ID that does not exist exits with a status
+           above zero.
+test       t/004-no-such-process.sh
+
+assertion  XCU.renice.005
+anchor     utilities/renice.html#STDOUT
+anchor     utilities/renice.html#STDERR
+class      required
+says       A successful renice writes nothing to standard output.
+test       t/005-no-stdout.sh
+
+assertion  XCU.renice.006
+anchor     utilities/renice.html#OPTIONS
+class      untestable
+says       -g applies the change to every process of a process group and -u
+           to every process of a user, by user name or numeric ID.
+reason     Both change the nice value of processes the test does not own, in
+           the harness's own group or user; a safe group or user cannot be
+           arranged portably from a script.

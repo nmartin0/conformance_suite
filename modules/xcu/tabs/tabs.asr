@@ -1,0 +1,19 @@
+# XCU tabs
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page leaves the output undefined when standard output is not a terminal
+# and the sequence written to a terminal unspecified, and the driver supplies
+# no terminal, so nothing can be observed.
+
+assertion  XCU.tabs.001
+anchor     utilities/tabs.html#DESCRIPTION
+anchor     utilities/tabs.html#OPTIONS
+anchor     utilities/tabs.html#OPERANDS
+anchor     utilities/tabs.html#STDOUT
+class      untestable
+says       tabs clears the terminal tab stops and sets them at the stops named
+           by -n, a canned format option or a list operand, for the terminal
+           type given by -T or TERM.
+reason     The sequence is unspecified, the results are undefined when standard
+           output is not a terminal, and an effect on tab stops can only be seen
+           on a terminal.

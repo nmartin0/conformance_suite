@@ -1,0 +1,23 @@
+# XCU write
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The recipient's terminal cannot be used by a test, so only the refusal for a
+# user who is not logged on is exercised. The name used is one that no login
+# can hold.
+
+assertion  XCU.write.001
+anchor     utilities/write.html#EXIT STATUS
+class      required
+says       write to a user who is not logged on exits with a status above zero.
+test       t/001-not-logged-on.sh
+
+assertion  XCU.write.002
+anchor     utilities/write.html#DESCRIPTION
+anchor     utilities/write.html#STDIN
+anchor     utilities/write.html#EXIT STATUS
+class      untestable
+says       write copies lines from standard input to the terminal of a user
+           who is logged in, after the header line, ending a session with the
+           end-of-text message.
+reason     It needs another login with a terminal that the test may write to,
+           and the output goes to that terminal and not to the test.

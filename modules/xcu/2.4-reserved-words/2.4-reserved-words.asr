@@ -1,0 +1,58 @@
+# XCU 2.4-reserved-words
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.2.4-reserved-words.001
+anchor     utilities/V3_chap02.html#2.4
+class      required
+says       The words if, then, elif, else and fi are reserved words that
+           make an if command when they appear in command position.
+test       t/001-if-words.sh
+
+assertion  XCU.2.4-reserved-words.002
+anchor     utilities/V3_chap02.html#2.4
+class      required
+says       The words for, in, do, done, while and until are reserved words
+           that make the loop commands when they appear in command position.
+test       t/002-loop-words.sh
+
+assertion  XCU.2.4-reserved-words.003
+anchor     utilities/V3_chap02.html#2.4
+class      required
+says       The words case, in and esac are reserved words that make a case
+           command.
+test       t/003-case-words.sh
+
+assertion  XCU.2.4-reserved-words.004
+anchor     utilities/V3_chap02.html#2.4
+class      required
+says       The words { and } make a grouping command and ! is a reserved
+           word that negates the status of the pipeline after it, when they
+           appear in command position.
+test       t/004-brace-and-bang.sh
+
+assertion  XCU.2.4-reserved-words.005
+anchor     utilities/V3_chap02.html#2.4
+anchor     utilities/V3_chap02.html#2.2
+class      required
+says       A word is a reserved word only when none of its characters is
+           quoted: if, while and the like written with a backslash or quotes
+           in them are ordinary command names (here not found, status 127).
+test       t/005-quoted-not-reserved.sh
+
+assertion  XCU.2.4-reserved-words.006
+anchor     utilities/V3_chap02.html#2.4
+class      required
+says       Reserved words are recognized only in the places listed (first
+           word of a command, after most reserved words, third word of for
+           and case); elsewhere, for instance as arguments, in a word list
+           or as a case word, they are ordinary words.
+test       t/006-position-rule.sh
+
+assertion  XCU.2.4-reserved-words.007
+anchor     utilities/V3_chap02.html#2.4
+class      required
+says       Where the reserved word time stands as the command name of a
+           command that would run the time utility, the behaviour is that of
+           the time utility: with -p the timings go to standard error in the
+           POSIX format and the status is that of the timed command.
+test       t/007-time-reserved.sh

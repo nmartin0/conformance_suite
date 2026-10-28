@@ -1,0 +1,57 @@
+# XCU localedef
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Whether new locales can be created is implementation-defined (the
+# POSIX2_LOCALEDEF symbol); every test reports NOTINUSE when getconf does not
+# report a positive value for it. The locale built is a copy of the POSIX
+# locale in each category, stored under a pathname inside the test's
+# directory, and removed afterwards.
+
+assertion  XCU.localedef.001
+anchor     utilities/localedef.html#OPTIONS
+anchor     utilities/localedef.html#OPERANDS
+anchor     utilities/localedef.html#DESCRIPTION
+anchor     utilities/localedef.html#EXIT STATUS
+class      required
+says       localedef -c -i FILE NAME, with FILE holding copy directives for
+           the six categories from the POSIX locale and NAME a pathname with
+           a slash, exits with status zero or one and the locale exists at
+           NAME afterwards.
+test       t/001-create-from-file.sh
+
+assertion  XCU.localedef.002
+anchor     utilities/localedef.html#STDIN
+anchor     utilities/localedef.html#DESCRIPTION
+class      required
+says       Without -i the source definitions are read from standard input,
+           with the same result as in the -i case.
+test       t/002-create-from-stdin.sh
+
+assertion  XCU.localedef.003
+anchor     utilities/localedef.html#OPTIONS
+anchor     utilities/localedef.html#CONSEQUENCES OF ERRORS
+anchor     utilities/localedef.html#EXIT STATUS
+class      required
+says       When the -i file does not exist localedef exits with a status above
+           zero and creates nothing at NAME.
+test       t/003-missing-source.sh
+
+assertion  XCU.localedef.004
+anchor     utilities/localedef.html#CONSEQUENCES OF ERRORS
+anchor     utilities/localedef.html#EXIT STATUS
+class      required
+says       A source that uses, in a category other than LC_CTYPE and
+           LC_COLLATE, a symbolic character name that the character map does
+           not define is an error: localedef exits with a status above zero
+           and creates no permanent output at NAME.
+test       t/004-broken-source.sh
+
+assertion  XCU.localedef.005
+anchor     utilities/localedef.html#EXTENDED DESCRIPTION
+anchor     utilities/localedef.html#OPTIONS
+class      untestable
+says       -f names a charmap that gives encodings to symbolic characters and
+           -u a target codeset for ISO/IEC 10646 position values.
+reason     The effect is visible only through the use of the created locale by
+           other utilities and the charmap and codeset names are
+           implementation-defined.

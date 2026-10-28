@@ -1,0 +1,128 @@
+# XCU 2.8-exit-status-and-errors
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.2.8-exit-status-and-errors.001
+anchor     utilities/V3_chap02.html#2.8.1
+anchor     utilities/sh.html#EXIT STATUS
+class      required
+says       A syntax error in a non-interactive shell makes it write a
+           diagnostic to standard error and exit with a status from 1 to 125
+           without running later commands.
+test       t/001-syntax-error-exits.sh
+
+assertion  XCU.2.8-exit-status-and-errors.002
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       An error for which the shell exits, when it occurs in a subshell
+           environment, ends the subshell with a nonzero status and the
+           invoking environment continues.
+test       t/002-syntax-error-subshell.sh
+
+assertion  XCU.2.8-exit-status-and-errors.003
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       An error in a special built-in utility executed directly makes a
+           non-interactive shell exit with a nonzero status.
+test       t/003-special-builtin-error.sh
+
+assertion  XCU.2.8-exit-status-and-errors.004
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       When a special built-in utility is run through the command
+           utility, an error in it does not make the shell exit.
+test       t/004-special-builtin-via-command.sh
+
+assertion  XCU.2.8-exit-status-and-errors.005
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       A failure of an ordinary utility does not make a non-interactive
+           shell exit.
+test       t/005-utility-error-continues.sh
+
+assertion  XCU.2.8-exit-status-and-errors.006
+anchor     utilities/V3_chap02.html#2.8.1
+anchor     utilities/sh.html#EXIT STATUS
+class      required
+says       A redirection error on a special built-in utility makes a
+           non-interactive shell write a diagnostic and exit with a status
+           from 1 to 125.
+test       t/006-redirect-special-builtin.sh
+
+assertion  XCU.2.8-exit-status-and-errors.007
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       A redirection error on a compound command writes a diagnostic but
+           does not make a non-interactive shell exit.
+test       t/007-redirect-compound.sh
+
+assertion  XCU.2.8-exit-status-and-errors.008
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       A redirection error on the execution of a function writes a
+           diagnostic but does not make a non-interactive shell exit.
+test       t/008-redirect-function.sh
+
+assertion  XCU.2.8-exit-status-and-errors.009
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       A redirection error on an ordinary utility writes a diagnostic
+           but does not make a non-interactive shell exit.
+test       t/009-redirect-utility.sh
+
+assertion  XCU.2.8-exit-status-and-errors.010
+anchor     utilities/V3_chap02.html#2.8.1
+anchor     utilities/V3_chap02.html#2.9.1.2
+anchor     utilities/sh.html#EXIT STATUS
+class      required
+says       An attempt to assign to a read-only variable is a variable
+           assignment error: a non-interactive shell writes a diagnostic and
+           exits with a status from 1 to 125.
+test       t/010-assignment-error.sh
+
+assertion  XCU.2.8-exit-status-and-errors.011
+anchor     utilities/V3_chap02.html#2.8.1
+anchor     utilities/sh.html#EXIT STATUS
+class      required
+says       An expansion error, such as ${x!y} where ! is not an operator,
+           makes a non-interactive shell write a diagnostic and exit with a
+           status from 1 to 125 (an implementation may count it as a syntax
+           error).
+test       t/011-expansion-error.sh
+
+assertion  XCU.2.8-exit-status-and-errors.012
+anchor     utilities/V3_chap02.html#2.8.2
+class      required
+says       A command that is not found has exit status 127, whether the name
+           is looked up in PATH or contains a slash.
+test       t/012-not-found-status.sh
+
+assertion  XCU.2.8-exit-status-and-errors.013
+anchor     utilities/V3_chap02.html#2.8.1
+anchor     utilities/V3_chap02.html#2.8.2
+class      required
+says       A command that is not found makes the shell write a diagnostic to
+           standard error and the status is 127, also when the shell then
+           exits.
+test       t/013-not-found-diagnostic.sh
+
+assertion  XCU.2.8-exit-status-and-errors.014
+anchor     utilities/V3_chap02.html#2.8.2
+class      required
+says       A command that is found but is not an executable utility (a file
+           without execute permission, a directory) has exit status 126.
+test       t/014-not-executable-status.sh
+
+assertion  XCU.2.8-exit-status-and-errors.015
+anchor     utilities/V3_chap02.html#2.8.2
+class      required
+says       When a command is ended by a signal the shell gives it an exit
+           status greater than 128.
+test       t/015-signal-status.sh
+
+assertion  XCU.2.8-exit-status-and-errors.016
+anchor     utilities/V3_chap02.html#2.8.2
+class      required
+says       Otherwise the exit status of a command is the value it passed to
+           exit, 0 to 255 (for a program the remainder modulo 256), as seen
+           by wait.
+test       t/016-exit-status-value.sh

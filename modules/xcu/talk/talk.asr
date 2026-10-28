@@ -1,0 +1,24 @@
+# XCU talk
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The utility is optional (UP). The test runs it with an input that is not a
+# terminal, which the page says must fail; the session itself needs two
+# terminals and cannot be scripted.
+
+assertion  XCU.talk.001
+anchor     utilities/talk.html#STDIN
+anchor     utilities/talk.html#EXIT STATUS
+class      conditional
+when       UP
+says       When standard input is not a terminal, talk writes a diagnostic
+           message and exits with a status above zero.
+test       t/001-stdin-not-terminal.sh
+
+assertion  XCU.talk.002
+anchor     utilities/talk.html#DESCRIPTION
+anchor     utilities/talk.html#OPERANDS
+class      untestable
+says       talk sends its connection request to the address and, once the other
+           side answers, shows the two parties' typing in separate regions.
+reason     It is a screen program that needs a terminal on each side and a
+           second login to answer, which a script run by the driver lacks.

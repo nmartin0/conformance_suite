@@ -1,0 +1,86 @@
+# XCU id
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The identity of the process cannot be chosen by the test, so the output
+# forms are checked against each other and against their stated formats.
+
+assertion  XCU.id.001
+anchor     utilities/id.html#OPTIONS
+anchor     utilities/id.html#STDOUT
+class      required
+says       id -u, id -g, and their forms with -r, each write one decimal
+           number followed by a newline and nothing else.
+test       t/001-single-number.sh
+
+assertion  XCU.id.002
+anchor     utilities/id.html#OPTIONS
+anchor     utilities/id.html#STDOUT
+class      required
+says       The numbers in the default output agree with the options: -ur and
+           -gr give the uid= and gid= values, and -u and -g give the euid=
+           and egid= values when the output has them and the uid= and gid=
+           values otherwise.
+test       t/002-numbers-agree.sh
+
+assertion  XCU.id.003
+anchor     utilities/id.html#OPTIONS
+anchor     utilities/id.html#STDOUT
+class      required
+says       With -n the options write the names that the default output shows
+           in parentheses: -un and -gn for the effective user and group,
+           -urn and -grn for the real ones.
+test       t/003-names-agree.sh
+
+assertion  XCU.id.004
+anchor     utilities/id.html#STDOUT
+anchor     utilities/id.html#DESCRIPTION
+class      required
+says       In the POSIX locale the default output has the words uid=ID(name)
+           and gid=ID(name) first, then euid=ID(name) only when the effective
+           and real user IDs differ, then egid=ID(name) only when the group
+           IDs differ, then optionally groups= with comma separated
+           ID(name) items, separated by single spaces; every group ID listed
+           under groups= is also in the id -G list.
+test       t/004-default-format.sh
+
+assertion  XCU.id.005
+anchor     utilities/id.html#OPTIONS
+anchor     utilities/id.html#STDOUT
+class      required
+says       id -G writes the distinct group IDs separated by single spaces on
+           one line ending with a newline, the effective and the real group
+           ID among them.
+test       t/005-all-groups.sh
+
+assertion  XCU.id.006
+anchor     utilities/id.html#OPTIONS
+class      required
+says       id -Gn writes as many words as id -G and the name of the effective
+           group is among them.
+test       t/006-all-group-names.sh
+
+assertion  XCU.id.007
+anchor     utilities/id.html#DESCRIPTION
+anchor     utilities/id.html#OPERANDS
+class      required
+needs      root
+says       With the login name of the real user as operand, id writes the same
+           real user ID, and effective IDs are taken to be the real ones, so
+           the default output has no euid= or egid= word.
+test       t/007-user-operand.sh
+
+assertion  XCU.id.008
+anchor     utilities/id.html#EXIT STATUS
+anchor     utilities/id.html#OPERANDS
+class      required
+says       id with a user operand that names no user exits with a status above
+           zero.
+test       t/008-unknown-user.sh
+
+assertion  XCU.id.009
+anchor     utilities/id.html#EXIT STATUS
+anchor     utilities/id.html#STDERR
+class      required
+says       The forms of id without an operand exit with status zero and write
+           nothing to standard error.
+test       t/009-status-and-stderr.sh

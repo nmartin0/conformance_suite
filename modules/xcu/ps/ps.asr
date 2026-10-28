@@ -1,0 +1,111 @@
+# XCU ps
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The default output format is unspecified; the tests use -o (headers and
+# value shapes in the POSIX locale are specified) and select the shell that
+# runs the test and a sleeping child it starts. XSI-shaded options are in
+# their own assertion.
+
+assertion  XCU.ps.001
+anchor     utilities/ps.html#OPTIONS
+anchor     utilities/ps.html#STDOUT
+class      required
+says       ps -o pid= -p PID writes one line holding only the process ID, for
+           the shell that runs the test (no header line because the header
+           text is null).
+test       t/001-pid-only.sh
+
+assertion  XCU.ps.002
+anchor     utilities/ps.html#STDOUT
+class      required
+says       In the POSIX locale the -o names pid, ppid, pgid, user, ruser,
+           group, rgroup, nice, vsz, etime, time, tty, pcpu, comm and args
+           give the headings PID, PPID, PGID, USER, RUSER, GROUP, RGROUP, NI,
+           VSZ, ELAPSED, TIME, TT, %CPU, COMMAND and COMMAND, and a list of
+           names may be separated by blanks or commas.
+test       t/002-default-headers.sh
+
+assertion  XCU.ps.003
+anchor     utilities/ps.html#OPTIONS
+anchor     utilities/ps.html#STDOUT
+class      required
+says       name=text replaces the heading; when every heading is null no
+           heading line is written; several -o options act as one list in the
+           order given; the fields come in the order listed.
+test       t/003-header-text-and-order.sh
+
+assertion  XCU.ps.004
+anchor     utilities/ps.html#STDOUT
+anchor     utilities/ps.html#OPTIONS
+class      required
+says       For a background child of the shell running the test, -p of its
+           process ID selects it, pid shows that ID and ppid shows the shell's
+           process ID.
+test       t/004-child-ppid.sh
+
+assertion  XCU.ps.005
+anchor     utilities/ps.html#OPTIONS
+class      required
+says       The list argument of -p may be separated by commas or by blanks and
+           then selects every process named.
+test       t/005-proc-list.sh
+
+assertion  XCU.ps.006
+anchor     utilities/ps.html#OPTIONS
+class      required
+says       Several selection options select the inclusive OR of their
+           criteria: -p of a child together with -U of the real user ID lists
+           the shell that runs the test as well as the child.
+test       t/006-selection-or.sh
+
+assertion  XCU.ps.007
+anchor     utilities/ps.html#OPTIONS
+class      required
+says       -A lists every process, including the shell that runs the test and
+           its child; -U with the real user ID and -G with the real group ID
+           list the shell that runs the test.
+test       t/007-select-all-user-group.sh
+
+assertion  XCU.ps.008
+anchor     utilities/ps.html#OPTIONS
+anchor     utilities/ps.html#STDOUT
+class      conditional
+when       XSI
+says       -e lists the shell that runs the test, -u with the effective user
+           ID lists it, -f gives the headings UID PID PPID C STIME TTY TIME CMD
+           in that order, and -l gives F S UID PID PPID C PRI NI ADDR SZ WCHAN
+           TTY TIME CMD in that order.
+test       t/008-xsi-options.sh
+
+assertion  XCU.ps.009
+anchor     utilities/ps.html#STDOUT
+class      required
+says       The user, ruser, group and rgroup fields of the shell running the
+           test show the textual name or else the decimal ID of the effective
+           user, real user, effective group and real group.
+test       t/009-user-group-fields.sh
+
+assertion  XCU.ps.010
+anchor     utilities/ps.html#STDOUT
+class      required
+says       For a background child started as "sleep 301", comm shows sleep
+           and args shows a command line that begins with sleep.
+test       t/010-comm-args.sh
+
+assertion  XCU.ps.011
+anchor     utilities/ps.html#STDOUT
+class      required
+says       In the POSIX locale etime has the form [[dd-]hh:]mm:ss and time
+           the form [dd-]hh:mm:ss, nice and vsz are decimal integers and
+           pcpu a decimal number; a hyphen may stand for a value that is not
+           available.
+test       t/011-value-shapes.sh
+
+assertion  XCU.ps.012
+anchor     utilities/ps.html#DESCRIPTION
+class      untestable
+says       With no selection option ps lists the processes that have the
+           same effective user ID and the same controlling terminal as the
+           invoker.
+reason     A script cannot give the test a controlling terminal of its own,
+           and without one the set of processes selected is not defined.

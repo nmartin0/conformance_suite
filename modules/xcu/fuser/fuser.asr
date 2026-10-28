@@ -1,0 +1,81 @@
+# XCU fuser
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The whole utility is XSI-shaded. Each test starts a sleeping child that
+# holds a file as its standard input (or has the directory as its working
+# directory) and asks fuser about it. The pids go to standard output and the
+# rest to standard error; the combined form (both to one file) is checked as
+# a whole. A user may need privilege to run fuser; a process of the same
+# user is expected to be visible.
+
+assertion  XCU.fuser.001
+anchor     utilities/fuser.html#DESCRIPTION
+anchor     utilities/fuser.html#STDOUT
+class      conditional
+when       XSI
+says       For a file that a sleeping child of the test holds open, fuser (and
+           fuser -f) write the child's process ID to standard output, in the
+           form blank and decimal number for each process, and exit with
+           status zero.
+test       t/001-pid-on-stdout.sh
+
+assertion  XCU.fuser.002
+anchor     utilities/fuser.html#DESCRIPTION
+class      conditional
+when       XSI
+says       Standard error begins with the pathname operand as given (or its
+           resolved pathname) followed by a colon, and ends with a newline.
+test       t/002-pathname-on-stderr.sh
+
+assertion  XCU.fuser.003
+anchor     utilities/fuser.html#DESCRIPTION
+class      conditional
+when       XSI
+says       With standard output and standard error going to one file, the
+           result for one file operand is one line: the pathname and a colon,
+           then for each process a blank, its process ID and zero or more
+           alphabetic use characters.
+test       t/003-combined-line.sh
+
+assertion  XCU.fuser.004
+anchor     utilities/fuser.html#DESCRIPTION
+anchor     utilities/fuser.html#OPTIONS
+class      conditional
+when       XSI
+says       With -u each process entry has the user name (or the decimal real
+           user ID when there is no name) in parentheses right after the use
+           characters.
+test       t/004-user-names.sh
+
+assertion  XCU.fuser.005
+anchor     utilities/fuser.html#DESCRIPTION
+class      conditional
+when       XSI
+says       A directory that is the working directory of a process counts as
+           used by it, and the use characters for that process include c.
+test       t/005-current-directory.sh
+
+assertion  XCU.fuser.006
+anchor     utilities/fuser.html#DESCRIPTION
+class      conditional
+when       XSI
+says       For a file that no process uses, fuser writes no process ID to
+           standard output.
+test       t/006-unused-file.sh
+
+assertion  XCU.fuser.007
+anchor     utilities/fuser.html#EXIT STATUS
+class      conditional
+when       XSI
+says       fuser of a file that does not exist exits with a status above zero.
+test       t/007-missing-file.sh
+
+assertion  XCU.fuser.008
+anchor     utilities/fuser.html#OPTIONS
+class      untestable
+when       XSI
+says       -c lists the processes using any file on the file system mounted
+           at a directory, and for a block special device holding a mounted
+           file system -f restricts the report to the device file itself.
+reason     Needs a mount point or a mounted block device under the test's
+           control, which a script cannot create portably.

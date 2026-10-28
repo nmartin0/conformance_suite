@@ -1,0 +1,98 @@
+# 2.7-redirection.cov - every requirement unit in XCU 2.7.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+2.7:b11ea2d3              none  overview
+2.7:274098c7              none  overview
+2.7:65457898              none  introduces the format
+2.7:82cae51f              none  format line
+2.7:fc7a7d6b              XCU.2.7-redirection.009
+2.7:4e4638e2              XCU.2.7-redirection.009
+2.7:07d20acd              none  introduces an example
+2.7:8e65a46b              XCU.2.7-redirection.009
+2.7:b13a7bcd              XCU.2.7-redirection.009
+2.7:12cb1a3a              XCU.2.7-redirection.009
+2.7:07d20acd.2            none  introduces an example
+2.7:ca0814b8              XCU.2.7-redirection.009
+2.7:5ce229fa              XCU.2.7-redirection.009
+2.7:f2c70bbc              XCU.2.7-redirection.009
+2.7:69339d2a              none  optional behaviour
+2.7:f6bd6320              none  optional format
+2.7:ee546926              none  optional format
+2.7:890f37b4              impl  implementation-defined
+2.7:e614fa5d              XCU.2.7-redirection.003
+2.7:27189ed5              partial XCU.2.7-redirection.016  # quote removal of the delimiter word is tested; the other expansions are unspecified
+2.7:99410f29              XCU.2.7-redirection.010
+2.7:eb9d7d9a              XCU.2.7-redirection.011
+2.7:be92ed4d              none  note on a future version
+2.7:7b11261e              XCU.2.7-redirection.012
+2.7:c8f24cb1              XCU.2.7-redirection.013
+2.7:be3303dc              XCU.2.7-redirection.001
+2.7:6cc78ea6              none  introduces the format
+2.7:2c166a4c              none  format line
+2.7:c46e3bfb              none  restates the format
+2.7:05ecf8b8              XCU.2.7-redirection.001
+2.7:5f32ef9d              none  introduces the formats
+2.7:36bbfd41              none  format line
+2.7:4162068c              none  format line
+2.7:c46e3bfb.2            none  restates the format
+2.7:24358bdd              XCU.2.7-redirection.002
+2.7:d11e525c              XCU.2.7-redirection.004
+2.7:4dbe4ecf              todo  atomicity needs a race between processes
+2.7:88ad559a              none  explains the purpose of atomicity
+2.7:fd99f239              none  permission, no requirement
+2.7:53557644              none  explanation
+2.7:d2cd708b              none  cross-reference
+2.7:06150ce2              XCU.2.7-redirection.002 XCU.2.7-redirection.004
+2.7:61cd1b97              XCU.2.7-redirection.002
+2.7:6ddd7d36              XCU.2.7-redirection.005
+2.7:3a44363b              partial XCU.2.7-redirection.005  # appending is tested; the atomic end-of-file write of O_APPEND is not
+2.7:e3c42a1a              XCU.2.7-redirection.005
+2.7:a5f82e09              none  introduces the format
+2.7:0e163dca              none  format line
+2.7:c46e3bfb.3            none  restates the format
+2.7:fbb5c123              XCU.2.7-redirection.005
+2.7:4f684bd7              none  overview
+2.7:06ac3466              none  definition
+2.7:84ba1678              XCU.2.7-redirection.014 XCU.2.3-token-recognition.009
+2.7:48e3c776              XCU.2.7-redirection.018
+2.7:6a64ddf8              XCU.2.7-redirection.022
+2.7:0894638e              none  'should, but need not'
+2.7:4d1afc06              none  introduces the format
+2.7:ab694d19              none  format line
+2.7:c46e3bfb.4            none  restates the format
+2.7:0f0ab1f5              XCU.2.7-redirection.014
+2.7:69ea078c              none  unspecified behaviour
+2.7:3fdcc2bb              app
+2.7:8ee81937              XCU.2.7-redirection.016
+2.7:0176c377              none  introduces the unquoted case
+2.7:a7ce74ff              XCU.2.7-redirection.014
+2.7:12922094              XCU.2.7-redirection.023
+2.7:36cf6153              partial XCU.2.7-redirection.023  # whether the delimiter line itself is subject to continuation is unspecified and not tested
+2.7:f21da202              partial XCU.2.7-redirection.015  # that expansion happens at evaluation time, after the delimiter is found, is not shown
+2.7:82cdd642              XCU.2.7-redirection.019
+2.7:d732962e              XCU.2.7-redirection.015
+2.7:2372ae37              partial XCU.2.7-redirection.015  # a double quote inside $( ) or ${ } in the text is not tested
+2.7:540b4448              XCU.2.7-redirection.017
+2.7:3e112d51              XCU.2.7-redirection.017
+2.7:98fe3e07              XCU.2.7-redirection.018 XCU.2.3-token-recognition.009
+2.7:d87cb096              todo  needs an interactive shell
+2.7:6944a988              none  introduces an example
+2.7:1f1e8d64              XCU.2.7-redirection.018
+2.7:cc7e19fe              none  introduces the operator
+2.7:d2a82145              none  format line
+2.7:5ce22485              XCU.2.7-redirection.007
+2.7:4d711772              XCU.2.7-redirection.007 XCU.2.7-redirection.013
+2.7:e5f91466              XCU.2.7-redirection.007
+2.7:0b74c128              XCU.2.7-redirection.007
+2.7:10236286              none  unspecified behaviour
+2.7:cc7e19fe.2            none  introduces the operator
+2.7:96303449              none  format line
+2.7:b923bf05              XCU.2.7-redirection.008
+2.7:65c8d93e              XCU.2.7-redirection.008 XCU.2.7-redirection.013
+2.7:00b5c3da              XCU.2.7-redirection.008
+2.7:0b74c128.2            XCU.2.7-redirection.008
+2.7:10236286.2            none  unspecified behaviour
+2.7:cc7e19fe.3            none  introduces the operator
+2.7:c9c17ea5              none  format line
+2.7:7c51700e              XCU.2.7-redirection.006
+2.7:e3c42a1a.2            XCU.2.7-redirection.006

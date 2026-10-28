@@ -1,0 +1,61 @@
+# 2.2-quoting.cov - every requirement unit in XCU 2.2.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+2.2:c204e1cd              none  overview of the purpose of quoting
+2.2:66bb8d49              none  overview; each use is tested where it applies (2.4, 2.7.4 and the rest of 2.2)
+2.2:96f3c8eb              app
+2.2:00df44e1              app
+2.2:a9084aab              none  introduces the list
+2.2:31c1583f              none  introduces the list
+2.2:70382653              app
+2.2:c824644b              app
+2.2:eca04d42              app
+2.2:fd214938              app
+2.2:05572ebb              none  lists the mechanisms
+2.2:ec8c2715              none  cross-reference; here-documents are tested in XCU.2.7-redirection
+2.2:ef1cc25d              XCU.2.2-quoting.001
+2.2:c04641e4              XCU.2.2-quoting.002
+2.2:a162c318              XCU.2.2-quoting.002
+2.2:cf58051a              XCU.2.2-quoting.002
+2.2:25b73171              XCU.2.2-quoting.003
+2.2:1d662e1a              XCU.2.2-quoting.003
+2.2:960bca86              XCU.2.2-quoting.004
+2.2:ab4c947a              XCU.2.2-quoting.005 XCU.2.2-quoting.007
+2.2:6dadf1e2              XCU.2.2-quoting.008
+2.2:72fcda01              XCU.2.2-quoting.008
+2.2:0ea1999f              XCU.2.2-quoting.011
+2.2:688dd81e              XCU.2.2-quoting.010
+2.2:30aa5ecb              none  unspecified behaviour
+2.2:a64ac0e7              partial XCU.2.2-quoting.010  # backquote inside the braces is not tested
+2.2:29ff536d              XCU.2.2-quoting.010
+2.2:0ee02467              XCU.2.2-quoting.005
+2.2:20ead6d5              todo  escape removal in a backquote substitution inside double quotes (the unquoted case is XCU.2.6-word-expansions.027)
+2.2:0cfd4070              none  undefined results
+2.2:7cedeaa7              XCU.2.2-quoting.006
+2.2:77bc1801              XCU.2.2-quoting.009
+2.2:91937e71              app
+2.2:294b694a              none  cross-reference; tested in XCU.2.5-parameters.004
+2.2:d48a152c              XCU.2.2-quoting.016
+2.2:33be593c              XCU.2.2-quoting.012
+2.2:2e3f7ce9              XCU.2.2-quoting.012
+2.2:78ca7780              XCU.2.2-quoting.012
+2.2:9b28ea7d              XCU.2.2-quoting.012
+2.2:5db02613              XCU.2.2-quoting.012
+2.2:24a49508              XCU.2.2-quoting.012
+2.2:6f4ab2e0              XCU.2.2-quoting.012
+2.2:eee44552              XCU.2.2-quoting.012
+2.2:d8496bfa              XCU.2.2-quoting.012
+2.2:e32d3de4              XCU.2.2-quoting.012
+2.2:abf70543              XCU.2.2-quoting.012
+2.2:7b94459a              XCU.2.2-quoting.012
+2.2:a23700b8              XCU.2.2-quoting.014
+2.2:94cf774a              none  unspecified behaviour
+2.2:91140c22              XCU.2.2-quoting.015
+2.2:d7419a81              none  unspecified behaviour
+2.2:6cf7c5a9              XCU.2.2-quoting.014 XCU.2.2-quoting.015
+2.2:75d0fe4b              XCU.2.2-quoting.016
+2.2:610d40eb              none  unspecified behaviour
+2.2:c3bdd99f              none  unspecified behaviour
+2.2:302fac7d              impl  result is implementation-defined
+2.2:67bd7ac6              todo  needs a locale in which \e or \cX has no encoding; none is guaranteed
+2.2:efbd93ce              XCU.2.2-quoting.017

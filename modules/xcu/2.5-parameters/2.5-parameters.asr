@@ -1,0 +1,157 @@
+# XCU 2.5-parameters
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.2.5-parameters.001
+anchor     utilities/V3_chap02.html#2.5.1
+class      required
+says       Positional parameters are named by decimal numbers, leading zeros
+           do not make them octal, and a number of more than one digit needs
+           braces: without braces only the first digit belongs to the name.
+test       t/001-positional-digits.sh
+
+assertion  XCU.2.5-parameters.002
+anchor     utilities/V3_chap02.html#2.5.1
+class      required
+says       The positional parameters can be reassigned with set and are
+           temporarily replaced while a shell function runs, then restored.
+test       t/002-positional-replacement.sh
+
+assertion  XCU.2.5-parameters.003
+anchor     utilities/V3_chap02.html#2.5.2
+class      required
+says       The special parameter # expands to the number of positional
+           parameters, written in decimal, not counting parameter 0.
+test       t/003-hash-count.sh
+
+assertion  XCU.2.5-parameters.004
+anchor     utilities/V3_chap02.html#2.5.2
+class      required
+says       Within double quotes "$@" yields one field per positional
+           parameter, empty ones included, none at all when there are none,
+           and when embedded in a word the first field joins the text before
+           it and the last field the text after it.
+test       t/004-at-quoted.sh
+
+assertion  XCU.2.5-parameters.005
+anchor     utilities/V3_chap02.html#2.5.2
+class      required
+says       Unquoted, both $@ and $* expand to the positional parameters,
+           each non-empty one then subject to field splitting.
+test       t/005-at-star-unquoted.sh
+
+assertion  XCU.2.5-parameters.006
+anchor     utilities/V3_chap02.html#2.5.2
+class      required
+says       Where no field splitting follows, $* joins the positional
+           parameters with the first character of IFS, with a space if IFS
+           is unset, and with nothing if IFS is empty; this holds for "$*"
+           and for an assignment.
+test       t/006-star-quoted.sh
+
+assertion  XCU.2.5-parameters.007
+anchor     utilities/V3_chap02.html#2.5.2
+class      required
+says       The special parameter ? expands to the decimal exit status of the
+           most recent pipeline executed in the current shell environment
+           (the last command of it), starting at 0, set by failure, by a
+           pipeline's last command, by negation, and by an assignment's
+           command substitution, and a subshell starts with the value of its
+           parent.
+test       t/007-question-mark.sh
+
+assertion  XCU.2.5-parameters.008
+anchor     utilities/V3_chap02.html#2.5.2
+class      required
+says       The special parameter $ expands to the decimal process ID of the
+           shell, written without leading zeros and nonzero, and a subshell
+           or command substitution sees the same value.
+test       t/008-dollar-dollar.sh
+
+assertion  XCU.2.5-parameters.009
+anchor     utilities/V3_chap02.html#2.5.2
+class      required
+says       After an asynchronous AND-OR list the special parameter ! expands
+           to the decimal process ID of that list, so that wait given it
+           reports the list's exit status.
+test       t/009-bang.sh
+
+assertion  XCU.2.5-parameters.010
+anchor     utilities/V3_chap02.html#2.5.2
+class      required
+says       The special parameter - expands to the current option letters, so
+           a letter appears after the option is set with set and is gone
+           after it is unset again.
+test       t/010-hyphen.sh
+
+assertion  XCU.2.5-parameters.011
+anchor     utilities/V3_chap02.html#2.5.2
+anchor     utilities/sh.html#OPERANDS
+class      required
+says       The special parameter 0 expands to the name of the script as the
+           shell was given it (the command_file operand), or to the
+           command_name operand of the -c form; the positional parameters
+           follow in order.
+test       t/011-zero.sh
+
+assertion  XCU.2.5-parameters.012
+anchor     utilities/V3_chap02.html#2.5.3
+class      required
+says       A shell variable initialized from the environment is marked for
+           export at once, so a later plain assignment to it is passed on to
+           programs the shell runs.
+test       t/012-env-init-exported.sh
+
+assertion  XCU.2.5-parameters.013
+anchor     utilities/V3_chap02.html#2.5.3
+class      required
+says       The shell sets IFS to space, tab and newline when it starts,
+           whatever IFS was in the environment.
+test       t/013-ifs-initial.sh
+
+assertion  XCU.2.5-parameters.014
+anchor     utilities/V3_chap02.html#2.5.3
+anchor     utilities/V3_chap02.html#2.6.5
+class      required
+says       When IFS is unset the shell splits fields as if it held space,
+           tab and newline, and the variable stays unset.
+test       t/014-ifs-unset.sh
+
+assertion  XCU.2.5-parameters.015
+anchor     utilities/V3_chap02.html#2.5
+class      required
+says       A variable assigned the empty string is set (null is a value) and
+           stays set until unset is used.
+test       t/015-null-is-set.sh
+
+assertion  XCU.2.5-parameters.016
+anchor     utilities/V3_chap02.html#2.5.3
+class      required
+says       PPID is the decimal process ID of the shell's parent, and a
+           subshell sees the same value.
+test       t/016-ppid.sh
+
+assertion  XCU.2.5-parameters.017
+anchor     utilities/V3_chap02.html#2.5.3
+class      required
+says       The shell takes PWD from the environment only when it is an
+           absolute path of the current directory without dot or dot-dot
+           components; otherwise (not set, wrong directory, dot components)
+           it sets PWD to the physical path that pwd -P gives.
+test       t/017-pwd-init.sh
+
+assertion  XCU.2.5-parameters.018
+anchor     utilities/V3_chap02.html#2.5.3
+class      conditional
+when       UP
+says       LINENO is the line number, counted from 1, within the script of
+           the command being executed.
+test       t/018-lineno.sh
+
+assertion  XCU.2.5-parameters.019
+anchor     utilities/V3_chap02.html#2.5.3
+class      conditional
+when       UP
+says       When an execution trace is on (set -x), the value of PS4
+           undergoes parameter expansion and is written to standard error
+           before each traced command.
+test       t/019-ps4-expansion.sh

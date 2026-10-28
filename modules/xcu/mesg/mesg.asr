@@ -1,0 +1,31 @@
+# XCU mesg
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only the case without a terminal can be run from a script, because the
+# utility acts on the first terminal among the three standard streams and a
+# test must not change a person's terminal.
+
+assertion  XCU.mesg.001
+anchor     utilities/mesg.html#EXIT STATUS
+anchor     utilities/mesg.html#DESCRIPTION
+class      disputed
+says       When none of standard input, output and error is a terminal, mesg
+           with no operand reports an error with an exit status above one.
+note       disputed (standard issue candidate, not yet numbered): the page
+           says the terminal is the first one among the three standard
+           streams and gives status above 1 for "an error", but never says
+           that having no such terminal is an error; a FAIL is logged as
+           INSPECT. Only the form without an operand is run, so that nothing
+           can be changed even where a system looks further for a terminal.
+test       t/001-no-terminal.sh
+
+assertion  XCU.mesg.002
+anchor     utilities/mesg.html#OPERANDS
+anchor     utilities/mesg.html#STDOUT
+anchor     utilities/mesg.html#EXIT STATUS
+class      untestable
+says       mesg y and mesg n grant and deny messages to the terminal, and mesg
+           alone reports the state and exits zero when messages are allowed
+           and one when they are not.
+reason     It needs a terminal device that the test may change, and a script run
+           by the driver has none.

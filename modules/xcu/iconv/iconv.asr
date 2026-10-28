@@ -1,0 +1,61 @@
+# XCU iconv
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Codeset names are implementation-defined and iconv -l lists them in an
+# unspecified format. The tests take every word of that list that has no
+# slash as a candidate codeset name and use the first one that converts a
+# plain text from itself to itself; the checks that follow rest on that
+# identity conversion. Charmap conversions are not used (they need a charmap
+# file with every portable character, and are optional).
+
+assertion  XCU.iconv.001
+anchor     utilities/iconv.html#OPTIONS
+anchor     utilities/iconv.html#STDOUT
+class      required
+says       iconv -l exits with status zero and writes the supported codeset
+           names to standard output.
+test       t/001-list.sh
+
+assertion  XCU.iconv.002
+anchor     utilities/iconv.html#STDOUT
+anchor     utilities/iconv.html#DESCRIPTION
+class      required
+says       Converting a text from a supported codeset to the same codeset
+           writes exactly the text, and nothing else, to standard output.
+test       t/002-identity.sh
+
+assertion  XCU.iconv.003
+anchor     utilities/iconv.html#OPERANDS
+anchor     utilities/iconv.html#STDIN
+class      required
+says       Several file operands are converted in order and the output is
+           their concatenation; a file operand of - stands for standard input
+           at that position.
+test       t/003-file-operands.sh
+
+assertion  XCU.iconv.004
+anchor     utilities/iconv.html#EXIT STATUS
+anchor     utilities/iconv.html#OPERANDS
+class      required
+says       A file operand that cannot be opened gives a status above zero.
+test       t/004-missing-file.sh
+
+assertion  XCU.iconv.005
+anchor     utilities/iconv.html#OPTIONS
+class      required
+says       Adding -c or -s does not change the exit status, and -s keeps
+           messages about invalid characters off standard error; the same
+           input run with none of them, -c, -s and -cs gives one status.
+test       t/005-c-and-s.sh
+
+assertion  XCU.iconv.006
+anchor     utilities/iconv.html#OPTIONS
+anchor     utilities/iconv.html#DESCRIPTION
+class      untestable
+says       With charmap files for -f and -t, the conversion joins the two
+           charmaps on their symbolic names; -c omits characters invalid in
+           the input codeset.
+reason     A charmap file must name every portable character and give an
+           encoding to each, the codeset of a charmap-less -f or -t is
+           implementation-defined, and the result for characters with no
+           counterpart is documented by the implementation, not specified.

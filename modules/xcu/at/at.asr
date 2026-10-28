@@ -1,0 +1,95 @@
+# XCU at
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every job is scheduled for December 2035, so none can run during a test,
+# and every job a test submits is removed on every exit path with at -r.
+# The tests run with TZ=UTC0 unless a zone is the point. A system on which the
+# user is not allowed to use at (the XSI access files) makes the submission
+# fail; the tests then report UNRESOLVED, since a refusal for that reason is
+# permitted. The commands of a job are "true". Mail (-m) and the run of a job
+# are not exercised.
+
+assertion  XCU.at.001
+anchor     utilities/at.html#STDERR
+anchor     utilities/at.html#DESCRIPTION
+anchor     utilities/at.html#OPTIONS
+class      required
+says       at -t 203512091200 with commands on standard input submits a job and
+           exits with status zero; standard error then holds a line of the form
+           "job ID at DATE" with ID made only of letters, digits and periods and
+           DATE the scheduled time in the form of date's POSIX-locale format
+           (weekday, month, day, time, year: Sun Dec 9 12:00:00 2035); nothing
+           is written to standard output.
+test       t/001-submit-message.sh
+
+assertion  XCU.at.002
+anchor     utilities/at.html#STDOUT
+anchor     utilities/at.html#OPTIONS
+class      required
+says       at -l writes a line for each of the invoking user's jobs holding the
+           job ID, a tab and the scheduled time in the same form as the
+           submission message; at -l with job IDs lists only those jobs.
+test       t/002-list.sh
+
+assertion  XCU.at.003
+anchor     utilities/at.html#OPTIONS
+anchor     utilities/at.html#DESCRIPTION
+class      required
+says       Two jobs submitted by one user get different IDs; at -r ID removes the
+           job with exit status zero, after which at -l no longer lists it
+           while the other job stays listed.
+test       t/003-remove.sh
+
+assertion  XCU.at.004
+anchor     utilities/at.html#OPTIONS
+anchor     utilities/at.html#CONSEQUENCES OF ERRORS
+class      required
+says       at -f FILE takes the job's commands from FILE (exit status zero and
+           a job is scheduled), and when FILE does not exist at exits with a
+           status above zero and schedules no job.
+test       t/004-file-option.sh
+
+assertion  XCU.at.005
+anchor     utilities/at.html#OPERANDS
+class      required
+says       The timespec operands noon, midnight, 24-hour times, 12-hour times
+           with am or pm, a month name with day and year, and the increments
+           "+ N weeks", "+ N days" and "next day" give the expected scheduled
+           times, and a time with the zone name utc is shown in the zone of TZ.
+test       t/005-timespec.sh
+
+assertion  XCU.at.006
+anchor     utilities/at.html#CONSEQUENCES OF ERRORS
+anchor     utilities/at.html#EXIT STATUS
+class      required
+says       An invalid time (an hour of 25, a word that is no time, or a -t
+           argument that is not a date) gives a status above zero and no job
+           is scheduled.
+test       t/006-invalid-time.sh
+
+assertion  XCU.at.007
+anchor     utilities/at.html#OPTIONS
+class      required
+says       Jobs go to queue a unless -q says otherwise: a job submitted without
+           -q is listed by at -l -q a and not by at -l -q b, and one submitted
+           with -q a is listed by at -l -q a.
+test       t/007-queues.sh
+
+assertion  XCU.at.008
+anchor     utilities/at.html#EXIT STATUS
+anchor     utilities/at.html#OPTIONS
+class      required
+says       at -r of an ID that names no job exits with a status above zero.
+test       t/008-remove-unknown.sh
+
+assertion  XCU.at.009
+anchor     utilities/at.html#DESCRIPTION
+anchor     utilities/at.html#OPTIONS
+class      untestable
+says       A job runs at its time in a separate shell with the environment
+           variables, working directory and umask of the submission, mail is
+           sent after the job with -m (or the job's output when not redirected),
+           and the SHELL variable selects the interpreter.
+reason     Running a job needs the scheduler daemon and a wait for the job's
+           time, which cannot be bounded for a test; the jobs of these tests
+           are placed years ahead on purpose.

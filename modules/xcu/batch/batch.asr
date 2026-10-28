@@ -1,0 +1,28 @@
+# XCU batch
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# A batch job runs when the system chooses and mails its completion to the
+# user, so the only job a test submits is the command true; it is removed
+# again with at -r if it is still waiting. The user may be refused the use of
+# batch (the XSI access files); the test then reports UNRESOLVED.
+
+assertion  XCU.batch.001
+anchor     utilities/batch.html#STDERR
+anchor     utilities/batch.html#EXIT STATUS
+class      required
+says       batch reading the command true from standard input exits with status
+           zero, writes a line "job ID at DATE" to standard error (ID made only
+           of letters, digits and periods, DATE in the form of date's
+           POSIX-locale format without the zone: weekday, month, day, time,
+           year) and nothing to standard output.
+test       t/001-submit-message.sh
+
+assertion  XCU.batch.002
+anchor     utilities/batch.html#DESCRIPTION
+anchor     utilities/batch.html#OPTIONS
+class      untestable
+says       batch is equivalent to at -q b -m now: the job goes to queue b, mail
+           is sent after it ran, and it runs when the system's algorithm
+           chooses.
+reason     The moment of the run and the mail depend on scheduling decisions
+           that are unspecified, and mail delivery is outside the utility.

@@ -1,0 +1,69 @@
+# XCU locale
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The environment is built with env -i so that the result does not depend on
+# the settings of the run. Keyword values are checked only in the POSIX
+# locale.
+
+assertion  XCU.locale.001
+anchor     utilities/locale.html#STDOUT
+class      required
+says       With no options or operands locale writes the line LANG= (with
+           the value of LANG, empty when unset) first and the line LC_ALL=
+           last, and between them a line for each of LC_CTYPE, LC_COLLATE,
+           LC_MONETARY, LC_NUMERIC, LC_TIME and LC_MESSAGES; it exits with
+           status zero and writes nothing to standard error.
+test       t/001-summary-structure.sh
+
+assertion  XCU.locale.002
+anchor     utilities/locale.html#STDOUT
+class      required
+says       A LC_ variable that is set and not overridden by LC_ALL is written
+           as NAME=value without quotes; those that are not set are written
+           as NAME="locale" with double quotes around the name of the locale
+           that applies (the POSIX locale here).
+test       t/002-set-and-implied.sh
+
+assertion  XCU.locale.003
+anchor     utilities/locale.html#STDOUT
+class      required
+says       When LC_ALL is set, the LC_ variables it overrides are written
+           in the quoted form with the locale of LC_ALL, LANG is still written
+           first, and LC_ALL=value is the last line.
+test       t/003-lc-all-overrides.sh
+
+assertion  XCU.locale.004
+anchor     utilities/locale.html#OPTIONS
+anchor     utilities/locale.html#STDOUT
+class      required
+says       locale -a writes one locale name per line and the names include
+           POSIX; it exits with status zero.
+test       t/004-all-locales.sh
+
+assertion  XCU.locale.005
+anchor     utilities/locale.html#OPTIONS
+anchor     utilities/locale.html#STDOUT
+class      required
+says       locale -m writes at least one charmap name, one per line, and
+           exits with status zero.
+test       t/005-charmaps.sh
+
+assertion  XCU.locale.006
+anchor     utilities/locale.html#OPTIONS
+anchor     utilities/locale.html#STDOUT
+anchor     utilities/locale.html#OPERANDS
+class      required
+says       In the POSIX locale the keyword decimal_point is written as
+           ".", by itself with no option, as decimal_point="." with -k, after
+           the line LC_NUMERIC with -c, and with both lines with -ck; naming
+           the category LC_NUMERIC selects the keyword and with -c writes the
+           category name first.
+test       t/006-keywords.sh
+
+assertion  XCU.locale.007
+anchor     utilities/locale.html#EXIT STATUS
+anchor     utilities/locale.html#OPERANDS
+class      required
+says       An operand that names neither a category nor a keyword gives a
+           status above zero.
+test       t/007-unknown-name.sh

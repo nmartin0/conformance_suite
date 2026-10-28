@@ -1,0 +1,46 @@
+# renice.cov - every requirement unit on utilities/renice.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sections listed as "None.", "Not used." or "Default." take their meaning
+# from XCU 1.4 Utility Description Defaults.
+
+DESCRIPTION:6e348c2a             XCU.renice.001
+DESCRIPTION:a55b0cb1             XCU.renice.001
+DESCRIPTION:15d6c8b4             XCU.renice.006
+DESCRIPTION:4d3ac894             XCU.renice.003
+DESCRIPTION:427d8042             XCU.renice.003
+DESCRIPTION:6c901806             XCU.renice.006
+DESCRIPTION:006df66c             todo  needs a process the test may not change, which cannot be arranged for every privilege level
+DESCRIPTION:0dd2a7ea             todo  needs a process the test may not change, which cannot be arranged for every privilege level
+DESCRIPTION:d82c8fe9             todo  needs a process the test may not change, which cannot be arranged for every privilege level
+OPTIONS:4edafc6a                 todo  utility syntax conformance is not tested here
+OPTIONS:e2947e20                 none  introduces the option list
+OPTIONS:1612b276                 XCU.renice.006
+OPTIONS:ea415e91                 XCU.renice.001 XCU.renice.002
+OPTIONS:20ab64d1                 XCU.renice.001 XCU.renice.002
+OPTIONS:383d90cf                 todo  needs privilege and would lower the nice value of a process
+OPTIONS:6eb40f62                 XCU.renice.002
+OPTIONS:13e15cb3                 XCU.renice.001
+OPTIONS:3e3c41a6                 XCU.renice.006
+OPTIONS:23477dea                 XCU.renice.006
+OPTIONS:d5478f6f                 XCU.renice.006
+OPERANDS:51b44f3c                none  introduces the operand list
+OPERANDS:251ab449                XCU.renice.001 XCU.renice.006
+STDIN:3f472296                   none  XCU 1.4 default or empty section
+INPUT_FILES:eb724aff             none  XCU 1.4 default or empty section
+ENVIRONMENT_VARIABLES:1acd2cc7   none  introduces the list
+ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:8aece102   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:4a460d8d   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:fb479014   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables are not varied
+ASYNCHRONOUS_EVENTS:d92f27bd     none  XCU 1.4 default or empty section
+STDOUT:3f472296                  XCU.renice.005
+STDERR:b2905b3f                  todo  diagnostic-only standard error is not checked
+OUTPUT_FILES:eb724aff            none  XCU 1.4 default or empty section
+EXTENDED_DESCRIPTION:eb724aff    none  XCU 1.4 default or empty section
+EXIT_STATUS:db823381             none  introduces the list
+EXIT_STATUS:8b075da2             XCU.renice.001 XCU.renice.002 XCU.renice.005
+EXIT_STATUS:9d252ff7             XCU.renice.004
+CONSEQUENCES_OF_ERRORS:d92f27bd  none  XCU 1.4 default or empty section
