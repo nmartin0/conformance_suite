@@ -1,0 +1,50 @@
+# XCU comm
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Inputs are ordered by byte value, which is the collating sequence of the
+# POSIX locale used by the tests.
+
+assertion  XCU.comm.001
+anchor     utilities/comm.html#DESCRIPTION
+anchor     utilities/comm.html#STDOUT
+class      required
+since      1992
+says       comm writes lines found only in file1 as they are, lines found
+           only in file2 after one tab, and lines found in both after two
+           tabs, in the order of the inputs.
+test       t/001-three-columns.sh
+
+assertion  XCU.comm.002
+anchor     utilities/comm.html#OPTIONS/-1
+anchor     utilities/comm.html#OPTIONS/-2
+anchor     utilities/comm.html#OPTIONS/-3
+anchor     utilities/comm.html#STDOUT
+class      required
+since      1992
+says       comm -1, -2 and -3 each leave out one column; the lines of the
+           columns after it then have one tab less, except that lines in
+           both files get one tab when exactly one of -1 and -2 is given.
+test       t/002-suppress-one-column.sh
+
+assertion  XCU.comm.003
+anchor     utilities/comm.html#STDOUT
+class      required
+since      1992
+says       With two of the options the remaining column is written with no
+           tab in front, and with all three nothing is written.
+test       t/003-suppress-two-columns.sh
+
+assertion  XCU.comm.004
+anchor     utilities/comm.html#OPERANDS
+anchor     utilities/comm.html#STDIN
+class      required
+since      1992
+says       The operand - as file1 or file2 means standard input.
+test       t/004-standard-input.sh
+
+assertion  XCU.comm.005
+anchor     utilities/comm.html#EXIT STATUS
+class      required
+since      1992
+says       When file1 or file2 cannot be read the status is nonzero.
+test       t/005-unreadable-file.sh

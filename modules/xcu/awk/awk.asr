@@ -1,0 +1,148 @@
+# XCU awk
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All tests run in the POSIX locale. Focused on the options, variables,
+# statements and functions the page defines; not an exhaustive grammar test.
+# The standard input of every awk run that could read it is a pipe that ends
+# or /dev/null.
+
+assertion  XCU.awk.001
+anchor     utilities/awk.html#OPTIONS/-F
+anchor     utilities/awk.html#OPTIONS/-f
+anchor     utilities/awk.html#OPTIONS/-v
+class      required
+since      1992
+says       -F sepstring sets the field separator, -v assigns before BEGIN with escape processing, and several -f files are concatenated into one program (a - file being standard input).
+test       t/001-options.sh
+
+assertion  XCU.awk.002
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+anchor     utilities/awk.html#DESCRIPTION
+class      required
+since      1992
+says       BEGIN actions run first in order, then each record is matched against every pattern in order, then END actions; a missing pattern matches all and a missing action prints the record; BEGIN-only programs read no input.
+test       t/002-program-structure.sh
+
+assertion  XCU.awk.003
+anchor     utilities/awk.html#DESCRIPTION
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Records split into fields $1.., $0 is the record; assigning a field rebuilds $0 with OFS, assigning past the end extends NF, and reading a missing field creates none.
+test       t/003-fields.sh
+
+assertion  XCU.awk.004
+anchor     utilities/awk.html#OPTIONS/-F
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       FS of a blank splits on runs of blanks, another single character at each occurrence, longer values are EREs, and a new FS applies from the next record.
+test       t/004-field-separator.sh
+
+assertion  XCU.awk.005
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+anchor     utilities/awk.html#DESCRIPTION
+class      required
+since      1992
+says       RS of one character ends records there; a null RS separates records at blank lines and makes newline a field separator.
+test       t/005-record-separator.sh
+
+assertion  XCU.awk.006
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       NR, FNR, FILENAME, NF, OFS, ORS, OFMT, CONVFMT, SUBSEP, ENVIRON, ARGC, ARGV, RSTART and RLENGTH have the values and effects described.
+test       t/006-special-variables.sh
+
+assertion  XCU.awk.007
+anchor     utilities/awk.html#OPERANDS
+class      required
+since      1992
+says       A name=value operand assigns the variable just before the next file is read (after BEGIN, before END), with escapes processed and numeric-string typing.
+test       t/007-assignment-operands.sh
+
+assertion  XCU.awk.008
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Operators follow the stated precedence and associativity; conversions, Boolean contexts, increments, assignment operators, comparison rules, ~, in and concatenation behave as described.
+test       t/008-expressions.sh
+
+assertion  XCU.awk.009
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Arrays are associative with string subscripts; a list of subscripts is joined by SUBSEP; a reference creates an element but in does not; delete, for-in and split work as described.
+test       t/009-arrays.sh
+
+assertion  XCU.awk.010
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+anchor     utilities/awk.html#EXIT STATUS
+class      required
+since      1992
+says       if, while, do-while, for, break, continue, next and exit behave as described; exit runs END actions and sets the status, and an exit inside END ends the program.
+test       t/010-control-flow.sh
+
+assertion  XCU.awk.011
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       print and printf write to standard output, a truncated file, an appended file or a pipe, use OFS and ORS, and printf supports d, s, c, x, X, o, u, f, e, g, % with flags, width and precision (also from arguments).
+test       t/011-output.sh
+
+assertion  XCU.awk.012
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       length, index, substr, sub, gsub (including & and its escape), sprintf, tolower and toupper return the specified values; sub and gsub act on $0 or a field and re-split.
+test       t/012-string-functions.sh
+
+assertion  XCU.awk.013
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       int, sqrt, exp, log, sin, cos and atan2 return the specified values; srand sets a repeatable seed and returns the previous one, and rand returns values in [0,1).
+test       t/013-math-functions.sh
+
+assertion  XCU.awk.014
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       getline in its forms reads the next record into $0 or a variable from the input, a file or a command, returning 1, 0 or -1 and updating NR, FNR and NF as described; close and system return statuses.
+test       t/014-getline-and-system.sh
+
+assertion  XCU.awk.015
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       User-defined functions may be called before definition and recurse; extra parameters are locals; scalars pass by value and arrays by reference; return needs no value.
+test       t/015-user-functions.sh
+
+assertion  XCU.awk.016
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       ERE constants and dynamic regular expressions follow the stated escapes; a bare /re/ tests $0; range patterns are inclusive, repeat, and run to the end if never closed.
+test       t/016-regex-and-ranges.sh
+
+assertion  XCU.awk.017
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Numeric-looking input from fields, getline, ARGV, ENVIRON, split, -v and operands compares as numbers, while string constants and concatenations compare as strings.
+test       t/017-numeric-strings.sh
+
+assertion  XCU.awk.018
+anchor     utilities/awk.html#CONSEQUENCES OF ERRORS
+anchor     utilities/awk.html#EXIT STATUS
+class      required
+since      1992
+says       A file operand that cannot be accessed makes awk write a diagnostic, terminate without further action and exit above zero.
+test       t/018-missing-file.sh
+
+assertion  XCU.awk.019
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       nextfile abandons the current file, fflush returns 0, and FILENAME is - for standard input.
+test       t/019-later-additions.sh

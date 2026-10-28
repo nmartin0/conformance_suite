@@ -1,0 +1,56 @@
+# XCU tee
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.tee.001
+anchor     utilities/tee.html#DESCRIPTION
+anchor     utilities/tee.html#STDOUT
+anchor     utilities/tee.html#OUTPUT FILES
+class      required
+since      1992
+says       tee copies standard input, byte for byte, to standard output and
+           to every named file.
+test       t/001-copy.sh
+
+assertion  XCU.tee.002
+anchor     utilities/tee.html#OPTIONS/-a
+anchor     utilities/tee.html#DESCRIPTION
+class      required
+since      1992
+says       Without -a tee overwrites an existing output file; with -a it
+           appends to it, creating it when absent.
+test       t/002-append.sh
+
+assertion  XCU.tee.003
+anchor     utilities/tee.html#OPERANDS
+class      required
+since      1992
+says       A file operand of - is a file named -, not standard output.
+test       t/003-dash-operand.sh
+
+assertion  XCU.tee.004
+anchor     utilities/tee.html#OPTIONS/-i
+anchor     utilities/tee.html#ASYNCHRONOUS EVENTS
+class      required
+since      1992
+says       With -i, tee ignores SIGINT: after being sent SIGINT it goes on
+           copying its input and exits 0.
+note       A C test is used because a shell cannot start a process with
+           SIGINT at its default action and send it a signal reliably.
+timeout    120
+test       t/004-ignore-interrupt.c
+
+assertion  XCU.tee.005
+anchor     utilities/tee.html#CONSEQUENCES OF ERRORS
+anchor     utilities/tee.html#EXIT STATUS
+class      required
+since      1992
+says       When a file operand cannot be written tee still copies to the other
+           files and to standard output, and exits nonzero.
+test       t/005-write-failure.sh
+
+assertion  XCU.tee.006
+anchor     utilities/tee.html#OPERANDS
+class      required
+since      1992
+says       tee accepts thirteen file operands.
+test       t/006-thirteen-files.sh

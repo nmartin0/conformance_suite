@@ -1,0 +1,48 @@
+# XCU expand
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests use single-column characters in the POSIX locale.
+
+assertion  XCU.expand.001
+anchor     utilities/expand.html#DESCRIPTION
+anchor     utilities/expand.html#STDOUT
+class      required
+since      1992
+says       By default expand replaces each tab by the spaces that reach the
+           next tab stop, the stops being every eighth column; a tab at a
+           stop goes to the following stop, and lines without tabs are
+           unchanged.
+test       t/001-default-stops.sh
+
+assertion  XCU.expand.002
+anchor     utilities/expand.html#OPTIONS/-t
+class      required
+since      1992
+says       expand -t number puts the tab stops number columns apart.
+test       t/002-tab-size.sh
+
+assertion  XCU.expand.003
+anchor     utilities/expand.html#OPTIONS/-t
+class      required
+since      1992
+says       expand -t with a comma- or blank-separated list sets tabs at those
+           columns, and a tab beyond the last one becomes a single space.
+test       t/003-tab-list.sh
+
+assertion  XCU.expand.004
+anchor     utilities/expand.html#DESCRIPTION
+class      required
+since      1992
+says       A backspace is copied to the output and lowers the column count
+           that later tabs use.
+test       t/004-backspace.sh
+
+assertion  XCU.expand.005
+anchor     utilities/expand.html#OPERANDS
+anchor     utilities/expand.html#CONSEQUENCES OF ERRORS
+class      required
+since      1992
+says       expand handles file operands in order, reads standard input with no
+           operand, and ends with a diagnostic and a nonzero status when a
+           file cannot be accessed.
+test       t/005-operands.sh

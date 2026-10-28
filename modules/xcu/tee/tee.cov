@@ -1,0 +1,36 @@
+# tee.cov - every requirement unit on utilities/tee.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sections listed as "None.", "Not used." or "Default." take their meaning
+# from XCU 1.4 Utility Description Defaults.
+
+DESCRIPTION:a0d738d3             XCU.tee.001
+DESCRIPTION:f7216d09             todo  absence of output buffering not tried
+DESCRIPTION:43d398a8             XCU.tee.002
+OPTIONS:8226fc81                 todo  syntax guidelines not checked
+OPTIONS:e2947e20                 none  introductory sentence
+OPTIONS:6c8cacdc                 XCU.tee.002
+OPTIONS:ae5dd567                 XCU.tee.004
+OPERANDS:51b44f3c                XCU.tee.003
+OPERANDS:7f53e99f                XCU.tee.003
+OPERANDS:4109bdd8                XCU.tee.003
+OPERANDS:94b872ce                XCU.tee.006
+STDIN:94e40aa6                   XCU.tee.001
+INPUT_FILES:eb724aff             none  none
+ENVIRONMENT_VARIABLES:083f5177   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:4a460d8d   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables not exercised
+ASYNCHRONOUS_EVENTS:2cb4fdd7     XCU.tee.004
+STDOUT:d2bfcd2d                  XCU.tee.001
+STDERR:b2905b3f                  none  diagnostics only
+OUTPUT_FILES:46d07881            XCU.tee.001
+EXTENDED_DESCRIPTION:eb724aff    none  none
+EXIT_STATUS:db823381             XCU.tee.005 XCU.tee.001
+EXIT_STATUS:f95ad990             XCU.tee.005 XCU.tee.001
+EXIT_STATUS:9d252ff7             XCU.tee.005 XCU.tee.001
+CONSEQUENCES_OF_ERRORS:175a7bb6  todo  a failing write (as opposed to a failing open) is not provoked
+CONSEQUENCES_OF_ERRORS:dbc68043  XCU.tee.005

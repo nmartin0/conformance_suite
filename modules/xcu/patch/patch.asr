@@ -1,0 +1,122 @@
+# XCU patch
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All tests run in the POSIX locale. Patch files are written by hand with
+# printf, not produced by diff, so the tests do not depend on another
+# utility's output. Standard input is /dev/null or the patch itself.
+
+assertion  XCU.patch.001
+anchor     utilities/patch.html#DESCRIPTION
+anchor     utilities/patch.html#OPTIONS/-n
+anchor     utilities/patch.html#OPTIONS/-i
+class      required
+since      1992
+says       patch applies a normal-format listing, named with -n or recognised, from a file (-i) or standard input.
+test       t/001-normal-format.sh
+
+assertion  XCU.patch.002
+anchor     utilities/patch.html#DESCRIPTION
+anchor     utilities/patch.html#OPTIONS/-c
+class      required
+since      1992
+says       patch applies a copied-context listing, named with -c or recognised.
+test       t/002-context-format.sh
+
+assertion  XCU.patch.003
+anchor     utilities/patch.html#DESCRIPTION
+anchor     utilities/patch.html#OPTIONS/-u
+anchor     utilities/patch.html#EXTENDED DESCRIPTION
+class      required
+since      2008
+says       patch applies a unified-context listing, named with -u or recognised, with several hunks and with line numbers that are off.
+test       t/003-unified-format.sh
+
+assertion  XCU.patch.004
+anchor     utilities/patch.html#DESCRIPTION
+anchor     utilities/patch.html#OPTIONS/-e
+class      required
+since      1992
+says       patch -e applies an ed-style listing.
+test       t/004-ed-script.sh
+
+assertion  XCU.patch.005
+anchor     utilities/patch.html#OPTIONS/-o
+anchor     utilities/patch.html#OPTIONS/-b
+class      required
+since      1992
+says       -o writes the patched file to the named file and leaves the original; with -b and an existing outfile, outfile.orig is made and file.orig is not.
+test       t/005-output-file.sh
+
+assertion  XCU.patch.006
+anchor     utilities/patch.html#OPTIONS/-R
+class      required
+since      1992
+says       -R applies a patch in the reverse sense.
+test       t/006-reverse.sh
+
+assertion  XCU.patch.007
+anchor     utilities/patch.html#OPTIONS/-b
+class      required
+since      1992
+says       -b saves the original as file.orig (once per file, overwriting an old one); without -b none is made.
+test       t/007-backup.sh
+
+assertion  XCU.patch.008
+anchor     utilities/patch.html#OPTIONS/-p
+anchor     utilities/patch.html#OPTIONS/-d
+anchor     utilities/patch.html#OPERANDS
+anchor     utilities/patch.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       The file to patch comes from the operand, the headers or an Index: line; -p strips leading components (base name without -p); -d sets the directory.
+test       t/008-pathnames.sh
+
+assertion  XCU.patch.009
+anchor     utilities/patch.html#OPTIONS/-r
+anchor     utilities/patch.html#CONSEQUENCES OF ERRORS
+anchor     utilities/patch.html#EXIT STATUS
+anchor     utilities/patch.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       A hunk that cannot be placed is written to the reject file (file.rej or the -r name, in copied-context form for a normal patch), other hunks are applied, and the status is 1.
+test       t/009-rejects.sh
+
+assertion  XCU.patch.010
+anchor     utilities/patch.html#OPTIONS/-N
+class      required
+since      1992
+says       By default an already-applied patch is rejected (unless patch asks and is told to assume -R); -N ignores it.
+note       Without -N and with a patch that has been applied, patch may ask
+           the user whether to assume -R; standard input is /dev/null, but a
+           prompt read from a terminal could wait, so the test has a short limit.
+timeout    20
+test       t/010-already-applied.sh
+
+assertion  XCU.patch.011
+anchor     utilities/patch.html#OPTIONS/-l
+class      required
+since      1992
+says       -l lets any run of blanks in the patch match any run of blanks in the file; otherwise blanks must match exactly.
+test       t/011-blank-matching.sh
+
+assertion  XCU.patch.012
+anchor     utilities/patch.html#OPTIONS/-D
+class      required
+since      1992
+says       -D name marks changes with conditionals so the file reads as patched when name is defined and as the original when it is not.
+test       t/012-ifdef-markup.sh
+
+assertion  XCU.patch.013
+anchor     utilities/patch.html#DESCRIPTION
+anchor     utilities/patch.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       A patch file with patches for several files patches each, named by headers or Index: lines.
+test       t/013-several-patches.sh
+
+assertion  XCU.patch.014
+anchor     utilities/patch.html#EXIT STATUS
+class      required
+since      1992
+says       patch exits above 1 when the patch file cannot be read, nonzero when the file to patch does not exist, and 0 on success.
+test       t/014-errors.sh

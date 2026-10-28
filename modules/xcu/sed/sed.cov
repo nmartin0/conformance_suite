@@ -1,0 +1,186 @@
+# sed.cov - every requirement unit on utilities/sed.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sections listed as "None.", "Not used." or "Default." take their meaning
+# from XCU 1.4 Utility Description Defaults.
+
+DESCRIPTION:2a5e69b8             XCU.sed.001 XCU.sed.002
+DESCRIPTION:81ee6cdf             XCU.sed.001 XCU.sed.002
+OPTIONS:f234a007                 todo  syntax guidelines not checked (order of -e and -f is exercised in 002)
+OPTIONS:e2947e20                 none  introductory sentence
+OPTIONS:e7f8c693                 XCU.sed.007
+OPTIONS:233cd09e                 XCU.sed.007
+OPTIONS:4813f39d                 XCU.sed.002
+OPTIONS:dc40d639                 XCU.sed.002
+OPTIONS:400ffe70                 XCU.sed.001
+OPTIONS:c219c3f0                 XCU.sed.001
+OPTIONS:42db379a                 XCU.sed.002
+OPTIONS:1d91b231                 XCU.sed.002
+OPTIONS:ca78492f                 XCU.sed.002
+OPTIONS:b112d64b                 XCU.sed.002
+OPERANDS:51b44f3c                none  introductory sentence
+OPERANDS:8bee7e86                XCU.sed.003 XCU.sed.013
+OPERANDS:0196ee15                XCU.sed.013
+OPERANDS:fa30eb4c                XCU.sed.001
+OPERANDS:4a220393                XCU.sed.001
+OPERANDS:3b3bd791                none  restriction on the application
+STDIN:edcb53c5                   none  the standard input is used only with no file operand, and '-' is optional
+STDIN:59ec88a4                   none  the standard input is used only with no file operand, and '-' is optional
+STDIN:fc1111c9                   none  the standard input is used only with no file operand, and '-' is optional
+INPUT_FILES:3eee12be             none  regular text files
+INPUT_FILES:e08014b7             XCU.sed.002
+ENVIRONMENT_VARIABLES:f0625aae   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:8cbf3293   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:cb0a8ed7   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd     none  default
+STDOUT:7f8311d3                  XCU.sed.001
+STDOUT:93fa731e                  XCU.sed.001
+STDERR:439d68e1                  todo  only emptiness of diagnostics could be observed
+OUTPUT_FILES:47ebff85            XCU.sed.005 XCU.sed.010
+EXTENDED_DESCRIPTION:a635af36    none  introduction of the command form
+EXTENDED_DESCRIPTION:295e60f8    none  command form
+EXTENDED_DESCRIPTION:2af484ea    none  introduction of the command form
+EXTENDED_DESCRIPTION:387d3e29    XCU.sed.002
+EXTENDED_DESCRIPTION:2b08d6ee    XCU.sed.002
+EXTENDED_DESCRIPTION:fed1f45d    XCU.sed.002
+EXTENDED_DESCRIPTION:5817a6f5    XCU.sed.001 XCU.sed.008
+EXTENDED_DESCRIPTION:1bed4a0d    XCU.sed.008
+EXTENDED_DESCRIPTION:3bdcaeb2    XCU.sed.008
+EXTENDED_DESCRIPTION:15acba6b    XCU.sed.001
+EXTENDED_DESCRIPTION:fd520d8f    XCU.sed.001
+EXTENDED_DESCRIPTION:857560bc    XCU.sed.009
+EXTENDED_DESCRIPTION:f5183ba3    todo  capacity not tested
+EXTENDED_DESCRIPTION:9929e398    XCU.sed.003
+EXTENDED_DESCRIPTION:36de0b2a    XCU.sed.003
+EXTENDED_DESCRIPTION:55375686    XCU.sed.003
+EXTENDED_DESCRIPTION:75c49a2c    todo  only the non-special delimiter case is used
+EXTENDED_DESCRIPTION:f833cb5b    XCU.sed.003
+EXTENDED_DESCRIPTION:ebeca9a1    XCU.sed.003
+EXTENDED_DESCRIPTION:488f44a5    XCU.sed.001
+EXTENDED_DESCRIPTION:0fe9d665    XCU.sed.003
+EXTENDED_DESCRIPTION:2c608f4c    XCU.sed.003
+EXTENDED_DESCRIPTION:4d37e370    XCU.sed.003
+EXTENDED_DESCRIPTION:6a9d85d6    XCU.sed.003
+EXTENDED_DESCRIPTION:66fea793    none  undefined
+EXTENDED_DESCRIPTION:c877c80e    none  command form
+EXTENDED_DESCRIPTION:42ee53ea    XCU.sed.007
+EXTENDED_DESCRIPTION:9433a136    XCU.sed.007
+EXTENDED_DESCRIPTION:95ab50a9    none  introductory sentence
+EXTENDED_DESCRIPTION:74d288b3    XCU.sed.003
+EXTENDED_DESCRIPTION:b211776f    XCU.sed.004
+EXTENDED_DESCRIPTION:8db20b9e    XCU.sed.008 XCU.sed.012
+EXTENDED_DESCRIPTION:4d4fa81c    none  restriction on the application
+EXTENDED_DESCRIPTION:6c44bb32    XCU.sed.013
+EXTENDED_DESCRIPTION:15ac9548    none  introductory sentence
+EXTENDED_DESCRIPTION:b5e80011    XCU.sed.010
+EXTENDED_DESCRIPTION:07d02973    XCU.sed.010
+EXTENDED_DESCRIPTION:6a06714f    XCU.sed.010
+EXTENDED_DESCRIPTION:61d70fcd    none  unspecified
+EXTENDED_DESCRIPTION:7ec7d787    todo  zero separation is an optional extension; blank separation is used
+EXTENDED_DESCRIPTION:911c172f    XCU.sed.010
+EXTENDED_DESCRIPTION:0d225d4b    XCU.sed.005
+EXTENDED_DESCRIPTION:6b3473b3    todo  the number of wfiles is not tested
+EXTENDED_DESCRIPTION:47765c29    XCU.sed.005 XCU.sed.010
+EXTENDED_DESCRIPTION:212f9138    XCU.sed.010 XCU.sed.011
+EXTENDED_DESCRIPTION:18862afc    todo  a single space is used throughout
+EXTENDED_DESCRIPTION:0347cbdf    XCU.sed.010
+EXTENDED_DESCRIPTION:ccfa901f    XCU.sed.010
+EXTENDED_DESCRIPTION:c6b8cebd    XCU.sed.010
+EXTENDED_DESCRIPTION:bd1f2853    todo  the time of reading is not distinguished
+EXTENDED_DESCRIPTION:0d43feea    XCU.sed.010
+EXTENDED_DESCRIPTION:34502883    XCU.sed.002 XCU.sed.008
+EXTENDED_DESCRIPTION:b1655e6e    none  unspecified
+EXTENDED_DESCRIPTION:e162b910    XCU.sed.011
+EXTENDED_DESCRIPTION:46b0d67a    XCU.sed.011
+EXTENDED_DESCRIPTION:4da2080f    none  conforming applications avoid it; unspecified
+EXTENDED_DESCRIPTION:0ee40a8d    none  unspecified
+EXTENDED_DESCRIPTION:77463764    none  unspecified
+EXTENDED_DESCRIPTION:0a646aa4    none  unspecified
+EXTENDED_DESCRIPTION:2b9ae4eb    XCU.sed.011
+EXTENDED_DESCRIPTION:75322a20    XCU.sed.011
+EXTENDED_DESCRIPTION:7ed11387    XCU.sed.011
+EXTENDED_DESCRIPTION:eb0fd91e    XCU.sed.011
+EXTENDED_DESCRIPTION:1dc30a41    XCU.sed.011
+EXTENDED_DESCRIPTION:fa39eac6    XCU.sed.011
+EXTENDED_DESCRIPTION:767e1083    XCU.sed.010
+EXTENDED_DESCRIPTION:a4eef539    none  unspecified
+EXTENDED_DESCRIPTION:590681f8    XCU.sed.011
+EXTENDED_DESCRIPTION:e4c1ccaa    XCU.sed.010
+EXTENDED_DESCRIPTION:a5a3d2f0    XCU.sed.010
+EXTENDED_DESCRIPTION:fbe4f78c    XCU.sed.010
+EXTENDED_DESCRIPTION:6d980d63    XCU.sed.008
+EXTENDED_DESCRIPTION:6c353ba8    XCU.sed.008
+EXTENDED_DESCRIPTION:97ea7bda    XCU.sed.008
+EXTENDED_DESCRIPTION:5613ffa7    XCU.sed.009
+EXTENDED_DESCRIPTION:fa192d8e    XCU.sed.009
+EXTENDED_DESCRIPTION:30f823c0    XCU.sed.009
+EXTENDED_DESCRIPTION:f58f630c    XCU.sed.009
+EXTENDED_DESCRIPTION:f589885a    XCU.sed.010
+EXTENDED_DESCRIPTION:87d75ada    XCU.sed.012
+EXTENDED_DESCRIPTION:c6dc3e39    XCU.sed.012
+EXTENDED_DESCRIPTION:451c03e3    XCU.sed.012
+EXTENDED_DESCRIPTION:30107f0f    todo  folding length is unspecified
+EXTENDED_DESCRIPTION:469a4a08    XCU.sed.012
+EXTENDED_DESCRIPTION:68bda392    XCU.sed.008
+EXTENDED_DESCRIPTION:3960c6bc    XCU.sed.014
+EXTENDED_DESCRIPTION:40cb061d    XCU.sed.010
+EXTENDED_DESCRIPTION:1eddc353    XCU.sed.008
+EXTENDED_DESCRIPTION:ebf9fa41    XCU.sed.014
+EXTENDED_DESCRIPTION:7e0de3f0    XCU.sed.001
+EXTENDED_DESCRIPTION:609bee92    XCU.sed.008
+EXTENDED_DESCRIPTION:28062683    XCU.sed.013
+EXTENDED_DESCRIPTION:52ae0210    XCU.sed.010
+EXTENDED_DESCRIPTION:c9b9a6e5    XCU.sed.010
+EXTENDED_DESCRIPTION:d46c3889    XCU.sed.004
+EXTENDED_DESCRIPTION:1744a06c    XCU.sed.004
+EXTENDED_DESCRIPTION:a80f2189    XCU.sed.003
+EXTENDED_DESCRIPTION:6fe6cf56    XCU.sed.004
+EXTENDED_DESCRIPTION:612886ab    XCU.sed.004
+EXTENDED_DESCRIPTION:2996288f    XCU.sed.004
+EXTENDED_DESCRIPTION:e7707d26    XCU.sed.004
+EXTENDED_DESCRIPTION:08dc7bc7    XCU.sed.004
+EXTENDED_DESCRIPTION:ebd5fb1b    XCU.sed.004
+EXTENDED_DESCRIPTION:29a7b49f    XCU.sed.004
+EXTENDED_DESCRIPTION:dfc15864    XCU.sed.004
+EXTENDED_DESCRIPTION:8248294f    XCU.sed.004
+EXTENDED_DESCRIPTION:1b46573f    XCU.sed.004
+EXTENDED_DESCRIPTION:8e6f2252    XCU.sed.004
+EXTENDED_DESCRIPTION:d19fd19d    none  unspecified
+EXTENDED_DESCRIPTION:43a54c0f    XCU.sed.004
+EXTENDED_DESCRIPTION:7ebca74c    XCU.sed.004
+EXTENDED_DESCRIPTION:9e839751    none  introductory sentence
+EXTENDED_DESCRIPTION:4aca57a3    XCU.sed.005
+EXTENDED_DESCRIPTION:fc9bba6d    XCU.sed.005
+EXTENDED_DESCRIPTION:e64488c7    none  unspecified
+EXTENDED_DESCRIPTION:3559e676    XCU.sed.006
+EXTENDED_DESCRIPTION:2b9c238a    XCU.sed.005
+EXTENDED_DESCRIPTION:83f3ca52    XCU.sed.005
+EXTENDED_DESCRIPTION:39c73f62    XCU.sed.005
+EXTENDED_DESCRIPTION:fd027428    none  conforming application obligation
+EXTENDED_DESCRIPTION:e200f05f    none  unspecified
+EXTENDED_DESCRIPTION:95ed7744    XCU.sed.011
+EXTENDED_DESCRIPTION:2073edd0    XCU.sed.011
+EXTENDED_DESCRIPTION:590681f8.2  XCU.sed.011
+EXTENDED_DESCRIPTION:d9b9f20c    XCU.sed.005
+EXTENDED_DESCRIPTION:f35011c3    XCU.sed.009
+EXTENDED_DESCRIPTION:7b51208d    XCU.sed.012
+EXTENDED_DESCRIPTION:d2d87f88    XCU.sed.012
+EXTENDED_DESCRIPTION:d6c6e57d    none  unspecified
+EXTENDED_DESCRIPTION:326f3a33    XCU.sed.012
+EXTENDED_DESCRIPTION:631e80e9    XCU.sed.012
+EXTENDED_DESCRIPTION:40a99f1c    XCU.sed.012
+EXTENDED_DESCRIPTION:6d21fe78    none  unspecified
+EXTENDED_DESCRIPTION:ab52055d    XCU.sed.011
+EXTENDED_DESCRIPTION:7d6cf868    XCU.sed.011
+EXTENDED_DESCRIPTION:1f32d662    XCU.sed.010
+EXTENDED_DESCRIPTION:8e18517e    todo  an empty command is not tried separately
+EXTENDED_DESCRIPTION:b90128a4    XCU.sed.012
+EXIT_STATUS:db823381             none  introductory sentence
+EXIT_STATUS:8b075da2             XCU.sed.015
+EXIT_STATUS:9d252ff7             XCU.sed.015
+CONSEQUENCES_OF_ERRORS:d92f27bd  none  default

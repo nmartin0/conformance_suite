@@ -1,0 +1,63 @@
+# XCU head
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.head.001
+anchor     utilities/head.html#OPTIONS
+anchor     utilities/head.html#DESCRIPTION
+class      required
+since      1992
+says       Without options head writes the first ten lines of the file, or the
+           whole file when it has fewer, and exits 0.
+test       t/001-default-ten-lines.sh
+
+assertion  XCU.head.002
+anchor     utilities/head.html#OPTIONS/-n
+class      required
+since      1992
+says       head -n number writes the first number lines; when the file has
+           fewer lines it is copied whole and the status is 0.
+test       t/002-line-count.sh
+
+assertion  XCU.head.003
+anchor     utilities/head.html#OPTIONS/-c
+class      required
+since      2024
+says       head -c number writes exactly the first number bytes of the file,
+           even in the middle of a line, and the whole file when it is
+           shorter.
+test       t/003-byte-count.sh
+
+assertion  XCU.head.004
+anchor     utilities/head.html#STDOUT
+class      required
+since      1992
+says       With more than one file operand head writes, before the output for
+           each file, a newline (omitted for the first file) and a header
+           line made of arrow marks around the file name.
+test       t/004-several-files.sh
+
+assertion  XCU.head.005
+anchor     utilities/head.html#OPERANDS
+anchor     utilities/head.html#STDIN
+class      required
+since      1992
+says       With no file operand head reads standard input.
+test       t/005-standard-input.sh
+
+assertion  XCU.head.006
+anchor     utilities/head.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+since      1992
+says       A file operand that cannot be read gives a nonzero final status
+           and does not stop head from handling the other operands.
+test       t/006-unreadable-file.sh
+
+assertion  XCU.head.007
+anchor     utilities/V3_chap01.html#1.4
+anchor     utilities/head.html#INPUT FILES
+class      required
+says       If head ends before reaching the end of a seekable standard input,
+           the file offset is left just after the last byte it processed, so
+           that a following cat reads the rest.
+test       t/007-leaves-offset.sh

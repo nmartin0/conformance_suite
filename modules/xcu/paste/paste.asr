@@ -1,0 +1,79 @@
+# XCU paste
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Results the page leaves unspecified are not tested: a backslash-zero
+# followed by x or a digit, and any other backslash sequence in -d.
+
+assertion  XCU.paste.001
+anchor     utilities/paste.html#DESCRIPTION
+anchor     utilities/paste.html#STDOUT
+class      required
+since      1992
+says       paste writes, for each set of corresponding lines of its files,
+           one line with the lines joined by tabs; with one file the file is
+           copied.
+test       t/001-default-join.sh
+
+assertion  XCU.paste.002
+anchor     utilities/paste.html#DESCRIPTION
+class      required
+since      1992
+says       When some but not all files reach end of file, paste goes on as if
+           the finished files supplied empty lines, whether the shorter file
+           comes first or last.
+test       t/002-unequal-length.sh
+
+assertion  XCU.paste.003
+anchor     utilities/paste.html#OPTIONS/-d
+class      required
+since      1992
+says       paste -d list puts the list's delimiters between the fields in
+           turn, reusing the list from its first element when it runs out
+           and at the start of every output line.
+test       t/003-delimiter-list.sh
+
+assertion  XCU.paste.004
+anchor     utilities/paste.html#OPTIONS/-d
+class      required
+since      1992
+says       In a -d list, the sequences backslash-t, backslash-n and two
+           backslashes stand for a tab, a newline and a backslash, and
+           backslash-zero for no delimiter at all.
+test       t/004-delimiter-escapes.sh
+
+assertion  XCU.paste.005
+anchor     utilities/paste.html#OPTIONS/-s
+anchor     utilities/paste.html#OPTIONS/-d
+class      required
+since      1992
+says       paste -s writes one line per file, in command-line order, joining
+           the lines of the file with tabs (or the -d delimiters, restarted
+           at the first for each file) and without changing the final
+           newline; an empty file gives a line of only a newline.
+test       t/005-serial.sh
+
+assertion  XCU.paste.006
+anchor     utilities/paste.html#OPERANDS
+anchor     utilities/paste.html#STDIN
+class      required
+since      1992
+says       A - operand is standard input, read one line at a time, going round
+           the - operands in turn for each output line.
+test       t/006-standard-input.sh
+
+assertion  XCU.paste.007
+anchor     utilities/paste.html#OPERANDS
+class      required
+since      1992
+says       Twelve file operands are accepted and joined.
+test       t/007-twelve-files.sh
+
+assertion  XCU.paste.008
+anchor     utilities/paste.html#CONSEQUENCES OF ERRORS
+anchor     utilities/paste.html#EXIT STATUS
+class      required
+since      1992
+says       When a file cannot be opened, paste without -s writes nothing to
+           standard output; with -s it handles the other files as usual; the
+           status is nonzero in both cases.
+test       t/008-unopenable-file.sh

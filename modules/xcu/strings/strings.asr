@@ -1,0 +1,51 @@
+# XCU strings
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every test gives -a, since without it the part of a file that is scanned
+# is implementation-defined. Test files hold only NUL, newline and ASCII
+# printable bytes, so that no run ends at a byte whose treatment the page
+# does not state. The page allows additional implementation-defined strings,
+# so the tests look for the strings they expect and for the absence of
+# strings that are too short, not for the exact output.
+
+assertion  XCU.strings.001
+anchor     utilities/strings.html#DESCRIPTION
+anchor     utilities/strings.html#STDOUT
+class      required
+since      1992
+says       strings writes each run of four or more printable characters that
+           is ended by a newline or a NUL as one line, and nothing shorter.
+test       t/001-default-length.sh
+
+assertion  XCU.strings.002
+anchor     utilities/strings.html#OPTIONS/-n
+class      required
+since      1992
+says       strings -n number makes number the shortest run written.
+test       t/002-minimum-length.sh
+
+assertion  XCU.strings.003
+anchor     utilities/strings.html#OPTIONS/-t
+anchor     utilities/strings.html#STDOUT
+class      required
+since      1992
+says       strings -t d, -t o and -t x write each string preceded by its byte
+           offset from the start of the file, in decimal, octal or
+           (lowercase) hexadecimal, and one space.
+test       t/003-offsets.sh
+
+assertion  XCU.strings.004
+anchor     utilities/strings.html#OPTIONS/-a
+class      required
+since      1992
+says       strings -a scans the whole file: a string 131072 bytes in is found.
+test       t/004-whole-file.sh
+
+assertion  XCU.strings.005
+anchor     utilities/strings.html#OPERANDS
+anchor     utilities/strings.html#EXIT STATUS
+class      required
+since      1992
+says       strings handles file operands in order, reads standard input with no
+           operand, and exits nonzero for a file it cannot read.
+test       t/005-operands.sh

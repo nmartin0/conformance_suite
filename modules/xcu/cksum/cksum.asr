@@ -1,0 +1,38 @@
+# XCU cksum
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All tests run in the POSIX locale. The expected values are the CRC and
+# octet count the page's algorithm gives for each input.
+
+assertion  XCU.cksum.001
+anchor     utilities/cksum.html#DESCRIPTION
+anchor     utilities/cksum.html#STDOUT
+class      required
+since      1992
+says       cksum writes the CRC (as an unsigned number) and the octet count for fixed inputs, with the length included in the CRC.
+test       t/001-known-values.sh
+
+assertion  XCU.cksum.002
+anchor     utilities/cksum.html#DESCRIPTION
+anchor     utilities/cksum.html#INPUT FILES
+class      required
+since      1992
+says       Bytes of every value, including NUL, and lengths that take more than one octet to record, give the defined CRC.
+test       t/002-binary-and-long.sh
+
+assertion  XCU.cksum.003
+anchor     utilities/cksum.html#STDOUT
+anchor     utilities/cksum.html#OPERANDS/file
+anchor     utilities/cksum.html#STDIN
+class      required
+since      1992
+says       Each file operand gives a line of checksum, octet count and pathname, in order; with no operand the line has no pathname and no leading space.
+test       t/003-operands-and-format.sh
+
+assertion  XCU.cksum.004
+anchor     utilities/cksum.html#EXIT STATUS
+anchor     utilities/cksum.html#STDERR
+class      required
+since      1992
+says       A file that cannot be read gives a diagnostic and a nonzero status and no result line; success gives 0.
+test       t/004-errors.sh

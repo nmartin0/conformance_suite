@@ -1,0 +1,85 @@
+# XCU nl
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The whole utility is shaded XSI, so the module option is XSI. What nl
+# writes for the logical-page delimiter lines themselves is not stated; the
+# tests look only at lines that carry a number and the separator under
+# test, except XCU.nl.002, which is about the lines that carry none.
+
+assertion  XCU.nl.001
+anchor     utilities/nl.html#STDOUT
+anchor     utilities/nl.html#DESCRIPTION
+class      required
+since      1992
+says       nl numbers the non-empty lines, writing the number in six columns
+           right-justified, then a tab, then the line; it reads standard
+           input when no file is named.
+test       t/001-default-numbering.sh
+
+assertion  XCU.nl.002
+anchor     utilities/nl.html#STDOUT
+class      required
+since      1992
+says       A line that gets no number is written as the input line alone,
+           with neither number nor separator.
+note       The page defines the line number and the separator as empty for
+           an unnumbered line; an implementation that writes padding in
+           their place does not follow it.
+test       t/002-unnumbered-lines.sh
+
+assertion  XCU.nl.003
+anchor     utilities/nl.html#OPTIONS/-b
+class      required
+since      1992
+says       nl -b a numbers all lines of the body, -b t only the non-empty
+           ones, -b n none, and -b pstring those matching the basic regular
+           expression string.
+test       t/003-body-style.sh
+
+assertion  XCU.nl.004
+anchor     utilities/nl.html#OPTIONS/-n
+anchor     utilities/nl.html#OPTIONS/-w
+anchor     utilities/nl.html#STDOUT
+class      required
+since      1992
+says       nl -n ln, rn and rz write the number left-justified, right-justified
+           or right-justified with leading zeros, in the width given by -w
+           (default six).
+test       t/004-number-format.sh
+
+assertion  XCU.nl.005
+anchor     utilities/nl.html#OPTIONS/-s
+anchor     utilities/nl.html#OPTIONS/-v
+anchor     utilities/nl.html#OPTIONS/-i
+class      required
+since      1992
+says       nl -s sets the characters written between the number and the line,
+           -v the number of the first line and -i the step.
+test       t/005-separator-and-numbers.sh
+
+assertion  XCU.nl.006
+anchor     utilities/nl.html#OPTIONS/-l
+class      required
+since      1992
+says       nl -l num with -b a numbers only every numth line of each run of
+           blank lines.
+test       t/006-blank-grouping.sh
+
+assertion  XCU.nl.007
+anchor     utilities/nl.html#DESCRIPTION
+anchor     utilities/nl.html#OPTIONS/-p
+class      required
+since      1992
+says       Lines made only of the section delimiters start a header, body or
+           footer; header and footer lines are not numbered by default;
+           numbering starts again at each new logical page, and -p stops
+           that.
+test       t/007-logical-pages.sh
+
+assertion  XCU.nl.008
+anchor     utilities/nl.html#OPTIONS/-d
+class      required
+since      1992
+says       nl -d sets the two characters of the section delimiters, and with
+           one character the second is a colon.
+test       t/008-delimiter-characters.sh

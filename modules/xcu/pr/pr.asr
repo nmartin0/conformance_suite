@@ -1,0 +1,102 @@
+# XCU pr
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# POSIX locale. Header dates use a fixed modification time and TZ=UTC0.
+
+assertion  XCU.pr.001
+anchor     utilities/pr.html#DESCRIPTION
+anchor     utilities/pr.html#STDOUT
+class      required
+since      1992
+says       By default pr writes 66-line pages, each with a 5-line header (date of the file's modification, name, page number) and a 5-line blank trailer; the last page is followed by blank lines.
+test       t/001-default-layout.sh
+
+assertion  XCU.pr.002
+anchor     utilities/pr.html#OPTIONS/-t
+anchor     utilities/pr.html#OPTIONS/-l
+class      required
+since      1992
+says       -t writes neither header nor trailer; a page length not above ten does the same; -l sets the page length.
+test       t/002-trailer-length.sh
+
+assertion  XCU.pr.003
+anchor     utilities/pr.html#OPTIONS/-h
+anchor     utilities/pr.html#OPTIONS
+anchor     utilities/pr.html#STDOUT
+class      required
+since      1992
+says       -h replaces the name in the header, +page begins at that page, and pages from standard input have an empty name field.
+test       t/003-header-page.sh
+
+assertion  XCU.pr.004
+anchor     utilities/pr.html#OPTIONS/-d
+class      required
+since      1992
+says       -d adds a newline after every input newline.
+test       t/004-double-space.sh
+
+assertion  XCU.pr.005
+anchor     utilities/pr.html#OPTIONS/-n
+anchor     utilities/pr.html#OPTIONS/-o
+class      required
+since      1992
+says       -n numbers lines with a default width of 5 followed by a tab, with a given width or separator character; -o precedes each line with offset spaces.
+test       t/005-number-offset.sh
+
+assertion  XCU.pr.006
+anchor     utilities/pr.html#OPTIONS/-column
+anchor     utilities/pr.html#OPTIONS/-a
+class      required
+since      1992
+says       -column writes down columns in input order, minimal length with -t; -a fills across rows.
+test       t/006-columns.sh
+
+assertion  XCU.pr.007
+anchor     utilities/pr.html#OPTIONS/-m
+anchor     utilities/pr.html#STDOUT
+class      required
+since      1992
+says       -m writes one line from each file side by side, supports at least three files here, and leaves the header name field empty.
+test       t/007-merge.sh
+
+assertion  XCU.pr.008
+anchor     utilities/pr.html#OPTIONS/-w
+anchor     utilities/pr.html#OPTIONS/-s
+anchor     utilities/pr.html#DESCRIPTION
+class      required
+since      1992
+says       Multi-column lines are truncated to the column width, -w sets the width, -s separates with the given character and widens the default to 512, and single-column lines are not truncated.
+test       t/008-width-separator.sh
+
+assertion  XCU.pr.009
+anchor     utilities/pr.html#OPTIONS/-e
+anchor     utilities/pr.html#OPTIONS/-i
+class      required
+since      1992
+says       -e expands tabs (gap or char arguments) and -i replaces runs of spaces reaching tab columns by tabs.
+test       t/009-expand-tabs.sh
+
+assertion  XCU.pr.010
+anchor     utilities/pr.html#OPTIONS/-F
+class      required
+since      1992
+says       -F separates pages with form-feeds; the default does not.
+test       t/010-form-feed.sh
+
+assertion  XCU.pr.011
+anchor     utilities/pr.html#OPTIONS/-f
+class      conditional
+when       XSI
+since      1992
+says       On XSI systems -f separates pages with form-feeds when output is not a terminal.
+test       t/011-form-feed-xsi.sh
+
+assertion  XCU.pr.012
+anchor     utilities/pr.html#OPERANDS
+anchor     utilities/pr.html#OPTIONS/-r
+anchor     utilities/pr.html#EXIT STATUS
+anchor     utilities/pr.html#STDIN
+class      required
+since      1992
+says       No operand or - reads standard input, several files are written in turn each with its own header, an unopenable file gives a diagnostic and nonzero status, and -r suppresses the diagnostic.
+test       t/012-operands-errors.sh

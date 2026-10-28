@@ -1,0 +1,94 @@
+# XCU join
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every input is ordered as the page requires (by byte value in the POSIX
+# locale), so no result depends on unspecified ordering.
+
+assertion  XCU.join.001
+anchor     utilities/join.html#DESCRIPTION
+anchor     utilities/join.html#STDOUT
+class      required
+since      1992
+says       For each pair of lines whose first fields are equal, join writes
+           the join field, the rest of the file1 line and the rest of the
+           file2 line, separated by single spaces; blanks at the start of a
+           line are ignored and a run of blanks is one separator.
+test       t/001-default-join.sh
+
+assertion  XCU.join.002
+anchor     utilities/join.html#OPTIONS/-1
+anchor     utilities/join.html#OPTIONS/-2
+anchor     utilities/join.html#STDOUT
+class      required
+since      1992
+says       -1 and -2 choose the join field of each file; the output has the
+           join field first, then the fields of file1 that precede and
+           follow its join field, then those of file2.
+test       t/002-field-choice.sh
+
+assertion  XCU.join.003
+anchor     utilities/join.html#OPTIONS/-t
+class      required
+since      1992
+says       With -t the given character separates fields in the input and the
+           output, every occurrence counts (so empty fields exist) and
+           blanks are ordinary characters.
+test       t/003-separator.sh
+
+assertion  XCU.join.004
+anchor     utilities/join.html#OPTIONS/-a
+class      required
+since      1992
+says       -a n adds to the output, in order, the lines of file n that have no
+           partner, written as the join field and the other fields of that
+           file; -a 1 -a 2 adds both kinds.
+test       t/004-unpairable-added.sh
+
+assertion  XCU.join.005
+anchor     utilities/join.html#OPTIONS/-v
+class      required
+since      1992
+says       -v n writes only the lines of file n that have no partner; -v 1
+           -v 2 writes those of both files, in order.
+test       t/005-unpairable-only.sh
+
+assertion  XCU.join.006
+anchor     utilities/join.html#OPTIONS/-o
+class      required
+since      1992
+says       -o writes only the listed file.field items (0 for the join
+           field), with the list given as one argument separated by commas
+           or by blanks.
+test       t/006-output-list.sh
+
+assertion  XCU.join.007
+anchor     utilities/join.html#OPTIONS/-e
+class      required
+since      1992
+says       -e string replaces an empty or absent field named by -o with the
+           string.
+test       t/007-empty-replacement.sh
+
+assertion  XCU.join.008
+anchor     utilities/join.html#DESCRIPTION
+class      required
+since      1992
+says       If a key occurs several times in either file, join writes every
+           combination of the other fields of the file1 lines and the file2
+           lines, in the order of the lines met.
+test       t/008-repeated-keys.sh
+
+assertion  XCU.join.009
+anchor     utilities/join.html#OPERANDS
+anchor     utilities/join.html#STDIN
+class      required
+since      1992
+says       The operand - used as file1 or as file2 means standard input.
+test       t/009-standard-input.sh
+
+assertion  XCU.join.010
+anchor     utilities/join.html#EXIT STATUS
+class      required
+since      1992
+says       When file1 or file2 cannot be read, the status is nonzero.
+test       t/010-unreadable-file.sh

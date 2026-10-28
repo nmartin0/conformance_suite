@@ -1,0 +1,85 @@
+# XCU tr
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the POSIX locale with ASCII text. Cases the page leaves
+# unspecified are avoided: a string2 shorter than string1 without a [x*]
+# fill, characters repeated in string1, empty strings and unknown escapes.
+
+assertion  XCU.tr.001
+anchor     utilities/tr.html#DESCRIPTION
+anchor     utilities/tr.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       tr string1 string2 replaces each input character found in string1
+           by the character at the same position of string2; a range c-c
+           stands for the characters between its ends in the POSIX locale.
+test       t/001-translate.sh
+
+assertion  XCU.tr.002
+anchor     utilities/tr.html#OPTIONS/-d
+class      required
+since      1992
+says       tr -d deletes the input characters that are in string1 and copies
+           the rest.
+test       t/002-delete.sh
+
+assertion  XCU.tr.003
+anchor     utilities/tr.html#OPTIONS/-s
+anchor     utilities/tr.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       tr -s replaces a run of one repeated character by a single
+           occurrence if the character is in the last operand, after any
+           translation, and leaves other characters alone.
+test       t/003-squeeze.sh
+
+assertion  XCU.tr.004
+anchor     utilities/tr.html#OPTIONS/-c
+anchor     utilities/tr.html#OPTIONS/-C
+anchor     utilities/tr.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       tr -c and -C take the complement of string1 (all other characters
+           in the POSIX locale); with a [x*] fill in string2 they translate
+           all of them, with -d they delete all but string1, with -s they
+           squeeze the replacement.
+test       t/004-complement.sh
+
+assertion  XCU.tr.005
+anchor     utilities/tr.html#OPTIONS/-d
+anchor     utilities/tr.html#OPTIONS/-s
+class      required
+since      1992
+says       tr -d -s deletes the characters of string1 and then squeezes runs
+           of the characters of string2.
+test       t/005-delete-and-squeeze.sh
+
+assertion  XCU.tr.006
+anchor     utilities/tr.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       In an operand, a backslash with one to three octal digits is the
+           character with that code, the backslash escapes for backslash,
+           alert, backspace, form feed, newline, carriage return, tab and
+           vertical tab stand for those characters, and a range with an
+           octal end covers the coded values between.
+test       t/006-escapes.sh
+
+assertion  XCU.tr.007
+anchor     utilities/tr.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       [:lower:] in string1 with [:upper:] in string2 (and the reverse)
+           converts case (and with -s squeezes the converted characters);
+           classes such as digit and space work in string1 for deleting and
+           squeezing.
+test       t/007-classes.sh
+
+assertion  XCU.tr.008
+anchor     utilities/tr.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       In string2, [x*n] stands for n copies of x (octal if n has a
+           leading zero) and [x*] for as many copies as it takes to match
+           string1.
+test       t/008-repeat-count.sh

@@ -1,0 +1,557 @@
+# awk.cov - every requirement unit on utilities/awk.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sections listed as "None.", "Not used." or "Default." take their meaning
+# from XCU 1.4 Utility Description Defaults.
+
+DESCRIPTION:c7b45d61             XCU.awk.002
+DESCRIPTION:5d925b26             XCU.awk.002
+DESCRIPTION:891a9d3d             XCU.awk.002
+DESCRIPTION:0c5d792f             XCU.awk.005 XCU.awk.002
+DESCRIPTION:c5e130fe             XCU.awk.002
+DESCRIPTION:bb138aa5             XCU.awk.002
+DESCRIPTION:34908a83             XCU.awk.002
+DESCRIPTION:20a483f0             XCU.awk.003 XCU.awk.004
+DESCRIPTION:9752c18a             XCU.awk.002
+DESCRIPTION:31c1b983             XCU.awk.003
+DESCRIPTION:56cc03dd             XCU.awk.003
+DESCRIPTION:9257c592             XCU.awk.002
+OPTIONS:9ab5ee8a                 todo  syntax guidelines not checked
+OPTIONS:e2947e20                 none  introductory sentence
+OPTIONS:83ff5cbd                 XCU.awk.001 XCU.awk.004
+OPTIONS:13d124e3                 XCU.awk.001 XCU.awk.004
+OPTIONS:b620347b                 XCU.awk.001 XCU.awk.004
+OPTIONS:95a1de6a                 XCU.awk.001
+OPTIONS:631692f8                 XCU.awk.001
+OPTIONS:afae04a3                 XCU.awk.001
+OPTIONS:c7689237                 XCU.awk.001
+OPTIONS:40d0b929                 XCU.awk.001
+OPTIONS:62391458                 XCU.awk.001
+OPTIONS:5ea56446                 XCU.awk.001
+OPERANDS:51b44f3c                none  introductory sentence
+OPERANDS:f878c752                XCU.awk.007 XCU.awk.001
+OPERANDS:e2d6939a                XCU.awk.007 XCU.awk.001
+OPERANDS:591c7b71                XCU.awk.007 XCU.awk.001
+OPERANDS:35170ecc                XCU.awk.007 XCU.awk.001
+OPERANDS:8596ea06                XCU.awk.007 XCU.awk.001
+OPERANDS:a6db08ef                XCU.awk.007 XCU.awk.001
+OPERANDS:2494c5ae                XCU.awk.007
+OPERANDS:71b89979                none  undefined for reserved words
+OPERANDS:be40f6ae                XCU.awk.007 XCU.awk.001
+OPERANDS:223246c7                XCU.awk.007 XCU.awk.001
+OPERANDS:456dd9fe                XCU.awk.007
+OPERANDS:07dc881c                XCU.awk.007
+OPERANDS:a1526655                XCU.awk.007
+STDIN:c3055dff                   XCU.awk.019
+STDIN:804ae129                   todo  the no-action program is not tried
+INPUT_FILES:3d81a059             none  text files
+INPUT_FILES:a2638318             none  text files
+INPUT_FILES:971a564c             none  text files
+INPUT_FILES:ddbd9ecb             none  text files
+INPUT_FILES:44bbda16             todo  record length limits are not tested
+INPUT_FILES:4dbbed7d             none  text files
+ENVIRONMENT_VARIABLES:9251fae9   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:9129ce42   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:5c4370e6   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:aa8eb9f0   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:fba78fb4   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:06db5ca8   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:1e6b3c43   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:3d45ab14   XCU.awk.006
+ASYNCHRONOUS_EVENTS:d92f27bd     none  default
+STDOUT:b7d1fa57                  none  depends on the program
+STDERR:b2905b3f                  todo  only emptiness of diagnostics could be observed
+OUTPUT_FILES:b7d1fa57            XCU.awk.011
+EXTENDED_DESCRIPTION:333cca4e    XCU.awk.002
+EXTENDED_DESCRIPTION:bdc5c4fc    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:43ecfb62    XCU.awk.002
+EXTENDED_DESCRIPTION:42bf93bb    XCU.awk.002
+EXTENDED_DESCRIPTION:236b0137    XCU.awk.002
+EXTENDED_DESCRIPTION:01cc4e24    XCU.awk.002
+EXTENDED_DESCRIPTION:101d498e    XCU.awk.002
+EXTENDED_DESCRIPTION:2099fd29    XCU.awk.004
+EXTENDED_DESCRIPTION:9fc344c0    XCU.awk.002
+EXTENDED_DESCRIPTION:dd4b1e21    XCU.awk.002
+EXTENDED_DESCRIPTION:deb9f068    XCU.awk.002
+EXTENDED_DESCRIPTION:ae4ba2db    XCU.awk.008
+EXTENDED_DESCRIPTION:4685818d    XCU.awk.008
+EXTENDED_DESCRIPTION:b4c1a4c6    XCU.awk.008
+EXTENDED_DESCRIPTION:c60fa646    XCU.awk.009
+EXTENDED_DESCRIPTION:a81c491d    XCU.awk.008
+EXTENDED_DESCRIPTION:318222f6    XCU.awk.008
+EXTENDED_DESCRIPTION:0a172b2c    XCU.awk.008
+EXTENDED_DESCRIPTION:f9f9545d    XCU.awk.008
+EXTENDED_DESCRIPTION:98f1859d    todo  keyword and token lists are not tested individually
+EXTENDED_DESCRIPTION:3c868e20    todo  keyword and token lists are not tested individually
+EXTENDED_DESCRIPTION:36fa6737    XCU.awk.008
+EXTENDED_DESCRIPTION:cf03a100    XCU.awk.008
+EXTENDED_DESCRIPTION:7a02256c    XCU.awk.008
+EXTENDED_DESCRIPTION:6a0fdb23    XCU.awk.008
+EXTENDED_DESCRIPTION:af4aca21    XCU.awk.008
+EXTENDED_DESCRIPTION:42c1b91f    XCU.awk.008
+EXTENDED_DESCRIPTION:04b75509    XCU.awk.008
+EXTENDED_DESCRIPTION:3bf88422    XCU.awk.008
+EXTENDED_DESCRIPTION:630f3bbf    XCU.awk.008
+EXTENDED_DESCRIPTION:bf59e54c    XCU.awk.008
+EXTENDED_DESCRIPTION:b0b2cee0    XCU.awk.008
+EXTENDED_DESCRIPTION:12b81291    XCU.awk.008
+EXTENDED_DESCRIPTION:ea4c72f7    XCU.awk.008
+EXTENDED_DESCRIPTION:210e5f78    XCU.awk.008
+EXTENDED_DESCRIPTION:9a4cea53    XCU.awk.008
+EXTENDED_DESCRIPTION:52f21ce5    XCU.awk.008
+EXTENDED_DESCRIPTION:05b71fb7    XCU.awk.008
+EXTENDED_DESCRIPTION:64514dc9    XCU.awk.008
+EXTENDED_DESCRIPTION:a478f65e    XCU.awk.008
+EXTENDED_DESCRIPTION:dfb16898    XCU.awk.008
+EXTENDED_DESCRIPTION:c8860b73    XCU.awk.008
+EXTENDED_DESCRIPTION:4d01d17e    XCU.awk.008
+EXTENDED_DESCRIPTION:7d409d73    XCU.awk.008
+EXTENDED_DESCRIPTION:e62b9bf8    XCU.awk.008
+EXTENDED_DESCRIPTION:3d3dcb10    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:d89ef5b2    XCU.awk.008
+EXTENDED_DESCRIPTION:84b5ebc0    XCU.awk.008
+EXTENDED_DESCRIPTION:924cd0d0    XCU.awk.017
+EXTENDED_DESCRIPTION:3f487cf6    XCU.awk.017
+EXTENDED_DESCRIPTION:0c036afc    XCU.awk.017
+EXTENDED_DESCRIPTION:08deae8d    XCU.awk.017
+EXTENDED_DESCRIPTION:44b43c23    XCU.awk.017
+EXTENDED_DESCRIPTION:945452ee    XCU.awk.017
+EXTENDED_DESCRIPTION:d5f20a51    XCU.awk.017
+EXTENDED_DESCRIPTION:d52918b8    XCU.awk.017
+EXTENDED_DESCRIPTION:9c7c04ca    XCU.awk.017
+EXTENDED_DESCRIPTION:1239b56e    todo  the condition is implementation-dependent
+EXTENDED_DESCRIPTION:08d8373e    todo  the numeric-string conditions are implementation-dependent
+EXTENDED_DESCRIPTION:c63098b0    todo  the numeric-string conditions are implementation-dependent
+EXTENDED_DESCRIPTION:5b8410ba    todo  the numeric-string conditions are implementation-dependent
+EXTENDED_DESCRIPTION:3e382242    todo  the numeric-string conditions are implementation-dependent
+EXTENDED_DESCRIPTION:e1706679    XCU.awk.008 XCU.awk.010
+EXTENDED_DESCRIPTION:838c1a08    XCU.awk.008
+EXTENDED_DESCRIPTION:8df47127    XCU.awk.008 XCU.awk.010
+EXTENDED_DESCRIPTION:a8e32dbc    XCU.awk.008 XCU.awk.010
+EXTENDED_DESCRIPTION:894acecb    XCU.awk.008 XCU.awk.010
+EXTENDED_DESCRIPTION:66cb026c    XCU.awk.008 XCU.awk.010
+EXTENDED_DESCRIPTION:f185c92c    XCU.awk.008 XCU.awk.010
+EXTENDED_DESCRIPTION:8c0dc21e    XCU.awk.008 XCU.awk.010
+EXTENDED_DESCRIPTION:99228e94    XCU.awk.008 XCU.awk.010
+EXTENDED_DESCRIPTION:c1ef37f3    XCU.awk.008
+EXTENDED_DESCRIPTION:4ae63554    XCU.awk.008
+EXTENDED_DESCRIPTION:1ae0b441    XCU.awk.008
+EXTENDED_DESCRIPTION:8483be6d    XCU.awk.008
+EXTENDED_DESCRIPTION:ca5e4e04    XCU.awk.008
+EXTENDED_DESCRIPTION:7f911014    XCU.awk.009
+EXTENDED_DESCRIPTION:e089855a    XCU.awk.008
+EXTENDED_DESCRIPTION:39d03c18    XCU.awk.008
+EXTENDED_DESCRIPTION:88f105a0    XCU.awk.008
+EXTENDED_DESCRIPTION:5e7713e7    XCU.awk.008
+EXTENDED_DESCRIPTION:bb98d7e0    XCU.awk.008
+EXTENDED_DESCRIPTION:4ae63554.2  XCU.awk.008
+EXTENDED_DESCRIPTION:4953d449    XCU.awk.008
+EXTENDED_DESCRIPTION:8483be6d.2  XCU.awk.008
+EXTENDED_DESCRIPTION:f23b533a    XCU.awk.008
+EXTENDED_DESCRIPTION:7f911014.2  XCU.awk.009
+EXTENDED_DESCRIPTION:e089855a.2  XCU.awk.008
+EXTENDED_DESCRIPTION:9d0e70a7    XCU.awk.008
+EXTENDED_DESCRIPTION:88f105a0.2  XCU.awk.008
+EXTENDED_DESCRIPTION:dca17220    XCU.awk.008
+EXTENDED_DESCRIPTION:bb98d7e0.2  XCU.awk.008
+EXTENDED_DESCRIPTION:eac39586    XCU.awk.008
+EXTENDED_DESCRIPTION:ac0f29e5    XCU.awk.008
+EXTENDED_DESCRIPTION:b79e32dd    XCU.awk.008
+EXTENDED_DESCRIPTION:051068ae    XCU.awk.008
+EXTENDED_DESCRIPTION:f45d3dcb    XCU.awk.008
+EXTENDED_DESCRIPTION:a15bc142    XCU.awk.009
+EXTENDED_DESCRIPTION:415edfb5    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:cf6e3b7e    XCU.awk.009
+EXTENDED_DESCRIPTION:37c45b9e    XCU.awk.009
+EXTENDED_DESCRIPTION:dcf20e73    XCU.awk.009
+EXTENDED_DESCRIPTION:aaa83c96    XCU.awk.009
+EXTENDED_DESCRIPTION:cbdc5f14    XCU.awk.009
+EXTENDED_DESCRIPTION:5c59b402    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:dc76ace3    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:1f5fe6d8    XCU.awk.009
+EXTENDED_DESCRIPTION:02234b7f    XCU.awk.009
+EXTENDED_DESCRIPTION:6c54b3d2    XCU.awk.009
+EXTENDED_DESCRIPTION:7f911014.3  XCU.awk.009
+EXTENDED_DESCRIPTION:216dad84    XCU.awk.009
+EXTENDED_DESCRIPTION:ba4fd685    XCU.awk.009
+EXTENDED_DESCRIPTION:8e1b8782    XCU.awk.009
+EXTENDED_DESCRIPTION:f3f654e9    XCU.awk.009
+EXTENDED_DESCRIPTION:5883b0f3    XCU.awk.009
+EXTENDED_DESCRIPTION:37697c90    XCU.awk.009
+EXTENDED_DESCRIPTION:3e684cb8    XCU.awk.008
+EXTENDED_DESCRIPTION:24418a62    XCU.awk.008
+EXTENDED_DESCRIPTION:5f63fc8a    XCU.awk.008
+EXTENDED_DESCRIPTION:28d8527a    XCU.awk.008
+EXTENDED_DESCRIPTION:ba3befee    XCU.awk.008
+EXTENDED_DESCRIPTION:f375030d    XCU.awk.008
+EXTENDED_DESCRIPTION:30c2b471    XCU.awk.008
+EXTENDED_DESCRIPTION:713e699c    XCU.awk.008
+EXTENDED_DESCRIPTION:bb91a2d7    XCU.awk.008
+EXTENDED_DESCRIPTION:1dae2a3f    XCU.awk.008 XCU.awk.015
+EXTENDED_DESCRIPTION:c09dc4d6    XCU.awk.008 XCU.awk.015
+EXTENDED_DESCRIPTION:d0580b24    XCU.awk.008 XCU.awk.015
+EXTENDED_DESCRIPTION:5235f43e    none  restriction on the application
+EXTENDED_DESCRIPTION:a98e386b    none  restriction on the application
+EXTENDED_DESCRIPTION:7820fadc    none  restriction on the application
+EXTENDED_DESCRIPTION:bcfa5603    XCU.awk.008
+EXTENDED_DESCRIPTION:40049365    XCU.awk.008
+EXTENDED_DESCRIPTION:7f4e0e61    XCU.awk.008
+EXTENDED_DESCRIPTION:8189678f    XCU.awk.017
+EXTENDED_DESCRIPTION:5ccc5afc    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:325cf4d2    XCU.awk.003
+EXTENDED_DESCRIPTION:9fbc93df    XCU.awk.003
+EXTENDED_DESCRIPTION:655354f1    XCU.awk.003
+EXTENDED_DESCRIPTION:4f966db2    XCU.awk.003
+EXTENDED_DESCRIPTION:f23e92b6    XCU.awk.003
+EXTENDED_DESCRIPTION:594506fe    XCU.awk.017
+EXTENDED_DESCRIPTION:a4594b60    XCU.awk.017
+EXTENDED_DESCRIPTION:9466b7b0    XCU.awk.006
+EXTENDED_DESCRIPTION:6fb4674f    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:74958b2d    XCU.awk.006
+EXTENDED_DESCRIPTION:42e10197    XCU.awk.006
+EXTENDED_DESCRIPTION:417c8c02    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:bf4efd6f    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:833f488d    XCU.awk.006
+EXTENDED_DESCRIPTION:b0b71d5a    XCU.awk.006
+EXTENDED_DESCRIPTION:ac4da4b8    XCU.awk.006
+EXTENDED_DESCRIPTION:cef2e9c8    XCU.awk.006
+EXTENDED_DESCRIPTION:929d4e07    XCU.awk.006
+EXTENDED_DESCRIPTION:7ccf99d6    XCU.awk.006
+EXTENDED_DESCRIPTION:a8001f60    XCU.awk.006
+EXTENDED_DESCRIPTION:da6d3d21    XCU.awk.006
+EXTENDED_DESCRIPTION:6af5d183    XCU.awk.006
+EXTENDED_DESCRIPTION:c0ecc8c4    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:fb673cd5    XCU.awk.006
+EXTENDED_DESCRIPTION:ca95356a    XCU.awk.006
+EXTENDED_DESCRIPTION:dc917287    XCU.awk.006
+EXTENDED_DESCRIPTION:b4c8bb05    XCU.awk.006
+EXTENDED_DESCRIPTION:952fbc4b    XCU.awk.006
+EXTENDED_DESCRIPTION:7bf017d0    XCU.awk.006
+EXTENDED_DESCRIPTION:ea5698ce    XCU.awk.006
+EXTENDED_DESCRIPTION:7926d1cd    XCU.awk.006 XCU.awk.017
+EXTENDED_DESCRIPTION:70e8463f    XCU.awk.006 XCU.awk.017
+EXTENDED_DESCRIPTION:f1946484    XCU.awk.006 XCU.awk.017
+EXTENDED_DESCRIPTION:35bfa47a    todo  whether changes to ENVIRON reach children is implementation-defined
+EXTENDED_DESCRIPTION:d276ec76    XCU.awk.006 XCU.awk.019
+EXTENDED_DESCRIPTION:5de5eb0f    XCU.awk.006 XCU.awk.019
+EXTENDED_DESCRIPTION:bc0827de    XCU.awk.006 XCU.awk.019
+EXTENDED_DESCRIPTION:0abcbdfc    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:773b9bad    XCU.awk.006
+EXTENDED_DESCRIPTION:dc93f285    XCU.awk.006
+EXTENDED_DESCRIPTION:be3520d0    XCU.awk.006
+EXTENDED_DESCRIPTION:9d09bdbe    XCU.awk.004
+EXTENDED_DESCRIPTION:94864230    XCU.awk.006
+EXTENDED_DESCRIPTION:9f33f0d7    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:36a6b1ab    XCU.awk.006
+EXTENDED_DESCRIPTION:f9c9a13b    XCU.awk.006
+EXTENDED_DESCRIPTION:dc93f285.2  XCU.awk.006
+EXTENDED_DESCRIPTION:88a96fbb    XCU.awk.006
+EXTENDED_DESCRIPTION:7db417be    XCU.awk.019
+EXTENDED_DESCRIPTION:6859ff96    XCU.awk.006
+EXTENDED_DESCRIPTION:ea5698ce.2  XCU.awk.006
+EXTENDED_DESCRIPTION:381b0e7b    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:daf48d4f    XCU.awk.006
+EXTENDED_DESCRIPTION:63b258b9    XCU.awk.006
+EXTENDED_DESCRIPTION:a9ac74aa    XCU.awk.006
+EXTENDED_DESCRIPTION:0a88ffcf    XCU.awk.005
+EXTENDED_DESCRIPTION:b000b1b5    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:22b3ba16    XCU.awk.005
+EXTENDED_DESCRIPTION:157a0605    XCU.awk.006
+EXTENDED_DESCRIPTION:2444f801    XCU.awk.006
+EXTENDED_DESCRIPTION:55d65363    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:7b9dbef1    XCU.awk.016
+EXTENDED_DESCRIPTION:5ab61c00    XCU.awk.016
+EXTENDED_DESCRIPTION:b26c3c1c    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:871debb5    XCU.awk.016
+EXTENDED_DESCRIPTION:c605d1d2    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:668e217b    XCU.awk.016
+EXTENDED_DESCRIPTION:751d5aca    XCU.awk.016
+EXTENDED_DESCRIPTION:6bae0e1c    XCU.awk.016
+EXTENDED_DESCRIPTION:5638e749    XCU.awk.016
+EXTENDED_DESCRIPTION:c57e0d23    XCU.awk.016
+EXTENDED_DESCRIPTION:a799038b    XCU.awk.016
+EXTENDED_DESCRIPTION:bf8a1f5f    XCU.awk.016
+EXTENDED_DESCRIPTION:d8c7d39f    XCU.awk.016
+EXTENDED_DESCRIPTION:fa1ff0f3    XCU.awk.016
+EXTENDED_DESCRIPTION:8b02ecd1    XCU.awk.016
+EXTENDED_DESCRIPTION:c573a45d    XCU.awk.016
+EXTENDED_DESCRIPTION:95c6b469    XCU.awk.016
+EXTENDED_DESCRIPTION:06886ae7    XCU.awk.016
+EXTENDED_DESCRIPTION:7255de38    XCU.awk.016
+EXTENDED_DESCRIPTION:158aa401    XCU.awk.016
+EXTENDED_DESCRIPTION:4bf918d9    XCU.awk.016
+EXTENDED_DESCRIPTION:e840f621    XCU.awk.004
+EXTENDED_DESCRIPTION:431a625e    XCU.awk.004
+EXTENDED_DESCRIPTION:126c9c32    XCU.awk.004
+EXTENDED_DESCRIPTION:41e02e66    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:d2af8bd5    XCU.awk.004
+EXTENDED_DESCRIPTION:0b37ebe6    XCU.awk.004
+EXTENDED_DESCRIPTION:7765a6b4    XCU.awk.004
+EXTENDED_DESCRIPTION:526505bf    XCU.awk.004
+EXTENDED_DESCRIPTION:e1afe748    todo  matching against records versus strings is not distinguished
+EXTENDED_DESCRIPTION:57b126d0    todo  matching against records versus strings is not distinguished
+EXTENDED_DESCRIPTION:1d3366ad    todo  matching against records versus strings is not distinguished
+EXTENDED_DESCRIPTION:bc78e7c0    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:7a787f72    XCU.awk.002
+EXTENDED_DESCRIPTION:387f863a    XCU.awk.002
+EXTENDED_DESCRIPTION:dc86258e    XCU.awk.002
+EXTENDED_DESCRIPTION:a1d87e33    XCU.awk.002
+EXTENDED_DESCRIPTION:814a8029    XCU.awk.002
+EXTENDED_DESCRIPTION:ad9c2a25    none  restriction on the application
+EXTENDED_DESCRIPTION:dda8e8d0    XCU.awk.002
+EXTENDED_DESCRIPTION:3b0137c2    XCU.awk.002
+EXTENDED_DESCRIPTION:f759240f    XCU.awk.002
+EXTENDED_DESCRIPTION:b55bb965    XCU.awk.002
+EXTENDED_DESCRIPTION:1ee5f9e6    XCU.awk.002
+EXTENDED_DESCRIPTION:b8402cde    XCU.awk.008 XCU.awk.010
+EXTENDED_DESCRIPTION:b8a1627a    XCU.awk.002
+EXTENDED_DESCRIPTION:fc2f8059    XCU.awk.002
+EXTENDED_DESCRIPTION:3d9ed7a1    XCU.awk.016
+EXTENDED_DESCRIPTION:3267039b    XCU.awk.016
+EXTENDED_DESCRIPTION:60b64643    XCU.awk.010
+EXTENDED_DESCRIPTION:39b140ac    XCU.awk.010
+EXTENDED_DESCRIPTION:6cef9b35    XCU.awk.010
+EXTENDED_DESCRIPTION:e740b85e    XCU.awk.010
+EXTENDED_DESCRIPTION:e8e64c98    XCU.awk.010
+EXTENDED_DESCRIPTION:9e7ea603    XCU.awk.015
+EXTENDED_DESCRIPTION:25d154c2    XCU.awk.009
+EXTENDED_DESCRIPTION:145eefa9    XCU.awk.009
+EXTENDED_DESCRIPTION:8db4cce8    XCU.awk.009
+EXTENDED_DESCRIPTION:a26b1676    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:212fc807    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:0ecf5187    XCU.awk.009
+EXTENDED_DESCRIPTION:32ce30a9    XCU.awk.009
+EXTENDED_DESCRIPTION:7371d9ef    XCU.awk.009
+EXTENDED_DESCRIPTION:18ab6ac7    XCU.awk.009
+EXTENDED_DESCRIPTION:b9943456    XCU.awk.009
+EXTENDED_DESCRIPTION:1504e090    XCU.awk.009
+EXTENDED_DESCRIPTION:17e04bba    XCU.awk.010
+EXTENDED_DESCRIPTION:8433b133    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:9bc05807    XCU.awk.019
+EXTENDED_DESCRIPTION:f0fec9e6    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:968f66fe    XCU.awk.010
+EXTENDED_DESCRIPTION:91b526c5    XCU.awk.010
+EXTENDED_DESCRIPTION:ba7e2903    XCU.awk.010
+EXTENDED_DESCRIPTION:d0e9a6a2    XCU.awk.011
+EXTENDED_DESCRIPTION:ce29a283    XCU.awk.011
+EXTENDED_DESCRIPTION:a8fa37f9    XCU.awk.011
+EXTENDED_DESCRIPTION:b1b73bfa    XCU.awk.011
+EXTENDED_DESCRIPTION:fa22f5f4    XCU.awk.011
+EXTENDED_DESCRIPTION:5a9c7c3c    XCU.awk.011
+EXTENDED_DESCRIPTION:26ba2a9a    XCU.awk.011
+EXTENDED_DESCRIPTION:2519dc58    XCU.awk.011
+EXTENDED_DESCRIPTION:ba0589ab    XCU.awk.011
+EXTENDED_DESCRIPTION:e104d858    XCU.awk.011
+EXTENDED_DESCRIPTION:5c807193    XCU.awk.011
+EXTENDED_DESCRIPTION:93a7d200    XCU.awk.011
+EXTENDED_DESCRIPTION:f3e50112    XCU.awk.011
+EXTENDED_DESCRIPTION:eda269c8    XCU.awk.011
+EXTENDED_DESCRIPTION:83bcad0a    XCU.awk.011
+EXTENDED_DESCRIPTION:2eaa4c72    XCU.awk.011
+EXTENDED_DESCRIPTION:12b80f13    XCU.awk.011
+EXTENDED_DESCRIPTION:cdf524c7    XCU.awk.011
+EXTENDED_DESCRIPTION:317864d1    XCU.awk.011
+EXTENDED_DESCRIPTION:ebec75e9    XCU.awk.011
+EXTENDED_DESCRIPTION:8888b069    XCU.awk.011
+EXTENDED_DESCRIPTION:5e272442    XCU.awk.011
+EXTENDED_DESCRIPTION:4716f869    XCU.awk.011
+EXTENDED_DESCRIPTION:9c3636d6    XCU.awk.011
+EXTENDED_DESCRIPTION:ec6ca050    XCU.awk.011
+EXTENDED_DESCRIPTION:0cbb8a46    XCU.awk.011
+EXTENDED_DESCRIPTION:8da1b341    XCU.awk.011
+EXTENDED_DESCRIPTION:0d571c41    XCU.awk.011
+EXTENDED_DESCRIPTION:63a702b0    XCU.awk.011
+EXTENDED_DESCRIPTION:1db877d5    XCU.awk.011
+EXTENDED_DESCRIPTION:06ff5d53    XCU.awk.011
+EXTENDED_DESCRIPTION:73db3471    XCU.awk.011
+EXTENDED_DESCRIPTION:d5f3a7a8    XCU.awk.011
+EXTENDED_DESCRIPTION:237e6624    XCU.awk.011
+EXTENDED_DESCRIPTION:8a0b7b59    XCU.awk.011
+EXTENDED_DESCRIPTION:191a42c2    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:79d5fb32    XCU.awk.011
+EXTENDED_DESCRIPTION:2cb622bf    XCU.awk.011
+EXTENDED_DESCRIPTION:a6be1c65    XCU.awk.011
+EXTENDED_DESCRIPTION:f24624f5    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:1301ebdb    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:a3bf1702    todo  output length limits are not tested
+EXTENDED_DESCRIPTION:7e3d30a7    XCU.awk.015
+EXTENDED_DESCRIPTION:fb86aa4b    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:ab817cbc    XCU.awk.015
+EXTENDED_DESCRIPTION:e855ed69    XCU.awk.012 XCU.awk.013
+EXTENDED_DESCRIPTION:023d57d7    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:cb2c887e    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:944b3efd    XCU.awk.013
+EXTENDED_DESCRIPTION:c92dbff3    XCU.awk.013
+EXTENDED_DESCRIPTION:9d983334    XCU.awk.013
+EXTENDED_DESCRIPTION:ebf64b9c    XCU.awk.013
+EXTENDED_DESCRIPTION:4d226c96    XCU.awk.013
+EXTENDED_DESCRIPTION:2c7d873b    XCU.awk.013
+EXTENDED_DESCRIPTION:df623b9a    XCU.awk.013
+EXTENDED_DESCRIPTION:fa4ec6a1    XCU.awk.013
+EXTENDED_DESCRIPTION:0dd3873e    XCU.awk.013
+EXTENDED_DESCRIPTION:be0162d1    XCU.awk.013
+EXTENDED_DESCRIPTION:095710b0    XCU.awk.013
+EXTENDED_DESCRIPTION:6efe7bde    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:d792070b    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:b403d668    XCU.awk.013
+EXTENDED_DESCRIPTION:653e6609    XCU.awk.013
+EXTENDED_DESCRIPTION:01a23c42    XCU.awk.012 XCU.awk.013
+EXTENDED_DESCRIPTION:cb2c887e.2  none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:40600ee0    XCU.awk.012
+EXTENDED_DESCRIPTION:c93da76a    XCU.awk.012
+EXTENDED_DESCRIPTION:e0933075    XCU.awk.012
+EXTENDED_DESCRIPTION:063e1769    XCU.awk.012
+EXTENDED_DESCRIPTION:029c180f    XCU.awk.012
+EXTENDED_DESCRIPTION:31116851    XCU.awk.012
+EXTENDED_DESCRIPTION:ed70d2f2    XCU.awk.012
+EXTENDED_DESCRIPTION:2c22da20    XCU.awk.012
+EXTENDED_DESCRIPTION:1b8e7828    XCU.awk.012
+EXTENDED_DESCRIPTION:950d5f9f    XCU.awk.012
+EXTENDED_DESCRIPTION:0a8bb3ea    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:4919c7c4    XCU.awk.012
+EXTENDED_DESCRIPTION:cdf76521    XCU.awk.012
+EXTENDED_DESCRIPTION:f19238da    XCU.awk.012
+EXTENDED_DESCRIPTION:b9cebcc9    XCU.awk.012
+EXTENDED_DESCRIPTION:da29c86b    XCU.awk.012
+EXTENDED_DESCRIPTION:5821244f    XCU.awk.012
+EXTENDED_DESCRIPTION:3334a9d3    XCU.awk.012
+EXTENDED_DESCRIPTION:f249a37a    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:a2e44812    XCU.awk.012
+EXTENDED_DESCRIPTION:a5e317ec    XCU.awk.012
+EXTENDED_DESCRIPTION:6b91008b    XCU.awk.012
+EXTENDED_DESCRIPTION:51e9fdca    XCU.awk.012
+EXTENDED_DESCRIPTION:5e9a6230    XCU.awk.012
+EXTENDED_DESCRIPTION:2d33cfe9    XCU.awk.012
+EXTENDED_DESCRIPTION:51e9fdca.2  XCU.awk.012
+EXTENDED_DESCRIPTION:16e1c21c    XCU.awk.012
+EXTENDED_DESCRIPTION:11592349    XCU.awk.012
+EXTENDED_DESCRIPTION:935b62fe    XCU.awk.012 XCU.awk.013
+EXTENDED_DESCRIPTION:62912d3c    XCU.awk.012 XCU.awk.013
+EXTENDED_DESCRIPTION:1f0dca65    XCU.awk.014
+EXTENDED_DESCRIPTION:3957ad77    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:98762bdd    XCU.awk.014
+EXTENDED_DESCRIPTION:24c8699e    XCU.awk.019
+EXTENDED_DESCRIPTION:22dc9986    XCU.awk.019
+EXTENDED_DESCRIPTION:f9bbe207    XCU.awk.019
+EXTENDED_DESCRIPTION:2d99e019    XCU.awk.014
+EXTENDED_DESCRIPTION:93a7d200.2  XCU.awk.014
+EXTENDED_DESCRIPTION:671c3632    XCU.awk.014
+EXTENDED_DESCRIPTION:61f96480    XCU.awk.014
+EXTENDED_DESCRIPTION:24ba9dae    XCU.awk.014
+EXTENDED_DESCRIPTION:623258d0    XCU.awk.014
+EXTENDED_DESCRIPTION:f5fe0ecc    XCU.awk.014
+EXTENDED_DESCRIPTION:5835c2a3    XCU.awk.014
+EXTENDED_DESCRIPTION:03381524    XCU.awk.014
+EXTENDED_DESCRIPTION:91bb357b    XCU.awk.014
+EXTENDED_DESCRIPTION:decfd859    XCU.awk.014
+EXTENDED_DESCRIPTION:ddc7ec23    XCU.awk.014
+EXTENDED_DESCRIPTION:81af4532    XCU.awk.014
+EXTENDED_DESCRIPTION:26a14d4e    XCU.awk.014
+EXTENDED_DESCRIPTION:0b0e882b    XCU.awk.014
+EXTENDED_DESCRIPTION:e6081880    XCU.awk.014
+EXTENDED_DESCRIPTION:a13da6b8    XCU.awk.014
+EXTENDED_DESCRIPTION:ef948fe0    XCU.awk.014
+EXTENDED_DESCRIPTION:0c84cacb    XCU.awk.014
+EXTENDED_DESCRIPTION:f5fe0ecc.2  XCU.awk.014
+EXTENDED_DESCRIPTION:0779bf0e    XCU.awk.014
+EXTENDED_DESCRIPTION:102a103b    XCU.awk.014
+EXTENDED_DESCRIPTION:1213c1a6    XCU.awk.014
+EXTENDED_DESCRIPTION:4d100354    XCU.awk.014
+EXTENDED_DESCRIPTION:fd26fddb    todo  distinct spellings of a file name are not tried
+EXTENDED_DESCRIPTION:e6f46187    todo  distinct spellings of a file name are not tried
+EXTENDED_DESCRIPTION:49a8c30c    XCU.awk.015
+EXTENDED_DESCRIPTION:b215292d    XCU.awk.015
+EXTENDED_DESCRIPTION:1105c0cc    XCU.awk.015
+EXTENDED_DESCRIPTION:67b77cb2    XCU.awk.015
+EXTENDED_DESCRIPTION:12e1901f    XCU.awk.015
+EXTENDED_DESCRIPTION:5a883fe5    XCU.awk.015
+EXTENDED_DESCRIPTION:46f5ea97    XCU.awk.015
+EXTENDED_DESCRIPTION:453980a8    XCU.awk.015
+EXTENDED_DESCRIPTION:c56a459f    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:347d7f0b    XCU.awk.015
+EXTENDED_DESCRIPTION:4ce8a98b    XCU.awk.015
+EXTENDED_DESCRIPTION:049008c9    XCU.awk.015
+EXTENDED_DESCRIPTION:4ca32778    XCU.awk.015
+EXTENDED_DESCRIPTION:bb9f53d8    XCU.awk.015
+EXTENDED_DESCRIPTION:6f6a52f5    XCU.awk.015
+EXTENDED_DESCRIPTION:5aceb082    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:c3659ccc    XCU.awk.015
+EXTENDED_DESCRIPTION:3c398b55    XCU.awk.015
+EXTENDED_DESCRIPTION:c08ae9d9    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:68bae3e7    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:9dd23c02    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:130961df    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:bad5a669    XCU.awk.015
+EXTENDED_DESCRIPTION:b220574c    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:99c81766    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:da8df467    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:2b360a73    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:0621341f    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:dbfc860b    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:82299ff4    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:7628710b    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:925c1a57    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:2dc53bd2    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:225d06e7    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:07d20acd    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:731db952    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:ecca3026    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:67dfc247    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:8c828ad8    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:1e5d786d    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:420a56c5    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:68dbe5a8    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:0c52407e    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:af1c3bd0    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:17f66f7a    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:054a994d    XCU.awk.011
+EXTENDED_DESCRIPTION:0160a4d8    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:294cfa7d    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:f8770251    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:c9d19c92    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:59643f8f    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:53f074e6    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:8de3b412    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:46ce5e49    XCU.awk.011
+EXTENDED_DESCRIPTION:0160a4d8.2  todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:a31bdbc3    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:96ea4769    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:3a2bd808    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:e3582281    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:db4c1238    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:a3acf990    XCU.awk.008
+EXTENDED_DESCRIPTION:d52d183c    XCU.awk.008
+EXTENDED_DESCRIPTION:f6fa956c    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:633666be    none  unspecified or undefined behaviour
+EXTENDED_DESCRIPTION:411d4de1    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:df3cd8f2    todo  keyword and token lists are not tested individually
+EXTENDED_DESCRIPTION:c089476b    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:560db9d3    todo  keyword and token lists are not tested individually
+EXTENDED_DESCRIPTION:a9aa4fb2    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:8d34ae2a    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:6ab7533e    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:f1c1e951    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:5ed3a94c    todo  token names are not tested individually
+EXTENDED_DESCRIPTION:b043bad3    todo  keyword and token lists are not tested individually
+EXTENDED_DESCRIPTION:0924e134    todo  keyword and token lists are not tested individually
+EXTENDED_DESCRIPTION:7f0a4525    todo  keyword and token lists are not tested individually
+EXTENDED_DESCRIPTION:b7b0c15b    todo  keyword and token lists are not tested individually
+EXTENDED_DESCRIPTION:4c463879    todo  keyword and token lists are not tested individually
+EXTENDED_DESCRIPTION:627a07ff    todo  keyword and token lists are not tested individually
+EXTENDED_DESCRIPTION:a6f4411c    todo  keyword and token lists are not tested individually
+EXTENDED_DESCRIPTION:6384f089    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:b6184e72    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:c2accd69    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:07496894    todo  grammar, lexical or detail unit not individually tested
+EXTENDED_DESCRIPTION:75c246cd    todo  grammar, lexical or detail unit not individually tested
+EXIT_STATUS:db823381             none  introductory sentence
+EXIT_STATUS:84f4b845             XCU.awk.010 XCU.awk.018
+EXIT_STATUS:9d252ff7             XCU.awk.010 XCU.awk.018
+EXIT_STATUS:d6d0cbe8             XCU.awk.010
+CONSEQUENCES_OF_ERRORS:00c06d06  XCU.awk.018
+CONSEQUENCES_OF_ERRORS:00b09c12  XCU.awk.018

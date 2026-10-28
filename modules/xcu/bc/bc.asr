@@ -1,0 +1,81 @@
+# XCU bc
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All tests run in the POSIX locale with the standard input a pipe that ends,
+# so bc is never interactive. Fractions below one are accepted with or
+# without the leading zero, which the page leaves unspecified.
+
+assertion  XCU.bc.001
+anchor     utilities/bc.html#EXTENDED DESCRIPTION
+anchor     utilities/bc.html#STDOUT
+anchor     utilities/bc.html#EXIT STATUS
+class      required
+since      1992
+says       Integer expressions are evaluated exactly with the stated operators, precedence and associativity, each expression that is not an assignment is written on its own line, and the status is 0 on success.
+test       t/001-arithmetic.sh
+
+assertion  XCU.bc.002
+anchor     utilities/bc.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       scale limits the fractional digits kept (truncating, not rounding), and the scale of results follows the rules for constants, sums, products, remainders, sqrt, length and scale().
+test       t/002-scale.sh
+
+assertion  XCU.bc.003
+anchor     utilities/bc.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       ibase and obase select the radix of input and output; a single digit assigned to either is hexadecimal; bases above 16 write space-led multi-digit decimal numbers.
+test       t/003-bases.sh
+
+assertion  XCU.bc.004
+anchor     utilities/bc.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Identifiers and array elements start at zero, the three name classes do not conflict, subscripts are truncated, and ++, -- and compound assignments behave as described.
+test       t/004-variables-and-arrays.sh
+
+assertion  XCU.bc.005
+anchor     utilities/bc.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       if, while, for, break and quit work, relational operators are valid in them, strings are written as given, comments have no effect, and statements run in sequence.
+test       t/005-control-flow-strings-comments.sh
+
+assertion  XCU.bc.006
+anchor     utilities/bc.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Functions take parameters by value (arrays by name), have auto locals, return a value or zero, may recurse, are replaced on redefinition, and names refer to the newest binding.
+test       t/006-functions.sh
+
+assertion  XCU.bc.007
+anchor     utilities/bc.html#OPTIONS/-l
+anchor     utilities/bc.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       With -l scale starts at 20 and s, c, a, l, e and j are defined, return results at the current scale and leave scale unchanged.
+test       t/007-math-library.sh
+
+assertion  XCU.bc.008
+anchor     utilities/bc.html#OPERANDS/file
+anchor     utilities/bc.html#DESCRIPTION
+anchor     utilities/bc.html#INPUT FILES
+class      required
+since      1992
+says       bc executes each file operand in order, then the standard input.
+test       t/008-files-and-stdin.sh
+
+assertion  XCU.bc.009
+anchor     utilities/bc.html#CONSEQUENCES OF ERRORS
+class      required
+since      1992
+says       A file operand that cannot be accessed gets a diagnostic and ends bc without further action.
+test       t/009-missing-file.sh
+
+assertion  XCU.bc.010
+anchor     utilities/bc.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Very long numbers are folded into lines of at most 70 characters of the number (and the backslash), each continued line ending with a backslash.
+test       t/010-long-numbers.sh

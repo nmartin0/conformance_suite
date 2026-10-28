@@ -1,0 +1,124 @@
+# XCU od
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page fixes neither how many items od writes on a line (a block is a
+# multiple of the least common multiple of the type sizes), nor the width
+# or zero padding of numbers, nor the letter case of hexadecimal digits,
+# nor the byte order of multi-byte items. The tests therefore read the
+# output as fields, drop leading zeros, use only hexadecimal values without
+# letters (except where both cases are accepted) and use multi-byte items
+# whose bytes are equal.
+
+assertion  XCU.od.001
+anchor     utilities/od.html#OPTIONS/-A
+anchor     utilities/od.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       od -A d, -A o and -A x write at the start of each block the offset
+           of its first byte, in decimal, octal or hexadecimal, and after the
+           last block a line with only the offset after the last byte and no
+           blank after it; -A n writes no offsets.
+test       t/001-offsets.sh
+
+assertion  XCU.od.002
+anchor     utilities/od.html#OPTIONS/-t
+anchor     utilities/od.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       od -t o1, x1, u1 and d1 write each byte as an octal, hexadecimal,
+           unsigned decimal or signed decimal number; o2, x2, u2, x4 and x8
+           write two, four or eight bytes as one number.
+test       t/002-integer-types.sh
+
+assertion  XCU.od.003
+anchor     utilities/od.html#EXTENDED DESCRIPTION
+anchor     utilities/od.html#OPTIONS/-t
+class      required
+since      1992
+says       od -t a writes each byte, using only its seven low bits, as the
+           ASCII name given for control characters (nul, soh, nl or lf, sp,
+           del and so on) or as the printable character itself.
+test       t/003-named-characters.sh
+
+assertion  XCU.od.004
+anchor     utilities/od.html#EXTENDED DESCRIPTION
+anchor     utilities/od.html#OPTIONS/-t
+class      required
+since      1992
+says       od -t c writes printable bytes as themselves, the C escapes for
+           newline, tab, carriage return, backspace, form feed, vertical
+           tab and alert, a single backslash for backslash, \0 for NUL and
+           three octal digits for other nonprintable bytes.
+test       t/004-characters.sh
+
+assertion  XCU.od.005
+anchor     utilities/od.html#OPTIONS/-j
+anchor     utilities/od.html#OPTIONS/-N
+class      required
+says       od -j skips that many bytes (decimal, or octal with a leading 0 or
+           hexadecimal with 0x) and fails if the input is shorter; od -N
+           formats at most that many bytes, a shorter input being no error.
+test       t/005-skip-and-count.sh
+
+assertion  XCU.od.006
+anchor     utilities/od.html#OPTIONS/-v
+class      required
+since      1992
+says       Without -v, od replaces groups of output lines identical to the
+           group before by a line holding only an asterisk (for 1024 equal
+           bytes); with -v every group is written.
+test       t/006-repeated-lines.sh
+
+assertion  XCU.od.007
+anchor     utilities/od.html#OPTIONS/-t
+anchor     utilities/od.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       With several types, from several -t options or one type string,
+           od writes for each block one line per type, in the order the
+           types were given.
+test       t/007-several-types.sh
+
+assertion  XCU.od.008
+anchor     utilities/od.html#OPERANDS
+anchor     utilities/od.html#STDIN
+anchor     utilities/od.html#EXIT STATUS
+class      required
+since      1992
+says       od treats its file operands as one stream with offsets running on
+           across files, reads standard input with no operand, and exits
+           nonzero for a file it cannot read.
+test       t/008-operands.sh
+
+assertion  XCU.od.009
+anchor     utilities/od.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       With no output type od behaves as with -t oS.
+test       t/009-default-type.sh
+
+assertion  XCU.od.010
+anchor     utilities/od.html#OPTIONS/-b
+anchor     utilities/od.html#OPTIONS/-c
+anchor     utilities/od.html#OPTIONS/-d
+anchor     utilities/od.html#OPTIONS/-o
+anchor     utilities/od.html#OPTIONS/-s
+anchor     utilities/od.html#OPTIONS/-x
+class      conditional
+when       XSI
+since      1992
+says       The options -b, -d, -o, -s and -x give the same output as -t o1,
+           -t u2, -t o2, -t d2 and -t x2; -c shows the same characters as
+           -t c (the page does not state the layouts to be equal).
+test       t/010-xsi-letter-options.sh
+
+assertion  XCU.od.011
+anchor     utilities/od.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       On XSI systems, when there are at most two operands, no -A, -j, -N,
+           -t or -v is given and the last operand starts with + (or is a
+           number after a file name), it is the byte offset at which to
+           start, octal unless it ends in a dot.
+test       t/011-xsi-offset-operand.sh

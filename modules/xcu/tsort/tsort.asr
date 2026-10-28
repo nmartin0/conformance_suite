@@ -1,0 +1,47 @@
+# XCU tsort
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All tests run in the POSIX locale. Output order is checked against the
+# input pairs, since many orders can be valid; only chains with one valid order
+# are compared exactly.
+
+assertion  XCU.tsort.001
+anchor     utilities/tsort.html#DESCRIPTION
+anchor     utilities/tsort.html#STDOUT
+class      required
+since      1992
+says       tsort writes every item once, one per line, so that the first item of each pair of different items comes before the second.
+test       t/001-ordering.sh
+
+assertion  XCU.tsort.002
+anchor     utilities/tsort.html#DESCRIPTION
+anchor     utilities/tsort.html#INPUT FILES
+class      required
+since      1992
+says       A pair of identical items only records the item; blanks and newlines in any number separate items.
+test       t/002-identical-and-separators.sh
+
+assertion  XCU.tsort.003
+anchor     utilities/tsort.html#DESCRIPTION
+anchor     utilities/tsort.html#STDERR
+class      required
+since      2024
+says       A cycle in the input is reported on standard error, and input without a cycle gives no diagnostic.
+test       t/003-cycle-message.sh
+
+assertion  XCU.tsort.004
+anchor     utilities/tsort.html#OPTIONS/-w
+anchor     utilities/tsort.html#EXIT STATUS
+class      required
+since      2024
+says       With -w the exit status is the number of cycles found, and the message is a diagnostic; with no cycle the status is 0.
+test       t/004-w-option.sh
+
+assertion  XCU.tsort.005
+anchor     utilities/tsort.html#OPERANDS/file
+anchor     utilities/tsort.html#STDIN
+anchor     utilities/tsort.html#EXIT STATUS
+class      required
+since      1992
+says       tsort reads the file operand, else standard input; empty input gives no output and status 0; a missing file gives a nonzero status.
+test       t/005-operands.sh

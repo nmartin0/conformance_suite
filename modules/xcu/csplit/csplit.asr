@@ -1,0 +1,77 @@
+# XCU csplit
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The -k option is not tested with an error: an implementation may find the
+# error before it has made any file, so nothing could be required to remain.
+# A first line matching a first expression is avoided, since the resulting
+# empty file is unspecified.
+
+assertion  XCU.csplit.001
+anchor     utilities/csplit.html#OPERANDS
+anchor     utilities/csplit.html#STDOUT
+anchor     utilities/csplit.html#OUTPUT FILES
+class      required
+since      1992
+says       csplit with line-number operands writes the lines before the first
+           number to xx00, those up to the second number to xx01, and so on,
+           and writes one line with each file's size in bytes.
+test       t/001-line-numbers.sh
+
+assertion  XCU.csplit.002
+anchor     utilities/csplit.html#OPERANDS
+class      required
+since      1992
+says       csplit /rexp/ ends the piece before the first following line that
+           matches, moved by a +n or -n offset, and the next piece starts
+           there.
+test       t/002-regular-expression.sh
+
+assertion  XCU.csplit.003
+anchor     utilities/csplit.html#OPERANDS
+class      required
+since      1992
+says       csplit %rexp% advances to the matching line without writing a file
+           for the lines skipped.
+test       t/003-skip-section.sh
+
+assertion  XCU.csplit.004
+anchor     utilities/csplit.html#OPERANDS
+class      required
+since      1992
+says       A {num} operand after a regular expression applies it num more
+           times, and after a line number splits every that many lines num
+           more times.
+test       t/004-repeat.sh
+
+assertion  XCU.csplit.005
+anchor     utilities/csplit.html#OPTIONS/-f
+anchor     utilities/csplit.html#OPTIONS/-n
+class      required
+since      1992
+says       csplit -f prefix names the files prefix00, prefix01, ..., and -n
+           number gives the file numbers that many digits.
+test       t/005-file-names.sh
+
+assertion  XCU.csplit.006
+anchor     utilities/csplit.html#OPTIONS/-s
+class      required
+since      1992
+says       csplit -s writes no size lines to standard output.
+test       t/006-quiet.sh
+
+assertion  XCU.csplit.007
+anchor     utilities/csplit.html#CONSEQUENCES OF ERRORS
+anchor     utilities/csplit.html#EXIT STATUS
+class      required
+since      1992
+says       An operand that matches no line, or names a line past the end of
+           the input, gives a nonzero status, and without -k no file made by
+           that run remains.
+test       t/007-error-removes-files.sh
+
+assertion  XCU.csplit.008
+anchor     utilities/csplit.html#OPERANDS
+class      required
+since      1992
+says       A file operand of - means standard input.
+test       t/008-standard-input.sh

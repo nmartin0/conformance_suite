@@ -1,0 +1,108 @@
+# XCU cut
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the POSIX locale. Multi-byte behaviour of -n is not
+# exercised: it needs a locale the suite cannot name.
+
+assertion  XCU.cut.001
+anchor     utilities/cut.html#OPTIONS
+class      required
+since      1992
+says       cut -b with a single number, a low-high range, a -high range, a
+           low- range and a comma list writes exactly the bytes so selected
+           from each line, followed by a newline, and exits 0.
+test       t/001-bytes-list.sh
+
+assertion  XCU.cut.002
+anchor     utilities/cut.html#OPTIONS
+class      required
+since      1992
+says       cut -c with the same list forms writes exactly the characters so
+           selected from each line (ASCII text in the POSIX locale).
+test       t/002-chars-list.sh
+
+assertion  XCU.cut.003
+anchor     utilities/cut.html#OPTIONS
+class      required
+since      1992
+says       List elements that repeat, overlap or come in any order still
+           give the selected bytes, characters or fields in input order, each
+           written once.
+test       t/003-order-and-repeats.sh
+
+assertion  XCU.cut.004
+anchor     utilities/cut.html#OPTIONS
+class      required
+since      1992
+says       A list given as one argument with blanks between the elements
+           selects the same positions as the comma form.
+test       t/004-blank-list.sh
+
+assertion  XCU.cut.005
+anchor     utilities/cut.html#OPTIONS/-b
+class      required
+since      1992
+says       Selecting bytes or characters that a line does not have is not an
+           error: the status is 0 and what exists is written; a line from
+           which nothing is selected is written as an empty line.
+test       t/005-beyond-line-end.sh
+
+assertion  XCU.cut.006
+anchor     utilities/cut.html#OPTIONS/-f
+class      required
+since      1992
+says       With -f and no -d the delimiter is the tab, and the selected
+           fields are written separated by one tab each.
+test       t/006-fields-default-tab.sh
+
+assertion  XCU.cut.007
+anchor     utilities/cut.html#OPTIONS/-d
+class      required
+since      1992
+says       With -d the given character delimits the input fields and
+           separates the selected fields in the output.
+test       t/007-field-delimiter.sh
+
+assertion  XCU.cut.008
+anchor     utilities/cut.html#OPTIONS/-s
+class      required
+since      1992
+says       With -f a line without the delimiter is written unchanged; with -s
+           such lines are not written.
+test       t/008-suppress-undelimited.sh
+
+assertion  XCU.cut.009
+anchor     utilities/cut.html#OPTIONS/-f
+class      required
+since      1992
+says       Selecting a field that a delimited line does not have is not an
+           error (status 0); the fields that exist are written.
+test       t/009-field-absent.sh
+
+assertion  XCU.cut.010
+anchor     utilities/cut.html#OPTIONS/-n
+class      required
+since      1992
+says       In the POSIX locale, where a character is one byte, -n with -b
+           gives the same bytes as without -n and the option is accepted
+           before or after the list.
+test       t/010-no-split-chars.sh
+
+assertion  XCU.cut.011
+anchor     utilities/cut.html#OPERANDS
+anchor     utilities/cut.html#STDIN
+class      required
+since      1992
+says       Files named as operands are cut in command-line order; with no
+           operand, or with the operand -, standard input is read.
+test       t/011-operands.sh
+
+assertion  XCU.cut.012
+anchor     utilities/cut.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+since      1992
+says       A file operand that cannot be read gives a diagnostic and a
+           nonzero final status, and the operands after it are still
+           processed.
+test       t/012-missing-file.sh

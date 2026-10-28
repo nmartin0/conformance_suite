@@ -1,0 +1,49 @@
+# XCU unexpand
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests use single-column characters in the POSIX locale.
+
+assertion  XCU.unexpand.001
+anchor     utilities/unexpand.html#DESCRIPTION
+class      required
+since      1992
+says       By default unexpand converts the blanks at the start of each line
+           into as many tabs as fit (stops every eighth column) followed by
+           as few spaces as needed, and leaves other blanks alone.
+test       t/001-leading-blanks.sh
+
+assertion  XCU.unexpand.002
+anchor     utilities/unexpand.html#OPTIONS/-a
+class      required
+since      1992
+says       unexpand -a also converts a run of two or more blanks that ends at
+           a tab stop, anywhere in the line, and does not convert a single
+           blank or a run that stops short of a tab stop.
+test       t/002-all-blanks.sh
+
+assertion  XCU.unexpand.003
+anchor     utilities/unexpand.html#OPTIONS/-t
+class      required
+since      1992
+says       unexpand -t sets the tab stops (a number for equal spacing or a
+           list), converts blanks anywhere in the line, and converts nothing
+           beyond the last stop of a list.
+test       t/003-tab-list.sh
+
+assertion  XCU.unexpand.004
+anchor     utilities/unexpand.html#DESCRIPTION
+class      required
+since      1992
+says       Tabs in the input count as blanks: the blanks and tabs at the start
+           of a line are replaced by the most tabs and fewest spaces that
+           fill the same columns.
+test       t/004-existing-tabs.sh
+
+assertion  XCU.unexpand.005
+anchor     utilities/unexpand.html#OPERANDS
+anchor     utilities/unexpand.html#EXIT STATUS
+class      required
+since      1992
+says       unexpand handles file operands in order, reads standard input with
+           no operand, and exits nonzero when a file cannot be read.
+test       t/005-operands.sh

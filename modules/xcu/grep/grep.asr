@@ -1,0 +1,86 @@
+# XCU grep
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All tests run in the POSIX locale. Input is plain ASCII text lines.
+
+assertion  XCU.grep.001
+anchor     utilities/grep.html#DESCRIPTION
+class      required
+since      1992
+says       By default grep treats each pattern as a basic regular expression
+           matched against any part of a line, and a null pattern matches
+           every line.
+test       t/001-basic-patterns.sh
+
+assertion  XCU.grep.002
+anchor     utilities/grep.html#OPTIONS/-E
+anchor     utilities/grep.html#OPTIONS/-F
+class      required
+since      1992
+says       -E reads patterns as extended regular expressions, -F as fixed
+           strings, and -F accepts several strings in one newline-separated
+           list.
+test       t/002-ere-and-fixed.sh
+
+assertion  XCU.grep.003
+anchor     utilities/grep.html#OPTIONS/-e
+anchor     utilities/grep.html#OPTIONS/-f
+anchor     utilities/grep.html#OPERANDS
+class      required
+since      1992
+says       Patterns from every -e, every -f and a newline-separated list are
+           all used; a null pattern from a list or a -f line matches every
+           line; -e accepts a pattern that begins with a hyphen-minus.
+test       t/003-pattern-sources.sh
+
+assertion  XCU.grep.004
+anchor     utilities/grep.html#OPTIONS/-i
+anchor     utilities/grep.html#OPTIONS/-v
+anchor     utilities/grep.html#OPTIONS/-x
+class      required
+since      1992
+says       -i ignores case, -v selects the lines no pattern matches, and -x
+           selects only lines matched in their entirety.
+test       t/004-case-invert-whole.sh
+
+assertion  XCU.grep.005
+anchor     utilities/grep.html#OPTIONS/-n
+anchor     utilities/grep.html#OPTIONS/-c
+anchor     utilities/grep.html#STDOUT
+class      required
+since      1992
+says       -n prefixes each selected line with its line number and a colon;
+           -c writes only the number of selected lines, with -n ignored.
+test       t/005-numbers-and-counts.sh
+
+assertion  XCU.grep.006
+anchor     utilities/grep.html#OPTIONS/-l
+anchor     utilities/grep.html#OPTIONS/-q
+anchor     utilities/grep.html#STDOUT
+class      required
+since      1992
+says       -l writes the name of each file with a selected line once, naming
+           the standard input (standard input) in the POSIX locale; -q
+           writes nothing and reports by status only.
+test       t/006-list-and-quiet.sh
+
+assertion  XCU.grep.007
+anchor     utilities/grep.html#STDOUT
+anchor     utilities/grep.html#OPERANDS
+class      required
+since      1992
+says       With several files each output line (and each count) is prefixed
+           with the file name and a colon; line numbers restart at 1 per
+           file; one file gives no prefix.
+test       t/007-several-files.sh
+
+assertion  XCU.grep.008
+anchor     utilities/grep.html#EXIT STATUS
+anchor     utilities/grep.html#OPTIONS/-s
+anchor     utilities/grep.html#CONSEQUENCES OF ERRORS
+class      required
+since      1992
+says       Status is 0 when a line was selected, 1 when none was, above 1 on
+           an error; -s suppresses diagnostics for unreadable files; with -q
+           a selected line gives 0 even after an error.
+test       t/008-exit-status.sh

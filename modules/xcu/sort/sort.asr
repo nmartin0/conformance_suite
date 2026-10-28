@@ -1,0 +1,132 @@
+# XCU sort
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the POSIX locale and use ASCII text, so the collating
+# sequence is the byte order and equal-comparing lines are ordered by the
+# last-resort comparison the page requires. Where -u makes the choice of
+# the surviving line unspecified, either line is accepted.
+
+assertion  XCU.sort.001
+anchor     utilities/sort.html#DESCRIPTION
+anchor     utilities/sort.html#STDOUT
+class      required
+since      1992
+says       Without options sort writes the input lines in ascending order of
+           the whole line, by byte value in the POSIX locale.
+test       t/001-default-order.sh
+
+assertion  XCU.sort.002
+anchor     utilities/sort.html#OPTIONS/-r
+class      required
+since      1992
+says       sort -r writes the lines in the reverse of the default order.
+test       t/002-reverse.sh
+
+assertion  XCU.sort.003
+anchor     utilities/sort.html#OPTIONS/-n
+class      required
+since      1992
+says       sort -n orders by the arithmetic value of the leading numeric
+           string (blanks and a minus sign allowed, a missing number being
+           zero); lines of equal value are ordered by comparing the whole
+           lines, in reverse when -r is given as well.
+test       t/003-numeric.sh
+
+assertion  XCU.sort.004
+anchor     utilities/sort.html#OPTIONS/-u
+class      required
+since      1992
+says       sort -u writes one line from each set of lines with equal keys,
+           alone or with -f or -n.
+test       t/004-unique.sh
+
+assertion  XCU.sort.005
+anchor     utilities/sort.html#OPTIONS/-f
+anchor     utilities/sort.html#OPTIONS
+class      required
+since      1992
+says       sort -f compares lowercase letters as their uppercase forms, and
+           lines that then compare equal are ordered by byte value.
+test       t/005-fold-case.sh
+
+assertion  XCU.sort.006
+anchor     utilities/sort.html#OPTIONS/-d
+anchor     utilities/sort.html#OPTIONS/-i
+class      required
+since      1992
+says       sort -d lets only blanks and alphanumeric characters count in
+           comparisons, and sort -i ignores nonprintable characters.
+test       t/006-dictionary-and-nonprinting.sh
+
+assertion  XCU.sort.007
+anchor     utilities/sort.html#OPTIONS/-t
+anchor     utilities/sort.html#OPTIONS/-k
+class      required
+since      1992
+says       sort -t char -k n,n orders by the nth field with char as the only
+           separator, an empty field coming before any non-empty one.
+test       t/007-field-separator.sh
+
+assertion  XCU.sort.008
+anchor     utilities/sort.html#OPTIONS/-k
+anchor     utilities/sort.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Several -k keys are compared in order, a type letter on a key
+           applies to that key alone, field.character positions limit a key
+           to part of a field, and -u compares only the key.
+test       t/008-key-modifiers.sh
+
+assertion  XCU.sort.009
+anchor     utilities/sort.html#OPTIONS/-b
+anchor     utilities/sort.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       sort -b, and the b type attached to a key, skip leading blanks when
+           finding where a key starts.
+test       t/009-ignore-leading-blanks.sh
+
+assertion  XCU.sort.010
+anchor     utilities/sort.html#OPTIONS/-c
+anchor     utilities/sort.html#OPTIONS/-C
+anchor     utilities/sort.html#EXIT STATUS
+class      required
+since      1992
+says       sort -c and -C write nothing to standard output; they exit 0 for
+           ordered input and 1 for disorder (with -u, also for a duplicate
+           key); -c writes a diagnostic on disorder and -C does not.
+test       t/010-check.sh
+
+assertion  XCU.sort.011
+anchor     utilities/sort.html#OPTIONS/-m
+class      required
+since      1992
+says       sort -m merges already ordered files into one ordered output.
+test       t/011-merge.sh
+
+assertion  XCU.sort.012
+anchor     utilities/sort.html#OPTIONS/-o
+anchor     utilities/sort.html#OUTPUT FILES
+class      required
+since      1992
+says       sort -o names the file that receives the sorted lines in place of
+           standard output, and that file may be one of the input files.
+test       t/012-output-file.sh
+
+assertion  XCU.sort.013
+anchor     utilities/sort.html#OPERANDS
+anchor     utilities/sort.html#INPUT FILES
+class      required
+since      1992
+says       sort sorts the lines of all file operands together, reads standard
+           input for no operand or for -, and supplies the missing newline of
+           an incomplete last line.
+test       t/013-operands.sh
+
+assertion  XCU.sort.014
+anchor     utilities/sort.html#EXIT STATUS
+class      required
+since      1992
+says       A file operand that cannot be opened gives an exit status greater
+           than 1.
+test       t/014-unreadable-file.sh

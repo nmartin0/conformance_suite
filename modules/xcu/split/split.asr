@@ -1,0 +1,77 @@
+# XCU split
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.split.001
+anchor     utilities/split.html#OPTIONS/-l
+anchor     utilities/split.html#DESCRIPTION
+class      required
+since      1992
+says       split -l n writes pieces of n lines to the files xaa, xab, ...,
+           the last file holding what remains, and writes nothing to standard
+           output.
+test       t/001-line-count.sh
+
+assertion  XCU.split.002
+anchor     utilities/split.html#DESCRIPTION
+anchor     utilities/split.html#OPTIONS/-l
+class      required
+since      1992
+says       Without -l or -b, split writes pieces of 1000 lines.
+test       t/002-default-size.sh
+
+assertion  XCU.split.003
+anchor     utilities/split.html#OPERANDS
+class      required
+since      1992
+says       A name operand replaces x as the prefix of the output file names.
+test       t/003-name-prefix.sh
+
+assertion  XCU.split.004
+anchor     utilities/split.html#OPTIONS/-a
+anchor     utilities/split.html#DESCRIPTION
+class      required
+since      1992
+says       split -a n gives the suffixes n lowercase letters, counted as a
+           base-26 number starting at all a's (the default being two).
+test       t/004-suffix-length.sh
+
+assertion  XCU.split.005
+anchor     utilities/split.html#OPTIONS/-b
+class      required
+since      1992
+says       split -b n writes pieces of n bytes, and -b nk pieces of n times
+           1024 bytes, the last holding the remainder.
+test       t/005-byte-count.sh
+
+assertion  XCU.split.006
+anchor     utilities/split.html#OPERANDS
+anchor     utilities/split.html#OPTIONS/-l
+class      required
+since      1992
+says       With no file operand, or with -, split reads standard input; an
+           incomplete last line goes into the last file as it is.
+test       t/006-standard-input.sh
+
+assertion  XCU.split.007
+anchor     utilities/split.html#DESCRIPTION
+class      required
+since      1992
+says       An empty input gives no output file and a zero status.
+test       t/007-empty-input.sh
+
+assertion  XCU.split.008
+anchor     utilities/split.html#DESCRIPTION
+class      required
+since      2008
+says       When more files are needed than the suffix length allows, split
+           exits nonzero after creating the last file with a valid suffix and
+           does not delete the files it made.
+test       t/008-suffix-exhaustion.sh
+
+assertion  XCU.split.009
+anchor     utilities/split.html#EXIT STATUS
+class      required
+since      1992
+says       An input file that cannot be read gives a nonzero status and no
+           output file.
+test       t/009-unreadable-input.sh

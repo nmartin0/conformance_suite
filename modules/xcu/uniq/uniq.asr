@@ -1,0 +1,73 @@
+# XCU uniq
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.uniq.001
+anchor     utilities/uniq.html#DESCRIPTION
+class      required
+since      1992
+says       uniq writes one copy of each run of equal adjacent lines and does
+           not detect repeats that are not adjacent; with no operand it reads
+           standard input.
+test       t/001-adjacent-duplicates.sh
+
+assertion  XCU.uniq.002
+anchor     utilities/uniq.html#OPTIONS/-c
+anchor     utilities/uniq.html#OUTPUT FILES
+class      required
+since      1992
+says       uniq -c writes for each output line the number of times it
+           occurred, then a blank, then the line; blanks before the count are
+           tolerated.
+note       The page gives the format as a number, one space and the line; the
+           padding that existing implementations write before the number is
+           not mentioned (Q-175).
+test       t/002-count.sh
+
+assertion  XCU.uniq.003
+anchor     utilities/uniq.html#OPTIONS/-d
+class      required
+since      1992
+says       uniq -d writes one copy of each repeated line and nothing else.
+test       t/003-repeated-only.sh
+
+assertion  XCU.uniq.004
+anchor     utilities/uniq.html#OPTIONS/-u
+class      required
+since      1992
+says       uniq -u writes only the lines that are not repeated.
+test       t/004-unrepeated-only.sh
+
+assertion  XCU.uniq.005
+anchor     utilities/uniq.html#OPTIONS/-f
+class      required
+since      1992
+says       uniq -f n ignores the first n fields of each line in comparisons,
+           a field being any blanks followed by non-blanks.
+test       t/005-skip-fields.sh
+
+assertion  XCU.uniq.006
+anchor     utilities/uniq.html#OPTIONS/-s
+class      required
+since      1992
+says       uniq -s n ignores the first n characters in comparisons; with -f
+           the characters are counted after the skipped fields.
+test       t/006-skip-chars.sh
+
+assertion  XCU.uniq.007
+anchor     utilities/uniq.html#OPERANDS
+anchor     utilities/uniq.html#OUTPUT FILES
+class      required
+since      1992
+says       uniq reads input_file (standard input for no operand or -) and,
+           when output_file is given, writes the result there and writes
+           nothing to standard output.
+test       t/007-file-operands.sh
+
+assertion  XCU.uniq.008
+anchor     utilities/uniq.html#OPTIONS/-f
+anchor     utilities/uniq.html#OPTIONS/-s
+class      required
+since      1992
+says       When -f or -s skips more than the line holds, the line is compared
+           as an empty string, so such lines count as equal.
+test       t/008-short-lines.sh

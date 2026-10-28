@@ -1,0 +1,59 @@
+# XCU fold
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the POSIX locale with single-column characters.
+
+assertion  XCU.fold.001
+anchor     utilities/fold.html#OPTIONS/-w
+anchor     utilities/fold.html#DESCRIPTION
+class      required
+since      1992
+says       With no -w, fold breaks a line into segments of at most 80
+           columns by inserting newlines; lines of 80 columns or fewer are
+           unchanged.
+test       t/001-default-width.sh
+
+assertion  XCU.fold.002
+anchor     utilities/fold.html#OPTIONS/-w
+class      required
+since      1992
+says       fold -w width makes each segment as long as possible without
+           exceeding width columns; lines that fit are unchanged.
+test       t/002-width-option.sh
+
+assertion  XCU.fold.003
+anchor     utilities/fold.html#OPTIONS/-b
+anchor     utilities/fold.html#DESCRIPTION
+class      required
+since      1992
+says       Without -b a tab advances the column to the next tab stop (so that
+           the next character falls in column 9, 17, ...), and with -b every
+           byte, a tab included, counts as one.
+test       t/003-bytes-and-tabs.sh
+
+assertion  XCU.fold.004
+anchor     utilities/fold.html#OPTIONS/-s
+class      required
+since      1992
+says       fold -s breaks after the last blank within the width, and has no
+           effect on a segment that holds no blank.
+test       t/004-break-at-blank.sh
+
+assertion  XCU.fold.005
+anchor     utilities/fold.html#DESCRIPTION
+class      required
+since      2008
+says       A backspace lowers the column count by one (not below zero) and a
+           carriage return sets it to zero; no newline is inserted directly
+           before or after either.
+test       t/005-backspace-and-return.sh
+
+assertion  XCU.fold.006
+anchor     utilities/fold.html#OPERANDS
+anchor     utilities/fold.html#EXIT STATUS
+class      required
+since      1992
+says       fold handles file operands in order, reads standard input with no
+           operand, and exits nonzero (still folding the other files) when
+           one cannot be read.
+test       t/006-operands.sh

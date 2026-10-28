@@ -1,0 +1,57 @@
+# XCU asa
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Only the behaviours the page specifies are tested. The characters that
+# stand for a page advance and a return to column 1 are implementation-defined,
+# so those tests check that something other than a newline is written in the
+# right place. The utility is shaded FR (Fortran runtime).
+
+assertion  XCU.asa.001
+anchor     utilities/asa.html#DESCRIPTION
+class      conditional
+when       FR
+since      1992
+says       A line starting with a space is written without that character and otherwise unchanged.
+test       t/001-space.sh
+
+assertion  XCU.asa.002
+anchor     utilities/asa.html#DESCRIPTION
+class      conditional
+when       FR
+since      1992
+says       A line starting with 0 is preceded by a newline; only the first character of a line is the control character.
+test       t/002-zero.sh
+
+assertion  XCU.asa.003
+anchor     utilities/asa.html#DESCRIPTION
+class      conditional
+when       FR
+since      1992
+says       A line starting with 1 is preceded by one or more characters that advance to the next page.
+test       t/003-one.sh
+
+assertion  XCU.asa.004
+anchor     utilities/asa.html#DESCRIPTION
+class      conditional
+when       FR
+since      1992
+says       A line starting with + replaces the previous line's newline with characters that return to column 1; a + on the first line acts as a space.
+test       t/004-plus.sh
+
+assertion  XCU.asa.005
+anchor     utilities/asa.html#OPERANDS/file
+anchor     utilities/asa.html#STDIN
+anchor     utilities/asa.html#STDOUT
+class      conditional
+when       FR
+since      1992
+says       Files are written in order, standard input is used with no operand, and status is 0.
+test       t/005-operands.sh
+
+assertion  XCU.asa.006
+anchor     utilities/asa.html#EXIT STATUS
+class      conditional
+when       FR
+since      1992
+says       A file that cannot be read gives a nonzero status.
+test       t/006-missing-file.sh

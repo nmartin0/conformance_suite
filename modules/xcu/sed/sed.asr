@@ -1,0 +1,118 @@
+# XCU sed
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All tests run in the POSIX locale. Focused on the options and editing
+# commands the page defines; not an exhaustive grammar test.
+
+assertion  XCU.sed.001
+anchor     utilities/sed.html#DESCRIPTION
+anchor     utilities/sed.html#STDOUT
+anchor     utilities/sed.html#OPTIONS/-n
+class      required
+since      1992
+says       sed writes each input line to the output with the script applied; -n suppresses that copy and only explicitly selected lines (p) are written.
+test       t/001-output-and-p.sh
+
+assertion  XCU.sed.002
+anchor     utilities/sed.html#OPTIONS/-e
+anchor     utilities/sed.html#OPTIONS/-f
+anchor     utilities/sed.html#OPERANDS/script
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       The script is built from -e and -f pieces in the order given, a newline separating a -e piece from what follows; a command may be preceded by blanks and semicolons.
+test       t/002-script-assembly.sh
+
+assertion  XCU.sed.003
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+anchor     utilities/sed.html#OPERANDS/file
+class      required
+since      1992
+says       An address is a line number counted across files, $, /RE/ or \cREc; zero, one or two addresses select every, matching or an inclusive range of lines.
+test       t/003-addresses.sh
+
+assertion  XCU.sed.004
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       In s, & is the match, \n the nth group (empty if unmatched), a backslash removes special meaning, an escaped newline splits the line, and another delimiter may be used, escaped inside the RE or replacement.
+test       t/004-substitute-replacement.sh
+
+assertion  XCU.sed.005
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       The s flags n, g, p and w: a number replaces that occurrence only, g all, p writes after a replacement, w appends to a file created before processing.
+test       t/005-substitute-flags.sh
+
+assertion  XCU.sed.006
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       The s flag i matches the RE without regard to case.
+test       t/006-substitute-icase.sh
+
+assertion  XCU.sed.007
+anchor     utilities/sed.html#OPTIONS/-E
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       -E makes sed read REs as extended REs.
+test       t/007-extended-regex.sh
+
+assertion  XCU.sed.008
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       d, n, N, P and D move through lines as described: d ends the cycle, n and N bring in the next line, P writes up to the first newline, D deletes through it and restarts without reading.
+test       t/008-line-flow-commands.sh
+
+assertion  XCU.sed.009
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       g, G, h, H and x copy, append and exchange the pattern space and an initially empty hold space.
+test       t/009-hold-space.sh
+
+assertion  XCU.sed.010
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       a, i and c write text (c once at the end of a range), r copies a file at the end of the cycle and treats an unreadable one as empty, = writes the line number, w writes the pattern space to a file; queued a and r text goes out in order.
+test       t/010-text-commands.sh
+
+assertion  XCU.sed.011
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       b and t branch to a label or the end of the script (t only after a substitution), { } groups commands and ! negates the selection.
+test       t/011-branching-and-blocks.sh
+
+assertion  XCU.sed.012
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       y translates characters with escapes for newline, backslash and delimiter; l writes escapes and three-digit octal and ends with $; # starts a comment and #n on the first line suppresses default output.
+test       t/012-y-l-and-comments.sh
+
+assertion  XCU.sed.013
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+anchor     utilities/sed.html#OPERANDS/file
+class      required
+since      1992
+says       An empty RE reuses the last RE used; files named are concatenated and edited as one stream; q stops after writing the pattern space and queued text.
+test       t/013-empty-re-files-quit.sh
+
+assertion  XCU.sed.014
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       With no next line, N quits without writing the pattern space and n quits after the default output.
+test       t/014-n-on-last-line.sh
+
+assertion  XCU.sed.015
+anchor     utilities/sed.html#EXIT STATUS
+class      required
+since      1992
+says       sed exits above zero for a script it cannot use or a file it cannot read, and with 0 on success.
+test       t/015-errors.sh

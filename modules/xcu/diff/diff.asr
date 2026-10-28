@@ -1,0 +1,81 @@
+# XCU diff
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# All tests run in the POSIX locale and TZ=UTC0 where times are shown. Inputs
+# are small text files whose smallest list of changes is unique. The
+# handling of a pure addition or deletion in -c output and of single-line
+# ranges in -u output is not unambiguous on the page, so it is not tested.
+
+assertion  XCU.diff.001
+anchor     utilities/diff.html#DESCRIPTION
+anchor     utilities/diff.html#STDOUT
+class      required
+since      1992
+says       Without options diff writes ed-like lines (NaM, NdM, NcM with ranges), then the affected lines of file1 as '< line' and of file2 as '> line', separated by --- for a change.
+test       t/001-default-format.sh
+
+assertion  XCU.diff.002
+anchor     utilities/diff.html#EXIT STATUS
+anchor     utilities/diff.html#DESCRIPTION
+class      required
+since      1992
+says       No output and status 0 for identical files, status 1 when differences are written, above 1 on an error.
+test       t/002-exit-status.sh
+
+assertion  XCU.diff.003
+anchor     utilities/diff.html#OPTIONS/-c
+anchor     utilities/diff.html#OPTIONS/-C
+anchor     utilities/diff.html#STDOUT
+class      required
+since      1992
+says       -c and -C n write file names with times, then hunks with context, once for each file, with ! marking changed lines.
+test       t/003-context-format.sh
+
+assertion  XCU.diff.004
+anchor     utilities/diff.html#OPTIONS/-u
+anchor     utilities/diff.html#OPTIONS/-U
+anchor     utilities/diff.html#STDOUT
+class      required
+since      2008
+says       -u and -U n write file names with times, then @@ hunks with context and interleaved - and + lines, joining hunks whose context meets.
+test       t/004-unified-format.sh
+
+assertion  XCU.diff.005
+anchor     utilities/diff.html#OPTIONS/-e
+anchor     utilities/diff.html#STDOUT
+class      required
+since      1992
+says       -e writes an ed script from the end of the file to the start using a, c and d, text ended by a period line.
+test       t/005-ed-script.sh
+
+assertion  XCU.diff.006
+anchor     utilities/diff.html#OPTIONS/-f
+anchor     utilities/diff.html#STDOUT
+class      required
+since      1992
+says       -f writes the same kind of script from the start to the end with the command letter first and space-separated ranges.
+test       t/006-forward-script.sh
+
+assertion  XCU.diff.007
+anchor     utilities/diff.html#OPTIONS/-b
+class      required
+since      1992
+says       -b ignores trailing white space and treats runs of white space as equal, but a blank is still different from none.
+test       t/007-ignore-blanks.sh
+
+assertion  XCU.diff.008
+anchor     utilities/diff.html#OPTIONS/-r
+anchor     utilities/diff.html#OPERANDS
+anchor     utilities/diff.html#STDOUT
+class      required
+since      1992
+says       Directories are compared by file, reporting files present in one only; -r descends into common subdirectories; a file against a directory uses the same-named file.
+test       t/008-directories.sh
+
+assertion  XCU.diff.009
+anchor     utilities/diff.html#OPERANDS
+anchor     utilities/diff.html#STDIN
+class      required
+since      1992
+says       A file operand - means the standard input.
+test       t/009-stdin-operand.sh

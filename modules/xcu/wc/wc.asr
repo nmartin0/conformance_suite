@@ -1,0 +1,86 @@
+# XCU wc
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page gives the output line as counts separated by one space each;
+# the tests split the output into fields, so any padding blanks are
+# tolerated (Q-175).
+
+assertion  XCU.wc.001
+anchor     utilities/wc.html#STDOUT
+anchor     utilities/wc.html#DESCRIPTION
+class      required
+since      1992
+says       Without options wc writes, for each file, the number of newline
+           characters, of words and of bytes, followed by the file name.
+test       t/001-default-counts.sh
+
+assertion  XCU.wc.002
+anchor     utilities/wc.html#OPTIONS/-l
+anchor     utilities/wc.html#OPTIONS/-w
+anchor     utilities/wc.html#OPTIONS/-c
+class      required
+since      1992
+says       wc -l, wc -w and wc -c each write only the newline, word or byte
+           count, followed by the file name.
+test       t/002-single-counts.sh
+
+assertion  XCU.wc.003
+anchor     utilities/wc.html#OPTIONS/-m
+anchor     utilities/wc.html#STDOUT
+class      required
+since      1992
+says       wc -m writes the character count where the byte count would be;
+           for ASCII text in the POSIX locale it equals the byte count.
+test       t/003-character-count.sh
+
+assertion  XCU.wc.004
+anchor     utilities/wc.html#STDOUT
+class      required
+since      1992
+says       When options are given wc writes only the requested counts, always
+           in the order lines, words, bytes (or characters), whatever the
+           order of the options.
+test       t/004-fixed-order.sh
+
+assertion  XCU.wc.005
+anchor     utilities/wc.html#STDOUT
+anchor     utilities/wc.html#DESCRIPTION
+class      required
+since      1992
+says       With more than one file wc adds a last line of the same form whose
+           name is total and whose counts are the column sums.
+test       t/005-several-files.sh
+
+assertion  XCU.wc.006
+anchor     utilities/wc.html#STDOUT
+anchor     utilities/wc.html#STDIN
+class      required
+since      1992
+says       With no file operand wc reads standard input and writes no name and
+           no blank after the last count.
+test       t/006-standard-input.sh
+
+assertion  XCU.wc.007
+anchor     utilities/wc.html#DESCRIPTION
+class      required
+since      1992
+says       A word is a non-empty run of characters bounded by white space
+           (spaces, tabs, newlines) or the ends of the file.
+test       t/007-word-boundaries.sh
+
+assertion  XCU.wc.008
+anchor     utilities/wc.html#OPTIONS/-l
+class      required
+since      1992
+says       wc -l counts newline characters: a final line with no newline is
+           not counted and an empty file has none.
+test       t/008-newline-count.sh
+
+assertion  XCU.wc.009
+anchor     utilities/wc.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+since      1992
+says       When a file operand cannot be read wc gives a nonzero final status
+           and still counts the other operands.
+test       t/009-unreadable-file.sh
