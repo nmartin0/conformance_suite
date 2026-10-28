@@ -176,3 +176,516 @@ since      1992
 says       With wrapscan a search wraps past the end; with nowrapscan it
            fails.
 test       t/019-wrapscan.sh
+
+assertion  XCU.ex.020
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       After each ex command the current line has the value its description
+           gives: the last line input by a, i and c (or the line before when
+           nothing was input), the line after deleted lines, the last line
+           copied, moved, shifted, read, put or printed, the first line of a
+           join, the last line where a substitution happened, the first line
+           changed by undo, the last line after a re-edit, and unchanged after
+           commands such as mark, yank, set and file.
+timeout    60
+test       t/020-current-line.sh
+
+assertion  XCU.ex.021
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Addressing in ex
+class      conditional
+when       UP
+since      1992
+says       When the edit buffer has no lines the current line is zero and $ is
+           zero; append, insert and read work on it; commands that name a line
+           other than zero fail.
+test       t/021-empty-buffer.sh
+
+assertion  XCU.ex.022
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Addressing in ex
+class      conditional
+when       UP
+since      1992
+says       A null search // or ?? finds the next or previous line matching the
+           last regular expression, the closing delimiter may be left off at the
+           end of the line, \/ and \? stand for the delimiter inside the
+           expression, and an offset can follow a search address.
+test       t/022-search-addresses.sh
+
+assertion  XCU.ex.023
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Addressing in ex
+class      conditional
+when       UP
+since      1992
+says       Address offsets add and subtract lines (with intermediate values
+           allowed to leave the buffer but not the final one), extra addresses
+           are dropped from the front, an empty address next to a comma or
+           semicolon means the current line, a semicolon sets the current line
+           before the next address, and blanks between addresses are discarded.
+timeout    60
+test       t/023-offsets-and-separators.sh
+
+assertion  XCU.ex.024
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Addressing in ex
+class      conditional
+when       UP
+since      1992
+says       A decimal number following an address adds that many lines to it.
+test       t/024-bare-number-offset.sh
+
+assertion  XCU.ex.025
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Addressing in ex
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       A mark set with k or mark addresses its line for as long as the line
+           exists, follows the line when text moves, is restored by undo, and
+           using a mark that is unset or whose line was deleted is an error.
+timeout    60
+test       t/025-mark-addresses.sh
+
+assertion  XCU.ex.026
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Line Parsing in ex
+class      conditional
+when       UP
+since      1992
+says       Leading colons and blanks are skipped, a command starting with a
+           double quote is a comment, a vertical line ends a command, command
+           names match by prefix (del is delete), k and s followed by option
+           letters are the mark and repeat commands, counts need no blank, a lone
+           address or empty line prints, and the last print flag is remembered
+           for the implied print.
+timeout    60
+test       t/026-command-line-parsing.sh
+
+assertion  XCU.ex.027
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Line Parsing in ex
+class      conditional
+when       UP
+since      1992
+says       When an append, insert or change command ends at a vertical line, the
+           characters after it up to the newline are the first line of input
+           text.
+test       t/027-input-after-bar.sh
+
+assertion  XCU.ex.028
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       A p, l, + or - flag after a command writes the new current line, with
+           + and - moving the current line before it is written and l using list
+           format.
+test       t/028-command-flags.sh
+
+assertion  XCU.ex.029
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       A count after a command acts as an extra address equal to the last
+           address plus count minus one, cut at the last line, and an address
+           given first is dropped when two remain.
+test       t/029-counts.sh
+
+assertion  XCU.ex.030
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       j with one address and a count joins that line and count more lines;
+           with two addresses and a count the count extends the last address;
+           without a count a single address joins the line with the next; lines
+           are joined with one blank.
+test       t/030-join-count.sh
+
+assertion  XCU.ex.031
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       m and t accept destination zero and the last line; t may copy to a
+           line inside the range; m to a line inside the range is an error.
+timeout    30
+test       t/031-move-copy-edges.sh
+
+assertion  XCU.ex.032
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       Named and unnamed buffers: commands that store text also fill the
+           unnamed buffer, an uppercase name appends, an uppercase name used as
+           source equals the lowercase one, and each buffer keeps its own lines.
+test       t/032-buffers.sh
+
+assertion  XCU.ex.033
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       g! and v select the lines that do not match, an empty pattern is the
+           last expression, the range defaults to the whole buffer, any suitable
+           delimiter works (also inside brackets), several commands can follow,
+           no command prints, lines deleted by an earlier command get no command,
+           and an error ends the command.
+timeout    30
+test       t/033-global-details.sh
+
+assertion  XCU.ex.034
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       The text of an append command inside g follows after a backslash
+           newline, and the final period may be left off.
+test       t/034-global-append.sh
+
+assertion  XCU.ex.035
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Regular Expressions in ex
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       In a replacement & is the match and \& a literal ampersand, \1 to \9
+           are groups (empty when unmatched), ~ and % are the previous
+           replacement, \u \l \U \L \e change case, and other escaped characters
+           stand for themselves.
+timeout    30
+test       t/035-replacement-strings.sh
+
+assertion  XCU.ex.036
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       An empty s, &, ~ and % repeat or reuse the earlier expression and
+           replacement, a missing final delimiter is allowed, any non-
+           alphanumeric character can delimit, a substitution on only some lines
+           succeeds and on none fails, and ~ in an expression matches the last
+           replacement.
+timeout    30
+test       t/036-substitute-repeat.sh
+
+assertion  XCU.ex.037
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Regular Expressions in ex
+class      conditional
+when       UP
+since      1992
+says       With nomagic only ^ at the start and $ at the end are special in an
+           expression, . * [ and ~ are ordinary unless escaped, and in the
+           replacement & and ~ are ordinary and \& and \~ are the match and the
+           previous replacement.
+timeout    30
+test       t/037-option-magic.sh
+
+assertion  XCU.ex.038
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       u reverses the last change including an earlier u, treats a global
+           command as one change, ignores commands that do not change the buffer,
+           and is an error when there is nothing to undo.
+test       t/038-undo-details.sh
+
+assertion  XCU.ex.039
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       z writes count lines chosen by its type (none, +, ++, -, --, ^, .),
+           the count defaults to twice the scroll value, it moves the current
+           line to the last line written (the given line for =), and lines
+           outside the buffer are errors.
+timeout    30
+test       t/039-z-command.sh
+
+assertion  XCU.ex.040
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Line Parsing in ex
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       In file arguments % is the current pathname and # the alternate one
+           (an error when unset), the e, f, r and w commands update them,
+           backslash makes %, blank and other characters literal, and shell
+           expansions (patterns, ~, variables) apply, with more than one result
+           being an error.
+timeout    30
+test       t/040-file-arguments.sh
+
+assertion  XCU.ex.041
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       w refuses to overwrite an existing file other than the current one, to
+           write part of the buffer over an existing file, or to write to a file
+           reached through f, unless forced with ! or writeany; once a forced
+           write succeeds later writes are allowed; an empty buffer writes an
+           empty file.
+timeout    30
+test       t/041-write-refusals.sh
+
+assertion  XCU.ex.042
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       r without a file name reads the current pathname, takes a file or
+           command output whose last line has no newline as a line, treats
+           carriage return newline pairs as newlines, and fails for a file that
+           cannot be read.
+test       t/042-read-details.sh
+
+assertion  XCU.ex.043
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Line Parsing in ex
+class      conditional
+when       UP
+since      1992
+says       The program named by the shell option (default taken from SHELL, sh
+           when empty) is run with -c and the expanded command text as its two
+           arguments for !, r ! and w !; % and ! expand to the current pathname
+           and the previous command and a backslash makes them literal.
+timeout    30
+test       t/043-shell-program.sh
+
+assertion  XCU.ex.044
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       A filter replaces the lines with its output (a last line without a
+           newline and carriage return newline pairs handled), fills the unnamed
+           buffer with the old lines, and sets the current line to the last line
+           read, else the line before, else the first line, else zero.
+timeout    30
+test       t/044-filter-details.sh
+
+assertion  XCU.ex.045
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+class      conditional
+when       UP
+since      1992
+says       With autoprint set a command that changes the buffer writes the new
+           current line, but not a, i, c, the file form of r, g or v, and set
+           noap turns it off.
+timeout    30
+test       t/045-autoprint.sh
+
+assertion  XCU.ex.046
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       set turns Boolean options on and off, accepts several arguments
+           processed in order, and reports a paragraphs or sections value of
+           odd length as an error.
+timeout    30
+test       t/046-set-command.sh
+
+assertion  XCU.ex.047
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+class      conditional
+when       UP
+since      1992
+says       With edcompatible set the g suffix of a substitution is remembered and
+           repeating it turns it off.
+test       t/047-option-edcompatible.sh
+
+assertion  XCU.ex.048
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+class      conditional
+when       UP
+since      1992
+says       With autowrite set a modified buffer is written before e, n, ! and
+           similar commands; appending ! to the command name prevents the write.
+timeout    30
+test       t/048-option-autowrite.sh
+
+assertion  XCU.ex.049
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+class      conditional
+when       UP
+since      1992
+says       Where the ctags utility exists, tag finds the named tag in the files
+           of the tags option in order, positions on the line given by a number
+           or pattern, honours taglength, fails for an unknown tag, and refuses
+           to replace a modified buffer without !.
+timeout    30
+test       t/049-tag-command.sh
+
+assertion  XCU.ex.050
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       @ and * execute the lines of a buffer as ex commands with the current
+           line set to each addressed line, @@ repeats the last buffer, and @@
+           before any buffer was executed is an error.
+timeout    30
+test       t/050-buffer-execution.sh
+
+assertion  XCU.ex.051
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       so runs the ex commands in a file, ignores blank lines in it, and
+           stops reading the file at the first error.
+test       t/051-source-command.sh
+
+assertion  XCU.ex.052
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       e replaces the buffer with another file and runs a + command on it, an
+           absent file gives an empty buffer, and from a modified buffer e fails
+           unless ! discards the changes.
+test       t/052-edit-command.sh
+
+assertion  XCU.ex.053
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       The l command writes control characters as three-digit octal numbers
+           after a backslash, characters that have an escape sequence (alert,
+           backspace, form-feed, carriage-return, vertical-tab, backslash) as
+           that sequence, and marks the end of the line with a dollar sign.
+test       t/053-list-escapes.sh
+
+assertion  XCU.ex.054
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+class      conditional
+when       UP
+since      1992
+says       In command mode on a terminal ex prompts with a colon before each
+           command, and set noprompt stops the prompt.
+timeout    60
+test       t/054-prompt-option.sh
+
+assertion  XCU.ex.055
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+class      conditional
+when       UP
+since      1992
+says       With the number option set, ex prompts for each line of text input
+           with the line number it will have, in the format of the number
+           command.
+timeout    60
+test       t/055-number-prompt.sh
+
+assertion  XCU.ex.056
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       With autoindent set, lines entered after the first in ex text input
+           start with the indentation of the previous input line; ! after the
+           command name turns autoindent off for that command.
+timeout    60
+test       t/056-option-autoindent.sh
+
+assertion  XCU.ex.057
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Initialization in ex and vi
+class      conditional
+when       UP
+since      1992
+says       On a terminal ex runs the commands of EXINIT, or when that is not set
+           those of .exrc in the HOME directory (blank lines ignored, only when
+           owned by the user and not writable by others).
+timeout    120
+test       t/057-startup-files.sh
+
+assertion  XCU.ex.058
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Initialization in ex and vi
+class      conditional
+when       UP
+since      1992
+says       A .exrc file in the current directory (other than HOME) is run only
+           when the exrc option has been set by EXINIT or the .exrc in HOME.
+timeout    90
+test       t/058-option-exrc.sh
+
+assertion  XCU.ex.059
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       With the c option s shows each line with carets under the match and
+           replaces only after an answer that starts with the affirmative word of
+           the locale.
+timeout    60
+test       t/059-substitute-confirm.sh
+
+assertion  XCU.ex.060
+anchor     utilities/ex.html#OPTIONS/The following options shall be supported:
+class      conditional
+when       UP
+since      1992
+says       ex accepts grouped options with an option-argument last, the --
+           delimiter, -c commands run with the current line at the last line of
+           the loaded file (and a second -c after the first where supported), and
+           writes a message when a command fails.
+timeout    30
+test       t/060-command-line-options.sh
+
+assertion  XCU.ex.061
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       n with no later file and rew with an empty argument list are errors,
+           and rew makes the first file current.
+timeout    30
+test       t/061-args-errors.sh
+
+assertion  XCU.ex.062
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+class      conditional
+when       UP
+since      1992
+says       Assorted command rules: address zero and reversed ranges are errors,
+           the default range is the current line, command prefixes (ch, pr, re,
+           ma, un) work, a vertical line ends a map, g and u cannot be used
+           inside g, ignorecase applies to the remembered expression,
+           unabbreviate and unmap of unknown names fail, = defaults to the last
+           line, cd uses HOME and refuses a modified buffer, shifting keeps empty
+           lines and fills the unnamed buffer, set shows a value, q refuses with
+           files left, and readonly follows write permission.
+timeout    60
+test       t/062-misc-commands.sh
+
+assertion  XCU.ex.063
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+class      conditional
+when       UP+XSI
+since      1992
+says       With beautify set, non-printable characters other than tab, newline
+           and form-feed are discarded from text read from files; without it they
+           are kept.
+test       t/063-option-beautify.sh
+
+assertion  XCU.ex.064
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       On a terminal, ex goes on after an error and drops the rest of the
+           command line, reads in canonical mode, and the file command writes the
+           current pathname.
+timeout    90
+test       t/064-terminal-behaviour.sh

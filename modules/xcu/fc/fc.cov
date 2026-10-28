@@ -1,91 +1,91 @@
 # fc.cov - every requirement unit on utilities/fc.html.
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 
-DESCRIPTION:d2279493         todo  not yet covered: The fc utility shall list, or shall edit and re-execute, com
-DESCRIPTION:4408846f         todo  not yet covered: The command history list shall reference commands by number.
-DESCRIPTION:252d93ed         todo  not yet covered: The first number in the list is selected arbitrarily.
-DESCRIPTION:c30722e8         todo  not yet covered: The relationship of a number to its command shall not change
-DESCRIPTION:e6fe595f         XCU.fc.009
-DESCRIPTION:7fc15d24         todo  not yet covered: However, despite this optional wrapping of numbers, fc shall
-DESCRIPTION:cc6c4951         XCU.fc.001
-DESCRIPTION:cf8f366b         todo  not yet covered: When commands are edited (when the -l option is not specifie
-DESCRIPTION:c7693c90         todo  not yet covered: The fc command that caused the editing shall not be entered 
-DESCRIPTION:8ef2ac0d         XCU.fc.011 XCU.fc.009
-DESCRIPTION:515a81f0         todo  not yet covered: Any command line variable assignments or redirection operato
-DESCRIPTION:587c83a8         todo  not yet covered: fc -s -- -1 2>/dev/null
-DESCRIPTION:84eb2f1f         todo  not yet covered: reinvokes the previous command, suppressing standard error f
-OPTIONS:f31aeb1e             todo  Utility Syntax Guidelines (options grouping, --) are only tried where an assertion names them
-OPTIONS:e2947e20             none  introduces a list; the items are classified below
-OPTIONS:acead9f7             XCU.fc.010
-OPTIONS:6771471b             XCU.fc.010
-OPTIONS:261eb1f4             todo  not yet covered: Environment Variables ).
-OPTIONS:a9608d5e             XCU.fc.010
-OPTIONS:764a065d             XCU.fc.010
-OPTIONS:dd03064f             todo  not yet covered: (The letter ell.) List the commands rather than invoking an 
-OPTIONS:6d848428             XCU.fc.001 XCU.fc.003
-OPTIONS:bb46398e             XCU.fc.001 XCU.fc.002
-OPTIONS:c82dbcdf             XCU.fc.001 XCU.fc.003
-OPTIONS:7dbee838             XCU.fc.002 XCU.fc.009
-OPERANDS:51b44f3c            none  introduces a list; the items are classified below
-OPERANDS:b241a81f            todo  not yet covered: Select the commands to list or edit.
-OPERANDS:295af396            XCU.fc.005
-OPERANDS:8a4e8de9            XCU.fc.003 XCU.fc.004
-OPERANDS:91cb51e4            XCU.fc.001 XCU.fc.004
-OPERANDS:926e6ab4            XCU.fc.005 XCU.fc.004
-OPERANDS:1d257961            XCU.fc.005 XCU.fc.006
-OPERANDS:e1f4ab9f            XCU.fc.005 XCU.fc.008
-OPERANDS:a1a8c213            XCU.fc.007
-OPERANDS:cee53bec            todo  not yet covered: When the synopsis form with -s is used:
-OPERANDS:4945fb26            XCU.fc.007 XCU.fc.004
-OPERANDS:a5e1168c            todo  not yet covered: For the synopsis forms without -s :
-OPERANDS:d3f69b5d            XCU.fc.005 XCU.fc.001
-OPERANDS:de87123d            XCU.fc.001 XCU.fc.003
-OPERANDS:8db24209            XCU.fc.003 XCU.fc.001
-OPERANDS:32da3ec8            XCU.fc.007
-OPERANDS:243a8734            XCU.fc.003 XCU.fc.004
-OPERANDS:80e733ae            XCU.fc.003
-OPERANDS:78db98aa            XCU.fc.001 XCU.fc.003
-OPERANDS:ef19fe78            todo  not yet covered: For example, if there are only ten commands in the history l
-OPERANDS:f955bb94            XCU.fc.007
-STDIN:3f472296               none  XCU 1.4 default for this section
-INPUT_FILES:eb724aff         none  XCU 1.4 default for this section
+DESCRIPTION:d2279493           XCU.fc.012
+DESCRIPTION:4408846f           XCU.fc.014
+DESCRIPTION:252d93ed           none the first number is chosen arbitrarily
+DESCRIPTION:c30722e8           partial XCU.fc.014 # the numbers are stable within a session; the reset at login is not asserted
+DESCRIPTION:e6fe595f           XCU.fc.009
+DESCRIPTION:7fc15d24           XCU.fc.014
+DESCRIPTION:cc6c4951           XCU.fc.001
+DESCRIPTION:cf8f366b           XCU.fc.013
+DESCRIPTION:c7693c90           XCU.fc.015
+DESCRIPTION:8ef2ac0d           XCU.fc.011 XCU.fc.009
+DESCRIPTION:515a81f0           XCU.fc.016
+DESCRIPTION:587c83a8           XCU.fc.016
+DESCRIPTION:84eb2f1f           XCU.fc.016
+OPTIONS:f31aeb1e               XCU.fc.017
+OPTIONS:e2947e20               none  introduces a list; the items are classified below
+OPTIONS:acead9f7               XCU.fc.010
+OPTIONS:6771471b               XCU.fc.010
+OPTIONS:261eb1f4               XCU.fc.010
+OPTIONS:a9608d5e               XCU.fc.010
+OPTIONS:764a065d               XCU.fc.010
+OPTIONS:dd03064f               XCU.fc.001
+OPTIONS:6d848428               XCU.fc.001 XCU.fc.003
+OPTIONS:bb46398e               XCU.fc.001 XCU.fc.002
+OPTIONS:c82dbcdf               XCU.fc.001 XCU.fc.003
+OPTIONS:7dbee838               XCU.fc.002 XCU.fc.009
+OPERANDS:51b44f3c              none  introduces a list; the items are classified below
+OPERANDS:b241a81f              none lead-in to the operand descriptions
+OPERANDS:295af396              XCU.fc.005
+OPERANDS:8a4e8de9              XCU.fc.003 XCU.fc.004
+OPERANDS:91cb51e4              XCU.fc.001 XCU.fc.004
+OPERANDS:926e6ab4              XCU.fc.005 XCU.fc.004
+OPERANDS:1d257961              XCU.fc.005 XCU.fc.006
+OPERANDS:e1f4ab9f              XCU.fc.005 XCU.fc.008
+OPERANDS:a1a8c213              XCU.fc.007
+OPERANDS:cee53bec              none lead-in to the operand descriptions
+OPERANDS:4945fb26              XCU.fc.007 XCU.fc.004
+OPERANDS:a5e1168c              none lead-in to the operand descriptions
+OPERANDS:d3f69b5d              XCU.fc.005 XCU.fc.001
+OPERANDS:de87123d              XCU.fc.001 XCU.fc.003
+OPERANDS:8db24209              XCU.fc.003 XCU.fc.001
+OPERANDS:32da3ec8              XCU.fc.007
+OPERANDS:243a8734              XCU.fc.003 XCU.fc.004
+OPERANDS:80e733ae              XCU.fc.003
+OPERANDS:78db98aa              XCU.fc.001 XCU.fc.003
+OPERANDS:ef19fe78              XCU.fc.018
+OPERANDS:f955bb94              XCU.fc.007
+STDIN:3f472296                 none  XCU 1.4 default for this section
+INPUT_FILES:eb724aff           none  XCU 1.4 default for this section
 ENVIRONMENT_VARIABLES:a3b50bc3 none  introduces the list that follows
 ENVIRONMENT_VARIABLES:46dc9d90 XCU.fc.010
 ENVIRONMENT_VARIABLES:764a065d XCU.fc.010
-ENVIRONMENT_VARIABLES:7769529a todo  not yet covered: Determine a pathname naming a command history file.
-ENVIRONMENT_VARIABLES:ad0e5432 todo  not yet covered: If the HISTFILE variable is not set, the shell may attempt t
+ENVIRONMENT_VARIABLES:7769529a XCU.sh.058
+ENVIRONMENT_VARIABLES:ad0e5432 none the default history file is only an attempt the shell may make
 ENVIRONMENT_VARIABLES:58e652a0 impl  left to the implementation or unspecified
 ENVIRONMENT_VARIABLES:68126533 impl  left to the implementation or unspecified
-ENVIRONMENT_VARIABLES:e09b9254 todo  not yet covered: In some historical shells, the history file is initialized j
+ENVIRONMENT_VARIABLES:e09b9254 none historical remark
 ENVIRONMENT_VARIABLES:dc875ba3 impl  left to the implementation or unspecified
 ENVIRONMENT_VARIABLES:f2f8c680 impl  left to the implementation or unspecified
 ENVIRONMENT_VARIABLES:be6abdc2 impl  left to the implementation or unspecified
-ENVIRONMENT_VARIABLES:5f3f24d4 todo  not yet covered: As entries are deleted from the history file, they shall be 
+ENVIRONMENT_VARIABLES:5f3f24d4 XCU.fc.022
 ENVIRONMENT_VARIABLES:b18379ae impl  left to the implementation or unspecified
-ENVIRONMENT_VARIABLES:0abd4b0f todo  not yet covered: Determine a decimal number representing the limit to the num
+ENVIRONMENT_VARIABLES:0abd4b0f XCU.fc.022
 ENVIRONMENT_VARIABLES:0f18cf16 impl  left to the implementation or unspecified
 ENVIRONMENT_VARIABLES:ad71b6b2 impl  left to the implementation or unspecified
-ENVIRONMENT_VARIABLES:1ac50042 todo  not yet covered: An implementation may choose to access this variable only wh
+ENVIRONMENT_VARIABLES:1ac50042 impl an implementation may read HISTSIZE only when the history is initialised
 ENVIRONMENT_VARIABLES:407dbf65 impl  left to the implementation or unspecified
-ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:8586e6ac todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
-ASYNCHRONOUS_EVENTS:d92f27bd none  XCU 1.4 default for this section
-STDOUT:9e754c64              XCU.fc.001 XCU.fc.002
-STDOUT:7d63a756              XCU.fc.001
-STDOUT:73b6fcc0              none  fragment of a format line; the format is covered with its sentence
-STDOUT:882e7a45              XCU.fc.002 XCU.fc.001
-STDOUT:ef7e885b              none  fragment of a format line; the format is covered with its sentence
-STDOUT:0e84e474              XCU.fc.001 XCU.fc.004
-STDOUT:d9a49497              none  fragment of a format line; the format is covered with its sentence
-STDERR:b2905b3f              todo  standard error is not checked for stray output in every case
-OUTPUT_FILES:eb724aff        none  XCU 1.4 default for this section
-EXTENDED_DESCRIPTION:eb724aff none  XCU 1.4 default for this section
-EXIT_STATUS:db823381         none  introduces a list; the items are classified below
-EXIT_STATUS:22e67029         todo  not yet covered: Successful completion of the listing.
-EXIT_STATUS:9d252ff7         none  generic 0 / >0 meaning of the exit status; the specific cases are separate units
-EXIT_STATUS:7a355ded         todo  not yet covered: Otherwise, the exit status shall be that of the commands exe
+ENVIRONMENT_VARIABLES:221d4f1a todo needs a locale other than the POSIX locale
+ENVIRONMENT_VARIABLES:8aece102 todo needs a locale other than the POSIX locale
+ENVIRONMENT_VARIABLES:b96c5038 todo needs a locale other than the POSIX locale
+ENVIRONMENT_VARIABLES:8586e6ac todo needs a locale other than the POSIX locale
+ENVIRONMENT_VARIABLES:fb479014 todo needs a locale with translated diagnostics
+ENVIRONMENT_VARIABLES:d838b9f5 todo needs a message catalog
+ASYNCHRONOUS_EVENTS:d92f27bd   none  XCU 1.4 default for this section
+STDOUT:9e754c64                XCU.fc.001 XCU.fc.002
+STDOUT:7d63a756                XCU.fc.001
+STDOUT:73b6fcc0                none  fragment of a format line; the format is covered with its sentence
+STDOUT:882e7a45                XCU.fc.002 XCU.fc.001
+STDOUT:ef7e885b                none  fragment of a format line; the format is covered with its sentence
+STDOUT:0e84e474                XCU.fc.001 XCU.fc.004
+STDOUT:d9a49497                none  fragment of a format line; the format is covered with its sentence
+STDERR:b2905b3f                XCU.fc.021
+OUTPUT_FILES:eb724aff          none  XCU 1.4 default for this section
+EXTENDED_DESCRIPTION:eb724aff  none  XCU 1.4 default for this section
+EXIT_STATUS:db823381           none  introduces a list; the items are classified below
+EXIT_STATUS:22e67029           XCU.fc.020
+EXIT_STATUS:9d252ff7           none  generic 0 / >0 meaning of the exit status; the specific cases are separate units
+EXIT_STATUS:7a355ded           XCU.fc.020
 CONSEQUENCES_OF_ERRORS:d92f27bd none  XCU 1.4 default for this section

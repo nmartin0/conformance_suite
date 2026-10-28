@@ -109,3 +109,632 @@ when       UP
 since      1992
 says       cw changes a word, w moves by words, and a count repeats a command.
 test       t/012-change-word.sh
+
+assertion  XCU.vi.013
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move Cursor Backwards
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move Cursor Forward
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move to First Character in Line
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move to Specific Column Position
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move to First Non-
+class      conditional
+when       UP
+since      1992
+says       The cursor moves right and left by characters (with a count that is cut
+           back to the line), to the first character, the last character, the first
+           non-blank and a numbered column; each line of the file is tried with one
+           motion followed by x.
+timeout    60
+test       t/013-motion-horizontal.sh
+
+assertion  XCU.vi.014
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move Down
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move Up
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Current and Line Above
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move to Line
+class      conditional
+when       UP
+since      1992
+says       Moving by lines with a count, to the first non-blank of the target line
+           (+, -, _) or in the same column (j, k), and to a numbered or the last
+           line with G.
+timeout    60
+test       t/014-motion-vertical.sh
+
+assertion  XCU.vi.015
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move to Top of Screen
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move to Middle of Screen
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move to Bottom of Screen
+class      conditional
+when       UP
+since      1992
+says       With a five-line window on a six-line screen showing lines 1 to 5, L
+           goes to the last displayed line, H to the first, M to the middle, and a
+           count moves H down and L up from the ends.
+timeout    60
+test       t/015-screen-hml.sh
+
+assertion  XCU.vi.016
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Page Forward
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Page Backwards
+class      conditional
+when       UP
+since      1992
+says       With a five-line window, control-F shows the screen starting window-2
+           lines further on and puts the cursor on the first line it shows when the
+           old and new screens overlap; control-B goes back the same way; a count
+           multiplies the step.
+timeout    60
+test       t/016-page-fb.sh
+
+assertion  XCU.vi.017
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Scroll Forward
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Scroll Backward
+class      conditional
+when       UP
+since      1992
+says       control-D moves the cursor down and control-U up by a count, which
+           defaults to the scroll option at first and later to the count last given
+           to either command; the cursor stops at the first or last line.
+timeout    60
+test       t/017-scroll-du.sh
+
+assertion  XCU.vi.018
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Scroll Forward by Line
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Scroll Backward by Line
+class      conditional
+when       UP
+since      1992
+says       control-E and control-Y move the display by lines; the cursor stays
+           unless it leaves the display, in which case it goes to the first
+           displayed line.
+timeout    60
+test       t/018-scroll-ey.sh
+
+assertion  XCU.vi.019
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move to Beginning of Bigword
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move Backward to Preceding Bigword
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move to End-of-Bigword
+class      conditional
+when       UP
+since      1992
+says       On a line holding a word, a punctuation word, a word and a second
+           bigword, the word and bigword motions with counts land on the characters
+           the definitions give.
+timeout    60
+test       t/019-word-motions.sh
+
+assertion  XCU.vi.020
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move to Matching Character
+class      conditional
+when       UP
+since      1992
+says       % jumps from a bracket to its match, forwards and backwards, nested,
+           over several lines, and from a non-bracket to the match of the next
+           bracket on the line.
+timeout    60
+test       t/020-matching-bracket.sh
+
+assertion  XCU.vi.021
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move Forward to Next Paragraph
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move Back to Preceding Paragraph
+class      conditional
+when       UP
+since      1992
+says       A run of blank lines is a paragraph boundary: } goes to the next one
+           (count times), { to the previous one.
+timeout    60
+test       t/021-paragraph.sh
+
+assertion  XCU.vi.022
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move to Next Section
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Return to Previous Section
+class      conditional
+when       UP
+since      1992
+says       A line starting with an open brace, or with a period and a macro name
+           from the sections option (the default ones), is a section boundary: ]]
+           goes to the next, [[ to the previous, with counts.
+timeout    60
+test       t/022-section.sh
+
+assertion  XCU.vi.023
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move Forward to Beginning of Sentence
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move Back to Beginning of Sentence
+class      conditional
+when       UP
+since      1992
+says       A sentence ends at a period, exclamation mark or question mark followed
+           by two spaces; ) goes to the next sentence start, ( to the start of the
+           current or previous one, with counts.
+timeout    60
+test       t/023-sentence.sh
+
+assertion  XCU.vi.024
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Find Character in Current Line (Forward)
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Find Character in Current Line (Reverse)
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move Cursor to Before Character (Forward)
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move Cursor to After Character (Reverse)
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Repeat Find
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Reverse Find Character
+class      conditional
+when       UP
+since      1992
+says       Finding the countth occurrence of a character forward or backward,
+           stopping before or after it, repeating with ; and reversing with a
+           comma.
+timeout    60
+test       t/024-find-char.sh
+
+assertion  XCU.vi.025
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Mark Position
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Return to Previous Context at Beginning of Line
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Return to Previous Context
+class      conditional
+when       UP
+since      1992
+says       A mark remembers a line and a column; the apostrophe command goes to the
+           line (first non-blank) and the grave accent command to the exact column.
+timeout    60
+test       t/025-marks-position.sh
+
+assertion  XCU.vi.026
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Return to Previous Context at Beginning of Line
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Return to Previous Context
+class      conditional
+when       UP
+since      1992
+says       d with an apostrophe mark deletes whole lines from the cursor line to
+           the marked line; d with a grave accent mark deletes the characters
+           between the cursor and the mark, the end one excluded.
+timeout    60
+test       t/026-marks-motion.sh
+
+assertion  XCU.vi.027
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Find Regular Expression
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Scan Backwards for Regular Expression
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Repeat Regular Expression Find (Forward)
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Repeat Regular Expression Find (Reverse)
+class      conditional
+when       UP
+since      1992
+says       A search starts after (or before) the cursor, n repeats in the
+           remembered direction and N in the other, and with wrapscan set a search
+           that runs off one end continues from the other.
+timeout    60
+test       t/027-search-direction.sh
+
+assertion  XCU.vi.028
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Find Regular Expression
+class      conditional
+when       UP
+since      1992
+says       After the pattern a slash and a line offset (including zero) move the
+           cursor that many lines from the matched line; an empty search line
+           repeats the last regular expression.
+timeout    60
+test       t/028-search-offset.sh
+
+assertion  XCU.vi.029
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Find Regular Expression
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Scan Backwards for Regular Expression
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+class      conditional
+when       UP
+since      1992
+says       With nowrapscan a forward search from the last match and a backward
+           search from the first stop at the end of the buffer, fail, and leave the
+           cursor in place.
+timeout    60
+test       t/029-search-nowrap.sh
+
+assertion  XCU.vi.030
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Find Regular Expression
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Scan Backwards for Regular Expression
+class      conditional
+when       UP
+since      1992
+says       d with / or ? deletes characters up to the match, or whole lines when
+           the cursor is at the start of its line and the match is at the start of
+           its, or with an offset.
+timeout    60
+test       t/030-search-motion.sh
+
+assertion  XCU.vi.031
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Append
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Append at End-of-Line
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Insert Before Cursor
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Insert at Beginning of Line
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Insert Empty Line Below
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Insert Empty Line Above
+class      conditional
+when       UP
+since      1992
+says       The insert commands put the typed text after or before the cursor, at
+           the line ends, or on a new line below or above; a count repeats the
+           typed text.
+timeout    60
+test       t/031-insert-commands.sh
+
+assertion  XCU.vi.032
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Delete
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Delete to End-of-Line
+class      conditional
+when       UP
+since      1992
+says       d applies to the region a motion names: words with counts multiplied, to
+           the end or start of the line, to or before a character, backwards, by a
+           bracket match.
+timeout    60
+test       t/032-delete-motions.sh
+
+assertion  XCU.vi.033
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Delete
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move Down
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move Up
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Move to Line
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Current and Line Above
+class      conditional
+when       UP
+since      1992
+says       A line-oriented motion makes d delete whole lines from the cursor line
+           to the line reached.
+timeout    60
+test       t/033-delete-lines.sh
+
+assertion  XCU.vi.034
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Change
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Change to End-of-Line
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Substitute Character
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Substitute Lines
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Replace Character
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Replace Characters
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Reverse Case
+class      conditional
+when       UP
+since      1992
+says       The change commands replace the region of a motion, the rest of the
+           line, one or more characters, whole lines or overwrite characters, and ~
+           reverses the case of count characters.
+timeout    60
+test       t/034-change-commands.sh
+
+assertion  XCU.vi.035
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Delete Character at Cursor
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Delete Character Before Cursor
+class      conditional
+when       UP
+since      1992
+says       x deletes count characters from the cursor, X the count before it; a
+           count larger than the line is cut back.
+timeout    60
+test       t/035-delete-chars.sh
+
+assertion  XCU.vi.036
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Yank
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Yank Current Line
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Put from Buffer Following
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Put from Buffer Before
+class      conditional
+when       UP
+since      1992
+says       Yanked lines are put as whole lines below (p) or above (P) the cursor
+           line, yanked characters inside the line; a count repeats the put.
+timeout    60
+test       t/036-yank-put.sh
+
+assertion  XCU.vi.037
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Put from Buffer Following
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Yank
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       Text copied into a named buffer can be put back from it; an upper-case
+           buffer name appends; text stored in a named buffer is also in the
+           unnamed buffer; a character-mode buffer put goes inside the line.
+timeout    60
+test       t/037-named-buffers.sh
+
+assertion  XCU.vi.038
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Delete
+class      conditional
+when       UP
+since      1992
+says       Each delete that takes whole lines moves the numbered buffers up by one
+           and puts the lines in buffer 1; deleting characters within a line does
+           not.
+timeout    60
+test       t/038-numbered-buffers.sh
+
+assertion  XCU.vi.039
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Repeat
+class      conditional
+when       UP
+since      1992
+says       The dot command repeats the last change command with its motion; a count
+           given to it replaces the original count; inserted text is repeated.
+timeout    60
+test       t/039-repeat-dot.sh
+
+assertion  XCU.vi.040
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Repeat
+class      conditional
+when       UP
+since      1992
+says       Repeating a put from numbered buffer n puts from buffer n+1.
+timeout    60
+test       t/040-repeat-put-numbered.sh
+
+assertion  XCU.vi.041
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Undo
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Undo Current Line
+class      conditional
+when       UP
+since      1992
+says       u reverses the last change and a second u reverses that undo; U puts the
+           current line back as it was when the cursor arrived on it.
+timeout    60
+test       t/041-undo-line.sh
+
+assertion  XCU.vi.042
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Repeat Substitution
+class      conditional
+when       UP
+since      1992
+says       & repeats the previous substitute command on the current line only and
+           ignores its g flag.
+timeout    60
+test       t/042-repeat-substitution.sh
+
+assertion  XCU.vi.043
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Replace Text with Results from Shell Command
+class      conditional
+when       UP
+since      1992
+says       ! with a repeated bang filters the current line (or count lines), and
+           with a motion the lines the motion covers, through the command typed on
+           the last line.
+timeout    60
+test       t/043-filter.sh
+
+assertion  XCU.vi.044
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Shift Left
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Shift Right
+class      conditional
+when       UP
+since      1992
+says       >> and << shift one line, with a count or a motion several lines, by
+           shiftwidth columns; dot repeats a shift.
+timeout    60
+test       t/044-shift.sh
+
+assertion  XCU.vi.045
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Shift Right
+class      conditional
+when       UP
+since      1992
+says       After >> the unnamed buffer holds the line as it was before shifting, in
+           line mode.
+timeout    60
+test       t/045-shift-buffer.sh
+
+assertion  XCU.vi.046
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Input Mode Commands in vi
+class      conditional
+when       UP
+since      1992
+says       Typed text can be erased by character, by word (with the blanks after
+           it) or entirely, without touching text that was there before the input
+           began; control-V enters the next character literally.
+timeout    60
+test       t/046-input-erase.sh
+
+assertion  XCU.vi.047
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Input Mode Commands in vi
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+class      conditional
+when       UP
+since      1992
+says       With autoindent set new lines copy the indent; control-T adds a
+           shiftwidth step, control-D takes one away, 0 then control-D removes it
+           all; an indent-only line is emptied by escape.
+timeout    60
+test       t/047-autoindent.sh
+
+assertion  XCU.vi.048
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       After :abbreviate, typing the short form followed by a non-word
+           character or escape inserts the long form, unless it is the tail of a
+           longer word or the abbreviation was removed.
+timeout    60
+test       t/048-abbreviations.sh
+
+assertion  XCU.vi.049
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       After :map a typed character acts as its replacement command; a
+           replacement that is itself mapped is mapped again while remap is set.
+timeout    60
+test       t/049-map-command.sh
+
+assertion  XCU.vi.050
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       After :map! a character typed in text input mode is replaced by the
+           mapped text, again through other mappings.
+timeout    60
+test       t/050-map-input.sh
+
+assertion  XCU.vi.051
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       In visual mode :read appends a file after the current line and leaves
+           the cursor on the first line read; :read with an exclamation mark reads
+           a command output the same way.
+timeout    60
+test       t/051-read-file.sh
+
+assertion  XCU.vi.052
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       :w name writes the edit buffer to name and leaves the edited file
+           untouched; :q! then leaves with zero status.
+timeout    60
+test       t/052-write-other-quit.sh
+
+assertion  XCU.vi.053
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       After writing, :e file replaces the buffer with another file and later
+           writes go to that file.
+timeout    60
+test       t/053-edit-file.sh
+
+assertion  XCU.vi.054
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Edit the Alternate File
+class      conditional
+when       UP
+since      1992
+says       After :e other, control-^ returns to the previous file (it is the ex
+           edit command with the alternate name).
+timeout    60
+test       t/054-alternate-file.sh
+
+assertion  XCU.vi.055
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Command Descriptions in vi
+class      conditional
+when       UP
+since      1992
+says       For D, ^, %, u (and others) a count is accepted without error and has no
+           effect.
+timeout    60
+test       t/055-count-ignored.sh
+
+assertion  XCU.vi.056
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Enter ex Mode
+class      conditional
+when       UP
+since      1992
+says       After Q the editor reads ex commands from the terminal, keeping the
+           buffer and current line.
+timeout    60
+test       t/056-ex-mode-q.sh
+
+assertion  XCU.vi.057
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Redraw Window
+class      conditional
+when       UP
+since      1992
+says       [line]z followed by a dot, hyphen or newline puts that line on the
+           display and makes it the current line.
+timeout    60
+test       t/057-z-command.sh
+
+assertion  XCU.vi.058
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Join
+class      conditional
+when       UP
+since      1992
+says       J joins the line with the next, 3J three lines, and two spaces follow a
+           final period.
+timeout    60
+test       t/058-join-count.sh
+
+assertion  XCU.vi.059
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Execute
+class      conditional
+when       UP
+since      1992
+says       A buffer holding command text is executed as typed input, with a
+           newline after each line; a count to @ acts as if typed before the
+           buffer text; @@ executes the last buffer again.
+timeout    60
+test       t/059-execute-buffer.sh
+
+assertion  XCU.vi.060
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Command Descriptions in vi
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Input Mode Commands in vi
+class      conditional
+when       UP
+since      1992
+says       An unescaped escape terminates the colon command line like a newline
+           would; control-H with nothing typed leaves the line and returns to
+           command mode.
+timeout    60
+test       t/060-line-input-end.sh
+
+assertion  XCU.vi.061
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Input Mode Commands in vi
+class      conditional
+when       UP
+since      1992
+says       Typing a NUL character first in text input mode inserts the most
+           recently typed text and ends the input.
+timeout    60
+test       t/061-nul-repeat-input.sh
+
+assertion  XCU.vi.062
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Command Descriptions in vi
+class      conditional
+when       UP
+since      1992
+says       Where both a buffer and a count may precede a command, "a2p and 2"ap
+           both put the buffer twice.
+timeout    60
+test       t/062-buffer-count-order.sh
+
+assertion  XCU.vi.063
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Terminate Command or Input Mode
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Command Descriptions in vi
+class      conditional
+when       UP
+since      1992
+says       After d and escape, or a count and escape, or d with a failing find, the
+           pending command is dropped and the next command acts alone.
+timeout    60
+test       t/063-error-discard.sh
+
+assertion  XCU.vi.064
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Command Descriptions in vi
+class      conditional
+when       UP
+since      1992
+says       When a command from a mapping or from a buffer fails, the characters
+           after it from that mapping or buffer are not run.
+timeout    60
+test       t/064-error-discard-map-buffer.sh
+
+assertion  XCU.vi.065
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Terminate Command or Input Mode
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       A mapping whose replacement is escape followed by a command runs that
+           command: the escape does not count as an error.
+timeout    60
+test       t/065-map-escape.sh
+
+assertion  XCU.vi.066
+anchor     utilities/vi.html#EXTENDED DESCRIPTION/Input Mode Commands in vi
+class      conditional
+when       UP
+since      1992
+says       Text after the cursor moves to the new line when a newline is typed in
+           text input mode.
+timeout    60
+test       t/066-newline-split.sh

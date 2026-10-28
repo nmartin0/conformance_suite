@@ -39,7 +39,7 @@
 2.5:d998bd63              none  cross-reference
 2.5:144dd282              XCU.2.5-parameters.010
 2.5:20659a9b              none  unspecified behaviour
-2.5:bc66d773              todo  needs an interactive shell
+2.5:bc66d773              XCU.2.5-parameters.024
 2.5:250e310c              XCU.2.5-parameters.008
 2.5:56e57995              XCU.2.5-parameters.008
 2.5:796d11bb              partial XCU.2.5-parameters.009  # the job-control bg case is not tested
@@ -52,10 +52,10 @@
 2.5:8e397f93              XCU.2.5-parameters.012
 2.5:906b65dd              none  list of mechanisms, each tested where it is described
 2.5:259f8385              none  introduces the list
-2.5:91e53817              todo  ENV is read only by an interactive shell
-2.5:c7b9a4d7              todo  ENV is read only by an interactive shell
-2.5:c0d59251              todo  ENV is read only by an interactive shell
-2.5:df519486              todo  ENV is read only by an interactive shell
+2.5:91e53817              XCU.sh.020 XCU.sh.021
+2.5:c7b9a4d7              XCU.sh.020 XCU.sh.021
+2.5:c0d59251              XCU.sh.020 XCU.sh.021
+2.5:df519486              XCU.sh.020 XCU.sh.021
 2.5:88acf742              none  explanation
 2.5:42050cef              none  unspecified behaviour
 2.5:44dfacc7              todo  needs different real and effective IDs
@@ -84,23 +84,23 @@
 2.5:13be4601              XCU.2.5-parameters.016
 2.5:6d72ce21              XCU.2.5-parameters.016
 2.5:60f9f865              XCU.2.5-parameters.016
-2.5:6c43be3a              todo  PS1 is used only by an interactive shell
-2.5:1193a3f5              todo  PS1 is used only by an interactive shell
+2.5:6c43be3a              XCU.2.5-parameters.020
+2.5:1193a3f5              XCU.2.5-parameters.020 XCU.2.5-parameters.021
 2.5:994f2aeb              none  unspecified behaviour
-2.5:49319b83              todo  PS1 and PS2 are written only by an interactive shell
-2.5:19bd8244              todo  PS1 is used only by an interactive shell
-2.5:1263f6af              todo  PS1 is used only by an interactive shell
-2.5:da83e42c              todo  PS1 is used only by an interactive shell
+2.5:49319b83              XCU.2.5-parameters.020
+2.5:19bd8244              untestable the order of the two passes is not specified, so a test cannot rely on how an exclamation mark produced by an expansion is treated
+2.5:1263f6af              untestable the order of the two passes is not specified, so a test cannot rely on how an exclamation mark produced by an expansion is treated
+2.5:da83e42c              untestable the order of the two passes is not specified, so a test cannot rely on how an exclamation mark produced by an expansion is treated
 2.5:8c6710f4              none  unspecified behaviour
-2.5:f4bd48ec              todo  PS1 is used only by an interactive shell
+2.5:f4bd48ec              impl the default prompt may differ for users with additional privileges
 2.5:35091e74              none  implementation-defined
-2.5:e0bf4ca3              todo  PS1 is used only by an interactive shell
-2.5:bdd673aa              todo  PS1 is used only by an interactive shell
-2.5:4063ced3              todo  PS2 is used only by an interactive shell
-2.5:5408bc11              todo  PS2 is used only by an interactive shell
+2.5:e0bf4ca3              XCU.2.5-parameters.021
+2.5:bdd673aa              XCU.2.5-parameters.021
+2.5:4063ced3              XCU.2.5-parameters.022
+2.5:5408bc11              XCU.2.5-parameters.022
 2.5:994f2aeb.2            none  unspecified behaviour
-2.5:49319b83.2            todo  PS1 and PS2 are written only by an interactive shell
-2.5:3038f22c              todo  PS2 is used only by an interactive shell
+2.5:49319b83.2            XCU.2.5-parameters.020
+2.5:3038f22c              XCU.2.5-parameters.023
 2.5:00069c14              XCU.2.5-parameters.019
 2.5:5cad2fd5              XCU.2.5-parameters.019
 2.5:994f2aeb.3            none  unspecified behaviour

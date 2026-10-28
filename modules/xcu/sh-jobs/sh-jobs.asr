@@ -9,3 +9,129 @@ says       With job control on (set -m), an asynchronous list is a
            background job whose process is a process group leader: its
            process group ID equals its process ID.
 test       t/001-background-job-group.sh
+
+assertion  XCU.sh-jobs.002
+anchor     utilities/V3_chap02.html#2.11/shall be written to standard error using the format
+class      conditional
+when       UP
+says       An interactive shell with job control that starts a background job
+           writes the job number and process id, as [number] id, and the id
+           equals the value of the special parameter for the last background
+           command.
+timeout    60
+test       t/002-background-job-message.sh
+
+assertion  XCU.sh-jobs.003
+anchor     utilities/V3_chap02.html#2.11/completion of the corresponding job is written to standard error
+class      conditional
+when       UP
+says       When a background job ends while an interactive shell with job control
+           is running, the shell writes a message that shows the job as done
+           before a later prompt.
+timeout    60
+test       t/003-completion-message.sh
+
+assertion  XCU.sh-jobs.004
+anchor     utilities/V3_chap02.html#2.11/stopped by a signal
+class      conditional
+when       UP
+says       When the foreground job is stopped from the terminal (the suspend
+           character), the shell regains control and reports it as stopped; jobs
+           lists it as stopped; bg continues it so that jobs then lists it as
+           running.
+timeout    60
+test       t/004-stop-and-continue.sh
+
+assertion  XCU.sh-jobs.005
+anchor     utilities/V3_chap02.html#2.11/brought into the foreground
+class      conditional
+when       UP
+says       fg brings a background job into the foreground: the shell waits for
+           it, writes its command line, and continues with the next command only
+           after the job ends.
+timeout    60
+test       t/005-fg-foreground.sh
+
+assertion  XCU.sh-jobs.006
+anchor     utilities/V3_chap02.html#2.11/When job control is enabled, the shell shall create one or more jobs
+class      conditional
+when       UP
+says       A pipeline run in the background forms one job: jobs lists it
+           once, with the whole pipeline as its command.
+timeout    60
+test       t/006-pipeline-job.sh
+
+assertion  XCU.sh-jobs.007
+anchor     utilities/V3_chap02.html#2.11/split into multiple
+class      conditional
+when       UP
+says       Sequential lists before an asynchronous list do not form a
+           background job, and two asynchronous lists on one line form two
+           jobs.
+timeout    60
+test       t/007-lists-split.sh
+
+assertion  XCU.sh-jobs.008
+anchor     utilities/V3_chap02.html#2.11/completes or is terminated
+class      conditional
+when       UP
+says       With set -b the shell writes the completion message of a
+           background job as soon as it completes, even while a foreground
+           command is still running.
+timeout    60
+test       t/008-set-b-immediate.sh
+
+assertion  XCU.sh-jobs.009
+anchor     utilities/V3_chap02.html#2.11/is disabled, the message
+class      conditional
+when       UP
+says       Without set -b the completion message is written just before the
+           next prompt, after the foreground command has ended.
+timeout    60
+test       t/009-set-b-off-deferred.sh
+
+assertion  XCU.sh-jobs.010
+anchor     utilities/V3_chap02.html#2.11/convert the (non-suspended) background job into a suspended job
+class      conditional
+when       UP
+says       When a background job is stopped by SIGSTOP the shell writes a
+           message for a suspended job before the next prompt, with set -b
+           disabled or enabled, and jobs lists it as stopped.
+timeout    60
+test       t/010-background-stop-message.sh
+
+assertion  XCU.sh-jobs.011
+anchor     utilities/V3_chap02.html#2.11/shall all be in the same process group
+class      conditional
+when       UP
+says       The processes of a background pipeline share one process group.
+timeout    60
+test       t/011-pipeline-process-group.sh
+
+assertion  XCU.sh-jobs.012
+anchor     utilities/V3_chap02.html#2.11/the shell shall create a suspended job consisting of a set of commands
+class      conditional
+when       UP
+says       Stopping a foreground pipeline from the terminal makes a suspended
+           job that includes the pipeline.
+timeout    60
+test       t/012-stop-pipeline.sh
+
+assertion  XCU.sh-jobs.013
+anchor     utilities/V3_chap02.html#2.11/shall not be repeated
+class      conditional
+when       UP
+says       Commands of a stopped job that had already completed are not run
+           again when the job is continued.
+timeout    60
+test       t/013-completed-not-repeated.sh
+
+assertion  XCU.sh-jobs.014
+anchor     utilities/V3_chap02.html#2.11/SIGSTOP signal
+class      conditional
+when       UP
+says       A foreground job whose process stops itself with SIGSTOP is
+           reported as stopped, as if the suspend character had been typed,
+           and continues with fg.
+timeout    60
+test       t/014-sigstop-foreground.sh

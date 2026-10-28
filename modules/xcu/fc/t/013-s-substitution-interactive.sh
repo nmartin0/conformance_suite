@@ -1,0 +1,31 @@
+# In an interactive shell, fc -s old=new runs the previous command again with the first occurrence of old replaced by new
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# ASSERTION XCU.fc.013
+. "$PC_CORE/pc.sh"
+pc_begin XCU.fc.013
+LC_ALL=C; export LC_ALL
+pc_top=$(pwd) || pc_unresolved "cannot find the working directory"
+pc_wd=pcw.$$
+mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
+trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
+. "$PC_CORE/pcpty.sh"
+
+pc_pty_need
+# ish INPUT [ENV=VAL...]: run an interactive shell on a terminal with INPUT typed; output in pty.out
+ish() {
+	ish_in=$1; shift
+	"$PC_PTY" -t 25 -d 400 -i "$ish_in" -o pty.out -- env HISTFILE="$PWD/pc.hist" ENV= PS1='PCP> ' "$@" \
+	    "${PC_SH:-sh}" -c 'stty susp "^Z" 2>/dev/null; exec "$0" -i' "${PC_SH:-sh}"
+	ish_rc=$?
+	[ "$ish_rc" -ne 125 ] || pc_unresolved "cannot set up a pseudo-terminal"
+	[ "$ish_rc" -ne 124 ] || pc_fail "the interactive shell did not finish"
+}
+
+printf '%s\n' "printf 'A%sB\\n' q" 'fc -s q=r' 'exit' >pc.in || pc_unresolved "write"
+pc_test
+ish pc.in
+o=$(tr -d '\r' <pty.out)
+printf '%s\n' "$o" | grep -q '^AqB$' || pc_unresolved "the first command did not run: $o"
+printf '%s\n' "$o" | grep -q '^ArB$' || pc_fail "the substituted command gave no output: $o"
+pc_pass

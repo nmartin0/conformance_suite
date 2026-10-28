@@ -116,3 +116,112 @@ when       UP
 since      1992
 says       If the editor exits non-zero the edited command is not run.
 test       t/011-editor-fails.sh
+
+assertion  XCU.fc.012
+anchor     utilities/fc.html#DESCRIPTION
+class      conditional
+when       UP
+says       In an interactive shell, fc -s with no operand runs the previous
+           command again, so the command's output appears twice.
+timeout    60
+test       t/012-s-reexecute-interactive.sh
+
+assertion  XCU.fc.013
+anchor     utilities/fc.html#OPERANDS
+class      conditional
+when       UP
+says       In an interactive shell, fc -s old=new runs the previous command again
+           with the first occurrence of old replaced by new.
+timeout    60
+test       t/013-s-substitution-interactive.sh
+
+assertion  XCU.fc.014
+anchor     utilities/fc.html#DESCRIPTION/The command history list shall reference commands by number
+class      conditional
+when       UP
+says       Commands in the history list are referenced by number; the number
+           of a command does not change while later commands are added, and
+           later commands have larger numbers.
+timeout    60
+test       t/014-numbers-stable.sh
+
+assertion  XCU.fc.015
+anchor     utilities/fc.html#DESCRIPTION/shall not be entered into the history list
+class      conditional
+when       UP
+says       The fc command that caused editing is not entered into the history
+           list, while the edited command is.
+timeout    60
+test       t/015-not-in-history.sh
+
+assertion  XCU.fc.016
+anchor     utilities/fc.html#DESCRIPTION/reinvokes the previous command, suppressing standard error
+class      conditional
+when       UP
+says       Redirections and variable assignments on an fc command apply both
+           to fc and to the command it re-executes.
+timeout    60
+test       t/016-redirect-both.sh
+
+assertion  XCU.fc.017
+anchor     utilities/fc.html#OPTIONS/shall conform to XBD
+class      conditional
+when       UP
+says       fc follows the utility syntax guidelines: options may be grouped
+           in any order and a double hyphen ends the options so that a
+           negative number is an operand.
+timeout    60
+test       t/017-option-syntax.sh
+
+assertion  XCU.fc.018
+anchor     utilities/fc.html#OPERANDS/shall not be an error to specify
+class      conditional
+when       UP
+says       A first or last value outside the history list is not an error:
+           the oldest or newest command is used instead.
+timeout    60
+test       t/018-range-outside-list.sh
+
+assertion  XCU.fc.019
+anchor     utilities/fc.html#OPERANDS/newer command than
+class      conditional
+when       UP
+says       When first is a newer command than last the commands are listed in
+           reverse, as with -r.
+timeout    60
+test       t/019-range-reverse.sh
+
+assertion  XCU.fc.020
+anchor     utilities/fc.html#EXIT STATUS/Otherwise, the exit status shall be that of the commands executed by
+class      conditional
+when       UP
+says       fc returns zero after a successful listing, a nonzero status for
+           an error, and otherwise the status of the commands it executed.
+timeout    60
+test       t/020-exit-status.sh
+
+assertion  XCU.fc.021
+anchor     utilities/fc.html#STDERR/The standard error shall be used only for diagnostic messages
+class      conditional
+when       UP
+says       fc writes nothing to standard error when it lists or re-executes
+           commands successfully.
+timeout    60
+test       t/021-stderr-silent.sh
+
+assertion  XCU.fc.022
+anchor     utilities/fc.html#ENVIRONMENT VARIABLES/Determine a decimal number representing the limit
+class      conditional
+when       UP
+says       When HISTSIZE limits the commands that are accessible, the oldest
+           commands are the ones lost.
+timeout    60
+test       t/022-histsize-oldest-first.sh
+
+assertion  XCU.fc.023
+anchor     utilities/fc.html#ENVIRONMENT VARIABLES/null or unset
+class      conditional
+when       UP
+says       When -e is not given and FCEDIT is unset, the editor used is ed.
+timeout    60
+test       t/023-default-editor-ed.sh

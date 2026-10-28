@@ -1,0 +1,31 @@
+# An interactive shell with job control that starts a background job writes the job number and process id, as [number] id, and the id equals the value of the special parameter for the last background command
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# ASSERTION XCU.sh-jobs.002
+. "$PC_CORE/pc.sh"
+pc_begin XCU.sh-jobs.002
+LC_ALL=C; export LC_ALL
+pc_top=$(pwd) || pc_unresolved "cannot find the working directory"
+pc_wd=pcw.$$
+mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
+trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
+. "$PC_CORE/pcpty.sh"
+
+pc_pty_need
+# ish INPUT [ENV=VAL...]: run an interactive shell on a terminal with INPUT typed; output in pty.out
+ish() {
+	ish_in=$1; shift
+	"$PC_PTY" -t 25 -d 400 -i "$ish_in" -o pty.out -- env HISTFILE="$PWD/pc.hist" ENV= PS1='PCP> ' "$@" \
+	    "${PC_SH:-sh}" -c 'stty susp "^Z" 2>/dev/null; exec "$0" -i' "${PC_SH:-sh}"
+	ish_rc=$?
+	[ "$ish_rc" -ne 125 ] || pc_unresolved "cannot set up a pseudo-terminal"
+	[ "$ish_rc" -ne 124 ] || pc_fail "the interactive shell did not finish"
+}
+
+printf '%s\n' 'sleep 30 &' 'echo P$!P' 'kill %1' 'wait' 'exit' >pc.in || pc_unresolved "write"
+pc_test
+ish pc.in
+want=$(tr -d '\r' <pty.out | sed -n 's/^P\([0-9][0-9]*\)P$/\1/p' | head -n 1)
+[ -n "$want" ] || pc_unresolved "could not read the process id from the output"
+tr -d '\r' <pty.out | grep -q "^\[1\] $want\$" || pc_fail "no line '[1] $want' in the output: $(tr -d '\r' <pty.out)"
+pc_pass

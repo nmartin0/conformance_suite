@@ -155,3 +155,48 @@ says       When an execution trace is on (set -x), the value of PS4
            undergoes parameter expansion and is written to standard error
            before each traced command.
 test       t/019-ps4-expansion.sh
+
+assertion  XCU.2.5-parameters.020
+anchor     utilities/V3_chap02.html#2.5.3/the value of this variable shall be subjected to parameter expansion
+class      conditional
+when       UP
+says       PS1 undergoes parameter expansion each time the shell is ready to
+           read a command and the result is written to standard error.
+timeout    60
+test       t/020-ps1-expansion.sh
+
+assertion  XCU.2.5-parameters.021
+anchor     utilities/V3_chap02.html#2.5.3/escaped by another
+class      conditional
+when       UP
+says       In PS1 an exclamation mark is replaced by the history number of
+           the next command and two exclamation marks give one.
+timeout    60
+test       t/021-ps1-history-number.sh
+
+assertion  XCU.2.5-parameters.022
+anchor     utilities/V3_chap02.html#2.5.3/Each time the user enters a
+class      conditional
+when       UP
+says       PS2 undergoes parameter expansion and is written to standard error
+           each time a newline is entered before a command is complete.
+timeout    60
+test       t/022-ps2-continuation.sh
+
+assertion  XCU.2.5-parameters.023
+anchor     utilities/V3_chap02.html#2.5.3/The default value shall be
+class      conditional
+when       UP
+says       The default value of PS2 is a greater-than sign followed by a
+           space.
+timeout    60
+test       t/023-ps2-default.sh
+
+assertion  XCU.2.5-parameters.024
+anchor     utilities/V3_chap02.html#2.5.2/shall be included in
+class      conditional
+when       UP
+says       The -i option is included in the value of $- when the shell is
+           interactive, whether or not it was given on invocation.
+timeout    60
+test       t/024-dash-i-interactive.sh

@@ -161,3 +161,442 @@ says       An interactive shell runs the file named by ENV, after parameter
            expansion of the value, in the current environment before reading
            its commands.
 test       t/021-env-interactive.sh
+
+assertion  XCU.sh.022
+anchor     utilities/sh.html#ENVIRONMENT VARIABLES/takes precedence over the
+class      conditional
+when       UP
+says       An interactive shell with MAILPATH set and MAILCHECK zero informs the
+           user, before a later prompt, with the message given for a file that
+           has received mail.
+timeout    60
+test       t/022-mailpath-message.sh
+
+assertion  XCU.sh.023
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/shall enable
+class      conditional
+when       UP
+says       With set -o vi, typing the escape character puts the shell in command
+           mode in which k brings the previous command line back for editing; the
+           newline then runs it.
+timeout    60
+test       t/023-vi-mode-recall.sh
+
+assertion  XCU.sh.024
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/shall enable
+class      conditional
+when       UP
+says       With set -o vi, the escape character, a motion to the line start and x
+           delete characters of the command line being edited, and the edited
+           line is what runs.
+timeout    60
+test       t/024-vi-mode-delete-char.sh
+
+assertion  XCU.sh.025
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Move the current cursor position to the next character position
+class      conditional
+when       UP
+says       With set -o vi, in command mode the motions 0, ^, $, l, space, h
+           and | (with counts) place the cursor so that a following r
+           replaces the character there; a count larger than the line moves
+           to the first or last character.
+timeout    60
+test       t/025-vi-char-motions.sh
+
+assertion  XCU.sh.026
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Move to the start of the next bigword
+class      conditional
+when       UP
+says       With set -o vi, the word motions w, W, b, B, e and E with counts
+           move the cursor as defined for words and bigwords, a count past
+           the end stopping at the last character.
+timeout    60
+test       t/026-vi-word-motions.sh
+
+assertion  XCU.sh.027
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Repeat the most recent
+class      conditional
+when       UP
+says       With set -o vi, f, F, t and T (with counts) and the repeats ; and
+           , move to the named character in the stated direction.
+timeout    60
+test       t/027-vi-find-char.sh
+
+assertion  XCU.sh.028
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Delete the character before the current cursor position
+class      conditional
+when       UP
+says       With set -o vi, x and X delete the character at or before the
+           cursor, D deletes to the end of the line, each into the save
+           buffer, and p puts the save buffer after the cursor.
+timeout    60
+test       t/028-vi-delete-char-put.sh
+
+assertion  XCU.sh.029
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Yank the characters from the current cursor position to the end of the line into the save buffer
+class      conditional
+when       UP
+says       With set -o vi, d and y with a motion delete or copy text, d
+           toward the line start leaves the cursor character, y leaves the
+           cursor unchanged, and P puts the save buffer before the cursor.
+timeout    60
+test       t/029-vi-delete-yank-motion.sh
+
+assertion  XCU.sh.030
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Delete from the current character to the end of the line and enter insert mode at the new end-of-line
+class      conditional
+when       UP
+says       With set -o vi, c with a motion deletes the text and enters insert
+           mode, and C changes to the end of the line.
+timeout    60
+test       t/030-vi-change.sh
+
+assertion  XCU.sh.031
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Clear the entire edit line and enter insert mode
+class      conditional
+when       UP
+says       With set -o vi, S and cc clear the whole edit line and enter
+           insert mode.
+timeout    60
+test       t/031-vi-clear-line.sh
+
+assertion  XCU.sh.032
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Enter insert mode, replacing characters from the command line beginning at the current cursor position
+class      conditional
+when       UP
+says       With set -o vi, r with a count replaces that many characters
+           leaving the cursor on the last changed one, and R replaces
+           characters as they are typed.
+timeout    60
+test       t/032-vi-replace.sh
+
+assertion  XCU.sh.033
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Enter insert mode at the beginning of the current command line
+class      conditional
+when       UP
+says       With set -o vi, i, a, A and I enter insert mode before the cursor,
+           after it, at the end and at the beginning of the line.
+timeout    60
+test       t/033-vi-insert-commands.sh
+
+assertion  XCU.sh.034
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Convert, if the current
+class      conditional
+when       UP
+says       With set -o vi, ~ converts the case of the character and advances
+           the cursor, with a count converts that many, and a count past the
+           end is not an error.
+timeout    60
+test       t/034-vi-tilde.sh
+
+assertion  XCU.sh.035
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Repeat the most recent non-motion command, even if it was executed on an earlier command line
+class      conditional
+when       UP
+says       With set -o vi, . repeats the most recent non-motion command; a
+           count given to . replaces the old count and is kept for later
+           repeats.
+timeout    60
+test       t/035-vi-dot-count.sh
+
+assertion  XCU.sh.036
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Undo all changes made to the edit line
+class      conditional
+when       UP
+says       With set -o vi, u undoes the last change to the edit line and U
+           undoes all changes to it.
+timeout    60
+test       t/036-vi-undo.sh
+
+assertion  XCU.sh.037
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Set the current command line to be the oldest command line stored in the shell command history
+class      conditional
+when       UP
+says       With set -o vi, k with a count recalls an earlier command line and
+           G without a number recalls the oldest command line in the history.
+timeout    60
+test       t/037-vi-history-k-G.sh
+
+assertion  XCU.sh.038
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/next command line
+class      conditional
+when       UP
+says       With set -o vi, j moves to the next command line in the history
+           after k has moved back.
+timeout    60
+test       t/038-vi-history-j.sh
+
+assertion  XCU.sh.039
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/previous command line
+class      conditional
+when       UP
+says       With set -o vi, - and + move to the previous and next history
+           lines, and - takes a count.
+timeout    60
+test       t/039-vi-history-minus-plus.sh
+
+assertion  XCU.sh.040
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Move backwards through the command history, searching for the specified pattern
+class      conditional
+when       UP
+says       With set -o vi, /pattern followed by a newline searches backward
+           through the history and makes the found line the current line.
+timeout    60
+test       t/040-vi-search-backward.sh
+
+assertion  XCU.sh.041
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Move forwards through the command history, searching for the specified pattern
+class      conditional
+when       UP
+says       With set -o vi, ?pattern followed by a newline searches forward
+           through the history.
+timeout    60
+test       t/041-vi-search-forward.sh
+
+assertion  XCU.sh.042
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Repeat the most recent
+class      conditional
+when       UP
+says       With set -o vi, n repeats the last history search in the same
+           direction and N in the opposite direction.
+timeout    60
+test       t/042-vi-search-repeat.sh
+
+assertion  XCU.sh.043
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Insert the character
+class      conditional
+when       UP
+says       With set -o vi, # inserts a number sign at the start of the line,
+           which is then treated as a comment and entered into the history.
+timeout    60
+test       t/043-vi-comment.sh
+
+assertion  XCU.sh.044
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Display the possible shell word expansions
+class      conditional
+when       UP
+says       With set -o vi, = displays the pathname expansions of the bigword
+           at the cursor on later lines, adding a slash to directories,
+           without changing the line.
+timeout    60
+test       t/044-vi-expand-display.sh
+
+assertion  XCU.sh.045
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Perform pathname expansion on the current bigword and insert all expansions into the command to replace the current bigword
+class      conditional
+when       UP
+says       With set -o vi, * replaces the bigword at the cursor by all its
+           pathname expansions separated by spaces.
+timeout    60
+test       t/045-vi-expand-insert.sh
+
+assertion  XCU.sh.046
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Perform pathname expansion (see
+class      conditional
+when       UP
+says       With set -o vi, a backslash completes the bigword at the cursor to
+           the unique match and enters insert mode.
+timeout    60
+test       t/046-vi-expand-complete.sh
+
+assertion  XCU.sh.047
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Insert the value of the alias named
+class      conditional
+when       UP
+says       With set -o vi, @ followed by a letter inserts the value of the
+           alias named with an underscore and that letter.
+timeout    60
+test       t/047-vi-alias-insert.sh
+
+assertion  XCU.sh.048
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Redraw the current command line
+class      conditional
+when       UP
+says       With set -o vi, control-L redraws the line and leaves the cursor
+           at the same place.
+timeout    60
+test       t/048-vi-redraw.sh
+
+assertion  XCU.sh.049
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Append a
+class      conditional
+when       UP
+says       With set -o vi, _ appends a space and the last bigword of the
+           previous input line, or with a count the numbered bigword.
+timeout    60
+test       t/049-vi-underscore.sh
+
+assertion  XCU.sh.050
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Put a copy of the current contents of the save buffer after the current cursor position
+class      conditional
+when       UP
+says       With set -o vi, Y yanks to the end of the line and a count on p
+           puts that many copies after the cursor.
+timeout    60
+test       t/050-vi-yank-put-count.sh
+
+assertion  XCU.sh.051
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/yanked into the save buffer
+class      conditional
+when       UP
+says       With set -o vi, yy yanks the whole line leaving the cursor, p puts
+           it after the cursor, and dd clears the line.
+timeout    60
+test       t/051-vi-yy-dd.sh
+
+assertion  XCU.sh.052
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/SIGINT signal in command
+class      conditional
+when       UP
+says       With set -o vi, an interrupt typed in insert or command mode
+           abandons the line and the abandoned line is not entered in the
+           history.
+timeout    60
+test       t/052-vi-interrupt.sh
+
+assertion  XCU.sh.053
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Clear all the characters from the input line
+class      conditional
+when       UP
+says       With set -o vi, in insert mode the erase character removes the
+           previous character and the kill character clears the line.
+timeout    60
+test       t/053-vi-erase-kill.sh
+
+assertion  XCU.sh.054
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Delete the characters from the one preceding the cursor to the preceding word boundary
+class      conditional
+when       UP
+says       With set -o vi, in insert mode control-W deletes the word before
+           the cursor.
+timeout    60
+test       t/054-vi-word-erase.sh
+
+assertion  XCU.sh.055
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Insert the next character input, even if the character is otherwise a special insert mode character
+class      conditional
+when       UP
+says       With set -o vi, in insert mode control-V inserts the next
+           character even if it is the kill character.
+timeout    60
+test       t/055-vi-literal-next.sh
+
+assertion  XCU.sh.056
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/Interpreted as the end
+class      conditional
+when       UP
+says       With set -o vi, the end-of-file character at the beginning of a
+           line ends the shell.
+timeout    60
+test       t/056-vi-eof.sh
+
+assertion  XCU.sh.057
+anchor     utilities/sh.html#EXTENDED DESCRIPTION/temporary file
+class      conditional
+when       UP
+says       With set -o vi, v in command mode invokes vi on the current
+           command line in a temporary file, and when vi exits the commands
+           in the file are executed.
+timeout    60
+test       t/057-vi-edit-command.sh
+
+assertion  XCU.sh.058
+anchor     utilities/sh.html#ENVIRONMENT VARIABLES/Determine a pathname naming a command history file
+class      conditional
+when       UP
+says       The command history kept in the file named by HISTFILE survives
+           between interactive sessions: a command typed in one session is
+           listed by fc -l in a later session that uses the same file.
+timeout    60
+test       t/058-histfile-persist.sh
+
+assertion  XCU.sh.059
+anchor     utilities/sh.html#ENVIRONMENT VARIABLES/Determine a pathname naming a command history file
+class      conditional
+when       UP
+says       With set -o vi in a later session using the same HISTFILE, k with
+           a count recalls a command typed in an earlier session.
+timeout    60
+test       t/059-histfile-recall.sh
+
+assertion  XCU.sh.060
+anchor     utilities/sh.html#ENVIRONMENT VARIABLES/takes precedence over the
+class      conditional
+when       UP
+says       When MAILPATH and MAIL are both set, only the files of MAILPATH
+           are watched: a change to the MAIL file adds nothing to what the
+           user is told.
+timeout    60
+test       t/060-mail-precedence.sh
+
+assertion  XCU.sh.061
+anchor     utilities/sh.html#ENVIRONMENT VARIABLES/Determine a pathname of the user
+class      conditional
+when       UP
+says       With MAIL set and MAILPATH unset, the shell informs the user,
+           before a later prompt, when the MAIL file is created.
+timeout    60
+test       t/061-mail-default.sh
+
+assertion  XCU.sh.062
+anchor     utilities/sh.html#ENVIRONMENT VARIABLES/Establish a decimal integer value that specifies how often
+class      conditional
+when       UP
+says       The shell checks for mail only after the MAILCHECK interval since
+           the last check: a change made soon after a check is reported only
+           at a prompt after the interval has passed.
+timeout    60
+test       t/062-mailcheck-interval.sh
+
+assertion  XCU.sh.063
+anchor     utilities/sh.html#ENVIRONMENT VARIABLES/preceded by a
+class      conditional
+when       UP
+says       In MAILPATH a percent sign preceded by a backslash belongs to the
+           pathname.
+timeout    60
+test       t/063-mailpath-percent.sh
+
+assertion  XCU.sh.064
+anchor     utilities/sh.html#ENVIRONMENT VARIABLES/a string that shall be subjected to parameter expansion
+class      conditional
+when       UP
+says       The message of a MAILPATH entry undergoes parameter expansion when
+           it is written.
+timeout    60
+test       t/064-mailpath-expand.sh
+
+assertion  XCU.sh.065
+anchor     utilities/sh.html#ENVIRONMENT VARIABLES/Provide a list of pathnames and optional messages separated by
+class      conditional
+when       UP
+says       MAILPATH names several files separated by colons and the message
+           of the file that changed is the one written.
+timeout    60
+test       t/065-mailpath-multiple.sh
+
+assertion  XCU.sh.066
+anchor     utilities/sh.html#ENVIRONMENT VARIABLES/If set to zero, the shell shall
+class      conditional
+when       UP
+says       With MAILCHECK zero the shell checks before each primary prompt,
+           so two later changes are reported separately.
+timeout    60
+test       t/066-mailcheck-zero.sh
+
+assertion  XCU.sh.067
+anchor     utilities/sh.html#ASYNCHRONOUS EVENTS/SIGTTIN, SIGTTOU, and SIGTSTP signals shall be ignored
+class      conditional
+when       UP
+says       With the -m option in effect the shell ignores SIGTSTP, SIGTTIN
+           and SIGTTOU sent to itself.
+timeout    60
+test       t/067-monitor-ignores-stop.sh
+
+assertion  XCU.sh.068
+anchor     utilities/sh.html#ASYNCHRONOUS EVENTS/SIGQUIT and SIGTERM signals shall be ignored
+class      conditional
+when       UP
+says       An interactive shell ignores SIGTERM and SIGQUIT sent to itself.
+timeout    60
+test       t/068-ignores-term-quit.sh
