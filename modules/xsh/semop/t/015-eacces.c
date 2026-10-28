@@ -308,11 +308,23 @@ static inline struct semid_ds st(int id)
 	return d;
 }
 
+/*
+ * The attributes are read once, while the mode still allows it: a mode of 0
+ * denies IPC_STAT to the owner too, and the mode has to be put back by
+ * IPC_SET, which does not need read permission.
+ */
 static inline void set_mode(int id, int mode)
 {
-	struct semid_ds d = st(id);
+	static struct semid_ds saved;
+	static int have;
+	struct semid_ds d;
 	union semun u;
 
+	if (!have) {
+		saved = st(id);
+		have = 1;
+	}
+	d = saved;
 	d.sem_perm.mode = (mode_t)mode;
 	u.buf = &d;
 	NEED(semctl(id, 0, IPC_SET, u) == 0, "semctl(IPC_SET) failed: %s", pc_errname(errno));

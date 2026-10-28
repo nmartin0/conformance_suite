@@ -277,10 +277,22 @@ static inline struct msqid_ds st(int id)
 	return d;
 }
 
+/*
+ * The attributes are read once, while the mode still allows it: a mode of 0
+ * denies IPC_STAT to the owner too, and the mode has to be put back by
+ * IPC_SET, which does not need read permission.
+ */
 static inline void set_mode(int id, int mode)
 {
-	struct msqid_ds d = st(id);
+	static struct msqid_ds saved;
+	static int have;
+	struct msqid_ds d;
 
+	if (!have) {
+		saved = st(id);
+		have = 1;
+	}
+	d = saved;
 	d.msg_perm.mode = (mode_t)mode;
 	NEED(msgctl(id, IPC_SET, &d) == 0, "msgctl(IPC_SET) failed: %s", pc_errname(errno));
 }

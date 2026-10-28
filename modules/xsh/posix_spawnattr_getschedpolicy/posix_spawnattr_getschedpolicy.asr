@@ -41,5 +41,7 @@ says       A child spawned with POSIX_SPAWN_SETSCHEDULER and a spawn-schedpolicy
            set through posix_spawnattr_setschedpolicy() runs under that
            policy.
 note       Changing the scheduler may need privilege (implementation-defined); a
-           refusal is UNRESOLVED.
+           refusal is UNRESOLVED. The test asks for a real-time policy,
+           which an ordinary user may be refused.
+needs      root
 test       t/003-effect.c

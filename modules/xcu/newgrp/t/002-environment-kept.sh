@@ -5,6 +5,8 @@
 . "$PC_CORE/pc.sh"
 pc_begin XCU.newgrp.002
 LC_ALL=C; export LC_ALL
+# Which shell newgrp creates is up to the system; name one with SHELL so that every account gets the same.
+SHELL=${PC_SH:-/bin/sh}; export SHELL
 d=pcnewgrp.$$
 mkdir "$d" || pc_fail "cannot make $d"
 trap 'cd ..; rm -rf "$d"' EXIT

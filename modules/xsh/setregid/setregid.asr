@@ -59,6 +59,7 @@ says       After setregid(-1, 65534) in that process (the real group ID
 note       disputed (Q-69): the page says when the saved set-group-ID is set
            to the new effective ID but leaves it unchanged otherwise only
            in APPLICATION USAGE. A FAIL is logged as INSPECT.
+needs      root
 nomutant   no fault is planted in a call that changes the process IDs (reviewed by hand against the text; see docs/methodology.md)
 test       t/004-saved-kept.c
 
