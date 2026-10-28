@@ -1,0 +1,170 @@
+# XBD 4.16 Pathname Resolution
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The general rules, tested through stat(), lstat(), open(), access(),
+# chdir(), the *at() calls and the creation calls, in a private directory.
+# Function modules test the same rules for their own call (their trailing-
+# slash, ELOOP and ENAMETOOLONG assertions). Where a name that is too long
+# or lies below a file also names nothing, XSH 2.3 lets either error be
+# reported (Q-8): stat() accepts both, the creation calls only the one that
+# applies. Not tested: a pathname of exactly two leading slashes
+# (implementation-defined), dot-dot at the root (may be the root itself),
+# and the process root directory (changing it is not POSIX).
+
+assertion  XBD.4.16-pathname-resolution.001
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       An absolute pathname starts at the root and ignores the working
+           directory; a relative one starts at the working directory and
+           follows chdir(); with fstatat() and openat() a relative one
+           starts at the directory the descriptor names, not the working
+           directory, and an absolute one ignores the descriptor; "/" is a
+           directory and "/." is the same one.
+test       t/001-absolute-relative.c
+
+assertion  XBD.4.16-pathname-resolution.002
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       Resolution fails when a component is not in the directory
+           before it: ENOENT for a missing name or directory (stat, open,
+           access, chdir, unlink), ENOTDIR for chdir() or opendir() of a
+           regular file, and a failure (ENOTDIR or ENOENT) for names below
+           a regular file, including d/f/. and d/f/..
+test       t/002-resolution-fails.c
+
+assertion  XBD.4.16-pathname-resolution.003
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       To create an entry only its path prefix is resolved: new names
+           below an existing directory can be made with open(O_CREAT),
+           mkdir(), symlink(), mkfifo(), link() and rename(), while the
+           same calls below a missing directory fail with ENOENT and make
+           nothing; an existing last component is found (EEXIST).
+test       t/003-resolution-for-creation.c
+
+assertion  XBD.4.16-pathname-resolution.004
+anchor     basedefs/V1_chap04.html#4.16
+anchor     basedefs/V1_chap03.html#3.146
+class      required
+says       A name of {NAME_MAX} bytes (pathconf of the directory) can be
+           created, found, listed and removed; a component of {NAME_MAX}+1
+           bytes is an error: open(O_CREAT) and mkdir() fail with
+           ENAMETOOLONG and create nothing (no truncated name), stat()
+           fails with ENAMETOOLONG or ENOENT, at the end of a pathname and
+           in the middle. NOTINUSE where {NAME_MAX} is unlimited.
+note       The text makes it an error whatever the value of
+           _POSIX_NO_TRUNC; the function pages give ENAMETOOLONG.
+test       t/004-name-max.c
+
+assertion  XBD.4.16-pathname-resolution.005
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       Trailing slashes: "d/", "d///" and "sd/" (a link to a directory)
+           resolve to the directory (lstat("sd/") describes the directory
+           and lstat("sd") the link); "f/" and "sf/" (a link to a file)
+           fail with ENOTDIR in stat, lstat, open, access and chdir; a
+           dangling link with a slash fails with ENOENT; mkdir("nd/") and
+           mkdir("nd2//") make directories; open("newfile/", O_CREAT) makes
+           nothing; "///" is the root.
+test       t/005-trailing-slashes.c
+
+assertion  XBD.4.16-pathname-resolution.006
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       A symbolic link in the middle of a pathname is followed, also by
+           unlink(); at the end, stat() and open() follow links (also
+           chains of links) while lstat(), readlink(), symlink() (EEXIST),
+           rename(), unlink() and remove() act on the link itself and leave
+           its target.
+test       t/006-symlink-follow-or-act.c
+
+assertion  XBD.4.16-pathname-resolution.007
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       Link contents take the place of the link's name: a relative link
+           (also with ..) is read from the directory that holds the link,
+           not the working directory, an absolute one from the root, chains
+           are followed, and links containing only slashes ("/" and "///")
+           make the rest of the pathname start at the root, however many
+           slashes follow them.
+test       t/007-symlink-contents.c
+
+assertion  XBD.4.16-pathname-resolution.008
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       A symbolic link with empty contents resolves either to ENOENT or
+           to the directory that contains the link (so "es" is "." and
+           "es/f" is "./f"); lstat() of the link works. NOTINUSE where such
+           a link cannot be made.
+test       t/008-empty-symlink.c
+
+assertion  XBD.4.16-pathname-resolution.009
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       A loop of links (a to b to a, a link to itself) fails with ELOOP
+           in stat(), open() and access() (also with a name below it), while
+           lstat() of a link in the loop works; a chain of {SYMLOOP_MAX}
+           links (at least 8, at most 200 tried) is followed, below it and
+           at its end.
+test       t/009-loops-and-limit.c
+
+assertion  XBD.4.16-pathname-resolution.010
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       Dot is the directory itself and dot-dot its parent: d/. is d,
+           d/sub/.. is d, d/sub/../.. is the working directory, long chains
+           of both resolve; dot-dot after a link to d/sub is the parent of
+           d/sub, not the directory that holds the link; and from inside
+           d/sub, .. and ../../d are as expected.
+test       t/010-dot-and-dotdot.c
+
+assertion  XBD.4.16-pathname-resolution.011
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       The empty pathname is never resolved: stat, lstat, open (also
+           with O_CREAT), access, chdir, unlink, rmdir, mkdir, mkfifo,
+           readlink, fstatat (also with a descriptor), opendir, and the
+           first or second pathname of rename, link and symlink all fail
+           with ENOENT, and nothing is created.
+test       t/011-empty-pathname.c
+
+assertion  XBD.4.16-pathname-resolution.012
+anchor     basedefs/V1_chap04.html#4.16
+anchor     basedefs/V1_chap03.html#3.254
+class      required
+says       Repeated slashes count as one, inside a pathname and in front
+           of it when there are three or more; "////" and "/./" are the
+           root; an absolute pathname with leading and inner slashes
+           repeated names the same file.
+test       t/012-slashes.c
+
+assertion  XBD.4.16-pathname-resolution.013
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       For a fixed set of pathnames (existing, missing, below a file,
+           with a trailing slash, through links, in a loop, dangling, empty,
+           absolute, too long a component), stat(), access(), fstatat(),
+           open() and statvfs() succeed or fail together and, where the
+           error is not a matter of choice, with the same error.
+test       t/013-same-result-everywhere.c
+
+assertion  XBD.4.16-pathname-resolution.014
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       When a link's contents plus the rest of the pathname exceed
+           {PATH_MAX}, stat() either fails with ENAMETOOLONG or resolves
+           to the file the short pathname leads to (a link of nearly
+           {PATH_MAX} bytes followed by 24 "./" components and f).
+           NOTINUSE where {PATH_MAX} is unlimited or such a link cannot be
+           made.
+test       t/014-path-max-with-links.c
+
+assertion  XBD.4.16-pathname-resolution.015
+anchor     basedefs/V1_chap04.html#4.16
+class      required
+says       Different pathnames give the same directory entry and different
+           entries the same file: spellings of a directory (with ., .., a
+           trailing slash, a link, the absolute path, ../name/d) all give
+           the same directory, and the spellings of a file (also through a
+           link, and a second hard link) the same file.
+test       t/015-aliases.c

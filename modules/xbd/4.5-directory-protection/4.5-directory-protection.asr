@@ -1,0 +1,35 @@
+# XBD 4.5 Directory Protection
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The restricted deletion bit exists only under the XSI option (S_ISVTX in
+# <sys/stat.h>), so the assertions are conditional. The refusals are tested
+# by XSH.unlink.018, XSH.rmdir.012, XSH.rename.028 and .029, and the owner
+# of the file by XSH.unlink.020, XSH.rmdir.013 and XSH.rename.030; these
+# assertions add the owner of the directory and the privileged process.
+# Whether a file the process can write may also be removed is
+# implementation-defined and is avoided: the entries here are never
+# writable by the process.
+
+assertion  XBD.4.5-directory-protection.001
+anchor     basedefs/V1_chap04.html#4.5
+class      conditional
+when       XSI
+says       In a directory with S_ISVTX set that a process owns and can
+           write, a process without privileges, that is not the owner of
+           the entries and cannot write them (mode 0644 files and a mode
+           0755 directory owned by another user), can unlink() a file,
+           rename() a file within the directory, and rmdir() the empty
+           directory.
+needs      root
+test       t/001-dir-owner.c
+
+assertion  XBD.4.5-directory-protection.002
+anchor     basedefs/V1_chap04.html#4.5
+class      conditional
+when       XSI
+says       In a directory with S_ISVTX set, owned by one user and writable
+           by all, a process with appropriate privileges can unlink() and
+           rename() files and rmdir() a directory that belong to another
+           user.
+needs      root
+test       t/002-privileged.c

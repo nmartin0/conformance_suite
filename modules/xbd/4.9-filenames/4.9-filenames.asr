@@ -1,0 +1,11 @@
+# XBD 4.9 Filenames
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XBD.4.9-filenames.001
+anchor     basedefs/V1_chap04.html#4.9
+class      required
+says       Names that differ only in letter case are different names: Ab,
+           aB, AB and ab can be created in one directory, are four files
+           with their own data and inode numbers, are each listed once by
+           readdir(), and removing one leaves the others.
+test       t/001-case-distinct.c

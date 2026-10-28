@@ -1,0 +1,56 @@
+# XBD 10.1 Directory Structure and Files
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XBD.10.1-directory-structure-and-files.001
+anchor     basedefs/V1_chap10.html#10.1
+class      required
+says       "/", "/dev" and "/tmp" exist and are directories, and "/dev/null"
+           and "/dev/tty" exist.
+test       t/001-required-directories.c
+
+assertion  XBD.10.1-directory-structure-and-files.002
+anchor     basedefs/V1_chap10.html#10.1
+class      required
+says       Any application can create in /tmp a file (written, read back,
+           removed), a directory, and a file in that directory.
+test       t/002-tmp-create.c
+
+assertion  XBD.10.1-directory-structure-and-files.003
+anchor     basedefs/V1_chap10.html#10.1
+class      required
+says       /dev/null can be opened for reading, for writing and for both;
+           reads give end-of-file before and after writes (also through
+           another descriptor), and 48 writes of 1 MiB each return their
+           full count.
+test       t/003-dev-null.c
+
+assertion  XBD.10.1-directory-structure-and-files.004
+anchor     basedefs/V1_chap10.html#10.1
+class      required
+says       /dev/tty is readable and writable: access() with R_OK and with
+           W_OK succeeds.
+test       t/004-dev-tty-access.c
+
+assertion  XBD.10.1-directory-structure-and-files.005
+anchor     basedefs/V1_chap10.html#10.1
+class      required
+says       In a process whose controlling terminal is a pseudo-terminal,
+           text written to /dev/tty reaches the terminal although standard
+           output and error are redirected, and a read of /dev/tty returns
+           the line typed at the terminal.
+test       t/005-dev-tty-controlling.sh
+
+assertion  XBD.10.1-directory-structure-and-files.006
+anchor     basedefs/V1_chap10.html#10.1
+class      required
+says       /dev/console exists: stat() succeeds.
+test       t/006-dev-console-exists.c
+
+assertion  XBD.10.1-directory-structure-and-files.007
+anchor     basedefs/V1_chap10.html#10.1
+anchor     basedefs/V1_chap11.html
+class      required
+says       When /dev/console can be opened (read-only, non-blocking, not as
+           controlling terminal) it is a terminal: isatty() is true and
+           tcgetattr() works on it. UNRESOLVED when it cannot be opened.
+test       t/007-dev-console-terminal.c

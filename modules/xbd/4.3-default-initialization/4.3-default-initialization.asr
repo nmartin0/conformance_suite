@@ -1,0 +1,70 @@
+# XBD 4.3 Default Initialization
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The rules are those of the C language, which the standard requires of
+# the C compiler it names. Unions are not called aggregates in the text,
+# so { 0 } is tested on structures, arrays and scalars only; unions are
+# tested where default initialization reaches them (as static objects and
+# as members of aggregates). The padding bits are unspecified (the notes),
+# so members are compared one by one.
+
+assertion  XBD.4.3-default-initialization.001
+anchor     basedefs/V1_chap04.html#4.3
+class      required
+says       Objects with static or thread storage duration and no initializer
+           are default-initialized: pointers are null, integers, booleans,
+           enumerations and complex numbers zero, floating members positive
+           zero, every member of a structure or array likewise (nested
+           ones too), a union by its first named member; this holds for
+           file-scope, external and function-scope static objects.
+test       t/001-static-default.c
+
+assertion  XBD.4.3-default-initialization.002
+anchor     basedefs/V1_chap04.html#4.3
+class      required
+says       An initializer of { 0 } default-initializes a structure or array
+           (nested aggregates, floating members, pointers, a union member,
+           character arrays) of automatic, static or thread storage
+           duration, and the compound literal { 0 } assigned over dirty
+           memory; an automatic one is fresh on every pass of a loop.
+test       t/002-braces-zero.c
+
+assertion  XBD.4.3-default-initialization.003
+anchor     basedefs/V1_chap04.html#4.3
+class      required
+says       Initializers apply in list order and a later one for the same
+           subobject replaces an earlier one: repeated member designators,
+           array designators that re-aim the position, nested designators
+           and array-of-structure designators leave the last value, and
+           the elements and members never named are zero.
+test       t/003-list-order.c
+
+assertion  XBD.4.3-default-initialization.004
+anchor     basedefs/V1_chap04.html#4.3
+class      required
+says       Members of a structure that its initializer (by designator or by
+           position) does not name are default-initialized: null pointers,
+           positive zero for floating members, the first named member of a
+           union member, the remaining characters of a string-initialized
+           array and the unnamed elements of nested arrays of structures.
+test       t/004-implicit-rest.c
+
+assertion  XBD.4.3-default-initialization.005
+anchor     basedefs/V1_chap04.html#4.3
+class      required
+says       An initializer of { 0 } on a scalar of automatic or static
+           storage (integer, boolean, enumeration, floating types, object
+           and function pointers) gives it zero, positive zero or a null
+           pointer.
+test       t/005-braces-scalar.c
+
+assertion  XBD.4.3-default-initialization.006
+anchor     basedefs/V1_chap04.html#4.3
+class      required
+says       Where the all-zero bit pattern of float, double and long double is
+           positive zero (it must be wherever __STDC_IEC_559__ is defined,
+           the only case in which the test can fail on that point), a
+           structure zeroed by memset() or allocated by calloc() has the same
+           member values as one default-initialized. NOTINUSE where the
+           macro is not defined and the pattern is not positive zero.
+test       t/006-zero-bits.c

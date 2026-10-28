@@ -1,0 +1,40 @@
+# XBD 4.11 File System Cache
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The section makes the cache invisible: the atomicity, serialization and
+# time rules of the rest of the standard hold for what other processes and
+# threads see. What reaches the storage and when (the sentences on
+# fdatasync(), fsync() and the notes on crashes) cannot be observed without
+# restarting the system. File times: XBD.4.12-file-times-update. Atomicity
+# of directory operations: XBD.4.4-directory-operations.
+
+assertion  XBD.4.11-file-system-cache.001
+anchor     basedefs/V1_chap04.html#4.11
+anchor     functions/write.html#DESCRIPTION
+class      required
+says       A second process sees at once what the first has done: a new
+           file and its size, a rename, an unlink, mkdir, rmdir, a symbolic
+           link, a hard link (st_nlink 2), data written through another open
+           file description, a second write to the same place, a truncation
+           and data written by the second process itself; this includes
+           names the second process looked up (and did not find) just before.
+timeout    120
+test       t/001-cross-process-visibility.c
+
+assertion  XBD.4.11-file-system-cache.002
+anchor     basedefs/V1_chap04.html#4.11
+anchor     functions/V2_chap02.html#2.9.7
+class      required
+says       A pread() of 256 KiB that runs while another thread keeps
+           overwriting the same bytes with pwrite() sees all old or all new
+           data, never a mixture, and is never short; UNRESOLVED if the two
+           never overlapped.
+timeout    120
+test       t/002-read-write-atomic.c
+
+assertion  XBD.4.11-file-system-cache.003
+anchor     basedefs/V1_chap04.html#4.11
+class      untestable
+says       Successful fdatasync(), fsync() and aio_fsync() transfer the
+           cache entries to storage, in atomic units.
+reason     What has reached storage can be seen only after the system stops and restarts without a clean shutdown, which a test running on the system cannot arrange; the return values of the calls are tested in XSH.fsync.

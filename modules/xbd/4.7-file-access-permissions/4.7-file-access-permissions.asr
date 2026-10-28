@@ -1,0 +1,71 @@
+# XBD 4.7 File Access Permissions
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# access() is tested in XSH.access.001 to .004 and .019; exec of a file
+# without execute permission in XSH.exec.035 and .037. These assertions
+# apply the same rules through open(), directory search and listing, and
+# privileged exec. Additional and alternate access control mechanisms are
+# implementation-defined and cannot be switched on from a test; every file
+# here is a plain one with permission bits only. Members of a file's group
+# class by supplementary group are not tested (setting groups is not
+# POSIX), so the group class is tested through the effective group ID.
+
+assertion  XBD.4.7-file-access-permissions.001
+anchor     basedefs/V1_chap04.html#4.7
+class      required
+says       For an unprivileged process that owns a file, open() checks only
+           the owner permission bits: with modes 0077 and 0000 every access
+           mode fails with EACCES, 0400 allows read only, 0200 write only,
+           0600 all, whatever the group and other bits say.
+test       t/001-open-owner-class.c
+
+assertion  XBD.4.7-file-access-permissions.002
+anchor     basedefs/V1_chap04.html#4.7
+class      required
+says       For an unprivileged process that is not the owner but whose
+           effective group is the file's group, open() checks only the
+           group bits: mode 0604 refuses read (EACCES) though others may
+           read, 0640 allows read only, 0620 write only, 0660 both, 0006
+           and 0606 refuse everything.
+needs      root
+test       t/002-open-group-class.c
+
+assertion  XBD.4.7-file-access-permissions.003
+anchor     basedefs/V1_chap04.html#4.7
+class      required
+says       For an unprivileged process that is neither the owner nor in the
+           file's group, open() checks only the other bits: mode 0640 and
+           0660 refuse read (EACCES) though the group may, 0604 allows
+           read only, 0602 write only, 0606 and 0006 both.
+needs      root
+test       t/003-open-other-class.c
+
+assertion  XBD.4.7-file-access-permissions.004
+anchor     basedefs/V1_chap04.html#4.7
+class      required
+says       For an unprivileged owner of a directory, search permission
+           (needed for stat("dd/f") and chdir("dd")) and read permission
+           (needed for opendir("dd")) are separate bits of the owner class:
+           mode 0600 allows listing only, 0100 searching only, 0500 both,
+           0077 and 0000 neither; each refusal is EACCES.
+test       t/004-directory-bits.c
+
+assertion  XBD.4.7-file-access-permissions.005
+anchor     basedefs/V1_chap04.html#4.7
+class      required
+says       A process with appropriate privileges can open a mode 0 file of
+           another user for reading, writing and both, and can stat(),
+           opendir(), chdir() and open files through a mode 0 directory of
+           another user.
+needs      root
+test       t/005-privileged-access.c
+
+assertion  XBD.4.7-file-access-permissions.006
+anchor     basedefs/V1_chap04.html#4.7
+class      required
+says       A process with appropriate privileges can execute a file that has
+           only the owner, only the group or only the other execute bit
+           (and one with all three), and cannot execute (EACCES) a file
+           with none (modes 0000, 0666, 0444, 0222).
+needs      root
+test       t/006-privileged-exec.c

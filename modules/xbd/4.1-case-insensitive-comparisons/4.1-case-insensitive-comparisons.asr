@@ -1,0 +1,38 @@
+# XBD 4.1 Case Insensitive Comparisons
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The rule is stated once for every utility and function that matches
+# without regard to case. regcomp() with REG_ICASE and fnmatch() with
+# FNM_CASEFOLD are tested in their own modules (XSH.regcomp.027,
+# XSH.fnmatch.021 and .022); these assertions apply the same rule to
+# utilities, in the POSIX locale.
+
+assertion  XBD.4.1-case-insensitive-comparisons.001
+anchor     basedefs/V1_chap04.html#4.1
+anchor     utilities/grep.html#OPTIONS
+class      required
+says       grep -i, in the POSIX locale, selects a line when changing the
+           case of any of its characters in a line that matches case-
+           sensitively would still match: literal letters, bracket ranges,
+           the lower and upper classes, back-references (both copies may
+           differ in case) and, with -E, alternation and repetition; the
+           same patterns without -i keep case significant.
+test       t/001-grep-icase.sh
+
+assertion  XBD.4.1-case-insensitive-comparisons.002
+anchor     basedefs/V1_chap04.html#4.1
+anchor     utilities/find.html#OPERANDS
+class      required
+says       find -iname matches a file name against a pattern with bracket
+           ranges, classes and wildcards without regard to case (the
+           counterpart rule), where -name with the same pattern does not.
+test       t/002-find-iname.sh
+
+assertion  XBD.4.1-case-insensitive-comparisons.003
+anchor     basedefs/V1_chap04.html#4.1
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+says       The i flag of the sed s command matches literals, bracket
+           ranges, classes and back-references without regard to case,
+           in the POSIX locale; without the flag case matters.
+test       t/003-sed-icase.sh

@@ -1,0 +1,22 @@
+# XBD 10.2 Output Devices and Terminal Types
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XBD.10.2-output-devices-and-terminal-types.001
+anchor     basedefs/V1_chap10.html#10.2
+anchor     utilities/od.html#OPTIONS/-t
+class      required
+says       The control characters of the table of <control> names are the
+           bytes 1 to 31 and 127 that od -t a names SOH, STX, ETX, EOT,
+           ENQ, ACK, BEL, BS, HT, LF, VT, FF, CR, SO, SI, DLE, DC1, DC2,
+           DC3, DC4, NAK, SYN, ETB, CAN, EM, SUB, ESC, FS, GS, RS, US and
+           DEL, in that order (A to Z, then [ \ ] ^ _ and ?).
+test       t/001-control-names.sh
+
+assertion  XBD.10.2-output-devices-and-terminal-types.002
+anchor     basedefs/V1_chap10.html#10.2
+class      untestable
+says       The system documentation lists the terminal types supported and
+           the features and utilities each lacks; a feature a terminal lacks
+           is reported by a diagnostic or exit status; keyboards that cannot
+           send a <control> character have their sequences documented.
+reason     The sentences are about documentation and about which terminal types and features an implementation chooses to support; no test can know what the documentation promises or which type lacks which feature.

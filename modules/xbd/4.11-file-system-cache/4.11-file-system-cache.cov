@@ -1,0 +1,11 @@
+# 4.11-file-system-cache.cov - every requirement unit in XBD 4.11.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+4.11:c6edd658              partial XBD.4.11-file-system-cache.001 XBD.4.11-file-system-cache.002 XBD.4.4-directory-operations.001 XBD.4.12-file-times-update.002  # directory atomicity, serialization, file times and write/read ordering; the file-times rules are tested only for stat and fstat
+4.11:d779fdf1              untestable  what has reached storage is visible only after a crash (XBD.4.11-file-system-cache.003)
+4.11:827449bf              untestable  atomic units of transfer to storage are visible only after a crash (XBD.4.11-file-system-cache.003)
+4.11:4e3c46a3              none  note about crashes
+4.11:9a84d904              none  note about crashes
+4.11:f2945c62              none  note about crashes
+4.11:96968166              none  note on non-conforming configurations
+4.11:716c4468              none  note for applications

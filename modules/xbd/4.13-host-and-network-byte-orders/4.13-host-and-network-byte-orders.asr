@@ -1,0 +1,19 @@
+# XBD 4.13 Host and Network Byte Orders
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The conversions are tested byte by byte in XSH.htonl.001 to .004. This
+# module adds the use of the order in a real socket address: the port and
+# address fields of a sockaddr_in hold their octets most significant first.
+
+assertion  XBD.4.13-host-and-network-byte-orders.001
+anchor     basedefs/V1_chap04.html#4.13
+class      required
+says       htons() and htonl() give values whose first octet in memory is
+           the most significant (a port and 0x7f000001), ntohs() and
+           ntohl() undo them, getsockname() reports a port bound with
+           htons() with its octets in that order and the loopback address
+           as 127, 0, 0, 1, and a connect() to a socket address whose port
+           field was filled with the port's two octets, most significant
+           first, reaches the listener bound with htons().
+timeout    60
+test       t/001-port-octets.c

@@ -1,0 +1,18 @@
+# 4.12-file-times-update.cov - every requirement unit in XBD 4.12.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+4.12:c526cfa3              none  introduces the rules
+4.12:f02f999f              none  a stream without a file description has no timestamps to look at
+4.12:a68ad22d              XBD.4.12-file-times-update.001
+4.12:d6d4cddb              XBD.4.12-file-times-update.001 XBD.4.12-file-times-update.002 XBD.4.12-file-times-update.003 XBD.sys_stat.h.001
+4.12:8bbbf0f0              partial XBD.4.12-file-times-update.002 XSH.fstat.007 XSH.read.014 XSH.futimens.005  # each function page is tested in its own module
+4.12:a39a7cbf              impl  documentation of timestamps marked in places the standard does not specify
+4.12:7baf262d              none  unspecified
+4.12:ff8dc59d              none  a may-statement
+4.12:a007045b              XBD.4.12-file-times-update.001 XBD.4.12-file-times-update.002
+4.12:4656b19c              partial XBD.4.12-file-times-update.002  # stat(), fstat() and lstat(); fstatat(), fsync(), futimens(), utimensat(), utimes() and the last close are in their modules or cannot be told from the other cases
+4.12:b098fb7a              none  unspecified
+4.12:f5b9eda8              untestable  XBD.4.12-file-times-update.004
+4.12:24e676ca              XBD.4.12-file-times-update.003
+4.12:959f22ee              XBD.4.12-file-times-update.001 XSH.futimens.001
+4.12:c9837412              XSH.futimens.001 XSH.futimens.006

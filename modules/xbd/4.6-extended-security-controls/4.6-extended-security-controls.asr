@@ -1,0 +1,9 @@
+# XBD 4.6 Extended Security Controls
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XBD.4.6-extended-security-controls.001
+anchor     basedefs/V1_chap04.html#4.6
+class      untestable
+says       Implementation-defined extended security controls do not change
+           the semantics of any interface.
+reason     What the controls are, and how to turn one on, is implementation-defined; a test cannot enable an unknown mechanism, and the interface tests of every other module already run with whatever controls the system has in force.

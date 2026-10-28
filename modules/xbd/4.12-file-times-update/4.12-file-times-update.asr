@@ -1,0 +1,48 @@
+# XBD 4.12 File Times Update
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Which operation marks which timestamp is stated on the page of each
+# function and tested in its module (for example XSH.fstat.007, XSH.read.014,
+# XSH.futimens.001 to .007, and the mkdir, link, unlink, rename and similar
+# modules). The access time is marked by reading whatever the mount options
+# are (XSH.read.014); these assertions are about the update rules
+# themselves. Timestamps are compared with CLOCK_REALTIME; a step that
+# needs the old value to be stale waits 1.3 s so that the resolution of up
+# to a second cannot hide a missing update.
+
+assertion  XBD.4.12-file-times-update.001
+anchor     basedefs/V1_chap04.html#4.12
+class      required
+says       A newly created file has all three timestamps within a second of
+           the clock when it was made (not later than the clock when it was
+           looked at, not more than one second before it was made), valid
+           nanosecond fields, and the directory it was made in has its
+           modification and status change times likewise.
+test       t/001-new-file-times.c
+
+assertion  XBD.4.12-file-times-update.002
+anchor     basedefs/V1_chap04.html#4.12
+class      required
+says       Updates marked by an operation are made by the time fstat(),
+           stat() or lstat() reports them: after a write() (fstat), an
+           ftruncate() that changes the size (stat) and a chmod() (lstat)
+           the times that operation marks (modification and status change,
+           status change) show the current time, within the resolution,
+           even though the old value was more than 1.3 s older.
+timeout    90
+test       t/002-updates-before-stat.c
+
+assertion  XBD.4.12-file-times-update.003
+anchor     basedefs/V1_chap04.html#4.12
+class      required
+says       The timestamp resolution is no coarser than one second: two
+           writes at least 1.2 s apart (by the monotonic clock) give
+           different modification times and different status change times.
+timeout    90
+test       t/003-resolution.c
+
+assertion  XBD.4.12-file-times-update.004
+anchor     basedefs/V1_chap04.html#4.12
+class      untestable
+says       No marks or updates are made for files on a read-only file system.
+reason     A test cannot make a read-only file system (mounting is not POSIX) and cannot rely on one being present; the read-only errors of the function pages are tested where a read-only descriptor or file exists.

@@ -1,0 +1,20 @@
+# XBD 4.10 Filename Portability
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The section tells applications to use only the portable filename
+# character set; what an implementation owes in return is that such names
+# work. Names are kept to 14 bytes, the least {NAME_MAX} can be, except for
+# one name of all 65 characters that is tried only where {NAME_MAX} allows.
+
+assertion  XBD.4.10-filename-portability.001
+anchor     basedefs/V1_chap04.html#4.10
+anchor     basedefs/V1_chap03.html#3.265
+class      required
+says       A file can be created, found by stat(), listed once by readdir(),
+           renamed and removed under a name made of any portable filename
+           character: each letter, digit, underscore and hyphen-minus as a
+           one-character name, a name holding every portable character
+           (where {NAME_MAX} allows 65), a 14-byte name with dots,
+           underscores and hyphens, and names that begin with a hyphen-minus
+           or a dot or end with a dot.
+test       t/001-portable-characters.c

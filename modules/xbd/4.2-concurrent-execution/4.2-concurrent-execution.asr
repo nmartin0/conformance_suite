@@ -1,0 +1,44 @@
+# XBD 4.2 Concurrent Execution
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# One sentence: a function that suspends the calling thread must not
+# leave the other threads suspended for ever. Each test suspends one thread
+# in a function and lets another thread do what ends the wait; a hang is
+# the FAIL (a timer ends the test).
+
+assertion  XBD.4.2-concurrent-execution.001
+anchor     basedefs/V1_chap04.html#4.2
+class      required
+says       While one thread is suspended in sleep(), nanosleep() or
+           clock_nanosleep(), another thread runs to completion, and the
+           sleeper returns.
+timeout    90
+test       t/001-sleepers.c
+
+assertion  XBD.4.2-concurrent-execution.002
+anchor     basedefs/V1_chap04.html#4.2
+class      required
+says       A thread blocked in read() on a pipe or a socket pair, in poll()
+           without a timeout, in a FIFO open, in accept() or in sigwait()
+           does not keep another thread from running and ending the wait.
+timeout    90
+test       t/002-blocking-io.c
+
+assertion  XBD.4.2-concurrent-execution.003
+anchor     basedefs/V1_chap04.html#4.2
+class      required
+says       A thread blocked in pthread_mutex_lock(), pthread_cond_wait(),
+           sem_wait(), pthread_join(), pthread_rwlock_wrlock() or
+           pthread_barrier_wait() does not keep another thread from running
+           and ending the wait.
+timeout    90
+test       t/003-sync-waits.c
+
+assertion  XBD.4.2-concurrent-execution.004
+anchor     basedefs/V1_chap04.html#4.2
+class      required
+says       A thread blocked in waitpid() or in fcntl(F_SETLKW) does not
+           keep another thread from running and letting the child end or
+           release its lock.
+timeout    90
+test       t/004-process-waits.c

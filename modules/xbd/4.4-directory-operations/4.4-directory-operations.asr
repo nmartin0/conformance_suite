@@ -1,0 +1,65 @@
+# XBD 4.4 Directory Operations
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Atomic and serializable: the tests race processes against one another
+# and check that what they find could have come from the operations running
+# one after the other. A timing-dependent outcome that did not exercise the
+# interleaving (no observer caught the change under way) is UNRESOLVED,
+# never a pass. XSH.rename.* tests the rename atomicity sentences.
+
+assertion  XBD.4.4-directory-operations.001
+anchor     basedefs/V1_chap04.html#4.4
+class      required
+says       When six processes try at once to create the same name with
+           open(O_CREAT|O_EXCL), mkdir(), link(), symlink() or mkfifo(),
+           exactly one succeeds and each other fails with EEXIST (forty
+           rounds of each); the name exists afterwards.
+timeout    150
+test       t/001-create-races.c
+
+assertion  XBD.4.4-directory-operations.002
+anchor     basedefs/V1_chap04.html#4.4
+class      required
+says       When six processes try at once to unlink() or rmdir() the same
+           name, or to rename it away to six different names, exactly one
+           succeeds and each other fails with ENOENT; afterwards the old
+           name is gone and (for rename) exactly one new name exists.
+timeout    150
+test       t/002-remove-races.c
+
+assertion  XBD.4.4-directory-operations.003
+anchor     basedefs/V1_chap04.html#4.4
+class      required
+says       A directory operation that fails leaves the file system as it
+           was: after sixteen failing calls (mkdir with a missing parent,
+           mkdir of an existing name, rmdir of a non-empty directory,
+           renames of a directory onto a non-empty one, into itself, of a
+           file onto a directory and the reverse, of a missing file, link
+           and symlink onto existing names, an O_EXCL|O_TRUNC open of an
+           existing file, mkfifo onto an existing name, link of a missing
+           file, mkdir below a file, mkdir of a name longer than {NAME_MAX})
+           the names, inode numbers, modes, link counts and file sizes are
+           those before.
+test       t/003-failed-ops-no-effect.c
+
+assertion  XBD.4.4-directory-operations.004
+anchor     basedefs/V1_chap04.html#4.4
+class      required
+says       While a process renames newly made files over one name 3000
+           times, three other processes opening that name always find it,
+           always read a whole file (never a mixture), and never see an
+           older one after a newer one.
+timeout    150
+test       t/004-rename-replace.c
+
+assertion  XBD.4.4-directory-operations.005
+anchor     basedefs/V1_chap04.html#4.4
+class      required
+says       The directory operations of one process are seen in their order
+           by another: when names f000 to f299 are created one after
+           another, a scan from f299 down to f000 that finds a name finds
+           all the lower ones; when they are removed one after another, a
+           scan from the top that misses a name misses all the lower ones.
+           UNRESOLVED when no scan caught the change under way.
+timeout    150
+test       t/005-serial-order.c

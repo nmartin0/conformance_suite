@@ -1,0 +1,22 @@
+# XBD 4.8 File Hierarchy
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XBD.4.8-file-hierarchy.001
+anchor     basedefs/V1_chap04.html#4.8
+class      required
+says       Only directories have names below them: open(O_CREAT), mkdir(),
+           symlink() and mkfifo() with a pathname that goes through a
+           regular file, a FIFO or a symbolic link to a regular file fail
+           with ENOTDIR (the last component is being created, so no other
+           error applies), while the same calls below a directory work.
+test       t/001-leaves-have-no-children.c
+
+assertion  XBD.4.8-file-hierarchy.002
+anchor     basedefs/V1_chap04.html#4.8
+class      required
+says       A file can have several directory entries, in one directory or
+           in several: after link() the names give the same device and
+           inode, st_nlink counts them, data written through one is read
+           through another, and removing names one by one keeps the file
+           reachable until the last is gone.
+test       t/002-directed-graph.c
