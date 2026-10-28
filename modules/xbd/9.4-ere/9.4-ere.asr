@@ -1,0 +1,83 @@
+# XBD 9.4 Extended Regular Expressions
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Bracket expressions (9.4.5) are tested by the BRE module, whose tests run
+# with and without REG_EXTENDED. Not required, hence not tested: a leading
+# duplication symbol, an empty group, a bar first or last, a brace outside a
+# valid interval, adjacent duplication symbols, a lone left bracket.
+
+assertion  XBD.9.4-ere.001
+anchor     basedefs/V1_chap09.html#9.4.1
+anchor     basedefs/V1_chap09.html#9.4.7
+class      required
+since      1992
+says       An ERE for one character in parentheses matches exactly what it matches
+           without them, also when repeated by *, +, ?, {2} or {1,2}; likewise
+           (a|b) behaves as [ab] and (a|b|c) as [abc], on a set of strings.
+test       t/001-paren-single.c
+
+assertion  XBD.9.4-ere.002
+anchor     basedefs/V1_chap09.html#9.4.6
+class      required
+since      1992
+says       Repetition forms equal their expansions: [ab]+ is [ab][ab]*, (ab)+ is
+           (ab)(ab)*, a{2} is aa, a{2,} is aaa*, a{1,3} is a(a(a)?)?; and cd and (cd)
+           are both matched by the third and fourth characters of abcdefabcdef, the
+           parenthesised one reporting them as group one.
+test       t/002-dup-equivalence.c
+
+assertion  XBD.9.4-ere.003
+anchor     basedefs/V1_chap09.html#9.4.3
+anchor     basedefs/V1_chap09.html#9.5.1
+class      disputed
+since      1992
+says       A right parenthesis that is not matched with a preceding left
+           parenthesis is an ordinary character: a) on a) matches both characters,
+           (a)) on a) matches them with group one a.
+note       disputed (Q-180): the text makes the right parenthesis special only when
+           paired, which leaves a lone one ordinary, but REG_EPAREN describes
+           parentheses that do not balance, which XBD does not call invalid; a FAIL
+           is logged as INSPECT.
+test       t/003-unmatched-rparen.c
+
+assertion  XBD.9.4-ere.004
+anchor     basedefs/V1_chap09.html#9.4.6
+class      required
+since      1992
+says       An ERE group repeated by * or ? or an interval takes no null iteration
+           beyond its only match or what a minimum count needs: (a*)* on aab has
+           group one 0 to 2, on b the empty string at 0, (a?)* on aab group one 1 to 2,
+           (a*)*c on aac group one 0 to 2, (ab*)* on abbab group one 3 to 5, and
+           (a*){2} matches a and the empty string.
+test       t/004-star-null.c
+
+assertion  XBD.9.4-ere.005
+anchor     basedefs/V1_chap09.html#9.4.8
+anchor     basedefs/V1_chap09.html#9.4.7
+class      required
+since      1992
+says       ERE precedence: duplication binds to the item before it (ab+, ab{2},
+           (ab){2}, a(b|c)+d), alternation has the lowest precedence ( ^a|b$, ^ab|cd$,
+           (a|b)c|d ), three or more alternatives work and the longest wins
+           (a|ab|abc), and escaped characters are single items (a\.*b, \[a]).
+test       t/005-precedence.c
+
+assertion  XBD.9.4-ere.006
+anchor     basedefs/V1_chap09.html#9.4.9
+class      required
+since      1992
+says       A lone circumflex matches the empty string at offset 0 and a lone dollar
+           sign the empty string at the end; anchors work inside groups next to
+           alternation: (^|x)a, a($|b) and ^$|x report the right offsets and groups.
+test       t/006-anchors-lone.c
+
+assertion  XBD.9.4-ere.007
+anchor     basedefs/V1_chap09.html#9.4.6
+class      required
+since      1992
+says       An interval expression accepts counts up to {RE_DUP_MAX} (capped at
+           65536 in the test): a{M}, a{0,M} and a{M,} compile and match an anchored
+           run of exactly M letters a and fail on one less or one more (where the
+           form is exact).
+timeout    120
+test       t/007-dup-max.c

@@ -1,0 +1,31 @@
+# 9.1-definitions.cov - every requirement unit in XBD 9.1.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# RC.nnn below is XSH.regcomp.nnn, whose tests are not repeated here.
+
+9.1:9d26ea21            none  # introduces the definitions
+9.1:ecd6012b            none  # definition
+9.1:f6324397            XBD.9.1-definitions.004
+9.1:62df353e            XBD.9.1-definitions.004
+9.1:1adb897c            XBD.9.1-definitions.002
+9.1:3b8746b6            none  # definition of "matched"
+9.1:d1c51766            XBD.9.1-definitions.001
+9.1:38d7333a            partial XBD.9.1-definitions.001  # one encoding per character in the POSIX locale; other encodings of a graphic symbol need a multibyte locale
+9.1:02618450            app
+9.1:8a2068f4            XBD.9.1-definitions.002
+9.1:59fa9329            XBD.9.1-definitions.002 XSH.regcomp.003
+9.1:b8c691e2            XSH.regcomp.002 XSH.regcomp.003
+9.1:8a18fa69            XBD.9.1-definitions.003 XSH.regcomp.026
+9.1:12c15b3c            XBD.9.1-definitions.003 XSH.regcomp.026
+9.1:c0862937            XSH.regcomp.026
+9.1:9408e456            XSH.regcomp.033
+9.1:2c958f4a            untestable  # needs a locale with multi-character collating elements; the POSIX locale has none a program can rely on
+9.1:a00d89d4            none  # definition
+9.1:5135a1b8            untestable  # needs a locale with multi-character collating elements
+9.1:15b7abca            none  # definition
+9.1:f03a3166            none  # definition
+9.1:60f9f158            none  # introduces "invalid"
+9.1:57d291bf            XBD.9.1-definitions.005 XSH.regcomp.038 XSH.regcomp.039
+9.1:d2649c56            none  # undefined results; nothing is required (Q-162)
+9.1:8a42bcec            none  # example of an undefined construct
+9.1:44c3102e            app

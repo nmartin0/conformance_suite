@@ -1,0 +1,63 @@
+# XBD 9.1 Regular Expression Definitions
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tested through regcomp()/regexec() in the POSIX locale (the tests never
+# call setlocale()), plus one utility test of the "invalid" rule. Matching
+# order and sub-match rules that XSH.regcomp already tests are referenced
+# from the .cov, not repeated here.
+
+assertion  XBD.9.1-definitions.001
+anchor     basedefs/V1_chap09.html#9.1
+anchor     basedefs/V1_chap09.html#9.3.2
+anchor     basedefs/V1_chap09.html#9.4.2
+class      required
+since      1992
+says       Every character of the POSIX locale other than the NUL and the special
+           characters is an RE that matches exactly itself, in a BRE and in an ERE:
+           searching a string holding bytes 1 to 255 in order, and again in reverse
+           order, finds the single-byte pattern at that byte's own position, so no
+           other byte is taken for it.
+test       t/001-ordinary-bytes.c
+
+assertion  XBD.9.1-definitions.002
+anchor     basedefs/V1_chap09.html#9.1
+class      required
+since      1992
+says       The match begins at the earliest position where any match exists, even if
+           a longer match begins later, and among matches from that position the
+           longest is taken whatever the order of alternatives: a|bcd and bcd|a on
+           abcd give the first character, d|bcd on abcd gives characters two to four,
+           x* on abxxx is empty at offset 0.
+test       t/002-earliest-longest.c
+
+assertion  XBD.9.1-definitions.003
+anchor     basedefs/V1_chap09.html#9.1
+class      required
+since      1992
+says       The whole match is the longest first; the subpatterns then take the
+           longest strings left to right that are consistent with it: (a*)(b|abc) on
+           abc gives group one empty and group two abc, (ab|a)(bc|c)? on abc gives ab
+           and c, (a*)(ab)*(b*) on aabb gives aa, no participation, bb, and \(.*\)\(.*\)
+           puts everything in group one.
+test       t/003-subpattern-order.c
+
+assertion  XBD.9.1-definitions.004
+anchor     basedefs/V1_chap09.html#9.1
+class      required
+since      1992
+says       A backslash that is itself escaped does not begin another escape sequence:
+           in a BRE \(a\)\\1 matches a, a backslash and the digit 1 (not a back-
+           reference), \\* repeats the literal backslash, and in an ERE \\. is a
+           backslash followed by any character, \\(a) a backslash and a group, \\+
+           a run of backslashes and \\|b either.
+test       t/004-escape-sequence.c
+
+assertion  XBD.9.1-definitions.005
+anchor     basedefs/V1_chap09.html#9.1
+class      required
+since      1992
+says       A standard utility given an invalid RE (a back-reference to a group that
+           does not exist, a collating symbol naming no collating element) generates
+           an error condition: grep (BRE and ERE) exits with a value above 1 and sed
+           with a nonzero value.
+test       t/005-invalid-utility.sh

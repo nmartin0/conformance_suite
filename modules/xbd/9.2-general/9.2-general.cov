@@ -1,0 +1,18 @@
+# 9.2-general.cov - every requirement unit in XBD 9.2.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# RC.nnn below is XSH.regcomp.nnn, whose tests are not repeated here.
+
+9.2:fbe9d0c3            none  # scope sentence; the tests of 9.3, 9.4 and XSH.regcomp run both syntaxes
+9.2:6f57e496            none  # background
+9.2:d6f4c8e7            none  # background
+9.2:74ee14e7            none  # background
+9.2:ce3695f4            XSH.regcomp.029
+9.2:237cfaea            none  # utility-specific; undefined unless the utility page says
+9.2:43b711cc            none  # duty of the utilities, tested with their pages
+9.2:fb67e2da            XSH.regcomp.029
+9.2:bb9c508b            app  # the interface cannot be given a NUL inside a string
+9.2:483c4d59            optional  # a utility may end the text at a NUL
+9.2:5a6fe88f            none  # background
+9.2:8449faeb            XSH.regcomp.027
+9.2:ddf754ef            XBD.9.2-general.001 XSH.regcomp.036

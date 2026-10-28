@@ -1,0 +1,158 @@
+# XBD 9.3 Basic Regular Expressions
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# POSIX locale only. The bracket-expression rules (9.3.5) are shared with
+# EREs (9.4.5), so tests 007 to 013 run with and without REG_EXTENDED and
+# serve both sections. Not required, hence not tested: \? \+ \| (implementation
+# defined), anchors inside a subexpression (optional), a lone [, adjacent
+# duplication symbols, multi-character collating elements, ranges whose
+# endpoints are equivalence classes.
+
+assertion  XBD.9.3-bre.001
+anchor     basedefs/V1_chap09.html#9.3.6
+class      required
+since      1992
+says       Back-references \1 to \9 all work; the nth group is the one whose \(
+           comes nth, nesting included: a pattern of nine groups followed by \9
+           down to \1 matches abcdefghiihgfedcba with each group one character, and
+           \(a\(b\(c\)\)\)\3\2\1 matches abccbcabc.
+test       t/001-backref-digits.c
+
+assertion  XBD.9.3-bre.002
+anchor     basedefs/V1_chap09.html#9.3.6
+class      required
+since      1992
+says       A back-reference followed by an asterisk or an interval expression is
+           repeated like any single-item BRE: \(a\)\1* on aaaa takes all four, \(ab\)\1\{2\}
+           matches ababab but not abab, and \(.\)\1\{2,\} on xaaaay takes the four
+           a's but does not match xaay.
+test       t/002-backref-dup.c
+
+assertion  XBD.9.3-bre.003
+anchor     basedefs/V1_chap09.html#9.3.6
+class      required
+since      1992
+says       A subexpression repeated by an asterisk or interval takes no null
+           iteration beyond its only match or what a minimum count needs: \(a*\)* on
+           aab has group one at offsets 0 to 2, on b the empty string at 0, \(a*\)*c
+           on aac group one 0 to 2, \(ab*\)* on abbab group one 3 to 5, and
+           \(x*\)\{2\} matches x and the empty string.
+test       t/003-star-null.c
+
+assertion  XBD.9.3-bre.004
+anchor     basedefs/V1_chap09.html#9.3.7
+class      required
+since      1992
+says       Precedence of a BRE: duplication binds to the item before it (ab\{2\} is a
+           then two b's, a\.*b, a\**b, [ab]*c, a\(b\)*c), an escaped character
+           and a bracket expression are single items (\[a] matches the three
+           characters [a]), and anchoring has lower precedence than concatenation
+           and duplication (^ab*, ab*$).
+test       t/004-precedence.c
+
+assertion  XBD.9.3-bre.005
+anchor     basedefs/V1_chap09.html#9.3.8
+class      required
+since      1992
+says       A lone circumflex matches the empty string at offset 0 and a lone dollar
+           sign the empty string at the end of the string, also for the empty
+           string; the anchors also work around a subexpression (^\(a\), \(a\)$) and
+           with repetitions (x*$ on axx is 1 to 3, ^x*).
+test       t/005-anchors-lone.c
+
+assertion  XBD.9.3-bre.006
+anchor     basedefs/V1_chap09.html#9.3.6
+class      required
+since      1992
+says       An interval expression accepts counts up to {RE_DUP_MAX} (capped at
+           65536 in the test): a\{M\}, a\{0,M\} and a\{M,\} compile and match an
+           anchored run of exactly M letters a and fail on one less or one more
+           (where the form is exact). The limit is from <limits.h> or sysconf().
+timeout    120
+test       t/006-dup-max.c
+
+assertion  XBD.9.3-bre.007
+anchor     basedefs/V1_chap09.html#9.3.5
+class      required
+since      1992
+says       In a bracket expression (BRE and ERE) a closing bracket first in the list
+           (after any circumflex) is a member, [a]b] is the list [a] followed by the
+           characters b and ], [^^] excludes only the circumflex, a closing bracket
+           written as the collating symbol [.].] does not end the list, and a
+           left bracket not followed by a period, equals sign or colon is an ordinary
+           member.
+test       t/007-bracket-close.c
+
+assertion  XBD.9.3-bre.008
+anchor     basedefs/V1_chap09.html#9.3.5
+anchor     basedefs/V1_chap09.html#9.5.2
+class      required
+since      1992
+says       In the POSIX locale (BRE and ERE) ranges follow code order: a single-
+           element range, several ranges in one list, a range after which a hyphen
+           ends the list, collating symbols as one or both endpoints, a range from a
+           space to a tilde and a range starting with a hyphen all match exactly the
+           characters from start to end inclusive, and a non-matching list the rest.
+test       t/008-ranges.c
+
+assertion  XBD.9.3-bre.009
+anchor     basedefs/V1_chap09.html#9.3.5
+class      required
+since      1992
+says       [a--@] (a range from a to hyphen-minus is reversed) is either rejected
+           by regcomp() or equivalent to a list holding only @; accepted, it matches
+           @ and none of a, hyphen-minus, b, comma or a grave accent. Same in a BRE
+           and an ERE.
+test       t/009-reversed-hyphen-range.c
+
+assertion  XBD.9.3-bre.010
+anchor     basedefs/V1_chap09.html#9.3.5
+class      required
+since      1992
+says       A non-matching list matches exactly the bytes 1 to 255 that the same list
+           without the circumflex does not, in a BRE and an ERE, for lists built from
+           plain characters, a range, a character class, a collating symbol, an
+           equivalence class, a leading closing bracket, a leading or trailing
+           hyphen, a trailing circumflex and a backslash.
+test       t/010-complement.c
+
+assertion  XBD.9.3-bre.011
+anchor     basedefs/V1_chap09.html#9.3.5
+class      required
+since      1992
+says       In the POSIX locale a collating symbol [.c.] written for an ordinary
+           printable character (letters, digits and punctuation other than period,
+           brackets, circumflex, hyphen and backslash) matches that character and no
+           other byte, in a BRE and an ERE.
+test       t/011-collating-symbols.c
+
+assertion  XBD.9.3-bre.012
+anchor     basedefs/V1_chap09.html#9.3.5
+class      required
+since      1992
+says       In the POSIX locale an equivalence class [=c=] written for a printable
+           character (letters, digits and punctuation other than equals sign,
+           brackets, circumflex, hyphen and backslash) matches that character and no
+           other byte, in a BRE and an ERE.
+test       t/012-equivalence.c
+
+assertion  XBD.9.3-bre.013
+anchor     basedefs/V1_chap09.html#9.3.5
+anchor     basedefs/V1_chap09.html#9.5.2
+class      required
+since      1992
+says       One list can hold ordinary characters, ranges, collating symbols,
+           equivalence classes and character classes together, with a closing
+           bracket first and a hyphen last, and means the union of them (BRE and ERE),
+           its non-matching form the complement.
+test       t/013-mixed-list.c
+
+assertion  XBD.9.3-bre.014
+anchor     basedefs/V1_chap09.html#9.3.6
+class      required
+since      1992
+says       Enclosing a BRE in \( and \), once or nested up to twenty deep, does not
+           change what it matches: the offsets of the whole match are the same as
+           without the groups for ab*, [ab]*c, a.c, a*, x\.y and \(a\)* on a set of
+           strings, and re_nsub counts the groups.
+test       t/014-group-transparent.c

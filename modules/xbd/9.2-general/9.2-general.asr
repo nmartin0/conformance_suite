@@ -1,0 +1,18 @@
+# XBD 9.2 Regular Expression General Requirements
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Newline as an ordinary character in the functions, REG_ICASE and the
+# 256-byte minimum for plain literals are tested by XSH.regcomp.029,
+# XSH.regcomp.027 and XSH.regcomp.036; this module adds the 256-byte limit
+# for other constructs.
+
+assertion  XBD.9.2-general.001
+anchor     basedefs/V1_chap09.html#9.2
+class      required
+since      1992
+says       REs of exactly 256 bytes built from other constructs are accepted and
+           work, in a BRE and an ERE: a bracket expression of 254 list characters, 84
+           alternatives followed by a literal run, groups nested 63 (BRE) and 127
+           (ERE) deep, 28 (BRE) and 36 (ERE) interval expressions, 128 escaped periods and 128 starred
+           items.
+test       t/001-limit-shapes.c

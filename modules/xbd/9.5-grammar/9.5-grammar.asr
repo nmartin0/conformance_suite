@@ -1,0 +1,40 @@
+# XBD 9.5 Regular Expression Grammar
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The tokens and productions are exercised by the tests of 9.3 and 9.4 and
+# XSH.regcomp; this module adds the lexical corner cases and checks that
+# grammatical expressions are accepted.
+
+assertion  XBD.9.5-grammar.001
+anchor     basedefs/V1_chap09.html#9.5.1
+class      required
+since      1992
+says       A back-reference token is a backslash and one digit: \(a\)\10 is the
+           back-reference \1 followed by the character 0; digits outside an
+           interval are ordinary characters: 1\{2\} and 1{2} repeat the 1, 12\{2\} and
+           12{2} repeat the 2, 0\{0\}1 and 0{0}1 match 1.
+test       t/001-lexical-digits.c
+
+assertion  XBD.9.5-grammar.002
+anchor     basedefs/V1_chap09.html#9.5.1
+anchor     basedefs/V1_chap09.html#9.5.2
+class      required
+since      1992
+says       Characters that are special elsewhere (circumflex, left bracket, equals
+           sign, colon, period, backslash, dollar sign, asterisk,
+           left parenthesis) are valid collating symbols: [[.^.]], [[.[.]], [[...]],
+           [[.=.]], [[.:.]], [[.\.]], [[.$.]], [[.*.]] and [[.(.]] match the one character each and no other.
+test       t/002-collating-meta.c
+
+assertion  XBD.9.5-grammar.003
+anchor     basedefs/V1_chap09.html#9.5.2
+anchor     basedefs/V1_chap09.html#9.5.3
+class      required
+since      1992
+says       Expressions made of the productions of the grammar and nothing it calls
+           undefined are accepted by regcomp(): BREs (anchors, groups, back-
+           references, intervals, quoted characters, bracket forms) and EREs
+           (alternation, nested groups, every duplication symbol, anchors, quoted
+           characters, ordinary closing bracket and brace). The repetition modifier
+           is tested with XSH.regcomp.033.
+test       t/003-valid-forms.c

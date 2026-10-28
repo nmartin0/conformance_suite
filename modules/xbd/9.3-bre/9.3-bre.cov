@@ -1,0 +1,127 @@
+# 9.3-bre.cov - every requirement unit in XBD 9.3.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# RC.nnn below is XSH.regcomp.nnn, whose tests are not repeated here.
+
+9.3:f03ec933            XBD.9.1-definitions.001 XSH.regcomp.010 XSH.regcomp.011
+9.3:04a68043            XBD.9.1-definitions.001
+9.3:da74c8b7            XSH.regcomp.010
+9.3:ecd579d3            XSH.regcomp.011
+9.3:d4704fc0            XSH.regcomp.012 XSH.regcomp.015
+9.3:34947cea            XBD.9.1-definitions.001
+9.3:6e67c427            none  # undefined for other escapes
+9.3:3df905be            XSH.regcomp.001 XSH.regcomp.004
+9.3:97e13296            XBD.9.3-bre.001 XSH.regcomp.017
+9.3:c4e8f3f5            XSH.regcomp.010
+9.3:beb6db0c            XSH.regcomp.010
+9.3:30e00ba6            impl  # \? \+ \| are implementation-defined; the implementation must document them
+9.3:4a6b2885            none  # note about a future edition
+9.3:aa2bc4ca            none  # introduction
+9.3:f6edcdfe            XSH.regcomp.010 XSH.regcomp.007
+9.3:7cb10a34            none  # introduces the list
+9.3:8122b689            XSH.regcomp.002 XSH.regcomp.010 XSH.regcomp.012
+9.3:aaf1c745            none  # undefined
+9.3:2925d899            XSH.regcomp.009 XSH.regcomp.012
+9.3:5f9241c8            XSH.regcomp.009
+9.3:d55217a0            XSH.regcomp.007 XBD.9.3-bre.005
+9.3:51900c39            XSH.regcomp.012 XBD.9.3-bre.007
+9.3:d29aa372            XSH.regcomp.007 XBD.9.3-bre.005
+9.3:2d4c7166            XSH.regcomp.011  # the NUL exclusion cannot be observed through a string
+9.3:1618182d            XSH.regcomp.012 XBD.9.3-bre.010
+9.3:6af894cd            none  # introduces the list
+9.3:caa1e862            XSH.regcomp.012
+9.3:57d5b9a9            XBD.9.3-bre.013
+9.3:5ae52646            XBD.9.3-bre.007 XSH.regcomp.012
+9.3:2411f0b9            XBD.9.3-bre.007
+9.3:0d51f869            XSH.regcomp.012
+9.3:45f86909            XSH.regcomp.013
+9.3:492f41b9            none  # shell patterns, tested with XCU 2.14
+9.3:f0f6ab5a            XBD.9.3-bre.007 XSH.regcomp.015 XSH.regcomp.016
+9.3:be22e3fd            XSH.regcomp.015 XSH.regcomp.016 XSH.regcomp.042
+9.3:d2c9c404            XSH.regcomp.012 XBD.9.3-bre.013
+9.3:37b76b3a            XSH.regcomp.012
+9.3:0b19bad5            XSH.regcomp.012 XBD.9.3-bre.010
+9.3:fad47650            none  # unspecified
+9.3:824f936f            XBD.9.3-bre.010 XSH.regcomp.012
+9.3:1e81fc7a            XSH.regcomp.012 XBD.9.3-bre.010
+9.3:cc5b2b1c            none  # unspecified
+9.3:ea2e3749            XSH.regcomp.012 XBD.9.3-bre.007
+9.3:1107f50e            XSH.regcomp.015 XBD.9.3-bre.011
+9.3:2931a558            none  # cross-reference
+9.3:73045179            app
+9.3:11b511bd            untestable  # needs a locale with a multi-character collating element
+9.3:b570b708            untestable  # a collating symbol outside brackets has no separate reading to observe
+9.3:deb80beb            XSH.regcomp.039
+9.3:2199cc32            XBD.9.3-bre.012 XSH.regcomp.015
+9.3:7b60170c            untestable  # needs a locale with several collation levels; the POSIX locale has one
+9.3:e2e0d333            XBD.9.3-bre.012 XSH.regcomp.015
+9.3:7bb36878            untestable  # example needs accented characters in a locale
+9.3:77a3fe67            XBD.9.3-bre.012
+9.3:cf0d77e2            XSH.regcomp.016 XBD.9.3-bre.013
+9.3:aab4b25a            none  # unspecified
+9.3:ce310bef            XSH.regcomp.016
+9.3:51dc6330            XSH.regcomp.016
+9.3:fb1c9b8f            XSH.regcomp.016
+9.3:ce68a1c0            XSH.regcomp.016
+9.3:a9eec9ba            none  # introduces the next item
+9.3:cc65d38c            untestable  # needs a locale with a charclass keyword; the POSIX locale has none
+9.3:86af3bb7            untestable  # needs a locale with a charclass keyword
+9.3:2072c1b9            XSH.regcomp.014 XBD.9.3-bre.008
+9.3:20603efa            none  # unspecified in other locales; the tests run in the POSIX locale
+9.3:0f9eccde            XSH.regcomp.014 XBD.9.3-bre.008
+9.3:ef5e5d61            none  # states the locale of the examples
+9.3:94bd5e92            XSH.regcomp.014 XBD.9.3-bre.008
+9.3:d708806c            none  # unspecified
+9.3:5f2c9509            XBD.9.3-bre.012
+9.3:2cfcc733            none  # unspecified
+9.3:d94c9d05            none  # undefined
+9.3:1217d589            XSH.regcomp.014 XBD.9.3-bre.008
+9.3:0fa0be17            XSH.regcomp.014
+9.3:a3ee8b23            XSH.regcomp.014 XBD.9.3-bre.009
+9.3:2ce7aa04            XSH.regcomp.014 XBD.9.3-bre.008
+9.3:6c074e99            app  # B.007 tests the placement
+9.3:86ca2a59            none  # unspecified
+9.3:5423fcb8            none  # introduces the list
+9.3:279499cb            XSH.regcomp.002 XBD.9.3-bre.004
+9.3:331c35b1            XSH.regcomp.001 XBD.9.3-bre.014
+9.3:a700fa55            XBD.9.3-bre.014
+9.3:47cfa1eb            XBD.9.3-bre.014 XBD.9.2-general.001
+9.3:daf8d377            XSH.regcomp.017 XBD.9.3-bre.001
+9.3:a55499b0            XBD.9.3-bre.001
+9.3:9a9d1513            XSH.regcomp.038
+9.3:01d29d8c            XSH.regcomp.017 XSH.regcomp.024
+9.3:2cac0978            XSH.regcomp.017
+9.3:1c10ab4a            XSH.regcomp.017 XSH.regcomp.022
+9.3:b34caa81            XSH.regcomp.017
+9.3:6458d595            XSH.regcomp.002 XBD.9.3-bre.002
+9.3:162513a4            XSH.regcomp.002
+9.3:a2434050            XSH.regcomp.004 XBD.9.3-bre.002
+9.3:bb70a78f            XSH.regcomp.037 XBD.9.3-bre.006
+9.3:40bd95ad            XSH.regcomp.004
+9.3:bf12a570            XSH.regcomp.004
+9.3:87007221            none  # undefined
+9.3:38cb008a            XBD.9.3-bre.003 XSH.regcomp.026
+9.3:95321b99            XBD.9.3-bre.004
+9.3:3c060651            XBD.9.3-bre.007 XBD.9.3-bre.011
+9.3:fcb542ea            XBD.9.3-bre.004
+9.3:489742b2            XBD.9.3-bre.004
+9.3:00f5b3a8            XBD.9.3-bre.004 XBD.9.3-bre.014
+9.3:42791968            XBD.9.3-bre.004
+9.3:5c93b563            XSH.regcomp.002 XBD.9.3-bre.004
+9.3:cf552f92            XBD.9.3-bre.004 XBD.9.3-bre.005
+9.3:0ec9f386            none  # definition
+9.3:f2524792            XSH.regcomp.007 XBD.9.3-bre.005
+9.3:6170e4c7            partial XSH.regcomp.007 XBD.9.3-bre.005  # the \| alternative is implementation-defined
+9.3:ebf55e55            optional  # an implementation may treat a circumflex in a subexpression as an anchor
+9.3:1517f01f            optional  # concerns \| only
+9.3:8792252f            XSH.regcomp.007
+9.3:fe4ce96d            XSH.regcomp.007
+9.3:0e357831            optional  # "may match"
+9.3:0302e8c7            app
+9.3:2d971f81            partial XSH.regcomp.007 XBD.9.3-bre.005  # the \| alternative is implementation-defined
+9.3:3072a621            optional  # an implementation may treat a dollar sign in a subexpression as an anchor
+9.3:09f2f599            optional  # concerns \| only
+9.3:396c1e64            XSH.regcomp.007 XBD.9.3-bre.005
+9.3:14807d9c            app
+9.3:84e27f74            XSH.regcomp.007
+9.3:26317bee            XSH.regcomp.007

@@ -1,0 +1,58 @@
+# 9.5-grammar.cov - every requirement unit in XBD 9.5.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# RC.nnn below is XSH.regcomp.nnn, whose tests are not repeated here.
+
+9.5:43502c39            none  # introduction
+9.5:0800b5c5            none  # precedence of grammar over text
+9.5:df142840            none  # cross-reference
+9.5:d5dd89b6            none  # introduction
+9.5:2cabe559            XBD.9.5-grammar.001 XBD.9.5-grammar.002
+9.5:0c7def11            none  # introduces the tokens
+9.5:4c1d2b6b            XBD.9.5-grammar.002
+9.5:5a1b890f            untestable  # needs a locale with a multi-character collating element
+9.5:028bf2bc            XBD.9.5-grammar.001
+9.5:42015cc7            XBD.9.5-grammar.001
+9.5:3eba13ba            XBD.9.5-grammar.001 XSH.regcomp.037
+9.5:39169099            XSH.regcomp.037 XBD.9.3-bre.006 XBD.9.4-ere.007
+9.5:97385951            XBD.9.5-grammar.001
+9.5:7232cf9b            XBD.9.5-grammar.001
+9.5:e7bc7370            none  # introduces the list
+9.5:03f6dd76            XBD.9.3-bre.007 XSH.regcomp.012
+9.5:174324e6            XSH.regcomp.014 XBD.9.3-bre.008
+9.5:c2f0da63            XBD.9.3-bre.007
+9.5:028bf2bc.2          XSH.regcomp.007
+9.5:2cd353b1            partial XSH.regcomp.007 XBD.9.3-bre.005  # the \| alternative is implementation-defined
+9.5:b86adaa8            optional  # anchors elsewhere are optional
+9.5:a93f3e04            XBD.9.1-definitions.001
+9.5:799ae55b            partial XSH.regcomp.010  # \? \+ \| are implementation-defined
+9.5:f794186f            partial XSH.regcomp.007 XBD.9.3-bre.005  # the \| alternative is implementation-defined
+9.5:19b6b7c9            optional  # anchors elsewhere are optional
+9.5:e59773a3            none  # introduces the list
+9.5:91847314            XSH.regcomp.010 XSH.regcomp.012
+9.5:91847314.2          XSH.regcomp.010 XSH.regcomp.012
+9.5:91847314.3          XSH.regcomp.010 XSH.regcomp.012
+9.5:ebf972b9            XSH.regcomp.007 XBD.9.3-bre.005
+9.5:3ea2f2b9            XSH.regcomp.007 XBD.9.3-bre.005
+9.5:5359f9e5            XSH.regcomp.009
+9.5:fb654981            XSH.regcomp.010 XSH.regcomp.032
+9.5:c9e80cab            XSH.regcomp.010 XSH.regcomp.032
+9.5:13b025be            XBD.9.4-ere.003
+9.5:f6239137            none  # introduction
+9.5:8b904439            XBD.9.5-grammar.003
+9.5:ef46194d            optional  # anchors inside a subexpression are optional
+9.5:c01a7e26            optional  # anchors inside a subexpression are optional
+9.5:fb31e1b4            app
+9.5:4189d9a9            none  # introduction
+9.5:ac8c13e1            none  # note
+9.5:bacc4ae9            none  # note
+9.5:b51ac75e            XBD.9.5-grammar.003
+9.5:52da80c0            none  # undefined
+9.5:cb38f423            none  # introduces undefined constructs
+9.5:31f1b25c            none  # undefined
+9.5:b0d2a12c            none  # undefined
+9.5:db81e201            none  # undefined
+9.5:fe43a2af            none  # undefined
+9.5:7e88fbe3            optional  # implementations may extend the language
+9.5:5d3e9c69            app
+9.5:3830670c            none  # navigation text
