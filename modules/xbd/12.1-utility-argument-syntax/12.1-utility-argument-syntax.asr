@@ -1,0 +1,40 @@
+# XBD 12.1 Utility Argument Syntax
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The SYNOPSIS notation itself is a convention for readers and applications
+# (see the .cov file). What the system must do is stated for option-arguments
+# (the same argument or the next one, and an optional option-argument given
+# alone) and for numeric values. The tests use the same representative set of
+# utilities as XBD 12.2 and run in the POSIX locale.
+
+assertion  XBD.12.1-utility-argument-syntax.001
+anchor     basedefs/V1_chap12.html#12.1
+class      required
+since      1992
+says       An option with a mandatory option-argument is also accepted with
+           the option-argument in the same argument as the option, with no
+           blank between them (cut -f1, sort -k1,1, head -n1, tail -n1, grep
+           -epattern, sed -e'script', mkdir -m755), and the effect is that of
+           the two-argument form.
+test       t/001-adjacent-option-argument.sh
+
+assertion  XBD.12.1-utility-argument-syntax.002
+anchor     basedefs/V1_chap12.html#12.1
+class      required
+since      2001
+says       A numeric option-argument is read as a decimal integer, so 08 is
+           eight and 010 is ten, and a value up to 2147483647 is recognised:
+           fold -w 08, head -n 010, fold -w 2147483647 and cut -f 2147483647
+           behave as the value says.
+test       t/002-numeric-arguments.sh
+
+assertion  XBD.12.1-utility-argument-syntax.003
+anchor     basedefs/V1_chap12.html#12.1
+class      required
+since      2001
+says       When an option whose option-argument is optional is given alone
+           (pr -e, pr -n), it behaves as if the option-argument were omitted
+           and the next argument is not taken as its option-argument: pr -t
+           -e FILE expands tabs in FILE and pr -t -n FILE numbers its lines.
+test       t/003-optional-option-argument.sh
+

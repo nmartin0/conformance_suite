@@ -1,0 +1,150 @@
+# XBD 12.1 Utility Argument Syntax and 12.2 Utility Syntax Guidelines
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# 12.2 says the standard utilities that claim conformance to the guidelines
+# conform to all of them as if "should" read "shall" (almost every utility
+# does, in its OPTIONS section). The guidelines are exercised through a
+# representative set (cat, cut, sort, head, tail, wc, ls, sed, grep, mkdir,
+# rm, pr and the getopts utility). A utility that the OPTIONS section
+# excepts from a guideline is never used for that guideline (sort and
+# Guideline 9; tail and a leading plus sign). Guidelines 1 to 3, 7 and 8 and
+# the notation of the SYNOPSIS lines concern how utilities are named and
+# specified, not what a running system does; see the .cov files.
+# Everything runs in the POSIX locale.
+
+assertion  XBD.12.2-utility-syntax-guidelines.001
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;5
+class      required
+since      1992
+says       Options that take no option-argument can be grouped behind one
+           hyphen-minus, followed by at most one option that takes an
+           option-argument (given as the next argument), and the effect is
+           that of giving the options one by one: cut -sf, sort -nrk, grep
+           -ine, sed -ne, ls -ld, wc -lw, mkdir -pm, rm -rf and the getopts
+           utility.
+test       t/001-grouping.sh
+
+assertion  XBD.12.2-utility-syntax-guidelines.002
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;6
+class      required
+since      1992
+says       An option and its option-argument can be given as two separate
+           arguments (cut -f 1, sort -k 1,1, head -n 1, tail -n 1, grep -e
+           pattern, sed -e script, mkdir -m 755).
+test       t/002-separate-arguments.sh
+
+assertion  XBD.12.2-utility-syntax-guidelines.003
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;9
+anchor     basedefs/V1_chap12.html#12.1/Ellipses
+class      required
+since      1992
+says       Options given first are followed by any number of operands, and
+           each operand is used: cat, grep (with file name prefixes), wc, head
+           (with headers), ls, rm, mkdir and sed given several operands after
+           their options.
+test       t/003-several-operands.sh
+
+assertion  XBD.12.2-utility-syntax-guidelines.004
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;10
+class      required
+since      1992
+says       The first -- that is not an option-argument ends the options: the
+           arguments after it are operands even when they begin with a
+           hyphen-minus, so files named -n, -x and -d are read, listed,
+           created or removed as files by cat, wc, head, tail, grep, sort,
+           cut, ls, mkdir, rm and sed, and a pattern or script after -- is
+           taken from the next argument.
+test       t/004-double-dash-ends-options.sh
+
+assertion  XBD.12.2-utility-syntax-guidelines.005
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;10
+class      required
+since      1992
+says       A -- that is the option-argument of an option is that option's
+           value and not the end of the options: grep -e -- uses the pattern
+           --, and the getopts utility returns -- as the OPTARG of an option
+           that takes an argument and goes on to the next option.
+test       t/005-double-dash-as-option-argument.sh
+
+assertion  XBD.12.2-utility-syntax-guidelines.006
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;10
+class      required
+since      1992
+says       Only the first -- ends the options: a second -- after it is an
+           operand (cat -- -- reads a file named --, wc -l -- -- counts it,
+           ls -- -- lists it).
+test       t/006-second-double-dash-is-operand.sh
+
+assertion  XBD.12.2-utility-syntax-guidelines.007
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;14
+class      required
+since      1992
+says       An argument that can be identified as an option, or as a group of
+           options, is treated as such even when a file of that name exists
+           in the working directory: with files named -u, -d and -l present,
+           cat -u still reads standard input, ls -d still lists dot and wc -l
+           still reads standard input.
+test       t/007-option-looking-argument.sh
+
+assertion  XBD.12.2-utility-syntax-guidelines.008
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;11
+anchor     basedefs/V1_chap12.html#12.1
+class      required
+since      1992
+says       The order of different options relative to one another does not
+           change the result (ls -l -d and -d -l, wc -w -l and -l -w, grep -n
+           -i and -i -n, sort -n -r and -r -n, cut -s -f and -f -s).
+test       t/008-option-order.sh
+
+assertion  XBD.12.2-utility-syntax-guidelines.009
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;11
+anchor     basedefs/V1_chap12.html#12.1/Ellipses
+class      required
+since      1992
+says       When an option that takes an option-argument is repeated, the
+           option and option-argument pairs are used in command-line order:
+           two sed -e scripts apply one after the other (swapping them gives
+           another result), grep -e patterns together select the lines that
+           match any of them, and the getopts utility returns the repeated
+           option-arguments in the order given.
+test       t/009-repeated-option-order.sh
+
+assertion  XBD.12.2-utility-syntax-guidelines.010
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;13
+anchor     basedefs/V1_chap12.html#12.2
+class      required
+since      1992
+says       With a file named - present, the operand - means standard input
+           for the utilities whose OPERANDS say so (cat, cut, sort), and for
+           head, tail, grep and sed it means standard input or the file named -
+           (which of the two is implementation-defined, as their OPERANDS
+           say), never something else.
+note       The choice for those four utilities is implementation-defined and
+           must be documented; the test t/010-dash-operand.sh accepts either and does not
+           check the documentation.
+test       t/010-dash-operand.sh
+
+assertion  XBD.12.2-utility-syntax-guidelines.011
+anchor     basedefs/V1_chap12.html#12.2
+class      required
+since      2001
+says       A file operand and an option-argument can contain bytes outside the
+           portable character set: cat reads a file with such a byte in its
+           name, and grep -e finds a line holding such a byte.
+test       t/011-nonportable-bytes.sh
+
+assertion  XBD.12.2-utility-syntax-guidelines.012
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;3
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;5
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;6
+anchor     basedefs/V1_chap12.html#12.2/Guideline&nbsp;10
+class      required
+since      1992
+says       The getopts utility follows the guidelines when it parses a mixed
+           command line: grouped flags, an option-argument as the next
+           argument or attached, the end of the options at -- and at the
+           first operand, with OPTIND naming the first operand.
+note       The getopts page puts these guidelines in its DESCRIPTION; the
+           getopts module covers the pieces one by one, this assertion the
+           combination.
+test       t/012-getopts-guidelines.sh

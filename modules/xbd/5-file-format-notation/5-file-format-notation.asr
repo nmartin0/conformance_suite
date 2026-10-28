@@ -1,0 +1,157 @@
+# XBD 5 File Format Notation
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The chapter is the notation the utility pages use to describe the text
+# they write (the STDOUT, STDERR and OUTPUT FILES sections) and, for printf
+# and awk, the format strings those utilities accept. What a system can show
+# is therefore the behaviour of those two utilities (their formats follow the
+# chapter, with the exceptions their own pages list) and the exactness of the
+# formats the utility pages state. The latter is tested in the utility
+# modules and referenced from the .cov file.
+#
+# Conversions tested with printf and with awk (both must follow the chapter):
+# the flags, the field width, the precision and the d i o u x X c s
+# conversions. Floating-point conversions are tested with awk only, because
+# the printf utility page lets an implementation leave them out. Every test
+# runs in the POSIX locale. Results the chapter leaves to the implementation
+# (the style of infinity and NaN, # on d i u c s, 0 on c and s, too few
+# arguments) are never examined.
+
+assertion  XBD.5-file-format-notation.001
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      1992
+says       A field width is a minimum: shorter output is padded on the left
+           with spaces (on the right with the - flag), longer output is never
+           cut. This holds for d, c and s.
+test       t/001-field-width.sh
+
+assertion  XBD.5-file-format-notation.002
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      1992
+says       The + flag puts a sign on a signed conversion; the space flag puts
+           a space before a result that has no sign; given together, + wins.
+test       t/002-sign-flags.sh
+
+assertion  XBD.5-file-format-notation.003
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      1992
+says       When the 0 flag and the - flag are both given, the 0 flag has no
+           effect: the number is padded with spaces on the right.
+test       t/003-left-beats-zero.sh
+
+assertion  XBD.5-file-format-notation.004
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      1992
+says       The precision of d, i, o, u, x and X is the least number of
+           digits, filled with leading zeros, and never cuts a longer
+           number; a sign comes before the zeros.
+test       t/004-integer-precision.sh
+
+assertion  XBD.5-file-format-notation.005
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      1992
+says       Converting zero with a precision of 0 (also a bare period, whose
+           empty digit string means zero) writes no characters, but with the
+           # flag on o it writes 0; without a precision zero writes the one
+           digit 0.
+test       t/005-zero-precision.sh
+
+assertion  XBD.5-file-format-notation.006
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      1992
+says       For d, i, o, u, x and X, a precision makes the 0 flag have no
+           effect: the width is filled with spaces.
+test       t/006-precision-beats-zero.sh
+
+assertion  XBD.5-file-format-notation.007
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      1992
+says       The 0 flag pads to the width with zeros that come after the sign
+           (or space) and after the 0x or 0X prefix.
+test       t/007-zero-padding.sh
+
+assertion  XBD.5-file-format-notation.008
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      1992
+says       The # flag on o forces the first digit of the result to be a zero
+           (8 gives 010, 0 stays 0), and on x and X prefixes a non-zero
+           result with 0x or 0X (zero is written as 0).
+test       t/008-alternative-form.sh
+
+assertion  XBD.5-file-format-notation.009
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      1992
+says       The precision of s is the most bytes written, a bare period means
+           zero bytes, and the width still applies to what is written.
+test       t/009-string-precision.sh
+
+assertion  XBD.5-file-format-notation.010
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      1992
+says       The f and F conversions write decimal notation with the number of
+           digits after the radix character equal to the precision (six when
+           it is omitted, no radix character at precision 0 unless # is
+           given), with the sign, space, width, - and 0 flags as for
+           integers.
+note       Tested with the awk printf statement only: the printf utility page
+           lets an implementation omit the floating-point conversions.
+test       t/010-fixed-point.sh
+
+assertion  XBD.5-file-format-notation.011
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      1992
+says       The e and E conversions write one digit, the radix character, the
+           precision's worth of digits and an exponent of at least two digits
+           introduced by e or E and a sign (more digits when the exponent
+           needs them; six digits after the radix character by default).
+note       Tested with the awk printf statement only, as for the f
+           conversion.
+test       t/011-exponent-form.sh
+
+assertion  XBD.5-file-format-notation.012
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      1992
+says       The g and G conversions use the precision as the number of
+           significant digits (six by default), the e style only when the
+           exponent is below -4 or at least the precision, remove trailing
+           zeros and a lone radix character, and keep them with the # flag.
+note       Tested with the awk printf statement only, as for the f
+           conversion.
+test       t/012-general-form.sh
+
+assertion  XBD.5-file-format-notation.013
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      2001
+says       The a and A conversions write the value zero with the digit 0
+           and a zero exponent (0x0p+0 and 0X0P+0; any fraction digits are
+           zeros) and
+           another value, 255 here, as 0x (0X), one non-zero hexadecimal
+           digit, optionally a radix character and more hexadecimal digits, p
+           (P), a sign and a decimal exponent without leading zeros, with
+           lowercase letters for a and uppercase letters for A.
+note       Tested with the awk printf statement only, as for the f
+           conversion. The number of hexadecimal digits and the choice of the
+           first one for a non-zero value are not examined.
+test       t/013-hex-float.sh
+
+assertion  XBD.5-file-format-notation.014
+anchor     basedefs/V1_chap05.html#5. File Format Notation
+class      required
+since      1992
+says       Arguments left over once the format is used up are ignored by the
+           awk printf statement (the printf utility instead reuses the
+           format; see XCU.printf.004).
+test       t/014-excess-arguments.sh

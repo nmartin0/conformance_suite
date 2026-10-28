@@ -1,0 +1,21 @@
+# XBD 1 Introduction
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The chapter states the scope of the standard, how its words (shall,
+# should, may, can, implementation-defined, undefined, unspecified, legacy)
+# are used, what it refers to, and the margin codes that mark options. None
+# of it is a behaviour of a system under test: the words decide how every
+# other assertion is written, and the margin codes are the option names of
+# core/options.list, used in the "when" fields of the assertions.
+
+assertion  XBD.1-introduction.001
+anchor     basedefs/V1_chap01.html#1.6
+anchor     basedefs/V1_chap01.html#1.8
+class      untestable
+since      1992
+says       The chapter defines the standard's wording and the option codes in
+           its margins; it adds no requirement on a running system.
+reason     Terminology, scope, references and notation; the only requirement
+           it states for implementations, that implementation-defined
+           behaviour be documented, concerns documents and is accounted for
+           in every module that meets such a choice.

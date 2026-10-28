@@ -1,0 +1,250 @@
+# 2-conformance.cov - XBD 2 Conformance.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Chapter 2 defines conformance; applications and profiles are not systems
+# under test. The option constants that stand alone are in the <unistd.h>
+# module (XBD.unistd.h).
+
+2:de6b230f    none  introduction
+2:5d524997    none  introduces the criteria that follow
+2:996fa98b    partial XBD.2-conformance.001  # the utilities; every function and header has its own module
+2:d10a5bb0    none  umbrella: the functional behaviour of each interface is tested in its own module
+2:3de20ad3    none  permission (XSI option)
+2:a5559005    none  permission (options)
+2:442fdcc1    XBD.2-conformance.002 XBD.2-conformance.005 XBD.2-conformance.006 XBD.unistd.h.011
+2:86cda266    none  permission to provide extensions
+2:77e6e2e3    none  permission to provide extensions
+2:d7951870    none  permission to provide extensions
+2:b6038b84    none  permission to provide extensions
+2:86ec1bb8    none  permission to provide extensions
+2:6cac0bb1    none  permission to provide extensions
+2:cd74d12b    none  permission to provide extensions
+2:4ca538f1    none  permission to provide extensions
+2:189acf40    none  permission to provide extensions
+2:de15dbcd    none  permission to provide extensions
+2:9719d473    none  permission to provide extensions
+2:0bac8dd7    none  recommendation (identify extensions)
+2:1a298d0f    none  permission
+2:cef6340b    impl  the conformance document defines the environment
+2:aba6e29b    untestable  that no conforming environment needs a changed Strictly Conforming POSIX Application concerns the conformance document and how applications are run, not a behaviour a test can observe
+2:74c272a0    none  note about the documented environment variables
+2:73d37e94    none  cross-reference to confstr()
+2:39c9ed92    impl  contents of the conformance document
+2:1c660b30    impl  contents of the conformance document
+2:f00ebd64    none  permission to omit empty sections of the conformance document
+2:c05bc03b    impl  contents of the conformance document
+2:fd09724d    impl  contents of the conformance document
+2:8225e951    none  permission or recommendation about the conformance document
+2:df6bb97f    none  permission or recommendation about the conformance document
+2:19ec9a5f    impl  contents of the conformance document
+2:90c71d47    impl  contents of the conformance document
+2:105956a4    impl  contents of the conformance document
+2:892e91db    impl  contents of the conformance document
+2:3c4363ac    none  permission or recommendation about the conformance document
+2:940b7027    impl  contents of the conformance document
+2:4f11d631    impl  contents of the conformance document
+2:e3c5eb54    none  permission or recommendation about the conformance document
+2:3f7415f9    none  statement of the POSIX conformance criteria
+2:a58fb1a4    none  statement of the POSIX conformance criteria
+2:26605f63    partial XBD.unistd.h.004  # _POSIX_VERSION; the mandatory functions and headers are in their own modules
+2:fb3e7b5c    none  remark about configuration
+2:df367ca9    none  recommendation
+2:13791756    XBD.unistd.h.008
+2:c65a5c9a    none  recommendation to applications
+2:dbd17043    XSH.open.017
+2:8cfaf528    XBD.unistd.h.007
+2:f1fe9c23    XBD.unistd.h.007
+2:399fc6da    XBD.unistd.h.008
+2:c268f857    none  note about historical options
+2:2df792f7    XBD.unistd.h.006
+2:d4ccb11e    none  introduction
+2:35e808f4    XBD.2-conformance.001
+2:19da0ef0    todo  Large File capabilities of the utilities are the subject of XCU 1.5 (module xcu/1.5-large-files, no assertions yet when this chapter was classified)
+2:a9756f20    XCU.getconf.005
+2:064eeeb7    none  note on the getconf names
+2:23905903    none  future bindings
+2:7cef19dd    none  future bindings
+2:e27bc0c8    none  statement of the XSI conformance criteria
+2:18cef40a    none  statement of the XSI conformance criteria
+2:f9acaf5b    none  statement of the XSI conformance criteria
+2:007686b7    partial XBD.2-conformance.003 XBD.2-conformance.004  # an XSI system also meets the POSIX criteria, which every module tests
+2:940a5a49    XBD.unistd.h.005
+2:429f3acd    none  statement of the XSI conformance criteria
+2:efe788ef    none  each XSI function and header is tested in its own module under the XSI option
+2:52be9e5f    XBD.2-conformance.004
+2:6595b0ab    none  statement of the XSI conformance criteria
+2:91c462ed    none  statement of the XSI conformance criteria
+2:65fc19cd    none  statement of the XSI conformance criteria
+2:ced41f73    none  statement of the XSI conformance criteria
+2:7aa8d695    none  statement of the XSI conformance criteria
+2:9a215be2    none  statement of the XSI conformance criteria
+2:8825205c    none  each XSI-marked utility is tested in its own module
+2:cd0eee8b    XBD.2-conformance.003
+2:56904d41    XBD.2-conformance.003
+2:8c8fe014    none  cross-reference
+2:89a15c9d    XBD.2-conformance.003
+2:b99695f7    none  list of the XSI Development Utilities, an option with no constant to test its claim
+2:d2eb98c7    none  permission
+2:6a20921b    none  introduces the list
+2:d8c900b9    none  option groups and profiles: requirements on profile definitions, not on a running system
+2:01621b68    none  each function of an option group is tested in its own module under the option
+2:4a494f08    none  permission
+2:13e9a6be    none  subprofiling: requirements on profiles
+2:c044c767    none  subprofiling: requirements on profiles
+2:c8063557    none  subprofiling: requirements on profiles
+2:4b05fb45    none  subprofiling: requirements on profiles
+2:d0542285    none  subprofiling: requirements on profiles
+2:c41f254f    none  subprofiling: requirements on profiles
+2:6b7dde20    none  subprofiling: requirements on profiles
+2:949f0a81    none  subprofiling: requirements on profiles
+2:876246a3    none  subprofiling: requirements on profiles
+2:c9e3d284    none  subprofiling: requirements on profiles
+2:3c9aff1b    none  requirement on profile definitions, not on a running system
+2:00519744    none  requirement on profile definitions, not on a running system
+2:fb15a2fa    none  requirement on profile definitions, not on a running system
+2:873bc844    none  requirement on profile definitions, not on a running system
+2:42f92fa2    none  requirement on profile definitions, not on a running system
+2:1958141a    none  requirement on profile definitions, not on a running system
+2:671d0289    none  requirement on profile definitions, not on a running system
+2:4aa992cc    none  requirement on profile definitions, not on a running system
+2:e78e7a57    none  requirement on profile definitions, not on a running system
+2:44109647    none  requirement on profile definitions, not on a running system
+2:f4421c02    none  XSI option groups
+2:b9c15a31    none  XSI option groups
+2:1f9bb0a9    none  XSI option groups
+2:c6f43923    none  XSI option groups
+2:3d0e1602    none  XSI option groups
+2:7678818e    none  XSI option groups
+2:0a03627d    none  XSI option groups
+2:42a92021    none  XSI option groups
+2:7ccb4066    none  encryption functions: tested in the crypt, encrypt and setkey modules
+2:38132815    none  definition of a claim
+2:26e40a5a    none  XSI option groups
+2:44ada474    none  XSI option groups
+2:a2a2af64    none  XSI option groups
+2:2a9e534e    none  XSI option groups
+2:75961249    none  definition of a claim
+2:0446c1c2    none  XSI option groups
+2:f53f3293    none  XSI option groups
+2:c0a3b7ae    XBD.2-conformance.005
+2:e0784782    XBD.2-conformance.005
+2:d9b2e5c7    XBD.2-conformance.004
+2:1f2c0342    none  permission
+2:1864387a    untestable  the priority at which asynchronous operations are submitted cannot be observed by a program
+2:fba3f045    untestable  the priority at which asynchronous operations are submitted cannot be observed by a program
+2:32bf4112    impl  documentation of the files for which I/O prioritization is supported
+2:bd30f8aa    none  definition of a claim
+2:148ba4f2    none  XSI option groups
+2:2a9e534e.2  none  XSI option groups
+2:0446c1c2.2  none  XSI option groups
+2:27dead77    none  XSI option groups
+2:c588f396    untestable  the Advanced Realtime (Threads) Option Group is not detectable by any constant; its options are tested one by one
+2:27dead77.2  untestable  the Advanced Realtime (Threads) Option Group is not detectable by any constant; its options are tested one by one
+2:8cc5d917    XBD.2-conformance.007
+2:958c9701    none  XSI option groups
+2:0446c1c2.3  none  XSI option groups
+2:649b3a07    none  XSI option groups
+2:eaa92935    none  XSI option groups
+2:42f6ba57    none  definition of a claim
+2:e49cebdd    XBD.2-conformance.006
+2:649b3a07.2  XBD.2-conformance.006
+2:cc7f5a3d    none  XSI option groups
+2:82244ed9    none  XSI option groups
+2:2a9e534e.3  none  XSI option groups
+2:0446c1c2.4  none  XSI option groups
+2:764a45d9    none  XSI option groups
+2:43a59aae    XBD.2-conformance.007
+2:c99b40d8    untestable  the Advanced Realtime (Threads) Option Group is not detectable by any constant; its options are tested one by one
+2:764a45d9.2  untestable  the Advanced Realtime (Threads) Option Group is not detectable by any constant; its options are tested one by one
+2:78da4175    none  options of the standard: explanation and list
+2:8a74caf2    none  options of the standard: explanation and list
+2:9a6f2359    none  options of the standard: explanation and list
+2:ddbe01eb    none  permission; the compile-time advertisement of an unsupported option
+2:15fd79f6    none  permission (need not be present)
+2:a060f759    none  options of the standard: explanation and list
+2:24fd6389    none  options of the standard: explanation and list
+2:9900ecc2    none  options of the standard: explanation and list
+2:89ece339    none  options of the standard: explanation and list
+2:9a709e65    partial XBD.2-conformance.002  # utilities of options claimed through getconf; the headers and functions of each option are in their modules
+2:bf4e2797    XBD.unistd.h.011
+2:12268d14    none  options of the standard: explanation and list
+2:0ec35fc1    none  options of the standard: explanation and list
+2:6f47df98    none  options of the standard: explanation and list
+2:ce680178    none  headers and functions of an option reported as 0 are in their modules, conditional on the runtime check
+2:bb78c3e7    none  permission
+2:8450c848    none  options of the standard: explanation and list
+2:354e7885    none  unspecified behaviour
+2:874a7542    none  options of the standard: explanation and list
+2:fef8dbb8    none  options of the standard: explanation and list
+2:e3d96eb8    XCU.getconf.005
+2:62c1ec67    none  options of the standard: explanation and list
+2:671ca5a0    none  options of the standard: explanation and list
+2:f3b49235    none  options of the standard: explanation and list
+2:80fc66a4    none  options of the standard: explanation and list
+2:af480de8    XBD.2-conformance.002
+2:4fd7b914    none  options of the standard: explanation and list
+2:f40b3eea    none  permission
+2:27b8a803    none  pointer to the utility descriptions
+2:3cfa75df    none  options of the standard: explanation and list
+2:0f05bcef    none  terminal types of XBD 10.2 are covered with that chapter
+2:159ad88e    none  options of the standard: explanation and list
+2:1c1b39c0    none  options of the standard: explanation and list
+2:1932b958    XBD.2-conformance.002
+2:50176ae3    none  options of the standard: explanation and list
+2:1261b759    none  options of the standard: explanation and list
+2:ee2a83b9    XBD.2-conformance.002
+2:07e94680    none  options of the standard: explanation and list
+2:a8ed9349    none  options of the standard: explanation and list
+2:9666e242    XBD.2-conformance.002
+2:9f17b7a7    XBD.2-conformance.002
+2:bf2271ad    none  options of the standard: explanation and list
+2:14c448c7    XBD.2-conformance.002
+2:b3070ae6    none  options of the standard: explanation and list
+2:d02af4be    none  options of the standard: explanation and list
+2:78d3fde8    none  options of the standard: explanation and list
+2:a9d00db0    none  options of the standard: explanation and list
+2:fed5036c    app
+2:d15dbbb9    app
+2:ef28b4cc    none  definition of a kind of application
+2:478a2473    none  definition of a kind of application
+2:506d54ae    app
+2:9ea6380c    app
+2:98a096f4    app
+2:46fb0f75    app
+2:5a32db12    app
+2:8eebfffc    app
+2:993b5d73    app
+2:815fcd1f    app
+2:9744c2ff    app
+2:199e20f1    none  definition
+2:1f5f1d26    app
+2:f179d736    none  definition
+2:613640f8    app
+2:945b58f0    none  definition
+2:b396e8ff    app
+2:f978b169    app
+2:3d39b272    none  definition
+2:478a2473.2  none  definition of a kind of application
+2:506d54ae.2  app
+2:9ea6380c.2  app
+2:98a096f4.2  app
+2:46fb0f75.2  app
+2:b58ddca0    app
+2:8eebfffc.2  app
+2:993b5d73.2  app
+2:d9f831de    app
+2:ab77ee19    app
+2:3dfa5c88    none  definition
+2:be78167c    app
+2:3889a6be    impl  how implementors claim conformance
+2:458d5da1    none  statement
+2:04532344    none  statement
+2:be1ea19d    XBD.2-conformance.008
+2:2b387a90    XBD.2-conformance.008
+2:7082817c    XBD.2-conformance.008
+2:51955f4b    none  footnote text
+2:f37400fe    none  footnote text
+2:3e15e2fd    none  footnote text
+2:48afc385    none  footnote text
+2:661f8cbf    none  footnote text
+2:3830670c    none  navigation links of the page

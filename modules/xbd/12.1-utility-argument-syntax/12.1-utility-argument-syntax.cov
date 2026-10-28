@@ -1,0 +1,63 @@
+# 12.1-utility-argument-syntax.cov - XBD 12.1 Utility Argument Syntax.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The notation of the SYNOPSIS lines is a convention for readers; the
+# requirements on what a running utility accepts are asserted here and in
+# XBD 12.2 (utility-syntax-guidelines).
+
+12.1:c282d69b    none  introduction to the chapter
+12.1:d44f4955    none  introduction to the notation
+12.1:212ab447    none  introduces the example synopsis
+12.1:896c70ed    none  member of the example synopsis line
+12.1:b8770518    none  member of the example synopsis line
+12.1:788bb77e    none  member of the example synopsis line
+12.1:63512e19    none  member of the example synopsis line
+12.1:00aa1f88    none  member of the example synopsis line
+12.1:6c980d95    none  member of the example synopsis line
+12.1:99d4a8f3    none  member of the example synopsis line
+12.1:99a6c3b1    none  states that the notation binds implementors; the bindings are the items below
+12.1:e9846396    none  terminology: utility name
+12.1:c074266f    none  terminology
+12.1:cfd083d8    none  terminology: options
+12.1:e9d330f6    none  terminology: option-argument
+12.1:65887a0d    none  terminology: operands
+12.1:5c909e4d    none  explains the notation
+12.1:d0d2e862    none  explains the notation
+12.1:8d84009b    XBD.12.1-utility-argument-syntax.001 XBD.12.2-utility-syntax-guidelines.002
+12.1:d55588f6    XBD.12.1-utility-argument-syntax.001
+12.1:5f69f479    app   how applications place an optional option-argument
+12.1:3d8963c4    XBD.12.1-utility-argument-syntax.003
+12.1:61aab676    none  ordering convention of the text, not a behaviour
+12.1:b7665b21    XBD.12.2-utility-syntax-guidelines.008
+12.1:98271833    none  undefined: nothing is required
+12.1:b3578f39    none  notation
+12.1:6a1d8e41    app   angle brackets are not part of the data
+12.1:dfce4cf8    none  notation
+12.1:b03dad12    none  notation
+12.1:eaf90582    XBD.12.1-utility-argument-syntax.002
+12.1:effbb7a6    XBD.12.1-utility-argument-syntax.002
+12.1:9cc34935    todo  negative numerals (down to -2147483647) where a utility description says negatives are accepted: no such utility checked yet; candidates are the integer operands of test and expr, whose parsing of a leading hyphen must be read first
+12.1:3b24e603    todo  file size-related values up to the maximum file size: needs a file or offset beyond 2 GiB (sparse); see the large-files module of XCU 1.5
+12.1:3ea863f4    todo  negative file-size values: as above
+12.1:18cf7f3a    none  permits ranges larger than the minimum; no requirement
+12.1:c2f576be    none  statement about meaning of the range, no behaviour
+12.1:2854d8a9    none  the standard describes smaller ranges on the utility pages
+12.1:1990ef04    untestable  the wording of a diagnostic for an out-of-range value; no utility has a documented range small enough to trigger it portably, and diagnostics are free-form
+12.1:26b1e912    none  notation
+12.1:0532e83c    app   brackets are not data
+12.1:285f6b87    none  notation
+12.1:2e236204    app   the vertical bar is not data
+12.1:f1944fff    none  notation
+12.1:1eff3702    none  notation
+12.1:585ff9e8    none  explains the notation
+12.1:7f4453af    app   only one of the mutually-exclusive arguments is given
+12.1:5e1a4c41    app   the synopsis relations bind applications
+12.1:35927e41    none  undefined: nothing is required
+12.1:7cec4544    none  notation
+12.1:14932301    none  notation; the order of options is covered by XBD.12.2-utility-syntax-guidelines.008
+12.1:92e5e804    XBD.12.2-utility-syntax-guidelines.003
+12.1:fd4b552f    XBD.12.2-utility-syntax-guidelines.003
+12.1:db79fd10    XBD.12.2-utility-syntax-guidelines.009
+12.1:faa105df    XBD.12.2-utility-syntax-guidelines.009
+12.1:cf7c5867    none  layout of the printed synopsis
+12.1:29fd22b2    none  layout of the printed synopsis

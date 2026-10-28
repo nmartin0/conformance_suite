@@ -1,0 +1,115 @@
+# 5-file-format-notation.cov - XBD 5 File Format Notation.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The chapter is the notation the utility pages use. The exactness of each
+# utility's stated output format is tested in that utility's module; here the
+# conversion rules themselves are tested through printf and awk.
+
+5:bf286673    none  says where the notation is used
+5:01253195    none  says the notation resembles printf(); the printf utility is tested in its own module
+5:61860e84    none  how the notation is read for input sections; no behaviour
+5:dd0ccb96    none  introduces the record notation
+5:476aaf04    none  member of the record notation (format and arguments)
+5:d2039104    none  member of the record notation (format and arguments)
+5:78977c2b    none  member of the record notation (format and arguments)
+5:02b4b2cc    none  member of the record notation (format and arguments)
+5:6c9aeb4e    none  member of the record notation (format and arguments)
+5:3e05e87b    none  member of the record notation (format and arguments)
+5:bd5f0c5f    none  introduces the three kinds of objects
+5:19fcc1e1    XCU.printf.001 XBD.5-file-format-notation.014
+5:13288c9f    XCU.printf.002
+5:e36b7449    none  introduces conversion specifications
+5:fe11630d    none  introduces the two special characters
+5:6838123f    none  an empty position stands for one or more blanks: a reading rule for the formats, tolerated by the utility tests and not itself a behaviour
+5:0d9acbaa    XCU.diff.001 XCU.diff.003 XCU.uuencode.001 XCU.stty.009
+5:8c5c0d75    none  introduces the escape sequence table
+5:69ad5f57    none  caption of the escape sequence table
+5:54884de1    XCU.printf.002
+5:d7987344    partial XCU.printf.002  # the bytes the escape stands for; the terminal action is not observable
+5:4d886403    partial XCU.printf.002  # the bytes the escape stands for; the terminal action is not observable
+5:2ba32455    partial XCU.printf.002  # the bytes the escape stands for; the terminal action is not observable
+5:2c83dd6c    XCU.printf.002
+5:8e5994e1    partial XCU.printf.002  # the bytes the escape stands for; the terminal action is not observable
+5:454ace2e    partial XCU.printf.002  # the bytes the escape stands for; the terminal action is not observable
+5:b9a82fcd    partial XCU.printf.002  # the bytes the escape stands for; the terminal action is not observable
+5:49260dc9    none  conversions start with the percent-sign
+5:b1bc40e5    XBD.5-file-format-notation.001 XBD.5-file-format-notation.002 XBD.5-file-format-notation.003 XBD.5-file-format-notation.004 XBD.5-file-format-notation.005 XBD.5-file-format-notation.006 XBD.5-file-format-notation.007 XBD.5-file-format-notation.008 XBD.5-file-format-notation.009 XBD.5-file-format-notation.010 XBD.5-file-format-notation.011 XBD.5-file-format-notation.012
+5:2892614a    XBD.5-file-format-notation.002 XBD.5-file-format-notation.003
+5:004cfe69    XBD.5-file-format-notation.001
+5:279886b8    XBD.5-file-format-notation.001
+5:013f1376    XBD.5-file-format-notation.004 XBD.5-file-format-notation.005 XBD.5-file-format-notation.009 XBD.5-file-format-notation.010 XBD.5-file-format-notation.011 XBD.5-file-format-notation.012
+5:2390c28e    XBD.5-file-format-notation.005 XBD.5-file-format-notation.009
+5:5ce530e8    none  introduces the conversion specifier characters
+5:db9cf882    none  introduces the flags
+5:848fc811    XBD.5-file-format-notation.001 XBD.5-file-format-notation.003
+5:5769a0dc    XBD.5-file-format-notation.002
+5:b9e8bcfd    XBD.5-file-format-notation.002
+5:15caf8f6    XBD.5-file-format-notation.002
+5:bd8df0f5    XBD.5-file-format-notation.008
+5:d0e36666    none  undefined: nothing is required
+5:a19a4d28    XBD.5-file-format-notation.008
+5:f6587641    XBD.5-file-format-notation.008
+5:6ce719dc    XBD.5-file-format-notation.010 XBD.5-file-format-notation.011
+5:d55edf87    XBD.5-file-format-notation.012
+5:9e889831    XBD.5-file-format-notation.007 XBD.5-file-format-notation.010
+5:563e7c0f    XBD.5-file-format-notation.003
+5:c99ebc82    XBD.5-file-format-notation.006
+5:8741e928    none  undefined: nothing is required
+5:44cb3529    XCU.printf.004 XCU.printf.011
+5:3333a84e    none  undefined: nothing is required
+5:deb13ecb    XBD.5-file-format-notation.014
+5:1f0009fa    none  introduces the conversion specifiers
+5:77bb24f2    partial XBD.5-file-format-notation.013  # the style at zero and at 255 only; precision-driven digit counts are not examined
+5:27ace5f5    XBD.5-file-format-notation.013
+5:994f785f    XBD.5-file-format-notation.013
+5:a429a9b1    XBD.5-file-format-notation.013
+5:e7ccf4bf    XBD.5-file-format-notation.013
+5:f13e2b9b    untestable  awk has no defined way to produce an infinity or a NaN (its math functions are undefined at those points), and the printf utility page lets the floating-point conversions be missing
+5:3287ae52    XBD.5-file-format-notation.004 XBD.5-file-format-notation.005 XBD.5-file-format-notation.007 XBD.5-file-format-notation.008 XCU.printf.005 XCU.printf.006
+5:60830604    XBD.5-file-format-notation.004 XCU.printf.005
+5:d45e1615    XBD.5-file-format-notation.004 XBD.5-file-format-notation.008 XCU.printf.006
+5:331b8c1a    XBD.5-file-format-notation.004
+5:622ab620    XBD.5-file-format-notation.004
+5:e6c019e0    XBD.5-file-format-notation.005
+5:e83ecfca    XBD.5-file-format-notation.005
+5:63f20ba8    none  a permission (blanks may be added when width and precision are omitted); the printf utility and awk forbid it for d and u, tested in 005
+5:1a059968    XBD.5-file-format-notation.010
+5:377cc247    untestable  needs a locale whose radix character is not a period; only the POSIX locale is guaranteed to exist
+5:b6cce2c7    XBD.5-file-format-notation.010
+5:932a5bd9    untestable  awk has no defined way to produce an infinity or a NaN
+5:d5db337d    untestable  awk has no defined way to produce an infinity or a NaN
+5:db6824c7    untestable  awk has no defined way to produce an infinity or a NaN
+5:28f229d5    XBD.5-file-format-notation.011
+5:377cc247.2  untestable  needs a locale whose radix character is not a period; only the POSIX locale is guaranteed to exist
+5:1e317bc6    XBD.5-file-format-notation.011
+5:fa920b80    XBD.5-file-format-notation.011
+5:096c90aa    XBD.5-file-format-notation.011
+5:08865233    XBD.5-file-format-notation.011
+5:f13e2b9b.2  untestable  awk has no defined way to produce an infinity or a NaN (its math functions are undefined at those points), and the printf utility page lets the floating-point conversions be missing
+5:0ebb6ba1    XBD.5-file-format-notation.012
+5:e21c3d14    XBD.5-file-format-notation.012
+5:b8dd489a    XBD.5-file-format-notation.012
+5:0c32e837    XBD.5-file-format-notation.012
+5:f13e2b9b.3  untestable  awk has no defined way to produce an infinity or a NaN (its math functions are undefined at those points), and the printf utility page lets the floating-point conversions be missing
+5:75535cec    XBD.5-file-format-notation.001 XCU.printf.008
+5:0fe843f7    XBD.5-file-format-notation.009 XCU.printf.013
+5:615d17e8    XBD.5-file-format-notation.009
+5:af9db5db    XCU.printf.011
+5:712a0719    app
+5:ff8bef57    XBD.5-file-format-notation.001
+5:546d1ed5    none  clarifies two terms
+5:698bbfb2    none  example
+5:94a048ca    none  example in the chapter
+5:2c8d63d0    none  example in the chapter
+5:b5f8f119    none  example in the chapter
+5:410822d1    none  example in the chapter
+5:9aa42b63    none  example in the chapter
+5:87ef3d5c    none  example in the chapter
+5:9676891a    none  example in the chapter
+5:5114fa50    none  example in the chapter
+5:7f448a76    none  example in the chapter
+5:02b4b2cc.2  none  member of the record notation (format and arguments)
+5:76181f20    none  example in the chapter
+5:03d4586d    none  example in the chapter
+5:1da06e34    none  example in the chapter
+5:3830670c    none  navigation links of the page

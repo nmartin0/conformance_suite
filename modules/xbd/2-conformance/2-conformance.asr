@@ -1,0 +1,112 @@
+# XBD 2 Conformance
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Chapter 2 mostly states what a conformance claim is: documents, profiles
+# and what applications may do. What a program or script can see of it is
+# the presence of what the claim promises: the mandatory utilities, the
+# utilities of each claimed option, the option constants that must go with
+# an option group, and the length of external names in C. The constants
+# that stand alone (_POSIX_VERSION, the always-defined options) are asserted
+# in the <unistd.h> module.
+
+assertion  XBD.2-conformance.001
+anchor     basedefs/V1_chap02.html#2.1.3.2
+anchor     functions/confstr.html#DESCRIPTION
+class      required
+since      1992
+says       With PATH set to the value getconf PATH writes, each mandatory
+           standard utility (those that need no option; the list is the one
+           of the modules whose option is BASE, without localedef, which
+           belongs to an option) is found by command -v.
+note       Finding the name also succeeds for utilities built into the shell,
+           which XCU 1.6 lets be missing from the path for the special and
+           intrinsic utilities; whether each other utility can be reached
+           through the exec functions is for the XCU 1.6 module.
+test       t/001-mandatory-utilities.sh
+
+assertion  XBD.2-conformance.002
+anchor     basedefs/V1_chap02.html#2.1.6.2
+anchor     basedefs/V1_chap02.html#2.1.1
+class      required
+since      1992
+says       For each option of the shell and utilities that getconf reports as
+           supported (a value above zero for POSIX2_C_DEV, POSIX2_FORT_RUN,
+           POSIX2_LOCALEDEF, POSIX2_SW_DEV, POSIX2_UPE or XOPEN_UUCP), every
+           utility listed for that option is found by command -v under the
+           PATH from getconf PATH; NOTINUSE when no option is reported.
+test       t/002-option-utilities.sh
+
+assertion  XBD.2-conformance.003
+anchor     basedefs/V1_chap02.html#2.1.4.2
+class      conditional
+when       XSI
+since      2001
+says       On an XSI system getconf reports POSIX2_UPE, POSIX2_CHAR_TERM and
+           POSIX2_LOCALEDEF as defined and not -1, and the c17 utility is
+           found by command -v.
+test       t/003-xsi-shell-and-utilities.sh
+
+assertion  XBD.2-conformance.004
+anchor     basedefs/V1_chap02.html#2.1.4.1
+anchor     basedefs/V1_chap02.html#2.1.5.2
+class      conditional
+when       XSI
+since      2001
+says       On an XSI system _POSIX_FSYNC, _POSIX_THREAD_ATTR_STACKADDR,
+           _POSIX_THREAD_ATTR_STACKSIZE and _POSIX_THREAD_PROCESS_SHARED are
+           defined by <unistd.h> with a value above zero (supported always).
+test       t/004-xsi-options.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.2-conformance.005
+anchor     basedefs/V1_chap02.html#2.1.5.2
+class      conditional
+when       XSI
+since      2001
+says       When _XOPEN_REALTIME is defined with a value other than -1,
+           _POSIX_MEMLOCK, _POSIX_MEMLOCK_RANGE, _POSIX_MESSAGE_PASSING,
+           _POSIX_PRIORITY_SCHEDULING, _POSIX_SHARED_MEMORY_OBJECTS and
+           _POSIX_SYNCHRONIZED_IO are defined as 202405L; NOTINUSE when the
+           Realtime Option Group is not claimed.
+test       t/005-realtime-group.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.2-conformance.006
+anchor     basedefs/V1_chap02.html#2.1.5.2
+class      conditional
+when       XSI
+since      2001
+says       When _XOPEN_REALTIME_THREADS is defined with a value other than -1,
+           _POSIX_THREAD_PRIO_INHERIT, _POSIX_THREAD_PRIO_PROTECT,
+           _POSIX_THREAD_PRIORITY_SCHEDULING,
+           _POSIX_THREAD_ROBUST_PRIO_INHERIT and
+           _POSIX_THREAD_ROBUST_PRIO_PROTECT are defined as 202405L; NOTINUSE
+           when the Realtime Threads Option Group is not claimed.
+test       t/006-realtime-threads-group.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.2-conformance.007
+anchor     basedefs/V1_chap02.html#2.1.5.2
+class      conditional
+when       SS|TSP
+since      2001
+says       When _POSIX_SPORADIC_SERVER is defined as 202405L,
+           _POSIX_PRIORITY_SCHEDULING is also defined as 202405L, and when
+           _POSIX_THREAD_SPORADIC_SERVER is defined as 202405L,
+           _POSIX_THREAD_PRIORITY_SCHEDULING is also defined as 202405L.
+test       t/007-sporadic-needs-scheduling.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.2-conformance.008
+anchor     basedefs/V1_chap02.html#2.4
+class      conditional
+when       CD
+since      1992
+says       The C implementation tells apart external names that differ in the
+           31st byte, and external names that differ only in letter case:
+           four such names defined in one C file and used from another link
+           into a program that reads four different values.
+note       The other-language wording of 2.4 applies to any language
+           implementation that claims conformance; C is the only one the
+           standard names.
+test       t/008-external-names.sh

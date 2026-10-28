@@ -1,0 +1,71 @@
+# XBD 3 Definitions
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The chapter defines terms that the rest of the standard uses; almost every
+# definition is exercised where it is used (in the function, header and
+# utility modules). The assertions here are the definitions that say
+# something a program can check by itself: the blank and white-space
+# characters of the POSIX locale, the characters a portable file name may
+# hold, the size and content of a file name, and the range of a file
+# descriptor. The 3.254 pathname rule on repeated slashes is tested with
+# XBD 4.16 (pathname resolution).
+
+assertion  XBD.3-definitions.001
+anchor     basedefs/V1_chap03.html#3.45
+anchor     basedefs/V1_chap03.html#3.346
+anchor     basedefs/V1_chap03.html#3.383
+class      required
+since      1992
+says       In the POSIX locale the blank characters are exactly the space and
+           the tab: of all 256 byte values only those two are blank for
+           isblank(), and iswblank() agrees for the same character codes.
+test       t/001-blank-characters.c
+
+assertion  XBD.3-definitions.002
+anchor     basedefs/V1_chap03.html#3.413
+anchor     basedefs/V1_chap03.html#3.415
+class      required
+since      1992
+says       In the POSIX locale the white-space characters are exactly the
+           space, tab, newline, carriage-return, form-feed and vertical-tab:
+           of all 256 byte values only those six satisfy isspace(), and
+           iswspace() agrees for the same character codes.
+test       t/002-white-space-characters.c
+
+assertion  XBD.3-definitions.003
+anchor     basedefs/V1_chap03.html#3.265
+anchor     basedefs/V1_chap03.html#3.264
+class      required
+since      1992
+says       A file can be created, read back, listed and removed under each
+           name made of the portable filename characters (the 26 uppercase
+           and 26 lowercase letters, the ten digits, period, underscore and
+           hyphen-minus): every one-character name except the dot itself,
+           names with a leading, trailing or inner period, an underscore or
+           a hyphen-minus, and a 14-byte name that uses all kinds of
+           character.
+note       Each name is created, read and removed in turn, so a file system
+           that does not tell upper and lower case apart (a permitted
+           extension) does not change the result.
+test       t/003-portable-filename-characters.sh
+
+assertion  XBD.3-definitions.004
+anchor     basedefs/V1_chap03.html#3.146
+class      required
+since      1992
+says       A file can be created with a name of exactly {NAME_MAX} bytes
+           (pathconf(_PC_NAME_MAX) for the directory) and the directory then
+           lists it under that name; no name read from a directory holds a
+           slash, and a path with a slash in the middle names a file in a
+           directory and never creates a file whose name holds the slash.
+note       NOTINUSE when pathconf reports no limit or a limit above 1000.
+test       t/004-filename-bytes.c
+
+assertion  XBD.3-definitions.005
+anchor     basedefs/V1_chap03.html#3.141
+class      required
+since      1992
+says       A newly created file descriptor (from open(), dup() or pipe())
+           is not negative and is below sysconf(_SC_OPEN_MAX).
+note       NOTINUSE when sysconf reports no limit.
+test       t/005-descriptor-range.c

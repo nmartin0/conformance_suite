@@ -260,6 +260,23 @@ if args.standard:
         if item and item not in f.read_text(encoding="latin-1"):
             err(here, f"anchor item '{item}' not found on {page}")
 
+# XBD.2-conformance.001 hard-codes the mandatory utilities: keep the list in
+# step with the XCU modules whose option is BASE (localedef is left out).
+_t = args.modules / "xbd/2-conformance/t/001-mandatory-utilities.sh"
+if _t.is_file():
+    _txt = _t.read_text()
+    _body = _txt[_txt.index("for u in") + 8:_txt.index("; do")].replace("\\\n", " ")
+    _have = set(_body.replace("'['", "[").split())
+    _want = {"[", "test"}
+    for _m in mods:
+        if _m.path.startswith("xcu/") and _m.fields.get("option") == "BASE" \
+                and not _m.path[4:5].isdigit() and not _m.path.startswith("xcu/sh-") \
+                and _m.path != "xcu/localedef":
+            _want.add({"colon": ":", "dot": "."}.get(_m.path[4:], _m.path[4:]))
+    if _have != _want:
+        err(_t.relative_to(args.modules), "utility list differs from the BASE xcu modules: "
+            f"missing {sorted(_want - _have)}, extra {sorted(_have - _want)}")
+
 # RULES.md 2: the standard's text never enters the repository.
 MARKERS = ("The IEEE and The Open Group, All Rights Reserved",
            "Copyright \u00a9 2001-2024 The IEEE and The Open Group")

@@ -105,12 +105,22 @@ def page_sections(src, section=None):
     """[(section name, html)] for a reference page, or for one numbered
     section of a chapter page (section="2.6")."""
     if section:
+        # "11.1+" is section 11.1 together with the chapter's introductory
+        # text before its first numbered subsection (which has no unit of
+        # its own otherwise); unit ids carry the plain name "11.1".
+        intro = section.endswith("+")
+        section = section.rstrip("+")
         heads = [(m.start(), m.end(), m.group(2))
                  for m in re.finditer(
-                     r"<h([2-5])[^>]*>(?:<a[^>]*></a>)?\s*(\d+(?:\.\d+)*)\s",
+                     r"<h([2-5])[^>]*>(?:<a[^>]*></a>)?\s*(\d+(?:\.\d+)*)\.?\s",
                      src)]
         start = end = None
         for i, (s0, e0, num) in enumerate(heads):
+            if start is None and intro and num == section.split(".")[0]:
+                start = e0
+                continue
+            if num == section and intro:
+                continue
             if start is None and num == section:
                 start = e0
                 continue

@@ -1,0 +1,38 @@
+# 12.2-utility-syntax-guidelines.cov - XBD 12.2 Utility Syntax Guidelines.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The guidelines are requirements ("as if shall") on the standard utilities
+# that claim conformance in their OPTIONS section. They are checked through a
+# representative set of those utilities; each utility module tests its own
+# options.
+
+12.2:f01b2790    none  introduction to the guidelines
+12.2:eec9a293    none  cross-reference to getopt(), tested in its own module
+12.2:2e60fe2c    XBD.12.2-utility-syntax-guidelines.011
+12.2:2896f2de    none  intent of the guidelines for future utilities
+12.2:8ea788b5    none  tells which utilities deviate; the OPTIONS sections say how, and those utilities are left out of the matching guideline here
+12.2:72279498    none  Guideline 1: the standard fixes the utility names, and each is reached by its own module; no behaviour to test
+12.2:70e212a6    none  Guideline 2: as above, the characters of the standard names
+12.2:8a8e0459    none  Guideline 3: how option names are chosen in the standard; each option has its own module
+12.2:b47c2f38    untestable  -W is reserved for vendor options: no standard utility defines it and what a vendor does with it is not defined
+12.2:b672db42    none  Guideline 3: how options are chosen in the standard
+12.2:46a7b84f    XBD.12.2-utility-syntax-guidelines.002 XBD.12.2-utility-syntax-guidelines.001
+12.2:6025553e    XBD.12.2-utility-syntax-guidelines.001
+12.2:810bf972    XBD.12.2-utility-syntax-guidelines.002 XBD.12.1-utility-argument-syntax.001
+12.2:ec188da6    none  Guideline 7: a rule for specifying utilities; the optional option-argument exceptions are covered by XBD.12.1-utility-argument-syntax.003
+12.2:e564ec0b    none  Guideline 8: how a utility specifies lists in one argument; tested in the utility modules (cut -f, sort -k and the like)
+12.2:7f3cf78d    XBD.12.2-utility-syntax-guidelines.003
+12.2:e248739d    XBD.12.2-utility-syntax-guidelines.004 XBD.12.2-utility-syntax-guidelines.005 XBD.12.2-utility-syntax-guidelines.006
+12.2:25bec6ee    XBD.12.2-utility-syntax-guidelines.004 XBD.12.2-utility-syntax-guidelines.006
+12.2:fe24ace7    XBD.12.2-utility-syntax-guidelines.008
+12.2:43f7f2b9    XBD.12.2-utility-syntax-guidelines.009
+12.2:bbcadbbe    none  Guideline 12: the order of operands may matter; utility-specific
+12.2:101ef5f5    XBD.12.2-utility-syntax-guidelines.010
+12.2:0720ba9f    XBD.12.2-utility-syntax-guidelines.007
+12.2:a8e9dd01    XBD.12.2-utility-syntax-guidelines.001 XBD.12.2-utility-syntax-guidelines.002 XBD.12.2-utility-syntax-guidelines.003 XBD.12.2-utility-syntax-guidelines.004 XBD.12.2-utility-syntax-guidelines.005 XBD.12.2-utility-syntax-guidelines.006 XBD.12.2-utility-syntax-guidelines.007 XBD.12.2-utility-syntax-guidelines.008 XBD.12.2-utility-syntax-guidelines.009 XBD.12.2-utility-syntax-guidelines.010 XBD.12.2-utility-syntax-guidelines.012
+12.2:eba92aea    none  implementations may accept more than the guidelines; nothing is required
+12.2:50e948d4    XBD.12.2-utility-syntax-guidelines.010
+12.2:351ccfb3    XBD.12.2-utility-syntax-guidelines.010
+12.2:7f4c7fb2    none  recommendation for future utilities
+12.2:4b569c8e    none  recommendation for future utilities
+12.2:3830670c    none  navigation links of the page
