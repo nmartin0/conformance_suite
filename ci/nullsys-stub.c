@@ -64,7 +64,8 @@ int main(int argc, char **argv)
 		const char *bin = getenv("PC_NULLSYS_BIN");
 		const char *old = getenv("PATH");
 
-		if (bin != NULL && *bin != '\0') {
+		/* the driver's own checks (no assertion running) keep the real PATH */
+		if (bin != NULL && *bin != '\0' && getenv("PC_ASSERTION") != NULL) {
 			char *np = malloc(strlen(bin) + (old ? strlen(old) : 0) + 2);
 
 			if (np != NULL) {
