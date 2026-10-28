@@ -104,3 +104,21 @@ since      1992
 says       "nm" on a file that does not exist exits with a status greater
            than zero.
 test       t/010-missing-file.sh
+
+assertion  XCU.nm.011
+anchor     utilities/nm.html#OPTIONS/-e
+class      conditional
+when       SD+XSI
+since      1992
+says       "nm -e" lists both an external symbol and a static symbol of
+           the object file.
+test       t/011-e-external-static.sh
+
+assertion  XCU.nm.012
+anchor     utilities/nm.html#OPTIONS/-f
+class      conditional
+when       SD+XSI
+since      1992
+says       "nm -f" lists at least every symbol name that the default output
+           lists.
+test       t/012-f-full.sh

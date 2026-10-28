@@ -8,8 +8,8 @@ DESCRIPTION:9f73567d             XCU.ps.001 XCU.ps.004
 DESCRIPTION:a5f631a3             untestable  needs a controlling terminal shared with the test, which the harness does not give
 OPTIONS:53bcd977                 todo  utility syntax conformance is not tested here
 OPTIONS:e2947e20                 none  introduces the option list
-OPTIONS:f9d6b413                 todo  needs a terminal
-OPTIONS:6562afd1                 todo  needs a terminal
+OPTIONS:f9d6b413                 XCU.ps.013
+OPTIONS:6562afd1                 impl  session leaders may be omitted, so nothing is required
 OPTIONS:2aaa6f5e                 XCU.ps.007 XCU.ps.008
 OPTIONS:bbc0b7d1                 todo  session leader status of the test shell is not controlled
 OPTIONS:b12ab017                 XCU.ps.007 XCU.ps.008
@@ -22,17 +22,17 @@ OPTIONS:309bb67f                 XCU.ps.007
 OPTIONS:a7c1a5b2.2               todo  list syntax is tested through -p only
 OPTIONS:a3bc1ace                 XCU.ps.008
 OPTIONS:49737621                 XCU.ps.008
-OPTIONS:2d437091                 todo  the namelist file is unspecified
-OPTIONS:99408319                 todo  the namelist file is unspecified
+OPTIONS:2d437091                 impl  contents are implementation-defined
+OPTIONS:99408319                 impl  contents are implementation-defined
 OPTIONS:f4c4fd8e                 XCU.ps.002 XCU.ps.003
 OPTIONS:237f6223                 XCU.ps.002
 OPTIONS:910f7f58                 XCU.ps.003
 OPTIONS:86654204                 XCU.ps.001 XCU.ps.005
 OPTIONS:b128c742                 XCU.ps.005
-OPTIONS:c8054183                 todo  needs a terminal
-OPTIONS:11f60fd1                 todo  needs a terminal
-OPTIONS:1b3d6e2c                 todo  needs a terminal
-OPTIONS:9dcb2786                 todo  needs a terminal
+OPTIONS:c8054183                 impl  terminal identifiers are implementation-defined
+OPTIONS:11f60fd1                 impl  terminal identifiers are implementation-defined
+OPTIONS:1b3d6e2c                 impl  terminal identifiers are implementation-defined
+OPTIONS:9dcb2786                 impl  terminal identifiers are implementation-defined
 OPTIONS:e650a541                 XCU.ps.008
 OPTIONS:9a8d457b                 todo  list syntax is tested through -p only
 OPTIONS:a9be9d18                 todo  needs the default listing, whose format is unspecified
@@ -40,7 +40,7 @@ OPTIONS:ed003649                 XCU.ps.008
 OPTIONS:9a8d457b.2               todo  list syntax is tested through -p only
 OPTIONS:c7f3e4a2                 todo  -w and line width depend on the unspecified default format
 OPTIONS:e258eafd                 todo  -w and line width depend on the unspecified default format
-OPTIONS:2e7a0901                 todo  the namelist file is unspecified
+OPTIONS:2e7a0901                 impl  the namelist file is unspecified
 OPTIONS:b31c9a3a                 XCU.ps.006
 OPERANDS:eb724aff                none  XCU 1.4 default or empty section
 STDIN:3f472296                   none  XCU 1.4 default or empty section
@@ -65,24 +65,24 @@ STDOUT:34b19a3f                  XCU.ps.008
 STDOUT:587fffb7                  XCU.ps.008
 STDOUT:dc6182cf                  XCU.ps.008
 STDOUT:0757314d                  XCU.ps.008
-STDOUT:d8222a25                  todo  meanings are implementation-defined
-STDOUT:b2be35a1                  todo  meanings are implementation-defined
+STDOUT:d8222a25                  impl  meaning is implementation-defined
+STDOUT:b2be35a1                  impl  meaning is implementation-defined
 STDOUT:9eb60bdd                  XCU.ps.008
 STDOUT:88a381f8                  XCU.ps.008
 STDOUT:1c890c5c                  XCU.ps.008
-STDOUT:a9ada8d9                  todo  meanings are implementation-defined
-STDOUT:0c0488f5                  todo  meanings are implementation-defined
-STDOUT:98034dfa                  todo  meanings are implementation-defined
-STDOUT:957c2cfa                  todo  meanings are implementation-defined
-STDOUT:fdc88cbd                  todo  meanings are implementation-defined
-STDOUT:ff185c51                  todo  meanings are implementation-defined
-STDOUT:98632a0e                  todo  meanings are implementation-defined
-STDOUT:f7969912                  todo  meanings are implementation-defined
-STDOUT:39ca4ae7                  todo  meanings are implementation-defined
+STDOUT:a9ada8d9                  impl  meaning is implementation-defined
+STDOUT:0c0488f5                  impl  meaning is implementation-defined
+STDOUT:98034dfa                  impl  meaning is implementation-defined
+STDOUT:957c2cfa                  impl  meaning is implementation-defined
+STDOUT:fdc88cbd                  impl  meaning is implementation-defined
+STDOUT:ff185c51                  impl  meaning is implementation-defined
+STDOUT:98632a0e                  impl  meaning is implementation-defined
+STDOUT:f7969912                  impl  meaning is implementation-defined
+STDOUT:39ca4ae7                  impl  meaning is implementation-defined
 STDOUT:7cdeef61                  XCU.ps.008
-STDOUT:a180469b                  todo  needs a defunct process or the full command line
-STDOUT:7dd2718c                  todo  needs a defunct process or the full command line
-STDOUT:795c91c5                  todo  needs a defunct process or the full command line
+STDOUT:a180469b                  XCU.ps.015
+STDOUT:7dd2718c                  impl  the means of finding the full command line is not specified
+STDOUT:795c91c5                  impl  the means of finding the full command line is not specified
 STDOUT:eddb6c3f                  XCU.ps.002 XCU.ps.003
 STDOUT:2fae8b49                  XCU.ps.002 XCU.ps.003
 STDOUT:9a3e4985                  XCU.ps.002
@@ -129,7 +129,7 @@ STDOUT:5042a8c4                  XCU.ps.002
 STDOUT:7aff23c1                  XCU.ps.002
 STDOUT:42c653fe                  XCU.ps.002
 STDOUT:1d5efeaa                  XCU.ps.002
-STDOUT:ff98d274                  todo  meanings are implementation-defined
+STDOUT:ff98d274                  impl  meaning is implementation-defined
 STDOUT:58aa4267                  XCU.ps.002
 STDOUT:d9980858                  XCU.ps.002
 STDOUT:483411a9                  XCU.ps.002

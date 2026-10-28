@@ -93,3 +93,42 @@ says       With no -r the latest delta is read and its successor made, -r
            with a higher release makes release.1, and -r of an earlier delta
            that has a successor makes a branch SID.
 test       t/009-sid-table.sh
+
+assertion  XCU.get.010
+anchor     utilities/get.html#OPERANDS
+anchor     utilities/get.html#STDOUT
+anchor     utilities/get.html#STDIN
+class      required
+since      1992
+says       With several SCCS files, a directory or "-" as the operand, get
+           processes every named SCCS file (for "-" the names are read from
+           standard input), writes each pathname followed by a colon on a
+           line of its own before the informative lines, and silently
+           ignores non-SCCS files in a directory.
+test       t/010-multiple-operands.sh
+
+assertion  XCU.get.011
+anchor     utilities/get.html#OPTIONS/-L
+class      required
+since      1992
+says       With -L the delta summary is written to standard output, the
+           informative lines go to standard error, and -s suppresses them.
+test       t/011-L-summary.sh
+
+assertion  XCU.get.012
+anchor     utilities/get.html#STDOUT
+class      required
+since      1992
+says       Using -x lists the excluded deltas after a line "Excluded:", and
+           using -i lists the included deltas after a line "Included:", on
+           standard output.
+test       t/012-included-excluded.sh
+
+assertion  XCU.get.013
+anchor     utilities/get.html#OPTIONS/-b
+class      required
+since      1992
+says       With -e, -b makes the new delta a branch when the b flag is set
+           and the retrieved delta is a leaf, and is ignored when the flag
+           is absent or the retrieved delta is not a leaf.
+test       t/013-branch-b.sh

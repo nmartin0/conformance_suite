@@ -202,3 +202,53 @@ since      2024
 says       -mount is always true; on a single file system it changes
            nothing.
 test       t/027-mount.sh
+
+assertion  XCU.find.028
+anchor     utilities/find.html#OPTIONS
+class      required
+since      1992
+says       The last of -H and -L determines the behaviour without error, and
+           a dangling link is treated as the link itself under both.
+test       t/028-last-H-L-dangling.sh
+
+assertion  XCU.find.029
+anchor     utilities/find.html#OPERANDS
+class      required
+since      1992
+says       The right operand of -a is not evaluated when the left is false,
+           and the right operand of -o is not evaluated when the left is
+           true.
+test       t/029-short-circuit.sh
+
+assertion  XCU.find.030
+anchor     utilities/find.html#OPERANDS
+class      required
+since      1992
+says       -depth applies to the whole expression even when not evaluated,
+           and with -depth the -prune primary has no effect.
+test       t/030-depth-whole-prune.sh
+
+assertion  XCU.find.031
+anchor     utilities/find.html#OPERANDS
+class      required
+since      1992
+says       -perm accepts symbolic modes applied to an empty template, for an
+           exact match and, with a leading hyphen, an at-least match.
+test       t/031-perm-symbolic.sh
+
+assertion  XCU.find.032
+anchor     utilities/find.html#OPERANDS
+class      required
+since      1992
+says       -newer with a symbolic-link argument uses the modification time
+           of the referenced file under -H, and the link's own time when
+           the referenced file does not exist.
+test       t/032-newer-links.sh
+
+assertion  XCU.find.033
+anchor     utilities/find.html#OPERANDS
+class      required
+since      1992
+says       Utilities run by -exec ... {} + have the starting current
+           directory as their working directory.
+test       t/033-exec-plus-cwd.sh

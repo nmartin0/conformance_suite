@@ -65,3 +65,11 @@ says       A directory operand processes each SCCS file in it and ignores
            other files, a - operand reads names from standard input, and a
            missing file gives a non-zero status.
 test       t/006-operands.sh
+
+assertion  XCU.prs.007
+anchor     utilities/prs.html#STDOUT
+class      required
+since      1992
+says       The keywords :MR:, :BD: and :GB: give the MR numbers of a delta,
+           the body of the SCCS file and the text retrieved for the delta.
+test       t/007-mr-body-keywords.sh

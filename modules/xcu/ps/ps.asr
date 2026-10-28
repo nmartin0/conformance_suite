@@ -109,3 +109,29 @@ says       With no selection option ps lists the processes that have the
            invoker.
 reason     A script cannot give the test a controlling terminal of its own,
            and without one the set of processes selected is not defined.
+
+assertion  XCU.ps.013
+anchor     utilities/ps.html#OPTIONS/-a
+class      required
+since      1992
+says       On a terminal, ps -a lists a process associated with that
+           terminal that is not a session leader.
+test       t/013-a-terminal.sh
+
+assertion  XCU.ps.014
+anchor     utilities/ps.html#DESCRIPTION
+class      required
+since      1992
+says       With no selection option, run on a terminal, ps lists processes
+           with the invoker's effective user ID and controlling terminal,
+           including the invoking shell and its background children.
+test       t/014-default-selection-terminal.sh
+
+assertion  XCU.ps.015
+anchor     utilities/ps.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       In the default listing, a process that has exited and has not been
+           waited for by its parent is marked defunct.
+test       t/015-defunct.sh

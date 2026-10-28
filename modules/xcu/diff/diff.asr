@@ -79,3 +79,14 @@ class      required
 since      1992
 says       A file operand - means the standard input.
 test       t/009-stdin-operand.sh
+
+assertion  XCU.diff.010
+anchor     utilities/diff.html#STDOUT
+class      required
+since      1992
+says       For a differing common file in directory mode the line begins
+           with "diff", the options as given on the command line and the
+           two names; with -r, an unmatched file in a subdirectory is
+           reported as "Only in" followed by the directory pathname
+           relative to the operand and the file name.
+test       t/010-dir-header-and-only-in.sh

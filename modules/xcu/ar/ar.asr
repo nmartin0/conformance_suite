@@ -173,3 +173,21 @@ since      1992
 says       "ar -s a" on an existing archive exits 0 and the members are
            unchanged and still listed in order.
 test       t/016-rebuild-symbols.sh
+
+assertion  XCU.ar.017
+anchor     utilities/ar.html#DESCRIPTION
+class      conditional
+when       SD+XSI
+since      1992
+says       An archive made only of printable text files consists only of
+           printable characters, <newline> and <tab>.
+test       t/017-printable-archive.sh
+
+assertion  XCU.ar.018
+anchor     utilities/ar.html#OPERANDS
+class      conditional
+when       SD
+since      1992
+says       A long member name is not truncated: the archive lists the full
+           name and the member extracts under it.
+test       t/018-long-name.sh

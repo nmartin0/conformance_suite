@@ -182,3 +182,319 @@ says       By default a symbolic link is archived itself (its -v line starts
            command line is archived as that file under the link's name (the
            -v line starts with -).
 test       t/018-symbolic-links.sh
+
+assertion  XCU.pax.019
+anchor     utilities/pax.html#DESCRIPTION
+anchor     utilities/pax.html#OPTIONS/-n
+class      required
+since      1992
+says       A directory operand or pattern brings in the whole hierarchy under
+           it: "pax -w d h" and "pax -w" fed the name d on standard input
+           archive d, d/e, d/e/f, d/g and h; listing with the pattern d (also
+           with -n) names d and everything below it; "pax -r d" restores the
+           hierarchy and not h; "pax -rw d dest" copies the nested files.
+test       t/019-hierarchy.sh
+
+assertion  XCU.pax.020
+anchor     utilities/pax.html#DESCRIPTION
+class      required
+since      1992
+says       When an archive holds only the member a/b/c, extracting it creates
+           the missing directories a and a/b with the mode the umask leaves
+           of 0777 (umask 027 gives drwxr-x---, umask 002 gives drwxrwxr-x).
+test       t/020-intermediate-dirs.sh
+
+assertion  XCU.pax.021
+anchor     utilities/pax.html#OPTIONS/-b
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/ustar Interchange Format
+class      required
+since      1992
+says       With -b 4096 (and with -b 32256) each of the formats ustar, cpio and
+           pax writes an archive whose length is a multiple of the block size,
+           and pax lists and extracts it without -b.
+test       t/021-blocksize.sh
+
+assertion  XCU.pax.022
+anchor     utilities/pax.html#OPTIONS/-i
+anchor     utilities/pax.html#INPUT FILES
+class      required
+since      1992
+says       "pax -r -i" on a terminal writes a prompt naming each member to the
+           terminal (not to standard error); a blank answer skips the member, a
+           single period extracts it under its own name, any other answer is
+           the new name; end-of-file in an answer ends pax at once with a
+           nonzero status.
+test       t/022-interactive.sh
+
+assertion  XCU.pax.023
+anchor     utilities/pax.html#OPTIONS/-l
+class      required
+since      1992
+says       "pax -rw -l src dest" makes dest/src/f a hard link to src/f (same
+           serial number); with -L a symbolic link met in the hierarchy is
+           linked to the file it refers to.
+test       t/023-copy-links.sh
+
+assertion  XCU.pax.024
+anchor     utilities/pax.html#DESCRIPTION
+class      required
+since      1992
+says       "pax -w -L d" on a hierarchy holding a symbolic link to an ancestor
+           directory stops (does not run on) and writes a diagnostic to
+           standard error.
+test       t/024-loop.sh
+
+assertion  XCU.pax.025
+anchor     utilities/pax.html#OPTIONS/-s
+class      required
+since      1992
+says       In -s, & stands for the matched text and \1 \2 for subexpressions,
+           the g flag replaces every match, another delimiter such as # can
+           be used, a name that becomes empty is ignored when writing and when
+           reading, the substitution is applied to every member of a
+           hierarchy, and the s and S flags decide whether the contents of a
+           symbolic link are substituted (S: yes, s: no) in write and read
+           mode.
+test       t/025-substitution-more.sh
+
+assertion  XCU.pax.026
+anchor     utilities/pax.html#OPTIONS/-p
+class      required
+since      1992
+says       Extracting a file archived with mode 6755 with -p p, or without -p,
+           does not set the set-user-ID and set-group-ID bits and gives
+           rwxr-xr-x under umask 022 (the ustar mode field holds 6755); in
+           "-p em" the later m wins (the modification time is not
+           preserved) and in "-p me" and "-p eme" it is preserved.
+test       t/026-setuid-and-p.sh
+
+assertion  XCU.pax.027
+anchor     utilities/pax.html#OPTIONS/-p
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/pax Extended Header
+class      required
+since      1992
+says       A file with a preset access time archived in the pax format with
+           -o times gets that access time back on extraction by default, and
+           does not get it with -p a.
+test       t/027-atime.sh
+
+assertion  XCU.pax.028
+anchor     utilities/pax.html#OPTIONS/-t
+class      required
+since      1992
+says       "pax -w -t" leaves the access time of the archived file as it was
+           before pax read it.
+test       t/028-keep-atime.sh
+
+assertion  XCU.pax.029
+anchor     utilities/pax.html#OPTIONS/-H
+anchor     utilities/pax.html#OPTIONS/-L
+class      required
+since      1992
+says       For a tree t holding a symbolic link ld to a directory d: by default
+           and with -H the link ld is archived as a link only; with -L the
+           files below it (t/ld/x) are archived too and t/ld is a directory;
+           "-H t/ld" on the command line archives t/ld as a directory with
+           t/ld/x; with both -H and -L the last one decides.
+test       t/029-symlink-dirs.sh
+
+assertion  XCU.pax.030
+anchor     utilities/pax.html#STDERR
+anchor     utilities/pax.html#OPTIONS/-v
+class      required
+since      1992
+says       "-v" in read mode and in copy mode writes each member or file name
+           as one line to standard error and nothing to standard output; with
+           -s the name written is the substituted one (in write mode too).
+test       t/030-verbose-modes.sh
+
+assertion  XCU.pax.031
+anchor     utilities/pax.html#CONSEQUENCES OF ERRORS
+anchor     utilities/pax.html#DESCRIPTION
+class      required
+since      1992
+says       A file operand that does not exist, or a member that cannot be
+           created, gives a diagnostic and a nonzero status but processing
+           continues with the other files; a ustar hard-link member
+           extracted alone either gets its data or gives a nonzero status
+           and a diagnostic that names the member holding the data.
+test       t/031-consequences.sh
+
+assertion  XCU.pax.032
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/ustar Interchange Format
+class      required
+since      1992
+says       In a ustar archive of a file, a hard link to it, a directory, a
+           symbolic link and a FIFO, the header fields hold the uid, gid,
+           mtime, uname and gname of the file, the type flags are 0, 1 (with
+           the first name in linkname and size 0), 5, 2 (with the target in
+           linkname and size 0) and 6, and no data records follow the headers
+           of types 1, 2, 5 and 6 (the two zero blocks follow the last
+           header); a file of mode 6777 has the mode field 6777.
+test       t/032-ustar-fields.sh
+
+assertion  XCU.pax.033
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/ustar Interchange Format
+class      required
+since      1992
+says       A ustar pathname of 152 characters is stored with name and prefix
+           fields that join into it and is listed and extracted whole; a
+           pathname of 304 characters, or a symbolic link whose target is 150
+           characters, is refused with a diagnostic and a nonzero status and
+           no part of it is stored, while other files are archived.
+test       t/033-ustar-long-names.sh
+
+assertion  XCU.pax.034
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/cpio Header
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/cpio Special Entries
+class      required
+since      1992
+says       In a cpio archive of a file, a hard link to it, a directory, a
+           symbolic link and a FIFO, the fields hold the mode (type and
+           permission bits), uid, gid and mtime of each file, the name size
+           counts the NUL, c_nlink is at least the number of names in the
+           archive, linked names share c_dev and c_ino while the others
+           differ, directories and FIFOs have a zero file size, the symbolic
+           link holds its target as data, entries follow each other without
+           padding up to the trailer, a file of mode 6777 has those bits in
+           c_mode, and extraction restores the types and the hard link.
+test       t/034-cpio-fields.sh
+
+assertion  XCU.pax.035
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/pax Extended Header
+anchor     utilities/pax.html#OPTIONS/-o
+class      required
+since      1992
+says       With -x pax, "-o comment:=hello" puts a typeflag x block holding
+           the record "17 comment=hello" before the file; "-o comment=hello"
+           puts a typeflag g block with it first; the g block is named
+           $TMPDIR/GlobalHead.<pid>.1 by default (/tmp when TMPDIR is unset),
+           the x block ./PaxHeaders.<pid>/f1, and -o globexthdr.name and
+           -o exthdr.name change those names with %n, %p, %d, %f and %%
+           replaced; the two zero blocks end the archive;
+           -o delete=?time removes the atime and mtime records that -o times
+           writes; the mtime record holds the file's time in seconds since the
+           Epoch.
+test       t/035-pax-records.sh
+
+assertion  XCU.pax.036
+anchor     utilities/pax.html#OPTIONS/-o
+class      required
+since      1992
+says       Of two "-o comment=" options the later one wins, a backslash-comma
+           keeps the comma in the value, a trailing comma (also one followed
+           by blanks) is ignored, keywords may be preceded by blanks and a
+           comment record is ignored when the archive is read.
+test       t/036-pax-option-syntax.sh
+
+assertion  XCU.pax.037
+anchor     utilities/pax.html#OPTIONS/-o
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/pax Extended Header Keyword Precedence
+class      required
+since      1992
+says       In list mode the value of gname shown with -o listopt follows the
+           precedence: -o gname:=v beats an x record, which beats -o gname=v,
+           which beats a g record, which beats the ustar header field; and
+           -o delete=gname leaves the ustar header field.
+test       t/037-pax-precedence.sh
+
+assertion  XCU.pax.038
+anchor     utilities/pax.html#DESCRIPTION
+class      required
+since      1992
+says       Archives written with -x ustar, -x cpio and -x pax are recognised
+           without any option on input: pax lists and extracts all three the
+           same way.
+test       t/038-autodetect.sh
+
+assertion  XCU.pax.039
+anchor     utilities/pax.html#OPTIONS/-p
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/pax Extended Header
+class      required
+since      1992
+needs      root
+says       A file owned by ids 61234 and 61235 with mode 4755: extracted with
+           -p o it keeps those ids, extracted by default it belongs to the
+           invoking user, with -p e it keeps the ids and the mode 4755; in the
+           pax format ids above 2097151 are written as uid and gid records.
+test       t/039-privileged-ids.sh
+
+assertion  XCU.pax.040
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/List Mode Format Specifications
+anchor     utilities/pax.html#OPTIONS/-o
+class      required
+since      1992
+says       With -v and -o listopt in list mode: %M gives the ls mode string
+           (%.1M the type character), %F the path, %L "name -> target" for a
+           symbolic link and the path otherwise, %D with no device is a
+           blank and %(size)D equals %(size)u, %T writes the modification
+           time as "%b %e %H:%M %Y" and %(mtime=%Y-%m-%d)T with the given
+           format, \t is a tab, a newline is
+           added after each entry, several listopt options are joined and TZ
+           decides the zone of the times.
+test       t/040-listopt-conversions.sh
+
+assertion  XCU.pax.041
+anchor     utilities/pax.html#OPTIONS/-u
+class      required
+since      1992
+says       "pax -w -a -u" appends a file newer than its archive member and
+           leaves the archive alone for an older file; "pax -rw -u" replaces
+           the destination file when the source is newer and keeps it when the
+           source is older.
+test       t/041-update-write-copy.sh
+
+assertion  XCU.pax.042
+anchor     utilities/pax.html#OPTIONS/-o
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/pax Extended Header
+class      required
+since      1992
+says       In the pax format a path record replaces the name of the member
+           ("-o path:=renamed/x" lists renamed/x); a member whose name has a
+           component longer than the destination allows is not created, by
+           default or with -o invalid=bypass, a diagnostic is written and
+           the next member is still extracted; with -o invalid=rename on a
+           terminal the typed answer becomes the name, and only that member
+           is asked about.
+test       t/042-invalid-names.sh
+
+assertion  XCU.pax.043
+anchor     utilities/pax.html#OPTIONS/-o
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/pax Header Block
+class      required
+since      1992
+says       "pax -w -x pax -o linkdata f1 h" with h a hard link to f1 gives an
+           archive in which the typeflag 1 member h has the size 6 and is
+           followed by a data block and then the end of the archive, where
+           without linkdata h has size 0 and the end follows its header.
+test       t/043-linkdata.sh
+
+assertion  XCU.pax.044
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/pax Extended Header
+class      required
+since      1992
+says       The pax format archives a pathname of 304 characters and a symbolic
+           link whose target has 150 characters, which ustar cannot hold,
+           without error; the archive holds a path record and a linkpath
+           record with them, and extraction restores the file and the link
+           with the same names.
+test       t/044-pax-long-names.sh
+
+assertion  XCU.pax.045
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/pax Extended Header File Times
+class      required
+since      1992
+says       For a file whose modification time has a half second, "pax -w -x
+           pax" writes an mtime record whose value is the time in seconds
+           since the Epoch with the digit 5 for the tenths (1041519845.5).
+test       t/045-subsecond-mtime.sh
+
+assertion  XCU.pax.046
+anchor     utilities/pax.html#EXTENDED DESCRIPTION/ustar Interchange Format
+class      required
+since      1992
+says       Reading a ustar archive: a prefix field that begins with NUL is
+           ignored (the name alone is the pathname), and a name field of
+           100 characters with no terminating NUL is accepted; a
+           100-character file name is written and read back whole.
+test       t/046-crafted-ustar.sh

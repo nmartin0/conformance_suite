@@ -35,3 +35,19 @@ since      1992
 says       unget with no pending edit gives a non-zero status, and a -
            operand reads names from standard input.
 test       t/003-errors.sh
+
+assertion  XCU.unget.004
+anchor     utilities/unget.html#OPTIONS/-r
+class      required
+since      1992
+says       With two outstanding edits by the same user, -r names the one to
+           cancel and the other remains pending.
+test       t/004-r-two-edits.sh
+
+assertion  XCU.unget.005
+anchor     utilities/unget.html#STDOUT
+class      required
+since      1992
+says       With several files, or a directory, each pathname is written on a
+           line of its own after a blank line, followed by the SID removed.
+test       t/005-multiple-files.sh

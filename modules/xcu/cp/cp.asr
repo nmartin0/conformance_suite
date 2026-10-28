@@ -178,3 +178,45 @@ class      required
 says       With -R, copying a directory onto an existing non-directory is
            an error that leaves the file alone.
 test       t/023-R-dir-onto-file.sh
+
+assertion  XCU.cp.024
+anchor     utilities/cp.html#OPTIONS
+class      required
+since      1992
+says       With -R, when -L and -P are both given, the last one given
+           takes effect: -L then -P copies a symbolic link as a link.
+test       t/024-R-L-then-P.sh
+
+assertion  XCU.cp.025
+anchor     utilities/cp.html#OPTIONS
+class      required
+since      1992
+says       With -R, -P then -L: the last takes effect, so a symbolic link
+           to a regular file is copied as a regular file.
+test       t/025-R-P-then-L.sh
+
+assertion  XCU.cp.026
+anchor     utilities/cp.html#OPTIONS
+class      required
+since      1992
+says       With -R -H, a symbolic link operand naming a directory is
+           followed, while a symbolic link found inside is copied as a link.
+test       t/026-R-H.sh
+
+assertion  XCU.cp.027
+anchor     utilities/cp.html#OPTIONS
+class      required
+since      1992
+needs      root
+says       cp -p gives the copy the owner and group of the source, and
+           keeps the set-user-ID and set-group-ID bits.
+test       t/027-p-ids.sh
+
+assertion  XCU.cp.028
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+since      1992
+says       A directory source without -R is diagnosed, creates nothing,
+           the remaining sources are still copied, and the status is
+           non-zero.
+test       t/028-dir-no-R.sh

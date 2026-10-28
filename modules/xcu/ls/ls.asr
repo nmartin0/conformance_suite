@@ -288,3 +288,162 @@ class      required
 says       With no operand ls lists the current directory; a file operand
            is written as given, and a dot file is listed when named.
 test       t/037-operands-as-given.sh
+
+assertion  XCU.ls.038
+anchor     utilities/ls.html#OPTIONS/-C
+anchor     utilities/ls.html#OPTIONS/-x
+anchor     utilities/ls.html#ENVIRONMENT VARIABLES
+class      required
+since      1992
+says       With 12 names of different lengths and COLUMNS=40, ls -C writes
+           them so that reading down the columns gives the collating order and
+           ls -x so that reading across the rows does; every name appears
+           once and whole, no line is longer than 40 columns and the names of
+           one column start at the same position in every line.
+test       t/038-multicolumn.sh
+
+assertion  XCU.ls.039
+anchor     utilities/ls.html#OPTIONS/-f
+class      required
+since      1992
+says       ls -f lists dot and dot-dot and the hidden names (it turns on -a),
+           and -r, -t and -S given with -f leave the order exactly as
+           without them.
+test       t/039-option-f-ignores.sh
+
+assertion  XCU.ls.040
+anchor     utilities/ls.html#OPTIONS/-c
+anchor     utilities/ls.html#OPTIONS/-S
+class      required
+since      1992
+says       With files whose modification time, status change time and size
+           give three different orders: -t sorts by modification time, -t -c
+           by status change time, -t -c -S by size (the last of -c, -u and
+           -S wins) and -S -c by size; the time written by -l is the status change time with -c (even after
+           -S) and the modification time without it.
+test       t/040-option-c.sh
+
+assertion  XCU.ls.041
+anchor     utilities/ls.html#STDOUT
+class      required
+since      1992
+says       In the long format mode each of the nine permission positions
+           shows r, w or x only for its own bit (modes 400, 200, 100, 040,
+           020, 010, 004, 002, 001 and 000 give one letter or none); with
+           set-group-ID the group position shows s when the group may execute
+           and S when it may not.
+test       t/041-permission-letters.sh
+
+assertion  XCU.ls.042
+anchor     utilities/ls.html#STDOUT
+class      required
+since      1992
+says       "ls -l /dev/null" writes a line for a character special file: the
+           mode starts with c, the link count is a number, the owner and
+           group follow, and the line ends with the pathname as given.
+test       t/042-char-special.sh
+
+assertion  XCU.ls.043
+anchor     utilities/ls.html#STDOUT
+anchor     utilities/ls.html#OPTIONS/-F
+class      required
+since      1992
+says       "ls -lF" of symbolic links writes name, @, arrow and contents,
+           optionally followed by the indicator of the target (/ for a
+           directory, * for an executable file, nothing for a plain file or
+           a missing target, which is not an error); "ls -lp" writes no @
+           and, optionally, the slash of a directory target only.
+test       t/043-symlink-indicators.sh
+
+assertion  XCU.ls.044
+anchor     utilities/ls.html#STDOUT
+anchor     utilities/ls.html#OPTIONS/-i
+anchor     utilities/ls.html#OPTIONS/-s
+class      required
+since      1992
+says       "ls -i -s -l" writes the total line and then lines that start with
+           the serial number and the block count before the mode; "ls -i -s
+           -1" writes serial number, block count and name.
+test       t/044-inode-blocks-long.sh
+
+assertion  XCU.ls.045
+anchor     utilities/ls.html#DESCRIPTION
+class      required
+since      1992
+says       "ls -RL" on a tree with a symbolic link to an ancestor directory
+           writes a diagnostic to standard error and does not run on: it
+           recovers or terminates.
+test       t/045-loop.sh
+
+assertion  XCU.ls.046
+anchor     utilities/ls.html#OPTIONS/-S
+anchor     utilities/ls.html#OPTIONS/-t
+anchor     utilities/ls.html#OPTIONS/-H
+class      required
+since      1992
+says       -S and -t use the size and time of a symbolic link itself unless
+           -H (for operands) or -L evaluates it as the file it refers to.
+test       t/046-sort-symlinks.sh
+
+assertion  XCU.ls.047
+anchor     utilities/ls.html#ENVIRONMENT VARIABLES
+anchor     utilities/ls.html#STDOUT
+class      required
+since      1992
+says       The hour in the long format time of a recent file follows TZ:
+           with TZ=XYZ-3 it is three hours later than with TZ=UTC0 and the
+           minutes are the same.
+test       t/047-tz.sh
+
+assertion  XCU.ls.048
+anchor     utilities/ls.html#OPTIONS/-A
+anchor     utilities/ls.html#OPTIONS/-F
+class      required
+since      1992
+says       Of two options from one exclusive set the last decides: "-A -a"
+           lists dot and dot-dot and "-a -A" does not; "-F -p" marks
+           directories only and "-p -F" also marks executables; "-m -1"
+           writes one name per line and "-1 -m" a comma list; "-C -x" is the
+           same as -x and "-x -C" the same as -C.
+test       t/048-last-option-wins.sh
+
+assertion  XCU.ls.049
+anchor     utilities/ls.html#EXIT STATUS
+anchor     utilities/ls.html#STDERR
+class      required
+since      1992
+says       A successful ls exits with status 0 and writes nothing to standard
+           error.
+test       t/049-success.sh
+
+assertion  XCU.ls.050
+anchor     utilities/ls.html#OPTIONS/-n
+anchor     utilities/ls.html#OPTIONS/-1
+class      required
+since      1992
+says       -n written after -C, -m or -x switches the long format on and
+           written before them is switched off by them (the total line shows
+           which one wins), and -1 does not switch the long format off
+           ("-l -1" and "-1 -l" still write the total line and the long
+           lines).
+test       t/050-long-enablers.sh
+
+assertion  XCU.ls.051
+anchor     utilities/ls.html#OPTIONS/-g
+anchor     utilities/ls.html#OPTIONS/-o
+class      conditional
+when       XSI
+since      1992
+says       -g and -o behave as -n does for the long format: written after -C,
+           -m or -x they switch it on, written before them they are switched
+           off, and -1 does not switch it off.
+test       t/051-long-enablers-xsi.sh
+
+assertion  XCU.ls.052
+anchor     utilities/ls.html#STDOUT
+class      required
+since      1992
+says       "ls -lR d" with a subdirectory d/sub writes a blank line, the
+           header "d/sub:" and then the total line of that directory, in
+           this order.
+test       t/052-R-header-total.sh

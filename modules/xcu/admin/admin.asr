@@ -83,3 +83,36 @@ since      1992
 says       A single - operand reads SCCS file names from standard input; an
            unreadable -i file gives a non-zero status and creates nothing.
 test       t/008-operands-and-errors.sh
+
+assertion  XCU.admin.009
+anchor     utilities/admin.html#OPTIONS/-f
+anchor     utilities/admin.html#OPTIONS/-d
+class      required
+since      1992
+says       The l flag with a release list (or a) makes get -e of a locked
+           release fail, and -d with the l flag unlocks it.
+test       t/009-lock-flag.sh
+
+assertion  XCU.admin.010
+anchor     utilities/admin.html#OPTIONS/-f
+class      required
+since      1992
+says       The j flag allows a second get -e on the same SID while the first
+           edit is outstanding.
+test       t/010-joint-edit-flag.sh
+
+assertion  XCU.admin.011
+anchor     utilities/admin.html#OPERANDS
+class      required
+since      1992
+says       A directory operand applies the operation to every SCCS file in it
+           and silently ignores other files.
+test       t/011-directory-operand.sh
+
+assertion  XCU.admin.012
+anchor     utilities/admin.html#OPTIONS/-m
+class      required
+since      1992
+says       With the v flag set, -m records MR numbers for the initial delta
+           of a new file; without the v flag, a diagnostic is written.
+test       t/012-mr-initial.sh

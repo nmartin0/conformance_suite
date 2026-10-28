@@ -66,3 +66,11 @@ says       With the - operand each input line is a command line, and a
            discrepancy is reported as the input line, an empty line and an
            indented pathname message.
 test       t/006-stdin-lines.sh
+
+assertion  XCU.val.007
+anchor     utilities/val.html#EXIT STATUS
+class      required
+since      1992
+says       A modified SCCS file sets the corrupted-file bit 0x20 in the exit
+           status of val.
+test       t/007-corrupted.sh

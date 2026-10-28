@@ -7,41 +7,41 @@
 DESCRIPTION:924d62fa             XCU.get.002
 DESCRIPTION:c95aab0c             XCU.get.002
 OPTIONS:ba5dded2                 todo  utility syntax guidelines not exercised
-OPTIONS:e2947e20                 todo  not covered by this build
+OPTIONS:e2947e20                 none  introduces the option list
 OPTIONS:6c6ac95e                 XCU.get.004 XCU.get.009
 OPTIONS:10885376                 XCU.get.003
 OPTIONS:1eb29f04                 XCU.get.004
-OPTIONS:59ecf1b4                 todo  not covered by this build
-OPTIONS:5295217a                 todo  not covered by this build
+OPTIONS:59ecf1b4                 none  expected future change; no behaviour
+OPTIONS:5295217a                 none  expected future change; no behaviour
 OPTIONS:400cc595                 XCU.get.004
 OPTIONS:5100efcc                 XCU.get.004
 OPTIONS:93d794c0                 XCU.get.004
 OPTIONS:5500c57f                 XCU.get.004
 OPTIONS:5194d47a                 XCU.get.003
 OPTIONS:7acf1b31                 XCU.get.003
-OPTIONS:718abb00                 todo  not covered by this build
+OPTIONS:718abb00                 impl  concurrent edits of different SIDs: permitted, nothing required to be observed
 OPTIONS:8b1d070e                 XCU.get.003
 OPTIONS:e3bf540d                 XCU.get.003
 OPTIONS:d0d98de1                 XCU.get.003
-OPTIONS:126118b8                 todo  -b needs the b flag and a leaf
-OPTIONS:6a785d3d                 todo  -b needs the b flag and a leaf
+OPTIONS:126118b8                 XCU.get.013
+OPTIONS:6a785d3d                 XCU.get.013
 OPTIONS:b1467f5e                 XCU.get.008
-OPTIONS:8a9d0e39                 todo  not covered by this build
-OPTIONS:2837c708                 todo  not covered by this build
+OPTIONS:8a9d0e39                 impl  result of a partial SID in a list is unspecified
+OPTIONS:2837c708                 XCU.get.012
 OPTIONS:a396e964                 XCU.get.008
 OPTIONS:80755574                 XCU.get.008
 OPTIONS:a44b01e6                 XCU.get.005
 OPTIONS:4f66c8ae                 XCU.get.003
 OPTIONS:29b5bece                 XCU.get.007
-OPTIONS:12e977e4                 todo  -L is not exercised
-OPTIONS:ab028f60                 todo  not covered by this build
+OPTIONS:12e977e4                 XCU.get.011
+OPTIONS:ab028f60                 XCU.get.011
 OPTIONS:7dad786d                 XCU.get.001
 OPTIONS:e421006d                 XCU.get.001
 OPTIONS:8ac803e3                 XCU.get.001
 OPTIONS:8bc859eb                 XCU.get.001
-OPTIONS:47516197                 todo  not covered by this build
+OPTIONS:47516197                 XCU.get.011
 OPTIONS:fdd8adf5                 XCU.get.006
-OPTIONS:b94df97b                 todo  not covered by this build
+OPTIONS:b94df97b                 XCU.get.006
 OPTIONS:7b4c340c                 XCU.get.006
 OPTIONS:103c8ea7                 XCU.get.006
 OPTIONS:2ee083d7                 XCU.get.007
@@ -49,11 +49,11 @@ OPTIONS:ccf3cbee                 XCU.get.007
 OPTIONS:3f05b600                 XCU.get.004
 OPERANDS:51b44f3c                XCU.get.002
 OPERANDS:00a5388b                XCU.get.002
-OPERANDS:cb7a7e68                todo  - operand is not exercised for get
-OPERANDS:479ecccf                todo  - operand is not exercised for get
-OPERANDS:9e844f1f                todo  - operand is not exercised for get
-STDIN:4e42d080                   todo  - operand is not exercised for get
-STDIN:36b9af0b                   todo  - operand is not exercised for get
+OPERANDS:cb7a7e68                XCU.get.010
+OPERANDS:479ecccf                XCU.get.010
+OPERANDS:9e844f1f                XCU.get.010
+STDIN:4e42d080                   XCU.get.010
+STDIN:36b9af0b                   XCU.get.010
 INPUT_FILES:0c413c84             XCU.get.002
 ENVIRONMENT_VARIABLES:9228c7b0   todo  locale variables not exercised
 ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
@@ -72,13 +72,13 @@ STDOUT:2147043e                  XCU.get.002 XCU.get.003
 STDOUT:39f7cadb                  XCU.get.002 XCU.get.003
 STDOUT:3496ba40                  XCU.get.002
 STDOUT:42754146.2                XCU.get.002 XCU.get.003
-STDOUT:017679cf                  todo  multi-file headings are not exercised
-STDOUT:97c4f361                  todo  multi-file headings are not exercised
+STDOUT:017679cf                  XCU.get.010
+STDOUT:97c4f361                  XCU.get.010
 STDOUT:d6ba8c1b                  XCU.get.002
-STDOUT:975bc8da                  todo  -L summary is not exercised
-STDOUT:f0201a87                  todo  -L summary is not exercised
-STDOUT:a804ced2                  todo  -L summary is not exercised
-STDOUT:e0f186db                  todo  -L summary is not exercised
+STDOUT:975bc8da                  XCU.get.011 XCU.get.012
+STDOUT:f0201a87                  XCU.get.011 XCU.get.012
+STDOUT:a804ced2                  XCU.get.011 XCU.get.012
+STDOUT:e0f186db                  XCU.get.011 XCU.get.012
 STDOUT:bdce2a7d                  XCU.get.001
 STDERR:9e4e8014                  none  diagnostics are unspecified
 OUTPUT_FILES:fcd967a0            XCU.get.002 XCU.get.003
@@ -132,11 +132,11 @@ OUTPUT_FILES:5b9a56a4            XCU.get.003
 OUTPUT_FILES:7a74ed91            XCU.get.002
 OUTPUT_FILES:5923d836            XCU.get.002
 OUTPUT_FILES:af95186f            XCU.get.003
-OUTPUT_FILES:8bcf645e            todo  the transient z-file is not observable
-OUTPUT_FILES:9c900d20            todo  the transient z-file is not observable
-OUTPUT_FILES:e8783268            todo  the transient z-file is not observable
+OUTPUT_FILES:8bcf645e            untestable  the lock file exists only while get runs and is not observable
+OUTPUT_FILES:9c900d20            untestable  the lock file exists only while get runs and is not observable
+OUTPUT_FILES:e8783268            untestable  the lock file exists only while get runs and is not observable
 OUTPUT_FILES:368fb3a9            XCU.get.003
-OUTPUT_FILES:3f274848            todo  the transient z-file is not observable
+OUTPUT_FILES:3f274848            untestable  the lock file exists only while get runs and is not observable
 EXTENDED_DESCRIPTION:bc20c8fd    XCU.get.005
 EXTENDED_DESCRIPTION:89411323    XCU.get.005
 EXTENDED_DESCRIPTION:567d28d7    XCU.get.005
