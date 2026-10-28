@@ -1,0 +1,80 @@
+# XCU sh-patterns
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.sh-patterns.001
+anchor     utilities/V3_chap02.html#2.14.1
+anchor     utilities/V3_chap02.html#2.14.2
+class      required
+says       Ordinary characters match themselves, ? matches exactly one
+           character, * matches any string including the empty one (each *
+           as much as lets the rest match).
+test       t/001-ordinary-star-question.sh
+
+assertion  XCU.sh-patterns.002
+anchor     utilities/V3_chap02.html#2.14.1
+class      required
+says       Bracket expressions match one character from a list, a range or a
+           class, ! negates, a ] first and a - first or last are literal.
+test       t/002-brackets.sh
+
+assertion  XCU.sh-patterns.003
+anchor     utilities/V3_chap02.html#2.14.1/does not introduce a valid bracket expression
+class      required
+says       A [ that does not start a valid bracket expression matches a [
+           itself.
+test       t/003-bracket-not-valid.sh
+
+assertion  XCU.sh-patterns.004
+anchor     utilities/V3_chap02.html#2.14.1
+class      required
+says       A quoted or backslash-escaped pattern character matches only
+           itself; a pattern that comes from an expansion keeps its special
+           characters unless the expansion was quoted.
+test       t/004-quoting.sh
+
+assertion  XCU.sh-patterns.005
+anchor     utilities/V3_chap02.html#2.14.1
+anchor     utilities/V3_chap02.html#2.14.3
+class      required
+says       Matching is by characters and is case-sensitive; in a case
+           pattern (not filename expansion) * and ? and [/] also match a
+           slash or a leading period.
+test       t/005-case-sensitive-slash-period.sh
+
+assertion  XCU.sh-patterns.006
+anchor     utilities/V3_chap02.html#2.14.3/sorted according to the collating sequence
+class      required
+says       Pathname expansion replaces a pattern that matches existing names
+           by those names, sorted by the collating sequence (byte order in
+           the POSIX locale).
+test       t/006-expand-sorted.sh
+
+assertion  XCU.sh-patterns.007
+anchor     utilities/V3_chap02.html#2.14.3/If the pattern does not match any
+class      required
+says       A pattern that matches no name is left as it is; a word with no
+           pattern characters is also left alone.
+test       t/007-expand-no-match.sh
+
+assertion  XCU.sh-patterns.008
+anchor     utilities/V3_chap02.html#2.14.3/slash
+class      required
+says       In pathname expansion a slash is matched only by a slash in the
+           pattern, never by *, ? or a bracket expression, and a [ with a
+           slash before its ] is an ordinary character.
+test       t/008-expand-slash.sh
+
+assertion  XCU.sh-patterns.009
+anchor     utilities/V3_chap02.html#2.14.3/leading
+class      required
+says       A leading period in a name is matched only by an explicit period
+           in the pattern (first, or just after a slash), not by *, ?, [!a],
+           or a range.
+test       t/009-expand-leading-period.sh
+
+assertion  XCU.sh-patterns.010
+anchor     utilities/V3_chap02.html#2.14.1
+class      required
+says       Quoted or escaped pattern characters are not expanded as filename
+           patterns.
+test       t/010-expand-quoted-literal.sh

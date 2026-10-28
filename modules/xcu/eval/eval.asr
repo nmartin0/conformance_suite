@@ -1,0 +1,58 @@
+# XCU eval
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/eval.html only redirects
+# there), so anchors name V3_chap02.html and the .cov file accounts for
+# the units by hand.
+
+assertion  XCU.eval.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/shall construct a command string by concatenating
+class      required
+says       eval joins its operands with single spaces into one command
+           string and executes it.
+test       t/001-concatenate.sh
+
+assertion  XCU.eval.002
+anchor     utilities/V3_chap02.html#DESCRIPTION/in the current
+class      required
+says       The constructed command runs in the current shell environment:
+           variables, functions and positional parameters it sets stay set.
+test       t/002-current-env.sh
+
+assertion  XCU.eval.003
+anchor     utilities/V3_chap02.html#EXAMPLES/foo=10 x=foo
+anchor     utilities/V3_chap02.html#DESCRIPTION/shall construct a command string by concatenating
+class      required
+says       The operands are expanded once by the shell and the result is
+           parsed again, so eval y='$'$x with x holding a variable name
+           gives y that variable's value.
+test       t/003-double-expansion.sh
+
+assertion  XCU.eval.004
+anchor     utilities/V3_chap02.html#EXIT STATUS/exit status of the command defined
+class      required
+says       The exit status of eval is that of the command it executes.
+test       t/004-status.sh
+
+assertion  XCU.eval.005
+anchor     utilities/V3_chap02.html#EXIT STATUS/or only null <i>argument</i>s
+class      required
+says       eval with no operands, or only null operands, returns status zero
+           even when the previous status was not zero.
+test       t/005-no-operands.sh
+
+assertion  XCU.eval.006
+anchor     utilities/V3_chap02.html#DESCRIPTION/tokenized
+class      required
+says       The command string is tokenized and parsed as shell language:
+           reserved words, lists and quoting in it work as in a script.
+test       t/006-parsed-afresh.sh
+
+assertion  XCU.eval.007
+anchor     utilities/V3_chap02.html#2.8.1
+anchor     utilities/V3_chap02.html#EXIT STATUS/could not be parsed
+class      required
+says       A syntax error in the constructed command makes a non-interactive
+           shell exit with a non-zero status without running later commands.
+test       t/007-syntax-error.sh

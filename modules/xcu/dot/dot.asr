@@ -1,0 +1,72 @@
+# XCU dot
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/dot.html only redirects
+# there), so anchors name V3_chap02.html and the .cov file accounts for
+# the units by hand.
+
+assertion  XCU.dot.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/execute the resulting commands in the current environment
+class      required
+says       The dot utility executes the commands of the file in the current
+           shell environment: variables, functions and positional parameters
+           it sets stay set.
+test       t/001-current-env.sh
+
+assertion  XCU.dot.002
+anchor     utilities/V3_chap02.html#DESCRIPTION/need not be executable
+anchor     utilities/V3_chap02.html#DESCRIPTION/search path specified by
+class      required
+says       A file operand without a slash is looked for in the directories
+           of PATH and need not be executable; the current directory is not
+           searched unless PATH names it.
+test       t/002-path-search.sh
+
+assertion  XCU.dot.003
+anchor     utilities/V3_chap02.html#DESCRIPTION/does not contain a
+class      required
+says       A file operand that contains a slash is used as given, with no
+           PATH search.
+test       t/003-slash-name.sh
+
+assertion  XCU.dot.004
+anchor     utilities/V3_chap02.html#EXIT STATUS/return the value of the last command executed
+class      required
+says       The status of the dot utility is that of the last command
+           executed in the file, and zero when the file runs no command.
+test       t/004-status.sh
+
+assertion  XCU.dot.005
+anchor     utilities/V3_chap02.html#DESCRIPTION/If no readable file is found
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       When no readable file is found, a non-interactive shell exits
+           with a non-zero status and runs nothing more.
+test       t/005-not-found.sh
+
+assertion  XCU.dot.006
+anchor     utilities/V3_chap02.html#DESCRIPTION/diagnostic message to standard error
+anchor     utilities/V3_chap02.html#EXIT STATUS/the shell is interactive
+class      required
+says       When no readable file is found, an interactive shell writes a
+           diagnostic to standard error, does not exit, and the dot utility
+           returns a non-zero status.
+test       t/006-not-found-interactive.sh
+
+assertion  XCU.dot.007
+anchor     utilities/V3_chap02.html#2.8.1
+anchor     utilities/V3_chap02.html#DESCRIPTION/parse the tokens
+class      required
+says       A syntax error in the file read by dot makes a non-interactive
+           shell exit with a non-zero status; commands after the dot are not
+           run.
+test       t/007-syntax-error.sh
+
+assertion  XCU.dot.008
+anchor     utilities/V3_chap02.html#DESCRIPTION/special built-in shall support XBD
+class      required
+since      2024
+says       The dot utility accepts "--" as the end of options before the
+           file operand.
+test       t/008-double-hyphen.sh

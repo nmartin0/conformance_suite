@@ -1,0 +1,43 @@
+# XCU continue
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/continue.html only
+# redirects there), so anchors name V3_chap02.html and the .cov file
+# accounts for the units by hand.
+
+assertion  XCU.continue.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/return to the top
+class      required
+says       Without an operand, continue skips the rest of the body of the
+           innermost for, while or until loop and starts the next iteration.
+test       t/001-innermost.sh
+
+assertion  XCU.continue.002
+anchor     utilities/V3_chap02.html#DESCRIPTION/return to the top
+class      required
+says       continue n returns to the top of the nth enclosing loop,
+           abandoning the inner loops; continue 1 is the same as continue.
+test       t/002-nth-loop.sh
+
+assertion  XCU.continue.003
+anchor     utilities/V3_chap02.html#DESCRIPTION/outermost
+class      required
+says       When n is greater than the number of enclosing loops, continue
+           applies to the outermost enclosing loop.
+test       t/003-too-large.sh
+
+assertion  XCU.continue.004
+anchor     utilities/V3_chap02.html#DESCRIPTION/repeating the condition list
+class      required
+says       continue in a while or until loop repeats the condition list; in
+           a for loop it takes the next item.
+test       t/004-condition-repeated.sh
+
+assertion  XCU.continue.005
+anchor     utilities/V3_chap02.html#EXIT STATUS/not an unsigned decimal integer
+class      required
+says       A continue whose operand is not a positive decimal integer
+           returns a non-zero status (or the shell exits with a non-zero
+           status).
+test       t/005-bad-operand.sh

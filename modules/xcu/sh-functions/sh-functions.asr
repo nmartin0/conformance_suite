@@ -1,0 +1,64 @@
+# XCU sh-functions
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.sh-functions.001
+anchor     utilities/V3_chap02.html#2.9.5/none of the expansions
+class      required
+says       A function definition stores the body without expanding it; each
+           call expands and runs it afresh.
+test       t/001-define-call.sh
+
+assertion  XCU.sh-functions.002
+anchor     utilities/V3_chap02.html#2.9.5/The operands to the command temporarily
+class      required
+says       A function's operands become its positional parameters and $#; $0
+           is unchanged; the caller's parameters come back afterwards.
+test       t/002-parameters.sh
+
+assertion  XCU.sh-functions.003
+anchor     utilities/V3_chap02.html#2.9.5/Exit Status
+class      required
+says       A function call has the status of the last command run in it; the
+           status of a definition is zero.
+test       t/003-status.sh
+
+assertion  XCU.sh-functions.004
+anchor     utilities/V3_chap02.html#2.9.5
+class      required
+says       The body of a function may be any compound command: a subshell,
+           if, for, case or while.
+test       t/004-compound-bodies.sh
+
+assertion  XCU.sh-functions.005
+anchor     utilities/V3_chap02.html#2.9.5/optional <i>io-redirect</i> redirections
+class      required
+says       Redirections written after a function definition apply at each
+           call, not at the definition.
+test       t/005-redirect-at-call.sh
+
+assertion  XCU.sh-functions.006
+anchor     utilities/V3_chap02.html#2.9.5/separate name
+class      required
+says       Functions and variables have separate name spaces.
+test       t/006-separate-names.sh
+
+assertion  XCU.sh-functions.007
+anchor     utilities/V3_chap02.html#2.9.5/The operands to the command temporarily
+class      required
+says       A function runs in the current environment: variables it sets
+           stay, and shift in it changes only its own parameters.
+test       t/007-env-effects.sh
+
+assertion  XCU.sh-functions.008
+anchor     utilities/V3_chap02.html#2.9.5
+class      required
+says       A function can call itself, and a later definition replaces an
+           earlier one.
+test       t/008-recursion-redefine.sh
+
+assertion  XCU.sh-functions.009
+anchor     utilities/V3_chap02.html#2.13/Changes made to the subshell environment
+class      required
+says       A function defined in a subshell is not defined in the shell that
+           started it.
+test       t/009-subshell-scope.sh

@@ -1,0 +1,56 @@
+# XCU exit
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/exit.html only redirects
+# there), so anchors name V3_chap02.html and the .cov file accounts for
+# the units by hand.
+
+assertion  XCU.exit.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/between 0 and 255 inclusive
+class      required
+says       exit n ends the shell with exit status n for values from 0 to
+           255.
+test       t/001-status-n.sh
+
+assertion  XCU.exit.002
+anchor     utilities/V3_chap02.html#DESCRIPTION/If <i>n</i> is not specified
+class      required
+says       exit with no operand uses the exit status of the last command
+           executed.
+test       t/002-no-operand.sh
+
+assertion  XCU.exit.003
+anchor     utilities/V3_chap02.html#DESCRIPTION/subshell environment and continue
+class      required
+says       In a subshell, exit ends only the subshell with the given status;
+           the parent continues.
+test       t/003-subshell.sh
+
+assertion  XCU.exit.004
+anchor     utilities/V3_chap02.html#DESCRIPTION/on <b>EXIT</b> shall be executed before the shell terminates, except
+class      required
+says       A trap on EXIT runs before the shell terminates after exit n, and
+           the exit status is still n.
+test       t/004-exit-trap.sh
+
+assertion  XCU.exit.005
+anchor     utilities/V3_chap02.html#DESCRIPTION/shell shall exit immediately
+class      required
+says       An exit within an EXIT trap action ends the shell at once with
+           that exit's status.
+test       t/005-exit-in-trap.sh
+
+assertion  XCU.exit.006
+anchor     utilities/V3_chap02.html#DESCRIPTION/it had immediately preceding the
+class      required
+says       An exit with no operand inside a trap action uses the exit status
+           the shell had before the trap action began.
+test       t/006-trap-status.sh
+
+assertion  XCU.exit.007
+anchor     utilities/V3_chap02.html#DESCRIPTION/cause the shell to exit from its current execution
+class      required
+says       exit within a function, an eval string or a dot file ends the
+           whole shell, not only that construct.
+test       t/007-ends-shell.sh

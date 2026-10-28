@@ -1,0 +1,72 @@
+# XCU readonly
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/readonly.html only
+# redirects there), so anchors name V3_chap02.html and the .cov file
+# accounts for the units by hand.
+
+assertion  XCU.readonly.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/readonly attribute
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       After readonly name=word, a plain assignment to name is an error:
+           a non-interactive shell exits with a non-zero status; in a
+           subshell only the subshell ends, and the value is unchanged.
+test       t/001-assign-fails.sh
+
+assertion  XCU.readonly.002
+anchor     utilities/V3_chap02.html#DESCRIPTION/readonly attribute
+class      required
+says       readonly name (no value) makes an existing variable read-only
+           while keeping its value.
+test       t/002-existing-variable.sh
+
+assertion  XCU.readonly.003
+anchor     utilities/V3_chap02.html#DESCRIPTION/cannot be changed by subsequent assignment
+class      required
+says       A read-only variable cannot be unset or exported with a new
+           value: both fail with a non-zero status and the value stays.
+test       t/003-unset-export.sh
+
+assertion  XCU.readonly.004
+anchor     utilities/V3_chap02.html#DESCRIPTION/getopts
+anchor     utilities/read.html#DESCRIPTION/previously been marked <i>readonly</i>
+anchor     utilities/getopts.html#DESCRIPTION/previously been marked <i>readonly</i>
+class      required
+since      2024
+says       The read and getopts utilities cannot change a read-only
+           variable: each returns a value greater than one, the shell does
+           not exit, and the value stays.
+test       t/004-read-getopts.sh
+
+assertion  XCU.readonly.005
+anchor     utilities/V3_chap02.html#DESCRIPTION/When <b>-p</b> is specified, <a href="#readonly"
+class      required
+says       readonly -p writes readonly name=value for each read-only
+           variable that is set (value quoted for reading back) and readonly
+           name for one that is unset; reading it back into a new shell
+           makes the variable read-only again with its value.
+test       t/005-p-format.sh
+
+assertion  XCU.readonly.006
+anchor     utilities/V3_chap02.html#EXIT STATUS/an already <i>readonly</i> variable
+class      required
+says       readonly name=word on a variable that is already read-only fails
+           with a non-zero status and does not change the value.
+test       t/006-readonly-twice.sh
+
+assertion  XCU.readonly.007
+anchor     utilities/V3_chap02.html#DESCRIPTION/declaration utility
+anchor     utilities/V3_chap02.html#2.9.1.1
+class      required
+since      2024
+says       The words name=word given to readonly are expanded as
+           assignments: tilde after = and colons, no field splitting.
+test       t/007-declaration-utility.sh
+
+assertion  XCU.readonly.008
+anchor     utilities/V3_chap02.html#DESCRIPTION/special built-in shall support XBD
+class      required
+says       readonly accepts "--" as the end of options.
+test       t/008-double-hyphen.sh

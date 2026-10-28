@@ -1,0 +1,159 @@
+# XCU trap
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/trap.html only redirects
+# there), so anchors name V3_chap02.html and the .cov file accounts for
+# the units by hand.
+
+assertion  XCU.trap.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/shall be read and executed by the shell
+class      required
+says       trap action condition runs the action (as eval would) when the
+           signal arrives, and the shell then goes on.
+test       t/001-signal-action.sh
+
+assertion  XCU.trap.002
+anchor     utilities/V3_chap02.html#DESCRIPTION/EXIT condition shall occur
+class      required
+says       A trap on EXIT (or on 0) runs when the shell exits normally.
+test       t/002-exit-condition.sh
+
+assertion  XCU.trap.003
+anchor     utilities/V3_chap02.html#DESCRIPTION/reset each condition to the default value
+anchor     utilities/V3_chap02.html#DESCRIPTION/unsigned decimal integer
+class      required
+says       trap - condition restores the default action, and a first operand
+           that is an unsigned decimal integer makes all operands conditions
+           to reset.
+test       t/003-reset.sh
+
+assertion  XCU.trap.004
+anchor     utilities/V3_chap02.html#DESCRIPTION/the shell shall ignore each specified
+class      required
+says       trap "" condition makes the shell ignore the signal.
+test       t/004-ignore.sh
+
+assertion  XCU.trap.005
+anchor     utilities/V3_chap02.html#DESCRIPTION/shall override a previous action
+class      required
+says       A new trap on a condition replaces the earlier one.
+test       t/005-override.sh
+
+assertion  XCU.trap.006
+anchor     utilities/V3_chap02.html#DESCRIPTION/value of
+class      required
+says       The value of $? after a trap action finishes is the value it had
+           before the action.
+test       t/006-status-kept.sh
+
+assertion  XCU.trap.007
+anchor     utilities/V3_chap02.html#DESCRIPTION/<tt>eval </tt><i>action</i>
+class      required
+says       A trap action runs in the current shell environment: its
+           assignments stay.
+test       t/007-current-env.sh
+
+assertion  XCU.trap.008
+anchor     utilities/V3_chap02.html#2.12
+class      required
+says       A trap for a signal received while the shell waits for a
+           foreground utility is not run until that utility has finished.
+test       t/008-deferred.sh
+
+assertion  XCU.trap.009
+anchor     utilities/V3_chap02.html#DESCRIPTION/command with no operands shall write to standard output
+class      required
+says       trap with no operands writes, as trap -- action condition lines
+           that read back, the conditions whose action is not the default,
+           and no others.
+test       t/009-list.sh
+
+assertion  XCU.trap.010
+anchor     utilities/V3_chap02.html#OPTIONS/Write to standard output a list of commands
+class      required
+since      2024
+says       trap -p condition... writes the trap for each named condition as
+           a trap -- line that restores the same trap when read back, and
+           writes only the named conditions.
+test       t/010-p-operands.sh
+
+assertion  XCU.trap.011
+anchor     utilities/V3_chap02.html#OPTIONS/Write to standard output a list of commands
+class      disputed
+since      2024
+says       trap -p condition for a condition in its default state writes a
+           line that, read back, leaves the condition in the default state.
+note       disputed (new): the description of -p with operands says it
+           writes the commands associated with each condition operand and
+           that the output must achieve the same trapping results, but does
+           not say what is written for a condition whose action is the
+           default; only the form for trap -p without operands (all
+           conditions) is explicit.
+test       t/011-p-operand-default.sh
+
+assertion  XCU.trap.012
+anchor     utilities/V3_chap02.html#DESCRIPTION/the set shall contain all conditions
+class      required
+since      2024
+says       trap -p with no operands lists all conditions, those in their
+           default state too, each as a trap -- line.
+test       t/012-p-all.sh
+
+assertion  XCU.trap.013
+anchor     utilities/V3_chap02.html#EXIT STATUS/the trap name
+class      required
+says       An unknown condition name makes trap write a warning to standard
+           error and return non-zero, but the shell does not exit.
+test       t/013-invalid-condition.sh
+
+assertion  XCU.trap.014
+anchor     utilities/V3_chap02.html#DESCRIPTION/shall be identical to
+class      required
+says       The EXIT trap action runs in the environment the shell had after
+           its last command (variables and working directory).
+test       t/014-exit-env.sh
+
+assertion  XCU.trap.015
+anchor     utilities/V3_chap02.html#DESCRIPTION/When a subshell is entered
+class      required
+says       A subshell resets caught traps to the default but keeps ignored
+           signals ignored.
+test       t/015-subshell.sh
+
+assertion  XCU.trap.016
+anchor     utilities/V3_chap02.html#DESCRIPTION/Signals that were ignored on entry
+class      required
+says       A signal that was ignored when a non-interactive shell started
+           cannot be trapped: the shell goes on and the signal stays
+           ignored.
+test       t/016-ignored-on-entry.sh
+
+assertion  XCU.trap.017
+anchor     utilities/V3_chap02.html#DESCRIPTION/including signals that were ignored on entry
+class      required
+says       The trap listing includes a signal that was ignored on entry to a
+           non-interactive shell.
+test       t/017-list-ignored-on-entry.sh
+
+assertion  XCU.trap.018
+anchor     utilities/V3_chap02.html#DESCRIPTION/XSI-conformant systems also allow numeric signal numbers
+class      conditional
+when       XSI
+says       On an XSI system the conditions may be given as the signal
+           numbers 1, 2, 3, 6, 9, 14 and 15 and 0 for exit; number 15 is
+           TERM.
+test       t/018-xsi-numbers.sh
+
+assertion  XCU.trap.019
+anchor     utilities/V3_chap02.html#DESCRIPTION/immediately before the subshell environment was entered
+class      required
+says       trap with no operands inside a command substitution lists the
+           traps of the shell that started the substitution.
+test       t/019-listing-in-subshell.sh
+
+assertion  XCU.trap.020
+anchor     utilities/V3_chap02.html#DESCRIPTION/special built-in shall conform to XBD
+class      required
+says       trap accepts "--" before its operands.
+test       t/020-double-hyphen.sh

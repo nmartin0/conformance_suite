@@ -1,0 +1,92 @@
+# XCU exec
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/exec.html only redirects
+# there), so anchors name V3_chap02.html and the .cov file accounts for
+# the units by hand.
+
+assertion  XCU.exec.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/redirections associated with the
+class      required
+says       With no utility operand, exec makes its redirections in the
+           current shell: later commands write to the redirected output,
+           read the redirected input, and use a newly opened descriptor.
+test       t/001-redirect-only.sh
+
+assertion  XCU.exec.002
+anchor     utilities/V3_chap02.html#DESCRIPTION/shall execute a
+anchor     utilities/V3_chap02.html#EXIT STATUS/shall not return to the shell
+class      required
+says       With a utility operand, exec replaces the shell with that
+           utility: later commands are not run and the shell's exit status
+           is the utility's.
+test       t/002-replace-shell.sh
+
+assertion  XCU.exec.003
+anchor     utilities/V3_chap02.html#DESCRIPTION/<i>argument</i> operands (if any) as the command arguments
+class      required
+says       The operands after the utility name are its arguments, passed one
+           to one (including empty ones and ones with spaces).
+test       t/003-arguments.sh
+
+assertion  XCU.exec.004
+anchor     utilities/V3_chap02.html#ENVIRONMENT VARIABLES/Determine the search path
+anchor     utilities/V3_chap02.html#2.9.1.6
+class      required
+says       The utility operand is looked up through PATH; a script without a
+           magic line found that way is run by a shell.
+test       t/004-path.sh
+
+assertion  XCU.exec.005
+anchor     utilities/V3_chap02.html#DESCRIPTION/special built-in shall support XBD
+class      required
+since      2024
+says       exec accepts "--" as the end of options before the utility.
+test       t/005-double-hyphen.sh
+
+assertion  XCU.exec.006
+anchor     utilities/V3_chap02.html#EXIT STATUS/shall return a zero
+class      required
+says       exec with no operands, or with only redirections that succeed,
+           returns status zero.
+test       t/006-status-zero.sh
+
+assertion  XCU.exec.007
+anchor     utilities/V3_chap02.html#DESCRIPTION/If the
+anchor     utilities/V3_chap02.html#EXIT STATUS/Non-built-in Utility Execution
+class      required
+says       exec of a utility that does not exist makes a non-interactive
+           shell exit with status 127; no later command is run.
+test       t/007-not-found.sh
+
+assertion  XCU.exec.008
+anchor     utilities/V3_chap02.html#EXIT STATUS/Non-built-in Utility Execution
+anchor     utilities/V3_chap02.html#2.8.2
+class      required
+says       exec of an existing file that is not executable makes a non-
+           interactive shell exit with status 126.
+test       t/008-not-executable.sh
+
+assertion  XCU.exec.009
+anchor     utilities/V3_chap02.html#EXIT STATUS/redirection error occurs
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       A redirection error in exec makes a non-interactive shell exit
+           with a status in the range 1 to 125.
+test       t/009-redirect-error.sh
+
+assertion  XCU.exec.010
+anchor     utilities/V3_chap02.html#2.9.1.6
+class      required
+says       exec in a subshell replaces only the subshell: the parent shell
+           continues and sees the utility's status.
+test       t/010-in-subshell.sh
+
+assertion  XCU.exec.011
+anchor     utilities/V3_chap02.html#DESCRIPTION/an interactive shell may exit from a subshell
+class      conditional
+when       UP
+says       A failing exec does not make an interactive shell exit (except
+           from a subshell, where it may).
+test       t/011-interactive-keeps-running.sh

@@ -1,0 +1,59 @@
+# XCU sh-lists
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.sh-lists.001
+anchor     utilities/V3_chap02.html#2.9.3/equal precedence
+class      required
+says       && and || have equal precedence and group from the left.
+test       t/001-and-or-assoc.sh
+
+assertion  XCU.sh-lists.002
+anchor     utilities/V3_chap02.html#2.9.3.3
+anchor     utilities/V3_chap02.html#2.9.3.4
+class      required
+says       The status of an AND or OR list is the status of the last command
+           that was executed.
+test       t/002-and-or-status.sh
+
+assertion  XCU.sh-lists.003
+anchor     utilities/V3_chap02.html#2.9.3.2
+class      required
+says       Lists separated by ; or newline run one after the other, and the
+           status is that of the last one run.
+test       t/003-sequential.sh
+
+assertion  XCU.sh-lists.004
+anchor     utilities/V3_chap02.html#2.9.3.3
+class      required
+says       The commands of an AND or OR list are expanded only when they are
+           executed.
+test       t/004-expand-only-executed.sh
+
+assertion  XCU.sh-lists.005
+anchor     utilities/V3_chap02.html#2.9.3.1
+class      required
+says       A command ended with & runs in the background: the shell goes on
+           without waiting for it, and wait can collect it later.
+test       t/005-async-no-wait.sh
+
+assertion  XCU.sh-lists.006
+anchor     utilities/V3_chap02.html#2.9.3.1/The exit status of an asynchronous AND-OR list shall be zero
+anchor     utilities/V3_chap02.html#2.9.3.1/The exit status of the subshell
+class      required
+says       The status of an asynchronous list as seen when the shell goes on
+           is zero; its real status is available through wait on $!.
+test       t/006-async-status.sh
+
+assertion  XCU.sh-lists.007
+anchor     utilities/V3_chap02.html#2.9.3.1/If, and only if, job control is disabled
+class      required
+says       When job control is off, an asynchronous list gets /dev/null as
+           standard input unless it redirects it.
+test       t/007-async-stdin.sh
+
+assertion  XCU.sh-lists.008
+anchor     utilities/V3_chap02.html#2.9.3.1
+class      required
+says       Several asynchronous lists in one line all run; wait with no
+           operand waits for all of them.
+test       t/008-async-several.sh

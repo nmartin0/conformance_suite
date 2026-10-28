@@ -1,0 +1,32 @@
+# XCU sh-signals
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.sh-signals.001
+anchor     utilities/V3_chap02.html#2.12/If job control is disabled
+class      required
+says       With job control off, a command in an asynchronous list inherits
+           SIGINT and SIGQUIT as ignored.
+test       t/001-async-ignores-int-quit.sh
+
+assertion  XCU.sh-signals.002
+anchor     utilities/V3_chap02.html#2.12/commands executed by the shell shall inherit
+class      required
+says       Other signals keep the action the shell had in an asynchronous
+           list: a default-action signal still ends the command.
+test       t/002-async-keeps-others.sh
+
+assertion  XCU.sh-signals.003
+anchor     utilities/V3_chap02.html#2.12/the reception of a signal for which a trap has been set
+class      required
+says       A signal with a trap that arrives while the shell is in wait
+           makes wait return at once with a status above 128, and the trap
+           action then runs.
+test       t/003-wait-interrupted.sh
+
+assertion  XCU.sh-signals.004
+anchor     utilities/V3_chap02.html#2.12/shall not be executed until after the foreground command
+class      required
+says       A trap for a signal that arrives while a foreground utility runs
+           is not taken until the utility is done, and the utility is not
+           disturbed.
+test       t/004-trap-after-foreground.sh

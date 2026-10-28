@@ -1,0 +1,57 @@
+# XCU export
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/export.html only redirects
+# there), so anchors name V3_chap02.html and the .cov file accounts for
+# the units by hand.
+
+assertion  XCU.export.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/set the export attribute for variables
+class      required
+says       export name=word sets the variable and gives it the export
+           attribute, so utilities run later see it; a plain assignment does
+           not export.
+test       t/001-set-and-export.sh
+
+assertion  XCU.export.002
+anchor     utilities/V3_chap02.html#DESCRIPTION/set the export attribute for variables
+class      required
+says       export name gives an existing variable the export attribute, and
+           later assignments to it are still passed on; a variable that was
+           unset when exported is passed on once it is assigned.
+test       t/002-name-only.sh
+
+assertion  XCU.export.003
+anchor     utilities/V3_chap02.html#DESCRIPTION/declaration utility
+anchor     utilities/V3_chap02.html#2.9.1.1
+class      required
+since      2024
+says       The words of the form name=word given to export are expanded as
+           assignments: tilde after = and after colons, no field splitting
+           and no pathname expansion.
+test       t/003-declaration-utility.sh
+
+assertion  XCU.export.004
+anchor     utilities/V3_chap02.html#DESCRIPTION/When <b>-p</b> is specified, <a href="#export"
+class      required
+says       export -p writes one line per exported variable as export
+           name=value (value quoted so the line can be read back), and just
+           export name for an exported variable that is unset; a variable
+           that is not exported is not listed.
+test       t/004-p-format.sh
+
+assertion  XCU.export.005
+anchor     utilities/V3_chap02.html#EXIT STATUS/attempt to modify a <i>readonly</i> variable using
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       Giving a new value to a read-only variable with export is an
+           error: the status is non-zero (a non-interactive shell may exit)
+           and the value is unchanged.
+test       t/005-readonly-error.sh
+
+assertion  XCU.export.006
+anchor     utilities/V3_chap02.html#DESCRIPTION/special built-in shall support XBD
+class      required
+says       export accepts "--" as the end of options.
+test       t/006-double-hyphen.sh

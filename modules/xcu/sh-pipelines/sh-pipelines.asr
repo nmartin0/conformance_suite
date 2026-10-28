@@ -1,0 +1,55 @@
+# XCU sh-pipelines
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.sh-pipelines.001
+anchor     utilities/V3_chap02.html#2.9.2/connect the standard output
+class      required
+says       In a pipeline the standard output of each command is the standard
+           input of the next.
+test       t/001-data-flow.sh
+
+assertion  XCU.sh-pipelines.002
+anchor     utilities/V3_chap02.html#2.9.2/The exit status of the last
+class      required
+says       The status of a pipeline is the status of its last command.
+test       t/002-status-last.sh
+
+assertion  XCU.sh-pipelines.003
+anchor     utilities/V3_chap02.html#2.9.2/Begins with
+class      required
+says       A pipeline that begins with ! has the logical negation of the
+           status it would otherwise have: 0 if that was non-zero, else 1.
+test       t/003-negation.sh
+
+assertion  XCU.sh-pipelines.004
+anchor     utilities/V3_chap02.html#2.9.2/pipefail Enabled
+class      required
+since      2024
+says       With pipefail the status is 0 when every command succeeded, else
+           the status of the rightmost failing command; with ! the result is
+           negated.
+test       t/004-pipefail.sh
+
+assertion  XCU.sh-pipelines.005
+anchor     utilities/V3_chap02.html#2.9.2/The shell shall use the
+class      required
+since      2024
+says       The pipefail setting used is the one in force when the pipeline
+           begins: false | set -o pipefail takes its status from the last
+           command, not from false.
+test       t/005-pipefail-start.sh
+
+assertion  XCU.sh-pipelines.006
+anchor     utilities/V3_chap02.html#2.9.2/shell shall wait for the last command
+class      required
+says       The shell waits for the last command of a pipeline to finish
+           before going on.
+test       t/006-waits-for-last.sh
+
+assertion  XCU.sh-pipelines.007
+anchor     utilities/V3_chap02.html#2.9.2/The standard
+class      required
+says       Redirections of a command override the pipe connections made by
+           the pipeline: an input redirection replaces the pipe as input, an
+           output redirection leaves the next command an empty input.
+test       t/007-redirect-after-pipe.sh

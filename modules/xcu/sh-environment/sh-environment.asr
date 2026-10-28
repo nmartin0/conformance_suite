@@ -1,0 +1,61 @@
+# XCU sh-environment
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.sh-environment.001
+anchor     utilities/V3_chap02.html#2.13/Variables with the <a href="#export"
+class      required
+says       A utility gets exactly the exported variables, including ones set
+           only for that command, and not the other shell variables.
+test       t/001-exported-vars.sh
+
+assertion  XCU.sh-environment.002
+anchor     utilities/V3_chap02.html#2.13/Current working directory
+class      required
+says       A utility starts in the shell's working directory with the
+           shell's file creation mask and with descriptors added by
+           redirections of its command.
+test       t/002-inherited-state.sh
+
+assertion  XCU.sh-environment.003
+anchor     utilities/V3_chap02.html#2.13/The environment of the shell process shall not be changed
+class      required
+says       What a utility changes in its own environment (directory, mask,
+           variables) does not change the shell's environment.
+test       t/003-utility-no-effect.sh
+
+assertion  XCU.sh-environment.004
+anchor     utilities/V3_chap02.html#2.13/If the utility is a shell script
+class      required
+says       A utility run by the shell gets ignored signals still ignored,
+           and signals the shell catches back at their default action.
+test       t/004-traps-for-utility.sh
+
+assertion  XCU.sh-environment.005
+anchor     utilities/V3_chap02.html#2.13/Changes made to the subshell environment
+class      required
+says       Changes made in a subshell (variables, unset, working directory,
+           mask, options, functions, traps, descriptors) do not affect the
+           shell that started it.
+test       t/005-subshell-isolated.sh
+
+assertion  XCU.sh-environment.006
+anchor     utilities/V3_chap02.html#2.13/A subshell environment shall be created as a duplicate
+class      required
+says       A subshell starts as a copy of the shell: it sees all variables
+           (exported or not), functions, options, working directory, mask,
+           positional parameters and the value of $?.
+test       t/006-subshell-inherits.sh
+
+assertion  XCU.sh-environment.007
+anchor     utilities/V3_chap02.html#2.13/Except where otherwise stated
+class      required
+says       Compound commands, function bodies, eval and dot run in the
+           current shell environment, so their assignments stay.
+test       t/007-current-env-commands.sh
+
+assertion  XCU.sh-environment.008
+anchor     utilities/V3_chap02.html#2.13/Command substitution, commands
+class      required
+says       An asynchronous list and a command substitution run in a
+           subshell, so their variable changes do not reach the shell.
+test       t/008-async-and-substitution.sh

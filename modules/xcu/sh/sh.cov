@@ -1,0 +1,352 @@
+# sh.cov - units of the chapter section; assertions are in sh.asr.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:cb8cb2cc   XCU.sh.001 XCU.sh.004 XCU.sh.005
+DESCRIPTION:0051dc95   app
+DESCRIPTION:58e12e3e   none  cross-reference to the shell language chapter
+DESCRIPTION:edb57fb0   todo  pathname expansion of a huge file name is not tested
+DESCRIPTION:b3c1f315   impl  the offset maximum is implementation-defined
+OPTIONS:3d96351d       XCU.sh.011 XCU.sh.010
+OPTIONS:70f6165c       none  cross-reference to set
+OPTIONS:1e19666a       XCU.sh.012 XCU.sh.015
+OPTIONS:2759a172       none  unspecified
+OPTIONS:d9e871e6       none  introduces the options below
+OPTIONS:2334665e       XCU.sh.001
+OPTIONS:bf4d8b21       XCU.sh.001
+OPTIONS:be4e3fd8       XCU.sh.003
+OPTIONS:03049218       XCU.sh.016
+OPTIONS:31dc1f6a       none  an allowance for implementations
+OPTIONS:7799c15d       XCU.sh.004
+OPTIONS:f5ae45eb       XCU.sh.004
+OPTIONS:a58c5511       XCU.sh.016
+OPERANDS:51b44f3c      none  introduces the operands below
+OPERANDS:4a9f88d3      XCU.sh.010
+OPERANDS:1059eb48      none  undefined
+OPERANDS:33e99a38      XCU.sh.004 XCU.sh.005
+OPERANDS:1da5c8e6      none  describes the operand
+OPERANDS:f77bf9e7      XCU.sh.005
+OPERANDS:63eaf3e9      XCU.sh.005
+OPERANDS:dab5869a      none  an allowance for implementations
+OPERANDS:346b131d      XCU.sh.005
+OPERANDS:a61e2048      XCU.sh.002
+OPERANDS:e0aae71d      XCU.sh.001
+OPERANDS:76c58198      XCU.sh.002
+OPERANDS:65a9b953      XCU.sh.001
+OPERANDS:5cddec6f      XCU.sh.006
+STDIN:12591ef7         XCU.sh.003 XCU.sh.005
+STDIN:7040167e         XCU.sh.004
+STDIN:07d729b9         XCU.sh.004
+STDIN:759ae485         XCU.sh.003
+STDIN:fc1111c9         none  cross-reference
+STDIN:407075bc         XCU.sh.017
+STDIN:0d9e9468         XCU.sh.017
+STDIN:71b9d3e8         none  unspecified
+STDIN:a66ea29c         todo  non-blocking standard input is not tested
+STDIN:958dcef5         todo  non-blocking standard input is not tested
+INPUT_FILES:081edf61   todo  an input file with a NUL byte is not tested
+INPUT_FILES:d2293a3a   XCU.sh.019
+INPUT_FILES:c4daad9d   XCU.sh.006
+ENVIRONMENT_VARIABLES:3b3f4104 none  introduces the variables below
+ENVIRONMENT_VARIABLES:a2fe68e5 XCU.sh.021 XCU.sh.020
+ENVIRONMENT_VARIABLES:66a5d667 none  unspecified
+ENVIRONMENT_VARIABLES:42050cef none  unspecified
+ENVIRONMENT_VARIABLES:0afc9afc untestable  needs a real and an effective user ID that differ
+ENVIRONMENT_VARIABLES:48c315a0 none  an allowance for implementations
+ENVIRONMENT_VARIABLES:a693a2c5 XCU.fc.010
+ENVIRONMENT_VARIABLES:764a065d todo  the default editor is not tested
+ENVIRONMENT_VARIABLES:8c01990b todo  the history file is not tested
+ENVIRONMENT_VARIABLES:ad0e5432 none  an allowance for implementations
+ENVIRONMENT_VARIABLES:58e652a0 todo  the history file is not tested
+ENVIRONMENT_VARIABLES:68126533 todo  the history file is not tested
+ENVIRONMENT_VARIABLES:f2f8c680 none  an allowance for implementations
+ENVIRONMENT_VARIABLES:be6abdc2 none  unspecified
+ENVIRONMENT_VARIABLES:5f3f24d4 todo  the history file is not tested
+ENVIRONMENT_VARIABLES:b18379ae none  unspecified
+ENVIRONMENT_VARIABLES:37c0f992 todo  HISTSIZE is not tested
+ENVIRONMENT_VARIABLES:0f18cf16 todo  HISTSIZE is not tested
+ENVIRONMENT_VARIABLES:ad71b6b2 todo  HISTSIZE is not tested
+ENVIRONMENT_VARIABLES:1ac50042 none  an allowance for implementations
+ENVIRONMENT_VARIABLES:407dbf65 none  unspecified
+ENVIRONMENT_VARIABLES:34b321de todo  HOME in tilde expansion is covered by the tilde module, not here
+ENVIRONMENT_VARIABLES:31ee1875 todo  HOME in tilde expansion is covered by the tilde module, not here
+ENVIRONMENT_VARIABLES:221d4f1a todo  the locale variables are not tested through sh
+ENVIRONMENT_VARIABLES:8aece102 todo  the locale variables are not tested through sh
+ENVIRONMENT_VARIABLES:b96c5038 todo  the locale variables are not tested through sh
+ENVIRONMENT_VARIABLES:78b74f99 todo  the locale variables are not tested through sh
+ENVIRONMENT_VARIABLES:b90d54c4 todo  the locale variables are not tested through sh
+ENVIRONMENT_VARIABLES:fb479014 todo  the locale variables are not tested through sh
+ENVIRONMENT_VARIABLES:54636d81 todo  mail notification is not tested
+ENVIRONMENT_VARIABLES:9d216b74 todo  mail notification is not tested
+ENVIRONMENT_VARIABLES:fe610294 todo  mail notification is not tested
+ENVIRONMENT_VARIABLES:b9e5075c todo  mail notification is not tested
+ENVIRONMENT_VARIABLES:560cc831 todo  mail notification is not tested
+ENVIRONMENT_VARIABLES:49fd6392 todo  mail notification is not tested
+ENVIRONMENT_VARIABLES:ea9d40b5 todo  mail notification is not tested
+ENVIRONMENT_VARIABLES:ef495460 todo  mail notification is not tested
+ENVIRONMENT_VARIABLES:64873da5 todo  mail notification is not tested
+ENVIRONMENT_VARIABLES:28afb9ea todo  mail notification is not tested
+ENVIRONMENT_VARIABLES:e121b1ed todo  mail notification is not tested
+ENVIRONMENT_VARIABLES:e5da5541 todo  mail notification is not tested
+ENVIRONMENT_VARIABLES:d10d4ad5 none  unspecified
+ENVIRONMENT_VARIABLES:78e33248 todo  mail notification is not tested
+ENVIRONMENT_VARIABLES:d838b9f5 todo  NLSPATH is not tested
+ENVIRONMENT_VARIABLES:ef746712 todo  PATH search is covered by the simple command units, not here
+ENVIRONMENT_VARIABLES:d3bdda93 todo  PATH search is covered by the simple command units, not here
+ENVIRONMENT_VARIABLES:b8ef3d46 todo  PWD is not tested through sh
+ENVIRONMENT_VARIABLES:2b6ef4f9 none  an allowance for implementations
+ASYNCHRONOUS_EVENTS:949431a2 todo  the standard action for signals is not tested through sh
+ASYNCHRONOUS_EVENTS:bd8d80c7 todo  an interactive shell and SIGINT are not tested
+ASYNCHRONOUS_EVENTS:0fb5d97d none  introduces the items below
+ASYNCHRONOUS_EVENTS:f6a69c1b todo  signals in an interactive shell are not tested
+ASYNCHRONOUS_EVENTS:25d42662 todo  signals in an interactive shell are not tested
+ASYNCHRONOUS_EVENTS:4c41bc0b none  unspecified
+ASYNCHRONOUS_EVENTS:ac5fa59c todo  signals in an interactive shell are not tested
+ASYNCHRONOUS_EVENTS:e1a75a55 none  informative statement
+STDOUT:a6a96dc2        none  cross-reference
+STDERR:ef6243a5        XCU.sh.018
+OUTPUT_FILES:eb724aff  none  nothing is output to files
+EXTENDED_DESCRIPTION:3c0c22ba none  cross-reference to the shell language chapter
+EXTENDED_DESCRIPTION:58e12e3e none  cross-reference to the shell language chapter
+EXTENDED_DESCRIPTION:06c2c640 none  introduces the shaded part of the section
+EXTENDED_DESCRIPTION:0063c24d todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:ff291d9f todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:3ce6a37d todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:effab386 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:c4fdbefd todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:c59702e5 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:093a1a23 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:b758d494 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:d1d2131b todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:f2e12f7b todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:2cb5adbe todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:440e8a17 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:69af5c8a todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:8821c2d2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:e7fddea0 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:070f3276 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:eb03e050 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:662c99e1 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:97250b91 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:1bfbbcbc todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:3fa44ba3 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:6e3dbf05 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:d0c28dd1 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:6aa3c213 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:cb33983b todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:b69a9b09 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7f6774bd todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:c24dcb24 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:fe0272a1 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:230f0d2b todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:8a270a70 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:e2c89110 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:07dae04c todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:724556db todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:c74f4ede todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:9a03237c todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:f7d3d892 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:8c2ae460 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:db83b3de todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:ee2183de todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:35df6846 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:b517a777 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:96e3aa7b todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7cfe3835 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:36dbae48 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:305e0b54 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:1324bfbb todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:97e80f86 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:e230a3dc todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:4b1c67e2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:8cc99539 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:a7ac9563 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:b69a9b09.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7f6774bd.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:c7ce8c35 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:197bfe6b todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:b3c9288b todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:03cdb644 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:cc0c5db7 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:4dcc6141 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:bda8be42 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:4db89de9 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:cccaad5c todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:c9d195d2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:3bcd222c todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:4db89de9.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:cf32490f todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:e83ee6a5 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:c343515c todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:d76bc1ae todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:6aa5555b todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:49069dd8 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:99e64e3c todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:a64ac0c4 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:a10d6123 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:497d3e41 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:b7ce3c2b todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:34810e09 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:521f543f todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:c2d4627e todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:b0457f64 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:d256b89d todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:db26a40b todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:6f25a6a2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:543e16ae todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:57d8e14f todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:11e803ae todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:4de46a40 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:f6044660 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:ab637dca todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:0b031acd todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7256e51c todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:db26a40b.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:04c7bd10 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:d28b4a59 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:c922bf99 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:d4911e82 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7256e51c.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:8907e5c9 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:5fedb249 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7256e51c.3 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:4ce8736c todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:cf017c10 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:e5cb3df3 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7256e51c.4 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:8907e5c9.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:2aa1fda6 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:72de5b10 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7256e51c.5 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:4ce8736c.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:fbfce3df todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:e9a0557e todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:d28b4a59.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:ec3b16a3 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:69216163 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:2ea9c096 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:d28b4a59.3 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:3007eccf todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:a9792941 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:f4d0e308 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:fc7792e7 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:a8017af2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:d31560fe todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:67e5e81d todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:283eca06 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:e6824ec6 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7256e51c.6 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:309eb1d7 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:8474185c todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:d28b4a59.4 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:be451577 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:e64bdca3 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7256e51c.7 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:309eb1d7.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:4e8aa267 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:d28b4a59.5 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:be451577.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:f651c32c todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:48057c30 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:53000c91 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:f651c32c.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:48057c30.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:1ed464c2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:a1cb96b1 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:e600bf57 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:808f785e todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:4b66437b todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:45c94bcc todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:6c8449e5 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:0b069ea9 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:3e2ab82c todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:8d37b287 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:75426f93 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:3f711fa8 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7c88ea53 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:4776a0bd todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7f8698fe todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:e98d97af todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:2c7841e1 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:eaecccbb todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:88746bea todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:0501001b todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:2f880f22 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:e2fd200f todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:0c949911 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:689d13fa todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:56d62521 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:6533e11f todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:c0e33b5d todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:f87fda2b todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:2b75e272 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:6bcf0758 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:2a666232 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:546d2f5d todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:759fefb9 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:fd03e78a todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:21c0c9d2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:1ee60cb8 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:b958350c todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:a867ee04 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:fdeb0487 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:3764dfb9 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:f8bf9ad6 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:3764dfb9.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:fd7137c0 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:83781744 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:8a1048f3 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:dc50d2b5 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:ca8e1df1 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:4fac5c60 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7d9bd1ec todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:37b02209 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:575e1bca todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:21c74f47 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:4ca3ce95 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:cb5bdbdb todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:eb1d0f5c todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:4ca3ce95.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:90bb905e todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:11591cec todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:09048ffe todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:11591cec.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:d3669b17 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:19b768be todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:394077f1 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:ab361ae4 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7c25ea67 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:19b768be.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:394077f1.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:38e735ff todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7b51b47e todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:ffc5d3fe todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:20bdcc1d todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:32fd1013 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:12943719 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:004e6980 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:55965528 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:64360f13 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:1cc51001 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:931111b0 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:709629c7 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:7c006c27 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:12943719.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:004e6980.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:55965528.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:64360f13.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:ecc31518 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:931111b0.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:709629c7.2 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:2a733082 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:e2488ecc todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:2355c4f0 todo  command history and vi-mode editing are not tested
+EXTENDED_DESCRIPTION:e2488ecc.2 todo  command history and vi-mode editing are not tested
+EXIT_STATUS:db823381   none  introduces the values below
+EXIT_STATUS:b2ae5db2   XCU.sh.006
+EXIT_STATUS:0fa801cd   XCU.sh.009
+EXIT_STATUS:fc6df71e   todo  a command file that cannot be executed is not tested
+EXIT_STATUS:332d2469   XCU.sh.008
+EXIT_STATUS:c21309a3   todo  an unrecoverable read error is not tested
+EXIT_STATUS:29c09810   XCU.sh.007
+EXIT_STATUS:8cbc9bd1   none  cross-reference
+CONSEQUENCES_OF_ERRORS:8baff613 none  cross-reference

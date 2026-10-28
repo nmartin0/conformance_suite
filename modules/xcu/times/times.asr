@@ -1,0 +1,22 @@
+# XCU times
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/times.html only redirects
+# there), so anchors name V3_chap02.html and the .cov file accounts for
+# the units by hand.
+
+assertion  XCU.times.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/accumulated user and system times
+class      required
+says       times writes two lines in the form NmN.NNs NmN.NNs, the first for
+           the shell's user and system times and the second for its
+           children, and exits with status zero.
+test       t/001-format.sh
+
+assertion  XCU.times.003
+anchor     utilities/V3_chap02.html#DESCRIPTION/accumulated user and system times
+class      required
+says       After a child process has used processor time, the second line of
+           times shows non-zero accumulated time for children.
+test       t/003-children.sh

@@ -1,0 +1,163 @@
+# XCU sh
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.sh.001
+anchor     utilities/sh.html#OPTIONS/Read commands from the <i>command_string</i> operand
+anchor     utilities/sh.html#OPERANDS/command_name
+class      required
+says       sh -c runs the command string; command_name becomes $0 and the
+           later operands $1, $2 ...; a string of several lines runs them in
+           order.
+test       t/001-dash-c.sh
+
+assertion  XCU.sh.002
+anchor     utilities/sh.html#OPERANDS/command_name
+anchor     utilities/V3_chap02.html#2.9.1.6
+class      required
+says       sh -c with no command_name sets $0 to the first argument the
+           shell was started with, which for a command found by search is
+           the command name.
+test       t/002-dash-c-zero.sh
+
+assertion  XCU.sh.003
+anchor     utilities/sh.html#OPTIONS/No commands shall be
+class      required
+says       With -c the shell reads no commands from standard input, and the
+           standard input stays available to the commands it runs.
+test       t/003-dash-c-stdin.sh
+
+assertion  XCU.sh.004
+anchor     utilities/sh.html#OPTIONS/Read commands from the standard input
+anchor     utilities/sh.html#OPERANDS/argument
+class      required
+says       sh -s reads commands from standard input and takes its operands
+           as positional parameters; with no operands and no -c, -s is
+           assumed.
+test       t/004-dash-s.sh
+
+assertion  XCU.sh.005
+anchor     utilities/sh.html#OPERANDS/command_file
+class      required
+says       sh command_file argument... reads the commands from the file,
+           which need not be executable, sets $0 to the file name as given
+           and $1, $2 ... to the arguments; standard input is not read.
+test       t/005-command-file.sh
+
+assertion  XCU.sh.006
+anchor     utilities/sh.html#OPERANDS/If the
+anchor     utilities/sh.html#INPUT FILES/If the input file consists solely of
+class      required
+says       A command string, a file or standard input that holds only blank
+           lines and comments (or nothing) makes sh exit with status zero.
+test       t/006-empty-script.sh
+
+assertion  XCU.sh.007
+anchor     utilities/sh.html#EXIT STATUS/the shell shall terminate in the same manner
+class      required
+says       sh ends with the status of the last command it ran (as exit with
+           no operand does) or with the status given to exit.
+test       t/007-exit-status.sh
+
+assertion  XCU.sh.008
+anchor     utilities/sh.html#EXIT STATUS/could not be found by a non-interactive shell
+class      required
+says       sh with a command_file that does not exist exits with status 127.
+test       t/008-file-not-found.sh
+
+assertion  XCU.sh.009
+anchor     utilities/sh.html#EXIT STATUS/A non-interactive shell detected an error
+class      required
+says       A non-interactive sh that finds a syntax, redirection or variable
+           assignment error exits with a status from 1 to 125.
+test       t/009-error-status-range.sh
+
+assertion  XCU.sh.010
+anchor     utilities/sh.html#OPERANDS/treated as the first operand and then ignored
+class      required
+says       A single - operand is treated as the first operand and ignored.
+test       t/010-single-hyphen.sh
+
+assertion  XCU.sh.011
+anchor     utilities/sh.html#OPTIONS/Utility Syntax Guidelines
+class      required
+says       sh accepts -- as the end of options, before the command string or
+           the command file.
+test       t/011-double-hyphen.sh
+
+assertion  XCU.sh.012
+anchor     utilities/sh.html#OPTIONS/described as part of the
+class      required
+says       Options given on the command line act as the same options of set,
+           including the plus form that reverses one: -a, -C, -e, -f, -u
+           (and -f followed by +f).
+test       t/012-set-options.sh
+
+assertion  XCU.sh.013
+anchor     utilities/sh.html#OPTIONS/described as part of the
+class      required
+says       sh -n reads the commands but runs none, so a script is only
+           syntax-checked: a good script gives status zero and no output; a
+           script with a syntax error gives a non-zero status and a message.
+test       t/013-noexec.sh
+
+assertion  XCU.sh.014
+anchor     utilities/sh.html#OPTIONS/described as part of the
+class      required
+says       sh -v and sh -x act as set -v and set -x: the input lines, or a
+           trace of each expanded command, go to standard error.
+test       t/014-trace-options.sh
+
+assertion  XCU.sh.015
+anchor     utilities/sh.html#OPTIONS/option-argument
+class      required
+since      2024
+says       sh -o name and sh +o name act as set -o and set +o: noglob,
+           errexit, nounset and pipefail are accepted.
+test       t/015-long-options.sh
+
+assertion  XCU.sh.016
+anchor     utilities/sh.html#OPTIONS/Specify that the shell is <i>interactive</i>
+anchor     utilities/V3_chap02.html#2.5.2
+class      required
+says       sh -i makes the shell interactive, so "$-" contains i; a shell
+           started without -i, with no terminal, is not interactive.
+test       t/016-interactive-flag.sh
+
+assertion  XCU.sh.017
+anchor     utilities/sh.html#STDIN/It shall not read
+class      required
+says       When sh reads commands from standard input and runs a command
+           that also reads standard input, the input is left just after the
+           command line that started it: the shell has not read ahead.
+test       t/017-no-read-ahead.sh
+
+assertion  XCU.sh.018
+anchor     utilities/sh.html#STDERR/standard error shall be used
+class      required
+says       sh writes to standard error only diagnostics: running good
+           commands from a string, a file or standard input leaves standard
+           error empty.
+test       t/018-stderr-diagnostics-only.sh
+
+assertion  XCU.sh.019
+anchor     utilities/sh.html#INPUT FILES/shall not enforce any line length limits
+class      required
+says       sh accepts input lines of any length: a command line of 100000
+           characters runs.
+test       t/019-long-line.sh
+
+assertion  XCU.sh.020
+anchor     utilities/sh.html#ENVIRONMENT VARIABLES/when and only when an interactive shell is invoked
+class      conditional
+when       UP
+says       A non-interactive shell does not read the file named by ENV.
+test       t/020-env-not-used.sh
+
+assertion  XCU.sh.021
+anchor     utilities/sh.html#ENVIRONMENT VARIABLES/subjected to parameter expansion
+class      conditional
+when       UP
+says       An interactive shell runs the file named by ENV, after parameter
+           expansion of the value, in the current environment before reading
+           its commands.
+test       t/021-env-interactive.sh

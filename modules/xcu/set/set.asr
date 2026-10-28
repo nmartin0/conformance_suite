@@ -1,0 +1,165 @@
+# XCU set
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/set.html only redirects
+# there), so anchors name V3_chap02.html and the .cov file accounts for
+# the units by hand.
+
+assertion  XCU.set.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/remaining arguments shall be assigned
+class      required
+says       set with operands replaces all positional parameters and $# with
+           them; earlier ones that are not replaced become unset.
+test       t/001-positional.sh
+
+assertion  XCU.set.002
+anchor     utilities/V3_chap02.html#DESCRIPTION/without <i>argument</i> shall
+class      required
+says       set -- with no operands unsets all positional parameters; after
+           --, operands that begin with - or + are plain parameters and set
+           no options.
+test       t/002-double-hyphen.sh
+
+assertion  XCU.set.003
+anchor     utilities/V3_chap02.html#DESCRIPTION/names and values of all
+class      required
+says       set with no options or operands lists the shell variables as
+           name=value in the collation order of the current locale, with
+           values quoted so that the lines can be read back.
+test       t/003-listing.sh
+
+assertion  XCU.set.004
+anchor     utilities/V3_chap02.html#DESCRIPTION/Write the current settings
+anchor     utilities/V3_chap02.html#DESCRIPTION/Write the current option settings
+class      required
+says       set -o writes the option settings to standard output and set +o
+           writes commands that read back into the same option settings.
+test       t/004-options-list.sh
+
+assertion  XCU.set.005
+anchor     utilities/V3_chap02.html#DESCRIPTION/Set the <i>export</i> attribute for all variable assignments
+class      required
+since      2024
+says       With set -a, every variable assignment (plain, by an expansion,
+           by read) gives the variable the export attribute; set +a ends
+           that.
+test       t/005-allexport.sh
+
+assertion  XCU.set.006
+anchor     utilities/V3_chap02.html#DESCRIPTION/Prevent existing regular files
+class      required
+says       With set -C, > does not overwrite an existing regular file (the
+           command fails) but >| does, and a file that does not exist yet or
+           a non-regular file such as /dev/null can still be the target of
+           >.
+test       t/006-noclobber.sh
+
+assertion  XCU.set.007
+anchor     utilities/V3_chap02.html#DESCRIPTION/immediately shall exit
+class      required
+says       With set -e, a failing command ends the shell at once with the
+           failed command's status.
+test       t/007-errexit.sh
+
+assertion  XCU.set.008
+anchor     utilities/V3_chap02.html#DESCRIPTION/shall be ignored when executing the compound list
+class      required
+says       set -e does not end the shell for a failure in an if, elif, while
+           or until condition, in a command preceded by !, or in a command
+           of an AND-OR list other than the last.
+test       t/008-errexit-ignored.sh
+
+assertion  XCU.set.009
+anchor     utilities/V3_chap02.html#DESCRIPTION/multi-command pipeline
+class      required
+says       Under set -e, a failing command that is not the last of a
+           pipeline, a failing subshell inside a pipeline whose last command
+           succeeds, and a failing subshell for a command substitution do
+           not end the shell; a failing pipeline does.
+test       t/009-errexit-pipeline.sh
+
+assertion  XCU.set.010
+anchor     utilities/V3_chap02.html#DESCRIPTION/If the exit status of a compound command
+class      required
+says       Under set -e, a compound command (other than a subshell) whose
+           non-zero status came from a failure while -e was ignored does not
+           end the shell.
+test       t/010-errexit-compound.sh
+
+assertion  XCU.set.011
+anchor     utilities/V3_chap02.html#DESCRIPTION/disable pathname expansion
+class      required
+says       With set -f pathname expansion is off, with set +f it is on
+           again.
+test       t/011-noglob.sh
+
+assertion  XCU.set.012
+anchor     utilities/V3_chap02.html#DESCRIPTION/read commands but does not execute them
+class      required
+says       With set -n the shell reads but does not execute the commands
+           that follow, and exits with status zero.
+test       t/012-noexec.sh
+
+assertion  XCU.set.013
+anchor     utilities/V3_chap02.html#DESCRIPTION/an unset parameter other than
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       With set -u, expanding an unset parameter other than @ and *
+           writes a message to standard error and the non-interactive shell
+           exits with a non-zero status; $@ and $* are exempt.
+test       t/013-nounset.sh
+
+assertion  XCU.set.014
+anchor     utilities/V3_chap02.html#DESCRIPTION/write its input to standard error as it is read
+class      required
+says       With set -v the shell writes the input it reads to standard
+           error.
+test       t/014-verbose.sh
+
+assertion  XCU.set.015
+anchor     utilities/V3_chap02.html#DESCRIPTION/trace for each command after it expands
+class      required
+says       With set -x the shell writes a trace of each command to standard
+           error after expanding it.
+test       t/015-xtrace.sh
+
+assertion  XCU.set.016
+anchor     utilities/V3_chap02.html#DESCRIPTION/Equivalent to
+class      required
+says       The long forms set -o allexport, noglob and noclobber act like
+           -a, -f and -C, and set +o name turns them off again.
+test       t/016-long-names.sh
+
+assertion  XCU.set.017
+anchor     utilities/V3_chap02.html#DESCRIPTION/Equivalent to
+class      required
+says       The long forms set -o errexit, nounset, noexec, verbose and
+           xtrace act like -e, -u, -n, -v and -x.
+test       t/017-long-names-2.sh
+
+assertion  XCU.set.018
+anchor     utilities/V3_chap02.html#DESCRIPTION/Derive the exit status of a pipeline
+class      required
+since      2024
+says       set -o pipefail makes a pipeline fail when any command in it
+           fails, using the rightmost failing status; set +o pipefail
+           restores the default.
+test       t/018-pipefail.sh
+
+assertion  XCU.set.019
+anchor     utilities/V3_chap02.html#EXIT STATUS/invalid option was specified
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       An invalid option given to set is an error: the status is non-
+           zero, a non-interactive shell may exit (the error is a special
+           built-in error).
+test       t/019-invalid-option.sh
+
+assertion  XCU.set.020
+anchor     utilities/V3_chap02.html#DESCRIPTION/shall be supported if the implementation supports the User Portability
+class      conditional
+when       UP
+says       The options -b, -m, ignoreeof, monitor, notify and nolog are
+           accepted in both forms.
+test       t/020-up-options.sh

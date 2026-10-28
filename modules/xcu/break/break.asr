@@ -1,0 +1,56 @@
+# XCU break
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/break.html only redirects
+# there), so anchors name V3_chap02.html and the .cov file accounts for
+# the units by hand.
+
+assertion  XCU.break.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/shall exit from the
+class      required
+says       Without an operand, break leaves the innermost for, while or
+           until loop and execution continues after that loop.
+test       t/001-innermost.sh
+
+assertion  XCU.break.002
+anchor     utilities/V3_chap02.html#DESCRIPTION/shall exit from the
+class      required
+says       break n leaves the nth enclosing loop; break 1 is the same as
+           break.
+test       t/002-nth-loop.sh
+
+assertion  XCU.break.003
+anchor     utilities/V3_chap02.html#DESCRIPTION/outermost
+class      required
+says       When n is greater than the number of enclosing loops, break
+           leaves the outermost enclosing loop.
+test       t/003-too-large.sh
+
+assertion  XCU.break.004
+anchor     utilities/V3_chap02.html#DESCRIPTION/Contained in a compound-list associated with the loop
+class      required
+says       A break written in the condition list of a while or until loop
+           leaves that loop.
+test       t/004-in-condition.sh
+
+assertion  XCU.break.005
+anchor     utilities/V3_chap02.html#DESCRIPTION/lexically encloses
+class      required
+says       break inside if, case and brace-group commands that are
+           themselves inside a loop still leaves the loop.
+test       t/005-nested-compound.sh
+
+assertion  XCU.break.006
+anchor     utilities/V3_chap02.html#EXIT STATUS/not an unsigned decimal integer
+class      required
+says       A break whose operand is not a positive decimal integer returns a
+           non-zero status (or the shell exits with a non-zero status); it
+           never acts as a normal break or as a no-op returning zero.
+test       t/006-bad-operand.sh
+
+assertion  XCU.break.007
+anchor     utilities/V3_chap02.html#STDOUT/Not used
+class      required
+says       break writes nothing to standard output.
+test       t/007-no-stdout.sh

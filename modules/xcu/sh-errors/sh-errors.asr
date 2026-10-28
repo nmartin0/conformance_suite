@@ -1,0 +1,79 @@
+# XCU sh-errors
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.sh-errors.001
+anchor     utilities/V3_chap02.html#2.8.1/Shell language syntax error
+class      required
+says       A syntax error makes a non-interactive shell write a diagnostic
+           and exit with a non-zero status without running later commands.
+test       t/001-syntax-error.sh
+
+assertion  XCU.sh-errors.002
+anchor     utilities/V3_chap02.html#2.8.1/Special built-in utility error
+class      required
+says       An error in a special built-in run directly makes a non-
+           interactive shell exit with a non-zero status: an invalid option
+           to set, unsetting a read-only variable, giving export a value for
+           a read-only variable.
+test       t/002-special-builtin-exit.sh
+
+assertion  XCU.sh-errors.003
+anchor     utilities/V3_chap02.html#2.8.1/executed via the
+class      required
+says       The same errors do not end the shell when the special built-in is
+           run through the command utility.
+test       t/003-special-via-command.sh
+
+assertion  XCU.sh-errors.004
+anchor     utilities/V3_chap02.html#2.8.1/Other utility
+class      required
+says       An error in a utility that is not a special built-in does not end
+           the shell.
+test       t/004-other-utility-continues.sh
+
+assertion  XCU.sh-errors.006
+anchor     utilities/V3_chap02.html#2.8.1/Redirection error with<br>
+class      required
+says       A failing redirection on a compound command, on a function call
+           or on a regular utility does not end the shell; the command is
+           not run and its status is non-zero.
+test       t/006-redirect-others-continue.sh
+
+assertion  XCU.sh-errors.008
+anchor     utilities/V3_chap02.html#2.8.1/Expansion error
+class      required
+says       An expansion error (an unset parameter with ${name?}, ${name:?},
+           or an invalid expansion operator) makes a non-interactive shell
+           exit with a non-zero status and a diagnostic.
+test       t/008-expansion-error-exit.sh
+
+assertion  XCU.sh-errors.009
+anchor     utilities/V3_chap02.html#2.8.1/occur in a subshell
+class      required
+says       An error that would end a shell ends only the subshell it happens
+           in; the shell goes on with a non-zero status for the subshell.
+test       t/009-subshell-errors.sh
+
+assertion  XCU.sh-errors.010
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       An interactive shell does not exit for a syntax error, a special
+           built-in error, a redirection error of a special built-in, a
+           variable assignment error, an expansion error, or an unknown
+           command; later commands still run.
+test       t/010-interactive-continues.sh
+
+assertion  XCU.sh-errors.011
+anchor     utilities/V3_chap02.html#2.8.1/an interactive shell shall not perform any further processing
+class      required
+says       After an error that an interactive shell survives, it does not
+           run the rest of the command in which the error happened.
+test       t/011-interactive-abandons-command.sh
+
+assertion  XCU.sh-errors.012
+anchor     utilities/V3_chap02.html#2.8.2
+class      required
+says       Command status values: 127 when the command is not found, 126
+           when found but not executable; for a command ended by a signal,
+           above 128; otherwise the exit value.
+test       t/012-status-values.sh

@@ -1,0 +1,56 @@
+# XCU colon
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/colon.html only redirects
+# there), so anchors name V3_chap02.html and the .cov file accounts for
+# the units by hand.
+
+assertion  XCU.colon.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/do nothing except return
+class      required
+says       The null utility exits with status zero, with or without operands
+           and whatever the status before it was.
+test       t/001-status.sh
+
+assertion  XCU.colon.002
+anchor     utilities/V3_chap02.html#OPTIONS/Implementations shall not support any options
+class      required
+since      2024
+says       The null utility supports no options and does not treat "--"
+           specially: option-like operands and "--" are accepted without a
+           diagnostic and with status zero.
+test       t/002-no-options.sh
+
+assertion  XCU.colon.003
+anchor     utilities/V3_chap02.html#2.9.1.1
+class      required
+says       The operands of the null utility are still expanded: an
+           assignment made by an expansion in an operand and a command
+           substitution in an operand both take effect.
+test       t/003-expansions.sh
+
+assertion  XCU.colon.004
+anchor     utilities/V3_chap02.html#STDOUT/Not used
+anchor     utilities/V3_chap02.html#STDERR/Not used
+class      required
+says       The null utility writes nothing to standard output and nothing to
+           standard error.
+test       t/004-no-output.sh
+
+assertion  XCU.colon.005
+anchor     utilities/V3_chap02.html#2.9.1.2
+anchor     utilities/V3_chap02.html#EXAMPLES/x=y
+class      required
+says       Being a special built-in, a variable assignment before the null
+           utility stays in effect after it, and its redirections are
+           performed (a file named in an output redirection is created or
+           truncated).
+test       t/005-special-builtin.sh
+
+assertion  XCU.colon.006
+anchor     utilities/V3_chap02.html#2.8.1
+class      required
+says       When the redirection of the null utility fails, a non-interactive
+           shell exits with a non-zero status and runs no further command.
+test       t/006-redir-error.sh

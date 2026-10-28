@@ -1,0 +1,43 @@
+# XCU shift
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/shift.html only redirects
+# there), so anchors name V3_chap02.html and the .cov file accounts for
+# the units by hand.
+
+assertion  XCU.shift.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/positional parameters shall be shifted
+class      required
+says       shift without an operand moves each positional parameter down by
+           one, drops the first, and lowers $# by one.
+test       t/001-one.sh
+
+assertion  XCU.shift.002
+anchor     utilities/V3_chap02.html#DESCRIPTION/unsigned decimal integer less than
+class      required
+says       shift n drops the first n positional parameters; shift 0 changes
+           nothing; shifting all of them leaves none and succeeds.
+test       t/002-n.sh
+
+assertion  XCU.shift.003
+anchor     utilities/V3_chap02.html#EXIT STATUS/greater than
+class      required
+says       shift n with n larger than $# returns non-zero (a non-interactive
+           shell may exit instead) and, when it goes on, writes a warning to
+           standard error.
+test       t/003-too-many.sh
+
+assertion  XCU.shift.004
+anchor     utilities/V3_chap02.html#EXIT STATUS/operand is invalid
+class      required
+says       shift with an operand that is not an unsigned decimal integer
+           returns non-zero (or the non-interactive shell exits).
+test       t/004-invalid-operand.sh
+
+assertion  XCU.shift.005
+anchor     utilities/V3_chap02.html#2.9.5
+class      required
+says       Inside a function, shift acts on the function's own positional
+           parameters; the caller's are restored when the function returns.
+test       t/005-function-scope.sh

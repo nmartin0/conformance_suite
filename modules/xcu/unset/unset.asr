@@ -1,0 +1,58 @@
+# XCU unset
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/unset.html only redirects
+# there), so anchors name V3_chap02.html and the .cov file accounts for
+# the units by hand.
+
+assertion  XCU.unset.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/unset each variable or function definition
+class      required
+says       unset name and unset -v name remove a variable (it ends up unset,
+           not empty); several names may be given.
+test       t/001-variables.sh
+
+assertion  XCU.unset.002
+anchor     utilities/V3_chap02.html#DESCRIPTION/shall unset the function definition
+class      required
+says       unset -f name removes a function, so the name is then not found
+           (status 127), and leaves a variable of the same name alone; unset
+           -v leaves the function alone.
+test       t/002-functions.sh
+
+assertion  XCU.unset.003
+anchor     utilities/V3_chap02.html#DESCRIPTION/<i>name</i> refers to a variable
+class      required
+says       Without -f or -v, unset treats the name as a variable: the
+           variable goes and a function of the same name stays.
+test       t/003-no-option.sh
+
+assertion  XCU.unset.004
+anchor     utilities/V3_chap02.html#DESCRIPTION/shall not be considered an error
+class      required
+says       Unsetting a name that is not set is not an error: status zero and
+           the shell goes on.
+test       t/004-not-set-ok.sh
+
+assertion  XCU.unset.005
+anchor     utilities/V3_chap02.html#EXIT STATUS/could not be unset
+anchor     utilities/V3_chap02.html#DESCRIPTION/Read-only variables cannot be unset
+class      required
+says       A read-only variable cannot be unset: unset returns non-zero (the
+           shell may exit) and the value stays.
+test       t/005-readonly.sh
+
+assertion  XCU.unset.006
+anchor     utilities/V3_chap02.html#DESCRIPTION/remove it from
+class      required
+since      2024
+says       Unsetting an exported variable removes it from the environment of
+           later utilities, and a later assignment does not bring it back.
+test       t/006-environment.sh
+
+assertion  XCU.unset.007
+anchor     utilities/V3_chap02.html#DESCRIPTION/special built-in shall support XBD
+class      required
+says       unset accepts "--" as the end of options.
+test       t/007-double-hyphen.sh

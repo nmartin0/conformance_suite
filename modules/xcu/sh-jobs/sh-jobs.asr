@@ -1,0 +1,11 @@
+# XCU sh-jobs
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.sh-jobs.001
+anchor     utilities/V3_chap02.html#2.11/process group leader
+class      conditional
+when       UP
+says       With job control on (set -m), an asynchronous list is a
+           background job whose process is a process group leader: its
+           process group ID equals its process ID.
+test       t/001-background-job-group.sh

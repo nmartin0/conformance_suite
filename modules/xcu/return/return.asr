@@ -1,0 +1,50 @@
+# XCU return
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The special built-in utilities are described inside
+# utilities/V3_chap02.html (the page utilities/return.html only redirects
+# there), so anchors name V3_chap02.html and the .cov file accounts for
+# the units by hand.
+
+assertion  XCU.return.001
+anchor     utilities/V3_chap02.html#DESCRIPTION/stop executing the current function
+anchor     utilities/V3_chap02.html#EXIT STATUS/The exit status shall be <i>n</i>
+class      required
+says       return n ends the function with status n and the rest of the
+           function is not run.
+test       t/001-function-status.sh
+
+assertion  XCU.return.002
+anchor     utilities/V3_chap02.html#EXIT STATUS/the result shall be as if <i>n</i> were specified
+class      required
+says       return with no operand uses the status of the last command
+           executed.
+test       t/002-no-operand.sh
+
+assertion  XCU.return.003
+anchor     utilities/V3_chap02.html#2.9.5
+class      required
+says       After return, execution resumes with the command after the
+           function call.
+test       t/003-resume.sh
+
+assertion  XCU.return.004
+anchor     utilities/V3_chap02.html#DESCRIPTION/dot script
+class      required
+says       return in a file read by the dot utility stops that file; the
+           shell continues after the dot command with the status given.
+test       t/004-dot-script.sh
+
+assertion  XCU.return.005
+anchor     utilities/V3_chap02.html#DESCRIPTION/stop executing the current function
+class      required
+says       return inside loops, if and case commands of a function ends the
+           function at once.
+test       t/005-nested-compound.sh
+
+assertion  XCU.return.006
+anchor     utilities/V3_chap02.html#DESCRIPTION/stop executing the current function
+class      required
+says       return ends only the function it is in; a calling function
+           carries on.
+test       t/006-innermost-function.sh
