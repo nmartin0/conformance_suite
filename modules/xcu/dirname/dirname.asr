@@ -1,0 +1,46 @@
+# XCU dirname
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.dirname.001
+anchor     utilities/dirname.html#DESCRIPTION
+anchor     utilities/dirname.html#STDOUT
+class      required
+says       dirname removes the final component and writes the rest,
+           followed by a newline.
+test       t/001-simple.sh
+
+assertion  XCU.dirname.002
+anchor     utilities/dirname.html#DESCRIPTION
+class      required
+says       A string without a slash, an empty string, dot and dot-dot all
+           give dot.
+test       t/002-no-slash.sh
+
+assertion  XCU.dirname.003
+anchor     utilities/dirname.html#DESCRIPTION
+class      required
+says       Trailing slashes that are not also leading slashes are not
+           counted.
+test       t/003-trailing-slashes.sh
+
+assertion  XCU.dirname.004
+anchor     utilities/dirname.html#DESCRIPTION
+class      required
+says       The directory of a file in the root directory is the root, and
+           of the root itself is the root.
+test       t/004-root.sh
+
+assertion  XCU.dirname.005
+anchor     utilities/dirname.html#DESCRIPTION
+class      required
+says       Dot-dot components before the final component are not removed.
+test       t/005-dot-dot-kept.sh
+
+assertion  XCU.dirname.006
+anchor     utilities/dirname.html#DESCRIPTION
+class      required
+says       dirname does not look at the file system: symbolic links are
+           not resolved and the file need not exist.
+test       t/006-no-resolution.sh

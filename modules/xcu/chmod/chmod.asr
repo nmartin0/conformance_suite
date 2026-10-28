@@ -1,0 +1,77 @@
+# XCU chmod
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.chmod.001
+anchor     utilities/chmod.html#EXTENDED DESCRIPTION
+anchor     utilities/chmod.html#OPERANDS
+class      required
+says       chmod with an octal mode sets the permission bits absolutely,
+           for each file operand.
+test       t/001-octal.sh
+
+assertion  XCU.chmod.002
+anchor     utilities/chmod.html#EXTENDED DESCRIPTION
+class      required
+says       chmod with a symbolic mode that names who applies +, - and = to
+           the named classes only, several clauses separated by commas.
+test       t/002-symbolic-who.sh
+
+assertion  XCU.chmod.003
+anchor     utilities/chmod.html#EXTENDED DESCRIPTION
+class      required
+says       Without who, + - and = affect the classes except the bits set
+           in the file creation mask.
+test       t/003-symbolic-no-who.sh
+
+assertion  XCU.chmod.004
+anchor     utilities/chmod.html#EXTENDED DESCRIPTION
+class      required
+says       One clause may carry several actions, applied in order.
+test       t/004-multiple-actions.sh
+
+assertion  XCU.chmod.005
+anchor     utilities/chmod.html#EXTENDED DESCRIPTION
+class      required
+says       The permission letters u, g and o after an operator copy the
+           current permissions of that class.
+test       t/005-permcopy.sh
+
+assertion  XCU.chmod.006
+anchor     utilities/chmod.html#EXTENDED DESCRIPTION
+class      required
+says       The permission X sets execute/search only for directories and
+           for files that already have an execute bit.
+test       t/006-perm-X.sh
+
+assertion  XCU.chmod.007
+anchor     utilities/chmod.html#EXTENDED DESCRIPTION
+class      required
+says       On a regular file with an execute bit, u+s sets and u-s clears
+           set-user-ID, octal 4755 sets it and 755 clears it, and o+s
+           changes nothing and is not an error.
+test       t/007-setuid.sh
+
+assertion  XCU.chmod.008
+anchor     utilities/chmod.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+says       On a directory, a+t or t alone sets the sticky bit, octal 1777
+           sets it, and an octal mode without it clears it.
+test       t/008-sticky.sh
+
+assertion  XCU.chmod.009
+anchor     utilities/chmod.html#OPTIONS
+class      required
+says       chmod -R changes the mode of a directory operand and of every
+           file below it.
+test       t/009-option-R.sh
+
+assertion  XCU.chmod.010
+anchor     utilities/chmod.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+says       If one file cannot be changed, chmod diagnoses it, changes the
+           others, and exits non-zero.
+test       t/010-error-continue.sh

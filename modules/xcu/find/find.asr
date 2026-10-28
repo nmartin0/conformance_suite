@@ -1,0 +1,204 @@
+# XCU find
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.find.001
+anchor     utilities/find.html#DESCRIPTION
+anchor     utilities/find.html#STDOUT
+class      required
+says       find with a directory and no expression writes the directory
+           and every file below it, each once, as the operand joined to
+           the relative name.
+test       t/001-all-paths.sh
+
+assertion  XCU.find.002
+anchor     utilities/find.html#DESCRIPTION
+class      required
+says       A path operand is used as given, trailing slash included, with
+           a single slash before the relative names.
+test       t/002-trailing-slash.sh
+
+assertion  XCU.find.003
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -name matches the base name of each file with the pattern
+           notation, not the whole path.
+test       t/003-name.sh
+
+assertion  XCU.find.004
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -name does not treat a leading period specially: * and ? match
+           it.
+test       t/004-name-period.sh
+
+assertion  XCU.find.005
+anchor     utilities/find.html#OPERANDS
+class      required
+since      2024
+says       -iname is -name without regard to case.
+test       t/005-iname.sh
+
+assertion  XCU.find.006
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -path matches the whole path of each file, where * may also
+           match slashes.
+test       t/006-path.sh
+
+assertion  XCU.find.007
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -type d, f, l and p select directories, regular files, symbolic
+           links and FIFOs.
+test       t/007-type.sh
+
+assertion  XCU.find.008
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -perm mode matches the permission bits exactly, -perm -mode
+           matches files having at least those bits; modes may be octal or
+           symbolic.
+test       t/008-perm.sh
+
+assertion  XCU.find.009
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -links n matches files with exactly, more than (+n) or fewer
+           than (-n) n links.
+test       t/009-links.sh
+
+assertion  XCU.find.010
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -size n counts 512-byte blocks rounded up, and with the suffix
+           c counts bytes; + and - mean more than and fewer than.
+test       t/010-size.sh
+
+assertion  XCU.find.011
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -mtime, -atime and -ctime compare the age in whole days: 0 is
+           less than a day, +n more than n days, -n fewer.
+test       t/011-times.sh
+
+assertion  XCU.find.012
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -user and -group match the owner and group of a file, given by
+           name or by number.
+test       t/012-user-group.sh
+
+assertion  XCU.find.013
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -nouser and -nogroup match files whose owner or group has no
+           entry in the user or group database.
+needs      root
+test       t/013-nouser-nogroup.sh
+
+assertion  XCU.find.014
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -exec utility {} ; runs the utility once per file with {}
+           replaced by the pathname; the primary is true when the utility
+           exits 0, and an -exec means no implicit -print.
+test       t/014-exec-semicolon.sh
+
+assertion  XCU.find.015
+anchor     utilities/find.html#OPERANDS
+anchor     utilities/find.html#EXIT STATUS
+class      required
+says       -exec utility {} + passes the collected pathnames to few
+           invocations of the utility, always evaluates true, and find
+           exits non-zero if an invocation fails.
+test       t/015-exec-plus.sh
+
+assertion  XCU.find.016
+anchor     utilities/find.html#OPERANDS
+anchor     utilities/find.html#STDERR
+anchor     utilities/find.html#STDIN
+class      required
+says       -ok asks on standard error, runs the utility on an affirmative
+           reply, and is false otherwise.
+test       t/016-ok.sh
+
+assertion  XCU.find.017
+anchor     utilities/find.html#OPERANDS
+anchor     utilities/find.html#STDOUT
+class      required
+since      2024
+says       -print0 writes each pathname followed by a null byte, not a
+           newline.
+test       t/017-print0.sh
+
+assertion  XCU.find.018
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -newer file matches files modified more recently than file.
+test       t/018-newer.sh
+
+assertion  XCU.find.019
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -depth makes find act on the entries of a directory before the
+           directory; without it a directory comes first.
+test       t/019-depth.sh
+
+assertion  XCU.find.020
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -prune keeps find from descending into a directory.
+test       t/020-prune.sh
+
+assertion  XCU.find.021
+anchor     utilities/find.html#OPERANDS
+class      required
+says       ! negates, ( ) groups, -o is alternation with lower precedence
+           than the implied and, and -a is accepted.
+test       t/021-operators.sh
+
+assertion  XCU.find.022
+anchor     utilities/find.html#OPERANDS
+class      required
+says       With no -print, -exec or -ok in the expression, -print is
+           added; with -exec and no -print nothing is written.
+test       t/022-implicit-print.sh
+
+assertion  XCU.find.023
+anchor     utilities/find.html#OPTIONS
+class      required
+says       Without -H or -L a symbolic link is itself the file; -H follows
+           links given as path operands; -L follows all links.
+test       t/023-options-H-L.sh
+
+assertion  XCU.find.024
+anchor     utilities/find.html#OPERANDS
+class      required
+says       -xdev is always true; on a single file system it changes
+           nothing.
+test       t/024-xdev-mount.sh
+
+assertion  XCU.find.025
+anchor     utilities/find.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+says       A path operand that does not exist gets a diagnostic and a
+           non-zero status, and the other operands are still searched.
+test       t/025-error-continue.sh
+
+assertion  XCU.find.026
+anchor     utilities/find.html#OPERANDS
+anchor     utilities/find.html#DESCRIPTION
+class      required
+says       Several path operands are searched in turn.
+test       t/026-several-paths.sh
+
+assertion  XCU.find.027
+anchor     utilities/find.html#OPERANDS
+class      required
+since      2024
+says       -mount is always true; on a single file system it changes
+           nothing.
+test       t/027-mount.sh

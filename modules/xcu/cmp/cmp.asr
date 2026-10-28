@@ -1,0 +1,78 @@
+# XCU cmp
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.cmp.001
+anchor     utilities/cmp.html#DESCRIPTION
+anchor     utilities/cmp.html#EXIT STATUS
+class      required
+says       For identical files cmp writes nothing and exits 0.
+test       t/001-identical.sh
+
+assertion  XCU.cmp.002
+anchor     utilities/cmp.html#DESCRIPTION
+anchor     utilities/cmp.html#STDOUT
+anchor     utilities/cmp.html#EXIT STATUS
+class      required
+says       For files that differ cmp writes the names, the byte number and
+           the line number of the first difference, both counted from 1,
+           and exits 1.
+test       t/002-differ-format.sh
+
+assertion  XCU.cmp.003
+anchor     utilities/cmp.html#OPTIONS
+anchor     utilities/cmp.html#STDOUT
+class      required
+says       cmp -l writes, for each differing byte, its number in decimal
+           and the two bytes in octal, and exits 1.
+test       t/003-option-l.sh
+
+assertion  XCU.cmp.004
+anchor     utilities/cmp.html#OPTIONS
+anchor     utilities/cmp.html#STDOUT
+class      required
+says       cmp -s writes nothing to standard output or standard error and
+           reports the result in the exit status.
+test       t/004-option-s.sh
+
+assertion  XCU.cmp.005
+anchor     utilities/cmp.html#STDERR
+anchor     utilities/cmp.html#EXIT STATUS
+anchor     utilities/cmp.html#DESCRIPTION
+class      required
+says       When one file is a prefix of the other, cmp exits 1 and writes
+           an EOF diagnostic naming the shorter file to standard error.
+test       t/005-eof.sh
+
+assertion  XCU.cmp.006
+anchor     utilities/cmp.html#STDERR
+anchor     utilities/cmp.html#OPTIONS
+class      required
+says       With -l, differing lengths give the EOF diagnostic after any
+           differences have been listed.
+test       t/006-option-l-eof.sh
+
+assertion  XCU.cmp.007
+anchor     utilities/cmp.html#EXIT STATUS
+anchor     utilities/cmp.html#STDERR
+class      required
+says       When a file cannot be read cmp exits with a status above 1,
+           writes a diagnostic (unless -s), and writes nothing to standard
+           output.
+test       t/007-error.sh
+
+assertion  XCU.cmp.008
+anchor     utilities/cmp.html#OPERANDS
+class      required
+says       A file operand of - makes cmp read standard input, as either
+           operand.
+test       t/008-stdin.sh
+
+assertion  XCU.cmp.009
+anchor     utilities/cmp.html#DESCRIPTION
+anchor     utilities/cmp.html#INPUT FILES
+class      required
+says       cmp compares bytes of any value, null bytes included, and
+           accepts a character special file.
+test       t/009-binary.sh

@@ -1,0 +1,58 @@
+# XCU rmdir
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.rmdir.001
+anchor     utilities/rmdir.html#DESCRIPTION
+anchor     utilities/rmdir.html#STDOUT
+class      required
+says       rmdir removes each named empty directory, in order, with no
+           output.
+test       t/001-basic.sh
+
+assertion  XCU.rmdir.002
+anchor     utilities/rmdir.html#OPERANDS
+anchor     utilities/rmdir.html#EXIT STATUS
+class      required
+says       rmdir of a directory that is not empty fails with a diagnostic
+           and removes nothing.
+test       t/002-not-empty.sh
+
+assertion  XCU.rmdir.003
+anchor     utilities/rmdir.html#DESCRIPTION
+class      required
+says       A subdirectory named before its parent can be removed together
+           with it, in one invocation.
+test       t/003-order.sh
+
+assertion  XCU.rmdir.004
+anchor     utilities/rmdir.html#OPTIONS
+class      required
+says       rmdir -p removes the named directory and then each parent in
+           the path.
+test       t/004-option-p.sh
+
+assertion  XCU.rmdir.005
+anchor     utilities/rmdir.html#OPTIONS
+anchor     utilities/rmdir.html#EXIT STATUS
+class      required
+says       rmdir -p removes what it can; a parent that is not empty stays,
+           and the status is non-zero.
+test       t/005-p-stops.sh
+
+assertion  XCU.rmdir.006
+anchor     utilities/rmdir.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+says       If one operand cannot be removed, rmdir diagnoses it, handles
+           the others, and exits non-zero.
+test       t/006-error-continue.sh
+
+assertion  XCU.rmdir.007
+anchor     utilities/rmdir.html#DESCRIPTION
+anchor     utilities/rmdir.html#EXIT STATUS
+class      required
+says       rmdir of a file that is not a directory fails and leaves the
+           file.
+test       t/007-not-directory.sh

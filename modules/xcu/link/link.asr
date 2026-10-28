@@ -1,0 +1,29 @@
+# XCU link
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.link.001
+anchor     utilities/link.html#DESCRIPTION
+class      required
+says       link file1 file2 makes file2 a second name for file1, with no
+           output.
+note       A user may need privileges to run link, so the test first makes
+           sure that a hard link can be made with ln.
+test       t/001-basic.sh
+
+assertion  XCU.link.002
+anchor     utilities/link.html#DESCRIPTION
+anchor     utilities/link.html#EXIT STATUS
+class      required
+says       If file2 exists, link fails with a diagnostic and file2 is not
+           replaced.
+test       t/002-exists.sh
+
+assertion  XCU.link.003
+anchor     utilities/link.html#DESCRIPTION
+anchor     utilities/link.html#EXIT STATUS
+class      required
+says       If file1 does not exist, link fails with a diagnostic and
+           creates nothing.
+test       t/003-missing.sh

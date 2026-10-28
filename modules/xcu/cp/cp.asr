@@ -1,0 +1,180 @@
+# XCU cp
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.cp.001
+anchor     utilities/cp.html#DESCRIPTION
+anchor     utilities/cp.html#STDOUT
+class      required
+says       cp source_file target_file creates the target with the source
+           contents, leaves the source unchanged, and writes nothing to
+           standard output.
+test       t/001-basic.sh
+
+assertion  XCU.cp.002
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       cp onto an existing regular file replaces its contents
+           completely, with no remnant of longer old data.
+test       t/002-overwrite.sh
+
+assertion  XCU.cp.003
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       cp source_file... target copies each source to target/basename,
+           with or without a trailing slash on the directory.
+test       t/003-into-directory.sh
+
+assertion  XCU.cp.004
+anchor     utilities/cp.html#DESCRIPTION
+anchor     utilities/cp.html#EXIT STATUS
+class      required
+says       Without -R, cp treats a source that is a directory as an error:
+           it writes a diagnostic, exits non-zero, and copies nothing.
+test       t/004-dir-no-R.sh
+
+assertion  XCU.cp.005
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       A newly created copy gets the source permission bits modified
+           by the file creation mask.
+test       t/005-new-mode.sh
+
+assertion  XCU.cp.006
+anchor     utilities/cp.html#OPTIONS
+class      required
+says       cp -p gives the copy the source modification time and
+           permission bits, regardless of the creation mask.
+test       t/006-option-p.sh
+
+assertion  XCU.cp.007
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       Without -R, a source that is a symbolic link is copied as the
+           file it refers to, not as a link.
+test       t/007-symlink-source.sh
+
+assertion  XCU.cp.008
+anchor     utilities/cp.html#OPTIONS
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       cp -f replaces a destination file that cannot be opened for
+           writing, by removing it first.
+note       As a privileged user the destination can be opened anyway, so
+           the test only distinguishes a faulty -f when run unprivileged;
+           the verdict for a conforming utility is the same in both cases.
+test       t/008-option-f.sh
+
+assertion  XCU.cp.009
+anchor     utilities/cp.html#OPTIONS
+anchor     utilities/cp.html#STDERR
+anchor     utilities/cp.html#EXIT STATUS
+class      required
+says       With -i, an existing destination triggers a prompt naming it on
+           standard error, and a negative reply leaves it untouched with
+           status 0.
+test       t/009-option-i-no.sh
+
+assertion  XCU.cp.010
+anchor     utilities/cp.html#OPTIONS
+class      required
+says       With -i, an affirmative reply makes cp overwrite the existing
+           destination.
+test       t/010-option-i-yes.sh
+
+assertion  XCU.cp.011
+anchor     utilities/cp.html#DESCRIPTION
+anchor     utilities/cp.html#OPTIONS
+class      required
+says       cp -R source target, with target absent, makes target a copy of
+           the whole hierarchy including empty directories and dot files.
+test       t/011-R-new.sh
+
+assertion  XCU.cp.012
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       cp -R source target, with target an existing directory, creates
+           target/source with the hierarchy.
+test       t/012-R-into-dir.sh
+
+assertion  XCU.cp.013
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       cp -R makes copied directories usable while it fills them and
+           leaves them with the source permissions (modified by the mask):
+           a read-only directory with content is copied with its mode.
+test       t/013-R-dir-mode.sh
+
+assertion  XCU.cp.014
+anchor     utilities/cp.html#OPTIONS
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       cp -R -P copies a symbolic link in the hierarchy as a symbolic
+           link with the same contents.
+test       t/014-R-P.sh
+
+assertion  XCU.cp.015
+anchor     utilities/cp.html#OPTIONS
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       cp -R -L copies what a symbolic link in the hierarchy refers
+           to, not the link.
+test       t/015-R-L.sh
+
+assertion  XCU.cp.016
+anchor     utilities/cp.html#OPTIONS
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       cp -R -H follows a symbolic link given as an operand but copies
+           links found in the hierarchy as links.
+test       t/016-R-H.sh
+
+assertion  XCU.cp.017
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       cp -R recreates a FIFO in the hierarchy as a FIFO.
+test       t/017-R-fifo.sh
+
+assertion  XCU.cp.018
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       When source and destination are the same file, cp does nothing
+           more with it: the contents survive.
+test       t/018-same-file.sh
+
+assertion  XCU.cp.019
+anchor     utilities/cp.html#OPERANDS
+class      required
+says       The operand - names a file called -, for both source and
+           target; it never means a standard stream.
+test       t/019-dash-file.sh
+
+assertion  XCU.cp.020
+anchor     utilities/cp.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+says       If one source cannot be copied, cp diagnoses it, copies the
+           remaining sources, and exits non-zero.
+test       t/020-error-continue.sh
+
+assertion  XCU.cp.021
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       With several sources, a target that is not a directory is an
+           error and the target is not modified.
+test       t/021-target-not-dir.sh
+
+assertion  XCU.cp.022
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       With -R and more than two operands, a target that does not
+           exist is an error.
+test       t/022-R-many-missing.sh
+
+assertion  XCU.cp.023
+anchor     utilities/cp.html#DESCRIPTION
+class      required
+says       With -R, copying a directory onto an existing non-directory is
+           an error that leaves the file alone.
+test       t/023-R-dir-onto-file.sh

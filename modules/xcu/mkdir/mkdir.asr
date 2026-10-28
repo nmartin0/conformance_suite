@@ -1,0 +1,85 @@
+# XCU mkdir
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.mkdir.001
+anchor     utilities/mkdir.html#DESCRIPTION
+anchor     utilities/mkdir.html#STDOUT
+class      required
+says       mkdir creates the named directories in the order given, with no
+           output; a later operand may live inside an earlier one.
+test       t/001-basic.sh
+
+assertion  XCU.mkdir.002
+anchor     utilities/mkdir.html#DESCRIPTION
+class      required
+says       Without -m the directory gets mode rwxrwxrwx reduced by the
+           file creation mask.
+test       t/002-default-mode.sh
+
+assertion  XCU.mkdir.003
+anchor     utilities/mkdir.html#OPTIONS
+class      required
+says       mkdir -m with an octal mode sets exactly that mode, whatever
+           the file creation mask.
+test       t/003-mode-octal.sh
+
+assertion  XCU.mkdir.004
+anchor     utilities/mkdir.html#OPTIONS
+class      required
+says       mkdir -m with a symbolic mode applies it to an initial mode of
+           rwxrwxrwx.
+test       t/004-mode-symbolic.sh
+
+assertion  XCU.mkdir.005
+anchor     utilities/mkdir.html#OPTIONS
+class      required
+says       mkdir -p creates all missing intermediate directories, for
+           several operands.
+test       t/005-option-p.sh
+
+assertion  XCU.mkdir.006
+anchor     utilities/mkdir.html#OPTIONS
+class      required
+says       The intermediate directories made by -p get u+wx plus
+           everything the mask leaves, while the last one gets the plain
+           default mode.
+test       t/006-p-intermediate-mode.sh
+
+assertion  XCU.mkdir.007
+anchor     utilities/mkdir.html#OPTIONS
+anchor     utilities/mkdir.html#EXIT STATUS
+class      required
+says       With -p, an operand that names an existing directory is ignored
+           without error or diagnostic.
+test       t/007-p-existing.sh
+
+assertion  XCU.mkdir.008
+anchor     utilities/mkdir.html#EXIT STATUS
+class      required
+says       Without -p, creating a directory that already exists is an
+           error with a diagnostic.
+test       t/008-exists-no-p.sh
+
+assertion  XCU.mkdir.009
+anchor     utilities/mkdir.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+says       If one directory cannot be created, mkdir diagnoses it, creates
+           the others, and exits non-zero.
+test       t/009-error-continue.sh
+
+assertion  XCU.mkdir.010
+anchor     utilities/mkdir.html#EXIT STATUS
+class      required
+says       With -p, a path prefix component that is a file is an error and
+           the file is untouched.
+test       t/010-p-through-file.sh
+
+assertion  XCU.mkdir.011
+anchor     utilities/mkdir.html#OPTIONS
+class      required
+says       With -p and -m, only the last directory gets the -m mode;
+           intermediates follow the -p rule.
+test       t/011-p-with-m.sh

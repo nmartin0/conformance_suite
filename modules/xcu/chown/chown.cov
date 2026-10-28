@@ -1,0 +1,49 @@
+# chown.cov - every requirement unit on utilities/chown.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:91744f48         XCU.chown.001 XCU.chown.002
+DESCRIPTION:ad8ec0b6         XCU.chown.001 XCU.chown.003
+DESCRIPTION:777f2698         XCU.chown.001
+DESCRIPTION:53085112         XCU.chown.001
+DESCRIPTION:574c629f         XCU.chown.001 XCU.chown.002
+DESCRIPTION:1875c149         todo  needs an unprivileged user to demonstrate
+OPTIONS:4bb68e97             todo  utility syntax guidelines (option grouping, "--") are not checked as such
+OPTIONS:4f2c54fc             none  introduces the list that follows
+OPTIONS:fcda1d29             XCU.chown.004
+OPTIONS:2233b7f4             XCU.chown.004
+OPTIONS:2ddfac1d             XCU.chown.006
+OPTIONS:ebf87af8             XCU.chown.005
+OPTIONS:631ee242             XCU.chown.005
+OPTIONS:fafdd9d4             XCU.chown.005
+OPTIONS:7bf15e6f             XCU.chown.003
+OPTIONS:1736a150             todo  not covered by a test yet
+OPTIONS:b84a4017             todo  not covered by a test yet
+OPTIONS:21d66641             todo  last of -H -L -P wins is not tested
+OPTIONS:2b2bf570             todo  not covered by a test yet
+OPERANDS:51b44f3c            none  introduces the list that follows
+OPERANDS:4ef7ab89            XCU.chown.001 XCU.chown.002
+OPERANDS:e1625af8            XCU.chown.001 XCU.chown.008
+OPERANDS:290d2598            todo  not covered by a test yet
+OPERANDS:27cbe295            todo  needs a known user database entry
+OPERANDS:3f2cea60            XCU.chown.002
+OPERANDS:21b03d33            todo  not covered by a test yet
+OPERANDS:e38cc6d6            todo  not covered by a test yet
+OPERANDS:4fa61a33            XCU.chown.001
+STDIN:3f472296               none  section says nothing is needed (XCU 1.4 defaults)
+INPUT_FILES:eb724aff         none  section says nothing is needed (XCU 1.4 defaults)
+ENVIRONMENT_VARIABLES:5820f530 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd todo  XCU 1.4 default for signals and errors is not exercised
+STDOUT:3f472296              none  section says nothing is needed (XCU 1.4 defaults)
+STDERR:b2905b3f              todo  not covered by a test yet
+OUTPUT_FILES:eb724aff        none  section says nothing is needed (XCU 1.4 defaults)
+EXTENDED_DESCRIPTION:eb724aff none  section says nothing is needed (XCU 1.4 defaults)
+EXIT_STATUS:db823381         todo  not covered by a test yet
+EXIT_STATUS:817005c0         XCU.chown.001
+EXIT_STATUS:9d252ff7         XCU.chown.007 XCU.chown.008
+CONSEQUENCES_OF_ERRORS:d92f27bd todo  XCU 1.4 default for signals and errors is not exercised

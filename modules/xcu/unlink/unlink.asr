@@ -1,0 +1,26 @@
+# XCU unlink
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.unlink.001
+anchor     utilities/unlink.html#DESCRIPTION
+class      required
+says       unlink removes the named directory entry and leaves other names
+           of the same file intact.
+test       t/001-basic.sh
+
+assertion  XCU.unlink.002
+anchor     utilities/unlink.html#DESCRIPTION
+anchor     utilities/unlink.html#EXIT STATUS
+class      required
+says       unlink of a file that does not exist gives a diagnostic and a
+           non-zero status.
+test       t/002-missing.sh
+
+assertion  XCU.unlink.003
+anchor     utilities/unlink.html#DESCRIPTION
+class      required
+says       unlink on a symbolic link removes the link itself, not the file
+           it points to.
+test       t/003-symlink.sh

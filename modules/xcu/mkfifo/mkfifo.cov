@@ -1,0 +1,33 @@
+# mkfifo.cov - every requirement unit on utilities/mkfifo.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:9dd4bafe         XCU.mkfifo.001
+DESCRIPTION:ebe50446         XCU.mkfifo.001 XCU.mkfifo.002
+DESCRIPTION:c7fa8ed1         XCU.mkfifo.001
+DESCRIPTION:5d2272d6         XCU.mkfifo.002 XCU.mkfifo.003
+DESCRIPTION:66fbfd24         todo  not covered by a test yet
+OPTIONS:8f3b863a             todo  utility syntax guidelines (option grouping, "--") are not checked as such
+OPTIONS:5567759d             none  introduces the list that follows
+OPTIONS:9c7f4607             XCU.mkfifo.003 XCU.mkfifo.004
+OPTIONS:232277b0             XCU.mkfifo.003 XCU.mkfifo.004
+OPTIONS:87b1f4f6             XCU.mkfifo.004
+OPERANDS:4ec2d2a9            none  introduces the list that follows
+OPERANDS:12b41232            XCU.mkfifo.001
+STDIN:3f472296               none  section says nothing is needed (XCU 1.4 defaults)
+INPUT_FILES:eb724aff         none  section says nothing is needed (XCU 1.4 defaults)
+ENVIRONMENT_VARIABLES:14c12e63 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd todo  XCU 1.4 default for signals and errors is not exercised
+STDOUT:3f472296              none  section says nothing is needed (XCU 1.4 defaults)
+STDERR:b2905b3f              todo  not covered by a test yet
+OUTPUT_FILES:eb724aff        none  section says nothing is needed (XCU 1.4 defaults)
+EXTENDED_DESCRIPTION:eb724aff none  section says nothing is needed (XCU 1.4 defaults)
+EXIT_STATUS:db823381         todo  not covered by a test yet
+EXIT_STATUS:053524a2         XCU.mkfifo.001
+EXIT_STATUS:9d252ff7         XCU.mkfifo.005 XCU.mkfifo.006
+CONSEQUENCES_OF_ERRORS:d92f27bd todo  XCU 1.4 default for signals and errors is not exercised

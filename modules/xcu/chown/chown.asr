@@ -1,0 +1,70 @@
+# XCU chown
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.chown.001
+anchor     utilities/chown.html#DESCRIPTION
+anchor     utilities/chown.html#OPERANDS
+class      required
+says       chown sets the user ID of the file to the numeric owner operand
+           and leaves the group alone.
+needs      root
+test       t/001-owner.sh
+
+assertion  XCU.chown.002
+anchor     utilities/chown.html#DESCRIPTION
+anchor     utilities/chown.html#OPERANDS
+class      required
+says       chown owner:group sets both the user ID and the group ID.
+needs      root
+test       t/002-owner-group.sh
+
+assertion  XCU.chown.003
+anchor     utilities/chown.html#OPTIONS
+class      required
+says       chown -R changes the directory operand and everything below it.
+needs      root
+test       t/003-option-R.sh
+
+assertion  XCU.chown.004
+anchor     utilities/chown.html#OPTIONS
+class      required
+says       chown -h changes the owner of a symbolic link itself and not of
+           the file it refers to; without -h the file is changed.
+needs      root
+test       t/004-option-h.sh
+
+assertion  XCU.chown.005
+anchor     utilities/chown.html#OPTIONS
+class      required
+says       With -R, -P changes a symbolic link found in the hierarchy
+           without following it, and -L follows it.
+needs      root
+test       t/005-R-P-L.sh
+
+assertion  XCU.chown.006
+anchor     utilities/chown.html#OPTIONS
+class      required
+says       With -R, -H follows a symbolic link given as operand to a
+           directory and changes the files below it.
+needs      root
+note       What -H does to a link met inside the hierarchy is not stated,
+           so only the operand link is checked.
+test       t/006-R-H.sh
+
+assertion  XCU.chown.007
+anchor     utilities/chown.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+says       If one operand cannot be changed, chown diagnoses it, handles
+           the others, and exits non-zero.
+test       t/007-error-continue.sh
+
+assertion  XCU.chown.008
+anchor     utilities/chown.html#OPERANDS
+anchor     utilities/chown.html#EXIT STATUS
+class      required
+says       An owner operand that is no user name and not numeric is an
+           error and changes nothing.
+test       t/008-bad-owner.sh

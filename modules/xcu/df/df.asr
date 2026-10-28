@@ -1,0 +1,66 @@
+# XCU df
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.df.001
+anchor     utilities/df.html#STDOUT
+anchor     utilities/df.html#OPTIONS
+class      required
+says       df -P writes a header line naming the columns with 512-byte
+           blocks.
+test       t/001-header-P.sh
+
+assertion  XCU.df.002
+anchor     utilities/df.html#STDOUT
+anchor     utilities/df.html#OPTIONS
+class      required
+says       df -k -P writes the header with 1024-byte blocks.
+test       t/002-header-kP.sh
+
+assertion  XCU.df.003
+anchor     utilities/df.html#STDOUT
+class      required
+says       Under -P the data line has the file system name, total, used
+           and free space, a whole percentage of used space rounded up,
+           and the mount directory.
+test       t/003-data-line.sh
+
+assertion  XCU.df.004
+anchor     utilities/df.html#STDOUT
+anchor     utilities/df.html#OPERANDS
+class      required
+says       The mount point on the data line is a prefix of the absolute
+           path of the file operand.
+test       t/004-mount-prefix.sh
+
+assertion  XCU.df.005
+anchor     utilities/df.html#OPTIONS
+anchor     utilities/df.html#STDOUT
+class      required
+says       The total in 1024-byte units is the total in 512-byte units
+           rounded up to an even number divided by two.
+test       t/005-unit-k.sh
+
+assertion  XCU.df.006
+anchor     utilities/df.html#DESCRIPTION
+anchor     utilities/df.html#OPTIONS
+class      required
+says       Without -P, df writes the file system name and exits 0.
+test       t/006-default-output.sh
+
+assertion  XCU.df.007
+anchor     utilities/df.html#OPERANDS
+anchor     utilities/df.html#EXIT STATUS
+class      required
+says       df of a file that does not exist fails with a diagnostic.
+test       t/007-nonexistent.sh
+
+assertion  XCU.df.008
+anchor     utilities/df.html#OPTIONS
+anchor     utilities/df.html#DESCRIPTION
+class      conditional
+when       XSI
+says       df -t is accepted and writes output (its format is
+           unspecified).
+test       t/008-option-t.sh

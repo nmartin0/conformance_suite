@@ -1,0 +1,48 @@
+# XCU basename
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.basename.001
+anchor     utilities/basename.html#DESCRIPTION
+anchor     utilities/basename.html#STDOUT
+class      required
+says       basename writes the last component of the pathname, followed by
+           a newline.
+test       t/001-simple.sh
+
+assertion  XCU.basename.002
+anchor     utilities/basename.html#DESCRIPTION
+class      required
+says       Trailing slashes are removed before the last component is
+           taken.
+test       t/002-trailing-slashes.sh
+
+assertion  XCU.basename.003
+anchor     utilities/basename.html#DESCRIPTION
+class      required
+says       A string made only of slashes (other than exactly two) gives a
+           single slash.
+test       t/003-only-slashes.sh
+
+assertion  XCU.basename.004
+anchor     utilities/basename.html#DESCRIPTION
+class      required
+says       A suffix operand that matches the end of the remaining string
+           is removed.
+test       t/004-suffix-removed.sh
+
+assertion  XCU.basename.005
+anchor     utilities/basename.html#DESCRIPTION
+class      required
+says       A suffix that does not match, that equals the whole remaining
+           string, that is empty, or that is longer than the string leaves
+           the string alone.
+test       t/005-suffix-kept.sh
+
+assertion  XCU.basename.006
+anchor     utilities/basename.html#DESCRIPTION
+class      required
+says       For a null string the result is a dot or a null string, and the
+           status is zero.
+test       t/006-null-string.sh

@@ -1,0 +1,78 @@
+# XCU du
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.du.001
+anchor     utilities/du.html#OPTIONS
+anchor     utilities/du.html#STDOUT
+class      required
+says       du -s writes exactly one line per operand: a number, a blank
+           and the operand.
+test       t/001-option-s.sh
+
+assertion  XCU.du.002
+anchor     utilities/du.html#DESCRIPTION
+anchor     utilities/du.html#STDOUT
+class      required
+says       Without options du writes a line for the operand directory and
+           each subdirectory, but not for plain files.
+test       t/002-default-dirs.sh
+
+assertion  XCU.du.003
+anchor     utilities/du.html#OPTIONS
+class      required
+says       du -a also writes a line for every file that is not a
+           directory.
+test       t/003-option-a.sh
+
+assertion  XCU.du.004
+anchor     utilities/du.html#OPTIONS
+anchor     utilities/du.html#OPERANDS
+class      required
+says       du -s with several operands writes one line for each, and a
+           plain file operand is written even without -a.
+test       t/004-several-operands.sh
+
+assertion  XCU.du.005
+anchor     utilities/du.html#OPTIONS
+anchor     utilities/du.html#DESCRIPTION
+class      required
+says       du -k reports 1024-byte units, so its number is the 512-byte
+           number divided by two, rounded up.
+test       t/005-option-k.sh
+
+assertion  XCU.du.006
+anchor     utilities/du.html#DESCRIPTION
+class      required
+says       A file that occurs under several names is written only once.
+test       t/006-hard-link-once.sh
+
+assertion  XCU.du.007
+anchor     utilities/du.html#DESCRIPTION
+anchor     utilities/du.html#OPTIONS
+class      required
+says       By default du counts a symbolic link itself and does not follow
+           it; -L follows links in the hierarchy.
+test       t/007-symlinks-default-L.sh
+
+assertion  XCU.du.008
+anchor     utilities/du.html#OPTIONS
+class      required
+says       du -H follows a symbolic link given as operand but not one
+           inside the hierarchy.
+test       t/008-option-H.sh
+
+assertion  XCU.du.009
+anchor     utilities/du.html#EXIT STATUS
+anchor     utilities/du.html#DESCRIPTION
+class      required
+says       A nonexistent operand gets a diagnostic and a non-zero status,
+           and the other operands are still reported.
+test       t/009-error-continue.sh
+
+assertion  XCU.du.010
+anchor     utilities/du.html#OPERANDS
+class      required
+says       With no operand du reports the current directory.
+test       t/010-no-operand.sh

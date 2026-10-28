@@ -1,0 +1,101 @@
+# XCU ln
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.ln.001
+anchor     utilities/ln.html#DESCRIPTION
+class      required
+says       ln source_file target_file makes a second name for the same
+           file: same file, link count 2, no output.
+test       t/001-hard.sh
+
+assertion  XCU.ln.002
+anchor     utilities/ln.html#DESCRIPTION
+anchor     utilities/ln.html#OPERANDS
+class      required
+says       ln -s creates a symbolic link whose contents are the source
+           operand text exactly, whether or not the source exists.
+test       t/002-symbolic.sh
+
+assertion  XCU.ln.003
+anchor     utilities/ln.html#DESCRIPTION
+class      required
+says       ln source_file... target_dir creates target_dir/basename for
+           each source, as hard links or, with -s, as links holding the
+           operand text.
+test       t/003-into-directory.sh
+
+assertion  XCU.ln.004
+anchor     utilities/ln.html#DESCRIPTION
+class      required
+says       If the destination exists and -f is absent, ln writes a
+           diagnostic, exits non-zero, and leaves the destination alone.
+test       t/004-exists-no-f.sh
+
+assertion  XCU.ln.005
+anchor     utilities/ln.html#OPTIONS
+anchor     utilities/ln.html#DESCRIPTION
+class      required
+says       ln -f replaces an existing destination.
+test       t/005-option-f.sh
+
+assertion  XCU.ln.006
+anchor     utilities/ln.html#DESCRIPTION
+class      required
+says       If the destination is the very directory entry of the source,
+           ln diagnoses it and does not remove the file, even with -f.
+test       t/006-same-entry.sh
+
+assertion  XCU.ln.007
+anchor     utilities/ln.html#OPTIONS
+anchor     utilities/ln.html#DESCRIPTION
+class      required
+says       ln -s fails on an existing destination without -f, and replaces
+           it with -f.
+test       t/007-symbolic-f.sh
+
+assertion  XCU.ln.008
+anchor     utilities/ln.html#OPTIONS
+anchor     utilities/ln.html#DESCRIPTION
+class      required
+says       ln -L makes a hard link to the file a symbolic link refers to.
+test       t/008-option-L.sh
+
+assertion  XCU.ln.009
+anchor     utilities/ln.html#OPTIONS
+anchor     utilities/ln.html#DESCRIPTION
+class      required
+says       ln -P makes a hard link to a symbolic link itself.
+note       Whether the file system can hold a hard link to a symbolic link
+           is outside the utility, so a failing ln -P is reported as
+           unresolved rather than failed.
+test       t/009-option-P.sh
+
+assertion  XCU.ln.010
+anchor     utilities/ln.html#OPTIONS
+class      required
+says       When -L and -P are both given, the last one decides.
+test       t/010-L-P-last.sh
+
+assertion  XCU.ln.011
+anchor     utilities/ln.html#OPTIONS
+class      required
+says       With -s, the options -L and -P are silently ignored and a
+           symbolic link is made.
+test       t/011-s-ignores-LP.sh
+
+assertion  XCU.ln.012
+anchor     utilities/ln.html#DESCRIPTION
+class      required
+says       With more than two operands and a last operand that is not a
+           directory, ln reports an error.
+test       t/012-many-no-dir.sh
+
+assertion  XCU.ln.013
+anchor     utilities/ln.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+says       If one source cannot be linked, ln diagnoses it, links the
+           others, and exits non-zero.
+test       t/013-error-continue.sh

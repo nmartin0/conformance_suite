@@ -1,0 +1,34 @@
+# pwd.cov - every requirement unit on utilities/pwd.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:82f48259         XCU.pwd.001
+OPTIONS:589542ec             todo  utility syntax guidelines (option grouping, "--") are not checked as such
+OPTIONS:4f2c54fc             none  introduces the list that follows
+OPTIONS:862b5ce3             XCU.pwd.003
+OPTIONS:e671e71c             todo  needs PWD to be made invalid, which an application may not do
+OPTIONS:56ea8173             XCU.pwd.002
+OPTIONS:101b44b0             XCU.pwd.001 XCU.pwd.002
+OPTIONS:cf23c41c             XCU.pwd.001
+OPTIONS:5e7e18ba             XCU.pwd.004
+OPTIONS:ff4f5ea0             XCU.pwd.003
+OPERANDS:eb724aff            none  section says nothing is needed (XCU 1.4 defaults)
+STDIN:3f472296               none  section says nothing is needed (XCU 1.4 defaults)
+INPUT_FILES:eb724aff         none  section says nothing is needed (XCU 1.4 defaults)
+ENVIRONMENT_VARIABLES:49c94012 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:9d66fee1 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:df41c8cf XCU.pwd.003
+ENVIRONMENT_VARIABLES:329766db app
+ASYNCHRONOUS_EVENTS:d92f27bd todo  XCU 1.4 default for signals and errors is not exercised
+STDOUT:5b57b0da              XCU.pwd.001
+STDOUT:52c5eb12              todo  not covered by a test yet
+STDERR:b2905b3f              todo  not covered by a test yet
+OUTPUT_FILES:eb724aff        none  section says nothing is needed (XCU 1.4 defaults)
+EXTENDED_DESCRIPTION:eb724aff none  section says nothing is needed (XCU 1.4 defaults)
+EXIT_STATUS:db823381         todo  not covered by a test yet
+EXIT_STATUS:8b075da2         XCU.pwd.001
+EXIT_STATUS:9d252ff7         todo  needs a current directory that cannot be determined
+CONSEQUENCES_OF_ERRORS:76e01c31 todo  needs a current directory that cannot be determined

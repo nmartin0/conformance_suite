@@ -1,0 +1,38 @@
+# XCU readlink
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.readlink.001
+anchor     utilities/readlink.html#DESCRIPTION
+anchor     utilities/readlink.html#STDOUT
+class      required
+since      2024
+says       readlink writes the contents of a symbolic link, unresolved,
+           followed by a newline.
+test       t/001-contents.sh
+
+assertion  XCU.readlink.002
+anchor     utilities/readlink.html#OPTIONS
+class      required
+since      2024
+says       readlink -n omits the trailing newline.
+test       t/002-option-n.sh
+
+assertion  XCU.readlink.003
+anchor     utilities/readlink.html#DESCRIPTION
+class      required
+since      2024
+says       readlink does not follow the link: for a link to a link it
+           writes only the first link text, and a dangling link is fine.
+test       t/003-not-followed.sh
+
+assertion  XCU.readlink.004
+anchor     utilities/readlink.html#DESCRIPTION
+anchor     utilities/readlink.html#EXIT STATUS
+class      required
+since      2024
+says       For a file that is not a symbolic link, or does not exist,
+           readlink writes a diagnostic, nothing to standard output, and
+           exits non-zero.
+test       t/004-not-a-link.sh

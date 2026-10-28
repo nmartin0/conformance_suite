@@ -1,0 +1,61 @@
+# XCU cat
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.cat.001
+anchor     utilities/cat.html#DESCRIPTION
+anchor     utilities/cat.html#STDOUT
+class      required
+says       cat writes the contents of its file operands to standard output
+           in operand order, byte for byte, and nothing else.
+test       t/001-sequence.sh
+
+assertion  XCU.cat.002
+anchor     utilities/cat.html#OPERANDS
+anchor     utilities/cat.html#STDIN
+class      required
+says       With no file operands cat copies standard input to standard
+           output.
+test       t/002-stdin.sh
+
+assertion  XCU.cat.003
+anchor     utilities/cat.html#OPERANDS
+class      required
+says       A file operand of - makes cat read standard input at that point
+           in the sequence.
+test       t/003-dash-operand.sh
+
+assertion  XCU.cat.004
+anchor     utilities/cat.html#OPERANDS
+class      required
+says       cat accepts several - operands and does not reopen standard
+           input: with a regular file as input the second - adds nothing.
+test       t/004-dash-twice.sh
+
+assertion  XCU.cat.005
+anchor     utilities/cat.html#OPTIONS
+class      required
+says       cat accepts -u and still writes the same bytes.
+test       t/005-option-u.sh
+
+assertion  XCU.cat.006
+anchor     utilities/cat.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+says       When one operand cannot be read, cat reports it on standard
+           error, still writes the other operands, and exits non-zero.
+test       t/006-error-continue.sh
+
+assertion  XCU.cat.007
+anchor     utilities/cat.html#INPUT FILES
+class      required
+says       cat reads files of any type, so a character special file such
+           as the null device contributes no bytes.
+test       t/007-special-file.sh
+
+assertion  XCU.cat.008
+anchor     utilities/cat.html#DESCRIPTION
+class      required
+says       cat copies a file of several thousand lines without loss.
+test       t/008-large.sh

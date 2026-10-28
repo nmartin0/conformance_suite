@@ -1,0 +1,116 @@
+# XCU rm
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.rm.001
+anchor     utilities/rm.html#DESCRIPTION
+anchor     utilities/rm.html#STDOUT
+class      required
+says       rm removes each named file and leaves others alone; it writes
+           nothing to standard output without -v.
+test       t/001-basic.sh
+
+assertion  XCU.rm.002
+anchor     utilities/rm.html#DESCRIPTION
+anchor     utilities/rm.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+says       A nonexistent operand without -f gets a diagnostic and a
+           non-zero status, and the other operands are still removed.
+test       t/002-nonexistent.sh
+
+assertion  XCU.rm.003
+anchor     utilities/rm.html#OPTIONS
+anchor     utilities/rm.html#SYNOPSIS
+class      required
+says       With -f, nonexistent operands and an empty operand list give no
+           diagnostic and status 0; existing operands are still removed.
+test       t/003-option-f.sh
+
+assertion  XCU.rm.004
+anchor     utilities/rm.html#DESCRIPTION
+class      required
+says       Without -r, -R or -d, rm refuses a directory, empty or not:
+           diagnostic, non-zero status, the directory remains.
+test       t/004-dir-no-r.sh
+
+assertion  XCU.rm.005
+anchor     utilities/rm.html#OPTIONS
+class      required
+says       rm -R removes a whole file hierarchy, dot files and empty
+           directories included.
+test       t/005-option-R.sh
+
+assertion  XCU.rm.006
+anchor     utilities/rm.html#OPTIONS
+class      required
+says       rm -r is equivalent to rm -R.
+test       t/006-option-r.sh
+
+assertion  XCU.rm.007
+anchor     utilities/rm.html#OPTIONS
+anchor     utilities/rm.html#DESCRIPTION
+class      required
+since      2024
+says       rm -d removes an empty directory and a plain file, but fails on
+           a directory that is not empty.
+test       t/007-option-d.sh
+
+assertion  XCU.rm.008
+anchor     utilities/rm.html#DESCRIPTION
+class      required
+says       rm -r removes a symbolic link in the hierarchy without entering
+           what it points to.
+test       t/008-symlink-not-followed.sh
+
+assertion  XCU.rm.009
+anchor     utilities/rm.html#OPTIONS
+anchor     utilities/rm.html#STDERR
+class      required
+says       With -i, rm prompts on standard error naming the file; a
+           negative reply keeps the file and the status is 0.
+test       t/009-option-i-no.sh
+
+assertion  XCU.rm.010
+anchor     utilities/rm.html#OPTIONS
+class      required
+says       With -i, an affirmative reply makes rm remove the file.
+test       t/010-option-i-yes.sh
+
+assertion  XCU.rm.011
+anchor     utilities/rm.html#OPTIONS
+class      required
+says       A -f after -i cancels it: the file is removed without regard to
+           a negative reply.
+test       t/011-f-after-i.sh
+
+assertion  XCU.rm.012
+anchor     utilities/rm.html#OPTIONS
+class      required
+says       An -i after -f cancels it: rm prompts, and a negative reply
+           keeps the file.
+test       t/012-i-after-f.sh
+
+assertion  XCU.rm.013
+anchor     utilities/rm.html#OPTIONS
+anchor     utilities/rm.html#STDOUT
+class      required
+since      2024
+says       rm -v writes a message containing the pathname of each file it
+           removed to standard output.
+test       t/013-option-v.sh
+
+assertion  XCU.rm.014
+anchor     utilities/rm.html#DESCRIPTION
+class      required
+says       An operand whose last component is dot or dot-dot is diagnosed
+           and nothing is removed.
+test       t/014-dot-operands.sh
+
+assertion  XCU.rm.015
+anchor     utilities/rm.html#DESCRIPTION
+class      required
+says       rm -r removes a hierarchy deeper than a path name could be
+           written in one piece.
+test       t/015-deep.sh

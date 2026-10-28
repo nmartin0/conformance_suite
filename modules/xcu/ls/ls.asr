@@ -1,0 +1,290 @@
+# XCU ls
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.ls.001
+anchor     utilities/ls.html#DESCRIPTION
+anchor     utilities/ls.html#STDOUT
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       ls lists the visible entries of a directory one per line,
+           sorted by the collating sequence (byte order in the POSIX
+           locale), omitting names that start with a period; -1 and a
+           later -1 after -C give the same.
+test       t/001-default.sh
+
+assertion  XCU.ls.002
+anchor     utilities/ls.html#OPTIONS
+anchor     utilities/ls.html#DESCRIPTION
+class      required
+says       ls -a also lists names that start with a period.
+test       t/002-option-a.sh
+
+assertion  XCU.ls.003
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       ls -A lists names that start with a period but never dot or
+           dot-dot.
+test       t/003-option-A.sh
+
+assertion  XCU.ls.004
+anchor     utilities/ls.html#OPTIONS
+anchor     utilities/ls.html#STDOUT
+class      required
+says       ls -m writes the names across the page separated by a comma and
+           a space, ending with a newline.
+test       t/004-option-m.sh
+
+assertion  XCU.ls.005
+anchor     utilities/ls.html#STDOUT
+anchor     utilities/ls.html#ENVIRONMENT VARIABLES
+class      required
+says       ls -m starts a new line, after the comma, when the next name
+           does not fit the line length given by COLUMNS.
+test       t/005-option-m-wrap.sh
+
+assertion  XCU.ls.006
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       ls -p writes a slash after each directory name.
+test       t/006-option-p.sh
+
+assertion  XCU.ls.007
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       ls -F marks directories with /, executables with *, FIFOs with
+           | and symbolic links with @.
+test       t/007-option-F.sh
+
+assertion  XCU.ls.008
+anchor     utilities/ls.html#OPTIONS
+anchor     utilities/ls.html#STDOUT
+class      required
+says       ls -l of a directory starts with a total line and then one line
+           per file with mode, link count, owner, group, size, a
+           three-part date and the name.
+test       t/008-long-format.sh
+
+assertion  XCU.ls.009
+anchor     utilities/ls.html#STDOUT
+class      required
+says       The first character of the long format mode is d for a
+           directory, p for a FIFO, l for a symbolic link and - for a
+           regular file.
+test       t/009-entry-types.sh
+
+assertion  XCU.ls.010
+anchor     utilities/ls.html#STDOUT
+class      required
+says       In the long format mode, the owner execute position shows s for
+           set-user-ID with execute and S without.
+test       t/010-setuid-chars.sh
+
+assertion  XCU.ls.011
+anchor     utilities/ls.html#STDOUT
+class      conditional
+when       XSI
+says       On a directory, the other-execute position shows t for the
+           sticky bit with search permission and T without.
+test       t/011-sticky-chars.sh
+
+assertion  XCU.ls.012
+anchor     utilities/ls.html#STDOUT
+class      required
+says       In the long format a symbolic link is shown as name, space,
+           arrow, space, link contents.
+test       t/012-symlink-long.sh
+
+assertion  XCU.ls.013
+anchor     utilities/ls.html#OPTIONS
+anchor     utilities/ls.html#STDOUT
+class      required
+says       ls -n shows the numeric user ID and a numeric group ID instead
+           of names.
+test       t/013-option-n.sh
+
+assertion  XCU.ls.014
+anchor     utilities/ls.html#OPTIONS
+anchor     utilities/ls.html#STDOUT
+class      conditional
+when       XSI
+says       ls -g writes the long format without the owner.
+test       t/014-option-g.sh
+
+assertion  XCU.ls.015
+anchor     utilities/ls.html#OPTIONS
+anchor     utilities/ls.html#STDOUT
+class      conditional
+when       XSI
+says       ls -o writes the long format without the group.
+test       t/015-option-o.sh
+
+assertion  XCU.ls.016
+anchor     utilities/ls.html#OPTIONS
+anchor     utilities/ls.html#STDOUT
+class      required
+says       ls -i puts the file serial number before each name: equal for
+           names of one file, different for different files.
+test       t/016-option-i.sh
+
+assertion  XCU.ls.017
+anchor     utilities/ls.html#OPTIONS
+anchor     utilities/ls.html#STDOUT
+class      required
+says       ls -s puts a total line first and the block count before each
+           name.
+test       t/017-option-s.sh
+
+assertion  XCU.ls.018
+anchor     utilities/ls.html#OPTIONS
+anchor     utilities/ls.html#STDOUT
+class      required
+says       With -k, the block size for -s and for the total line of the
+           long format is 1024 bytes.
+test       t/018-option-k.sh
+
+assertion  XCU.ls.019
+anchor     utilities/ls.html#OPTIONS
+anchor     utilities/ls.html#STDOUT
+class      required
+says       ls -R lists a directory and then each subdirectory below it,
+           each preceded by a blank line and a header with its pathname.
+test       t/019-option-R.sh
+
+assertion  XCU.ls.020
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       ls -R descends into a subdirectory whose name starts with a
+           period only if that name was listed.
+test       t/020-R-hidden.sh
+
+assertion  XCU.ls.021
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       ls -R does not descend through a symbolic link to a directory
+           unless -L is given.
+test       t/021-R-symlink.sh
+
+assertion  XCU.ls.022
+anchor     utilities/ls.html#OPTIONS
+anchor     utilities/ls.html#DESCRIPTION
+class      required
+says       ls -d writes a directory operand itself instead of its
+           contents; with no operand it writes dot.
+test       t/022-option-d.sh
+
+assertion  XCU.ls.023
+anchor     utilities/ls.html#DESCRIPTION
+anchor     utilities/ls.html#STDOUT
+class      required
+says       With several operands ls writes the non-directories first, then
+           each directory (sorted) under a blank line and a header with
+           its pathname.
+test       t/023-operand-order.sh
+
+assertion  XCU.ls.024
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       ls -r reverses the collating order.
+test       t/024-option-r.sh
+
+assertion  XCU.ls.025
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       ls -S sorts by size, largest first, ties by name; with -r the
+           smallest comes first.
+test       t/025-option-S.sh
+
+assertion  XCU.ls.026
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       ls -t sorts by modification time, newest first, ties by name;
+           with -r the oldest comes first.
+test       t/026-option-t.sh
+
+assertion  XCU.ls.027
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       With -t, -u sorts by the time of last access instead of
+           modification.
+test       t/027-option-u.sh
+
+assertion  XCU.ls.028
+anchor     utilities/ls.html#STDOUT
+class      required
+says       In the POSIX locale the long format date is month, day and
+           hour:minute for a recent file and month, day and year for an
+           old or future one.
+note       The year of a future file rests on touch -t accepting a date in
+           2037, which the touch page requires.
+test       t/028-date-format.sh
+
+assertion  XCU.ls.029
+anchor     utilities/ls.html#OPTIONS
+anchor     utilities/ls.html#STDOUT
+class      required
+says       For a symbolic link to a file, ls -l describes the link itself;
+           with -L or -H it describes the file but still writes the name
+           of the link.
+test       t/029-L-H-file.sh
+
+assertion  XCU.ls.030
+anchor     utilities/ls.html#DESCRIPTION
+class      required
+says       A symbolic link to a directory given as operand is followed
+           (its contents listed) when none of -d, -F, -l is used.
+test       t/030-dirlink-follow.sh
+
+assertion  XCU.ls.031
+anchor     utilities/ls.html#DESCRIPTION
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       With -d, -F or -l, a symbolic link to a directory given as
+           operand is not followed.
+test       t/031-dirlink-nofollow.sh
+
+assertion  XCU.ls.032
+anchor     utilities/ls.html#OPTIONS
+anchor     utilities/ls.html#DESCRIPTION
+class      required
+says       With -H, a symbolic link to a directory given as operand is
+           followed even with -l.
+test       t/032-H-dirlink.sh
+
+assertion  XCU.ls.033
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       ls -f lists every entry, including those starting with a
+           period, in unspecified order.
+test       t/033-option-f.sh
+
+assertion  XCU.ls.034
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       ls -q writes a question mark for each nonprintable character of
+           a file name, including a newline.
+test       t/034-option-q.sh
+
+assertion  XCU.ls.035
+anchor     utilities/ls.html#OPTIONS
+class      required
+says       -C, -x and -m turn long format off and a later -l turns it on
+           again: the total line shows which one wins.
+test       t/035-long-vs-columns.sh
+
+assertion  XCU.ls.036
+anchor     utilities/ls.html#OPERANDS
+anchor     utilities/ls.html#EXIT STATUS
+class      required
+says       A nonexistent operand gets a diagnostic and a non-zero status,
+           and the other operands are still listed.
+test       t/036-nonexistent.sh
+
+assertion  XCU.ls.037
+anchor     utilities/ls.html#DESCRIPTION
+anchor     utilities/ls.html#STDOUT
+class      required
+says       With no operand ls lists the current directory; a file operand
+           is written as given, and a dot file is listed when named.
+test       t/037-operands-as-given.sh

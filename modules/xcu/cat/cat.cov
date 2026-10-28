@@ -1,0 +1,33 @@
+# cat.cov - every requirement unit on utilities/cat.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:1f8b9206         XCU.cat.001 XCU.cat.003 XCU.cat.006
+OPTIONS:aa42a07f             todo  utility syntax guidelines (option grouping, "--") are not checked as such
+OPTIONS:5567759d             none  introduces the list that follows
+OPTIONS:44e79afd             XCU.cat.005
+OPERANDS:4ec2d2a9            none  introduces the list that follows
+OPERANDS:f3933a2c            XCU.cat.001
+OPERANDS:fa30eb4c            XCU.cat.002
+OPERANDS:05466bbb            XCU.cat.003
+OPERANDS:19a28597            XCU.cat.004
+STDIN:da662d9e               XCU.cat.002 XCU.cat.003
+STDIN:fc1111c9               none  cross-reference
+INPUT_FILES:d928e7fa         XCU.cat.007
+ENVIRONMENT_VARIABLES:cf52fc59 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd todo  XCU 1.4 default for signals and errors is not exercised
+STDOUT:dea60060              XCU.cat.001 XCU.cat.008
+STDOUT:cf677bbc              XCU.cat.001
+STDOUT:50787203              impl  the implementation may treat it as an error
+STDERR:b2905b3f              todo  stderr on success is not asserted empty
+OUTPUT_FILES:eb724aff        none  section says nothing is needed (XCU 1.4 defaults)
+EXTENDED_DESCRIPTION:eb724aff none  section says nothing is needed (XCU 1.4 defaults)
+EXIT_STATUS:db823381         todo  not covered by a test yet
+EXIT_STATUS:2fca8ac2         XCU.cat.001
+EXIT_STATUS:9d252ff7         XCU.cat.006
+CONSEQUENCES_OF_ERRORS:d92f27bd todo  XCU 1.4 default for signals and errors is not exercised

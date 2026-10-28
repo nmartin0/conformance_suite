@@ -1,0 +1,36 @@
+# XCU pwd
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.pwd.001
+anchor     utilities/pwd.html#DESCRIPTION
+anchor     utilities/pwd.html#STDOUT
+anchor     utilities/V3_chap01.html#1.6
+class      required
+says       pwd writes one line with an absolute pathname of the current
+           directory that has no dot or dot-dot components and no needless
+           slashes, both as the shell runs it and by a direct exec.
+test       t/001-plain.sh
+
+assertion  XCU.pwd.002
+anchor     utilities/pwd.html#OPTIONS
+class      required
+says       pwd -P writes the physical directory: no component that is a
+           symbolic link.
+test       t/002-option-P.sh
+
+assertion  XCU.pwd.003
+anchor     utilities/pwd.html#OPTIONS
+class      required
+says       pwd -L, and pwd without options, write the PWD pathname when it
+           is valid, so a path through a symbolic link is kept.
+note       The shell sets PWD when it changes directory; the test only
+           exports it for the direct exec and never assigns a value.
+test       t/003-option-L.sh
+
+assertion  XCU.pwd.004
+anchor     utilities/pwd.html#OPTIONS
+class      required
+says       When both -L and -P are given the last one applies.
+test       t/004-L-P-last.sh

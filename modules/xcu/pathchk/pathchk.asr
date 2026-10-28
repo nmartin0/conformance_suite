@@ -1,0 +1,69 @@
+# XCU pathchk
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.pathchk.001
+anchor     utilities/pathchk.html#DESCRIPTION
+anchor     utilities/pathchk.html#EXIT STATUS
+class      required
+says       pathchk accepts pathnames whose components need not exist as
+           long as such a file could be created.
+test       t/001-valid.sh
+
+assertion  XCU.pathchk.002
+anchor     utilities/pathchk.html#DESCRIPTION
+class      required
+says       By default pathchk diagnoses a component longer than the
+           NAME_MAX of its directory and accepts one of exactly that
+           length.
+test       t/002-name-max.sh
+
+assertion  XCU.pathchk.003
+anchor     utilities/pathchk.html#DESCRIPTION
+class      required
+says       By default pathchk diagnoses a pathname longer than PATH_MAX.
+test       t/003-path-max.sh
+
+assertion  XCU.pathchk.004
+anchor     utilities/pathchk.html#OPTIONS
+class      required
+says       With -p, a component longer than 14 bytes is diagnosed and one
+           of 14 bytes is accepted.
+test       t/004-option-p-name.sh
+
+assertion  XCU.pathchk.005
+anchor     utilities/pathchk.html#OPTIONS
+class      required
+says       With -p, a pathname longer than 256 bytes is diagnosed and one
+           of at most 256 bytes is accepted.
+test       t/005-option-p-path.sh
+
+assertion  XCU.pathchk.006
+anchor     utilities/pathchk.html#OPTIONS
+class      required
+says       With -p, characters outside the portable filename character set
+           are diagnosed.
+test       t/006-option-p-chars.sh
+
+assertion  XCU.pathchk.007
+anchor     utilities/pathchk.html#OPTIONS
+class      required
+says       With -P, a component starting with a hyphen and an empty
+           pathname are diagnosed.
+test       t/007-option-P.sh
+
+assertion  XCU.pathchk.008
+anchor     utilities/pathchk.html#DESCRIPTION
+anchor     utilities/pathchk.html#STDERR
+anchor     utilities/pathchk.html#EXIT STATUS
+class      required
+says       The diagnostic names the offending operand, and one bad operand
+           makes the status non-zero even when the others are fine.
+test       t/008-diagnostic-names-operand.sh
+
+assertion  XCU.pathchk.009
+anchor     utilities/pathchk.html#OPTIONS
+class      required
+says       -p and -P can be combined and both sets of checks apply.
+test       t/009-p-and-P.sh

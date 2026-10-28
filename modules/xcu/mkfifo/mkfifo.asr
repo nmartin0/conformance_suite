@@ -1,0 +1,48 @@
+# XCU mkfifo
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.mkfifo.001
+anchor     utilities/mkfifo.html#DESCRIPTION
+anchor     utilities/mkfifo.html#STDOUT
+class      required
+says       mkfifo creates a FIFO for each operand, in order, with no
+           output.
+test       t/001-basic.sh
+
+assertion  XCU.mkfifo.002
+anchor     utilities/mkfifo.html#DESCRIPTION
+class      required
+says       Without -m the FIFO gets mode rw-rw-rw- reduced by the file
+           creation mask.
+test       t/002-default-mode.sh
+
+assertion  XCU.mkfifo.003
+anchor     utilities/mkfifo.html#OPTIONS
+class      required
+says       mkfifo -m with an octal mode sets exactly that mode, whatever
+           the file creation mask.
+test       t/003-mode-octal.sh
+
+assertion  XCU.mkfifo.004
+anchor     utilities/mkfifo.html#OPTIONS
+class      required
+says       mkfifo -m with a symbolic mode applies it to an initial mode of
+           rw-rw-rw-.
+test       t/004-mode-symbolic.sh
+
+assertion  XCU.mkfifo.005
+anchor     utilities/mkfifo.html#EXIT STATUS
+class      required
+says       mkfifo on a name that exists fails with a diagnostic and leaves
+           the file alone.
+test       t/005-exists.sh
+
+assertion  XCU.mkfifo.006
+anchor     utilities/mkfifo.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+says       If one FIFO cannot be created, mkfifo diagnoses it, creates the
+           others, and exits non-zero.
+test       t/006-error-continue.sh

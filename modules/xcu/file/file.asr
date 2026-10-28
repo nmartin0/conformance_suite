@@ -1,0 +1,85 @@
+# XCU file
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.file.001
+anchor     utilities/file.html#STDOUT
+class      required
+says       file writes one line per operand in the form name, colon,
+           space, a type description.
+test       t/001-format.sh
+
+assertion  XCU.file.002
+anchor     utilities/file.html#STDOUT
+anchor     utilities/file.html#EXIT STATUS
+class      required
+says       For a file that does not exist, file says it cannot open it and
+           still exits 0.
+test       t/002-nonexistent.sh
+
+assertion  XCU.file.003
+anchor     utilities/file.html#STDOUT
+class      required
+says       A directory is described with the word directory.
+test       t/003-directory.sh
+
+assertion  XCU.file.004
+anchor     utilities/file.html#STDOUT
+class      required
+says       A FIFO is described with the word fifo.
+test       t/004-fifo.sh
+
+assertion  XCU.file.005
+anchor     utilities/file.html#STDOUT
+anchor     utilities/file.html#DESCRIPTION
+class      required
+says       An empty regular file is described with the word empty.
+test       t/005-empty.sh
+
+assertion  XCU.file.006
+anchor     utilities/file.html#OPTIONS
+anchor     utilities/file.html#STDOUT
+class      required
+says       With -i a regular file is described as regular file without
+           further classification, empty or not.
+test       t/006-option-i.sh
+
+assertion  XCU.file.007
+anchor     utilities/file.html#OPTIONS
+anchor     utilities/file.html#STDOUT
+class      required
+says       With -h a symbolic link is described as a symbolic link
+           followed by its contents.
+test       t/007-option-h.sh
+
+assertion  XCU.file.008
+anchor     utilities/file.html#DESCRIPTION
+anchor     utilities/file.html#OPTIONS
+class      required
+says       By default file describes what a symbolic link refers to; a
+           link to a missing file is described as a symbolic link.
+test       t/008-link-resolved.sh
+
+assertion  XCU.file.009
+anchor     utilities/file.html#OPTIONS
+anchor     utilities/file.html#EXTENDED DESCRIPTION
+class      required
+says       With -m, the tests of the named file are applied: a matching
+           string at an offset prints the message, a non-matching file
+           does not.
+test       t/009-option-m.sh
+
+assertion  XCU.file.010
+anchor     utilities/file.html#EXTENDED DESCRIPTION
+class      required
+says       A numeric test compares the value read from the file at the
+           offset, here one byte.
+test       t/010-magic-numeric.sh
+
+assertion  XCU.file.011
+anchor     utilities/file.html#EXTENDED DESCRIPTION
+class      required
+says       A line whose offset starts with > is applied only after the
+           preceding line matched, and both messages are written.
+test       t/011-magic-continuation.sh

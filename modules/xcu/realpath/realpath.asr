@@ -1,0 +1,65 @@
+# XCU realpath
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.realpath.001
+anchor     utilities/realpath.html#DESCRIPTION
+anchor     utilities/realpath.html#STDOUT
+class      required
+since      2024
+says       realpath writes the absolute pathname with symbolic links
+           followed and dot and dot-dot resolved, as the realpath()
+           function would, followed by a newline.
+test       t/001-resolve.sh
+
+assertion  XCU.realpath.002
+anchor     utilities/realpath.html#OPTIONS
+anchor     utilities/realpath.html#DESCRIPTION
+class      required
+since      2024
+says       realpath -e behaves like the default for a pathname that
+           exists.
+test       t/002-option-e-exists.sh
+
+assertion  XCU.realpath.003
+anchor     utilities/realpath.html#OPTIONS
+anchor     utilities/realpath.html#DESCRIPTION
+class      required
+since      2024
+says       realpath -e on a pathname whose last component does not exist
+           writes nothing to standard output, a diagnostic to standard
+           error, and exits non-zero.
+test       t/003-option-e-missing.sh
+
+assertion  XCU.realpath.004
+anchor     utilities/realpath.html#OPTIONS
+anchor     utilities/realpath.html#DESCRIPTION
+class      required
+since      2024
+says       realpath -E accepts a missing last component when the directory
+           part exists, expanding links in that part.
+test       t/004-option-E-missing-last.sh
+
+assertion  XCU.realpath.005
+anchor     utilities/realpath.html#DESCRIPTION
+class      required
+since      2024
+says       realpath -E still fails when a directory in the path does not
+           exist.
+test       t/005-option-E-missing-prefix.sh
+
+assertion  XCU.realpath.006
+anchor     utilities/realpath.html#OPTIONS
+class      required
+since      2024
+says       When -e and -E are both given the last one decides.
+test       t/006-e-E-last-wins.sh
+
+assertion  XCU.realpath.007
+anchor     utilities/realpath.html#DESCRIPTION
+class      required
+since      2024
+says       realpath -e with an empty operand fails: nothing on standard
+           output, a diagnostic, non-zero status.
+test       t/007-empty.sh

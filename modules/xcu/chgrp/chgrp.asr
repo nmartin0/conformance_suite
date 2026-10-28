@@ -1,0 +1,62 @@
+# XCU chgrp
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.chgrp.001
+anchor     utilities/chgrp.html#DESCRIPTION
+anchor     utilities/chgrp.html#OPERANDS
+class      required
+says       chgrp sets the group ID of the file to the numeric group
+           operand and leaves the owner alone.
+needs      root
+test       t/001-group.sh
+
+assertion  XCU.chgrp.002
+anchor     utilities/chgrp.html#OPTIONS
+class      required
+says       chgrp -R changes the directory operand and everything below it.
+needs      root
+test       t/002-option-R.sh
+
+assertion  XCU.chgrp.003
+anchor     utilities/chgrp.html#OPTIONS
+class      required
+says       chgrp -h changes the group of a symbolic link itself and not of
+           the file it refers to; without -h the file is changed.
+needs      root
+test       t/003-option-h.sh
+
+assertion  XCU.chgrp.004
+anchor     utilities/chgrp.html#OPTIONS
+class      required
+says       With -R, -P changes a symbolic link found in the hierarchy
+           without following it, and -L follows it.
+needs      root
+test       t/004-R-P-L.sh
+
+assertion  XCU.chgrp.005
+anchor     utilities/chgrp.html#OPTIONS
+class      required
+says       With -R, -H follows a symbolic link given as operand to a
+           directory and changes the files below it.
+needs      root
+note       What -H does to a link met inside the hierarchy is not stated,
+           so only the operand link is checked.
+test       t/005-R-H.sh
+
+assertion  XCU.chgrp.006
+anchor     utilities/chgrp.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+says       If one operand cannot be changed, chgrp diagnoses it, handles
+           the others, and exits non-zero.
+test       t/006-error-continue.sh
+
+assertion  XCU.chgrp.007
+anchor     utilities/chgrp.html#OPERANDS
+anchor     utilities/chgrp.html#EXIT STATUS
+class      required
+says       A group operand that is no group name and not numeric is an
+           error and changes nothing.
+test       t/007-bad-group.sh

@@ -1,0 +1,36 @@
+# mkdir.cov - every requirement unit on utilities/mkdir.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:af4ad006         XCU.mkdir.001
+DESCRIPTION:ceb0e232         XCU.mkdir.001 XCU.mkdir.002
+DESCRIPTION:4c755ca0         XCU.mkdir.001
+DESCRIPTION:52bd4c0f         XCU.mkdir.002 XCU.mkdir.003
+DESCRIPTION:10791e4a         todo  not covered by a test yet
+OPTIONS:318f513e             todo  utility syntax guidelines (option grouping, "--") are not checked as such
+OPTIONS:e2947e20             none  introduces the list that follows
+OPTIONS:9129512c             XCU.mkdir.003 XCU.mkdir.004
+OPTIONS:232277b0             XCU.mkdir.003 XCU.mkdir.004
+OPTIONS:72312c25             XCU.mkdir.004
+OPTIONS:104db3cc             todo  not covered by a test yet
+OPTIONS:d700a6f5             XCU.mkdir.005
+OPTIONS:b743d608             XCU.mkdir.005 XCU.mkdir.006 XCU.mkdir.011
+OPERANDS:4ec2d2a9            none  introduces the list that follows
+OPERANDS:39f81463            XCU.mkdir.001
+STDIN:3f472296               none  section says nothing is needed (XCU 1.4 defaults)
+INPUT_FILES:eb724aff         none  section says nothing is needed (XCU 1.4 defaults)
+ENVIRONMENT_VARIABLES:01ff90f8 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd todo  XCU 1.4 default for signals and errors is not exercised
+STDOUT:3f472296              none  section says nothing is needed (XCU 1.4 defaults)
+STDERR:b2905b3f              todo  not covered by a test yet
+OUTPUT_FILES:eb724aff        none  section says nothing is needed (XCU 1.4 defaults)
+EXTENDED_DESCRIPTION:eb724aff none  section says nothing is needed (XCU 1.4 defaults)
+EXIT_STATUS:db823381         todo  not covered by a test yet
+EXIT_STATUS:0e85a980         XCU.mkdir.001 XCU.mkdir.007
+EXIT_STATUS:9d252ff7         XCU.mkdir.008 XCU.mkdir.009 XCU.mkdir.010
+CONSEQUENCES_OF_ERRORS:d92f27bd todo  XCU 1.4 default for signals and errors is not exercised

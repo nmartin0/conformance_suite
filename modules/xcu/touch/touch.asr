@@ -1,0 +1,98 @@
+# XCU touch
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tests run in the private directory the driver gives. Scaffolding uses only POSIX utilities; setup problems are UNRESOLVED.
+
+assertion  XCU.touch.001
+anchor     utilities/touch.html#DESCRIPTION
+class      required
+says       touch creates a missing file as an empty regular file with mode
+           rw-rw-rw- reduced by the creation mask, and leaves the contents
+           of an existing file alone.
+test       t/001-create.sh
+
+assertion  XCU.touch.002
+anchor     utilities/touch.html#OPTIONS
+class      required
+says       touch -c creates nothing and writes no diagnostic for a missing
+           file; an existing file is still touched.
+test       t/002-option-c.sh
+
+assertion  XCU.touch.003
+anchor     utilities/touch.html#DESCRIPTION
+anchor     utilities/touch.html#OPTIONS
+class      required
+says       Without options touch sets both the modification and the access
+           time of an existing file to the current time.
+test       t/003-current-time.sh
+
+assertion  XCU.touch.004
+anchor     utilities/touch.html#OPTIONS
+class      required
+says       touch -m changes the modification time only.
+test       t/004-option-m.sh
+
+assertion  XCU.touch.005
+anchor     utilities/touch.html#OPTIONS
+class      required
+says       touch -a changes the access time only.
+test       t/005-option-a.sh
+
+assertion  XCU.touch.006
+anchor     utilities/touch.html#OPTIONS
+class      required
+says       touch -a -m changes both times.
+test       t/006-option-a-m.sh
+
+assertion  XCU.touch.007
+anchor     utilities/touch.html#OPTIONS
+class      required
+says       touch -t sets both times to the given time, interpreting it in
+           the TZ time zone, in the forms CCYYMMDDhhmm, YYMMDDhhmm and
+           with .SS seconds.
+test       t/007-option-t.sh
+
+assertion  XCU.touch.008
+anchor     utilities/touch.html#OPTIONS
+class      required
+since      2024
+says       touch -d accepts YYYY-MM-DDThh:mm:SS with an optional fraction
+           and Z, takes T or a space, and reads a time without Z in the TZ
+           time zone.
+test       t/008-option-d.sh
+
+assertion  XCU.touch.009
+anchor     utilities/touch.html#OPTIONS
+class      required
+says       touch -r copies both the modification and the access time of
+           the reference file.
+test       t/009-option-r.sh
+
+assertion  XCU.touch.010
+anchor     utilities/touch.html#OPTIONS
+class      required
+says       touch -r combined with -a changes only the access time, taking
+           it from the reference file.
+test       t/010-r-with-a.sh
+
+assertion  XCU.touch.011
+anchor     utilities/touch.html#OPTIONS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+says       touch -r with a reference file that does not exist fails with a
+           diagnostic and a non-zero status.
+test       t/011-missing-ref.sh
+
+assertion  XCU.touch.012
+anchor     utilities/touch.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+says       If one operand cannot be touched, touch diagnoses it, handles
+           the others, and exits non-zero.
+test       t/012-error-continue.sh
+
+assertion  XCU.touch.013
+anchor     utilities/touch.html#OPTIONS
+class      required
+says       touch -t accepts a time up to the start of 2038.
+test       t/013-late-time.sh
