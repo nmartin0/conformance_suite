@@ -1,0 +1,111 @@
+# XCU kill
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# kill is also reachable by exec (XCU 1.6 exempts it from the intrinsic
+# carve-out), so the signal tests use both the shell's kill and a direct
+# exec. Targets are sleep processes the test starts and reaps. The way a
+# target ended is read back with wait and kill -l.
+
+assertion  XCU.kill.001
+anchor     utilities/kill.html#DESCRIPTION
+anchor     utilities/kill.html#STDOUT
+class      required
+since      1992
+says       kill pid sends SIGTERM by default: the process ends by that
+           signal, the call exits zero and writes nothing to standard
+           output.
+test       t/001-default-term.sh
+
+assertion  XCU.kill.002
+anchor     utilities/kill.html#OPTIONS
+class      required
+since      1992
+says       kill -s signal_name sends that signal; the name is accepted
+           without the SIG prefix and in lower case as well as upper case.
+test       t/002-s-name.sh
+
+assertion  XCU.kill.003
+anchor     utilities/kill.html#OPTIONS
+anchor     utilities/kill.html#EXIT STATUS
+class      required
+since      1992
+says       kill -s 0 sends no signal: it exits zero for a live process,
+           and the process goes on; for a process that no longer exists
+           it exits greater than zero.
+test       t/003-s-zero.sh
+
+assertion  XCU.kill.004
+anchor     utilities/kill.html#EXIT STATUS
+anchor     utilities/kill.html#STDERR
+class      required
+since      1992
+says       kill with the ID of a process that does not exist exits greater
+           than zero.
+test       t/004-no-process.sh
+
+assertion  XCU.kill.005
+anchor     utilities/kill.html#OPTIONS
+anchor     utilities/kill.html#STDOUT
+class      required
+since      1992
+says       kill -l writes signal names in upper case without SIG, each
+           followed by a newline or a space, the last by a newline, and
+           the list holds the names of the signals the standard requires
+           (HUP, INT, QUIT, ABRT, KILL, ALRM, TERM, USR1, USR2, CHLD, CONT,
+           STOP, TSTP).
+test       t/005-list.sh
+
+assertion  XCU.kill.006
+anchor     utilities/kill.html#OPTIONS
+anchor     utilities/kill.html#STDOUT
+class      required
+since      1992
+says       kill -l with the exit status of a process that ended by a signal
+           writes that signal's name and a newline.
+test       t/006-list-status.sh
+
+assertion  XCU.kill.007
+anchor     utilities/kill.html#OPTIONS
+anchor     utilities/kill.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       kill -l with a signal number writes the signal name: 1 gives
+           HUP, 2 INT, 3 QUIT, 6 ABRT, 9 KILL, 14 ALRM, 15 TERM.
+test       t/007-list-number.sh
+
+assertion  XCU.kill.008
+anchor     utilities/kill.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       kill -signal_name works like -s signal_name.
+test       t/008-dash-name.sh
+
+assertion  XCU.kill.009
+anchor     utilities/kill.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       kill -signal_number sends the signal for the numbers 0, 1, 2, 3,
+           6, 9, 14 and 15 as listed by the page (checked with 0, 9 and 15).
+test       t/009-dash-number.sh
+
+assertion  XCU.kill.010
+anchor     utilities/V3_chap01.html#1.6
+anchor     utilities/kill.html#DESCRIPTION
+class      required
+since      1992
+says       kill can be run by a direct exec as well as by the shell; run
+           that way it sends the signal.
+test       t/010-exec.sh
+
+assertion  XCU.kill.011
+anchor     utilities/kill.html#OPERANDS
+anchor     utilities/kill.html#DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       With job control enabled, a job ID operand (%%) names the current
+           background job and kill signals it.
+test       t/011-job-id.sh

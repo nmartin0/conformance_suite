@@ -1,0 +1,109 @@
+# XCU jobs
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# jobs is intrinsic (XCU 1.7). The standard speaks of background jobs of a
+# job-control shell, so each test turns job control on with set -m (which
+# the User Portability Option provides for any shell) and starts sleep
+# processes with &. A test that cannot turn job control on reports
+# UNRESOLVED. The tests keep to what the page says for a shell that is
+# not a subshell and is non-interactive only where jobs makes no
+# interactive condition. Started processes are always killed and reaped.
+
+assertion  XCU.jobs.001
+anchor     utilities/jobs.html#STDOUT
+anchor     utilities/jobs.html#DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       jobs lists a running background job as one line made of [number],
+           one space, + (the only job is the current job), one space,
+           Running, one space, and the command.
+test       t/001-running.sh
+
+assertion  XCU.jobs.002
+anchor     utilities/jobs.html#OPTIONS
+anchor     utilities/jobs.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       jobs -p writes the process ID of the process group leader of the
+           job, one per line; for a job made from a single command that is
+           the ID the shell reports in $!.
+test       t/002-p.sh
+
+assertion  XCU.jobs.003
+anchor     utilities/jobs.html#OPTIONS
+anchor     utilities/jobs.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       jobs -l puts the process group ID between the current marker and
+           the state, so the first line has the fields [number], +, the ID,
+           Running and the command.
+test       t/003-l.sh
+
+assertion  XCU.jobs.004
+anchor     utilities/jobs.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       A background job that has ended with status zero is reported once
+           as Done (with the same line layout) and is then removed from
+           the list.
+test       t/004-done.sh
+
+assertion  XCU.jobs.005
+anchor     utilities/jobs.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       A background job that has ended with a non-zero status n is
+           reported as Done(n).
+test       t/005-done-code.sh
+
+assertion  XCU.jobs.006
+anchor     utilities/jobs.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       A background job stopped by SIGTSTP is reported with the state
+           Stopped (or Suspended, with or without the signal name in
+           parentheses).
+test       t/006-stopped.sh
+
+assertion  XCU.jobs.007
+anchor     utilities/jobs.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       When a suspended job exists the current job, marked +, is a
+           suspended one even if a later job is running.
+test       t/007-current-suspended.sh
+
+assertion  XCU.jobs.008
+anchor     utilities/jobs.html#OPERANDS
+class      conditional
+when       UP
+since      1992
+says       With a job_id operand (%?string, a job whose command contains the
+           string) jobs reports only that job.
+test       t/008-job-id.sh
+
+assertion  XCU.jobs.009
+anchor     utilities/jobs.html#EXIT STATUS
+anchor     utilities/jobs.html#STDERR
+class      conditional
+when       UP
+since      1992
+says       jobs with a job_id that names no job exits greater than zero and
+           writes nothing to standard output.
+test       t/009-no-such-job.sh
+
+assertion  XCU.jobs.010
+anchor     utilities/jobs.html#EXIT STATUS
+anchor     utilities/jobs.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       With no background job jobs writes nothing and exits zero.
+test       t/010-empty.sh

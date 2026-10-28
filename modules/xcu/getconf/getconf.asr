@@ -1,0 +1,87 @@
+# XCU getconf
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Values that depend on the system are judged only by their form (digits,
+# or the word undefined, or for strings a non-empty line). The constants
+# the limits.h page gives fixed values to are judged by those values.
+
+assertion  XCU.getconf.001
+anchor     utilities/getconf.html#OPERANDS
+anchor     utilities/getconf.html#STDOUT
+class      required
+since      1992
+says       getconf of a sysconf() variable (_POSIX_VERSION, ARG_MAX,
+           CHILD_MAX, OPEN_MAX, PAGESIZE, LINE_MAX) exits zero and writes
+           one line holding a decimal integer (the %d format), or undefined.
+test       t/001-system-var.sh
+
+assertion  XCU.getconf.002
+anchor     utilities/getconf.html#OPERANDS
+anchor     utilities/getconf.html#STDOUT
+class      required
+since      1992
+says       getconf of a pathconf() variable with a pathname (NAME_MAX,
+           PATH_MAX, PIPE_BUF) exits zero and writes one line holding a
+           decimal integer, or undefined.
+test       t/002-path-var.sh
+
+assertion  XCU.getconf.003
+anchor     utilities/getconf.html#OPERANDS
+anchor     utilities/getconf.html#STDOUT
+class      required
+since      1992
+says       getconf PATH writes one non-empty line, which used as PATH finds
+           the standard utilities sh and ls.
+test       t/003-path-string.sh
+
+assertion  XCU.getconf.004
+anchor     utilities/getconf.html#STDOUT
+anchor     utilities/getconf.html#EXIT STATUS
+anchor     utilities/getconf.html#STDERR
+class      required
+since      1992
+says       getconf of a name that is not a configuration variable exits
+           greater than zero, writes nothing to standard output and a
+           diagnostic to standard error.
+test       t/004-invalid-name.sh
+
+assertion  XCU.getconf.005
+anchor     utilities/getconf.html#OPERANDS
+class      required
+since      1992
+says       The names POSIX2_C_BIND, POSIX2_C_DEV, POSIX2_CHAR_TERM,
+           POSIX2_FORT_RUN, POSIX2_LOCALEDEF, POSIX2_SW_DEV, POSIX2_UPE and
+           POSIX2_VERSION give the same output and status as the same name
+           with an underscore in front.
+test       t/005-posix2-names.sh
+
+assertion  XCU.getconf.006
+anchor     utilities/getconf.html#OPERANDS
+class      required
+since      1992
+says       NPROCESSORS_CONF and NPROCESSORS_ONLN are accepted and write a
+           decimal integer of at least one.
+test       t/006-nprocessors.sh
+
+assertion  XCU.getconf.007
+anchor     utilities/getconf.html#OPERANDS
+anchor     basedefs/limits.h.html#Minimum Values
+class      required
+since      1992
+says       The limit names from the minimum values list have their fixed
+           values: _POSIX_ARG_MAX 4096, _POSIX_NAME_MAX 14,
+           _POSIX_PATH_MAX 256, _POSIX_PIPE_BUF 512, _POSIX_OPEN_MAX 20
+           and _POSIX2_LINE_MAX 2048.
+test       t/007-minimum-values.sh
+
+assertion  XCU.getconf.008
+anchor     utilities/getconf.html#OPERANDS
+anchor     utilities/getconf.html#STDOUT
+class      required
+since      1992
+says       The confstr() variable names (PATH, and the others of that list
+           the system defines) are accepted without the _CS_ prefix and
+           give one line.
+note       Only PATH is judged, being the one name the standard requires
+           a value for; see XCU.getconf.003.
+test       t/008-confstr-name.sh

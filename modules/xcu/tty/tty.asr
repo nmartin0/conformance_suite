@@ -1,0 +1,23 @@
+# XCU tty
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The case with a terminal on standard input cannot be tested without
+# one. The driver runs tests without a terminal, and the tests give
+# standard input explicitly.
+
+assertion  XCU.tty.001
+anchor     utilities/tty.html#STDOUT
+anchor     utilities/tty.html#EXIT STATUS
+class      required
+since      1992
+says       With standard input a regular file, the null device, or a pipe,
+           tty writes "not a tty" and a newline and exits one.
+test       t/001-not-a-tty.sh
+
+assertion  XCU.tty.002
+anchor     utilities/tty.html#STDIN
+class      required
+since      1992
+says       tty reads no input: a command run after it on the same open
+           file reads the file from the start.
+test       t/002-reads-nothing.sh

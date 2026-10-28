@@ -1,0 +1,30 @@
+# fg.cov - every requirement unit on utilities/fg.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:e0664ed4         XCU.fg.002
+DESCRIPTION:5461f7a2         XCU.fg.002
+OPTIONS:eb724aff             none  XCU 1.4 default for this section
+OPERANDS:4ec2d2a9            none  introduces the list that follows
+OPERANDS:2764df40            todo  not yet covered: Specify the job to be run as a foreground job.
+OPERANDS:bce576b3            todo  not yet covered: If no job_id operand is given, the job_id for the job that w
+OPERANDS:f5729789            todo  not yet covered: The format of job_id is described in XBD 3.182 Job ID .
+STDIN:3f472296               none  XCU 1.4 default for this section
+INPUT_FILES:eb724aff         none  XCU 1.4 default for this section
+ENVIRONMENT_VARIABLES:b3f2188d none  introduces the list that follows
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd none  XCU 1.4 default for this section
+STDOUT:4ef6fd59              XCU.fg.002
+STDOUT:6c51e00b              none  fragment of a format line; the format is covered with its sentence
+STDERR:b2905b3f              todo  standard error is not checked for stray output in every case
+OUTPUT_FILES:eb724aff        none  XCU 1.4 default for this section
+EXTENDED_DESCRIPTION:eb724aff none  XCU 1.4 default for this section
+EXIT_STATUS:f1569936         todo  not yet covered: If the fg utility succeeds, it does not return an exit statu
+EXIT_STATUS:bf2f33f0         XCU.fg.002 XCU.fg.001
+EXIT_STATUS:be0b964e         XCU.fg.001
+EXIT_STATUS:9d252ff7         XCU.fg.001
+CONSEQUENCES_OF_ERRORS:aa296691 XCU.fg.001

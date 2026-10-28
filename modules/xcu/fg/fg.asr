@@ -1,0 +1,30 @@
+# XCU fg
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# fg is intrinsic (XCU 1.7). As for bg, the behaviour with job control is
+# left optional for a shell that is not interactive, so the positive test
+# runs in an interactive shell started with sh -i and reports UNRESOLVED
+# when that shell does not have job control enabled.
+
+assertion  XCU.fg.001
+anchor     utilities/fg.html#CONSEQUENCES OF ERRORS
+anchor     utilities/fg.html#EXIT STATUS
+class      conditional
+when       UP
+since      1992
+says       With job control disabled, fg exits greater than zero and puts
+           no job into the foreground.
+test       t/001-disabled.sh
+
+assertion  XCU.fg.002
+anchor     utilities/fg.html#DESCRIPTION
+anchor     utilities/fg.html#STDOUT
+anchor     utilities/V3_chap02.html#2.11
+class      conditional
+when       UP
+since      1992
+says       In an interactive shell with job control, fg moves a background
+           job to the foreground, writes its command line and a newline
+           to standard output, and the shell waits for the job; afterwards
+           the job is gone from the list.
+test       t/002-foreground.sh

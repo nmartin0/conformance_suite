@@ -1,0 +1,33 @@
+# XCU sleep
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# sleep may be built into the shell but XCU 1.6 requires it to be
+# reachable by exec, so checks run both ways. The time a call takes is read
+# with the date utility (seconds of the day in UTC); a call of n seconds
+# must advance that clock by at least n whole seconds.
+
+assertion  XCU.sleep.001
+anchor     utilities/sleep.html#DESCRIPTION
+anchor     utilities/sleep.html#EXIT STATUS
+class      required
+since      1992
+says       sleep 0 exits zero and writes nothing.
+test       t/001-zero.sh
+
+assertion  XCU.sleep.002
+anchor     utilities/sleep.html#DESCRIPTION
+anchor     utilities/sleep.html#OPERANDS
+class      required
+since      1992
+says       sleep 2 suspends for at least two seconds and exits zero.
+test       t/002-duration.sh
+
+assertion  XCU.sleep.003
+anchor     utilities/sleep.html#EXIT STATUS
+anchor     utilities/sleep.html#OPERANDS
+class      required
+since      1992
+says       An operand that is not a non-negative decimal integer gives an
+           exit status greater than zero, and the call returns without
+           waiting.
+test       t/003-invalid.sh

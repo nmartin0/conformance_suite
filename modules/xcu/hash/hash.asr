@@ -1,0 +1,48 @@
+# XCU hash
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# hash is intrinsic (XCU 1.7). The utilities hashed are small scripts the
+# test puts in its own directories, found through PATH changes made in the
+# test shell. The report format is unspecified; only that it contains the
+# pathname of each remembered utility is relied on.
+
+assertion  XCU.hash.001
+anchor     utilities/hash.html#DESCRIPTION
+anchor     utilities/hash.html#OPERANDS
+anchor     utilities/hash.html#STDOUT
+class      required
+since      1992
+says       hash with a utility name that is found in PATH exits zero and
+           writes nothing; a later hash with no operands exits zero and
+           writes output that contains the pathname where the utility was
+           found.
+test       t/001-add-report.sh
+
+assertion  XCU.hash.002
+anchor     utilities/hash.html#OPTIONS
+anchor     utilities/hash.html#DESCRIPTION
+anchor     utilities/hash.html#STDOUT
+class      required
+since      1992
+says       hash -r exits zero and empties the list: a later hash with no
+           operands no longer reports the utility.
+test       t/002-forget.sh
+
+assertion  XCU.hash.003
+anchor     utilities/hash.html#DESCRIPTION
+anchor     utilities/hash.html#OPTIONS
+anchor     utilities/V3_chap02.html#2.9.1.4
+class      required
+since      1992
+says       After hash -r the shell searches PATH afresh: a copy of a
+           utility placed in an earlier PATH directory than the one it
+           was found in before is the one that runs.
+test       t/003-research.sh
+
+assertion  XCU.hash.004
+anchor     utilities/hash.html#STDOUT
+class      required
+since      1992
+says       Changing the contents of PATH clears the list of remembered
+           locations.
+test       t/004-path-change.sh

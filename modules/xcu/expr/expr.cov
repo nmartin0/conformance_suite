@@ -1,0 +1,50 @@
+# expr.cov - every requirement unit on utilities/expr.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:f6ac36c7         todo  not yet covered: The expr utility shall evaluate an expression and write the 
+OPTIONS:eb724aff             none  XCU 1.4 default for this section
+OPERANDS:a7d987db            todo  not yet covered: The single expression evaluated by expr shall be formed from
+OPERANDS:fc35640e            app
+OPERANDS:93c2925d            todo  not yet covered: ( ) | & = > >= < <= != + - * / % :
+OPERANDS:4df53657            todo  not yet covered: and the symbols integer and string in the table are provided
+STDIN:3f472296               none  XCU 1.4 default for this section
+INPUT_FILES:eb724aff         none  XCU 1.4 default for this section
+ENVIRONMENT_VARIABLES:9c042245 none  introduces the list that follows
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:da792923 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:da052a25 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd none  XCU 1.4 default for this section
+STDOUT:187b79fe              XCU.expr.001
+STDERR:b2905b3f              todo  standard error is not checked for stray output in every case
+OUTPUT_FILES:eb724aff        none  XCU 1.4 default for this section
+EXTENDED_DESCRIPTION:0193d183 todo  not yet covered: The formation of the expression to be evaluated is shown in 
+EXTENDED_DESCRIPTION:bf9cb319 XCU.expr.006 XCU.expr.003
+EXTENDED_DESCRIPTION:cab90f4c XCU.expr.002
+EXTENDED_DESCRIPTION:34af5daf todo  not yet covered: All of the operators shall be left-associative.
+EXTENDED_DESCRIPTION:bf83ec32 todo  not yet covered: integer | An argument consisting only of an (optional) unary
+EXTENDED_DESCRIPTION:43e8adb5 todo  not yet covered: string | A string argument; see below.
+EXTENDED_DESCRIPTION:8158f662 XCU.expr.006
+EXTENDED_DESCRIPTION:dbe91e53 XCU.expr.003
+EXTENDED_DESCRIPTION:ef1530a9 XCU.expr.001 XCU.expr.003
+EXTENDED_DESCRIPTION:fa3303a3 XCU.expr.003
+EXTENDED_DESCRIPTION:065031f7 XCU.expr.002 XCU.expr.001
+EXTENDED_DESCRIPTION:5cf94b9e XCU.expr.003
+EXTENDED_DESCRIPTION:61a0b8ca XCU.expr.003
+EXTENDED_DESCRIPTION:be1dff7b XCU.expr.006
+EXTENDED_DESCRIPTION:1a93b165 XCU.expr.006
+EXTENDED_DESCRIPTION:c84c2174 XCU.expr.006
+EXTENDED_DESCRIPTION:f9198c2e XCU.expr.006
+EXTENDED_DESCRIPTION:12d89695 XCU.expr.006
+EXTENDED_DESCRIPTION:5921305a todo  not yet covered: An argument or the value of a subexpression that consists on
+EXTENDED_DESCRIPTION:2c74022d todo  not yet covered: Otherwise, the argument or subexpression value shall be trea
+EXTENDED_DESCRIPTION:2eae628e XCU.expr.006
+EXIT_STATUS:db823381         none  introduces a list; the items are classified below
+EXIT_STATUS:8dad3147         XCU.expr.004
+EXIT_STATUS:225224ef         XCU.expr.004 XCU.expr.005
+EXIT_STATUS:038af593         XCU.expr.005
+EXIT_STATUS:63e752df         todo  not yet covered: Another error occurred.
+CONSEQUENCES_OF_ERRORS:d92f27bd none  XCU 1.4 default for this section

@@ -1,0 +1,80 @@
+# cd.cov - every requirement unit on utilities/cd.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:85abbb0a         XCU.cd.001 XCU.cd.003
+DESCRIPTION:a46a2045         none  cross-reference
+DESCRIPTION:ae1bf84d         todo  not yet covered: There is no requirement that curpath be made visible to the 
+DESCRIPTION:e8bc8ca8         XCU.cd.002 XCU.cd.005
+DESCRIPTION:129f14fb         XCU.cd.005
+DESCRIPTION:b460e608         XCU.cd.005 XCU.cd.001
+DESCRIPTION:e78a12cf         XCU.cd.002 XCU.cd.009
+DESCRIPTION:a3475ae1         XCU.cd.002 XCU.cd.009
+DESCRIPTION:8c9cd185         XCU.cd.002 XCU.cd.009
+DESCRIPTION:0eb51164         XCU.cd.002 XCU.cd.005
+DESCRIPTION:19c0a0a4         todo  not yet covered: Otherwise, repeat this step with the next pathname in CDPATH
+DESCRIPTION:7655c40f         XCU.cd.005 XCU.cd.001
+DESCRIPTION:71385a09         todo  not yet covered: If the -P option is in effect, proceed to step 10.
+DESCRIPTION:6c96539c         XCU.cd.005
+DESCRIPTION:a526dd24         todo  not yet covered: The curpath value shall then be converted to canonical form 
+DESCRIPTION:e14c369b         XCU.cd.013
+DESCRIPTION:b74feecb         XCU.cd.013 XCU.cd.002
+DESCRIPTION:93c2e755         todo  not yet covered: An implementation may further simplify curpath by removing a
+DESCRIPTION:1d22eace         todo  not yet covered: If, as a result of this canonicalization, the curpath variab
+DESCRIPTION:a3606a07         XCU.cd.001 XCU.cd.002
+DESCRIPTION:0d544666         todo  not yet covered: This conversion shall always be considered possible if the v
+DESCRIPTION:4ec68e37         impl  left to the implementation or unspecified
+DESCRIPTION:6af9e557         XCU.cd.001 XCU.cd.002
+DESCRIPTION:750d6dc1         todo  not yet covered: The cd utility shall then perform actions equivalent to the 
+DESCRIPTION:42713846         todo  not yet covered: If these actions fail for any reason, the cd utility shall d
+DESCRIPTION:2530d862         XCU.cd.002 XCU.cd.007
+DESCRIPTION:7f00de67         XCU.cd.002 XCU.cd.007
+DESCRIPTION:c21b85c9         XCU.cd.002 XCU.cd.004
+DESCRIPTION:9b2355be         XCU.cd.001 XCU.cd.002
+DESCRIPTION:65527f34         XCU.cd.003
+DESCRIPTION:bde1b9a3         XCU.cd.003
+OPTIONS:8feacace             todo  Utility Syntax Guidelines (options grouping, --) are only tried where an assertion names them
+OPTIONS:4f2c54fc             none  introduces a list; the items are classified below
+OPTIONS:5634c05b             XCU.cd.006 XCU.cd.007
+OPTIONS:5df2a326             XCU.cd.006 XCU.cd.007
+OPTIONS:eb5460bf             XCU.cd.006 XCU.cd.007
+OPTIONS:741dfc0e             XCU.cd.008
+OPTIONS:285ea40b             XCU.cd.006 XCU.cd.007
+OPERANDS:51b44f3c            none  introduces a list; the items are classified below
+OPERANDS:51ce86de            XCU.cd.001 XCU.cd.002
+OPERANDS:32aeceeb            XCU.cd.001
+OPERANDS:3df8d88f            XCU.cd.012
+OPERANDS:a75f3b9d            XCU.cd.004
+OPERANDS:c4fbcaf4            impl  left to the implementation or unspecified
+STDIN:3f472296               none  XCU 1.4 default for this section
+INPUT_FILES:eb724aff         none  XCU 1.4 default for this section
+ENVIRONMENT_VARIABLES:2ee664d8 none  introduces the list that follows
+ENVIRONMENT_VARIABLES:a5e905fd todo  not yet covered: A <colon>-separated list of pathnames that refer to director
+ENVIRONMENT_VARIABLES:37ba1de7 XCU.cd.010
+ENVIRONMENT_VARIABLES:f28442da XCU.cd.010 XCU.cd.002
+ENVIRONMENT_VARIABLES:7c421c30 XCU.cd.010
+ENVIRONMENT_VARIABLES:993f3878 XCU.cd.002 XCU.cd.005
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:52d181e4 XCU.cd.002 XCU.cd.005
+ENVIRONMENT_VARIABLES:9cf8a9f3 XCU.cd.005
+ENVIRONMENT_VARIABLES:31dd5468 todo  not yet covered: This variable shall be set as specified in the DESCRIPTION.
+ENVIRONMENT_VARIABLES:e45211f7 impl  left to the implementation or unspecified
+ASYNCHRONOUS_EVENTS:d92f27bd none  XCU 1.4 default for this section
+STDOUT:f5350937              XCU.cd.001 XCU.cd.009
+STDOUT:7126afdf              XCU.cd.004 XCU.cd.009
+STDOUT:f6e9e0e8              XCU.cd.004 XCU.cd.001
+STDOUT:65065768              XCU.cd.001 XCU.cd.009
+STDERR:b2905b3f              todo  standard error is not checked for stray output in every case
+OUTPUT_FILES:eb724aff        none  XCU 1.4 default for this section
+EXTENDED_DESCRIPTION:eb724aff none  XCU 1.4 default for this section
+EXIT_STATUS:db823381         none  introduces a list; the items are classified below
+EXIT_STATUS:2e7ed315         XCU.cd.011 XCU.cd.001
+EXIT_STATUS:3f524fdc         XCU.cd.011 XCU.cd.001
+EXIT_STATUS:18a7b4c4         todo  not yet covered: Either the -e option or the -P option is not in effect, and 
+EXIT_STATUS:119b783f         XCU.cd.011 XCU.cd.001
+EXIT_STATUS:3cdf043c         todo  not yet covered: Both the -e and the -P options are in effect, and an error o
+CONSEQUENCES_OF_ERRORS:c2a242cd XCU.cd.011

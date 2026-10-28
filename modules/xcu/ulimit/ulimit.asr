@@ -1,0 +1,80 @@
+# XCU ulimit
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# ulimit is intrinsic (XCU 1.7). Limits are changed only inside a subshell
+# command substitution or a subshell, and only downwards, so no test
+# needs privilege and the shell running the test keeps its limits. The
+# -a form and the single-resource forms are Base (Issue 8 moved ulimit out
+# of XSI); only the -t option stays XSI. The page's synopsis still carries
+# a stray XSI marker on the single-resource form (standard issue).
+
+assertion  XCU.ulimit.001
+anchor     utilities/ulimit.html#OPTIONS
+anchor     utilities/ulimit.html#STDOUT
+anchor     utilities/ulimit.html#EXIT STATUS
+class      required
+since      2024
+says       ulimit -a exits zero and writes at least six lines (one for each
+           of the resources the option list names that are not shaded),
+           each holding a limit value: decimal digits or unlimited.
+note       The format of a line is unspecified apart from the form of the
+           value, so a line is judged only by holding a word that is
+           digits or unlimited.
+test       t/001-all.sh
+
+assertion  XCU.ulimit.002
+anchor     utilities/ulimit.html#STDOUT
+anchor     utilities/ulimit.html#OPTIONS
+class      required
+since      2024
+says       ulimit -f, -S -f and -H -f each write one line holding decimal
+           digits or the word unlimited; ulimit with no option writes
+           what ulimit -f writes, and with -f and no -H or -S the soft
+           limit is the one reported.
+test       t/002-single-value.sh
+
+assertion  XCU.ulimit.003
+anchor     utilities/ulimit.html#OPTIONS
+anchor     utilities/ulimit.html#STDOUT
+class      required
+since      2024
+says       Each of -c, -d, -n, -s and -v, alone, exits zero and writes
+           one line holding decimal digits or unlimited.
+test       t/003-each-option.sh
+
+assertion  XCU.ulimit.004
+anchor     utilities/ulimit.html#OPTIONS
+anchor     utilities/ulimit.html#DESCRIPTION
+class      required
+since      2024
+says       ulimit -S -f n lowers only the soft file-size limit: the new
+           value is read back by ulimit -S -f and the hard limit is as it
+           was.
+test       t/004-soft-only.sh
+
+assertion  XCU.ulimit.005
+anchor     utilities/ulimit.html#OPTIONS
+class      required
+since      2024
+says       With neither -H nor -S, a new limit is set for both the hard and
+           the soft limit.
+test       t/005-both.sh
+
+assertion  XCU.ulimit.006
+anchor     utilities/ulimit.html#DESCRIPTION
+anchor     utilities/ulimit.html#EXIT STATUS
+class      required
+since      2024
+says       A soft limit cannot be set above the hard limit: the request
+           exits greater than zero and the soft limit is unchanged.
+test       t/006-above-hard.sh
+
+assertion  XCU.ulimit.007
+anchor     utilities/ulimit.html#OPTIONS
+anchor     utilities/ulimit.html#STDOUT
+class      conditional
+when       XSI
+since      2024
+says       ulimit -t exits zero and writes one line holding decimal digits
+           or unlimited.
+test       t/007-cpu-time.sh

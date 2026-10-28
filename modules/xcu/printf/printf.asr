@@ -1,0 +1,134 @@
+# XCU printf
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# printf may be built into the shell, but XCU 1.6 also requires it to be
+# reachable by exec, so each check runs both ways. Output goes to a file
+# and is compared byte for byte. Control characters that are hard to
+# write in a test are checked by passing the output through tr, which
+# turns a byte given in octal into a visible letter. Floating-point
+# conversions need not be supported and are left out.
+
+assertion  XCU.printf.001
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+anchor     utilities/printf.html#STDOUT
+class      required
+since      1992
+says       Text in the format that is not a conversion or an escape is
+           written as it is, spaces included, with no newline added; the
+           call exits zero.
+test       t/001-literal.sh
+
+assertion  XCU.printf.002
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       The format escapes \\, \a, \b, \f, \n, \r, \t and \v write a
+           backslash, an alert, a backspace, a form feed, a newline, a
+           carriage return, a tab and a vertical tab.
+test       t/002-escapes.sh
+
+assertion  XCU.printf.003
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       In the format, \ followed by one to three octal digits writes
+           the byte with that value.
+test       t/003-octal-escape.sh
+
+assertion  XCU.printf.004
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+anchor     utilities/V3_chap01.html#1.4
+class      required
+since      1992
+says       %s writes the argument; the format is used again as many times as
+           needed to use all arguments; conversions left without an
+           argument write an empty string for %s and zero for numbers.
+test       t/004-s-reuse.sh
+
+assertion  XCU.printf.005
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       %d and %i write a signed decimal; an argument may carry a plus or
+           minus sign, be hexadecimal (0x..) or octal (leading 0), and an
+           argument starting with a quote gives the character code of the
+           next character; with no width no blanks are added.
+test       t/005-d.sh
+
+assertion  XCU.printf.006
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       %o, %u, %x and %X write unsigned octal, decimal and hexadecimal
+           (lower and upper case letters) with no added zeros or blanks.
+test       t/006-ouxX.sh
+
+assertion  XCU.printf.007
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Flags and widths work for integers: %5d right-aligns, %-5d
+           left-aligns, %05d pads with zeros, %+d always shows a sign, %
+           d (space flag) leaves a space for a positive number, %.3d gives
+           at least three digits, %#o forces a leading zero and %#x a 0x
+           prefix.
+test       t/007-flags.sh
+
+assertion  XCU.printf.008
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       %c writes the first byte of the argument and ignores the rest.
+test       t/008-c.sh
+
+assertion  XCU.printf.009
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       %b writes the argument with backslash escapes (\\, \a, \b, \f, \n,
+           \r, \t, \v and \0 followed by up to three octal digits) turned
+           into the characters they stand for.
+test       t/009-b.sh
+
+assertion  XCU.printf.010
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       \c in a %b argument ends all output: nothing after it is
+           written, not the rest of that argument, nor later arguments,
+           nor the rest of the format.
+test       t/010-b-c.sh
+
+assertion  XCU.printf.011
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       %% writes a percent sign and uses no argument.
+test       t/011-percent.sh
+
+assertion  XCU.printf.012
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       %n$ selects the nth argument, and when the format is used again
+           n counts from after the arguments the previous use consumed.
+test       t/012-numbered.sh
+
+assertion  XCU.printf.013
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       A width pads %s on the left (or the right with the - flag) and
+           never cuts; a precision on %s limits the number of bytes written.
+test       t/013-s-width-precision.sh
+
+assertion  XCU.printf.014
+anchor     utilities/printf.html#EXTENDED DESCRIPTION
+anchor     utilities/printf.html#EXIT STATUS
+anchor     utilities/printf.html#STDERR
+class      required
+since      1992
+says       An argument that cannot be converted to a number gives a
+           diagnostic on standard error and a non-zero exit status, and
+           the remaining arguments are still processed.
+test       t/014-bad-number.sh

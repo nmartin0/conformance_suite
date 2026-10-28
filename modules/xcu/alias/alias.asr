@@ -1,0 +1,132 @@
+# XCU alias
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# alias is an intrinsic utility (XCU 1.7), so it is exercised through the
+# shell running the test. A definition is put to use with eval, on a line
+# after the one that defined it: the standard lets a shell defer a change
+# of an alias until the complete command that made it has finished (XCU
+# 2.3.1). Names used are unlikely to clash with any predefined alias.
+
+assertion  XCU.alias.001
+anchor     utilities/alias.html#DESCRIPTION
+anchor     utilities/alias.html#OPERANDS
+anchor     utilities/V3_chap02.html#2.3.1
+class      required
+since      1992
+says       alias name=string defines the alias and exits zero; the next
+           command read that has the name as its command word is
+           replaced by the string.
+test       t/001-define.sh
+
+assertion  XCU.alias.002
+anchor     utilities/alias.html#OPERANDS
+anchor     utilities/alias.html#STDOUT
+class      required
+since      1992
+says       alias with a name operand writes exactly one line that begins
+           with the name and an equals sign, then the value quoted, and
+           ends with a newline.
+test       t/002-show-one.sh
+
+assertion  XCU.alias.003
+anchor     utilities/alias.html#STDOUT
+class      required
+since      1992
+says       The line written for an alias holding quotes, spaces, a dollar
+           sign and backslashes is suitable for reinput: after the alias
+           is removed, giving the line to alias again restores a
+           definition that behaves as before.
+test       t/003-reinput.sh
+
+assertion  XCU.alias.004
+anchor     utilities/alias.html#OPERANDS
+anchor     utilities/alias.html#STDOUT
+class      required
+since      1992
+says       alias with no operands writes the definition of every alias
+           that exists, one name=value line each.
+test       t/004-list-all.sh
+
+assertion  XCU.alias.005
+anchor     utilities/alias.html#EXIT STATUS
+anchor     utilities/alias.html#STDOUT
+class      required
+since      1992
+says       alias with the name of an alias that does not exist exits with
+           a status greater than zero and writes nothing to standard
+           output.
+test       t/005-missing-status.sh
+
+assertion  XCU.alias.006
+anchor     utilities/alias.html#EXIT STATUS
+anchor     utilities/alias.html#STDERR
+anchor     utilities/V3_chap01.html#1.4
+class      required
+since      1992
+says       The failure for a missing alias comes with a diagnostic message
+           on standard error.
+test       t/006-missing-diagnostic.sh
+
+assertion  XCU.alias.007
+anchor     utilities/alias.html#DESCRIPTION
+class      required
+since      1992
+says       Defining a name again replaces the earlier value: the new
+           value is what is shown and what is substituted.
+test       t/007-redefine.sh
+
+assertion  XCU.alias.008
+anchor     utilities/alias.html#DESCRIPTION
+anchor     utilities/V3_chap02.html#2.13
+class      required
+since      1992
+says       An alias defined in the shell is in effect in its subshells;
+           an alias defined in a subshell does not exist in the shell
+           that started it.
+test       t/008-subshell.sh
+
+assertion  XCU.alias.009
+anchor     utilities/alias.html#DESCRIPTION
+anchor     utilities/V3_chap02.html#2.3.1
+class      required
+since      1992
+says       Alias definitions are not inherited by a separate invocation of
+           the shell run from the shell that holds them.
+test       t/009-not-inherited.sh
+
+assertion  XCU.alias.010
+anchor     utilities/V3_chap02.html#2.3.1
+anchor     utilities/alias.html#DESCRIPTION
+class      required
+since      1992
+says       When an alias value ends in a blank the word after the
+           substituted text is also checked for alias substitution; when
+           the value does not end in a blank it is not.
+test       t/010-trailing-blank.sh
+
+assertion  XCU.alias.011
+anchor     utilities/V3_chap02.html#2.3.1
+anchor     utilities/alias.html#DESCRIPTION
+class      required
+since      1992
+says       A word containing a quoting character is not subject to alias
+           substitution.
+test       t/011-quoted.sh
+
+assertion  XCU.alias.012
+anchor     utilities/V3_chap02.html#2.3.1
+anchor     utilities/alias.html#DESCRIPTION
+class      required
+since      1992
+says       A word that came from the substitution of an alias is not
+           substituted again by the same alias, so an alias whose value
+           starts with its own name runs that command once.
+test       t/012-recursion.sh
+
+assertion  XCU.alias.013
+anchor     utilities/alias.html#OPERANDS
+class      required
+since      1992
+says       Several name=string operands in one call each define an alias,
+           and several name operands each show a definition.
+test       t/013-several.sh

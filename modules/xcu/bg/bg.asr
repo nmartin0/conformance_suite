@@ -1,0 +1,43 @@
+# XCU bg
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# bg is intrinsic (XCU 1.7). What bg does in a shell that is not
+# interactive is left optional by the page; so one test is run with job
+# control disabled in the shell running the test, and the other in an
+# interactive shell started with sh -i whose input is a script. That test
+# reports UNRESOLVED when the interactive shell does not have job control
+# enabled.
+
+assertion  XCU.bg.001
+anchor     utilities/bg.html#CONSEQUENCES OF ERRORS
+anchor     utilities/bg.html#EXIT STATUS
+class      conditional
+when       UP
+since      1992
+says       With job control disabled, bg exits greater than zero, writes
+           nothing to standard output and puts no job into the
+           background.
+test       t/001-disabled.sh
+
+assertion  XCU.bg.002
+anchor     utilities/bg.html#DESCRIPTION
+anchor     utilities/bg.html#STDOUT
+anchor     utilities/V3_chap02.html#2.11
+class      conditional
+when       UP
+since      1992
+says       In an interactive shell with job control, bg job_id resumes a
+           suspended job as a background job, writes a line [number]
+           command, exits zero, and the job runs again (jobs reports it
+           Running).
+test       t/002-resume.sh
+
+assertion  XCU.bg.003
+anchor     utilities/bg.html#DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       In an interactive shell with job control, bg for a job that is
+           already running in the background has no effect and exits
+           zero.
+test       t/003-already-running.sh

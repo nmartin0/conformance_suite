@@ -1,0 +1,125 @@
+# XCU read
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# read is intrinsic (XCU 1.7). Input comes from files made by the test
+# and is given to read by redirection, never by a terminal. IFS is
+# restored after each use.
+
+assertion  XCU.read.001
+anchor     utilities/read.html#DESCRIPTION
+anchor     utilities/read.html#OPERANDS
+anchor     utilities/read.html#EXIT STATUS
+class      required
+since      1992
+says       read reads one line and splits it on IFS (default blank, tab,
+           newline) into the variables named, the last variable getting
+           the rest of the line; exits zero.
+test       t/001-split.sh
+
+assertion  XCU.read.002
+anchor     utilities/read.html#DESCRIPTION
+class      required
+since      1992
+says       With one variable the whole line is assigned with leading and
+           trailing IFS white space removed.
+test       t/002-single-variable.sh
+
+assertion  XCU.read.003
+anchor     utilities/read.html#DESCRIPTION
+class      required
+since      1992
+says       Variables left over after the fields run out are set to the
+           empty string.
+test       t/003-extra-variables.sh
+
+assertion  XCU.read.004
+anchor     utilities/read.html#DESCRIPTION
+anchor     utilities/read.html#OPTIONS
+class      required
+since      1992
+says       Without -r a backslash escapes the next character (it is
+           removed and the character is kept out of field splitting);
+           with -r the backslash is kept as an ordinary character.
+test       t/004-backslash.sh
+
+assertion  XCU.read.005
+anchor     utilities/read.html#DESCRIPTION
+anchor     utilities/read.html#OPTIONS
+class      required
+since      1992
+says       Without -r a backslash before a newline continues the logical
+           line on the next input line, and both are removed; with -r the
+           line ends at the first newline and the backslash stays.
+test       t/005-continuation.sh
+
+assertion  XCU.read.006
+anchor     utilities/read.html#DESCRIPTION
+anchor     utilities/read.html#EXIT STATUS
+class      required
+since      1992
+says       Input that ends before a newline is seen still sets the
+           variables from the bytes read and exits one; empty input sets
+           the variable to the empty string and exits one.
+test       t/006-eof.sh
+
+assertion  XCU.read.007
+anchor     utilities/read.html#DESCRIPTION
+class      required
+since      1992
+says       With IFS set to the empty string the whole line goes to the
+           first variable unchanged and the other variables are set to
+           the empty string.
+test       t/007-empty-ifs.sh
+
+assertion  XCU.read.008
+anchor     utilities/read.html#DESCRIPTION
+anchor     utilities/V3_chap02.html#2.6.5
+class      required
+since      1992
+says       With a non-blank IFS character each occurrence separates a
+           field, so adjacent delimiters give an empty field.
+test       t/008-ifs-delimiters.sh
+
+assertion  XCU.read.009
+anchor     utilities/read.html#OPTIONS
+class      required
+since      2024
+says       read -d delim takes the single byte delim as the end of the
+           logical line instead of a newline, and a newline inside the
+           data is kept; the rest of the input stays for the next read.
+test       t/009-delimiter.sh
+
+assertion  XCU.read.010
+anchor     utilities/read.html#OPTIONS
+class      required
+since      2024
+says       read -d with the empty string takes the null byte as the line
+           delimiter.
+test       t/010-null-delimiter.sh
+
+assertion  XCU.read.011
+anchor     utilities/read.html#DESCRIPTION
+anchor     utilities/V3_chap01.html#1.4
+class      required
+since      1992
+says       read takes only the bytes of one line from a seekable input:
+           a following command on the same open file sees the lines
+           after it.
+test       t/011-offset.sh
+
+assertion  XCU.read.012
+anchor     utilities/read.html#DESCRIPTION
+class      required
+since      1992
+says       Run in a subshell, read does not change the variables of the
+           shell that started it.
+test       t/012-subshell.sh
+
+assertion  XCU.read.013
+anchor     utilities/read.html#DESCRIPTION
+anchor     utilities/read.html#EXIT STATUS
+class      required
+since      1992
+says       When a variable cannot be set because it is read-only, read
+           exits with a status greater than one.
+test       t/013-readonly.sh

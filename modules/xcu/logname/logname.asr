@@ -1,0 +1,27 @@
+# XCU logname
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Whether a login name exists depends on the session the suite runs in:
+# the page requires a diagnostic and a non-zero status where getlogin()
+# would fail. The test accepts either outcome, and judges each against
+# what the page says for it.
+
+assertion  XCU.logname.001
+anchor     utilities/logname.html#DESCRIPTION
+anchor     utilities/logname.html#STDOUT
+anchor     utilities/logname.html#EXIT STATUS
+class      required
+since      1992
+says       logname either exits zero having written one line holding a
+           non-empty name, or exits greater than zero having written a
+           diagnostic message to standard error and nothing to standard
+           output.
+test       t/001-name-or-error.sh
+
+assertion  XCU.logname.002
+anchor     utilities/logname.html#STDIN
+class      required
+since      1992
+says       logname reads no input: a command run after it on the same open
+           file reads the file from the start.
+test       t/002-reads-nothing.sh

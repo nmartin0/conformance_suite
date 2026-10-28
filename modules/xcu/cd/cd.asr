@@ -1,0 +1,141 @@
+# XCU cd
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# cd is intrinsic (XCU 1.7). The test makes its own tree of directories,
+# marked by empty files, and tells where it is by those marks and by the
+# PWD variable, never by a command that is not under test. Symbolic links
+# come from ln -s, and every test that needs one reports UNRESOLVED when
+# it cannot be made.
+
+assertion  XCU.cd.001
+anchor     utilities/cd.html#DESCRIPTION
+anchor     utilities/cd.html#OPERANDS
+anchor     utilities/cd.html#EXIT STATUS
+anchor     utilities/cd.html#STDOUT
+class      required
+since      1992
+says       cd with a relative or an absolute directory operand changes
+           the working directory of the shell, exits zero and, when no
+           CDPATH directory and no hyphen-minus is used, writes nothing
+           to standard output.
+test       t/001-change.sh
+
+assertion  XCU.cd.002
+anchor     utilities/cd.html#DESCRIPTION
+anchor     utilities/cd.html#ENVIRONMENT VARIABLES
+class      required
+since      1992
+says       After a successful cd the PWD variable names the new directory
+           as an absolute pathname, and a dot-dot component in the
+           operand is resolved by removing the component before it
+           (for a directory that exists).
+test       t/002-pwd.sh
+
+assertion  XCU.cd.003
+anchor     utilities/cd.html#DESCRIPTION
+anchor     utilities/cd.html#ENVIRONMENT VARIABLES
+class      required
+since      1992
+says       After a successful cd the OLDPWD variable holds the directory
+           the shell was in before the call.
+test       t/003-oldpwd.sh
+
+assertion  XCU.cd.004
+anchor     utilities/cd.html#OPERANDS
+anchor     utilities/cd.html#STDOUT
+class      required
+since      1992
+says       cd - changes to the directory in OLDPWD and writes the new
+           directory (the value of PWD) followed by a newline to standard
+           output.
+test       t/004-hyphen.sh
+
+assertion  XCU.cd.005
+anchor     utilities/cd.html#DESCRIPTION
+anchor     utilities/cd.html#ENVIRONMENT VARIABLES
+class      required
+since      1992
+says       cd with no operand goes to the directory in HOME when HOME is
+           set to a non-empty value.
+test       t/005-home.sh
+
+assertion  XCU.cd.006
+anchor     utilities/cd.html#OPTIONS
+anchor     utilities/cd.html#DESCRIPTION
+class      required
+since      1992
+says       By default, and with -L, a symbolic link in the operand is kept
+           in PWD and a following dot-dot goes back to the directory
+           holding the link, not to the parent of the link target.
+test       t/006-logical.sh
+
+assertion  XCU.cd.007
+anchor     utilities/cd.html#OPTIONS
+anchor     utilities/cd.html#DESCRIPTION
+class      required
+since      1992
+says       With -P symbolic links are resolved: PWD holds the physical
+           pathname without the link, and a dot-dot goes to the parent
+           of the link target.
+test       t/007-physical.sh
+
+assertion  XCU.cd.008
+anchor     utilities/cd.html#OPTIONS
+class      required
+since      1992
+says       When -L and -P are both given the last one decides.
+test       t/008-last-option.sh
+
+assertion  XCU.cd.009
+anchor     utilities/cd.html#ENVIRONMENT VARIABLES
+anchor     utilities/cd.html#DESCRIPTION
+anchor     utilities/cd.html#STDOUT
+class      required
+since      1992
+says       A relative operand not starting with dot or dot-dot is looked up
+           in the directories of CDPATH in order; when one is found the
+           shell goes there and the new directory is written to standard
+           output.
+test       t/009-cdpath.sh
+
+assertion  XCU.cd.010
+anchor     utilities/cd.html#ENVIRONMENT VARIABLES
+anchor     utilities/cd.html#DESCRIPTION
+anchor     utilities/cd.html#STDOUT
+class      required
+since      1992
+says       An empty CDPATH entry stands for the current directory and is
+           tried in its position in the list; when that entry is the one
+           used nothing is written, and an operand starting with ./ or
+           ../ is not looked up in CDPATH at all.
+test       t/010-cdpath-order.sh
+
+assertion  XCU.cd.011
+anchor     utilities/cd.html#CONSEQUENCES OF ERRORS
+anchor     utilities/cd.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+since      1992
+says       cd to a directory that does not exist or to a file that is not a
+           directory exits greater than zero with a diagnostic on
+           standard error, and the working directory and PWD stay as
+           they were.
+test       t/011-error.sh
+
+assertion  XCU.cd.012
+anchor     utilities/cd.html#OPERANDS
+anchor     utilities/cd.html#CONSEQUENCES OF ERRORS
+class      required
+since      1992
+says       An empty directory operand makes cd write a diagnostic and exit
+           greater than zero without changing the directory.
+test       t/012-empty-operand.sh
+
+assertion  XCU.cd.013
+anchor     utilities/cd.html#DESCRIPTION
+class      required
+since      1992
+says       In a logical cd a dot-dot component whose preceding component is
+           not a directory (missing, or a regular file) is an error: cd
+           exits greater than zero and does not change the directory.
+test       t/013-dotdot-error.sh

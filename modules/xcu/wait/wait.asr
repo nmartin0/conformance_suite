@@ -1,0 +1,68 @@
+# XCU wait
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# wait is intrinsic (XCU 1.7). The children are subshells and sh -c
+# commands started with & by the test; each test reaps what it starts.
+
+assertion  XCU.wait.001
+anchor     utilities/wait.html#DESCRIPTION
+anchor     utilities/wait.html#EXIT STATUS
+class      required
+since      1992
+says       wait with no operands waits for all known background children
+           and exits zero, whatever statuses they had.
+test       t/001-all.sh
+
+assertion  XCU.wait.002
+anchor     utilities/wait.html#OPERANDS
+anchor     utilities/wait.html#EXIT STATUS
+class      required
+since      1992
+says       wait pid exits with the exit status of that process.
+test       t/002-status.sh
+
+assertion  XCU.wait.003
+anchor     utilities/wait.html#DESCRIPTION
+anchor     utilities/wait.html#EXIT STATUS
+class      required
+since      1992
+says       wait does not return before the awaited process has ended.
+test       t/003-blocks.sh
+
+assertion  XCU.wait.004
+anchor     utilities/wait.html#DESCRIPTION
+anchor     utilities/wait.html#EXIT STATUS
+class      required
+since      1992
+says       With several pid operands wait waits for all of them and exits
+           with the status of the last operand.
+test       t/004-last-operand.sh
+
+assertion  XCU.wait.005
+anchor     utilities/wait.html#DESCRIPTION
+anchor     utilities/wait.html#EXIT STATUS
+class      required
+since      1992
+says       A process ID that has already been waited for is no longer
+           known: waiting for it again exits 127.
+test       t/005-unknown.sh
+
+assertion  XCU.wait.006
+anchor     utilities/wait.html#EXIT STATUS
+anchor     utilities/wait.html#DESCRIPTION
+class      required
+since      1992
+says       For a process ended by a signal wait exits with a status over
+           128 that differs for different signals; kill -l maps it back
+           to the signal.
+test       t/006-signal-status.sh
+
+assertion  XCU.wait.007
+anchor     utilities/wait.html#OPERANDS
+anchor     utilities/wait.html#EXIT STATUS
+class      conditional
+when       UP
+since      1992
+says       With job control enabled (set -m), wait %n waits for the job and
+           exits with its status.
+test       t/007-job-id.sh

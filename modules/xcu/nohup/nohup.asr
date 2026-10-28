@@ -1,0 +1,47 @@
+# XCU nohup
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The behaviour when standard output or standard error is a terminal
+# cannot be tested without one, so the tests run with all three streams
+# on files or pipes. That is the situation of a test run by the driver.
+
+assertion  XCU.nohup.001
+anchor     utilities/nohup.html#DESCRIPTION
+anchor     utilities/nohup.html#ASYNCHRONOUS EVENTS
+class      required
+since      1992
+says       The utility run by nohup has SIGHUP ignored: a shell started by
+           nohup that sends SIGHUP to itself carries on.
+note       The test first checks that a shell not started by nohup is
+           ended by the same signal. If the test shell already ignores
+           SIGHUP the result is UNRESOLVED.
+test       t/001-hup-ignored.sh
+
+assertion  XCU.nohup.002
+anchor     utilities/nohup.html#STDOUT
+anchor     utilities/nohup.html#DESCRIPTION
+class      required
+since      1992
+says       When standard output is not a terminal, nohup writes the
+           utility's output to standard output with the arguments passed
+           on, and creates no nohup.out in the current directory or in
+           HOME.
+test       t/002-stdout-passthrough.sh
+
+assertion  XCU.nohup.003
+anchor     utilities/nohup.html#EXIT STATUS
+class      required
+since      1992
+says       nohup exits with the status of the utility, 127 when the utility
+           cannot be found, and 126 when it is found but cannot be run.
+test       t/003-status.sh
+
+assertion  XCU.nohup.004
+anchor     utilities/nohup.html#DESCRIPTION
+anchor     utilities/nohup.html#STDERR
+class      required
+since      1992
+says       When standard error is not a terminal the utility's standard
+           error is not redirected: what it writes there reaches standard
+           error and nohup writes nothing of its own to it.
+test       t/004-stderr-passthrough.sh

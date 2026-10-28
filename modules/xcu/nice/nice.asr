@@ -1,0 +1,51 @@
+# XCU nice
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The nice value of a process is read with ps -o nice= -p. A test whose
+# nice value cannot be read reports UNRESOLVED. A test that needs room
+# above the current nice value of the test also reports UNRESOLVED when
+# there is none.
+
+assertion  XCU.nice.001
+anchor     utilities/nice.html#DESCRIPTION
+anchor     utilities/nice.html#OPERANDS
+anchor     utilities/nice.html#EXIT STATUS
+class      required
+since      1992
+says       nice runs the utility with the arguments given and exits with
+           the status of the utility.
+test       t/001-runs.sh
+
+assertion  XCU.nice.002
+anchor     utilities/nice.html#DESCRIPTION
+class      required
+since      1992
+says       With no option the utility runs with a nice value at least the
+           nice value of the caller.
+test       t/002-default-not-lower.sh
+
+assertion  XCU.nice.003
+anchor     utilities/nice.html#OPTIONS
+class      required
+since      1992
+says       nice -n 1 runs the utility with a nice value one higher than
+           the caller's.
+test       t/003-n-increment.sh
+
+assertion  XCU.nice.004
+anchor     utilities/nice.html#EXIT STATUS
+class      required
+since      1992
+says       nice exits 127 when the utility cannot be found and 126 when it
+           is found but cannot be run.
+test       t/004-not-found.sh
+
+assertion  XCU.nice.005
+anchor     utilities/nice.html#DESCRIPTION
+anchor     utilities/nice.html#EXIT STATUS
+class      required
+since      1992
+says       A request to lower the nice value that the user may not make
+           does not stop the utility from running and does not change its
+           exit status.
+test       t/005-no-privilege.sh

@@ -1,0 +1,48 @@
+# XCU type
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# type is intrinsic (XCU 1.7) and shaded XSI on its SYNOPSIS. Its output
+# format is unspecified, so tests judge exit status and that something is
+# written for each operand.
+
+assertion  XCU.type.001
+anchor     utilities/type.html#DESCRIPTION
+anchor     utilities/type.html#STDOUT
+anchor     utilities/type.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       type for a utility found through PATH exits zero and writes
+           something to standard output.
+test       t/001-utility.sh
+
+assertion  XCU.type.002
+anchor     utilities/type.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       type for a name that no command search finds exits greater than
+           zero.
+test       t/002-not-found.sh
+
+assertion  XCU.type.003
+anchor     utilities/type.html#DESCRIPTION
+anchor     utilities/type.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       type for a shell function and for an alias exits zero and
+           writes something to standard output for each.
+test       t/003-function-alias.sh
+
+assertion  XCU.type.004
+anchor     utilities/type.html#OPERANDS
+anchor     utilities/type.html#STDOUT
+anchor     utilities/type.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       With several operands, type writes information for each name it
+           knows (the output grows with every operand found) and exits
+           greater than zero when any operand is not found.
+test       t/004-several.sh

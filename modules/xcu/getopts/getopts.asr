@@ -1,0 +1,150 @@
+# XCU getopts
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# getopts is intrinsic (XCU 1.7). Each test runs it in the shell that runs
+# the test, with OPTIND reset to 1 between uses as the page allows.
+
+assertion  XCU.getopts.001
+anchor     utilities/getopts.html#DESCRIPTION
+class      required
+since      1992
+says       When the shell starts, OPTIND is 1.
+test       t/001-optind-initial.sh
+
+assertion  XCU.getopts.002
+anchor     utilities/getopts.html#DESCRIPTION
+anchor     utilities/getopts.html#OPERANDS
+class      required
+since      1992
+says       Called repeatedly, getopts sets the name variable to each
+           option character of the positional parameters in turn and
+           exits zero for each; the call after the last option exits one
+           with name set to a question mark and OPTIND the index of the
+           first operand.
+test       t/002-flags.sh
+
+assertion  XCU.getopts.003
+anchor     utilities/getopts.html#DESCRIPTION
+anchor     utilities/getopts.html#OPERANDS
+class      required
+since      1992
+says       An option that takes an argument gets it into OPTARG whether
+           given as the next word or attached to the option, and OPTIND
+           then names the word after the option and its argument.
+test       t/003-option-argument.sh
+
+assertion  XCU.getopts.004
+anchor     utilities/getopts.html#DESCRIPTION
+class      required
+since      1992
+says       Option characters grouped in one word are returned one at a
+           time in order, and once the word is used up the call that ends
+           the options leaves OPTIND at the word after it.
+test       t/004-cluster.sh
+
+assertion  XCU.getopts.005
+anchor     utilities/getopts.html#DESCRIPTION
+class      required
+since      1992
+says       A -- word ends the options: getopts exits one, sets name to a
+           question mark, and OPTIND is the index of the word after the
+           --.
+test       t/005-double-dash.sh
+
+assertion  XCU.getopts.006
+anchor     utilities/getopts.html#DESCRIPTION
+class      required
+since      1992
+says       The first word that is not an option and does not start with a
+           hyphen ends the options: getopts exits one with OPTIND the
+           index of that word.
+test       t/006-first-operand.sh
+
+assertion  XCU.getopts.007
+anchor     utilities/getopts.html#DESCRIPTION
+anchor     utilities/getopts.html#STDERR
+class      required
+since      1992
+says       An option not in optstring (optstring not starting with a
+           colon) sets name to a question mark, leaves OPTARG unset,
+           writes a diagnostic to standard error and exits zero.
+test       t/007-unknown.sh
+
+assertion  XCU.getopts.008
+anchor     utilities/getopts.html#DESCRIPTION
+anchor     utilities/getopts.html#STDERR
+class      required
+since      1992
+says       With optstring starting with a colon, an unknown option sets
+           name to a question mark and OPTARG to the option character,
+           writes nothing to standard error and exits zero.
+test       t/008-unknown-colon.sh
+
+assertion  XCU.getopts.009
+anchor     utilities/getopts.html#DESCRIPTION
+anchor     utilities/getopts.html#STDERR
+class      required
+since      1992
+says       A missing option-argument (optstring not starting with a
+           colon) sets name to a question mark, leaves OPTARG unset,
+           writes a diagnostic to standard error and exits zero.
+test       t/009-missing-argument.sh
+
+assertion  XCU.getopts.010
+anchor     utilities/getopts.html#DESCRIPTION
+anchor     utilities/getopts.html#STDERR
+class      required
+since      1992
+says       With optstring starting with a colon, a missing option-argument
+           sets name to a colon and OPTARG to the option character, writes
+           nothing to standard error and exits zero.
+test       t/010-missing-argument-colon.sh
+
+assertion  XCU.getopts.011
+anchor     utilities/getopts.html#DESCRIPTION
+class      required
+since      1992
+says       OPTARG is unset when an option that takes no argument is found
+           and when the end of the options is reached.
+test       t/011-optarg-unset.sh
+
+assertion  XCU.getopts.012
+anchor     utilities/getopts.html#OPERANDS
+class      required
+since      1992
+says       With param operands, those are parsed instead of the positional
+           parameters, and OPTIND counts them.
+test       t/012-param-operands.sh
+
+assertion  XCU.getopts.013
+anchor     utilities/getopts.html#DESCRIPTION
+class      required
+since      1992
+says       Setting OPTIND back to 1 lets a new set of parameters be
+           parsed from the start.
+test       t/013-reset.sh
+
+assertion  XCU.getopts.014
+anchor     utilities/getopts.html#DESCRIPTION
+class      required
+since      1992
+says       OPTIND and OPTARG are not exported to the environment of
+           utilities the shell runs.
+test       t/014-not-exported.sh
+
+assertion  XCU.getopts.015
+anchor     utilities/getopts.html#DESCRIPTION
+anchor     utilities/getopts.html#EXIT STATUS
+class      required
+since      1992
+says       When the name variable cannot be set because it is read-only,
+           getopts exits with a status greater than one.
+test       t/015-readonly.sh
+
+assertion  XCU.getopts.016
+anchor     utilities/getopts.html#STDERR
+class      required
+since      1992
+says       The diagnostic for an unknown option names the invoking program
+           (the base name of $0 satisfies this) and the option character.
+test       t/016-diagnostic.sh

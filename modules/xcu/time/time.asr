@@ -1,0 +1,51 @@
+# XCU time
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The page leaves the results of a plain "time" simple command with
+# redirections or in a pipeline unspecified, so the tests call the
+# utility as "command time" and by a direct exec, which the page names as
+# specified ways.
+
+assertion  XCU.time.001
+anchor     utilities/time.html#STDERR
+anchor     utilities/time.html#OPTIONS
+class      required
+since      1992
+says       time -p writes the lines real, user and sys, each followed by a
+           decimal number with at least one digit after the radix
+           character, to standard error (a leading empty line and extra
+           text after are allowed).
+test       t/001-p-format.sh
+
+assertion  XCU.time.002
+anchor     utilities/time.html#EXIT STATUS
+class      required
+since      1992
+says       time exits with the status of the utility.
+test       t/002-status.sh
+
+assertion  XCU.time.003
+anchor     utilities/time.html#DESCRIPTION
+anchor     utilities/time.html#STDOUT
+class      required
+since      1992
+says       time runs the utility with the arguments given and writes the
+           timing on standard error, not on standard output.
+test       t/003-runs.sh
+
+assertion  XCU.time.004
+anchor     utilities/time.html#DESCRIPTION
+anchor     utilities/time.html#STDERR
+class      required
+since      1992
+says       The real time reported covers the run of the utility: for sleep 2
+           it is at least one second.
+test       t/004-real-time.sh
+
+assertion  XCU.time.005
+anchor     utilities/time.html#EXIT STATUS
+class      required
+since      1992
+says       time exits 127 when the utility cannot be found and 126 when it
+           is found but cannot be run.
+test       t/005-not-found.sh

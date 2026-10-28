@@ -1,0 +1,38 @@
+# wait.cov - every requirement unit on utilities/wait.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:929bc346         XCU.wait.001 XCU.wait.003
+DESCRIPTION:9de7c9b7         XCU.wait.001 XCU.wait.002
+DESCRIPTION:de1927fc         XCU.wait.004 XCU.wait.001
+DESCRIPTION:e6273edb         XCU.wait.004 XCU.wait.001
+DESCRIPTION:5962316b         XCU.wait.004 XCU.wait.002
+DESCRIPTION:ef0acce1         XCU.wait.005
+DESCRIPTION:743c2b6c         todo  not yet covered: If the process ID is associated with a background job, the c
+OPTIONS:eb724aff             none  XCU 1.4 default for this section
+OPERANDS:4ec2d2a9            none  introduces the list that follows
+OPERANDS:097b55f6            XCU.wait.002
+OPERANDS:1a9a00aa            todo  not yet covered: A job ID (see XBD 3.182 Job ID ) that identifies a process g
+OPERANDS:891596d6            XCU.wait.007
+OPERANDS:81140f36            XCU.wait.002 XCU.wait.007
+OPERANDS:91c7ae36            todo  not yet covered: Note: The job ID type of pid is only available on systems su
+STDIN:3f472296               none  XCU 1.4 default for this section
+INPUT_FILES:eb724aff         none  XCU 1.4 default for this section
+ENVIRONMENT_VARIABLES:45be6593 none  introduces the list that follows
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd none  XCU 1.4 default for this section
+STDOUT:3f472296              none  XCU 1.4 default for this section
+STDERR:b2905b3f              todo  standard error is not checked for stray output in every case
+OUTPUT_FILES:eb724aff        none  XCU 1.4 default for this section
+EXTENDED_DESCRIPTION:eb724aff none  XCU 1.4 default for this section
+EXIT_STATUS:e4d727b1         XCU.wait.004
+EXIT_STATUS:e9db6227         XCU.wait.006
+EXIT_STATUS:b17329a7         XCU.wait.006 XCU.wait.002
+EXIT_STATUS:2ec5bca5         XCU.wait.001 XCU.wait.002
+EXIT_STATUS:880ae05e         todo  not yet covered: The wait utility detected an error.
+EXIT_STATUS:6f3dae57         XCU.wait.004 XCU.wait.002
+CONSEQUENCES_OF_ERRORS:d92f27bd none  XCU 1.4 default for this section

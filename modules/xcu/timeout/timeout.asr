@@ -1,0 +1,98 @@
+# XCU timeout
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The utilities run under timeout are sh -c command strings that loop on
+# sleep 1 (so a signal is handled within a second) or ignore a signal.
+# Time limits are one second; every call that can only end by the limit is
+# bounded by the limit, or by -k for a utility that ignores SIGTERM, and
+# the driver's own timeout stands behind them.
+
+assertion  XCU.timeout.001
+anchor     utilities/timeout.html#DESCRIPTION
+anchor     utilities/timeout.html#EXIT STATUS
+class      required
+since      2024
+says       When the utility ends within the time, timeout exits with its
+           status, passes its output on, and gives it the arguments.
+test       t/001-in-time.sh
+
+assertion  XCU.timeout.002
+anchor     utilities/timeout.html#DESCRIPTION
+anchor     utilities/timeout.html#EXIT STATUS
+class      required
+since      2024
+says       When the limit is reached the utility is sent SIGTERM and
+           timeout exits 124.
+test       t/002-limit-reached.sh
+
+assertion  XCU.timeout.003
+anchor     utilities/timeout.html#OPTIONS
+anchor     utilities/timeout.html#EXIT STATUS
+class      required
+since      2024
+says       timeout -s signal_name sends that signal instead of SIGTERM,
+           names being accepted in lower case and without SIG; the exit
+           status is 124.
+test       t/003-s-signal.sh
+
+assertion  XCU.timeout.004
+anchor     utilities/timeout.html#OPTIONS
+anchor     utilities/timeout.html#EXIT STATUS
+class      required
+since      2024
+says       timeout -p, when the limit is reached, exits with the status of
+           the utility instead of 124; without -p the same run gives 124.
+test       t/004-p-preserve.sh
+
+assertion  XCU.timeout.005
+anchor     utilities/timeout.html#OPTIONS
+anchor     utilities/timeout.html#DESCRIPTION
+class      required
+since      2024
+says       timeout -k time sends SIGKILL to a utility that still runs after
+           time has passed since the first signal, so a utility that
+           ignores SIGTERM is ended; the exit status is 124 or the status
+           of the process ended by SIGKILL.
+test       t/005-k-kill.sh
+
+assertion  XCU.timeout.006
+anchor     utilities/timeout.html#EXIT STATUS
+class      required
+since      2024
+says       timeout exits 127 when the utility cannot be found, 126 when it
+           is found but cannot be run, and 125 for an error of its own (a
+           duration that is not a number).
+test       t/006-errors.sh
+
+assertion  XCU.timeout.007
+anchor     utilities/timeout.html#OPERANDS
+class      required
+since      2024
+says       The duration may have a fraction and the suffixes s, m, h and d;
+           0.5s stops a long-running utility and 1m, 1h and 1d leave a
+           short one alone.
+test       t/007-duration-forms.sh
+
+assertion  XCU.timeout.008
+anchor     utilities/timeout.html#OPERANDS
+class      required
+since      2024
+says       A duration of zero sets no limit: the utility runs to its end
+           and its status is passed on.
+test       t/008-zero.sh
+
+assertion  XCU.timeout.009
+anchor     utilities/timeout.html#EXIT STATUS
+class      required
+since      2024
+says       When the utility ends by a signal other than from the time limit,
+           timeout ends itself by the same signal.
+test       t/009-signal-propagation.sh
+
+assertion  XCU.timeout.010
+anchor     utilities/timeout.html#OPTIONS
+class      required
+since      2024
+says       timeout -f is accepted and the limit still stops the utility
+           (exit 124).
+test       t/010-f.sh

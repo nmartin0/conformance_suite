@@ -1,0 +1,92 @@
+# XCU expr
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# expr may be built into the shell but XCU 1.6 also requires it to be
+# reachable by exec, so each check runs both ways. Every operator and
+# operand is its own argument, and the shell metacharacters among the
+# operators are quoted. The locale is POSIX.
+
+assertion  XCU.expr.001
+anchor     utilities/expr.html#EXTENDED DESCRIPTION
+anchor     utilities/expr.html#STDOUT
+class      required
+since      1992
+says       + - * / % compute on decimal integers, with the usual
+           precedence, left to right for equal precedence, and the result
+           is written with a newline; division of non-negative operands is exact integer division.
+test       t/001-arithmetic.sh
+
+assertion  XCU.expr.002
+anchor     utilities/expr.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       The comparison operators = != < <= > >= give 1 for true and 0
+           for false; two integers are compared as numbers and otherwise
+           the strings are compared (in the POSIX locale by byte order).
+test       t/002-comparison.sh
+
+assertion  XCU.expr.003
+anchor     utilities/expr.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       expr1 & expr2 gives expr1 when neither is null or zero and zero
+           otherwise; expr1 | expr2 gives expr1 when it is neither null
+           nor zero, else expr2 when that is not null, else zero.
+test       t/003-and-or.sh
+
+assertion  XCU.expr.004
+anchor     utilities/expr.html#EXIT STATUS
+class      required
+since      1992
+says       The exit status is zero when the result is neither null nor
+           zero, and one when it is null or zero; the result is still
+           written.
+test       t/004-exit-status.sh
+
+assertion  XCU.expr.005
+anchor     utilities/expr.html#EXIT STATUS
+class      required
+since      1992
+says       An invalid expression (an operator without its operand, or two
+           operands with nothing between) exits with status two; division
+           by zero exits greater than one.
+note       Division by zero is an error but the page does not say which
+           of the two error classes it is, so any status of two or more is
+           accepted.
+test       t/005-invalid.sh
+
+assertion  XCU.expr.006
+anchor     utilities/expr.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       expr string : pattern matches the pattern as a basic regular
+           expression anchored at the start of the string: it gives the
+           number of characters matched, 0 on failure, or the text of the
+           first \( \) group when the pattern has one (the null string,
+           with status one, when the group did not match).
+test       t/006-match.sh
+
+assertion  XCU.expr.007
+anchor     utilities/expr.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Parentheses group, so ( 2 + 3 ) * 4 is 20.
+test       t/007-parentheses.sh
+
+assertion  XCU.expr.008
+anchor     utilities/expr.html#STDOUT
+anchor     utilities/expr.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       A single operand that is a string is written as it is; an
+           integer operand may be negative.
+test       t/008-single-operand.sh
+
+assertion  XCU.expr.009
+anchor     utilities/V3_chap01.html#1.4
+anchor     utilities/expr.html#APPLICATION USAGE
+class      required
+since      1992
+says       expr accepts -- as a first argument and discards it, so that an
+           expression starting with a negative integer can be given.
+test       t/009-double-dash.sh

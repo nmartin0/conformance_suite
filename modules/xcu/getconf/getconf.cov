@@ -1,0 +1,55 @@
+# getconf.cov - every requirement unit on utilities/getconf.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:0b017e14         XCU.getconf.008 XCU.getconf.004
+DESCRIPTION:981fcc78         XCU.getconf.008 XCU.getconf.002
+DESCRIPTION:00b1b43b         XCU.getconf.008
+DESCRIPTION:c4833bc0         todo  not yet covered: The value shall reflect conditions in the current operating 
+OPTIONS:2508d17b             todo  Utility Syntax Guidelines (options grouping, --) are only tried where an assertion names them
+OPTIONS:5567759d             none  introduces the list that follows
+OPTIONS:a4b4009f             todo  not yet covered: Indicate a specific specification and version for which conf
+OPTIONS:3f391378             todo  not yet covered: If this option is not specified, the values returned corresp
+OPTIONS:9cd508d4             impl  left to the implementation or unspecified
+OPTIONS:48fddf87             impl  left to the implementation or unspecified
+OPTIONS:e9180de5             impl  left to the implementation or unspecified
+OPTIONS:f65c57a9             impl  left to the implementation or unspecified
+OPERANDS:51b44f3c            none  introduces a list; the items are classified below
+OPERANDS:621e3ad4            XCU.getconf.002 XCU.getconf.008
+OPERANDS:921c131e            XCU.getconf.008 XCU.getconf.001
+OPERANDS:1642c3d5            todo  not yet covered: The implementation may add other local variables.
+OPERANDS:83fd2e18            XCU.getconf.002 XCU.getconf.008
+OPERANDS:621e3ad4.2          XCU.getconf.002 XCU.getconf.008
+OPERANDS:b966c197            XCU.getconf.001 XCU.getconf.008
+OPERANDS:74d050f0            XCU.getconf.005
+OPERANDS:d6017760            todo  not yet covered: This requirement may be removed in a future version.
+OPERANDS:5ad64b7c            XCU.getconf.006
+OPERANDS:a5f71e08            XCU.getconf.006
+OPERANDS:f60c693c            XCU.getconf.008
+OPERANDS:9d0d5310            XCU.getconf.007
+OPERANDS:7a6d8e7c            XCU.getconf.005 XCU.getconf.007
+OPERANDS:d6017760.2          todo  not yet covered: This requirement may be removed in a future version.
+OPERANDS:a05af434            todo  not yet covered: The implementation may add other local values.
+STDIN:3f472296               none  XCU 1.4 default for this section
+INPUT_FILES:eb724aff         none  XCU 1.4 default for this section
+ENVIRONMENT_VARIABLES:1189a88f none  introduces the list that follows
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd none  XCU 1.4 default for this section
+STDOUT:17ce5f1e              XCU.getconf.008
+STDOUT:3ce0dcb8              none  fragment of a format line; the format is covered with its sentence
+STDOUT:ed4f61b0              XCU.getconf.008
+STDOUT:bb82b444              none  fragment of a format line; the format is covered with its sentence
+STDOUT:51b582e2              XCU.getconf.001 XCU.getconf.002
+STDOUT:46b94c2a              none  fragment of a format line; the format is covered with its sentence
+STDOUT:ec8e29f2              XCU.getconf.004
+STDERR:b2905b3f              todo  standard error is not checked for stray output in every case
+OUTPUT_FILES:eb724aff        none  XCU 1.4 default for this section
+EXTENDED_DESCRIPTION:eb724aff none  XCU 1.4 default for this section
+EXIT_STATUS:db823381         none  introduces a list; the items are classified below
+EXIT_STATUS:d4f84af1         todo  not yet covered: The specified variable is valid and information about its cu
+EXIT_STATUS:9d252ff7         XCU.getconf.004
+CONSEQUENCES_OF_ERRORS:d92f27bd none  XCU 1.4 default for this section

@@ -1,0 +1,64 @@
+# kill.cov - every requirement unit on utilities/kill.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:2418a20c         XCU.kill.001
+DESCRIPTION:5b19a799         XCU.kill.001 XCU.kill.011
+DESCRIPTION:67e7cd55         todo  not yet covered: The value of the pid operand shall be used as the pid argume
+DESCRIPTION:89897483         XCU.kill.002 XCU.kill.001
+OPTIONS:47a20d06             XCU.kill.007 XCU.kill.002
+OPTIONS:e2947e20             none  introduces a list; the items are classified below
+OPTIONS:42fc659a             XCU.kill.002 XCU.kill.006
+OPTIONS:53605c87             XCU.kill.006
+OPTIONS:0ba93dc1             XCU.kill.002 XCU.kill.006
+OPTIONS:fd0bd07e             impl  left to the implementation or unspecified
+OPTIONS:ebb52bc2             XCU.kill.005
+OPTIONS:cfabebf7             XCU.kill.002
+OPTIONS:9f549e75             XCU.kill.002 XCU.kill.003
+OPTIONS:1f00fb80             todo  not yet covered: The corresponding signal shall be sent instead of SIGTERM.
+OPTIONS:579367c3             XCU.kill.002 XCU.kill.008
+OPTIONS:4ada8ad7             XCU.kill.001 XCU.kill.002
+OPTIONS:ed1ab873             XCU.kill.005
+OPTIONS:9eab1d51             XCU.kill.009 XCU.kill.007
+OPTIONS:4558786d             todo  not yet covered: SIGHUP
+OPTIONS:f8034276             todo  not yet covered: SIGINT
+OPTIONS:961f58c5             todo  not yet covered: SIGQUIT
+OPTIONS:591f65c5             todo  not yet covered: SIGABRT
+OPTIONS:d0b6b6e7             todo  not yet covered: SIGKILL
+OPTIONS:f9033176             todo  not yet covered: SIGALRM
+OPTIONS:52acfb02             todo  not yet covered: SIGTERM
+OPTIONS:dc9ea1af             XCU.kill.003 XCU.kill.006
+OPERANDS:51b44f3c            none  introduces a list; the items are classified below
+OPERANDS:3e6065b9            todo  not yet covered: One of the following: A decimal integer specifying a process
+OPERANDS:296564a0            XCU.kill.001 XCU.kill.011
+OPERANDS:74db67db            todo  not yet covered: If process number 0 is specified, all processes in the curre
+OPERANDS:d65df957            todo  not yet covered: For the effects of negative pid numbers, see the kill () fun
+OPERANDS:9a11df7f            todo  not yet covered: If the first pid operand is negative, it should be preceded 
+OPERANDS:8c3e771f            XCU.kill.011
+OPERANDS:25815825            XCU.kill.011
+OPERANDS:91c7ae36            XCU.kill.011
+OPERANDS:84ffd395            XCU.kill.006
+STDIN:3f472296               none  XCU 1.4 default for this section
+INPUT_FILES:eb724aff         none  XCU 1.4 default for this section
+ENVIRONMENT_VARIABLES:6d213dc5 none  introduces the list that follows
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd none  XCU 1.4 default for this section
+STDOUT:a7c0b4b8              XCU.kill.001 XCU.kill.005
+STDOUT:edbe196a              XCU.kill.006 XCU.kill.007
+STDOUT:bf2c7730              XCU.kill.006 XCU.kill.007
+STDOUT:0e4aba94              none  fragment of a format line; the format is covered with its sentence
+STDOUT:a441fb76              XCU.kill.005 XCU.kill.002
+STDOUT:44b61ce4              XCU.kill.005 XCU.kill.006
+STDOUT:a7e9e8f7              XCU.kill.006
+STDOUT:01aaa745              XCU.kill.006 XCU.kill.007
+STDERR:b2905b3f              todo  standard error is not checked for stray output in every case
+OUTPUT_FILES:eb724aff        none  XCU 1.4 default for this section
+EXTENDED_DESCRIPTION:eb724aff none  XCU 1.4 default for this section
+EXIT_STATUS:db823381         none  introduces a list; the items are classified below
+EXIT_STATUS:69fd2448         XCU.kill.001
+EXIT_STATUS:9d252ff7         XCU.kill.003 XCU.kill.004
+CONSEQUENCES_OF_ERRORS:d92f27bd none  XCU 1.4 default for this section

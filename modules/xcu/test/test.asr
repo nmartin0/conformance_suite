@@ -1,0 +1,136 @@
+# XCU test
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# test and [ may be built into the shell, but XCU 1.6 also requires them
+# to be reachable by exec. Every check therefore runs four ways: test and
+# [ , each called by the shell and by a direct exec of the name (argv[0]
+# is the name given, as the page asks). Standard input, output and error
+# are redirected for the calls, so none is a terminal. Tests of primaries
+# that depend on file permissions use only cases that hold for a
+# privileged and an unprivileged user alike.
+
+assertion  XCU.test.001
+anchor     utilities/test.html#OPERANDS
+anchor     utilities/test.html#EXIT STATUS
+class      required
+since      1992
+says       With no argument (or only the closing bracket of [) the result
+           is false, exit status one.
+test       t/001-zero-args.sh
+
+assertion  XCU.test.002
+anchor     utilities/test.html#OPERANDS
+class      required
+since      1992
+says       With one argument the result is true (zero) when it is not the
+           null string, even when it looks like an operator (-n, !, =,
+           -f), and false when it is empty.
+test       t/002-one-arg.sh
+
+assertion  XCU.test.003
+anchor     utilities/test.html#OPERANDS
+class      required
+since      1992
+says       -n string is true for a non-empty string and false for an empty
+           one; -z string is the opposite; a string that looks like an
+           operator is still just a string.
+test       t/003-n-z.sh
+
+assertion  XCU.test.004
+anchor     utilities/test.html#OPERANDS
+class      required
+since      1992
+says       s1 = s2 is true when the strings are identical and s1 != s2
+           when they are not, including when one or both are empty.
+test       t/004-string-equal.sh
+
+assertion  XCU.test.005
+anchor     utilities/test.html#OPERANDS
+class      required
+since      1992
+says       In the POSIX locale, s1 < s2 and s1 > s2 compare strings by
+           their byte order: a before b, A before a, and a string before
+           a longer string it starts.
+test       t/005-string-order.sh
+
+assertion  XCU.test.006
+anchor     utilities/test.html#OPERANDS
+class      required
+since      1992
+says       -eq, -ne, -gt, -ge, -lt and -le compare integers algebraically,
+           including negative numbers and numbers that differ in digit
+           count (10 is greater than 9).
+test       t/006-integers.sh
+
+assertion  XCU.test.007
+anchor     utilities/test.html#OPERANDS
+class      required
+since      1992
+says       -e is true for an existing file of any kind, -f for a regular
+           file, -d for a directory, -L and -h for a symbolic link
+           (including one whose target is missing) and -p for a FIFO; each
+           is false for a path that does not exist or is another kind.
+test       t/007-file-types.sh
+
+assertion  XCU.test.008
+anchor     utilities/test.html#OPERANDS
+class      required
+since      1992
+says       -s is true for a file with data and false for an empty one;
+           -r, -w and -x are true for a file the user can read, write,
+           and run (or search, for a directory).
+test       t/008-size-access.sh
+
+assertion  XCU.test.009
+anchor     utilities/test.html#OPERANDS
+class      required
+since      1992
+says       f1 -nt f2 and f1 -ot f2 compare last modification times, with a
+           file that exists counting as newer than one that cannot be
+           resolved; -ef is true for two names of the same file.
+test       t/009-times-same-file.sh
+
+assertion  XCU.test.010
+anchor     utilities/test.html#OPERANDS
+class      required
+since      1992
+says       A symbolic link is followed by every primary except -h and -L: a
+           link to a regular file is -f and -s, a link to a directory is
+           -d, a link to nothing is not -e.
+test       t/010-follow-links.sh
+
+assertion  XCU.test.011
+anchor     utilities/test.html#OPERANDS
+class      required
+since      1992
+says       The ! operator negates: with two arguments, ! "" is true and
+           ! x is false, and with a primary and with three or four
+           arguments the result of the rest is negated; the lone argument
+           ! is the string !.
+test       t/011-negation.sh
+
+assertion  XCU.test.012
+anchor     utilities/test.html#OPERANDS
+class      required
+since      1992
+says       With three arguments a binary primary in the middle takes
+           precedence over ! as the first argument, so ! = ! is the
+           comparison of two equal strings and ! = x is a comparison of
+           different ones.
+test       t/012-three-args-binary.sh
+
+assertion  XCU.test.013
+anchor     utilities/test.html#OPERANDS
+class      required
+since      1992
+says       -t fd is false for a descriptor that is not open and for one open
+           on a regular file or the null device.
+test       t/013-t-false.sh
+
+assertion  XCU.test.014
+anchor     utilities/test.html#OPTIONS
+class      required
+since      1992
+says       The argument -- is not treated as the end of options: test --
+           is true (one non-empty argument) and test -z -- is false.
+test       t/014-double-dash.sh

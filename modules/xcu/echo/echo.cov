@@ -1,0 +1,44 @@
+# echo.cov - every requirement unit on utilities/echo.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:1143bc6f         XCU.echo.001 XCU.echo.002
+DESCRIPTION:fad2c78c         XCU.echo.001 XCU.echo.002
+OPTIONS:727cf686             todo  not yet covered: The echo utility shall not recognize the "--" argument in th
+OPTIONS:f03ff557             none  fragment of a format line; the format is covered with its sentence
+OPTIONS:1f2d3063             todo  not yet covered: Implementations shall not support any options.
+OPERANDS:51b44f3c            none  introduces a list; the items are classified below
+OPERANDS:fbfba556            XCU.echo.005
+OPERANDS:540e77ee            XCU.echo.005
+OPERANDS:a6d65f31            XCU.echo.005
+OPERANDS:c2f20658            todo  not yet covered: The following character sequences shall be recognized on XSI
+OPERANDS:2f2e9f8c            todo  not yet covered: Write an <alert>.
+OPERANDS:b3e1b085            XCU.echo.006
+OPERANDS:64307a02            XCU.echo.007
+OPERANDS:cf2df772            XCU.echo.007
+OPERANDS:b49519e9            todo  not yet covered: Write a <form-feed>.
+OPERANDS:96c64dae            XCU.echo.006
+OPERANDS:142b4a98            todo  not yet covered: Write a <carriage-return>.
+OPERANDS:7a20dff2            XCU.echo.006
+OPERANDS:d34976ae            todo  not yet covered: Write a <vertical-tab>.
+OPERANDS:6c096cbc            XCU.echo.006
+OPERANDS:7671bff7            XCU.echo.008
+STDIN:3f472296               none  XCU 1.4 default for this section
+INPUT_FILES:eb724aff         none  XCU 1.4 default for this section
+ENVIRONMENT_VARIABLES:3bfe19bb none  introduces the list that follows
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:96a4158a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd none  XCU 1.4 default for this section
+STDOUT:d3455859              XCU.echo.001
+STDOUT:7b221369              todo  not yet covered: [ XSI ] Output transformations shall occur based on the esca
+STDOUT:c2d8a2db              none  cross-reference
+STDERR:b2905b3f              todo  standard error is not checked for stray output in every case
+OUTPUT_FILES:eb724aff        none  XCU 1.4 default for this section
+EXTENDED_DESCRIPTION:eb724aff none  XCU 1.4 default for this section
+EXIT_STATUS:db823381         none  introduces a list; the items are classified below
+EXIT_STATUS:8b075da2         none  generic 0 / >0 meaning of the exit status; the specific cases are separate units
+EXIT_STATUS:9d252ff7         none  generic 0 / >0 meaning of the exit status; the specific cases are separate units
+CONSEQUENCES_OF_ERRORS:d92f27bd none  XCU 1.4 default for this section

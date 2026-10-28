@@ -1,0 +1,129 @@
+# XCU command
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# command is intrinsic (XCU 1.7). Utilities that the tests need to find
+# are small scripts the test puts in its own directory and names through
+# PATH.
+
+assertion  XCU.command.001
+anchor     utilities/command.html#DESCRIPTION
+anchor     utilities/V3_chap02.html#2.9.1.4
+class      required
+since      1992
+says       command name args runs the utility and not a shell function of
+           the same name, and the exit status is that of the command.
+test       t/001-bypass-function.sh
+
+assertion  XCU.command.002
+anchor     utilities/command.html#DESCRIPTION
+anchor     utilities/V3_chap02.html#2.15
+class      required
+since      1992
+says       Run through command, a special built-in loses its special
+           property: variable assignments written before command do not
+           stay in the shell afterwards.
+test       t/002-special-builtin.sh
+
+assertion  XCU.command.003
+anchor     utilities/command.html#OPTIONS
+anchor     utilities/command.html#STDOUT
+class      required
+since      1992
+says       command -v for a utility found by a PATH search writes the
+           absolute pathname of that utility and a newline, and exits
+           zero; running it does not run the utility.
+test       t/003-v-path.sh
+
+assertion  XCU.command.004
+anchor     utilities/command.html#OPTIONS
+anchor     utilities/command.html#STDOUT
+class      required
+since      1992
+says       command -v for a name containing a slash writes it as an
+           absolute pathname.
+test       t/004-v-slash.sh
+
+assertion  XCU.command.005
+anchor     utilities/command.html#OPTIONS
+anchor     utilities/command.html#STDOUT
+class      required
+since      1992
+says       command -v writes just the name for a shell function, for a
+           special built-in and for a reserved word.
+test       t/005-v-names.sh
+
+assertion  XCU.command.006
+anchor     utilities/command.html#OPTIONS
+anchor     utilities/command.html#STDOUT
+class      required
+since      1992
+says       command -v for an alias writes a command line that represents
+           the alias definition; its exact form is not fixed, so the line is only
+           checked for carrying the name and the value.
+test       t/006-v-alias.sh
+
+assertion  XCU.command.007
+anchor     utilities/command.html#OPTIONS
+anchor     utilities/command.html#EXIT STATUS
+anchor     utilities/command.html#STDOUT
+class      required
+since      1992
+says       command -v for a name that is not found writes nothing to
+           standard output and exits greater than zero.
+test       t/007-v-notfound.sh
+
+assertion  XCU.command.008
+anchor     utilities/command.html#OPTIONS
+anchor     utilities/command.html#STDOUT
+class      required
+since      1992
+says       command -V writes a description of how the name is read that
+           for a utility found in PATH contains its absolute pathname, for
+           a function contains the word function, and for an alias
+           contains the word alias and the alias value; it exits zero.
+note       The format is unspecified, so only the facts the page says the
+           string shall carry are checked; the words are taken in
+           the form the page names the categories.
+test       t/008-V-describe.sh
+
+assertion  XCU.command.009
+anchor     utilities/command.html#OPTIONS
+anchor     utilities/command.html#EXIT STATUS
+class      required
+since      1992
+says       command -V for a name that is not found exits greater than zero.
+test       t/009-V-notfound.sh
+
+assertion  XCU.command.010
+anchor     utilities/command.html#OPTIONS
+class      required
+since      1992
+says       command -p finds a standard utility by the default path even
+           when PATH names no directory that holds it.
+test       t/010-p.sh
+
+assertion  XCU.command.011
+anchor     utilities/command.html#EXIT STATUS
+class      required
+since      1992
+says       command exits 127 for a name that is not found, 126 for a file
+           that is found but cannot be run, and otherwise with the status
+           of the command it runs.
+test       t/011-status.sh
+
+assertion  XCU.command.012
+anchor     utilities/command.html#DESCRIPTION
+anchor     utilities/V3_chap02.html#2.3.1
+class      required
+since      1992
+says       The command_name operand is not subject to alias substitution.
+test       t/012-no-alias.sh
+
+assertion  XCU.command.013
+anchor     utilities/command.html#DESCRIPTION
+anchor     utilities/V3_chap02.html#2.4
+class      required
+since      1992
+says       The command_name operand is not recognized as a reserved word:
+           command if looks for a utility named if.
+test       t/013-no-reserved.sh

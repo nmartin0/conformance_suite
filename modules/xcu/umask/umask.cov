@@ -1,0 +1,48 @@
+# umask.cov - every requirement unit on utilities/umask.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:b1a95fe8         XCU.umask.001 XCU.umask.007
+DESCRIPTION:cf720970         XCU.umask.001
+DESCRIPTION:c708a5a8         XCU.umask.007
+DESCRIPTION:c85a7bb1         todo  not yet covered: (umask 002) nohup umask ... find . -exec umask ... \;
+DESCRIPTION:f303dc47         XCU.umask.001
+DESCRIPTION:710a2a9d         XCU.umask.001 XCU.umask.007
+OPTIONS:0f8248ae             todo  Utility Syntax Guidelines (options grouping, --) are only tried where an assertion names them
+OPTIONS:5567759d             none  introduces the list that follows
+OPTIONS:115f0d7f             todo  not yet covered: Produce symbolic output.
+OPTIONS:daeb226c             XCU.umask.002 XCU.umask.003
+OPERANDS:4ec2d2a9            none  introduces the list that follows
+OPERANDS:8dfab512            XCU.umask.001
+OPERANDS:51bd3dc4            todo  not yet covered: The string is treated in the same way as the mode operand de
+OPERANDS:cc34659e            XCU.umask.005 XCU.umask.006
+OPERANDS:0948e999            XCU.umask.005 XCU.umask.006
+OPERANDS:5361d350            XCU.umask.005 XCU.umask.006
+OPERANDS:e020a6b4            XCU.umask.005 XCU.umask.006
+OPERANDS:96b60752            impl  left to the implementation or unspecified
+OPERANDS:35e93603            XCU.umask.001 XCU.umask.006
+OPERANDS:83ab9dd1            XCU.umask.001
+OPERANDS:e3f56f69            XCU.umask.004 XCU.umask.001
+STDIN:3f472296               none  XCU 1.4 default for this section
+INPUT_FILES:eb724aff         none  XCU 1.4 default for this section
+ENVIRONMENT_VARIABLES:b26d1fd4 none  introduces the list that follows
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd none  XCU 1.4 default for this section
+STDOUT:429f8abc              XCU.umask.002 XCU.umask.001
+STDOUT:2717a18a              todo  not yet covered: If -S is specified, the message shall be in the following fo
+STDOUT:1f57e4fc              none  fragment of a format line; the format is covered with its sentence
+STDOUT:d495c943              none  fragment of a format line; the format is covered with its sentence
+STDOUT:e31c224a              none  fragment of a format line; the format is covered with its sentence
+STDOUT:a6b7a229              XCU.umask.003 XCU.umask.001
+STDOUT:e705dd31              XCU.umask.004 XCU.umask.002
+STDERR:b2905b3f              todo  standard error is not checked for stray output in every case
+OUTPUT_FILES:eb724aff        none  XCU 1.4 default for this section
+EXTENDED_DESCRIPTION:eb724aff none  XCU 1.4 default for this section
+EXIT_STATUS:db823381         none  introduces a list; the items are classified below
+EXIT_STATUS:bdf4a5c8         XCU.umask.008
+EXIT_STATUS:9d252ff7         XCU.umask.008
+CONSEQUENCES_OF_ERRORS:d92f27bd none  XCU 1.4 default for this section

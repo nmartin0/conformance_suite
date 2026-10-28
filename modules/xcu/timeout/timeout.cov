@@ -1,0 +1,64 @@
+# timeout.cov - every requirement unit on utilities/timeout.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:6814844f         XCU.timeout.001 XCU.timeout.005
+DESCRIPTION:71a699bb         XCU.timeout.005
+DESCRIPTION:3a607010         XCU.timeout.005
+DESCRIPTION:b119192e         todo  not yet covered: Otherwise, it is implementation defined which one of the fol
+DESCRIPTION:c879e14c         XCU.timeout.005
+DESCRIPTION:813e9e2c         XCU.timeout.005 XCU.timeout.002
+DESCRIPTION:dc904f0b         XCU.timeout.005
+DESCRIPTION:ab995247         XCU.timeout.005
+DESCRIPTION:3ce947c5         XCU.timeout.005
+OPTIONS:86a2fcd3             XCU.timeout.004 XCU.timeout.005
+OPTIONS:e2947e20             none  introduces a list; the items are classified below
+OPTIONS:bf77aa95             XCU.timeout.005
+OPTIONS:850b494b             XCU.timeout.005
+OPTIONS:1c0375f4             todo  not yet covered: The value of time shall be interpreted as specified for the 
+OPTIONS:75412809             XCU.timeout.004 XCU.timeout.005
+OPTIONS:0ac3b6c6             XCU.timeout.003 XCU.timeout.004
+OPTIONS:cfabebf7             XCU.timeout.003
+OPTIONS:dc2d1284             todo  not yet covered: By default, SIGTERM shall be sent.
+OPERANDS:51b44f3c            none  introduces a list; the items are classified below
+OPERANDS:9348e110            XCU.timeout.007
+OPERANDS:7febce03            todo  not yet covered: seconds
+OPERANDS:be2e2bb6            todo  not yet covered: minutes
+OPERANDS:5aedee09            todo  not yet covered: hours
+OPERANDS:5548ae4f            todo  not yet covered: days
+OPERANDS:a39aa938            app
+OPERANDS:fe42ba30            todo  not yet covered: If no suffix is present, the value shall specify seconds.
+OPERANDS:046546dc            XCU.timeout.008
+OPERANDS:da493fc3            todo  not yet covered: The name of a utility that is to be executed.
+OPERANDS:98260b51            impl  left to the implementation or unspecified
+OPERANDS:c88f8e65            todo  not yet covered: Any string to be supplied as an argument when executing the 
+STDIN:3f472296               none  XCU 1.4 default for this section
+INPUT_FILES:eb724aff         none  XCU 1.4 default for this section
+ENVIRONMENT_VARIABLES:6ce3e2fb none  introduces the list that follows
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8586e6ac todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:3f2b02eb todo  not yet covered: Determine the search path that is used to locate the utility
+ENVIRONMENT_VARIABLES:efd8fd28 none  cross-reference
+ASYNCHRONOUS_EVENTS:abe0bc89 todo  not yet covered: The default behavior specified in 1.4 Utility Description De
+ASYNCHRONOUS_EVENTS:7256b0a5 todo  not yet covered: The timeout utility shall ignore SIGTTIN and SIGTTOU signals
+ASYNCHRONOUS_EVENTS:69feb153 todo  not yet covered: The timeout utility may alter the disposition of SIGALRM if 
+ASYNCHRONOUS_EVENTS:c9a030cc XCU.timeout.005 XCU.timeout.009
+ASYNCHRONOUS_EVENTS:fba9c156 XCU.timeout.004 XCU.timeout.009
+ASYNCHRONOUS_EVENTS:cafece36 XCU.timeout.005
+ASYNCHRONOUS_EVENTS:c0c4a999 XCU.timeout.003 XCU.timeout.005
+STDOUT:3f472296              none  XCU 1.4 default for this section
+STDERR:b2905b3f              todo  standard error is not checked for stray output in every case
+OUTPUT_FILES:eb724aff        none  XCU 1.4 default for this section
+EXTENDED_DESCRIPTION:eb724aff none  XCU 1.4 default for this section
+EXIT_STATUS:fd64a6fc         XCU.timeout.004 XCU.timeout.002
+EXIT_STATUS:51aa944f         XCU.timeout.005
+EXIT_STATUS:64f7a9e6         XCU.timeout.005 XCU.timeout.003
+EXIT_STATUS:a3fdc9a1         XCU.timeout.009 XCU.timeout.003
+EXIT_STATUS:9d8df137         todo  not yet covered: If an error occurs, the following exit values shall be retur
+EXIT_STATUS:9fa1558b         todo  not yet covered: An error other than the two described below occurred.
+EXIT_STATUS:568efc60         XCU.timeout.006
+EXIT_STATUS:0d62913f         XCU.timeout.006
+CONSEQUENCES_OF_ERRORS:d92f27bd none  XCU 1.4 default for this section

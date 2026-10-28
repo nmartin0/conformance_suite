@@ -1,0 +1,79 @@
+# XCU echo
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# echo may be built into the shell, but XCU 1.6 also requires it to be
+# reachable by exec, so each check runs both ways. Output goes to a file
+# and is compared byte for byte, so a missing or extra newline shows.
+# The escape sequences and the treatment of a leading -n, -e or -E are
+# required only of XSI systems (they are implementation-defined for
+# others); the base assertions use arguments with no backslash and no
+# leading hyphen.
+
+assertion  XCU.echo.001
+anchor     utilities/echo.html#DESCRIPTION
+anchor     utilities/echo.html#STDOUT
+class      required
+since      1992
+says       echo writes its arguments separated by single spaces and a
+           newline after the last, and exits zero.
+test       t/001-args.sh
+
+assertion  XCU.echo.002
+anchor     utilities/echo.html#DESCRIPTION
+class      required
+since      1992
+says       echo with no arguments writes only a newline.
+test       t/002-no-args.sh
+
+assertion  XCU.echo.003
+anchor     utilities/echo.html#STDOUT
+class      required
+since      1992
+says       An empty argument still takes part in the spacing: a single
+           space on each side of it.
+test       t/003-empty-argument.sh
+
+assertion  XCU.echo.004
+anchor     utilities/echo.html#OPTIONS
+anchor     utilities/echo.html#OPERANDS
+class      required
+since      1992
+says       The argument -- is an ordinary operand and is written.
+test       t/004-double-dash.sh
+
+assertion  XCU.echo.005
+anchor     utilities/echo.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       A first operand made of a hyphen and the letters e, E or n is
+           written as a string, and echo supports no options.
+test       t/005-dash-first.sh
+
+assertion  XCU.echo.006
+anchor     utilities/echo.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       The escape sequences \t, \n, \\, \f, \v, \r and \b in an argument
+           write a tab, a newline, a backslash, a form feed, a vertical
+           tab, a carriage return and a backspace.
+test       t/006-escapes.sh
+
+assertion  XCU.echo.007
+anchor     utilities/echo.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       \c in an argument suppresses the final newline and the rest of
+           the output, including later arguments.
+test       t/007-escape-c.sh
+
+assertion  XCU.echo.008
+anchor     utilities/echo.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       \0num with one to three octal digits writes the byte with that
+           value.
+test       t/008-escape-octal.sh

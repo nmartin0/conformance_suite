@@ -1,0 +1,34 @@
+# bg.cov - every requirement unit on utilities/bg.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:d1010dd9         XCU.bg.002
+DESCRIPTION:d799ecce         XCU.bg.003
+OPTIONS:eb724aff             none  XCU 1.4 default for this section
+OPERANDS:4ec2d2a9            none  introduces the list that follows
+OPERANDS:3f38740e            todo  not yet covered: Specify the job to be resumed as a background job.
+OPERANDS:9d22ee02            todo  not yet covered: If no job_id operand is given, the most recently suspended j
+OPERANDS:f5729789            todo  not yet covered: The format of job_id is described in XBD 3.182 Job ID .
+STDIN:3f472296               none  XCU 1.4 default for this section
+INPUT_FILES:eb724aff         none  XCU 1.4 default for this section
+ENVIRONMENT_VARIABLES:0369030f none  introduces the list that follows
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd none  XCU 1.4 default for this section
+STDOUT:fb26c149              todo  not yet covered: The output of bg shall consist of a line in the format:
+STDOUT:0ef2535a              none  fragment of a format line; the format is covered with its sentence
+STDOUT:73b6fcc0              none  fragment of a format line; the format is covered with its sentence
+STDOUT:9ea5261f              todo  not yet covered: where the fields are as follows:
+STDOUT:818ec281              XCU.bg.002
+STDOUT:2bd2bc50              XCU.bg.002
+STDOUT:4414ebf3              XCU.bg.002
+STDERR:b2905b3f              todo  standard error is not checked for stray output in every case
+OUTPUT_FILES:eb724aff        none  XCU 1.4 default for this section
+EXTENDED_DESCRIPTION:eb724aff none  XCU 1.4 default for this section
+EXIT_STATUS:db823381         none  introduces a list; the items are classified below
+EXIT_STATUS:8b075da2         XCU.bg.001
+EXIT_STATUS:9d252ff7         XCU.bg.001
+CONSEQUENCES_OF_ERRORS:6ba9ff2a XCU.bg.001

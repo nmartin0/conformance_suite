@@ -1,0 +1,118 @@
+# XCU fc
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# fc works on the history of an interactive sh. Every test starts sh -i
+# with a script on its standard input (so the commands are entered into
+# the history as an interactive shell does); HISTFILE names a file in the test's private
+# directory so that the history file lands there, ENV is unset. The first
+# number of the history list is arbitrary, so numbers are taken from the
+# listing and never assumed. The commands entered are plain echo and
+# true lines, and only the lines of fc output that fit the format the
+# page gives are judged.
+
+assertion  XCU.fc.001
+anchor     utilities/fc.html#OPTIONS
+anchor     utilities/fc.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       fc -l first last lists the commands from first to last, each on a
+           line made of the command number, a tab and the command text;
+           the numbers differ and the order is oldest first.
+test       t/001-list.sh
+
+assertion  XCU.fc.002
+anchor     utilities/fc.html#OPTIONS
+anchor     utilities/fc.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       fc -l -n lists each command as a tab and the command text without
+           a number.
+test       t/002-list-n.sh
+
+assertion  XCU.fc.003
+anchor     utilities/fc.html#OPTIONS
+anchor     utilities/fc.html#OPERANDS
+class      conditional
+when       UP
+since      1992
+says       fc -l -r lists the commands newest first, and giving first newer
+           than last does the same.
+test       t/003-list-reverse.sh
+
+assertion  XCU.fc.004
+anchor     utilities/fc.html#OPERANDS
+anchor     utilities/fc.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       A positive number as first and last selects the command with
+           that number as listed: giving the number of one listed
+           command twice lists just that command.
+test       t/004-list-number.sh
+
+assertion  XCU.fc.005
+anchor     utilities/fc.html#OPERANDS
+class      conditional
+when       UP
+since      1992
+says       A negative number counts back from the previous command and a
+           string selects the most recent command that starts with it;
+           with -l and no last, the listing runs up to the previous
+           command.
+test       t/005-list-relative.sh
+
+assertion  XCU.fc.006
+anchor     utilities/fc.html#OPTIONS
+anchor     utilities/fc.html#OPERANDS
+class      conditional
+when       UP
+since      1992
+says       fc -s with no operand runs the previous command again.
+test       t/006-s-previous.sh
+
+assertion  XCU.fc.007
+anchor     utilities/fc.html#OPERANDS
+class      conditional
+when       UP
+since      1992
+says       fc -s old=new runs the previous command with the first
+           occurrence of old replaced by new.
+test       t/007-s-substitute.sh
+
+assertion  XCU.fc.008
+anchor     utilities/fc.html#OPERANDS
+class      conditional
+when       UP
+since      1992
+says       fc -s string runs the most recent command that starts with the
+           string.
+test       t/008-s-string.sh
+
+assertion  XCU.fc.009
+anchor     utilities/fc.html#OPTIONS
+anchor     utilities/fc.html#DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       fc -e editor runs the editor on a file holding the command,
+           and what the editor leaves in the file is run by the shell.
+test       t/009-editor.sh
+
+assertion  XCU.fc.010
+anchor     utilities/fc.html#ENVIRONMENT VARIABLES
+anchor     utilities/fc.html#OPTIONS
+class      conditional
+when       UP
+since      1992
+says       When -e is not given, the editor is the utility named by FCEDIT.
+test       t/010-fcedit.sh
+
+assertion  XCU.fc.011
+anchor     utilities/fc.html#DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       If the editor exits non-zero the edited command is not run.
+test       t/011-editor-fails.sh

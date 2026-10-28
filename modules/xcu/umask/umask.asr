@@ -1,0 +1,83 @@
+# XCU umask
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# umask is intrinsic (XCU 1.7). Effects on creation are observed with files
+# and directories the test makes in its private directory; the mode is
+# read back with ls -ld, using only the first ten characters.
+
+assertion  XCU.umask.001
+anchor     utilities/umask.html#DESCRIPTION
+anchor     utilities/umask.html#OPERANDS
+anchor     utilities/umask.html#STDOUT
+class      required
+since      1992
+says       umask with an octal mask sets the mask for later creations:
+           with 027 a file made by a redirection gets rw-r----- and a
+           directory made by mkdir gets rwxr-x---; the call exits zero
+           and writes nothing.
+test       t/001-octal.sh
+
+assertion  XCU.umask.002
+anchor     utilities/umask.html#STDOUT
+anchor     utilities/umask.html#OPTIONS
+class      required
+since      1992
+says       umask with no operand writes a message that, given back as the
+           operand, restores the mask; the mask in force does not change
+           by asking.
+test       t/002-reinput.sh
+
+assertion  XCU.umask.003
+anchor     utilities/umask.html#STDOUT
+anchor     utilities/umask.html#OPTIONS
+class      required
+since      1992
+says       umask -S writes one line u=...,g=...,o=... whose letters (from r,
+           w, x) are the permissions the mask leaves clear; for mask 027
+           these are rwx, rx and none.
+test       t/003-symbolic-output.sh
+
+assertion  XCU.umask.004
+anchor     utilities/umask.html#STDOUT
+anchor     utilities/umask.html#OPERANDS
+class      required
+since      1992
+says       The line written by umask -S is accepted as the operand and
+           restores the mask.
+test       t/004-symbolic-reinput.sh
+
+assertion  XCU.umask.005
+anchor     utilities/umask.html#OPERANDS
+class      required
+since      1992
+says       A symbolic mask u=rwx,g=rx,o= sets the mask to the complement of
+           those permissions, which is 027.
+test       t/005-symbolic-absolute.sh
+
+assertion  XCU.umask.006
+anchor     utilities/umask.html#OPERANDS
+class      required
+since      1992
+says       In a symbolic mask the + operator clears bits in the current mask
+           and the - operator sets them: from 077, g+rx gives 027; from
+           000, go-w gives 022.
+test       t/006-symbolic-relative.sh
+
+assertion  XCU.umask.007
+anchor     utilities/umask.html#DESCRIPTION
+anchor     utilities/V3_chap02.html#2.13
+class      required
+since      1992
+says       umask run in a subshell does not change the mask of the shell
+           that started it.
+test       t/007-subshell.sh
+
+assertion  XCU.umask.008
+anchor     utilities/umask.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+since      1992
+says       A mask operand that is not valid gives an exit status greater
+           than zero, a diagnostic on standard error, and leaves the mask
+           unchanged.
+test       t/008-invalid.sh

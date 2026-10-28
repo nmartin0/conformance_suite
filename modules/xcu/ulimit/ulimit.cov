@@ -1,0 +1,68 @@
+# ulimit.cov - every requirement unit on utilities/ulimit.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:b275b8f4         todo  not yet covered: The ulimit utility shall report or set the resource limits i
+DESCRIPTION:8aad2c25         XCU.ulimit.004 XCU.ulimit.006
+DESCRIPTION:03012db8         XCU.ulimit.004 XCU.ulimit.006
+DESCRIPTION:0fdfe82a         XCU.ulimit.004 XCU.ulimit.006
+DESCRIPTION:c8a31ae0         XCU.ulimit.004
+DESCRIPTION:aa29bda9         XCU.ulimit.004
+DESCRIPTION:05e517b2         todo  not yet covered: In locales other than the POSIX locale, ulimit may support a
+DESCRIPTION:b0236d9e         todo  not yet covered: The behavior when resource limits are exceeded shall be as d
+OPTIONS:e04e4a16             todo  Utility Syntax Guidelines (options grouping, --) are only tried where an assertion names them
+OPTIONS:cb578278            none  order of options may matter; nothing to test
+OPTIONS:816dabed             app
+OPTIONS:e2947e20             none  introduces a list; the items are classified below
+OPTIONS:2cad8c50            XCU.ulimit.004 XCU.ulimit.005
+OPTIONS:45102ae4            XCU.ulimit.002 XCU.ulimit.004
+OPTIONS:2ed8b927            XCU.ulimit.001
+OPTIONS:9c9187ec            XCU.ulimit.003
+OPTIONS:55b8da9b            none  names the setrlimit() resource of the option; the option itself is covered
+OPTIONS:9460bc7f            XCU.ulimit.003
+OPTIONS:a7443fef            none  names the setrlimit() resource of the option; the option itself is covered
+OPTIONS:129dc98e            XCU.ulimit.002 XCU.ulimit.004 XCU.ulimit.005
+OPTIONS:fd9a85b5            none  names the setrlimit() resource of the option; the option itself is covered
+OPTIONS:c9914859            XCU.ulimit.003 XCU.ulimit.001
+OPTIONS:5ae0e7d0            none  names the setrlimit() resource of the option; the option itself is covered
+OPTIONS:955ac50e            XCU.ulimit.003
+OPTIONS:fc31f2ba            none  names the setrlimit() resource of the option; the option itself is covered
+OPTIONS:2dfb5dc9            XCU.ulimit.007
+OPTIONS:65e31714            none  names the setrlimit() resource of the option; the option itself is covered
+OPTIONS:d3d8e755            XCU.ulimit.003
+OPTIONS:f82cf3e8            none  names the setrlimit() resource of the option; the option itself is covered
+OPTIONS:ae7e97a6            none  names the setrlimit() resource of the option; the option itself is covered
+OPTIONS:c23fa418            XCU.ulimit.005 XCU.ulimit.002
+OPTIONS:55bf3908             XCU.ulimit.004 XCU.ulimit.005
+OPTIONS:19add0f9            XCU.ulimit.002
+OPTIONS:132c12cb             XCU.ulimit.002 XCU.ulimit.004
+OPTIONS:81b8f4b5            none  unspecified behaviour
+OPERANDS:4ec2d2a9            none  introduces the list that follows
+OPERANDS:4e642c61            todo  not yet covered: Either an integer value to use as the new limit(s) for the s
+OPERANDS:86a2b7db            todo  not yet covered: Numerals in the range 0 to the maximum limit value supported
+STDIN:3f472296               none  XCU 1.4 default for this section
+INPUT_FILES:eb724aff         none  XCU 1.4 default for this section
+ENVIRONMENT_VARIABLES:9e75e5e8 none  introduces the list that follows
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b55e60b5 todo  not yet covered: Determine the location of messages objects and message catal
+ASYNCHRONOUS_EVENTS:d92f27bd none  XCU 1.4 default for this section
+STDOUT:af3a0389             XCU.ulimit.002
+STDOUT:08e536ab              XCU.ulimit.001 XCU.ulimit.002
+STDOUT:ada3ab51              todo  not yet covered: A short phrase identifying the resource (for example "file s
+STDOUT:5a43f502              todo  not yet covered: An indication of the units used for the resource, if the cor
+STDOUT:c2a06f43              XCU.ulimit.001 XCU.ulimit.002
+STDOUT:0bb103b9              XCU.ulimit.001
+STDOUT:087c9c8e              XCU.ulimit.001
+STDOUT:fd2f6ccb              XCU.ulimit.001 XCU.ulimit.002
+STDOUT:3473d2c8              XCU.ulimit.001 XCU.ulimit.002
+STDOUT:867cc12a              XCU.ulimit.001 XCU.ulimit.002
+STDERR:b2905b3f              todo  standard error is not checked for stray output in every case
+OUTPUT_FILES:eb724aff        none  XCU 1.4 default for this section
+EXTENDED_DESCRIPTION:eb724aff none  XCU 1.4 default for this section
+EXIT_STATUS:db823381         none  introduces a list; the items are classified below
+EXIT_STATUS:8b075da2         XCU.ulimit.001 XCU.ulimit.006
+EXIT_STATUS:a42b9646         XCU.ulimit.006
+CONSEQUENCES_OF_ERRORS:d92f27bd none  XCU 1.4 default for this section

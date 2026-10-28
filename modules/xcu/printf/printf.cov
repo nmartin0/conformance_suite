@@ -1,0 +1,75 @@
+# printf.cov - every requirement unit on utilities/printf.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+DESCRIPTION:102ef973         todo  not yet covered: The printf utility shall write formatted operands to the sta
+DESCRIPTION:79b8376f         todo  not yet covered: The argument operands shall be formatted under control of th
+OPTIONS:eb724aff             none  XCU 1.4 default for this section
+OPERANDS:51b44f3c            none  introduces a list; the items are classified below
+OPERANDS:d909ce8f            todo  not yet covered: A character string describing the format to use to write the
+OPERANDS:969889e3            none  cross-reference
+OPERANDS:1954362f            todo  not yet covered: The values to be written to standard output, under the contr
+OPERANDS:969889e3.2          none  cross-reference
+STDIN:3f472296               none  XCU 1.4 default for this section
+INPUT_FILES:eb724aff         none  XCU 1.4 default for this section
+ENVIRONMENT_VARIABLES:a03f4a6f none  introduces the list that follows
+ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:9d66fee1 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:f490421d todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:3e4939d0 todo  not yet covered: It shall affect the format of numbers written using the e , 
+ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd none  XCU 1.4 default for this section
+STDOUT:969889e3              none  cross-reference
+STDERR:b2905b3f              todo  standard error is not checked for stray output in every case
+OUTPUT_FILES:eb724aff        none  XCU 1.4 default for this section
+EXTENDED_DESCRIPTION:da4e91ce XCU.printf.004
+EXTENDED_DESCRIPTION:833652f3 XCU.printf.004
+EXTENDED_DESCRIPTION:f8b5140f todo  not yet covered: File Format Notation with the following exceptions:
+EXTENDED_DESCRIPTION:e7e5f8ee XCU.printf.001 XCU.printf.004
+EXTENDED_DESCRIPTION:68f23cf0 XCU.printf.004
+EXTENDED_DESCRIPTION:74bc5400 todo  not yet covered: In addition to the escape sequences shown in XBD 5.
+EXTENDED_DESCRIPTION:80e0d57d XCU.printf.002 XCU.printf.009
+EXTENDED_DESCRIPTION:25c2ff43 XCU.printf.001 XCU.printf.010
+EXTENDED_DESCRIPTION:db7b7f91 XCU.printf.001 XCU.printf.010
+EXTENDED_DESCRIPTION:e50f8f97 impl  left to the implementation or unspecified
+EXTENDED_DESCRIPTION:b85b9bcd todo  not yet covered: An additional conversion specifier character, b , shall be s
+EXTENDED_DESCRIPTION:c64b8f60 XCU.printf.004 XCU.printf.009
+EXTENDED_DESCRIPTION:1ae91407 todo  not yet covered: The following <backslash>-escape sequences shall be supporte
+EXTENDED_DESCRIPTION:12630b39 XCU.printf.009 XCU.printf.002
+EXTENDED_DESCRIPTION:0b5cb417 XCU.printf.003 XCU.printf.007
+EXTENDED_DESCRIPTION:eb92e2ee XCU.printf.010 XCU.printf.001
+EXTENDED_DESCRIPTION:0866bdc5 XCU.printf.010 XCU.printf.013
+EXTENDED_DESCRIPTION:ce2f0cb1 XCU.printf.009
+EXTENDED_DESCRIPTION:fe27081d XCU.printf.013
+EXTENDED_DESCRIPTION:b9cde0ab XCU.printf.013
+EXTENDED_DESCRIPTION:ad4a9dfb XCU.printf.004 XCU.printf.005
+EXTENDED_DESCRIPTION:158f6e44 XCU.printf.005 XCU.printf.006
+EXTENDED_DESCRIPTION:f52ebce7 XCU.printf.004 XCU.printf.010
+EXTENDED_DESCRIPTION:a3e8a081 XCU.printf.001 XCU.printf.004
+EXTENDED_DESCRIPTION:ce0db064 todo  not yet covered: The only exception to this is that "%%" can be mixed with th
+EXTENDED_DESCRIPTION:bda7479a impl  left to the implementation or unspecified
+EXTENDED_DESCRIPTION:9891cf1e XCU.printf.014
+EXTENDED_DESCRIPTION:8300067a todo  not yet covered: The operand to be evaluated shall be determined as follows: 
+EXTENDED_DESCRIPTION:2b11fa42 XCU.printf.012
+EXTENDED_DESCRIPTION:abacff77 XCU.printf.001 XCU.printf.004
+EXTENDED_DESCRIPTION:36436692 XCU.printf.004 XCU.printf.010
+EXTENDED_DESCRIPTION:f4bce380 XCU.printf.012
+EXTENDED_DESCRIPTION:61cfcf40 XCU.printf.014
+EXTENDED_DESCRIPTION:0b98034a XCU.printf.004 XCU.printf.001
+EXTENDED_DESCRIPTION:24a396fa XCU.printf.001 XCU.printf.002
+EXTENDED_DESCRIPTION:f46da033 XCU.printf.004 XCU.printf.001
+EXTENDED_DESCRIPTION:bfa7d8df XCU.printf.008 XCU.printf.013
+EXTENDED_DESCRIPTION:d2b32079 XCU.printf.004 XCU.printf.010
+EXTENDED_DESCRIPTION:9e7893c1 todo  not yet covered: The argument operands shall be treated as strings if the cor
+EXTENDED_DESCRIPTION:cf1090e2 todo  not yet covered: Otherwise, they shall be evaluated as unsuffixed C integer c
+EXTENDED_DESCRIPTION:4f702eed todo  not yet covered: A leading <plus-sign> or <hyphen-minus> shall be allowed.
+EXTENDED_DESCRIPTION:a59e0bf1 XCU.printf.005
+EXTENDED_DESCRIPTION:9dd3e619 todo  not yet covered: Suffixed integer constants may be allowed.
+EXTENDED_DESCRIPTION:5a967bc5 XCU.printf.014
+EXTENDED_DESCRIPTION:3162bd61 XCU.printf.014
+EXIT_STATUS:db823381         none  introduces a list; the items are classified below
+EXIT_STATUS:8b075da2         XCU.printf.014
+EXIT_STATUS:9d252ff7         XCU.printf.014
+CONSEQUENCES_OF_ERRORS:d92f27bd none  XCU 1.4 default for this section
