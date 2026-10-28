@@ -40,54 +40,31 @@ verified; this file is the plan. Update both when a step finishes.
 
 - Round of stdio, process and file modules (about 15 modules; 1880 assertions, 2807 mutants, 1451 variants in all); deviations O.34 to O.53, SI-73 to SI-88 and Q-62 to Q-74 recorded.
 
+## Status (lean mode, nothing executed yet)
+
+Every function page, every header (Tier 0 plus semantic modules under
+`modules/xbd`) and every utility page (`modules/xcu`, including the shell
+command language chapter 2) now has a module, all reviewed blind. About
+970 modules in all. Nothing has been run against any C library or shell:
+the modules are written from the standard alone and have no mutants or
+variants yet.
+
 ## Next
 
-00. **Empirical gate** for the 2024 round (mutate.sh) is deferred by decision; run it on the target OS or a host library when wanted.
-
-0. **Core pages still missing** (files, processes, stdio): creat, fsync, mkstemp, pread/pwrite, readv/writev, pipe2, poll/select, system, popen, waitid, getrlimit, nice, times, posix_spawn, the flockfile family and others; about 45 pages in six groups.
-
-1. **Signals** (remaining): the few signal todos left (`ci/coverage.py
-   --show` lists them): machine-dependent SIGILL/SIGFPE/SIGTRAP codes,
-   `<stdatomic.h>` in handlers, signal() from several threads, the
-   disputed SIGCHLD/SIGURG/SIGWINCH queue case (SI-24), the sigaction
-   member checks that belong to Tier 0.
-2. **Your OS**: run the suite on the OS under development as soon as it can
-   run a POSIX shell and a C compiler (or cross-compiled tests with a
-   small runner). Results are judged by `analyze.py` on another machine.
-3. **BSD reference runs** under QEMU (FreeBSD, NetBSD, OpenBSD), then
-   macOS and illumos, triaged with `analyze.py matrix`. Waiting on the
-   images, which the user will supply.
-3a. **Linux-ism audit** (done): independent reviewers given only the
-   standard and the tests (not the Linux results) re-read every module
-   reviewed before ungetc for expectations that Linux meets but the text
-   does not require (glibc and musl agreeing does not rule these out, since
-   both run on one kernel). 76 findings in eight areas, 14 new questions
-   (Q-42 to Q-55) and 5 entries (SI-68 to SI-72); see the review log.
-3b. **Variant infrastructure** (next): variant directories for dotted module names (2.4.x, 2.5.1, 2.6); variants
-   that plant a disputed reading (expected INSPECT); running variants where the baseline is not PASS, and a
-   variant with a fault; header and xcu variants; harness file names within 14 bytes and a {NAME_MAX} check of
-   the results directory; compile-time renaming instead of LD_PRELOAD and RTLD_NEXT (C17 and POSIX only);
-   ci/mutate.sh without mktemp and python; strict -std=c17 builds in CI; setgroups() found by a build probe,
-   not by OS name; the compatibility-layer abort removed.
-4. **Header mutants for Tier 0**, and Tier 0 for the prose-only headers
-   (`<stdint.h>`, `<float.h>` and the like) that `gen/specmodel.py` does
-   not yet read.
-5. **Files and directories** (remaining): `posix_getdents` (no reference libc has it yet).
-6. **Remaining todos** in the done modules (`ci/coverage.py --show MODULE`
-   lists them): unprivileged EACCES cases, pseudo-terminal cases,
-   environment cases (ENOSPC, EROFS, ENFILE), SA_NOCLDWAIT.
-7. **stdio** (done: `fflush`, `fclose`, `ungetc`, `setvbuf`, `fopen`, `fdopen`,
-   `fseek`, `ftell`): next the XSH 2.5.1 handle rules, the XSH 2.5.2
-   wide-stream rule for psignal() and psiginfo(), and an `fmemopen` module
-   (the fseek review found that neither glibc nor musl writes the NUL at
-   buf[0] for mode "w"); EINTR on a flushing fseek(), and EFBIG at the
-   offset maximum.
-8. **Threads**: `pthread_create`, joins, cancellation, mutexes, condition
-   variables, thread-specific data.
-9. **Shell and utilities** (XCU): the shell language first, then the
-   utilities the OS needs.
-10. **Controller**: copy the tree to a VM or test machine over ssh, run,
-    copy the results back.
+1. **First runs on real systems**, starting with the user's own OS: expect
+   test defects (hand-written expected strings, timing) as well as findings;
+   triage each failure against the standard before touching a test.
+2. **Hardening**: mutants and variants for the lean-mode modules, once the
+   suite is stable; header mutants for Tier 0.
+3. **Untested residue**: terminal-dependent utilities (stty, tabs, tput, vi,
+   talk, write), job control beyond one assertion, the ex/vi command sets
+   (many `todo` units in the `.cov` files), history/mail/vi-mode parts of
+   `sh`.
+4. **Cleanup**: simplify the older option and root handling in the first
+   231 modules; write the remaining entries of `standard-issues-report.md`
+   (Q-75 onward, SI-89 to SI-96).
+5. **Python port** (deferred), and the controller that copies the tree to a
+   VM or test machine over ssh, runs it and copies results back.
 
 ## Standard issues
 
