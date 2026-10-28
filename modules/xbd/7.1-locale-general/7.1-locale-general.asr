@@ -1,0 +1,25 @@
+# XBD 7.1 General
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# creating locales is optional (POSIX2_LOCALEDEF): these tests report NOTINUSE
+# when the system does not claim it.
+
+assertion  XBD.7.1-locale-general.001
+anchor     basedefs/V1_chap07.html#7.1
+class      required
+since      1992
+says       When a locale environment variable names a locale by a pathname
+           beginning with a slash, setlocale() selects the locale definition
+           made at that pathname by localedef.
+timeout    120
+test       t/001-pathname-in-lc-all.c
+
+assertion  XBD.7.1-locale-general.002
+anchor     basedefs/V1_chap07.html#7.1
+class      required
+since      2008
+says       newlocale() with the empty name takes the locale from the
+           environment, and with LC_ALL naming the pathname of a locale made
+           by localedef the object carries that locale.
+timeout    120
+test       t/002-pathname-with-newlocale.c

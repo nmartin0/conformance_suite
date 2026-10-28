@@ -1,0 +1,102 @@
+# XBD 7.3.1 LC_CTYPE
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The POSIX-locale tests check byte and wide classes over all 256 bytes.
+# creating locales is optional (POSIX2_LOCALEDEF): these tests report NOTINUSE
+# when the system does not claim it.
+
+assertion  XBD.7.3.1-lc-ctype.001
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      1992
+says       In the POSIX locale upper, lower, alpha, digit, alnum, xdigit,
+           space and blank hold exactly the portable characters the locale
+           definition lists, among all 256 bytes.
+test       t/001-posix-byte-classes.c
+
+assertion  XBD.7.3.1-lc-ctype.002
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      1992
+says       The same membership holds for the wide-character functions and
+           for iswctype() with the class names, over the codes of all 256
+           characters.
+test       t/002-posix-wide-classes.c
+
+assertion  XBD.7.3.1-lc-ctype.003
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      1992
+says       In the POSIX locale cntrl holds at least 33 bytes and none is
+           alpha or print, punct holds the 32 portable punctuation
+           characters, and graph and print relate to the other classes as
+           defined.
+test       t/003-posix-cntrl-punct-graph-print.c
+
+assertion  XBD.7.3.1-lc-ctype.004
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      1992
+says       In the POSIX locale toupper(), tolower(), towupper() and
+           towlower() map the 26 letters of each case to the other and
+           change nothing else.
+test       t/004-posix-case-mapping.c
+
+assertion  XBD.7.3.1-lc-ctype.005
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      1992
+says       In every locale the class digit holds only the ten digits and
+           xdigit only the digits and A-F, a-f, among the valid wide codes
+           below 0x10000.
+test       t/005-every-locale-digit-xdigit.c
+
+assertion  XBD.7.3.1-lc-ctype.006
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      1992
+says       A locale made with localedef puts characters added to lower,
+           upper, punct, cntrl and blank in those classes and the classes
+           they imply, and in no others.
+timeout    120
+test       t/006-localedef-added-chars.c
+
+assertion  XBD.7.3.1-lc-ctype.007
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      1992
+says       A locale-specific class declared with charclass and filled in the
+           source is usable through wctype() and iswctype(); a declared
+           class without members matches nothing.
+timeout    120
+test       t/007-localedef-charclass.c
+
+assertion  XBD.7.3.1-lc-ctype.008
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      1992
+says       Case mappings of a made locale follow toupper and tolower as
+           given: an omitted tolower is the reverse of toupper, both given
+           map their own pairs only, both omitted keep the portable
+           defaults.
+timeout    120
+test       t/008-localedef-case-maps.c
+
+assertion  XBD.7.3.1-lc-ctype.009
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      1992
+says       An ellipsis between two characters of a class list puts every
+           character with an encoded value between them in the class, for
+           symbolic names and for hexadecimal constants.
+timeout    120
+test       t/009-localedef-ellipsis.c
+
+assertion  XBD.7.3.1-lc-ctype.010
+anchor     basedefs/V1_chap07.html#7.3.1
+class      required
+since      1992
+says       A locale whose categories all copy the POSIX locale behaves as
+           the POSIX locale.
+timeout    120
+test       t/010-localedef-copy-posix.c

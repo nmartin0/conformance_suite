@@ -1,0 +1,39 @@
+# XBD 8.1 Environment Variable Definition
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The C tests run the test program itself as the new process image, so no
+# other program or implementation detail is needed.
+
+assertion  XBD.8.1-environment-variable-definition.001
+anchor     basedefs/V1_chap08.html#8.1
+class      required
+since      1988
+says       A variable whose value holds every byte value from 1 to 255,
+           including the equals sign, reaches a new process image intact.
+test       t/001-every-byte-value.c
+
+assertion  XBD.8.1-environment-variable-definition.002
+anchor     basedefs/V1_chap08.html#8.1
+class      required
+since      1988
+says       Variables whose names differ only in letter case stay distinct in
+           a new image and through setenv() and getenv().
+test       t/002-case-retained.c
+
+assertion  XBD.8.1-environment-variable-definition.003
+anchor     basedefs/V1_chap08.html#8.1
+class      required
+since      1988
+says       A name ends at the first equals sign: values containing equals
+           signs, empty values and names of letters, digits and underscores
+           are kept, and the new image holds exactly the strings given.
+test       t/003-name-value-split.c
+
+assertion  XBD.8.1-environment-variable-definition.004
+anchor     basedefs/V1_chap08.html#8.1
+class      required
+since      2024
+says       Marking PWD, OLDPWD, OPTIND, OPTARG or LINENO readonly is
+           rejected, or succeeds with the shell still modifying the
+           variable, or succeeds with the modifying built-in failing.
+test       t/004-readonly-special.sh

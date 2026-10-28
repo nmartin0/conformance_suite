@@ -1,0 +1,32 @@
+# XBD 6.3 Wide-Character Codes
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Run in the POSIX locale and in every locale `locale -a` lists.
+
+assertion  XBD.6.3-wide-character-codes.001
+anchor     basedefs/V1_chap06.html#6.3
+class      required
+since      1992
+says       In the POSIX locale the wide-character code of each portable
+           character equals its character constant, through btowc, mbrtowc,
+           wcrtomb and wctob.
+test       t/001-posix-code-equals-constant.c
+
+assertion  XBD.6.3-wide-character-codes.002
+anchor     basedefs/V1_chap06.html#6.3
+class      required
+since      1992
+says       In every locale the wide codes of the portable letters, digits
+           and white-space characters are their character constants: they
+           lie in the classes the locale definition puts those characters
+           in.
+test       t/002-every-locale-classes.c
+
+assertion  XBD.6.3-wide-character-codes.003
+anchor     basedefs/V1_chap06.html#6.3
+class      required
+since      1992
+says       The wide-character string and memory functions give array
+           elements that are not valid wide codes of the locale their
+           specified semantics (lengths, copies, comparisons, searches).
+test       t/003-invalid-codes-in-strings.c

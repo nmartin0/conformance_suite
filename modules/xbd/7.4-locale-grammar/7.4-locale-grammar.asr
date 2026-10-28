@@ -1,0 +1,60 @@
+# XBD 7.4 Locale Definition Grammar
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# creating locales is optional (POSIX2_LOCALEDEF): these tests report NOTINUSE
+# when the system does not claim it.
+
+assertion  XBD.7.4-locale-grammar.001
+anchor     basedefs/V1_chap07.html#7.4
+class      required
+since      1992
+says       comment_char and escape_char global statements change the comment
+           and escape characters of the source; the number sign is the
+           comment character without them.
+timeout    120
+test       t/001-global-statements.c
+
+assertion  XBD.7.4-locale-grammar.002
+anchor     basedefs/V1_chap07.html#7.4
+class      required
+since      1992
+says       An escape character at the end of a line joins it with the next,
+           in a grouping list and in a list of strings.
+timeout    120
+test       t/002-escape-newline.c
+
+assertion  XBD.7.4-locale-grammar.003
+anchor     basedefs/V1_chap07.html#7.4
+class      required
+since      1992
+says       A character written as an octal, hexadecimal or decimal encoding
+           of its bytes is read as that character in strings and in a class
+           list.
+timeout    120
+test       t/003-character-forms.c
+
+assertion  XBD.7.4-locale-grammar.004
+anchor     basedefs/V1_chap07.html#7.4
+class      required
+since      1992
+says       A category not closed by its END statement, or closed by the END
+           of another category, is a syntax error: localedef exits non-zero.
+timeout    120
+test       t/004-missing-end.c
+
+assertion  XBD.7.4-locale-grammar.005
+anchor     basedefs/V1_chap07.html#7.4
+class      required
+since      1992
+says       The categories of a source may appear in any order.
+timeout    120
+test       t/005-category-order.c
+
+assertion  XBD.7.4-locale-grammar.006
+anchor     basedefs/V1_chap07.html#7.4
+class      required
+since      1992
+says       The copy statement takes the locale name bare or in double
+           quotes.
+timeout    120
+test       t/006-copy-locale-name.c

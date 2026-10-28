@@ -1,0 +1,43 @@
+# XBD 6.1 Portable Character Set
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Run in the POSIX locale and in every locale that `locale -a` lists; the
+# POSIX locale is always checked, so the test is never vacuous.
+
+assertion  XBD.6.1-portable-character-set.001
+anchor     basedefs/V1_chap06.html#6.1
+class      required
+since      1988
+says       In the POSIX locale each of the 103 members of the portable
+           character set is a complete one-byte character, the members have
+           distinct encodings, the null character is the zero byte and every
+           other member is a positive value as a char.
+test       t/001-posix-single-byte.c
+
+assertion  XBD.6.1-portable-character-set.002
+anchor     basedefs/V1_chap06.html#6.1
+class      required
+since      1988
+says       The encoded values of the digits 0 to 9 ascend by one in the
+           POSIX locale and in every locale the system offers.
+test       t/002-digits-ascend.c
+
+assertion  XBD.6.1-portable-character-set.003
+anchor     basedefs/V1_chap06.html#6.1
+anchor     basedefs/V1_chap06.html#6.2
+class      required
+since      1988
+says       Every locale the system offers includes the portable character
+           set: each member is one byte that decodes back to the same
+           character, the members are distinct and the null character is the
+           zero byte.
+test       t/003-every-locale-has-set.c
+
+assertion  XBD.6.1-portable-character-set.004
+anchor     basedefs/V1_chap06.html#6.1
+class      required
+since      1988
+says       The encodings of period, slash, newline and carriage-return are
+           the same in every locale: each is the value of its character
+           constant and decodes to its own character.
+test       t/004-four-invariant.c

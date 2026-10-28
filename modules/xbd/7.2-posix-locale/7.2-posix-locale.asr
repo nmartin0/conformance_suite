@@ -1,0 +1,35 @@
+# XBD 7.2 POSIX Locale
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The POSIX locale is observed only through its behaviour for the portable
+# characters and the langinfo and localeconv values the tables of XBD 7.3
+# give. creating locales is optional (POSIX2_LOCALEDEF): these tests report
+# NOTINUSE when the system does not claim it.
+
+assertion  XBD.7.2-posix-locale.001
+anchor     basedefs/V1_chap07.html#7.2
+class      required
+since      1992
+says       The C locale and the POSIX locale are identical: classes, case
+           mappings, collation, langinfo items, localeconv() and the code
+           set agree.
+test       t/001-c-and-posix-identical.c
+
+assertion  XBD.7.2-posix-locale.002
+anchor     basedefs/V1_chap07.html#7.2
+class      required
+since      1992
+says       A locale built with localedef from the POSIX locale tables
+           answers like the POSIX locale for classes, case maps, collation,
+           langinfo items and localeconv().
+timeout    120
+test       t/002-as-if-localedef-tables.c
+
+assertion  XBD.7.2-posix-locale.003
+anchor     basedefs/V1_chap07.html#7.2
+class      required
+since      1992
+says       When no locale environment variable is set, or all are empty,
+           selecting the locale from the environment succeeds and leaves a
+           locale in which the portable characters work.
+test       t/003-default-locale-exists.c

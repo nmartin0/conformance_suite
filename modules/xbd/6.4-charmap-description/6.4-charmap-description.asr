@@ -1,0 +1,90 @@
+# XBD 6.4 Character Set Description File
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Whether users can supply a charmap with localedef -f is implementation-
+# defined, so a charmap or locale the system refuses is UNRESOLVED, and only
+# the behaviour of a locale that was made is judged. creating locales is
+# optional (POSIX2_LOCALEDEF): these tests report NOTINUSE when the system
+# does not claim it.
+
+assertion  XBD.6.4-charmap-description.001
+anchor     basedefs/V1_chap06.html#6.4
+class      required
+since      1992
+says       A charmap with comment lines, empty lines and trailing comments
+           is read, and the hexadecimal encodings it gives additional
+           characters are the bytes the made locale classifies.
+timeout    120
+test       t/001-hex-comments-blank.c
+
+assertion  XBD.6.4-charmap-description.002
+anchor     basedefs/V1_chap06.html#6.4
+class      required
+since      1992
+says       Hexadecimal (both digit cases), three-digit decimal, three-digit
+           octal, two-digit decimal and two-digit octal constants each
+           denote the byte they state.
+timeout    120
+test       t/002-constant-notations.c
+
+assertion  XBD.6.4-charmap-description.003
+anchor     basedefs/V1_chap06.html#6.4
+class      required
+since      1992
+says       A range line of symbolic names with an ellipsis defines the names
+           in between with consecutive encodings, carrying through the
+           numeric part.
+timeout    120
+test       t/003-range-line.c
+
+assertion  XBD.6.4-charmap-description.004
+anchor     basedefs/V1_chap06.html#6.4
+class      required
+since      1992
+says       A coded character value can have two symbolic names, and the
+           locale source can use either.
+timeout    120
+test       t/004-two-names-one-encoding.c
+
+assertion  XBD.6.4-charmap-description.005
+anchor     basedefs/V1_chap06.html#6.4
+class      required
+since      1992
+says       A charmap that redefines escape_char and comment_char before its
+           mapping lines is read in the new notation.
+timeout    120
+test       t/005-redefined-escape-comment.c
+
+assertion  XBD.6.4-charmap-description.006
+anchor     basedefs/V1_chap06.html#6.4
+class      required
+since      1992
+says       With mb_cur_max 2 and two-byte characters written as concatenated
+           constants, MB_CUR_MAX is 2, the two bytes decode as one character
+           in sequence, and a charmap without the declaration gives 1.
+timeout    120
+test       t/006-multibyte.c
+
+assertion  XBD.6.4-charmap-description.007
+anchor     basedefs/V1_chap06.html#6.4
+class      conditional
+when       XSI
+since      2001
+says       WIDTH (single names and ranges) and WIDTH_DEFAULT after the
+           mapping lines set the column widths wcwidth() reports for
+           printable characters; the default without WIDTH_DEFAULT is 1.
+note       wcwidth() is an XSI interface in this suite (see XSH.wcwidth);
+           that wcwidth() reflects the charmap widths is the reading taken
+           from XBD 3.75 and the WIDTH keyword.
+timeout    120
+test       t/007-width.c
+
+assertion  XBD.6.4-charmap-description.008
+anchor     basedefs/V1_chap06.html#6.4
+class      required
+since      1992
+says       A character after the escape character in a symbolic name stands
+           for itself: names written with an escaped greater-than sign or
+           escaped escape character are usable in the locale source.
+timeout    120
+test       t/008-escaped-angle-bracket.c

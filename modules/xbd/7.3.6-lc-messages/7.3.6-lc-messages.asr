@@ -1,0 +1,16 @@
+# XBD 7.3.6 LC_MESSAGES
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# creating locales is optional (POSIX2_LOCALEDEF): these tests report NOTINUSE
+# when the system does not claim it.
+
+assertion  XBD.7.3.6-lc-messages.001
+anchor     basedefs/V1_chap07.html#7.3.6
+class      required
+since      1992
+says       yesexpr and noexpr given to localedef are what
+           nl_langinfo(YESEXPR) and nl_langinfo(NOEXPR) return, and as
+           extended expressions they match the intended answers and not the
+           POSIX locale ones.
+timeout    120
+test       t/001-localedef-yesno.c

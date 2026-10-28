@@ -1,0 +1,74 @@
+# XBD 8.3 Other Environment Variables
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# TZ is observed through localtime_r() with times given as UTC calendar dates.
+# PATH is observed through the shell. The other variables of the section are
+# tested through the utility or function that uses them; see the .cov.
+
+assertion  XBD.8.3-other-environment-variables.001
+anchor     basedefs/V1_chap08.html#8.3
+class      required
+since      1988
+says       The TZ offset is hours with optional minutes and seconds: plain
+           or plus-signed is west, minus-signed east, leading zeros and
+           single digits read alike, zero and 24 hours are accepted.
+test       t/001-tz-offsets.c
+
+assertion  XBD.8.3-other-environment-variables.002
+anchor     basedefs/V1_chap08.html#8.3
+class      required
+since      2008
+says       TZ standard and daylight names come from the unquoted form
+           (letters) or the quoted form (letters, digits, plus, minus) and
+           tzname[] gives them without the quoting characters.
+test       t/002-tz-names.c
+
+assertion  XBD.8.3-other-environment-variables.003
+anchor     basedefs/V1_chap08.html#8.3
+class      required
+since      1988
+says       A TZ value naming only a standard time never applies daylight
+           saving time: the same offset and tm_isdst 0 in every month.
+test       t/003-tz-no-dst.c
+
+assertion  XBD.8.3-other-environment-variables.004
+anchor     basedefs/V1_chap08.html#8.3
+class      required
+since      1988
+says       The Mm.n.d date form names the d-th weekday of week n of month m,
+           week 5 meaning the last such day even if the month has only four,
+           at 02:00 local time.
+test       t/004-tz-month-week-day.c
+
+assertion  XBD.8.3-other-environment-variables.005
+anchor     basedefs/V1_chap08.html#8.3
+class      required
+since      1988
+says       A TZ rule time may carry minutes and seconds and be as large as
+           167 hours.
+test       t/005-tz-rule-time-forms.c
+
+assertion  XBD.8.3-other-environment-variables.006
+anchor     basedefs/V1_chap08.html#8.3
+class      required
+since      1988
+says       A PATH prefix without a trailing slash gets one inserted before
+           the file name, one with a trailing slash works, and the list is
+           searched from the beginning.
+test       t/006-path-slash-inserted.sh
+
+assertion  XBD.8.3-other-environment-variables.007
+anchor     basedefs/V1_chap08.html#8.3
+class      required
+since      1988
+says       A file of the sought name without execute permission in an
+           earlier PATH directory is passed over.
+test       t/007-path-skips-non-executable.sh
+
+assertion  XBD.8.3-other-environment-variables.008
+anchor     basedefs/V1_chap08.html#8.3
+class      required
+since      1988
+says       A zero-length PATH prefix (leading, trailing or doubled colon)
+           stands for the working directory.
+test       t/008-path-zero-length-prefix.sh

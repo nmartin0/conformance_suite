@@ -1,0 +1,137 @@
+# XBD 7.3.2 LC_COLLATE
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The POSIX-locale tests (001 to 003) are always run; the others build a
+# locale. creating locales is optional (POSIX2_LOCALEDEF): these tests report
+# NOTINUSE when the system does not claim it.
+
+assertion  XBD.7.3.2-lc-collate.001
+anchor     basedefs/V1_chap07.html#7.3.2
+class      required
+since      1992
+says       In the POSIX locale any two distinct bytes collate in a
+           consistent total order that strcoll(), wcscoll() and strxfrm()
+           agree on, and bytes that are neither portable members nor
+           controls collate after the portable members.
+test       t/001-posix-total-order.c
+
+assertion  XBD.7.3.2-lc-collate.002
+anchor     basedefs/V1_chap07.html#7.3.2
+class      required
+since      1992
+says       When the portable characters are encoded as ASCII the POSIX
+           collation sequence is the order of the byte values, for strcoll()
+           and wcscoll().
+test       t/002-posix-ascending.c
+
+assertion  XBD.7.3.2-lc-collate.003
+anchor     basedefs/V1_chap07.html#7.3.2
+class      required
+since      1992
+says       The POSIX locale has no multi-character collating elements: a
+           bracket expression holding a collating symbol of two characters
+           is invalid, while one holding a single character is valid.
+test       t/003-posix-no-multichar-element.c
+
+assertion  XBD.7.3.2-lc-collate.004
+anchor     basedefs/V1_chap07.html#7.3.2
+class      required
+since      1992
+says       An order_start list ending with UNDEFINED puts the listed
+           characters first, in the listed order, and all others after them
+           in ascending order of encoded value.
+timeout    120
+test       t/004-localedef-undefined.c
+
+assertion  XBD.7.3.2-lc-collate.005
+anchor     basedefs/V1_chap07.html#7.3.2
+class      required
+since      1992
+says       With two weights per character the second weight is compared from
+           the start under forward and from the end under backward, and only
+           when the first weights leave the strings equal.
+timeout    120
+test       t/005-localedef-forward-backward.c
+
+assertion  XBD.7.3.2-lc-collate.006
+anchor     basedefs/V1_chap07.html#7.3.2
+class      required
+since      1992
+says       A multi-character collating element collates as one unit at its
+           place in the order, and a bracket expression can name it as a
+           collating symbol, but not a string that is not an element.
+timeout    120
+test       t/006-localedef-collating-element.c
+
+assertion  XBD.7.3.2-lc-collate.007
+anchor     basedefs/V1_chap07.html#7.3.2
+class      required
+since      1992
+says       A character whose first weight is IGNORE is left out of the
+           first-level comparison but counts on the second weight.
+timeout    120
+test       t/007-localedef-ignore.c
+
+assertion  XBD.7.3.2-lc-collate.008
+anchor     basedefs/V1_chap07.html#7.3.2
+class      required
+since      2024
+says       A collation sequence that does not order all characters totally
+           makes localedef warn and exit with status 1; with -c the locale
+           is made and two characters sharing their only weight collate as
+           equal.
+timeout    120
+test       t/008-localedef-not-total.c
+
+assertion  XBD.7.3.2-lc-collate.009
+anchor     basedefs/V1_chap07.html#7.3.2
+class      required
+since      1992
+says       With the position directive, elements subject to IGNORE count by
+           their position: the string whose first non-ignored element
+           follows fewer ignored ones collates first; without it the strings
+           are equal.
+timeout    120
+test       t/009-localedef-position.c
+
+assertion  XBD.7.3.2-lc-collate.010
+anchor     basedefs/V1_chap07.html#7.3.2
+class      required
+since      1992
+says       An ellipsis in a collation order ranks the characters between its
+           neighbours (or below the next, or above the previous, when
+           initial or trailing) by encoded value; a declared collating
+           symbol placed in the order has no effect; order_start without
+           operands is one forward level.
+timeout    120
+test       t/010-localedef-ellipsis-symbol.c
+
+assertion  XBD.7.3.2-lc-collate.011
+anchor     basedefs/V1_chap07.html#7.3.2
+class      required
+since      1992
+says       A collation order without UNDEFINED that leaves characters
+           unlisted makes localedef warn (status 1); with -c the unlisted
+           characters collate after the listed ones in ascending encoded
+           value.
+timeout    120
+test       t/011-localedef-no-undefined.c
+
+assertion  XBD.7.3.2-lc-collate.012
+anchor     basedefs/V1_chap07.html#7.3.2
+class      required
+since      1992
+says       An order_start with more operands than {COLL_WEIGHTS_MAX} makes
+           localedef issue a warning (status 1 with -c).
+timeout    120
+test       t/012-localedef-too-many-weights.c
+
+assertion  XBD.7.3.2-lc-collate.013
+anchor     basedefs/V1_chap07.html#7.3.2
+class      required
+since      1992
+says       A weight written as two concatenated characters maps one
+           character to two collating elements, and an empty operand stands
+           for the collating element itself.
+timeout    120
+test       t/013-localedef-one-to-many.c

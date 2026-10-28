@@ -1,0 +1,93 @@
+# XBD 7.3.5 LC_TIME
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# creating locales is optional (POSIX2_LOCALEDEF): these tests report NOTINUSE
+# when the system does not claim it.
+
+assertion  XBD.7.3.5-lc-time.001
+anchor     basedefs/V1_chap07.html#7.3.5
+class      required
+since      2024
+says       The weekday and month name lists given to localedef (abday, day,
+           abmon, mon, ab_alt_mon, alt_mon) are the strings %a, %A, %b, %B,
+           %Ob and %OB write, from Sunday and from January.
+timeout    120
+test       t/001-localedef-names.c
+
+assertion  XBD.7.3.5-lc-time.002
+anchor     basedefs/V1_chap07.html#7.3.5
+class      required
+since      1992
+says       d_t_fmt, d_fmt, t_fmt, am_pm and t_fmt_ampm given to localedef
+           are what %c, %x, %X, %p and %r write; an escape sequence for a
+           tab becomes a tab; the meridiem string follows the hour.
+timeout    120
+test       t/002-localedef-formats.c
+
+assertion  XBD.7.3.5-lc-time.003
+anchor     basedefs/V1_chap07.html#7.3.5
+class      required
+since      1992
+says       alt_digits supplies the symbols the %O modifier writes for
+           numeric conversions, entry n for the value n, while unmodified
+           conversions write ordinary digits.
+timeout    120
+test       t/003-localedef-alt-digits.c
+
+assertion  XBD.7.3.5-lc-time.004
+anchor     basedefs/V1_chap07.html#7.3.5
+class      required
+since      1992
+says       With both am_pm strings and t_fmt_ampm empty, %p writes nothing,
+           %r writes nothing or a 24-hour time, and the 24-hour formats
+           still work.
+timeout    120
+test       t/004-localedef-no-12-hour.c
+
+assertion  XBD.7.3.5-lc-time.005
+anchor     basedefs/V1_chap07.html#7.3.5
+class      required
+since      1992
+says       The date utility writes the weekday and month names of the locale
+           named in LC_ALL.
+timeout    120
+test       t/005-localedef-date-utility.c
+
+assertion  XBD.7.3.5-lc-time.006
+anchor     basedefs/V1_chap07.html#7.3.5
+class      conditional
+when       XSI
+since      1992
+says       strptime() accepts the locale weekday and month names for %A, %a,
+           %B and %b and its meridiem strings for %p.
+note       strptime() is an XSI interface in this suite (see XSH.strptime).
+timeout    120
+test       t/006-localedef-strptime.c
+
+assertion  XBD.7.3.5-lc-time.007
+anchor     basedefs/V1_chap07.html#7.3.5
+class      required
+since      2024
+says       nl_langinfo() gives the strings given to localedef for the
+           weekday, month, alternative month, format and meridiem items.
+timeout    120
+test       t/007-localedef-langinfo.c
+
+assertion  XBD.7.3.5-lc-time.008
+anchor     basedefs/V1_chap07.html#7.3.5
+class      required
+since      1992
+says       With both meridiem strings empty nl_langinfo(AM_STR) and
+           nl_langinfo(PM_STR) give the empty string.
+timeout    120
+test       t/008-localedef-langinfo-empty-ampm.c
+
+assertion  XBD.7.3.5-lc-time.009
+anchor     basedefs/V1_chap07.html#7.3.5
+class      required
+since      1992
+says       An era description with era_d_fmt, era_t_fmt, era_d_t_fmt and
+           alt_digits is what %EC, %Ey, %Ex, %EX, %Ec and the ERA, ERA_*_FMT
+           and ALT_DIGITS items give.
+timeout    120
+test       t/009-localedef-era.c

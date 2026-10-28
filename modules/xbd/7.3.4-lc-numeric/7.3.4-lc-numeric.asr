@@ -1,0 +1,41 @@
+# XBD 7.3.4 LC_NUMERIC
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# creating locales is optional (POSIX2_LOCALEDEF): these tests report NOTINUSE
+# when the system does not claim it.
+
+assertion  XBD.7.3.4-lc-numeric.001
+anchor     basedefs/V1_chap07.html#7.3.4
+class      required
+since      1992
+says       decimal_point, thousands_sep and grouping given to localedef
+           reach the localeconv() members of the same name.
+timeout    120
+test       t/001-localedef-localeconv.c
+
+assertion  XBD.7.3.4-lc-numeric.002
+anchor     basedefs/V1_chap07.html#7.3.4
+class      required
+since      1992
+says       printf-family output uses the locale radix and the %' flag groups
+           the integer digits with the locale separator, here 3 then 2.
+timeout    120
+test       t/002-localedef-printf.c
+
+assertion  XBD.7.3.4-lc-numeric.003
+anchor     basedefs/V1_chap07.html#7.3.4
+class      required
+since      1992
+says       strtod() reads the locale radix as the decimal point and not the
+           period when the radix is a comma.
+timeout    120
+test       t/003-localedef-strtod.c
+
+assertion  XBD.7.3.4-lc-numeric.004
+anchor     basedefs/V1_chap07.html#7.3.4
+class      required
+since      1992
+says       nl_langinfo(RADIXCHAR) and nl_langinfo(THOUSEP) give the
+           decimal_point and thousands_sep strings.
+timeout    120
+test       t/004-localedef-langinfo.c

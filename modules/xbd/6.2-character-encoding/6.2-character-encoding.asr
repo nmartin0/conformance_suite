@@ -1,0 +1,49 @@
+# XBD 6.2 Character Encoding
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Locale-enumerating tests take names from `locale -a`; the POSIX locale is
+# always included.
+
+assertion  XBD.6.2-character-encoding.001
+anchor     basedefs/V1_chap06.html#6.2
+class      required
+since      1988
+says       The POSIX locale has 256 single-byte characters: MB_CUR_MAX is 1,
+           every byte value decodes, the 256 characters have distinct codes
+           and each encodes back to its byte.
+test       t/001-posix-256.c
+
+assertion  XBD.6.2-character-encoding.002
+anchor     basedefs/V1_chap06.html#6.2
+class      required
+since      1988
+says       In every locale the portable characters leave the shift state
+           initial after decoding or encoding.
+test       t/002-initial-state.c
+
+assertion  XBD.6.2-character-encoding.003
+anchor     basedefs/V1_chap06.html#6.2
+class      required
+since      1988
+says       The zero byte is the null character whatever the shift state, and
+           never part of another character: after a byte that starts a
+           longer character it ends the sequence as an error or stands
+           alone.
+test       t/003-zero-byte.c
+
+assertion  XBD.6.2-character-encoding.004
+anchor     basedefs/V1_chap06.html#6.2
+class      required
+since      1988
+says       The bytes of period, slash, newline and carriage-return are never
+           part of another character in any locale.
+test       t/004-four-bytes-alone.c
+
+assertion  XBD.6.2-character-encoding.005
+anchor     basedefs/V1_chap06.html#6.2
+class      required
+since      1988
+says       In every locale MB_CUR_MAX is at least 1 and at most MB_LEN_MAX,
+           and no character decoded or encoded is longer than MB_CUR_MAX
+           bytes.
+test       t/005-mb-cur-max.c

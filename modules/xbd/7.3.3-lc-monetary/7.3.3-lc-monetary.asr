@@ -1,0 +1,53 @@
+# XBD 7.3.3 LC_MONETARY
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# creating locales is optional (POSIX2_LOCALEDEF): these tests report NOTINUSE
+# when the system does not claim it.
+
+assertion  XBD.7.3.3-lc-monetary.001
+anchor     basedefs/V1_chap07.html#7.3.3
+class      required
+since      1992
+says       Every LC_MONETARY keyword given to localedef reaches the
+           localeconv() member of the same name with its value intact.
+timeout    120
+test       t/001-localedef-keywords.c
+
+assertion  XBD.7.3.3-lc-monetary.002
+anchor     basedefs/V1_chap07.html#7.3.3
+class      required
+since      1992
+says       Empty strings and integer keywords set to -1 give the empty
+           string and {CHAR_MAX} through localeconv().
+timeout    120
+test       t/002-localedef-unavailable.c
+
+assertion  XBD.7.3.3-lc-monetary.003
+anchor     basedefs/V1_chap07.html#7.3.3
+class      required
+since      1992
+says       strfmon() formats with the locale: local symbol, radix, grouping,
+           fraction digits and signs for %n, the international symbol and
+           its fraction digits for %i.
+timeout    120
+test       t/003-localedef-strfmon.c
+
+assertion  XBD.7.3.3-lc-monetary.004
+anchor     basedefs/V1_chap07.html#7.3.3
+class      required
+since      1992
+says       nl_langinfo(CRNCYSTR) gives a minus sign and the symbol when the
+           symbol precedes the value and a plus sign and the symbol when it
+           succeeds.
+timeout    120
+test       t/004-localedef-crncystr.c
+
+assertion  XBD.7.3.3-lc-monetary.005
+anchor     basedefs/V1_chap07.html#7.3.3
+class      required
+since      1992
+says       localedef does not accept a monetary category whose sign
+           positions and sign strings cannot tell negative from positive
+           values, for the local and the international forms.
+timeout    120
+test       t/005-localedef-invalid-signs.c

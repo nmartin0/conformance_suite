@@ -1,0 +1,65 @@
+# XBD 8.2 Internationalization Variables
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Probe locale X is made with localedef and differs from the POSIX locale in
+# every category (t/xloc.h), so which of the two a category follows can be
+# observed. creating locales is optional (POSIX2_LOCALEDEF): these tests
+# report NOTINUSE when the system does not claim it.
+
+assertion  XBD.8.2-internationalization-variables.001
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+since      1992
+says       A non-null LC_ALL decides every category over every LC_* variable
+           and over LANG.
+timeout    120
+test       t/001-lc-all-first.c
+
+assertion  XBD.8.2-internationalization-variables.002
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+since      1992
+says       With LC_ALL unset or null, a non-null LC_x decides its category
+           alone and over LANG, and the other categories follow LANG.
+timeout    120
+test       t/002-category-variable.c
+
+assertion  XBD.8.2-internationalization-variables.003
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+since      1992
+says       LANG decides every category for which neither LC_ALL nor the
+           category variable is non-null; unset and null variables are
+           alike.
+timeout    120
+test       t/003-lang-default.c
+
+assertion  XBD.8.2-internationalization-variables.004
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+since      1992
+says       LC_ALL naming the C or POSIX locale gives every category the
+           POSIX behaviour whatever LANG and the category variables name.
+timeout    120
+test       t/004-lc-all-posix.c
+
+assertion  XBD.8.2-internationalization-variables.005
+anchor     basedefs/V1_chap08.html#8.2
+class      conditional
+when       XSI
+since      1988
+says       In an NLSPATH template %% is one percent sign and %t and %c are
+           empty in the POSIX locale, so catopen() finds the catalog at the
+           expanded pathname.
+note       catalogs are made by gencat; the colon rules, %N and %L are
+           tested by XSH.catopen.006 to 011.
+test       t/005-nlspath-conversions.c
+
+assertion  XBD.8.2-internationalization-variables.006
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+since      1992
+says       The date utility takes its weekday name from LC_ALL, then
+           LC_TIME, then LANG.
+timeout    120
+test       t/006-date-precedence.c
