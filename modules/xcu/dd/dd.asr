@@ -1,0 +1,258 @@
+# XCU dd
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Inputs are regular files (reads return whole blocks) except where a test
+# is about pipes. Tests run with LC_ALL=C. The statistics lines on standard
+# error are matched only in the formats the page fixes for the POSIX
+# locale; other diagnostics are never compared. Block counts of skipped
+# blocks, count=0, cbs missing or zero, repeated non-conv operands and the
+# effect of bad size expressions are unspecified and not tested.
+
+assertion  XCU.dd.001
+anchor     utilities/dd.html#DESCRIPTION
+anchor     utilities/dd.html#OPERANDS
+class      required
+since      1992
+says       if=file and of=file copy the input file to the output file byte
+           for byte (including NUL and high bytes) with the default block
+           sizes, and an existing output file longer than the input is
+           truncated to the copied data when neither seek nor notrunc is given.
+test       t/001-if-of.sh
+
+assertion  XCU.dd.002
+anchor     utilities/dd.html#OPERANDS
+anchor     utilities/dd.html#STDIN
+anchor     utilities/dd.html#STDOUT
+class      required
+since      1992
+says       Without if= the input is standard input and without of= the output
+           is standard output, and nothing but the copied data goes to
+           standard output.
+test       t/002-stdin-stdout.sh
+
+assertion  XCU.dd.003
+anchor     utilities/dd.html#STDERR
+anchor     utilities/dd.html#EXIT STATUS
+class      required
+since      1992
+says       On success dd exits with status zero and writes on standard error,
+           in the POSIX locale, one line N+M records in and one line N+M
+           records out, where N counts whole blocks and M partial blocks,
+           with the default block size of 512 bytes.
+test       t/003-statistics.sh
+
+assertion  XCU.dd.004
+anchor     utilities/dd.html#DESCRIPTION
+anchor     utilities/dd.html#OPERANDS
+class      required
+since      1992
+says       ibs= and obs= set the input and output block sizes separately:
+           input is read in ibs blocks, collected and written in full obs
+           blocks with a shorter last block, and the record counts follow
+           those sizes.
+test       t/004-ibs-obs.sh
+
+assertion  XCU.dd.005
+anchor     utilities/dd.html#OPERANDS
+class      required
+since      1992
+says       bs= sets both block sizes and supersedes ibs= and obs= given
+           before it.
+test       t/005-bs.sh
+
+assertion  XCU.dd.006
+anchor     utilities/dd.html#OPERANDS
+class      required
+since      1992
+says       Sizes may be written as a decimal number, with the suffix k (times
+           1024) or b (times 512), or as two or more such numbers joined by
+           x giving their product.
+test       t/006-size-expressions.sh
+
+assertion  XCU.dd.007
+anchor     utilities/dd.html#OPERANDS
+class      required
+since      1992
+says       count=n copies only n input blocks.
+test       t/007-count.sh
+
+assertion  XCU.dd.008
+anchor     utilities/dd.html#OPERANDS
+anchor     utilities/dd.html#STDIN
+class      required
+since      1992
+says       skip=n skips n input blocks of the input block size before
+           copying, for a file named by if= and for a regular file on standard
+           input, and combines with count=.
+test       t/008-skip.sh
+
+assertion  XCU.dd.009
+anchor     utilities/dd.html#OPERANDS
+class      required
+since      1992
+says       On a non-seekable input (a pipe) skip=n reads and discards n
+           blocks and copies the rest.
+test       t/009-skip-pipe.sh
+
+assertion  XCU.dd.010
+anchor     utilities/dd.html#OPERANDS
+class      required
+since      1992
+says       seek=n skips n output blocks of the output block size from the
+           start of the output file; without notrunc the blocks skipped over
+           are kept and nothing after the written data is kept, so a longer
+           old file is shortened.
+test       t/010-seek.sh
+
+assertion  XCU.dd.011
+anchor     utilities/dd.html#OPERANDS
+class      required
+since      1992
+says       With an empty input and seek beyond the old end of the output file
+           (or a missing output file) the output size becomes the seek
+           offset; with an empty input and seek short of the old end the file
+           is shortened to the seek offset.
+test       t/011-seek-empty.sh
+
+assertion  XCU.dd.012
+anchor     utilities/dd.html#OPERANDS
+class      required
+since      1992
+says       conv=notrunc leaves the old contents of the output file that dd
+           does not write, with or without seek=.
+test       t/012-notrunc.sh
+
+assertion  XCU.dd.013
+anchor     utilities/dd.html#OPERANDS
+anchor     utilities/dd.html#ENVIRONMENT VARIABLES
+class      required
+since      1992
+says       conv=lcase maps uppercase letters to lowercase and conv=ucase maps
+           lowercase to uppercase in the POSIX locale, leaving every other
+           byte unchanged, independently of the input block boundaries.
+test       t/013-case.sh
+
+assertion  XCU.dd.014
+anchor     utilities/dd.html#DESCRIPTION
+anchor     utilities/dd.html#OPERANDS
+class      required
+since      1992
+says       conv=swab swaps every pair of input bytes and leaves a final odd
+           byte of the input in place.
+test       t/014-swab.sh
+
+assertion  XCU.dd.015
+anchor     utilities/dd.html#DESCRIPTION
+anchor     utilities/dd.html#OPERANDS
+class      required
+since      1992
+says       conv=sync pads a short input block with NUL bytes up to the input
+           block size, the padding is processed and written like input, and
+           with block or unblock the padding is spaces instead; a short block
+           is counted as a partial input block.
+test       t/015-sync.sh
+
+assertion  XCU.dd.016
+anchor     utilities/dd.html#OPERANDS
+anchor     utilities/dd.html#STDERR
+class      required
+since      1992
+says       conv=block with cbs=n turns each newline-terminated or EOF-
+           terminated record into a fixed record of n bytes: the newline is
+           dropped, short records are padded with spaces, long ones are
+           truncated, independently of the input block size; the number of
+           truncated records is reported on standard error in the form N
+           truncated record or N truncated records.
+test       t/016-block.sh
+
+assertion  XCU.dd.017
+anchor     utilities/dd.html#OPERANDS
+class      required
+since      1992
+says       conv=unblock with cbs=n takes n bytes at a time (the rest of the
+           input if fewer), deletes trailing spaces and appends a newline,
+           independently of the input block size.
+test       t/017-unblock.sh
+
+assertion  XCU.dd.018
+anchor     utilities/dd.html#OPERANDS
+class      required
+since      1992
+says       Several conversions can be given as a comma-separated list in one
+           conv= operand or in several conv= operands, and all apply.
+test       t/018-conv-lists.sh
+
+assertion  XCU.dd.019
+anchor     utilities/dd.html#DESCRIPTION
+anchor     utilities/dd.html#OPERANDS
+anchor     utilities/dd.html#STDERR
+class      required
+since      1992
+says       With bs= and only the conversions noerror, notrunc or sync, dd
+           copies the input unchanged (here without error) and the counts
+           reflect the block size; notrunc keeps the tail of a longer old
+           output file.
+test       t/019-bs-noerror-notrunc.sh
+
+assertion  XCU.dd.020
+anchor     utilities/dd.html#OPERANDS
+anchor     utilities/dd.html#DESCRIPTION
+class      required
+since      2024
+says       iflags=fullblock makes dd read until a full input block (or end of
+           file) is obtained, so a slow pipe giving short reads still yields
+           full blocks, and count= then counts full blocks.
+test       t/020-fullblock.sh
+
+assertion  XCU.dd.021
+anchor     utilities/dd.html#EXIT STATUS
+anchor     utilities/dd.html#CONSEQUENCES OF ERRORS
+class      required
+since      1992
+says       When the input file cannot be opened or the output file cannot be
+           created, dd writes a diagnostic message on standard error and
+           exits with a status above zero.
+test       t/021-errors.sh
+
+assertion  XCU.dd.022
+anchor     utilities/dd.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       conv=ebcdic with cbs behaves as block followed by conversion of
+           the bytes to EBCDIC by the standard table, and conv=ibm does so
+           with the IBM table, whose entries for the characters ^ and ~
+           differ from the standard table.
+test       t/022-ebcdic-ibm.sh
+
+assertion  XCU.dd.023
+anchor     utilities/dd.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       conv=ascii with cbs behaves as unblock after converting the bytes
+           from EBCDIC to ASCII by the inverse of the standard table.
+test       t/023-ascii.sh
+
+assertion  XCU.dd.024
+anchor     utilities/dd.html#OPERANDS
+anchor     utilities/dd.html#CONSEQUENCES OF ERRORS
+class      untestable
+since      1992
+says       With conv=noerror an input error writes a diagnostic and the block
+           counts and the copy goes on (the block omitted, or replaced by NUL
+           bytes with sync); without noerror the partial output block is
+           written and the copy stops.
+reason     A read error on the input cannot be produced portably from
+           standard utilities and a regular file.
+
+assertion  XCU.dd.025
+anchor     utilities/dd.html#ASYNCHRONOUS EVENTS
+class      untestable
+since      2001
+says       On SIGINT dd stops, writes status information to standard error and
+           terminates as if by the default action; other signals take their
+           default action except that implementation-defined non-job-control
+           signals may only report status.
+reason     Delivering a signal at a chosen point of a copy is not portably
+           possible from scripts without timing assumptions.
