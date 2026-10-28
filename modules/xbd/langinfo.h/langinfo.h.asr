@@ -54,3 +54,11 @@ note       disputed (Q-169): as for the other items, the page does not say the
            constants were added in Issue 8.
 test       t/004-altmon-distinct.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.langinfo.h.005
+anchor     basedefs/langinfo.h.html#DESCRIPTION/locale_t
+class      required
+since      2008
+says       <langinfo.h> defines the types locale_t, nl_item.
+test       t/005-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

@@ -100,3 +100,16 @@ class      required
 since      1992
 says       No operand or - reads standard input, several files are written in turn each with its own header, an unopenable file gives a diagnostic and nonzero status, and -r suppresses the diagnostic.
 test       t/012-operands-errors.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.pr.013
+anchor     utilities/pr.html#ENVIRONMENT VARIABLES
+anchor     utilities/pr.html#STDOUT
+class      required
+says       The time in the page header of pr is the modification time of the
+           file written in the zone that TZ names.
+timeout    60
+test       t/013-timezone-header.sh

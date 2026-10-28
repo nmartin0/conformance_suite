@@ -34,3 +34,30 @@ note       Commands that msgctl(), semctl() and shmctl() tell apart
            (Q-165).
 test       t/002-commands.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_ipc.h.003
+anchor     basedefs/sys_ipc.h.html#DESCRIPTION/ipc_perm
+class      conditional
+when       XSI
+says       <sys/ipc.h> defines struct ipc_perm as a complete type with
+           at least the members uid (uid_t), gid (gid_t), cuid (uid_t),
+           cgid (gid_t), mode (mode_t).
+test       t/003-struct-ipc_perm.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_ipc.h.004
+anchor     basedefs/sys_ipc.h.html#DESCRIPTION/uid_t
+class      conditional
+when       XSI
+says       <sys/ipc.h> defines the types uid_t, gid_t, mode_t, key_t.
+test       t/004-types-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_ipc.h.005
+anchor     basedefs/sys_ipc.h.html#DESCRIPTION/ftok
+class      conditional
+when       XSI
+says       <sys/ipc.h> declares ftok() with the prototypes the page
+           gives.
+test       t/005-functions-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

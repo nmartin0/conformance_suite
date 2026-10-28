@@ -14,3 +14,32 @@ says       ST_RDONLY and ST_NOSUID are nonzero and share no bits.
 note       f_flag is a bit mask of these values (Q-165).
 test       t/001-f-flag.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_statvfs.h.002
+anchor     basedefs/sys_statvfs.h.html#DESCRIPTION/statvfs
+class      required
+since      2008
+says       <sys/statvfs.h> defines struct statvfs as a complete type
+           with at least the members f_bsize (unsigned long), f_frsize
+           (unsigned long), f_blocks (fsblkcnt_t), f_bfree (fsblkcnt_t),
+           f_bavail (fsblkcnt_t), f_files (fsfilcnt_t), f_ffree
+           (fsfilcnt_t), f_favail (fsfilcnt_t), f_fsid (unsigned long),
+           f_flag (unsigned long), f_namemax (unsigned long).
+test       t/002-struct-statvfs.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_statvfs.h.003
+anchor     basedefs/sys_statvfs.h.html#DESCRIPTION/fsblkcnt_t
+class      required
+since      2008
+says       <sys/statvfs.h> defines the types fsblkcnt_t, fsfilcnt_t.
+test       t/003-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_statvfs.h.004
+anchor     basedefs/sys_statvfs.h.html#DESCRIPTION/fstatvfs
+class      required
+says       <sys/statvfs.h> declares fstatvfs(), statvfs() with the
+           prototypes the page gives.
+test       t/004-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

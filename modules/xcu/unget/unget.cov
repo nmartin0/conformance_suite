@@ -19,13 +19,13 @@ OPERANDS:9e844f1f                XCU.unget.003
 STDIN:1f0378ef                   XCU.unget.003
 STDIN:36b9af0b                   XCU.unget.003
 INPUT_FILES:6d8b8f2d             XCU.unget.001
-ENVIRONMENT_VARIABLES:29cef3dd   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:29cef3dd  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
+ENVIRONMENT_VARIABLES:8aece102  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
+ENVIRONMENT_VARIABLES:b96c5038  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
 ENVIRONMENT_VARIABLES:8586e6ac   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:b55e60b5   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:fb479014  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:b55e60b5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ASYNCHRONOUS_EVENTS:d92f27bd     none  default
 STDOUT:c3a7ef49                  XCU.unget.001
 STDOUT:c8400ab6                  XCU.unget.001

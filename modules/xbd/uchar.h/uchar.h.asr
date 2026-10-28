@@ -12,3 +12,20 @@ says       char16_t is the same type as uint_least16_t and char32_t is the same
            type as uint_least32_t.
 test       t/001-char-types.c
 nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.uchar.h.002
+anchor     basedefs/uchar.h.html#DESCRIPTION/mbstate_t
+class      required
+since      2024
+says       <uchar.h> defines the types mbstate_t, size_t.
+test       t/002-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.uchar.h.003
+anchor     basedefs/uchar.h.html#DESCRIPTION/c16rtomb
+class      required
+since      2024
+says       <uchar.h> declares c16rtomb(), c32rtomb(), mbrtoc16(),
+           mbrtoc32() with the prototypes the page gives.
+test       t/003-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

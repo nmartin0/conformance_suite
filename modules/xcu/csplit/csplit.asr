@@ -75,3 +75,26 @@ class      required
 since      1992
 says       A file operand of - means standard input.
 test       t/008-standard-input.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.csplit.009
+anchor     utilities/csplit.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       A bracket expression in a csplit regular expression can name a
+           collating element that the locale named by LC_COLLATE defines.
+timeout    120
+test       t/009-locale-collate-element.sh
+
+assertion  XCU.csplit.010
+anchor     utilities/csplit.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       A character class in a csplit regular expression is the class of
+           the locale that LC_CTYPE names, with LC_ALL, LANG and a null
+           LC_ALL treated as XBD 8.2 says.
+timeout    120
+test       t/010-locale-ctype-class.sh

@@ -13,3 +13,19 @@ says       jmp_buf and sigjmp_buf are array types: an object of either type
            pointer).
 test       t/001-array-types.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.setjmp.h.002
+anchor     basedefs/setjmp.h.html#DESCRIPTION/longjmp
+class      required
+says       <setjmp.h> declares longjmp(), siglongjmp() with the
+           prototypes the page gives.
+test       t/002-functions-jump.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.setjmp.h.003
+anchor     basedefs/setjmp.h.html#DESCRIPTION/setjmp
+class      required
+says       <setjmp.h> declares setjmp(), sigsetjmp() with the prototypes
+           the page gives, or defines each as a macro.
+test       t/003-functions-save.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

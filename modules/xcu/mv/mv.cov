@@ -52,14 +52,14 @@ OPERANDS:07e50b8d            XCU.mv.003
 STDIN:60bb9109               XCU.mv.005 XCU.mv.006
 STDIN:59ec88a4               todo  not covered by a test yet
 INPUT_FILES:ddc9d613         XCU.mv.011
-ENVIRONMENT_VARIABLES:6db846c0 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:5d64a535 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:5293788d todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:1bda213e todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:6db846c0  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  XCU.mv.015 XCU.mv.016 XCU.mv.017
+ENVIRONMENT_VARIABLES:8aece102  XCU.mv.015 XCU.mv.016 XCU.mv.017
+ENVIRONMENT_VARIABLES:b96c5038  XCU.mv.015 XCU.mv.016 XCU.mv.017
+ENVIRONMENT_VARIABLES:5d64a535  partial XCU.mv.016  # multi-character collating elements only; equivalence classes are not exercised
+ENVIRONMENT_VARIABLES:5293788d  XCU.mv.017
+ENVIRONMENT_VARIABLES:1bda213e  XCU.mv.015
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ASYNCHRONOUS_EVENTS:d92f27bd todo  XCU 1.4 default for signals and errors is not exercised
 STDOUT:3f472296              none  section says nothing is needed (XCU 1.4 defaults)
 STDERR:01a73ce1              XCU.mv.005 XCU.mv.006

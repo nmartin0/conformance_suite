@@ -85,3 +85,21 @@ note       XSH CMPLX() says the macros behave as if built with _Imaginary_I,
            only where the compiler claims IEC 60559 floating point.
 test       t/007-cmplx.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.complex.h.008
+anchor     basedefs/complex.h.html#DESCRIPTION/cabs
+class      required
+says       <complex.h> declares cabs(), cabsf(), cabsl(), cacos(),
+           cacosf(), cacosh(), cacoshf(), cacoshl(), cacosl(), carg(),
+           cargf(), cargl(), casin(), casinf(), casinh(), casinhf(),
+           casinhl(), casinl(), catan(), catanf(), catanh(), catanhf(),
+           catanhl(), catanl(), ccos(), ccosf(), ccosh(), ccoshf(),
+           ccoshl(), ccosl(), cexp(), cexpf(), cexpl(), cimag(),
+           cimagf(), cimagl(), clog(), clogf(), clogl(), conj(),
+           conjf(), conjl(), cpow(), cpowf(), cpowl(), cproj(),
+           cprojf(), cprojl(), creal(), crealf(), creall(), csin(),
+           csinf(), csinh(), csinhf(), csinhl(), csinl(), csqrt(),
+           csqrtf(), csqrtl(), ctan(), ctanf(), ctanh(), ctanhf(),
+           ctanhl(), ctanl() with the prototypes the page gives.
+test       t/008-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

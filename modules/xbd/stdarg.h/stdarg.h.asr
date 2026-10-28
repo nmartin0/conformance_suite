@@ -48,3 +48,16 @@ says       On an XSI system va_arg() may read a pointer argument as a pointer of
            any other type, and the pointer converted back is the original.
 test       t/005-va-arg-pointers-xsi.c
 nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdarg.h.006
+anchor     basedefs/stdarg.h.html#DESCRIPTION/va_arg
+class      required
+since      1988
+says       A variable argument read with va_arg as the corresponding
+           signed or unsigned type gives the same value when it is
+           representable in both, and a void pointer and a character
+           pointer read as each other give the same pointer.
+note       Only the exceptions to the compatibility rule that the page
+           lists are used, with small positive values.
+test       t/006-va-arg-compatible.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

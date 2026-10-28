@@ -6,9 +6,9 @@
 # it means; that behaviour is tested on the function page that uses it.
 #
 DESCRIPTION:26bdebae        partial XBD.fcntl.h.008  # presence of the struct and members; member types: Tier 0
-DESCRIPTION:cd0926b8       todo  Tier 0 header check (generator)
-DESCRIPTION:43d1ad34       todo  Tier 0 header check (generator)
-DESCRIPTION:5d5c6ec0       todo  Tier 0 header check (generator)
+DESCRIPTION:cd0926b8        XBD.fcntl.h.017
+DESCRIPTION:43d1ad34        XBD.fcntl.h.017
+DESCRIPTION:5d5c6ec0        XBD.fcntl.h.018
 DESCRIPTION:ce9d5e31        partial XBD.fcntl.h.006  # the F_OFD_* constants only; the rest: Tier 0 header check (generator)
 DESCRIPTION:b1d4f256         XBD.fcntl.h.009
 DESCRIPTION:eeab1313       none  describes the constant; its behaviour is on the function page
@@ -38,10 +38,10 @@ DESCRIPTION:7c886790       none  describes the constant; its behaviour is on the
 DESCRIPTION:b0998705       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:8968191e       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:897b4216        XBD.fcntl.h.008
-DESCRIPTION:fe2d8cff       todo  Tier 0 header check (generator)
+DESCRIPTION:fe2d8cff        XBD.fcntl.h.008
 DESCRIPTION:b26ed8fc       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:48e7dd25       none  describes the constant; its behaviour is on the function page
-DESCRIPTION:6306eeac       todo  Tier 0 header check (generator)
+DESCRIPTION:6306eeac        XBD.fcntl.h.019
 DESCRIPTION:ba3aa83c        partial XBD.fcntl.h.004 XBD.fcntl.h.005 XBD.fcntl.h.007  # O_CLOEXEC, O_CLOFORK, O_TTY_INIT only; the rest: Tier 0 header check
 DESCRIPTION:f8c1c171.2       XBD.fcntl.h.011  # O_TTY_INIT may be zero (DESCRIPTION:fb2d6a1a)
 DESCRIPTION:72c6c614        partial XBD.fcntl.h.004 XSH.open.010  # atomicity (no window for another thread's fork+exec) not tested
@@ -53,8 +53,8 @@ DESCRIPTION:b695002f       none  describes the constant; its behaviour is on the
 DESCRIPTION:f9ec1de6       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:7639ca99       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:435e6bb7       none  describes the constant; its behaviour is on the function page
-DESCRIPTION:35091ead       todo  Tier 0 header check (generator)
-DESCRIPTION:686ac2e0       todo  Tier 0 header check (generator)
+DESCRIPTION:35091ead        XBD.fcntl.h.020 XBD.fcntl.h.021
+DESCRIPTION:686ac2e0        XBD.fcntl.h.020 XBD.fcntl.h.021
 DESCRIPTION:a6a9bd6b       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:f1669632       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:c78285ca       none  describes the constant; its behaviour is on the function page
@@ -73,7 +73,7 @@ DESCRIPTION:6dfefb13       none  describes the constant; its behaviour is on the
 DESCRIPTION:f99d55a0       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:8fac7e64        none  leaves the result unspecified
 DESCRIPTION:9ff99aa4       none  describes the constant; its behaviour is on the function page
-DESCRIPTION:636d72cf       todo  Tier 0 header check (generator)
+DESCRIPTION:636d72cf        XBD.fcntl.h.022 XBD.fcntl.h.023
 DESCRIPTION:e64296a5         partial XBD.fcntl.h.015  # AT_FDCWD is not a descriptor; presence: Tier 0 header check (generator)
 DESCRIPTION:53ee72a6       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:9538d1aa         partial XBD.fcntl.h.015  # AT_EACCESS nonzero; presence: Tier 0 header check (generator)
@@ -92,17 +92,17 @@ DESCRIPTION:2567a817       none  describes the constant; its behaviour is on the
 DESCRIPTION:9fde7b7d       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:a5c2ff68       none  describes the constant; its behaviour is on the function page
 DESCRIPTION:aed86d38       none  describes the constant; its behaviour is on the function page
-DESCRIPTION:61ad5fbc       todo  Tier 0 header check (generator)
-DESCRIPTION:00630480       todo  Tier 0 header check (generator)
+DESCRIPTION:61ad5fbc        XBD.fcntl.h.024 XBD.fcntl.h.025
+DESCRIPTION:00630480        XBD.fcntl.h.024 XBD.fcntl.h.025
 
 # --- struct members (preformatted lists) and sentences without "shall" ---
 DESCRIPTION:791fc49b        partial XBD.fcntl.h.008  # member present; its type is Tier 0
 DESCRIPTION:e5024194        partial XBD.fcntl.h.008  # member present; its type is Tier 0
-DESCRIPTION:fa4a2c05        todo  Tier 0 header check (generator): flock member; lock types are tested in xsh/fcntl
-DESCRIPTION:120beff1        todo  Tier 0 header check (generator): flock member
-DESCRIPTION:fb6558f5        todo  Tier 0 header check (generator): flock member
-DESCRIPTION:e3e2eb8c        todo  xsh/fcntl: a lock with l_len 0 extends to end of file and beyond (header check for the member)
-DESCRIPTION:69f2d66c        todo  xsh/fcntl: F_GETLK reports the owner's pid; F_OFD_GETLK reports -1; OFD requests need l_pid 0
+DESCRIPTION:fa4a2c05        XBD.fcntl.h.017 XBD.fcntl.h.010
+DESCRIPTION:120beff1        XBD.fcntl.h.017
+DESCRIPTION:fb6558f5        XBD.fcntl.h.017
+DESCRIPTION:e3e2eb8c        partial XBD.fcntl.h.017  # member presence and type here; a lock with l_len 0 extending to end of file is on xsh/fcntl
+DESCRIPTION:69f2d66c        partial XBD.fcntl.h.017  # member presence and type here; the l_pid values reported or required are on xsh/fcntl
 DESCRIPTION:fb2d6a1a        none  a permission; it qualifies DESCRIPTION:f8c1c171.2
 DESCRIPTION:c63a4eab        none  a permission (namespace)
-DESCRIPTION:7ad330d2        todo  Tier 0 header check (generator): the function declarations
+DESCRIPTION:7ad330d2        XBD.fcntl.h.024 XBD.fcntl.h.025

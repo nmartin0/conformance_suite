@@ -27,3 +27,27 @@ note       glob() returns zero for success and these for the three
            errors, which callers tell apart (Q-165).
 test       t/002-errors.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.glob.h.003
+anchor     basedefs/glob.h.html#DESCRIPTION/glob_t
+class      required
+says       <glob.h> defines glob_t as a complete type with at least the
+           members gl_pathc (size_t), gl_pathv (char **), gl_offs
+           (size_t).
+test       t/003-struct-glob_t.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.glob.h.004
+anchor     basedefs/glob.h.html#DESCRIPTION/size_t
+class      required
+says       <glob.h> defines the type size_t.
+test       t/004-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.glob.h.005
+anchor     basedefs/glob.h.html#DESCRIPTION/glob
+class      required
+says       <glob.h> declares glob(), globfree() with the prototypes the
+           page gives.
+test       t/005-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

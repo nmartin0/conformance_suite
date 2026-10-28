@@ -174,3 +174,78 @@ note       Not said in words; six advice values that posix_fadvise()
            must tell apart (Q-165).
 test       t/016-fadv-distinct.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.017
+anchor     basedefs/fcntl.h.html#DESCRIPTION/flock
+class      required
+since      1988
+says       <fcntl.h> defines struct flock as a complete type with at
+           least the members l_type (short), l_whence (short), l_start
+           (off_t), l_len (off_t), l_pid (pid_t).
+test       t/017-struct-flock.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.018
+anchor     basedefs/fcntl.h.html#DESCRIPTION/mode_t
+class      required
+since      2001
+says       <fcntl.h> defines the types mode_t, off_t, pid_t.
+test       t/018-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.019
+anchor     basedefs/fcntl.h.html#DESCRIPTION/SEEK_SET
+class      required
+says       <fcntl.h> defines the macros SEEK_SET, SEEK_CUR, SEEK_END.
+test       t/019-macros-seek.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.020
+anchor     basedefs/fcntl.h.html#DESCRIPTION/O_APPEND
+class      required
+says       <fcntl.h> defines the macros O_APPEND, O_NONBLOCK, O_SYNC,
+           usable in #if.
+test       t/020-macros-status-flags.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.021
+anchor     basedefs/fcntl.h.html#DESCRIPTION/O_DSYNC
+class      conditional
+when       SIO
+says       <fcntl.h> defines the macros O_DSYNC, O_RSYNC, usable in #if.
+test       t/021-macros-status-flags-sio.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.022
+anchor     basedefs/fcntl.h.html#DESCRIPTION
+class      required
+says       <fcntl.h> defines the macros S_IRWXU, S_IRUSR, S_IWUSR,
+           S_IXUSR, S_IRWXG, S_IRGRP, S_IWGRP, S_IXGRP, S_IRWXO,
+           S_IROTH, S_IWOTH, S_IXOTH, S_ISUID, S_ISGID.
+test       t/022-macros-modes.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.023
+anchor     basedefs/fcntl.h.html#DESCRIPTION
+class      conditional
+when       XSI
+says       <fcntl.h> defines the macro S_ISVTX.
+test       t/023-macros-modes-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.024
+anchor     basedefs/fcntl.h.html#DESCRIPTION/creat
+class      required
+says       <fcntl.h> declares creat(), fcntl(), open(), openat() with
+           the prototypes the page gives.
+test       t/024-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.fcntl.h.025
+anchor     basedefs/fcntl.h.html#DESCRIPTION/posix_fadvise
+class      conditional
+when       ADV
+says       <fcntl.h> declares posix_fadvise(), posix_fallocate() with
+           the prototypes the page gives.
+test       t/025-functions-adv.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

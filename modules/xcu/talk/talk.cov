@@ -39,14 +39,14 @@ OPERANDS:55f1c992                XCU.talk.002
 STDIN:add38ceb                   XCU.talk.002
 STDIN:f277c0a9                   XCU.talk.001
 INPUT_FILES:eb724aff             none  XCU 1.4 default or empty section
-ENVIRONMENT_VARIABLES:c13c4b9b   todo  variables are not varied
-ENVIRONMENT_VARIABLES:221d4f1a   todo  variables are not varied
-ENVIRONMENT_VARIABLES:8aece102   todo  variables are not varied
-ENVIRONMENT_VARIABLES:b96c5038   todo  variables are not varied
+ENVIRONMENT_VARIABLES:c13c4b9b  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
+ENVIRONMENT_VARIABLES:8aece102  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
+ENVIRONMENT_VARIABLES:b96c5038  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
 ENVIRONMENT_VARIABLES:8586e6ac   todo  variables are not varied
-ENVIRONMENT_VARIABLES:2da03eb9   todo  variables are not varied
-ENVIRONMENT_VARIABLES:891f91fa   todo  variables are not varied
-ENVIRONMENT_VARIABLES:d838b9f5   todo  variables are not varied
+ENVIRONMENT_VARIABLES:2da03eb9  untestable  needs a second user logged in on a terminal
+ENVIRONMENT_VARIABLES:891f91fa  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ENVIRONMENT_VARIABLES:13884f6d   todo  variables are not varied
 ENVIRONMENT_VARIABLES:afd5e1f8   todo  variables are not varied
 ASYNCHRONOUS_EVENTS:4206b8d4     todo  not tested

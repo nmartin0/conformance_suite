@@ -83,3 +83,26 @@ since      1992
 says       nl -d sets the two characters of the section delimiters, and with
            one character the second is a colon.
 test       t/008-delimiter-characters.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.nl.009
+anchor     utilities/nl.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       A bracket expression in a nl regular expression can name a
+           collating element that the locale named by LC_COLLATE defines.
+timeout    120
+test       t/009-locale-collate-element.sh
+
+assertion  XCU.nl.010
+anchor     utilities/nl.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       A character class in a nl regular expression is the class of the
+           locale that LC_CTYPE names, with LC_ALL, LANG and a null LC_ALL
+           treated as XBD 8.2 says.
+timeout    120
+test       t/010-locale-ctype-class.sh

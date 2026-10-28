@@ -84,3 +84,40 @@ says       ctermid() stores its result in an array of L_ctermid characters: the
            string (with its terminating null) fits in L_ctermid bytes.
 test       t/009-ctermid-size.c
 nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdio.h.010
+anchor     basedefs/stdio.h.html#DESCRIPTION/FILE
+class      required
+says       <stdio.h> defines the types FILE, off_t, size_t, ssize_t,
+           va_list.
+note       FILE may be an incomplete type, so only that the name is a
+           type is checked.
+test       t/010-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdio.h.011
+anchor     basedefs/stdio.h.html#DESCRIPTION/FILENAME_MAX
+class      required
+says       <stdio.h> defines the macro FILENAME_MAX.
+test       t/011-macros.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdio.h.012
+anchor     basedefs/stdio.h.html#DESCRIPTION/clearerr
+class      required
+says       <stdio.h> declares clearerr(), ctermid(), dprintf(),
+           fclose(), fdopen(), feof(), ferror(), fflush(), fgetc(),
+           fgetpos(), fgets(), fileno(), flockfile(), fmemopen(),
+           fopen(), fprintf(), fputc(), fputs(), fread(), freopen(),
+           fscanf(), fseek(), fseeko(), fsetpos(), ftell(), ftello(),
+           ftrylockfile(), funlockfile(), fwrite(), getc(), getchar(),
+           getc_unlocked(), getchar_unlocked(), getdelim(), getline(),
+           open_memstream(), pclose(), perror(), popen(), printf(),
+           putc(), putchar(), putc_unlocked(), putchar_unlocked(),
+           puts(), remove(), rename(), renameat(), rewind(), scanf(),
+           setbuf(), setvbuf(), snprintf(), sprintf(), sscanf(),
+           tmpfile(), tmpnam(), ungetc(), vdprintf(), vfprintf(),
+           vfscanf(), vprintf(), vscanf(), vsnprintf(), vsprintf(),
+           vsscanf() with the prototypes the page gives.
+test       t/012-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

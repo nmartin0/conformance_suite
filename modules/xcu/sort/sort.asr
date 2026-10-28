@@ -147,3 +147,50 @@ since      1992
 says       At least nine -k options are accepted and are significant in
            command-line order.
 test       t/016-nine-keys.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.sort.017
+anchor     utilities/sort.html#ENVIRONMENT VARIABLES
+anchor     utilities/sort.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       sort orders lines by the collating sequence of the locale that
+           LC_COLLATE names, with LC_ALL, LANG and a null LC_ALL treated as
+           XBD 8.2 says.
+timeout    120
+test       t/017-locale-collate.sh
+
+assertion  XCU.sort.018
+anchor     utilities/sort.html#ENVIRONMENT VARIABLES
+anchor     utilities/sort.html#OPTIONS/-n
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       sort -n takes the radix character from the locale that LC_NUMERIC
+           names (two numbers that differ only after that character are
+           different), with LC_ALL, LANG and a null LC_ALL treated as XBD 8.2
+           says.
+timeout    120
+test       t/018-locale-numeric.sh
+
+assertion  XCU.sort.019
+anchor     utilities/sort.html#ENVIRONMENT VARIABLES
+anchor     utilities/sort.html#OPTIONS/-f
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       sort -f folds a lowercase letter of the locale that LC_CTYPE names
+           to its uppercase equivalent, with LC_ALL, LANG and a null LC_ALL
+           treated as XBD 8.2 says.
+timeout    120
+test       t/019-locale-ctype-fold.sh
+
+assertion  XCU.sort.020
+anchor     utilities/sort.html#DESCRIPTION
+class      required
+says       Lines that the collating sequence of the locale does not
+           distinguish are put in the order of the POSIX locale (byte by
+           byte).
+timeout    120
+test       t/020-collate-tie-break.sh

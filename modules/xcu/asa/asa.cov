@@ -20,13 +20,13 @@ STDIN:edcb53c5                   XCU.asa.005
 STDIN:59ec88a4                   XCU.asa.005
 STDIN:fc1111c9                   XCU.asa.005
 INPUT_FILES:3eee12be             none  text files
-ENVIRONMENT_VARIABLES:e6d2c0d9   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:e6d2c0d9  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
+ENVIRONMENT_VARIABLES:8aece102  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
+ENVIRONMENT_VARIABLES:b96c5038  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
 ENVIRONMENT_VARIABLES:8586e6ac   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:fb479014  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ASYNCHRONOUS_EVENTS:d92f27bd     none  default
 STDOUT:2870db55                  XCU.asa.005 XCU.asa.001
 STDERR:eb724aff                  none  none

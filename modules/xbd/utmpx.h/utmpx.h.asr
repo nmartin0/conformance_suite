@@ -18,3 +18,40 @@ note       Values of the one ut_type member, which getutxid() matches on
            (Q-165).
 test       t/001-ut-type.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.utmpx.h.002
+anchor     basedefs/utmpx.h.html#DESCRIPTION/utmpx
+class      conditional
+when       XSI
+says       <utmpx.h> defines struct utmpx as a complete type with at
+           least the members ut_user (char[]), ut_id (char[]), ut_line
+           (char[]), ut_pid (pid_t), ut_type (short), ut_tv (struct
+           timeval).
+test       t/002-struct-utmpx.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.utmpx.h.003
+anchor     basedefs/utmpx.h.html#DESCRIPTION/pid_t
+class      conditional
+when       XSI
+says       <utmpx.h> defines the type pid_t.
+test       t/003-types-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.utmpx.h.004
+anchor     basedefs/utmpx.h.html#DESCRIPTION/timeval
+class      conditional
+when       XSI
+says       <utmpx.h> defines struct timeval as a complete type.
+test       t/004-complete-timeval.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.utmpx.h.005
+anchor     basedefs/utmpx.h.html#DESCRIPTION/endutxent
+class      conditional
+when       XSI
+says       <utmpx.h> declares endutxent(), getutxent(), getutxid(),
+           getutxline(), pututxline(), setutxent() with the prototypes
+           the page gives.
+test       t/005-functions-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

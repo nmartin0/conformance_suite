@@ -14,3 +14,54 @@ says       mqd_t is not an array type: a function can return one, take
            one by value, and objects of the type can be assigned.
 test       t/001-mqd-not-array.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.mqueue.h.002
+anchor     basedefs/mqueue.h.html#DESCRIPTION/size_t
+class      conditional
+when       MSG
+says       <mqueue.h> defines the types size_t, ssize_t.
+test       t/002-types-msg.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.mqueue.h.003
+anchor     basedefs/mqueue.h.html#DESCRIPTION/timespec
+class      conditional
+when       MSG
+says       <mqueue.h> defines struct timespec as a complete type.
+test       t/003-complete-timespec.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.mqueue.h.004
+anchor     basedefs/mqueue.h.html#DESCRIPTION/mq_attr
+class      conditional
+when       MSG
+says       <mqueue.h> defines struct mq_attr as a complete type with at
+           least the members mq_flags (long), mq_maxmsg (long),
+           mq_msgsize (long), mq_curmsgs (long).
+test       t/004-struct-mq_attr.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.mqueue.h.005
+anchor     basedefs/mqueue.h.html#DESCRIPTION/O_RDONLY
+class      conditional
+when       MSG
+since      2024
+says       <mqueue.h> defines the macros O_RDONLY, O_WRONLY, O_RDWR,
+           O_CREAT, O_EXCL, O_NONBLOCK.
+test       t/005-macros-open-flags.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.mqueue.h.006
+anchor     basedefs/mqueue.h.html#DESCRIPTION/mq_close
+class      conditional
+when       MSG
+says       <mqueue.h> declares mq_close(), mq_getattr(), mq_notify(),
+           mq_open(), mq_receive(), mq_send(), mq_setattr(),
+           mq_timedreceive(), mq_timedsend(), mq_unlink() with the
+           prototypes the page gives.
+note       The prototype of mq_notify() names struct sigevent; a header
+           that did not declare that tag at file scope would give the
+           function a prototype-scope type that does not match the one
+           written here, so this test also shows the tag is declared.
+test       t/006-functions-msg.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

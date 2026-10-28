@@ -103,3 +103,37 @@ class      required
 says       mv keeps the modification time and permission bits of the file
            it moves.
 test       t/014-attributes.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.mv.015
+anchor     utilities/mv.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap07.html#7.3.6
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       The response to the question of mv -i is affirmative when it
+           matches the yesexpr of the locale that LC_MESSAGES names, with
+           LC_ALL, LANG and a null LC_ALL treated as XBD 8.2 says.
+timeout    120
+test       t/015-locale-messages-yesexpr.sh
+
+assertion  XCU.mv.016
+anchor     utilities/mv.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       A collating element in the yesexpr of the locale named by
+           LC_MESSAGES is interpreted in the collating sequence of the locale
+           that LC_COLLATE names.
+timeout    120
+test       t/016-locale-collate-yesexpr.sh
+
+assertion  XCU.mv.017
+anchor     utilities/mv.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       A character class in the yesexpr of the locale named by
+           LC_MESSAGES is the class of the locale that LC_CTYPE names.
+timeout    120
+test       t/017-locale-ctype-yesexpr.sh

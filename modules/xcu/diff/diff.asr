@@ -90,3 +90,16 @@ says       For a differing common file in directory mode the line begins
            reported as "Only in" followed by the directory pathname
            relative to the operand and the file name.
 test       t/010-dir-header-and-only-in.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.diff.011
+anchor     utilities/diff.html#ENVIRONMENT VARIABLES
+anchor     utilities/diff.html#Diff -c or -C Output Format
+class      required
+says       The timestamps in the header of a diff -c output are the
+           modification times of the files written in the zone that TZ names.
+timeout    60
+test       t/011-timezone-context-header.sh

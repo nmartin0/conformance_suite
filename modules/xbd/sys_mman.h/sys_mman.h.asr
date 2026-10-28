@@ -97,3 +97,111 @@ note       posix_typed_mem_open() takes at most one of the three in
            (Q-165).
 test       t/008-typed-mem-flags.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.009
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/mode_t
+class      required
+says       <sys/mman.h> defines the types mode_t, off_t, size_t.
+test       t/009-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.010
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/posix_typed_mem_info
+class      conditional
+when       TYM
+says       <sys/mman.h> defines struct posix_typed_mem_info as a
+           complete type with at least the members posix_tmi_length
+           (size_t).
+test       t/010-struct-posix_typed_mem_info.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.011
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/O_RDONLY
+class      conditional
+when       SHM|TYM
+since      2024
+says       <sys/mman.h> defines the macros O_RDONLY, O_RDWR.
+test       t/011-macros-open-shm-tym.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.012
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/O_WRONLY
+class      conditional
+when       TYM
+since      2024
+says       <sys/mman.h> defines the macros O_WRONLY, O_CLOEXEC,
+           O_CLOFORK.
+test       t/012-macros-open-tym.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.013
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/O_CREAT
+class      conditional
+when       SHM
+since      2024
+says       <sys/mman.h> defines the macros O_CREAT, O_EXCL, O_TRUNC.
+test       t/013-macros-open-shm.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.014
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/mmap
+class      required
+says       <sys/mman.h> declares mmap(), mprotect(), munmap() with the
+           prototypes the page gives.
+test       t/014-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.015
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/posix_madvise
+class      conditional
+when       ADV
+says       <sys/mman.h> declares posix_madvise() with the prototypes the
+           page gives.
+test       t/015-functions-adv.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.016
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/mlockall
+class      conditional
+when       ML
+says       <sys/mman.h> declares mlockall(), munlockall() with the
+           prototypes the page gives.
+test       t/016-functions-ml.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.017
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/mlock
+class      conditional
+when       MLR
+says       <sys/mman.h> declares mlock(), munlock() with the prototypes
+           the page gives.
+test       t/017-functions-mlr.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.018
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/shm_open
+class      conditional
+when       SHM
+says       <sys/mman.h> declares shm_open(), shm_unlink() with the
+           prototypes the page gives.
+test       t/018-functions-shm.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.019
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/posix_mem_offset
+class      conditional
+when       TYM
+says       <sys/mman.h> declares posix_mem_offset(),
+           posix_typed_mem_get_info(), posix_typed_mem_open() with the
+           prototypes the page gives.
+test       t/019-functions-tym.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_mman.h.020
+anchor     basedefs/sys_mman.h.html#DESCRIPTION/msync
+class      conditional
+when       XSI|SIO
+says       <sys/mman.h> declares msync() with the prototypes the page
+           gives.
+test       t/020-functions-xsi-sio.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

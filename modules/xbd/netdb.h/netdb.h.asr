@@ -50,3 +50,77 @@ note       The page says the value is the highest reserved port number but does
            (Q-167).
 test       t/004-ipport-reserved.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netdb.h.005
+anchor     basedefs/netdb.h.html#DESCRIPTION/hostent
+class      required
+says       <netdb.h> defines struct hostent as a complete type with at
+           least the members h_name (char *), h_aliases (char **),
+           h_addrtype (int), h_length (int), h_addr_list (char **).
+test       t/005-struct-hostent.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.netdb.h.006
+anchor     basedefs/netdb.h.html#DESCRIPTION/netent
+class      required
+says       <netdb.h> defines struct netent as a complete type with at
+           least the members n_name (char *), n_aliases (char **),
+           n_addrtype (int), n_net (uint32_t).
+test       t/006-struct-netent.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.netdb.h.007
+anchor     basedefs/netdb.h.html#DESCRIPTION/uint32_t
+class      required
+says       <netdb.h> defines the type uint32_t.
+test       t/007-types-uint32.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.netdb.h.008
+anchor     basedefs/netdb.h.html#DESCRIPTION/protoent
+class      required
+says       <netdb.h> defines struct protoent as a complete type with at
+           least the members p_name (char *), p_aliases (char **),
+           p_proto (int).
+test       t/008-struct-protoent.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.netdb.h.009
+anchor     basedefs/netdb.h.html#DESCRIPTION/servent
+class      required
+says       <netdb.h> defines struct servent as a complete type with at
+           least the members s_name (char *), s_aliases (char **),
+           s_port (int), s_proto (char *).
+test       t/009-struct-servent.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.netdb.h.010
+anchor     basedefs/netdb.h.html#DESCRIPTION/addrinfo
+class      required
+says       <netdb.h> defines struct addrinfo as a complete type with at
+           least the members ai_flags (int), ai_family (int),
+           ai_socktype (int), ai_protocol (int), ai_addrlen (socklen_t),
+           ai_addr (struct sockaddr *), ai_canonname (char *), ai_next
+           (struct addrinfo *).
+test       t/010-struct-addrinfo.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.netdb.h.011
+anchor     basedefs/netdb.h.html#DESCRIPTION/socklen_t
+class      required
+says       <netdb.h> defines the type socklen_t.
+test       t/011-types-socklen.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.netdb.h.012
+anchor     basedefs/netdb.h.html#DESCRIPTION/endhostent
+class      required
+says       <netdb.h> declares endhostent(), endnetent(), endprotoent(),
+           endservent(), freeaddrinfo(), gai_strerror(), getaddrinfo(),
+           gethostent(), getnameinfo(), getnetbyaddr(), getnetbyname(),
+           getnetent(), getprotobyname(), getprotobynumber(),
+           getprotoent(), getservbyname(), getservbyport(),
+           getservent(), sethostent(), setnetent(), setprotoent(),
+           setservent() with the prototypes the page gives.
+test       t/012-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

@@ -48,3 +48,41 @@ says       shmatt_t is an unsigned integer type at least as large as
            unsigned short.
 test       t/004-shmatt.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_shm.h.005
+anchor     basedefs/sys_shm.h.html#DESCRIPTION/shmid_ds
+class      conditional
+when       XSI
+says       <sys/shm.h> defines struct shmid_ds as a complete type with
+           at least the members shm_perm (struct ipc_perm), shm_segsz
+           (size_t), shm_lpid (pid_t), shm_cpid (pid_t), shm_nattch
+           (shmatt_t), shm_atime (time_t), shm_dtime (time_t), shm_ctime
+           (time_t).
+test       t/005-struct-shmid_ds.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_shm.h.006
+anchor     basedefs/sys_shm.h.html#DESCRIPTION/pid_t
+class      conditional
+when       XSI
+says       <sys/shm.h> defines the types pid_t, size_t, time_t.
+test       t/006-types-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_shm.h.007
+anchor     basedefs/sys_shm.h.html#DESCRIPTION/shmat
+class      conditional
+when       XSI
+says       <sys/shm.h> declares shmat(), shmctl(), shmdt(), shmget()
+           with the prototypes the page gives.
+test       t/007-functions-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_shm.h.008
+anchor     basedefs/sys_shm.h.html#DESCRIPTION/sys/ipc.h
+class      conditional
+when       XSI
+says       <sys/shm.h> makes what <sys/ipc.h> defines visible: struct
+           ipc_perm and the IPC_ macros.
+test       t/008-includes-ipc.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

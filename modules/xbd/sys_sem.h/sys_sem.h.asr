@@ -28,3 +28,49 @@ says       GETNCNT, GETPID, GETVAL, GETALL, GETZCNT, SETVAL, SETALL,
 note       All are values of the one cmd argument of semctl() (Q-165).
 test       t/002-semctl-cmds.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_sem.h.003
+anchor     basedefs/sys_sem.h.html#DESCRIPTION/semid_ds
+class      conditional
+when       XSI
+says       <sys/sem.h> defines struct semid_ds as a complete type with
+           at least the members sem_perm (struct ipc_perm), sem_nsems
+           (unsigned short), sem_otime (time_t), sem_ctime (time_t).
+test       t/003-struct-semid_ds.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_sem.h.004
+anchor     basedefs/sys_sem.h.html#DESCRIPTION/pid_t
+class      conditional
+when       XSI
+says       <sys/sem.h> defines the types pid_t, size_t, time_t.
+test       t/004-types-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_sem.h.005
+anchor     basedefs/sys_sem.h.html#DESCRIPTION/sembuf
+class      conditional
+when       XSI
+says       <sys/sem.h> defines struct sembuf as a complete type with at
+           least the members sem_num (unsigned short), sem_op (short),
+           sem_flg (short).
+test       t/005-struct-sembuf.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_sem.h.006
+anchor     basedefs/sys_sem.h.html#DESCRIPTION/semctl
+class      conditional
+when       XSI
+says       <sys/sem.h> declares semctl(), semget(), semop() with the
+           prototypes the page gives.
+test       t/006-functions-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_sem.h.007
+anchor     basedefs/sys_sem.h.html#DESCRIPTION/sys/ipc.h
+class      conditional
+when       XSI
+says       <sys/sem.h> makes what <sys/ipc.h> defines visible: struct
+           ipc_perm and the IPC_ macros.
+test       t/007-includes-ipc.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

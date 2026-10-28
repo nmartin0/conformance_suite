@@ -84,3 +84,18 @@ since      1992
 says       When a file operand cannot be read wc gives a nonzero final status
            and still counts the other operands.
 test       t/009-unreadable-file.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.wc.010
+anchor     utilities/wc.html#ENVIRONMENT VARIABLES
+anchor     utilities/wc.html#OPTIONS/-m
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       wc -m counts the characters of the code set of the locale that
+           LC_CTYPE names, so a two-byte character counts once, with LC_ALL,
+           LANG and a null LC_ALL treated as XBD 8.2 says.
+timeout    120
+test       t/010-locale-ctype-multibyte.sh

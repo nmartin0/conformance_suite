@@ -166,3 +166,35 @@ says       The contents of the file named by r are taken when the output is
            written and not when the r command ran, so lines that a w command
            wrote to that file in the same cycle are included.
 test       t/021-r-file-time.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.sed.022
+anchor     utilities/sed.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       A bracket expression in a sed address can name a collating element
+           that the locale named by LC_COLLATE defines.
+timeout    120
+test       t/022-locale-collate-element.sh
+
+assertion  XCU.sed.023
+anchor     utilities/sed.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       A character class in a sed address is the class of the locale that
+           LC_CTYPE names, with LC_ALL, LANG and a null LC_ALL treated as XBD
+           8.2 says.
+timeout    120
+test       t/023-locale-ctype-class.sh
+
+assertion  XCU.sed.024
+anchor     utilities/sed.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       sed matches a multibyte character of the code set of the locale
+           that LC_CTYPE names as one character with a dot.
+timeout    120
+test       t/024-locale-ctype-multibyte.sh

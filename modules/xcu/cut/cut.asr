@@ -106,3 +106,19 @@ says       A file operand that cannot be read gives a diagnostic and a
            nonzero final status, and the operands after it are still
            processed.
 test       t/012-missing-file.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.cut.013
+anchor     utilities/cut.html#ENVIRONMENT VARIABLES
+anchor     utilities/cut.html#OPTIONS/-c
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       cut -c selects whole characters of the code set of the locale that
+           LC_CTYPE names, so a two-byte character is selected by one
+           position, with LC_ALL, LANG and a null LC_ALL treated as XBD 8.2
+           says.
+timeout    120
+test       t/013-locale-ctype-multibyte.sh

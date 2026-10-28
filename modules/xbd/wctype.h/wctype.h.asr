@@ -24,3 +24,33 @@ says       <wctype.h> alone defines WEOF, a constant expression of type wint_t,
            with the same value as the WEOF of <wchar.h>.
 test       t/002-weof.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.wctype.h.003
+anchor     basedefs/wctype.h.html#DESCRIPTION/wint_t
+class      required
+says       <wctype.h> defines the types wint_t, wctrans_t, wctype_t.
+test       t/003-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.wctype.h.004
+anchor     basedefs/wctype.h.html#DESCRIPTION/locale_t
+class      required
+says       <wctype.h> defines the type locale_t.
+test       t/004-types-locale.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.wctype.h.005
+anchor     basedefs/wctype.h.html#DESCRIPTION/iswalnum
+class      required
+says       <wctype.h> declares iswalnum(), iswalnum_l(), iswalpha(),
+           iswalpha_l(), iswblank(), iswblank_l(), iswcntrl(),
+           iswcntrl_l(), iswctype(), iswctype_l(), iswdigit(),
+           iswdigit_l(), iswgraph(), iswgraph_l(), iswlower(),
+           iswlower_l(), iswprint(), iswprint_l(), iswpunct(),
+           iswpunct_l(), iswspace(), iswspace_l(), iswupper(),
+           iswupper_l(), iswxdigit(), iswxdigit_l(), towctrans(),
+           towctrans_l(), towlower(), towlower_l(), towupper(),
+           towupper_l(), wctrans(), wctrans_l(), wctype(), wctype_l()
+           with the prototypes the page gives.
+test       t/005-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

@@ -43,15 +43,15 @@ OPERANDS:4ec2d2a9                none  introductory sentence
 OPERANDS:2ffe6676                XCU.patch.008
 STDIN:fc1111c9                   XCU.patch.001
 INPUT_FILES:f71247f1             XCU.patch.001
-ENVIRONMENT_VARIABLES:b6089644   todo  not tested
-ENVIRONMENT_VARIABLES:221d4f1a   todo  not tested
-ENVIRONMENT_VARIABLES:9d66fee1   todo  not tested
-ENVIRONMENT_VARIABLES:b96c5038   todo  not tested
+ENVIRONMENT_VARIABLES:b6089644  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_COLLATE, LC_CTYPE)
+ENVIRONMENT_VARIABLES:9d66fee1  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_COLLATE, LC_CTYPE)
+ENVIRONMENT_VARIABLES:b96c5038  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_COLLATE, LC_CTYPE)
 ENVIRONMENT_VARIABLES:5d64a535   todo  not tested
 ENVIRONMENT_VARIABLES:adc1d0a2   todo  not tested
 ENVIRONMENT_VARIABLES:1bda213e   todo  not tested
-ENVIRONMENT_VARIABLES:d838b9f5   todo  not tested
-ENVIRONMENT_VARIABLES:acfd87ec   todo  not tested
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
+ENVIRONMENT_VARIABLES:acfd87ec  impl  outside the POSIX locale the format and contents of the date and time strings are not specified by the page
 ASYNCHRONOUS_EVENTS:d92f27bd     none  default action
 STDOUT:3f472296                  none  not used
 STDERR:5d467969                  none  diagnostic content is not specified

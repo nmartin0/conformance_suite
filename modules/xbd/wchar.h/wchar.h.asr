@@ -68,3 +68,58 @@ says       <wchar.h> defines NULL as a null pointer constant: it can initialise 
            be used in a static initializer.
 test       t/005-null.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.wchar.h.006
+anchor     basedefs/wchar.h.html#DESCRIPTION/FILE
+class      required
+says       <wchar.h> defines the types FILE, locale_t, mbstate_t,
+           size_t, va_list, wchar_t, wint_t.
+test       t/006-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.wchar.h.007
+anchor     basedefs/wchar.h.html#DESCRIPTION/NULL
+class      required
+says       <wchar.h> defines the macro NULL.
+test       t/007-macros.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.wchar.h.008
+anchor     basedefs/wchar.h.html#DESCRIPTION/wcslcat
+class      required
+since      2024
+says       <wchar.h> declares wcslcat(), wcslcpy() with the prototypes
+           the page gives.
+test       t/008-functions-wcslcat.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.wchar.h.009
+anchor     basedefs/wchar.h.html#DESCRIPTION/btowc
+class      required
+says       <wchar.h> declares btowc(), fgetwc(), fgetws(), fputwc(),
+           fputws(), fwide(), fwprintf(), fwscanf(), getwc(),
+           getwchar(), mbrlen(), mbrtowc(), mbsinit(), mbsnrtowcs(),
+           mbsrtowcs(), open_wmemstream(), putwc(), putwchar(),
+           swprintf(), swscanf(), ungetwc(), vfwprintf(), vfwscanf(),
+           vswprintf(), vswscanf(), vwprintf(), vwscanf(), wcpcpy(),
+           wcpncpy(), wcrtomb(), wcscasecmp(), wcscasecmp_l(), wcscat(),
+           wcschr(), wcscmp(), wcscoll(), wcscoll_l(), wcscpy(),
+           wcscspn(), wcsdup(), wcsftime(), wcslen(), wcsncasecmp(),
+           wcsncasecmp_l(), wcsncat(), wcsncmp(), wcsncpy(), wcsnlen(),
+           wcsnrtombs(), wcspbrk(), wcsrchr(), wcsrtombs(), wcsspn(),
+           wcsstr(), wcstod(), wcstof(), wcstok(), wcstol(), wcstold(),
+           wcstoll(), wcstoul(), wcstoull(), wcsxfrm(), wcsxfrm_l(),
+           wctob(), wmemchr(), wmemcmp(), wmemcpy(), wmemmove(),
+           wmemset(), wprintf(), wscanf() with the prototypes the page
+           gives.
+test       t/009-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.wchar.h.010
+anchor     basedefs/wchar.h.html#DESCRIPTION/wcswidth
+class      conditional
+when       XSI
+says       <wchar.h> declares wcswidth(), wcwidth() with the prototypes
+           the page gives.
+test       t/010-functions-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

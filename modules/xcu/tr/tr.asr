@@ -83,3 +83,18 @@ says       In string2, [x*n] stands for n copies of x (octal if n has a
            leading zero) and [x*] for as many copies as it takes to match
            string1.
 test       t/008-repeat-count.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.tr.009
+anchor     utilities/tr.html#ENVIRONMENT VARIABLES
+anchor     utilities/tr.html#EXTENDED DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       tr takes character classes and the toupper mapping from the locale
+           that LC_CTYPE names, with LC_ALL, LANG and a null LC_ALL treated
+           as XBD 8.2 says.
+timeout    120
+test       t/009-locale-ctype-class.sh

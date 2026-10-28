@@ -84,3 +84,26 @@ says       Status is 0 when a line was selected, 1 when none was, above 1 on
            an error; -s suppresses diagnostics for unreadable files; with -q
            a selected line gives 0 even after an error.
 test       t/008-exit-status.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.grep.009
+anchor     utilities/grep.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       A bracket expression in a grep pattern can name a collating
+           element that the locale named by LC_COLLATE defines.
+timeout    120
+test       t/009-locale-collate-element.sh
+
+assertion  XCU.grep.010
+anchor     utilities/grep.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       grep takes character classes and the case equivalence of -i from
+           the locale that LC_CTYPE names, with LC_ALL, LANG and a null
+           LC_ALL treated as XBD 8.2 says.
+timeout    120
+test       t/010-locale-ctype.sh

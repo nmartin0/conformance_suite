@@ -134,3 +134,17 @@ since      1992
 says       The argument -- is not treated as the end of options: test --
            is true (one non-empty argument) and test -z -- is false.
 test       t/014-double-dash.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.test.015
+anchor     utilities/test.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       The < and > string comparisons of test use the collating sequence
+           of the locale that LC_COLLATE names, with LC_ALL, LANG and a null
+           LC_ALL treated as XBD 8.2 says.
+timeout    120
+test       t/015-locale-collate.sh

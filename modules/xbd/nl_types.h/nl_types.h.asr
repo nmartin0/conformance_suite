@@ -31,3 +31,18 @@ note       The value of NL_SETD is implementation-defined, so only its use as an
            int is checked.
 test       t/002-setd-catd.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.nl_types.h.003
+anchor     basedefs/nl_types.h.html#DESCRIPTION/nl_catd
+class      required
+says       <nl_types.h> defines the types nl_catd, nl_item.
+test       t/003-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.nl_types.h.004
+anchor     basedefs/nl_types.h.html#DESCRIPTION/catclose
+class      required
+says       <nl_types.h> declares catclose(), catgets(), catopen() with
+           the prototypes the page gives.
+test       t/004-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

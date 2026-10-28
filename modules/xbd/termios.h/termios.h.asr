@@ -148,3 +148,48 @@ says       TCOOFF, TCOON, TCIOFF and TCION have four different values.
 note       Alternatives for the one action argument (Q-165).
 test       t/013-tcflow-actions.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.014
+anchor     basedefs/termios.h.html#DESCRIPTION/termios
+class      required
+says       <termios.h> defines struct termios as a complete type with at
+           least the members c_iflag (tcflag_t), c_oflag (tcflag_t),
+           c_cflag (tcflag_t), c_lflag (tcflag_t), c_cc (cc_t[NCCS]).
+test       t/014-struct-termios.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.015
+anchor     basedefs/termios.h.html#DESCRIPTION/winsize
+class      required
+since      2024
+says       <termios.h> defines struct winsize as a complete type with at
+           least the members ws_row (unsigned short), ws_col (unsigned
+           short).
+test       t/015-struct-winsize.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.016
+anchor     basedefs/termios.h.html#DESCRIPTION/pid_t
+class      required
+says       <termios.h> defines the type pid_t.
+test       t/016-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.017
+anchor     basedefs/termios.h.html#DESCRIPTION/tcgetwinsize
+class      required
+since      2024
+says       <termios.h> declares tcgetwinsize(), tcsetwinsize() with the
+           prototypes the page gives.
+test       t/017-functions-winsize.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.termios.h.018
+anchor     basedefs/termios.h.html#DESCRIPTION/cfgetispeed
+class      required
+says       <termios.h> declares cfgetispeed(), cfgetospeed(),
+           cfsetispeed(), cfsetospeed(), tcdrain(), tcflow(), tcflush(),
+           tcgetattr(), tcgetsid(), tcsendbreak(), tcsetattr() with the
+           prototypes the page gives.
+test       t/018-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

@@ -130,3 +130,51 @@ note       disputed (Q-166): the page names INADDR_ANY the IPv4 wildcard address
            outside this standard. A FAIL is logged as INSPECT.
 test       t/010-inaddr-values.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.011
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/sockaddr_in
+class      required
+says       <netinet/in.h> defines struct sockaddr_in as a complete type
+           with at least the members sin_family (sa_family_t), sin_port
+           (in_port_t), sin_addr (struct in_addr).
+test       t/011-struct-sockaddr_in.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.012
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/in6_addr
+class      conditional
+when       IP6
+says       <netinet/in.h> defines struct in6_addr as a complete type
+           with at least the members s6_addr (uint8_t[16]).
+test       t/012-struct-in6_addr.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.013
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/sockaddr_in6
+class      conditional
+when       IP6
+says       <netinet/in.h> defines struct sockaddr_in6 as a complete type
+           with at least the members sin6_family (sa_family_t),
+           sin6_port (in_port_t), sin6_flowinfo (uint32_t), sin6_addr
+           (struct in6_addr), sin6_scope_id (uint32_t).
+test       t/013-struct-sockaddr_in6.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.014
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/ipv6_mreq
+class      conditional
+when       IP6
+says       <netinet/in.h> defines struct ipv6_mreq as a complete type
+           with at least the members ipv6mr_multiaddr (struct in6_addr),
+           ipv6mr_interface (unsigned).
+test       t/014-struct-ipv6_mreq.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.netinet_in.h.015
+anchor     basedefs/netinet_in.h.html#DESCRIPTION/in6addr_any
+class      conditional
+when       IP6
+says       <netinet/in.h> declares the external variables in6addr_any,
+           in6addr_loopback with the type the page gives.
+test       t/015-variables.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

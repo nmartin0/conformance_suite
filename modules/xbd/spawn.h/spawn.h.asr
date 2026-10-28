@@ -30,3 +30,62 @@ says       POSIX_SPAWN_SETSCHEDPARAM and POSIX_SPAWN_SETSCHEDULER are
 note       As XBD.spawn.h.001 (Q-165).
 test       t/002-flags-ps.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.spawn.h.003
+anchor     basedefs/spawn.h.html#DESCRIPTION/posix_spawnattr_t
+class      conditional
+when       SPN
+says       <spawn.h> defines the types posix_spawnattr_t,
+           posix_spawn_file_actions_t.
+test       t/003-types-spawn.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.spawn.h.004
+anchor     basedefs/spawn.h.html#DESCRIPTION/mode_t
+class      conditional
+when       SPN
+says       <spawn.h> defines the types mode_t, pid_t.
+test       t/004-types-sys-types.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.spawn.h.005
+anchor     basedefs/spawn.h.html#DESCRIPTION/sigset_t
+class      conditional
+when       SPN
+says       <spawn.h> defines the type sigset_t.
+test       t/005-types-sigset.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.spawn.h.006
+anchor     basedefs/spawn.h.html#DESCRIPTION/posix_spawnattr_getschedparam
+class      conditional
+when       SPN+PS
+says       <spawn.h> declares posix_spawnattr_getschedparam(),
+           posix_spawnattr_getschedpolicy(),
+           posix_spawnattr_setschedparam(),
+           posix_spawnattr_setschedpolicy() with the prototypes the page
+           gives.
+test       t/006-functions-spn-ps.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.spawn.h.007
+anchor     basedefs/spawn.h.html#DESCRIPTION/posix_spawn
+class      conditional
+when       SPN
+says       <spawn.h> declares posix_spawn(),
+           posix_spawn_file_actions_addchdir(),
+           posix_spawn_file_actions_addclose(),
+           posix_spawn_file_actions_adddup2(),
+           posix_spawn_file_actions_addfchdir(),
+           posix_spawn_file_actions_addopen(),
+           posix_spawn_file_actions_destroy(),
+           posix_spawn_file_actions_init(), posix_spawnattr_destroy(),
+           posix_spawnattr_getflags(), posix_spawnattr_getpgroup(),
+           posix_spawnattr_getsigdefault(),
+           posix_spawnattr_getsigmask(), posix_spawnattr_init(),
+           posix_spawnattr_setflags(), posix_spawnattr_setpgroup(),
+           posix_spawnattr_setsigdefault(),
+           posix_spawnattr_setsigmask(), posix_spawnp() with the
+           prototypes the page gives.
+test       t/007-functions-spn.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

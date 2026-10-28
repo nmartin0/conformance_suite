@@ -40,14 +40,14 @@ OPERANDS:37acfd35                XCU.csplit.004
 OPERANDS:4fa93733                XCU.csplit.007
 STDIN:fc1111c9                   XCU.csplit.008
 INPUT_FILES:48431ce8             none  text file
-ENVIRONMENT_VARIABLES:b2a89a78   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8cbf3293   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:cf065fb5   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:b2a89a78  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  XCU.csplit.009 XCU.csplit.010
+ENVIRONMENT_VARIABLES:8aece102  XCU.csplit.009 XCU.csplit.010
+ENVIRONMENT_VARIABLES:b96c5038  XCU.csplit.009 XCU.csplit.010
+ENVIRONMENT_VARIABLES:8cbf3293  partial XCU.csplit.009  # multi-character collating elements only; equivalence classes are not exercised
+ENVIRONMENT_VARIABLES:cf065fb5  XCU.csplit.010
+ENVIRONMENT_VARIABLES:fb479014  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ASYNCHRONOUS_EVENTS:d06f21ce     todo  retention of files on a signal with -k not tried
 ASYNCHRONOUS_EVENTS:e04d859f     todo  retention of files on a signal with -k not tried
 STDOUT:40e50004                  XCU.csplit.001 XCU.csplit.006

@@ -179,3 +179,57 @@ says       With XSI, each of the eighteen constants M_El, M_EGAMMAl, M_LOG2El,
 note       Compared with a 40-digit value to a relative error of 2*LDBL_EPSILON.
 test       t/015-m-consts-long.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.016
+anchor     basedefs/math.h.html#DESCRIPTION/acos
+class      required
+says       <math.h> declares acos(), acosf(), acosh(), acoshf(),
+           acoshl(), acosl(), asin(), asinf(), asinh(), asinhf(),
+           asinhl(), asinl(), atan(), atan2(), atan2f(), atan2l(),
+           atanf(), atanh(), atanhf(), atanhl(), atanl(), cbrt(),
+           cbrtf(), cbrtl(), ceil(), ceilf(), ceill(), copysign(),
+           copysignf(), copysignl(), cos(), cosf(), cosh(), coshf(),
+           coshl(), cosl(), erf(), erfc(), erfcf(), erfcl(), erff(),
+           erfl(), exp(), exp2(), exp2f(), exp2l(), expf(), expl(),
+           expm1(), expm1f(), expm1l(), fabs(), fabsf(), fabsl(),
+           fdim(), fdimf(), fdiml(), floor(), floorf(), floorl(), fma(),
+           fmaf(), fmal(), fmax(), fmaxf(), fmaxl(), fmin(), fminf(),
+           fminl(), fmod(), fmodf(), fmodl(), frexp(), frexpf(),
+           frexpl(), hypot(), hypotf(), hypotl(), ilogb(), ilogbf(),
+           ilogbl(), ldexp(), ldexpf(), ldexpl(), lgamma(), lgammaf(),
+           lgammal(), llrint(), llrintf(), llrintl(), llround(),
+           llroundf(), llroundl(), log(), log10(), log10f(), log10l(),
+           log1p(), log1pf(), log1pl(), log2(), log2f(), log2l(),
+           logb(), logbf(), logbl(), logf(), logl(), lrint(), lrintf(),
+           lrintl(), lround(), lroundf(), lroundl(), modf(), modff(),
+           modfl(), nan(), nanf(), nanl(), nearbyint(), nearbyintf(),
+           nearbyintl(), nextafter(), nextafterf(), nextafterl(),
+           nexttoward(), nexttowardf(), nexttowardl(), pow(), powf(),
+           powl(), remainder(), remainderf(), remainderl(), remquo(),
+           remquof(), remquol(), rint(), rintf(), rintl(), round(),
+           roundf(), roundl(), scalbln(), scalblnf(), scalblnl(),
+           scalbn(), scalbnf(), scalbnl(), sin(), sinf(), sinh(),
+           sinhf(), sinhl(), sinl(), sqrt(), sqrtf(), sqrtl(), tan(),
+           tanf(), tanh(), tanhf(), tanhl(), tanl(), tgamma(),
+           tgammaf(), tgammal(), trunc(), truncf(), truncl() with the
+           prototypes the page gives.
+test       t/016-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.017
+anchor     basedefs/math.h.html#DESCRIPTION/j0
+class      conditional
+when       XSI
+says       <math.h> declares j0(), j1(), jn(), y0(), y1(), yn() with the
+           prototypes the page gives.
+test       t/017-functions-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.math.h.018
+anchor     basedefs/math.h.html#DESCRIPTION/signgam
+class      conditional
+when       XSI
+says       <math.h> declares the external variable signgam with the type
+           the page gives.
+test       t/018-variables.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

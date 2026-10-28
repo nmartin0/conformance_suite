@@ -114,3 +114,37 @@ class      required
 says       rm -r removes a hierarchy deeper than a path name could be
            written in one piece.
 test       t/015-deep.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.rm.016
+anchor     utilities/rm.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap07.html#7.3.6
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       The response to the question of rm -i is affirmative when it
+           matches the yesexpr of the locale that LC_MESSAGES names, with
+           LC_ALL, LANG and a null LC_ALL treated as XBD 8.2 says.
+timeout    120
+test       t/016-locale-messages-yesexpr.sh
+
+assertion  XCU.rm.017
+anchor     utilities/rm.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       A collating element in the yesexpr of the locale named by
+           LC_MESSAGES is interpreted in the collating sequence of the locale
+           that LC_COLLATE names.
+timeout    120
+test       t/017-locale-collate-yesexpr.sh
+
+assertion  XCU.rm.018
+anchor     utilities/rm.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       A character class in the yesexpr of the locale named by
+           LC_MESSAGES is the class of the locale that LC_CTYPE names.
+timeout    120
+test       t/018-locale-ctype-yesexpr.sh

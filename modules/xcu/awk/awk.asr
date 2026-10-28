@@ -299,3 +299,47 @@ says       The operators <, <=, >, >=, == and != compare numbers numerically,
            strings by collation and numeric strings from input numerically, and a
            string constant forces a string comparison.
 test       t/035-comparison-operators.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.awk.036
+anchor     utilities/awk.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       awk compares string values in the collating sequence of the locale
+           that LC_COLLATE names, with LC_ALL, LANG and a null LC_ALL treated
+           as XBD 8.2 says.
+timeout    120
+test       t/036-locale-collate-compare.sh
+
+assertion  XCU.awk.037
+anchor     utilities/awk.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       awk takes toupper and the character classes of its regular
+           expressions from the locale that LC_CTYPE names, with LC_ALL, LANG
+           and a null LC_ALL treated as XBD 8.2 says.
+timeout    120
+test       t/037-locale-ctype-case.sh
+
+assertion  XCU.awk.038
+anchor     utilities/awk.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       awk writes the radix character of the locale that LC_NUMERIC names
+           when it converts a number to text, with LC_ALL, LANG and a null
+           LC_ALL treated as XBD 8.2 says.
+timeout    120
+test       t/038-locale-numeric.sh
+
+assertion  XCU.awk.039
+anchor     utilities/awk.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       awk counts characters, not bytes, of the code set of the locale
+           that LC_CTYPE names, with LC_ALL, LANG and a null LC_ALL treated
+           as XBD 8.2 says.
+timeout    120
+test       t/039-locale-ctype-multibyte.sh

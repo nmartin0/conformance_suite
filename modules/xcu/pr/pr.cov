@@ -66,15 +66,15 @@ INPUT_FILES:3eee12be             XCU.pr.001
 INPUT_FILES:933d3c81             none  may or should, not required
 INPUT_FILES:142930c9             todo  needs a terminal
 ENVIRONMENT_VARIABLES:6940d191   none  introductory sentence
-ENVIRONMENT_VARIABLES:221d4f1a   todo  not tested
-ENVIRONMENT_VARIABLES:9d66fee1   todo  not tested
-ENVIRONMENT_VARIABLES:b96c5038   todo  not tested
+ENVIRONMENT_VARIABLES:221d4f1a  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
+ENVIRONMENT_VARIABLES:9d66fee1  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
+ENVIRONMENT_VARIABLES:b96c5038  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
 ENVIRONMENT_VARIABLES:33e7ba73   todo  not tested
 ENVIRONMENT_VARIABLES:29819e3b   todo  not tested
-ENVIRONMENT_VARIABLES:fb479014   todo  not tested
-ENVIRONMENT_VARIABLES:e62cf6ab   todo  not tested
-ENVIRONMENT_VARIABLES:d838b9f5   todo  not tested
-ENVIRONMENT_VARIABLES:d07e7ea7   todo  not tested
+ENVIRONMENT_VARIABLES:fb479014  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:e62cf6ab  impl  outside the POSIX locale the format and contents of the date and time strings are not specified by the page
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
+ENVIRONMENT_VARIABLES:d07e7ea7  XCU.pr.013
 ENVIRONMENT_VARIABLES:bdf7eb3f   XCU.pr.001
 ASYNCHRONOUS_EVENTS:1fb8a5b8     todo  needs a terminal
 STDOUT:ea3d7087                  XCU.pr.001

@@ -43,3 +43,48 @@ note       Not stated for the header: uselocale() returns LC_GLOBAL_LOCALE when
            two have to differ.
 test       t/003-lc-global-locale.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.locale.h.004
+anchor     basedefs/locale.h.html#DESCRIPTION/lconv
+class      required
+says       <locale.h> defines struct lconv as a complete type with at
+           least the members currency_symbol (char *), decimal_point
+           (char *), frac_digits (char), grouping (char *),
+           int_curr_symbol (char *), int_frac_digits (char),
+           int_n_cs_precedes (char), int_n_sep_by_space (char),
+           int_n_sign_posn (char), int_p_cs_precedes (char),
+           int_p_sep_by_space (char), int_p_sign_posn (char),
+           mon_decimal_point (char *), mon_grouping (char *),
+           mon_thousands_sep (char *), negative_sign (char *),
+           n_cs_precedes (char), n_sep_by_space (char), n_sign_posn
+           (char), positive_sign (char *), p_cs_precedes (char),
+           p_sep_by_space (char), p_sign_posn (char), thousands_sep
+           (char *).
+test       t/004-struct-lconv.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.locale.h.005
+anchor     basedefs/locale.h.html#DESCRIPTION/locale_t
+class      required
+since      2008
+says       <locale.h> defines the type locale_t.
+test       t/005-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.locale.h.006
+anchor     basedefs/locale.h.html#DESCRIPTION/getlocalename_l
+class      required
+since      2024
+says       <locale.h> declares getlocalename_l() with the prototypes the
+           page gives.
+test       t/006-functions-getlocalename.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.locale.h.007
+anchor     basedefs/locale.h.html#DESCRIPTION/duplocale
+class      required
+says       <locale.h> declares duplocale(), freelocale(), localeconv(),
+           newlocale(), setlocale(), uselocale() with the prototypes the
+           page gives.
+test       t/007-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

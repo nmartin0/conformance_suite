@@ -27,3 +27,49 @@ says       An fd_set can be copied by assignment, as a structure can,
            FD_SETSIZE-1) usable.
 test       t/002-fd-set-struct.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_select.h.003
+anchor     basedefs/sys_select.h.html#DESCRIPTION/timeval
+class      required
+says       <sys/select.h> defines struct timeval as a complete type with
+           at least the members tv_sec (time_t), tv_usec (suseconds_t).
+test       t/003-struct-timeval.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_select.h.004
+anchor     basedefs/sys_select.h.html#DESCRIPTION/time_t
+class      required
+says       <sys/select.h> defines the types time_t, suseconds_t.
+test       t/004-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_select.h.005
+anchor     basedefs/sys_select.h.html#DESCRIPTION/sigset_t
+class      required
+says       <sys/select.h> defines the type sigset_t.
+test       t/005-types-sigset.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_select.h.006
+anchor     basedefs/sys_select.h.html#DESCRIPTION/timespec
+class      required
+says       <sys/select.h> defines struct timespec as a complete type.
+test       t/006-complete-timespec.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_select.h.007
+anchor     basedefs/sys_select.h.html#DESCRIPTION/FD_CLR
+class      required
+says       <sys/select.h> declares FD_CLR(), FD_ISSET(), FD_SET(),
+           FD_ZERO() with the prototypes the page gives, or defines each
+           as a macro.
+test       t/007-functions-fd-macros.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_select.h.008
+anchor     basedefs/sys_select.h.html#DESCRIPTION/pselect
+class      required
+says       <sys/select.h> declares pselect(), select() with the
+           prototypes the page gives.
+test       t/008-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

@@ -53,3 +53,55 @@ note       No relation between the three is tested: on a system where
            other.
 test       t/004-rlim-values.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_resource.h.005
+anchor     basedefs/sys_resource.h.html#DESCRIPTION/rlimit
+class      required
+since      2024
+says       <sys/resource.h> defines struct rlimit as a complete type
+           with at least the members rlim_cur (rlim_t), rlim_max
+           (rlim_t).
+test       t/005-struct-rlimit.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_resource.h.006
+anchor     basedefs/sys_resource.h.html#DESCRIPTION/rusage
+class      conditional
+when       XSI
+says       <sys/resource.h> defines struct rusage as a complete type
+           with at least the members ru_utime (struct timeval), ru_stime
+           (struct timeval).
+test       t/006-struct-rusage.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_resource.h.007
+anchor     basedefs/sys_resource.h.html#DESCRIPTION/timeval
+class      required
+says       <sys/resource.h> defines struct timeval as a complete type.
+test       t/007-complete-timeval.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_resource.h.008
+anchor     basedefs/sys_resource.h.html#DESCRIPTION/id_t
+class      conditional
+when       XSI
+says       <sys/resource.h> defines the type id_t.
+test       t/008-types-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_resource.h.009
+anchor     basedefs/sys_resource.h.html#DESCRIPTION/getrlimit
+class      required
+says       <sys/resource.h> declares getrlimit(), setrlimit() with the
+           prototypes the page gives.
+test       t/009-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_resource.h.010
+anchor     basedefs/sys_resource.h.html#DESCRIPTION/getpriority
+class      conditional
+when       XSI
+says       <sys/resource.h> declares getpriority(), getrusage(),
+           setpriority() with the prototypes the page gives.
+test       t/010-functions-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

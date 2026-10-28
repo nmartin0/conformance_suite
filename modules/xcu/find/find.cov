@@ -107,14 +107,14 @@ STDIN:7e32e54b               XCU.find.016
 STDIN:0a2d0883               XCU.find.016
 STDIN:59ec88a4               todo  not covered by a test yet
 INPUT_FILES:eb724aff         none  section says nothing is needed (XCU 1.4 defaults)
-ENVIRONMENT_VARIABLES:b7870254 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:041e4524 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:21fa02d2 todo  locale variables are not exercised
-ENVIRONMENT_VARIABLES:1bda213e todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:b7870254  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  XCU.find.034 XCU.find.035 XCU.find.036
+ENVIRONMENT_VARIABLES:8aece102  XCU.find.034 XCU.find.035 XCU.find.036
+ENVIRONMENT_VARIABLES:b96c5038  XCU.find.034 XCU.find.035 XCU.find.036
+ENVIRONMENT_VARIABLES:041e4524  partial XCU.find.035  # multi-character collating elements only; equivalence classes are not exercised
+ENVIRONMENT_VARIABLES:21fa02d2  XCU.find.036
+ENVIRONMENT_VARIABLES:1bda213e  XCU.find.034
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ENVIRONMENT_VARIABLES:c607c759 todo  PATH lookup for -exec is not tested
 ENVIRONMENT_VARIABLES:1e6b3c43 todo  not covered by a test yet
 ASYNCHRONOUS_EVENTS:d92f27bd     none  default action

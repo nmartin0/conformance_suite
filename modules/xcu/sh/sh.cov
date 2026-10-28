@@ -74,7 +74,7 @@ ENVIRONMENT_VARIABLES:8aece102 todo needs a locale other than the POSIX locale
 ENVIRONMENT_VARIABLES:b96c5038 todo needs a locale other than the POSIX locale
 ENVIRONMENT_VARIABLES:78b74f99 todo needs a locale other than the POSIX locale
 ENVIRONMENT_VARIABLES:b90d54c4 todo needs a locale other than the POSIX locale
-ENVIRONMENT_VARIABLES:fb479014 todo needs a message catalog or a locale with translated diagnostics
+ENVIRONMENT_VARIABLES:fb479014  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
 ENVIRONMENT_VARIABLES:54636d81 XCU.sh.061
 ENVIRONMENT_VARIABLES:9d216b74 XCU.sh.022
 ENVIRONMENT_VARIABLES:fe610294 XCU.sh.022
@@ -89,7 +89,7 @@ ENVIRONMENT_VARIABLES:e121b1ed XCU.sh.022
 ENVIRONMENT_VARIABLES:e5da5541 XCU.sh.063
 ENVIRONMENT_VARIABLES:d10d4ad5 none  unspecified
 ENVIRONMENT_VARIABLES:78e33248 XCU.sh.060
-ENVIRONMENT_VARIABLES:d838b9f5 todo needs a message catalog or a locale with translated diagnostics
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ENVIRONMENT_VARIABLES:ef746712 todo PATH is used by command search, which the sh-simple-commands assertions exercise; its use in an interactive shell is not separately asserted
 ENVIRONMENT_VARIABLES:d3bdda93 todo PATH is used by command search, which the sh-simple-commands assertions exercise; its use in an interactive shell is not separately asserted
 ENVIRONMENT_VARIABLES:b8ef3d46 XCU.2.5-parameters.017
@@ -230,9 +230,9 @@ EXTENDED_DESCRIPTION:a9792941  XCU.sh.025
 EXTENDED_DESCRIPTION:f4d0e308  XCU.sh.025
 EXTENDED_DESCRIPTION:fc7792e7  XCU.sh.025
 EXTENDED_DESCRIPTION:a8017af2  XCU.sh.025
-EXTENDED_DESCRIPTION:d31560fe  todo  # item heading of the count-bar command, covered by its detail units
+EXTENDED_DESCRIPTION:d31560fe  todo  item heading of the count-bar command, covered by its detail units
 EXTENDED_DESCRIPTION:67e5e81d  XCU.sh.025
-EXTENDED_DESCRIPTION:283eca06  todo  # the no-count bar (first position) and count past line end are not exercised
+EXTENDED_DESCRIPTION:283eca06  todo  the no-count bar (first position) and count past line end are not exercised
 EXTENDED_DESCRIPTION:e6824ec6  XCU.sh.027
 EXTENDED_DESCRIPTION:7256e51c.6 partial XCU.sh.025 # the cursor result is asserted; the alert is not observable
 EXTENDED_DESCRIPTION:309eb1d7  todo a find that does not match leaves the cursor in place; this is not asserted

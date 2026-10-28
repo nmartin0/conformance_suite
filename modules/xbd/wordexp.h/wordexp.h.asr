@@ -27,3 +27,27 @@ note       wordexp() returns zero for success and these for the errors,
            which callers tell apart (Q-165).
 test       t/002-errors.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.wordexp.h.003
+anchor     basedefs/wordexp.h.html#DESCRIPTION/wordexp_t
+class      required
+says       <wordexp.h> defines wordexp_t as a complete type with at
+           least the members we_wordc (size_t), we_wordv (char **),
+           we_offs (size_t).
+test       t/003-struct-wordexp_t.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.wordexp.h.004
+anchor     basedefs/wordexp.h.html#DESCRIPTION/size_t
+class      required
+says       <wordexp.h> defines the type size_t.
+test       t/004-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.wordexp.h.005
+anchor     basedefs/wordexp.h.html#DESCRIPTION/wordexp
+class      required
+says       <wordexp.h> declares wordexp(), wordfree() with the
+           prototypes the page gives.
+test       t/005-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

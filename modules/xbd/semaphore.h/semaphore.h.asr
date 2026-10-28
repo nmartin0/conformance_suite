@@ -13,3 +13,45 @@ since      2001
 says       SEM_FAILED has type sem_t *.
 test       t/001-sem-failed.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.semaphore.h.002
+anchor     basedefs/semaphore.h.html#DESCRIPTION/sem_t
+class      required
+says       <semaphore.h> defines the type sem_t.
+test       t/002-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.semaphore.h.003
+anchor     basedefs/semaphore.h.html#DESCRIPTION/timespec
+class      required
+since      2024
+says       <semaphore.h> defines struct timespec as a complete type.
+test       t/003-complete-timespec.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.semaphore.h.004
+anchor     basedefs/semaphore.h.html#DESCRIPTION/O_CREAT
+class      required
+since      2024
+says       <semaphore.h> defines the macros O_CREAT, O_EXCL.
+test       t/004-macros-open-flags.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.semaphore.h.005
+anchor     basedefs/semaphore.h.html#DESCRIPTION/sem_clockwait
+class      required
+since      2024
+says       <semaphore.h> declares sem_clockwait() with the prototypes
+           the page gives.
+test       t/005-functions-sem-clockwait.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.semaphore.h.006
+anchor     basedefs/semaphore.h.html#DESCRIPTION/sem_close
+class      required
+says       <semaphore.h> declares sem_close(), sem_destroy(),
+           sem_getvalue(), sem_init(), sem_open(), sem_post(),
+           sem_timedwait(), sem_trywait(), sem_unlink(), sem_wait() with
+           the prototypes the page gives.
+test       t/006-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

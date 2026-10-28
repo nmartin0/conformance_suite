@@ -30,14 +30,14 @@ OPERANDS:34576f4b                XCU.nm.001 XCU.nm.005
 STDIN:fc1111c9                   none  see input files
 INPUT_FILES:8c532319             XCU.nm.005
 INPUT_FILES:e9f4a2ee             impl  implementation-defined library formats
-ENVIRONMENT_VARIABLES:389addd6   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:389addd6  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_COLLATE, LC_CTYPE)
+ENVIRONMENT_VARIABLES:8aece102  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_COLLATE, LC_CTYPE)
+ENVIRONMENT_VARIABLES:b96c5038  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_COLLATE, LC_CTYPE)
 ENVIRONMENT_VARIABLES:d7a3c817   todo  locale variables not exercised
 ENVIRONMENT_VARIABLES:4a460d8d   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:fb479014  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ASYNCHRONOUS_EVENTS:d92f27bd     none  default
 STDOUT:ae21de9b                  XCU.nm.001
 STDOUT:cf7ff5c8                  XCU.nm.006

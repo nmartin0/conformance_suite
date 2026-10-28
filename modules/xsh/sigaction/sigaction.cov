@@ -4,10 +4,10 @@
 DESCRIPTION:a0e4c251        XSH.sigaction.001 XSH.sigaction.002
 DESCRIPTION:950dedd0        XSH.sigaction.019  # values outside <signal.h> fail
 DESCRIPTION:6eb14fb2        none  introduces the structure
-DESCRIPTION:014523e0        todo  Tier 0 header check (generator): sa_handler member; used by every test here
-DESCRIPTION:70898c0a        todo  Tier 0 header check (generator): sa_mask member; behaviour in XSH.sigaction.014
-DESCRIPTION:cbee66ec        todo  Tier 0 header check (generator): sa_flags member
-DESCRIPTION:35e6ff38        todo  Tier 0 header check (generator): sa_sigaction member; behaviour in XSH.sigaction.005
+DESCRIPTION:014523e0        XBD.signal.h.013  # the member and its type; used by every test here
+DESCRIPTION:70898c0a        XBD.signal.h.013 XSH.sigaction.014  # the member and its type; behaviour in XSH.sigaction.014
+DESCRIPTION:cbee66ec        XBD.signal.h.013  # the member and its type
+DESCRIPTION:35e6ff38        XBD.signal.h.014 XSH.sigaction.005  # the member and its type; behaviour in XSH.sigaction.005
 DESCRIPTION:ed817e4c        app
 DESCRIPTION:0e74f0e7        XSH.sigaction.002
 DESCRIPTION:c6ce0ceb        XSH.sigaction.001 XSH.sigaction.002

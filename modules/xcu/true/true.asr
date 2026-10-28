@@ -30,3 +30,17 @@ class      required
 since      1992
 says       true writes nothing to standard error.
 test       t/003-no-stderr.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.true.004
+anchor     utilities/true.html#ENVIRONMENT VARIABLES
+anchor     utilities/true.html#STDERR
+class      required
+says       No environment variable affects true: with locale and catalog
+           variables set to a made locale and to catalog names that do not exist it still exits 0 and
+           writes nothing.
+timeout    60
+test       t/004-odd-environment.sh

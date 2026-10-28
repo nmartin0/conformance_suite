@@ -198,3 +198,81 @@ note       That the pair means that the data holds file descriptors is tested on
            sendmsg() and recvmsg().
 test       t/015-scm-rights.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.017
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/sockaddr
+class      required
+says       <sys/socket.h> defines struct sockaddr as a complete type
+           with at least the members sa_family (sa_family_t), sa_data
+           (char[]).
+test       t/017-struct-sockaddr.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.018
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/msghdr
+class      required
+says       <sys/socket.h> defines struct msghdr as a complete type with
+           at least the members msg_name (void *), msg_namelen
+           (socklen_t), msg_iov (struct iovec *), msg_iovlen (int),
+           msg_control (void *), msg_controllen (socklen_t), msg_flags
+           (int).
+test       t/018-struct-msghdr.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.019
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/iovec
+class      required
+says       <sys/socket.h> defines struct iovec as a complete type.
+test       t/019-complete-iovec.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.020
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/cmsghdr
+class      required
+says       <sys/socket.h> defines struct cmsghdr as a complete type with
+           at least the members cmsg_len (socklen_t), cmsg_level (int),
+           cmsg_type (int).
+test       t/020-struct-cmsghdr.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.021
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/linger
+class      required
+says       <sys/socket.h> defines struct linger as a complete type with
+           at least the members l_onoff (int), l_linger (int).
+test       t/021-struct-linger.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.022
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/SOMAXCONN
+class      required
+says       <sys/socket.h> defines the macro SOMAXCONN.
+test       t/022-macros.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.023
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/size_t
+class      required
+says       <sys/socket.h> defines the types size_t, ssize_t.
+test       t/023-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.024
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/accept4
+class      required
+since      2024
+says       <sys/socket.h> declares accept4() with the prototypes the
+           page gives.
+test       t/024-functions-accept4.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_socket.h.025
+anchor     basedefs/sys_socket.h.html#DESCRIPTION/accept
+class      required
+says       <sys/socket.h> declares accept(), bind(), connect(),
+           getpeername(), getsockname(), getsockopt(), listen(), recv(),
+           recvfrom(), recvmsg(), send(), sendmsg(), sendto(),
+           setsockopt(), shutdown(), sockatmark(), socket(),
+           socketpair() with the prototypes the page gives.
+test       t/025-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

@@ -43,3 +43,81 @@ note       The page points to <sys/wait.h>, where the options argument of
            own is the reading of that.
 test       t/004-wait-options.c
 nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdlib.h.005
+anchor     basedefs/stdlib.h.html#DESCRIPTION/div_t
+class      required
+says       <stdlib.h> defines div_t, ldiv_t, lldiv_t as complete types.
+test       t/005-complete-div.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdlib.h.006
+anchor     basedefs/stdlib.h.html#DESCRIPTION/size_t
+class      required
+says       <stdlib.h> defines the types size_t, wchar_t.
+test       t/006-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdlib.h.007
+anchor     basedefs/stdlib.h.html#DESCRIPTION/mkostemp
+class      required
+since      2024
+says       <stdlib.h> declares mkostemp(), qsort_r(), secure_getenv(),
+           reallocarray() with the prototypes the page gives.
+test       t/007-functions-issue8.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdlib.h.008
+anchor     basedefs/stdlib.h.html#DESCRIPTION/ptsname_r
+class      conditional
+when       XSI
+since      2024
+says       <stdlib.h> declares ptsname_r() with the prototypes the page
+           gives.
+test       t/008-functions-ptsname-r.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdlib.h.009
+anchor     basedefs/stdlib.h.html#DESCRIPTION/_Exit
+class      required
+says       <stdlib.h> declares _Exit(), abort(), abs(), aligned_alloc(),
+           at_quick_exit(), atexit(), atof(), atoi(), atol(), atoll(),
+           bsearch(), calloc(), div(), exit(), free(), getenv(),
+           getsubopt(), labs(), ldiv(), llabs(), lldiv(), malloc(),
+           mblen(), mbstowcs(), mbtowc(), mkdtemp(), mkstemp(), qsort(),
+           quick_exit(), rand(), realloc(), realpath(), setenv(),
+           srand(), strtod(), strtof(), strtol(), strtold(), strtoll(),
+           strtoul(), strtoull(), system(), unsetenv(), wcstombs(),
+           wctomb() with the prototypes the page gives.
+test       t/009-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdlib.h.010
+anchor     basedefs/stdlib.h.html#DESCRIPTION/posix_memalign
+class      conditional
+when       ADV
+says       <stdlib.h> declares posix_memalign() with the prototypes the
+           page gives.
+test       t/010-functions-adv.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdlib.h.011
+anchor     basedefs/stdlib.h.html#DESCRIPTION/a64l
+class      conditional
+when       XSI
+says       <stdlib.h> declares a64l(), drand48(), erand48(), grantpt(),
+           initstate(), jrand48(), l64a(), lcong48(), lrand48(),
+           mrand48(), nrand48(), posix_openpt(), ptsname(), putenv(),
+           random(), seed48(), setstate(), srand48(), srandom(),
+           unlockpt() with the prototypes the page gives.
+test       t/011-functions-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.stdlib.h.012
+anchor     basedefs/stdlib.h.html#DESCRIPTION/setkey
+class      conditional
+when       XSI+CRYPT
+says       <stdlib.h> declares setkey() with the prototypes the page
+           gives.
+test       t/012-functions-xsi-crypt.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

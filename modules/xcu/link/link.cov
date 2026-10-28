@@ -11,13 +11,13 @@ OPERANDS:36df1fc8            XCU.link.001 XCU.link.003
 OPERANDS:89d4ee6c            XCU.link.001 XCU.link.002
 STDIN:3f472296               none  section says nothing is needed (XCU 1.4 defaults)
 INPUT_FILES:3f472296         none  section says nothing is needed (XCU 1.4 defaults)
-ENVIRONMENT_VARIABLES:4852ce8b todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:fb479014 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:b55e60b5 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:4852ce8b  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  none  the precedence of the internationalization variables is stated once, in XBD 8.2, and asserted there (XBD.8.2-internationalization-variables.001 to .004); no locale category this utility consults has a standard-defined, observable effect that a made locale could show
+ENVIRONMENT_VARIABLES:8aece102  none  the precedence of the internationalization variables is stated once, in XBD 8.2, and asserted there (XBD.8.2-internationalization-variables.001 to .004); no locale category this utility consults has a standard-defined, observable effect that a made locale could show
+ENVIRONMENT_VARIABLES:b96c5038  none  the precedence of the internationalization variables is stated once, in XBD 8.2, and asserted there (XBD.8.2-internationalization-variables.001 to .004); no locale category this utility consults has a standard-defined, observable effect that a made locale could show
+ENVIRONMENT_VARIABLES:4a460d8d  untestable  the utility handles its operands and data as names, numbers, keywords or opaque bytes; how bytes group into characters changes nothing the page specifies, so no observable difference can be required
+ENVIRONMENT_VARIABLES:fb479014  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:b55e60b5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ASYNCHRONOUS_EVENTS:d92f27bd todo  XCU 1.4 default for signals and errors is not exercised
 STDOUT:eb724aff              none  section says nothing is needed (XCU 1.4 defaults)
 STDERR:b2905b3f              todo  not covered by a test yet

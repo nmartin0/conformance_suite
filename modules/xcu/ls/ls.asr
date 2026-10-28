@@ -447,3 +447,38 @@ says       "ls -lR d" with a subdirectory d/sub writes a blank line, the
            header "d/sub:" and then the total line of that directory, in
            this order.
 test       t/052-R-header-total.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.ls.053
+anchor     utilities/ls.html#ENVIRONMENT VARIABLES
+anchor     utilities/ls.html#DESCRIPTION
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       ls orders names by the collating sequence of the locale that
+           LC_COLLATE names, with LC_ALL, LANG and a null LC_ALL treated as
+           XBD 8.2 says.
+timeout    120
+test       t/053-locale-collate.sh
+
+assertion  XCU.ls.054
+anchor     utilities/ls.html#ENVIRONMENT VARIABLES
+anchor     utilities/ls.html#OPTIONS/-q
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       ls -q leaves alone a character that the locale named by LC_CTYPE
+           classes as printable, with LC_ALL, LANG and a null LC_ALL treated
+           as XBD 8.2 says.
+timeout    120
+test       t/054-locale-ctype-print.sh
+
+assertion  XCU.ls.055
+anchor     utilities/ls.html#DESCRIPTION
+class      required
+says       Names that the collating sequence of the locale does not
+           distinguish are put in the order of the POSIX locale (byte by
+           byte).
+timeout    120
+test       t/055-collate-tie-break.sh

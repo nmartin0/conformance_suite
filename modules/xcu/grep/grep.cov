@@ -57,14 +57,14 @@ STDIN:edcb53c5                   none  the standard input is used only with no f
 STDIN:59ec88a4                   none  the standard input is used only with no file operand, and '-' is optional
 STDIN:fc1111c9                   none  the standard input is used only with no file operand, and '-' is optional
 INPUT_FILES:3eee12be             none  regular text files
-ENVIRONMENT_VARIABLES:097ff517   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8cbf3293   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:cf065fb5   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:097ff517  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  XCU.grep.009 XCU.grep.010
+ENVIRONMENT_VARIABLES:8aece102  XCU.grep.009 XCU.grep.010
+ENVIRONMENT_VARIABLES:b96c5038  XCU.grep.009 XCU.grep.010
+ENVIRONMENT_VARIABLES:8cbf3293  partial XCU.grep.009  # multi-character collating elements only; equivalence classes are not exercised
+ENVIRONMENT_VARIABLES:cf065fb5  XCU.grep.010
+ENVIRONMENT_VARIABLES:fb479014  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ASYNCHRONOUS_EVENTS:d92f27bd     none  default
 STDOUT:4f45929f                  XCU.grep.006
 STDOUT:f0975a1f                  XCU.grep.005 XCU.grep.007

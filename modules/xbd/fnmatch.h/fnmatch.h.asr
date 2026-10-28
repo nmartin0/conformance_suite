@@ -28,3 +28,11 @@ note       Equivalence is tested by effect; the values need not be
            equal.
 test       t/002-ignorecase.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.fnmatch.h.003
+anchor     basedefs/fnmatch.h.html#DESCRIPTION/fnmatch
+class      required
+says       <fnmatch.h> declares fnmatch() with the prototypes the page
+           gives.
+test       t/003-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

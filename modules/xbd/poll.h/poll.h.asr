@@ -56,3 +56,49 @@ note       POLLWRNORM is called equivalent to POLLOUT, so either bit is
            assumed.
 test       t/004-wrnorm.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.poll.h.005
+anchor     basedefs/poll.h.html#DESCRIPTION/pollfd
+class      required
+says       <poll.h> defines struct pollfd as a complete type with at
+           least the members fd (int), events (short), revents (short).
+test       t/005-struct-pollfd.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.poll.h.006
+anchor     basedefs/poll.h.html#DESCRIPTION/nfds_t
+class      required
+says       <poll.h> defines the type nfds_t.
+test       t/006-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.poll.h.007
+anchor     basedefs/poll.h.html#DESCRIPTION/sigset_t
+class      required
+since      2024
+says       <poll.h> defines the type sigset_t.
+test       t/007-types-sigset.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.poll.h.008
+anchor     basedefs/poll.h.html#DESCRIPTION/timespec
+class      required
+since      2024
+says       <poll.h> defines struct timespec as a complete type.
+test       t/008-complete-timespec.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.poll.h.009
+anchor     basedefs/poll.h.html#DESCRIPTION/ppoll
+class      required
+since      2024
+says       <poll.h> declares ppoll() with the prototypes the page gives.
+test       t/009-functions-ppoll.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.poll.h.010
+anchor     basedefs/poll.h.html#DESCRIPTION/poll
+class      required
+says       <poll.h> declares poll() with the prototypes the page gives.
+test       t/010-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

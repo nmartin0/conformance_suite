@@ -70,3 +70,35 @@ says       regoff_t is a signed integer type that can hold the largest value of
            SSIZE_MAX).
 test       t/005-regoff-t.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.regex.h.006
+anchor     basedefs/regex.h.html#DESCRIPTION/regex_t
+class      required
+says       <regex.h> defines regex_t as a complete type with at least
+           the members re_nsub (size_t).
+test       t/006-struct-regex_t.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.regex.h.007
+anchor     basedefs/regex.h.html#DESCRIPTION/regmatch_t
+class      required
+says       <regex.h> defines regmatch_t as a complete type with at least
+           the members rm_so (regoff_t), rm_eo (regoff_t).
+test       t/007-struct-regmatch_t.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.regex.h.008
+anchor     basedefs/regex.h.html#DESCRIPTION/size_t
+class      required
+since      2008
+says       <regex.h> defines the type size_t.
+test       t/008-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.regex.h.009
+anchor     basedefs/regex.h.html#DESCRIPTION/regcomp
+class      required
+says       <regex.h> declares regcomp(), regerror(), regexec(),
+           regfree() with the prototypes the page gives.
+test       t/009-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

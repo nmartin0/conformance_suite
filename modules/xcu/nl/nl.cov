@@ -55,14 +55,14 @@ STDIN:cb9b765e                   XCU.nl.001
 STDIN:59ec88a4                   XCU.nl.001
 STDIN:fc1111c9                   XCU.nl.001
 INPUT_FILES:48431ce8             none  text file
-ENVIRONMENT_VARIABLES:1196d59a   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8cbf3293   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:84389792   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:b55e60b5   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:1196d59a  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  XCU.nl.009 XCU.nl.010
+ENVIRONMENT_VARIABLES:8aece102  XCU.nl.009 XCU.nl.010
+ENVIRONMENT_VARIABLES:b96c5038  XCU.nl.009 XCU.nl.010
+ENVIRONMENT_VARIABLES:8cbf3293  partial XCU.nl.009  # multi-character collating elements only; equivalence classes are not exercised
+ENVIRONMENT_VARIABLES:84389792  XCU.nl.010
+ENVIRONMENT_VARIABLES:fb479014  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:b55e60b5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ASYNCHRONOUS_EVENTS:d92f27bd     none  default
 STDOUT:9c3a4153                  XCU.nl.001 XCU.nl.004
 STDOUT:c7d78dd3                  XCU.nl.001 XCU.nl.004

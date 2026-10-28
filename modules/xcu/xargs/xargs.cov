@@ -68,13 +68,13 @@ STDIN:7aa5c802                   impl  input not satisfying the requirement is u
 STDIN:77c8ab95                   XCU.xargs.006
 INPUT_FILES:142930c9             XCU.xargs.015
 ENVIRONMENT_VARIABLES:14b63504   none  introduces the list
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables are not varied
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables are not varied
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:221d4f1a  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_COLLATE, LC_CTYPE)
+ENVIRONMENT_VARIABLES:8aece102  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_COLLATE, LC_CTYPE)
+ENVIRONMENT_VARIABLES:b96c5038  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_COLLATE, LC_CTYPE)
 ENVIRONMENT_VARIABLES:5d64a535   todo  locale variables are not varied
 ENVIRONMENT_VARIABLES:18e71e9f   todo  locale variables are not varied
 ENVIRONMENT_VARIABLES:1bda213e   todo  locale variables are not varied
-ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ENVIRONMENT_VARIABLES:20a34d1a   todo  PATH is not varied
 ENVIRONMENT_VARIABLES:1e6b3c43   todo  PATH is not varied
 ASYNCHRONOUS_EVENTS:d92f27bd     none  XCU 1.4 default or empty section

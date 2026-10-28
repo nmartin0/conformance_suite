@@ -29,3 +29,50 @@ note       nftw() flags are the bitwise-inclusive OR of these (nftw
            page) (Q-165).
 test       t/002-walk-flags.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.ftw.h.003
+anchor     basedefs/ftw.h.html#DESCRIPTION/FTW
+class      conditional
+when       XSI
+since      1988
+says       <ftw.h> defines struct FTW as a complete type with at least
+           the members base (int), level (int).
+test       t/003-struct-ftw.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.ftw.h.004
+anchor     basedefs/ftw.h.html#DESCRIPTION/stat
+class      conditional
+when       XSI
+says       <ftw.h> defines struct stat as a complete type.
+test       t/004-complete-stat.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.ftw.h.005
+anchor     basedefs/ftw.h.html#DESCRIPTION
+class      conditional
+when       XSI
+says       <ftw.h> defines the macros S_IRWXU, S_IRUSR, S_IWUSR,
+           S_IXUSR, S_IRWXG, S_IRGRP, S_IWGRP, S_IXGRP, S_IRWXO,
+           S_IROTH, S_IWOTH, S_IXOTH, S_ISUID, S_ISGID, S_ISVTX, S_IFMT,
+           S_IFBLK, S_IFCHR, S_IFIFO, S_IFREG, S_IFDIR, S_IFLNK,
+           S_IFSOCK.
+test       t/005-macros-st-mode.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.ftw.h.006
+anchor     basedefs/ftw.h.html#DESCRIPTION
+class      conditional
+when       XSI
+says       <ftw.h> defines the macros S_ISBLK, S_ISCHR, S_ISDIR,
+           S_ISFIFO, S_ISREG, S_ISLNK, S_ISSOCK.
+test       t/006-macros-file-type-tests.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.ftw.h.007
+anchor     basedefs/ftw.h.html#DESCRIPTION/nftw
+class      conditional
+when       XSI
+says       <ftw.h> declares nftw() with the prototypes the page gives.
+test       t/007-functions-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

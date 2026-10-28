@@ -80,3 +80,91 @@ says       On an XSI system <time.h> provides getdate_err as an expression of
            type int.
 test       t/007-getdate-err.c
 nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.008
+anchor     basedefs/time.h.html#DESCRIPTION/timespec
+class      required
+says       <time.h> defines struct timespec as a complete type with at
+           least the members tv_sec (time_t).
+test       t/008-struct-timespec-sec.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.009
+anchor     basedefs/time.h.html#DESCRIPTION/itimerspec
+class      required
+says       <time.h> defines struct itimerspec as a complete type with at
+           least the members it_interval (struct timespec), it_value
+           (struct timespec).
+test       t/009-struct-itimerspec.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.010
+anchor     basedefs/time.h.html#DESCRIPTION/NULL
+class      required
+says       <time.h> defines the macro NULL.
+test       t/010-macros.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.011
+anchor     basedefs/time.h.html#DESCRIPTION/TIMER_ABSTIME
+class      required
+says       <time.h> defines the macro TIMER_ABSTIME.
+test       t/011-macros.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.012
+anchor     basedefs/time.h.html#DESCRIPTION/daylight
+class      conditional
+when       XSI
+says       <time.h> declares the external variables daylight, timezone
+           with the type the page gives.
+test       t/012-variables-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.013
+anchor     basedefs/time.h.html#DESCRIPTION/tzname
+class      required
+says       <time.h> declares the external variable tzname with the type
+           the page gives.
+test       t/013-variables-tzname.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.014
+anchor     basedefs/time.h.html#DESCRIPTION/timespec_get
+class      required
+since      2024
+says       <time.h> declares timespec_get() with the prototypes the page
+           gives.
+test       t/014-functions-timespec-get.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.015
+anchor     basedefs/time.h.html#DESCRIPTION/asctime
+class      required
+says       <time.h> declares asctime(), clock(), clock_getres(),
+           clock_gettime(), clock_nanosleep(), clock_settime(), ctime(),
+           difftime(), gmtime(), gmtime_r(), localtime(), localtime_r(),
+           mktime(), nanosleep(), strftime(), strftime_l(), time(),
+           timer_create(), timer_delete(), timer_getoverrun(),
+           timer_gettime(), timer_settime(), tzset() with the prototypes
+           the page gives.
+test       t/015-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.016
+anchor     basedefs/time.h.html#DESCRIPTION/clock_getcpuclockid
+class      conditional
+when       CPT
+says       <time.h> declares clock_getcpuclockid() with the prototypes
+           the page gives.
+test       t/016-functions-cpt.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.time.h.017
+anchor     basedefs/time.h.html#DESCRIPTION/getdate
+class      conditional
+when       XSI
+says       <time.h> declares getdate(), strptime() with the prototypes
+           the page gives.
+test       t/017-functions-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

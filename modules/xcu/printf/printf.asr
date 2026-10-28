@@ -132,3 +132,18 @@ says       An argument that cannot be converted to a number gives a
            diagnostic on standard error and a non-zero exit status, and
            the remaining arguments are still processed.
 test       t/014-bad-number.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.printf.015
+anchor     utilities/printf.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       The e, f and g conversions of printf write the radix character of
+           the locale that LC_NUMERIC names, with LC_ALL, LANG and a null
+           LC_ALL treated as XBD 8.2 says. The conversions are optional in
+           the utility, so a system without them is NOTINUSE.
+timeout    120
+test       t/015-locale-numeric.sh

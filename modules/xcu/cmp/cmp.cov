@@ -19,13 +19,13 @@ OPERANDS:da629668            impl  undefined
 STDIN:e2e36ef5               XCU.cmp.008
 STDIN:fc1111c9               todo  not covered by a test yet
 INPUT_FILES:d928e7fa         XCU.cmp.009
-ENVIRONMENT_VARIABLES:dff5ca7d todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:221d4f1a todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:8aece102 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:b96c5038 todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:4a460d8d todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:891f91fa todo  locale, message-catalog and similar environment variables are not exercised
-ENVIRONMENT_VARIABLES:d838b9f5 todo  locale, message-catalog and similar environment variables are not exercised
+ENVIRONMENT_VARIABLES:dff5ca7d  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  none  the precedence of the internationalization variables is stated once, in XBD 8.2, and asserted there (XBD.8.2-internationalization-variables.001 to .004); no locale category this utility consults has a standard-defined, observable effect that a made locale could show
+ENVIRONMENT_VARIABLES:8aece102  none  the precedence of the internationalization variables is stated once, in XBD 8.2, and asserted there (XBD.8.2-internationalization-variables.001 to .004); no locale category this utility consults has a standard-defined, observable effect that a made locale could show
+ENVIRONMENT_VARIABLES:b96c5038  none  the precedence of the internationalization variables is stated once, in XBD 8.2, and asserted there (XBD.8.2-internationalization-variables.001 to .004); no locale category this utility consults has a standard-defined, observable effect that a made locale could show
+ENVIRONMENT_VARIABLES:4a460d8d  untestable  the utility handles its operands and data as names, numbers, keywords or opaque bytes; how bytes group into characters changes nothing the page specifies, so no observable difference can be required
+ENVIRONMENT_VARIABLES:891f91fa  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ASYNCHRONOUS_EVENTS:d92f27bd todo  XCU 1.4 default for signals and errors is not exercised
 STDOUT:1660bf4f              XCU.cmp.002 XCU.cmp.003
 STDOUT:54f42259              XCU.cmp.002

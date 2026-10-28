@@ -83,3 +83,28 @@ says       The mmddhhmm[[cc]yy] operand sets the system date and time, with
            2000 to 2068, the current year when the year is omitted.
 reason     Setting the system clock changes the state of the machine under
            test and needs privilege; the effect cannot be undone exactly.
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.date.010
+anchor     utilities/date.html#ENVIRONMENT VARIABLES
+anchor     utilities/date.html#STDOUT
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       date writes the weekday and month names, the meridiem string and
+           the %c layout of the locale that LC_TIME names, with LC_ALL, LANG
+           and a null LC_ALL treated as XBD 8.2 says.
+timeout    120
+test       t/010-locale-time.sh
+
+assertion  XCU.date.011
+anchor     utilities/date.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.3
+class      required
+says       date writes the time of the zone that TZ names: a zone written
+           with an offset east of the zero offset is that many hours ahead,
+           and one west of it that many hours behind.
+timeout    60
+test       t/011-timezone-offset.sh

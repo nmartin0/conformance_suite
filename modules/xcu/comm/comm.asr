@@ -48,3 +48,18 @@ class      required
 since      1992
 says       When file1 or file2 cannot be read the status is nonzero.
 test       t/005-unreadable-file.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.comm.006
+anchor     utilities/comm.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       comm expects its files to be sorted in the collating sequence of
+           the locale that LC_COLLATE names (a line is before another in that
+           sequence), with LC_ALL, LANG and a null LC_ALL treated as XBD 8.2
+           says.
+timeout    120
+test       t/006-locale-collate.sh

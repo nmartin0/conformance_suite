@@ -32,3 +32,64 @@ note       The page lets DT_MQ and the others be equal to nothing else,
            files may carry one.
 test       t/002-dt-never-returned.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.dirent.h.003
+anchor     basedefs/dirent.h.html#DESCRIPTION/DIR
+class      required
+says       <dirent.h> defines the types DIR, ino_t, size_t, ssize_t.
+test       t/003-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.dirent.h.004
+anchor     basedefs/dirent.h.html#DESCRIPTION/reclen_t
+class      required
+since      2024
+says       <dirent.h> defines the type reclen_t.
+test       t/004-types-reclen.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.dirent.h.005
+anchor     basedefs/dirent.h.html#DESCRIPTION/dirent
+class      required
+since      1988
+says       <dirent.h> defines struct dirent as a complete type with at
+           least the members d_ino (ino_t), d_name (char[]).
+test       t/005-struct-dirent.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.dirent.h.006
+anchor     basedefs/dirent.h.html#DESCRIPTION/posix_dent
+class      required
+since      2024
+says       <dirent.h> defines struct posix_dent as a complete type with
+           at least the members d_ino (ino_t), d_reclen (reclen_t),
+           d_type (unsigned char), d_name (char[]).
+test       t/006-struct-posix_dent.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.dirent.h.007
+anchor     basedefs/dirent.h.html#DESCRIPTION/alphasort
+class      required
+says       <dirent.h> declares alphasort(), closedir(), dirfd(),
+           fdopendir(), opendir(), readdir(), readdir_r(), rewinddir(),
+           scandir() with the prototypes the page gives.
+test       t/007-functions-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.dirent.h.008
+anchor     basedefs/dirent.h.html#DESCRIPTION/posix_getdents
+class      required
+since      2024
+says       <dirent.h> declares posix_getdents() with the prototypes the
+           page gives.
+test       t/008-functions-posix-getdents.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.dirent.h.009
+anchor     basedefs/dirent.h.html#DESCRIPTION/seekdir
+class      conditional
+when       XSI
+says       <dirent.h> declares seekdir(), telldir() with the prototypes
+           the page gives.
+test       t/009-functions-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

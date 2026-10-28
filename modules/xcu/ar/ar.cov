@@ -66,15 +66,15 @@ OPERANDS:7b0f0d11                XCU.ar.018
 OPERANDS:89e0cdca                XCU.ar.012 XCU.ar.013
 STDIN:3f472296                   none  not used
 INPUT_FILES:d587bca9             XCU.ar.002
-ENVIRONMENT_VARIABLES:08312df9   todo  other environment variables not exercised
+ENVIRONMENT_VARIABLES:08312df9  none  introductory sentence; each variable it introduces has its own unit
 ENVIRONMENT_VARIABLES:221d4f1a   XCU.ar.008
-ENVIRONMENT_VARIABLES:8aece102   todo  other environment variables not exercised
-ENVIRONMENT_VARIABLES:b96c5038   todo  other environment variables not exercised
+ENVIRONMENT_VARIABLES:8aece102  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
+ENVIRONMENT_VARIABLES:b96c5038  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
 ENVIRONMENT_VARIABLES:8586e6ac   todo  other environment variables not exercised
-ENVIRONMENT_VARIABLES:fb479014   todo  other environment variables not exercised
+ENVIRONMENT_VARIABLES:fb479014  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
 ENVIRONMENT_VARIABLES:75bbe821   XCU.ar.008
-ENVIRONMENT_VARIABLES:d838b9f5   todo  other environment variables not exercised
-ENVIRONMENT_VARIABLES:6d3d958d   todo  other environment variables not exercised
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
+ENVIRONMENT_VARIABLES:6d3d958d  untestable  temporary files are not observable portably (their names and use are unspecified)
 ENVIRONMENT_VARIABLES:c550c462   XCU.ar.008
 ENVIRONMENT_VARIABLES:bdf7eb3f   XCU.ar.008
 ASYNCHRONOUS_EVENTS:d92f27bd     none  default

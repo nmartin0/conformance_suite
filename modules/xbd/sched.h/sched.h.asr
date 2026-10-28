@@ -25,3 +25,75 @@ says       SCHED_SPORADIC differs from SCHED_FIFO, SCHED_RR and
            SCHED_OTHER (as far as they are defined).
 test       t/002-policy-sporadic.c
 nomutant   header content check; needs the Tier 0 header mutants
+
+assertion  XBD.sched.h.003
+anchor     basedefs/sched.h.html#DESCRIPTION/pid_t
+class      conditional
+when       PS
+since      2008
+says       <sched.h> defines the type pid_t.
+test       t/003-types-pid.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sched.h.004
+anchor     basedefs/sched.h.html#DESCRIPTION/time_t
+class      conditional
+when       SS|TSP
+since      2008
+says       <sched.h> defines the type time_t.
+test       t/004-types-time.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sched.h.005
+anchor     basedefs/sched.h.html#DESCRIPTION/timespec
+class      required
+since      2008
+says       <sched.h> defines struct timespec as a complete type.
+test       t/005-complete-timespec.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sched.h.006
+anchor     basedefs/sched.h.html#DESCRIPTION/sched_param
+class      required
+says       <sched.h> defines struct sched_param as a complete type with
+           at least the members sched_priority (int).
+test       t/006-struct-sched-param.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sched.h.007
+anchor     basedefs/sched.h.html#DESCRIPTION/sched_param
+class      conditional
+when       SS|TSP
+says       <sched.h> defines struct sched_param with the sporadic server
+           members sched_ss_low_priority, sched_ss_repl_period,
+           sched_ss_init_budget and sched_ss_max_repl as well.
+test       t/007-struct-sched-param-sporadic.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sched.h.008
+anchor     basedefs/sched.h.html#DESCRIPTION/sched_yield
+class      required
+says       <sched.h> declares sched_yield() with the prototypes the page
+           gives.
+test       t/008-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sched.h.009
+anchor     basedefs/sched.h.html#DESCRIPTION/sched_getparam
+class      conditional
+when       PS
+says       <sched.h> declares sched_getparam(), sched_getscheduler(),
+           sched_setparam(), sched_setscheduler() with the prototypes
+           the page gives.
+test       t/009-functions-ps.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sched.h.010
+anchor     basedefs/sched.h.html#DESCRIPTION/sched_get_priority_max
+class      conditional
+when       PS|TPS
+says       <sched.h> declares sched_get_priority_max(),
+           sched_get_priority_min(), sched_rr_get_interval() with the
+           prototypes the page gives.
+test       t/010-functions-ps-tps.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

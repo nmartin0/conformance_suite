@@ -47,14 +47,14 @@ INPUT_FILES:100cba6f             XCU.localedef.005
 INPUT_FILES:87e44e32             XCU.localedef.001
 INPUT_FILES:4a5caf32             XCU.localedef.001
 ENVIRONMENT_VARIABLES:7091b4ff   none  introduces the list
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables are not varied
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables are not varied
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:221d4f1a  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_COLLATE, LC_CTYPE)
+ENVIRONMENT_VARIABLES:8aece102  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_COLLATE, LC_CTYPE)
+ENVIRONMENT_VARIABLES:b96c5038  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_COLLATE, LC_CTYPE)
 ENVIRONMENT_VARIABLES:e8854e33   todo  locale variables are not varied
 ENVIRONMENT_VARIABLES:8586e6ac   todo  locale variables are not varied
 ENVIRONMENT_VARIABLES:a0ef4c7d   todo  locale variables are not varied
-ENVIRONMENT_VARIABLES:fb479014   todo  locale variables are not varied
-ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:fb479014  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
 ASYNCHRONOUS_EVENTS:d92f27bd     none  XCU 1.4 default or empty section
 STDOUT:595f0f00                  impl  unspecified format
 STDERR:b2905b3f                  todo  diagnostic-only standard error is not checked

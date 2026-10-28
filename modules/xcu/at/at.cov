@@ -72,13 +72,13 @@ STDIN:0b083a2c                   XCU.at.004
 INPUT_FILES:3d275a87             XCU.at.004
 INPUT_FILES:3790b457             untestable  the access files are in implementation-defined directories and need privilege to change
 ENVIRONMENT_VARIABLES:16ae557e   none  introduces the list
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables are not varied
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables are not varied
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:221d4f1a  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
+ENVIRONMENT_VARIABLES:8aece102  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
+ENVIRONMENT_VARIABLES:b96c5038  todo  the precedence of LANG and LC_ALL is observable only through a category whose effect is still untested here (LC_CTYPE)
 ENVIRONMENT_VARIABLES:8586e6ac   todo  locale variables are not varied
-ENVIRONMENT_VARIABLES:891f91fa   todo  locale variables are not varied
-ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables are not varied
-ENVIRONMENT_VARIABLES:3a55dafb   todo  locale variables are not varied
+ENVIRONMENT_VARIABLES:891f91fa  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
+ENVIRONMENT_VARIABLES:3a55dafb  impl  outside the POSIX locale the format and contents of the date and time strings are not specified by the page
 ENVIRONMENT_VARIABLES:782236e6   XCU.at.009
 ENVIRONMENT_VARIABLES:dddf00d3   todo  locale variables are not varied
 ENVIRONMENT_VARIABLES:ea521df4   todo  locale variables are not varied

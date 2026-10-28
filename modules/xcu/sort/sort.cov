@@ -9,7 +9,7 @@ DESCRIPTION:c75370ba             XCU.sort.013
 DESCRIPTION:2262ffa2             XCU.sort.011
 DESCRIPTION:d02185b9             XCU.sort.010
 DESCRIPTION:246b87a7             XCU.sort.001
-DESCRIPTION:8d9faff8             todo  needs a locale with a partial collation order
+DESCRIPTION:8d9faff8            XCU.sort.020
 OPTIONS:f16caf96                 todo  syntax guidelines not checked (plus-sign option delimiter is optional)
 OPTIONS:c7d0595c                 impl  recognising + as a delimiter is optional
 OPTIONS:e2947e20                 none  introductory sentence
@@ -60,16 +60,16 @@ OPERANDS:16886661                XCU.sort.013
 STDIN:da662d9e                   XCU.sort.013
 STDIN:fc1111c9                   XCU.sort.013
 INPUT_FILES:d3f4636b             XCU.sort.013
-ENVIRONMENT_VARIABLES:f3882e1b   todo  locale variables and TMPDIR not exercised
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables and TMPDIR not exercised
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables and TMPDIR not exercised
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables and TMPDIR not exercised
-ENVIRONMENT_VARIABLES:e3832a34   todo  locale variables and TMPDIR not exercised
-ENVIRONMENT_VARIABLES:9f141f11   todo  locale variables and TMPDIR not exercised
-ENVIRONMENT_VARIABLES:fb479014   todo  locale variables and TMPDIR not exercised
-ENVIRONMENT_VARIABLES:95f230cd   todo  locale variables and TMPDIR not exercised
-ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables and TMPDIR not exercised
-ENVIRONMENT_VARIABLES:112eef7c   todo  locale variables and TMPDIR not exercised
+ENVIRONMENT_VARIABLES:f3882e1b  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  XCU.sort.017 XCU.sort.018 XCU.sort.019
+ENVIRONMENT_VARIABLES:8aece102  XCU.sort.017 XCU.sort.018 XCU.sort.019
+ENVIRONMENT_VARIABLES:b96c5038  XCU.sort.017 XCU.sort.018 XCU.sort.019
+ENVIRONMENT_VARIABLES:e3832a34  XCU.sort.017 XCU.sort.020
+ENVIRONMENT_VARIABLES:9f141f11  partial XCU.sort.019  # only -f is exercised, not -b -d -i -n
+ENVIRONMENT_VARIABLES:fb479014  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:95f230cd  partial XCU.sort.018  # the thousands separator is not exercised
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
+ENVIRONMENT_VARIABLES:112eef7c  untestable  temporary files are not observable portably (their names and use are unspecified)
 ASYNCHRONOUS_EVENTS:d92f27bd     none  default
 STDOUT:450ca19b                  XCU.sort.001
 STDERR:1f1ab306                  XCU.sort.010

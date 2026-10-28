@@ -19,3 +19,30 @@ note       dlopen() describes mode as a relocation value OR-ed with a visibility
            inferred, not stated (Q-169).
 test       t/001-rtld-modes.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.dlfcn.h.002
+anchor     basedefs/dlfcn.h.html#DESCRIPTION/Dl_info_t
+class      required
+since      2024
+says       <dlfcn.h> defines Dl_info_t as a complete type with at least
+           the members dli_fname (const char *), dli_fbase (void *),
+           dli_sname (const char *), dli_saddr (void *).
+test       t/002-struct-dl_info_t.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.dlfcn.h.003
+anchor     basedefs/dlfcn.h.html#DESCRIPTION/dlclose
+class      required
+says       <dlfcn.h> declares dlclose(), dlerror(), dlopen(), dlsym()
+           with the prototypes the page gives.
+test       t/003-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.dlfcn.h.004
+anchor     basedefs/dlfcn.h.html#DESCRIPTION/dladdr
+class      required
+since      2024
+says       <dlfcn.h> declares dladdr() with the prototypes the page
+           gives.
+test       t/004-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

@@ -37,3 +37,17 @@ says       false exits with a status from 1 to 125 inclusive.
 note       Austin Group defect 1321 (Issue 8) set the range; before, the
            status had only to be non-zero (XCU.false.001).
 test       t/004-status-range.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.false.005
+anchor     utilities/false.html#ENVIRONMENT VARIABLES
+anchor     utilities/false.html#STDERR
+class      required
+says       No environment variable affects false: with locale and catalog
+           variables set to a made locale and to catalog names that do not exist it still exits 1 and
+           writes nothing.
+timeout    60
+test       t/005-odd-environment.sh

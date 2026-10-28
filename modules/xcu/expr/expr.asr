@@ -90,3 +90,37 @@ since      1992
 says       expr accepts -- as a first argument and discards it, so that an
            expression starting with a negative integer can be given.
 test       t/009-double-dash.sh
+
+# Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
+# localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
+# NOTINUSE without it.
+
+assertion  XCU.expr.010
+anchor     utilities/expr.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       The string comparison operators of expr use the collating sequence
+           of the locale that LC_COLLATE names, with LC_ALL, LANG and a null
+           LC_ALL treated as XBD 8.2 says.
+timeout    120
+test       t/010-locale-collate-compare.sh
+
+assertion  XCU.expr.011
+anchor     utilities/expr.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       A bracket expression in an expr match can name a collating element
+           that the locale named by LC_COLLATE defines (it matches the
+           characters of the element together, not singly).
+timeout    120
+test       t/011-locale-collate-element.sh
+
+assertion  XCU.expr.012
+anchor     utilities/expr.html#ENVIRONMENT VARIABLES
+anchor     basedefs/V1_chap08.html#8.2
+class      required
+says       A character class in an expr match is the class of the locale that
+           LC_CTYPE names, with LC_ALL, LANG and a null LC_ALL treated as XBD
+           8.2 says.
+timeout    120
+test       t/012-locale-ctype-class.sh

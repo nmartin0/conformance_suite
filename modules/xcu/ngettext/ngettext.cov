@@ -46,16 +46,16 @@ OPERANDS:edf13e06                todo  not covered by this build
 OPERANDS:de9955d2                XCU.ngettext.001 XCU.ngettext.003
 STDIN:3f472296                   none  not used
 INPUT_FILES:663411b6             untestable  translation needs a messages object found through a locale name that the standard does not specify
-ENVIRONMENT_VARIABLES:42f33789   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:42f33789  none  introductory sentence; each variable it introduces has its own unit
+ENVIRONMENT_VARIABLES:221d4f1a  none  the precedence of the internationalization variables is stated once, in XBD 8.2, and asserted there (XBD.8.2-internationalization-variables.001 to .004); no locale category this utility consults has a standard-defined, observable effect that a made locale could show
+ENVIRONMENT_VARIABLES:8aece102  none  the precedence of the internationalization variables is stated once, in XBD 8.2, and asserted there (XBD.8.2-internationalization-variables.001 to .004); no locale category this utility consults has a standard-defined, observable effect that a made locale could show
 ENVIRONMENT_VARIABLES:63c0449c   untestable  catalog lookup needs a locale name that the standard does not specify
-ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:3a7b5e82   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:fc76dacf   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:083ba191   todo  locale variables not exercised
-ENVIRONMENT_VARIABLES:b11bd577   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:b96c5038  none  the precedence of the internationalization variables is stated once, in XBD 8.2, and asserted there (XBD.8.2-internationalization-variables.001 to .004); no locale category this utility consults has a standard-defined, observable effect that a made locale could show
+ENVIRONMENT_VARIABLES:3a7b5e82  untestable  the wording and layout of diagnostic messages are unspecified (the page says only that they should follow the locale), so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:d838b9f5  impl  the format of message catalogs and the messages a utility looks up in them are implementation-defined, so a catalog search cannot be observed in a portable way
+ENVIRONMENT_VARIABLES:fc76dacf  untestable  the text domain and its directory select a messages object by locale name, and the names under which one is searched are unspecified, so only the untranslated text can be observed (as in XCU.ngettext.001)
+ENVIRONMENT_VARIABLES:083ba191  untestable  the text domain and its directory select a messages object by locale name, and the names under which one is searched are unspecified, so only the untranslated text can be observed (as in XCU.ngettext.001)
+ENVIRONMENT_VARIABLES:b11bd577  untestable  the text domain and its directory select a messages object by locale name, and the names under which one is searched are unspecified, so only the untranslated text can be observed (as in XCU.ngettext.001)
 ENVIRONMENT_VARIABLES:be34e3cd   XCU.ngettext.001
 ASYNCHRONOUS_EVENTS:d92f27bd     none  default
 STDOUT:2537b9f4                  XCU.ngettext.001

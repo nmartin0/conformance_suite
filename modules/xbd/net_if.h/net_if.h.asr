@@ -13,3 +13,21 @@ says       IF_NAMESIZE is an integer constant expression with a positive value,
            its terminating null character.
 test       t/001-if-namesize.c
 nomutant   compile-time check; needs the Tier 0 header mutants
+
+assertion  XBD.net_if.h.002
+anchor     basedefs/net_if.h.html#DESCRIPTION/if_nameindex
+class      required
+says       <net/if.h> defines struct if_nameindex as a complete type
+           with at least the members if_index (unsigned), if_name (char
+           *).
+test       t/002-struct-if_nameindex.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.net_if.h.003
+anchor     basedefs/net_if.h.html#DESCRIPTION/if_freenameindex
+class      required
+says       <net/if.h> declares if_freenameindex(), if_indextoname(),
+           if_nameindex(), if_nametoindex() with the prototypes the page
+           gives.
+test       t/003-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
