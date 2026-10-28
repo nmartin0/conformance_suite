@@ -1,0 +1,100 @@
+# XSH 2.1 Use and Implementation of Functions
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# General rules for functions and macros that every page relies on. Facts
+# a page already states for its own function are not repeated here.
+
+assertion  XSH.2.1-use-of-functions.001
+anchor     functions/V2_chap02.html#2.1
+class      required
+says       Each of getc, putc, getchar, putchar, feof, ferror, clearerr, fileno,
+           getc_unlocked, putc_unlocked, getchar_unlocked, putchar_unlocked,
+           isalpha, isdigit, toupper, tolower, abs and labs can be called with
+           its name in parentheses (which suppresses a macro of that name), and
+           its address can be taken and used for a call, with the right
+           results.
+test       t/001-suppress-and-address.c
+
+assertion  XSH.2.1-use-of-functions.002
+anchor     functions/V2_chap02.html#2.1
+class      required
+says       After #undef of each name in the list of 001, the name still
+           refers to a working function: it can be called and its address
+           used.
+test       t/002-undef.c
+
+assertion  XSH.2.1-use-of-functions.003
+anchor     functions/V2_chap02.html#2.1
+class      required
+says       Calls of feof, ferror, clearerr, fileno, isalpha, isdigit, toupper,
+           tolower, abs and labs, and the byte argument of putc and
+           putc_unlocked, with arguments that have side effects (an
+           increment, a decrement or a comma expression) evaluate each
+           argument exactly once, and arguments built with a conditional or
+           an assignment expression are taken as a whole.
+note       The pages of getc, putc, getc_unlocked and putc_unlocked say a
+           macro form may evaluate the stream argument more than once, so
+           that argument is always side-effect free here.
+test       t/003-args-once.c
+
+assertion  XSH.2.1-use-of-functions.004
+anchor     functions/V2_chap02.html#2.1
+class      required
+says       Without including any header, a program that declares abs,
+           labs, atoi, atof, rand, srand, toupper, tolower, isalpha,
+           isdigit, strcmp, strcpy and sprintf itself
+           (using only types that need no header) can call them, with
+           right results.
+note       Only functions whose prototypes use no type from a header are
+           declared. sprintf is declared with its usual
+           prototype (char *, const char *, ...).
+test       t/004-declare-without-header.c
+
+assertion  XSH.2.1-use-of-functions.005
+anchor     functions/V2_chap02.html#2.1
+class      required
+says       Each of EOF, BUFSIZ, RAND_MAX, EXIT_FAILURE, INT_MAX, INT_MIN,
+           UINT_MAX, LONG_MAX, LONG_MIN, CHAR_BIT, SIGINT, SIGKILL, EINVAL,
+           ENOENT, SEEK_END, FOPEN_MAX, S_IRWXU, O_CREAT and _POSIX_VERSION,
+           used unparenthesized in an arithmetic expression, acts as one
+           operand: the expression has the value it has with the macro's
+           value in a variable.
+note       Each macro is combined with *, /, % and - (the large ones only
+           with / and %, so nothing overflows), then compared with the same
+           expression on a variable that holds the macro's value.
+test       t/005-object-macro-grouping.c
+
+assertion  XSH.2.1-use-of-functions.006
+anchor     functions/V2_chap02.html#2.1
+class      required
+says       EOF, BUFSIZ, RAND_MAX, EXIT_FAILURE, EXIT_SUCCESS, INT_MAX, INT_MIN,
+           UINT_MAX, LONG_MAX, LONG_MIN, CHAR_BIT, SIGINT, SIGKILL, SIGTERM,
+           EINVAL, ENOENT, SEEK_SET, SEEK_CUR, SEEK_END and FOPEN_MAX can
+           be used in #if directives; EOF is negative there, and the signal
+           numbers, error numbers, BUFSIZ and FOPEN_MAX are positive.
+note       Only the use in #if and the signs are required here; the
+           values of the other constants are tested with their headers.
+test       t/006-if-usable.c
+
+assertion  XSH.2.1-use-of-functions.007
+anchor     functions/V2_chap02.html#2.1
+class      required
+says       Four threads at once, each calling snprintf, strtol, strtod,
+           qsort, bsearch, memcpy, memcmp, strlen, gmtime_r,
+           strftime, toupper, regcomp and regexec, fnmatch, mbrtowc and
+           strerror_r on data of their own, always get the results the same
+           calls give one thread at a time.
+note       A race between the calls shows up as a wrong result. The
+           functions listed are all required to be thread-safe by XSH 2.9.1.
+timeout    60
+test       t/007-concurrent-private.c
+
+assertion  XSH.2.1-use-of-functions.008
+anchor     functions/V2_chap02.html#2.1
+class      required
+says       The comparison function of qsort() and of bsearch(), the routine of
+           pthread_once(), and a signal handler run by raise(), all run in
+           the thread that made the call, both in the main thread and in
+           another thread.
+note       These are operations whose effects the application can see.
+test       t/008-callbacks-in-calling-thread.c

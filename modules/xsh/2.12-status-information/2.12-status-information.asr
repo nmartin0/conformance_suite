@@ -1,0 +1,33 @@
+# XSH 2.12 Status Information
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# What a parent can learn about a child. Most of the section is tested
+# with wait(), waitid() and _Exit(); the .cov file points there. These
+# two cover what they do not.
+
+assertion  XSH.2.12-status-information.001
+anchor     functions/V2_chap02.html#2.12
+class      required
+says       A child that stops itself, is continued and then exits with status
+           5, before its parent has waited for any of that, leaves one status
+           only: after waitid(WEXITED|WNOWAIT) reports the exit, waitpid()
+           with WUNTRACED|WCONTINUED reports the exit with status 5 (not the
+           stop or the continuation), and a second waitpid() fails with
+           ECHILD.
+note       The stop and the continuation status are replaced by the new one.
+           WCONTINUED is XSI: without XSI the test uses WUNTRACED alone.
+timeout    30
+test       t/001-new-status-replaces.c
+
+assertion  XSH.2.12-status-information.002
+anchor     functions/V2_chap02.html#2.12
+class      required
+says       With two threads blocked in waitpid() and a third in
+           waitid(WEXITED|WNOWAIT), all for the only child, when the child
+           exits at least one of the three obtains its status, and not both
+           of the two waitpid() threads do.
+note       Which threads obtain it is unspecified. Threads left blocked at
+           the end are cancelled; the test counts only returns seen
+           within 3 s of the exit.
+timeout    30
+test       t/002-wait-threads-wnowait.c

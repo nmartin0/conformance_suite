@@ -1,0 +1,91 @@
+# XSH 2.7 XSI Interprocess Communication
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The rules the message queue, semaphore and shared memory functions share.
+# The permission tests change user and group IDs: they need root, and each
+# case runs in a child process that gives up privilege.
+
+assertion  XSH.2.7-xsi-ipc.001
+anchor     functions/V2_chap02.html#2.7
+class      disputed
+when       XSI
+says       Message queue, semaphore set and shared memory identifiers returned
+           by the three get functions are positive: ten identifiers of each
+           kind made with IPC_PRIVATE are all greater than zero and pairwise
+           different.
+note       disputed (new, see the report): 2.7 calls each identifier a
+           unique positive integer, while msgget(), semget() and shmget()
+           say non-negative. Zero would break one of the two texts.
+           Distinctness alone is XSH.msgget.001, XSH.semget.001 and
+           XSH.shmget.001.
+test       t/001-ids-positive.c
+
+assertion  XSH.2.7-xsi-ipc.002
+anchor     functions/V2_chap02.html#2.7
+class      conditional
+when       XSI
+says       For a message queue whose owner and group are A and B and whose
+           mode gives read and write to a chosen set of the user, group
+           and other classes, a process with effective IDs (A, any) is
+           judged by the user class alone, one with (not A, B) by the group
+           class alone, and one with neither by the other class alone: of
+           eight modes and three kinds of process, msgsnd() (write) and
+           msgrcv() (read) are allowed exactly where the class that applies
+           has the bit and fail with EACCES elsewhere.
+needs      root
+timeout    60
+test       t/002-msg-class-rules.c
+
+assertion  XSH.2.7-xsi-ipc.003
+anchor     functions/V2_chap02.html#2.7
+class      conditional
+when       XSI
+says       For a semaphore set the same holds: of eight modes and three
+           kinds of process, semctl(GETVAL) (read) and semop() with a
+           change of +1 (alter) are allowed exactly where the class that
+           applies has the bit and fail with EACCES elsewhere.
+needs      root
+timeout    60
+test       t/003-sem-class-rules.c
+
+assertion  XSH.2.7-xsi-ipc.004
+anchor     functions/V2_chap02.html#2.7
+class      conditional
+when       XSI
+says       For a shared memory segment the same holds: of eight modes and
+           three kinds of process, shmat() with SHM_RDONLY (read) and
+           shmat() for reading and writing are allowed exactly where the
+           class that applies has the bit(s) and fail with EACCES elsewhere.
+needs      root
+timeout    60
+test       t/004-shm-class-rules.c
+
+assertion  XSH.2.7-xsi-ipc.005
+anchor     functions/V2_chap02.html#2.7
+class      conditional
+when       XSI
+says       A process whose effective user ID equals the creator's ID of a
+           message queue, not its owner's ID (the owner was changed with
+           msgctl(IPC_SET)), is judged by the user class; likewise a process
+           whose effective group ID is the creator's group, not the owner's
+           group, is judged by the group class; and one that equals the
+           new owner is judged by the user class too.
+needs      root
+timeout    60
+test       t/005-msg-creator-ids.c
+
+assertion  XSH.2.7-xsi-ipc.006
+anchor     functions/V2_chap02.html#2.7
+class      conditional
+when       XSI
+says       The time recorded by msgsnd (msg_stime), msgrcv (msg_rtime),
+           msgctl IPC_SET (msg_ctime), semop (sem_otime), shmat
+           (shm_atime) and shmdt (shm_dtime) is the whole second that the clock showed, not
+           rounded up: called late in a second the value is not later than
+           the CLOCK_REALTIME seconds read just after the call, and it is not
+           earlier than those read just before.
+note       Each call is made when the fraction of the second is between 0.8
+           and 0.95 (waiting up to 1.2 s for it) so that a clock rounded
+           to the nearest second would show up.
+timeout    60
+test       t/006-timestamps-floor.c

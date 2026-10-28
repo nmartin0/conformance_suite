@@ -1,0 +1,192 @@
+# 2.3-error-numbers.cov - every requirement unit in XSH 2.3.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+2.3:db97caa1                 none  a statement
+2.3:32391129                 none  a statement
+2.3:873bd4de                 XBD.errno.h.003
+2.3:d97d51fa                 none  advice to applications
+2.3:4e2e0a9e                 XSH.2.3-error-numbers.001
+2.3:babf6e9d                 XBD.errno.h.004 XSH.2.3-error-numbers.002
+2.3:1456dc81                 none  a statement
+2.3:eecc7b7b                 XSH.2.3-error-numbers.003
+2.3:765004c0                 none  unspecified
+2.3:a7088f6c                 impl  additional errors (documentation)
+2.3:f6a00c10                 none  the shall-fail errors of each function are the assertions of its own page
+2.3:fbd281d0                 none  success when no error applies is the assertions of each function page
+2.3:e673c2de                 none  a permission (partial completion)
+2.3:8ecfb25b                 impl  additional circumstances, which must be treated alike
+2.3:286a74ba                 none  the function-page assertions accept exactly the errors their pages list
+2.3:15a215d3                 impl  the conformance document must list where each optional error is detected (documentation)
+2.3:f028dd3a                 none  a statement
+2.3:e9a2ba27                 partial XSH.pthread_join.005 XSH.pthread_mutex_lock.015 XSH.pthread_rwlock_rdlock.005 XSH.pthread_barrier_wait.004  # the functions whose pages forbid EINTR are tested one by one
+2.3:b512ae03                 none  a pointer to the function pages
+2.3:c565dd8e                 none  introduces the list
+2.3:c8c11d10                 none  unspecified
+2.3:60f8b52f                 XBD.errno.h.002
+2.3:afd6a757                 XBD.errno.h.001
+2.3:6ac2d0a2                 none  unspecified
+2.3:4fc528fe                 XBD.errno.h.001
+2.3:3558cb31                 XSH.exec.043 XSH.iconv.002 XSH.msgrcv.004
+2.3:3dfd007e                 XBD.errno.h.001
+2.3:6e9f0cb7                 XSH.access.001 XSH.access.003
+2.3:09c75ab4                 XBD.errno.h.001
+2.3:1591bc24                 XSH.bind.003
+2.3:766f5410                 XBD.errno.h.001
+2.3:684d401d                 XSH.bind.021
+2.3:633118df                 XBD.errno.h.001
+2.3:b58e276c                 XSH.bind.009 XSH.connect.011
+2.3:98c8ef99                 XBD.errno.h.001
+2.3:8b81e661                 XSH.accept.008 XSH.read.019
+2.3:8792085d                 XBD.errno.h.001
+2.3:927290ff                 XSH.connect.017
+2.3:e586b4ae                 XBD.errno.h.001
+2.3:99f418dd                 XSH.access.014 XSH.read.012
+2.3:000f5fcf                 XBD.errno.h.001
+2.3:002c1920                 untestable  no function page makes a corrupted message observable on every system
+2.3:cde11565                 XBD.errno.h.001
+2.3:88e2f995                 XSH.mq_notify.003 XSH.2.3-error-numbers.003
+2.3:e6b8b33d                 XBD.errno.h.001
+2.3:a19797c8                 XSH.aio_cancel.002
+2.3:473780e5                 XBD.errno.h.001
+2.3:8aab814c                 XSH.wait.015 XSH.wait.016
+2.3:1793ad69                 XBD.errno.h.001
+2.3:c7905172                 untestable  needs a connection aborted by the network between accept calls; no portable way to cause it
+2.3:02120f1d                 XBD.errno.h.001
+2.3:222fc320                 XSH.connect.003 XSH.connect.004
+2.3:9ef63a4e                 XBD.errno.h.001
+2.3:a4af2427                 XSH.read.022
+2.3:72981c1c                 XBD.errno.h.001
+2.3:a61a8363                 XSH.pthread_mutex_lock.007
+2.3:3aaea4f5                 XBD.errno.h.001
+2.3:68c0a24d                 XSH.listen.003 XSH.send.005
+2.3:c02c5ad7                 XBD.errno.h.001
+2.3:125bee5e                 XSH.acos.005
+2.3:6cf95a1a                 XBD.errno.h.001  # reserved: only the macro is required
+2.3:149ccb9a                 XBD.errno.h.001
+2.3:bfd08354                 XSH.fopen.009 XSH.link.008
+2.3:4da82d1b                 XBD.errno.h.001
+2.3:297852d1                 untestable  detection of a bad address cannot be guaranteed (the text says so)
+2.3:f6cdfb72                 none  detection is optional (the text says it cannot be guaranteed)
+2.3:d1684168                 XBD.errno.h.001
+2.3:02809048                 XSH.fputc.011 XSH.fclose.013
+2.3:35e74920                 XBD.errno.h.001
+2.3:099d72d6                 untestable  needs an unreachable host or router; no portable way to cause it
+2.3:c86db608                 XBD.errno.h.001
+2.3:cee09b2f                 XSH.msgrcv.009 XSH.msgctl.007
+2.3:d9fcd5c3                 XBD.errno.h.001
+2.3:327adb02                 XSH.fgetwc.010 XSH.mbrtowc.007 XSH.2.5.2-stream-orientation.010
+2.3:31448811                 XBD.errno.h.001
+2.3:b6fffa5e                 XSH.aio_error.001 XSH.connect.015
+2.3:c8604301                 XBD.errno.h.001
+2.3:05860176                 XSH.nanosleep.003 XSH.accept.022
+2.3:4eb4234e                 XSH.nanosleep.003 XSH.accept.022
+2.3:6fc557b4                 XBD.errno.h.001
+2.3:879955c2                 XSH.kill.007
+2.3:e85296b5                 XBD.errno.h.001
+2.3:3918a41f                 XSH.lio_listio.006 XSH.tcdrain.008
+2.3:39494dc7                 none  an error may be reported later (unspecified when)
+2.3:8ece4503                 none  an error indication may be lost (unspecified)
+2.3:4ffba8b3                 XBD.errno.h.001
+2.3:707f1b40                 XSH.connect.010
+2.3:375ef36f                 XBD.errno.h.001
+2.3:577f210d                 XSH.creat.010 XSH.fopen.024
+2.3:4c7f83e9                 XBD.errno.h.001
+2.3:b99bbe28                 XSH.access.012
+2.3:1e3c8018                 none  a may-statement (SYMLOOP_MAX)
+2.3:e38248bd                 XBD.errno.h.001
+2.3:cd84156f                 XSH.dup.005 XSH.freopen.022
+2.3:1e6994c3                 XBD.errno.h.001
+2.3:7724edaf                 XSH.2.3-error-numbers.004
+2.3:7d8ea2fd                 XBD.errno.h.001
+2.3:536adb2a                 XSH.mq_send.004 XSH.mq_receive.003
+2.3:6cf95a1a.2               XBD.errno.h.001  # reserved: only the macro is required
+2.3:a4962b69                 XBD.errno.h.001
+2.3:2fdf9cab                 XSH.access.013
+2.3:ecdc226b                 none  a may-statement (substituted path names)
+2.3:f9c97610                 XBD.errno.h.001
+2.3:7c527253                 untestable  needs a network interface that is down; no portable way to cause it
+2.3:5358ccf7                 XBD.errno.h.001
+2.3:41c1b7ab                 XBD.errno.h.001
+2.3:b9d0a000                 untestable  needs a destination with no route; no portable way to cause it
+2.3:cb89502a                 XBD.errno.h.001
+2.3:d6768ca9                 untestable  needs the system-wide open-file table to be full; the suite must not exhaust it
+2.3:940c776c                 untestable  needs the system-wide open-file table to be full; the suite must not exhaust it
+2.3:2676321e                 XBD.errno.h.001
+2.3:c4f52347                 untestable  needs the system's socket buffer space to be exhausted; the suite must not exhaust it
+2.3:a000b550                 XBD.errno.h.001
+2.3:c0668ea1                 XSH.mmap.011 XSH.posix_fallocate.009
+2.3:e3538d2e                 XBD.errno.h.001
+2.3:5da7d7a4                 XSH.access.007 XSH.access.008
+2.3:ca88ce62                 XBD.errno.h.001
+2.3:df0118e5                 XSH.exec.042
+2.3:e8ea4c0e                 XBD.errno.h.001
+2.3:748f6349                 untestable  needs the system's lock table to be exhausted; the suite must not exhaust it
+2.3:6cf95a1a.3               XBD.errno.h.001  # reserved: only the macro is required
+2.3:363f5a6a                 XBD.errno.h.001
+2.3:0c894bc3                 XSH.calloc.004 XSH.aligned_alloc.004
+2.3:7c3ef1ad                 XBD.errno.h.001
+2.3:3d82878d                 XSH.msgrcv.006
+2.3:738b356c                 XBD.errno.h.001
+2.3:19624b12                 XSH.getsockopt.009
+2.3:40b1aaa0                 XBD.errno.h.001
+2.3:31f8fe3c                 partial XSH.inet_ntop.010 XSH.fclose.012  # a full file system (the write() case) is todo: it needs a small file system the suite cannot make portably
+2.3:7503be8c                 XBD.errno.h.001
+2.3:6e969d6e                 untestable  the text applies to an interface an implementation lacks; a conforming suite cannot name one
+2.3:bdefab20                 XBD.errno.h.001
+2.3:58643acd                 XSH.getpeername.005
+2.3:246584b1                 XBD.errno.h.001
+2.3:70acd9f7                 XSH.access.011
+2.3:018ab210                 XBD.errno.h.001
+2.3:52f2cf7e                 XSH.rmdir.002
+2.3:0204171d                 XBD.errno.h.001
+2.3:9ed392e3                 XSH.pthread_mutex_lock.014
+2.3:59793044                 XBD.errno.h.001
+2.3:1dd934df                 XSH.accept.019
+2.3:93f57b6a                 XBD.errno.h.001
+2.3:fd5ed313                 XSH.posix_fallocate.009 XSH.clock_nanosleep.008
+2.3:9203d9b8                 XBD.errno.h.001
+2.3:660c0dbf                 XSH.tcdrain.005
+2.3:e783e07d                 XBD.errno.h.001
+2.3:02c6240d                 XSH.mmap.011 XSH.lseek.014
+2.3:23208d4f                 none  a may-statement
+2.3:ace28c06                 XBD.errno.h.001
+2.3:a79001fd                 XSH.accept.020 XSH.getsockopt.018
+2.3:1646d84b                 none  the two values may be equal
+2.3:84336267                 XBD.errno.h.001
+2.3:8f53d419                 XSH.fseek.015 XSH.fprintf.052
+2.3:3f284035                 XBD.errno.h.001
+2.3:e2bd1b5e                 XSH.pthread_mutex_consistent.002
+2.3:5878d3e1                 XBD.errno.h.001
+2.3:bf68a287                 XSH.chmod.006
+2.3:1d45d8b9                 XBD.errno.h.001
+2.3:a90dccc1                 XSH.write.015 XSH.write.017
+2.3:4da1120b                 XBD.errno.h.001
+2.3:91487270                 none  device-specific; nothing in the text can be checked on every system
+2.3:7d450acb                 none  a statement
+2.3:3c9c2d9e                 XBD.errno.h.001
+2.3:20acbb50                 XSH.socket.013
+2.3:f808c049                 XBD.errno.h.001
+2.3:f52c589d                 XSH.connect.021
+2.3:4577b4f0                 XBD.errno.h.001
+2.3:2f9216fd                 XSH.strtol.008
+2.3:7fb5eabd                 XBD.errno.h.001
+2.3:95f49a01                 XSH.statvfs.003
+2.3:8c83e4e9                 XBD.errno.h.001
+2.3:d4208723                 XSH.socket.012
+2.3:a8db1dcd                 XBD.errno.h.001
+2.3:68d0a7e1                 XSH.fseek.011 XSH.fgetpos.003
+2.3:760abbab                 XBD.errno.h.001
+2.3:2d5ed9b3                 XSH.fcntl.013 XSH.getpgid.003
+2.3:6cf95a1a.4               XBD.errno.h.001  # reserved: only the macro is required
+2.3:22c9db50                 XBD.errno.h.001
+2.3:01fc7e7e                 XSH.mq_timedreceive.002
+2.3:0ffe4294                 none  unspecified
+2.3:16f0843c                 XSH.mq_timedreceive.002
+2.3:f973c190                 XBD.errno.h.001
+2.3:8b4a2ff8                 optional  the function pages list it among the may-fail errors (exec, open)
+2.3:e5cb4a8f                 XBD.errno.h.001
+2.3:8ade9d0e                 XSH.accept.008 XSH.read.019
+2.3:63276623                 none  the two values may be equal
+2.3:a34f0a8a                 XBD.errno.h.001
+2.3:4869133e                 todo  needs two file systems, and the suite has no portable way to name a second one (link() and rename() across them)
+2.3:a87f3052                 impl  additional error numbers (documentation)

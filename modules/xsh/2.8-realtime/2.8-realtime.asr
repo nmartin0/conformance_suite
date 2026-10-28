@@ -1,0 +1,64 @@
+# XSH 2.8 Realtime
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The concepts of the realtime sections that no function page already
+# tests. Signals (2.8.1) are in XSH.2.4.2-realtime-signals; asynchronous
+# I/O, memory mapping, scheduling interfaces and timers are mostly tested
+# with their functions, and the .cov file points there.
+
+assertion  XSH.2.8-realtime.001
+anchor     functions/V2_chap02.html#2.8.3
+class      required
+says       A store through a shared mapping to a byte that lies beyond the end
+           of the file but inside the last mapped page does not change the
+           size of the file (fstat() gives the old st_size before and
+           after).
+note       Whole pages beyond the end give SIGBUS (XSH.2.4.3-signal-actions.021);
+           this is the part inside the last page. The store is not required
+           to be kept.
+test       t/001-size-unaffected.c
+
+assertion  XSH.2.8-realtime.002
+anchor     functions/V2_chap02.html#2.8.5
+class      required
+says       The finest resolution of CLOCK_REALTIME and of CLOCK_MONOTONIC,
+           as clock_getres() reports it, is not coarser than 20 ms, and
+           {_POSIX_CLOCKRES_MIN} is 20000000 (nanoseconds) in <limits.h>.
+uses       XSH.clock_getres.001
+test       t/002-clock-resolution.c
+
+assertion  XSH.2.8-realtime.003
+anchor     functions/V2_chap02.html#2.8.3
+class      required
+says       Two processes that map the same part of a file with MAP_SHARED see
+           each other's stores: a byte written by a child through its mapping
+           is seen by the parent through its own (no msync() between).
+test       t/003-shared-file-mapping-visible.c
+
+assertion  XSH.2.8-realtime.004
+anchor     functions/V2_chap02.html#2.8.3
+class      conditional
+when       SHM
+says       Two processes that map the same shared memory object see each
+           other's stores: a byte written by a child through its mapping
+           of an object from shm_open() is seen by the parent through its
+           own.
+test       t/004-shared-object-visible.c
+
+assertion  XSH.2.8-realtime.005
+anchor     functions/V2_chap02.html#2.8.3
+class      conditional
+when       MLR+XSI|MLR+SIO
+since      2001
+says       A memory lock a process holds on a page of a shared file
+           mapping is not held by a child made by fork() (the child's own
+           msync() with MS_INVALIDATE over that page does not fail with
+           EBUSY while the parent's does), and unmapping the page removes
+           the lock: a fresh mapping of the same file part at the same
+           address is not locked.
+note       Lock state is seen through msync() with MS_INVALIDATE failing
+           with EBUSY over locked pages, as the mlock() module does.
+           Whether locks also vanish across exec and process termination
+           is not tested.
+uses       XSH.msync.004
+test       t/005-lock-fork-unmap.c

@@ -1,0 +1,80 @@
+# XSH 2.2 The Compilation Environment
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Every test of this module is a compile-time check: a program that
+# does not build is the failure (MODULE buildfail FAIL).
+
+assertion  XSH.2.2-compilation-environment.001
+anchor     functions/V2_chap02.html#2.2.1
+class      required
+says       Without the feature test macro __STDC_WANT_LIB_EXT1__ (and with it
+           defined as 0), headers do not make the Annex K names visible:
+           after including the headers, a program can define its own
+           objects called fopen_s, fprintf_s, freopen_s, fscanf_s, gets_s,
+           printf_s, scanf_s, snprintf_s, sprintf_s, sscanf_s, tmpfile_s,
+           tmpnam_s, vfprintf_s, vfscanf_s, vprintf_s, vscanf_s,
+           vsnprintf_s, vsprintf_s, vsscanf_s, abort_handler_s, bsearch_s,
+           getenv_s, ignore_handler_s, mbstowcs_s, qsort_s,
+           set_constraint_handler_s, wctomb_s, asctime_s, ctime_s, gmtime_s,
+           localtime_s, fwprintf_s, fwscanf_s, snwprintf_s, swprintf_s,
+           swscanf_s, vfwprintf_s, vfwscanf_s, vswprintf_s, vswscanf_s,
+           vwprintf_s, vwscanf_s, wprintf_s and wscanf_s, and the macros
+           RSIZE_MAX, L_tmpnam_s and TMP_MAX_S are not defined.
+note       The names that begin with wcs, such as wcstombs_s, are left out:
+           that prefix is reserved for <string.h> and <wchar.h> anyway.
+test       t/001-annex-k-hidden.c
+
+assertion  XSH.2.2-compilation-environment.002
+anchor     functions/V2_chap02.html#2.2.2
+class      required
+says       Including every header the standard requires of all systems, in
+           alphabetical order and each one twice in a row, gives a program
+           that builds and whose definitions work (a few well-known macros
+           and types from different headers are used together).
+note       The headers of options (mqueue.h, spawn.h, XSI ones) and the
+           headers that depend on an optional part of the C language
+           (complex.h, tgmath.h, threads.h, stdatomic.h) are left out.
+test       t/002-headers-forward.c
+
+assertion  XSH.2.2-compilation-environment.003
+anchor     functions/V2_chap02.html#2.2.2
+class      required
+says       The same headers in the opposite order, each twice in a row, also
+           give a program that builds and works.
+test       t/003-headers-reverse.c
+
+assertion  XSH.2.2-compilation-environment.004
+anchor     functions/V2_chap02.html#2.2.2
+class      required
+says       After including every header of 002, a program can define its own
+           file-scope objects called index, rindex, bcopy, bzero, bcmp, valloc,
+           getdtablesize, getpagesize, ulong, ushort, uint, u_char, u_short,
+           u_int, u_long, min and max, and none of the
+           names MIN, MAX, TRUE, FALSE, MAXPATHLEN, NBBY, howmany, roundup or
+           powerof2 is defined as a macro.
+note       None of these names appears in the standard, none matches a
+           reserved prefix, suffix or complete name of 2.2.2, so no header
+           may make them visible. The set is a sample, not the whole
+           guarantee ("no other identifiers are reserved").
+test       t/004-free-names.c
+
+assertion  XSH.2.2-compilation-environment.005
+anchor     functions/V2_chap02.html#2.2.1
+class      conditional
+when       XSI
+says       With _XOPEN_SOURCE 800 and _POSIX_C_SOURCE 202405L both defined,
+           the XSI interfaces are visible (srand48, lrand48, nftw, shmget,
+           msgget, semget), so are POSIX ones (strnlen, posix_memalign,
+           clock_gettime), and XSI is claimed (_XOPEN_UNIX defined and
+           sysconf(_SC_XOPEN_UNIX) greater than 0).
+test       t/005-xopen-and-posix.c
+
+assertion  XSH.2.2-compilation-environment.006
+anchor     functions/V2_chap02.html#2.2.1
+class      conditional
+when       XSI
+says       With only _XOPEN_SOURCE 800 defined, all of the functionality
+           that _POSIX_C_SOURCE 202405L enables is visible too (strnlen,
+           posix_memalign, clock_gettime, O_CLOEXEC, _POSIX_VERSION at least
+           202405L) as well as the XSI interfaces.
+test       t/006-xopen-alone.c

@@ -1,0 +1,75 @@
+# XSH 2.11 Data Types
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The kind of type each name stands for. Every test builds or does not
+# (MODULE buildfail FAIL); the presence of each type is also in the
+# Tier 0 header checks.
+
+assertion  XSH.2.11-data-types.001
+anchor     functions/V2_chap02.html#2.11
+class      required
+says       off_t, pid_t, ssize_t, ptrdiff_t and suseconds_t are signed integer
+           types: a conversion of -1 to each is less than 0 and each takes
+           bitwise and shift operators.
+test       t/001-signed-types.c
+
+assertion  XSH.2.11-data-types.002
+anchor     functions/V2_chap02.html#2.11
+class      required
+says       ino_t, size_t, rlim_t and reclen_t are unsigned integer types:
+           a conversion of -1 to each is not less than 0, and each takes
+           bitwise and shift operators.
+test       t/002-unsigned-types.c
+
+assertion  XSH.2.11-data-types.003
+anchor     functions/V2_chap02.html#2.11
+class      required
+says       dev_t, gid_t, uid_t, id_t, mode_t, nlink_t, nfds_t, time_t, wchar_t,
+           wint_t and sig_atomic_t are integer types: a conversion of 0.5 to
+           each gives 0 and each takes bitwise and shift operators; clock_t
+           is an arithmetic type (integer or real floating): 0.5 converted
+           to it gives 0 or a value above 0 and below 1.
+test       t/003-integer-types.c
+
+assertion  XSH.2.11-data-types.004
+anchor     functions/V2_chap02.html#2.11
+class      required
+says       id_t can hold every value of pid_t, uid_t and gid_t: its range
+           includes theirs (its maximum is at least the largest of theirs, and
+           where it is signed its minimum is at most the smallest of theirs).
+test       t/004-id-range.c
+
+assertion  XSH.2.11-data-types.005
+anchor     functions/V2_chap02.html#2.11
+class      required
+says       rlim_t can hold every non-negative value of int and of off_t:
+           its maximum is at least INT_MAX and at least the maximum of
+           off_t.
+test       t/005-rlim-range.c
+
+assertion  XSH.2.11-data-types.006
+anchor     functions/V2_chap02.html#2.11
+class      required
+says       wint_t can hold WEOF and every wide character of the POSIX locale:
+           for the codes 0 to 255 that btowc() maps, converting the
+           result to wint_t and back gives the same code, and WEOF differs
+           from each of those.
+test       t/006-wint-holds-wchar.c
+
+assertion  XSH.2.11-data-types.007
+anchor     functions/V2_chap02.html#2.11
+class      required
+says       char is a single byte: CHAR_BIT is 8 (usable in #if) and
+           sizeof(char) is 1.
+test       t/007-char-byte.c
+
+assertion  XSH.2.11-data-types.008
+anchor     functions/V2_chap02.html#2.11
+class      conditional
+when       XSI
+says       key_t is an arithmetic type: a conversion of 1.5 to it gives 1 or
+           a value from 1 to below 2 (integer or floating), and ftok()
+           returns a value of that type.
+note       The page says arithmetic; the value 1.5 converts to 1 in an
+           integer type and keeps 1.5 in a floating one.
+test       t/008-key-arithmetic.c

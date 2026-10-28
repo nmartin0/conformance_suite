@@ -1,0 +1,116 @@
+# XSH 2.5.2 Stream Orientation and Encoding Rules
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# fwide() asks about the orientation without changing it when its mode is
+# 0; the tests use that to read the orientation.
+
+assertion  XSH.2.5.2-stream-orientation.001
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       A new stream stays without orientation (fwide(f, 0) returns 0)
+           after fseek, ftell, rewind, fflush, setvbuf, fgetpos, fsetpos,
+           feof, ferror, clearerr, fileno, flockfile and funlockfile have
+           been applied to it, and each of those operations works.
+uses       XSH.fwide.001
+test       t/001-unoriented-stays.c
+
+assertion  XSH.2.5.2-stream-orientation.002
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       A byte-oriented stream (after fputc or fgetc) stays byte-oriented
+           and a wide-oriented one (after fputwc or fgetwc) stays
+           wide-oriented (fwide(f, 0) negative or positive) after the
+           operations of 001; the operations give the same results as on
+           an unoriented stream (the file position is what was written or
+           read).
+uses       XSH.fwide.004
+test       t/002-oriented-stays.c
+
+assertion  XSH.2.5.2-stream-orientation.003
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       Applying any one of fputc, fputs, fwrite, fprintf, putc, fgetc,
+           fgets, fread, fscanf and getc to a new stream makes it
+           byte-oriented.
+uses       XSH.fwide.001
+test       t/003-byte-functions-orient.c
+
+assertion  XSH.2.5.2-stream-orientation.004
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       Applying any one of fputwc, fputws, fwprintf, putwc, fgetwc,
+           fgetws, fwscanf and getwc to a new stream makes it
+           wide-oriented.
+uses       XSH.fwide.001
+test       t/004-wide-functions-orient.c
+
+assertion  XSH.2.5.2-stream-orientation.005
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       In a locale with a multibyte code set, a wide-oriented stream
+           read to a character boundary has the same position and
+           parse state after fsetpos() with a value stored by fgetpos(): the
+           characters read after fsetpos() are the ones read after
+           fgetpos().
+note       NOTINUSE without a multibyte locale.
+test       t/005-fgetpos-fsetpos-wide.c
+
+assertion  XSH.2.5.2-stream-orientation.006
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       The encoding rule is the one of the locale in force when the stream
+           becomes wide-oriented: with a file holding the bytes of one
+           character in a multibyte code set, a stream made wide-oriented
+           under that locale and then read under a single-byte locale
+           (setlocale() between the orientation and the read) returns the
+           characters of the multibyte locale, not of the single-byte one.
+note       NOTINUSE unless the system has both a multibyte locale
+           (UTF-8) and one with a single-byte code set.
+test       t/006-encoding-fixed-at-orientation.c
+
+assertion  XSH.2.5.2-stream-orientation.007
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       After freopen() on a wide-oriented stream the stream has no
+           orientation and no encoding rule: made wide-oriented again
+           under a different locale it uses the encoding rule of that
+           locale.
+note       NOTINUSE unless the system has both a multibyte locale and a
+           single-byte one.
+uses       XSH.2.5.2-stream-orientation.006
+test       t/007-freopen-resets-encoding.c
+
+assertion  XSH.2.5.2-stream-orientation.008
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       Wide-character input reads exactly what mbrtowc() would make of
+           the file's bytes (checked on all 256 byte values in the POSIX
+           locale, and on mixed 1- to 4-byte characters in a UTF-8 locale
+           when there is one): fgetwc(), fgetws() and getwc() return the
+           same sequence of wide characters.
+test       t/008-input-as-mbrtowc.c
+
+assertion  XSH.2.5.2-stream-orientation.009
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       Wide-character output writes exactly what wcrtomb() would make of
+           the characters (checked on the codes 1 to 255 in the POSIX locale
+           that wcrtomb accepts, and on mixed 1- to 4-byte characters in a
+           UTF-8 locale when there is one): fputwc(), fputws() and putwc()
+           write the same bytes.
+test       t/009-output-as-wcrtomb.c
+
+assertion  XSH.2.5.2-stream-orientation.010
+anchor     functions/V2_chap02.html#2.5.2
+class      required
+says       errno is set to EILSEQ by byte and wide input and output only when
+           an encoding error occurs: with errno set to a different value,
+           successful fputc, fgetc, fputwc, fgetwc, fputws and fgetws
+           calls leave errno different from EILSEQ, and an encoding error
+           (a stray byte 0xff on wide input in a UTF-8 locale; a code
+           that wcrtomb rejects on wide output) gives EILSEQ.
+uses       XSH.fgetwc.010 XSH.fputwc.010
+note       NOTINUSE for the error half without a UTF-8 locale (the clean
+           half is always run); in the POSIX locale a code that wcrtomb
+           rejects is looked up as in XSH.fputwc.010.
+test       t/010-eilseq-iff.c

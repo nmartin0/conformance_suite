@@ -1,0 +1,21 @@
+# 2.1-use-of-functions.cov - every requirement unit in XSH 2.1.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+2.1:dc449102                 none  introduces the list
+2.1:94c1e356                 none  undefined behaviour
+2.1:c241c4c3                 none  advice to applications
+2.1:801e890c                 XSH.2.1-use-of-functions.001
+2.1:7790df2e                 XSH.2.1-use-of-functions.001
+2.1:1980ba06                 XSH.2.1-use-of-functions.002
+2.1:d87d3b41                 XSH.2.1-use-of-functions.003
+2.1:e79d4730                 XSH.2.1-use-of-functions.004
+2.1:a14c5964                 none  undefined behaviour
+2.1:075fd055                 partial XSH.2.1-use-of-functions.007  # calls on data of the thread's own, by several threads; the access to other threads' objects the standard forbids cannot be observed directly
+2.1:606ad2ce                 partial XSH.2.1-use-of-functions.007  # same: a race shows as a wrong result in the sample of functions; the rest is untestable from outside
+2.1:f5198861                 none  a permission
+2.1:69aabb5a                 partial XSH.2.1-use-of-functions.008  # callbacks of qsort, bsearch, pthread_once and raise run in the calling thread; other visible effects are not tested
+2.1:bbb2e4de                 none  introduces the list
+2.1:d2bd19d0                 XSH.2.1-use-of-functions.005
+2.1:ac645a45                 XSH.2.1-use-of-functions.006
+2.1:23181405                 partial XSH.2.1-use-of-functions.003  # the functions and macros of the sample
+2.1:0efa3129                 partial XSH.2.1-use-of-functions.001 XSH.2.1-use-of-functions.003  # used in assignment, comparison and argument positions; every function-like macro is not enumerable

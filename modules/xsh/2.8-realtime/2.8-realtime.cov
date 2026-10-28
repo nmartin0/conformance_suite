@@ -1,0 +1,226 @@
+# 2.8-realtime.cov - every requirement unit in XSH 2.8.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+2.8:5bafe1e4                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:d79501e9                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:81a2892f                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:09e6c0af                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:57ac3b68                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:bb3715ba                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:774ff852                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:3ab75768                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:ea6ac935                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:6af70ab6                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:f7f052c1                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:b9aeab1a                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:6e37a88c                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:1b11898c                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:2d8a92bb                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:47a22ba4                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:6619164f                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:b2f73846                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:1a307e41                 XSH.aio_read.001 XSH.aio_write.001
+2.8:850032da                 XSH.aio_read.001 XSH.aio_write.001
+2.8:99e30228                 XSH.aio_read.001 XSH.aio_write.001
+2.8:81f52178                 XSH.aio_read.002
+2.8:6efedcc4                 XSH.aio_read.007
+2.8:fd3cdacd                 XSH.aio_read.008
+2.8:2154eb23                 XSH.lio_listio.001
+2.8:79a199c9                 XSH.aio_read.001 XSH.aio_write.001 XSH.aio_read.005
+2.8:e7327a71                 XSH.aio_read.001 XSH.aio_write.001
+2.8:652e4aac                 XSH.aio_write.002
+2.8:52b4bd7a                 app
+2.8:17fd3ad0                 none  the offset after enqueueing is unspecified, so nothing is required
+2.8:e678aee8                 XSH.aio_read.002 XSH.aio_return.001
+2.8:ed121020                 untestable  priority-ordered queueing needs _POSIX_PRIORITIZED_IO and a device that holds requests; the order of completion is not deterministic
+2.8:60f95fe5                 XSH.aio_read.007
+2.8:5dea1594                 impl  the order of processing is unspecified without prioritized I/O
+2.8:2820d352                 impl  the order of processing for other schedulers is unspecified
+2.8:ddee01ec                 untestable  priority-ordered queueing is not observable deterministically
+2.8:6f88f11a                 untestable  priority-ordered queueing is not observable deterministically
+2.8:04d7a939                 impl  the processing order is unspecified for files other than character special files
+2.8:30a7ad08                 untestable  priority-ordered queueing is not observable deterministically
+2.8:183bf7eb                 todo  needs aio_read with a non-zero aio_reqprio and a check through sched_getparam that the process priority is unchanged; the call may fail with EINVAL where prioritized I/O is unsupported, so the check must be conditional
+2.8:b83f9e24                 untestable  the order in which blocked requests are granted a resource is not observable deterministically
+2.8:e8b6d987                 impl  the relative priority of asynchronous and synchronous I/O is implementation-defined
+2.8:37565773                 impl  the implementation must document for which files I/O prioritization is supported
+2.8:731999d3                 XSH.aio_read.008 XSH.aio_write.007 XSH.lio_listio.003
+2.8:95f2a6d8                 XSH.aio_write.006 XSH.aio_return.001
+2.8:65e375b4                 XSH.aio_read.004 XSH.aio_write.003
+2.8:56decab1                 XSH.lio_listio.001
+2.8:b8a87639                 XSH.lio_listio.001 XSH.lio_listio.002
+2.8:4e6c31d8                 XSH.lio_listio.001
+2.8:d9fdac5f                 XSH.aio_error.001 XSH.aio_return.001
+2.8:834e4a2c                 XSH.aio_error.001
+2.8:496cec69                 app
+2.8:2becd9a2                 XSH.aio_return.001
+2.8:fc3c7cb2                 XSH.aio_return.002
+2.8:af27267d                 XSH.aio_return.001 XSH.aio_return.002
+2.8:a82fcaf1                 XSH.mlock.001
+2.8:4bdc762a                 impl  an implementation may restrict range locking to page boundaries and must document it
+2.8:bdf1675d                 XSH.sysconf.012
+2.8:bbdd0f0d                 none  a permission for a one-byte page size
+2.8:c5120521                 XSH.mlock.001 XSH.mlockall.001
+2.8:d941445b                 impl  whether locking fixes virtual-to-physical translation is implementation-defined
+2.8:3d7e8078                 partial XSH.2.8-realtime.005  # fork is tested; the unlocking by exec and by process termination is not (a test would have to re-execute itself)
+2.8:651b74a0                 XSH.2.8-realtime.005
+2.8:5857aa17                 XSH.mmap.015 XSH.munmap.006
+2.8:9a3865ab                 impl  an implementation may restrict range mappings to page boundaries and must document it
+2.8:bdf1675d.2               XSH.sysconf.012
+2.8:bbdd0f0d.2               none  a permission for a one-byte page size
+2.8:fcc6fe6f                 XSH.2.8-realtime.003
+2.8:0a8b21dd                 XSH.mmap.002
+2.8:99cc701e                 XSH.2.8-realtime.003
+2.8:a23dac93                 XSH.2.8-realtime.003 XSH.mmap.002 XSH.mmap.006
+2.8:53900285                 XSH.2.8-realtime.004 XSH.shm_open.001
+2.8:9b331efc                 XSH.mmap.018 XSH.shm_unlink.002 XSH.shm_unlink.003
+2.8:60899c72                 XSH.mmap.018 XSH.shm_unlink.003
+2.8:c8444af6                 XSH.mmap.018 XSH.shm_unlink.003
+2.8:0f7c5bff                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:b1b5ae4c                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:09a1a522                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:a5747e3b                 XSH.mmap.012 XSH.mmap.013
+2.8:6ff57653                 XSH.munmap.001 XSH.munmap.002
+2.8:f324ce6a                 XSH.ftruncate.007
+2.8:a899ada7                 XSH.2.8-realtime.001 XSH.mmap.017
+2.8:7d1b4906                 none  states when the section applies
+2.8:86ee6375                 none  a permission
+2.8:b76b711b                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:fc8c8fc9                 impl  unspecified or implementation-defined, so nothing is required
+2.8:2fbbaca1                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:3ee7356f                 untestable  typed memory pool names are implementation-defined, so no portable name can be opened
+2.8:a13589d9                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:7604a2fc                 none  states when the section applies
+2.8:6b8a4a2f                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:f3e46d8b                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:1f8c9535                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:2aa579fb                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:3ee25861                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:8352cef5                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:85089bcb                 XSH.sched_get_priority_max.004 XBD.sched.h.001
+2.8:414b9e1c                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:48f92dcd                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:b056b55e                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:35688667                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:4524280b                 XSH.pthread_getschedparam.001 XSH.pthread_getschedparam.003
+2.8:9f8ad113                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:6f427be6                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:9ee337b1                 XSH.sched_getscheduler.001 XSH.sched_setscheduler.002 XSH.sched_getparam.001
+2.8:f786f675                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:273965f2                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:5e9dadb8                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:35df7b92                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:3aee1b4e                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:cc9920a0                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:ee0e7ed5                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:27e7e30f                 XSH.sched_get_priority_max.001 XSH.sched_get_priority_max.002 XSH.sched_get_priority_max.006
+2.8:24fbb831                 none  a permission
+2.8:e18deb4a                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:173df1b3                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:d37186c8                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:614ac1ad                 impl  other policies are implementation-defined
+2.8:efd18631                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:a5256275                 XBD.sched.h.001
+2.8:3b1c2b02                 XBD.sched.h.001
+2.8:7ba305e0                 XBD.sched.h.002
+2.8:6bdeaea7                 XBD.sched.h.001
+2.8:289954d6                 XBD.sched.h.001 XBD.sched.h.002
+2.8:d38ef81b                 XSH.sched_get_priority_max.001
+2.8:dd85531b                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:5a49b555                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:84840908                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:564df7b8                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:56812e46                 XSH.sched_setscheduler.002
+2.8:5a935ef0                 XSH.sched_setparam.001
+2.8:9525a90f                 XSH.pthread_getschedparam.003
+2.8:51519339                 XSH.pthread_setschedprio.001
+2.8:9da050ed                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:c23ff4d1                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:2689a2f0                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:42651bf3                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:3d5a9e6c                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:bac62266                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:20665f57                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:a0d7abde                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:a4a82a59                 XSH.sched_get_priority_max.001 XSH.sched_setscheduler.002 XSH.sched_setscheduler.004
+2.8:84ef29ec                 XSH.sched_get_priority_max.001
+2.8:06b38836                 XSH.sched_get_priority_max.002
+2.8:10b58303                 untestable  the order in which runnable threads are chosen cannot be observed deterministically: it needs a real-time policy (privilege) and the threads confined to one processor, which no interface provides
+2.8:2961481c                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:2a19b4e2                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:a00e4255                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:1db427c8                 XSH.sched_get_priority_max.002 XSH.sched_setscheduler.002 XSH.sched_setscheduler.004
+2.8:84ef29ec.2               XSH.sched_get_priority_max.002
+2.8:ce7cb274                 none  states when the section applies
+2.8:0e8c9f89                 XSH.sched_get_priority_max.006 XBD.sched.h.002
+2.8:a772166f                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:f3da1561                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:5ae1783e                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:eab4fa83                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:da1e35bc                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:5d14a2bb                 impl  unspecified or implementation-defined, so nothing is required
+2.8:4e36e870                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:0d2962cb                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:891dbd59                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:5ab87c88                 impl  the resolution of the execution-time limit is implementation-defined
+2.8:067b0079                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:4e0c449b                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:408be701                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:1a92f4b7                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:408be701.2               untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:551d0dd4                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:5784fe52                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:ff384a02                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:dac8241d                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:b3e71ea1                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:00b0eb05                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:d3fd02e3                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:dad0e860                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:fdc5e2ab                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:4344a5df                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:3b6557f7                 untestable  sporadic-server budget accounting is a timing behaviour that needs privilege and an exact execution-time budget; not observable deterministically
+2.8:b2373ce3                 XSH.sched_get_priority_max.006
+2.8:ac6bef32                 XSH.sched_get_priority_max.006
+2.8:45fc677a                 untestable  the members are ignored for these policies, which is not observable
+2.8:b503a3d6                 impl  their effect for other policies is implementation-defined
+2.8:474c70a2                 XSH.sched_get_priority_max.003 XSH.sched_getscheduler.001
+2.8:77757a92                 impl  the effect of SCHED_OTHER threads alongside real-time threads is implementation-defined
+2.8:cec2ff3d                 none  an introduction, a definition or a description with no behaviour of its own
+2.8:42e75940                 XSH.sched_get_priority_max.003
+2.8:94f80c87                 none  an introduction
+2.8:3d857c94                 none  an introduction
+2.8:33d4a857                 XBD.time.h.006
+2.8:906ea8e2                 XBD.time.h.006
+2.8:bb487072                 XBD.time.h.006
+2.8:dc8a761d                 XBD.time.h.006 XSH.nanosleep.002 XSH.timer_getoverrun.011
+2.8:460bd938                 XSH.nanosleep.001
+2.8:8012c296                 none  introduces the structure
+2.8:6fbf312e                 none  introduces the structure
+2.8:999df630                 XSH.timer_getoverrun.003
+2.8:2744ed23                 XSH.timer_getoverrun.002
+2.8:8f890c16                 XSH.timer_getoverrun.002 XSH.timer_getoverrun.006 XSH.timer_getoverrun.007
+2.8:ba98ea67                 XSH.timer_getoverrun.004
+2.8:82b7934e                 XSH.timer_getoverrun.003 XSH.timer_getoverrun.009
+2.8:7aa1925b                 XSH.timer_getoverrun.005
+2.8:9e3d2cac                 XSH.timer_create.005
+2.8:8cfb9e8d                 none  a cross-reference
+2.8:2ec8ab7a                 XSH.timer_create.005
+2.8:82c523f0                 none  introduces the constants
+2.8:61d1a9f7                 XBD.time.h.004 XSH.clock_getres.001
+2.8:b8bb1038                 XSH.timer_getoverrun.006 XSH.timer_getoverrun.007
+2.8:483ab4cb                 XSH.clock_getres.005 XSH.clock_getres.006 XBD.time.h.004
+2.8:84e632aa                 impl  the maximum possible clock jump is implementation-defined
+2.8:052afa14                 XSH.2.8-realtime.002 XBD.limits.h.001
+2.8:86c03d20                 none  a permission
+2.8:b2c56ac7                 XSH.clock_getres.001 XSH.clock_getres.002
+2.8:7ec25bb9                 impl  the implementation must document any difference in resolution
+2.8:29053190                 untestable  probing the largest value of a clock means setting it, which alters the system clock
+2.8:9d39fade                 impl  the implementation must document any difference in maximum value
+2.8:e5058723                 XSH.timer_create.010 XSH.clock_getres.008 XSH.clock_getres.009
+2.8:5195be73                 XSH.timer_create.011 XSH.clock_getres.010 XSH.clock_getres.011
+2.8:606d02b1                 none  a definition
+2.8:3e11e849                 none  a cross-reference
+2.8:41bc7a2b                 none  introduces the constant
+2.8:2a47160b                 XSH.clock_getres.008 XSH.timer_create.010
+2.8:6fc4b25b                 none  introduces the constant
+2.8:94cc0988                 XSH.clock_getres.010 XSH.timer_create.011

@@ -1,0 +1,71 @@
+# XSH 2.3 Error Numbers
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The general rules on errno and the meaning of each error number. The
+# error numbers themselves are tested with the function that reports each
+# one; the .cov file points from every entry here to those assertions.
+
+assertion  XSH.2.3-error-numbers.001
+anchor     functions/V2_chap02.html#2.3
+class      required
+says       With errno set to a non-zero value beforehand, a successful call of
+           each of getpid, getcwd, open, read, write, lseek, fstat, stat,
+           fcntl, dup, pipe, close, unlink, mkdir, rmdir, opendir,
+           readdir (including the call that finds the end), closedir,
+           fopen, fgets, fputs, fprintf, fgetc at end-of-file, fclose,
+           malloc, free, strtol, strtod, time, clock_gettime, nanosleep,
+           sysconf, sigprocmask, setlocale and getenv leaves errno not
+           equal to zero.
+note       The text forbids setting errno to zero; leaving the value as it
+           was, or any other non-zero value, is allowed. A failing call
+           sets a non-zero value by definition.
+test       t/001-never-zero.c
+
+assertion  XSH.2.3-error-numbers.002
+anchor     functions/V2_chap02.html#2.3
+class      required
+says       A thread whose errno holds a value, while another thread makes
+           failing calls (open of a missing file, close of -1, read of
+           -1, strtol overflow) and assigns 0 and other values to its own
+           errno, still finds its value unchanged afterwards, and the other
+           thread sees the codes its own calls produced.
+uses       XBD.errno.h.004
+note       XBD.errno.h.004 covers plain stores; this one covers function
+           calls by the other thread. The threads are synchronised with a
+           mutex; the whole test is bounded by an alarm.
+timeout    30
+test       t/002-errno-per-thread-calls.c
+
+assertion  XSH.2.3-error-numbers.003
+anchor     functions/V2_chap02.html#2.3
+class      required
+says       The functions that return an error number as their value return 0
+           on success: pthread_mutex_init, pthread_mutex_lock,
+           pthread_mutex_unlock, pthread_mutex_destroy, pthread_cond_init,
+           pthread_cond_destroy, pthread_rwlock_init, pthread_rwlock_rdlock,
+           pthread_rwlock_unlock, pthread_rwlock_destroy, pthread_attr_init,
+           pthread_attr_destroy, pthread_key_create, pthread_setspecific,
+           pthread_key_delete, pthread_create, pthread_join,
+           pthread_once, posix_memalign, pthread_sigmask and
+           pthread_kill with signal 0 each return exactly 0. In failure they
+           return the error number itself (positive, and not -1):
+           pthread_mutex_trylock of a locked error-checking mutex gives EBUSY,
+           pthread_attr_setdetachstate with an invalid state gives EINVAL
+           (page: may fail), posix_memalign with alignment 3 gives
+           EINVAL, an error-checking mutex unlocked by a thread that does not
+           own it gives EPERM.
+note       The failure return of pthread_attr_setdetachstate is a may-fail
+           error; if it returns 0 the test does not count it. The value
+           must be positive, and must equal the number the page names where
+           it does.
+test       t/003-direct-returns.c
+
+assertion  XSH.2.3-error-numbers.004
+anchor     functions/V2_chap02.html#2.3
+class      required
+says       When the link count of a file has reached {LINK_MAX}, a further
+           link() to it fails with EMLINK and the count stays at {LINK_MAX}.
+note       Applies when pathconf(".", _PC_LINK_MAX) is bounded and at most
+           70000; otherwise the test is NOTINUSE.
+timeout    120
+test       t/004-emlink.c
