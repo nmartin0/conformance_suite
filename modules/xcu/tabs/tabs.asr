@@ -1,9 +1,9 @@
 # XCU tabs
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
-# The page leaves the output undefined when standard output is not a terminal
-# and the sequence written to a terminal unspecified, and the driver supplies
-# no terminal, so nothing can be observed.
+# The tests run tabs on a private pseudo-terminal (core/pcpty.c). The escape
+# sequence is unspecified, so they compare outputs for the equivalences the
+# page states, and check the success-or-diagnostic rule.
 
 assertion  XCU.tabs.001
 anchor     utilities/tabs.html#DESCRIPTION
@@ -11,9 +11,55 @@ anchor     utilities/tabs.html#OPTIONS
 anchor     utilities/tabs.html#OPERANDS
 anchor     utilities/tabs.html#STDOUT
 class      untestable
-says       tabs clears the terminal tab stops and sets them at the stops named
-           by -n, a canned format option or a list operand, for the terminal
-           type given by -T or TERM.
-reason     The sequence is unspecified, the results are undefined when standard
-           output is not a terminal, and an effect on tab stops can only be seen
-           on a terminal.
+says       The bytes written for a given tab list are the terminal's sequence
+           that clears and sets the stops.
+reason     The sequence is unspecified; only the equivalences between
+           invocations can be observed.
+
+assertion  XCU.tabs.002
+anchor     utilities/tabs.html#EXIT STATUS
+anchor     utilities/tabs.html#STDERR
+class      required
+since      1992
+says       tabs with a terminal type either succeeds or exits nonzero with a
+           diagnostic; it never fails silently.
+test       t/002-run.sh
+
+assertion  XCU.tabs.003
+anchor     utilities/tabs.html#OPTIONS
+class      required
+since      1992
+says       tabs with no operand has the same effect as tabs -8.
+test       t/003-default.sh
+
+assertion  XCU.tabs.004
+anchor     utilities/tabs.html#OPERANDS
+class      required
+since      1992
+says       A tab list given with commas, blanks or plus-signed increments means
+           the same stops, so the output is identical.
+test       t/004-list-forms.sh
+
+assertion  XCU.tabs.005
+anchor     utilities/tabs.html#OPTIONS
+class      required
+since      1992
+says       The terminal type from -T takes precedence over TERM.
+test       t/005-t-overrides.sh
+
+assertion  XCU.tabs.006
+anchor     utilities/tabs.html#OPTIONS
+anchor     utilities/tabs.html#EXIT STATUS
+class      required
+since      1992
+says       An unknown option is an error with a nonzero status.
+test       t/006-bad-option.sh
+
+assertion  XCU.tabs.007
+anchor     utilities/tabs.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       Each of -a, -a2, -c, -c2, -c3, -f, -p, -s and -u gives the same effect
+           as its listed tab stops.
+test       t/007-xsi-presets.sh

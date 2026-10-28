@@ -339,6 +339,17 @@ if ! pc_cache_get "$pc_k" "$pc_bin/pcgroups.o"; then
 	fi
 	pc_cache_put "$pc_k" "$pc_bin/pcgroups.o"
 fi
+# pcpty runs a command on a private pseudo-terminal for the terminal
+# utilities; if it cannot be built those tests report UNRESOLVED.
+pc_k=$(pc_cache_key "pcpty: $pc_cc" "$pc_root"/core/pcpty.c)
+if ! pc_cache_get "$pc_k" "$pc_bin/pcpty"; then
+	if "$pc_cc" -o "$pc_bin/pcpty" "$pc_root/core/pcpty.c" \
+	    >"$pc_trustdir/pcpty.txt" 2>&1 </dev/null; then
+		pc_cache_put "$pc_k" "$pc_bin/pcpty"
+	fi
+fi
+if [ -x "$pc_bin/pcpty" ]; then PC_PTY=$pc_bin/pcpty; else PC_PTY=; fi
+export PC_PTY
 pc_pcexec=$pc_bin/pcexec
 pc_probe=$pc_bin/probe
 

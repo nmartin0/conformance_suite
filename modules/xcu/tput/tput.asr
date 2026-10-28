@@ -1,19 +1,54 @@
 # XCU tput
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
-# The sequences are terminal dependent and the page leaves the results
-# undefined when standard output is not a terminal, so nothing observable is
-# left for a script. The exit codes for a usage error and an unknown terminal
-# are not exercised, since the page gives no result for a non-terminal output.
+# The tests run tput on a private pseudo-terminal (core/pcpty.c). The
+# sequences are unspecified, so they check status codes and equivalences.
 
 assertion  XCU.tput.001
 anchor     utilities/tput.html#DESCRIPTION
 anchor     utilities/tput.html#OPERANDS
 anchor     utilities/tput.html#EXIT STATUS
 class      untestable
-says       tput clear, init and reset write the terminal's clear, initialise and
-           reset sequences, a terminal that lacks one is not an error, and the
-           exit status classes name usage errors, unknown terminals and invalid
-           operands.
-reason     The sequences depend on the terminal type, and the page leaves the
-           results undefined when standard output is not a terminal.
+says       clear, init and reset write the terminal's sequences that clear the
+           screen, initialise and reset it.
+reason     The sequences depend on the terminal type and are unspecified;
+           only status codes and equivalences between invocations can be
+           observed.
+
+assertion  XCU.tput.002
+anchor     utilities/tput.html#OPERANDS
+anchor     utilities/tput.html#EXIT STATUS
+class      required
+since      1992
+says       tput clear, init and reset exit zero for a terminal type the system
+           knows.
+test       t/002-operands.sh
+
+assertion  XCU.tput.003
+anchor     utilities/tput.html#OPTIONS
+class      required
+since      1992
+says       The terminal type from -T takes precedence over TERM.
+test       t/003-t-overrides.sh
+
+assertion  XCU.tput.004
+anchor     utilities/tput.html#OPERANDS
+anchor     utilities/tput.html#CONSEQUENCES OF ERRORS
+class      required
+since      1992
+says       With several operands tput writes the output for each in turn.
+test       t/004-several.sh
+
+assertion  XCU.tput.005
+anchor     utilities/tput.html#EXIT STATUS
+class      required
+since      1992
+says       No information about the terminal type is status 3.
+test       t/005-unknown-type.sh
+
+assertion  XCU.tput.006
+anchor     utilities/tput.html#EXIT STATUS
+class      required
+since      1992
+says       A usage error (no operand, unknown option) is status 2.
+test       t/006-usage.sh

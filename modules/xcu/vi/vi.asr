@@ -1,9 +1,8 @@
 # XCU vi
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
-# vi is a screen editor whose input and output must be a terminal; with
-# other devices the behaviour is not defined by the page, so the whole page
-# is recorded as untestable.
+# The tests type keystrokes at a private pseudo-terminal (core/pcpty.c) and read
+# back the edited file. What the screen shows is not observed.
 
 assertion  XCU.vi.001
 anchor     utilities/vi.html#DESCRIPTION
@@ -11,9 +10,102 @@ anchor     utilities/vi.html#OPTIONS
 anchor     utilities/vi.html#EXTENDED DESCRIPTION
 class      untestable
 since      1992
-says       vi edits the named files in a screen on the terminal, with the
-           -c, -r, -R, -t and -w options and the visual-mode commands, and
-           writes the buffer to a file only by an editor command.
-reason     The behaviour is defined for a terminal that shows screens and
-           sends keystrokes; with standard input or output not a terminal
-           the page defines nothing, and a script has no terminal to supply.
+says       vi shows the buffer on the screen, and the -r, -t and -w options and
+           the remaining visual-mode commands (scrolling, marks, buffers,
+           searches, shell filters) behave as the page defines.
+reason     The screen contents depend on the terminal type and are not defined
+           in a form a script can compare; recovery and tag files need state
+           the page leaves to the implementation. Only the editing commands
+           whose effect on the file is exact are tested.
+
+assertion  XCU.vi.002
+anchor     utilities/vi.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       Writing the unchanged buffer with :wq leaves the file as it was and vi
+           exits zero.
+test       t/002-write-quit.sh
+
+assertion  XCU.vi.003
+anchor     utilities/vi.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       The i, A and o commands insert, append at end of line and open a line
+           below.
+test       t/003-insert.sh
+
+assertion  XCU.vi.004
+anchor     utilities/vi.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       x deletes a character, dd a line, and u undoes the last change.
+test       t/004-delete-undo.sh
+
+assertion  XCU.vi.005
+anchor     utilities/vi.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       yy yanks a line, p puts after the cursor, and x then p exchanges
+           characters.
+test       t/005-yank-put.sh
+
+assertion  XCU.vi.006
+anchor     utilities/vi.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       :q! quits without writing, discarding the edit.
+test       t/006-discard.sh
+
+assertion  XCU.vi.007
+anchor     utilities/vi.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       ZZ writes the buffer and exits.
+test       t/007-zz.sh
+
+assertion  XCU.vi.008
+anchor     utilities/vi.html#OPTIONS
+class      conditional
+when       UP
+since      1992
+says       -c command runs the ex command after the first file is read.
+test       t/008-option-c.sh
+
+assertion  XCU.vi.009
+anchor     utilities/vi.html#OPTIONS
+class      conditional
+when       UP
+since      1992
+says       -R opens the file read-only, so a plain :w does not overwrite it.
+test       t/009-option-R.sh
+
+assertion  XCU.vi.010
+anchor     utilities/vi.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       J joins lines, r replaces a character, and . repeats the last change.
+test       t/010-join-replace.sh
+
+assertion  XCU.vi.011
+anchor     utilities/vi.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       The : command runs an ex command on the buffer, here a substitution
+           over all lines.
+test       t/011-ex-command.sh
+
+assertion  XCU.vi.012
+anchor     utilities/vi.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       cw changes a word, w moves by words, and a count repeats a command.
+test       t/012-change-word.sh

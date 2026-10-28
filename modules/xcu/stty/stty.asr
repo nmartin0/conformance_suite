@@ -1,9 +1,8 @@
 # XCU stty
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
-# The utility acts on the terminal that is its standard input, and the driver
-# gives scripts none. Nothing about its operands can be observed without
-# changing a terminal, so the page is recorded as untestable.
+# The tests run stty on a private pseudo-terminal (core/pcpty.c), so no real
+# terminal is changed.
 
 assertion  XCU.stty.001
 anchor     utilities/stty.html#DESCRIPTION
@@ -11,10 +10,106 @@ anchor     utilities/stty.html#OPTIONS
 anchor     utilities/stty.html#OPERANDS
 anchor     utilities/stty.html#STDOUT
 class      untestable
-says       stty without operands reports settings, -a reports all of them, -g
-           writes a one-line form that restores them, and the operands change
-           the control, input, output and local modes, the special characters
-           and the combination modes.
-reason     It needs a terminal as standard input whose settings the test may read
-           and change; the driver supplies none and a test must not alter a
-           person's terminal.
+says       The baud-rate operands (a number, ispeed, ospeed) set the line
+           speed.
+reason     A pseudo-terminal has no line speed or modem lines to observe, and
+           the page leaves the result of failed control-mode changes
+           unspecified.
+
+assertion  XCU.stty.002
+anchor     utilities/stty.html#STDOUT
+anchor     utilities/stty.html#OPTIONS
+class      required
+since      1992
+says       stty -a writes, for the terminal on standard input, each control
+           character as name = value; for eof, eol, erase, intr, kill, quit,
+           susp, start and stop, a speed line, and every mode operand as itself
+           or with a leading minus, and a character size.
+test       t/002-report-all.sh
+
+assertion  XCU.stty.003
+anchor     utilities/stty.html#STDOUT
+class      required
+since      1992
+says       stty with no options or operands exits zero and writes a report.
+test       t/003-default-report.sh
+
+assertion  XCU.stty.004
+anchor     utilities/stty.html#OPTIONS
+class      required
+since      1992
+says       stty -g writes one line of portable printable characters with no white
+           space or pathname-expansion characters, and giving that string back as
+           the one argument restores the settings.
+test       t/004-save-restore.sh
+
+assertion  XCU.stty.005
+anchor     utilities/stty.html#OPERANDS
+class      required
+since      1992
+says       The input, output (base) and local mode operands set the mode and
+           their minus forms clear it, as shown by -a; the control modes do the
+           same when the line accepts them.
+test       t/005-boolean-modes.sh
+
+assertion  XCU.stty.006
+anchor     utilities/stty.html#OPERANDS
+class      required
+since      1992
+says       A control-character operand given a single character, undef or ^- is
+           applied (the first as that character, the others as disabled), and the
+           circumflex forms equal the literal control character, in either case.
+test       t/006-control-chars.sh
+
+assertion  XCU.stty.007
+anchor     utilities/stty.html#OPERANDS
+class      required
+since      1992
+says       The min and time operands change the non-canonical read parameters and
+           are restored by giving the earlier values.
+test       t/007-min-time.sh
+
+assertion  XCU.stty.008
+anchor     utilities/stty.html#OPERANDS
+class      required
+since      1992
+says       evenp, parity, oddp, -parity, -evenp, -oddp, nl, -nl, ek and sane act
+           as the page defines.
+test       t/008-combination-modes.sh
+
+assertion  XCU.stty.009
+anchor     utilities/stty.html#OPERANDS
+anchor     utilities/stty.html#STDOUT
+class      required
+since      2024
+says       rows and cols change the window size, size writes rows, a space and
+           columns, and operands that are not queries write nothing.
+test       t/009-window-size.sh
+
+assertion  XCU.stty.010
+anchor     utilities/stty.html#OPERANDS
+anchor     utilities/stty.html#EXIT STATUS
+class      required
+since      1992
+says       hup is equivalent to hupcl, and an unknown operand or option is an
+           error with a nonzero status and no standard output.
+test       t/010-hup-and-errors.sh
+
+assertion  XCU.stty.011
+anchor     utilities/stty.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       The XSI output-mode operands (onlcr, ocrnl, onocr, onlret, ofill,
+           ofdel and their minus forms) and the delay-style operands, with tabs
+           equal to tab0 and -tabs to tab3, take effect as shown by -a.
+test       t/011-xsi-output-modes.sh
+
+assertion  XCU.stty.012
+anchor     utilities/stty.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       raw gives cs8, -opost and -inpck, equals the operand list the page
+           gives for it, and -raw equals cooked.
+test       t/012-xsi-raw.sh
