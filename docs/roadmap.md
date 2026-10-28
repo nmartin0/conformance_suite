@@ -56,8 +56,9 @@ variants yet.
    triage each failure against the standard before touching a test.
 2. **Hardening**: mutants and variants for the lean-mode modules, once the
    suite is stable; header mutants for Tier 0.
-3. **Untested residue**: terminal-dependent utilities (stty, tabs, tput, vi,
-   talk, write), job control beyond one assertion, the ex/vi command sets
+3. **Untested residue**: terminal-dependent utilities beyond the pty tests
+   already written for stty, tabs, tput and vi (talk, write, vi screen
+   contents, -r/-t/-w), job control beyond one assertion, the ex/vi command sets
    (many `todo` units in the `.cov` files), history/mail/vi-mode parts of
    `sh`.
 4. **Cleanup**: simplify the older option and root handling in the first
