@@ -1,0 +1,133 @@
+# XCU yacc
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# yacc followed by c17 on the generated y.tab.c; each program supplies its
+# own yylex, yyerror and main so the yacc library is not needed. Missing c17
+# makes the test UNRESOLVED. Report formats are unspecified and never
+# examined.
+
+assertion  XCU.yacc.001
+anchor     utilities/yacc.html#OUTPUT FILES
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       Without options yacc writes y.tab.c, not y.tab.h or y.output; the
+           code file compiles, defines YYEOF as 0 and YYEMPTY as a negative
+           number, and the parser evaluates input.
+test       t/001-files-and-run.sh
+
+assertion  XCU.yacc.002
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION/Conflicts
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION/Declarations Section
+class      conditional
+when       CD
+since      1992
+says       Declared precedence and associativity resolve conflicts: higher
+           precedence binds tighter, %left reduces, %right shifts, %nonassoc
+           makes chained use a syntax error, and %prec gives a rule the
+           precedence of a token.
+test       t/002-precedence.sh
+
+assertion  XCU.yacc.003
+anchor     utilities/yacc.html#OPTIONS
+anchor     utilities/yacc.html#OUTPUT FILES/Header File
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION/Interface to the Lexical Analyzer
+class      conditional
+when       CD
+since      1992
+says       -d writes y.tab.h with #define lines for the tokens; an explicit
+           token number is used, other tokens are above 256 and distinct,
+           and a %union gives YYSTYPE and yylval to the header.
+test       t/003-header-and-tokens.sh
+
+assertion  XCU.yacc.004
+anchor     utilities/yacc.html#OPTIONS
+class      conditional
+when       CD
+since      1992
+says       -b pre names the outputs pre.tab.c, pre.tab.h and pre.output and
+           no y.* files are written.
+test       t/004-file-prefix.sh
+
+assertion  XCU.yacc.005
+anchor     utilities/yacc.html#OPTIONS
+class      conditional
+when       CD
+since      1992
+says       -v writes y.output, -l leaves #line out of the code file, and -t
+           makes the debugging variable yydebug available with initial value
+           zero.
+test       t/005-options-v-l-t.sh
+
+assertion  XCU.yacc.006
+anchor     utilities/yacc.html#OPTIONS
+class      conditional
+when       CD
+since      1992
+says       -p xx renames yyparse, yylex and yyerror to xxparse, xxlex and
+           xxerror; a program defining its own yyparse links with the
+           generated code.
+test       t/006-symbol-prefix.sh
+
+assertion  XCU.yacc.007
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION/Error Handling
+class      conditional
+when       CD
+since      1992
+says       A syntax error calls yyerror with "syntax error", the error token
+           lets the parser recover, no second call is made while recovering,
+           and yyerrok resets the recovery state.
+test       t/007-error-recovery.sh
+
+assertion  XCU.yacc.008
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION/Error Handling
+class      conditional
+when       CD
+since      1992
+says       YYACCEPT makes yyparse return zero at once, YYABORT returns non-
+           zero, and YYERROR returns non-zero without calling yyerror when
+           there is no recovery rule.
+test       t/008-accept-abort-error.sh
+
+assertion  XCU.yacc.009
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION/Grammar Rules in yacc
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION/Declarations Section
+class      conditional
+when       CD
+since      1992
+says       Semantic values flow through $$ and $n with union tags, the
+           default value of a rule is its first element, a mid-rule action
+           has a value, and %start overrides the first rule.
+test       t/009-values.sh
+
+assertion  XCU.yacc.010
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION/Conflicts
+anchor     utilities/yacc.html#STDERR
+class      conditional
+when       CD
+since      1992
+says       Conflicts are reported on standard error with a zero exit status;
+           a shift/reduce conflict resolves to shift and a reduce/reduce
+           conflict to the earlier rule.
+test       t/010-conflict-defaults.sh
+
+assertion  XCU.yacc.011
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION/Interface to the Lexical Analyzer
+class      conditional
+when       CD
+since      1992
+says       A yylex that returns a negative value at end of input ends the
+           parse successfully; end of input in the middle of a construct is
+           a syntax error.
+test       t/011-end-marker.sh
+
+assertion  XCU.yacc.012
+anchor     utilities/yacc.html#EXIT STATUS
+anchor     utilities/yacc.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       A missing grammar file, a missing operand and a non-terminal
+           without a rule give a non-zero exit status.
+test       t/012-errors.sh

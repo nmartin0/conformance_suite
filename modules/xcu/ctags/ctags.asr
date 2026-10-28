@@ -1,0 +1,78 @@
+# XCU ctags
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# ctags run on small C sources; only the required objects (function
+# definitions, type definitions, macros with arguments) and the main rule
+# are required to appear, extra tags are tolerated. Tag lines are read back
+# with grep and cut and the pattern is unescaped and checked against the
+# defining line.
+
+assertion  XCU.ctags.001
+anchor     utilities/ctags.html#OUTPUT FILES
+anchor     utilities/ctags.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD|SD
+since      1992
+says       Without -x a file named tags is written to the current directory;
+           it has a name, file name and slash-delimited search pattern per
+           line (tab separated), with lines for a function definition, a
+           type definition and a macro with arguments, whose pattern is
+           found in the defining line, and nothing for #if or #ifdef.
+test       t/001-tags-file-format.sh
+
+assertion  XCU.ctags.002
+anchor     utilities/ctags.html#OUTPUT FILES
+class      conditional
+when       CD|SD
+since      1992
+says       The identifiers in the tags file are in ascending order of the
+           collation sequence of the POSIX locale.
+test       t/002-sorted.sh
+
+assertion  XCU.ctags.003
+anchor     utilities/ctags.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD|SD
+since      1992
+says       The tag for main in a file is the file name with leading
+           directories and the trailing .c removed, prefixed by M.
+test       t/003-main-tag.sh
+
+assertion  XCU.ctags.004
+anchor     utilities/ctags.html#OPTIONS
+class      conditional
+when       CD|SD
+since      1992
+says       -f writes the locators into the named file instead of tags, and
+           -a adds to the existing file keeping its earlier lines.
+test       t/004-file-and-append.sh
+
+assertion  XCU.ctags.005
+anchor     utilities/ctags.html#OPTIONS
+anchor     utilities/ctags.html#STDOUT
+class      conditional
+when       CD|SD
+since      1992
+says       -x writes one line per object to standard output with the name,
+           the line number, the file name and the text of that line
+           separated by single spaces, and creates no tags file.
+test       t/005-index-listing.sh
+
+assertion  XCU.ctags.006
+anchor     utilities/ctags.html#OPERANDS
+class      conditional
+when       CD|SD
+since      1992
+says       Files whose names end in .c or .h are scanned as C source, and
+           several operands give tags from each file with its own name in
+           the file column.
+test       t/006-operands.sh
+
+assertion  XCU.ctags.007
+anchor     utilities/ctags.html#EXIT STATUS
+class      conditional
+when       CD|SD
+since      1992
+says       A pathname operand that cannot be read gives a non-zero exit
+           status.
+test       t/007-missing-file.sh

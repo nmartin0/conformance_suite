@@ -1,0 +1,69 @@
+# XCU msgfmt
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# msgfmt checked through the files it creates; the object file format is
+# unspecified, so tests only look at names, existence, differences and exit
+# status.
+
+assertion  XCU.msgfmt.001
+anchor     utilities/msgfmt.html#OPTIONS
+anchor     utilities/msgfmt.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       A well-formed dot-po file with comments, continued strings, a
+           plural header and plural entries compiles to the file named by -o
+           with status 0.
+test       t/001-output-file.sh
+
+assertion  XCU.msgfmt.002
+anchor     utilities/msgfmt.html#EXTENDED DESCRIPTION
+anchor     utilities/msgfmt.html#OPTIONS
+class      required
+since      2024
+says       With -S each domain section goes to domainname.mo and the leading
+           section to messages.mo; with -o a single file is written and
+           domain directives are ignored.
+test       t/002-domains.sh
+
+assertion  XCU.msgfmt.003
+anchor     utilities/msgfmt.html#OPTIONS
+class      required
+since      2024
+says       -S never doubles a .mo suffix on the output name; whether it adds
+           one to a -o name is not stated, and a run that leaves the -o name
+           alone is UNRESOLVED.
+test       t/003-suffix.sh
+
+assertion  XCU.msgfmt.004
+anchor     utilities/msgfmt.html#OPTIONS
+class      required
+since      2024
+says       -D dir makes msgfmt find an input file in that directory.
+test       t/004-search-dir.sh
+
+assertion  XCU.msgfmt.005
+anchor     utilities/msgfmt.html#OPTIONS
+anchor     utilities/msgfmt.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       With -c and -v a newline mismatch or a c-format conversion
+           mismatch gives a non-zero status, a clean file gives zero, and
+           no-c-format suppresses the conversion check.
+test       t/005-check.sh
+
+assertion  XCU.msgfmt.006
+anchor     utilities/msgfmt.html#OPTIONS
+anchor     utilities/msgfmt.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       A fuzzy entry is left out of the output unless -f is given, so
+           the outputs with and without -f differ and the one without
+           matches a file with no such entry.
+test       t/006-fuzzy.sh
+
+assertion  XCU.msgfmt.007
+anchor     utilities/msgfmt.html#EXIT STATUS
+class      required
+since      2024
+says       A pathname operand that cannot be read gives a non-zero status.
+test       t/007-missing-input.sh

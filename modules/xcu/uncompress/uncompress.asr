@@ -1,0 +1,70 @@
+# XCU uncompress
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# uncompress: the decompress-only form of compress (same page text as
+# compress).
+
+assertion  XCU.uncompress.001
+anchor     utilities/uncompress.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       "uncompress f.Z" restores f with the original bytes, removes f.Z
+           and exits 0.
+test       t/001-restore.sh
+
+assertion  XCU.uncompress.002
+anchor     utilities/uncompress.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       "uncompress -c f.Z" writes the original bytes to standard output
+           and leaves f.Z present and unchanged, with no f created.
+test       t/002-stdout-option.sh
+
+assertion  XCU.uncompress.003
+anchor     utilities/uncompress.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       "uncompress f1.Z f2.Z" restores f1 and f2.
+test       t/003-multiple.sh
+
+assertion  XCU.uncompress.004
+anchor     utilities/uncompress.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       With f already present, standard input not a terminal and no -f,
+           "uncompress f.Z" exits nonzero and leaves f unchanged; with -f f
+           is replaced by the decompressed data.
+test       t/004-no-overwrite.sh
+
+assertion  XCU.uncompress.005
+anchor     utilities/uncompress.html#OPERANDS
+anchor     utilities/uncompress.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       With no file operand uncompress reads compressed data from
+           standard input and writes the original bytes to standard output.
+test       t/005-stdin.sh
+
+assertion  XCU.uncompress.006
+anchor     utilities/uncompress.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       With -v uncompress writes a message to standard error for each
+           file and nothing to standard output.
+test       t/006-verbose.sh
+
+assertion  XCU.uncompress.007
+anchor     utilities/uncompress.html#DESCRIPTION
+anchor     utilities/uncompress.html#OUTPUT FILES
+class      conditional
+when       XSI
+since      2024
+says       "uncompress h.gz" restores h with the original bytes, removes h.gz
+           and exits 0 for a gzip-format file.
+test       t/007-gzip.sh

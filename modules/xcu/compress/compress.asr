@@ -1,0 +1,155 @@
+# XCU compress
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# compress (also covering the decompress mode): default LZW and the
+# deflate/gzip algorithms, suffixes, standard output, options, exit
+# statuses. The page and its option are conditional on XSI. File formats
+# other than GZIP are implementation-defined, so only round trips and the
+# gzip header are checked.
+
+assertion  XCU.compress.001
+anchor     utilities/compress.html#DESCRIPTION
+anchor     utilities/compress.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       "compress f" replaces f with f.Z (the lzw suffix) and exits 0;
+           "compress -d f.Z" then restores f with the original bytes and
+           removes f.Z.
+test       t/001-default-roundtrip.sh
+
+assertion  XCU.compress.002
+anchor     utilities/compress.html#OPTIONS
+anchor     utilities/compress.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       "compress -c f" writes the compressed data to standard output,
+           leaves f unchanged and creates no f.Z; "compress -d -c" of that
+           output read from standard input gives back the original bytes.
+test       t/002-stdout-option.sh
+
+assertion  XCU.compress.003
+anchor     utilities/compress.html#OPTIONS
+anchor     utilities/compress.html#OUTPUT FILES
+class      conditional
+when       XSI
+since      2024
+says       With -g, with -m gzip and with -m deflate the output file is f.gz
+           and starts with the gzip signature bytes 1f 8b and method byte
+           08; "compress -d f.gz" restores the original bytes.
+test       t/003-gzip-format.sh
+
+assertion  XCU.compress.004
+anchor     utilities/compress.html#EXIT STATUS
+anchor     utilities/compress.html#OPTIONS
+class      conditional
+when       XSI
+since      2024
+says       "compress -g f" on a one-byte file, whose gzip form is longer
+           than the input, exits with status 2 and leaves f in place and
+           unchanged; with -f the file is compressed (status 0, f.gz
+           exists).
+test       t/004-increase-status-2.sh
+
+assertion  XCU.compress.005
+anchor     utilities/compress.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       "-b 12" with lzw, and "-b 1" and "-b 9" with -g, are accepted and
+           the compressed file decompresses to the original bytes.
+test       t/005-level-and-bits.sh
+
+assertion  XCU.compress.006
+anchor     utilities/compress.html#DESCRIPTION
+anchor     utilities/compress.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       "compress f1 f2" creates f1.Z and f2.Z and removes f1 and f2;
+           "compress -d -c f1.Z f2.Z" writes the two decompressed files one
+           after the other to standard output.
+test       t/006-multiple-operands.sh
+
+assertion  XCU.compress.007
+anchor     utilities/compress.html#OPTIONS
+class      conditional
+when       XSI
+since      2024
+says       With "-g -m lzw" the output suffix is .Z; with "-m lzw -g" it is
+           .gz; with two -m options the last one decides; none of these is
+           an error.
+test       t/007-last-option-wins.sh
+
+assertion  XCU.compress.008
+anchor     utilities/compress.html#OPTIONS
+class      conditional
+when       XSI
+since      2024
+says       "compress -m" with an algorithm name that is certainly
+           unsupported exits with a status greater than 2 and leaves the
+           file unchanged and in place.
+test       t/008-unsupported-algorithm.sh
+
+assertion  XCU.compress.009
+anchor     utilities/compress.html#OPERANDS
+anchor     utilities/compress.html#STDIN
+class      conditional
+when       XSI
+since      1992
+says       With no file operand, and with the operand -, compress reads
+           standard input and writes standard output; "compress -d" of the
+           result restores the original bytes.
+test       t/009-stdin-stdout.sh
+
+assertion  XCU.compress.010
+anchor     utilities/compress.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       "compress -d -c" on a file with an unrelated name (no suffix)
+           decompresses both lzw data and gzip data correctly.
+test       t/010-content-decides.sh
+
+assertion  XCU.compress.011
+anchor     utilities/compress.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       With f.Z already present, standard input not a terminal and no
+           -f, "compress f" exits nonzero and leaves the existing f.Z
+           unchanged; with -f the output file is replaced by valid
+           compressed data.
+test       t/011-no-overwrite.sh
+
+assertion  XCU.compress.012
+anchor     utilities/compress.html#OPTIONS
+anchor     utilities/compress.html#STDERR
+class      conditional
+when       XSI
+since      1992
+says       With -v compress writes something to standard error for a file it
+           compresses, and nothing to standard output; without -v it writes
+           nothing to standard error.
+test       t/012-verbose.sh
+
+assertion  XCU.compress.013
+anchor     utilities/compress.html#DESCRIPTION
+class      conditional
+when       XSI
+since      2024
+says       After "compress f" on a file with mode 640 and an old
+           modification time, f.Z has mode 640 and a modification time no
+           later than that old time.
+test       t/013-metadata.sh
+
+assertion  XCU.compress.014
+anchor     utilities/compress.html#CONSEQUENCES OF ERRORS
+class      conditional
+when       XSI
+since      1992
+says       "compress -d g.Z" on a file that is not compressed data either
+           succeeds or fails, and if it fails (nonzero status) g.Z is
+           unchanged and still present.
+test       t/014-error-keeps-input.sh

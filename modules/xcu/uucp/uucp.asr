@@ -1,0 +1,23 @@
+# XCU uucp
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# uucp copies files between systems over a communications line; the page
+# defines nothing a script can observe without a configured remote system,
+# so the module is recorded as untestable and a transfer is never started by
+# the suite.
+
+assertion  XCU.uucp.001
+anchor     utilities/uucp.html#DESCRIPTION
+anchor     utilities/uucp.html#OPTIONS
+anchor     utilities/uucp.html#OPERANDS
+class      untestable
+since      1992
+says       uucp copies the source files to the destination, either of which
+           can be system-name!pathname, queueing the job and (with -j)
+           writing a job identification to standard output, with -c, -C, -d,
+           -f, -m, -n and -r changing how the copy is made.
+reason     A transfer needs a configured remote system and a communications
+           line that a test system need not have, and a request that does
+           succeed leaves a queued job or a file on another machine; the
+           diagnostic when no communications means exist is not worded by
+           the page.

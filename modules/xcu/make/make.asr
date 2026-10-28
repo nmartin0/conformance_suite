@@ -1,0 +1,273 @@
+# XCU make
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# make on small makefiles that start with the .POSIX special target.
+# Everything is conditional on the Software Development option. Commands are
+# plain echo, touch, cp and false so no compiler is needed except where
+# noted. File times are set explicitly with touch -t.
+
+assertion  XCU.make.001
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+anchor     utilities/make.html#OPTIONS/-f
+class      conditional
+when       SD
+since      1992
+says       With both ./makefile and ./Makefile present, ./makefile is used;
+           with only ./Makefile it is used; -f NAME uses that file instead;
+           -f - reads the makefile from standard input; with several -f
+           options the first target found in the first file is the default.
+test       t/001-makefile-selection.sh
+
+assertion  XCU.make.002
+anchor     utilities/make.html#OPERANDS
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       With no operand make builds the first target that is not special;
+           "make b a" builds b then a; a target with no rule that does not
+           exist is an error (nonzero status); an existing file with no rule
+           is up to date (status 0).
+test       t/002-targets-and-defaults.sh
+
+assertion  XCU.make.003
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       A target older than a prerequisite is rebuilt; a target newer
+           than its prerequisites is not; prerequisites are brought up to
+           date in the order listed before the target's own commands; a
+           missing target is built.
+test       t/003-up-to-date.sh
+
+assertion  XCU.make.004
+anchor     utilities/make.html#STDOUT
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+anchor     utilities/make.html#OPTIONS/-s
+class      conditional
+when       SD
+since      1992
+says       Commands are written to standard output before execution except
+           those with a @ prefix; with -s, or with .SILENT without
+           prerequisites, or with the target listed after .SILENT, none is
+           written; the commands' own output is unaffected.
+test       t/004-echo-and-silence.sh
+
+assertion  XCU.make.005
+anchor     utilities/make.html#OPTIONS/-n
+class      conditional
+when       SD
+since      1992
+says       With -n the commands are written but not run (including @ lines,
+           which are written), except that a + prefixed line is run.
+test       t/005-dry-run.sh
+
+assertion  XCU.make.006
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+anchor     utilities/make.html#OPTIONS/-i
+anchor     utilities/make.html#EXIT STATUS
+class      conditional
+when       SD
+since      1992
+says       A failing command stops make with nonzero status before later
+           commands; a - prefix, -i, or a .IGNORE special target make the
+           failure ignored (status 0, later commands run); a command line is
+           run with the shell -e option unless errors are ignored.
+test       t/006-error-handling.sh
+
+assertion  XCU.make.007
+anchor     utilities/make.html#OPTIONS/-k
+anchor     utilities/make.html#OPTIONS/-S
+class      conditional
+when       SD
+since      1992
+says       After a failure, make -k still builds independent targets and
+           ends with nonzero status; without -k, or with -S after -k, it
+           stops; with -S before -k it keeps going.
+test       t/007-keep-going.sh
+
+assertion  XCU.make.008
+anchor     utilities/make.html#OPTIONS/-q
+anchor     utilities/make.html#EXIT STATUS
+class      conditional
+when       SD
+since      1992
+says       "make -q" exits 0 when the target is up to date and 1 when it is
+           not, and does not run its commands, except that a + prefixed
+           command is run.
+test       t/008-question.sh
+
+assertion  XCU.make.009
+anchor     utilities/make.html#OPTIONS/-t
+class      conditional
+when       SD
+since      1992
+says       "make -t" does not run an out-of-date target's commands but
+           updates the target's modification time and writes a message
+           naming it; a target with prerequisites but no commands is not
+           touched.
+test       t/009-touch.sh
+
+assertion  XCU.make.010
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+anchor     utilities/make.html#OPTIONS/-e
+anchor     utilities/make.html#ENVIRONMENT VARIABLES
+class      conditional
+when       SD
+since      1992
+says       Macros come from the command line, MAKEFLAGS, the environment,
+           the makefile; a makefile definition overrides the environment
+           unless -e is given; a command-line definition overrides both; a
+           null environment value overrides with -e.
+test       t/010-macro-precedence.sh
+
+assertion  XCU.make.011
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       "=" is delayed, "::=" and ":::=" expand at definition, "!=" takes
+           the shell output (newlines become spaces, failure is not an
+           error), "?=" assigns only if not defined, "+=" appends with a
+           space.
+test       t/011-macro-forms.sh
+
+assertion  XCU.make.012
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       $(X:.c=.o) and ${X:.c=.o} replace a suffix of each word, $$ gives
+           a dollar sign for the shell, a one-character macro needs no
+           parentheses, and an undefined macro gives an empty string.
+test       t/012-macro-expansion.sh
+
+assertion  XCU.make.013
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       In a target rule $@ is the target, $? only the prerequisites
+           newer than the target, and $(@D) and $(@F) the directory part (.
+           when there is none) and the file name part.
+test       t/013-internal-macros.sh
+
+assertion  XCU.make.014
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       With .SUFFIXES listing .in and .out, a .in.out rule builds x.out
+           from an existing x.in with $< and $* set accordingly and rebuilds
+           when x.in is newer; a single-suffix rule builds tool from
+           tool.one; an empty .SUFFIXES clears the list so the rule is no
+           longer used; -r removes the built-in rules.
+test       t/014-inference-rules.sh
+
+assertion  XCU.make.015
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       An existing file with no prerequisites is up to date and its
+           commands do not run; .DEFAULT commands build any target with no
+           rule, with $< the target name; the first target after special
+           ones is the default.
+test       t/015-special-targets.sh
+
+assertion  XCU.make.016
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2008
+says       include FILE reads FILE as if in place (also through a macro and
+           nested); a missing file is an error.
+test       t/016-include.sh
+
+assertion  XCU.make.017
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       A backslash-newline in a macro definition joins the lines, and
+           one in a command line is passed to the shell with the next line
+           (minus a leading tab).
+test       t/017-line-continuation.sh
+
+assertion  XCU.make.018
+anchor     utilities/make.html#OPTIONS/-n
+anchor     utilities/make.html#ENVIRONMENT VARIABLES
+class      conditional
+when       SD
+since      1992
+says       Under -n a command line using $(MAKE) is still run, and the sub-
+           make also behaves as if -n, so the sub-make's own command is
+           written and not run; MAKEFLAGS=n and MAKEFLAGS=-n in the
+           environment act as -n.
+test       t/018-sub-make.sh
+
+assertion  XCU.make.019
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       $(CURDIR) is the working directory (the same as pwd -L or pwd
+           -P); the SHELL environment variable does not change the SHELL
+           macro or stop commands running.
+test       t/019-special-macros.sh
+
+assertion  XCU.make.020
+anchor     utilities/make.html#OPTIONS/-j
+class      conditional
+when       SD
+since      2024
+says       "make -j 2" with four independent targets builds them all and
+           exits 0, and a .WAIT prerequisite makes the targets to its right
+           start after those to its left are done.
+test       t/020-parallel.sh
+
+assertion  XCU.make.021
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       A target lib.a(f.o) is a member of an archive: in its commands $@
+           is lib.a and $% is f.o; building it adds the member f.o to lib.a.
+test       t/021-archive-members.sh
+
+assertion  XCU.make.022
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       In a target rule $^ is the list of prerequisites without
+           duplicates and $+ the list with duplicates.
+test       t/022-caret-plus-macros.sh
+
+assertion  XCU.make.023
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       $(X:%.c=%.x) and $(X:a.%=new_%) replace by pattern, and nested
+           references like $($(N)) are expanded inside out.
+test       t/023-pattern-nested-macros.sh
+
+assertion  XCU.make.024
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       A target named in .PHONY always runs even if a file of that name
+           exists.
+test       t/024-phony.sh
+
+assertion  XCU.make.025
+anchor     utilities/make.html#EXTENDED DESCRIPTION
+class      conditional
+when       SD
+since      2024
+says       A missing file named on an -include line is ignored, and a file
+           that exists is still read.
+test       t/025-silent-include.sh

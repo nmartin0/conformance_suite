@@ -1,0 +1,172 @@
+# XCU mailx
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# mailx in Receive Mode reading a secondary mailbox with -f and commands
+# from standard input; the prompt is turned off with set noprompt and echo
+# lines with distinctive markers split the output into sections. Message
+# text uses unique tokens so printing is checked by presence and absence
+# only; header summary layouts, size units and message print layouts beyond
+# the required pieces are not examined. Send Mode, the system mailbox and
+# the interactive input mode need a mail transfer agent or a terminal and
+# are recorded as untestable.
+
+assertion  XCU.mailx.001
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       print and type (with their abbreviations) write the named message
+           to standard output without the other messages, and Print and Type
+           write it with all of its header fields.
+test       t/001-print-type.sh
+
+assertion  XCU.mailx.002
+anchor     utilities/mailx.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       A message list can be a number, a range n-m, several numbers, *
+           for all, $ for the last, ^ for the first, + and - for the next
+           and previous message, /string for a Subject match ignoring case,
+           or an address.
+test       t/002-message-lists.sh
+
+assertion  XCU.mailx.003
+anchor     utilities/mailx.html#Commands in mailx
+anchor     utilities/mailx.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       Deleted messages are not shown by later commands and are removed
+           from the file when mailx quits (by quit or end-of-file) but not
+           by exit; undelete restores them; delete with no list deletes the
+           current message.
+test       t/003-delete-and-quit.sh
+
+assertion  XCU.mailx.004
+anchor     utilities/mailx.html#Commands in mailx
+anchor     utilities/mailx.html#OUTPUT FILES
+class      conditional
+when       UP
+since      1992
+says       save and copy append the messages with their headers in the
+           mailbox file format, creating the file, with no file operand save
+           goes to the mbox, and write puts the message without its header
+           into the file.
+test       t/004-save-write-copy.sh
+
+assertion  XCU.mailx.005
+anchor     utilities/mailx.html#Commands in mailx
+anchor     utilities/mailx.html#OPTIONS
+anchor     utilities/mailx.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       from and headers write one summary line per message that is not
+           deleted, the current message line begins with >, -H writes only
+           the summary and exits, and -N leaves out the initial summary.
+test       t/005-header-summary.sh
+
+assertion  XCU.mailx.006
+anchor     utilities/mailx.html#Commands in mailx
+anchor     utilities/mailx.html#EXTENDED DESCRIPTION
+class      conditional
+when       UP
+since      1992
+says       The current message starts as the first message, = writes its
+           number, a command with a list leaves the highest numbered message
+           of the list current, and next prints the current message if it
+           has not been shown, then each following message in turn.
+test       t/006-current-and-next.sh
+
+assertion  XCU.mailx.007
+anchor     utilities/mailx.html#Commands in mailx
+anchor     utilities/mailx.html#OPTIONS
+anchor     utilities/mailx.html#OPERANDS
+class      conditional
+when       UP
+since      1992
+says       file switches to another mailbox file, # names the previous file,
+           + names a file in the folder directory, file with no argument
+           says which mailbox is open, -f with no operand reads the mbox,
+           and -i is accepted.
+test       t/007-change-file.sh
+
+assertion  XCU.mailx.008
+anchor     utilities/mailx.html#Commands in mailx
+anchor     utilities/mailx.html#Internal Variables in mailx
+class      conditional
+when       UP
+since      1992
+says       top writes only the first few lines of a message, as many as the
+           toplines variable says (default 5), so a long message is cut
+           short and a large toplines value shows all of it.
+test       t/008-top.sh
+
+assertion  XCU.mailx.009
+anchor     utilities/mailx.html#Commands in mailx
+anchor     utilities/mailx.html#Internal Variables in mailx
+class      conditional
+when       UP
+since      1992
+says       echo writes its strings as the echo utility does (abbreviations
+           accepted, quotes keep spacing), a # line is ignored, source runs
+           commands from a file, ! runs a shell command, and set defines a
+           variable that set lists and unset removes.
+test       t/009-echo-set-source.sh
+
+assertion  XCU.mailx.010
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       pipe and | give the listed messages to a shell command as its
+           standard input; with no arguments the current message goes to the
+           command held in the cmd variable.
+test       t/010-pipe.sh
+
+assertion  XCU.mailx.011
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       ignore (and discard) hide the named header fields, ignoring case,
+           when messages are written with print, Print overrides that, a
+           command without names lists the hidden names, and retain shows
+           only the named fields.
+test       t/011-header-field-filters.sh
+
+assertion  XCU.mailx.012
+anchor     utilities/mailx.html#Commands in mailx
+class      conditional
+when       UP
+since      1992
+says       alias and group record the addresses of a name, alias with a name
+           lists it, alias with no arguments lists all, unalias removes one,
+           and alternates stores and lists alternative addresses.
+test       t/012-aliases.sh
+
+assertion  XCU.mailx.013
+anchor     utilities/mailx.html#EXIT STATUS
+class      conditional
+when       UP
+since      1992
+says       Naming a file with -f that cannot be read gives a non-zero exit
+           status.
+test       t/013-missing-file.sh
+
+assertion  XCU.mailx.014
+anchor     utilities/mailx.html#Send Mode
+anchor     utilities/mailx.html#ENVIRONMENT VARIABLES
+anchor     utilities/mailx.html#ASYNCHRONOUS EVENTS
+anchor     utilities/mailx.html#Command Escapes in mailx
+class      untestable
+since      1992
+says       Send Mode delivers standard input as a message with -E and -s, -e
+           and -u examine a system mailbox, hold, preserve, mbox and touch
+           act on the system mailbox, and reply, mail, followup and the
+           tilde escapes compose messages in input mode.
+reason     Delivery needs a mail transfer agent and recipients, the system
+           mailbox has an unspecified location and need not be a file, and
+           input mode is defined for a terminal; none of these can be set up
+           or inspected portably from a script.

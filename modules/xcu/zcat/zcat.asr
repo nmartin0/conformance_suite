@@ -1,0 +1,55 @@
+# XCU zcat
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# zcat: decompress to standard output, files left alone (same page text as
+# compress).
+
+assertion  XCU.zcat.001
+anchor     utilities/zcat.html#DESCRIPTION
+anchor     utilities/zcat.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       "zcat f.Z" writes the original bytes to standard output, leaves
+           f.Z present and unchanged, and creates no f.
+test       t/001-stdout.sh
+
+assertion  XCU.zcat.002
+anchor     utilities/zcat.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       "zcat f1.Z f2.Z" writes the decompressed data of f1.Z then that
+           of f2.Z.
+test       t/002-concatenates.sh
+
+assertion  XCU.zcat.003
+anchor     utilities/zcat.html#STDIN
+anchor     utilities/zcat.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       With no operand, and with the operand -, zcat decompresses
+           standard input to standard output.
+test       t/003-stdin.sh
+
+assertion  XCU.zcat.004
+anchor     utilities/zcat.html#EXIT STATUS
+anchor     utilities/zcat.html#CONSEQUENCES OF ERRORS
+class      conditional
+when       XSI
+since      1992
+says       "zcat" on a file that is not compressed data may succeed
+           (UNRESOLVED); if it exits nonzero the file is unchanged.
+test       t/004-bad-input.sh
+
+assertion  XCU.zcat.005
+anchor     utilities/zcat.html#DESCRIPTION
+anchor     utilities/zcat.html#STDOUT
+class      conditional
+when       XSI
+since      2024
+says       "zcat h.gz" writes the original bytes of a gzip-format file to
+           standard output, leaves h.gz present and unchanged, and creates
+           no h.
+test       t/005-gzip.sh

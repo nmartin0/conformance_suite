@@ -1,0 +1,178 @@
+# XCU ex
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# ex driven by scripts on standard input (never a terminal, so -s is
+# implied). Tests avoid error continuation: after an error ex stops, so
+# error cases are separate runs. Informational messages are suppressed by -s
+# and never compared.
+
+assertion  XCU.ex.001
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       a, i and c enter text input ended by a period line, address 0
+           puts text at the start, and the changed file is written.
+test       t/001-text-input.sh
+
+assertion  XCU.ex.002
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Addressing in ex
+class      conditional
+when       UP
+since      1992
+says       Numbers, $, regular expression searches both ways, marks,
+           offsets, the semicolon and % address the right lines.
+test       t/002-addressing.sh
+
+assertion  XCU.ex.003
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       d, m, t, ya, pu and j change the buffer as specified.
+test       t/003-move-copy-yank-put.sh
+
+assertion  XCU.ex.004
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       j drops leading spaces, puts two spaces after a period, none
+           after a trailing blank or before a closing parenthesis, and j!
+           joins unchanged.
+test       t/004-join-rules.sh
+
+assertion  XCU.ex.005
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       s replaces with & and groups, g replaces all, other delimiters
+           work, a backslash-newline splits the line, and & repeats the last
+           substitution.
+test       t/005-substitute.sh
+
+assertion  XCU.ex.006
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       g runs commands on matching lines, v on the others, g/^/m0
+           reverses the buffer, and g! is v.
+test       t/006-global.sh
+
+assertion  XCU.ex.007
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       u reverses the last change and a second u reverses the undo.
+test       t/007-undo.sh
+
+assertion  XCU.ex.008
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       nu and # precede lines by a six-wide number and two spaces, l
+           shows tab as \t, escapes a dollar and ends with a dollar, =
+           prints the line number, and set number makes p number lines.
+test       t/008-number-list.sh
+
+assertion  XCU.ex.009
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       r inserts a file after a line, r ! inserts command output, w with
+           a range writes those lines to a new file, and w >> appends.
+test       t/009-read-write.sh
+
+assertion  XCU.ex.010
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       q on a modified buffer fails, q! discards, w to an existing other
+           file fails unless forced with !, -R blocks w but not w!, and x
+           and wq write and exit.
+test       t/010-quit-write-rules.sh
+
+assertion  XCU.ex.011
+anchor     utilities/ex.html#CONSEQUENCES OF ERRORS
+class      conditional
+when       UP
+since      1992
+says       After an error with standard input not a terminal, ex does not
+           write the file and exits with a non-zero status.
+test       t/011-error-ends-session.sh
+
+assertion  XCU.ex.012
+anchor     utilities/ex.html#OPTIONS
+class      conditional
+when       UP
+since      1992
+says       -c runs a command on the first file loaded and -r with no file
+           lists recoverable files and exits normally.
+test       t/012-option-c-and-r.sh
+
+assertion  XCU.ex.013
+anchor     utilities/ex.html#OPTIONS
+class      conditional
+when       UP
+since      1992
+says       With -s the EXINIT variable and the .exrc file are not used.
+test       t/013-no-init-with-s.sh
+
+assertion  XCU.ex.014
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       A range with ! replaces the lines by the filter output and w !cmd
+           feeds lines to a command.
+test       t/014-shell-commands.sh
+
+assertion  XCU.ex.015
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       > indents by shiftwidth columns and < removes it.
+test       t/015-shift.sh
+
+assertion  XCU.ex.016
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       n moves to the next file operand after a write and ar shows the
+           list with the current entry in brackets.
+test       t/016-args-next.sh
+
+assertion  XCU.ex.017
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Command Descriptions in ex
+class      conditional
+when       UP
+since      1992
+says       Lines yanked or deleted into a named buffer can be put back from
+           it.
+test       t/017-named-buffers.sh
+
+assertion  XCU.ex.018
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Regular Expressions in ex
+class      conditional
+when       UP
+since      1992
+says       \< and \> match word edges, \{n\} matches an interval, and set
+           ignorecase matches regardless of case.
+test       t/018-regular-expressions.sh
+
+assertion  XCU.ex.019
+anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
+class      conditional
+when       UP
+since      1992
+says       With wrapscan a search wraps past the end; with nowrapscan it
+           fails.
+test       t/019-wrapscan.sh

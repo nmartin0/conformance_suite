@@ -1,0 +1,19 @@
+# XCU vi
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# vi is a screen editor whose input and output must be a terminal; with
+# other devices the behaviour is not defined by the page, so the whole page
+# is recorded as untestable.
+
+assertion  XCU.vi.001
+anchor     utilities/vi.html#DESCRIPTION
+anchor     utilities/vi.html#OPTIONS
+anchor     utilities/vi.html#EXTENDED DESCRIPTION
+class      untestable
+since      1992
+says       vi edits the named files in a screen on the terminal, with the
+           -c, -r, -R, -t and -w options and the visual-mode commands, and
+           writes the buffer to a file only by an editor command.
+reason     The behaviour is defined for a terminal that shows screens and
+           sends keystrokes; with standard input or output not a terminal
+           the page defines nothing, and a script has no terminal to supply.

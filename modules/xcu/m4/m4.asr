@@ -1,0 +1,123 @@
+# XCU m4
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# m4 driven by input files; every expectation is built with printf or
+# heredocs. Output of dumpdef, traceon and the -s directive text are
+# unspecified and only minimally checked.
+
+assertion  XCU.m4.001
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       A macro defined with define expands with $1, $2, $0 and $#
+           replaced; without parentheses $# is 0 and arguments are null; the
+           expansion is rescanned; names are the longest run of letters,
+           digits and underscores not starting with a digit.
+test       t/001-define-args.sh
+
+assertion  XCU.m4.002
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Parenthesised commas do not split arguments, leading white space
+           of an argument is dropped and trailing kept, omitted arguments
+           are null, $* joins with commas, and $@ quotes each argument so it
+           is not expanded again.
+test       t/002-argument-collection.sh
+
+assertion  XCU.m4.003
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Quoted text is not expanded and the outer quotes are removed;
+           changequote sets and restores the quote strings; comment text is
+           copied unscanned; changecom changes the comment start; dnl
+           discards through the newline.
+test       t/003-quotes-comments-dnl.sh
+
+assertion  XCU.m4.004
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       ifelse chooses by string equality, handles the 4,5 and 6-or-more
+           argument forms; incr, decr, len, index, substr, translit and
+           shift give the specified strings.
+test       t/004-conditionals-strings.sh
+
+assertion  XCU.m4.005
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       pushdef saves a definition that popdef restores; popdef of the
+           last definition undefines; undefine removes all definitions;
+           ifdef tests definition; defn gives a definition that can define
+           another macro.
+test       t/005-definitions.sh
+
+assertion  XCU.m4.006
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       eval evaluates the listed C operators with C precedence, accepts
+           octal and hexadecimal constants, and takes a radix and a minimum
+           digit count as second and third arguments.
+test       t/006-eval.sh
+
+assertion  XCU.m4.007
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Diverted text is held and written at the end in buffer order;
+           divert(-1) discards; divnum gives the current stream; undivert
+           writes a buffer at once and empties it; m4wrap text is processed
+           at end of input in call order.
+test       t/007-diversions.sh
+
+assertion  XCU.m4.008
+anchor     utilities/m4.html#OPTIONS
+anchor     utilities/m4.html#OPERANDS
+class      required
+since      1992
+says       -D defines to the value or to null, -U undefines (including
+           built-ins), their order matters, options may follow operands,
+           files are processed in order with - meaning standard input, and
+           -s produces #line directives.
+test       t/008-options-operands.sh
+
+assertion  XCU.m4.009
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+anchor     utilities/m4.html#EXIT STATUS
+class      required
+since      1992
+says       include gives the contents of a file; sinclude of a missing file
+           is silently empty with status 0; include of a missing file writes
+           a diagnostic and the final status is non-zero.
+test       t/009-include.sh
+
+assertion  XCU.m4.010
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+anchor     utilities/m4.html#STDERR
+anchor     utilities/m4.html#EXIT STATUS
+class      required
+since      1992
+says       syscmd runs a command and sysval gives its exit value; m4exit
+           sets the exit status and stops processing; errprint writes to
+           standard error only.
+test       t/010-system-macros.sh
+
+assertion  XCU.m4.011
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      2008
+says       mkstemp gives the pathname of a file it created from the template
+           argument.
+test       t/011-mkstemp.sh
+
+assertion  XCU.m4.012
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+anchor     utilities/m4.html#EXIT STATUS
+class      required
+since      2024
+says       m4exit with no argument or a zero argument, after an error has
+           occurred, leaves the exit status non-zero.
+test       t/012-m4exit-after-error.sh

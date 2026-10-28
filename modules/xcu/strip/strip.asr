@@ -1,0 +1,40 @@
+# XCU strip
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# strip on executables made by c17 (UNRESOLVED when the compiler cannot be
+# used).
+
+assertion  XCU.strip.001
+anchor     utilities/strip.html#DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       After "strip prog" (status 0) the program still runs and gives
+           the same output and exit status.
+test       t/001-still-runs.sh
+
+assertion  XCU.strip.002
+anchor     utilities/strip.html#OPERANDS
+class      conditional
+when       SD
+since      1992
+says       "strip p1 p2" exits 0 and both programs still run correctly.
+test       t/002-multiple-operands.sh
+
+assertion  XCU.strip.003
+anchor     utilities/strip.html#EXIT STATUS
+class      conditional
+when       SD
+since      1992
+says       "strip" on a file that does not exist exits with a status greater
+           than zero.
+test       t/003-missing-file.sh
+
+assertion  XCU.strip.004
+anchor     utilities/strip.html#DESCRIPTION
+class      conditional
+when       SD+XSI
+since      1992
+says       "strip lib.a" for an archive made by ar -r from an object file
+           exits 0 and the archive still lists its member.
+test       t/004-archive.sh

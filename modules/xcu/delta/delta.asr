@@ -1,0 +1,65 @@
+# XCU delta
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# SCCS files are made and inspected only with the SCCS utilities (admin,
+# get, delta, prs and friends); the file format is unspecified so nothing
+# reads the files directly. A missing companion utility makes the test
+# UNRESOLVED. Login names, dates and the diagnostic texts are never compared
+# literally.
+
+assertion  XCU.delta.001
+anchor     utilities/delta.html#STDOUT
+anchor     utilities/delta.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       delta prints the new SID and the inserted, deleted and unchanged
+           line counts; the g-file is removed, the new version is what get
+           retrieves, the old one remains available, and another get -e is
+           allowed afterwards.
+test       t/001-report-and-remove.sh
+
+assertion  XCU.delta.002
+anchor     utilities/delta.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -s suppresses the report and -n keeps the edited g-file.
+test       t/002-options-s-n.sh
+
+assertion  XCU.delta.003
+anchor     utilities/delta.html#STDOUT
+anchor     utilities/delta.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       Replacing one line of three reports one inserted, one deleted and
+           two unchanged, and the -y text becomes the delta comment.
+test       t/003-counts-comment.sh
+
+assertion  XCU.delta.004
+anchor     utilities/delta.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -p writes the differences in diff format to standard output.
+test       t/004-diff-output.sh
+
+assertion  XCU.delta.005
+anchor     utilities/delta.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       delta on a file with no pending edit gives a non-zero status and
+           changes nothing.
+test       t/005-no-pending-edit.sh
+
+assertion  XCU.delta.006
+anchor     utilities/delta.html#OPERANDS
+anchor     utilities/delta.html#STDIN
+class      conditional
+when       XSI
+since      1992
+says       A single - operand reads SCCS file names from standard input,
+           with -y supplying the comment.
+test       t/006-stdin-names.sh

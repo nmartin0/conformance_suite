@@ -1,0 +1,188 @@
+# XCU ed
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# ed driven by scripts on standard input (the input is never a terminal).
+# Most tests use -s and a 5-line file one..five so only the specified
+# outputs appear. Error continuation is only relied on for an invalid
+# command, which the page says leaves ed in command mode.
+
+assertion  XCU.ed.001
+anchor     utilities/ed.html#OPTIONS/-s
+anchor     utilities/ed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Loading a 24-byte file writes "24" to standard output and w
+           writes "24" for the bytes written; with -s neither count is
+           written. r of a file onto an empty buffer writes the byte count
+           too.
+test       t/001-byte-counts.sh
+
+assertion  XCU.ed.002
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Append Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Insert Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Change Command
+class      required
+since      1992
+says       "2a", "0a", "$i" and "3c" with text lines end by a lone dot put
+           the text after line 2, at the top, before the last line, and in
+           place of line 3; the result written to a file has the expected
+           eight lines.
+test       t/002-append-insert-change.sh
+
+assertion  XCU.ed.003
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Print Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Number Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Line Number Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Delete Command
+class      required
+since      1992
+says       p prints lines, n prints each with its number and a tab, = prints
+           a line number, and after d the current line is the line after the
+           deleted ones (the new last line when the end was deleted, 0 when
+           the buffer is empty).
+test       t/003-print-number-delete.sh
+
+assertion  XCU.ed.004
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Addresses in ed
+class      required
+since      1992
+says       The forms 1, $, /RE/, ?RE?, +n, -, $-1, 1;/RE/, 'x marks, a comma
+           alone and offsets select the expected lines; searches wrap
+           around.
+test       t/004-addresses.sh
+
+assertion  XCU.ed.005
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Null Command
+class      required
+since      1992
+says       An address alone prints that line and makes it current; an empty
+           command line acts as +1p.
+test       t/005-null-command.sh
+
+assertion  XCU.ed.006
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Substitute Command
+class      required
+since      1992
+says       s replaces the first match, all with g, only the nth with a
+           count; & is the matched text, \1 \2 are back-references, a lone %
+           repeats the previous replacement, and another delimiter character
+           may be used.
+test       t/006-substitute.sh
+
+assertion  XCU.ed.007
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Substitute Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Commands in ed
+class      required
+since      1992
+says       "2dp" prints the new current line; the p, n and l flags of s
+           print the changed line as p, n and l do; a backslash-newline in
+           the replacement splits the line.
+test       t/007-substitute-flags.sh
+
+assertion  XCU.ed.008
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Global Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Global Non-Matched Command
+class      required
+since      1992
+says       g runs a command list on matching lines (default p), v on lines
+           that do not match, and a multi-line list may carry an a command
+           whose text ends the list.
+test       t/008-global.sh
+
+assertion  XCU.ed.009
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Interactive Global Command
+class      required
+since      1992
+says       G writes each matching line and executes the next command read
+           for it; & repeats the previous command.
+test       t/009-interactive-global.sh
+
+assertion  XCU.ed.010
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Join Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Move Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Copy Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Undo Command
+class      required
+since      1992
+says       j joins lines, m moves them after an address, t copies them after
+           an address, u undoes the last change and restores the current
+           line, and u after a g undoes all of its changes at once.
+test       t/010-join-move-copy-undo.sh
+
+assertion  XCU.ed.011
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Filename Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Edit Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Read Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Write Command
+class      required
+since      1992
+says       f prints the remembered name and sets a new one; w with no name
+           writes to it; e replaces the buffer; 0r reads a file at the top
+           without changing the remembered name; w with a name writes those
+           lines.
+test       t/011-file-commands.sh
+
+assertion  XCU.ed.012
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Shell Escape Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Read Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Write Command
+class      required
+since      1992
+says       "!cmd" runs the command and, unless -s, writes "!" after it; a %
+           in it becomes the remembered pathname and the changed line is
+           written first; r !cmd appends the command's output; w !cmd feeds
+           the lines to the command; E !cmd replaces the buffer.
+test       t/012-shell-escape.sh
+
+assertion  XCU.ed.013
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Quit Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Quit Without Checking Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       q on a modified buffer writes "?" and does not quit; a second q
+           (after only non-modifying commands) quits; q on an unmodified
+           buffer or after an empty a does not warn; Q never warns; nothing
+           is written to the file without w.
+test       t/013-quit.sh
+
+assertion  XCU.ed.014
+anchor     utilities/ed.html#OPTIONS/-p
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Prompt Command
+class      required
+since      1992
+says       With -p STR the string is written before each command is read; P
+           turns the prompt on with "*" when -p was not given.
+test       t/014-prompt.sh
+
+assertion  XCU.ed.015
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/List Command
+class      required
+since      1992
+says       l shows a tab as \t, a backslash as \\, a dollar inside the text
+           as \$, a control byte as a three-digit octal escape, and ends
+           each line with $.
+test       t/015-list.sh
+
+assertion  XCU.ed.016
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Regular Expressions in ed
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Addresses in ed
+class      required
+since      1992
+says       Other delimiters can replace the slash (g%[%]%p, s-[0-9]--g), a
+           delimiter in a bracket expression does not end the RE, // repeats
+           the last RE, and a final delimiter may be omitted in an address.
+test       t/016-regex-delimiters.sh
+
+assertion  XCU.ed.017
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Help Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION/Help-Mode Command
+anchor     utilities/ed.html#EXTENDED DESCRIPTION
+anchor     utilities/ed.html#EXIT STATUS
+class      required
+since      1992
+says       An invalid command writes "?" and ed stays in command mode with
+           the current line unchanged; h then writes an explanation; with H
+           on, the explanation follows each "?"; the exit status after a
+           command error is nonzero.
+test       t/017-errors.sh

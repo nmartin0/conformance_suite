@@ -1,0 +1,85 @@
+# XCU admin
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# SCCS files are made and inspected only with the SCCS utilities (admin,
+# get, delta, prs and friends); the file format is unspecified so nothing
+# reads the files directly. A missing companion utility makes the test
+# UNRESOLVED. Login names, dates and the diagnostic texts are never compared
+# literally.
+
+assertion  XCU.admin.001
+anchor     utilities/admin.html#OPTIONS
+anchor     utilities/admin.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       admin -iname creates s.name from the text of a file as the first
+           delta, the new file has no write permission, no x-file or z-file
+           is left, and get returns the same text.
+test       t/001-create-from-file.sh
+
+assertion  XCU.admin.002
+anchor     utilities/admin.html#OPTIONS
+anchor     utilities/admin.html#STDIN
+class      conditional
+when       XSI
+since      1992
+says       -n creates a file with no text and -i without a name reads the
+           text from standard input.
+test       t/002-empty-and-stdin.sh
+
+assertion  XCU.admin.003
+anchor     utilities/admin.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -r3 makes the initial delta 3.1 and the level defaults to 1.
+test       t/003-initial-release.sh
+
+assertion  XCU.admin.004
+anchor     utilities/admin.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       The m, t, q, b, j, c, f, n, d and i flags set with -f are
+           reflected by prs, the default module name is the file name
+           without s., and -d removes b and j.
+test       t/004-flags.sh
+
+assertion  XCU.admin.005
+anchor     utilities/admin.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -tname stores descriptive text, -t alone removes it from an
+           existing file, -y sets the comment of the initial delta, and the
+           default comment starts with the creation text.
+test       t/005-description-comment.sh
+
+assertion  XCU.admin.006
+anchor     utilities/admin.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -a adds login names to the list of users who may make deltas and
+           -e removes them.
+test       t/006-user-list.sh
+
+assertion  XCU.admin.007
+anchor     utilities/admin.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -h passes an intact file silently, reports a damaged one, and -z
+           recomputes the checksum so that -h passes again.
+test       t/007-check-and-sum.sh
+
+assertion  XCU.admin.008
+anchor     utilities/admin.html#OPERANDS
+anchor     utilities/admin.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       A single - operand reads SCCS file names from standard input; an
+           unreadable -i file gives a non-zero status and creates nothing.
+test       t/008-operands-and-errors.sh

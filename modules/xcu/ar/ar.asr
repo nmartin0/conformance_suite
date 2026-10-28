@@ -1,0 +1,175 @@
+# XCU ar
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# ar on plain text members (no object files, so no symbol table is
+# involved). Everything is conditional on the Software Development option;
+# the XSI-marked operations also need XSI. Archive formats are unspecified,
+# so archives are only read back through ar itself.
+
+assertion  XCU.ar.001
+anchor     utilities/ar.html#OPTIONS/-r
+anchor     utilities/ar.html#OPTIONS/-c
+anchor     utilities/ar.html#STDERR
+class      conditional
+when       SD
+since      1992
+says       "ar -r a f1" creating a new archive exits 0, writes a diagnostic
+           to standard error and the archive then lists f1; with -c ("ar
+           -rc") nothing is written to standard error.
+test       t/001-create-diagnostic.sh
+
+assertion  XCU.ar.002
+anchor     utilities/ar.html#OPTIONS/-t
+anchor     utilities/ar.html#STDOUT
+class      conditional
+when       SD
+since      1992
+says       "ar -t a" prints the member names one per line in archive order;
+           with one operand only that member is listed, printed as the
+           operand was given.
+test       t/002-table-of-contents.sh
+
+assertion  XCU.ar.003
+anchor     utilities/ar.html#OPTIONS/-p
+anchor     utilities/ar.html#STDOUT
+class      conditional
+when       SD
+since      1992
+says       "ar -p a" writes the contents of all members in archive order;
+           "ar -p a f2" writes only f2; with -v each member is preceded by a
+           blank line, the name in angle brackets and another blank line
+           (the name is the operand if operands are given, else the member
+           name).
+test       t/003-print-contents.sh
+
+assertion  XCU.ar.004
+anchor     utilities/ar.html#OPTIONS/-x
+class      conditional
+when       SD
+since      1992
+says       "ar -x a f2" recreates f2 with its contents and leaves other
+           members unextracted; "ar -x a" with no operand extracts all
+           members; the archive file is unchanged; the extracted file's
+           modification time is the time of extraction, not the old time of
+           the original.
+test       t/004-extract.sh
+
+assertion  XCU.ar.005
+anchor     utilities/ar.html#OPTIONS/-d
+anchor     utilities/ar.html#STDOUT
+class      conditional
+when       SD
+since      1992
+says       "ar -d a f2" removes f2 and keeps the others in their order; with
+           -v it writes "d - f2" to standard output.
+test       t/005-delete.sh
+
+assertion  XCU.ar.006
+anchor     utilities/ar.html#OPTIONS/-r
+anchor     utilities/ar.html#STDOUT
+class      conditional
+when       SD
+since      1992
+says       Replacing an existing member keeps its place in the archive and
+           takes the new contents; a file not yet in the archive is appended
+           at the end; with -v standard output has "r - NAME" for a replaced
+           file and "a - NAME" for an added one.
+test       t/006-replace-and-add.sh
+
+assertion  XCU.ar.007
+anchor     utilities/ar.html#OPTIONS/-u
+class      conditional
+when       SD
+since      1992
+says       With -r -u a file whose modification time is older than that of
+           the archived member is not replaced, and one that is at least as
+           new is replaced.
+test       t/007-update.sh
+
+assertion  XCU.ar.008
+anchor     utilities/ar.html#STDOUT
+anchor     utilities/ar.html#OPTIONS/-v
+class      conditional
+when       SD
+since      1992
+says       "ar -tv a f1" in the POSIX locale and with TZ=UTC prints one line
+           with the nine-character mode, owner id/group id, the size in
+           bytes, the abbreviated month, day, hour:minute and year of the
+           file's modification time when it was archived, and the name.
+test       t/008-verbose-listing.sh
+
+assertion  XCU.ar.009
+anchor     utilities/ar.html#STDOUT
+class      conditional
+when       SD
+since      1992
+says       "ar -xv a f1" writes "x - f1" to standard output.
+test       t/009-extract-verbose.sh
+
+assertion  XCU.ar.010
+anchor     utilities/ar.html#DESCRIPTION
+anchor     utilities/ar.html#OPERANDS
+class      conditional
+when       SD
+since      1992
+says       A file added as sub/f3 is stored under the name f3: "ar -t a"
+           lists f3, and a later "ar -d a other/f3" (same last component)
+           removes it.
+test       t/010-last-component.sh
+
+assertion  XCU.ar.011
+anchor     utilities/ar.html#EXIT STATUS
+class      conditional
+when       SD
+since      1992
+says       "ar -t" on an archive that does not exist, and "ar -r" naming a
+           file that does not exist, each exit with a status greater than
+           zero.
+test       t/011-errors.sh
+
+assertion  XCU.ar.012
+anchor     utilities/ar.html#OPTIONS/-m
+class      conditional
+when       SD+XSI
+since      1992
+says       "ar -m a f1" moves f1 to the end; "ar -m -a f3 a f1" places it
+           after f3, and "ar -m -b f2 a f3" places f3 before f2, other
+           members keeping their order.
+test       t/012-move.sh
+
+assertion  XCU.ar.013
+anchor     utilities/ar.html#OPTIONS/-a
+anchor     utilities/ar.html#OPTIONS/-b
+anchor     utilities/ar.html#OPTIONS/-i
+class      conditional
+when       SD+XSI
+since      1992
+says       "ar -r -a f1 a n" puts new member n after f1; -b puts it before
+           the named member; -i behaves as -b.
+test       t/013-positioning.sh
+
+assertion  XCU.ar.014
+anchor     utilities/ar.html#OPTIONS/-q
+class      conditional
+when       SD+XSI
+since      1992
+says       "ar -q a f2" appends f2 after the existing members.
+test       t/014-quick-append.sh
+
+assertion  XCU.ar.015
+anchor     utilities/ar.html#OPTIONS/-C
+class      conditional
+when       SD+XSI
+since      1992
+says       "ar -x -C a f1" leaves an existing f1 with its old contents;
+           without -C it is replaced.
+test       t/015-no-clobber.sh
+
+assertion  XCU.ar.016
+anchor     utilities/ar.html#OPTIONS/-s
+class      conditional
+when       SD+XSI
+since      1992
+says       "ar -s a" on an existing archive exits 0 and the members are
+           unchanged and still listed in order.
+test       t/016-rebuild-symbols.sh

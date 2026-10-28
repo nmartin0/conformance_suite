@@ -1,0 +1,55 @@
+# XCU rmdel
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# SCCS files are made and inspected only with the SCCS utilities (admin,
+# get, delta, prs and friends); the file format is unspecified so nothing
+# reads the files directly. A missing companion utility makes the test
+# UNRESOLVED. Login names, dates and the diagnostic texts are never compared
+# literally.
+
+assertion  XCU.rmdel.001
+anchor     utilities/rmdel.html#DESCRIPTION
+anchor     utilities/rmdel.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       rmdel -r SID removes the newest delta of a branch silently and
+           what get retrieves goes back to the earlier version.
+test       t/001-remove-latest.sh
+
+assertion  XCU.rmdel.002
+anchor     utilities/rmdel.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       rmdel of a delta that is not the latest, if refused with a
+           non-zero status, leaves the file unchanged (success is
+           UNRESOLVED: the page states the rule but not the consequence).
+test       t/002-only-latest.sh
+
+assertion  XCU.rmdel.003
+anchor     utilities/rmdel.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       rmdel of a SID that is listed in the p-file, if refused with a
+           non-zero status, leaves the file unchanged (success is
+           UNRESOLVED: the application is to ensure the SID is not listed).
+test       t/003-pending-edit.sh
+
+assertion  XCU.rmdel.004
+anchor     utilities/rmdel.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       A nonexistent file or a nonexistent SID gives a non-zero status.
+test       t/004-errors.sh
+
+assertion  XCU.rmdel.005
+anchor     utilities/rmdel.html#OPERANDS
+anchor     utilities/rmdel.html#STDIN
+class      conditional
+when       XSI
+since      1992
+says       A single - operand reads SCCS file names from standard input.
+test       t/005-stdin-names.sh

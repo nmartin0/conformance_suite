@@ -1,0 +1,92 @@
+# uuencode.cov - every requirement unit on utilities/uuencode.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sections that read "None.", "Not used." or "Default." take their meaning
+# from XCU 1.4 Utility Description Defaults.
+
+DESCRIPTION:5e861bb6             XCU.uuencode.005
+DESCRIPTION:74f0de77             XCU.uuencode.004
+OPTIONS:019e97ce                 todo  utility syntax guidelines not exercised
+OPTIONS:31cab02f                 none  introduces the option list
+OPTIONS:08116699                 XCU.uuencode.006
+OPTIONS:cebe6ac3                 XCU.uuencode.001
+OPERANDS:51b44f3c                none  introduces the operand list
+OPERANDS:2d398fa6                XCU.uuencode.001
+OPERANDS:768c9887                partial XCU.uuencode.001 # only that the name is carried; the stdout meaning belongs to uudecode
+OPERANDS:103c4366                none  unspecified
+OPERANDS:a3b5be76                XCU.uuencode.005
+STDIN:fc1111c9                   XCU.uuencode.001
+INPUT_FILES:9cb13a64             XCU.uuencode.009
+ENVIRONMENT_VARIABLES:8d09b48a   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:8586e6ac   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd     none  default
+STDOUT:f7f525b4                  XCU.uuencode.006
+STDOUT:1ceee0a9                  XCU.uuencode.006
+STDOUT:2c036e41                  XCU.uuencode.006
+STDOUT:3126be47                  XCU.uuencode.006
+STDOUT:86f69e93                  todo  not covered by this build
+STDOUT:d7085a8f                  XCU.uuencode.001 XCU.uuencode.006
+STDOUT:8dd74b31                  XCU.uuencode.006
+STDOUT:7a18ca48                  XCU.uuencode.006
+STDOUT:c33c681b                  XCU.uuencode.006
+STDOUT:f0343143                  XCU.uuencode.006
+STDOUT:97ba598b                  XCU.uuencode.006
+STDOUT:09f0b318                  XCU.uuencode.006
+STDOUT:415b2d28                  none  table caption
+STDOUT:0760ad28                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:694d5b9c                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:6d46b8a5                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:81d0f202                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:e3d50db7                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:4def4e7b                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:6f65d8cc                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:1e11d2d5                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:dc2886c3                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:02c19ee1                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:82179bd2                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:d62b220f                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:17ffda4c                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:fd974c84                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:d2cbd808                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:9fb94fb7                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:172cacc4                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:e02ef522                  XCU.uuencode.006
+STDOUT:de003b97                  XCU.uuencode.008
+STDOUT:a3122fbe                  none  table caption
+STDOUT:d21a3153                  XCU.uuencode.007
+STDOUT:50fc46ca                  XCU.uuencode.007
+STDOUT:3f6ba5e2                  XCU.uuencode.007
+STDOUT:41e631b8                  XCU.uuencode.007
+STDOUT:d06c5b53                  none  introduces the cases
+STDOUT:aa84217c                  XCU.uuencode.006
+STDOUT:ece22eb8                  XCU.uuencode.007
+STDOUT:f76f9a10                  XCU.uuencode.007
+STDOUT:431b99eb                  none  statement about the decoder
+STDOUT:f7f525b4.2                XCU.uuencode.006
+STDOUT:cb993665                  XCU.uuencode.001
+STDOUT:2c036e41.2                XCU.uuencode.006
+STDOUT:3126be47.2                XCU.uuencode.006
+STDOUT:a30ea9fd                  XCU.uuencode.001
+STDOUT:d7085a8f.2                XCU.uuencode.001 XCU.uuencode.006
+STDOUT:f8be4219                  XCU.uuencode.001
+STDOUT:97af5118                  XCU.uuencode.009
+STDOUT:1843b4d7                  untestable  depends on the codeset of the locale
+STDOUT:c25f145d                  none  example
+STDOUT:392ae238                  XCU.uuencode.001 XCU.uuencode.009
+STDOUT:5c6a45fe                  XCU.uuencode.001 XCU.uuencode.009
+STDOUT:ea15d855                  partial XCU.uuencode.009 # only some alphabet entries are exercised
+STDOUT:70a6775e                  none  restates the formula
+STDOUT:dbf45fe9                  XCU.uuencode.003
+STDOUT:d72ddaa9                  none  statement about the decoder
+STDERR:b2905b3f                  todo  diagnostics are not examined
+OUTPUT_FILES:eb724aff            none  none
+EXTENDED_DESCRIPTION:eb724aff    none  none
+EXIT_STATUS:db823381             none  introduces the list
+EXIT_STATUS:8b075da2             XCU.uuencode.001
+EXIT_STATUS:9d252ff7             XCU.uuencode.010
+CONSEQUENCES_OF_ERRORS:d92f27bd  none  default

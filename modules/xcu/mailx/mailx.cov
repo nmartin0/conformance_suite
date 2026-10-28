@@ -1,0 +1,552 @@
+# mailx.cov - every requirement unit on utilities/mailx.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sections that read "None.", "Not used." or "Default." take their meaning
+# from XCU 1.4 Utility Description Defaults.
+
+DESCRIPTION:4cb5574d             XCU.mailx.014
+DESCRIPTION:a1108874             XCU.mailx.014
+DESCRIPTION:b4e661fa             XCU.mailx.014
+DESCRIPTION:ed56cb84             XCU.mailx.014
+DESCRIPTION:b340adfa             XCU.mailx.014
+DESCRIPTION:82ca7b3d             XCU.mailx.014
+DESCRIPTION:495d6ed1             XCU.mailx.014
+DESCRIPTION:adde0000             XCU.mailx.014
+DESCRIPTION:416a4539             XCU.mailx.014
+DESCRIPTION:f0d1e155             XCU.mailx.014
+DESCRIPTION:bc3dd8c6             XCU.mailx.014
+DESCRIPTION:34b6d754             XCU.mailx.014
+DESCRIPTION:8c802288             XCU.mailx.014
+DESCRIPTION:4aaade9c             XCU.mailx.014
+DESCRIPTION:dfcf235c             XCU.mailx.014
+DESCRIPTION:46d757e7             XCU.mailx.014
+DESCRIPTION:fbe6232d             XCU.mailx.014
+DESCRIPTION:1f13e639             XCU.mailx.014
+DESCRIPTION:31f0d9ca             XCU.mailx.014
+OPTIONS:f6d57367                 todo  utility syntax guidelines not exercised
+OPTIONS:f5e96e35                 todo  utility syntax guidelines not exercised
+OPTIONS:45252830                 XCU.mailx.014
+OPTIONS:f1232969                 todo  utility syntax guidelines not exercised
+OPTIONS:438f4157                 XCU.mailx.014
+OPTIONS:217f25c7                 XCU.mailx.014
+OPTIONS:c520c623                 todo  utility syntax guidelines not exercised
+OPTIONS:4fa540f3                 XCU.mailx.007
+OPTIONS:6086a4a6                 todo  utility syntax guidelines not exercised
+OPTIONS:012d1bdf                 XCU.mailx.014
+OPTIONS:810d1e5a                 XCU.mailx.005
+OPTIONS:7e2784ea                 todo  utility syntax guidelines not exercised
+OPTIONS:360eb709                 XCU.mailx.005
+OPTIONS:3349aaec                 XCU.mailx.007
+OPTIONS:0bae411f                 todo  utility syntax guidelines not exercised
+OPTIONS:25a6fa12                 todo  the start-up file is not observable
+OPTIONS:969889e3                 todo  utility syntax guidelines not exercised
+OPTIONS:72a7ea93                 XCU.mailx.005
+OPTIONS:7898079d                 XCU.mailx.014
+OPTIONS:3e8b8ffc                 todo  utility syntax guidelines not exercised
+OPTIONS:218cca9e                 todo  utility syntax guidelines not exercised
+OPTIONS:920f5062                 XCU.mailx.014
+OPTIONS:c90c90d7                 XCU.mailx.014
+OPERANDS:51b44f3c                XCU.mailx.014
+OPERANDS:370cae03                XCU.mailx.014
+OPERANDS:f5efa407                XCU.mailx.007
+OPERANDS:85975304                XCU.mailx.007
+OPERANDS:1c5900e6                XCU.mailx.007
+OPERANDS:6c6c6967                XCU.mailx.007
+STDIN:7e56eb48                   XCU.mailx.014
+STDIN:d50999f1                   XCU.mailx.001
+STDIN:db498b90                   XCU.mailx.014
+STDIN:9fa35ef5                   XCU.mailx.001
+INPUT_FILES:c945894c             XCU.mailx.003 XCU.mailx.004
+INPUT_FILES:4fcaaed8             XCU.mailx.003 XCU.mailx.004
+ENVIRONMENT_VARIABLES:00ecea1a   XCU.mailx.014
+ENVIRONMENT_VARIABLES:d1b03a1f   XCU.mailx.014
+ENVIRONMENT_VARIABLES:cfbe7491   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:b05c55b3   XCU.mailx.014
+ENVIRONMENT_VARIABLES:9e9daa67   XCU.mailx.014
+ENVIRONMENT_VARIABLES:1d6f3fd6   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:17c90482   XCU.mailx.014
+ENVIRONMENT_VARIABLES:ef830f80   XCU.mailx.014
+ENVIRONMENT_VARIABLES:560b869c   XCU.mailx.014
+ENVIRONMENT_VARIABLES:34b321de   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:221d4f1a   XCU.mailx.014
+ENVIRONMENT_VARIABLES:8aece102   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:b96c5038   XCU.mailx.014
+ENVIRONMENT_VARIABLES:971fa590   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:0dbe82c9   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:77c292f8   XCU.mailx.014
+ENVIRONMENT_VARIABLES:891f91fa   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:d6a40280   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:0d575f24   XCU.mailx.014
+ENVIRONMENT_VARIABLES:2a275b74   XCU.mailx.014
+ENVIRONMENT_VARIABLES:560b869c.2 XCU.mailx.014
+ENVIRONMENT_VARIABLES:cf728466   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:14602caa   XCU.mailx.014
+ENVIRONMENT_VARIABLES:290bf646   XCU.mailx.014
+ENVIRONMENT_VARIABLES:0813c7dd   partial XCU.mailx.004  # only the target of save with no file is tested
+ENVIRONMENT_VARIABLES:adc2a669   XCU.mailx.014
+ENVIRONMENT_VARIABLES:bd683bef   partial XCU.mailx.004  # only the target of save with no file is tested
+ENVIRONMENT_VARIABLES:560b869c.3 XCU.mailx.014
+ENVIRONMENT_VARIABLES:d838b9f5   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:07b7e772   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:0d575f24.2 XCU.mailx.014
+ENVIRONMENT_VARIABLES:d90acc41   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:08c28c2a   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:224a524c   XCU.mailx.014
+ENVIRONMENT_VARIABLES:560b869c.4 XCU.mailx.014
+ENVIRONMENT_VARIABLES:a988375e   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:439c9072   XCU.mailx.014
+ENVIRONMENT_VARIABLES:560b869c.5 XCU.mailx.014
+ENVIRONMENT_VARIABLES:c5a022d8   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:ef4febef   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:560b869c.6 XCU.mailx.014
+ENVIRONMENT_VARIABLES:cd8aed33   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:bdf7eb3f   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:57533581   todo  locale and terminal variables not exercised
+ENVIRONMENT_VARIABLES:c208e98f   XCU.mailx.014
+ENVIRONMENT_VARIABLES:560b869c.7 XCU.mailx.014
+ASYNCHRONOUS_EVENTS:a681d696     XCU.mailx.014
+ASYNCHRONOUS_EVENTS:114f9e0d     XCU.mailx.014
+ASYNCHRONOUS_EVENTS:a06ea352     XCU.mailx.014
+ASYNCHRONOUS_EVENTS:5b06005f     XCU.mailx.014
+ASYNCHRONOUS_EVENTS:0dd9df15     XCU.mailx.014
+ASYNCHRONOUS_EVENTS:91fe1133     XCU.mailx.014
+ASYNCHRONOUS_EVENTS:1a9cc5c5     XCU.mailx.014
+ASYNCHRONOUS_EVENTS:b95064c2     XCU.mailx.014
+ASYNCHRONOUS_EVENTS:e5bdf854     XCU.mailx.014
+ASYNCHRONOUS_EVENTS:3e176b6e     XCU.mailx.014
+ASYNCHRONOUS_EVENTS:52cc52f1     XCU.mailx.014
+STDOUT:20d777ba                  XCU.mailx.001
+STDERR:b2905b3f                  none  diagnostics are unspecified
+OUTPUT_FILES:92827148            XCU.mailx.004
+OUTPUT_FILES:1a74e92f            XCU.mailx.004
+OUTPUT_FILES:0e64cac7            XCU.mailx.004
+OUTPUT_FILES:4cde8fc7            XCU.mailx.004
+OUTPUT_FILES:9c69e6a0            todo  body lines starting with From are not exercised
+OUTPUT_FILES:ac3dae27            todo  body lines starting with From are not exercised
+EXTENDED_DESCRIPTION:a9710b6e    todo  not covered by this build
+EXTENDED_DESCRIPTION:9fcdf5b2    todo  not covered by this build
+EXTENDED_DESCRIPTION:25bf57f0    todo  not covered by this build
+EXTENDED_DESCRIPTION:8c470a0a    todo  not covered by this build
+EXTENDED_DESCRIPTION:3482b835    todo  not covered by this build
+EXTENDED_DESCRIPTION:360111df    XCU.mailx.005
+EXTENDED_DESCRIPTION:0e4ebe21    XCU.mailx.005
+EXTENDED_DESCRIPTION:2746a5f8    XCU.mailx.014
+EXTENDED_DESCRIPTION:f4051a09    XCU.mailx.014
+EXTENDED_DESCRIPTION:cfe19e89    XCU.mailx.014
+EXTENDED_DESCRIPTION:425ff7de    XCU.mailx.014
+EXTENDED_DESCRIPTION:d187a8d1    XCU.mailx.014
+EXTENDED_DESCRIPTION:0a1bb663    todo  not covered by this build
+EXTENDED_DESCRIPTION:4f766479    XCU.mailx.014
+EXTENDED_DESCRIPTION:f7c2c73c    todo  not covered by this build
+EXTENDED_DESCRIPTION:08e4f3f6    todo  not covered by this build
+EXTENDED_DESCRIPTION:41bfa515    todo  not covered by this build
+EXTENDED_DESCRIPTION:900f3712    todo  not covered by this build
+EXTENDED_DESCRIPTION:99d4a8f3    todo  not covered by this build
+EXTENDED_DESCRIPTION:604631a2    todo  not covered by this build
+EXTENDED_DESCRIPTION:67639908    todo  not covered by this build
+EXTENDED_DESCRIPTION:557f02e3    todo  not covered by this build
+EXTENDED_DESCRIPTION:29b94912    todo  not covered by this build
+EXTENDED_DESCRIPTION:bf19d9f5    XCU.mailx.006 XCU.mailx.005
+EXTENDED_DESCRIPTION:3a7aaa57    XCU.mailx.006 XCU.mailx.005
+EXTENDED_DESCRIPTION:a47929d4    XCU.mailx.002
+EXTENDED_DESCRIPTION:405b7dc2    todo  not covered by this build
+EXTENDED_DESCRIPTION:c339ab75    XCU.mailx.014
+EXTENDED_DESCRIPTION:ed3e1adc    XCU.mailx.014
+EXTENDED_DESCRIPTION:58787318    XCU.mailx.014
+EXTENDED_DESCRIPTION:1731972d    XCU.mailx.014
+EXTENDED_DESCRIPTION:27d19f9e    todo  not covered by this build
+EXTENDED_DESCRIPTION:347b30a3    todo  not covered by this build
+EXTENDED_DESCRIPTION:ab720aa7    todo  not covered by this build
+EXTENDED_DESCRIPTION:5353e2aa    todo  not covered by this build
+EXTENDED_DESCRIPTION:8eac3330    todo  not covered by this build
+EXTENDED_DESCRIPTION:17c2322c    XCU.mailx.003
+EXTENDED_DESCRIPTION:b9b5fa98    XCU.mailx.003
+EXTENDED_DESCRIPTION:d4ca82e6    XCU.mailx.003
+EXTENDED_DESCRIPTION:8cb6e8ff    XCU.mailx.003
+EXTENDED_DESCRIPTION:d46bc2ae    XCU.mailx.014
+EXTENDED_DESCRIPTION:487d781e    todo  not covered by this build
+EXTENDED_DESCRIPTION:03fc9e70    todo  not covered by this build
+EXTENDED_DESCRIPTION:708d535f    todo  not covered by this build
+EXTENDED_DESCRIPTION:eb428322    todo  not covered by this build
+EXTENDED_DESCRIPTION:25af11e2    todo  not covered by this build
+EXTENDED_DESCRIPTION:e899ec2e    todo  not covered by this build
+EXTENDED_DESCRIPTION:232bfc59    XCU.mailx.002
+EXTENDED_DESCRIPTION:148b23a2    XCU.mailx.002
+EXTENDED_DESCRIPTION:eebd6da8    XCU.mailx.002
+EXTENDED_DESCRIPTION:2abac902    XCU.mailx.002
+EXTENDED_DESCRIPTION:d5668c08    todo  not covered by this build
+EXTENDED_DESCRIPTION:c6ffa1ec    XCU.mailx.002
+EXTENDED_DESCRIPTION:a3737233    XCU.mailx.002
+EXTENDED_DESCRIPTION:5d9d25fb    XCU.mailx.002
+EXTENDED_DESCRIPTION:d639219b    XCU.mailx.002
+EXTENDED_DESCRIPTION:7a74b858    XCU.mailx.002
+EXTENDED_DESCRIPTION:712d20e7    XCU.mailx.002
+EXTENDED_DESCRIPTION:0122603d    todo  not covered by this build
+EXTENDED_DESCRIPTION:b2192743    todo  not covered by this build
+EXTENDED_DESCRIPTION:e61258b5    todo  not covered by this build
+EXTENDED_DESCRIPTION:58e8789d    todo  not covered by this build
+EXTENDED_DESCRIPTION:e65bb0c1    todo  not covered by this build
+EXTENDED_DESCRIPTION:68901c84    todo  not covered by this build
+EXTENDED_DESCRIPTION:15a56ca7    todo  not covered by this build
+EXTENDED_DESCRIPTION:a6cabd8b    todo  not covered by this build
+EXTENDED_DESCRIPTION:2eec86ff    todo  not covered by this build
+EXTENDED_DESCRIPTION:5f6755de    todo  not covered by this build
+EXTENDED_DESCRIPTION:89e564ec    todo  not covered by this build
+EXTENDED_DESCRIPTION:49d64492    todo  not covered by this build
+EXTENDED_DESCRIPTION:7a48310f    todo  not covered by this build
+EXTENDED_DESCRIPTION:97dbde09    todo  not covered by this build
+EXTENDED_DESCRIPTION:0c40a3ad    todo  not covered by this build
+EXTENDED_DESCRIPTION:62dcc8e2    todo  not covered by this build
+EXTENDED_DESCRIPTION:fccae8e3    XCU.mailx.014
+EXTENDED_DESCRIPTION:e2267ede    todo  not covered by this build
+EXTENDED_DESCRIPTION:e5633f17    todo  not covered by this build
+EXTENDED_DESCRIPTION:4feef5e5    todo  not covered by this build
+EXTENDED_DESCRIPTION:6cddb898    XCU.mailx.009
+EXTENDED_DESCRIPTION:571d0d83    XCU.mailx.009
+EXTENDED_DESCRIPTION:f10ec87a    todo  not covered by this build
+EXTENDED_DESCRIPTION:b46d0172    todo  not covered by this build
+EXTENDED_DESCRIPTION:a83cb44c    todo  not covered by this build
+EXTENDED_DESCRIPTION:5df5d05e    todo  not covered by this build
+EXTENDED_DESCRIPTION:fad1119f    todo  not covered by this build
+EXTENDED_DESCRIPTION:e3bcfd74    todo  not covered by this build
+EXTENDED_DESCRIPTION:77e92e6a    todo  not covered by this build
+EXTENDED_DESCRIPTION:01be402b    todo  not covered by this build
+EXTENDED_DESCRIPTION:848869c5    todo  not covered by this build
+EXTENDED_DESCRIPTION:ef0e7dfb    todo  not covered by this build
+EXTENDED_DESCRIPTION:926fa993    todo  not covered by this build
+EXTENDED_DESCRIPTION:5df1c082    XCU.mailx.014
+EXTENDED_DESCRIPTION:66323350    todo  not covered by this build
+EXTENDED_DESCRIPTION:da6da179    todo  not covered by this build
+EXTENDED_DESCRIPTION:d9c086da    todo  not covered by this build
+EXTENDED_DESCRIPTION:3dc521db    todo  not covered by this build
+EXTENDED_DESCRIPTION:e4953f4d    todo  not covered by this build
+EXTENDED_DESCRIPTION:4f9379c5    todo  not covered by this build
+EXTENDED_DESCRIPTION:5ee51fef    todo  not covered by this build
+EXTENDED_DESCRIPTION:606b6f9c    todo  not covered by this build
+EXTENDED_DESCRIPTION:9c9252ec    todo  not covered by this build
+EXTENDED_DESCRIPTION:95f693d1    todo  not covered by this build
+EXTENDED_DESCRIPTION:fbbc2a1b    todo  not covered by this build
+EXTENDED_DESCRIPTION:5e4c52df    todo  not covered by this build
+EXTENDED_DESCRIPTION:2016ce87    todo  not covered by this build
+EXTENDED_DESCRIPTION:73dc0b2c    todo  not covered by this build
+EXTENDED_DESCRIPTION:9db365b9    todo  not covered by this build
+EXTENDED_DESCRIPTION:c0c29067    XCU.mailx.010
+EXTENDED_DESCRIPTION:cbb31d66    todo  not covered by this build
+EXTENDED_DESCRIPTION:6d97ac84    todo  not covered by this build
+EXTENDED_DESCRIPTION:a2866bbd    todo  not covered by this build
+EXTENDED_DESCRIPTION:19c71ba0    todo  not covered by this build
+EXTENDED_DESCRIPTION:fc4d210f    todo  not covered by this build
+EXTENDED_DESCRIPTION:410f6872    todo  not covered by this build
+EXTENDED_DESCRIPTION:be48eb0e    todo  not covered by this build
+EXTENDED_DESCRIPTION:07646524    todo  not covered by this build
+EXTENDED_DESCRIPTION:a2bd2c82    todo  not covered by this build
+EXTENDED_DESCRIPTION:6ade31da    todo  not covered by this build
+EXTENDED_DESCRIPTION:b38e21c3    XCU.mailx.014
+EXTENDED_DESCRIPTION:a938703d    XCU.mailx.014
+EXTENDED_DESCRIPTION:6c19b61f    todo  not covered by this build
+EXTENDED_DESCRIPTION:4f96b208    todo  not covered by this build
+EXTENDED_DESCRIPTION:8342ac28    XCU.mailx.014
+EXTENDED_DESCRIPTION:23047b77    XCU.mailx.007
+EXTENDED_DESCRIPTION:92aa4fe7    XCU.mailx.007
+EXTENDED_DESCRIPTION:aed279ed    todo  not covered by this build
+EXTENDED_DESCRIPTION:16cbaa39    todo  not covered by this build
+EXTENDED_DESCRIPTION:85fec03d    todo  not covered by this build
+EXTENDED_DESCRIPTION:0bb6c8cc    todo  not covered by this build
+EXTENDED_DESCRIPTION:f01b4895    todo  not covered by this build
+EXTENDED_DESCRIPTION:7daa2006    todo  not covered by this build
+EXTENDED_DESCRIPTION:d3e7a29b    todo  not covered by this build
+EXTENDED_DESCRIPTION:1e0be060    todo  not covered by this build
+EXTENDED_DESCRIPTION:9fd55495    todo  not covered by this build
+EXTENDED_DESCRIPTION:a9038fc0    todo  not covered by this build
+EXTENDED_DESCRIPTION:c358eca1    todo  not covered by this build
+EXTENDED_DESCRIPTION:2e23ed6d    todo  not covered by this build
+EXTENDED_DESCRIPTION:51bd9965    todo  not covered by this build
+EXTENDED_DESCRIPTION:84a5328e    todo  not covered by this build
+EXTENDED_DESCRIPTION:73e8bfe2    todo  not covered by this build
+EXTENDED_DESCRIPTION:77d75126    todo  not covered by this build
+EXTENDED_DESCRIPTION:8372f4ce    todo  not covered by this build
+EXTENDED_DESCRIPTION:b863f0c4    todo  not covered by this build
+EXTENDED_DESCRIPTION:9547a6e8    todo  not covered by this build
+EXTENDED_DESCRIPTION:3bf6020d    todo  not covered by this build
+EXTENDED_DESCRIPTION:5de44e7b    todo  not covered by this build
+EXTENDED_DESCRIPTION:57f9d646    todo  not covered by this build
+EXTENDED_DESCRIPTION:7454882f    todo  not covered by this build
+EXTENDED_DESCRIPTION:97fef60c    XCU.mailx.014
+EXTENDED_DESCRIPTION:ba99e2f3    XCU.mailx.014
+EXTENDED_DESCRIPTION:b7b82d90    XCU.mailx.014
+EXTENDED_DESCRIPTION:52a564f1    todo  not covered by this build
+EXTENDED_DESCRIPTION:6b31318c    todo  not covered by this build
+EXTENDED_DESCRIPTION:fe194942    todo  not covered by this build
+EXTENDED_DESCRIPTION:c5101125    todo  not covered by this build
+EXTENDED_DESCRIPTION:96c38edf    todo  not covered by this build
+EXTENDED_DESCRIPTION:871a40dd    todo  not covered by this build
+EXTENDED_DESCRIPTION:2caa301c    XCU.mailx.009
+EXTENDED_DESCRIPTION:9e4299eb    XCU.mailx.009
+EXTENDED_DESCRIPTION:675482be    XCU.mailx.009
+EXTENDED_DESCRIPTION:a99f5127    todo  not covered by this build
+EXTENDED_DESCRIPTION:12213e14    todo  not covered by this build
+EXTENDED_DESCRIPTION:5f88729d    todo  not covered by this build
+EXTENDED_DESCRIPTION:14b67b23    todo  not covered by this build
+EXTENDED_DESCRIPTION:377b3bc7    todo  not covered by this build
+EXTENDED_DESCRIPTION:b65d890d    XCU.mailx.014
+EXTENDED_DESCRIPTION:cda3cb64    XCU.mailx.014
+EXTENDED_DESCRIPTION:1f7b87ee    todo  not covered by this build
+EXTENDED_DESCRIPTION:bca71a39    todo  not covered by this build
+EXTENDED_DESCRIPTION:1148a6fe    todo  not covered by this build
+EXTENDED_DESCRIPTION:4ae1fdfb    todo  not covered by this build
+EXTENDED_DESCRIPTION:f9aec32d    todo  not covered by this build
+EXTENDED_DESCRIPTION:69522711    todo  not covered by this build
+EXTENDED_DESCRIPTION:a81ea801    todo  not covered by this build
+EXTENDED_DESCRIPTION:925b0109    todo  not covered by this build
+EXTENDED_DESCRIPTION:3ced9dc2    todo  not covered by this build
+EXTENDED_DESCRIPTION:33630531    todo  not covered by this build
+EXTENDED_DESCRIPTION:2db8c81b    todo  not covered by this build
+EXTENDED_DESCRIPTION:3638b07a    todo  not covered by this build
+EXTENDED_DESCRIPTION:3ced9dc2.2  todo  not covered by this build
+EXTENDED_DESCRIPTION:33630531.2  todo  not covered by this build
+EXTENDED_DESCRIPTION:2db8c81b.2  todo  not covered by this build
+EXTENDED_DESCRIPTION:b556cb92    todo  not covered by this build
+EXTENDED_DESCRIPTION:c1eca90b    XCU.mailx.008
+EXTENDED_DESCRIPTION:4a0f7adf    todo  not covered by this build
+EXTENDED_DESCRIPTION:df6b93ee    todo  not covered by this build
+EXTENDED_DESCRIPTION:fd2f3555    todo  not covered by this build
+EXTENDED_DESCRIPTION:590b8190    todo  not covered by this build
+EXTENDED_DESCRIPTION:ad23dabb    XCU.mailx.009
+EXTENDED_DESCRIPTION:e0580f2d    XCU.mailx.009
+EXTENDED_DESCRIPTION:41d07eff    todo  not covered by this build
+EXTENDED_DESCRIPTION:8c5f0006    XCU.mailx.009
+EXTENDED_DESCRIPTION:3bf93ee0    todo  not covered by this build
+EXTENDED_DESCRIPTION:e2fbb8ba    XCU.mailx.009
+EXTENDED_DESCRIPTION:2165c948    todo  not covered by this build
+EXTENDED_DESCRIPTION:135eb83b    todo  not covered by this build
+EXTENDED_DESCRIPTION:f9852260    todo  not covered by this build
+EXTENDED_DESCRIPTION:ecff4b45    todo  not covered by this build
+EXTENDED_DESCRIPTION:d46e6c6b    todo  not covered by this build
+EXTENDED_DESCRIPTION:2780da47    todo  not covered by this build
+EXTENDED_DESCRIPTION:f76c380c    todo  not covered by this build
+EXTENDED_DESCRIPTION:00048f03    XCU.mailx.012
+EXTENDED_DESCRIPTION:268f02df    XCU.mailx.014
+EXTENDED_DESCRIPTION:4a2605de    XCU.mailx.014
+EXTENDED_DESCRIPTION:d6936f6b    XCU.mailx.014
+EXTENDED_DESCRIPTION:2d29ec6d    XCU.mailx.012
+EXTENDED_DESCRIPTION:4dafc81d    XCU.mailx.012
+EXTENDED_DESCRIPTION:aaf0ba63    XCU.mailx.012
+EXTENDED_DESCRIPTION:c240995b    XCU.mailx.012
+EXTENDED_DESCRIPTION:ff6794bf    XCU.mailx.014
+EXTENDED_DESCRIPTION:82965291    todo  not covered by this build
+EXTENDED_DESCRIPTION:44ad446d    XCU.mailx.012
+EXTENDED_DESCRIPTION:9160f57d    todo  not covered by this build
+EXTENDED_DESCRIPTION:71d247f8    todo  not covered by this build
+EXTENDED_DESCRIPTION:84e583da    XCU.mailx.004
+EXTENDED_DESCRIPTION:75dd8688    XCU.mailx.004
+EXTENDED_DESCRIPTION:5eda4eab    todo  the author-named files are not exercised
+EXTENDED_DESCRIPTION:75dd8688.2  XCU.mailx.004
+EXTENDED_DESCRIPTION:182adf2e    XCU.mailx.003
+EXTENDED_DESCRIPTION:cddc78ab    XCU.mailx.003
+EXTENDED_DESCRIPTION:178f4617    todo  not covered by this build
+EXTENDED_DESCRIPTION:99f54552    XCU.mailx.011
+EXTENDED_DESCRIPTION:c44caaac    XCU.mailx.011
+EXTENDED_DESCRIPTION:b0393bb1    none  example
+EXTENDED_DESCRIPTION:b35bbea0    todo  not covered by this build
+EXTENDED_DESCRIPTION:52421b32    XCU.mailx.011
+EXTENDED_DESCRIPTION:7d70070a    XCU.mailx.011
+EXTENDED_DESCRIPTION:242aa50d    XCU.mailx.011
+EXTENDED_DESCRIPTION:07e0f1b5    XCU.mailx.011
+EXTENDED_DESCRIPTION:4aa788a8    XCU.mailx.002
+EXTENDED_DESCRIPTION:30cd538c    todo  not covered by this build
+EXTENDED_DESCRIPTION:08d9d7ca    XCU.mailx.009
+EXTENDED_DESCRIPTION:f3434f51    todo  not covered by this build
+EXTENDED_DESCRIPTION:abe2a080    todo  not covered by this build
+EXTENDED_DESCRIPTION:17c90482    todo  not covered by this build
+EXTENDED_DESCRIPTION:47259490    todo  not covered by this build
+EXTENDED_DESCRIPTION:5befaf54    XCU.mailx.003
+EXTENDED_DESCRIPTION:91982a60    todo  not covered by this build
+EXTENDED_DESCRIPTION:bf56e364    XCU.mailx.007
+EXTENDED_DESCRIPTION:ce2f7f77    XCU.mailx.007
+EXTENDED_DESCRIPTION:64ca7215    todo  not covered by this build
+EXTENDED_DESCRIPTION:e0a9da59    XCU.mailx.007
+EXTENDED_DESCRIPTION:fb252a82    XCU.mailx.014
+EXTENDED_DESCRIPTION:b294cbba    XCU.mailx.014
+EXTENDED_DESCRIPTION:e59c9e89    XCU.mailx.007
+EXTENDED_DESCRIPTION:3b8ac03f    XCU.mailx.014
+EXTENDED_DESCRIPTION:b9912b89    XCU.mailx.007
+EXTENDED_DESCRIPTION:9551dc05    todo  not covered by this build
+EXTENDED_DESCRIPTION:db8599b4    XCU.mailx.007
+EXTENDED_DESCRIPTION:5e52c3e3    todo  not covered by this build
+EXTENDED_DESCRIPTION:030fd1c6    todo  not covered by this build
+EXTENDED_DESCRIPTION:69019b11    XCU.mailx.014
+EXTENDED_DESCRIPTION:5111e125    todo  not covered by this build
+EXTENDED_DESCRIPTION:ae154873    XCU.mailx.014
+EXTENDED_DESCRIPTION:a9a57fab    XCU.mailx.014
+EXTENDED_DESCRIPTION:ac5cf164    todo  not covered by this build
+EXTENDED_DESCRIPTION:9aaada49    XCU.mailx.005
+EXTENDED_DESCRIPTION:62a57c2e    XCU.mailx.005
+EXTENDED_DESCRIPTION:b72791f0    todo  not covered by this build
+EXTENDED_DESCRIPTION:8187f58c    XCU.mailx.005
+EXTENDED_DESCRIPTION:13285c23    todo  not covered by this build
+EXTENDED_DESCRIPTION:0131cd1e    todo  not covered by this build
+EXTENDED_DESCRIPTION:9dd399ae    todo  not covered by this build
+EXTENDED_DESCRIPTION:220c8678    XCU.mailx.014
+EXTENDED_DESCRIPTION:c6117aa7    XCU.mailx.014
+EXTENDED_DESCRIPTION:8bcb3b41    XCU.mailx.014
+EXTENDED_DESCRIPTION:a4c93adc    todo  not covered by this build
+EXTENDED_DESCRIPTION:06bb023d    todo  not covered by this build
+EXTENDED_DESCRIPTION:12a22e43    todo  not covered by this build
+EXTENDED_DESCRIPTION:f794427c    XCU.mailx.014
+EXTENDED_DESCRIPTION:220c8678.2  XCU.mailx.014
+EXTENDED_DESCRIPTION:12043408    XCU.mailx.014
+EXTENDED_DESCRIPTION:bc915ad2    XCU.mailx.014
+EXTENDED_DESCRIPTION:9dcfc36c    XCU.mailx.014
+EXTENDED_DESCRIPTION:76cf3eb3    XCU.mailx.014
+EXTENDED_DESCRIPTION:8d4bf11b    XCU.mailx.006 XCU.mailx.005
+EXTENDED_DESCRIPTION:10fb0475    XCU.mailx.006 XCU.mailx.005
+EXTENDED_DESCRIPTION:30cd538c.2  todo  not covered by this build
+EXTENDED_DESCRIPTION:efc58b8f    XCU.mailx.014
+EXTENDED_DESCRIPTION:1b326270    XCU.mailx.010
+EXTENDED_DESCRIPTION:634ba8e3    XCU.mailx.010
+EXTENDED_DESCRIPTION:968732d8    XCU.mailx.010
+EXTENDED_DESCRIPTION:1a742f52    XCU.mailx.010
+EXTENDED_DESCRIPTION:84c4c24c    todo  not covered by this build
+EXTENDED_DESCRIPTION:c47e289e    XCU.mailx.001
+EXTENDED_DESCRIPTION:04c084ba    XCU.mailx.001
+EXTENDED_DESCRIPTION:75bdbbf6    todo  not covered by this build
+EXTENDED_DESCRIPTION:dc1ab24c    XCU.mailx.001
+EXTENDED_DESCRIPTION:75bdbbf6.2  todo  not covered by this build
+EXTENDED_DESCRIPTION:8a13c4a0    XCU.mailx.003
+EXTENDED_DESCRIPTION:d78b506c    XCU.mailx.014
+EXTENDED_DESCRIPTION:eb3fadde    XCU.mailx.014
+EXTENDED_DESCRIPTION:57d7ab37    todo  the author-named files are not exercised
+EXTENDED_DESCRIPTION:0071d0b2    XCU.mailx.014
+EXTENDED_DESCRIPTION:bc516b17    todo  the author-named files are not exercised
+EXTENDED_DESCRIPTION:d5530f15    XCU.mailx.014
+EXTENDED_DESCRIPTION:0d90db25    todo  not covered by this build
+EXTENDED_DESCRIPTION:fc705cd0    XCU.mailx.014
+EXTENDED_DESCRIPTION:6ddec15a    XCU.mailx.014
+EXTENDED_DESCRIPTION:7434b69d    XCU.mailx.014
+EXTENDED_DESCRIPTION:c582bd83    XCU.mailx.014
+EXTENDED_DESCRIPTION:43011989    XCU.mailx.014
+EXTENDED_DESCRIPTION:570d6c94    XCU.mailx.014
+EXTENDED_DESCRIPTION:df65d770    XCU.mailx.014
+EXTENDED_DESCRIPTION:d6fd5389    todo  not covered by this build
+EXTENDED_DESCRIPTION:40e19a7c    XCU.mailx.014
+EXTENDED_DESCRIPTION:112a7ff4    XCU.mailx.014
+EXTENDED_DESCRIPTION:52124f93    XCU.mailx.014
+EXTENDED_DESCRIPTION:9be77a7f    XCU.mailx.014
+EXTENDED_DESCRIPTION:5f893c63    XCU.mailx.014
+EXTENDED_DESCRIPTION:a0f845f0    XCU.mailx.014
+EXTENDED_DESCRIPTION:8417c7d6    XCU.mailx.014
+EXTENDED_DESCRIPTION:adf132da    todo  not covered by this build
+EXTENDED_DESCRIPTION:603835f4    XCU.mailx.014
+EXTENDED_DESCRIPTION:3f3507d2    XCU.mailx.011
+EXTENDED_DESCRIPTION:e58a9ac7    XCU.mailx.011
+EXTENDED_DESCRIPTION:7d70070a.2  XCU.mailx.011
+EXTENDED_DESCRIPTION:c7a644a9    XCU.mailx.011
+EXTENDED_DESCRIPTION:10bf9da1    XCU.mailx.004
+EXTENDED_DESCRIPTION:af55ffc2    XCU.mailx.004
+EXTENDED_DESCRIPTION:6f5885ba    XCU.mailx.004
+EXTENDED_DESCRIPTION:5273eaf4    todo  the author-named files are not exercised
+EXTENDED_DESCRIPTION:07c1c28f    todo  not covered by this build
+EXTENDED_DESCRIPTION:9e39be1f    XCU.mailx.014
+EXTENDED_DESCRIPTION:d8e3b060    XCU.mailx.009
+EXTENDED_DESCRIPTION:19c7d6a2    todo  not covered by this build
+EXTENDED_DESCRIPTION:2b04a5e6    todo  not covered by this build
+EXTENDED_DESCRIPTION:47ddf433    todo  not covered by this build
+EXTENDED_DESCRIPTION:f1bfbd5b    XCU.mailx.009
+EXTENDED_DESCRIPTION:a5a861b2    todo  not covered by this build
+EXTENDED_DESCRIPTION:7b4e1933    todo  not covered by this build
+EXTENDED_DESCRIPTION:b974ad40    todo  not covered by this build
+EXTENDED_DESCRIPTION:6bf19d4b    XCU.mailx.009
+EXTENDED_DESCRIPTION:33925bd1    XCU.mailx.008
+EXTENDED_DESCRIPTION:4ee1e658    XCU.mailx.008
+EXTENDED_DESCRIPTION:c1eca90b.2  XCU.mailx.008
+EXTENDED_DESCRIPTION:220c8678.3  XCU.mailx.014
+EXTENDED_DESCRIPTION:1515121d    XCU.mailx.014
+EXTENDED_DESCRIPTION:129e3bd2    todo  not covered by this build
+EXTENDED_DESCRIPTION:bc915ad2.2  XCU.mailx.014
+EXTENDED_DESCRIPTION:ad39f0e7    XCU.mailx.012
+EXTENDED_DESCRIPTION:21725664    todo  not covered by this build
+EXTENDED_DESCRIPTION:872b353f    XCU.mailx.003
+EXTENDED_DESCRIPTION:dd45a87a    XCU.mailx.002
+EXTENDED_DESCRIPTION:04dd9df9    todo  not covered by this build
+EXTENDED_DESCRIPTION:41f2e922    todo  not covered by this build
+EXTENDED_DESCRIPTION:51fd1dbb    todo  not covered by this build
+EXTENDED_DESCRIPTION:1c83517f    XCU.mailx.009
+EXTENDED_DESCRIPTION:b7f5c82d    todo  not covered by this build
+EXTENDED_DESCRIPTION:e81e1654    todo  not covered by this build
+EXTENDED_DESCRIPTION:839f7e98    todo  not covered by this build
+EXTENDED_DESCRIPTION:5d95f879    todo  not covered by this build
+EXTENDED_DESCRIPTION:93169ed3    XCU.mailx.004
+EXTENDED_DESCRIPTION:75dd8688.3  XCU.mailx.004
+EXTENDED_DESCRIPTION:5832293e    todo  not covered by this build
+EXTENDED_DESCRIPTION:e061c9bb    todo  not covered by this build
+EXTENDED_DESCRIPTION:106c1921    XCU.mailx.009
+EXTENDED_DESCRIPTION:e91e7364    todo  not covered by this build
+EXTENDED_DESCRIPTION:63001cfa    XCU.mailx.009
+EXTENDED_DESCRIPTION:d2190450    XCU.mailx.002
+EXTENDED_DESCRIPTION:819c28a7    XCU.mailx.014
+EXTENDED_DESCRIPTION:849738fb    todo  not covered by this build
+EXTENDED_DESCRIPTION:61e1a4bd    todo  not covered by this build
+EXTENDED_DESCRIPTION:d5197c82    XCU.mailx.014
+EXTENDED_DESCRIPTION:46cf22fc    XCU.mailx.014
+EXTENDED_DESCRIPTION:a0da0a6f    XCU.mailx.014
+EXTENDED_DESCRIPTION:3e62ffe7    todo  not covered by this build
+EXTENDED_DESCRIPTION:c58b4070    todo  not covered by this build
+EXTENDED_DESCRIPTION:3e05e87b    todo  not covered by this build
+EXTENDED_DESCRIPTION:b6fb02f3    XCU.mailx.014
+EXTENDED_DESCRIPTION:4e6c50c4    XCU.mailx.014
+EXTENDED_DESCRIPTION:a1f7038c    todo  not covered by this build
+EXTENDED_DESCRIPTION:7cbcd994    todo  not covered by this build
+EXTENDED_DESCRIPTION:c83a9984    XCU.mailx.014
+EXTENDED_DESCRIPTION:2010f8b6    XCU.mailx.014
+EXTENDED_DESCRIPTION:79887726    todo  not covered by this build
+EXTENDED_DESCRIPTION:5c953fac    XCU.mailx.014
+EXTENDED_DESCRIPTION:dc47b004    XCU.mailx.014
+EXTENDED_DESCRIPTION:abded1a4    XCU.mailx.014
+EXTENDED_DESCRIPTION:3abb60fb    XCU.mailx.014
+EXTENDED_DESCRIPTION:3abb60fb.2  XCU.mailx.014
+EXTENDED_DESCRIPTION:7c6dd0ea    XCU.mailx.014
+EXTENDED_DESCRIPTION:aaf10546    XCU.mailx.014
+EXTENDED_DESCRIPTION:95b08aa0    XCU.mailx.014
+EXTENDED_DESCRIPTION:1e61edcd    todo  not covered by this build
+EXTENDED_DESCRIPTION:e110b184    XCU.mailx.014
+EXTENDED_DESCRIPTION:0bfeab59    XCU.mailx.014
+EXTENDED_DESCRIPTION:10074168    XCU.mailx.014
+EXTENDED_DESCRIPTION:20de65b9    todo  not covered by this build
+EXTENDED_DESCRIPTION:2addea75    XCU.mailx.014
+EXTENDED_DESCRIPTION:cbd2ca1e    XCU.mailx.014
+EXTENDED_DESCRIPTION:8de7ea63    XCU.mailx.014
+EXTENDED_DESCRIPTION:0631751f    XCU.mailx.014
+EXTENDED_DESCRIPTION:fe8390b4    XCU.mailx.014
+EXTENDED_DESCRIPTION:bee4a6eb    todo  not covered by this build
+EXTENDED_DESCRIPTION:3d7a6ade    XCU.mailx.014
+EXTENDED_DESCRIPTION:20de65b9.2  todo  not covered by this build
+EXTENDED_DESCRIPTION:0e7b0429    XCU.mailx.014
+EXTENDED_DESCRIPTION:8e722069    XCU.mailx.014
+EXTENDED_DESCRIPTION:cb5e4b5a    XCU.mailx.014
+EXTENDED_DESCRIPTION:e8d19a99    XCU.mailx.014
+EXTENDED_DESCRIPTION:5eb44f7a    XCU.mailx.014
+EXTENDED_DESCRIPTION:1e61edcd.2  todo  not covered by this build
+EXTENDED_DESCRIPTION:ec427b22    XCU.mailx.014
+EXTENDED_DESCRIPTION:8f6a3cb6    todo  not covered by this build
+EXTENDED_DESCRIPTION:d7c32fe0    todo  not covered by this build
+EXTENDED_DESCRIPTION:200bb435    XCU.mailx.014
+EXTENDED_DESCRIPTION:b2847ee1    XCU.mailx.014
+EXTENDED_DESCRIPTION:6efef9bb    XCU.mailx.014
+EXTENDED_DESCRIPTION:c6cf681a    XCU.mailx.014
+EXTENDED_DESCRIPTION:c2ee2b07    todo  not covered by this build
+EXTENDED_DESCRIPTION:be5e9ea2    XCU.mailx.014
+EXTENDED_DESCRIPTION:4965a59a    XCU.mailx.014
+EXTENDED_DESCRIPTION:6454bb71    todo  not covered by this build
+EXTENDED_DESCRIPTION:e4b0179f    todo  not covered by this build
+EXTENDED_DESCRIPTION:16d2e3c5    todo  not covered by this build
+EXIT_STATUS:2e568414             XCU.mailx.014
+EXIT_STATUS:80136eac             XCU.mailx.014
+EXIT_STATUS:cdfed2ec             XCU.mailx.014
+EXIT_STATUS:425b4964             XCU.mailx.013
+EXIT_STATUS:4c7eacb9             XCU.mailx.013
+EXIT_STATUS:9d252ff7             XCU.mailx.013
+CONSEQUENCES_OF_ERRORS:2b8451fd  XCU.mailx.014
+CONSEQUENCES_OF_ERRORS:de58efd2  XCU.mailx.014
+CONSEQUENCES_OF_ERRORS:a4d35254  XCU.mailx.014
+CONSEQUENCES_OF_ERRORS:1c0d9bf9  none  default
+CONSEQUENCES_OF_ERRORS:d92f27bd  none  default

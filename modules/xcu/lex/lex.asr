@@ -1,0 +1,110 @@
+# XCU lex
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# lex followed by c17 on the generated lex.yy.c; the test programs define
+# their own yywrap and main so the lex library is not needed. Missing c17
+# makes the test UNRESOLVED. Statistics output is implementation-defined and
+# never examined.
+
+assertion  XCU.lex.001
+anchor     utilities/lex.html#OPTIONS
+anchor     utilities/lex.html#OUTPUT FILES
+class      conditional
+when       CD
+since      1992
+says       lex -t writes the C program to standard output and leaves no
+           lex.yy.c; without -t the program is written to lex.yy.c; with no
+           file operand the source is read from standard input; the program
+           compiles.
+test       t/001-stdout-and-file.sh
+
+assertion  XCU.lex.002
+anchor     utilities/lex.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       The longest match wins, a tie goes to the earlier rule, unmatched
+           input is copied, yytext and yyleng describe the match and
+           trailing context r/x matches only r.
+test       t/002-matching-rules.sh
+
+assertion  XCU.lex.003
+anchor     utilities/lex.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       A name defined in the definitions section is substituted for
+           {name}; %s start conditions keep unprefixed rules active, %x
+           conditions disable them, BEGIN switches and INITIAL (or 0)
+           returns.
+test       t/003-definitions-states.sh
+
+assertion  XCU.lex.004
+anchor     utilities/lex.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       REJECT executes the next best rule for the same input, an action
+           of | shares the next rule action, and unput returns a character
+           to the input.
+test       t/004-reject-pipe-unput.sh
+
+assertion  XCU.lex.005
+anchor     utilities/lex.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       yymore appends the next match to yytext and adjusts yyleng,
+           yyless keeps the first n characters and rescans the rest, and
+           input reads and consumes the next character.
+test       t/005-yymore-yyless-input.sh
+
+assertion  XCU.lex.006
+anchor     utilities/lex.html#OPERANDS
+anchor     utilities/lex.html#STDIN
+class      conditional
+when       CD
+since      1992
+says       Several file operands form one lex program, a - operand is
+           standard input, and -t works with them.
+test       t/006-operands.sh
+
+assertion  XCU.lex.007
+anchor     utilities/lex.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       Double-quoted text is literal, octal and hex escapes give
+           characters, an interval applies to a substituted name, ^ and $
+           anchor, character classes and quoted blanks work.
+test       t/007-regex-features.sh
+
+assertion  XCU.lex.008
+anchor     utilities/lex.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      1992
+says       Code in %{ %} and indented lines of the definitions is copied,
+           indented code before the first rule runs on each entry to yylex,
+           user subroutines are copied, and table size declarations are
+           accepted.
+test       t/008-user-code.sh
+
+assertion  XCU.lex.009
+anchor     utilities/lex.html#OPTIONS
+anchor     utilities/lex.html#STDOUT
+class      conditional
+when       CD
+since      1992
+says       -n is accepted and the program is still written; with -t and -v
+           the statistics go to standard error so standard output is still a
+           valid C program.
+test       t/009-options-n-v.sh
+
+assertion  XCU.lex.010
+anchor     utilities/lex.html#EXIT STATUS
+class      conditional
+when       CD
+since      1992
+says       A file operand that cannot be read gives a non-zero exit status.
+test       t/010-missing-file.sh

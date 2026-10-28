@@ -1,0 +1,106 @@
+# XCU nm
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# nm on object files made by c17 -c (needs the C compiler: UNRESOLVED when
+# it cannot be used). Symbol names are matched allowing a prefix before the
+# name, since decoration of C names is not part of the standard.
+
+assertion  XCU.nm.001
+anchor     utilities/nm.html#STDOUT
+class      conditional
+when       SD
+since      1992
+says       "nm -P x.o" prints lines of name, type letter, value and size
+           separated by blanks; a global function is type T, an initialised
+           global is D, an uninitialised global is B or C-style common (any
+           letter accepted for it is not tested), an unresolved reference is
+           U.
+test       t/001-portable-format.sh
+
+assertion  XCU.nm.002
+anchor     utilities/nm.html#OPTIONS/-u
+class      conditional
+when       SD
+since      1992
+says       "nm -u x.o" lists the undefined symbol and not the defined ones.
+test       t/002-undefined-only.sh
+
+assertion  XCU.nm.003
+anchor     utilities/nm.html#OPTIONS/-g
+class      conditional
+when       SD
+since      1992
+says       "nm -g x.o" lists global symbols and not a static (local)
+           variable.
+test       t/003-global-only.sh
+
+assertion  XCU.nm.004
+anchor     utilities/nm.html#STDOUT
+anchor     utilities/nm.html#OPTIONS/-A
+class      conditional
+when       SD
+since      1992
+says       With -A -P each line starts with the file operand followed by a
+           colon and a blank; for a library the member name follows the
+           library in square brackets.
+test       t/004-file-name-prefix.sh
+
+assertion  XCU.nm.005
+anchor     utilities/nm.html#STDOUT
+class      conditional
+when       SD
+since      1992
+says       Without -A, "nm -P x.o y.o" prints "x.o:" and "y.o:" lines before
+           each file's symbols, and "nm -P libx.a" for a library prints
+           "libx.a[x.o]:"; a single non-library file has no such line.
+test       t/005-headers.sh
+
+assertion  XCU.nm.006
+anchor     utilities/nm.html#OPTIONS/-v
+anchor     utilities/nm.html#STDOUT
+class      conditional
+when       SD
+since      1992
+says       By default the output is sorted by symbol name (POSIX locale);
+           with -v the defined symbols appear in nondecreasing order of
+           value.
+test       t/006-sort-by-value.sh
+
+assertion  XCU.nm.007
+anchor     utilities/nm.html#OPTIONS/-t
+anchor     utilities/nm.html#STDOUT
+class      conditional
+when       SD
+since      1992
+says       With -P, the value and size fields are made of decimal digits for
+           -t d, octal digits for -t o and hexadecimal digits for -t x (and
+           -P alone is as -t x).
+test       t/007-numeric-base.sh
+
+assertion  XCU.nm.008
+anchor     utilities/nm.html#OPTIONS/-x
+anchor     utilities/nm.html#OPTIONS/-o
+class      conditional
+when       SD+XSI
+since      1992
+says       "nm -x x.o" prints the same as "nm -t x x.o" and "nm -o x.o" the
+           same as "nm -t o x.o".
+test       t/008-xsi-options.sh
+
+assertion  XCU.nm.009
+anchor     utilities/nm.html#DESCRIPTION
+class      conditional
+when       SD
+since      1992
+says       An object file with no symbolic information is not an error: nm
+           exits 0.
+test       t/009-no-symbols.sh
+
+assertion  XCU.nm.010
+anchor     utilities/nm.html#EXIT STATUS
+class      conditional
+when       SD
+since      1992
+says       "nm" on a file that does not exist exits with a status greater
+           than zero.
+test       t/010-missing-file.sh

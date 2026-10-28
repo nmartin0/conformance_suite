@@ -1,0 +1,52 @@
+# XCU man
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# man with standard output redirected to a file; the content and layout of
+# reference text are implementation-defined, so the tests look only at
+# success, the presence of output and, for -k, the shape of the matching
+# lines. PAGER is set to cat so that nothing can block.
+
+assertion  XCU.man.001
+anchor     utilities/man.html#DESCRIPTION
+anchor     utilities/man.html#OPERANDS
+anchor     utilities/man.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       For the name of a standard utility, man exits 0 and writes a non-
+           empty description to standard output, and with two such names it
+           still succeeds and writes at least as much.
+test       t/001-standard-utility.sh
+
+assertion  XCU.man.002
+anchor     utilities/man.html#OPTIONS
+anchor     utilities/man.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       With -k each output line matches at least one of the keyword
+           operands, ignoring case (tested when the summary database has any
+           line for the keywords sort and copy; the wording of purpose
+           entries is unspecified).
+test       t/002-keyword-search.sh
+
+assertion  XCU.man.003
+anchor     utilities/man.html#OPTIONS
+class      conditional
+when       UP
+since      1992
+says       A keyword given in upper case finds lines for the same purpose
+           entries as the lower case keyword.
+test       t/003-keyword-case.sh
+
+assertion  XCU.man.004
+anchor     utilities/man.html#ENVIRONMENT VARIABLES
+anchor     utilities/man.html#DESCRIPTION
+class      untestable
+since      1992
+says       When standard output is a terminal the text is piped through the
+           PAGER command, or a default paginator when PAGER is null or
+           unset.
+reason     It needs a terminal on standard output, which a script run by the
+           driver does not have; the wording of the reference text is also
+           implementation-defined.

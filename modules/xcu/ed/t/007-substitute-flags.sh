@@ -1,0 +1,38 @@
+# command suffixes and s print flags
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# ASSERTION XCU.ed.007
+# "2dp" prints the new current line; the p, n and l flags of s print the
+# changed line as p, n and l do; a backslash-newline in the replacement
+# splits the line.
+. "$PC_CORE/pc.sh"
+pc_begin XCU.ed.007
+LC_ALL=C; export LC_ALL
+pc_top=$(pwd) || pc_unresolved "cannot find the working directory"
+pc_wd=pcw.$$
+mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
+trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
+printf 'one\ntwo\nthree\nfour\nfive\n' >f || pc_unresolved "setup: cannot write f"
+printf 'a b c\n' >g || pc_unresolved "setup: cannot write g"
+cat >s <<'EOS'
+2dp
+1s/o/0/p
+1s/0/o/n
+1s/e/E/l
+Q
+EOS
+cat >s2 <<'EOS'
+1s/ /\
+/g
+,p
+$=
+Q
+EOS
+printf 'three\n0ne\n1\tone\nonE$\n' >exp
+printf 'a\nb\nc\n3\n' >exp2
+pc_test
+ed -s f <s >o 2>err
+cmp -s o exp || pc_fail "suffix and flag output: $(cat o)"
+ed -s g <s2 >o2 2>err
+cmp -s o2 exp2 || pc_fail "splitting a line by substitution gave: $(cat o2)"
+pc_pass

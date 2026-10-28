@@ -1,0 +1,89 @@
+# XCU xgettext
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# xgettext on small C sources; header entries in the output are unspecified
+# so only non-empty msgid lines are examined, and duplicates may be
+# commented out so only uncommented lines count.
+
+assertion  XCU.xgettext.001
+anchor     utilities/xgettext.html#DESCRIPTION
+anchor     utilities/xgettext.html#OUTPUT FILES
+class      conditional
+when       CD
+since      2024
+says       String literals in gettext and ngettext calls are written to
+           messages.po in source order as msgid directives with empty
+           msgstr, plurals get msgid_plural and msgstr[0] directives, other
+           strings are ignored, and a repeated msgid is written once
+           uncommented.
+test       t/001-default-extraction.sh
+
+assertion  XCU.xgettext.002
+anchor     utilities/xgettext.html#OPTIONS
+class      conditional
+when       CD
+since      2024
+says       -d name writes name.po instead of messages.po, and -p dir writes
+           the file into dir.
+test       t/002-output-name-dir.sh
+
+assertion  XCU.xgettext.003
+anchor     utilities/xgettext.html#OPTIONS
+class      conditional
+when       CD
+since      2024
+says       -n adds a #: comment with pathname:line before the msgid
+           directive.
+test       t/003-line-comments.sh
+
+assertion  XCU.xgettext.004
+anchor     utilities/xgettext.html#OPTIONS
+class      conditional
+when       CD
+since      2024
+says       -K id extracts the first argument of id, id:2 the second, id:1,2
+           a singular and plural pair, and an empty -K disables the default
+           keywords.
+test       t/004-keywords.sh
+
+assertion  XCU.xgettext.005
+anchor     utilities/xgettext.html#OPTIONS
+class      conditional
+when       CD
+since      2024
+says       -a extracts every string literal and writes only one dot-po file.
+test       t/005-all-strings.sh
+
+assertion  XCU.xgettext.006
+anchor     utilities/xgettext.html#OPTIONS
+class      conditional
+when       CD
+since      2024
+says       -j appends new messages to an existing dot-po file and does not
+           repeat an msgid already present.
+test       t/006-join.sh
+
+assertion  XCU.xgettext.007
+anchor     utilities/xgettext.html#OPTIONS
+class      conditional
+when       CD
+since      2024
+says       Strings whose msgid appears in the -x file are not extracted.
+test       t/007-exclude.sh
+
+assertion  XCU.xgettext.008
+anchor     utilities/xgettext.html#OPERANDS
+anchor     utilities/xgettext.html#STDIN
+class      conditional
+when       CD
+since      2024
+says       A file operand of - reads the C source from standard input.
+test       t/008-stdin-operand.sh
+
+assertion  XCU.xgettext.009
+anchor     utilities/xgettext.html#EXIT STATUS
+class      conditional
+when       CD
+since      2024
+says       A file operand that cannot be read gives a non-zero exit status.
+test       t/009-missing-file.sh

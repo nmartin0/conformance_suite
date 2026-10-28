@@ -1,0 +1,27 @@
+# XCU lp
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# lp is checked only on a path that cannot reach a printer: a file operand
+# that does not exist. Submitting a real request would use a device the
+# suite must not assume; the printing itself is recorded as untestable.
+
+assertion  XCU.lp.001
+anchor     utilities/lp.html#EXIT STATUS
+anchor     utilities/lp.html#OPERANDS
+class      required
+since      1992
+says       A file operand that cannot be read gives a non-zero exit status.
+test       t/001-missing-file.sh
+
+assertion  XCU.lp.002
+anchor     utilities/lp.html#DESCRIPTION
+anchor     utilities/lp.html#OPTIONS
+anchor     utilities/lp.html#STDOUT
+class      untestable
+since      1992
+says       lp copies its input to a destination device, prints a request ID
+           on standard output unless -s is given, and honours -c, -d, -m,
+           -n, -o, -t and -w.
+reason     Printing needs an output device, which the page leaves
+           unspecified and which a test system need not have; the result is
+           paper (or another device) outside the reach of a script.

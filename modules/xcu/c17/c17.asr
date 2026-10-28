@@ -1,0 +1,141 @@
+# XCU c17
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# c17 on small C programs. Everything is conditional on the C-Language
+# Development option. Executables are run to check their behaviour; exact
+# diagnostics and object formats are never examined.
+
+assertion  XCU.c17.001
+anchor     utilities/c17.html#DESCRIPTION
+anchor     utilities/c17.html#OPTIONS/-o
+class      conditional
+when       CD
+since      2024
+says       "c17 p.c" writes the executable a.out, "c17 -o prog p.c" writes
+           prog, and running either gives the program's output and its exit
+           status; the executable has permission bits rwx for all, with the
+           umask cleared from them (0755 under umask 022, 0700 under umask
+           077).
+test       t/001-compile-link-run.sh
+
+assertion  XCU.c17.002
+anchor     utilities/c17.html#OPTIONS/-c
+anchor     utilities/c17.html#DESCRIPTION
+anchor     utilities/c17.html#OPTIONS/-o
+class      conditional
+when       CD
+since      2024
+says       "c17 -c a.c b.c" creates a.o and b.o and no a.out; "c17 -c -o x.o
+           a.c" creates x.o; the objects link to a working program.
+test       t/002-compile-only.sh
+
+assertion  XCU.c17.003
+anchor     utilities/c17.html#OPTIONS/-D
+anchor     utilities/c17.html#OPTIONS/-U
+class      conditional
+when       CD
+since      2024
+says       "-D NAME" defines NAME as 1 and "-D NAME=7" as 7; a name given to
+           both -U and -D is undefined whichever comes first.
+test       t/003-define-undefine.sh
+
+assertion  XCU.c17.004
+anchor     utilities/c17.html#OPTIONS/-E
+anchor     utilities/c17.html#STDOUT
+class      conditional
+when       CD
+since      2024
+says       "c17 -E e.c" writes the preprocessed text to standard output with
+           macros expanded and the included header's declaration present,
+           and creates no object or executable file.
+test       t/004-preprocess-only.sh
+
+assertion  XCU.c17.005
+anchor     utilities/c17.html#OPTIONS/-I
+class      conditional
+when       CD
+since      2024
+says       Angle-bracket headers are found in the -I directories in the
+           order given; a quoted header is found in the directory of the
+           including file before any -I directory.
+test       t/005-include-search.sh
+
+assertion  XCU.c17.006
+anchor     utilities/c17.html#OPTIONS/-L
+anchor     utilities/c17.html#OPTIONS/-l
+anchor     utilities/c17.html#OPERANDS
+class      conditional
+when       CD
+since      2024
+says       With two directories each holding a libpcx.a, "-L d1 -L d2 -l
+           pcx" links the one in d1 and "-L d2 -L d1" the one in d2; a
+           library given as a file.a operand is used as well.
+test       t/006-library-search.sh
+
+assertion  XCU.c17.007
+anchor     utilities/c17.html#OPTIONS/-O
+anchor     utilities/c17.html#OPTIONS/-g
+anchor     utilities/c17.html#OPTIONS/-s
+class      conditional
+when       CD
+since      2024
+says       "-O 0", "-O 1", "-g" and "-s" are each accepted and the resulting
+           program runs with its normal output and exit status.
+test       t/007-other-options.sh
+
+assertion  XCU.c17.008
+anchor     utilities/c17.html#CONSEQUENCES OF ERRORS
+anchor     utilities/c17.html#EXIT STATUS
+class      conditional
+when       CD
+since      2024
+says       "c17 -c bad.c good.c" with a source error in bad.c exits with a
+           nonzero status, writes a diagnostic to standard error, creates no
+           bad.o, and still compiles good.c to good.o.
+test       t/008-compile-error.sh
+
+assertion  XCU.c17.009
+anchor     utilities/c17.html#OPERANDS
+class      conditional
+when       CD
+since      2024
+says       The output of "c17 -E x.c" saved as x.i compiles and links with
+           "c17 -o p x.i" into a program with the original behaviour.
+test       t/009-preprocessed-input.sh
+
+assertion  XCU.c17.010
+anchor     utilities/c17.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      2024
+says       Returning a value from main gives that exit status and runs
+           atexit handlers; reaching the end of main gives status 0.
+test       t/010-main-exit.sh
+
+assertion  XCU.c17.011
+anchor     utilities/c17.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      2024
+says       A program that calls sqrt() links with "-l m" and gives the right
+           result; "-l c" is accepted.
+test       t/011-standard-libraries.sh
+
+assertion  XCU.c17.012
+anchor     utilities/c17.html#EXTENDED DESCRIPTION
+class      conditional
+when       CD
+since      2024
+says       Two functions whose 31-byte external names differ only in the
+           last byte, defined in separate files, link into one program in
+           which both are callable and distinct.
+test       t/012-external-names.sh
+
+assertion  XCU.c17.013
+anchor     utilities/c17.html#DESCRIPTION
+class      conditional
+when       CD
+since      2024
+says       A source file that requires __STDC__ to be 1 and __STDC_VERSION__
+           to be at least 201710L compiles without error.
+test       t/013-language-level.sh

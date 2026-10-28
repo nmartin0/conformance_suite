@@ -1,0 +1,55 @@
+# XCU what
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# SCCS files are made and inspected only with the SCCS utilities (admin,
+# get, delta, prs and friends); the file format is unspecified so nothing
+# reads the files directly. A missing companion utility makes the test
+# UNRESOLVED. Login names, dates and the diagnostic texts are never compared
+# literally.
+
+assertion  XCU.what.001
+anchor     utilities/what.html#DESCRIPTION
+anchor     utilities/what.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       what writes the pathname, then each string after @(#) up to a
+           double quote, >, newline, backslash, NUL or end of file, each
+           preceded by a tab.
+test       t/001-strings.sh
+
+assertion  XCU.what.002
+anchor     utilities/what.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -s writes at most one string per file.
+test       t/002-option-s.sh
+
+assertion  XCU.what.003
+anchor     utilities/what.html#EXIT STATUS
+anchor     utilities/what.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       A file without a match gives the pathname line and status 1; so
+           does a nonexistent file.
+test       t/003-no-match.sh
+
+assertion  XCU.what.004
+anchor     utilities/what.html#STDOUT
+anchor     utilities/what.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       Each file operand gets its own heading and strings, in operand
+           order, and the status is 0 if any file matched.
+test       t/004-several-files.sh
+
+assertion  XCU.what.005
+anchor     utilities/what.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       Text retrieved with the %W% keyword is found by what.
+test       t/005-with-get.sh

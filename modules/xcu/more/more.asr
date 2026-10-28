@@ -1,0 +1,70 @@
+# XCU more
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# more with standard output redirected to a file, which is the only mode a
+# script can drive; the page-by-page mode needs a terminal and is recorded
+# as untestable. Standard error is redirected to a file in every run, so the
+# no-error-without-readable-stderr rule is exercised.
+
+assertion  XCU.more.001
+anchor     utilities/more.html#DESCRIPTION
+anchor     utilities/more.html#EXTENDED DESCRIPTION
+anchor     utilities/more.html#STDOUT
+class      conditional
+when       UP
+since      1992
+says       When standard output is not a terminal, the input file is copied
+           to it in its entirety without modification, and options other
+           than -s (here -c, -e, -i, -n, -u) have no effect, even with
+           standard error unreadable.
+test       t/001-copy-through.sh
+
+assertion  XCU.more.002
+anchor     utilities/more.html#OPERANDS
+anchor     utilities/more.html#STDIN
+class      conditional
+when       UP
+since      1992
+says       With no file operands standard input is copied; with several
+           operands they are copied in order one after another; a - operand
+           reads standard input at that point in the sequence.
+test       t/002-operands-and-stdin.sh
+
+assertion  XCU.more.003
+anchor     utilities/more.html#OPTIONS
+class      conditional
+when       UP
+since      1992
+says       With -s runs of consecutive empty lines in the input come out as
+           a single empty line and everything else is unchanged.
+test       t/003-squeeze.sh
+
+assertion  XCU.more.004
+anchor     utilities/more.html#ENVIRONMENT VARIABLES
+class      conditional
+when       UP
+since      1992
+says       Options in the MORE variable act as if written before the command
+           line options, so MORE=-s squeezes empty lines in the same way as
+           -s.
+test       t/004-more-variable.sh
+
+assertion  XCU.more.005
+anchor     utilities/more.html#EXIT STATUS
+class      conditional
+when       UP
+since      1992
+says       A file operand that cannot be read gives a non-zero exit status.
+test       t/005-missing-file.sh
+
+assertion  XCU.more.006
+anchor     utilities/more.html#EXTENDED DESCRIPTION
+anchor     utilities/more.html#STDERR
+class      untestable
+since      1992
+says       With standard output a terminal, the files are shown a screenful
+           at a time under user commands, with a prompt on standard error,
+           folding of long lines and the interactive commands.
+reason     A terminal device and a person (or a terminal driver) are needed
+           to see screens and type commands; a portable script has no way to
+           create one.

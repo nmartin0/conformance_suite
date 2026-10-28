@@ -1,0 +1,184 @@
+# XCU pax
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# pax in its four modes on small trees of regular files. The default archive
+# format is implementation-defined, so default-format archives are only read
+# back by pax; the three named formats are checked at the byte level where
+# the page fixes the layout. Archive members are named as given on the
+# command line.
+
+assertion  XCU.pax.001
+anchor     utilities/pax.html#DESCRIPTION
+anchor     utilities/pax.html#STDOUT
+class      required
+since      1992
+says       "pax -w f1 d" writes an archive to standard output; "pax" with it
+           on standard input lists f1, d and d/f2; "pax -r" recreates the
+           files, the directory and the contents after the originals are
+           removed.
+test       t/001-write-list-read.sh
+
+assertion  XCU.pax.002
+anchor     utilities/pax.html#OPTIONS/-f
+class      required
+since      1992
+says       -f names the archive in write, list and read mode instead of
+           standard output or input.
+test       t/002-archive-option.sh
+
+assertion  XCU.pax.003
+anchor     utilities/pax.html#OPERANDS
+anchor     utilities/pax.html#OPTIONS/-c
+anchor     utilities/pax.html#OPTIONS/-n
+class      required
+since      1992
+says       With members a1 a2 b1, the pattern 'a*' lists a1 and a2, -c 'a*'
+           lists b1, -n 'a*' lists only a1, and "pax -r a2" extracts only
+           a2.
+test       t/003-patterns.sh
+
+assertion  XCU.pax.004
+anchor     utilities/pax.html#OPTIONS/-d
+class      required
+since      1992
+says       "pax -w -d d" archives only the directory d itself; in list mode
+           "-d d" on a full archive lists only d, while without -d the
+           pattern d also lists d/f2.
+test       t/004-no-descend.sh
+
+assertion  XCU.pax.005
+anchor     utilities/pax.html#DESCRIPTION
+anchor     utilities/pax.html#STDIN
+class      required
+since      1992
+says       "pax -w" with no file operands reads one pathname per line from
+           standard input and archives those files.
+test       t/005-names-on-stdin.sh
+
+assertion  XCU.pax.006
+anchor     utilities/pax.html#EXTENDED DESCRIPTION
+anchor     utilities/pax.html#OPTIONS/-x
+class      required
+since      1992
+says       For a 6-byte file of mode 640, "pax -w -x ustar" gives an archive
+           whose first block has name f1, mode 640, size 6, typeflag 0,
+           magic "ustar" followed by NUL, version 00 and a correct checksum,
+           followed by one data block and two zero blocks, and whose length
+           is a multiple of 512.
+test       t/006-ustar-format.sh
+
+assertion  XCU.pax.007
+anchor     utilities/pax.html#EXTENDED DESCRIPTION
+anchor     utilities/pax.html#OPTIONS/-x
+class      required
+since      1992
+says       "pax -w -x cpio f1" gives an archive starting with the magic
+           070707, with c_mode 0100640 in bytes 18 to 23, c_namesize 3 and
+           c_filesize 6 (octal), the name f1 after the 76-byte header, and a
+           trailer entry named TRAILER!!!.
+test       t/007-cpio-format.sh
+
+assertion  XCU.pax.008
+anchor     utilities/pax.html#EXTENDED DESCRIPTION
+anchor     utilities/pax.html#OPTIONS/-o
+class      required
+since      2001
+says       "pax -w -x pax f1" gives an archive of 512-byte blocks whose
+           first block has the ustar magic and version, which pax lists and
+           extracts; with -o times the archive holds atime and mtime
+           records, and -o comment=hello puts a comment record in it.
+test       t/008-pax-format.sh
+
+assertion  XCU.pax.009
+anchor     utilities/pax.html#DESCRIPTION
+class      required
+since      1992
+says       "pax -rw d dest" copies directory d with its contents into the
+           existing directory dest as dest/d.
+test       t/009-copy-mode.sh
+
+assertion  XCU.pax.010
+anchor     utilities/pax.html#OPTIONS/-s
+anchor     utilities/pax.html#STDERR
+class      required
+since      1992
+says       "-s /^f/g/" renames f1 to g1 in write mode and in read mode (-s
+           ,f,h, makes h1), the first expression that succeeds applies, and
+           a trailing p flag writes "OLD >> NEW" to standard error.
+test       t/010-substitution.sh
+
+assertion  XCU.pax.011
+anchor     utilities/pax.html#OPTIONS/-v
+anchor     utilities/pax.html#STDOUT
+anchor     utilities/pax.html#STDERR
+class      required
+since      1992
+says       "pax -v" in list mode writes an ls -l style line per member (type
+           character - for a file and d for a directory, nine or more
+           fields, the member name last); in write mode "-v" writes the
+           member names, one per line, to standard error.
+test       t/011-verbose.sh
+
+assertion  XCU.pax.012
+anchor     utilities/pax.html#OPTIONS/-k
+anchor     utilities/pax.html#OPTIONS/-u
+class      required
+since      1992
+says       -k leaves an existing file alone; -u extracts a member only when
+           it is newer than the existing file.
+test       t/012-keep-and-update.sh
+
+assertion  XCU.pax.013
+anchor     utilities/pax.html#OPTIONS/-p
+class      required
+since      1992
+says       Under umask 077, "-p p" restores mode 640; by default the
+           modification time stored in the archive is restored, and with -p
+           m it is not.
+test       t/013-preserve.sh
+
+assertion  XCU.pax.014
+anchor     utilities/pax.html#DESCRIPTION
+anchor     utilities/pax.html#EXIT STATUS
+class      required
+since      1992
+says       A pattern operand that matches no member gives a diagnostic and a
+           nonzero exit status, and nothing is extracted.
+test       t/014-unmatched-pattern.sh
+
+assertion  XCU.pax.015
+anchor     utilities/pax.html#STDOUT
+anchor     utilities/pax.html#OPTIONS/-o
+class      required
+since      2001
+says       "-o listopt=%(size)d:%F" in list mode writes, for each member,
+           its size in decimal, a colon and its path, then a newline.
+test       t/015-list-format.sh
+
+assertion  XCU.pax.016
+anchor     utilities/pax.html#OPTIONS/-a
+class      required
+since      1992
+says       "pax -w -a -f A f2" adds f2 to an existing archive A holding f1,
+           and listing shows f1 then f2; appending in a different format to
+           an existing archive exits with a nonzero status.
+test       t/016-append.sh
+
+assertion  XCU.pax.017
+anchor     utilities/pax.html#STDOUT
+class      required
+since      1992
+says       Archiving f1 and its hard link f1l and listing with -v ends the
+           second line with " == f1".
+test       t/017-hard-links.sh
+
+assertion  XCU.pax.018
+anchor     utilities/pax.html#OPTIONS/-H
+anchor     utilities/pax.html#OPTIONS/-L
+class      required
+since      1992
+says       By default a symbolic link is archived itself (its -v line starts
+           with l); with -L or -H a link to a regular file named on the
+           command line is archived as that file under the link's name (the
+           -v line starts with -).
+test       t/018-symbolic-links.sh

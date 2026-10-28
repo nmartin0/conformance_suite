@@ -1,0 +1,35 @@
+# XCU ngettext
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# no message catalogs are installed: TEXTDOMAINDIR points at an empty
+# directory and LC_ALL is C, so the only observable result is the
+# untranslated text (the msgid, or for ngettext the default singular or
+# plural); translations are untestable portably because the locale names
+# that select a catalog are not specified.
+
+assertion  XCU.ngettext.001
+anchor     utilities/ngettext.html#DESCRIPTION
+anchor     utilities/ngettext.html#OPERANDS
+class      required
+since      2024
+says       With no catalog the msgid is written for n equal to 1 and the
+           msgid_plural otherwise, whether the domain comes from an operand,
+           -d or TEXTDOMAIN; n is read as a decimal integer so 001 means 1.
+test       t/001-plural-selection.sh
+
+assertion  XCU.ngettext.002
+anchor     utilities/ngettext.html#OPTIONS
+anchor     utilities/ngettext.html#DESCRIPTION
+class      required
+since      2024
+says       -e processes C escape sequences in msgid and msgid_plural; -E
+           leaves them alone.
+test       t/002-escapes.sh
+
+assertion  XCU.ngettext.003
+anchor     utilities/ngettext.html#OPERANDS
+anchor     utilities/ngettext.html#DESCRIPTION
+class      required
+since      2024
+says       n of 0 and a large n select the plural.
+test       t/003-large-n.sh

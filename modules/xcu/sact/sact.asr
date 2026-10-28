@@ -1,0 +1,39 @@
+# XCU sact
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# SCCS files are made and inspected only with the SCCS utilities (admin,
+# get, delta, prs and friends); the file format is unspecified so nothing
+# reads the files directly. A missing companion utility makes the test
+# UNRESOLVED. Login names, dates and the diagnostic texts are never compared
+# literally.
+
+assertion  XCU.sact.001
+anchor     utilities/sact.html#STDOUT
+anchor     utilities/sact.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       After get -e, sact writes a line with the SID read, the new SID,
+           a login, a date and a time.
+test       t/001-pending-line.sh
+
+assertion  XCU.sact.002
+anchor     utilities/sact.html#STDOUT
+anchor     utilities/sact.html#STDERR
+class      conditional
+when       XSI
+since      1992
+says       With no pending edit, and after delta completes an edit, nothing
+           is written to standard output.
+test       t/002-nothing-pending.sh
+
+assertion  XCU.sact.003
+anchor     utilities/sact.html#STDOUT
+anchor     utilities/sact.html#OPERANDS
+anchor     utilities/sact.html#STDIN
+class      conditional
+when       XSI
+since      1992
+says       With several files each name is written as a heading before its
+           lines.
+test       t/003-several-files.sh

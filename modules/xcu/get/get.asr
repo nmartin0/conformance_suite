@@ -1,0 +1,95 @@
+# XCU get
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# SCCS files are made and inspected only with the SCCS utilities (admin,
+# get, delta, prs and friends); the file format is unspecified so nothing
+# reads the files directly. A missing companion utility makes the test
+# UNRESOLVED. Login names, dates and the diagnostic texts are never compared
+# literally.
+
+assertion  XCU.get.001
+anchor     utilities/get.html#OPTIONS
+anchor     utilities/get.html#STDERR
+class      conditional
+when       XSI
+since      1992
+says       -p writes the text to standard output and moves the informative
+           lines to standard error, and -s with -p drops them.
+test       t/001-print-option.sh
+
+assertion  XCU.get.002
+anchor     utilities/get.html#STDOUT
+anchor     utilities/get.html#OUTPUT FILES
+class      conditional
+when       XSI
+since      1992
+says       get writes the SID and line count to standard output and creates
+           a read-only g-file with the retrieved text.
+test       t/002-g-file.sh
+
+assertion  XCU.get.003
+anchor     utilities/get.html#OPTIONS
+anchor     utilities/get.html#STDOUT
+anchor     utilities/get.html#OUTPUT FILES
+class      conditional
+when       XSI
+since      1992
+says       -e reports the new delta SID, creates a writable g-file and a
+           p-file, and blocks a second get -e on the same SID.
+test       t/003-edit.sh
+
+assertion  XCU.get.004
+anchor     utilities/get.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -r picks a version, -t takes the top delta of a release or level,
+           and a late cutoff with -c keeps every delta.
+test       t/004-select-version.sh
+
+assertion  XCU.get.005
+anchor     utilities/get.html#EXTENDED DESCRIPTION
+anchor     utilities/get.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       Keywords %M% %I% %Z% %W% %F% are replaced in the retrieved text
+           and -k leaves them alone.
+test       t/005-keywords.sh
+
+assertion  XCU.get.006
+anchor     utilities/get.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -m prefixes each line with its SID and a tab, -n with the module
+           name and a tab, and both give the module name, SID and text.
+test       t/006-prefix-m-n.sh
+
+assertion  XCU.get.007
+anchor     utilities/get.html#OPTIONS
+anchor     utilities/get.html#OUTPUT FILES
+class      conditional
+when       XSI
+since      1992
+says       -g retrieves no text but succeeds only for an existing SID, and
+           -l writes an l-file listing the applied delta.
+test       t/007-no-text-and-l-file.sh
+
+assertion  XCU.get.008
+anchor     utilities/get.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -x leaves a delta out of the generated text.
+test       t/008-exclude.sh
+
+assertion  XCU.get.009
+anchor     utilities/get.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       With no -r the latest delta is read and its successor made, -r
+           with a higher release makes release.1, and -r of an earlier delta
+           that has a successor makes a branch SID.
+test       t/009-sid-table.sh

@@ -1,0 +1,37 @@
+# XCU gettext
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# no message catalogs are installed: TEXTDOMAINDIR points at an empty
+# directory and LC_ALL is C, so the only observable result is the
+# untranslated text (the msgid, or for ngettext the default singular or
+# plural); translations are untestable portably because the locale names
+# that select a catalog are not specified.
+
+assertion  XCU.gettext.001
+anchor     utilities/gettext.html#DESCRIPTION
+anchor     utilities/gettext.html#OPERANDS
+anchor     utilities/gettext.html#ENVIRONMENT VARIABLES
+class      required
+since      2024
+says       With a text domain given as an operand, as -d, or in TEXTDOMAIN,
+           and no catalog, the msgid is written to standard output unchanged
+           and without a newline, with status 0.
+test       t/001-domain-sources.sh
+
+assertion  XCU.gettext.002
+anchor     utilities/gettext.html#OPTIONS
+anchor     utilities/gettext.html#DESCRIPTION
+class      required
+since      2024
+says       -e processes C escape sequences in the msgid and -E leaves them
+           as they are.
+test       t/002-escapes.sh
+
+assertion  XCU.gettext.003
+anchor     utilities/gettext.html#OPTIONS
+anchor     utilities/gettext.html#DESCRIPTION
+class      required
+since      2024
+says       -s writes each msgid separated by a space and ends with a
+           newline, -n omits that newline, and -E is the default with -s.
+test       t/003-separate-s-n.sh

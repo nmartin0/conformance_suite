@@ -1,0 +1,61 @@
+# XCU gencat
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# gencat checked by reading the catalog back with a small C program (catopen
+# and catgets, via c17) because the catalog format is unspecified; the tests
+# are UNRESOLVED when c17 is unavailable.
+
+assertion  XCU.gencat.001
+anchor     utilities/gencat.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       $set selects the set for the following messages, $ lines followed
+           by a blank are comments, empty lines are ignored, and every
+           message is retrievable by its set and message number.
+test       t/001-sets-and-messages.sh
+
+assertion  XCU.gencat.002
+anchor     utilities/gencat.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       A $quote character surrounds text so trailing blanks stay, the
+           escapes \n \t \\ and \ddd give the named characters, a backslash-
+           newline continues a message, and a message with a separator and
+           no text is an empty string.
+test       t/002-text-escapes.sh
+
+assertion  XCU.gencat.003
+anchor     utilities/gencat.html#DESCRIPTION
+anchor     utilities/gencat.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       A second gencat run keeps the old messages, replaces colliding
+           numbers, a bare message number deletes that message, and $delset
+           removes a whole set.
+test       t/003-merge-and-delete.sh
+
+assertion  XCU.gencat.004
+anchor     utilities/gencat.html#OPERANDS
+anchor     utilities/gencat.html#STDIN
+anchor     utilities/gencat.html#STDOUT
+class      required
+since      1992
+says       A catfile of - writes the catalog to standard output and a
+           msgfile of - reads standard input.
+test       t/004-dash-operands.sh
+
+assertion  XCU.gencat.005
+anchor     utilities/gencat.html#EXTENDED DESCRIPTION
+anchor     utilities/gencat.html#OPERANDS
+class      required
+since      1992
+says       Messages before any $set go to the default set NL_SETD, and
+           several msgfile operands are merged into one catalog.
+test       t/005-default-set.sh
+
+assertion  XCU.gencat.006
+anchor     utilities/gencat.html#EXIT STATUS
+class      required
+since      1992
+says       A msgfile that cannot be read gives a non-zero exit status.
+test       t/006-missing-input.sh

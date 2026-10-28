@@ -1,0 +1,85 @@
+# nm.cov - every requirement unit on utilities/nm.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sections that read "None.", "Not used." or "Default." take their meaning
+# from XCU 1.4 Utility Description Defaults.
+
+DESCRIPTION:6fdb68c9             XCU.nm.001
+DESCRIPTION:1f6bbf1e             XCU.nm.009
+DESCRIPTION:c1996d5e             none  unspecified
+DESCRIPTION:0ee3b969             todo  XSI default base without -P; the default format is unspecified so only a numeric class check is possible
+OPTIONS:bef18b54                 todo  utility syntax guidelines not exercised
+OPTIONS:e2947e20                 none  introduces the list
+OPTIONS:5a6ab2fe                 XCU.nm.004
+OPTIONS:1fc703b3                 todo  -e needs symbol classification beyond local/global
+OPTIONS:72b0b3b7                 todo  -f redundant symbols are implementation specific
+OPTIONS:7fc42ff5                 todo  -f redundant symbols are implementation specific
+OPTIONS:86719b9a                 XCU.nm.003
+OPTIONS:c80d8167                 XCU.nm.008
+OPTIONS:08fdcc3f                 XCU.nm.001
+OPTIONS:2f6511b0                 XCU.nm.007
+OPTIONS:88be7f5f                 XCU.nm.007
+OPTIONS:dfc9f5c8                 XCU.nm.007
+OPTIONS:0346e453                 todo  not covered by this build
+OPTIONS:0664e24e                 XCU.nm.007
+OPTIONS:6e925026                 XCU.nm.002
+OPTIONS:654d6aef                 XCU.nm.006
+OPTIONS:d12e1ff6                 XCU.nm.008
+OPERANDS:4ec2d2a9                XCU.nm.001 XCU.nm.005
+OPERANDS:34576f4b                XCU.nm.001 XCU.nm.005
+STDIN:fc1111c9                   none  see input files
+INPUT_FILES:8c532319             XCU.nm.005
+INPUT_FILES:e9f4a2ee             impl  implementation-defined library formats
+ENVIRONMENT_VARIABLES:389addd6   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:221d4f1a   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:8aece102   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:b96c5038   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:d7a3c817   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:4a460d8d   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:fb479014   todo  locale variables not exercised
+ENVIRONMENT_VARIABLES:d838b9f5   todo  locale variables not exercised
+ASYNCHRONOUS_EVENTS:d92f27bd     none  default
+STDOUT:ae21de9b                  XCU.nm.001
+STDOUT:cf7ff5c8                  XCU.nm.006
+STDOUT:46f866fd                  XCU.nm.004
+STDOUT:402757ca                  XCU.nm.001
+STDOUT:f52a2e81                  XCU.nm.001
+STDOUT:8f997519                  partial XCU.nm.001 # only the presence of the uninitialised symbol is checked
+STDOUT:cc2c552b                  XCU.nm.001
+STDOUT:8d217af9                  XCU.nm.001
+STDOUT:c257cde9                  XCU.nm.001
+STDOUT:c7f36acd                  XCU.nm.007
+STDOUT:f9ab3d8d                  XCU.nm.007
+STDOUT:57f100a9                  none  implementation freedom
+STDOUT:d9d6ef86                  XCU.nm.001
+STDOUT:20eeb599                  XCU.nm.007
+STDOUT:582bd1c1                  XCU.nm.001
+STDOUT:8d465089                  XCU.nm.001
+STDOUT:24af7bcf                  XCU.nm.001
+STDOUT:be2e3df0                  XCU.nm.001
+STDOUT:47dde012                  XCU.nm.001
+STDOUT:09a6dc41                  XCU.nm.007
+STDOUT:8d465089.2                XCU.nm.001
+STDOUT:24af7bcf.2                XCU.nm.001
+STDOUT:be2e3df0.2                XCU.nm.001
+STDOUT:47dde012.2                XCU.nm.001
+STDOUT:8eaafd2d                  XCU.nm.007
+STDOUT:8d465089.3                XCU.nm.001
+STDOUT:24af7bcf.3                XCU.nm.001
+STDOUT:be2e3df0.3                XCU.nm.001
+STDOUT:47dde012.3                XCU.nm.001
+STDOUT:165c460b                  XCU.nm.001
+STDOUT:1bfb7001                  XCU.nm.004
+STDOUT:f9e5a1f8                  XCU.nm.004
+STDOUT:a0a08620                  XCU.nm.004
+STDOUT:f07d7ede                  XCU.nm.005
+STDOUT:b97069fb                  XCU.nm.005
+STDOUT:6dc7eb86                  XCU.nm.005
+STDOUT:f3d5b2cd                  XCU.nm.007
+STDERR:b2905b3f                  todo  diagnostics are not examined
+OUTPUT_FILES:eb724aff            none  none
+EXTENDED_DESCRIPTION:eb724aff    none  none
+EXIT_STATUS:db823381             none  introduces the list
+EXIT_STATUS:8b075da2             XCU.nm.009
+EXIT_STATUS:9d252ff7             XCU.nm.010
+CONSEQUENCES_OF_ERRORS:d92f27bd  none  default

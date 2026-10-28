@@ -1,0 +1,68 @@
+# XCU val
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# SCCS files are made and inspected only with the SCCS utilities (admin,
+# get, delta, prs and friends); the file format is unspecified so nothing
+# reads the files directly. A missing companion utility makes the test
+# UNRESOLVED. Login names, dates and the diagnostic texts are never compared
+# literally.
+
+assertion  XCU.val.001
+anchor     utilities/val.html#EXIT STATUS
+anchor     utilities/val.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       val on an intact SCCS file writes nothing and exits 0.
+test       t/001-valid-file.sh
+
+assertion  XCU.val.002
+anchor     utilities/val.html#OPTIONS
+anchor     utilities/val.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       -r of an existing SID passes, a nonexistent SID sets 0x04, and an
+           ambiguous or invalid SID sets 0x08.
+test       t/002-sid-check.sh
+
+assertion  XCU.val.003
+anchor     utilities/val.html#OPTIONS
+anchor     utilities/val.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       A -m name that is not the module name sets 0x01 and a -y type
+           that is not the type flag sets 0x02, matching values give 0.
+test       t/003-module-and-type.sh
+
+assertion  XCU.val.004
+anchor     utilities/val.html#OPTIONS
+anchor     utilities/val.html#STDOUT
+anchor     utilities/val.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       A file that is not SCCS sets 0x10, no file operand sets 0x80, an
+           unknown option sets 0x40, messages start with the pathname and -s
+           silences them.
+test       t/004-bad-input.sh
+
+assertion  XCU.val.005
+anchor     utilities/val.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       Over several files the status is the OR of the individual codes.
+test       t/005-aggregate.sh
+
+assertion  XCU.val.006
+anchor     utilities/val.html#OPERANDS
+anchor     utilities/val.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       With the - operand each input line is a command line, and a
+           discrepancy is reported as the input line, an empty line and an
+           indented pathname message.
+test       t/006-stdin-lines.sh

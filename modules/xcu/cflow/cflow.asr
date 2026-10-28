@@ -1,0 +1,97 @@
+# XCU cflow
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# cflow run on small C sources whose line numbers are known; the exact type
+# text, order of callees and spacing are not specified, so the checks read
+# the reference number, the indentation column of each name, the angle-
+# bracket location and the presence of names.
+
+assertion  XCU.cflow.001
+anchor     utilities/cflow.html#STDOUT
+anchor     utilities/cflow.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       Each output line starts with its line number as the reference
+           number, callees are indented deeper than their callers, a
+           definition from C source ends with the file name and line number
+           in angle brackets, and by default only functions not starting
+           with an underscore are shown.
+note       Q-178 in docs/standard-issues.md: the format string and the
+           example leave the indentation and repeated calls open; the test
+           reads indentation as the name column and checks a repeat only
+           under a different caller.
+test       t/001-graph-format.sh
+
+assertion  XCU.cflow.002
+anchor     utilities/cflow.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       Once a name has been written with its definition, a later mention
+           of it carries the reference number of that line and no
+           definition.
+note       Q-178 in docs/standard-issues.md: the format string and the
+           example leave the indentation and repeated calls open; the test
+           reads indentation as the name column and checks a repeat only
+           under a different caller.
+test       t/002-repeated-callee.sh
+
+assertion  XCU.cflow.003
+anchor     utilities/cflow.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       With -r the listing shows the callers of each function, indented
+           under the callee, and the callees at the outermost level are in
+           lexicographic order.
+test       t/003-reverse.sh
+
+assertion  XCU.cflow.004
+anchor     utilities/cflow.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -d with a small depth cuts deeper callees from the graph, a large
+           depth changes nothing, and a depth of zero or a negative number
+           is ignored.
+test       t/004-depth.sh
+
+assertion  XCU.cflow.005
+anchor     utilities/cflow.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -i x adds external and static data symbols to the graph, -i _
+           adds names that begin with an underscore, and each is absent
+           without its option.
+test       t/005-include-symbols.sh
+
+assertion  XCU.cflow.006
+anchor     utilities/cflow.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -D defines a macro, -U removes it, the later of -D and -U for a
+           name wins, and -I adds a directory searched for quoted include
+           files.
+note       Q-177 in docs/standard-issues.md: the synopsis says -U dir; the
+           test gives -U a macro name as c17 does.
+test       t/006-preprocessor-options.sh
+
+assertion  XCU.cflow.007
+anchor     utilities/cflow.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       A file operand that cannot be read gives a non-zero exit status.
+test       t/007-missing-file.sh
+
+assertion  XCU.cflow.008
+anchor     utilities/cflow.html#OPERANDS
+class      conditional
+when       XSI
+since      1992
+says       A file with the suffix .i is taken as the output of preprocessing
+           C source and gives the same call graph.
+test       t/008-preprocessed-input.sh

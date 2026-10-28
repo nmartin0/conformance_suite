@@ -1,0 +1,96 @@
+# XCU uuencode
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# uuencode: historical and Base64 encodings, header and trailer lines, line
+# lengths, padding, the begin line carrying the mode and the decode
+# pathname. Exact output is compared only where the page fixes it.
+
+assertion  XCU.uuencode.001
+anchor     utilities/uuencode.html#STDOUT
+class      required
+since      1992
+says       Without -m, input "Cat" from standard input gives a begin line
+           "begin MODE NAME", the single data line "#0V%T", a line holding
+           only a space or a grave accent, and the line "end". The decode
+           pathname operand is carried unchanged in the begin line.
+test       t/001-historical-exact.sh
+
+assertion  XCU.uuencode.002
+anchor     utilities/uuencode.html#STDOUT
+class      required
+since      1992
+says       Empty input without -m gives the begin line, then a line holding
+           only a space or a grave accent, then "end".
+test       t/002-historical-empty.sh
+
+assertion  XCU.uuencode.003
+anchor     utilities/uuencode.html#STDOUT
+class      required
+since      1992
+says       Without -m, 50 input bytes of ordinary text give data lines each
+           starting with a length character that stands for 1 to 45 bytes
+           and followed by exactly the four-for-three encoding of that many
+           bytes; the byte counts add up to 50.
+test       t/003-historical-line-split.sh
+
+assertion  XCU.uuencode.004
+anchor     utilities/uuencode.html#DESCRIPTION
+class      required
+since      1992
+says       For an input file with permission bits rw-r----- the begin line
+           holds that mode, in octal (640) or in symbolic notation that
+           chmod turns into those bits, and the decode pathname.
+test       t/004-mode-in-begin.sh
+
+assertion  XCU.uuencode.005
+anchor     utilities/uuencode.html#DESCRIPTION
+anchor     utilities/uuencode.html#OPERANDS
+class      required
+since      1992
+says       Encoding the named file gives the same data lines as encoding the
+           same bytes from standard input.
+test       t/005-file-operand.sh
+
+assertion  XCU.uuencode.006
+anchor     utilities/uuencode.html#STDOUT
+anchor     utilities/uuencode.html#OPTIONS
+class      required
+since      2001
+says       With -m, input "Cat" gives the begin line "begin-base64 MODE
+           NAME", the single line "Q2F0" and the line "====".
+test       t/006-base64-exact.sh
+
+assertion  XCU.uuencode.007
+anchor     utilities/uuencode.html#STDOUT
+class      required
+since      2001
+says       With -m, one input byte "a" gives "YQ==" and two input bytes "ab"
+           gives "YWI=" as the single data line.
+test       t/007-base64-padding.sh
+
+assertion  XCU.uuencode.008
+anchor     utilities/uuencode.html#STDOUT
+class      required
+since      2001
+says       With -m, 100 input bytes encode to the expected 136-character
+           string (33 groups and a padded final group) once the line breaks
+           are removed, and no line is longer than 76 characters.
+test       t/008-base64-line-length.sh
+
+assertion  XCU.uuencode.009
+anchor     utilities/uuencode.html#INPUT FILES
+anchor     utilities/uuencode.html#STDOUT
+class      required
+since      1992
+says       Input bytes 0x00 0xff 0x80 encode to "AP+A" with -m and, without
+           -m, to the data line "#" then a space-or-grave, "/", "^", a
+           space-or-grave.
+test       t/009-binary-input.sh
+
+assertion  XCU.uuencode.010
+anchor     utilities/uuencode.html#EXIT STATUS
+class      required
+since      1992
+says       An unreadable or nonexistent input file gives a nonzero exit
+           status.
+test       t/010-missing-file.sh

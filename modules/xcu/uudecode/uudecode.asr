@@ -1,0 +1,102 @@
+# XCU uudecode
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# uudecode: decoding both formats, output name from the data or -o, standard
+# output cookies, mode setting, overwriting.
+
+assertion  XCU.uudecode.001
+anchor     utilities/uudecode.html#DESCRIPTION
+anchor     utilities/uudecode.html#OUTPUT FILES
+class      required
+since      1992
+says       Decoding historical-format data whose begin line gives mode 640
+           and a name creates that file holding the decoded bytes, with
+           permission bits rw-r----- even when the file mode creation mask
+           is 077.
+test       t/001-historical-file.sh
+
+assertion  XCU.uudecode.002
+anchor     utilities/uudecode.html#OPTIONS
+class      required
+since      2001
+says       With -o outfile the decoded bytes go to outfile and no file with
+           the name from the data is created.
+test       t/002-output-option.sh
+
+assertion  XCU.uudecode.003
+anchor     utilities/uudecode.html#DESCRIPTION
+anchor     utilities/uudecode.html#STDOUT
+class      required
+since      2001
+says       A name of /dev/stdout, whether given by the data or by -o, sends
+           the decoded bytes to standard output.
+test       t/003-stdout-cookies.sh
+
+assertion  XCU.uudecode.004
+anchor     utilities/uudecode.html#DESCRIPTION
+anchor     utilities/uuencode.html#STDOUT
+class      required
+since      2001
+says       Data in the begin-base64 format ending in the "====" line decodes
+           to the original bytes.
+test       t/004-base64-input.sh
+
+assertion  XCU.uudecode.005
+anchor     utilities/uudecode.html#DESCRIPTION
+anchor     utilities/uudecode.html#STDIN
+class      required
+since      1992
+says       With no file operand the encoded data is read from standard
+           input.
+test       t/005-stdin-input.sh
+
+assertion  XCU.uudecode.006
+anchor     utilities/uudecode.html#OUTPUT FILES
+anchor     utilities/uudecode.html#DESCRIPTION
+class      required
+since      1992
+says       For inputs of 0, 1, 2, 3, 44, 45, 46 and 100 bytes holding non-
+           text bytes, uuencode piped to uudecode (both algorithms) gives
+           back exactly the original bytes.
+test       t/006-roundtrip.sh
+
+assertion  XCU.uudecode.007
+anchor     utilities/uudecode.html#DESCRIPTION
+class      required
+since      1992
+says       If the output file already exists and can be written, its old
+           contents are replaced entirely by the decoded bytes.
+test       t/007-overwrite.sh
+
+assertion  XCU.uudecode.008
+anchor     utilities/uudecode.html#DESCRIPTION
+class      required
+since      1992
+says       Text lines before the begin line are skipped and the data after
+           it is decoded.
+test       t/008-leading-text.sh
+
+assertion  XCU.uudecode.009
+anchor     utilities/uudecode.html#EXIT STATUS
+class      required
+since      1992
+says       A nonexistent input file gives a nonzero exit status.
+test       t/009-missing-input.sh
+
+assertion  XCU.uudecode.010
+anchor     utilities/uudecode.html#STDOUT
+class      required
+since      1992
+says       When the output is a named file, nothing is written to standard
+           output.
+test       t/010-no-stdout-use.sh
+
+assertion  XCU.uudecode.011
+anchor     utilities/uudecode.html#DESCRIPTION
+anchor     utilities/uudecode.html#OPTIONS/-o
+anchor     utilities/uudecode.html#STDOUT
+class      required
+since      2024
+says       A name of -, whether given by the data or by -o, sends the decoded
+           bytes to standard output and creates no file of that name.
+test       t/011-dash-cookie.sh

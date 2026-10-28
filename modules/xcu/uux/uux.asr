@@ -1,0 +1,30 @@
+# XCU uux
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# uux runs a command on a remote system; remote execution cannot be
+# observed, but the page requires four redirection operators to be refused
+# before anything is queued, and that check needs no remote system.
+
+assertion  XCU.uux.001
+anchor     utilities/uux.html#DESCRIPTION
+anchor     utilities/uux.html#EXIT STATUS
+class      conditional
+when       UU
+since      1992
+says       A command string using the redirection operators >>, <<, >| or >&
+           is rejected with a non-zero exit status.
+test       t/001-redirections-refused.sh
+
+assertion  XCU.uux.002
+anchor     utilities/uux.html#DESCRIPTION
+anchor     utilities/uux.html#OPTIONS
+anchor     utilities/uux.html#OPERANDS
+class      untestable
+since      1992
+says       uux gathers the files named in the command string, runs the
+           pipeline on the named system and sends its standard output to a
+           file, with -j writing a job identification, -n suppressing mail
+           and -p taking the command's standard input from uux's.
+reason     Remote execution needs a configured remote system and a
+           communications line, and the effects (a job queue entry, a run on
+           another machine, mail) lie outside the test system.

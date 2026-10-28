@@ -1,0 +1,67 @@
+# XCU prs
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# SCCS files are made and inspected only with the SCCS utilities (admin,
+# get, delta, prs and friends); the file format is unspecified so nothing
+# reads the files directly. A missing companion utility makes the test
+# UNRESOLVED. Login names, dates and the diagnostic texts are never compared
+# literally.
+
+assertion  XCU.prs.001
+anchor     utilities/prs.html#DESCRIPTION
+anchor     utilities/prs.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       With no -r, prs writes the SCCS pathname and then, for each
+           delta, the delta line, line statistics, MR and comment headings.
+test       t/001-default-output.sh
+
+assertion  XCU.prs.002
+anchor     utilities/prs.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       The keywords :I: :R: :L: :B: :S: :DT: :Li: :Ld: :Lu: :DS: :DP:
+           :M: :F: :Z: :W: :D: :T: and their parts give the stored values;
+           \t and \n in the data specification are a tab and a newline.
+test       t/002-data-keywords.sh
+
+assertion  XCU.prs.003
+anchor     utilities/prs.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -r picks one delta (the latest with no SID), -e adds all earlier
+           ones and -l all later ones, and a cutoff before every delta with
+           -e selects nothing.
+test       t/003-select-deltas.sh
+
+assertion  XCU.prs.004
+anchor     utilities/prs.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       :C: gives the comment given to delta and :P: is not empty.
+test       t/004-comments.sh
+
+assertion  XCU.prs.005
+anchor     utilities/prs.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       Without -a only existing deltas are shown; with -a a removed
+           delta is shown with type R.
+test       t/005-removed-deltas.sh
+
+assertion  XCU.prs.006
+anchor     utilities/prs.html#OPERANDS
+anchor     utilities/prs.html#STDIN
+anchor     utilities/prs.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       A directory operand processes each SCCS file in it and ignores
+           other files, a - operand reads names from standard input, and a
+           missing file gives a non-zero status.
+test       t/006-operands.sh

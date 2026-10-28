@@ -1,0 +1,19 @@
+# XCU uustat
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# uustat reports on or cancels queued uucp requests; the output format is
+# unspecified and a request must exist, so the page is recorded as
+# untestable.
+
+assertion  XCU.uustat.001
+anchor     utilities/uustat.html#DESCRIPTION
+anchor     utilities/uustat.html#OPTIONS
+anchor     utilities/uustat.html#STDOUT
+class      untestable
+since      1992
+says       uustat writes the status of the user's uucp requests (job ID,
+           user and remote system at least), and -q, -k, -r, -s and -u list
+           queues, cancel, refresh or select requests.
+reason     Meaningful output needs queued requests, which can only be made
+           with a configured remote system, and the format is unspecified;
+           cancelling or touching a job would act on the real queue.

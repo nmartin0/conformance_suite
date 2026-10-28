@@ -1,0 +1,88 @@
+# XCU cxref
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# cxref output format is unspecified beyond the file name line, the sorted
+# symbols, the declaring asterisk, the function name and the line numbers;
+# the tests find the block of lines that starts at a symbol in the first
+# column and look for those pieces in it; a listing laid out otherwise is
+# UNRESOLVED, not FAIL.
+
+assertion  XCU.cxref.001
+anchor     utilities/cxref.html#STDOUT
+anchor     utilities/cxref.html#DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       The listing starts with the input file name on its own line, then
+           has an entry for auto, static and global symbols and for macros
+           from #define, each giving its line numbers with an asterisk
+           before the declaring one and the name of the function it appears
+           in.
+test       t/001-listing.sh
+
+assertion  XCU.cxref.002
+anchor     utilities/cxref.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       The symbols in the listing are sorted, in the collation sequence
+           of the POSIX locale.
+test       t/002-sorted.sh
+
+assertion  XCU.cxref.003
+anchor     utilities/cxref.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -s leaves out the line with the input file name.
+test       t/003-silent.sh
+
+assertion  XCU.cxref.004
+anchor     utilities/cxref.html#OPTIONS
+anchor     utilities/cxref.html#OUTPUT FILES
+class      conditional
+when       XSI
+since      1992
+says       -o sends the listing to the named file instead of standard
+           output.
+test       t/004-output-file.sh
+
+assertion  XCU.cxref.005
+anchor     utilities/cxref.html#OPTIONS
+anchor     utilities/cxref.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       Without -c each input file has its own portion starting with its
+           file name; with -c the files are cross-referenced together in one
+           sorted list of symbols.
+test       t/005-combined.sh
+
+assertion  XCU.cxref.006
+anchor     utilities/cxref.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       With -w and a number of 51 or more, no output line is wider than
+           that many columns even for a symbol with many references.
+note       Q-179 in docs/standard-issues.md: only widths of 51 and above are
+           tested.
+test       t/006-width.sh
+
+assertion  XCU.cxref.007
+anchor     utilities/cxref.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -D defines and -U removes a macro, the later of the two for a
+           name wins, and -I names a directory searched for quoted include
+           files.
+test       t/007-preprocessor-options.sh
+
+assertion  XCU.cxref.008
+anchor     utilities/cxref.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       A file operand that cannot be read gives a non-zero exit status.
+test       t/008-missing-file.sh
