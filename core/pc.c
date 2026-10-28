@@ -72,14 +72,40 @@ static void pc_set_phase_env(const char *v)
 	(void)setenv("PC_PHASE", v, 1);
 }
 
+/*
+ * Negative-control switch (ci/nullsys.sh, docs/negative-control.md). The
+ * "null system" is a preloaded library that replaces every standard
+ * function with a stub that fails; it must act only while a test is in its
+ * test phase, never in the helper or in the driver's own code. The library
+ * learns the phase from getenv() calls with two names no variable has: it
+ * defines getenv() and takes "PC_NULLSYS_ON" as "stubs on" and
+ * "PC_NULLSYS_OFF" as "stubs off". Without the library getenv() just
+ * returns a null pointer and nothing happens. The rule: switch off first
+ * thing on entering any helper code (pc_internal_enter), and on again only
+ * as the very last act of leaving it (pc_internal_leave). pc_gate_on
+ * remembers the state for helpers that must restore it.
+ */
+static int pc_gate_on;
+
+static void pc_gate(int on)
+{
+	static const char *volatile sink;
+
+	sink = getenv(on ? "PC_NULLSYS_ON" : "PC_NULLSYS_OFF");
+	(void)sink;
+	pc_gate_on = on;
+}
+
 static void pc_internal_enter(void)
 {
+	pc_gate(0);
 	pc_set_phase_env("internal");
 }
 
 static void pc_internal_leave(void)
 {
 	pc_set_phase_env(pc_phase == PC_TEST ? "test" : "setup");
+	pc_gate(pc_phase == PC_TEST);
 }
 
 _Noreturn static void pc_report(const char *code, const char *note)
@@ -155,12 +181,16 @@ _Noreturn void pc_fail(const char *fmt, ...)
 void pc_note(const char *fmt, ...)
 {
 	va_list ap;
+	int gate = pc_gate_on;
+
+	pc_gate(0);
 	va_start(ap, fmt);
 	fputs("note: ", stderr);
 	vfprintf(stderr, fmt, ap);
 	fputc('\n', stderr);
 	fflush(stderr);
 	va_end(ap);
+	pc_gate(gate);
 }
 
 /* ---------- phases ---------- */
@@ -205,6 +235,7 @@ void pc_check(int cond, const char *fmt, ...)
 
 	if (cond)
 		return;
+	pc_gate(0);	/* formatting the failure note is helper code */
 	va_start(ap, fmt);
 	if (fmt)
 		(void)vsnprintf(note, sizeof note, fmt, ap);
@@ -215,6 +246,8 @@ void pc_check(int cond, const char *fmt, ...)
 void pc_expect_err(long r, int err, const char *what)
 {
 	int e = errno;
+	if (r != -1 || e != err)
+		pc_gate(0);	/* the failure note is helper code */
 	if (r != -1)
 		pc_fail("%s: returned %ld, expected -1 with %s", what, r,
 		    pc_errname(err));
@@ -226,6 +259,8 @@ void pc_expect_err(long r, int err, const char *what)
 void pc_expect_ok(long r, const char *what)
 {
 	int e = errno;
+	if (r == -1)
+		pc_gate(0);	/* the failure note is helper code */
 	if (r == -1)
 		pc_fail("%s: failed with %s", what, pc_errname(e));
 }
@@ -242,11 +277,14 @@ const char *pc_errname(int e)
 {
 	static char unknown[32];
 	size_t i;
+	int gate = pc_gate_on;
 
 	for (i = 0; i < sizeof pc_errtab / sizeof pc_errtab[0]; i++)
 		if (pc_errtab[i].value == e)
 			return pc_errtab[i].name;
+	pc_gate(0);
 	(void)snprintf(unknown, sizeof unknown, "E?%d", e);
+	pc_gate(gate);
 	return unknown;
 }
 
