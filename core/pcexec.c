@@ -111,6 +111,8 @@ struct limit {
 static const struct limit limits[] = {
 #ifdef RLIMIT_AS
 	{ "as", RLIMIT_AS },
+#else
+	{ "as", RLIMIT_DATA },	/* no address-space limit here: bound the data segment */
 #endif
 	{ "core", RLIMIT_CORE },
 	{ "cpu", RLIMIT_CPU },

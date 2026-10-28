@@ -351,6 +351,13 @@ fi
 if [ -x "$pc_bin/pcpty" ]; then PC_PTY=$pc_bin/pcpty; else PC_PTY=; fi
 export PC_PTY
 pc_pcexec=$pc_bin/pcexec
+# A runaway test must not take the machine down: cap each test's memory
+# (address space; data segment where there is no such limit). PC_MEM_LIMIT
+# overrides the 2G default; 0 turns the cap off.
+case ${PC_MEM_LIMIT-2G} in
+0) pc_memcap= ;;
+*) pc_memcap="-l as=${PC_MEM_LIMIT-2G}" ;;
+esac
 pc_probe=$pc_bin/probe
 
 "$pc_pcexec" -w "$pc_trustdir" -o "$pc_trustdir/pcexec.status" -t 30 \
@@ -690,7 +697,7 @@ pc_assertion() {
 	    PC_MUTANT_FILE=${pc_mutant_file:-} \
 	    PC_SELFTEST_DIR=$ctx_results/survivors \
 	    "$pc_pcexec" -w "$ctx_tmp" -o "$pc_sfile" -t "${a_timeout:-60}" \
-	    $pc_extra -- "$@" >"$ctx_out/$pc_id.txt" 2>&1 </dev/null
+	    $pc_memcap $pc_extra -- "$@" >"$ctx_out/$pc_id.txt" 2>&1 </dev/null
 	pc_decide
 	# A disputed assertion (the standard can be read either way; its note
 	# says why) does not count a FAIL against the system: it is logged as
