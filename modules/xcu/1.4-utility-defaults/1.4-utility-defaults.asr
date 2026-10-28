@@ -1,0 +1,200 @@
+# XCU 1.4 Utility Description Defaults
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The defaults of XCU 1.4 apply to every standard utility; the tests probe a
+# representative set of mandatory utilities (each named utility is BASE).
+
+assertion  XCU.1.4-utility-defaults.001
+anchor     utilities/V3_chap01.html#1.4/unrecognized by the implementation
+class      required
+since      1992
+says       A standard utility given an option it does not recognize, or an option
+           that needs an argument without one, writes a diagnostic to standard
+           error and exits non-zero.
+note       A utility that accepts the probe option as an extension is skipped; at
+           least three of the probed utilities must reject it.
+test       t/001-option-diagnostics.sh
+
+assertion  XCU.1.4-utility-defaults.002
+anchor     utilities/V3_chap01.html#1.4/eight-bit transparency
+class      required
+since      1992
+says       Utilities process command-line arguments containing arbitrary non-NUL
+           bytes (including 0x01, 0x7f, 0x80 and 0xff) without altering them.
+test       t/002-args-eight-bit.sh
+
+assertion  XCU.1.4-utility-defaults.003
+anchor     utilities/V3_chap01.html#1.4/eight-bit transparency
+class      required
+since      1992
+says       Utilities process input files containing every byte value except NUL
+           and newline without altering them.
+test       t/003-input-eight-bit.sh
+
+assertion  XCU.1.4-utility-defaults.004
+anchor     utilities/V3_chap01.html#1.4/eight-bit transparency
+class      required
+since      1992
+says       Utilities process environment variable names and values containing
+           bytes with the high bit set without altering them.
+test       t/004-env-eight-bit.sh
+
+assertion  XCU.1.4-utility-defaults.005
+anchor     utilities/V3_chap01.html#1.4/first argument to be discarded
+class      required
+since      1992
+says       Standard utilities that accept no options but accept operands treat a
+           first argument of two hyphens as the end of options and discard it, so
+           operands may start with a hyphen.
+test       t/005-double-hyphen.sh
+
+assertion  XCU.1.4-utility-defaults.006
+anchor     utilities/V3_chap01.html#1.4/process those operands
+class      required
+since      1992
+says       Standard utilities process their operands in the order given on the
+           command line: cat, wc, head, tail, cksum and grep report files in
+           operand order.
+test       t/006-operand-order.sh
+
+assertion  XCU.1.4-utility-defaults.007
+anchor     utilities/V3_chap01.html#1.4/Not used
+class      required
+since      1992
+says       Utilities whose STDIN section reads "Not used" do not read standard
+           input when used as described: data waiting in a pipe is still there
+           afterwards.
+test       t/007-stdin-not-used.sh
+
+assertion  XCU.1.4-utility-defaults.008
+anchor     utilities/V3_chap01.html#1.4/Not used
+class      required
+since      1992
+says       Utilities whose STDOUT section reads "Not used" write nothing to
+           standard output when used as described.
+test       t/008-stdout-not-used.sh
+
+assertion  XCU.1.4-utility-defaults.009
+anchor     utilities/V3_chap01.html#1.4/diagnostic messages shall be sent
+class      required
+since      1992
+says       When a standard utility is used as described and no error occurs, it
+           writes nothing to standard error.
+test       t/009-stderr-diagnostics-only.sh
+
+assertion  XCU.1.4-utility-defaults.010
+anchor     utilities/V3_chap01.html#1.4/shall not depend on the existence
+class      required
+since      1992
+says       The output and exit status of filters such as cat, sort and wc do not
+           depend on unrelated environment variables defined by the standard,
+           such as ENV, FCEDIT, HISTFILE, HISTSIZE, MAIL, MAILCHECK, MAILPATH,
+           PS1, PS2, PS4, COLUMNS, LINES, CDPATH, OPTIND and OPTARG.
+test       t/010-env-independence.sh
+
+assertion  XCU.1.4-utility-defaults.011
+anchor     utilities/V3_chap01.html#1.4/properly positioned
+class      required
+since      2024
+says       When a standard utility reads a seekable input file and ends without
+           error before end-of-file, the file offset is left just past the last
+           byte it processed, so (sed -n 1q; cat) gives what tail -n +2 gives;
+           sed 2q, head -n 2 and dd bs=3 count=1 behave likewise.
+test       t/011-file-offset.sh
+
+assertion  XCU.1.4-utility-defaults.012
+anchor     utilities/V3_chap01.html#1.4/properly positioned
+class      required
+since      2024
+says       The read utility of the shell leaves a seekable standard input
+           positioned just past the line it consumed, and a shell reading
+           commands from such an input leaves the rest for the commands it runs.
+test       t/012-file-offset-read.sh
+
+assertion  XCU.1.4-utility-defaults.013
+anchor     utilities/V3_chap01.html#1.4/properly positioned
+class      required
+since      2024
+says       awk leaves a seekable standard input positioned just past the last
+           record it processed when it exits before end-of-file.
+test       t/013-file-offset-awk.sh
+
+assertion  XCU.1.4-utility-defaults.014
+anchor     utilities/V3_chap01.html#1.4/standard action
+class      required
+since      1992
+says       A utility whose ASYNCHRONOUS EVENTS section says Default and that
+           starts with SIGTERM or SIGHUP ignored keeps ignoring it: sleep, and
+           cat and sort blocked on a FIFO, survive the signal.
+timeout    60
+test       t/014-signal-ignored-inherited.sh
+
+assertion  XCU.1.4-utility-defaults.015
+anchor     utilities/V3_chap01.html#1.4/standard action
+class      required
+since      1992
+says       A utility whose ASYNCHRONOUS EVENTS section says Default and that
+           starts with SIGTERM or SIGHUP at the default action is terminated by
+           that signal: sleep, and cat and sort blocked on a FIFO, report a
+           signal-termination status.
+timeout    60
+test       t/015-signal-default-inherited.sh
+
+assertion  XCU.1.4-utility-defaults.016
+anchor     utilities/V3_chap01.html#1.4/removed by the implementation
+class      required
+since      1992
+says       Temporary files that standard utilities create in TMPDIR are removed
+           on both successful exit and exit because of errors: after sort, ed,
+           sed, awk and diff finish, nothing is left in the directory.
+timeout    60
+test       t/016-temp-files-removed.sh
+
+assertion  XCU.1.4-utility-defaults.017
+anchor     utilities/V3_chap01.html#1.4/temporary files
+class      required
+since      1992
+says       Several instances of the same utility running at once in one working
+           directory and sharing one TMPDIR do not disturb each other: six
+           concurrent sorts each produce the correct output.
+timeout    120
+test       t/017-temp-files-concurrent.sh
+
+assertion  XCU.1.4-utility-defaults.018
+anchor     utilities/V3_chap01.html#1.4/continue processing the next operand
+class      required
+since      1992
+says       When the requested action cannot be performed on one operand, the
+           utility writes a diagnostic, goes on to the next operand and exits
+           with a non-zero status: cat, rm, chmod, wc, head, cksum, mv, rmdir,
+           ls, cp, mkdir and touch.
+test       t/018-operand-failure-continues.sh
+
+assertion  XCU.1.4-utility-defaults.019
+anchor     utilities/V3_chap01.html#1.4/cannot be performed
+class      required
+since      1992
+says       When the action requested by an option or option-argument cannot be
+           performed, the utility writes a diagnostic and exits non-zero: sort -o
+           into a missing directory, and sed, grep and awk given an unreadable
+           script or pattern file.
+test       t/019-option-action-fails.sh
+
+assertion  XCU.1.4-utility-defaults.020
+anchor     utilities/V3_chap01.html#1.4/unrecoverable
+class      required
+since      1992
+says       When a utility meets an error (a missing operand file or an impossible
+           target), it writes a diagnostic to standard error and exits with a
+           non-zero status.
+test       t/020-error-diagnostic-status.sh
+
+assertion  XCU.1.4-utility-defaults.021
+anchor     utilities/V3_chap01.html#1.4/declaration utility
+class      required
+since      2024
+says       A standard utility other than those the standard names as declaration
+           utilities is not treated as one: with printf, echo and env, a word
+           such as name=~/x gets no tilde expansion and a word such as name=$var
+           is split into fields.
+test       t/021-not-declaration-utility.sh

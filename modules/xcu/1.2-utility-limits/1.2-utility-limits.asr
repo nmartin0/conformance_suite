@@ -1,0 +1,58 @@
+# XCU 1.2 Utility Limits
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The minimum values of the utility limits are observed through getconf and
+# the utilities the limits apply to.
+
+assertion  XCU.1.2-utility-limits.001
+anchor     utilities/V3_chap01.html#1.2/Utility Limit Minimum Values
+class      required
+since      1992
+says       getconf reports, for each of the symbolic utility limits BC_BASE_MAX,
+           BC_DIM_MAX, BC_SCALE_MAX, BC_STRING_MAX, COLL_WEIGHTS_MAX,
+           EXPR_NEST_MAX, LINE_MAX and RE_DUP_MAX, an integer that is at least
+           the stated minimum.
+test       t/001-getconf-minimums.sh
+
+assertion  XCU.1.2-utility-limits.002
+anchor     utilities/V3_chap01.html#1.2/{LINE_MAX}
+class      required
+since      1992
+says       Text utilities process input lines of 2047 bytes plus the newline
+           unchanged: cat, sort, sed, awk, cut, head, tail, uniq, grep, tee,
+           paste and wc.
+timeout    60
+test       t/002-line-max-lines.sh
+
+assertion  XCU.1.2-utility-limits.003
+anchor     utilities/V3_chap01.html#1.2/{RE_DUP_MAX}
+class      required
+since      1992
+says       An interval expression may repeat 255 times in a BRE and an ERE:
+           a{255} matches a line of exactly 255 a characters and does not match
+           254.
+test       t/003-re-dup-max.sh
+
+assertion  XCU.1.2-utility-limits.004
+anchor     utilities/V3_chap01.html#1.2/{EXPR_NEST_MAX}
+class      required
+since      1992
+says       expr evaluates an expression nested in 32 levels of parentheses.
+test       t/004-expr-nesting.sh
+
+assertion  XCU.1.2-utility-limits.005
+anchor     utilities/V3_chap01.html#1.2/{BC_BASE_MAX}
+class      required
+since      1992
+says       bc supports an output base of 99, a scale of 99, an array index of
+           2047 and a string constant of 1000 bytes.
+test       t/005-bc-limits.sh
+
+assertion  XCU.1.2-utility-limits.006
+anchor     utilities/V3_chap01.html#1.2/All numeric limits defined by the System Interfaces volume
+class      required
+since      1992
+says       The limits of the System Interfaces apply to utilities: getconf
+           reports PATH_MAX of at least 256 and NAME_MAX of at least 14, and
+           pathchk accepts a path of 239 bytes made of components of 14 bytes.
+test       t/006-path-limits.sh

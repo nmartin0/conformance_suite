@@ -1,0 +1,66 @@
+# XCU 1.5 Considerations for Utilities in Support of Files of Arbitrary Size
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# A sparse file just over 4 GiB is created with dd; where the file system or
+# limits do not allow it the tests report that the resource is not in use.
+
+assertion  XCU.1.5-large-files.001
+anchor     utilities/V3_chap01.html#1.5/The following utilities support files of any size up to the maximum that can be created by the implementation.
+class      required
+since      2008
+says       For a file larger than 4 GiB (a sparse file of 4294967297 bytes), ls
+           -l prints the exact size, test -s succeeds, find -size matches the
+           exact block and byte counts, and du and df succeed.
+timeout    120
+test       t/001-size-reporting.sh
+
+assertion  XCU.1.5-large-files.002
+anchor     utilities/V3_chap01.html#1.5/The following utilities support files of any size up to the maximum that can be created by the implementation.
+class      required
+since      2008
+says       dd interprets skip, seek and count values that place data beyond 4
+           GiB: reading with skip at 4294967296 bytes returns the byte stored
+           there, and writing with seek past 4 GiB gives a file of the expected
+           size.
+timeout    120
+test       t/002-dd-offsets.sh
+
+assertion  XCU.1.5-large-files.003
+anchor     utilities/V3_chap01.html#1.5/The following utilities support files of any size up to the maximum that can be created by the implementation.
+class      required
+since      2008
+says       cmp -l reports byte numbers above 4 GiB: two files of 4294967297 bytes
+           that differ only in the last byte give byte number 4294967297 with the
+           two values.
+timeout    300
+test       t/003-cmp-offsets.sh
+
+assertion  XCU.1.5-large-files.004
+anchor     utilities/V3_chap01.html#1.5/The following utilities support files of any size up to the maximum that can be created by the implementation.
+class      required
+since      2008
+says       cksum reports the exact size of a file larger than 4 GiB and the same
+           checksum whether it reads the file or its content through a pipe from
+           cat.
+timeout    300
+test       t/004-cksum-size.sh
+
+assertion  XCU.1.5-large-files.005
+anchor     utilities/V3_chap01.html#1.5/Set or report file size limit.
+class      required
+since      2008
+says       ulimit -f accepts a value above 2^32 and reports the same value back,
+           and with a limit just above the size of a file of 4294967297 bytes, a
+           write that produces such a file succeeds.
+timeout    60
+test       t/005-ulimit-large.sh
+
+assertion  XCU.1.5-large-files.006
+anchor     utilities/V3_chap01.html#1.5/The following utilities support files of any size up to the maximum that can be created by the implementation.
+class      required
+since      2008
+says       touch, chmod, chown, chgrp, ln, mv and rm operate on a file larger
+           than 4 GiB without changing its size: the size is still 4294967297
+           bytes after each, the link count follows ln and rm.
+timeout    120
+test       t/006-file-handling.sh

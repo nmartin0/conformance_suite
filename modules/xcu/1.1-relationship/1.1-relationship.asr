@@ -1,0 +1,141 @@
+# XCU 1.1 Relationship to Other Documents
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The defaults of XCU 1.1 (process attributes, file creation, file removal,
+# pathname resolution, arithmetic) are observed through standard utilities.
+# Operators and mathematical functions of the languages are tested where the
+# languages are (XCU.2.6-word-expansions, XCU.awk).
+
+assertion  XCU.1.1-relationship.001
+anchor     utilities/V3_chap01.html#1.1.1.1/Process Attributes
+class      required
+since      1992
+says       A process created by a utility's fork-and-exec has the attributes of
+           the creating process that the standard lists: current directory, file
+           mode creation mask, open file descriptors, real and effective user and
+           group IDs, supplementary groups and process group.
+test       t/001-process-attributes.sh
+
+assertion  XCU.1.1-relationship.002
+anchor     utilities/V3_chap01.html#1.1.1.2/Independent processes
+class      required
+since      1992
+says       A process started by another keeps running when its creator exits: a
+           background subshell started by a shell that then exits still completes
+           its work.
+timeout    60
+test       t/002-independent-processes.sh
+
+assertion  XCU.1.1-relationship.003
+anchor     utilities/V3_chap01.html#1.1.1.4/user ID of the file
+class      required
+since      1992
+says       A file that does not exist and is created by a utility or a shell
+           redirection is a regular file of length zero owned by the effective
+           user, with group the effective group or the directory's group, and
+           mode 0666 less the umask; a created directory is empty with mode 0777
+           less the umask, a created FIFO has mode 0666 less the umask, and the
+           file times are current.
+timeout    60
+test       t/003-creation-defaults.sh
+
+assertion  XCU.1.1-relationship.004
+anchor     utilities/V3_chap01.html#1.1.1.4/shall be truncated to zero length
+class      required
+since      1992
+says       When a utility creates a regular file that already exists as a regular
+           file, the file is truncated to zero length, its owner, group and
+           permission bits do not change, and its modification time is updated;
+           tee, a shell redirection, sort -o, dd of=, sed w and an awk
+           redirection all behave so.
+test       t/004-create-over-regular.sh
+
+assertion  XCU.1.1-relationship.005
+anchor     utilities/V3_chap01.html#1.1.1.4/Fail.
+class      required
+since      1992
+says       Creating a file where one of an incompatible type exists fails with a
+           diagnostic and leaves the existing object as it was: tee onto a
+           directory; mkdir over a directory, file or symbolic link; mkfifo over
+           a file, FIFO, directory or symbolic link; ln -s over a file, symbolic
+           link or FIFO.
+test       t/005-create-fails-existing.sh
+
+assertion  XCU.1.1-relationship.006
+anchor     utilities/V3_chap01.html#1.1.1.4/Follow link
+class      required
+since      1992
+says       When a utility creates a regular file and the name is an existing
+           symbolic link, the link is followed: the target is written, and a
+           missing target is created; the link itself stays a link.
+test       t/006-create-follows-symlink.sh
+
+assertion  XCU.1.1-relationship.007
+anchor     utilities/V3_chap01.html#1.1.1.4/Open FIFO
+class      required
+since      1992
+says       When a utility writes a regular file whose name is an existing FIFO,
+           it waits until the FIFO is open for reading and then opens it for
+           writing and carries on, so the data reaches the reader.
+timeout    60
+test       t/007-create-over-fifo.sh
+
+assertion  XCU.1.1-relationship.008
+anchor     utilities/V3_chap01.html#1.1.1.4/O_APPEND
+class      required
+since      1992
+says       When a utility appends to a file it opens it for appending without
+           truncating: tee -a keeps the old contents, creates a missing file, and
+           writes at the current end of a file that another process has meanwhile
+           emptied.
+timeout    60
+test       t/008-append-mode.sh
+
+assertion  XCU.1.1-relationship.009
+anchor     utilities/V3_chap01.html#1.1.1.4/access mode corresponding to the operation
+class      required
+since      1992
+says       A utility opens a file to read it with read access only and to write
+           it with write access only: a file the user can only read can be read
+           by cat, sort, wc, head, cksum, od, grep, sed, cut and awk, and a file
+           the user can only write can be written by tee, tee -a, a redirection,
+           dd, sort -o, cp and sed w.
+test       t/009-access-modes.sh
+
+assertion  XCU.1.1-relationship.010
+anchor     utilities/V3_chap01.html#1.1.1.5/link count
+class      required
+since      1992
+says       Removing a file takes its name away and decrements its link count; the
+           contents of a removed file stay readable through a descriptor opened
+           earlier; rmdir removes an empty directory; and removing a name from a
+           directory updates that directory's modification time.
+timeout    60
+test       t/010-file-removal.sh
+
+assertion  XCU.1.1-relationship.011
+anchor     utilities/V3_chap01.html#1.1.1.8/Pathname Resolution
+class      required
+since      1992
+says       Utilities resolve pathnames as the file hierarchy defines: dot, dot-
+           dot, repeated slashes and symbolic link components work, a trailing
+           slash after a non-directory and an empty pathname are errors.
+test       t/011-pathname-resolution.sh
+
+assertion  XCU.1.1-relationship.012
+anchor     utilities/V3_chap01.html#1.1.2.1/Arithmetic Precision and Operations
+class      required
+since      1992
+says       Integer values in the shell's arithmetic, in expr and in test cover at
+           least the range of a signed C long of 32 bits: 2147483647 and
+           -2147483648 can be produced, printed and compared.
+test       t/012-integer-long-range.sh
+
+assertion  XCU.1.1-relationship.013
+anchor     utilities/V3_chap01.html#1.1.2.1/initialized to zero
+class      required
+since      1992
+says       Variables of the standard utilities' own languages start at zero when
+           the input does not assign them: an awk variable or array element, a bc
+           variable or array element, and an unset shell name in arithmetic.
+test       t/013-uninitialized-zero.sh

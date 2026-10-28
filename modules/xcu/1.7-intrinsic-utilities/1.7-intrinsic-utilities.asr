@@ -1,0 +1,38 @@
+# XCU 1.7 Intrinsic Utilities
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The intrinsic utilities are found without a search of PATH.
+
+assertion  XCU.1.7-intrinsic-utilities.001
+anchor     utilities/V3_chap01.html#1.7/search during command search and execution
+class      required
+since      1992
+says       When PATH names a directory holding executable files named alias, cd,
+           command, getopts, hash, kill, read, type, ulimit, umask, unalias and
+           wait, invoking each of those names as a simple
+           command in the shell does not run the file.
+timeout    60
+test       t/001-no-path-search.sh
+
+assertion  XCU.1.7-intrinsic-utilities.002
+anchor     utilities/V3_chap01.html#1.7/Intrinsic Utilities
+class      required
+since      1992
+says       With PATH naming only an empty directory, type and command -v still
+           find each of the twelve intrinsic utilities that are not part of the
+           User Portability Utilities option (alias, cd, command, getopts, hash,
+           kill, read, type, ulimit, umask, unalias, wait).
+timeout    60
+test       t/002-found-with-empty-path.sh
+
+assertion  XCU.1.7-intrinsic-utilities.003
+anchor     utilities/V3_chap01.html#1.7/Intrinsic Utilities
+class      conditional
+when       UP
+since      1992
+says       The intrinsic utilities bg, fc, fg and jobs are found without a PATH
+           search: invoking them with PATH naming a directory of files of those
+           names does not run the files, and type and command -v find them when
+           PATH names only an empty directory.
+timeout    60
+test       t/003-up-intrinsic.sh

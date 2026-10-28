@@ -1,0 +1,27 @@
+# XCU 1.6 Built-In Utilities
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Utilities that a shell may build in must also exist as files reachable by
+# a PATH search and by the exec functions.
+
+assertion  XCU.1.6-built-in-utilities.001
+anchor     utilities/V3_chap01.html#1.6/regardless of whether they are also implemented as regular built-ins
+class      required
+since      1992
+says       Each standard utility that is neither a special built-in nor an
+           intrinsic utility (except kill, which is one) exists as an executable
+           file found by a search of PATH, and the file runs when named by its
+           path: echo, printf, true, false, test, [, kill, basename, dirname and
+           expr give their expected results.
+timeout    60
+test       t/001-exec-reachable.sh
+
+assertion  XCU.1.6-built-in-utilities.002
+anchor     utilities/V3_chap01.html#1.6/exec
+class      required
+since      1992
+says       Utilities that run other utilities (env, xargs, find -exec, and nohup,
+           nice and time where present) can run echo, printf, true, test, kill,
+           basename, dirname and expr, and false gives status 1 through env.
+timeout    60
+test       t/002-run-by-utilities.sh
