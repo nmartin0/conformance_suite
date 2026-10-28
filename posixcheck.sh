@@ -314,9 +314,9 @@ if ! pc_cache_get "$pc_k" "$pc_bin/probe"; then
 	    pc_abort "cannot build probe (see $pc_trustdir/probe.txt)"
 	pc_cache_put "$pc_k" "$pc_bin/probe"
 fi
-pc_k=$(pc_cache_key "pc.o: $pc_cc -D_POSIX_C_SOURCE=202405L $pc_ccstrict" "$pc_root"/core/*.c "$pc_root"/core/*.h)
+pc_k=$(pc_cache_key "pc.o: $pc_cc -D_XOPEN_SOURCE=800 $pc_ccstrict" "$pc_root"/core/*.c "$pc_root"/core/*.h)
 if ! pc_cache_get "$pc_k" "$pc_bin/pc.o"; then
-	"$pc_cc" -D_POSIX_C_SOURCE=202405L $pc_ccstrict -I "$pc_root/core" -c \
+	"$pc_cc" -D_XOPEN_SOURCE=800 $pc_ccstrict -I "$pc_root/core" -c \
 	    -o "$pc_bin/pc.o" "$pc_root/core/pc.c" >"$pc_trustdir/pc.txt" 2>&1 \
 	    </dev/null || pc_abort "cannot build pc.o (see $pc_trustdir/pc.txt)"
 	pc_cache_put "$pc_k" "$pc_bin/pc.o"
