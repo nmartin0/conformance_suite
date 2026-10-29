@@ -550,13 +550,13 @@ pc_log() {
 # Volume directory <-> ID prefix.
 pc_vol_upper() {
 	case $1 in
-	xbd) pc_vu=XBD ;; xsh) pc_vu=XSH ;; xcu) pc_vu=XCU ;; st) pc_vu=ST ;;
+	xbd) pc_vu=XBD ;; xsh) pc_vu=XSH ;; xcu) pc_vu=XCU ;; st) pc_vu=ST ;; conv) pc_vu=CONV ;;
 	*) pc_vu= ;;
 	esac
 }
 pc_vol_lower() {
 	case $1 in
-	XBD) pc_vl=xbd ;; XSH) pc_vl=xsh ;; XCU) pc_vl=xcu ;; ST) pc_vl=st ;;
+	XBD) pc_vl=xbd ;; XSH) pc_vl=xsh ;; XCU) pc_vl=xcu ;; ST) pc_vl=st ;; CONV) pc_vl=conv ;;
 	*) pc_vl= ;;
 	esac
 }

@@ -1,0 +1,150 @@
+# CONV layout - file system layout conventions
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tier CONVENTION. Sources read for this module (five descriptions):
+#   FHS  the Filesystem Hierarchy Standard, version 3.0, chapters 3 to 5
+#        (refspecs.linuxfoundation.org/FHS_3.0/fhs/)
+#   hier(7) as published by the three BSD projects (one manual each, called
+#        BSD-A, BSD-B and BSD-C below, in the order of the file names under
+#        conv-docs; conv/STATUS.md says which is which; they differ in detail)
+# Only what at least two of the five agree on is asserted. A failure is a
+# deviation for a person to judge (INSPECT), not a conformance bug.
+#
+# Deliberately not asserted: /home, /root, /opt, /srv, /boot, /media, /run
+# (listed by some sources as optional or by only one family); /lib, /libexec
+# (the sources disagree on /lib versus merged trees); the contents of
+# /etc beyond the databases in conv/etcdb; any file under /usr/bin by name.
+# A directory may be a symbolic link to one (merged trees, a /var/tmp that
+# points to /tmp, /var/run pointing to /run): every check follows links.
+
+assertion  CONV.layout.001
+anchor     FHS_3.0/fhs/ch03s02.html#3.2
+anchor     FHS_3.0/fhs/ch05s15.html#5.15
+anchor     hier(7)#/
+class      disputed
+says       The root, /bin, /sbin, /dev, /etc, /tmp, /usr, /var, /var/tmp and /mnt
+           each exist and resolve to a directory (a link to a directory counts).
+test       t/001-top-level.c
+note       tier CONVENTION. FHS 3.2 lists all but /var/tmp (that is 5.15) as
+           required in the root, as directories or links to directories; BSD-A,
+           BSD-B and BSD-C list all of them (BSD-C makes /var/tmp a link to
+           /tmp). Sources agree.
+nomutant   file-system check; fixture tree via PC_CONV_ROOT (conv/neg/run.sh)
+
+assertion  CONV.layout.002
+anchor     FHS_3.0/fhs/ch04s02.html#4.2
+anchor     FHS_3.0/fhs/ch05s02.html#5.2
+anchor     hier(7)#/usr
+class      disputed
+says       /usr/bin, /usr/sbin, /usr/lib, /usr/share, /usr/local, /var/log and
+           /var/run each exist and resolve to a directory.
+test       t/002-usr-var.c
+note       tier CONVENTION. FHS 4.2 requires /usr/{bin,lib,local,sbin,share}
+           and 5.2 /var/{log,run}; all three BSD manuals list /usr/bin,
+           /usr/sbin, /usr/lib, /usr/share, /var/log and /var/run; /usr/local is
+           listed by BSD-A and BSD-C (BSD-B lists a package tree instead).
+           Every directory has FHS and at least two BSD manuals, so the
+           sources agree.
+nomutant   file-system check; fixture tree via PC_CONV_ROOT (conv/neg/run.sh)
+
+assertion  CONV.layout.003
+anchor     FHS_3.0/fhs/ch03s18.html#3.18
+anchor     hier(7)#/tmp
+class      disputed
+says       /tmp is readable, writable and searchable by every user.
+test       t/003-tmp-world.c
+note       tier CONVENTION. FHS 3.18: /tmp must be available to programs that
+           need temporary files; the BSD manuals describe it as the place for
+           temporary files. No source states the permission bits; world access
+           is what "available to programs" needs. Sources silent on the mode,
+           none contradicts.
+nomutant   file-system check; fixture tree via PC_CONV_ROOT (conv/neg/run.sh)
+
+assertion  CONV.layout.004
+anchor     FHS_3.0/fhs/ch03s18.html#3.18
+anchor     hier(7)#/tmp
+class      disputed
+says       /tmp has the sticky bit set, so that users cannot remove each
+           other's files.
+test       t/004-tmp-sticky.c
+note       tier CONVENTION, widest practice. None of the five sources mentions
+           the sticky bit: this is the only assertion here that no source in
+           the set states. Kept because a shared writable directory without it
+           lets any user delete others' files; a person judges.
+nomutant   file-system check; fixture tree via PC_CONV_ROOT (conv/neg/run.sh)
+
+assertion  CONV.layout.005
+anchor     FHS_3.0/fhs/ch05s15.html#5.15
+anchor     hier(7)#/var/tmp
+class      disputed
+says       /var/tmp (or the directory it links to) is readable, writable and
+           searchable by every user.
+test       t/005-vartmp-world.c
+note       tier CONVENTION. FHS 5.15 and the BSD manuals describe /var/tmp as
+           temporary space that survives reboot; BSD-C makes it a link to
+           /tmp. No source states the mode (see CONV.layout.003).
+nomutant   file-system check; fixture tree via PC_CONV_ROOT (conv/neg/run.sh)
+
+assertion  CONV.layout.006
+anchor     FHS_3.0/fhs/ch05s15.html#5.15
+anchor     hier(7)#/var/tmp
+class      disputed
+says       /var/tmp (or the directory it links to) has the sticky bit set.
+test       t/006-vartmp-sticky.c
+note       tier CONVENTION, widest practice; no source in the set mentions the
+           sticky bit (see CONV.layout.004).
+nomutant   file-system check; fixture tree via PC_CONV_ROOT (conv/neg/run.sh)
+
+assertion  CONV.layout.007
+anchor     hier(7)#/home
+anchor     FHS_3.0/fhs/ch03s08.html#3.8
+class      disputed
+says       Every account in the password file whose shell is listed in the
+           shells file has an absolute home directory path that names an
+           existing directory.
+test       t/007-home-dirs.c
+note       tier CONVENTION. The passwd(5) manuals of BSD-A, BSD-B and BSD-C
+           define the home field as the directory used as the login shell's
+           initial working directory; FHS 3.8 says programs should query the
+           home directory rather than assume where it is. Accounts without a
+           login shell (system accounts) are left out because their home
+           field is often deliberately unusable. NOTINUSE when there is no
+           password file or no shells file.
+nomutant   reads the account databases; fixture files via PC_CONV_PASSWD and
+           PC_CONV_SHELLS (conv/neg/run.sh)
+
+assertion  CONV.layout.008
+anchor     FHS_3.0/fhs/ch03s04.html#3.4
+class      disputed
+says       "command -v sh" prints an absolute pathname of a regular file that
+           the caller can execute.
+test       t/008-command-v-sh.c
+note       tier CONVENTION. FHS 3.4 lists sh among the commands required in
+           /bin; hier(7) of BSD-A, BSD-B and BSD-C describe /bin as the
+           fundamental utilities. That the lookup yields a file path (not a
+           builtin name or a relative one) is the practice scripts rely on.
+nomutant   runs the system's own shell lookup; no library call to fault
+
+assertion  CONV.layout.009
+anchor     FHS_3.0/fhs/ch03s04.html#3.4
+anchor     hier(7)#/bin
+class      disputed
+says       /bin/sh exists and resolves to a regular file executable by everyone.
+test       t/009-bin-sh.c
+note       tier CONVENTION. FHS 3.4 lists sh in /bin; hier(7) of the three BSD
+           projects place the fundamental utilities there. Scripts commonly
+           name this path in their first line. Sources agree.
+nomutant   file-system check; fixture tree via PC_CONV_ROOT (conv/neg/run.sh)
+
+assertion  CONV.layout.010
+anchor     FHS_3.0/fhs/ch04s04.html#4.4
+anchor     hier(7)#/usr/bin
+class      disputed
+says       /usr/bin/env exists and resolves to a regular file executable by
+           everyone.
+test       t/010-usr-bin-env.c
+note       tier CONVENTION, practice only. The sources describe /usr/bin as the
+           place for common commands but none lists env by name; scripts name
+           this path in their first line to find an interpreter. Sources
+           silent on the file itself.
+nomutant   file-system check; fixture tree via PC_CONV_ROOT (conv/neg/run.sh)

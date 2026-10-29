@@ -1,0 +1,114 @@
+# CONV devnodes - device nodes under /dev
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tier CONVENTION. Sources: FHS 3.0 section 3.6 and chapter 6 (the
+# operating-system annex lists the nodes that must exist), hier(7) of the
+# three BSD projects (BSD-A, BSD-B, BSD-C as in conv/modules/conv/layout).
+#
+# What POSIX itself requires of /dev/null, /dev/tty and /dev/console (that
+# they exist, and what reading and writing them does) is not repeated here;
+# the module adds file type, mode and the nodes POSIX does not mention.
+#
+# Deliberately not asserted:
+#  - /dev/full: none of the four sources lists it
+#  - /dev/console: only BSD-B lists it among the sources; POSIX covers it
+#  - /dev/ptmx and the exact name of the master: no source names them;
+#    only the slave name that ptsname() returns is checked (007)
+#  - the mode and owner of a pty slave (no source states them)
+#  - /dev/kmem, /dev/mem, /dev/drum, /dev/klog, /dev/log: BSD-B only
+#  - the MAKEDEV script FHS 3.6 allows: optional
+#  - the device numbers: FHS says there is no requirement
+
+assertion  CONV.devnodes.001
+anchor     FHS_3.0/fhs/ch06.html#6.1.3
+anchor     hier(7)#/dev/null
+class      disputed
+says       /dev/null, /dev/zero and /dev/tty each exist and are character
+           special files (a link to one counts).
+test       t/001-char-special.c
+note       tier CONVENTION. FHS annex 6.1.3 lists null, zero and tty as devices
+           that must exist; BSD-A lists null, BSD-B null, zero and tty. FHS
+           and at least one BSD manual agree on each. That they are character
+           devices is the meaning of "device file" in both.
+nomutant   file-system check; fixture directory via PC_CONV_DEV (conv/neg/run.sh)
+
+assertion  CONV.devnodes.002
+anchor     FHS_3.0/fhs/ch06.html#6.1.3
+anchor     hier(7)#/dev/zero
+class      disputed
+says       Reading /dev/zero returns as many bytes as requested, all zero;
+           writing to it succeeds and discards the data.
+test       t/002-zero-reads.c
+note       tier CONVENTION. FHS annex 6.1.3 states both properties; BSD-B lists
+           the node as the zero device. POSIX does not require /dev/zero.
+           Sources agree.
+nomutant   file-system check; fixture directory via PC_CONV_DEV (conv/neg/run.sh)
+
+assertion  CONV.devnodes.003
+anchor     FHS_3.0/fhs/ch06.html#6.1.3
+class      disputed
+says       /dev/null, /dev/zero and /dev/tty can be read and written by their
+           owner, their group and everyone else.
+test       t/003-modes.c
+note       tier CONVENTION. Sources silent on the mode bits. FHS says any
+           process may rely on these nodes (reads and writes of null and
+           zero; a synonym for the caller's terminal for tty), which needs
+           mode 0666 for an unprivileged caller. Inferred, so a person judges.
+nomutant   file-system check; fixture directory via PC_CONV_DEV (conv/neg/run.sh)
+
+assertion  CONV.devnodes.004
+anchor     hier(7)#/dev/random
+class      disputed
+says       Each of /dev/urandom and /dev/random that exists is a character
+           special file that can be opened and read without blocking for 32
+           bytes twice, and the bytes read are not all alike and not repeated.
+test       t/004-random.c
+note       tier CONVENTION. Only BSD-A lists a random device ("random"); FHS,
+           BSD-B and BSD-C do not mention either. The sources therefore do
+           not agree that the nodes exist: existence is not asserted and the
+           test is NOTINUSE when neither is there. What is asserted of a node
+           that does exist is the behaviour that the name promises. A node
+           that would block is UNRESOLVED setup (the kernel has not
+           collected entropy yet), not a failure.
+nomutant   reads a device; no library call to fault
+
+assertion  CONV.devnodes.005
+anchor     hier(7)#/dev/fd
+class      disputed
+says       /dev/fd is a directory in which /dev/fd/N opens the same open file
+           as the process's descriptor N, for the three standard descriptors
+           and for one opened by the process.
+test       t/005-dev-fd.c
+note       tier CONVENTION. All three BSD manuals list /dev/fd/ ("file
+           descriptor files"). FHS is silent. Sources agree among the BSD
+           manuals. The comparison is by device and inode numbers, so it is
+           valid for files, pipes and terminals alike.
+nomutant   file-system check; no library call to fault
+
+assertion  CONV.devnodes.006
+anchor     hier(7)#/dev/stdin
+class      disputed
+says       Where /dev/stdin, /dev/stdout and /dev/stderr exist, each names the
+           same open file as descriptor 0, 1 and 2.
+test       t/006-stdio-names.c
+note       tier CONVENTION. Only BSD-B lists the three names; BSD-A and BSD-C
+           list /dev/fd/ only (CONV.devnodes.005). The sources disagree that
+           the names exist, so absence gives NOTINUSE; the check applies only
+           when at least one of the three is present, and then expects all.
+nomutant   file-system check; fixture directory via PC_CONV_DEV (conv/neg/run.sh)
+
+assertion  CONV.devnodes.007
+anchor     hier(7)#/dev/pts
+class      disputed
+when       XSI
+says       The slave name that ptsname() returns after posix_openpt(), grantpt()
+           and unlockpt() begins with /dev/, names an existing character
+           special file, and opening it gives a terminal.
+test       t/007-pty-names.c
+note       tier CONVENTION. BSD-A and BSD-B list /dev/pts/ for pseudo-terminals;
+           BSD-C lists none; FHS only says other nodes may exist. The name
+           pattern is therefore not asserted (pts/N, ttypN and others are all
+           accepted), only that the node is under /dev, which the three
+           sources that mention pseudo-terminals place there. POSIX leaves
+           the name unspecified. Fixture prefix via PC_CONV_PTY_PREFIX.
+nomutant   needs a pseudo-terminal pair; no library call to fault

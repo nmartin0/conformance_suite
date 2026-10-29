@@ -72,7 +72,7 @@ for m in mods:
             err(where, f"missing '{key}'")
     if not m.assertions:
         err(where, "module has no assertions")
-    if not (m.dir / (page + ".cov")).is_file():
+    if vol != "CONV" and not (m.dir / (page + ".cov")).is_file():
         err(where, f"no {page}.cov: classify every requirement unit "
                    f"(ci/coverage.py --stub {m.path})")
 
@@ -99,7 +99,9 @@ for m in mods:
                 if code not in OPTION_CODES:
                     err(here, f"'when {when}': unknown option code '{code}' (core/options.list)")
         since = a.get("since")
-        if since and since not in ("1988", "1992", "2001", "2008", "2024"):
+        if vol == "CONV" and since:
+            err(here, "'since' is for POSIX editions; a CONV assertion names its source in 'note'")
+        elif since and since not in ("1988", "1992", "2001", "2008", "2024"):
             err(here, f"'since {since}' is not an edition year "
                 "(1988, 1992, 2001, 2008, 2024)")
         if not a.anchors():
@@ -290,6 +292,28 @@ for f in sorted(root.rglob("*")):
         continue
     if any(m in text for m in MARKERS):
         err(f.relative_to(root), "contains text copied from the standard")
+
+# The conventions suite (volume CONV) is about specifications and practice
+# outside POSIX and must not name an operating system or C library in a
+# test, an assertion or a note (RULES 12). Records of one system's
+# observations (known-deviations.md, STATUS.md) are exempt.
+_OSNAMES = re.compile(r"\b(linux|glibc|musl|freebsd|openbsd|netbsd|dragonfly|debian|ubuntu|fedora|"
+                      r"macos|darwin|solaris|illumos|android|alpine|busybox|uclibc|bionic)\b", re.I)
+for m in mods:
+    if not m.path.startswith("conv/"):
+        continue
+    for f in sorted(m.dir.rglob("*")):
+        if f.is_file() and f.suffix in (".asr", ".c", ".sh", ".h") or f.name == "MODULE":
+            for n, line in enumerate(f.read_text(errors="ignore").splitlines(), 1):
+                if _OSNAMES.search(line):
+                    err(f"{f.relative_to(args.modules)}:{n}", "names an operating system or C library")
+for f in sorted((root / "conv").glob("*.md")) + sorted((root / "conv" / "lib").glob("*")) + \
+        sorted((root / "conv" / "neg").glob("*")):
+    if f.name in ("known-deviations.md", "STATUS.md") or not f.is_file():
+        continue
+    for n, line in enumerate(f.read_text(errors="ignore").splitlines(), 1):
+        if _OSNAMES.search(line):
+            err(f"{f.relative_to(root)}:{n}", "names an operating system or C library")
 
 if args.list_variants:
     for aid, va in variant_pairs:

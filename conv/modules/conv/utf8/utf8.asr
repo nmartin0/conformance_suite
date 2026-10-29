@@ -1,0 +1,123 @@
+# CONV utf8 - UTF-8 as RFC 3629 defines it
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tier FORMAL: RFC 3629 is the published specification. The tests run in an
+# installed locale whose code set is UTF-8 (chosen with pc_find_locale; NOTINUSE
+# if the system has none) and use the C interfaces mbrtowc() and wcrtomb()
+# as the system's decoder and encoder. The reference is conv/lib/u8.h, written
+# from the RFC's table (section 3) and grammar (section 4), independent of the
+# library under test.
+#
+# The C and POSIX standards leave much of this to the implementation (which
+# sequences a locale accepts, what wchar_t holds, how an error is shown). So
+# each assertion states only what the RFC requires: a well-formed sequence is
+# a character; an invalid one is not decoded (any non-success result is
+# accepted: -1 or -2); wcrtomb produces the RFC's shortest form and refuses
+# what the RFC prohibits. Value checks need wide characters that are Unicode
+# code points (__STDC_ISO_10646__), else those tests are NOTINUSE (001 then
+# still checks the decoding result's length). A failure here is a deviation
+# from the RFC, not from POSIX.
+#
+# Deliberately not asserted: the byte order mark (RFC section 6, a protocol
+# matter for readers of whole streams); noncharacters (U+FFFE, U+FFFF are
+# valid UTF-8 syntax and are accepted, not required to be treated specially);
+# normalization (section 10); the errno value of a failure; the state of
+# mbstate_t after an error.
+
+assertion  CONV.utf8.001
+anchor     rfc3629.txt#3
+anchor     rfc3629.txt#4
+class      required
+says       In a UTF-8 locale mbrtowc() decodes every well-formed sequence for
+           the numbers U+0000 to U+10FFFF other than U+D800 to U+DFFF, uses
+           exactly the 1 to 4 octets the RFC's table gives, and yields the
+           code point as the wide character.
+test       t/001-valid.c
+note       tier FORMAL (RFC 3629 sections 3 and 4). All 1112064 code points are
+           tested. Wide character value checked only where
+           __STDC_ISO_10646__ is defined. Sources do not disagree.
+nomutant   exhaustive positive check of the whole code space; negative mutants
+           of the decoder are carried by 002 to 006
+
+assertion  CONV.utf8.002
+anchor     rfc3629.txt#3
+anchor     rfc3629.txt#10
+class      required
+says       mbrtowc() does not decode overlong sequences: C0 and C1 leads, E0
+           followed by 80 to 9F, F0 followed by 80 to 8F, the five- and
+           six-octet forms whose value fits fewer octets, and the RFC's own
+           C0 AE and C0 AF examples.
+test       t/002-overlong.c
+note       tier FORMAL (RFC 3629 section 3 "MUST protect against decoding
+           invalid sequences" and section 10). The C standard leaves it open
+           whether a locale accepts such bytes; the RFC does not, so any
+           successful decode is a deviation from the RFC. Sources do not
+           disagree.
+
+assertion  CONV.utf8.003
+anchor     rfc3629.txt#3
+class      required
+says       mbrtowc() does not decode the surrogate range U+D800 to U+DFFF
+           (ED A0 80 to ED BF BF), including the RFC's example of a surrogate
+           pair written as two three-octet sequences.
+test       t/003-surrogates.c
+note       tier FORMAL (RFC 3629 section 3: the definition prohibits encoding
+           these numbers, and decoders MUST protect against invalid sequences).
+           Sources do not disagree.
+
+assertion  CONV.utf8.004
+anchor     rfc3629.txt#4
+anchor     rfc3629.txt#10
+class      required
+says       mbrtowc() does not decode a number above U+10FFFF (F4 90 80 80 and
+           up, including the five- and six-octet forms of the original
+           definition) or a lead byte F5 to FF, whatever follows it.
+test       t/004-above-range.c
+note       tier FORMAL (RFC 3629 section 3 limits the range to U+10FFFF and
+           section 4's grammar has no lead byte above F4; section 10 warns of
+           the longer forms). Sources do not disagree.
+
+assertion  CONV.utf8.005
+anchor     rfc3629.txt#4
+class      required
+says       mbrtowc() does not decode a sequence cut short, alone or followed by
+           a byte that is not a continuation byte.
+test       t/005-truncated.c
+note       tier FORMAL (RFC 3629 section 4: a character needs all its octets).
+           The C standard requires the "incomplete" result (-2) for a prefix;
+           this check accepts either failure result, since only the decoding
+           is what the RFC forbids. Sources do not disagree.
+
+assertion  CONV.utf8.006
+anchor     rfc3629.txt#4
+class      required
+says       mbrtowc() does not decode a continuation byte (80 to BF) standing
+           where a character begins, alone, before other text, or after a
+           complete character.
+test       t/006-stray-continuation.c
+note       tier FORMAL (RFC 3629 section 4: UTF8-tail only appears after a
+           lead octet). Sources do not disagree.
+
+assertion  CONV.utf8.007
+anchor     rfc3629.txt#3
+class      required
+says       For every code point from U+0000 to U+10FFFF other than the
+           surrogates, wcrtomb() writes exactly the shortest form the RFC's
+           table gives, with the right length.
+test       t/007-encode-shortest.c
+note       tier FORMAL (RFC 3629 section 3: the rows of the table are mutually
+           exclusive, one valid way to encode a character). NOTINUSE where wide
+           characters are not Unicode code points. Sources do not disagree.
+
+assertion  CONV.utf8.008
+anchor     rfc3629.txt#3
+anchor     rfc3629.txt#10
+class      required
+says       wcrtomb() fails for U+D800 to U+DFFF and for wide characters above
+           U+10FFFF.
+test       t/008-encode-refuses.c
+note       tier FORMAL (RFC 3629 section 3: the definition prohibits encoding
+           the surrogate numbers; section 10: the range must be limited to
+           U+10FFFF). The failure convention (return of -1) is the C one; the
+           RFC requires only that no sequence be produced. Sources do not
+           disagree.

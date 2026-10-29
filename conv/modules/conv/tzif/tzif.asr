@@ -1,0 +1,105 @@
+# CONV tzif - the time zone information file format, RFC 8536
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tier FORMAL: RFC 8536 is a published specification of the file format.
+# The tests parse the files themselves (conv/lib/tzif.h); no tool or library
+# reads them for the checks of 001 to 004. The zone database is found from the
+# caller's TZDIR (conv/run.sh passes it as PC_CONV_TZDIR) or the common
+# locations; NOTINUSE if there is none. Files whose version byte is beyond
+# '3' are outside this RFC and are not judged. Every TZif file below the
+# directory is checked (the whole database), a superset of the sample the
+# task named (UTC, a fixed-offset zone, zones with transitions, version 2+).
+#
+# Deliberately not asserted: the reserved bytes of the header (the RFC says
+# unused); the correctness of the zone data (that is the tz database's job,
+# not the format's); leap-second files beyond the record rules; instants
+# after the last transition other than the footer's agreement with it.
+
+assertion  CONV.tzif.001
+anchor     rfc8536.txt#3.1
+anchor     rfc8536.txt#3
+class      required
+says       Every TZif file starts with the magic TZif and a version byte that is
+           NUL, '2' or '3'; each header has a nonzero typecnt and charcnt and
+           isutcnt and isstdcnt that are zero or equal to typecnt; a version 1
+           file ends with its data block; a version 2 or 3 file continues with a
+           second header of the same version, a data block that fits in the
+           file, and a footer made of a newline, a TZ string without a newline
+           or NUL, and a newline that ends the file.
+test       t/001-layout.c
+note       tier FORMAL (RFC 8536 sections 3 and 3.1, the MUSTs). class required:
+           a failure is a conformance bug of the file or of its producer.
+           Sources do not disagree.
+nomutant   reads files; checked with a fixture database (conv/neg/run.sh)
+
+assertion  CONV.tzif.002
+anchor     rfc8536.txt#3.2
+class      required
+says       In both data blocks transition times are strictly ascending and
+           every transition type index is below typecnt; no utoff is -2^31 and
+           every isdst is 0 or 1; every designation index is below charcnt and
+           a NUL follows it inside the designations; leap-second records start
+           at a nonnegative time with a correction of 1 or -1, are at least
+           2419199 seconds apart and their corrections differ by exactly one;
+           indicators are 0 or 1 and a set UT indicator has its standard
+           indicator set.
+test       t/002-data.c
+note       tier FORMAL (RFC 8536 section 3.2, the MUSTs). Sources do not
+           disagree. Files that fail the layout rules are left to
+           CONV.tzif.001.
+nomutant   reads files; checked with a fixture database (conv/neg/run.sh)
+
+assertion  CONV.tzif.003
+anchor     rfc8536.txt#3.3
+anchor     rfc8536.txt#3.3.1
+class      required
+says       The footer TZ string of a version 2 file follows the POSIX TZ syntax
+           and a version 3 string follows it or the version 3 extensions; for a
+           footer that is nonempty and a file with transitions, evaluating the
+           string at the last transition gives the same offset, daylight-saving
+           flag and abbreviation as that transition's type.
+test       t/003-footer.c
+note       tier FORMAL (RFC 8536 sections 3.3 and 3.3.1, the MUSTs). The
+           consistency check evaluates the string with the system's localtime()
+           under TZ set to it, so it is skipped for version 3 strings that use
+           the extensions (a system need not implement them) and for a 32-bit
+           time_t. Sources do not disagree.
+nomutant   reads files; checked with a fixture database (conv/neg/run.sh)
+
+assertion  CONV.tzif.004
+anchor     rfc8536.txt#3.2
+anchor     rfc8536.txt#4
+class      disputed
+says       Files follow the recommendations: they are not version 1; transition
+           times are at least -2^59; utoff is within [-89999, 93599]; designations
+           are 3 to 6 alphanumerics, plus or minus; the footer does not begin
+           with a colon; the version 1 transitions are a contiguous run of the
+           version 2+ ones.
+test       t/004-recommendations.c
+note       tier FORMAL but SHOULD only (RFC 8536 sections 3.2, 3.3, 4): a
+           departure is not a conformance bug, so the class is disputed and the
+           result is INSPECT. A first version 1 transition of exactly -2^31 is
+           read as a range marker and left out of the subsequence rule (the
+           text speaks of "time changes"); a person may read it the other
+           way. Sources do not disagree on the rest.
+nomutant   reads files; checked with a fixture database (conv/neg/run.sh)
+
+assertion  CONV.tzif.005
+anchor     rfc8536.txt#3.2
+anchor     rfc8536.txt#3.3
+class      required
+says       With TZ set to a zone name, localtime() gives, at each of a spread of
+           transitions of the zone's version 2+ data and one second before it,
+           the offset from UT, the daylight-saving flag and the abbreviation
+           that the file lists for that instant (the type of the transition, or
+           of the previous one, type 0 before the first); for a zone without
+           transitions and with a plain-offset footer, the footer's.
+test       t/005-localtime-agrees.c
+note       tier FORMAL (RFC 8536 section 3.2: which type applies to an instant;
+           POSIX XBD 8.3 gives the meaning of TZ naming a file, which the RFC
+           relies on). The test also sets TZDIR to the directory it found, which
+           a system may ignore; then its own default database is compared with
+           the found one and a mismatch is a deviation. The zones are: UTC and
+           Etc/GMT+5 and Etc/GMT-14 (fixed offsets), America/New_York,
+           Europe/London, Asia/Kolkata, Australia/Lord_Howe, America/Sao_Paulo,
+           Europe/Paris; absent ones are skipped. Sources do not disagree.

@@ -11,7 +11,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-VOLUMES = {"xbd": "XBD", "xsh": "XSH", "xcu": "XCU", "st": "ST"}
+VOLUMES = {"xbd": "XBD", "xsh": "XSH", "xcu": "XCU", "st": "ST", "conv": "CONV"}
 ASR_KEYS = {"assertion", "anchor", "class", "when", "since", "says", "test",
             "needs", "timeout", "expect", "reason", "origin", "note", "uses",
             "nomutant"}

@@ -1,0 +1,75 @@
+# CONV xdg - the XDG Base Directory Specification, version 0.8
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tier CONVENTION: a published specification exists, but it is a
+# freedesktop.org agreement among desktop projects, not a formal standard
+# that a system claims. A failure is reported INSPECT for a person to judge.
+# Source: basedir.html (section numbers below are that page's).
+#
+# Deliberately not asserted (application duties, no system tooling to run):
+#  - relative paths in the XDG_* variables are invalid and must be ignored
+#  - $XDG_*_HOME / $XDG_*_DIRS precedence and the search order
+#  - $HOME/.local/bin appearing in PATH (a distribution duty, environment)
+#  - XDG_RUNTIME_DIR lifetime (login/logout, reboot), "local file system",
+#    "file change notifications", the periodic clean-up rules: not observable
+#    from a program with the interfaces every system has
+
+assertion  CONV.xdg.001
+anchor     basedir.html#3/XDG_RUNTIME_DIR
+class      disputed
+says       When XDG_RUNTIME_DIR is set in the environment the suite was started
+           from, it is an absolute path naming an existing directory owned by
+           the current user whose mode is exactly 0700.
+test       t/001-runtime-dir.c
+note       tier CONVENTION; source basedir.html section 3, uses MUST. A system
+           that sets the variable for a session is held to it. NOTINUSE when
+           the variable is unset (the specification then only asks an
+           application for a fallback). conv/run.sh passes the caller's value
+           as PC_CONV_XDG_RUNTIME_DIR. Sources do not disagree.
+nomutant   reads the caller's environment; checked with a fixture directory of
+           the wrong mode (conv/neg/run.sh)
+
+assertion  CONV.xdg.002
+anchor     basedir.html#3/XDG_RUNTIME_DIR
+class      disputed
+says       The directory named by XDG_RUNTIME_DIR supports symbolic links, hard
+           links with a correct link count, access modes, record locking seen
+           across processes, sparse files, shared memory mappings, AF_UNIX
+           sockets bound to a name in it, and file names made of any bytes
+           except slash and NUL.
+test       t/002-runtime-features.c
+note       tier CONVENTION; source basedir.html section 3 (the list of
+           features the directory must be fully featured for). File change
+           notifications are not tested (no portable interface). NOTINUSE when
+           the variable is unset. Sources do not disagree.
+
+assertion  CONV.xdg.003
+anchor     basedir.html#3/XDG_DATA_HOME
+anchor     basedir.html#3/XDG_CONFIG_HOME
+anchor     basedir.html#3/XDG_STATE_HOME
+anchor     basedir.html#3/XDG_CACHE_HOME
+anchor     basedir.html#4
+class      disputed
+says       With the XDG variables unset, a program can create the default
+           per-user directories under HOME (config, local data, state, cache)
+           with mode 0700, can create files in them, and a directory that
+           already exists keeps its mode.
+test       t/003-default-dirs.c
+note       tier CONVENTION; source basedir.html sections 3 and 4 (defaults and
+           the 0700 creation rule). Runs in the test's private HOME, so it
+           checks that the system lets a program do what the specification
+           asks, not any user's real home. Sources do not disagree.
+
+assertion  CONV.xdg.004
+anchor     basedir.html#3/XDG_DATA_DIRS
+anchor     basedir.html#3/XDG_CONFIG_DIRS
+class      disputed
+says       The data directory that the specification's default search path ends
+           with, /usr/share, exists and is a directory; the other default
+           search directories, /usr/local/share and /etc/xdg, are directories
+           wherever they exist.
+test       t/004-default-search-dirs.c
+note       tier CONVENTION; source basedir.html section 3 (the defaults). The
+           specification does not require the other two to exist. Sources do
+           not disagree.
+nomutant   file-system check; fixture tree via PC_CONV_ROOT (conv/neg/run.sh)
