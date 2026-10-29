@@ -17,7 +17,7 @@ got=$(printf 'a\nb\n' | sed 'N;y/\n/,/' 2>/dev/null; printf 'rc=%s' "$?")
 [ "$got" = "a,b${NL}rc=0" ] || pc_fail "y with \\n failed"
 [ "$(printf '%s\n' 'a\b' | sed 'y/\\/X/' 2>/dev/null)" = "aXb" ] || pc_fail "y with an escaped backslash failed"
 got=$(printf 'a\tb\\c\001d\n' | sed -n l 2>/dev/null; printf 'rc=%s' "$?")
-[ "$got" = 'a\tb\\c\001d$'"${NL}rc=0" ] || pc_fail "l did not give a\\tb\\\\c\\001d\$"
+[ "$got" = 'a\tb\\c\001d$'"${NL}rc=0" ] || pc_fail "l did not give a\\tb\\\\c\\001d\$ (got: $got)"
 got=$(printf 'x\n' | sed -n l 2>/dev/null; printf 'rc=%s' "$?")
 [ "$got" = "x\$${NL}rc=0" ] || pc_fail "l did not end the line with \$"
 got=$(printf 'a\bb\fc\rd\ve\n' | sed -n l 2>/dev/null; printf 'rc=%s' "$?")

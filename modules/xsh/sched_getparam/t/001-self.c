@@ -23,6 +23,8 @@ int main(void)
 	hi = sched_get_priority_max(pol);
 	if (hi == -1 && errno != 0)
 		pc_unresolved("no priority range for policy %d: %s", pol, pc_errname(errno));
+	if (lo == -1 || hi == -1)
+		pc_unresolved("the range of policy %d is reported as %d..%d: -1 is the failure value, so it cannot be taken as a bound", pol, lo, hi);
 	memset(&sp, 0x5a, sizeof sp);
 	sp.sched_priority = INT_MIN;
 	pc_test();

@@ -32,7 +32,7 @@ IN
 printf '\n.\nrenamed3\n.\n' >typed1
 printf '.\n\004' >typed2
 pc_test
-pc_pty_run -i typed1 inner1.sh
+pc_pty_run -c -i typed1 inner1.sh
 [ "$(cat i1.rc 2>/dev/null)" = 0 ] || pc_fail "pax -r -i exit status '$(cat i1.rc 2>/dev/null)'"
 for n in 1 2 3 4; do
 	grep -F "f$n" pty.out >/dev/null || pc_fail "no prompt on the terminal names f$n"
@@ -44,7 +44,7 @@ grep -F f1 i1.err >/dev/null && pc_fail "a prompt naming f1 was written to stand
 [ "$(cat renamed3 2>/dev/null)" = data3 ] || pc_fail "f3 was not extracted as renamed3"
 [ "$(cat f4 2>/dev/null)" = data4 ] || pc_fail "f4 was not extracted after the answer \".\""
 rm -f f1 f2 f3 f4 renamed3 pty.out
-pc_pty_run -i typed2 inner2.sh
+pc_pty_run -c -i typed2 inner2.sh
 rc=$(cat i2.rc 2>/dev/null)
 case $rc in
 ''|*[!0-9]*) pc_fail "pax -r -i did not finish after end-of-file on the terminal" ;;

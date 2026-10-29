@@ -11,16 +11,16 @@ rd() { v=$(cat "$1"; printf x); v=${v%x}; }
 pc_test
 loc decimal_point >out || pc_fail "locale decimal_point failed"
 rd out
-[ "$v" = ".$nl" ] || pc_fail "locale decimal_point wrote '$v', expected '.'"
+[ "$v" = ".$nl" ] || pc_fail "locale decimal_point wrote '$(printf %s "$v" | tr '\n' '|')', expected '.'"
 loc -k decimal_point >out || pc_fail "locale -k decimal_point failed"
 rd out
-[ "$v" = "decimal_point=\".\"$nl" ] || pc_fail "locale -k decimal_point wrote '$v'"
+[ "$v" = "decimal_point=\".\"$nl" ] || pc_fail "locale -k decimal_point wrote '$(printf %s "$v" | tr '\n' '|')'"
 loc -c decimal_point >out || pc_fail "locale -c decimal_point failed"
 rd out
-[ "$v" = "LC_NUMERIC$nl.$nl" ] || pc_fail "locale -c decimal_point wrote '$v'"
+[ "$v" = "LC_NUMERIC$nl.$nl" ] || pc_fail "locale -c decimal_point wrote '$(printf %s "$v" | tr '\n' '|')'"
 loc -ck decimal_point >out || pc_fail "locale -ck decimal_point failed"
 rd out
-[ "$v" = "LC_NUMERIC${nl}decimal_point=\".\"$nl" ] || pc_fail "locale -ck decimal_point wrote '$v'"
+[ "$v" = "LC_NUMERIC${nl}decimal_point=\".\"$nl" ] || pc_fail "locale -ck decimal_point wrote '$(printf %s "$v" | tr '\n' '|')'"
 loc -c LC_NUMERIC >out || pc_fail "locale -c LC_NUMERIC failed"
 read -r l <out
 [ "$l" = LC_NUMERIC ] || pc_fail "locale -c LC_NUMERIC starts with '$l'"

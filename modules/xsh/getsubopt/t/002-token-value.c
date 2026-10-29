@@ -14,18 +14,19 @@ static char *const keys[] = { k0, k1, k2, k3, NULL };
 int main(void)
 {
 	char s0[] = "name=foo", s1[] = "size=", s2[] = "rw=on";
-	char *opt, *val;
+	char *opt, *val, *end0;
 	int r;
 
 	pc_begin("XSH.getsubopt.002");
 	pc_test();
 	opt = s0;
+	end0 = s0 + strlen(s0);	/* before the call: it may overwrite the equals sign */
 	val = NULL;
 	r = getsubopt(&opt, keys, &val);
 	pc_check(r == 2, "\"name=foo\": returned %d, expected 2", r);
 	pc_check(val != NULL && strcmp(val, "foo") == 0, "\"name=foo\": the value is %s", val ? val : "(null)");
 	pc_check(val == s0 + 5, "\"name=foo\": the value pointer is not at the first character after the equals sign");
-	pc_check(opt == s0 + strlen(s0), "\"name=foo\": the option pointer is not at the terminating null");
+	pc_check(opt == end0, "\"name=foo\": the option pointer is not at the terminating null");
 	opt = s1;
 	val = NULL;
 	r = getsubopt(&opt, keys, &val);

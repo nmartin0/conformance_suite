@@ -29,10 +29,12 @@ export HOME
 ed -s f <in >out 2>err &
 pid=$!
 exec 3>in
-printf '$a\nadded\n.\n$p\n' >&3
+# the shell escape leaves a file when ed has run the commands before it, so no
+# assumption is made about when ed flushes its own standard output
+printf '$a\nadded\n.\n!: >ready\n' >&3
 i=0
-while [ ! -s out ] && [ "$i" -lt 20 ]; do sleep 1; i=$((i+1)); done
-[ -s out ] || pc_unresolved "ed did not answer a command"
+while [ ! -f ready ] && [ "$i" -lt 20 ]; do sleep 1; i=$((i+1)); done
+[ -f ready ] || pc_unresolved "ed did not run a command"
 kill -HUP "$pid" 2>/dev/null
 i=0
 while kill -0 "$pid" 2>/dev/null && [ "$i" -lt 20 ]; do

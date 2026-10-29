@@ -20,12 +20,19 @@ int main(void)
 	pc_begin("XSH.calloc.002");
 	pc_test();
 	for (i = 0; i < N; i++) {
-		size_t ne = 1 + i % 7, es = 1 + (i * 5) % 13;
+		size_t ne = 1 + i % 7, es = 1 + (i * 5) % 13, al;
 
 		n[i] = ne * es;
 		p[i] = calloc(ne, es);
 		pc_check(p[i] != NULL, "calloc(%lu, %lu) returned a null pointer", (unsigned long)ne, (unsigned long)es);
-		pc_check(((uintptr_t)p[i] % _Alignof(max_align_t)) == 0, "calloc(%lu, %lu) result %p is not aligned",
+		/*
+		 * The pointer must suit an object "in the space allocated": only the types that fit in n bytes
+		 * count, so a block shorter than the greatest fundamental alignment needs at most the largest
+		 * power of two not above its size.
+		 */
+		for (al = _Alignof(max_align_t); al > n[i]; al >>= 1)
+			;
+		pc_check(((uintptr_t)p[i] % al) == 0, "calloc(%lu, %lu) result %p is not aligned",
 		    (unsigned long)ne, (unsigned long)es, (void *)p[i]);
 		memset(p[i], (int)(i + 1), n[i]);
 	}

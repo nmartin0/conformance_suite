@@ -57,5 +57,5 @@ pc_test
 gencat c2.cat m2.msg </dev/null >out 2>err || pc_fail "gencat: nonzero status"
 ./getmsg ./c2.cat 1 1 1 2 1 3 1 4 1 5 1 6 1 7 1 8 >out 2>err || pc_fail "cannot read the catalog back"
 printf '[trailing  ]\n[tab\there]\n[back\\slash]\n[ABC]\n[line\none]\n[]\n[joined together]\n[]\n' >exp
-cmp out exp >/dev/null 2>&1 || pc_fail "messages read back as: $(cat out)"
+cmp out exp >/dev/null 2>&1 || pc_fail "messages read back as: $(tr '\n' ' ' <out)"
 pc_pass

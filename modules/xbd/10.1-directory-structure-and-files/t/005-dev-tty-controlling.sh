@@ -18,7 +18,7 @@ printf '%s\n' "$line" >typed.txt
 IN
 printf 'typed-text-5527\n' >input.txt
 pc_test
-pc_pty_run -i input.txt inner.sh
+pc_pty_run -c -i input.txt inner.sh
 grep 'MARKER-OUT-7431' pty.out >/dev/null 2>&1 || pc_fail "text written to /dev/tty did not reach the terminal"
 grep 'MARKER-OUT-7431' out.txt err.txt >/dev/null 2>&1 && pc_fail "text written to /dev/tty went to the redirected output"
 grep '^write 0$' rc.txt >/dev/null 2>&1 || pc_fail "writing to /dev/tty failed"

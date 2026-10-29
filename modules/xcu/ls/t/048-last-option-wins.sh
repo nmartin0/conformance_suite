@@ -16,6 +16,9 @@ got=$(lines -A -a)
 [ "$got" = '.|..|.h|a|b|c|' ] || pc_fail "ls -A -a: '$got', expected dot and dot-dot too"
 got=$(lines -a -A)
 [ "$got" = '.h|a|b|c|' ] || pc_fail "ls -a -A: '$got', expected neither dot nor dot-dot"
+# the dot file is only for the two checks above: without -A or -a a name that
+# begins with a period is written only on an implementation-defined condition
+rm d/.h || pc_unresolved "cannot remove d/.h"
 got=$(lines -F -p)
 [ "$got" = 'a|b|c/|' ] || pc_fail "ls -F -p: '$got', expected a, b and c/ (only -p is in effect)"
 got=$(lines -p -F)

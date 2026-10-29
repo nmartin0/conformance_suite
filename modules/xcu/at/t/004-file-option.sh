@@ -71,8 +71,8 @@ rc=$?
 		[ "$#" -ge 3 ] && [ "$1" = job ] && { jobs="$jobs $2"; jid=$2; }
 	done <"$d/se"
 }
-[ "$rc" -eq 0 ] || pc_unresolved "at -f with a good file failed (status $rc): the user may not be allowed to use at"
-[ -n "$jid" ] || pc_fail "at -f with a good file printed no job line"
+[ "$rc" -eq 0 ] || pc_unresolved "at -f with a good file failed (status $rc): the user may not be allowed to use at [stderr: $(tr '\n' ' ' <"$d/se" | head -c 160); stdout: $(tr '\n' ' ' <"$d/so" | head -c 80)]"
+[ -n "$jid" ] || pc_fail "at -f with a good file printed no job line [stderr: $(tr '\n' ' ' <"$d/se" | head -c 160); stdout: $(tr '\n' ' ' <"$d/so" | head -c 80)]"
 listed
 case " $ids" in
 *" $jid "*) ;;

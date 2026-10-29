@@ -303,7 +303,7 @@ int main(void)
 		long lo = 0, hi = 0, bad[4][2];
 		int k;
 		struct timespec b[2];
-		int fd, i;
+		int fd, i, r, e;
 
 		/* Values outside [0, 999999999] that are not UTIME_NOW or UTIME_OMIT, which may be any such values. */
 		for (k = 2; k >= 0; k--)
@@ -326,10 +326,13 @@ int main(void)
 			b[0] = ts(1200000000, bad[i][0]);
 			b[1] = ts(1200000000, bad[i][1]);
 			errno = 0;
-			pc_check(utimensat(AT_FDCWD, "f", b, 0) == -1 && errno == EINVAL, "utimensat() with case %d: errno %s", i,
-				 pc_errname(errno));
+			r = utimensat(AT_FDCWD, "f", b, 0);
+			e = errno;
+			pc_check(r == -1 && e == EINVAL, "utimensat() with case %d returned %d, errno %s", i, r, pc_errname(e));
 			errno = 0;
-			pc_check(futimens(fd, b) == -1 && errno == EINVAL, "futimens() with case %d: errno %s", i, pc_errname(errno));
+			r = futimens(fd, b);
+			e = errno;
+			pc_check(r == -1 && e == EINVAL, "futimens() with case %d returned %d, errno %s", i, r, pc_errname(e));
 		}
 		pc_check(kept_old("f"), "a failed call changed the times");
 	}

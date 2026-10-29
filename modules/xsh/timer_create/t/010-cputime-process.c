@@ -204,7 +204,12 @@ int main(void)
 		memset(&sev, 0, sizeof sev);
 		sev.sigev_notify = SIGEV_SIGNAL;
 		sev.sigev_signo = SIGRTMIN;
-		pc_check(timer_create(CLOCK_PROCESS_CPUTIME_ID, &sev, &id) == 0, "timer_create() failed: %s", pc_errname(errno));
+		int r, e;
+
+		errno = 0;
+		r = timer_create(CLOCK_PROCESS_CPUTIME_ID, &sev, &id);
+		e = errno;
+		pc_check(r == 0, "timer_create() failed: %s", pc_errname(e));
 	}
 	its = its_of(20 * MS, 0);
 	c0 = ns_of(CLOCK_PROCESS_CPUTIME_ID);

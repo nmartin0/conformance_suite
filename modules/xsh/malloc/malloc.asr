@@ -18,8 +18,10 @@ anchor     functions/malloc.html#DESCRIPTION
 class      required
 since      1988
 says       Every pointer malloc() returns, whatever the size (1 byte up),
-           is a multiple of the fundamental alignment, and objects of the
-           widest basic types can be stored through it and read back.
+           is aligned for any basic type that fits in the requested size (so
+           a multiple of the fundamental alignment once the block can hold the
+           widest basic type), and objects of the widest basic types can be
+           stored through it and read back.
 test       t/002-aligned.c
 
 assertion  XSH.malloc.003

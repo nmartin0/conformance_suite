@@ -9,17 +9,17 @@ mkdir d || pc_fail "cannot create d"
 : >d/f || pc_fail "cannot create d/f"
 ln -s f d/lk || pc_fail "cannot create symbolic link"
 pc_test
-l=$(ls -l d/lk) || pc_fail "ls -l failed"
+l=$(ls -l d/lk 2>err) || pc_fail "ls -l failed: $(cat err)"
 case $l in
 l*" d/lk -> f") ;;
 *) pc_fail "ls -l: $l" ;;
 esac
-l=$(ls -lL d/lk) || pc_fail "ls -lL failed"
+l=$(ls -lL d/lk 2>err) || pc_fail "ls -lL failed: $(cat err)"
 case $l in
 -*" d/lk") ;;
 *) pc_fail "ls -lL: $l" ;;
 esac
-l=$(ls -lH d/lk) || pc_fail "ls -lH failed"
+l=$(ls -lH d/lk 2>err) || pc_fail "ls -lH failed: $(cat err)"
 case $l in
 -*" d/lk") ;;
 *) pc_fail "ls -lH: $l" ;;

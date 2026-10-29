@@ -35,7 +35,8 @@ patch -i pchg t.txt >/dev/null 2>&1 </dev/null
 rm -f t.txt.rej
 patch -N -i pchg t.txt >/dev/null 2>&1 </dev/null
 want5 t.txt a b X d e || pc_fail "-N: the file was changed by an already-applied patch"
-[ ! -s t.txt.rej ] || pc_fail "-N: an already-applied patch was written to a reject file"
+# Whether an ignored hunk is also recorded in a reject file is not stated
+# (a reject file "may" be created), so only the file's content is checked.
 base
 rm -f t.txt.rej
 patch -N -i pchg t.txt >/dev/null 2>&1 </dev/null

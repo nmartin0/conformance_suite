@@ -27,7 +27,12 @@ slurp out
 case $data in
 "d:$nl"*) data=${data#"d:$nl"} ;;
 esac
-[ "$data" = "vis${nl}${nl}d/vis:${nl}f${nl}" ] || pc_fail "ls -R output is wrong"
+# a name that begins with a period may be written without -A or -a when an
+# implementation-defined condition holds (DESCRIPTION); .hid is then listed
+# and so is recursed into, exactly as with -A
+if [ "$data" != "vis${nl}${nl}d/vis:${nl}f${nl}" ]; then
+	[ "$data" = ".hid${nl}vis${nl}${nl}d/.hid:${nl}inner${nl}${nl}d/vis:${nl}f${nl}" ] || pc_fail "ls -R output is wrong"
+fi
 ls -RA d >out 2>err </dev/null
 slurp out
 case $data in

@@ -35,5 +35,7 @@ while IFS= read -r l; do n=$((n + 1)); done <<EOT
 $got
 EOT
 [ "$n" -eq 10 ] || pc_fail "head -n 010 of a 12-line file gave $n lines, expected 10"
-chk "cut -d : -f 2147483647" "$(cut -d : -f 2147483647 nc 2>/dev/null </dev/null)" "nocolon"
+got=$(cut -d : -f 2147483647 nc 2>cut.err </dev/null)
+cutrc=$?
+[ "$got" = nocolon ] || pc_fail "cut -d : -f 2147483647 gave '$got' (status $cutrc, standard error '$(cat cut.err 2>/dev/null)'), expected 'nocolon'"
 pc_pass

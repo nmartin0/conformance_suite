@@ -31,7 +31,8 @@ since      2024
 says       <unistd.h> defines SEEK_HOLE and SEEK_DATA as macros with
            integer constant values, different from each other and from
            SEEK_SET, SEEK_CUR and SEEK_END.
-note       A system may define SEEK_HOLE and SEEK_DATA only under an extension feature macro (deviation 1.12).
+note       A system may define SEEK_HOLE and SEEK_DATA only under an extension
+           feature macro (deviation 1.12).
 uses       XBD.unistd.h.003
 test       t/002-seek-constants.c
 nomutant   compile-time presence check; needs the Tier 0 header mutants
@@ -176,13 +177,15 @@ nomutant   run-time check of header content; needs the Tier 0 header mutants
 
 assertion  XBD.unistd.h.016
 anchor     basedefs/unistd.h.html#DESCRIPTION/_CS_PATH
-class      required
+class      disputed
 since      2008
 says       The _CS_ constants for confstr() that earlier editions already had are
            pairwise different.
 note       Each name selects a different string, so two names cannot share a
-           value (the page lists no exception).
-           See Q-168 in docs/standard-issues.md.
+           value (the page lists no exception). See Q-168 in
+           docs/standard-issues.md. Disputed (Q-210): the _CS_ names of the Issue 7
+           environments are only "reserved for compatibility", so a header
+           without them is not a failure and a FAIL is logged as INSPECT.
 test       t/016-cs-distinct.c
 nomutant   run-time check of header content; needs the Tier 0 header mutants
 
@@ -220,11 +223,11 @@ says       The constants the 2024 edition added for sysconf(), pathconf() and
            for the _V8_ environments) are different from one another and from the
            earlier names of the same function, except that a _V8_ name and the
            _V7_ name of the same environment may be equal.
-note       The earlier names are included so that a new name equal to an old one
-           is found; a missing earlier name is reported by the assertions for the
-           earlier names. The _V7_ names are obsolescent aliases for the same
-           environments, so one value for a _V7_ and a _V8_ name is not excluded.
-           See Q-168 in docs/standard-issues.md.
+note       The earlier names are included so that a new name equal to an old
+           one is found; a missing earlier name is reported by the assertions
+           for the earlier names. The _V7_ names are obsolescent aliases for
+           the same environments, so one value for a _V7_ and a _V8_ name is
+           not excluded. See Q-168 in docs/standard-issues.md.
 test       t/019-new-names-distinct.c
 nomutant   run-time check of header content; needs the Tier 0 header mutants
 

@@ -55,7 +55,12 @@ pc_test
 touched=yes
 crontab <"$d/a" >"$d/o" 2>"$d/e"
 rc=$?
-[ "$rc" -eq 0 ] || pc_unresolved "crontab from standard input exited with status $rc: the user may not be allowed to use it"
+if [ "$rc" -ne 0 ]; then
+	# the user may simply not be allowed to use crontab; but if the same entries
+	# are installed with a file operand, the refusal is of the form without one
+	crontab "$d/a" >"$d/o2" 2>"$d/e2" </dev/null || pc_unresolved "crontab from standard input exited with status $rc: the user may not be allowed to use it"
+	pc_fail "crontab from standard input exited with status $rc, but crontab FILE accepted the same entries: $(head -c 200 "$d/e" | tr '\n' ' ')"
+fi
 crontab -l >"$d/l" 2>"$d/e" </dev/null || pc_fail "crontab -l failed"
 entries "$d/a"
 want=$e

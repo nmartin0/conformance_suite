@@ -192,7 +192,7 @@ int main(void)
 	struct sigevent sev;
 	timer_t id;
 	long long c0, c1, limit;
-	int got = 0;
+	int got = 0, r, e;
 
 	pc_begin("XSH.timer_create.011");
 	sig_setup(SIGRTMIN);
@@ -201,7 +201,10 @@ int main(void)
 	memset(&sev, 0, sizeof sev);
 	sev.sigev_notify = SIGEV_SIGNAL;
 	sev.sigev_signo = SIGRTMIN;
-	pc_check(timer_create(CLOCK_THREAD_CPUTIME_ID, &sev, &id) == 0, "timer_create() failed: %s", pc_errname(errno));
+	errno = 0;
+	r = timer_create(CLOCK_THREAD_CPUTIME_ID, &sev, &id);
+	e = errno;
+	pc_check(r == 0, "timer_create() failed: %s", pc_errname(e));
 	its = its_of(20 * MS, 0);
 	c0 = ns_of(CLOCK_THREAD_CPUTIME_ID);
 	NEED(timer_settime(id, 0, &its, NULL) == 0, "timer_settime failed: %s", pc_errname(errno));

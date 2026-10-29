@@ -150,7 +150,14 @@ int main(void)
 	memset(&sa, 0, sizeof sa);
 	sa.sa_family = AF_UNSPEC;
 	pc_test();
-	pc_check(connect(c, &sa, sizeof sa) == 0, "connect() with AF_UNSPEC failed: %s", pc_errname(errno));
+	{
+		int r_, e_;
+
+		errno = 0;
+		r_ = connect(c, &sa, sizeof sa);
+		e_ = errno;
+		pc_check(r_ == 0, "connect() with AF_UNSPEC failed: %s", pc_errname(e_));
+	}
 	len = sizeof pn;
 	errno = 0;
 	r = getpeername(c, (struct sockaddr *)&pn, &len);

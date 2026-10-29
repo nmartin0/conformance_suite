@@ -17,7 +17,10 @@
 /*
  * Candidates, none defined by any system we know of. Any of them may name
  * an additional clock (the implementation may have more): one that all
- * three functions accept is skipped.
+ * three functions accept is skipped. So is one that a function reports with
+ * ESRCH: the identifiers of CPU-time clocks stand for processes, and an
+ * identifier of that family naming no process is not an unknown clock (the
+ * text names no error for it).
  */
 static const long candidates[] = { 0x7ffffff0L, 0x3ffffff7L, 0x12345679L, 0x5aa5a55aL };
 
@@ -40,6 +43,10 @@ int main(void)
 		et = errno;
 		if (rg == 0 && rt == 0) {
 			pc_note("clock ID %#lx is a known clock here; trying the next", candidates[i]);
+			continue;
+		}
+		if (eg == ESRCH || et == ESRCH) {
+			pc_note("clock ID %#lx may name the CPU-time clock of no process here; trying the next", candidates[i]);
 			continue;
 		}
 		pc_check(rg == -1 && eg == EINVAL,

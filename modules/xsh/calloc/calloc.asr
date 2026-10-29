@@ -17,6 +17,10 @@ class      required
 since      1988
 says       calloc(n, s) returns a non-null, fundamentally aligned pointer to
            n*s usable bytes, and live results are pairwise disjoint.
+note       Q-212. The alignment is that for objects that fit "in the space
+           allocated": a block shorter than the greatest fundamental
+           alignment is checked for the largest power of two not above its
+           size.
 test       t/002-array.c
 
 assertion  XSH.calloc.003

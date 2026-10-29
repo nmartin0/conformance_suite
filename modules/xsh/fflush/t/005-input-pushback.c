@@ -322,7 +322,14 @@ int main(void)
 		NEED(fgetc(f) == '0' && fgetc(f) == '1', "fgetc failed");
 		NEED(ungetc('x', f) == 'x', "ungetc failed");
 		grow("f");
-		pc_check(fflush(f) == 0, "fflush() failed: %s", pc_errname(errno));
+		{
+			int r_, e_;
+
+			errno = 0;
+			r_ = fflush(f);
+			e_ = errno;
+			pc_check(r_ == 0, "fflush() failed: %s", pc_errname(e_));
+		}
 		o = offset(fileno(f));
 		c = fgetc(f);
 		pc_check(c != 'x', "the next fgetc() returned the discarded 'x'");

@@ -14,12 +14,15 @@ test       t/001-posix-code-equals-constant.c
 
 assertion  XBD.6.3-wide-character-codes.002
 anchor     basedefs/V1_chap06.html#6.3
-class      required
+class      disputed
 since      1992
 says       In every locale the wide codes of the portable letters, digits
            and white-space characters are their character constants: they
            lie in the classes the locale definition puts those characters
            in.
+note       disputed (Q-208): the use of an encoding with shift states with the
+           classification functions is implementation-defined, so a locale
+           with shift states is not examined; a FAIL is logged as INSPECT.
 test       t/002-every-locale-classes.c
 
 assertion  XBD.6.3-wide-character-codes.003

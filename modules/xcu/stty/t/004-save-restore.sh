@@ -27,5 +27,5 @@ case $g in
 esac
 [ -n "$g" ] || pc_fail "-g wrote an empty line"
 cmp -s before.out changed.out && pc_fail "the changed settings were not visible in -a"
-cmp -s before.out after.out || pc_fail "settings were not restored from the -g string"
+cmp -s before.out after.out || pc_fail "settings were not restored from the -g string ($(diff before.out after.out 2>&1 | tr '\n' '|' | cut -c1-300))"
 pc_pass

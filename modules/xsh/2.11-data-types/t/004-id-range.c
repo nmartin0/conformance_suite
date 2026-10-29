@@ -25,19 +25,22 @@ static unsigned long long max_##T(void) \
 		m = c; \
 	} \
 	return m; \
+} \
+/* The smallest value of T: 0, or minus the largest minus one (two's complement). */ \
+static long long min_##T(void) \
+{ \
+	return ISSIGNED(T) ? -(long long)max_##T() - 1 : 0LL; \
 }
 DEFMAX(id_t)
 DEFMAX(pid_t)
 DEFMAX(uid_t)
 DEFMAX(gid_t)
 
-/* The smallest value of T: 0, or minus the largest minus one (two's complement). */
-#define MINOF(T) (ISSIGNED(T) ? -(long long)max_##T() - 1 : 0LL)
 
 #define CHECKMAX(T) pc_check(max_id_t() >= max_##T(), "the largest id_t, %llu, is below the largest " #T ", %llu", \
 	max_id_t(), max_##T())
-#define CHECKMIN(T) pc_check(MINOF(id_t) <= MINOF(T), "the smallest id_t, %lld, is above the smallest " #T ", %lld", \
-	MINOF(id_t), MINOF(T))
+#define CHECKMIN(T) pc_check(min_id_t() <= min_##T(), "the smallest id_t, %lld, is above the smallest " #T ", %lld", \
+	min_id_t(), min_##T())
 
 int main(void)
 {

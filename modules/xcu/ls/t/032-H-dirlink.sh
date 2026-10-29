@@ -11,7 +11,7 @@ ln -s sub d/sl || pc_fail "cannot create symbolic link"
 pc_test
 ls -H -l d/sl >out 2>err </dev/null
 rc=$?
-[ "$rc" -eq 0 ] || pc_fail "ls -H -l exited with status $rc"
+[ "$rc" -eq 0 ] || pc_fail "ls -H -l exited with status $rc: $(cat err)"
 l1=$(sed -n 1p out)
 case $l1 in
 "total "*) ;;

@@ -64,9 +64,14 @@ test       t/007-error.sh
 
 assertion  XCU.cmp.008
 anchor     utilities/cmp.html#OPERANDS
-class      required
+anchor     utilities/cmp.html#STDOUT
+class      disputed
 says       A file operand of - makes cmp read standard input, as either
            operand.
+note       disputed (Q-206): the default output names file1 and file2, but
+           the text does not say what is written for the operand -, the
+           operand itself or a name for standard input; both are accepted
+           here, and the rest of the assertion is judged as usual.
 test       t/008-stdin.sh
 
 assertion  XCU.cmp.009

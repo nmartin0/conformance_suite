@@ -47,7 +47,9 @@ note       Implementations may support additional clocks, so no value is
            certain to be unknown. The test tries a few large values in
            turn and skips any that all three functions accept (a known
            clock); a value that one function accepts and another rejects
-           as unknown is a FAIL. No candidate left is UNRESOLVED.
+           as unknown is a FAIL. A value reported with ESRCH (the identifier
+           of the CPU-time clock of no process) is skipped as well. No
+           candidate left is UNRESOLVED.
 test       t/004-unknown-clock.c
 
 assertion  XSH.clock_getres.005

@@ -31,9 +31,11 @@ int main(void)
 	memset(&st, 0, sizeof st);
 	pc_test();
 	for (p = portable; *p != '\0'; p++) {
+		memset(&st, 0, sizeof st);	/* a fresh object per function: the state is not shared between them */
 		buf[0] = buf[1] = 'x';
 		r = c32rtomb(buf, (char32_t)(unsigned char)*p, &st);
 		pc_check(r == 1 && buf[0] == *p, "c32rtomb() of code %d returned %zu and stored %d", *p, r, buf[0]);
+		memset(&st, 0, sizeof st);
 		buf[0] = buf[1] = 'x';
 		r = c16rtomb(buf, (char16_t)(unsigned char)*p, &st);
 		pc_check(r == 1 && buf[0] == *p, "c16rtomb() of code %d returned %zu and stored %d", *p, r, buf[0]);

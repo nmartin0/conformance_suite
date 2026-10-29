@@ -14,7 +14,7 @@ printf 'R\n' >rf || pc_fail "cannot create input"
 pc_test
 got=$(sed '2a\
 AFTER' in4 2>/dev/null </dev/null; printf 'rc=%s' "$?")
-[ "$got" = "1${NL}2${NL}AFTER${NL}3${NL}4${NL}rc=0" ] || pc_fail "a gave the wrong result"
+[ "$got" = "1${NL}2${NL}AFTER${NL}3${NL}4${NL}rc=0" ] || pc_fail "a gave the wrong result (got: $got)"
 got=$(sed '2i\
 BEFORE' in4 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "1${NL}BEFORE${NL}2${NL}3${NL}4${NL}rc=0" ] || pc_fail "i gave the wrong result"

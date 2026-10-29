@@ -39,24 +39,31 @@ nomutant   header content check; needs the Tier 0 header mutants
 
 assertion  XBD.sys_stat.h.004
 anchor     basedefs/sys_stat.h.html#DESCRIPTION/S_IFBLK
-class      required
+class      conditional
+when       XSI
 since      1988
 says       S_IFBLK, S_IFCHR, S_IFIFO, S_IFREG, S_IFDIR, S_IFLNK and
            S_IFSOCK are usable in #if and have seven different values.
-note       That the values differ is implied by their naming different
-           file types that st_mode must tell apart (S_ISDIR and the
-           others); the page does not say it in words (Q-165).
+note       S_IFBLK and the other file type constants are shaded XSI on the
+           page, so the assertion applies on XSI systems (compiled with the
+           XSI feature macro). That the values differ is implied by their
+           naming different file types that st_mode must tell apart (S_ISDIR
+           and the others); the page does not say it in words (Q-165).
 test       t/004-ifmt-distinct.c
 nomutant   header content check; needs the Tier 0 header mutants
 
 assertion  XBD.sys_stat.h.005
 anchor     basedefs/sys_stat.h.html#DESCRIPTION/S_ISBLK
-class      required
+class      conditional
+when       XSI
 since      1988
 says       For a mode made of one of the seven file type constants and
            any permission bits (0, 0644, 0777, 07777), exactly the
            matching one of S_ISBLK, S_ISCHR, S_ISDIR, S_ISFIFO, S_ISREG,
            S_ISLNK and S_ISSOCK is nonzero and the other six are zero.
+note       The crafted modes use the file type constants S_IFBLK to S_IFSOCK,
+           which are shaded XSI on the page, so the assertion applies on XSI
+           systems (compiled with the XSI feature macro).
 test       t/005-isx-crafted.c
 nomutant   header content check; needs the Tier 0 header mutants
 

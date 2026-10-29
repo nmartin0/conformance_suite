@@ -28,8 +28,8 @@ while IFS= read -r l; do
 		jline=$l
 	fi
 done <"$d/se"
-[ "$rc" -eq 0 ] || pc_unresolved "batch exited with status $rc: the user may not be allowed to use it"
-[ -n "$jid" ] || pc_fail "standard error has no line 'job ID at DATE'"
+[ "$rc" -eq 0 ] || pc_unresolved "batch exited with status $rc: the user may not be allowed to use it [stderr: $(tr '\n' ' ' <"$d/se" | head -c 160); stdout: $(tr '\n' ' ' <"$d/so" | head -c 80)]"
+[ -n "$jid" ] || pc_fail "standard error has no line 'job ID at DATE' [stderr: $(tr '\n' ' ' <"$d/se" | head -c 160); stdout: $(tr '\n' ' ' <"$d/so" | head -c 80)]"
 case $jid in
 *[!A-Za-z0-9.]*) pc_fail "the job ID '$jid' has characters other than letters, digits and periods" ;;
 esac

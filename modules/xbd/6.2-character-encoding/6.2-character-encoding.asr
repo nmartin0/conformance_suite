@@ -33,10 +33,14 @@ test       t/003-zero-byte.c
 
 assertion  XBD.6.2-character-encoding.004
 anchor     basedefs/V1_chap06.html#6.2
-class      required
+class      disputed
 since      1988
 says       The bytes of period, slash, newline and carriage-return are never
            part of another character in any locale.
+note       disputed (Q-208): the text does not say that the four bytes keep
+           their meaning outside the initial shift state, so a locale with
+           shift states is examined in the initial state only; a FAIL is
+           logged as INSPECT.
 test       t/004-four-bytes-alone.c
 
 assertion  XBD.6.2-character-encoding.005

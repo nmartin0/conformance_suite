@@ -3,6 +3,9 @@
  * part of any other character: in every locale they decode to their own
  * characters in a row, and after any byte that starts a longer character
  * they are refused rather than taken as a continuation.
+ * The second part is not applied to a locale whose encoding has shift states:
+ * the text does not say that the four bytes keep their meaning outside the
+ * initial shift state.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XBD.6.2-character-encoding.004
@@ -32,6 +35,8 @@ int main(void)
 			pc_check(r == 1 && w == (wchar_t)four[i], "locale %s: character %d of the run does not decode to itself",
 			    pcl_name[k], i);
 		}
+		if (pcl_shifting())
+			continue;
 		for (lead = 1; lead < 256; lead++) {
 			char b = (char)lead;
 

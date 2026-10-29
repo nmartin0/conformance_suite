@@ -14,7 +14,9 @@ since      2001
 says       sched_getparam(0, &sp) returns 0 and stores a priority that lies
            within the range sched_get_priority_min()/max() give for the
            caller's current policy.
-note       UNRESOLVED if the policy has no range to compare with.
+note       UNRESOLVED if the policy has no range to compare with, or a
+           bound comes back as -1 (the failure value; it cannot be told
+           from a failed call whose errno was not set).
 test       t/001-self.c
 
 assertion  XSH.sched_getparam.002

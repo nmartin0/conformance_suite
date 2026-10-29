@@ -42,13 +42,17 @@ test       t/003-unmatched-rparen.c
 
 assertion  XBD.9.4-ere.004
 anchor     basedefs/V1_chap09.html#9.4.6
-class      required
+class      disputed
 since      1992
 says       An ERE group repeated by * or ? or an interval takes no null iteration
-           beyond its only match or what a minimum count needs: (a*)* on aab has
-           group one 0 to 2, on b the empty string at 0, (a?)* on aab group one 1 to 2,
-           (a*)*c on aac group one 0 to 2, (ab*)* on abbab group one 3 to 5, and
-           (a*){2} matches a and the empty string.
+           beyond what a minimum count needs: (a*)* on b has group one as the
+           empty string at 0, (ab*)* on abbab has group one 3 to 5, (a*){2}
+           matches a and the empty string, and (a*)* on aab, (a?)* on aab,
+           (a*)*c on aac and (a*b*)* on aabb match the whole run with group one
+           either the last non-empty match or the empty string just after it.
+note       disputed (Q-207): the text does not say whether a group makes one
+           more empty iteration after its last non-empty one; both readings are
+           accepted for those four cases and a FAIL is logged as INSPECT.
 test       t/004-star-null.c
 
 assertion  XBD.9.4-ere.005

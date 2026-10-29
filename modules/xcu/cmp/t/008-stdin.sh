@@ -26,5 +26,10 @@ printf 'abd\n' | cmp f - >out 2>err
 rc=$?
 [ "$rc" -eq 1 ] || pc_fail "cmp f - exited with status $rc for different data"
 slurp out
-[ "$data" = "f - differ: char 3, line 1${nl}" ] || pc_fail "output is: $data"
+# the name written for the operand - is not given (Q-206): the operand itself
+# and a word for standard input are both accepted
+case $data in
+"f - differ: char 3, line 1${nl}" | "f stdin differ: char 3, line 1${nl}") ;;
+*) pc_fail "output is: $data" ;;
+esac
 pc_pass

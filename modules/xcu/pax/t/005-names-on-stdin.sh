@@ -14,6 +14,6 @@ trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 printf 'one\n' >f1; printf 'three\n' >f3
 pc_test
 printf 'f1\nf3\n' | pax -w >a 2>err || pc_fail "pax -w with names on standard input: nonzero status"
-pax <a >o 2>err </dev/null || pc_fail "list: nonzero status"
+pax <a >o 2>err || pc_fail "list: nonzero status"
 [ "$(sort o | tr '\n' ' ')" = 'f1 f3 ' ] || pc_fail "the archive lists '$(tr '\n' ' ' <o)'"
 pc_pass

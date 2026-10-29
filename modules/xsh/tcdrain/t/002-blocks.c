@@ -166,14 +166,17 @@ static pid_t spawn_held(int s, int (*call)(int), int handler)
 /* 1 (and its status) if c has ended within ms, 0 if it is still running. */
 static int reap_within(pid_t c, int *st, int ms)
 {
-	int i;
+	struct timespec t0, t1;
 
-	for (i = 0; i <= ms / 10; i++) {
+	clock_gettime(CLOCK_MONOTONIC, &t0);
+	for (;;) {
 		if (waitpid(c, st, WNOHANG) == c)
 			return 1;
+		clock_gettime(CLOCK_MONOTONIC, &t1);
+		if ((t1.tv_sec - t0.tv_sec) * 1000L + (t1.tv_nsec - t0.tv_nsec) / 1000000L >= ms)
+			return 0;
 		msleep(10);
 	}
-	return 0;
 }
 
 static void kill_reap(pid_t c)
@@ -193,7 +196,7 @@ int main(void)
 {
 	char b[8];
 	pid_t c;
-	int m, s, st, ended, delivered;
+	int m, s, st, ended, delivered, got;
 
 	pc_begin("XSH.tcdrain.002");
 	s = open_pty(&m);
@@ -216,12 +219,14 @@ int main(void)
 		kill_reap(c);
 		pc_unresolved("tcflow(TCOON) failed: %s", pc_errname(errno));
 	}
+	/* The manager takes the byte now: where output counts as transmitted only once the manager has read it, tcdrain() cannot end before. */
+	got = collect(m, b, sizeof b, 2000);
 	ended = reap_within(c, &st, 10000);
 	if (!ended) {
 		kill_reap(c);
-		pc_fail("tcdrain() still blocked 10 s after the output was restarted");
+		pc_fail("tcdrain() still blocked 10 s after the output was restarted and read");
 	}
 	pc_check(WIFEXITED(st) && WEXITSTATUS(st) == 0, "tcdrain() ended with status %#x", (unsigned)st);
-	pc_check(collect(m, b, sizeof b, 2000) == 1 && b[0] == 'x', "the byte did not reach the manager");
+	pc_check(got == 1 && b[0] == 'x', "the byte did not reach the manager");
 	pc_pass();
 }

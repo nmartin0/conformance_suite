@@ -46,7 +46,9 @@ int main(void)
 		pc_fail("aio_write() is not declared as int aio_write(struct aiocb *)");
 	if (IS_T(&(aio_write), int (*)(struct aiocb *, int)))
 		pc_fail("aio_write() is declared without a prototype");
-	if (!IS_T(&(lio_listio), int (*)(int, struct aiocb *restrict const [restrict], int, struct sigevent *restrict)))
+	/* restrict on the elements of the list changes nothing a caller can observe (Q-209) */
+	if (!IS_T(&(lio_listio), int (*)(int, struct aiocb *restrict const [restrict], int, struct sigevent *restrict)) &&
+	    !IS_T(&(lio_listio), int (*)(int, struct aiocb *const [restrict], int, struct sigevent *restrict)))
 		pc_fail("lio_listio() is not declared as int lio_listio(int, struct aiocb *restrict const [restrict], int, struct sigevent *restrict)");
 	if (IS_T(&(lio_listio), int (*)(int, struct aiocb *restrict const [restrict], int, struct sigevent *restrict, int)))
 		pc_fail("lio_listio() is declared without a prototype");

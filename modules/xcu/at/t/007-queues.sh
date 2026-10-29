@@ -47,9 +47,9 @@ nlist() {
 		n=$((n + 1))
 	done <"$d/l"
 }
-submit -t 203512091200 || pc_unresolved "setup: at could not submit a job (status $srcode)"
+submit -t 203512091200 || pc_unresolved "setup: at could not submit a job (status $srcode) [stderr: $(tr '\n' ' ' <"$d/se" | head -c 160); stdout: $(tr '\n' ' ' <"$d/so" | head -c 80)]"
 a=$jid
-submit -q a -t 203512101300 || pc_unresolved "setup: at -q a could not submit a job (status $srcode)"
+submit -q a -t 203512101300 || pc_unresolved "setup: at -q a could not submit a job (status $srcode) [stderr: $(tr '\n' ' ' <"$d/se" | head -c 160); stdout: $(tr '\n' ' ' <"$d/so" | head -c 80)]"
 b=$jid
 inlist() { # inlist ARGS: sets fa fb for jobs a and b in at -l ARGS
 	at -l "$@" >"$d/l" 2>/dev/null </dev/null || pc_fail "at -l $* failed"

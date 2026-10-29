@@ -222,10 +222,14 @@ int main(int argc, char **argv)
 	pc_make_file("f", "x");
 	fd = open("f", O_RDONLY);
 	pc_check(fd != -1, "open failed");
-	pc_check(fcntl(fd, F_SETFD, FD_CLOFORK) == 0, "F_SETFD(FD_CLOFORK) failed");
 	(void)snprintf(num, sizeof num, "%d", fd);
 	pc_test();
 	if (spawn_child()) {
+		/* Set in the process that calls exec: set earlier, the fork that made it would have closed the descriptor. */
+		if (fcntl(fd, F_SETFD, FD_CLOFORK) != 0) {
+			say("!F_SETFD(FD_CLOFORK) failed");
+			_exit(98);
+		}
 		execv(self, imgv("fd", num, (char *)NULL));
 		returned("execv");
 	}

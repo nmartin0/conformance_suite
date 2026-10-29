@@ -23,7 +23,7 @@ exit 0
 IN
 : >typed
 pc_test
-pc_pty_run -i typed inner.sh
+pc_pty_run -c -i typed inner.sh
 [ "$(cat ps.rc 2>/dev/null)" = 0 ] || pc_fail "ps -a: exit status '$(cat ps.rc 2>/dev/null)'"
 b=$(cat bg.pid 2>/dev/null)
 [ -n "$b" ] || pc_unresolved "the background process was not started"

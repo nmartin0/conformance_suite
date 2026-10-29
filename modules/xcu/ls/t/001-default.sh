@@ -17,6 +17,13 @@ slurp() {
 	return 0
 }
 
+# Names that begin with a period are written without -A or -a only when an
+# implementation-defined condition holds (DESCRIPTION), so the names ".", ".."
+# and ".h" are dropped before a listing of d is judged.
+nodot() {
+	grep -v -F -x -e . -e .. -e .h "$1" >"$1.nd"
+	slurp "$1.nd"
+}
 LC_ALL=POSIX; export LC_ALL
 mkdir d || pc_fail "cannot create d"
 for n in b a C .h; do
@@ -26,12 +33,12 @@ pc_test
 ls d >out 2>err </dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "ls exited with status $rc"
-slurp out
+nodot out
 [ "$data" = "C${nl}a${nl}b${nl}" ] || pc_fail "default listing is wrong"
 ls -1 d >out 2>err </dev/null
-slurp out
+nodot out
 [ "$data" = "C${nl}a${nl}b${nl}" ] || pc_fail "ls -1 listing is wrong"
 ls -C -1 d >out 2>err </dev/null
-slurp out
+nodot out
 [ "$data" = "C${nl}a${nl}b${nl}" ] || pc_fail "ls -C -1 listing is wrong"
 pc_pass

@@ -30,13 +30,17 @@ test       t/002-backref-dup.c
 
 assertion  XBD.9.3-bre.003
 anchor     basedefs/V1_chap09.html#9.3.6
-class      required
+class      disputed
 since      1992
 says       A subexpression repeated by an asterisk or interval takes no null
-           iteration beyond its only match or what a minimum count needs: \(a*\)* on
-           aab has group one at offsets 0 to 2, on b the empty string at 0, \(a*\)*c
-           on aac group one 0 to 2, \(ab*\)* on abbab group one 3 to 5, and
-           \(x*\)\{2\} matches x and the empty string.
+           iteration beyond what a minimum count needs: \(a*\)* on b has group
+           one as the empty string at 0, \(ab*\)* on abbab has group one 3 to 5,
+           \(x*\)\{2\} matches x and the empty string, and \(a*\)* on aab,
+           \(a*\)*c on aac and \(a*b*\)* on aabb match the whole run with group
+           one either the last non-empty match or the empty string just after it.
+note       disputed (Q-207): the text does not say whether a group makes one
+           more empty iteration after its last non-empty one; both readings are
+           accepted for those three cases and a FAIL is logged as INSPECT.
 test       t/003-star-null.c
 
 assertion  XBD.9.3-bre.004

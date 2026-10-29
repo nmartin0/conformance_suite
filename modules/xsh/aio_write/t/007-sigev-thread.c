@@ -155,7 +155,8 @@ static void notify(union sigval v)
 
 int main(void)
 {
-	int fd, i;
+	long long end;
+	int fd;
 
 	pc_begin("XSH.aio_write.007");
 	guard();
@@ -170,7 +171,8 @@ int main(void)
 	cb.aio_sigevent.sigev_value.sival_ptr = &token;
 	go();
 	queued(aio_write(&cb), "aio_write");
-	for (i = 0; i < 800 && atomic_load(&calls) == 0; i++)
+	/* The 8 s are measured on the clock, not counted in sleeps (a sleep may be much longer than asked). */
+	for (end = now_ns() + 8000000000LL; atomic_load(&calls) == 0 && now_ns() < end;)
 		sleep_ms(10);
 	if (atomic_load(&calls) == 0 && aio_error(&cb) == EINPROGRESS)
 		pc_unresolved("the write had not completed after 8 s (no bound is stated)");

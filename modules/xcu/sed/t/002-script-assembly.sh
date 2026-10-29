@@ -18,7 +18,7 @@ got=$(sed -f sf -e 's/two/2/' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 got=$(sed -e 's/1/X/' -f sf -e 's/two/2/' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "1${NL}2${NL}rc=0" ] || pc_fail "the order of -e and -f options was not respected"
 got=$(sed -e '1a\' -e 'added' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
-[ "$got" = "one${NL}added${NL}two${NL}rc=0" ] || pc_fail "a newline was not put between two -e pieces"
+[ "$got" = "one${NL}added${NL}two${NL}rc=0" ] || pc_fail "a newline was not put between two -e pieces (got: $got)"
 got=$(sed ' ; ;  s/one/1/;;  s/two/2/' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "1${NL}2${NL}rc=0" ] || pc_fail "leading blanks and semicolons were not ignored"
 pc_pass

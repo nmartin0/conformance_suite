@@ -3,8 +3,11 @@
  *
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
- * usage: pcpty [-t SECS] [-i INPUT] [-d MS] -o OUTPUT -- CMD [ARG...]
+ * usage: pcpty [-c] [-t SECS] [-i INPUT] [-d MS] -o OUTPUT -- CMD [ARG...]
  *
+ *   -c        give status 125 unless opening the subsidiary side made it
+ *             the controlling terminal (how one is acquired is
+ *             implementation-defined)
  *   -t SECS   kill the command's session after SECS seconds (default 20)
  *   -i INPUT  file whose bytes are typed at the terminal, one line at a
  *             time with -d milliseconds between lines (default 200), the
@@ -48,13 +51,14 @@ int main(int argc, char **argv)
 	long secs = 20, delay = 200;
 	char *input = NULL;
 	size_t inlen = 0, inpos = 0;
-	int c, m, s, of, status = 0, done = 0, timed_out = 0;
+	int c, m, s, of, status = 0, done = 0, timed_out = 0, need_ctty = 0;
 	char *sname;
 	pid_t pid;
 	long start, nextin;
 
-	while ((c = getopt(argc, argv, "t:i:d:o:")) != -1) {
+	while ((c = getopt(argc, argv, "ct:i:d:o:")) != -1) {
 		switch (c) {
+		case 'c': need_ctty = 1; break;
 		case 't': secs = atol(optarg); break;
 		case 'i': inp = optarg; break;
 		case 'd': delay = atol(optarg); break;
@@ -97,6 +101,8 @@ int main(int argc, char **argv)
 			_exit(125);
 		s = open(sname, O_RDWR);	/* becomes the controlling terminal */
 		if (s < 0)
+			_exit(125);
+		if (need_ctty && tcgetpgrp(s) != getpgrp())
 			_exit(125);
 		if (dup2(s, 0) < 0 || dup2(s, 1) < 0 || dup2(s, 2) < 0)
 			_exit(125);

@@ -304,7 +304,8 @@ int main(void)
 
 	pc_begin("XSH.getsockopt.005");
 	guard(30);
-	dead = inet_sock(SOCK_STREAM, &a);	/* bound, never listening: nothing accepts here */
+	dead = inet_sock(SOCK_STREAM, &a);
+	(void)close(dead);	/* the port is bound to nothing now: a connection attempt is refused */
 	c = socket(AF_INET, SOCK_STREAM, 0);
 	NEED(c != -1, "socket failed: %s", pc_errname(errno));
 	setnb(c, 1);

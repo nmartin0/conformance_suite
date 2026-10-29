@@ -13,19 +13,20 @@
 
 int main(void)
 {
-	mbstate_t st;
+	mbstate_t st32, st16;	/* one per function */
 	char32_t c32 = 77;
 	char16_t c16 = 77;
 	size_t r32, r16;
 	int i32, i16;
 
 	pc_begin("XSH.mbrtoc16.003");
-	memset(&st, 0, sizeof st);
+	memset(&st32, 0, sizeof st32);
+	memset(&st16, 0, sizeof st16);
 	pc_test();
-	r32 = mbrtoc32(&c32, NULL, 5, &st);
-	i32 = mbsinit(&st);
-	r16 = mbrtoc16(&c16, NULL, 0, &st);
-	i16 = mbsinit(&st);
+	r32 = mbrtoc32(&c32, NULL, 5, &st32);
+	i32 = mbsinit(&st32);
+	r16 = mbrtoc16(&c16, NULL, 0, &st16);
+	i16 = mbsinit(&st16);
 	pc_check(r32 == 0, "mbrtoc32(&c, NULL, 5, &st) returned %zu, expected 0", r32);
 	pc_check(r16 == 0, "mbrtoc16(&c, NULL, 0, &st) returned %zu, expected 0", r16);
 	pc_check(c32 == 77 && c16 == 77, "a conversion with a null s stored into *pc");

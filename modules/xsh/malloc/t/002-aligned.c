@@ -10,6 +10,30 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
+ * The alignment that every block of n bytes must have: that of the most
+ * demanding basic type whose size fits in n (the text asks for access to an
+ * object of fundamental alignment "in the space allocated", which a type
+ * larger than the block cannot be).
+ */
+static size_t need_align(size_t n)
+{
+	size_t a = 1;
+
+#define FIT(T) do { if (sizeof(T) <= n && _Alignof(T) > a) a = _Alignof(T); } while (0)
+	FIT(short);
+	FIT(int);
+	FIT(long);
+	FIT(long long);
+	FIT(float);
+	FIT(double);
+	FIT(long double);
+	FIT(void *);
+	FIT(max_align_t);
+#undef FIT
+	return a;
+}
+
 int main(void)
 {
 	void *keep[40];
@@ -19,11 +43,12 @@ int main(void)
 	pc_test();
 	for (i = 0; i < 40; i++) {
 		size_t n = i < 20 ? i + 1 : (i - 19) * 24;
+		size_t a = need_align(n);
 		void *p = malloc(n);
 
 		pc_check(p != NULL, "malloc(%lu) returned a null pointer", (unsigned long)n);
-		pc_check(((uintptr_t)p % _Alignof(max_align_t)) == 0,
-		    "malloc(%lu) returned %p, not a multiple of the fundamental alignment", (unsigned long)n, p);
+		pc_check(((uintptr_t)p % a) == 0,
+		    "malloc(%lu) returned %p, not a multiple of %lu, the alignment of the widest basic type that fits", (unsigned long)n, p, (unsigned long)a);
 		keep[i] = p;
 	}
 	for (i = 0; i < 40; i++)

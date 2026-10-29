@@ -4,6 +4,9 @@
  * and the six white-space characters are in the classes every locale
  * definition gives them (upper, lower, digit, xdigit, space, blank and the
  * classes they imply).
+ * A locale whose encoding has shift states is not examined: the use of such
+ * an encoding with the character-class functions, which do not mention
+ * state-dependent encodings, is implementation-defined (XBD 6.2).
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XBD.6.3-wide-character-codes.002
@@ -33,6 +36,8 @@ int main(void)
 		const char *l = pcl_name[k];
 
 		pc_check(setlocale(LC_ALL, l) != NULL, "setlocale(\"%s\") failed after being accepted", l);
+		if (pcl_shifting())
+			continue;
 		members(l, pcc_upper, iswupper, "upper (A-Z)");
 		members(l, pcc_lower, iswlower, "lower (a-z)");
 		members(l, pcc_upper, iswalpha, "alpha (A-Z)");

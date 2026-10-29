@@ -319,7 +319,14 @@ int main(void)
 		NEED(f != NULL, "fopen failed");
 		NEED(fgetc(f) == '0' && !feof(f), "fgetc failed");
 		grow("f");
-		pc_check(fflush(f) == 0, "fflush() failed: %s", pc_errname(errno));
+		{
+			int r_, e_;
+
+			errno = 0;
+			r_ = fflush(f);
+			e_ = errno;
+			pc_check(r_ == 0, "fflush() failed: %s", pc_errname(e_));
+		}
 		o = offset(fileno(f));
 		pc_check(o == 1, "the descriptor's offset is %lld, not the stream's position 1", (long long)o);
 	}

@@ -49,7 +49,7 @@ for variant in default bypass; do
 	[ "$(cat $d/f2 2>/dev/null)" = 2 ] || pc_fail "$variant: f2 was not extracted after the invalid member"
 	[ -s err.$variant ] || pc_fail "$variant: no diagnostic for the member with the too long name"
 done
-pc_pty_run -i typed inner.sh
+pc_pty_run -c -i typed inner.sh
 [ "$(cat i.rc 2>/dev/null)" = 0 ] || pc_fail "-o invalid=rename: exit status '$(cat i.rc 2>/dev/null)'"
 grep aaaaaaaaaa pty.out >/dev/null || pc_fail "no prompt naming the invalid member was written to the terminal"
 grep f2 pty.out >/dev/null && pc_fail "the valid member f2 was asked about on the terminal"

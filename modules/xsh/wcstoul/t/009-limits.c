@@ -35,8 +35,8 @@ int main(void)
 	wchar_t smax[IC_N][64], sover[IC_N][64];
 	pc_begin("XSH.wcstoul.009");
 	for (j = 0; j < IC_N; j++) {
-		pc_check(snprintf(smax[j], 64, L"%ju", (uintmax_t)ic_fns[j].max) > 0, "swprintf failed");
-		strcpy(sover[j], smax[j]);
+		pc_check(swprintf(smax[j], 64, L"%ju", (uintmax_t)ic_fns[j].max) > 0, "swprintf failed");
+		wcscpy(sover[j], smax[j]);
 		inc_dec(sover[j]);
 	}
 	pc_test();

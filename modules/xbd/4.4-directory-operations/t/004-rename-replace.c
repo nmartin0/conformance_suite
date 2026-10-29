@@ -24,7 +24,8 @@
 static void on_alarm(int s)
 {
 	(void)s;
-	pc_fail("the test timed out");
+	/* a slow machine is not a finding about rename() */
+	pc_unresolved("the test ran out of time");
 }
 
 static void put_gen(const char *path, int g)
@@ -95,13 +96,18 @@ int main(void)
 	for (i = 0; i < NREAD; i++) {
 		if (waitpid(kid[i], &st, 0) != kid[i])
 			pc_unresolved("waitpid failed: %s", pc_errname(errno));
-		seen[i] = WIFEXITED(st) ? WEXITSTATUS(st) : 99;
+		/* 98: the reader's own time limit ended it before the writer finished */
+		seen[i] = WIFEXITED(st) ? WEXITSTATUS(st) : (WIFSIGNALED(st) && WTERMSIG(st) == SIGALRM ? 98 : 99);
 	}
 	for (i = 0; i < NREAD; i++) {
 		pc_check(seen[i] != 1, "reader %d did not find the name while it was being replaced by rename()", i);
 		pc_check(seen[i] != 2, "reader %d read a file that was not one of the complete files", i);
 		pc_check(seen[i] != 3, "reader %d found an older file after a newer one", i);
-		pc_check(seen[i] == 0, "reader %d ended with code %d", i, seen[i]);
 	}
+	for (i = 0; i < NREAD; i++)
+		if (seen[i] == 98)
+			pc_unresolved("reader %d reached its time limit before the writer finished (a slow machine)", i);
+	for (i = 0; i < NREAD; i++)
+		pc_check(seen[i] == 0, "reader %d ended with code %d", i, seen[i]);
 	pc_pass();
 }

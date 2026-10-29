@@ -118,11 +118,15 @@ test       t/010-sndtimeo.c
 
 assertion  XSH.setsockopt.011
 anchor     functions/V2_chap02.html#2.10.16
-class      required
+class      disputed
 since      2001
 says       With SO_RCVTIMEO set to 200 ms, a blocking recv() on an empty
            stream socket fails with EAGAIN or EWOULDBLOCK after waiting at
            least that long (the clock's resolution allowed for).
+note       disputed (Q-211): the timeout is called the limit on how long to
+           wait and nothing says a receive may not give up a little before
+           it; the test takes the lower bound, and a FAIL (an early return)
+           is logged as INSPECT.
 test       t/011-rcvtimeo-effect.c
 
 assertion  XSH.setsockopt.012

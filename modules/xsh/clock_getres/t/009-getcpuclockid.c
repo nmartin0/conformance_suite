@@ -43,7 +43,14 @@ int main(void)
 	r = clock_getcpuclockid(getpid(), &id);
 	NEED(r == 0, "clock_getcpuclockid(getpid()) returned %d (%s)", r, pc_errname(r));
 	pc_test();
-	pc_check(clock_getres(id, &res) == 0, "clock_getres(clock_getcpuclockid's ID) failed: %s", pc_errname(errno));
+	{
+		int r_, e_;
+
+		errno = 0;
+		r_ = clock_getres(id, &res);
+		e_ = errno;
+		pc_check(r_ == 0, "clock_getres(clock_getcpuclockid's ID) failed: %s", pc_errname(e_));
+	}
 	c0 = ns_of(id);
 	w0 = wall();
 	do {
