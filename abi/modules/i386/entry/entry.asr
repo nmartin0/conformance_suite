@@ -131,8 +131,8 @@ assertion  ABI.i386.entry.012
 anchor     i386-psabi:low-level-sys-info#Process Initialization/Stack State (EDX)
 class      untestable
 reason     EDX at the first instruction of the program holds a function that the start-up code should register with atexit(); a C program only runs after that code and cannot see EDX. A test would need its own _start (no C library start-up files), which this suite does not do yet.
-says       EDX at process entry is a function pointer that the application
-           should register with atexit().
+says       EDX at process entry carries the address of a termination function
+           that the start-up code is expected to hand to atexit().
 
 assertion  ABI.i386.entry.013
 anchor     i386-psabi:low-level-sys-info#Process Initialization/Stack State (EBP)

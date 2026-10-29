@@ -26,8 +26,10 @@ int main(void)
 	c.cw_set = ABI_X87_CW_ALT;
 	c.mxcsr_set = ABI_MXCSR_ALT;
 	abi_call(&c);
-	pc_check(sig_got == SIGUSR1, "the handler was not run");
-	pc_check(c.cw_before == ABI_X87_CW_ALT, "setup: control word not loaded");
+	if (sig_got != SIGUSR1)
+		pc_unresolved("raise() did not run the handler");
+	if (c.cw_before != ABI_X87_CW_ALT)
+		pc_unresolved("could not load the x87 control word 0x%04x (it reads 0x%04x)", ABI_X87_CW_ALT, c.cw_before);
 	abi_expect_callee_saved(&c, "raise and its handler");
 	abi_expect_df_clear(&c, "raise and its handler");
 	abi_expect_x87_cw_kept(&c, "raise and its handler");

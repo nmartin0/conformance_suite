@@ -37,11 +37,11 @@ int main(void)
 {
 	pc_begin("ABI.i386.threads.006");
 	abi_require_sse();
-	pc_check((abi_x87_cw() & 0xFFFFu) == ABI_X87_CW_DEFAULT && (abi_mxcsr() & ABI_MXCSR_CONTROL) == (ABI_MXCSR_DEFAULT & ABI_MXCSR_CONTROL),
+	pc_check((abi_x87_cw() & ABI_X87_CW_FIELDS) == (ABI_X87_CW_DEFAULT & ABI_X87_CW_FIELDS) && (abi_mxcsr() & ABI_MXCSR_CONTROL) == (ABI_MXCSR_DEFAULT & ABI_MXCSR_CONTROL),
 	    "setup: the creating thread is not in the default floating-point state (x87 0x%04x, MXCSR 0x%08x)", abi_x87_cw(), abi_mxcsr());
 	pc_test();
 	run_thread(NULL);
-	pc_check(thr_tramp_rec.cw == ABI_X87_CW_DEFAULT, "the new thread started with x87 control word 0x%04x, expected 0x%04x",
+	pc_check((thr_tramp_rec.cw & ABI_X87_CW_FIELDS) == (ABI_X87_CW_DEFAULT & ABI_X87_CW_FIELDS), "the new thread started with x87 control word 0x%04x, expected 0x%04x",
 	    thr_tramp_rec.cw, ABI_X87_CW_DEFAULT);
 	pc_check((thr_tramp_rec.mxcsr & ABI_MXCSR_CONTROL) == (ABI_MXCSR_DEFAULT & ABI_MXCSR_CONTROL),
 	    "the new thread started with MXCSR control bits 0x%04x, expected 0x%04x",

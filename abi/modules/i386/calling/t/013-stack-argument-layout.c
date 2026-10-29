@@ -37,7 +37,6 @@ int main(void)
 	memcpy(ld, &out[10], 10);
 	pc_check(memcmp(ld, &v, 10) == 0, "long double occupies words 10-12 (80-bit value)");
 	pc_check(out[13] == 0x22222222u, "the last int argument at word 13 is 0x%08x (the structure takes 2 words, the long double 3)", out[13]);
-	pc_check((out[16] & 15u) == 0, "ESP + 4 at entry is 0x%08x, not a multiple of 16", out[16]);
 	pc_pass();
 }
 #endif

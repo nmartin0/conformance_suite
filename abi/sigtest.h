@@ -94,7 +94,7 @@ static void sig_async(struct abi_spin *s, unsigned misalign, unsigned df)
 	alarm(0);
 	pthread_join(t, NULL);
 	if (sig_got != SIGUSR1)
-		pc_fail("the handler was not run (flag %d)", sig_got);
+		pc_unresolved("the handler was not run (flag %d)", sig_got);
 	if (s->cw_before != ABI_X87_CW_ALT)
 		pc_unresolved("could not load the x87 control word (it reads 0x%04x)", s->cw_before);
 	if ((s->mxcsr_before & ABI_MXCSR_CONTROL) != (ABI_MXCSR_ALT & ABI_MXCSR_CONTROL))

@@ -34,6 +34,8 @@
 #define ABI_X87_CW_PC_MASK     0x0300u
 #define ABI_X87_CW_RC_MASK     0x0C00u
 #define ABI_X87_CW_MASKS       0x003Fu   /* the six exception masks */
+/* the fields the psABI table lists: RC, PC and the six masks (reserved bits are not compared) */
+#define ABI_X87_CW_FIELDS      0x0F3Fu
 /* MXCSR at process entry (all exceptions masked, rounding nearest, no FZ/DAZ). */
 #define ABI_MXCSR_DEFAULT      0x1F80u
 /* MXCSR control bits: DAZ, the six masks, RC and FZ (not the status flags). */

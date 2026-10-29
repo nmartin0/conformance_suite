@@ -31,7 +31,7 @@ Results are the usual ones. In addition:
 - **NOTINUSE**: the test is for an architecture other than the one the
   compiler builds for (every i386 test, built for x86-64, says so).
 - **INSPECT**: a `disputed` assertion failed. Used where the two published
-  revisions of the psABI differ or where only one states the rule (below).
+  revisions of the psABI differ or where only the older one states the rule (below).
 - **UNTESTED**: an `untestable` assertion (needs control of the program's first
   instruction), listed so the gap is visible.
 
@@ -79,9 +79,11 @@ The revisions differ, and the suite says which one each check follows:
 - the current revision adds `long long`, complex types, `_Bool`, MXCSR and
   `max_align_t`; the older one has none of them.
 
-Every assertion whose rule is not the same in both is `disputed` (a FAIL is
-reported as INSPECT) and its `note` says which revision the test follows. Where
-both agree the assertion is `required`; for the stack alignment the weaker rule
+Every assertion whose rule differs between them, or that only the older revision
+states, is `disputed` (a FAIL is reported as INSPECT) and its `note` says which
+revision the test follows. Where both agree, or where the current revision states
+a rule for something the older one predates (the types and registers listed
+above), the assertion is `required`; for the stack alignment the weaker rule
 both share (word aligned) is a separate `required` assertion.
 
 Where the psABI leaves something open nothing is asserted: the upper bits of a

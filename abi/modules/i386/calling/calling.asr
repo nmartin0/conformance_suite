@@ -137,13 +137,17 @@ nomutant   a property of the compiler's generated code and of the library's entr
 
 assertion  ABI.i386.calling.013
 anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Parameter Passing and Returning Values/Passing Parameters
-class      required
+class      disputed
 says       Arguments are placed on the stack in order starting at the stack pointer
            (the last one farthest away), each at its type's alignment and rounded up to
            whole words: an int, float or char takes a word, a double or long long two,
            a long double three, a 5-byte structure two.
-note       Current revision; the older one says the same for words. The upper bits of a
-           char or short argument word are not checked.
+note       The expansion of a char or short to a word and the rounding of a structure
+           to whole words are stated by the older revision only; the current text asks
+           for padding that enforces the alignments of its table, which for a char
+           followed by a short leaves them packed, so a FAIL is INSPECT. The upper bits
+           of a char or short argument word are not checked. The stack alignment at the
+           call is calling.011, not this assertion.
 test       t/013-stack-argument-layout.c
 nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
 

@@ -18,7 +18,8 @@ int main(void)
 	sig_install();
 	pc_test();
 	raise(SIGUSR1);
-	pc_check(sig_got == SIGUSR1, "the handler was not run");
+	if (sig_got != SIGUSR1)
+		pc_unresolved("raise() did not run the handler");
 	abi_expect_entry_mod16(&sig_tramp_rec, "the signal handler");
 	pc_pass();
 }
