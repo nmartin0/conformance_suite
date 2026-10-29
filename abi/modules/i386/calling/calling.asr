@@ -1,0 +1,264 @@
+# ABI i386 calling: registers, stack at a call, parameters and return values
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Source: the i386 psABI, "Low Level System Information", Function Calling
+# Sequence (tables fig-reg-usage and fig_returning_locations, the stack-frame
+# section and "Returning Values in Memory"), compared with the older
+# published revision (abi386-4, chapter 3, "Function Calling Sequence"). The
+# rules apply to global functions only; every function called here is one.
+# The 16-byte stack alignment at a call is the current revision's; the older
+# one asked for word (4-byte) alignment, so that assertion is disputed and a
+# weaker one (calling.010) holds for both. Where the ABI leaves bits
+# undefined (the upper bits of a char or short return value) the test only
+# checks that the compiler's own caller does not depend on them.
+
+assertion  ABI.i386.calling.001
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Registers (table fig-reg-usage)
+class      required
+says       A call to strlen returns with EBX, ESI, EDI and EBP holding what the caller
+           put there.
+note       Both revisions (the older one also lists ESP). Sentinel values are loaded by
+           a hand-written caller.
+test       t/001-callee-saved-strlen.c
+nomutant   the calls are to a C library; a planted fault would be the library's, and the detectors are validated by abi/control.sh with deliberately wrong routines instead
+
+assertion  ABI.i386.calling.002
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Registers (table fig-reg-usage)
+class      required
+says       A call to memcpy returns with EBX, ESI, EDI and EBP holding what the caller
+           put there.
+note       Both revisions (the older one also lists ESP). Sentinel values are loaded by
+           a hand-written caller.
+test       t/002-callee-saved-memcpy.c
+nomutant   the calls are to a C library; a planted fault would be the library's, and the detectors are validated by abi/control.sh with deliberately wrong routines instead
+
+assertion  ABI.i386.calling.003
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Registers (table fig-reg-usage)
+class      required
+says       A call to qsort and its callback returns with EBX, ESI, EDI and EBP holding
+           what the caller put there.
+note       Both revisions (the older one also lists ESP). Sentinel values are loaded by
+           a hand-written caller.
+test       t/003-callee-saved-qsort.c
+nomutant   the calls are to a C library; a planted fault would be the library's, and the detectors are validated by abi/control.sh with deliberately wrong routines instead
+
+assertion  ABI.i386.calling.004
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Registers (table fig-reg-usage)
+class      required
+says       A call to snprintf with floating-point arguments returns with EBX, ESI, EDI
+           and EBP holding what the caller put there.
+note       Both revisions (the older one also lists ESP). Sentinel values are loaded by
+           a hand-written caller.
+test       t/004-callee-saved-snprintf.c
+nomutant   the calls are to a C library; a planted fault would be the library's, and the detectors are validated by abi/control.sh with deliberately wrong routines instead
+
+assertion  ABI.i386.calling.005
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Registers (table fig-reg-usage)
+class      required
+says       The direction flag is clear on return from every function, so after strlen,
+           memcpy, qsort and snprintf when it was clear at the call.
+note       Both revisions.
+test       t/005-df-clear-on-return.c
+nomutant   the calls are to a C library; a planted fault would be the library's, and the detectors are validated by abi/control.sh with deliberately wrong routines instead
+
+assertion  ABI.i386.calling.006
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Registers (table fig-reg-usage)
+class      required
+says       The x87 control word is callee-saved: after strlen, memcpy, qsort and
+           snprintf it is what it was before the call, even when it held a non-default
+           value.
+note       Current revision only (the older one gives no rule). The word is set to
+           round-down before each call.
+test       t/006-x87-cw-callee-saved.c
+nomutant   the calls are to a C library; a planted fault would be the library's, and the detectors are validated by abi/control.sh with deliberately wrong routines instead
+
+assertion  ABI.i386.calling.007
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Registers (table fig-reg-usage)
+class      required
+says       The MXCSR control bits are callee-saved (the status bits are not): after
+           strlen, memcpy, qsort and snprintf they are what they were before the call,
+           even when they held a non-default value.
+note       Current revision only. MXCSR is set to round-down before each call. Needs a
+           processor with SSE.
+test       t/007-mxcsr-control-callee-saved.c
+nomutant   the calls are to a C library; a planted fault would be the library's, and the detectors are validated by abi/control.sh with deliberately wrong routines instead
+
+assertion  ABI.i386.calling.008
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Registers (table fig-reg-usage)
+class      disputed
+says       A function that returns no floating-point value leaves the x87 register
+           stack empty, so the processor is in x87 mode for its caller.
+note       Stated outright by the older revision (empty before entry and upon exit).
+           The current revision asks for x87 mode at entry and for MMX users to clear
+           their state before returning, which an empty stack satisfies; so a FAIL is
+           INSPECT.
+test       t/008-x87-empty-on-return.c
+nomutant   the calls are to a C library; a planted fault would be the library's, and the detectors are validated by abi/control.sh with deliberately wrong routines instead
+
+assertion  ABI.i386.calling.009
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Registers (table fig-reg-usage)
+class      required
+says       The direction flag is clear at every function entry, including a callback
+           that a library function calls.
+note       Both revisions. The callee is entered through a recording trampoline.
+test       t/009-callback-df-clear.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.010
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/The Stack Frame (sec-stack-frame)
+class      required
+says       The stack is at least word aligned at a function entry: ESP + 4 is a
+           multiple of 4 whoever made the call.
+note       The part of the rule that holds in both revisions (the older says word
+           aligned; the current says 16, see calling.011).
+test       t/010-entry-word-aligned.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.011
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/The Stack Frame (sec-stack-frame)
+class      disputed
+says       At a function entry the value of ESP plus 4 is a multiple of 16, whatever
+           the number and size of the arguments and the size of the caller's frame.
+note       Follows the current revision (16-byte alignment). The older revision asks
+           only for word alignment (calling.010), so a FAIL is INSPECT. Checks the
+           compiler's calls.
+test       t/011-entry-16-compiled-calls.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.012
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/The Stack Frame (sec-stack-frame)
+class      disputed
+says       A comparison function that qsort or bsearch calls is entered with ESP plus 4
+           a multiple of 16.
+note       Follows the current revision (16-byte alignment); the older revision asks
+           only for word alignment, so a FAIL is INSPECT. Checks the library's calls.
+test       t/012-entry-16-library-callbacks.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.013
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Parameter Passing and Returning Values/Passing Parameters
+class      required
+says       Arguments are placed on the stack in order starting at the stack pointer
+           (the last one farthest away), each at its type's alignment and rounded up to
+           whole words: an int, float or char takes a word, a double or long long two,
+           a long double three, a 5-byte structure two.
+note       Current revision; the older one says the same for words. The upper bits of a
+           char or short argument word are not checked.
+test       t/013-stack-argument-layout.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.014
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values in Memory
+class      required
+says       A function returning a structure of any size, even one that would fit in a
+           register, receives the address of the result as an implicit first argument,
+           writes the value there, pops that argument and returns the address in EAX.
+note       Both revisions agree on the hidden pointer and on EAX. In the current text
+           all aggregates go to memory.
+test       t/014-small-aggregates-in-memory.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.015
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values in Memory
+class      required
+says       A function returning a larger structure (12, 16, 100 and 33 bytes, one
+           holding a long double) follows the same protocol: hidden first argument,
+           value written there, argument popped, address in EAX.
+note       Both revisions.
+test       t/015-large-aggregates-in-memory.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.016
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (table fig_returning_locations)
+class      required
+says       A function returning _Complex double or _Complex long double (types the
+           table gives 'memory' as return location) uses the hidden-pointer protocol.
+note       Current revision only.
+test       t/016-complex-in-memory.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.017
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (table fig_returning_locations)
+class      required
+says       A function returning float leaves exactly one value on the x87 register
+           stack, in st0, holding that value; the caller removes it.
+note       Both revisions. The record pops the value itself, as the caller must.
+test       t/017-return-float.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.018
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (table fig_returning_locations)
+class      required
+says       A function returning double leaves exactly one value on the x87 register
+           stack, in st0, holding that value; the caller removes it.
+note       Both revisions. The record pops the value itself, as the caller must.
+test       t/018-return-double.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.019
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (table fig_returning_locations)
+class      required
+says       A function returning long double leaves exactly one value on the x87
+           register stack, in st0, holding that value; the caller removes it.
+note       Both revisions. The record pops the value itself, as the caller must.
+test       t/019-return-long-double.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.020
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (floating-point paragraph)
+class      required
+says       A caller pops a floating-point return value from the x87 register stack
+           whether or not it uses the value.
+note       Both revisions. The calls are made by the compiler's own code through
+           prototyped function pointers.
+test       t/020-unused-fp-return-popped.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.021
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (table fig_returning_locations)
+class      required
+says       A function returning a 64-bit integer puts the high 32 bits in EDX and the
+           low 32 bits in EAX.
+note       Current revision only (the older one has no long long).
+test       t/021-return-64-bit.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.022
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (table fig_returning_locations)
+class      required
+says       A function returning an int, long, unsigned, enumeration, object pointer or
+           function pointer leaves the value in EAX.
+note       Both revisions.
+test       t/022-return-eax.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.023
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (table fig_returning_locations) (after the table, _Bool paragraph)
+class      required
+says       A function returning a _Bool leaves the truth value in bit 0 of AL and zero
+           in bits 1 to 7.
+note       Current revision only. The other bits of EAX are not checked.
+test       t/023-return-bool.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.024
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (table fig_returning_locations)
+class      required
+says       For a char or short return value only AL or AX is defined; the upper bits of
+           EAX are undefined and the caller must not depend on them, so a signed char
+           holding 0x80 in AL reads as -128 and an unsigned one as 128 whatever the
+           upper 24 bits hold.
+note       Current revision only. The callee is hand-written (garbage in the upper
+           bits); what is checked is the compiled caller.
+test       t/024-char-short-return-upper-bits.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.calling.025
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (table fig_returning_locations)
+class      required
+says       A function returning _Complex float returns the real part in EAX and the
+           imaginary part in EDX (the 32-bit patterns of the two floats).
+note       Current revision only.
+test       t/025-return-complex-float.c
+nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
+

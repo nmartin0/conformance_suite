@@ -72,7 +72,8 @@ for m in mods:
             err(where, f"missing '{key}'")
     if not m.assertions:
         err(where, "module has no assertions")
-    if not (m.dir / (page + ".cov")).is_file():
+    # The ABI suite has no requirement units to account for (no .cov file).
+    if vol_dir not in catalog.ARCHITECTURES and not (m.dir / (page + ".cov")).is_file():
         err(where, f"no {page}.cov: classify every requirement unit "
                    f"(ci/coverage.py --stub {m.path})")
 

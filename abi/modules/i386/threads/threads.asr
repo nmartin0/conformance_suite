@@ -1,0 +1,128 @@
+# ABI i386 threads: a new thread's entry state and thread-local storage
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Source: the i386 psABI, "Low Level System Information", Process
+# Initialization / Thread State (a new thread inherits the creating thread's
+# floating-point state, which is private to it afterwards) and the function
+# entry rules of the calling sequence. The start routine is entered through a
+# recording trampoline so the state at its first instruction is seen.
+#
+# Thread-local storage: the psABI names the separate ELF TLS document for the
+# relocation types and their use; that document was not in the source set
+# used to write this suite. The expected behaviour is that of the C language's
+# thread storage duration (every thread has its own object, initialised from
+# the initial value or zero, with the alignment asked for), which is what the
+# TLS layout (.tdata and .tbss) implements; the assertions say so in their
+# notes.
+
+assertion  ABI.i386.threads.001
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/The Stack Frame (sec-stack-frame)
+class      required
+says       The start routine of a new thread is entered like any function: ESP plus 4
+           is at least a multiple of 4.
+note       The part of the entry rule that holds in both revisions; see threads.002.
+test       t/001-start-routine-word-aligned.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.threads.002
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/The Stack Frame (sec-stack-frame)
+class      disputed
+says       The start routine of a new thread is entered with ESP plus 4 a multiple of
+           16.
+note       Follows the current revision (16 bytes); the older one asks for word
+           alignment only, so a FAIL is INSPECT.
+test       t/002-start-routine-16.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.threads.003
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Registers (table fig-reg-usage)
+class      required
+says       The direction flag is clear at every function entry, so at the start routine
+           of a new thread.
+note       Both revisions.
+test       t/003-start-routine-df-clear.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.threads.004
+anchor     i386-psabi:low-level-sys-info#Process Initialization/Thread State
+class      required
+says       A new thread inherits the floating-point state of its creator: with the
+           creator's x87 control word set to round-down, the thread's start routine is
+           entered with it.
+note       Current revision only.
+test       t/004-x87-cw-inherited.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.threads.005
+anchor     i386-psabi:low-level-sys-info#Process Initialization/Thread State
+class      required
+says       A new thread inherits the creator's MXCSR: with the creator's rounding set
+           to round-down, the thread's start routine is entered with it.
+note       Current revision only.
+test       t/005-mxcsr-inherited.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.threads.006
+anchor     i386-psabi:low-level-sys-info#Process Initialization/Thread State
+class      required
+says       A thread started from the process's initial floating-point state (x87
+           control word 0x037F, MXCSR control bits 0x1F80) begins in that state.
+note       Inferred from inheritance (Thread State) and the process-entry tables;
+           current revision.
+test       t/006-default-fp-state.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.threads.007
+anchor     i386-psabi:low-level-sys-info#Process Initialization/Thread State
+class      required
+says       The floating-point state is private to each thread after creation: a thread
+           that sets round-down for itself leaves its creator's control words
+           unchanged, and a thread started afterwards does not see the change.
+note       Current revision only.
+test       t/007-fp-state-private.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.threads.008
+anchor     i386-psabi:object-files#Relocation types for thread-local storage (R_386_TLS_*), which refer to the separate ELF TLS document (not in the source set)
+class      required
+says       A thread-local object with an initialiser (the .tdata image) starts in every
+           new thread with that initial value, whatever other threads have written to
+           their own copies.
+note       Oracle is the C language's thread storage duration, which the TLS layout
+           implements; the TLS document the psABI refers to was not in the source set.
+test       t/008-tls-initialised.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.threads.009
+anchor     i386-psabi:object-files#Relocation types for thread-local storage (R_386_TLS_*), which refer to the separate ELF TLS document (not in the source set)
+class      required
+says       A thread-local object without an initialiser (the .tbss part, here a
+           20000-byte array, a word and a structure) is all zero in every new thread,
+           even when another thread has filled its own copy.
+note       Oracle is the C language's thread storage duration, which the TLS layout
+           implements; the TLS document the psABI refers to was not in the source set.
+test       t/009-tls-zero.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.threads.010
+anchor     i386-psabi:object-files#Relocation types for thread-local storage (R_386_TLS_*), which refer to the separate ELF TLS document (not in the source set)
+class      required
+says       Four threads alive at the same time, and the main thread, each have their
+           own copy of an initialised and of an uninitialised thread-local variable:
+           the addresses differ and each thread reads back the value it wrote.
+note       Oracle is the C language's thread storage duration, which the TLS layout
+           implements; the TLS document the psABI refers to was not in the source set.
+test       t/010-tls-distinct.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.threads.011
+anchor     i386-psabi:object-files#Relocation types for thread-local storage (R_386_TLS_*), which refer to the separate ELF TLS document (not in the source set)
+class      required
+says       Thread-local objects declared with an alignment of 16, 64, 256 and 4096
+           bytes (both with an initialiser and without) are aligned that way in every
+           thread.
+note       Oracle is the C language's thread storage duration, which the TLS layout
+           implements; the TLS document the psABI refers to was not in the source set.
+test       t/011-tls-alignment.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+

@@ -11,7 +11,11 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-VOLUMES = {"xbd": "XBD", "xsh": "XSH", "xcu": "XCU", "st": "ST"}
+VOLUMES = {"xbd": "XBD", "xsh": "XSH", "xcu": "XCU", "st": "ST",
+           # the ABI suite (abi/modules): module <architecture>/<area>, IDs ABI.<architecture>.<area>.NNN
+           "i386": "ABI.i386", "x86_64": "ABI.x86_64"}
+# Volume directories that name an architecture rather than a volume of the standard.
+ARCHITECTURES = {"i386", "x86_64"}
 ASR_KEYS = {"assertion", "anchor", "class", "when", "since", "says", "test",
             "needs", "timeout", "expect", "reason", "origin", "note", "uses",
             "nomutant"}
@@ -100,7 +104,10 @@ def all_modules(modroot):
 
 
 def id_module(aid):
-    """XSH.close.001 -> xsh/close"""
+    """XSH.close.001 -> xsh/close; ABI.i386.entry.001 -> i386/entry"""
+    if aid.startswith("ABI."):
+        arch, rest = aid[4:].split(".", 1)
+        return f"{arch}/{rest.rsplit('.', 1)[0]}"
     vol, rest = aid.split(".", 1)
     page = rest.rsplit(".", 1)[0]
     for low, up in VOLUMES.items():

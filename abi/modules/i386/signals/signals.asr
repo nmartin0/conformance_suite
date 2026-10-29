@@ -1,0 +1,90 @@
+# ABI i386 signals: handler entry and resuming the interrupted code
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Source: the i386 psABI, "Low Level System Information", Function Calling
+# Sequence, and the older published revision (abi386-4, chapter 3, the
+# paragraph on signals in "Function Calling Sequence"). Neither revision has a
+# section on signal delivery. The older one says a returning handler lets the
+# process resume with its registers restored and that functions run during
+# signal handling have no unusual restrictions; the current one has no such
+# sentence. So the resume checks are disputed (INSPECT on FAIL). Reading the
+# function-entry rules (stack alignment, direction flag) as applying to a
+# handler is an inference, and those checks are disputed as well. The handler
+# deliberately changes registers and control words and sets DF before it
+# returns, so that restoring them is observable.
+
+assertion  ABI.i386.signals.001
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/The Stack Frame (sec-stack-frame)
+class      disputed
+says       A signal handler is entered like any function: ESP plus 4 is a multiple of
+           16.
+note       Neither revision speaks of signal handlers specifically; this reads the
+           function-entry rule (current revision: 16 bytes; the older one: word
+           aligned) as covering them. A FAIL is INSPECT.
+test       t/001-entry-16-raise.c
+nomutant   the behaviour belongs to the system's signal delivery, which has no function to plant a fault in; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.signals.002
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/The Stack Frame (sec-stack-frame)
+class      disputed
+says       A signal handler that interrupts code whose ESP has any word-aligned value
+           (four values mod 16 are tried) is still entered with ESP plus 4 a multiple
+           of 16.
+note       As signals.001: an inference from the function-entry rule; the current
+           revision's 16 bytes, the older one's word alignment. A FAIL is INSPECT.
+test       t/002-entry-16-async.c
+nomutant   the behaviour belongs to the system's signal delivery, which has no function to plant a fault in; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.signals.003
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Registers (table fig-reg-usage)
+class      disputed
+says       The direction flag is clear on entry to a signal handler even when the
+           interrupted code had it set.
+note       An inference from the rule that DF is clear at every function entry (both
+           revisions). A FAIL is INSPECT.
+test       t/003-entry-df-clear.c
+nomutant   the behaviour belongs to the system's signal delivery, which has no function to plant a fault in; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.signals.004
+anchor     abi386-4 chapter 3, Function Calling Sequence, 'Registers' (paragraph on signals)
+class      disputed
+says       When a handler returns, the interrupted code resumes with its registers
+           restored, so a call to raise() (the handler clobbering EBX, ESI, EDI, EBP,
+           DF and the control words) returns with callee-saved registers, DF and both
+           control words as they were.
+note       Stated by the older revision only. Also an application of the callee-saved
+           rules to raise(). A FAIL is INSPECT.
+test       t/004-resume-sync.c
+nomutant   the behaviour belongs to the system's signal delivery, which has no function to plant a fault in; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.signals.005
+anchor     abi386-4 chapter 3, Function Calling Sequence, 'Registers' (paragraph on signals)
+class      disputed
+says       When a handler returns, the process resumes with its registers (and its
+           direction flag) restored: code interrupted with sentinels in EBX, ESI, EDI
+           and EBP and DF set finds them again, whatever the handler did with them.
+note       Stated by the older revision only. A FAIL is INSPECT.
+test       t/005-resume-async-regs.c
+nomutant   the behaviour belongs to the system's signal delivery, which has no function to plant a fault in; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.signals.006
+anchor     abi386-4 chapter 3, Function Calling Sequence, 'Registers' (paragraph on signals)
+class      disputed
+says       Code interrupted with a non-default x87 control word finds it unchanged
+           after the handler returns, although the handler changed it.
+note       Stated by the older revision (registers restored) and consistent with the
+           current revision's callee-saved control word. A FAIL is INSPECT.
+test       t/006-resume-x87-cw.c
+nomutant   the behaviour belongs to the system's signal delivery, which has no function to plant a fault in; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.signals.007
+anchor     abi386-4 chapter 3, Function Calling Sequence, 'Registers' (paragraph on signals)
+class      disputed
+says       Code interrupted with non-default MXCSR control bits finds them unchanged
+           after the handler returns, although the handler changed them.
+note       The older revision predates SSE; this follows its registers-restored
+           sentence and the current revision's callee-saved MXCSR control bits. A FAIL
+           is INSPECT.
+test       t/007-resume-mxcsr.c
+nomutant   the behaviour belongs to the system's signal delivery, which has no function to plant a fault in; the detectors are validated by abi/control.sh
+

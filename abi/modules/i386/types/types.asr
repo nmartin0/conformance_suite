@@ -1,0 +1,171 @@
+# ABI i386 types: sizes, alignments and aggregate layout
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Source: the i386 psABI, "Low Level System Information", Data Representation
+# (table basic-types and the paragraphs after it), compared with the older
+# published revision (abi386-4, chapter 3). Every property is checked at
+# compile time with _Static_assert (so a build failure is the FAIL) and, where
+# the ABI describes stored bits, at run time. The ABI says nothing about
+# wchar_t, ptrdiff_t or the signedness of plain bit-fields' base types beyond
+# what is below, and nothing is asserted for them.
+
+assertion  ABI.i386.types.001
+anchor     i386-psabi:low-level-sys-info#Data Representation/Fundamental Types (table basic-types)
+class      required
+says       char is a signed byte; short, int and long have 2, 4 and 4 bytes, each
+           aligned to its own size; an enumeration type has the size and alignment of
+           int.
+test       t/001-integer-types.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.002
+anchor     i386-psabi:low-level-sys-info#Data Representation/Fundamental Types (table basic-types)
+class      required
+says       long long and unsigned long long occupy 8 bytes but need only 4-byte
+           alignment, so a structure places such a member at offset 4 after a char and
+           a structure ending in a char is 12 bytes.
+test       t/002-long-long.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.003
+anchor     i386-psabi:low-level-sys-info#Data Representation/Fundamental Types (table basic-types)
+class      required
+says       Pointers to objects and to functions are 4 bytes with 4-byte alignment, and
+           the null pointer of every pointer type has all bits zero.
+test       t/003-pointers.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.004
+anchor     i386-psabi:low-level-sys-info#Data Representation/Fundamental Types (table basic-types)
+class      required
+says       float has 4 bytes and 4-byte alignment; double has 8 bytes but 4-byte
+           alignment, so it sits at offset 4 after a char and a structure holding one
+           is a multiple of 4 bytes.
+test       t/004-float-double.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.005
+anchor     i386-psabi:low-level-sys-info#Data Representation/Fundamental Types (table basic-types)
+class      required
+says       long double (the 80-bit extended type) takes 12 bytes with 4-byte alignment,
+           so it sits at offset 4 after a char and a structure holding one is 16 bytes.
+note       The paragraph for Android in the table, where long double is 64-bit, is a
+           platform exception that this suite does not model; it applies to an x86 ABI
+           only for that platform.
+test       t/005-long-double.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.006
+anchor     i386-psabi:low-level-sys-info#Data Representation/Fundamental Types (table basic-types)
+class      required
+says       _Complex float, _Complex double and _Complex long double take 8, 16 and 24
+           bytes, each aligned to 4.
+note       Current revision only (complex types are not in the older table).
+test       t/006-complex.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.007
+anchor     i386-psabi:low-level-sys-info#Data Representation/Fundamental Types (table basic-types)
+class      required
+says       _Bool takes one byte with byte alignment, and a _Bool object in memory holds
+           only the byte values 0 and 1.
+test       t/007-bool.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.008
+anchor     i386-psabi:low-level-sys-info#Data Representation/Fundamental Types (after table basic-types)
+class      required
+says       The alignment of max_align_t is 16.
+note       Current revision only (the older one predates C11).
+test       t/008-max-align.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.009
+anchor     i386-psabi:low-level-sys-info#Data Representation/Fundamental Types (after table basic-types)
+class      required
+says       size_t, and so the type of the sizeof operator, is unsigned int.
+note       Current revision only. The ABI says nothing about ptrdiff_t or wchar_t, so
+           nothing is asserted for them.
+test       t/009-size-t.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.010
+anchor     i386-psabi:low-level-sys-info#Data Representation/Structures and Unions
+class      required
+says       Each member of a structure is placed at the lowest offset that is a multiple
+           of its alignment; padding fills the gap before it.
+note       Both revisions.
+test       t/010-struct-internal-padding.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.011
+anchor     i386-psabi:low-level-sys-info#Data Representation/Structures and Unions
+class      required
+says       A structure takes the alignment of its most strictly aligned member and its
+           size is rounded up (tail padding) to a multiple of that alignment, so arrays
+           of it have no gaps.
+note       Both revisions.
+test       t/011-struct-tail-padding.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.012
+anchor     i386-psabi:low-level-sys-info#Data Representation/Structures and Unions
+class      required
+says       An aggregate nested in another is aligned as its own most aligned member
+           requires, a union has the alignment of its most aligned member and a size
+           rounded up to it, and an array uses its element's alignment with no gaps.
+note       Both revisions.
+test       t/012-nested-and-union.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.013
+anchor     abi386-4 chapter 3, 'Bit-Fields' (the current revision has no bit-field rules)
+class      disputed
+says       Within a storage unit the first bit-field takes the lowest bits and the next
+           ones follow upward, so int fields of 5, 6 and 7 bits sit at bits 0 to 4, 5
+           to 10 and 11 to 17 of one word.
+note       Stated only in the older published revision (abi386-4); the current revision
+           does not mention bit-fields, so a FAIL is INSPECT. The layout is that of the
+           older text's figures.
+test       t/013-bitfield-right-to-left.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.014
+anchor     abi386-4 chapter 3, 'Bit-Fields' (the current revision has no bit-field rules)
+class      disputed
+says       A bit-field never crosses the boundary of a storage unit of its declared
+           type, and may share that unit with other members: in a structure of a 9-bit
+           short, a 9-bit int, a char, two more 9-bit shorts and a char the fields land
+           at the bit positions the older text's figure shows and the structure is 12
+           bytes.
+note       Stated only in the older published revision (abi386-4); the current revision
+           does not mention bit-fields, so a FAIL is INSPECT. The layout is that of the
+           older text's figures.
+test       t/014-bitfield-unit-boundary.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.015
+anchor     abi386-4 chapter 3, 'Bit-Fields' (the current revision has no bit-field rules)
+class      disputed
+says       A short bit-field of 8 bits after a char fits in the same 2-byte unit
+           (making a 2-byte, 2-aligned structure) and occupies its high byte; in a
+           union the bit-field starts at bit 0 and the union is 2 bytes, 2-aligned.
+note       Stated only in the older published revision (abi386-4); the current revision
+           does not mention bit-fields, so a FAIL is INSPECT. The layout is that of the
+           older text's figures.
+test       t/015-bitfield-sharing-union.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+
+assertion  ABI.i386.types.016
+anchor     abi386-4 chapter 3, 'Bit-Fields' (the current revision has no bit-field rules)
+class      disputed
+says       An unnamed bit-field reserves its bits (a zero-width one moves on to the
+           next unit boundary of its type) but its type does not raise the structure's
+           alignment: a char, an int:0, a char, a short:9 and a char make a 9-byte
+           structure with byte alignment and the named chars at offsets 0, 4 and 8.
+note       Stated only in the older published revision (abi386-4); the current revision
+           does not mention bit-fields, so a FAIL is INSPECT. The layout is that of the
+           older text's figures.
+test       t/016-bitfield-unnamed.c
+nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
+

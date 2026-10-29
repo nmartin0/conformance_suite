@@ -1,0 +1,7 @@
+module  i386/signals
+page    signals
+volume  ABI.i386
+option  BASE
+origin  i386 psABI, Function Calling Sequence
+buildfail UNINITIATED
+libs    -lpthread

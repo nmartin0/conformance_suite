@@ -1,0 +1,7 @@
+module  i386/threads
+page    threads
+volume  ABI.i386
+option  BASE
+origin  i386 psABI, Process Initialization / Thread State
+buildfail UNINITIATED
+libs    -lpthread

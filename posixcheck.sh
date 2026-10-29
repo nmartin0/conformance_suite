@@ -562,8 +562,17 @@ pc_vol_lower() {
 }
 
 # XSH.2.6-file-descriptor-allocation.001 -> xsh/2.6-file-descriptor-allocation
+# ABI.i386.entry.001 -> i386/entry (a module tree given with --root)
 pc_id_module() {
 	pc_im=${1%.*}
+	case $pc_im in
+	ABI.?*.?*)
+		# an ABI assertion: ABI.<architecture>.<area> is <architecture>/<area>
+		pc_im=${pc_im#ABI.}
+		pc_im=${pc_im%%.*}/${pc_im#*.}
+		return 0
+		;;
+	esac
 	pc_vol_lower "${pc_im%%.*}"
 	if [ -n "$pc_vl" ]; then pc_im=$pc_vl/${pc_im#*.}; else pc_im=; fi
 }
