@@ -80,7 +80,7 @@ do_build() {
 	mkdir "$dir/bin" || die "cannot create $dir/bin"
 
 	# 1. the stubs
-	python3 "$here/gen/nullsys.py" ${model:+--model "$model"} --out "$dir/nullsys.c" \
+	python3 "$here/gen/nullsys.py" ${model:+--model "$model"} --cc "$cc" --out "$dir/nullsys.c" \
 	    2>"$dir/nullsys.gen.txt" || { cat "$dir/nullsys.gen.txt" >&2; die "gen/nullsys.py failed"; }
 	cp "$here/gen/nullsys_rt.c" "$dir/nullsys_rt.c" || die "cannot copy the runtime"
 	pdef=

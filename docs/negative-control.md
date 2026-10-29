@@ -163,11 +163,18 @@ code in brackets. `INSPECT` (the FAIL of a disputed assertion) and
   a wrapper; `vfork` and the `ucontext` functions likewise. Not defined, so
   their tests run on the real functions.
 - Calls that never reach a library function by its standard name: ones the
-  compiler inlines, and ones a header maps to another name (checked or
-  64-bit variants). The wrapper switches the first two off where the
-  compiler accepts `-fno-builtin -U_FORTIFY_SOURCE`; a header that renames
-  `stat` or `open` for large files on a 32-bit system defeats a stub. The
-  log makes such cases visible: they land in (a).
+  compiler inlines, and ones a header maps to another symbol under the
+  feature macros the tests use. The wrapper switches the first kind off where
+  the compiler accepts `-fno-builtin -U_FORTIFY_SOURCE`. The second kind is
+  found at build time: `gen/nullsys.py --cc CC` compiles, per header, a probe
+  that takes the address of each modelled function with the driver's
+  `-D_POSIX_C_SOURCE=202405L` and `-D_XOPEN_SOURCE=800`, reads the undefined
+  symbols with `nm`, and for every symbol other than the name itself that
+  contains the standard name it adds a stub under that symbol. It has the
+  same gate and logs the standard name (`ID sscanf`); outside the test phase
+  it forwards to the C library's own symbol of that name. Which ones exist is
+  listed in `nullsys.gen.txt` ("is also stubbed as"). A build without `--cc`
+  skips this step.
 - Macros that stand in for a function (`getc`, `isalpha`, ...) are not
   calls; a test that uses the macro form reaches the stub only if the test
   uses the function form.

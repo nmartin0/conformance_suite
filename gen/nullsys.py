@@ -27,7 +27,9 @@
 
 import argparse
 import json
+import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -191,7 +193,9 @@ def plist_types(f):
     return ", ".join(f.params) if f.params else "void"
 
 
-def emit(f, idx, out):
+def emit(f, idx, out, sym=None):
+    """Write the stub of f; with sym, under that other symbol (an alternate
+    entry point of the same function): same gate, same log name."""
     P = f.params
     names = ["a%d" % i for i in range(len(P))]
     formal = ", ".join("%s %s" % (t, n) for t, n in zip(P, names))
@@ -199,7 +203,8 @@ def emit(f, idx, out):
     if f.variadic:
         formal = (formal + ", ..." if formal else "...")
     R = f.rtype
-    fnname = f.name
+    fnname = sym or f.name
+    stdname = f.name
 
     def fail_body(ind):
         s = ind + "ns_seterr();\n"
@@ -215,7 +220,7 @@ def emit(f, idx, out):
     w("%s %s(%s)\n{\n" % (R, fnname, formal if formal else "void"))
 
     def gate_on():
-        w("\tif (ns_enter(%d, \"%s\")) {\n" % (idx, fnname))
+        w("\tif (ns_enter(%d, \"%s\")) {\n" % (idx, stdname))
         w(fail_body("\t\t"))
         w("\t}\n")
 
@@ -240,7 +245,10 @@ def emit(f, idx, out):
           (R, plist_types(f), fnname))
         no_real()
         finish("real(%s)" % ", ".join(names), False)
-    elif fnname in VFORWARD:
+    elif stdname in VFORWARD:
+        vtarget = VFORWARD[stdname]
+        if sym and stdname in sym:
+            vtarget = sym.replace(stdname, vtarget, 1)
         w("\tstatic %s (*real)(%s);\n\tva_list ap;\n" %
           (R, ", ".join(P + ["va_list"])))
         if f.rkind != "void" and not f.noreturn:
@@ -248,7 +256,7 @@ def emit(f, idx, out):
         w("\n")
         gate_on()
         w("\tif (real == 0)\n\t\treal = (%s (*)(%s))ns_next(\"%s\");\n" %
-          (R, ", ".join(P + ["va_list"]), VFORWARD[fnname]))
+          (R, ", ".join(P + ["va_list"]), vtarget))
         no_real()
         w("\tva_start(ap, %s);\n" % last)
         if f.rkind == "void":
@@ -256,9 +264,9 @@ def emit(f, idx, out):
         else:
             w("\tr = real(%s);\n\tva_end(ap);\n\treturn r;\n" %
               ", ".join(names + ["ap"]))
-    elif fnname in LONGS or fnname in DOUBLES:
-        isd = fnname in DOUBLES
-        n = (DOUBLES if isd else LONGS)[fnname]
+    elif stdname in LONGS or stdname in DOUBLES:
+        isd = stdname in DOUBLES
+        n = (DOUBLES if isd else LONGS)[stdname]
         vt = "double" if isd else "long"
         w("\tstatic %s (*real)(%s, ...);\n\tva_list ap;\n" % (R, ptype))
         for i in range(n):
@@ -273,8 +281,8 @@ def emit(f, idx, out):
             w("\tx%d = va_arg(ap, %s);\n" % (i, vt))
         w("\tva_end(ap);\n")
         finish("real(%s)" % ", ".join(names + ["x%d" % i for i in range(n)]), False)
-    elif fnname in EXECL:
-        vname, has_env = EXECL[fnname]
+    elif stdname in EXECL:
+        vname, has_env = EXECL[stdname]
         vparams = ["void *", "void *"] + (["void *"] if has_env else [])
         w("\tstatic %s (*real)(%s);\n\tva_list ap;\n\tvoid *argv[NS_MAXARGS];\n"
           "%s\tint n = 0;\n\n" % (R, ", ".join(vparams), "\tvoid *envp = 0;\n" if has_env else ""))
@@ -302,6 +310,90 @@ def emit(f, idx, out):
           "\tx2 = va_arg(ap, long);\n\tva_end(ap);\n" % last)
         finish("real(%s)" % ", ".join(names + ["x0", "x1", "x2"]), False)
     w("}\n\n")
+
+
+# ---------- alternate entry points ----------
+#
+# With some feature macros a header binds a standard name to another symbol
+# of the C library (a redirect by asm label or macro), so a call never
+# reaches a stub of the standard name. The symbol is found by building: a
+# tiny file includes the function's header, takes the function's address
+# and is compiled with the flags the driver uses for the tests (and the
+# wrapper's -fno-builtin -U_FORTIFY_SOURCE); the only undefined symbol of
+# the object is the one the name is bound to. No name of a system or of a
+# library appears here.
+
+PROBE_FLAGS = [["-D_POSIX_C_SOURCE=202405L"], ["-D_XOPEN_SOURCE=800"]]
+PROBE_COMMON = ["-O0", "-fno-builtin", "-U_FORTIFY_SOURCE", "-c"]
+
+
+def undefined_symbols(cc, flags, source, tmp):
+    """Undefined symbols of the object made from source, or None if it does
+    not build."""
+    c, o = os.path.join(tmp, "p.c"), os.path.join(tmp, "p.o")
+    with open(c, "w") as fh:
+        fh.write(source)
+    for extra in (PROBE_COMMON, [x for x in PROBE_COMMON if x not in
+                                 ("-fno-builtin", "-U_FORTIFY_SOURCE")]):
+        r = subprocess.run(cc + flags + extra + ["-o", o, c],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                           stdin=subprocess.DEVNULL)
+        if r.returncode == 0:
+            break
+    else:
+        return None
+    r = subprocess.run(["nm", "-P", "-u", o], stdout=subprocess.PIPE,
+                       stderr=subprocess.DEVNULL, universal_newlines=True)
+    if r.returncode != 0:
+        return None
+    syms = set()
+    for line in r.stdout.splitlines():
+        w = line.split()
+        if len(w) >= 2 and w[1] == "U":
+            syms.add(w[0].split("@")[0])
+    return syms
+
+
+def probe_source(hdr, names):
+    s = "#include <%s>\n" % hdr
+    for n in names:
+        s += "void *ns_probe_%s(void) { return (void *)&%s; }\n" % (n, n)
+    return s
+
+
+def find_alternates(cc, model, names):
+    """{standard name: set of other symbols it is bound to} for the names."""
+    import tempfile
+    cc = cc.split()
+    where = {}
+    for hdr in model:
+        for e in hdr["functions"]:
+            if e["name"] in names:
+                where.setdefault(hdr["header"], []).append(e["name"])
+    alts = {}
+
+    def one(item):
+        hdr, fl = item
+        found = {}
+        with tempfile.TemporaryDirectory() as tmp:
+            for flags in PROBE_FLAGS:
+                # all of the header at once: extra undefined symbols mean
+                # some function is bound elsewhere; look one by one then
+                got = undefined_symbols(cc, flags, probe_source(hdr, fl), tmp)
+                if got is not None and got <= set(fl):
+                    continue
+                for n in fl:
+                    got = undefined_symbols(cc, flags, probe_source(hdr, [n]), tmp)
+                    for g in (got or set()) - {n}:
+                        found.setdefault(n, set()).add(g)
+        return found
+
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=8) as ex:
+        for found in ex.map(one, sorted(where.items())):
+            for n, g in found.items():
+                alts.setdefault(n, set()).update(g)
+    return alts
 
 
 PRELUDE = r'''/*
@@ -388,6 +480,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default=str(ROOT / "build" / "spec" / "model.json"))
     ap.add_argument("--out", required=True)
+    ap.add_argument("--cc", default="",
+                    help="compiler, to find the alternate entry points")
     args = ap.parse_args()
     try:
         model = json.load(open(args.model))
@@ -417,7 +511,24 @@ def main():
         out.write(PRELUDE)
         for i, f in enumerate(fns):
             emit(f, i, out)
+        extra = 0
+        if args.cc:
+            names = {f.name for f in fns}
+            taken = names | set(NOT_STUBBED) | set(IN_RUNTIME)
+            alts = find_alternates(args.cc, model, names)
+            index = {f.name: i for i, f in enumerate(fns)}
+            for f in fns:
+                for a in sorted(alts.get(f.name, set()) - taken):
+                    if f.name not in a:
+                        continue   # not a variant of this name
+                    taken.add(a)
+                    emit(f, index[f.name], out, sym=a)
+                    extra += 1
+                    sys.stderr.write("nullsys.py: %s is also stubbed as %s\n" % (f.name, a))
+        else:
+            sys.stderr.write("nullsys.py: no --cc: alternate entry points not looked for\n")
         out.write("/* %d stubs */\nint ns_stub_count = %d;\n" % (len(fns), len(fns)))
+        out.write("/* %d alternate entry points */\n" % extra)
     sys.stderr.write("nullsys.py: %d stubs written to %s\n" % (len(fns), args.out))
     for n, why in sorted(skipped):
         sys.stderr.write("nullsys.py: not generated: %s (%s)\n" % (n, why))
