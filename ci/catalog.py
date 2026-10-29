@@ -18,7 +18,7 @@ VOLUMES = {"xbd": "XBD", "xsh": "XSH", "xcu": "XCU", "st": "ST",
 ARCHITECTURES = {"i386", "x86_64"}
 ASR_KEYS = {"assertion", "anchor", "class", "when", "since", "says", "test",
             "needs", "timeout", "expect", "reason", "origin", "note", "uses",
-            "nomutant"}
+            "nomutant", "xflags"}
 # Keys that may repeat; their values are kept as a list.
 LIST_KEYS = {"anchor"}
 CLASSES = {"required", "conditional", "profile", "inspect", "untestable",

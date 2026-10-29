@@ -20,7 +20,9 @@
 # that is told to generate non-conforming code or layout (gcc options), for
 # example structures returned in registers, 8-byte aligned doubles, a 4-byte
 # stack alignment; the test must FAIL (or INSPECT, for a disputed assertion)
-# there, and PASS with the normal compiler. A compiler that rejects an
+# there, and PASS with the normal compiler. The entry-state stub is also
+# broken on purpose (EDX clobbered, EDX pointing at data, ESP off by 4):
+# entry.012 must FAIL for the first two and entry.014 report INSPECT or FAIL. A compiler that rejects an
 # option skips that item.
 #
 # Exit status: 0 if every check detected its fault, 1 if one was missed.
@@ -164,6 +166,9 @@ fault -mpreferred-stack-boundary=2 ABI.i386.calling.011 "stack aligned to 4 at c
 fault -mno-fp-ret-in-387 ABI.i386.calling.017 "float not returned in st0"
 fault -mno-fp-ret-in-387 ABI.i386.calling.018 "double not returned in st0"
 fault "-fcall-used-esi -fcall-used-edi -fcall-used-ebx" ABI.i386.calling.026 "compiled code clobbers callee-saved registers"
+fault -DABI_ENTRY_FAULT=1 ABI.i386.entry.012 "EDX clobbered before it is recorded: not a code address"
+fault -DABI_ENTRY_FAULT=2 ABI.i386.entry.012 "EDX points at data, not at code"
+fault -DABI_ENTRY_FAULT=3 ABI.i386.entry.014 "ESP recorded 4 lower: misaligned"
 
 printf 'control: %d detected, %d missed, %d skipped\n' "$detected" "$missed" "$skipped"
 [ "$missed" -eq 0 ]

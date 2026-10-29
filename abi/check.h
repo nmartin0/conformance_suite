@@ -20,6 +20,14 @@
 
 #if defined(__i386__)
 #include "arch/i386.h"
+#ifdef ABI_ENTRY_FAULT
+#include "arch/i386_entry_fault.h"   /* control only */
+#else
+#define ABI_ENTRY_PRE_ASM ""
+#endif
+#ifndef ABI_ENTRY_POST_ASM
+#define ABI_ENTRY_POST_ASM ""
+#endif
 #endif
 
 /* The body of a test built for another architecture. */

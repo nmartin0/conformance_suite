@@ -581,7 +581,7 @@ pc_id_module() {
 
 pc_asr_reset() {
 	a_id= a_class= a_when= a_test= a_needs= a_timeout= a_expect=
-	a_reason= a_uses=
+	a_reason= a_uses= a_xflags=
 }
 
 pc_assertion() {
@@ -655,15 +655,21 @@ pc_assertion() {
 			pc_vinc="-include $pc_modroot/xsh/${pc_var%.*}/variants/$pc_var.h"
 			pc_exe=$pc_exe.variant
 		fi
-		pc_tk=$(pc_cache_key "test: $pc_cc $pc_flags $pc_ccstrict $pc_vinc libs:$pc_mlibs" \
+		# xflags: extra link options for this test only (an entry point of
+		# its own, say). If the linker refuses them the test is built
+		# without, and it reports for itself that its set-up is missing.
+		pc_xf=$a_xflags
+		pc_tk=$(pc_cache_key "test: $pc_cc $pc_flags $pc_ccstrict $pc_vinc libs:$pc_mlibs xflags:$pc_xf" \
 		    "$pc_src" "$pc_root"/core/*.h "$pc_bin/pc.o" "$pc_bin/pcgroups.o" ${pc_vinc:+"${pc_vinc#-include }"} \
 		    ${pc_vinc:+"$pc_modroot/xsh/${pc_var%.*}/variants"/*.inc})
 		if pc_cache_get "$pc_tk" "$pc_exe"; then
 			: >"$ctx_out/$pc_id.build.txt"
 		# shellcheck disable=SC2086 # mod_libs is a word list
-		elif ! "$pc_cc" $pc_flags $pc_ccstrict $pc_vinc -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
-		    "$pc_bin/pc.o" "$pc_bin/pcgroups.o" $pc_mlibs >"$ctx_out/$pc_id.build.txt" 2>&1 \
-		    </dev/null; then
+		elif ! { "$pc_cc" $pc_flags $pc_ccstrict $pc_vinc -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
+		    "$pc_bin/pc.o" "$pc_bin/pcgroups.o" $pc_mlibs $pc_xf >"$ctx_out/$pc_id.build.txt" 2>&1 \
+		    </dev/null ||
+		    { [ -n "$pc_xf" ] && "$pc_cc" $pc_flags $pc_ccstrict $pc_vinc -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
+		    "$pc_bin/pc.o" "$pc_bin/pcgroups.o" $pc_mlibs >>"$ctx_out/$pc_id.build.txt" 2>&1 </dev/null; }; }; then
 			if [ "$mod_buildfail" = FAIL ]; then
 				# Tier 0 checks: a test that does not compile shows a
 				# missing or wrong declaration, which is the failure.
@@ -964,6 +970,7 @@ pc_run_module() {
 				expect) a_expect=$pc_v ;;
 				reason) a_reason=$pc_v ;;
 				uses) a_uses=$pc_v ;;
+				xflags) a_xflags=$pc_v ;;
 				anchor | since | says | origin | note | nomutant) ;;
 				*) pc_warn "$pc_asr: unknown key '$pc_k'" ;;
 				esac

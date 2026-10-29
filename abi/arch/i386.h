@@ -554,6 +554,57 @@ struct abi_entry_rec {
 	".size " #name ",.-" #name "\n"                                      \
 	".popsection\n")
 
+/*
+ * ABI_ENTRY_STATE_STUB(): defines `abi_entry_stub`, a replacement for the
+ * program's entry point, and the objects it fills in. A test that uses it is
+ * linked with the option that names it as the entry (the assertion's
+ * `xflags`, -Wl,-e,abi_entry_stub). The stub stores EDX, EBP and ESP exactly
+ * as they were at the first instruction, then restores EAX and EFLAGS and
+ * jumps to the ordinary start symbol `_start`, so the process goes on as
+ * usual. `abi_ent_seen` holds ABI_ENT_MAGIC once the stub has run; a test
+ * built without the option (the linker refused it) sees something else and
+ * reports NOTINUSE. ABI_ENTRY_PRE_ASM is assembly run before the values are
+ * stored (empty, set in check.h; the control plants a fault there).
+ */
+#define ABI_ENT_MAGIC 0x5e17c0deu
+extern unsigned abi_ent_edx, abi_ent_ebp, abi_ent_esp, abi_ent_seen
+    __attribute__((visibility("hidden")));
+#define ABI_ENTRY_STATE_STUB()                                               \
+	__asm__(                                                             \
+	".pushsection .bss\n"                                                \
+	".balign 4\n"                                                        \
+	".hidden abi_ent_edx\n.hidden abi_ent_ebp\n"                         \
+	".hidden abi_ent_esp\n.hidden abi_ent_seen\n"                        \
+	".globl abi_ent_edx\n.globl abi_ent_ebp\n"                           \
+	".globl abi_ent_esp\n.globl abi_ent_seen\n"                          \
+	"abi_ent_edx:\n\t.space 4\n"                                         \
+	"abi_ent_ebp:\n\t.space 4\n"                                         \
+	"abi_ent_esp:\n\t.space 4\n"                                         \
+	"abi_ent_seen:\n\t.space 4\n"                                        \
+	".popsection\n"                                                      \
+	".pushsection .text\n"                                               \
+	".globl abi_entry_stub\n.hidden abi_entry_stub\n"                    \
+	".type abi_entry_stub,@function\n"                                   \
+	"abi_entry_stub:\n"                                                  \
+	ABI_ENTRY_PRE_ASM                                                    \
+	"\tpushl %eax\n"                                                     \
+	"\tpushfl\n"                                                         \
+	"\tcall .Labi_ent_pc\n"                                              \
+	".Labi_ent_pc:\n"                                                    \
+	"\tpopl %eax\n"                                                      \
+	"\taddl $_GLOBAL_OFFSET_TABLE_+(.-.Labi_ent_pc),%eax\n"              \
+	"\tmovl %edx,abi_ent_edx@GOTOFF(%eax)\n"                             \
+	"\tmovl %ebp,abi_ent_ebp@GOTOFF(%eax)\n"                             \
+	"\tmovl %esp,abi_ent_esp@GOTOFF(%eax)\n"                             \
+	"\taddl $8,abi_ent_esp@GOTOFF(%eax)\n"      /* undo the two pushes */\
+	"\tmovl $0x5e17c0de,abi_ent_seen@GOTOFF(%eax)\n"                     \
+	"\tpopfl\n"                                                          \
+	"\tpopl %eax\n"                                                      \
+	ABI_ENTRY_POST_ASM                                                   \
+	"\tjmp _start\n"                                                     \
+	".size abi_entry_stub,.-abi_entry_stub\n"                            \
+	".popsection\n")
+
 /* Attributes for a function that is the target of a trampoline (or called only from assembly). */
 #define ABI_TARGET __attribute__((used, noinline, visibility("hidden")))
 

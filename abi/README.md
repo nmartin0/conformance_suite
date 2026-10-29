@@ -32,8 +32,8 @@ Results are the usual ones. In addition:
   compiler builds for (every i386 test, built for x86-64, says so).
 - **INSPECT**: a `disputed` assertion failed. Used where the two published
   revisions of the psABI differ or where only the older one states the rule (below).
-- **UNTESTED**: an `untestable` assertion (needs control of the program's first
-  instruction), listed so the gap is visible.
+- **UNTESTED**: an `untestable` assertion (the text gives the system nothing to
+  assert, or the state cannot be seen), listed so the gap is visible.
 
 Assertions whose rule rests on the older revision alone (the x87 stack depth
 at a return, calling.017-.019 and .025) or on an inference about where the
@@ -48,6 +48,7 @@ A test needs no privilege; as an ordinary user the result is the same.
     abi/control.sh        the control: wrong routines and wrong compilers must be caught
     abi/arch/i386.h       the architecture primitives (the only inline assembly of the suite)
     abi/arch/i386_control.h   deliberately wrong routines, for the control only
+    abi/arch/i386_entry_fault.h   planted faults for the entry-state stub, control only
     abi/check.h           the checks, in generic C, shared by tests and control
     abi/libcalls.h        the four library calls the calling-sequence tests make
     abi/sigtest.h         signal-test support (handler, interrupted loop, sender thread)
@@ -58,7 +59,7 @@ Areas of batch 1 (assertion IDs `ABI.i386.<area>.NNN`):
 
 | area | what | assertions |
 |---|---|---|
-| entry | initial stack, argv/envp/auxv, DF, x87 and MXCSR control state in `main` | 13 (2 untestable) |
+| entry | initial stack, argv/envp/auxv, DF, x87 and MXCSR control state in `main`; EDX and ESP at the true first instruction; the program file's own header | 15 (1 untestable) |
 | types | sizes, alignments, structure/union layout, older revision's bit-fields | 16 |
 | calling | callee-saved registers (library calls and compiled code), DF and control words across library calls, stack alignment at entry, argument layout, every kind of return value, `_Bool` arguments | 27 |
 | threads | a new thread's entry state, inherited and private FP state | 7 |
@@ -140,6 +141,17 @@ INSPECT there and PASS with the normal flags. Part B also builds the compiled-co
 threads and tls tests have no planted fault (the first two use the same
 entry detectors that the control exercises; the tls ones none).
 
+## An entry point of our own
+
+EDX and ESP at the first instruction are seen by tests that are linked with an
+entry point of their own: the assertion file gives `xflags -Wl,-e,abi_entry_stub`
+(a generic driver key: extra link options for that one test, part of the build
+cache key). `ABI_ENTRY_STATE_STUB()` (arch/i386.h) stores EDX, EBP and ESP, then
+jumps to the ordinary start symbol so the program runs as usual. If the linker
+refuses the option the driver builds the test without it and the test reports
+NOTINUSE, because the stub did not run. Faults for the control are in
+`arch/i386_entry_fault.h` (`-DABI_ENTRY_FAULT=n`, never used by the suite).
+
 ## Add a test
 
 1. Pick or add an area `abi/modules/<arch>/<area>/` with a `MODULE` file (copy
@@ -174,7 +186,6 @@ x86-64 (the psABI sources are in place; same layout, `abi/arch/x86_64.h`); the
 dynamic-linking side (procedure linkage, TLS models in shared objects, symbol
 versioning); stress of vector state across context switches (x87/SSE/AVX
 registers kept intact across preemption and signals, not only control words);
-a start-up file of our own to see EDX and EBP at the first instruction;
 AArch64 and RISC-V; the optional types (`__float128`, `__m64`, `__m128`,
 `_Decimal*`, `_BitInt`); argument passing of vector types; DWARF and unwind
 tables.

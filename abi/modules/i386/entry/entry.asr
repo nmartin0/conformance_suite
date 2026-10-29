@@ -131,13 +131,56 @@ nomutant   observes the state a process starts in; no library function to plant 
 
 assertion  ABI.i386.entry.012
 anchor     i386-psabi:low-level-sys-info#Process Initialization/Stack State (EDX)
-class      untestable
-reason     EDX at the first instruction of the program holds a function that the start-up code should register with atexit(); a C program only runs after that code and cannot see EDX. A test would need its own _start (no C library start-up files), which this suite does not do yet.
-says       EDX at process entry carries the address of a termination function
-           that the start-up code is expected to hand to atexit().
+class      required
+says       EDX at the first instruction holds a function pointer that the
+           application is expected to register to run at exit. When it is
+           not zero it is the address of code that can be registered and run
+           at a normal exit.
+note       Observed at the true entry: the test is linked with an entry point
+           of its own that stores EDX and jumps to the ordinary start symbol
+           (xflags). Only what the text states is checked. Zero is not
+           judged (the text gives it no meaning), so a zero EDX reports
+           NOTINUSE. A non-zero value is registered in a child process which
+           then exits normally; a value that is not callable code ends the
+           child by a signal. If the linker refuses the entry option the
+           test is built without it and reports NOTINUSE.
+test       t/012-edx-at-entry.c
+xflags     -Wl,-e,abi_entry_stub
+nomutant   observes the state a process starts in; no library function to plant a fault in
 
 assertion  ABI.i386.entry.013
 anchor     i386-psabi:low-level-sys-info#Process Initialization/Stack State (EBP)
 class      untestable
-reason     EBP at process entry is unspecified and the start-up code should set it to zero to mark the deepest stack frame; the chain of saved frame pointers passes through library code that need not keep one, so it cannot be walked reliably from C.
-says       The deepest stack frame is marked by a frame pointer of zero.
+reason     The text says the content of EBP at process entry is unspecified and asks the user code to set the frame pointer to zero to mark the deepest frame. That places a duty on the program's own start-up code, not a promise by the system, so there is no system behaviour to assert; whatever EBP holds can be seen but no value is right or wrong. A walk of the saved frame pointers is not a check either, since compiled code need not keep a frame pointer.
+says       The deepest stack frame is marked by a frame pointer of zero,
+           which user code sets.
+
+assertion  ABI.i386.entry.014
+anchor     i386-psabi:low-level-sys-info#Process Initialization/Stack State (table initial-stack)
+class      disputed
+says       At the first instruction ESP is 16-byte aligned, the word at ESP is
+           the argument count and the argument pointers follow it.
+note       Observed at the true entry through an entry point of the test's own
+           (see entry.012), so it needs no inference from argv. Follows the
+           current revision (16 bytes); the older revision guarantees word
+           alignment only, so a FAIL is INSPECT (entry.001 and entry.002 are
+           the inferred counterparts). That main() receives the same array is
+           assumed.
+test       t/014-esp-at-entry.c
+xflags     -Wl,-e,abi_entry_stub
+nomutant   observes the state a process starts in; no library function to plant a fault in
+
+assertion  ABI.i386.entry.015
+anchor     i386-psabi-older:abi386-4#Object Files/ELF Header (Machine Information)
+class      disputed
+says       The program's own file identifies as a 32-bit (class 1),
+           little-endian file (data encoding 1) for the i386 architecture
+           (machine 3) with no processor flags (zero).
+note       Only the older published revision states this; the current source
+           has no ELF header section. A FAIL is INSPECT. The test reads the
+           file named by its absolute argv[0] with a small reader; if argv[0]
+           is not an absolute path the setup is UNRESOLVED. Other ELF facts
+           (the interpreter name, the entry address) are not psABI-checkable;
+           see STATUS.md.
+test       t/015-elf-header.c
+nomutant   reads a file the system built; no library function to plant a fault in
