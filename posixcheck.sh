@@ -353,10 +353,10 @@ export PC_PTY
 pc_pcexec=$pc_bin/pcexec
 # A runaway test must not take the machine down: cap each test's memory
 # (address space; data segment where there is no such limit). PC_MEM_LIMIT
-# overrides the 2G default; 0 turns the cap off.
-case ${PC_MEM_LIMIT-2G} in
+# overrides the 1G default; 0 turns the cap off.
+case ${PC_MEM_LIMIT-1G} in
 0) pc_memcap= ;;
-*) pc_memcap="-l as=${PC_MEM_LIMIT-2G}" ;;
+*) pc_memcap="-l as=${PC_MEM_LIMIT-1G}" ;;
 esac
 pc_probe=$pc_bin/probe
 
