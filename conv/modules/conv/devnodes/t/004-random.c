@@ -40,8 +40,17 @@ int main(void)
 		fd = open(p, O_RDONLY | O_NONBLOCK);
 		pc_check(fd >= 0, "cannot open %s for reading: errno %d", p, errno);
 		r = read(fd, a, sizeof a);
+		if (strcmp(names[i], "random") == 0 && r < (ssize_t)sizeof a && (r >= 0 || errno == EAGAIN || errno == EWOULDBLOCK)) {
+			/* the manual of one family allows this device to block */
+			(void)close(fd);
+			continue;
+		}
 		pc_check(r == (ssize_t)sizeof a, "first read of %s returned %zd, errno %d", p, r, errno);
 		r = read(fd, b, sizeof b);
+		if (strcmp(names[i], "random") == 0 && r < (ssize_t)sizeof b && (r >= 0 || errno == EAGAIN || errno == EWOULDBLOCK)) {
+			(void)close(fd);
+			continue;
+		}
 		pc_check(r == (ssize_t)sizeof b, "second read of %s returned %zd, errno %d", p, r, errno);
 		(void)close(fd);
 		same = 1;

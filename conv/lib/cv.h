@@ -174,4 +174,35 @@ static void cv_strip_comment(char *s)
 		s[--n] = '\0';
 }
 
+/*
+ * Does the name-service configuration let the file database answer first?
+ * True when there is no configuration file, no line for db, or the first
+ * source on the line is "files", "compat" or "db" (a map built from the file) (PC_CONV_NSSWITCH overrides the
+ * configuration path). Used to decide whether a library lookup may be
+ * compared with the file.
+ */
+static int cv_nss_files_first(const char *db)
+{
+	const char *cp = cv_env("NSSWITCH");
+	char *t = cv_slurp(cp != NULL ? cp : "/etc/nsswitch.conf", NULL), *p, *l, *w;
+	size_t n = strlen(db);
+	int r = 1;
+
+	if (t == NULL)
+		return 1;
+	p = t;
+	while ((l = cv_nextline(&p)) != NULL) {
+		l += strspn(l, " \t");
+		if (strncmp(l, db, n) != 0 || l[n] != ':')
+			continue;
+		w = l + n + 1;
+		w += strspn(w, " \t");
+		if (*w != '\0' && *w != '#')
+			r = strncmp(w, "files", 5) == 0 || strncmp(w, "compat", 6) == 0 ||
+			    (strncmp(w, "db", 2) == 0 && (w[2] == ' ' || w[2] == '\t' || w[2] == '\0'));
+	}
+	free(t);
+	return r;
+}
+
 #endif

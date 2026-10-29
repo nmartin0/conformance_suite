@@ -48,7 +48,7 @@ int main(void)
 	}
 	for (k = 0; k < 3; k++)
 		pc_check(seen[k], "the protocols file has no entry for %s", want[k].name);
-	if (cv_env("PROTOCOLS") == NULL)
+	if (cv_env("PROTOCOLS") == NULL && cv_nss_files_first("protocols"))
 		for (k = 0; k < 3; k++) {
 			pe = getprotobyname(want[k].name);
 			pc_check(pe != NULL, "getprotobyname(\"%s\") finds nothing", want[k].name);

@@ -31,6 +31,8 @@ int main(void)
 	pc_begin("CONV.etcdb.005");
 	if (cv_env("PASSWD") != NULL || cv_env("GROUP") != NULL)
 		pc_notinuse("the files are overridden: the library reads the real ones");
+	if (!cv_nss_files_first("passwd") || !cv_nss_files_first("group"))
+		pc_notinuse("the name-service configuration lists another source ahead of the file");
 	pw = cv_etc("PASSWD", "/etc/passwd");
 	gr = cv_etc("GROUP", "/etc/group");
 	pc_test();

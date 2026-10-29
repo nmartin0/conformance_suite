@@ -1,0 +1,475 @@
+# CONV toolchain - what the assembler, the linker and the dynamic loader share
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Tier CONVENTION. The toolchain is judged through the command-line tools a
+# system provides (found with command -v: c17 or cc, as, ld, ar), by
+# building tiny objects and reading the result with a reader of the common
+# object-file container (conv/lib/elfdump.c, written from the gABI field
+# layout). A test is NOTINUSE when a tool is absent or the compiler refuses
+# an option beyond the POSIX compiler utility (-shared -fPIC -Wl,...; probed
+# once per run); it never names an operating system.
+#
+# RULE for this area: assert only what at least two independent toolchain
+# documents state the same way. The documents (source key; conv/STATUS.md
+# gives the hosts):
+#   GAS   the GNU assembler manual (directives, i386 syntax)
+#   GLD   the GNU linker manual (options)
+#   LLX   the LLVM "Extensions" document (assembler syntax); LLNM the LLVM
+#         nm command guide (symbol classes)
+#   ULD   ld(1) of a second, independent linker family; URT its runtime
+#         linker manual ld.so.1(1); UDL its dlopen(3C) and dlclose(3C)
+#   GABI  the System V generic ABI (chapters 4 and 5: sections, symbols,
+#         dynamic linking); PSABI the x86-64 supplement (sources)
+# Assembler directives are described in full by GAS only (LLX documents the
+# extensions of its integrated assembler and uses the same syntax in its
+# examples). Each directive assertion therefore rests on GAS (what the
+# directive does) together with the GABI definition of what the object must
+# then contain, and LLX where it shows the same spelling; the data directives
+# themselves (bytes emitted, string terminators, alignment padding) have no
+# second description and are listed under "not assertable" in conv/README.md.
+# A failure is a deviation for a person to judge (INSPECT), not a
+# conformance bug.
+#
+# Deliberately not asserted (README has the reasons): AT&T operand order and
+# prefixes; .byte .short .long .quad .ascii .asciz .align and the bytes they
+# emit; numeric local labels; the conventional symbols etext edata end; order
+# of init-array entries inside one object and finalisation order; LD_PRELOAD;
+# whether LD_LIBRARY_PATH is searched before or after a recorded run path;
+# constructors run by dlopen and destructors run by dlclose; the symbol
+# lookup order among a program's dependencies; the linker of the LLVM project
+# (its own documentation could not be reached).
+
+assertion  CONV.toolchain.001
+anchor     as.html#.text
+anchor     as.html#.data
+anchor     as.html#.bss
+anchor     gabi/ch4.sheader.html#special-sections
+class      disputed
+says       After .text, .data and .bss an assembled object has sections named
+           .text, .data and .bss, of type progbits, progbits and nobits, with the
+           attributes allocated and executable (text), allocated and writable
+           (data) and allocated and writable (bss); a label defined after each
+           directive lies in that section.
+test       t/001-asm-sections.sh
+note       tier CONVENTION. GAS: each directive assembles the following
+           statements onto the end of the section of that name. GABI special
+           sections: .text holds the instructions (progbits, alloc + exec), .data
+           initialised data (progbits, alloc + write), .bss uninitialised data
+           (nobits, alloc + write). The two agree on names and roles; the
+           attribute letters are the GABI's. The statements put into the sections
+           (.byte, .skip) only make the sections non-empty: the bytes are not
+           asserted. Sources agree.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.002
+anchor     as.html#.section
+anchor     llvm-extensions.html#.section
+anchor     gabi/ch4.sheader.html#sh_type
+class      disputed
+says       A .section directive with the flags "a", "aw" or "ax" and the type
+           progbits, or "aw" and the type nobits, creates a section with the
+           attributes allocated, allocated + writable, allocated + executable,
+           and with the type named; no other attribute is added.
+test       t/002-asm-section-flags.sh
+note       tier CONVENTION. GAS lists the ELF flag letters a (allocatable), w
+           (writable), x (executable) and the @type argument; LLX shows .section
+           with "a", "ax" and @progbits in its ELF examples and says its flags
+           are compatible with GAS; GABI defines the attributes and the progbits
+           and nobits types. The character that introduces the type word is a
+           comment character on some processors (GAS says so), so the at sign,
+           the percent sign and the hash sign are tried in turn; the test fails
+           only when none is accepted. Sources agree.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.003
+anchor     as.html#.global
+anchor     as.html#.weak
+anchor     as.html#.local
+anchor     gabi/ch4.symtab.html#symbol-binding
+anchor     llvm-nm.html#weak
+class      disputed
+says       In an assembled object a symbol named by .globl is global, one named
+           by .weak is weak, one named by .local or by no directive is local; all
+           are defined; every local symbol precedes the others in the symbol
+           table and the table's info field is the index of the first non-local
+           symbol.
+test       t/003-asm-binding.sh
+note       tier CONVENTION. GAS: .globl makes the symbol visible to ld, .weak
+           sets the weak attribute, .local makes a symbol local so that it is not
+           externally visible. GABI: local, global (visible to all combined
+           objects) and weak bindings; all locals precede the weak and global
+           symbols and the symbol table's info field names the first non-local
+           one. LLNM: weak symbols have lower precedence than regular ones.
+           Sources agree.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.004
+anchor     as.html#.type
+anchor     as.html#.size
+anchor     gabi/ch4.symtab.html#symbol-types
+class      disputed
+says       After .type with a function description a symbol has the function
+           type, after .type with an object description the object type; .size (a
+           number or label arithmetic) sets the size the symbol records; a symbol
+           with neither directive has no type and size zero.
+test       t/004-asm-type-size.sh
+note       tier CONVENTION. GAS: .type sets a symbol to a function or an object
+           symbol (five spellings, some of which are comment characters on some
+           processors, so the spellings are tried in turn and the test fails only
+           when none is accepted), .size sets the size from an expression that
+           may use label arithmetic. GABI: the function and object symbol types;
+           a symbol's size is its byte count and zero when it has none or an
+           unknown one. Sources agree.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.005
+anchor     as.html#.comm
+anchor     gabi/ch4.symtab.html#special-section-indexes
+anchor     llvm-nm.html#C
+class      disputed
+says       After .comm NAME,SIZE,ALIGN an assembled object holds a global symbol
+           NAME defined relative to the common section index, with size SIZE and
+           with the alignment as its value; the alignment is optional.
+test       t/005-asm-comm.sh
+note       tier CONVENTION. GAS: .comm declares a common symbol, takes an
+           optional third argument that is the alignment in bytes on ELF; GABI: a
+           symbol in the common section index labels a block not yet allocated,
+           its value gives the alignment and its size the bytes required (the
+           symbol type may be object or common). LLNM: a common symbol. Sources
+           agree.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.006
+anchor     ld.html#-o
+anchor     uld-ld.1#-o
+class      disputed
+says       ld -o NAME writes the output as the file NAME and creates no other
+           output file; without -o the output is a file named a.out.
+test       t/006-ld-output-name.sh
+note       tier CONVENTION. GLD: -o names the output, a.out by default. ULD: -o
+           outfile, default a.out. Sources agree. The output of a static link is
+           an executable object file (type exec) or, on a toolchain that defaults
+           to position-independent output, a shared-object type; both are
+           accepted.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.007
+anchor     ld.html#-l
+anchor     ld.html#-L
+anchor     uld-ld.1#-l
+anchor     uld-ld.1#-L
+class      disputed
+says       With ld -L DIR... -l NAME, a directory holding both a shared object
+           libNAME.so and an archive libNAME.a gives the shared object; when only
+           the first directory has the archive and a later one has the shared
+           object, the first directory wins (the archive is used); when the
+           shared object is in the first directory it is used.
+test       t/007-ld-library-search.sh
+note       tier CONVENTION. GLD: -l searches the library path for libNAME.so
+           before libNAME.a in a directory; -L directories are searched in
+           command-line order. ULD: ld chooses libNAME.so if both forms exist;
+           the directory search stops at the first directory containing either.
+           The sources differ on whether -L must precede the -l it applies to
+           (GLD: all -L apply to all -l; ULD: only those that precede), so the
+           test always places -L first. Sources agree on what is asserted.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.008
+anchor     ld.html#-l
+anchor     uld-ld.1#archive-processing
+anchor     gabi/ch4.symtab.html#symbol-binding
+class      disputed
+says       A member of an archive is taken into the link only if it defines a
+           symbol that is undefined where the archive appears on the command
+           line: a member defining only unneeded symbols is left out, an archive
+           placed before the object that needs it does not satisfy it, and a weak
+           undefined reference does not pull a member out.
+test       t/008-ld-archive.sh
+note       tier CONVENTION. GLD: an archive is searched once, at the place where
+           it is given; a member is included when it defines a symbol undefined
+           in an earlier object, and an undefined symbol in a later object does
+           not cause a second search. ULD: a library is searched exactly once at
+           the point it is met; only routines that define an unresolved reference
+           are loaded; weak references do not trigger extraction. GABI: the link
+           editor extracts members that define undefined global symbols and does
+           not extract them to resolve undefined weak symbols. Three documents
+           agree. The linker of the LLVM project is documented elsewhere (not
+           reachable) and was observed to accept the archive-first order: see
+           conv/known-deviations.md.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.009
+anchor     gabi/ch4.symtab.html#symbol-binding
+anchor     llvm-nm.html#W
+class      disputed
+says       When a symbol has a strong definition in one object and a weak
+           definition in another, the output has the strong one and the symbol is
+           not weak, in either order of the objects; a weak reference that
+           nothing defines does not make the link fail, and if the symbol is kept
+           it has value zero.
+test       t/009-ld-weak-strong.sh
+note       tier CONVENTION. GABI: if a defined global symbol exists, a weak
+           symbol of the same name is not an error and the global definition is
+           honoured; unresolved weak symbols have value zero. LLNM: a weak
+           definition is used only if no regular definition exists in the link;
+           an undefined weak symbol is not a link failure. GLD and ULD say little
+           about weak definitions beyond archives. Two documents agree.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.010
+anchor     gabi/ch4.symtab.html#symbol-binding
+anchor     ld.html#-z-muldefs
+anchor     uld-ld.1#-z-muldefs
+class      disputed
+says       Two strong definitions of one global symbol in different objects make
+           the link fail, in either order of the objects.
+test       t/010-ld-duplicate.sh
+note       tier CONVENTION. GABI: the link editor does not allow multiple
+           definitions of global symbols. GLD: normally the linker reports a
+           fatal error when a symbol is defined several times (-z muldefs relaxes
+           that). ULD: by default multiple definitions between relocatable
+           objects are a fatal error. Three documents agree. The test checks the
+           exit status only.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.011
+anchor     ld.html#-unresolved-symbols
+anchor     uld-ld.1#-z-defs
+anchor     uld-ld.1#-r
+class      disputed
+says       ld fails when an executable would contain an undefined reference; the
+           same object is accepted when the output is a shared object (-shared)
+           or a relocatable object (-r).
+test       t/011-ld-undefined.sh
+note       tier CONVENTION. GLD: unresolved symbols are reported as errors by
+           default (report-all); the shared-library case is the non-default one
+           for the -z defs check. ULD: -z defs, forcing an error for undefined
+           symbols, is the default for executables and not for shared objects; -G
+           allows undefined symbols; -r does not complain about unresolved
+           references. Two documents agree.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.012
+anchor     as.html#.comm
+anchor     ld.html#-warn-common
+anchor     llvm-nm.html#C
+anchor     gabi/ch4.symtab.html#special-section-indexes
+class      disputed
+says       Linking several common symbols of one name gives one symbol, in zero-
+           filled storage, whose size is at least the largest of them, in any
+           order of the objects; linking a common symbol with a real definition
+           of the name keeps the definition.
+test       t/012-ld-common.sh
+note       tier CONVENTION. GAS: common symbols of one name may be merged and, if
+           the sizes differ, the largest is allocated. GLD: the linker merges
+           common symbols of one name into one, picking the largest size, puts
+           them in the uninitialised data area, and turns a common symbol into a
+           declaration when there is a definition. LLNM: multiple common
+           definitions link together into one. GABI: the common section index's
+           size and alignment. Sources agree.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.013
+anchor     ld.html#-shared
+anchor     uld-ld.1#-G
+anchor     gabi/ch4.eheader.html#e_type
+class      disputed
+says       ld -shared of position-independent objects gives an object of the
+           shared-object type with a dynamic section that exports its global
+           functions and hides its static ones, and a program can open it with
+           dlopen, find a function with dlsym, call it, and close it.
+test       t/013-ld-shared.sh
+note       tier CONVENTION. GLD: -shared creates a shared library. ULD: -G (and
+           -shared) produces a shared object. GABI: the shared-object file type.
+           The opening is done with the POSIX interfaces dlopen, dlsym and
+           dlclose, whose own behaviour is not repeated here. NOTINUSE when the
+           compiler refuses -fPIC or -shared or dlopen needs a library the
+           compiler cannot link.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.014
+anchor     ld.html#-soname
+anchor     uld-ld.1#-h
+anchor     gabi/ch5.dynamic.html#shared-object-dependencies
+class      disputed
+says       ld -soname NAME records NAME as the shared object's name in its
+           dynamic section, and a program linked against the object lists NAME,
+           not the file name, as its dependency.
+test       t/014-ld-soname.sh
+note       tier CONVENTION. GLD: -soname sets the internal name that executables
+           record instead of the file name used to link. ULD: -h/-soname records
+           the name in the dynamic section and in objects linked with it. GABI:
+           the dependency list holds the names recorded in the dynamic section
+           (its example: a library with a recorded name and one without). Three
+           documents agree.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.015
+anchor     ld.html#-rpath
+anchor     uld-ld.1#-R
+anchor     gabi/ch5.dynamic.html#dt_runpath
+class      disputed
+says       ld -rpath DIR records DIR in the dynamic section as a run path or
+           library path entry; several -rpath options are joined into one colon-
+           separated list in command-line order; $ORIGIN is stored as written.
+test       t/015-ld-rpath.sh
+note       tier CONVENTION. GLD: all -rpath arguments are concatenated and passed
+           to the runtime linker; $ORIGIN is a token the path may hold. ULD:
+           multiple instances are concatenated with colons; the $ORIGIN token is
+           meant for relocatable objects. GABI: the run path and library path
+           entries are colon-separated lists. Which of the two entry kinds is
+           written is a choice of the linker (the GABI documents both; GLD notes
+           the newer one wins when both exist), so either is accepted. Sources
+           agree.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.016
+anchor     ld.html#-e
+anchor     uld-ld.1#-e
+anchor     gabi/ch4.eheader.html#e_entry
+class      disputed
+says       ld -e SYMBOL makes the entry address in the output header equal to the
+           address of SYMBOL.
+test       t/016-ld-entry.sh
+note       tier CONVENTION. GLD: -e uses the symbol as the beginning of
+           execution. ULD: sets the entry point address to the symbol. GABI: the
+           header member holds the virtual address at which the system first
+           transfers control. Sources agree.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.017
+anchor     ld.html#-r
+anchor     uld-ld.1#-r
+anchor     gabi/ch4.eheader.html#e_type
+class      disputed
+says       ld -r combines objects into one object of the relocatable type that
+           keeps an unresolved reference undefined without an error, holds the
+           definitions of all its inputs, and can be linked again to resolve that
+           reference.
+test       t/017-ld-relocatable.sh
+note       tier CONVENTION. GLD: -r generates relocatable output that can serve
+           as input to ld (partial linking). ULD: combines objects into one
+           relocatable object and does not complain about unresolved references.
+           GABI: the relocatable file type. Sources agree.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.018
+anchor     gabi/ch5.dynamic.html#substitution-sequences
+anchor     ld.html#-rpath-link
+anchor     uld-ld.1#-R
+class      disputed
+says       A program whose run path is $ORIGIN/../lib finds its library there
+           when started from any directory and after the whole tree has been
+           moved, and does not find it when copied to a tree that lacks the
+           library.
+test       t/018-rt-origin.sh
+note       tier CONVENTION. GABI: $ORIGIN in a run path is replaced by the
+           absolute directory of the object that contains it. GLD: $ORIGIN (with
+           $LIB) is a token usable in search paths and means the directory
+           containing the program or shared object. ULD: $ORIGIN lets dynamic
+           objects be relocated to different places. Three documents agree.
+           NOTINUSE when -Wl,-rpath is refused.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.019
+anchor     gabi/ch5.dynamic.html#shared-object-dependencies
+anchor     urt-ld.so.1#LD_LIBRARY_PATH
+class      disputed
+says       With LD_LIBRARY_PATH naming the directory that holds a program's
+           shared library (alone or in a colon-separated list that has other
+           directories before it), the program starts and uses the library,
+           although the program records no path to it and does not start without
+           the variable.
+test       t/019-rt-library-path.sh
+note       tier CONVENTION. GABI: the variable holds a list of directories
+           searched for the program's dependencies (before the default
+           directories). URT: it enhances the search path and is a colon-
+           separated list searched before the default directories. Two documents
+           agree. Not asserted: whether the variable is searched before or after
+           a recorded run path (GABI: before; URT does not say; the linker manual
+           of GLD gives the opposite order for link time only).
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.020
+anchor     gabi/ch4.symtab.html#symbol-visibility
+anchor     ld.html#-Bsymbolic
+anchor     uld-ld.1#-B-symbolic
+class      disputed
+says       When a program and a shared library both define a global function of
+           default visibility and the library calls it, the call goes to the
+           program's definition; without a definition in the program the
+           library's own is used.
+test       t/020-rt-preempt.sh
+note       tier CONVENTION. GABI: default-visibility global symbols are
+           preemptable by a definition of the same name in another component. GLD
+           (-Bsymbolic): normally a program linked against a shared library can
+           override the library's definition. ULD (-B symbolic): references are
+           not bound at link time, so an executable or other shared object can
+           override the object's own definition. Three documents agree. The
+           definition and the call are built in separate objects so that the
+           compiler cannot bind the call itself.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)
+
+assertion  CONV.toolchain.021
+anchor     gabi/ch5.dynamic.html#initialization-and-termination-functions
+anchor     urt-ld.so.1#initialization
+anchor     x86-64-ABI/dl.tex#initialization-and-termination-functions
+class      disputed
+says       Functions listed in a shared library's init array have run before main
+           starts, and those of a library that another library depends on run
+           before the dependent library's, whatever order the program lists them
+           in.
+test       t/021-rt-init-order.sh
+note       tier CONVENTION. GABI: after relocation each shared object runs its
+           initialisation functions, all shared-object initialisation happens
+           before the executable gains control, and an object's dependencies are
+           initialised before it. URT: initialisation functions are called after
+           relocation, in the reverse order of the topologically sorted
+           dependencies, and then control passes to the application. PSABI: the
+           implementation executes the init-array functions and the user program
+           takes no part. Two independent documents (GABI, URT) agree; PSABI
+           refers back to GABI. Not asserted: order inside one array (GABI only),
+           finalisation order at exit (GABI only), what dlopen runs.
+nomutant   runs the system's own assembler, linker and loader; faults are planted
+           by substituting a wrong tool (conv/neg/run.sh, PC_CONV_AS, PC_CONV_LD,
+           PC_CONV_CC)

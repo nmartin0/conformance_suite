@@ -33,12 +33,13 @@ int main(void)
 {
 	struct addrinfo hints, *res, *r;
 	char *t = NULL, *p, *l, *f[64];
-	int n, i, rc, got = 0, filehas = 0, match = 0;
+	int n, i, rc, got = 0, filehas = 0, match = 0, filefirst;
 
 	pc_begin("CONV.etcdb.010");
 	t = cv_etc("HOSTS", "/etc/hosts");
 	if (cv_env("HOSTS") != NULL)
 		pc_notinuse("the hosts file is overridden: the library reads the real one");
+	filefirst = cv_nss_files_first("hosts");
 	pc_test();
 	memset(&hints, 0, sizeof hints);
 	hints.ai_family = AF_UNSPEC;
@@ -76,7 +77,7 @@ int main(void)
 			}
 		}
 	}
-	if (filehas > 0)
+	if (filefirst && filehas > 0)
 		pc_check(match > 0, "none of the file's addresses for localhost is among the %d returned", got);
 	freeaddrinfo(res);
 	pc_pass();

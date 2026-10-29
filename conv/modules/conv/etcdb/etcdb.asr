@@ -3,12 +3,12 @@
 #
 # Tier CONVENTION. Sources: the section 5 manual pages passwd(5), group(5),
 # hosts(5), services(5), protocols(5), shells(5) and resolv.conf(5) of the
-# three BSD projects (BSD-A, BSD-B, BSD-C as in conv/modules/conv/layout), and
-# the IANA protocol numbers registry for CONV.etcdb.014. The pages for the
-# other systems' own file format pages were not reachable (that manual host
-# is blocked from this build environment); the file formats asserted are those
-# the BSD pages share, which are also the classic formats those systems
-# inherited. Where the BSD pages differ, the check accepts both.
+# three BSD projects (BSD-A, BSD-B, BSD-C as in conv/modules/conv/layout), the
+# same pages of the man7.org manual set (MAN-L; cross-checked
+# in the second pass, see conv/STATUS.md), nsswitch.conf(5) of MAN-L, and the
+# IANA protocol numbers registry for CONV.etcdb.014. Where the pages differ
+# the check accepts every variant; a rule only one family states is not
+# asserted, or is conditional.
 #
 # Every test is NOTINUSE when its file does not exist (another database, or
 # none, may be in use). The files are read directly; lines that begin with
@@ -30,8 +30,12 @@ says       Each entry of /etc/passwd has exactly seven colon-separated fields
 test       t/001-passwd-fields.c
 note       tier CONVENTION. BSD-A, BSD-B and BSD-C describe master.passwd with
            ten fields and say the passwd file is generated from it with three
-           removed, leaving seven. All three forbid a leading hyphen in the
-           name; BSD-A forbids white space. Sources agree on the count.
+           removed, leaving seven; MAN-L also says seven fields. All three BSD
+           pages forbid a leading hyphen in the name; BSD-A forbids white
+           space; MAN-L states neither, and adds that a name should not
+           contain capital letters (one family, a "should": not asserted).
+           Sources agree on the count; the name rules are BSD-only and
+           silent in MAN-L, which does not contradict them.
 nomutant   reads a file; fixture via PC_CONV_PASSWD (conv/neg/run.sh)
 
 assertion  CONV.etcdb.002
@@ -41,10 +45,12 @@ says       The uid and gid fields of every /etc/passwd entry are decimal
            integers that fit in 32 bits, no login name is repeated and no uid
            is used by two entries.
 test       t/002-passwd-ids.c
-note       tier CONVENTION. The three pages say name and uid "should" be unique
-           and that duplicates are "usually a mistake", so a duplicate is
-           reported for a person (some systems keep a deliberate second
-           uid-0 account). Sources agree.
+note       tier CONVENTION. The three BSD pages say name and uid "should" be
+           unique and that duplicates are "usually a mistake"; MAN-L is silent
+           on uniqueness (it says only that uid 0 is the superuser). A
+           duplicate is reported for a person (some systems keep a deliberate
+           second uid-0 account). Sources disagree on whether uniqueness is
+           stated; the numeric-field part is common to all.
 nomutant   reads a file; fixture via PC_CONV_PASSWD (conv/neg/run.sh)
 
 assertion  CONV.etcdb.003
@@ -54,8 +60,9 @@ says       The home directory field of every /etc/passwd entry is an absolute
            path and the shell field is empty or an absolute path.
 test       t/003-passwd-paths.c
 note       tier CONVENTION. BSD-A, BSD-B and BSD-C: the home field is a full
-           path name; BSD-B and BSD-C: an empty shell field means the default
-           shell. Sources agree.
+           path name; BSD-B, BSD-C and MAN-L: an empty shell field means the
+           default shell (MAN-L names /bin/sh). MAN-L calls the home field the
+           initial directory and does not say "full path". Sources agree.
 nomutant   reads a file; fixture via PC_CONV_PASSWD (conv/neg/run.sh)
 
 assertion  CONV.etcdb.004
@@ -68,7 +75,10 @@ says       Each entry of /etc/group has exactly four colon-separated fields, a
 test       t/004-group-fields.c
 note       tier CONVENTION. The three group(5) pages say four fields, a decimal
            gid and that the member list has commas without spaces; the
-           uniqueness is a "should" there too. Sources agree.
+           uniqueness is a "should" there too. MAN-L gives the four fields and
+           a comma-separated user list but says nothing of spaces or of
+           uniqueness. Sources agree on the layout; the extra rules are
+           BSD-only and MAN-L does not contradict them.
 nomutant   reads a file; fixture via PC_CONV_GROUP (conv/neg/run.sh)
 
 assertion  CONV.etcdb.005
@@ -81,8 +91,12 @@ says       For up to 300 entries of each file, getpwnam() and getgrnam() find
 test       t/005-db-agree.c
 note       tier CONVENTION. The pages define the files as the databases that
            getpwent(3) and getgrent(3) read. NOTINUSE if the files are
-           overridden. A system whose lookup order puts another database ahead
-           of the files may legitimately differ: a person judges.
+           overridden. nsswitch.conf(5) of MAN-L says the order of the sources
+           on a database line decides which is asked first, so the test is
+           also NOTINUSE when the passwd or group line there lists a source
+           other than the file (or compat, or a db map of it) first. The BSD pages do not
+           describe an ordering file: one family adds the rule, which makes
+           the check conditional.
 nomutant   compares library results with the files; no library fault planted
 
 assertion  CONV.etcdb.006
@@ -91,9 +105,13 @@ class      disputed
 says       Each non-comment line of /etc/shells is one absolute path to an
            executable regular file.
 test       t/006-shells-format.c
-note       tier CONVENTION. All three pages: the file lists the shells on the
-           system, one path relative to the root per line, comments after a
-           hash mark. BSD-C adds "valid shells available". Sources agree.
+note       tier CONVENTION. All three BSD pages: the file lists the shells on
+           the system, one path relative to the root per line, comments after
+           a hash mark. BSD-C adds "valid shells available". MAN-L: the full
+           pathnames of valid login shells (it does not mention comments, and
+           its example lists shells that may not be installed; that is an
+           example). Sources agree on the line format; "executable file" is
+           the reading of "valid" common to BSD-C and MAN-L.
 nomutant   reads a file; fixture via PC_CONV_SHELLS (conv/neg/run.sh)
 
 assertion  CONV.etcdb.007
@@ -103,9 +121,11 @@ class      disputed
 says       The shell field of each uid-0 account that names one is listed in
            /etc/shells.
 test       t/007-root-shell-listed.c
-note       tier CONVENTION, practice. The pages say programs consult the shells
-           file to decide whether an account's shell is valid; they do not say
-           the superuser's must be listed. Sources silent on the exact point.
+note       tier CONVENTION, practice. The BSD pages and MAN-L say programs
+           consult the shells file to decide whether an account's shell is
+           valid (MAN-L: file transfer daemons refuse accounts whose shell is
+           not listed); none says the superuser's must be listed. Sources
+           agree on the use; silent on the exact point.
 nomutant   reads two files; fixtures via PC_CONV_PASSWD and PC_CONV_SHELLS (conv/neg/run.sh)
 
 assertion  CONV.etcdb.008
@@ -114,9 +134,14 @@ class      disputed
 says       Each non-comment line of /etc/hosts is an IPv4 or IPv6 address
            followed by one or more host names of printable characters.
 test       t/008-hosts-format.c
-note       tier CONVENTION. The three hosts(5) pages: address, official name,
-           aliases, separated by blanks or tabs; hash starts a comment.
-           Sources agree.
+note       tier CONVENTION. The three BSD hosts(5) pages and MAN-L: address,
+           official name, aliases, separated by blanks or tabs; hash starts a
+           comment; IPv4 or IPv6. MAN-L adds that a name may contain only
+           letters, digits, hyphen and period and must begin with a letter
+           (one family; the BSD pages allow more, and real files hold names
+           outside it), so the check stays at "printable" and that rule is not
+           asserted. Sources disagree on the character set; the check accepts
+           the wider.
 nomutant   reads a file; fixture via PC_CONV_HOSTS (conv/neg/run.sh)
 
 assertion  CONV.etcdb.009
@@ -126,9 +151,11 @@ says       /etc/hosts contains a line that gives the name localhost a loopback
            address (127.x.y.z or ::1).
 test       t/009-hosts-loopback.c
 note       tier CONVENTION, practice. Only BSD-C says localhost always
-           resolves to the loopback addresses; none says the file must list
-           it (a resolver may supply it). Reported for a person; see also
-           CONV.etcdb.010, which asserts the resolution itself.
+           resolves to the loopback addresses; MAN-L's example calls the
+           127.0.0.1 and ::1 localhost lines "desirable" (an example, not a
+           requirement); none says the file must list it (a resolver may
+           supply it). Reported for a person; see also CONV.etcdb.010, which
+           asserts the resolution itself.
 nomutant   reads a file; fixture via PC_CONV_HOSTS (conv/neg/run.sh)
 
 assertion  CONV.etcdb.010
@@ -143,17 +170,28 @@ note       tier CONVENTION. Only BSD-C states that localhost always resolves
            agreement follows from the pages calling the file the host
            database. The interface is POSIX getaddrinfo(); the obsolescent
            gethostbyname() is not used. NOTINUSE if the file is overridden.
+           MAN-L's nsswitch.conf(5) says the source order of the hosts line
+           decides which database answers first: the file-agreement part (not
+           the loopback part) is skipped when the hosts line lists another
+           source ahead of the file. One family adds the rule, so it is
+           conditional.
 nomutant   compares library results with the file; no library fault planted
 
 assertion  CONV.etcdb.011
 anchor     services(5)#DESCRIPTION
 class      disputed
 says       Each non-comment line of /etc/services has a name, a port/protocol
-           item with a port number up to 65535 and a lower-case protocol name,
-           then optional aliases.
+           item with a port number up to 65535 and a non-empty protocol name
+           of printable characters, then optional aliases.
 test       t/011-services-format.c
-note       tier CONVENTION. The three services(5) pages: official name, port
-           and protocol joined by a slash, aliases. Sources agree.
+note       tier CONVENTION. The three BSD services(5) pages and MAN-L: official
+           name, port and protocol joined by a slash, aliases. No page
+           states that the protocol name is lower case (an earlier version of
+           this check required it; dropped as asserted by no source): the
+           check now needs a non-empty printable protocol name. MAN-L adds
+           that the protocol should match an entry of the protocols file and
+           that names are case sensitive (one family, a "should": not
+           asserted). Sources agree on the line format.
 nomutant   reads a file; fixture via PC_CONV_SERVICES (conv/neg/run.sh)
 
 assertion  CONV.etcdb.012
@@ -164,7 +202,10 @@ says       For up to 400 tcp or udp entries whose official name is used by no
            getservbyname() returns the port the file lists.
 test       t/012-services-agree.c
 note       tier CONVENTION. The pages define the file as the database
-           getservent(3) reads. NOTINUSE if overridden. Sources agree.
+           getservent(3) reads; MAN-L names getservbyname(3) as one of the
+           routines that query the file. NOTINUSE if overridden, or if the
+           services line of MAN-L's nsswitch.conf(5) lists another source
+           first (one family adds the rule: conditional). Sources agree.
 nomutant   compares library results with the file; no library fault planted
 
 assertion  CONV.etcdb.013
@@ -174,9 +215,11 @@ says       Each non-comment line of /etc/protocols has a name, a protocol
            number up to 255 (the IP header's protocol field is eight bits),
            then optional aliases.
 test       t/013-protocols-format.c
-note       tier CONVENTION. The three protocols(5) pages: official name,
-           number, aliases. The 255 bound is the width of the IP header field
-           that the numbers fill (IANA registry range 0 to 255). Sources agree.
+note       tier CONVENTION. The three BSD protocols(5) pages and MAN-L: official
+           name, number, aliases. MAN-L and the BSD pages say the number is
+           the value of the protocol field of the IP header; the 255 bound is
+           the width of that field (IANA registry range 0 to 255). Sources
+           agree.
 nomutant   reads a file; fixture via PC_CONV_PROTOCOLS (conv/neg/run.sh)
 
 assertion  CONV.etcdb.014
@@ -191,7 +234,8 @@ note       tier CONVENTION; the numbers themselves are FORMAL (IANA protocol
            and its content are convention. Kept under disputed because the
            requirement that the file carry all three is the pages' "known
            protocols" wording only. getprotobyname() is compared only when the
-           real file is used.
+           real file is used and the protocols line of MAN-L's
+           nsswitch.conf(5), if any, lists the file first.
 nomutant   reads a file; fixture via PC_CONV_PROTOCOLS (conv/neg/run.sh)
 
 assertion  CONV.etcdb.015
@@ -202,9 +246,13 @@ says       Each non-comment line of /etc/resolv.conf starts with a documented
            family) followed by a value; a nameserver value is an IP address and
            domain takes one name.
 test       t/015-resolv-conf.c
-note       tier CONVENTION. Directive set is the union over the three
-           resolv.conf(5) pages (BSD-C documents lookup and family, BSD-B calls
-           lookup ignored, BSD-A does not list it); comments start with hash or semicolon
-           (BSD-C). Sources disagree on the set, so every directive documented
-           by any is accepted.
+note       tier CONVENTION. Directive set is the union over the three BSD
+           resolv.conf(5) pages and MAN-L (BSD-C documents lookup and family,
+           BSD-B calls lookup ignored, BSD-A does not list it; MAN-L documents
+           nameserver, search, sortlist and options, and domain as the old
+           name of search with one entry); comments start with hash or
+           semicolon in the first column (BSD-C, MAN-L). Sources disagree on
+           the set, so every directive documented by any is accepted. MAN-L's
+           limits (three nameservers, option names that depend on the
+           library version) are not asserted.
 nomutant   reads a file; fixture via PC_CONV_RESOLV (conv/neg/run.sh)

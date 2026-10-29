@@ -42,6 +42,8 @@ int main(void)
 	pc_begin("CONV.etcdb.012");
 	if (cv_env("SERVICES") != NULL)
 		pc_notinuse("the services file is overridden: the library reads the real one");
+	if (!cv_nss_files_first("services"))
+		pc_notinuse("the name-service configuration lists another source ahead of the file");
 	t = cv_etc("SERVICES", "/etc/services");
 	pc_test();
 	p = t;

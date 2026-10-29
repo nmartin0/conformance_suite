@@ -43,8 +43,8 @@ int main(void)
 		pc_check(cv_decimal32(f[1], &port) && port <= 65535, "port '%s' of '%s' (line %d) is not a number up to 65535", f[1], f[0], line);
 		pc_check(slash[1] != '\0', "service '%s' (line %d) has an empty protocol name", f[0], line);
 		for (k = 0; slash[1 + k] != '\0'; k++)
-			pc_check(islower((unsigned char)slash[1 + k]) || isdigit((unsigned char)slash[1 + k]) || slash[1 + k] == '-' || slash[1 + k] == '_',
-			    "protocol '%s' (line %d) is not a lower-case protocol name", slash + 1, line);
+			pc_check(isgraph((unsigned char)slash[1 + k]) && slash[1 + k] != '/',
+			    "protocol '%s' (line %d) is not a plain protocol name", slash + 1, line);
 	}
 	pc_check(entries > 0, "the services file has no entries");
 	pc_pass();
