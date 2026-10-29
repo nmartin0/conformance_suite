@@ -6,7 +6,6 @@
  */
 #include "../../../../check.h"
 #include <string.h>
-#include <complex.h>
 
 #ifndef ABI_ARCH_I386
 ABI_NOT_THIS_ARCH("ABI.i386.calling.016")
@@ -41,14 +40,37 @@ static void check_guard(const unsigned char *p, size_t n, const char *what)
 #define AGG(T, fn, ...) AGGEQ(T, fn, memcmp(&box.v, &want, sizeof want) == 0, __VA_ARGS__)
 #define DEF(T, fn, ...) __attribute__((noinline)) T fn(void) { T r = __VA_ARGS__; return r; }
 
-__attribute__((noinline)) _Complex double f_cd(void) { return CMPLX(1.5, 2.5); }
-__attribute__((noinline)) _Complex long double f_cl(void) { return CMPLXL(1.5L, 2.5L); }
+/* a complex number from its two parts (CMPLX is not in every compiler's headers) */
+static _Complex double mk_cd(double r, double i)
+{
+	double p[2];
+	_Complex double z;
+
+	p[0] = r;
+	p[1] = i;
+	memcpy(&z, p, sizeof z);
+	return z;
+}
+
+static _Complex long double mk_cl(long double r, long double i)
+{
+	long double p[2];
+	_Complex long double z;
+
+	p[0] = r;
+	p[1] = i;
+	memcpy(&z, p, sizeof z);
+	return z;
+}
+
+__attribute__((noinline)) _Complex double f_cd(void) { return mk_cd(1.5, 2.5); }
+__attribute__((noinline)) _Complex long double f_cl(void) { return mk_cl(1.5L, 2.5L); }
 int main(void)
 {
 	pc_begin("ABI.i386.calling.016");
 	pc_test();
 	{
-		_Complex double want = CMPLX(1.5, 2.5);
+		_Complex double want = mk_cd(1.5, 2.5);
 		struct { unsigned char pre[16]; _Complex double v; unsigned char post[16]; } box;
 		struct abi_call c;
 
@@ -62,7 +84,7 @@ int main(void)
 		check_guard(box.post, sizeof box.post, "f_cd");
 	}
 	{
-		_Complex long double want = CMPLXL(1.5L, 2.5L);
+		_Complex long double want = mk_cl(1.5L, 2.5L);
 		struct { unsigned char pre[16]; _Complex long double v; unsigned char post[16]; } box;
 		struct abi_call c;
 

@@ -14,7 +14,7 @@
  * ABI_ARCH_I386 undefined, and each i386 test reports NOTINUSE.
  *
  * The assembly is written to be position independent (a test may be built
- * as a position independent executable) and for the GNU assembler's
+ * as a position independent executable) and for the assembler's
  * AT&T syntax, which every compiler used here accepts.
  */
 #ifndef ABI_ARCH_I386_H

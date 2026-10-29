@@ -5,12 +5,21 @@
  * ASSERTION ABI.i386.calling.025
  */
 #include "../../../../check.h"
-#include <complex.h>
+#include <string.h>
 
 #ifndef ABI_ARCH_I386
 ABI_NOT_THIS_ARCH("ABI.i386.calling.025")
 #else
-__attribute__((noinline)) _Complex float f_cf(void) { return CMPLXF(1.5f, 2.5f); }
+__attribute__((noinline)) _Complex float f_cf(void)
+{
+	float p[2];
+	_Complex float z;
+
+	p[0] = 1.5f;
+	p[1] = 2.5f;
+	memcpy(&z, p, sizeof z);
+	return z;
+}
 int main(void)
 {
 	pc_begin("ABI.i386.calling.025");

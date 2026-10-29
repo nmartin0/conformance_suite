@@ -49,9 +49,9 @@ anchor     i386-psabi:low-level-sys-info#Data Representation/Fundamental Types (
 class      required
 says       long double (the 80-bit extended type) takes 12 bytes with 4-byte alignment,
            so it sits at offset 4 after a char and a structure holding one is 16 bytes.
-note       The paragraph for Android in the table, where long double is 64-bit, is a
-           platform exception that this suite does not model; it applies to an x86 ABI
-           only for that platform.
+note       A footnote of the table lets one platform make long double the same as
+           double; that exception is not modelled here, so a system that takes it FAILs
+           and is a finding to record.
 test       t/005-long-double.c
 nomutant   compile-time check of the compiler's data layout; there is no library function to plant a fault in
 

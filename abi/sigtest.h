@@ -7,7 +7,7 @@
  * (changes registers and control words, sets DF) because the system
  * must put all of that back when the handler returns, and code that
  * is interrupted while sentinels sit in the callee-saved registers. Generic
- * C over the primitives of abi/arch/*.h; included once per test.
+ * C over the primitives of abi/arch/ARCH.h; included once per test.
  */
 #ifndef ABI_SIGTEST_H
 #define ABI_SIGTEST_H

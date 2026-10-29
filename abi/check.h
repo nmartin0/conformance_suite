@@ -5,7 +5,7 @@
  *
  * Every test includes this header. It selects the architecture header by
  * compiler guard and holds the checks that turn the facts a primitive
- * recorded (abi/arch/*.h) into pc_check() verdicts. It contains no
+ * recorded (abi/arch/ARCH.h) into pc_check() verdicts. It contains no
  * assembly: the same checks run in the tests against library code and in
  * abi/control against deliberately wrong routines, which they must flag.
  *
