@@ -17,9 +17,9 @@ pcrun() {
 	out=$(${PC_SH:-sh} pc.s 2>pc.err </dev/null)
 	rc=$?
 }
-pcscript 'set -n' 'echo hi' ': >pc.made' 
+pcscript 'echo before' 'set -n' 'echo hi' ': >pc.made' 
 pc_test
 pcrun
-[ -z "$out" ] && [ "$rc" -eq 0 ] || pc_fail "status $rc out '$out'"
+[ "$out" = before ] && [ "$rc" -eq 0 ] || pc_fail "status $rc out '$out', expected only the output of the command before set -n and status 0"
 [ -e pc.made ] && pc_fail "a command after set -n was executed"
 pc_pass

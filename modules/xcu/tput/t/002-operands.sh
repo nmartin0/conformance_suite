@@ -14,5 +14,8 @@ for op in clear init reset; do
 	rc=$?
 	[ "$rc" -ne 125 ] || pc_unresolved "cannot set up a pseudo-terminal"
 	[ "$rc" -eq 0 ] || pc_fail "tput $op exited with status $rc"
+	# the clear-screen sequence of a known type is not empty (a utility
+	# that does nothing is not told apart by its exit status alone)
+	[ "$op" != clear ] || [ -s "out.$op" ] || pc_fail "tput clear on $PCT wrote no clear-screen sequence"
 done
 pc_pass

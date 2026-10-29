@@ -20,4 +20,18 @@ n=$(kill -l "$?")
 wait "$q"
 n=$(kill -l "$?")
 [ "$n" = TERM ] || pc_fail "after -15 the process ended by '$n'"
+# the same through a direct exec of the utility
+sleep 100 &
+p=$!
+sleep 100 &
+q=$!
+env kill -0 "$p" 2>/dev/null || pc_fail "env kill -0 failed for a live process"
+env kill -9 "$p" 2>/dev/null || pc_fail "env kill -9 failed"
+env kill -15 "$q" 2>/dev/null || pc_fail "env kill -15 failed"
+wait "$p"
+n=$(kill -l "$?")
+[ "$n" = KILL ] || pc_fail "after env kill -9 the process ended by '$n'"
+wait "$q"
+n=$(kill -l "$?")
+[ "$n" = TERM ] || pc_fail "after env kill -15 the process ended by '$n'"
 pc_pass

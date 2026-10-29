@@ -15,6 +15,8 @@ pc_test
 "$PC_PTY" -t 20 -o both -- env "TERM=$PCT" tput clear init
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "tput clear init exited with status $rc"
+[ -s both ] || pc_fail "tput clear init wrote nothing"
+[ -s one.clear ] || pc_fail "tput clear on $PCT wrote no clear-screen sequence"
 cat one.clear one.init >joined
 cmp -s both joined || pc_fail "the output for two operands is not the two outputs in order"
 pc_pass

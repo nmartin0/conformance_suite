@@ -18,4 +18,17 @@ st=$?
 [ "$st" -gt 128 ] || pc_fail "the process did not end by a signal (status $st)"
 n=$(kill -l "$st")
 [ "$n" = TERM ] || pc_fail "the process ended by '$n', wanted TERM"
+# the same through a direct exec of the utility (a shell's own kill may be
+# an intrinsic that never reaches the utility)
+sleep 100 &
+p=$!
+env kill "$p" >out 2>/dev/null
+rc=$?
+[ "$rc" -eq 0 ] || pc_fail "env kill exited $rc"
+[ ! -s out ] || pc_fail "env kill wrote to standard output"
+wait "$p"
+st=$?
+[ "$st" -gt 128 ] || pc_fail "after env kill the process did not end by a signal (status $st)"
+n=$(kill -l "$st")
+[ "$n" = TERM ] || pc_fail "after env kill the process ended by '$n', wanted TERM"
 pc_pass

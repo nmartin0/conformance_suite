@@ -25,4 +25,23 @@ n=$(kill -l "$?")
 wait "$r"
 n=$(kill -l "$?")
 [ "$n" = USR1 ] || pc_fail "after -s Usr1 the process ended by '$n'"
+# the same through a direct exec of the utility
+sleep 100 &
+p=$!
+sleep 100 &
+q=$!
+sleep 100 &
+r=$!
+env kill -s term "$p" 2>/dev/null || pc_fail "env kill -s term failed"
+env kill -s KILL "$q" 2>/dev/null || pc_fail "env kill -s KILL failed"
+env kill -s Usr1 "$r" 2>/dev/null || pc_fail "env kill -s Usr1 failed"
+wait "$p"
+n=$(kill -l "$?")
+[ "$n" = TERM ] || pc_fail "after env kill -s term the process ended by '$n'"
+wait "$q"
+n=$(kill -l "$?")
+[ "$n" = KILL ] || pc_fail "after env kill -s KILL the process ended by '$n'"
+wait "$r"
+n=$(kill -l "$?")
+[ "$n" = USR1 ] || pc_fail "after env kill -s Usr1 the process ended by '$n'"
 pc_pass

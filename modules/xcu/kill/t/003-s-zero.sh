@@ -22,4 +22,12 @@ n=$(kill -l "$?")
 kill -s 0 "$d" 2>/dev/null
 rc=$?
 [ "$rc" -gt 0 ] || pc_fail "kill -s 0 exited $rc for a process that is gone"
+# the same through a direct exec of the utility (a shell's own kill may
+# be an intrinsic that never reaches the utility)
+env kill -s 0 $$ 2>/dev/null
+rc=$?
+[ "$rc" -eq 0 ] || pc_fail "env kill -s 0 exited $rc for a live process"
+env kill -s 0 "$d" 2>/dev/null
+rc=$?
+[ "$rc" -gt 0 ] || pc_fail "env kill -s 0 exited $rc for a process that is gone"
 pc_pass
