@@ -108,6 +108,8 @@ by the named assertion.
 | XSH.sig2str.001 to .006 | UNINITIATED | no sig2str() or str2sig() | 3.1 |
 | XBD.signal.h.007 | FAIL | no `_SC_NSIG` (nor `NSIG_MAX`) | 1.24 |
 | XBD.signal.h.008, .028 | FAIL, UNINITIATED | no `SIG2STR_MAX`, `sig2str()` or `str2sig()` | 3.1 |
+| XSH.catan.014, .015, XSH.catanh.015 | FAIL (glibc) | results at a point and at its conjugate or negation differ in the last bit | O.54 |
+| XSH.ccos.012, XSH.ccosh.012, XSH.csin.012, .013, XSH.csinh.013 | FAIL (glibc) | the unspecified sign of a zero or infinity in a special-value result is not made to follow the symmetry rules | O.54 |
 
 O.1 **`open()` with O_CREAT and a trailing slash fails with EISDIR (and so does `fopen()` with "w" or "a").**
 - POSIX (Issue 8 `open`, ERRORS): with O_CREAT, a path that ends in one or
@@ -585,6 +587,22 @@ O.53 **Names and declarations absent under the strict build.**
 - POSIX: XSH and XBD name `realpath`, `asprintf`, `vasprintf`, `secure_getenv`, `pthread_cond_clockwait`, `PTHREAD_NULL`, and the `tm_gmtoff` and `tm_zone` members of `struct tm`.
 - Both libraries, built with `_POSIX_C_SOURCE=202405L` and `-Werror`: the first five are not declared (implicit declaration), `struct tm` has no `tm_zone`/`tm_gmtoff`, and glibc has no `PTHREAD_NULL`. The tests that need them end UNINITIATED (build failure). See 6.3 and 11.1.
 - Comp: glibc, musl. Kind: feature-test. Observe: XSH.realpath.001-.010, XSH.fprintf.055, .056, XSH.vfprintf.008, XSH.getenv.004, .005, XSH.pthread_cond_wait.014-.016, XSH.gmtime.003, XSH.localtime.012, XSH.pthread_equal.003 (glibc).
+- Src: posixcheck run.
+
+O.54 **glibc: complex functions break the exact symmetry rules.**
+- POSIX (`catan`, `catanh`, `ccos`, `ccosh`, `csin`, `csinh`, RETURN VALUE, MXC):
+  the result at the conjugate (and, where stated, at the negation) of an
+  argument is exactly the conjugate (negation) of the result at the argument,
+  including for the special values, so a sign left unspecified at one point
+  fixes the sign at the other.
+- glibc 2.39, double: catan(-1.5+0.75i) and catan(-1.5-0.75i) differ in the
+  last bit of the imaginary part (0x1.a9d8f3ed9f95ap-3 against
+  0x1.a9d8f3ed9f959p-3); the same for catan at (1.5, -0.75) and catanh at
+  (0.5, 0.25) against (-0.5, -0.25). ccos(Inf+0i) and ccos(Inf-0i) both give
+  NaN+0i, ccosh(0+iInf) and ccosh(0-iInf) both NaN+0i, csin and csinh of
+  (Inf, Inf) against (Inf, -Inf) and (-Inf, -Inf) give the same infinity sign
+  (+Inf) in all three, where the rules force opposite signs.
+- Comp: glibc. Kind: long-standing. Observe: XSH.catan.014, .015, XSH.catanh.015, XSH.ccos.012, XSH.ccosh.012, XSH.csin.012, .013, XSH.csinh.013.
 - Src: posixcheck run.
 
 O.26 **glibc: fflush() of an input stream with pushback sets the wrong offset.**
