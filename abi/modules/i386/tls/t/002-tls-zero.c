@@ -2,14 +2,14 @@
  * Every thread's copy of an uninitialised thread-local object starts as zero.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
- * ASSERTION ABI.i386.threads.009
+ * ASSERTION ABI.i386.tls.002
  */
 #include "../../../../check.h"
 #include <pthread.h>
 #include <string.h>
 
 #ifndef ABI_ARCH_I386
-ABI_NOT_THIS_ARCH("ABI.i386.threads.009")
+ABI_NOT_THIS_ARCH("ABI.i386.tls.002")
 #else
 static _Thread_local unsigned char tl_buf[20000];
 static _Thread_local long tl_word;
@@ -33,7 +33,7 @@ static void *tbody(void *arg)
 }
 int main(void)
 {
-	pc_begin("ABI.i386.threads.009");
+	pc_begin("ABI.i386.tls.002");
 	pthread_t t;
 	long nonzero = -1;
 	size_t i;

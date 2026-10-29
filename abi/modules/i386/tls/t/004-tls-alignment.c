@@ -3,7 +3,7 @@
  * threads.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
- * ASSERTION ABI.i386.threads.011
+ * ASSERTION ABI.i386.tls.004
  */
 #include "../../../../check.h"
 #include <pthread.h>
@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 #ifndef ABI_ARCH_I386
-ABI_NOT_THIS_ARCH("ABI.i386.threads.011")
+ABI_NOT_THIS_ARCH("ABI.i386.tls.004")
 #else
 static _Thread_local _Alignas(16) int d16 = 1;
 static _Thread_local _Alignas(64) int d64 = 2;
@@ -46,7 +46,7 @@ static void *tbody(void *arg)
 }
 int main(void)
 {
-	pc_begin("ABI.i386.threads.011");
+	pc_begin("ABI.i386.tls.004");
 	pthread_t t;
 	unsigned bad = 0;
 	int k;

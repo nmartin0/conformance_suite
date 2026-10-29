@@ -1,0 +1,59 @@
+# ABI i386 tls: thread-local storage (NOT a psABI group)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# The i386 psABI only names the relocation types for thread-local storage and
+# refers to a separate TLS document that was not in the source set used to
+# write this suite. These assertions are therefore outside the psABI oracle:
+# the oracle is the C language's thread storage duration (every thread has its
+# own object, initialised from the initial value or zero, with the alignment
+# asked for), which the TLS layout (.tdata and .tbss) implements. They are kept
+# in an area of their own so that the ids show it: ABI.i386.tls.NNN.
+
+assertion  ABI.i386.tls.001
+anchor     i386-psabi:object-files#Relocation types for thread-local storage (R_386_TLS_*), which refer to the separate ELF TLS document (not in the source set)
+class      required
+says       A thread-local object with an initialiser (the .tdata image) starts in every
+           new thread with that initial value, whatever other threads have written to
+           their own copies.
+note       Not a psABI group: the oracle is the C language's thread storage duration,
+           which the TLS layout implements; the TLS document the psABI refers to was
+           not in the source set.
+test       t/001-tls-initialised.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.tls.002
+anchor     i386-psabi:object-files#Relocation types for thread-local storage (R_386_TLS_*), which refer to the separate ELF TLS document (not in the source set)
+class      required
+says       A thread-local object without an initialiser (the .tbss part, here a
+           20000-byte array, a word and a structure) is all zero in every new thread,
+           even when another thread has filled its own copy.
+note       Not a psABI group: the oracle is the C language's thread storage duration,
+           which the TLS layout implements; the TLS document the psABI refers to was
+           not in the source set.
+test       t/002-tls-zero.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.tls.003
+anchor     i386-psabi:object-files#Relocation types for thread-local storage (R_386_TLS_*), which refer to the separate ELF TLS document (not in the source set)
+class      required
+says       Four threads alive at the same time, and the main thread, each have their
+           own copy of an initialised and of an uninitialised thread-local variable:
+           the addresses differ and each thread reads back the value it wrote.
+note       Not a psABI group: the oracle is the C language's thread storage duration,
+           which the TLS layout implements; the TLS document the psABI refers to was
+           not in the source set.
+test       t/003-tls-distinct.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+
+assertion  ABI.i386.tls.004
+anchor     i386-psabi:object-files#Relocation types for thread-local storage (R_386_TLS_*), which refer to the separate ELF TLS document (not in the source set)
+class      required
+says       Thread-local objects declared with an alignment of 16, 64, 256 and 4096
+           bytes (both with an initialiser and without) are aligned that way in every
+           thread.
+note       Not a psABI group: the oracle is the C language's thread storage duration,
+           which the TLS layout implements; the TLS document the psABI refers to was
+           not in the source set.
+test       t/004-tls-alignment.c
+nomutant   the behaviour belongs to the thread library and the system; the detectors are validated by abi/control.sh
+

@@ -107,11 +107,13 @@ nomutant   observes the state a process starts in; no library function to plant 
 
 assertion  ABI.i386.entry.010
 anchor     i386-psabi:low-level-sys-info#Process Initialization/Special Registers
-class      required
+class      disputed
 says       At start the exception status flags of both floating-point units
            (x87 status word and MXCSR) are clear.
-note       Observed in main(), after the C library's start-up code, so a flag
-           set by that code shows here.
+note       Disputed because the state is read in main(), after constructors and other
+           start-up code may have run, not at the entry point; such code may do
+           inexact arithmetic and still leave a conforming process entry, so a FAIL
+           is INSPECT.
 test       t/010-fp-status-clear.c
 nomutant   observes the state a process starts in; no library function to plant a fault in
 

@@ -10,10 +10,10 @@ README.md for the design.
 - Driver reuse: `abi/run.sh ARCH`; one generic change in `posixcheck.sh` (an
   `ABI.<arch>.<area>.NNN` ID maps to the module `<arch>/<area>`), and `ci/lint.py`
   / `ci/catalog.py` know the architecture directories (no `.cov` file for them).
-  `python3 ci/lint.py --modules abi/modules` is clean (5 modules, 72 assertions,
+  `python3 ci/lint.py --modules abi/modules` is clean (6 modules, 74 assertions,
   0 problems). The POSIX tree's lint output is unchanged by this work.
-- i386, batch 1, 5 modules, 72 assertions: entry 13, types 16, calling 25,
-  threads 11, signals 7. 70 have tests, 2 are `untestable` (EDX and EBP at the
+- i386, batch 1, 6 modules, 74 assertions: entry 13, types 16, calling 27,
+  threads 7, tls 4 (non-psABI), signals 7. 72 have tests, 2 are `untestable` (EDX and EBP at the
   first instruction).
 - Primitives: `abi/arch/i386.h` (the only inline assembly): state readers
   (EFLAGS, x87 control/status/tag, MXCSR, CPUID SSE), `abi_call_raw` (call
@@ -22,11 +22,11 @@ README.md for the design.
   interrupted by a signal), `ABI_ENTRY_TRAMPOLINE` (records ESP, EFLAGS, x87
   control word, MXCSR at a function's entry, then jumps on), a handler that
   clobbers state on purpose, small asm callees.
-- Control: `abi/control.sh`, 31 faults detected, 0 missed.
+- Control: `abi/control.sh`, 32 faults detected, 0 missed.
 
 ## Results (this machine, run 1)
 
-70 PASS, 0 other, 2 UNTESTED; unprivileged identical; `-O2` identical; clang
+72 PASS, 0 other, 2 UNTESTED; unprivileged identical; `-O2` identical; clang
 69 PASS and 1 FAIL (types.008, recorded in known-deviations.md). x86-64
 build: all NOTINUSE.
 
@@ -53,3 +53,12 @@ build: all NOTINUSE.
 - Optional types and vector argument passing; varargs-specific rules; DWARF and
   unwind tables.
 - A planted fault for the thread-local-storage tests.
+
+## Untestable from C
+
+- EDX and EBP at the first instruction (entry.012, entry.013).
+- EFLAGS at process entry other than DF (CF, PF, AF, ZF, SF, OF = 0): the
+  flags are changed by the instructions that run before `main` and by the
+  tests' own arithmetic, and a status flag cannot be read without an
+  instruction that itself alters it; only a start-up file of our own could see
+  them at the first instruction. DF is testable because nothing in between sets it.

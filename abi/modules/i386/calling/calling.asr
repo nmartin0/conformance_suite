@@ -183,28 +183,34 @@ nomutant   a property of the compiler's generated code and of the library's entr
 
 assertion  ABI.i386.calling.017
 anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (table fig_returning_locations)
-class      required
+class      disputed
 says       A function returning float leaves exactly one value on the x87 register
            stack, in st0, holding that value; the caller removes it.
-note       Both revisions. The record pops the value itself, as the caller must.
+note       Disputed: the value in st0 is shared, but that it is the only one on the
+           x87 stack (st1-st7 empty on exit) is stated by the older revision alone, so
+           a FAIL is INSPECT. The record pops the value itself, as the caller must.
 test       t/017-return-float.c
 nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
 
 assertion  ABI.i386.calling.018
 anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (table fig_returning_locations)
-class      required
+class      disputed
 says       A function returning double leaves exactly one value on the x87 register
            stack, in st0, holding that value; the caller removes it.
-note       Both revisions. The record pops the value itself, as the caller must.
+note       Disputed: the value in st0 is shared, but that it is the only one on the
+           x87 stack (st1-st7 empty on exit) is stated by the older revision alone, so
+           a FAIL is INSPECT. The record pops the value itself, as the caller must.
 test       t/018-return-double.c
 nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
 
 assertion  ABI.i386.calling.019
 anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (table fig_returning_locations)
-class      required
+class      disputed
 says       A function returning long double leaves exactly one value on the x87
            register stack, in st0, holding that value; the caller removes it.
-note       Both revisions. The record pops the value itself, as the caller must.
+note       Disputed: the value in st0 is shared, but that it is the only one on the
+           x87 stack (st1-st7 empty on exit) is stated by the older revision alone, so
+           a FAIL is INSPECT. The record pops the value itself, as the caller must.
 test       t/019-return-long-double.c
 nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
 
@@ -259,10 +265,37 @@ nomutant   a property of the compiler's generated code and of the library's entr
 
 assertion  ABI.i386.calling.025
 anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (table fig_returning_locations)
-class      required
+class      disputed
 says       A function returning _Complex float returns the real part in EAX and the
            imaginary part in EDX (the 32-bit patterns of the two floats).
-note       Current revision only.
+note       The registers EAX and EDX are the current revision's (the older one has no
+           _Complex). The check that no value is left on the x87 stack rests on the
+           older revision alone, so a FAIL is INSPECT.
 test       t/025-return-complex-float.c
 nomutant   a property of the compiler's generated code and of the library's entry points, not of one library function; the detectors are validated by abi/control.sh
 
+
+assertion  ABI.i386.calling.026
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Registers (table fig-reg-usage)
+class      required
+says       A function compiled from C, with many values live across calls to a
+           function it cannot see into, returns with EBX, ESI, EDI and EBP holding
+           what the caller put there.
+note       Both revisions. The function asks for optimisation through a compiler
+           attribute, so the driver needs no per-test flags; a compiler without the
+           attribute builds it as it is. A conforming compiler never lets the
+           callee-saved registers change, whatever it uses them for.
+test       t/026-callee-saved-compiled.c
+nomutant   a property of the compiler's generated code; the detector is validated by abi/control.sh with a compiler told to treat those registers as call-clobbered
+
+assertion  ABI.i386.calling.027
+anchor     i386-psabi:low-level-sys-info#Function Calling Sequence/Returning Values (after table fig_returning_locations, _Bool paragraph)
+class      required
+says       A _Bool passed as an argument has the truth value in bit 0 and zero in
+           bits 1 to 7 of its low byte, also when it was converted from a value that
+           is nonzero and even.
+note       Current revision only. The upper 24 bits of the word are not checked. The
+           return value is calling.023. The callee reads the words as plain unsigned
+           values; the caller is compiled code.
+test       t/027-bool-argument.c
+nomutant   a property of the compiler's generated code; the check applies to the compiler's own calls

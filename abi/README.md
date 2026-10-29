@@ -35,6 +35,10 @@ Results are the usual ones. In addition:
 - **UNTESTED**: an `untestable` assertion (needs control of the program's first
   instruction), listed so the gap is visible.
 
+Assertions whose rule rests on the older revision alone (the x87 stack depth
+at a return, calling.017-.019 and .025) or on an inference about where the
+state is observed (entry.010, read in `main` after constructors) are `disputed`.
+
 A test needs no privilege; as an ordinary user the result is the same.
 
 ## Layout
@@ -56,8 +60,9 @@ Areas of batch 1 (assertion IDs `ABI.i386.<area>.NNN`):
 |---|---|---|
 | entry | initial stack, argv/envp/auxv, DF, x87 and MXCSR control state in `main` | 13 (2 untestable) |
 | types | sizes, alignments, structure/union layout, older revision's bit-fields | 16 |
-| calling | callee-saved registers, DF and control words across library calls, stack alignment at entry, argument layout, every kind of return value | 25 |
-| threads | a new thread's entry state, inherited and private FP state, thread-local storage | 11 |
+| calling | callee-saved registers (library calls and compiled code), DF and control words across library calls, stack alignment at entry, argument layout, every kind of return value, `_Bool` arguments | 27 |
+| threads | a new thread's entry state, inherited and private FP state | 7 |
+| tls | thread-local storage; **not a psABI group** (the C language is the oracle) | 4 |
 | signals | a handler's entry state, and the interrupted code's state afterwards | 7 |
 
 ## The sources and the two revisions
@@ -93,9 +98,10 @@ padding. Observations about the first instructions of a process are inferred,
 and the assertion note says so (`argv - 4` is the initial stack pointer; state
 read in `main` is taken as the state at entry).
 
-Thread-local storage: the psABI refers to a separate document for TLS that was
-not in the source set. Those assertions say so and take the C language's thread
-storage duration as the oracle (own copy per thread, initial value or zero, the
+Thread-local storage is a non-psABI group, kept in its own area `tls`
+(`ABI.i386.tls.NNN`) so the ids show it: the psABI refers to a separate document
+for TLS that was not in the source set. Those assertions say so in their notes
+and take the C language's thread storage duration as the oracle (own copy per thread, initial value or zero, the
 alignment asked for), which is what the TLS layout implements.
 
 ## Design rules
@@ -129,9 +135,10 @@ it resumes) and requires FAIL, and requires PASS from each routine's
 conforming twin. Part B runs real tests with a compiler told to break the ABI
 (`-malign-double`, `-mlong-double-64`, `-freg-struct-return`,
 `-mpreferred-stack-boundary=2`, `-mno-fp-ret-in-387`) and requires FAIL or
-INSPECT there and PASS with the normal flags. The entry, threads and
-thread-local-storage tests have no planted fault (the first two use the same
-entry detectors that the control exercises; the thread-local ones none).
+INSPECT there and PASS with the normal flags. Part B also builds the compiled-code callee-saved test (calling.026) with
+`-fcall-used-esi -fcall-used-edi -fcall-used-ebx`, which must FAIL. The entry,
+threads and tls tests have no planted fault (the first two use the same
+entry detectors that the control exercises; the tls ones none).
 
 ## Add a test
 

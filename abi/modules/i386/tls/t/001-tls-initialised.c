@@ -2,14 +2,14 @@
  * Every thread's copy of an initialised thread-local object starts with the initial value.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
- * ASSERTION ABI.i386.threads.008
+ * ASSERTION ABI.i386.tls.001
  */
 #include "../../../../check.h"
 #include <pthread.h>
 #include <string.h>
 
 #ifndef ABI_ARCH_I386
-ABI_NOT_THIS_ARCH("ABI.i386.threads.008")
+ABI_NOT_THIS_ARCH("ABI.i386.tls.001")
 #else
 static _Thread_local int tl_int = 0x1234ABCD;
 static _Thread_local char tl_text[8] = "hello";
@@ -30,7 +30,7 @@ static void *tbody(void *arg)
 }
 int main(void)
 {
-	pc_begin("ABI.i386.threads.008");
+	pc_begin("ABI.i386.tls.001");
 	pthread_t t;
 	struct report r;
 	int i;

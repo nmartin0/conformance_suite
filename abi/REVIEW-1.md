@@ -57,3 +57,7 @@ PROC = procedure (setup reported as a verdict, copying).
 Findings (16): ASK 3 (R1, R4, R7), LESS 2 (R8, R9), SILENT 1 (R2, also a class change), CLASS 3 (R6, R10, R12), REL 4 (R11, R13, R14, R15), PROC 2 (R3, R5), question 1 (R16). Fixed: R1-R6. Open for the user: R7-R14, R16.
 
 Checked and found sound: 72 assertions read against the text (about 55 without any finding), 70 tests read, all 31 control scenarios re-run (all detected, also after the fixes). The batch has no mutants or variants (lint: 0 mutants, 0 variants), so there is no fault or variant to review beyond the control.
+
+## Decisions applied after the review (round 2)
+
+R7: entry.010 now `disputed` (read in `main`, after constructors). R8: calling.026 added (compiled code under register pressure) with a control item in Part B (`-fcall-used-esi -fcall-used-edi -fcall-used-ebx` makes it FAIL). R9(a): calling.027 (`_Bool` argument). R9(b): listed as untestable in STATUS.md. R10: calling.017-.019 and .025 now `disputed`. R11(a): thread-local storage moved to its own non-psABI area, ids ABI.i386.tls.001-004 (were threads.008-011). Counts: 74 assertions, 72 PASS, 2 UNTESTED; control 32 detected, 0 missed; lint 0 problems.

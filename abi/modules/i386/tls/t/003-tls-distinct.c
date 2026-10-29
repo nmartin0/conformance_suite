@@ -2,14 +2,14 @@
  * Threads that are alive together have separate copies of a thread-local object.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
- * ASSERTION ABI.i386.threads.010
+ * ASSERTION ABI.i386.tls.003
  */
 #include "../../../../check.h"
 #include <pthread.h>
 #include <string.h>
 
 #ifndef ABI_ARCH_I386
-ABI_NOT_THIS_ARCH("ABI.i386.threads.010")
+ABI_NOT_THIS_ARCH("ABI.i386.tls.003")
 #else
 #define N 4
 static _Thread_local int tl_val = 7;
@@ -34,7 +34,7 @@ static void *tbody(void *arg)
 }
 int main(void)
 {
-	pc_begin("ABI.i386.threads.010");
+	pc_begin("ABI.i386.tls.003");
 	pthread_t t[N];
 	struct slot s[N];
 	int i, j;

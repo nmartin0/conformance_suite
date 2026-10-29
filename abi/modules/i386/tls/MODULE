@@ -1,0 +1,7 @@
+module  i386/tls
+page    tls
+volume  ABI.i386
+option  BASE
+origin  C language thread storage duration (not a psABI group)
+buildfail UNINITIATED
+libs    -lpthread

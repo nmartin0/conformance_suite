@@ -163,6 +163,7 @@ fault -freg-struct-return ABI.i386.calling.014 "small structures returned in reg
 fault -mpreferred-stack-boundary=2 ABI.i386.calling.011 "stack aligned to 4 at calls"
 fault -mno-fp-ret-in-387 ABI.i386.calling.017 "float not returned in st0"
 fault -mno-fp-ret-in-387 ABI.i386.calling.018 "double not returned in st0"
+fault "-fcall-used-esi -fcall-used-edi -fcall-used-ebx" ABI.i386.calling.026 "compiled code clobbers callee-saved registers"
 
 printf 'control: %d detected, %d missed, %d skipped\n' "$detected" "$missed" "$skipped"
 [ "$missed" -eq 0 ]
