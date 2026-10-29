@@ -164,3 +164,71 @@ says       sysconf(_SC_NSIG) never returns more than NSIG_MAX, and for the
            limit, is not compared).
 test       t/016-sysconf-vs-header.c
 nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.limits.h.017
+anchor     basedefs/limits.h.html#DESCRIPTION/OPEN_MAX
+class      required
+says       A process can have file descriptors 0 up to _POSIX_OPEN_MAX - 1 open
+           at the same time; sysconf(_SC_OPEN_MAX) is at least _POSIX_OPEN_MAX
+           (or -1), and when it reports a limit n up to 4096, descriptor n - 1
+           is the highest one assigned and an open() beyond it fails with EMFILE.
+test       t/017-open-max.c
+nomutant   a resource limit enforced by the kernel; a user-space shim cannot plant it
+
+assertion  XBD.limits.h.018
+anchor     basedefs/limits.h.html#DESCRIPTION/NAME_MAX
+class      required
+says       A file or directory can be created with a name of pathconf(_PC_NAME_MAX)
+           bytes, it is found again by stat() and readdir() under that exact
+           name, and where pathconf(_PC_NO_TRUNC) is non-zero a name one byte
+           longer fails with ENAMETOOLONG.
+test       t/018-name-max.c
+nomutant   a limit enforced by the file system; a user-space shim cannot plant it
+
+assertion  XBD.limits.h.019
+anchor     basedefs/limits.h.html#DESCRIPTION/PATH_MAX
+class      required
+says       A relative pathname of 255 bytes (the minimum acceptable value less
+           the null) works for mkdir(), open() and stat(); so does one of
+           pathconf(_PC_PATH_MAX) - 1 bytes up to 4095; and where the limit is
+           at most 4096 a pathname longer than the limit fails with ENAMETOOLONG.
+test       t/019-path-max.c
+nomutant   a limit enforced by the file system; a user-space shim cannot plant it
+
+assertion  XBD.limits.h.020
+anchor     basedefs/limits.h.html#DESCRIPTION/LINK_MAX
+class      required
+says       A file can take as many hard links as pathconf(_PC_LINK_MAX) (at
+           least _POSIX_LINK_MAX; 1024 are tried), st_nlink counts them, and
+           where the limit is 1024 or less one more link fails with EMLINK and
+           leaves st_nlink unchanged.
+test       t/020-link-max.c
+nomutant   a limit enforced by the file system; a user-space shim cannot plant it
+
+assertion  XBD.limits.h.021
+anchor     basedefs/limits.h.html#DESCRIPTION/PIPE_BUF
+class      required
+says       Four processes writing records of _POSIX_PIPE_BUF bytes, and of
+           {PIPE_BUF} bytes (to 8192), to one pipe at the same time never have
+           their records interleaved, and every record written is read.
+test       t/021-pipe-atomic.c
+nomutant   atomicity is kept by the kernel; a user-space shim cannot plant it
+
+assertion  XBD.limits.h.022
+anchor     basedefs/limits.h.html#DESCRIPTION/PIPE_BUF
+class      required
+says       A non-blocking write of {PIPE_BUF} bytes to an empty pipe transfers
+           all of them; to a full pipe it transfers none and fails with EAGAIN;
+           with less than {PIPE_BUF} bytes of room it either transfers all or
+           fails with EAGAIN; and every byte accepted can be read back.
+test       t/022-pipe-nonblock.c
+nomutant   pipe buffering is done by the kernel; a user-space shim cannot plant it
+
+assertion  XBD.limits.h.023
+anchor     basedefs/limits.h.html#DESCRIPTION/ARG_MAX
+class      required
+says       An exec whose argument and environment data come to _POSIX_ARG_MAX
+           bytes (less 16, counting the pointers as well) is not refused, and
+           the new image receives the long argument whole.
+test       t/023-arg-max.c
+nomutant   the limit is checked by the kernel; a user-space shim cannot plant it
