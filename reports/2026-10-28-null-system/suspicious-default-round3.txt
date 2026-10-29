@@ -1,0 +1,1306 @@
+negative control: default
+verdicts of 8889 assertions: UNRESOLVED 1692, UNTESTED 40, UNSUPPORTED 330, PASS 648, NOTINUSE 250, FAIL 3572, UNINITIATED 2197, INSPECT 160
+
+== (a) PASS and the subject was never called: the test never exercised it (108)
+xsh/2.1-use-of-functions   XSH.2.1-use-of-functions.005
+    Each of EOF, BUFSIZ, RAND_MAX, EXIT_FAILURE, INT_MAX, INT_MIN, UINT_MAX, LONG_MAX, LONG_MIN, CHAR_BIT, SIGINT, SIGKILL, EINVAL, ENOENT, SEEK_END, FOPEN_MAX, S_IRWXU, O_CREAT and _POSIX_VERSION, used unparenthesized in an arithmetic expression, acts as one operand: the expression has the value it has with the macro's value in a variable.
+xsh/2.1-use-of-functions   XSH.2.1-use-of-functions.006
+    EOF, BUFSIZ, RAND_MAX, EXIT_FAILURE, EXIT_SUCCESS, INT_MAX, INT_MIN, UINT_MAX, LONG_MAX, LONG_MIN, CHAR_BIT, SIGINT, SIGKILL, SIGTERM, EINVAL, ENOENT, SEEK_SET, SEEK_CUR, SEEK_END and FOPEN_MAX can be used in #if directives; EOF is negative there, and the signal numbers, error numbers, BUFSIZ and FOPEN_MAX are positive.
+xsh/2.11-data-types        XSH.2.11-data-types.001
+    off_t, pid_t, ssize_t, ptrdiff_t and suseconds_t are signed integer types: a conversion of -1 to each is less than 0 and each takes bitwise and shift operators.
+xsh/2.11-data-types        XSH.2.11-data-types.003
+    dev_t, gid_t, uid_t, id_t, mode_t, nlink_t, nfds_t, time_t, wchar_t, wint_t and sig_atomic_t are integer types: a conversion of 0.5 to each gives 0 and each takes bitwise and shift operators; clock_t is an arithmetic type (integer or real floating): 0.5 converted to it gives 0 or a value above 0 and below 1.
+xsh/2.11-data-types        XSH.2.11-data-types.005
+    rlim_t can hold every non-negative value of int and of off_t: its maximum is at least INT_MAX and at least the maximum of off_t.
+xsh/2.11-data-types        XSH.2.11-data-types.007
+    char is a single byte: CHAR_BIT is 8 (usable in #if) and sizeof(char) is 1.
+xsh/2.2-compilation-environment XSH.2.2-compilation-environment.001
+    Without the feature test macro __STDC_WANT_LIB_EXT1__ (and with it defined as 0), headers do not make the Annex K names visible: after including the headers, a program can define its own objects called fopen_s, fprintf_s, freopen_s, fscanf_s, gets_s, printf_s, scanf_s, snprintf_s, sprintf_s, sscanf_s, tmpfile_s, tmpnam_s, vfprintf_s, vfscanf_s, vprintf_s, vscanf_s, vsnprintf_s, vsprintf_s, vsscanf_s, abort_handler_s, bsearch_s, getenv_s, ignore_handler_s, mbstowcs_s, qsort_s, set_constraint_handler_s, wctomb_s, asctime_s, ctime_s, gmtime_s, localtime_s, fwprintf_s, fwscanf_s, snwprintf_s, swprintf_s, swscanf_s, vfwprintf_s, vfwscanf_s, vswprintf_s, vswscanf_s, vwprintf_s, vwscanf_s, wprintf_s and wscanf_s, and the macros RSIZE_MAX, L_tmpnam_s and TMP_MAX_S are not defined.
+xsh/2.2-compilation-environment XSH.2.2-compilation-environment.004
+    After including every header of 002, a program can define its own file-scope objects called index, rindex, bcopy, bzero, bcmp, valloc, getdtablesize, getpagesize, ulong, ushort, uint, u_char, u_short, u_int, u_long, min and max, and none of the names MIN, MAX, TRUE, FALSE, MAXPATHLEN, NBBY, howmany, roundup or powerof2 is defined as a macro.
+xsh/CMPLX                  XSH.CMPLX.003
+    The expressions have the types double complex, float complex and long double complex respectively, whatever the argument types.
+xsh/assert                 XSH.assert.001
+    assert() with a true expression (an int, a pointer, a floating value, a long) does nothing visible and execution continues; the expression is evaluated.
+xsh/assert                 XSH.assert.004
+    When NDEBUG is defined before <assert.h> is included, assert() has no effect: a false expression does not abort and is not evaluated.
+xsh/atomic_compare_exchange_strong XSH.atomic_compare_exchange_strong.001
+    When the object equals *expected, atomic_compare_exchange_strong() returns true, stores desired in the object and leaves *expected unchanged, for atomic_bool and every atomic integer type.
+xsh/atomic_compare_exchange_strong XSH.atomic_compare_exchange_strong.002
+    When the object differs from *expected, atomic_compare_exchange_strong() returns false, leaves the object unchanged and stores the object's value in *expected, for atomic_bool and every atomic integer type.
+xsh/atomic_compare_exchange_strong XSH.atomic_compare_exchange_strong.003
+    Both outcomes of atomic_compare_exchange_strong() and its _explicit form on atomic pointer objects (to int and to a structure, a null expected pointer included).
+xsh/atomic_compare_exchange_strong XSH.atomic_compare_exchange_strong.004
+    atomic_compare_exchange_strong_explicit() and atomic_compare_exchange_weak_explicit() with each (success, failure) memory order pair that the page allows (failure neither release nor acq_rel and not stronger than success: 14 pairs) act as the plain forms: true, new value stored and *expected kept for equal values; false, object kept and *expected set for different ones; for every atomic integer type.
+xsh/atomic_compare_exchange_strong XSH.atomic_compare_exchange_strong.005
+    atomic_compare_exchange_weak() with an object that differs from *expected returns false, leaves the object unchanged and sets *expected to the object's value (spurious failure is the only allowed deviation, and it applies to equal values only), for every atomic integer type.
+xsh/atomic_compare_exchange_strong XSH.atomic_compare_exchange_strong.006
+    atomic_compare_exchange_weak() with an object equal to *expected either succeeds (object takes desired, *expected untouched) or fails spuriously (returns false, object unchanged and *expected still equal to the old value); no other outcome occurs.
+xsh/atomic_compare_exchange_strong XSH.atomic_compare_exchange_strong.007
+    A loop of atomic_compare_exchange_weak() with equal values succeeds within a million attempts, for every atomic integer type.
+xsh/atomic_exchange        XSH.atomic_exchange.001
+    atomic_exchange() stores the new value and returns the value held before, for atomic_bool and every atomic integer type, with the values 0, 1, the type's minimum and maximum.
+xsh/atomic_exchange        XSH.atomic_exchange.002
+    atomic_exchange() on atomic pointer objects returns the pointer held before; in a chain of calls each returns what the previous call stored, also when the same value is stored again.
+xsh/atomic_exchange        XSH.atomic_exchange.003
+    atomic_exchange_explicit() stores the new value and returns the value held before with each of the six memory orders, for atomic _Bool and every atomic integer type.
+xsh/atomic_fetch_add       XSH.atomic_fetch_add.001
+    atomic_fetch_add() adds the operand to the object and returns the value held before, for every atomic integer type (20 + 7 gives 27 with 20 returned; adding 0; 27 + 100).
+xsh/atomic_fetch_add       XSH.atomic_fetch_add.002
+    atomic_fetch_sub() subtracts the operand from the object and returns the value held before, for every atomic integer type (127 - 7, - 0, - 120).
+xsh/atomic_fetch_add       XSH.atomic_fetch_add.003
+    atomic_fetch_and(), atomic_fetch_or() and atomic_fetch_xor() apply bitwise AND, inclusive OR and exclusive OR of the operand and return the value held before, for every atomic integer type (0x55 with 0x33 gives 0x11, 0x77, 0x66).
+xsh/atomic_fetch_add       XSH.atomic_fetch_add.004
+    For unsigned atomic integer types addition and subtraction wrap around: max + 1 gives 0, 0 - 1 gives max, max + max gives max - 1, 1 - 2 gives max.
+xsh/atomic_fetch_add       XSH.atomic_fetch_add.005
+    For signed atomic integer types the computation wraps silently on overflow: max + 1 gives min, min - 1 gives max, max + max gives -2; negative operands work (5 + -8 gives -3, -3 - -4 gives 1).
+xsh/atomic_fetch_add       XSH.atomic_fetch_add.007
+    atomic_fetch_add_explicit(), _sub_explicit, _and_explicit, _or_explicit and _xor_explicit with each of the six memory orders give the same result and return value as the plain forms, for every atomic integer type.
+xsh/atomic_flag_clear      XSH.atomic_flag_clear.001
+    After atomic_flag_clear() on a set flag, atomic_flag_test_and_set() returns false, and sets the flag again (repeated five times).
+xsh/atomic_flag_clear      XSH.atomic_flag_clear.002
+    atomic_flag_clear_explicit() with memory_order_relaxed, _release and _seq_cst (the orders allowed for it) clears a set flag, also when called repeatedly on a clear one.
+xsh/atomic_flag_clear      XSH.atomic_flag_clear.003
+    Clearing a clear flag leaves it clear (plain and explicit forms); clearing one flag of an array leaves the other four set.
+xsh/atomic_flag_test_and_set XSH.atomic_flag_test_and_set.001
+    A flag initialized with ATOMIC_FLAG_INIT (automatic, static, a structure member, array elements) is clear: the first atomic_flag_test_and_set() returns false and sets it, and every later call returns true.
+xsh/atomic_flag_test_and_set XSH.atomic_flag_test_and_set.002
+    atomic_flag_test_and_set_explicit() with each of the six memory orders returns false for a clear flag (setting it) and true afterwards; the plain form then also returns true.
+xsh/atomic_init            XSH.atomic_init.001
+    After atomic_init(&obj, v) on an automatic atomic object whose storage held junk, the object holds v (read plainly and with atomic_load()), for atomic_bool and every atomic integer type with the values 0, 1, minimum and maximum; also the page's example (atomic_int guide; atomic_init(&guide, 42)).
+xsh/atomic_init            XSH.atomic_init.003
+    atomic_init() on atomic pointer objects (to int, a structure, a function; null included) makes them hold the pointer, and atomic_exchange() and atomic_load() then work on them.
+xsh/atomic_init            XSH.atomic_init.004
+    The macro ATOMIC_VAR_INIT(value) exists and initializes atomic objects of automatic and static duration (int, bool, unsigned long long, char, long, unsigned int, int pointer) to the value.
+xsh/atomic_is_lock_free    XSH.atomic_is_lock_free.001
+    For atomic_bool, every atomic integer type and four atomic pointer types, atomic_is_lock_free() answers the same (as true or false) when called twice on one object, on a second object, on an automatic object, through a const volatile pointer, and with a null pointer.
+xsh/atomic_is_lock_free    XSH.atomic_is_lock_free.002
+    ATOMIC_BOOL_, CHAR_, CHAR16_T_, CHAR32_T_, WCHAR_T_, SHORT_, INT_, LONG_, LLONG_ and POINTER_LOCK_FREE are defined and usable in #if with a value of 0, 1 or 2.
+xsh/atomic_is_lock_free    XSH.atomic_is_lock_free.003
+    Where a lock-free macro is 2, atomic_is_lock_free() is true for the signed and unsigned atomic types and pointer types it covers; where it is 0, it is false for them. A macro of 1 is not constrained.
+xsh/atomic_load            XSH.atomic_load.001
+    atomic_load() returns the value held by the object, for atomic_bool and every atomic integer type of <stdatomic.h>, with the values 0, 1, the type's minimum and its maximum.
+xsh/atomic_load            XSH.atomic_load.002
+    atomic_load() on atomic object pointers (to int, char, void, a structure, a null pointer, a function) returns the pointer held.
+xsh/atomic_load            XSH.atomic_load.003
+    atomic_load_explicit() with memory_order_relaxed, _consume, _acquire and _seq_cst (the orders allowed for a load) returns the value held, for every atomic integer type.
+xsh/atomic_load            XSH.atomic_load.004
+    atomic_load() and atomic_load_explicit() accept a pointer to a const and/or volatile qualified atomic object (also a const object), return its value, and leave the object unchanged.
+xsh/atomic_signal_fence    XSH.atomic_signal_fence.001
+    atomic_thread_fence() can be called with each of the six memory orders and returns.
+xsh/atomic_signal_fence    XSH.atomic_signal_fence.002
+    atomic_signal_fence() can be called with each of the six memory orders and returns.
+xsh/atomic_store           XSH.atomic_store.001
+    atomic_store() replaces the value of an atomic object, for atomic_bool and every atomic integer type, with the values 0, 1, the type's minimum and its maximum.
+xsh/atomic_store           XSH.atomic_store.002
+    atomic_store_explicit() with memory_order_relaxed, _release and _seq_cst (the orders allowed for a store) replaces the value, for every atomic integer type.
+xsh/atomic_store           XSH.atomic_store.003
+    atomic_store() and atomic_store_explicit() replace the pointer held by atomic pointer objects (int, structure, function pointers, a null pointer).
+xsh/atomic_store           XSH.atomic_store.004
+    A store changes only the object it names: in an array of five atomic objects of each type, storing to one element leaves the others unchanged, with all-ones-like and all-zeros-like neighbours.
+xsh/clock                  XSH.clock.001
+    CLOCKS_PER_SEC is one million.
+xsh/ctermid                XSH.ctermid.002
+    L_ctermid is defined by <stdio.h> and is greater than 0.
+xsh/errno                  XSH.errno.001
+    errno designates a modifiable lvalue of type int: values can be assigned and read back (including through its address), and its type is int.
+xsh/errno                  XSH.errno.002
+    errno is zero when main() of the initial thread starts (read before anything else runs).
+xsh/errno                  XSH.errno.005
+    errno is a macro: it is defined by <errno.h> (tested with #ifdef).
+xsh/fegetround             XSH.fegetround.004
+    fesetround() with a value that equals no rounding direction macro (-1 is used, since the macros are non-negative) returns nonzero, because zero is returned only if the requested direction was established.
+xsh/fpclassify             XSH.fpclassify.001
+    fpclassify() of +0 and -0 is FP_ZERO; of 1, -1, 0.1, MIN, -MIN, MAX and -MAX (MIN, MAX the smallest normal and largest finite values of the type) it is FP_NORMAL, for arguments of each of the three floating types.
+xsh/fpclassify             XSH.fpclassify.002
+    fpclassify() of +Inf and -Inf is FP_INFINITE, for each of the three floating types.
+xsh/fpclassify             XSH.fpclassify.003
+    fpclassify() of a NaN and of its negation is FP_NAN, for each of the three floating types.
+xsh/fpclassify             XSH.fpclassify.004
+    fpclassify() of half the smallest normal value of the type, and of its negation, is FP_SUBNORMAL when the type has subnormal values.
+xsh/fpclassify             XSH.fpclassify.005
+    For float and double, fpclassify(MAX * 2), with MAX the largest finite value of the type, is FP_INFINITE: a product evaluated in a wider format is converted to the semantic type first.
+xsh/fpclassify             XSH.fpclassify.006
+    FP_INFINITE, FP_NAN, FP_NORMAL, FP_SUBNORMAL and FP_ZERO are integer constant expressions with distinct values (a switch statement uses them as case labels), and fpclassify() returns one of them for 1.0.
+xsh/fpclassify             XSH.fpclassify.007
+    MATH_ERRNO is 1 and MATH_ERREXCEPT is 2 (integer constant expressions), math_errhandling is an int equal to 1, 2 or 3, and when its MATH_ERREXCEPT bit is set FE_DIVBYZERO, FE_INVALID and FE_OVERFLOW are defined.
+xsh/fpclassify             XSH.fpclassify.008
+    HUGE_VAL, HUGE_VALF and HUGE_VALL are greater than zero and, where the IEC 60559 option is claimed, are +Inf; INFINITY is then +Inf and NAN (when defined) is a NaN.
+xsh/getopt                 XSH.getopt.009
+    optind is 1 when the program starts, and optarg, opterr, optopt and optind are declared by <unistd.h> (assignable int variables and a char * variable).
+xsh/ilogb                  XSH.ilogb.008
+    FP_ILOGB0 is INT_MIN or -INT_MAX, and FP_ILOGBNAN is INT_MAX or INT_MIN, both integer constant expressions.
+xsh/in6addr_any            XSH.in6addr_any.001
+    in6addr_any contains the wildcard IPv6 address (::): sixteen zero bytes.
+xsh/isfinite               XSH.isfinite.001
+    isfinite() of 0, -0, 1, -1, 0.1, MIN, MAX and MIN/2 (MIN the smallest normal value, MAX the largest finite value of the type) is non-zero, for each of the three floating types.
+xsh/isfinite               XSH.isfinite.002
+    isfinite() of +Inf, -Inf, a NaN and its negation is 0, for each of the three floating types.
+xsh/isfinite               XSH.isfinite.003
+    For float and double, isfinite(MAX * 2), with MAX the largest finite value of the type, is 0: a product evaluated in a wider format is converted to the semantic type first.
+xsh/isgreater              XSH.isgreater.001
+    isgreater(x, y) gives 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1 for the ordered pairs (2,1), (1,2), (1,1), (-1,-2), (-2,-1), (+0,-0), (-0,+0), (Inf,1), (1,Inf), (-Inf,1), (Inf,Inf), (-Inf,-Inf) and (0.5,-0.5) (1 when x is greater than y, else 0), for each of the three floating types.
+xsh/isgreater              XSH.isgreater.002
+    isgreaterequal(x, y) gives 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1 for the ordered pairs (2,1), (1,2), (1,1), (-1,-2), (-2,-1), (+0,-0), (-0,+0), (Inf,1), (1,Inf), (-Inf,1), (Inf,Inf), (-Inf,-Inf) and (0.5,-0.5) (1 when x is greater than or equal to y, else 0), for each of the three floating types.
+xsh/isgreater              XSH.isgreater.003
+    isless(x, y) gives 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0 for the ordered pairs (2,1), (1,2), (1,1), (-1,-2), (-2,-1), (+0,-0), (-0,+0), (Inf,1), (1,Inf), (-Inf,1), (Inf,Inf), (-Inf,-Inf) and (0.5,-0.5) (1 when x is less than y, else 0), for each of the three floating types.
+xsh/isgreater              XSH.isgreater.004
+    islessequal(x, y) gives 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0 for the ordered pairs (2,1), (1,2), (1,1), (-1,-2), (-2,-1), (+0,-0), (-0,+0), (Inf,1), (1,Inf), (-Inf,1), (Inf,Inf), (-Inf,-Inf) and (0.5,-0.5) (1 when x is less than or equal to y, else 0), for each of the three floating types.
+xsh/isgreater              XSH.isgreater.005
+    islessgreater(x, y) gives 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1 for the ordered pairs (2,1), (1,2), (1,1), (-1,-2), (-2,-1), (+0,-0), (-0,+0), (Inf,1), (1,Inf), (-Inf,1), (Inf,Inf), (-Inf,-Inf) and (0.5,-0.5) (1 when x is less than or greater than y, else 0), for each of the three floating types.
+xsh/isgreater              XSH.isgreater.006
+    isgreater(), isgreaterequal(), isless(), islessequal() and islessgreater() give 0 for (NaN, 1), (1, NaN), (NaN, NaN), (NaN, Inf) and (-Inf, NaN), for each of the three floating types.
+xsh/isgreater              XSH.isgreater.008
+    islessgreater(a[k++], 5) advances k once and islessgreater(1, a[j++]) advances j once, for each of the three floating types.
+xsh/isgreater              XSH.isgreater.009
+    For the pairs of 0.1f, 0.1 and 0.1L in both orders, each of the five macros gives the same value as the corresponding operator on the same operands (0.1f and 0.1L are in general different from 0.1, and the comparison is not done in the narrower type).
+xsh/isinf                  XSH.isinf.001
+    isinf() of +Inf and -Inf is non-zero, for each of the three floating types.
+xsh/isinf                  XSH.isinf.002
+    isinf() of 0, -0, 1, MAX, -MAX, a NaN and its negation is 0, for each of the three floating types.
+xsh/isinf                  XSH.isinf.003
+    For float and double, isinf(MAX * 2), with MAX the largest finite value of the type, is non-zero: a product evaluated in a wider format is converted to the semantic type first.
+xsh/isnan                  XSH.isnan.001
+    isnan() of a NaN and of its negation is non-zero, for each of the three floating types.
+xsh/isnan                  XSH.isnan.002
+    isnan() of 0, -0, 1, -1, MIN, MAX, +Inf and -Inf is 0, for each of the three floating types.
+xsh/isnormal               XSH.isnormal.001
+    isnormal() of 1, -1, 0.1, MIN, -MIN, MAX and -MAX is non-zero, for each of the three floating types.
+xsh/isnormal               XSH.isnormal.002
+    isnormal() of 0, -0, +Inf, -Inf, a NaN and its negation is 0, for each of the three floating types.
+xsh/isnormal               XSH.isnormal.003
+    isnormal() of half the smallest normal value of the type, and of its negation, is 0 when the type has subnormal values.
+xsh/isunordered            XSH.isunordered.001
+    isunordered() gives 1 for (NaN, 1), (1, NaN), (NaN, NaN), (NaN, Inf), (-Inf, NaN) and (-NaN, 0), for each of the three floating types.
+xsh/isunordered            XSH.isunordered.002
+    isunordered() gives 0 for (1, 2), (2, 1), (1, 1), (+0, -0), (Inf, 1), (-Inf, Inf) and (MAX, -MAX), for each of the three floating types.
+xsh/kill_dependency        XSH.kill_dependency.001
+    <stdatomic.h> defines the macro kill_dependency, and kill_dependency(y) is the value of y for int, long, unsigned long long, double, _Bool, char, an expression, and object, structure and function pointers.
+xsh/openlog                XSH.openlog.004
+    LOG_UPTO(LOG_WARNING) combined with LOG_MASK(LOG_DEBUG) by or equals LOG_UPTO(LOG_DEBUG) with the masks of LOG_NOTICE and LOG_INFO removed, and LOG_MASK and LOG_UPTO yield int.
+xsh/openlog                XSH.openlog.005
+    LOG_MASK gives each of the eight severities a nonzero mask different from the others, and LOG_UPTO(p) is the union of the masks from LOG_EMERG through p in the order emergency, alert, critical, error, warning, notice, info, debug.
+xsh/recvmsg                XSH.recvmsg.026
+    CMSG_LEN(n) is not smaller than the offset of CMSG_DATA() within a control message plus n, that offset is not smaller than the size of struct cmsghdr, and CMSG_SPACE(n) is not smaller than CMSG_LEN(n), for several n from 0 to 100.
+xsh/recvmsg                XSH.recvmsg.027
+    CMSG_FIRSTHDR() returns a null pointer when msg_controllen is 0 and when it is non-zero but smaller than struct cmsghdr, and returns msg_control when msg_controllen is exactly the size of struct cmsghdr and when it is CMSG_SPACE of a small length.
+xsh/recvmsg                XSH.recvmsg.029
+    CMSG_LEN() and CMSG_SPACE() with an integer constant argument are integer constant expressions: they work as array dimensions, enumeration values and in a compile-time relation, and the values are positive.
+xsh/scalbn                 XSH.scalbn.013
+    A NaN argument gives a NaN result.
+xsh/sched_get_priority_max XSH.sched_get_priority_max.004
+    SCHED_FIFO, SCHED_RR, SCHED_OTHER (and SCHED_SPORADIC when defined) have pairwise different values.
+xsh/select                 XSH.select.024
+    FD_ZERO() empties a set, also one that has members: afterwards FD_ISSET() is zero for every descriptor from 0 to FD_SETSIZE-1.
+xsh/select                 XSH.select.025
+    FD_SET() adds a descriptor (FD_ISSET() is then non-zero for it and zero for every other one in range), also for 0 and FD_SETSIZE-1; adding one that is already a member changes nothing, so a single FD_CLR() removes it.
+xsh/select                 XSH.select.026
+    FD_CLR() removes a member and leaves the others; on a descriptor that is not a member it has no effect and is not an error.
+xsh/select                 XSH.select.027
+    FD_ISSET() is non-zero for exactly the descriptors that are in the set (checked for a spread of members and non-members), and it accepts a pointer to a const set.
+xsh/signbit                XSH.signbit.001
+    signbit() of -1, -0.1, -MIN, -MAX and -Inf is non-zero, for each of the three floating types.
+xsh/signbit                XSH.signbit.002
+    signbit() of +0, 1, 0.1, MIN, MAX and +Inf is 0, for each of the three floating types.
+xsh/signbit                XSH.signbit.003
+    signbit() of -0 is non-zero, for each of the three floating types.
+xsh/signbit                XSH.signbit.004
+    A NaN and its negation have different signbit() results, for each of the three floating types.
+xsh/va_start               XSH.va_start.002
+    The mixes of type that are allowed work: an argument passed as a signed type is read as the corresponding unsigned type (value representable in both), and the other way round; a void pointer is read as a char pointer and the other way round.
+xsh/va_start               XSH.va_start.003
+    On an XSI system arguments passed as one pointer type may be read as another pointer type (int * read as long *, then converted back).
+xsh/va_start               XSH.va_start.004
+    va_copy() makes a copy that continues from the same point: after two arguments are read, the copy yields the remaining arguments in order, independently of further reads from the original, and both are ended with va_end().
+xsh/va_start               XSH.va_start.006
+    Several traversals, each bracketed by va_start() and va_end(), in one function give the same values each time.
+xsh/va_start               XSH.va_start.007
+    A call with 24 variable arguments of mixed int, double and pointer types (more than fit in registers on any usual convention) reads back every value correctly.
+xsh/wordexp                XSH.wordexp.025
+    The WRDE_ flags are nonzero and do not share bits, the error constants are nonzero and distinct, we_wordc and we_offs are size_t and we_wordv is a char **.
+
+== (b) PASS although the subject was called: the test accepts a garbage result (102)
+xsh/acos                   XSH.acos.004
+    acos(+Inf) and acos(-Inf) return a NaN.
+xsh/acosh                  XSH.acosh.005
+    acosh(-Inf) returns a NaN.
+xsh/aligned_alloc          XSH.aligned_alloc.003
+    aligned_alloc(alignof(max_align_t), 0) returns either a null pointer or a pointer that can be freed; two such non-null live results differ.
+xsh/asin                   XSH.asin.004
+    asin(+Inf) and asin(-Inf) return a NaN.
+xsh/atanh                  XSH.atanh.006
+    atanh(+Inf) and atanh(-Inf) return a NaN.
+xsh/bsearch                XSH.bsearch.003
+    With nel zero the comparison function is not called and the result is a null pointer.
+xsh/btowc                  XSH.btowc.002
+    btowc(EOF) returns WEOF.
+xsh/cabs                   XSH.cabs.003
+    cabs returns a NaN when a part is a NaN and the other part is not infinite (finite, zero or NaN).
+xsh/cacos                  XSH.cacos.003
+    cacos of +0 + iNaN and of -0 + iNaN has a NaN imaginary part.
+xsh/cacos                  XSH.cacos.007
+    cacos of x + iNaN (x non-zero finite), of NaN + iy (y finite, including zeros) and of NaN + iNaN is NaN + iNaN.
+xsh/cacosh                 XSH.cacosh.005
+    cacosh of +0 + iNaN has a NaN real part.
+xsh/cacosh                 XSH.cacosh.007
+    cacosh of x + iNaN (x non-zero finite), of NaN + iy (y finite, including zeros) and of NaN + iNaN is NaN + iNaN.
+xsh/carg                   XSH.carg.002
+    carg returns a NaN when either part is a NaN, including NaN with an infinite part.
+xsh/casin                  XSH.casin.004
+    For casin, in the page's notation w stands for the product i*z, and the value given is the factor that -i multiplies; the call is on z = -i*w (parts exchanged, one sign changed) and the result is -i times that factor. w = x + iNaN (x finite, including zeros), w = NaN + iy (y non-zero finite) and w = NaN + iNaN give NaN + iNaN.
+xsh/casinh                 XSH.casinh.004
+    For casinh, w is the argument. w = x + iNaN (x finite, including zeros), w = NaN + iy (y non-zero finite) and w = NaN + iNaN give NaN + iNaN.
+xsh/catan                  XSH.catan.006
+    For catan, in the page's notation w stands for the product i*z, and the value given is the factor that -i multiplies; the call is on z = -i*w (parts exchanged, one sign changed) and the result is -i times that factor. w = x + iNaN (x non-zero finite), w = NaN + iy (y finite, including zeros) and w = NaN + iNaN give NaN + iNaN.
+xsh/catanh                 XSH.catanh.006
+    For catanh, w is the argument. w = x + iNaN (x non-zero finite), w = NaN + iy (y finite, including zeros) and w = NaN + iNaN give NaN + iNaN.
+xsh/ccos                   XSH.ccos.004
+    For ccos, in the page's notation w stands for the product i*z; the call is on z = -i*w (parts exchanged, one sign changed). w = x + iInf (x non-zero finite) gives NaN + iNaN and the invalid exception is raised.
+xsh/ccos                   XSH.ccos.005
+    For ccos, in the page's notation w stands for the product i*z; the call is on z = -i*w (parts exchanged, one sign changed). w = x + iNaN (x non-zero finite) gives NaN + iNaN.
+xsh/ccos                   XSH.ccos.011
+    For ccos, in the page's notation w stands for the product i*z; the call is on z = -i*w (parts exchanged, one sign changed). w = NaN + iy (y non-zero finite) and w = NaN + iNaN give NaN + iNaN.
+xsh/ccosh                  XSH.ccosh.004
+    For ccosh, w is the argument. w = x + iInf (x non-zero finite) gives NaN + iNaN and the invalid exception is raised.
+xsh/ccosh                  XSH.ccosh.005
+    For ccosh, w is the argument. w = x + iNaN (x non-zero finite) gives NaN + iNaN.
+xsh/ccosh                  XSH.ccosh.011
+    For ccosh, w is the argument. w = NaN + iy (y non-zero finite) and w = NaN + iNaN give NaN + iNaN.
+xsh/ceil                   XSH.ceil.004
+    A NaN argument gives a NaN result.
+xsh/cexp                   XSH.cexp.002
+    cexp of x + iInf (x finite, including zeros) is NaN + iNaN and the invalid exception is raised.
+xsh/cexp                   XSH.cexp.003
+    cexp of x + iNaN (x finite, including zeros) is NaN + iNaN.
+xsh/cexp                   XSH.cexp.012
+    cexp of NaN + iy for a non-zero finite y is NaN + iNaN.
+xsh/cexp                   XSH.cexp.013
+    cexp of NaN + iNaN is NaN + iNaN.
+xsh/clog                   XSH.clog.005
+    clog of x + iNaN (x finite, including zeros), of NaN + iy (y finite, including zeros) and of NaN + iNaN is NaN + iNaN.
+xsh/cos                    XSH.cos.004
+    cos(+Inf) and cos(-Inf) return a NaN.
+xsh/csin                   XSH.csin.004
+    For csin, in the page's notation w stands for the product i*z, and the value given is the factor that -i multiplies; the call is on z = -i*w (parts exchanged, one sign changed) and the result is -i times that factor. w = x + iInf (x positive finite: 1, 2.5) gives NaN + iNaN and the invalid exception is raised.
+xsh/csin                   XSH.csin.005
+    For csin, in the page's notation w stands for the product i*z, and the value given is the factor that -i multiplies; the call is on z = -i*w (parts exchanged, one sign changed) and the result is -i times that factor. w = x + iNaN (x non-zero finite) gives NaN + iNaN.
+xsh/csin                   XSH.csin.011
+    For csin, in the page's notation w stands for the product i*z, and the value given is the factor that -i multiplies; the call is on z = -i*w (parts exchanged, one sign changed) and the result is -i times that factor. w = NaN + iy (y non-zero finite) and w = NaN + iNaN give NaN + iNaN.
+xsh/csinh                  XSH.csinh.004
+    For csinh, w is the argument. w = x + iInf (x positive finite: 1, 2.5) gives NaN + iNaN and the invalid exception is raised.
+xsh/csinh                  XSH.csinh.005
+    For csinh, w is the argument. w = x + iNaN (x non-zero finite) gives NaN + iNaN.
+xsh/csinh                  XSH.csinh.011
+    For csinh, w is the argument. w = NaN + iy (y non-zero finite) and w = NaN + iNaN give NaN + iNaN.
+xsh/csqrt                  XSH.csqrt.003
+    csqrt of x + iNaN (x finite, including zeros), of NaN + iy (y finite, including zeros) and of NaN + iNaN is NaN + iNaN.
+xsh/ctan                   XSH.ctan.003
+    For ctan, in the page's notation w stands for the product i*z, and the value given is the factor that -i multiplies; the call is on z = -i*w (parts exchanged, one sign changed) and the result is -i times that factor. w = x + iInf (x non-zero finite) gives NaN + iNaN and the invalid exception is raised.
+xsh/ctan                   XSH.ctan.005
+    For ctan, in the page's notation w stands for the product i*z, and the value given is the factor that -i multiplies; the call is on z = -i*w (parts exchanged, one sign changed) and the result is -i times that factor. w = x + iNaN (x non-zero finite) gives NaN + iNaN.
+xsh/ctan                   XSH.ctan.010
+    For ctan, in the page's notation w stands for the product i*z, and the value given is the factor that -i multiplies; the call is on z = -i*w (parts exchanged, one sign changed) and the result is -i times that factor. w = NaN + iy (y non-zero finite) and w = NaN + iNaN give NaN + iNaN.
+xsh/ctanh                  XSH.ctanh.003
+    For ctanh, w is the argument. w = x + iInf (x non-zero finite) gives NaN + iNaN and the invalid exception is raised.
+xsh/ctanh                  XSH.ctanh.005
+    For ctanh, w is the argument. w = x + iNaN (x non-zero finite) gives NaN + iNaN.
+xsh/ctanh                  XSH.ctanh.010
+    For ctanh, w is the argument. w = NaN + iy (y non-zero finite) and w = NaN + iNaN give NaN + iNaN.
+xsh/dlerror                XSH.dlerror.001
+    dlerror() called again with no dynamic linking call between returns a null pointer.
+xsh/fabs                   XSH.fabs.002
+    fabs() of a NaN and of its negation returns a NaN.
+xsh/fdim                   XSH.fdim.003
+    fdim(NaN, 1), fdim(1, NaN) and fdim(NaN, NaN) return a NaN.
+xsh/floor                  XSH.floor.004
+    A NaN argument gives a NaN result.
+xsh/fma                    XSH.fma.003
+    fma(NaN, 2, 3), (2, NaN, 3), (NaN, NaN, 3), (NaN, 2, NaN), (2, 3, NaN) and (Inf, 2, NaN) return a NaN.
+xsh/fma                    XSH.fma.006
+    fma(Inf, 0, NaN) and fma(0, Inf, NaN) return a NaN (whether a domain error occurs is left open).
+xsh/fmax                   XSH.fmax.003
+    fmax(NaN, NaN) returns a NaN.
+xsh/fmin                   XSH.fmin.003
+    fmin(NaN, NaN) returns a NaN.
+xsh/fmod                   XSH.fmod.003
+    fmod(NaN, 2), fmod(2, NaN), fmod(NaN, NaN) and fmod(-NaN, 2) return a NaN.
+xsh/frexp                  XSH.frexp.005
+    frexp(NaN, &e) returns a NaN (the exponent object is unspecified).
+xsh/getlogin               XSH.getlogin.002
+    Repeated calls to getlogin() agree: either all return null or all return the same name.
+xsh/hypot                  XSH.hypot.004
+    hypot returns a NaN if one argument is a NaN and the other is finite.
+xsh/isalnum                XSH.isalnum.001
+    In the POSIX locale isalnum() returns non-zero for each portable character of the class as the locale definition lists it: the 26 uppercase letters, the 26 lowercase letters and the ten digits. Checked through the function and through the header form.
+xsh/isalpha                XSH.isalpha.001
+    In the POSIX locale isalpha() returns non-zero for each portable character of the class as the locale definition lists it: the 26 uppercase and the 26 lowercase letters. Checked through the function and through the header form.
+xsh/isblank                XSH.isblank.001
+    In the POSIX locale isblank() returns non-zero for each portable character of the class as the locale definition lists it: the space and the tab. Checked through the function and through the header form.
+xsh/iscntrl                XSH.iscntrl.001
+    In the POSIX locale iscntrl() returns non-zero for each portable character of the class as the locale definition lists it: the portable control characters (the null character, alert, backspace, tab, newline, vertical-tab, form-feed, carriage-return). Checked through the function and through the header form.
+xsh/isdigit                XSH.isdigit.001
+    In the POSIX locale isdigit() returns non-zero for each portable character of the class as the locale definition lists it: the ten decimal digits. Checked through the function and through the header form.
+xsh/isgraph                XSH.isgraph.001
+    In the POSIX locale isgraph() returns non-zero for each portable character of the class as the locale definition lists it: the letters, the ten digits and the 32 punctuation characters. Checked through the function and through the header form.
+xsh/islower                XSH.islower.001
+    In the POSIX locale islower() returns non-zero for each portable character of the class as the locale definition lists it: the 26 lowercase letters. Checked through the function and through the header form.
+xsh/isprint                XSH.isprint.001
+    In the POSIX locale isprint() returns non-zero for each portable character of the class as the locale definition lists it: the letters, the ten digits, the 32 punctuation characters and the space. Checked through the function and through the header form.
+xsh/ispunct                XSH.ispunct.001
+    In the POSIX locale ispunct() returns non-zero for each portable character of the class as the locale definition lists it: the 32 punctuation characters. Checked through the function and through the header form.
+xsh/isspace                XSH.isspace.001
+    In the POSIX locale isspace() returns non-zero for each portable character of the class as the locale definition lists it: the space, tab, newline, vertical-tab, form-feed and carriage-return. Checked through the function and through the header form.
+xsh/isupper                XSH.isupper.001
+    In the POSIX locale isupper() returns non-zero for each portable character of the class as the locale definition lists it: the 26 uppercase letters. Checked through the function and through the header form.
+xsh/iswalnum               XSH.iswalnum.001
+    In the POSIX locale iswalnum() returns non-zero for each character of the class alnum as the locale definition lists it: the 26 uppercase letters, the 26 lowercase letters and the ten digits.
+xsh/iswalpha               XSH.iswalpha.001
+    In the POSIX locale iswalpha() returns non-zero for each character of the class alpha as the locale definition lists it: the 26 uppercase and the 26 lowercase letters.
+xsh/iswblank               XSH.iswblank.001
+    In the POSIX locale iswblank() returns non-zero for each character of the class blank as the locale definition lists it: the space and the tab.
+xsh/iswblank               XSH.iswblank.004
+    The two blank characters are also white-space characters: iswspace() is non-zero for them.
+xsh/iswcntrl               XSH.iswcntrl.001
+    In the POSIX locale iswcntrl() returns non-zero for each character of the class cntrl as the locale definition lists it: the control characters of the portable character set (null, alert, backspace, tab, newline, vertical tab, form feed, carriage return).
+xsh/iswdigit               XSH.iswdigit.001
+    In the POSIX locale iswdigit() returns non-zero for each character of the class digit as the locale definition lists it: the ten decimal digits.
+xsh/iswgraph               XSH.iswgraph.001
+    In the POSIX locale iswgraph() returns non-zero for each character of the class graph as the locale definition lists it: the letters, the digits and the 32 punctuation characters.
+xsh/iswlower               XSH.iswlower.001
+    In the POSIX locale iswlower() returns non-zero for each character of the class lower as the locale definition lists it: the 26 lowercase letters.
+xsh/iswprint               XSH.iswprint.001
+    In the POSIX locale iswprint() returns non-zero for each character of the class print as the locale definition lists it: the letters, the digits, the punctuation and the space.
+xsh/iswpunct               XSH.iswpunct.001
+    In the POSIX locale iswpunct() returns non-zero for each character of the class punct as the locale definition lists it: the 32 punctuation characters of the portable character set.
+xsh/iswspace               XSH.iswspace.001
+    In the POSIX locale iswspace() returns non-zero for each character of the class space as the locale definition lists it: the space, form feed, newline, carriage return, tab and vertical tab.
+xsh/iswupper               XSH.iswupper.001
+    In the POSIX locale iswupper() returns non-zero for each character of the class upper as the locale definition lists it: the 26 uppercase letters.
+xsh/iswxdigit              XSH.iswxdigit.001
+    In the POSIX locale iswxdigit() returns non-zero for each character of the class xdigit as the locale definition lists it: the ten digits, A to F and a to f.
+xsh/iswxdigit              XSH.iswxdigit.004
+    Each of the 22 hexadecimal digit characters is also an alnum character; the ten decimal digits are digit characters and the twelve letters are alpha characters.
+xsh/isxdigit               XSH.isxdigit.001
+    In the POSIX locale isxdigit() returns non-zero for each portable character of the class as the locale definition lists it: the ten digits, A to F and a to f. Checked through the function and through the header form.
+xsh/ldexp                  XSH.ldexp.004
+    A NaN argument gives a NaN result.
+xsh/logb                   XSH.logb.006
+    A NaN argument gives a NaN result.
+xsh/mbsinit                XSH.mbsinit.001
+    mbsinit(NULL) returns non-zero.
+xsh/mbsinit                XSH.mbsinit.002
+    An mbstate_t object set to all zero bytes, and one with static storage, describe an initial conversion state: mbsinit() returns non-zero for both.
+xsh/nearbyint              XSH.nearbyint.005
+    A NaN argument gives a NaN result.
+xsh/nextafter              XSH.nextafter.004
+    nextafter(NaN, 1), (1, NaN) and (NaN, NaN) return a NaN.
+xsh/openlog                XSH.openlog.009
+    openlog() accepts each of the option constants and their combinations and each facility constant, repeatedly, with a following syslog() and closelog(), without failing or blocking.
+xsh/pthread_equal          XSH.pthread_equal.001
+    pthread_equal() returns non-zero for equal IDs: the calling thread's ID with itself and with a copy, and a new thread's stored ID with what pthread_self() returns in that thread.
+xsh/remainder              XSH.remainder.003
+    remainder(NaN, 2), remainder(2, NaN) and remainder(NaN, NaN) return a NaN.
+xsh/remquo                 XSH.remquo.003
+    remquo(NaN, 2, &q), remquo(2, NaN, &q) and remquo(NaN, NaN, &q) return a NaN.
+xsh/rint                   XSH.rint.004
+    A NaN argument gives a NaN result.
+xsh/round                  XSH.round.004
+    A NaN argument gives a NaN result.
+xsh/scalbn                 XSH.scalbn.004
+    A NaN argument gives a NaN result.
+xsh/sin                    XSH.sin.004
+    sin(+Inf) and sin(-Inf) return a NaN.
+xsh/sqrt                   XSH.sqrt.004
+    sqrt(-Inf) returns a NaN.
+xsh/system                 XSH.system.001
+    system(NULL) returns a non-zero value.
+xsh/tgamma                 XSH.tgamma.004
+    tgamma(-Inf) returns a NaN.
+xsh/tgamma                 XSH.tgamma.006
+    tgamma of the negative integers -1, -2, -3 and -100 returns a NaN.
+xsh/trunc                  XSH.trunc.004
+    A NaN argument gives a NaN result.
+xsh/y0                     XSH.y0.002
+    y0(NaN), y1(NaN) and yn(2, NaN) return a NaN.
+xsh/y0                     XSH.y0.003
+    For a negative x the result is a NaN or the value the function gives at zero: y0(-1), y1(-1) and yn(2, -1) are a NaN or -HUGE_VAL, and yn(-1, -1) is a NaN or +HUGE_VAL (n negative and odd).
+
+== xbd: header and compile-only modules, cannot be stubbed at run time (438)
+xbd/11.2-terminal-parameters XBD.11.2-terminal-parameters.001
+    struct termios has members c_iflag, c_oflag, c_cflag and c_lflag of type tcflag_t and an array c_cc of NCCS elements of type cc_t.
+xbd/2-conformance          XBD.2-conformance.004
+    On an XSI system _POSIX_FSYNC, _POSIX_THREAD_ATTR_STACKADDR, _POSIX_THREAD_ATTR_STACKSIZE and _POSIX_THREAD_PROCESS_SHARED are defined by <unistd.h> with a value above zero (supported always).
+xbd/4.3-default-initialization XBD.4.3-default-initialization.001
+    Objects with static or thread storage duration and no initializer are default-initialized: pointers are null, integers, booleans, enumerations and complex numbers zero, floating members positive zero, every member of a structure or array likewise (nested ones too), a union by its first named member; this holds for file-scope, external and function-scope static objects.
+xbd/4.3-default-initialization XBD.4.3-default-initialization.003
+    Initializers apply in list order and a later one for the same subobject replaces an earlier one: repeated member designators, array designators that re-aim the position, nested designators and array-of-structure designators leave the last value, and the elements and members never named are zero.
+xbd/4.3-default-initialization XBD.4.3-default-initialization.004
+    Members of a structure that its initializer (by designator or by position) does not name are default-initialized: null pointers, positive zero for floating members, the first named member of a union member, the remaining characters of a string-initialized array and the unnamed elements of nested arrays of structures.
+xbd/4.3-default-initialization XBD.4.3-default-initialization.005
+    An initializer of { 0 } on a scalar of automatic or static storage (integer, boolean, enumeration, floating types, object and function pointers) gives it zero, positive zero or a null pointer.
+xbd/7.3.1-lc-ctype         XBD.7.3.1-lc-ctype.001
+    In the POSIX locale upper, lower, alpha, digit, alnum, xdigit, space and blank hold exactly the portable characters the locale definition lists, among all 256 bytes.
+xbd/7.3.2-lc-collate       XBD.7.3.2-lc-collate.002
+    When the portable characters are encoded as ASCII the POSIX collation sequence is the order of the byte values, for strcoll() and wcscoll().
+xbd/9.3-bre                XBD.9.3-bre.009
+    [a--@] (a range from a to hyphen-minus is reversed) is either rejected by regcomp() or equivalent to a list holding only @; accepted, it matches @ and none of a, hyphen-minus, b, comma or a grave accent. Same in a BRE and an ERE.
+xbd/aio.h                  XBD.aio.h.001
+    AIO_ALLDONE, AIO_CANCELED and AIO_NOTCANCELED have three different values and none is -1, the error return of aio_cancel().
+xbd/aio.h                  XBD.aio.h.002
+    LIO_NOP, LIO_READ and LIO_WRITE have three different values.
+xbd/aio.h                  XBD.aio.h.003
+    LIO_WAIT and LIO_NOWAIT have different values.
+xbd/aio.h                  XBD.aio.h.004
+    <aio.h> defines struct aiocb as a complete type with at least the members aio_fildes (int), aio_offset (off_t), aio_buf (volatile void *), aio_nbytes (size_t), aio_reqprio (int), aio_sigevent (struct sigevent), aio_lio_opcode (int).
+xbd/aio.h                  XBD.aio.h.005
+    <aio.h> defines the types off_t, pthread_attr_t, size_t, ssize_t.
+xbd/aio.h                  XBD.aio.h.006
+    <aio.h> defines struct timespec as a complete type.
+xbd/aio.h                  XBD.aio.h.007
+    <aio.h> defines struct sigevent and union sigval as complete types.
+xbd/aio.h                  XBD.aio.h.009
+    <aio.h> declares aio_fsync() with the prototypes the page gives.
+xbd/arpa_inet.h            XBD.arpa_inet.h.002
+    <arpa/inet.h> alone defines in_port_t as a 16-bit unsigned type, in_addr_t as a 32-bit unsigned type, socklen_t as an integer type of at least 32 bits, struct in_addr with s_addr of type in_addr_t, and INET_ADDRSTRLEN with the value 16.
+xbd/arpa_inet.h            XBD.arpa_inet.h.003
+    With IPv6, <arpa/inet.h> alone defines INET6_ADDRSTRLEN with the value 46.
+xbd/arpa_inet.h            XBD.arpa_inet.h.004
+    <arpa/inet.h> defines the types uint32_t, uint16_t.
+xbd/arpa_inet.h            XBD.arpa_inet.h.005
+    <arpa/inet.h> declares htonl(), htons(), ntohl(), ntohs() with the prototypes the page gives, or defines each as a macro.
+xbd/arpa_inet.h            XBD.arpa_inet.h.006
+    <arpa/inet.h> declares inet_addr(), inet_ntoa(), inet_ntop(), inet_pton() with the prototypes the page gives.
+xbd/assert.h               XBD.assert.h.001
+    assert is a macro; when NDEBUG is not defined a true assertion has no effect and its expression is evaluated once; after NDEBUG is defined and <assert.h> included again the expression is not evaluated; undefining NDEBUG and including it once more makes assert evaluate it again.
+xbd/complex.h              XBD.complex.h.001
+    The implementation does not define __STDC_NO_COMPLEX__, before or after <complex.h> is included, unless it defines _POSIX_SUBPROFILE in <unistd.h>.
+xbd/complex.h              XBD.complex.h.008
+    <complex.h> declares cabs(), cabsf(), cabsl(), cacos(), cacosf(), cacosh(), cacoshf(), cacoshl(), cacosl(), carg(), cargf(), cargl(), casin(), casinf(), casinh(), casinhf(), casinhl(), casinl(), catan(), catanf(), catanh(), catanhf(), catanhl(), catanl(), ccos(), ccosf(), ccosh(), ccoshf(), ccoshl(), ccosl(), cexp(), cexpf(), cexpl(), cimag(), cimagf(), cimagl(), clog(), clogf(), clogl(), conj(), conjf(), conjl(), cpow(), cpowf(), cpowl(), cproj(), cprojf(), cprojl(), creal(), crealf(), creall(), csin(), csinf(), csinh(), csinhf(), csinhl(), csinl(), csqrt(), csqrtf(), csqrtl(), ctan(), ctanf(), ctanh(), ctanhf(), ctanhl(), ctanl() with the prototypes the page gives.
+xbd/cpio.h                 XBD.cpio.h.001
+    C_IRUSR is 0400, C_IWUSR 0200, C_IXUSR 0100, C_IRGRP 040, C_IWGRP 020, C_IXGRP 010, C_IROTH 04, C_IWOTH 02, C_IXOTH 01, C_ISUID 04000, C_ISGID 02000 and C_ISVTX 01000.
+xbd/cpio.h                 XBD.cpio.h.002
+    C_ISDIR is 040000, C_ISFIFO 010000, C_ISREG 0100000, C_ISBLK 060000, C_ISCHR 020000, C_ISCTG 0110000, C_ISLNK 0120000 and C_ISSOCK 0140000.
+xbd/dirent.h               XBD.dirent.h.007
+    <dirent.h> declares alphasort(), closedir(), dirfd(), fdopendir(), opendir(), readdir(), readdir_r(), rewinddir(), scandir() with the prototypes the page gives.
+xbd/dirent.h               XBD.dirent.h.009
+    <dirent.h> declares seekdir(), telldir() with the prototypes the page gives.
+xbd/dlfcn.h                XBD.dlfcn.h.001
+    RTLD_LAZY differs from RTLD_NOW, RTLD_GLOBAL differs from RTLD_LOCAL, and neither RTLD_LAZY nor RTLD_NOW shares a bit with RTLD_GLOBAL or RTLD_LOCAL, so that one of each pair can be combined with | in the mode argument of dlopen().
+xbd/dlfcn.h                XBD.dlfcn.h.003
+    <dlfcn.h> declares dlclose(), dlerror(), dlopen(), dlsym() with the prototypes the page gives.
+xbd/errno.h                XBD.errno.h.001
+    Every error number <errno.h> lists is defined as a positive integer constant expression of type int that can be used in #if.
+xbd/errno.h                XBD.errno.h.003
+    errno expands to a modifiable lvalue of type int: it can be assigned, changed in place and have its address taken.
+xbd/errno.h                XBD.errno.h.004
+    errno has thread local storage duration: a value stored by one thread is not seen by another thread, and the other thread storing its own value does not change it.
+xbd/fcntl.h                XBD.fcntl.h.001
+    <fcntl.h> defines FD_CLOEXEC, usable in #if.
+xbd/fcntl.h                XBD.fcntl.h.004
+    <fcntl.h> defines O_CLOEXEC, usable in #if.
+xbd/fcntl.h                XBD.fcntl.h.009
+    The fcntl() command constants are usable in #if and have different values (F_DUPFD, F_DUPFD_CLOEXEC, F_DUPFD_CLOFORK, F_GETFD, F_SETFD, F_GETFL, F_SETFL, F_GETLK, F_SETLK, F_SETLKW, the F_OFD_* three, F_GETOWN, F_SETOWN, F_GETOWN_EX, F_SETOWN_EX).
+xbd/fcntl.h                XBD.fcntl.h.010
+    F_RDLCK, F_UNLCK and F_WRLCK are usable in #if, have different values and fit in l_type (a short).
+xbd/fcntl.h                XBD.fcntl.h.012
+    O_RDONLY, O_WRONLY and O_RDWR (and O_EXEC and O_SEARCH when defined) are usable in #if and have different values, except that O_EXEC and O_SEARCH may be equal.
+xbd/fcntl.h                XBD.fcntl.h.013
+    O_ACCMODE is usable in #if and every access mode constant lies wholly inside it.
+xbd/fcntl.h                XBD.fcntl.h.015
+    AT_FDCWD is not the number of any descriptor (it differs from the descriptors in use and is negative or beyond OPEN_MAX), and AT_EACCESS, AT_SYMLINK_NOFOLLOW, AT_SYMLINK_FOLLOW and AT_REMOVEDIR are nonzero.
+xbd/fcntl.h                XBD.fcntl.h.016
+    The POSIX_FADV_* advice constants (NORMAL, SEQUENTIAL, RANDOM, WILLNEED, DONTNEED, NOREUSE) have six different values.
+xbd/fcntl.h                XBD.fcntl.h.017
+    <fcntl.h> defines struct flock as a complete type with at least the members l_type (short), l_whence (short), l_start (off_t), l_len (off_t), l_pid (pid_t).
+xbd/fcntl.h                XBD.fcntl.h.018
+    <fcntl.h> defines the types mode_t, off_t, pid_t.
+xbd/fcntl.h                XBD.fcntl.h.019
+    <fcntl.h> defines the macros SEEK_SET, SEEK_CUR, SEEK_END.
+xbd/fcntl.h                XBD.fcntl.h.020
+    <fcntl.h> defines the macros O_APPEND, O_NONBLOCK, O_SYNC, usable in #if.
+xbd/fcntl.h                XBD.fcntl.h.021
+    <fcntl.h> defines the macros O_DSYNC, O_RSYNC, usable in #if.
+xbd/fcntl.h                XBD.fcntl.h.022
+    <fcntl.h> defines the macros S_IRWXU, S_IRUSR, S_IWUSR, S_IXUSR, S_IRWXG, S_IRGRP, S_IWGRP, S_IXGRP, S_IRWXO, S_IROTH, S_IWOTH, S_IXOTH, S_ISUID, S_ISGID.
+xbd/fcntl.h                XBD.fcntl.h.023
+    <fcntl.h> defines the macro S_ISVTX.
+xbd/fcntl.h                XBD.fcntl.h.024
+    <fcntl.h> declares creat(), fcntl(), open(), openat() with the prototypes the page gives.
+xbd/fcntl.h                XBD.fcntl.h.025
+    <fcntl.h> declares posix_fadvise(), posix_fallocate() with the prototypes the page gives.
+xbd/fenv.h                 XBD.fenv.h.001
+    Each of FE_DIVBYZERO, FE_INEXACT, FE_INVALID, FE_OVERFLOW and FE_UNDERFLOW that <fenv.h> defines is an integer constant expression, and no two of them have a bit in common.
+xbd/fenv.h                 XBD.fenv.h.002
+    <fenv.h> defines FE_ALL_EXCEPT as an integer constant expression that is the bitwise OR of the exception macros the implementation defines, so it contains every bit of each of FE_DIVBYZERO, FE_INEXACT, FE_INVALID, FE_OVERFLOW and FE_UNDERFLOW that is defined.
+xbd/fenv.h                 XBD.fenv.h.003
+    Each of FE_DOWNWARD, FE_TONEAREST, FE_TOWARDZERO and FE_UPWARD that <fenv.h> defines is an integer constant expression with a non-negative value, and no two have the same value.
+xbd/fenv.h                 XBD.fenv.h.004
+    An implementation that supports the IEC 60559 Floating-Point option (signalled by __STDC_IEC_559__ or __STDC_IEC_60559_BFP__) defines all of FE_DIVBYZERO, FE_INEXACT, FE_INVALID, FE_OVERFLOW, FE_UNDERFLOW, FE_DOWNWARD, FE_TONEAREST, FE_TOWARDZERO and FE_UPWARD.
+xbd/fenv.h                 XBD.fenv.h.006
+    <fenv.h> defines the types fenv_t, fexcept_t.
+xbd/fenv.h                 XBD.fenv.h.007
+    <fenv.h> declares feclearexcept(), fegetenv(), fegetexceptflag(), fegetround(), feholdexcept(), feraiseexcept(), fesetenv(), fesetexceptflag(), fesetround(), fetestexcept(), feupdateenv() with the prototypes the page gives.
+xbd/float.h                XBD.float.h.001
+    The integer values of <float.h> (all but FLT_ROUNDS) are usable in #if; FLT_RADIX is at least 2; the DIG and DECIMAL_DIG values are at least 6 (float) and 10 (double, long double, DECIMAL_DIG); the MIN_10_EXP values are at most -37 and the MAX_10_EXP values at least 37; the MIN_EXP values are negative and the MAX_EXP values positive.
+xbd/float.h                XBD.float.h.002
+    FLT_MAX, DBL_MAX and LDBL_MAX are constant expressions of at least 1E+37; FLT_EPSILON (at most 1E-5), DBL_EPSILON and LDBL_EPSILON (at most 1E-9), the MIN values and the TRUE_MIN values (each at most 1E-37) are positive constant expressions.
+xbd/float.h                XBD.float.h.003
+    The values follow the model the page defines: MAX_EXP is at least MANT_DIG; EPSILON is radix^(1-p); MIN is radix^(min_exp-1); MAX is (1 - radix^-p) times radix^max_exp, for float, double and long double.
+xbd/float.h                XBD.float.h.004
+    For each floating type, DIG, DECIMAL_DIG, MIN_10_EXP and MAX_10_EXP equal the values the page's formulas give from MANT_DIG, MIN_EXP, MAX_EXP and the radix, and DECIMAL_DIG is at least the long double value.
+xbd/float.h                XBD.float.h.005
+    FLT_HAS_SUBNORM, DBL_HAS_SUBNORM and LDBL_HAS_SUBNORM are -1, 0 or 1; TRUE_MIN is never above MIN, and is below it for a type that has subnormal numbers.
+xbd/fnmatch.h              XBD.fnmatch.h.001
+    FNM_PATHNAME, FNM_PERIOD, FNM_NOESCAPE and FNM_CASEFOLD are nonzero and share no bits.
+xbd/fnmatch.h              XBD.fnmatch.h.003
+    <fnmatch.h> declares fnmatch() with the prototypes the page gives.
+xbd/ftw.h                  XBD.ftw.h.001
+    FTW_F, FTW_D, FTW_DNR, FTW_DP, FTW_NS, FTW_SL and FTW_SLN have seven different values.
+xbd/ftw.h                  XBD.ftw.h.003
+    <ftw.h> defines struct FTW as a complete type with at least the members base (int), level (int).
+xbd/ftw.h                  XBD.ftw.h.004
+    <ftw.h> defines struct stat as a complete type.
+xbd/ftw.h                  XBD.ftw.h.005
+    <ftw.h> defines the macros S_IRWXU, S_IRUSR, S_IWUSR, S_IXUSR, S_IRWXG, S_IRGRP, S_IWGRP, S_IXGRP, S_IRWXO, S_IROTH, S_IWOTH, S_IXOTH, S_ISUID, S_ISGID, S_ISVTX, S_IFMT, S_IFBLK, S_IFCHR, S_IFIFO, S_IFREG, S_IFDIR, S_IFLNK, S_IFSOCK.
+xbd/ftw.h                  XBD.ftw.h.006
+    <ftw.h> defines the macros S_ISBLK, S_ISCHR, S_ISDIR, S_ISFIFO, S_ISREG, S_ISLNK, S_ISSOCK.
+xbd/ftw.h                  XBD.ftw.h.007
+    <ftw.h> declares nftw() with the prototypes the page gives.
+xbd/glob.h                 XBD.glob.h.001
+    GLOB_APPEND, GLOB_DOOFFS, GLOB_ERR, GLOB_MARK, GLOB_NOCHECK, GLOB_NOESCAPE and GLOB_NOSORT are nonzero and share no bits.
+xbd/glob.h                 XBD.glob.h.002
+    GLOB_ABORTED, GLOB_NOMATCH and GLOB_NOSPACE are nonzero and have three different values.
+xbd/glob.h                 XBD.glob.h.003
+    <glob.h> defines glob_t as a complete type with at least the members gl_pathc (size_t), gl_pathv (char **), gl_offs (size_t).
+xbd/glob.h                 XBD.glob.h.004
+    <glob.h> defines the type size_t.
+xbd/glob.h                 XBD.glob.h.005
+    <glob.h> declares glob(), globfree() with the prototypes the page gives.
+xbd/inttypes.h             XBD.inttypes.h.001
+    <inttypes.h> includes <stdint.h>, and for every integer type <stdint.h> provides (widths 8, 16, 32 and 64, the least, fast, greatest-width and pointer types) it defines the fprintf macros PRId, PRIi, PRIo, PRIu, PRIx and PRIX for that type.
+xbd/inttypes.h             XBD.inttypes.h.005
+    <inttypes.h> defines imaxdiv_t as a complete type.
+xbd/iso646.h               XBD.iso646.h.002
+    The alternative spellings work as the operators they stand for, in expressions and in #if.
+xbd/langinfo.h             XBD.langinfo.h.001
+    Each of CODESET, D_T_FMT, D_FMT, T_FMT, T_FMT_AMPM, AM_STR, PM_STR, DAY_1 to DAY_7, ABDAY_1 to ABDAY_7, MON_1 to MON_12, ABMON_1 to ABMON_12, ERA, ERA_D_FMT, ERA_D_T_FMT, ERA_T_FMT, ALT_DIGITS, RADIXCHAR, THOUSEP, YESEXPR, NOEXPR and CRNCYSTR has type nl_item.
+xbd/langinfo.h             XBD.langinfo.h.002
+    No two of CODESET, D_T_FMT, D_FMT, T_FMT, T_FMT_AMPM, AM_STR, PM_STR, DAY_1 to DAY_7, ABDAY_1 to ABDAY_7, MON_1 to MON_12, ABMON_1 to ABMON_12, ERA, ERA_D_FMT, ERA_D_T_FMT, ERA_T_FMT, ALT_DIGITS, RADIXCHAR, THOUSEP, YESEXPR, NOEXPR and CRNCYSTR have the same value.
+xbd/langinfo.h             XBD.langinfo.h.005
+    <langinfo.h> defines the types locale_t, nl_item.
+xbd/limits.h               XBD.limits.h.001
+    <limits.h> defines the _POSIX_*_MAX minimum-value constants (and _POSIX_CLOCKRES_MIN) with exactly the values the page gives for them, each usable in #if.
+xbd/limits.h               XBD.limits.h.002
+    On a system with the Message Passing option <limits.h> defines _POSIX_MQ_OPEN_MAX as 8 and _POSIX_MQ_PRIO_MAX as 32.
+xbd/limits.h               XBD.limits.h.005
+    <limits.h> defines the _POSIX2_* minimum-value constants with exactly the values the page gives for them, each usable in #if.
+xbd/limits.h               XBD.limits.h.006
+    CHAR_BIT is 8, SCHAR_MAX 127, SCHAR_MIN -128 and UCHAR_MAX 255; CHAR_MIN and CHAR_MAX are SCHAR_MIN and SCHAR_MAX when char can hold negative values, otherwise 0 and UCHAR_MAX.
+xbd/limits.h               XBD.limits.h.009
+    Each numerical limit other than CHAR_BIT, LONG_BIT, MB_LEN_MAX and WORD_BIT has the type an object of the corresponding type has after the integer promotions.
+xbd/limits.h               XBD.limits.h.010
+    Every macro and symbolic constant <limits.h> defines is suitable for use in #if preprocessing directives.
+xbd/limits.h               XBD.limits.h.012
+    On an XSI system the limits are at least the XSI minimum values (IOV_MAX, NAME_MAX, PATH_MAX, TEXTDOMAIN_MAX), PAGE_SIZE and PAGESIZE are both defined with one value when either is, and NL_LANGMAX (at least 14) and NZERO (at least 20) are defined.
+xbd/limits.h               XBD.limits.h.013
+    SSIZE_MAX is the largest value an object of type ssize_t holds, and is at least _POSIX_SSIZE_MAX.
+xbd/limits.h               XBD.limits.h.015
+    When STREAM_MAX is defined it has the same value as FOPEN_MAX.
+xbd/limits.h               XBD.limits.h.016
+    sysconf(_SC_NSIG) never returns more than NSIG_MAX, and for the runtime-increasable limits the run-time value sysconf() returns is not smaller than the value <limits.h> gives (a result of -1, no definite limit, is not compared).
+xbd/locale.h               XBD.locale.h.001
+    <locale.h> defines LC_ALL, LC_COLLATE, LC_CTYPE, LC_MESSAGES, LC_MONETARY, LC_NUMERIC and LC_TIME as integer constant expressions (usable in #if) with seven different values.
+xbd/locale.h               XBD.locale.h.002
+    <locale.h> defines LC_COLLATE_MASK, LC_CTYPE_MASK, LC_MESSAGES_MASK, LC_MONETARY_MASK, LC_NUMERIC_MASK and LC_TIME_MASK as non-zero values with no bit in common, and LC_ALL_MASK, which has every one of their bits set.
+xbd/locale.h               XBD.locale.h.003
+    LC_GLOBAL_LOCALE is an expression of type locale_t and is not (locale_t)0.
+xbd/locale.h               XBD.locale.h.004
+    <locale.h> defines struct lconv as a complete type with at least the members currency_symbol (char *), decimal_point (char *), frac_digits (char), grouping (char *), int_curr_symbol (char *), int_frac_digits (char), int_n_cs_precedes (char), int_n_sep_by_space (char), int_n_sign_posn (char), int_p_cs_precedes (char), int_p_sep_by_space (char), int_p_sign_posn (char), mon_decimal_point (char *), mon_grouping (char *), mon_thousands_sep (char *), negative_sign (char *), n_cs_precedes (char), n_sep_by_space (char), n_sign_posn (char), positive_sign (char *), p_cs_precedes (char), p_sep_by_space (char), p_sign_posn (char), thousands_sep (char *).
+xbd/locale.h               XBD.locale.h.005
+    <locale.h> defines the type locale_t.
+xbd/locale.h               XBD.locale.h.007
+    <locale.h> declares duplocale(), freelocale(), localeconv(), newlocale(), setlocale(), uselocale() with the prototypes the page gives.
+xbd/math.h                 XBD.math.h.001
+    <math.h> defines FP_INFINITE, FP_NAN, FP_NORMAL, FP_SUBNORMAL and FP_ZERO as integer constant expressions (usable in #if) with five different values.
+xbd/math.h                 XBD.math.h.002
+    fpclassify, isfinite, isinf, isnan, isnormal and signbit, and isgreater, isgreaterequal, isless, islessequal, islessgreater and isunordered, are macros whose value has type int for an argument of each real-floating type.
+xbd/math.h                 XBD.math.h.003
+    <math.h> defines MATH_ERRNO as the integer constant 1 and MATH_ERREXCEPT as the integer constant 2, usable in #if.
+xbd/math.h                 XBD.math.h.004
+    math_errhandling is an expression of type int whose value is MATH_ERRNO, MATH_ERREXCEPT or their bitwise OR (1, 2 or 3), and it has the same value at every use during the program.
+xbd/math.h                 XBD.math.h.005
+    If math_errhandling & MATH_ERREXCEPT is non-zero, <fenv.h> defines the macros FE_DIVBYZERO, FE_INVALID and FE_OVERFLOW.
+xbd/math.h                 XBD.math.h.006
+    HUGE_VAL, HUGE_VALF and HUGE_VALL are positive constant expressions of type double, float and long double respectively (usable as static initializers).
+xbd/math.h                 XBD.math.h.007
+    On a system that defines __STDC_IEC_559__ (or its successor __STDC_IEC_60559_BFP__), HUGE_VAL, HUGE_VALF and HUGE_VALL evaluate to positive infinity.
+xbd/math.h                 XBD.math.h.008
+    INFINITY is a positive constant expression of type float (usable as a static initializer); where the implementation defines __STDC_IEC_559__ it is positive infinity.
+xbd/math.h                 XBD.math.h.009
+    If NAN is defined it is a constant expression of type float (usable as a static initializer) whose value is a NaN; an implementation that defines __STDC_IEC_559__ supports quiet NaNs and so defines it.
+xbd/math.h                 XBD.math.h.010
+    float_t and double_t are real-floating types; float_t is at least as wide as float, double_t at least as wide as double and as float_t; for FLT_EVAL_METHOD 0 they are float and double, for 1 both are double, for 2 both are long double.
+xbd/math.h                 XBD.math.h.011
+    FP_ILOGB0 and FP_ILOGBNAN are integer constant expressions; FP_ILOGB0 is {INT_MIN} or -{INT_MAX}, and FP_ILOGBNAN is {INT_MAX} or {INT_MIN}.
+xbd/math.h                 XBD.math.h.016
+    <math.h> declares acos(), acosf(), acosh(), acoshf(), acoshl(), acosl(), asin(), asinf(), asinh(), asinhf(), asinhl(), asinl(), atan(), atan2(), atan2f(), atan2l(), atanf(), atanh(), atanhf(), atanhl(), atanl(), cbrt(), cbrtf(), cbrtl(), ceil(), ceilf(), ceill(), copysign(), copysignf(), copysignl(), cos(), cosf(), cosh(), coshf(), coshl(), cosl(), erf(), erfc(), erfcf(), erfcl(), erff(), erfl(), exp(), exp2(), exp2f(), exp2l(), expf(), expl(), expm1(), expm1f(), expm1l(), fabs(), fabsf(), fabsl(), fdim(), fdimf(), fdiml(), floor(), floorf(), floorl(), fma(), fmaf(), fmal(), fmax(), fmaxf(), fmaxl(), fmin(), fminf(), fminl(), fmod(), fmodf(), fmodl(), frexp(), frexpf(), frexpl(), hypot(), hypotf(), hypotl(), ilogb(), ilogbf(), ilogbl(), ldexp(), ldexpf(), ldexpl(), lgamma(), lgammaf(), lgammal(), llrint(), llrintf(), llrintl(), llround(), llroundf(), llroundl(), log(), log10(), log10f(), log10l(), log1p(), log1pf(), log1pl(), log2(), log2f(), log2l(), logb(), logbf(), logbl(), logf(), logl(), lrint(), lrintf(), lrintl(), lround(), lroundf(), lroundl(), modf(), modff(), modfl(), nan(), nanf(), nanl(), nearbyint(), nearbyintf(), nearbyintl(), nextafter(), nextafterf(), nextafterl(), nexttoward(), nexttowardf(), nexttowardl(), pow(), powf(), powl(), remainder(), remainderf(), remainderl(), remquo(), remquof(), remquol(), rint(), rintf(), rintl(), round(), roundf(), roundl(), scalbln(), scalblnf(), scalblnl(), scalbn(), scalbnf(), scalbnl(), sin(), sinf(), sinh(), sinhf(), sinhl(), sinl(), sqrt(), sqrtf(), sqrtl(), tan(), tanf(), tanh(), tanhf(), tanhl(), tanl(), tgamma(), tgammaf(), tgammal(), trunc(), truncf(), truncl() with the prototypes the page gives.
+xbd/math.h                 XBD.math.h.017
+    <math.h> declares j0(), j1(), jn(), y0(), y1(), yn() with the prototypes the page gives.
+xbd/math.h                 XBD.math.h.018
+    <math.h> declares the external variable signgam with the type the page gives.
+xbd/mqueue.h               XBD.mqueue.h.002
+    <mqueue.h> defines the types size_t, ssize_t.
+xbd/mqueue.h               XBD.mqueue.h.003
+    <mqueue.h> defines struct timespec as a complete type.
+xbd/mqueue.h               XBD.mqueue.h.004
+    <mqueue.h> defines struct mq_attr as a complete type with at least the members mq_flags (long), mq_maxmsg (long), mq_msgsize (long), mq_curmsgs (long).
+xbd/mqueue.h               XBD.mqueue.h.005
+    <mqueue.h> defines the macros O_RDONLY, O_WRONLY, O_RDWR, O_CREAT, O_EXCL, O_NONBLOCK.
+xbd/mqueue.h               XBD.mqueue.h.006
+    <mqueue.h> declares mq_close(), mq_getattr(), mq_notify(), mq_open(), mq_receive(), mq_send(), mq_setattr(), mq_timedreceive(), mq_timedsend(), mq_unlink() with the prototypes the page gives.
+xbd/net_if.h               XBD.net_if.h.001
+    IF_NAMESIZE is an integer constant expression with a positive value, so that char buf[IF_NAMESIZE] is a buffer for an interface name and its terminating null character.
+xbd/net_if.h               XBD.net_if.h.002
+    <net/if.h> defines struct if_nameindex as a complete type with at least the members if_index (unsigned), if_name (char *).
+xbd/net_if.h               XBD.net_if.h.003
+    <net/if.h> declares if_freenameindex(), if_indextoname(), if_nameindex(), if_nametoindex() with the prototypes the page gives.
+xbd/netdb.h                XBD.netdb.h.001
+    AI_PASSIVE, AI_CANONNAME, AI_NUMERICHOST, AI_NUMERICSERV, AI_V4MAPPED, AI_ALL and AI_ADDRCONFIG are defined and no two have a bit in common.
+xbd/netdb.h                XBD.netdb.h.003
+    EAI_AGAIN, EAI_BADFLAGS, EAI_FAIL, EAI_FAMILY, EAI_MEMORY, EAI_NONAME, EAI_SERVICE, EAI_SOCKTYPE, EAI_SYSTEM and EAI_OVERFLOW are defined with values usable in #if preprocessing directives, none is 0, and no two have the same value.
+xbd/netdb.h                XBD.netdb.h.004
+    IPPORT_RESERVED is defined with an integer value in the range of port numbers, 0 to 65535.
+xbd/netdb.h                XBD.netdb.h.005
+    <netdb.h> defines struct hostent as a complete type with at least the members h_name (char *), h_aliases (char **), h_addrtype (int), h_length (int), h_addr_list (char **).
+xbd/netdb.h                XBD.netdb.h.006
+    <netdb.h> defines struct netent as a complete type with at least the members n_name (char *), n_aliases (char **), n_addrtype (int), n_net (uint32_t).
+xbd/netdb.h                XBD.netdb.h.007
+    <netdb.h> defines the type uint32_t.
+xbd/netdb.h                XBD.netdb.h.008
+    <netdb.h> defines struct protoent as a complete type with at least the members p_name (char *), p_aliases (char **), p_proto (int).
+xbd/netdb.h                XBD.netdb.h.009
+    <netdb.h> defines struct servent as a complete type with at least the members s_name (char *), s_aliases (char **), s_port (int), s_proto (char *).
+xbd/netdb.h                XBD.netdb.h.010
+    <netdb.h> defines struct addrinfo as a complete type with at least the members ai_flags (int), ai_family (int), ai_socktype (int), ai_protocol (int), ai_addrlen (socklen_t), ai_addr (struct sockaddr *), ai_canonname (char *), ai_next (struct addrinfo *).
+xbd/netdb.h                XBD.netdb.h.011
+    <netdb.h> defines the type socklen_t.
+xbd/netdb.h                XBD.netdb.h.012
+    <netdb.h> declares endhostent(), endnetent(), endprotoent(), endservent(), freeaddrinfo(), gai_strerror(), getaddrinfo(), gethostent(), getnameinfo(), getnetbyaddr(), getnetbyname(), getnetent(), getprotobyname(), getprotobynumber(), getprotoent(), getservbyname(), getservbyport(), getservent(), sethostent(), setnetent(), setprotoent(), setservent() with the prototypes the page gives.
+xbd/netinet_in.h           XBD.netinet_in.h.001
+    <netinet/in.h> alone defines in_port_t as the type uint16_t, in_addr_t as the type uint32_t, sa_family_t as an unsigned integer type, and uint8_t and uint32_t; s_addr of struct in_addr has type in_addr_t.
+xbd/netinet_in.h           XBD.netinet_in.h.005
+    INET_ADDRSTRLEN is an integer constant expression with the value 16, usable as the size of an array.
+xbd/netinet_in.h           XBD.netinet_in.h.006
+    With IPv6, INET6_ADDRSTRLEN is an integer constant expression with the value 46, usable as the size of an array.
+xbd/netinet_in.h           XBD.netinet_in.h.007
+    With IPv6, IPV6_JOIN_GROUP, IPV6_LEAVE_GROUP, IPV6_MULTICAST_HOPS, IPV6_MULTICAST_IF, IPV6_MULTICAST_LOOP, IPV6_UNICAST_HOPS and IPV6_V6ONLY are defined with seven different integer values.
+xbd/netinet_in.h           XBD.netinet_in.h.009
+    With IPv6, each of the twelve IN6_IS_ADDR_ macros (UNSPECIFIED, LOOPBACK, MULTICAST, LINKLOCAL, SITELOCAL, V4MAPPED, V4COMPAT and the five MC_ scope forms) accepts a const struct in6_addr * and has type int.
+xbd/netinet_in.h           XBD.netinet_in.h.011
+    <netinet/in.h> defines struct sockaddr_in as a complete type with at least the members sin_family (sa_family_t), sin_port (in_port_t), sin_addr (struct in_addr).
+xbd/netinet_in.h           XBD.netinet_in.h.012
+    <netinet/in.h> defines struct in6_addr as a complete type with at least the members s6_addr (uint8_t[16]).
+xbd/netinet_in.h           XBD.netinet_in.h.013
+    <netinet/in.h> defines struct sockaddr_in6 as a complete type with at least the members sin6_family (sa_family_t), sin6_port (in_port_t), sin6_flowinfo (uint32_t), sin6_addr (struct in6_addr), sin6_scope_id (uint32_t).
+xbd/netinet_in.h           XBD.netinet_in.h.014
+    <netinet/in.h> defines struct ipv6_mreq as a complete type with at least the members ipv6mr_multiaddr (struct in6_addr), ipv6mr_interface (unsigned).
+xbd/netinet_in.h           XBD.netinet_in.h.015
+    <netinet/in.h> declares the external variables in6addr_any, in6addr_loopback with the type the page gives.
+xbd/nl_types.h             XBD.nl_types.h.001
+    NL_CAT_LOCALE is a value that can be passed as the int oflag argument of catopen() and it is not 0.
+xbd/nl_types.h             XBD.nl_types.h.002
+    NL_SETD has a value that can be passed as the int set_id argument of catgets(), and (nl_catd)-1, the error return of catopen(), is a valid nl_catd value that compares equal to itself.
+xbd/nl_types.h             XBD.nl_types.h.003
+    <nl_types.h> defines the types nl_catd, nl_item.
+xbd/nl_types.h             XBD.nl_types.h.004
+    <nl_types.h> declares catclose(), catgets(), catopen() with the prototypes the page gives.
+xbd/poll.h                 XBD.poll.h.001
+    All ten POLL event constants are nonzero and fit in a short (the type of events and revents).
+xbd/poll.h                 XBD.poll.h.002
+    POLLERR, POLLHUP and POLLNVAL each share no bits with any other POLL constant.
+xbd/poll.h                 XBD.poll.h.003
+    POLLIN, POLLRDNORM, POLLRDBAND, POLLPRI, POLLOUT and POLLWRBAND have six different values.
+xbd/poll.h                 XBD.poll.h.005
+    <poll.h> defines struct pollfd as a complete type with at least the members fd (int), events (short), revents (short).
+xbd/poll.h                 XBD.poll.h.006
+    <poll.h> defines the type nfds_t.
+xbd/poll.h                 XBD.poll.h.010
+    <poll.h> declares poll() with the prototypes the page gives.
+xbd/pthread.h              XBD.pthread.h.001
+    PTHREAD_CANCEL_ENABLE and PTHREAD_CANCEL_DISABLE have different values.
+xbd/pthread.h              XBD.pthread.h.002
+    PTHREAD_CANCEL_DEFERRED and PTHREAD_CANCEL_ASYNCHRONOUS have different values.
+xbd/pthread.h              XBD.pthread.h.003
+    PTHREAD_CREATE_DETACHED and PTHREAD_CREATE_JOINABLE have different values.
+xbd/pthread.h              XBD.pthread.h.006
+    PTHREAD_PROCESS_SHARED and PTHREAD_PROCESS_PRIVATE have different values.
+xbd/pthread.h              XBD.pthread.h.007
+    PTHREAD_EXPLICIT_SCHED and PTHREAD_INHERIT_SCHED have different values.
+xbd/pthread.h              XBD.pthread.h.008
+    PTHREAD_SCOPE_PROCESS and PTHREAD_SCOPE_SYSTEM have different values.
+xbd/pthread.h              XBD.pthread.h.013
+    PTHREAD_BARRIER_SERIAL_THREAD is nonzero and differs from EINVAL, the one error the pthread_barrier_wait() page names.
+xbd/pthread.h              XBD.pthread.h.014
+    <pthread.h> defines the types pthread_attr_t, pthread_barrier_t, pthread_barrierattr_t, pthread_cond_t, pthread_condattr_t, pthread_key_t, pthread_mutex_t, pthread_mutexattr_t, pthread_once_t, pthread_rwlock_t, pthread_rwlockattr_t, pthread_spinlock_t, pthread_t.
+xbd/pthread.h              XBD.pthread.h.016
+    <pthread.h> declares pthread_atfork(), pthread_attr_destroy(), pthread_attr_getdetachstate(), pthread_attr_getguardsize(), pthread_attr_getschedparam(), pthread_attr_init(), pthread_attr_setdetachstate(), pthread_attr_setguardsize(), pthread_attr_setschedparam(), pthread_barrier_destroy(), pthread_barrier_init(), pthread_barrier_wait(), pthread_barrierattr_destroy(), pthread_barrierattr_init(), pthread_cancel(), pthread_cond_broadcast(), pthread_cond_destroy(), pthread_cond_init(), pthread_cond_signal(), pthread_cond_timedwait(), pthread_cond_wait(), pthread_condattr_destroy(), pthread_condattr_getclock(), pthread_condattr_init(), pthread_condattr_setclock(), pthread_create(), pthread_detach(), pthread_equal(), pthread_exit(), pthread_getspecific(), pthread_join(), pthread_key_create(), pthread_key_delete(), pthread_mutex_consistent(), pthread_mutex_destroy(), pthread_mutex_init(), pthread_mutex_lock(), pthread_mutex_timedlock(), pthread_mutex_trylock(), pthread_mutex_unlock(), pthread_mutexattr_destroy(), pthread_mutexattr_getrobust(), pthread_mutexattr_gettype(), pthread_mutexattr_init(), pthread_mutexattr_setrobust(), pthread_mutexattr_settype(), pthread_once(), pthread_rwlock_destroy(), pthread_rwlock_init(), pthread_rwlock_rdlock(), pthread_rwlock_timedrdlock(), pthread_rwlock_timedwrlock(), pthread_rwlock_tryrdlock(), pthread_rwlock_trywrlock(), pthread_rwlock_unlock(), pthread_rwlock_wrlock(), pthread_rwlockattr_destroy(), pthread_rwlockattr_init(), pthread_self(), pthread_setcancelstate(), pthread_setcanceltype(), pthread_setspecific(), pthread_spin_destroy(), pthread_spin_init(), pthread_spin_lock(), pthread_spin_trylock(), pthread_spin_unlock(), pthread_testcancel() with the prototypes the page gives.
+xbd/pthread.h              XBD.pthread.h.017
+    <pthread.h> declares pthread_mutexattr_getprotocol(), pthread_mutexattr_setprotocol() with the prototypes the page gives.
+xbd/pthread.h              XBD.pthread.h.018
+    <pthread.h> declares pthread_mutex_getprioceiling(), pthread_mutex_setprioceiling(), pthread_mutexattr_getprioceiling(), pthread_mutexattr_setprioceiling() with the prototypes the page gives.
+xbd/pthread.h              XBD.pthread.h.019
+    <pthread.h> declares pthread_getcpuclockid() with the prototypes the page gives.
+xbd/pthread.h              XBD.pthread.h.020
+    <pthread.h> declares pthread_attr_getinheritsched(), pthread_attr_getschedpolicy(), pthread_attr_getscope(), pthread_attr_setinheritsched(), pthread_attr_setschedpolicy(), pthread_attr_setscope(), pthread_getschedparam(), pthread_setschedparam(), pthread_setschedprio() with the prototypes the page gives.
+xbd/pthread.h              XBD.pthread.h.021
+    <pthread.h> declares pthread_attr_getstack(), pthread_attr_setstack() with the prototypes the page gives.
+xbd/pthread.h              XBD.pthread.h.022
+    <pthread.h> declares pthread_barrierattr_getpshared(), pthread_barrierattr_setpshared(), pthread_condattr_getpshared(), pthread_condattr_setpshared(), pthread_mutexattr_getpshared(), pthread_mutexattr_setpshared(), pthread_rwlockattr_getpshared(), pthread_rwlockattr_setpshared() with the prototypes the page gives.
+xbd/pthread.h              XBD.pthread.h.023
+    <pthread.h> declares pthread_attr_getstacksize(), pthread_attr_setstacksize() with the prototypes the page gives.
+xbd/pthread.h              XBD.pthread.h.024
+    <pthread.h> makes what <sched.h> and <time.h> define visible: struct sched_param and struct timespec.
+xbd/regex.h                XBD.regex.h.001
+    REG_EXTENDED, REG_ICASE, REG_NOSUB and REG_NEWLINE are non-zero values with no bit in common, so that any of them can be combined with | in the cflags argument of regcomp().
+xbd/regex.h                XBD.regex.h.003
+    REG_NOTBOL and REG_NOTEOL are non-zero values with no bit in common, so that both can be combined with | in the eflags argument of regexec().
+xbd/regex.h                XBD.regex.h.004
+    REG_NOMATCH, REG_BADPAT, REG_ECOLLATE, REG_ECTYPE, REG_EESCAPE, REG_ESUBREG, REG_EBRACK, REG_EPAREN, REG_EBRACE, REG_BADBR, REG_ERANGE, REG_ESPACE and REG_BADRPT are defined, none is 0, and no two have the same value.
+xbd/regex.h                XBD.regex.h.006
+    <regex.h> defines regex_t as a complete type with at least the members re_nsub (size_t).
+xbd/regex.h                XBD.regex.h.007
+    <regex.h> defines regmatch_t as a complete type with at least the members rm_so (regoff_t), rm_eo (regoff_t).
+xbd/regex.h                XBD.regex.h.008
+    <regex.h> defines the type size_t.
+xbd/regex.h                XBD.regex.h.009
+    <regex.h> declares regcomp(), regerror(), regexec(), regfree() with the prototypes the page gives.
+xbd/sched.h                XBD.sched.h.001
+    SCHED_FIFO, SCHED_RR and SCHED_OTHER have three different values.
+xbd/sched.h                XBD.sched.h.003
+    <sched.h> defines the type pid_t.
+xbd/sched.h                XBD.sched.h.005
+    <sched.h> defines struct timespec as a complete type.
+xbd/sched.h                XBD.sched.h.006
+    <sched.h> defines struct sched_param as a complete type with at least the members sched_priority (int).
+xbd/sched.h                XBD.sched.h.008
+    <sched.h> declares sched_yield() with the prototypes the page gives.
+xbd/sched.h                XBD.sched.h.009
+    <sched.h> declares sched_getparam(), sched_getscheduler(), sched_setparam(), sched_setscheduler() with the prototypes the page gives.
+xbd/sched.h                XBD.sched.h.010
+    <sched.h> declares sched_get_priority_max(), sched_get_priority_min(), sched_rr_get_interval() with the prototypes the page gives.
+xbd/semaphore.h            XBD.semaphore.h.001
+    SEM_FAILED has type sem_t *.
+xbd/semaphore.h            XBD.semaphore.h.002
+    <semaphore.h> defines the type sem_t.
+xbd/semaphore.h            XBD.semaphore.h.003
+    <semaphore.h> defines struct timespec as a complete type.
+xbd/semaphore.h            XBD.semaphore.h.006
+    <semaphore.h> declares sem_close(), sem_destroy(), sem_getvalue(), sem_init(), sem_open(), sem_post(), sem_timedwait(), sem_trywait(), sem_unlink(), sem_wait() with the prototypes the page gives.
+xbd/setjmp.h               XBD.setjmp.h.001
+    jmp_buf and sigjmp_buf are array types: an object of either type designates the same address as the address of its first element, and one can be passed as a function parameter (where it becomes a pointer).
+xbd/setjmp.h               XBD.setjmp.h.002
+    <setjmp.h> declares longjmp(), siglongjmp() with the prototypes the page gives.
+xbd/setjmp.h               XBD.setjmp.h.003
+    <setjmp.h> declares setjmp(), sigsetjmp() with the prototypes the page gives, or defines each as a macro.
+xbd/signal.h               XBD.signal.h.001
+    <signal.h> defines SIG_DFL, SIG_ERR and SIG_IGN as macros that are constant expressions (usable in a static initializer), have the type of signal()'s second argument and return value, are all different, and differ from the address of a function.
+xbd/signal.h               XBD.signal.h.003
+    struct sigevent has sigev_notify (int), sigev_signo (int), sigev_value (union sigval), sigev_notify_function (void (*)(union sigval)) and sigev_notify_attributes (pthread_attr_t *).
+xbd/signal.h               XBD.signal.h.004
+    <signal.h> defines SIGEV_NONE, SIGEV_SIGNAL and SIGEV_THREAD as macros with different integer constant values that fit in sigev_notify.
+xbd/signal.h               XBD.signal.h.005
+    union sigval has the members sival_int (int) and sival_ptr (void *).
+xbd/signal.h               XBD.signal.h.006
+    SIGRTMIN and SIGRTMAX are macros with type int and positive values; SIGRTMAX - SIGRTMIN + 1 is at least {RTSIG_MAX} (from sysconf(), and never less than 8), and none of the table's signals that the header defines falls in the range.
+xbd/signal.h               XBD.signal.h.009
+    <signal.h> defines SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, SIGALRM, SIGHUP, SIGKILL, SIGPIPE, SIGQUIT, SIGUSR1 and SIGUSR2 as integer constant expressions with type int, positive and all different.
+xbd/signal.h               XBD.signal.h.010
+    <signal.h> defines SIGCHLD, SIGCONT, SIGSTOP, SIGTSTP, SIGTTIN, SIGTTOU and SIGBUS as positive integer constant expressions with type int, different from each other and from the signals in XBD.signal.h.009.
+xbd/signal.h               XBD.signal.h.011
+    <signal.h> defines SIGWINCH as a positive integer constant expression with type int, different from the signals in XBD.signal.h.009 and .010.
+xbd/signal.h               XBD.signal.h.012
+    On XSI systems <signal.h> also defines SIGSYS, SIGTRAP, SIGVTALRM, SIGXCPU and SIGXFSZ, positive, with type int, and different from the signals in XBD.signal.h.009 and .010.
+xbd/signal.h               XBD.signal.h.013
+    struct sigaction has sa_handler (void (*)(int)), sa_mask (sigset_t) and sa_flags (int).
+xbd/signal.h               XBD.signal.h.014
+    struct sigaction has sa_sigaction, of type void (*)(int, siginfo_t *, void *).
+xbd/signal.h               XBD.signal.h.015
+    <signal.h> defines SIG_BLOCK, SIG_UNBLOCK and SIG_SETMASK as integer constant expressions with different values.
+xbd/signal.h               XBD.signal.h.016
+    <signal.h> defines SA_NOCLDSTOP, SA_RESETHAND, SA_RESTART, SA_SIGINFO and SA_NODEFER as non-zero constants with no bits in common, so any of them can be combined in sa_flags.
+xbd/signal.h               XBD.signal.h.017
+    On XSI systems <signal.h> also defines SA_ONSTACK and SA_NOCLDWAIT, non-zero, with no bits in common with each other or the other SA_ flags.
+xbd/signal.h               XBD.signal.h.018
+    On XSI systems <signal.h> defines SS_ONSTACK and SS_DISABLE with different values, and MINSIGSTKSZ and SIGSTKSZ with positive values, all four as integer constant expressions.
+xbd/signal.h               XBD.signal.h.019
+    stack_t has the members ss_sp (void *), ss_size (size_t) and ss_flags (int).
+xbd/signal.h               XBD.signal.h.020
+    <signal.h> defines mcontext_t, and ucontext_t with the members uc_link (ucontext_t *), uc_sigmask (sigset_t), uc_stack (stack_t) and uc_mcontext (mcontext_t).
+xbd/signal.h               XBD.signal.h.021
+    siginfo_t has si_signo, si_code and si_status (int), si_pid (pid_t), si_uid (uid_t), si_addr (void *) and si_value (union sigval).
+xbd/signal.h               XBD.signal.h.022
+    On XSI systems siginfo_t also has si_errno (int).
+xbd/signal.h               XBD.signal.h.023
+    <signal.h> defines the si_code constants for SIGILL (ILL_*), SIGFPE (FPE_*), SIGSEGV (SEGV_*), SIGBUS (BUS_*), SIGCHLD (CLD_*) and for any signal (SI_USER, SI_QUEUE, SI_TIMER, SI_ASYNCIO, SI_MESGQ); the values for one signal, and the SI_ values, are all different.
+xbd/signal.h               XBD.signal.h.024
+    On XSI systems <signal.h> defines TRAP_BRKPT and TRAP_TRACE with different values.
+xbd/signal.h               XBD.signal.h.025
+    <signal.h> declares kill(), raise(), sigaction(), sigaddset(), sigdelset(), sigemptyset(), sigfillset(), sigismember(), signal(), sigpending(), sigprocmask(), sigsuspend() with the required prototypes.
+xbd/signal.h               XBD.signal.h.026
+    <signal.h> declares sigwait() with the required prototypes.
+xbd/signal.h               XBD.signal.h.027
+    <signal.h> declares pthread_kill(), pthread_sigmask(), sigqueue(), sigtimedwait(), sigwaitinfo(), psiginfo(), psignal() with the required prototypes.
+xbd/signal.h               XBD.signal.h.029
+    On XSI systems <signal.h> declares killpg(), sigaltstack() with the required prototypes.
+xbd/signal.h               XBD.signal.h.030
+    <signal.h> defines SIGURG as a positive integer constant expression with type int, different from the signals in XBD.signal.h.009 and .010.
+xbd/spawn.h                XBD.spawn.h.002
+    POSIX_SPAWN_SETSCHEDPARAM and POSIX_SPAWN_SETSCHEDULER are nonzero, fit in a short and share no bits with each other or with the five other flags.
+xbd/spawn.h                XBD.spawn.h.003
+    <spawn.h> defines the types posix_spawnattr_t, posix_spawn_file_actions_t.
+xbd/spawn.h                XBD.spawn.h.004
+    <spawn.h> defines the types mode_t, pid_t.
+xbd/spawn.h                XBD.spawn.h.005
+    <spawn.h> defines the type sigset_t.
+xbd/spawn.h                XBD.spawn.h.006
+    <spawn.h> declares posix_spawnattr_getschedparam(), posix_spawnattr_getschedpolicy(), posix_spawnattr_setschedparam(), posix_spawnattr_setschedpolicy() with the prototypes the page gives.
+xbd/stdalign.h             XBD.stdalign.h.002
+    __alignas_is_defined and __alignof_is_defined expand to the integer constant 1 and are suitable for use in #if.
+xbd/stdarg.h               XBD.stdarg.h.002
+    va_copy() makes a second list in the same state as the first: reading it gives the arguments the original would give next, and reading one list does not move the other.
+xbd/stdarg.h               XBD.stdarg.h.004
+    va_arg() may read an argument as the signed or unsigned type matching its own when the value fits both, and a void pointer as a pointer to a character type or the reverse.
+xbd/stdarg.h               XBD.stdarg.h.005
+    On an XSI system va_arg() may read a pointer argument as a pointer of any other type, and the pointer converted back is the original.
+xbd/stdarg.h               XBD.stdarg.h.006
+    A variable argument read with va_arg as the corresponding signed or unsigned type gives the same value when it is representable in both, and a void pointer and a character pointer read as each other give the same pointer.
+xbd/stdbool.h              XBD.stdbool.h.002
+    true, false and __bool_true_false_are_defined are suitable for use in #if directives.
+xbd/stddef.h               XBD.stddef.h.002
+    offsetof(type, member) is an integer constant expression of type size_t whose value is the byte offset of the member from the start of the structure, including nested and array-element designators; offsets are in member order, suitably aligned and inside the structure.
+xbd/stddef.h               XBD.stddef.h.003
+    ptrdiff_t is a signed integer type and is the type of the difference of two pointers, size_t is an unsigned integer type and is the type of sizeof, and wchar_t is an integer type whose null character has code zero.
+xbd/stddef.h               XBD.stddef.h.004
+    Unless __STDC_MB_MIGHT_NEQ_WC__ is defined, each character of the basic character set has as wide character the same code it has as a single-character integer constant.
+xbd/stddef.h               XBD.stddef.h.005
+    The alignment of max_align_t is at least that of every standard scalar type (the greatest fundamental alignment), and is a power of two that divides the size of max_align_t.
+xbd/stdint.h               XBD.stdint.h.001
+    int8_t, int16_t and int32_t (and int64_t when a 64-bit type exists) are signed types of exactly 8, 16, 32 and 64 bits, and uint8_t to uint64_t unsigned ones of the same widths; a standard integer type of one of those widths has a matching exact-width type.
+xbd/stdint.h               XBD.stdint.h.002
+    INTN_MIN is exactly -2^(N-1), INTN_MAX exactly 2^(N-1)-1 and UINTN_MAX exactly 2^N-1 for the exact-width types, usable in #if, each with the type an object of the matching type has after the integer promotions.
+xbd/stdint.h               XBD.stdint.h.003
+    int_leastN_t and uint_leastN_t exist for N of 8, 16, 32 and 64, are signed and unsigned, are at least N bits wide, are the smallest such types (no standard type with a smaller range is wide enough), and their limit macros reach the stated magnitudes and have the promoted type.
+xbd/stdint.h               XBD.stdint.h.004
+    int_fastN_t and uint_fastN_t exist for N of 8, 16, 32 and 64, are signed and unsigned, are at least N bits wide, and their limit macros reach the stated magnitudes and have the promoted type.
+xbd/stdint.h               XBD.stdint.h.005
+    When intptr_t and uintptr_t are provided, a valid void pointer converted to either and back compares equal to the original, intptr_t is signed and uintptr_t unsigned, and their limits reach -32768, 32767 and 65535 in magnitude with the promoted type.
+xbd/stdint.h               XBD.stdint.h.006
+    On an XSI system intptr_t and uintptr_t exist, and INTPTR_MIN, INTPTR_MAX and UINTPTR_MAX are defined.
+xbd/stdint.h               XBD.stdint.h.007
+    intmax_t is a signed type and uintmax_t an unsigned type that hold every value of every standard signed and unsigned type; intmax_t is two's complement; INTMAX_MIN, INTMAX_MAX and UINTMAX_MAX reach -2^63, 2^63-1 and 2^64-1 in magnitude, with the promoted type.
+xbd/stdint.h               XBD.stdint.h.008
+    PTRDIFF_MIN, PTRDIFF_MAX and SIZE_MAX reach -65536, 65535 and 65535 in magnitude; SIG_ATOMIC, WCHAR and WINT limits follow the signedness of their types (signed: no greater than -127, -127 and -32767 and no less than 127, 127 and 32767; unsigned: 0 and at least 255, 255 and 65535); all have the promoted type of the matching type.
+xbd/stdint.h               XBD.stdint.h.009
+    INTN_C and UINTN_C (N of 8, 16, 32, 64) expand to integer constant expressions usable in #if with the argument's value and the promoted type of int_leastN_t and uint_leastN_t; INTMAX_C and UINTMAX_C do the same with the types intmax_t and uintmax_t.
+xbd/stdint.h               XBD.stdint.h.010
+    A type named with and without the leading u (exact, least, fast, pointer, greatest width) is provided together with its counterpart, the two have the same size, and the MIN, MAX and UMAX limit macros of a type are defined together.
+xbd/stdio.h                XBD.stdio.h.001
+    BUFSIZ, L_tmpnam, FILENAME_MAX, FOPEN_MAX, TMP_MAX, _IOFBF, _IOLBF, _IONBF, SEEK_CUR, SEEK_END, SEEK_SET and EOF are integer constant expressions, and BUFSIZ is positive.
+xbd/stdio.h                XBD.stdio.h.002
+    _IOFBF, _IOLBF and _IONBF are different from one another, and so are SEEK_CUR, SEEK_END and SEEK_SET.
+xbd/stdio.h                XBD.stdio.h.003
+    EOF is an integer constant expression of type int with a negative value.
+xbd/stdio.h                XBD.stdio.h.004
+    FOPEN_MAX is at least 8 and TMP_MAX is at least 25.
+xbd/stdio.h                XBD.stdio.h.005
+    On an XSI system TMP_MAX is at least 10000.
+xbd/stdio.h                XBD.stdio.h.006
+    stdin, stdout and stderr are expressions of type pointer to FILE, and are different streams.
+xbd/stdio.h                XBD.stdio.h.007
+    fpos_t is a complete object type that is not an array: an object of the type has a size, and can be assigned to another.
+xbd/stdio.h                XBD.stdio.h.010
+    <stdio.h> defines the types FILE, off_t, size_t, ssize_t, va_list.
+xbd/stdio.h                XBD.stdio.h.011
+    <stdio.h> defines the macro FILENAME_MAX.
+xbd/stdio.h                XBD.stdio.h.012
+    <stdio.h> declares clearerr(), ctermid(), dprintf(), fclose(), fdopen(), feof(), ferror(), fflush(), fgetc(), fgetpos(), fgets(), fileno(), flockfile(), fmemopen(), fopen(), fprintf(), fputc(), fputs(), fread(), freopen(), fscanf(), fseek(), fseeko(), fsetpos(), ftell(), ftello(), ftrylockfile(), funlockfile(), fwrite(), getc(), getchar(), getc_unlocked(), getchar_unlocked(), getdelim(), getline(), open_memstream(), pclose(), perror(), popen(), printf(), putc(), putchar(), putc_unlocked(), putchar_unlocked(), puts(), remove(), rename(), renameat(), rewind(), scanf(), setbuf(), setvbuf(), snprintf(), sprintf(), sscanf(), tmpfile(), tmpnam(), ungetc(), vdprintf(), vfprintf(), vfscanf(), vprintf(), vscanf(), vsnprintf(), vsprintf(), vsscanf() with the prototypes the page gives.
+xbd/stdlib.h               XBD.stdlib.h.001
+    EXIT_SUCCESS is an integer constant expression with value 0 and EXIT_FAILURE one with a value from 1 to 125.
+xbd/stdlib.h               XBD.stdlib.h.002
+    RAND_MAX is an integer constant expression of at least 32767.
+xbd/stdlib.h               XBD.stdlib.h.004
+    <stdlib.h> also defines WNOHANG and WUNTRACED; they are flag values for waitpid(), so each is nonzero and they share no bit.
+xbd/stdlib.h               XBD.stdlib.h.005
+    <stdlib.h> defines div_t, ldiv_t, lldiv_t as complete types.
+xbd/stdlib.h               XBD.stdlib.h.006
+    <stdlib.h> defines the types size_t, wchar_t.
+xbd/stdlib.h               XBD.stdlib.h.010
+    <stdlib.h> declares posix_memalign() with the prototypes the page gives.
+xbd/stdlib.h               XBD.stdlib.h.011
+    <stdlib.h> declares a64l(), drand48(), erand48(), grantpt(), initstate(), jrand48(), l64a(), lcong48(), lrand48(), mrand48(), nrand48(), posix_openpt(), ptsname(), putenv(), random(), seed48(), setstate(), srand48(), srandom(), unlockpt() with the prototypes the page gives.
+xbd/sys_ipc.h              XBD.sys_ipc.h.001
+    IPC_CREAT, IPC_EXCL and IPC_NOWAIT are nonzero; IPC_CREAT and IPC_EXCL share no bits with each other or with the permission bits 0777.
+xbd/sys_ipc.h              XBD.sys_ipc.h.002
+    IPC_RMID, IPC_SET and IPC_STAT have three different values.
+xbd/sys_ipc.h              XBD.sys_ipc.h.003
+    <sys/ipc.h> defines struct ipc_perm as a complete type with at least the members uid (uid_t), gid (gid_t), cuid (uid_t), cgid (gid_t), mode (mode_t).
+xbd/sys_ipc.h              XBD.sys_ipc.h.004
+    <sys/ipc.h> defines the types uid_t, gid_t, mode_t, key_t.
+xbd/sys_ipc.h              XBD.sys_ipc.h.005
+    <sys/ipc.h> declares ftok() with the prototypes the page gives.
+xbd/sys_mman.h             XBD.sys_mman.h.001
+    PROT_READ, PROT_WRITE and PROT_EXEC are nonzero, PROT_WRITE shares no bits with the other two, and PROT_NONE differs from every OR of them.
+xbd/sys_mman.h             XBD.sys_mman.h.002
+    MAP_SHARED, MAP_PRIVATE, MAP_FIXED and MAP_ANONYMOUS are nonzero and share no bits.
+xbd/sys_mman.h             XBD.sys_mman.h.003
+    MAP_ANON has the same value as MAP_ANONYMOUS.
+xbd/sys_mman.h             XBD.sys_mman.h.004
+    MS_ASYNC, MS_INVALIDATE and MS_SYNC are nonzero and share no bits.
+xbd/sys_mman.h             XBD.sys_mman.h.005
+    MCL_CURRENT and MCL_FUTURE are nonzero and share no bits.
+xbd/sys_mman.h             XBD.sys_mman.h.006
+    MAP_FAILED has type void *.
+xbd/sys_mman.h             XBD.sys_mman.h.007
+    POSIX_MADV_NORMAL, POSIX_MADV_RANDOM, POSIX_MADV_SEQUENTIAL, POSIX_MADV_WILLNEED and POSIX_MADV_DONTNEED have five different values.
+xbd/sys_mman.h             XBD.sys_mman.h.009
+    <sys/mman.h> defines the types mode_t, off_t, size_t.
+xbd/sys_mman.h             XBD.sys_mman.h.014
+    <sys/mman.h> declares mmap(), mprotect(), munmap() with the prototypes the page gives.
+xbd/sys_mman.h             XBD.sys_mman.h.015
+    <sys/mman.h> declares posix_madvise() with the prototypes the page gives.
+xbd/sys_mman.h             XBD.sys_mman.h.016
+    <sys/mman.h> declares mlockall(), munlockall() with the prototypes the page gives.
+xbd/sys_mman.h             XBD.sys_mman.h.017
+    <sys/mman.h> declares mlock(), munlock() with the prototypes the page gives.
+xbd/sys_mman.h             XBD.sys_mman.h.018
+    <sys/mman.h> declares shm_open(), shm_unlink() with the prototypes the page gives.
+xbd/sys_mman.h             XBD.sys_mman.h.020
+    <sys/mman.h> declares msync() with the prototypes the page gives.
+xbd/sys_msg.h              XBD.sys_msg.h.001
+    MSG_NOERROR is nonzero and shares no bits with IPC_NOWAIT, the other flag of msgrcv().
+xbd/sys_msg.h              XBD.sys_msg.h.002
+    msgqnum_t and msglen_t are unsigned integer types at least as large as unsigned short.
+xbd/sys_msg.h              XBD.sys_msg.h.003
+    <sys/msg.h> defines struct msqid_ds as a complete type with at least the members msg_perm (struct ipc_perm), msg_qnum (msgqnum_t), msg_qbytes (msglen_t), msg_lspid (pid_t), msg_lrpid (pid_t), msg_stime (time_t), msg_rtime (time_t), msg_ctime (time_t).
+xbd/sys_msg.h              XBD.sys_msg.h.004
+    <sys/msg.h> defines the types pid_t, size_t, ssize_t, time_t.
+xbd/sys_msg.h              XBD.sys_msg.h.005
+    <sys/msg.h> declares msgctl(), msgget(), msgrcv(), msgsnd() with the prototypes the page gives.
+xbd/sys_msg.h              XBD.sys_msg.h.006
+    <sys/msg.h> makes what <sys/ipc.h> defines visible: struct ipc_perm and the IPC_ macros.
+xbd/sys_resource.h         XBD.sys_resource.h.001
+    On XSI systems PRIO_PROCESS, PRIO_PGRP and PRIO_USER have three different values.
+xbd/sys_resource.h         XBD.sys_resource.h.002
+    On XSI systems RUSAGE_SELF and RUSAGE_CHILDREN have different values.
+xbd/sys_resource.h         XBD.sys_resource.h.003
+    RLIMIT_CORE, RLIMIT_DATA, RLIMIT_FSIZE, RLIMIT_NOFILE, RLIMIT_STACK and RLIMIT_AS (and RLIMIT_CPU on XSI systems) have different values.
+xbd/sys_resource.h         XBD.sys_resource.h.004
+    rlim_t is an unsigned integer type, and RLIM_INFINITY, RLIM_SAVED_MAX and RLIM_SAVED_CUR are usable in #if and are values of rlim_t.
+xbd/sys_resource.h         XBD.sys_resource.h.005
+    <sys/resource.h> defines struct rlimit as a complete type with at least the members rlim_cur (rlim_t), rlim_max (rlim_t).
+xbd/sys_resource.h         XBD.sys_resource.h.006
+    <sys/resource.h> defines struct rusage as a complete type with at least the members ru_utime (struct timeval), ru_stime (struct timeval).
+xbd/sys_resource.h         XBD.sys_resource.h.007
+    <sys/resource.h> defines struct timeval as a complete type.
+xbd/sys_resource.h         XBD.sys_resource.h.008
+    <sys/resource.h> defines the type id_t.
+xbd/sys_resource.h         XBD.sys_resource.h.009
+    <sys/resource.h> declares getrlimit(), setrlimit() with the prototypes the page gives.
+xbd/sys_resource.h         XBD.sys_resource.h.010
+    <sys/resource.h> declares getpriority(), getrusage(), setpriority() with the prototypes the page gives.
+xbd/sys_select.h           XBD.sys_select.h.001
+    FD_SETSIZE is usable in #if, positive, and fd_set has room for that many descriptors.
+xbd/sys_select.h           XBD.sys_select.h.002
+    An fd_set can be copied by assignment, as a structure can, and the copy keeps its own members apart from the original, with the first, middle and last descriptors (0, FD_SETSIZE/2, FD_SETSIZE-1) usable.
+xbd/sys_select.h           XBD.sys_select.h.003
+    <sys/select.h> defines struct timeval as a complete type with at least the members tv_sec (time_t), tv_usec (suseconds_t).
+xbd/sys_select.h           XBD.sys_select.h.004
+    <sys/select.h> defines the types time_t, suseconds_t.
+xbd/sys_select.h           XBD.sys_select.h.005
+    <sys/select.h> defines the type sigset_t.
+xbd/sys_select.h           XBD.sys_select.h.006
+    <sys/select.h> defines struct timespec as a complete type.
+xbd/sys_select.h           XBD.sys_select.h.007
+    <sys/select.h> declares FD_CLR(), FD_ISSET(), FD_SET(), FD_ZERO() with the prototypes the page gives, or defines each as a macro.
+xbd/sys_select.h           XBD.sys_select.h.008
+    <sys/select.h> declares pselect(), select() with the prototypes the page gives.
+xbd/sys_sem.h              XBD.sys_sem.h.001
+    SEM_UNDO is nonzero, fits in a short and shares no bits with IPC_NOWAIT, the other flag in sem_flg.
+xbd/sys_sem.h              XBD.sys_sem.h.002
+    GETNCNT, GETPID, GETVAL, GETALL, GETZCNT, SETVAL, SETALL, IPC_RMID, IPC_SET and IPC_STAT have ten different values.
+xbd/sys_sem.h              XBD.sys_sem.h.004
+    <sys/sem.h> defines the types pid_t, size_t, time_t.
+xbd/sys_sem.h              XBD.sys_sem.h.005
+    <sys/sem.h> defines struct sembuf as a complete type with at least the members sem_num (unsigned short), sem_op (short), sem_flg (short).
+xbd/sys_sem.h              XBD.sys_sem.h.006
+    <sys/sem.h> declares semctl(), semget(), semop() with the prototypes the page gives.
+xbd/sys_sem.h              XBD.sys_sem.h.007
+    <sys/sem.h> makes what <sys/ipc.h> defines visible: struct ipc_perm and the IPC_ macros.
+xbd/sys_shm.h              XBD.sys_shm.h.001
+    SHM_RDONLY and SHM_RND are nonzero and share no bits.
+xbd/sys_shm.h              XBD.sys_shm.h.002
+    SHMLBA is positive.
+xbd/sys_shm.h              XBD.sys_shm.h.004
+    shmatt_t is an unsigned integer type at least as large as unsigned short.
+xbd/sys_shm.h              XBD.sys_shm.h.005
+    <sys/shm.h> defines struct shmid_ds as a complete type with at least the members shm_perm (struct ipc_perm), shm_segsz (size_t), shm_lpid (pid_t), shm_cpid (pid_t), shm_nattch (shmatt_t), shm_atime (time_t), shm_dtime (time_t), shm_ctime (time_t).
+xbd/sys_shm.h              XBD.sys_shm.h.006
+    <sys/shm.h> defines the types pid_t, size_t, time_t.
+xbd/sys_shm.h              XBD.sys_shm.h.007
+    <sys/shm.h> declares shmat(), shmctl(), shmdt(), shmget() with the prototypes the page gives.
+xbd/sys_shm.h              XBD.sys_shm.h.008
+    <sys/shm.h> makes what <sys/ipc.h> defines visible: struct ipc_perm and the IPC_ macros.
+xbd/sys_socket.h           XBD.sys_socket.h.001
+    <sys/socket.h> defines socklen_t as an integer type at least 32 bits wide and sa_family_t as an unsigned integer type.
+xbd/sys_socket.h           XBD.sys_socket.h.002
+    struct sockaddr_storage is at least as large as struct sockaddr_in and struct sockaddr_un, is aligned at least as strictly as struct sockaddr, sockaddr_in and sockaddr_un, and has ss_family, of type sa_family_t, at the same offset as sa_family, sin_family and sun_family.
+xbd/sys_socket.h           XBD.sys_socket.h.003
+    With IPv6, struct sockaddr_storage is at least as large as struct sockaddr_in6, aligned at least as strictly as it and as struct sockaddr, and has ss_family at the same offset as sin6_family and sa_family.
+xbd/sys_socket.h           XBD.sys_socket.h.004
+    SOCK_DGRAM, SOCK_SEQPACKET and SOCK_STREAM are defined with three different values.
+xbd/sys_socket.h           XBD.sys_socket.h.005
+    With raw sockets, SOCK_RAW is defined and differs from SOCK_DGRAM, SOCK_SEQPACKET and SOCK_STREAM.
+xbd/sys_socket.h           XBD.sys_socket.h.009
+    AF_INET, AF_UNIX and AF_UNSPEC are defined with three different values, and AF_UNSPEC is 0.
+xbd/sys_socket.h           XBD.sys_socket.h.010
+    With IPv6, AF_INET6 is defined and differs from AF_INET, AF_UNIX and AF_UNSPEC.
+xbd/sys_socket.h           XBD.sys_socket.h.011
+    SHUT_RD, SHUT_RDWR and SHUT_WR are defined with three different values.
+xbd/sys_socket.h           XBD.sys_socket.h.012
+    CMSG_FIRSTHDR(mhdr) returns a null pointer if msg_controllen is zero or less than sizeof(struct cmsghdr), and otherwise a pointer of type struct cmsghdr * to the start of the control data (msg_control).
+xbd/sys_socket.h           XBD.sys_socket.h.013
+    For control data holding two objects laid out CMSG_SPACE apart, CMSG_NXTHDR(mhdr, first) returns the second header and CMSG_NXTHDR(mhdr, second) a null pointer; CMSG_NXTHDR(mhdr, first) is a null pointer when the first object is the only one.
+xbd/sys_socket.h           XBD.sys_socket.h.014
+    For a constant length CMSG_LEN and CMSG_SPACE are integer constant expressions; for each length n, CMSG_LEN(n) is at least sizeof(struct cmsghdr) + n, CMSG_SPACE(n) is at least CMSG_LEN(n) and a multiple of the alignment of struct cmsghdr; CMSG_DATA(cmsg) has type unsigned char * and points after the header at an offset where n data bytes fit within CMSG_LEN(n).
+xbd/sys_socket.h           XBD.sys_socket.h.015
+    SCM_RIGHTS can be stored in the int cmsg_type member and SOL_SOCKET in the int cmsg_level member of a struct cmsghdr and read back unchanged.
+xbd/sys_socket.h           XBD.sys_socket.h.017
+    <sys/socket.h> defines struct sockaddr as a complete type with at least the members sa_family (sa_family_t), sa_data (char[]).
+xbd/sys_socket.h           XBD.sys_socket.h.019
+    <sys/socket.h> defines struct iovec as a complete type.
+xbd/sys_socket.h           XBD.sys_socket.h.021
+    <sys/socket.h> defines struct linger as a complete type with at least the members l_onoff (int), l_linger (int).
+xbd/sys_socket.h           XBD.sys_socket.h.022
+    <sys/socket.h> defines the macro SOMAXCONN.
+xbd/sys_socket.h           XBD.sys_socket.h.023
+    <sys/socket.h> defines the types size_t, ssize_t.
+xbd/sys_socket.h           XBD.sys_socket.h.025
+    <sys/socket.h> declares accept(), bind(), connect(), getpeername(), getsockname(), getsockopt(), listen(), recv(), recvfrom(), recvmsg(), send(), sendmsg(), sendto(), setsockopt(), shutdown(), sockatmark(), socket(), socketpair() with the prototypes the page gives.
+xbd/sys_stat.h             XBD.sys_stat.h.001
+    S_IRWXU, S_IRUSR, S_IWUSR, S_IXUSR, S_IRWXG, S_IRGRP, S_IWGRP, S_IXGRP, S_IRWXO, S_IROTH, S_IWOTH and S_IXOTH are usable in #if and have the octal values 0700, 0400, 0200, 0100, 070, 040, 020, 010, 07, 04, 02 and 01.
+xbd/sys_stat.h             XBD.sys_stat.h.002
+    S_ISUID and S_ISGID are usable in #if and have the octal values 04000 and 02000.
+xbd/sys_stat.h             XBD.sys_stat.h.009
+    UTIME_NOW and UTIME_OMIT are different, lie outside 0 to 999999999 and survive being stored in tv_nsec.
+xbd/sys_stat.h             XBD.sys_stat.h.010
+    st_atime, st_mtime and st_ctime are macros that stand for the tv_sec members of st_atim, st_mtim and st_ctim of the structure they are used with.
+xbd/sys_stat.h             XBD.sys_stat.h.012
+    On XSI systems S_ISVTX is usable in #if and has the octal value 01000.
+xbd/sys_stat.h             XBD.sys_stat.h.013
+    On XSI systems S_IFMT is usable in #if, each file type constant lies wholly inside it, and it shares no bit with the permission, set-user-ID and set-group-ID bits.
+xbd/sys_stat.h             XBD.sys_stat.h.014
+    <sys/stat.h> defines struct stat as a complete type with at least the members st_dev (dev_t), st_ino (ino_t), st_mode (mode_t), st_uid (uid_t), st_gid (gid_t), st_size (off_t), st_atim (struct timespec), st_mtim (struct timespec), st_ctim (struct timespec).
+xbd/sys_stat.h             XBD.sys_stat.h.015
+    <sys/stat.h> defines struct stat as a complete type with at least the members st_rdev (dev_t), st_blksize (blksize_t), st_blocks (blkcnt_t).
+xbd/sys_stat.h             XBD.sys_stat.h.016
+    <sys/stat.h> defines struct stat as a complete type with at least the members st_size (off_t).
+xbd/sys_stat.h             XBD.sys_stat.h.017
+    <sys/stat.h> defines the types blkcnt_t, blksize_t.
+xbd/sys_stat.h             XBD.sys_stat.h.018
+    <sys/stat.h> defines the types dev_t, ino_t, mode_t, nlink_t, uid_t, gid_t, off_t, time_t.
+xbd/sys_stat.h             XBD.sys_stat.h.019
+    <sys/stat.h> defines struct timespec as a complete type.
+xbd/sys_stat.h             XBD.sys_stat.h.020
+    <sys/stat.h> declares chmod(), fchmod(), fchmodat(), fstat(), fstatat(), futimens(), lstat(), mkdir(), mkdirat(), mkfifo(), mkfifoat(), stat(), umask(), utimensat() with the prototypes the page gives.
+xbd/sys_stat.h             XBD.sys_stat.h.021
+    <sys/stat.h> declares mknod(), mknodat() with the prototypes the page gives.
+xbd/sys_statvfs.h          XBD.sys_statvfs.h.001
+    ST_RDONLY and ST_NOSUID are nonzero and share no bits.
+xbd/sys_statvfs.h          XBD.sys_statvfs.h.002
+    <sys/statvfs.h> defines struct statvfs as a complete type with at least the members f_bsize (unsigned long), f_frsize (unsigned long), f_blocks (fsblkcnt_t), f_bfree (fsblkcnt_t), f_bavail (fsblkcnt_t), f_files (fsfilcnt_t), f_ffree (fsfilcnt_t), f_favail (fsfilcnt_t), f_fsid (unsigned long), f_flag (unsigned long), f_namemax (unsigned long).
+xbd/sys_statvfs.h          XBD.sys_statvfs.h.003
+    <sys/statvfs.h> defines the types fsblkcnt_t, fsfilcnt_t.
+xbd/sys_statvfs.h          XBD.sys_statvfs.h.004
+    <sys/statvfs.h> declares fstatvfs(), statvfs() with the prototypes the page gives.
+xbd/sys_types.h            XBD.sys_types.h.001
+    The types in <sys/types.h> other than the pthread_*_t types and timer_t are arithmetic types: they can be initialised from, multiplied, and converted to and from numbers.
+xbd/sys_types.h            XBD.sys_types.h.002
+    mode_t, dev_t, nlink_t, uid_t, gid_t and id_t are integer types; blkcnt_t, off_t, blksize_t, pid_t and ssize_t are signed integer types; fsblkcnt_t, fsfilcnt_t, ino_t and size_t are unsigned integer types.
+xbd/sys_types.h            XBD.sys_types.h.003
+    clock_t is an integer or real-floating type, and time_t is an integer type that holds values of 64 bits.
+xbd/sys_types.h            XBD.sys_types.h.004
+    ssize_t holds every value from -1 to SSIZE_MAX.
+xbd/sys_types.h            XBD.sys_types.h.005
+    On an XSI system suseconds_t is a signed integer type that holds -1 to 1000000, and key_t is an arithmetic type.
+xbd/sys_types.h            XBD.sys_types.h.006
+    id_t can hold any pid_t, uid_t or gid_t value: converting such a value to id_t and back gives the original.
+xbd/sys_types.h            XBD.sys_types.h.010
+    <sys/types.h> defines the type key_t.
+xbd/sys_un.h               XBD.sys_un.h.001
+    <sys/un.h> alone defines sa_family_t as an unsigned integer type and struct sockaddr_un with sun_family of type sa_family_t and, after it, a char array sun_path of at least 92 bytes; nothing but alignment padding follows sun_path.
+xbd/sys_utsname.h          XBD.sys_utsname.h.002
+    <sys/utsname.h> declares uname() with the prototypes the page gives.
+xbd/sys_wait.h             XBD.sys_wait.h.001
+    WNOHANG and WUNTRACED are nonzero and share no bits, so they can be OR-ed in the options argument of waitpid().
+xbd/sys_wait.h             XBD.sys_wait.h.002
+    WEXITED, WNOWAIT, WSTOPPED and WNOHANG are nonzero and share no bits, so they can be OR-ed in the options argument of waitid().
+xbd/sys_wait.h             XBD.sys_wait.h.003
+    On XSI systems WCONTINUED is nonzero and shares no bits with WNOHANG, WUNTRACED, WEXITED, WNOWAIT or WSTOPPED.
+xbd/sys_wait.h             XBD.sys_wait.h.004
+    P_ALL, P_PGID and P_PID can be stored in an idtype_t and are three different values.
+xbd/sys_wait.h             XBD.sys_wait.h.007
+    <sys/wait.h> defines the types id_t, pid_t.
+xbd/sys_wait.h             XBD.sys_wait.h.008
+    <sys/wait.h> defines the type siginfo_t and union sigval as a complete type.
+xbd/sys_wait.h             XBD.sys_wait.h.009
+    <sys/wait.h> declares wait(), waitid(), waitpid() with the prototypes the page gives.
+xbd/tar.h                  XBD.tar.h.002
+    REGTYPE is '0', AREGTYPE is the null character, LNKTYPE '1', SYMTYPE '2', CHRTYPE '3', BLKTYPE '4', DIRTYPE '5', FIFOTYPE '6' and CONTTYPE '7'.
+xbd/tar.h                  XBD.tar.h.003
+    TSUID is 04000, TSGID 02000, TUREAD 0400, TUWRITE 0200, TUEXEC 0100, TGREAD 040, TGWRITE 020, TGEXEC 010, TOREAD 04, TOWRITE 02 and TOEXEC 01.
+xbd/tar.h                  XBD.tar.h.004
+    With XSI, TSVTX is 01000.
+xbd/termios.h              XBD.termios.h.001
+    cc_t, speed_t and tcflag_t are unsigned integer types.
+xbd/termios.h              XBD.termios.h.002
+    NCCS is positive and c_cc has exactly NCCS elements.
+xbd/termios.h              XBD.termios.h.003
+    VEOF, VEOL, VERASE, VINTR, VKILL, VMIN, VQUIT, VSTART, VSTOP, VSUSP and VTIME are usable in #if, non-negative and below NCCS, and different from each other except that VMIN may equal VEOF and VTIME may equal VEOL.
+xbd/termios.h              XBD.termios.h.004
+    BRKINT, ICRNL, IGNBRK, IGNCR, IGNPAR, INLCR, INPCK, ISTRIP, IXANY, IXOFF, IXON and PARMRK are nonzero and share no bits.
+xbd/termios.h              XBD.termios.h.005
+    On XSI systems OPOST, ONLCR, OCRNL, ONOCR, ONLRET, OFILL, OFDEL, NLDLY, CRDLY, TABDLY, BSDLY, VTDLY and FFDLY are nonzero and share no bits.
+xbd/termios.h              XBD.termios.h.006
+    On XSI systems NL0 and NL1, CR0 to CR3, TAB0 to TAB3, BS0 and BS1, VT0 and VT1, and FF0 and FF1 each lie inside their mask (NLDLY, CRDLY, TABDLY, BSDLY, VTDLY, FFDLY) and differ from each other within a group.
+xbd/termios.h              XBD.termios.h.007
+    CLOCAL, CREAD, CSIZE, CSTOPB, HUPCL, PARENB and PARODD are nonzero and share no bits.
+xbd/termios.h              XBD.termios.h.008
+    CS5, CS6, CS7 and CS8 lie inside CSIZE and have four different values.
+xbd/termios.h              XBD.termios.h.009
+    ECHO, ECHOE, ECHOK, ECHONL, ICANON, IEXTEN, ISIG, NOFLSH and TOSTOP are nonzero and share no bits.
+xbd/termios.h              XBD.termios.h.010
+    B0, B50, B75, B110, B134, B150, B200, B300, B600, B1200, B1800, B2400, B4800, B9600, B19200 and B38400 have sixteen different values.
+xbd/termios.h              XBD.termios.h.011
+    TCSANOW, TCSADRAIN and TCSAFLUSH have three different values.
+xbd/termios.h              XBD.termios.h.012
+    TCIFLUSH, TCOFLUSH and TCIOFLUSH have three different values.
+xbd/termios.h              XBD.termios.h.013
+    TCOOFF, TCOON, TCIOFF and TCION have four different values.
+xbd/termios.h              XBD.termios.h.014
+    <termios.h> defines struct termios as a complete type with at least the members c_iflag (tcflag_t), c_oflag (tcflag_t), c_cflag (tcflag_t), c_lflag (tcflag_t), c_cc (cc_t[NCCS]).
+xbd/termios.h              XBD.termios.h.016
+    <termios.h> defines the type pid_t.
+xbd/termios.h              XBD.termios.h.018
+    <termios.h> declares cfgetispeed(), cfgetospeed(), cfsetispeed(), cfsetospeed(), tcdrain(), tcflow(), tcflush(), tcgetattr(), tcgetsid(), tcsendbreak(), tcsetattr() with the prototypes the page gives.
+xbd/tgmath.h               XBD.tgmath.h.002
+    For a type-generic macro called with real arguments, the result type follows the generic arguments: long double if any is long double, otherwise double if any is double or of integer type, otherwise float (for example sin of a float is float, atan2(float, long double) is long double, pow(long double, int) is long double, sin of an int is double).
+xbd/tgmath.h               XBD.tgmath.h.003
+    If any generic argument is complex the macro invokes a complex function of the type the arguments determine (log of a float complex is float complex, pow(long double complex, float) is long double complex); fabs() of a complex argument gives the real type of cabs(); carg, cimag, creal, conj and cproj accept any real or complex argument and use the complex functions.
+xbd/time.h                 XBD.time.h.001
+    CLOCKS_PER_SEC is an expression of type clock_t and is positive.
+xbd/time.h                 XBD.time.h.002
+    On an XSI system CLOCKS_PER_SEC is one million.
+xbd/time.h                 XBD.time.h.003
+    TIME_UTC is an integer constant greater than zero that can be used in #if.
+xbd/time.h                 XBD.time.h.004
+    CLOCK_REALTIME and CLOCK_MONOTONIC (and CLOCK_PROCESS_CPUTIME_ID and CLOCK_THREAD_CPUTIME_ID where defined) can be held in a clockid_t and name different clocks, so their values differ.
+xbd/time.h                 XBD.time.h.005
+    The members of the structure gmtime(), gmtime_r(), localtime() and localtime_r() fill in lie in the ranges the page gives (seconds 0 to 60, minutes 0 to 59, hours 0 to 23, day of month 1 to 31, month 0 to 11, weekday 0 to 6, day of year 0 to 365), and tm_isdst is never negative.
+xbd/time.h                 XBD.time.h.007
+    On an XSI system <time.h> provides getdate_err as an expression of type int.
+xbd/time.h                 XBD.time.h.008
+    <time.h> defines struct timespec as a complete type with at least the members tv_sec (time_t).
+xbd/time.h                 XBD.time.h.009
+    <time.h> defines struct itimerspec as a complete type with at least the members it_interval (struct timespec), it_value (struct timespec).
+xbd/time.h                 XBD.time.h.010
+    <time.h> defines the macro NULL.
+xbd/time.h                 XBD.time.h.011
+    <time.h> defines the macro TIMER_ABSTIME.
+xbd/time.h                 XBD.time.h.012
+    <time.h> declares the external variables daylight, timezone with the type the page gives.
+xbd/time.h                 XBD.time.h.013
+    <time.h> declares the external variable tzname with the type the page gives.
+xbd/time.h                 XBD.time.h.014
+    <time.h> declares timespec_get() with the prototypes the page gives.
+xbd/time.h                 XBD.time.h.015
+    <time.h> declares asctime(), clock(), clock_getres(), clock_gettime(), clock_nanosleep(), clock_settime(), ctime(), difftime(), gmtime(), gmtime_r(), localtime(), localtime_r(), mktime(), nanosleep(), strftime(), strftime_l(), time(), timer_create(), timer_delete(), timer_getoverrun(), timer_gettime(), timer_settime(), tzset() with the prototypes the page gives.
+xbd/time.h                 XBD.time.h.016
+    <time.h> declares clock_getcpuclockid() with the prototypes the page gives.
+xbd/time.h                 XBD.time.h.017
+    <time.h> declares getdate(), strptime() with the prototypes the page gives.
+xbd/uchar.h                XBD.uchar.h.001
+    char16_t is the same type as uint_least16_t and char32_t is the same type as uint_least32_t.
+xbd/uchar.h                XBD.uchar.h.002
+    <uchar.h> defines the types mbstate_t, size_t.
+xbd/uchar.h                XBD.uchar.h.003
+    <uchar.h> declares c16rtomb(), c32rtomb(), mbrtoc16(), mbrtoc32() with the prototypes the page gives.
+xbd/unistd.h               XBD.unistd.h.003
+    <unistd.h> defines SEEK_SET, SEEK_CUR and SEEK_END as macros with integer constant values, all different.
+xbd/unistd.h               XBD.unistd.h.008
+    _POSIX_CHOWN_RESTRICTED, _POSIX_NO_TRUNC, _POSIX_VDISABLE, _XOPEN_ENH_I18N and _XOPEN_SHM are defined with a value other than -1, usable in #if.
+xbd/unistd.h               XBD.unistd.h.009
+    Every symbol under Constants for Options and Option Groups that <unistd.h> defines has the value -1, 0 or greater and can be used in #if.
+xbd/unistd.h               XBD.unistd.h.012
+    F_OK, R_OK, W_OK, X_OK, R_OK|W_OK, R_OK|X_OK and R_OK|W_OK|X_OK all have different values, and the four constants are usable in #if.
+xbd/unistd.h               XBD.unistd.h.013
+    STDIN_FILENO is 0, STDOUT_FILENO is 1 and STDERR_FILENO is 2.
+xbd/unistd.h               XBD.unistd.h.017
+    On an XSI system F_LOCK, F_TEST, F_TLOCK and F_ULOCK are different values.
+xbd/unistd.h               XBD.unistd.h.020
+    <unistd.h> defines the macro NULL.
+xbd/unistd.h               XBD.unistd.h.022
+    <unistd.h> defines the types size_t, ssize_t, uid_t, gid_t, off_t, pid_t.
+xbd/unistd.h               XBD.unistd.h.023
+    <unistd.h> defines the type intptr_t.
+xbd/unistd.h               XBD.unistd.h.026
+    <unistd.h> declares access(), alarm(), chdir(), chown(), close(), confstr(), dup(), dup2(), _exit(), execl(), execle(), execlp(), execv(), execve(), execvp(), faccessat(), fchdir(), fchown(), fchownat(), fexecve(), fork(), fpathconf(), ftruncate(), getcwd(), getegid(), geteuid(), getgid(), getgroups(), gethostname(), getlogin(), getlogin_r(), getopt(), getpgid(), getpgrp(), getpid(), getppid(), getsid(), getuid(), isatty(), lchown(), link(), linkat(), lseek(), pathconf(), pause(), pipe(), pread(), pwrite(), read(), readlink(), readlinkat(), rmdir(), setegid(), seteuid(), setgid(), setpgid(), setsid(), setuid(), sleep(), symlink(), symlinkat(), sysconf(), tcgetpgrp(), tcsetpgrp(), truncate(), ttyname(), ttyname_r(), unlink(), unlinkat(), write() with the prototypes the page gives.
+xbd/unistd.h               XBD.unistd.h.027
+    <unistd.h> declares fsync() with the prototypes the page gives.
+xbd/unistd.h               XBD.unistd.h.028
+    <unistd.h> declares fdatasync() with the prototypes the page gives.
+xbd/unistd.h               XBD.unistd.h.029
+    <unistd.h> declares gethostid(), lockf(), nice(), setregid(), setreuid(), swab(), sync() with the prototypes the page gives.
+xbd/unistd.h               XBD.unistd.h.031
+    <unistd.h> declares the external variables optarg, opterr, optind, optopt with the type the page gives.
+xbd/utmpx.h                XBD.utmpx.h.001
+    EMPTY, BOOT_TIME, OLD_TIME, NEW_TIME, USER_PROCESS, INIT_PROCESS, LOGIN_PROCESS and DEAD_PROCESS have eight different values that fit in ut_type (a short).
+xbd/utmpx.h                XBD.utmpx.h.003
+    <utmpx.h> defines the type pid_t.
+xbd/utmpx.h                XBD.utmpx.h.004
+    <utmpx.h> defines struct timeval as a complete type.
+xbd/utmpx.h                XBD.utmpx.h.005
+    <utmpx.h> declares endutxent(), getutxent(), getutxid(), getutxline(), pututxline(), setutxent() with the prototypes the page gives.
+xbd/wchar.h                XBD.wchar.h.001
+    wint_t is an integer type that holds the wide-character codes of the portable characters (such as L'A' and the null wide character) and the value WEOF, each unchanged when converted to wint_t and back.
+xbd/wchar.h                XBD.wchar.h.002
+    WEOF is a constant expression of type wint_t (usable as a static initializer) whose value differs from the wint_t value of the null wide character and of each portable character.
+xbd/wchar.h                XBD.wchar.h.003
+    <wchar.h> defines WCHAR_MIN and WCHAR_MAX, usable in #if, the limits of wchar_t: if wchar_t is signed then WCHAR_MIN is -127 or lower and WCHAR_MAX 127 or higher; if it is unsigned then WCHAR_MIN is 0 and WCHAR_MAX at least 255 and equal to the largest wchar_t value; both are values of wchar_t.
+xbd/wchar.h                XBD.wchar.h.005
+    <wchar.h> defines NULL as a null pointer constant: it can initialise a pointer of any object type, compares equal to a null pointer, and can be used in a static initializer.
+xbd/wchar.h                XBD.wchar.h.006
+    <wchar.h> defines the types FILE, locale_t, mbstate_t, size_t, va_list, wchar_t, wint_t.
+xbd/wchar.h                XBD.wchar.h.007
+    <wchar.h> defines the macro NULL.
+xbd/wchar.h                XBD.wchar.h.009
+    <wchar.h> declares btowc(), fgetwc(), fgetws(), fputwc(), fputws(), fwide(), fwprintf(), fwscanf(), getwc(), getwchar(), mbrlen(), mbrtowc(), mbsinit(), mbsnrtowcs(), mbsrtowcs(), open_wmemstream(), putwc(), putwchar(), swprintf(), swscanf(), ungetwc(), vfwprintf(), vfwscanf(), vswprintf(), vswscanf(), vwprintf(), vwscanf(), wcpcpy(), wcpncpy(), wcrtomb(), wcscasecmp(), wcscasecmp_l(), wcscat(), wcschr(), wcscmp(), wcscoll(), wcscoll_l(), wcscpy(), wcscspn(), wcsdup(), wcsftime(), wcslen(), wcsncasecmp(), wcsncasecmp_l(), wcsncat(), wcsncmp(), wcsncpy(), wcsnlen(), wcsnrtombs(), wcspbrk(), wcsrchr(), wcsrtombs(), wcsspn(), wcsstr(), wcstod(), wcstof(), wcstok(), wcstol(), wcstold(), wcstoll(), wcstoul(), wcstoull(), wcsxfrm(), wcsxfrm_l(), wctob(), wmemchr(), wmemcmp(), wmemcpy(), wmemmove(), wmemset(), wprintf(), wscanf() with the prototypes the page gives.
+xbd/wchar.h                XBD.wchar.h.010
+    <wchar.h> declares wcswidth(), wcwidth() with the prototypes the page gives.
+xbd/wctype.h               XBD.wctype.h.001
+    <wctype.h> alone defines wctype_t and wctrans_t as scalar types (a value can be cast from zero and tested) and wint_t, as described for <wchar.h>, as an integer type.
+xbd/wctype.h               XBD.wctype.h.002
+    <wctype.h> alone defines WEOF, a constant expression of type wint_t, with the same value as the WEOF of <wchar.h>.
+xbd/wctype.h               XBD.wctype.h.003
+    <wctype.h> defines the types wint_t, wctrans_t, wctype_t.
+xbd/wctype.h               XBD.wctype.h.004
+    <wctype.h> defines the type locale_t.
+xbd/wctype.h               XBD.wctype.h.005
+    <wctype.h> declares iswalnum(), iswalnum_l(), iswalpha(), iswalpha_l(), iswblank(), iswblank_l(), iswcntrl(), iswcntrl_l(), iswctype(), iswctype_l(), iswdigit(), iswdigit_l(), iswgraph(), iswgraph_l(), iswlower(), iswlower_l(), iswprint(), iswprint_l(), iswpunct(), iswpunct_l(), iswspace(), iswspace_l(), iswupper(), iswupper_l(), iswxdigit(), iswxdigit_l(), towctrans(), towctrans_l(), towlower(), towlower_l(), towupper(), towupper_l(), wctrans(), wctrans_l(), wctype(), wctype_l() with the prototypes the page gives.
+xbd/wordexp.h              XBD.wordexp.h.003
+    <wordexp.h> defines wordexp_t as a complete type with at least the members we_wordc (size_t), we_wordv (char **), we_offs (size_t).
+xbd/wordexp.h              XBD.wordexp.h.004
+    <wordexp.h> defines the type size_t.
+xbd/wordexp.h              XBD.wordexp.h.005
+    <wordexp.h> declares wordexp(), wordfree() with the prototypes the page gives.
+
+nullsys: the list is also in /tmp/null4-full2/nullsys-suspicious.txt
