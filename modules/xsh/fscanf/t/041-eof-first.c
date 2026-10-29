@@ -33,5 +33,9 @@ int main(void)
 	pc_check(r == EOF, "sscanf(\"\", \"%%[a]\") returned %d, expected EOF", r);
 	r = sscanf("  ", " %d", &x);
 	pc_check(r == EOF, "sscanf(\"  \", \" %%d\") returned %d, expected EOF", r);
+	/* Control: a function that answers EOF for everything is not conforming. */
+	x = -1;
+	r = sscanf("5", "%d", &x);
+	pc_check(r == 1 && x == 5, "sscanf(\"5\", \"%%d\") returned %d with %d, expected 1 with 5", r, x);
 	pc_pass();
 }

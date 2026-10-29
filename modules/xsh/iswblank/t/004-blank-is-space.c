@@ -18,6 +18,7 @@ int main(void)
 		if (!wc_in(C_BLANK, i))
 			continue;
 		w = wc_ch[i];
+		pc_check(WC_NZ(iswblank), "iswblank() is zero at position %d", i);
 		pc_check(WC_NZ(iswspace), "relation failed at position %d: WC_NZ(iswspace)", i);
 	}
 	pc_pass();

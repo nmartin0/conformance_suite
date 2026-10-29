@@ -28,7 +28,7 @@ int main(void)
 	rc = gethostname(buf, n);
 	for (i = n; i < n + 16; i++)
 		pc_check((unsigned char)buf[i] == 0xA5, "byte %lu, past namelen, was written", (unsigned long)i);
-	if (rc == 0)
-		pc_check(memcmp(buf, full, n) == 0, "the %lu bytes written are not a prefix of the name", (unsigned long)n);
+	/* The returned name is truncated, so its first namelen bytes are there whatever the return value. */
+	pc_check(memcmp(buf, full, n) == 0, "the %lu bytes written (return value %d) are not a prefix of the name", (unsigned long)n, rc);
 	pc_pass();
 }

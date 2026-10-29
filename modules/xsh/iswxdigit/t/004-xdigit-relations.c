@@ -18,6 +18,7 @@ int main(void)
 		if (!wc_in(C_XDIGIT, i))
 			continue;
 		w = wc_ch[i];
+		pc_check(WC_NZ(iswxdigit), "iswxdigit() is zero at position %d", i);
 		pc_check(WC_NZ(iswalnum), "relation failed at position %d: WC_NZ(iswalnum)", i);
 		pc_check(((i >= 48 && i <= 57) ? WC_NZ(iswdigit) : WC_NZ(iswalpha)), "relation failed at position %d: ((i >= 48 && i <= 57) ? WC_NZ(iswdigit) : WC_NZ(iswalpha))", i);
 	}

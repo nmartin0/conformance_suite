@@ -61,9 +61,15 @@ static void ct_init(void)
 	pc_check(ct_nuni == (int)(sizeof ct_uni / sizeof ct_uni[0]), "character universe has the wrong size");
 }
 
+/* A plain loop: a library call here would be part of what is examined. */
 static int ct_has(const char *s, int c)
 {
-	return c != 0 && strchr(s, c) != NULL;
+	if (c == 0)
+		return 0;
+	for (; *s; s++)
+		if ((unsigned char)*s == c)
+			return 1;
+	return 0;
 }
 
 /* Whether character c is in class cls according to the POSIX locale definition. */

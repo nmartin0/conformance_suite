@@ -13,7 +13,7 @@ assertion  XSH.gethostname.002
 anchor     functions/gethostname.html#DESCRIPTION
 class      required
 since      2001
-says       With namelen one less than the length of the name, gethostname() does not write beyond namelen bytes, and if it returns 0 the bytes written are the first namelen bytes of the name.
+says       With namelen one less than the length of the name, gethostname() does not write beyond namelen bytes, and the bytes written are the first namelen bytes of the name (the returned name is truncated, whatever the return value).
 note       Whether the result is null-terminated and the return value in this case are not specified. NOTINUSE when the name has fewer than two characters.
 test       t/002-truncation.c
 
