@@ -16,9 +16,11 @@ pcrun() {
 	out=$(${PC_SH:-sh} pc.s 2>pc.err </dev/null)
 	rc=$?
 }
+# pchas FILE STRING: some line of FILE contains STRING (shell only: no grep)
+pchas() { while IFS= read -r pcl; do case $pcl in *"$2"*) return 0 ;; esac; done <"$1" 2>/dev/null; return 1; }
 pcscript 'set -v' 'echo marker_one' 
 pc_test
 pcrun
 [ "$out" = marker_one ] || pc_fail "standard output was '$out'"
-grep 'echo marker_one' pc.err >/dev/null || pc_fail "the command line was not written to standard error"
+pchas pc.err 'echo marker_one' || pc_fail "the command line was not written to standard error"
 pc_pass

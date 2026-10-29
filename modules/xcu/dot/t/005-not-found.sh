@@ -18,6 +18,9 @@ pcrun() {
 	rc=$?
 }
 pcscript '. ./pc.nosuchfile' 'echo after' 
+printf '%s\n' 'echo ran' >pc.probe || pc_unresolved "cannot write pc.probe"
+pcprobe=$(${PC_SH:-sh} pc.probe 2>/dev/null </dev/null)
+[ "$pcprobe" = ran ] || pc_unresolved "cannot run the shell under test"
 pc_test
 pcrun
 [ "$rc" -ge 1 ] || pc_fail "status $rc, expected non-zero"

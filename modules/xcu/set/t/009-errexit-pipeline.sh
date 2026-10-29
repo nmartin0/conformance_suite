@@ -20,7 +20,7 @@ pcrun() {
 	rc=$?
 }
 pc_test
-pcscript 'set -e' '(false; echo one) | cat' 'echo two' 'echo $(false; echo one) three' 'echo four' 'false | true' 'echo five'
+pcscript 'set -e' '(false; echo one) | while read -r pcl; do echo "$pcl"; done' 'echo two' 'echo $(false; echo one) three' 'echo four' 'false | true' 'echo five'
 pcrun
 want="two${nl}three${nl}four${nl}five"
 [ "$out" = "$want" ] || pc_fail "got '$out'"

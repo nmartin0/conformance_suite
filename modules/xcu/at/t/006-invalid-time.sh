@@ -18,6 +18,7 @@ trap cleanup EXIT
 # a signal ends the test through the EXIT trap, so the jobs are removed
 trap 'exit 1' HUP INT TERM
 mkdir "$d" || pc_fail "cannot make $d"
+[ -d "$d" ] || pc_fail "cannot make $d"
 tab=$(printf '\t')
 # submit ARGS: schedule the command true. Sets jid and jdate (the words of
 # the scheduled time as written in the message) and adds the job to $jobs.
@@ -64,6 +65,8 @@ pc_test
 for spec in "25:99" "nonsense" "-t 99999999999" "-t bogus"; do
 	printf 'true\n' | at $spec >"$d/so" 2>"$d/se"
 	rc=$?
+	# 126 and 127 mean at was not run at all, not a diagnosed error
+	[ "$rc" -lt 126 ] || pc_fail "at $spec exited with status $rc: at could not be run"
 	[ "$rc" -gt 0 ] || {
 		while IFS= read -r sl; do
 			set -- $sl

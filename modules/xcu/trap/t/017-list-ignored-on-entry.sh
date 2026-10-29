@@ -18,9 +18,11 @@ pcrun() {
 	rc=$?
 }
 printf '%s\n' 'trap >pc.tl5' >pc.k5 || pc_unresolved "write"
+# pchas FILE STRING: some line of FILE contains STRING (shell only: no grep)
+pchas() { while IFS= read -r pcl; do case $pcl in *"$2"*) return 0 ;; esac; done <"$1" 2>/dev/null; return 1; }
 pcscript 'trap "" USR1' 'exec ${PC_SH:-sh} ./pc.k5' 
 pc_test
 pcrun
 [ "$rc" -eq 0 ] || pc_fail "status $rc"
-grep 'USR1' pc.tl5 >/dev/null || pc_fail "USR1, ignored on entry, is not in the listing"
+pchas pc.tl5 'USR1' || pc_fail "USR1, ignored on entry, is not in the listing"
 pc_pass

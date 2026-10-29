@@ -5,6 +5,7 @@
 . "$PC_CORE/pc.sh"
 pc_begin XCU.rmdir.004
 mkdir -p a/b/c || pc_fail "cannot create a/b/c"
+[ -d a/b/c ] || pc_fail "a/b/c was not created"
 pc_test
 rmdir -p a/b/c >out 2>err </dev/null
 rc=$?

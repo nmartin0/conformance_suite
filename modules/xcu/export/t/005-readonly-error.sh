@@ -32,6 +32,9 @@ pcerr() {
 	fi
 }
 pcscript 'readonly PCR=1' 'export PCR=2' 'echo "rc=$?"' 'echo "val=$PCR"' 
+printf '%s\n' 'echo ran' >pc.probe || pc_unresolved "cannot write pc.probe"
+pcprobe=$(${PC_SH:-sh} pc.probe 2>/dev/null </dev/null)
+[ "$pcprobe" = ran ] || pc_unresolved "cannot run the shell under test"
 pc_test
 pcrun
 pcerr "export PCR=2"

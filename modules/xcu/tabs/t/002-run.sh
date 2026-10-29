@@ -10,10 +10,9 @@
 pc_begin XCU.tabs.002
 pc_pty_need
 pc_pty_term
-export PCT
 pc_test
 for a in "-T $PCT" "-T $PCT -8" "-T $PCT 1,9,17"; do
-	"$PC_PTY" -t 20 -o out -- env "TERM=$PCT" tabs $a
+	TERM=$PCT "$PC_PTY" -t 20 -o out -- tabs $a
 	rc=$?
 	[ "$rc" -ne 125 ] || pc_unresolved "cannot set up a pseudo-terminal"
 	[ "$rc" -ne 124 ] || pc_unresolved "tabs did not finish"

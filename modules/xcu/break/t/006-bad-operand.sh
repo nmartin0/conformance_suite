@@ -18,6 +18,9 @@ pcrun() {
 	out=$(${PC_SH:-sh} pc.s 2>pc.err </dev/null)
 	rc=$?
 }
+printf '%s\n' 'echo ran' >pc.probe || pc_unresolved "cannot write pc.probe"
+pcprobe=$(${PC_SH:-sh} pc.probe 2>/dev/null </dev/null)
+[ "$pcprobe" = ran ] || pc_unresolved "cannot run the shell under test"
 pc_test
 for arg in 0 abc; do
 	pcscript 'for i in 1 2; do' "  break $arg" '  echo "rc=$?"' 'done' 'echo after'

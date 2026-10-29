@@ -8,6 +8,8 @@ pc_begin XCU.kill.004
 d=$!
 wait "$d"
 pc_test
+# a kill that fails for every process would also pass: it must work on a live one
+kill -s 0 $$ >/dev/null 2>&1 || pc_unresolved "kill -s 0 fails for the running shell, so its failure for a missing process proves nothing"
 kill "$d" >out 2>/dev/null
 rc=$?
 [ "$rc" -gt 0 ] || pc_fail "kill exited $rc for a process that is gone"

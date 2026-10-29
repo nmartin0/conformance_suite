@@ -7,6 +7,6 @@ pc_begin XCU.read.012
 printf 'new\n' >in || pc_fail "cannot write the input"
 pcsub=orig
 pc_test
-( read pcsub ) <in
+( read pcsub && [ "$pcsub" = new ] ) <in || pc_fail "read did not set the variable inside the subshell"
 [ "$pcsub" = orig ] || pc_fail "variable changed to '$pcsub' by a subshell"
 pc_pass

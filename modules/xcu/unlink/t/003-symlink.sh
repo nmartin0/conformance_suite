@@ -6,6 +6,7 @@
 pc_begin XCU.unlink.003
 printf 'x\n' >f || pc_fail "cannot create f"
 ln -s f s || pc_fail "cannot create symbolic link"
+[ -h s ] || pc_fail "the symbolic link was not created"
 pc_test
 unlink s >out 2>err </dev/null
 rc=$?

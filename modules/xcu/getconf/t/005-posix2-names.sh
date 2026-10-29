@@ -6,8 +6,9 @@
 pc_begin XCU.getconf.005
 nl='
 '
-# gv ARGS...: getconf ARGS must exit zero and write one line that is
-# digits or the word undefined (judged the shell way and by exec).
+# gv ARGS...: getconf ARGS must exit zero and write one line that is a
+# number or the word undefined (judged the shell way and by exec). The
+# values are left in gv_shell and gv_exec.
 gv() {
 	for how in shell exec; do
 		if [ "$how" = shell ]; then
@@ -17,23 +18,31 @@ gv() {
 		fi
 		rc=$?
 		[ "$rc" -eq 0 ] || pc_fail "$how: getconf $* exited $rc"
-		n=0
+		gv_n=0
 		val=
 		while IFS= read -r line; do
-			n=$((n + 1))
+			gv_n=$((gv_n + 1))
 			val=$line
 		done <gv.out
-		[ "$n" -eq 1 ] || pc_fail "$how: getconf $* wrote $n lines, wanted one"
+		[ "$gv_n" -eq 1 ] || pc_fail "$how: getconf $* wrote $gv_n lines, wanted one"
 		case $val in
 		undefined) ;;
-		''|*[!0-9]*) pc_fail "$how: getconf $* wrote '$val', neither digits nor undefined" ;;
+		*)
+			num=${val#-}
+			case $num in
+			''|*[!0-9]*) pc_fail "$how: getconf $* wrote '$val', neither a number nor undefined" ;;
+			esac
+			;;
 		esac
+		eval "gv_$how=\$val"
 	done
 }
 pc_test
 for n in C_BIND C_DEV CHAR_TERM FORT_RUN LOCALEDEF SW_DEV UPE VERSION; do
-	a=$(getconf POSIX2_$n </dev/null 2>/dev/null; echo "x$?")
-	b=$(getconf _POSIX2_$n </dev/null 2>/dev/null; echo "x$?")
-	[ "$a" = "$b" ] || pc_fail "getconf POSIX2_$n gave '$a' but getconf _POSIX2_$n gave '$b'"
+	gv POSIX2_$n
+	a_shell=$gv_shell a_exec=$gv_exec
+	gv _POSIX2_$n
+	[ "$a_shell" = "$gv_shell" ] || pc_fail "getconf POSIX2_$n gave '$a_shell' but getconf _POSIX2_$n gave '$gv_shell'"
+	[ "$a_exec" = "$gv_exec" ] || pc_fail "exec getconf POSIX2_$n gave '$a_exec' but exec getconf _POSIX2_$n gave '$gv_exec'"
 done
 pc_pass

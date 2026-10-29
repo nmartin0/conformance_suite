@@ -17,6 +17,8 @@ pcrun() {
 	out=$(${PC_SH:-sh} pc.s 2>pc.err </dev/null)
 	rc=$?
 }
+# pchas FILE STRING: some line of FILE contains STRING (shell only: no grep)
+pchas() { while IFS= read -r pcl; do case $pcl in *"$2"*) return 0 ;; esac; done <"$1" 2>/dev/null; return 1; }
 pc_test
 pcscript 'set -o errexit' 'false' 'echo after'
 pcrun
@@ -29,8 +31,8 @@ pcrun
 [ -z "$out" ] && [ "$rc" -eq 0 ] || pc_fail "noexec: status $rc out '$out'"
 pcscript 'set -o verbose' 'echo marker_two'
 pcrun
-grep 'echo marker_two' pc.err >/dev/null || pc_fail "verbose: input not written to standard error"
+pchas pc.err 'echo marker_two' || pc_fail "verbose: input not written to standard error"
 pcscript 'pcv=expanded_two' 'set -o xtrace' 'echo "$pcv"'
 pcrun
-grep 'expanded_two' pc.err >/dev/null || pc_fail "xtrace: no trace on standard error"
+pchas pc.err 'expanded_two' || pc_fail "xtrace: no trace on standard error"
 pc_pass

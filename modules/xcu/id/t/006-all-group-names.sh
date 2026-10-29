@@ -21,16 +21,13 @@ ci=0
 for w in $ids; do ci=$((ci + 1)); done
 cn=0
 for w in $names; do cn=$((cn + 1)); done
+[ "$ci" -ge 1 ] || pc_fail "id -G wrote no group ID"
 [ "$ci" -eq "$cn" ] || pc_fail "id -G has $ci IDs, id -Gn has $cn words"
 en=$(id -gn) || pc_fail "id -gn failed"
-case $en in
-'') ;;
-*)
-	found=no
-	for w in $names; do
-		[ "$w" = "$en" ] && found=yes
-	done
-	[ "$found" = yes ] || pc_fail "the effective group name '$en' is not in '$names'"
-	;;
-esac
+[ -n "$en" ] || pc_fail "id -gn wrote no name although every group ID of the process has one"
+found=no
+for w in $names; do
+	[ "$w" = "$en" ] && found=yes
+done
+[ "$found" = yes ] || pc_fail "the effective group name '$en' is not in '$names'"
 pc_pass

@@ -8,8 +8,9 @@
 pc_begin XCU.tabs.005
 pc_pty_need
 pc_pty_term
-"$PC_PTY" -t 20 -o viaenv -- env "TERM=$PCT" tabs -8 || pc_unresolved "tabs -8 is not possible on this terminal type"
+TERM=$PCT "$PC_PTY" -t 20 -o viaenv -- tabs -8 || pc_unresolved "tabs -8 is not possible on this terminal type"
 pc_test
-"$PC_PTY" -t 20 -o viaopt -- env "TERM=pc-no-such-terminal-type" tabs -T "$PCT" -8 || pc_fail "tabs -T $PCT failed when TERM named another type"
+TERM=pc-no-such-terminal-type "$PC_PTY" -t 20 -o viaopt -- tabs -T "$PCT" -8 || pc_fail "tabs -T $PCT failed when TERM named another type"
+[ -s viaenv ] || pc_unresolved "tabs wrote nothing to the terminal, so the effect of -T cannot be compared"
 cmp -s viaenv viaopt || pc_fail "the -T type did not override TERM"
 pc_pass

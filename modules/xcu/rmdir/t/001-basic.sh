@@ -5,6 +5,7 @@
 . "$PC_CORE/pc.sh"
 pc_begin XCU.rmdir.001
 mkdir d1 d2 || pc_fail "cannot create directories"
+[ -d d1 ] && [ -d d2 ] || pc_fail "the directories were not created"
 pc_test
 rmdir d1 d2 >out 2>err </dev/null
 rc=$?
