@@ -24,6 +24,29 @@
 #include <float.h>
 #include <math.h>
 
+/*
+ * CMPLX() is required, but a missing definition must not hide every test
+ * that only needs a way to build an operand (the CMPLX modules themselves
+ * report the absence).  A complex object has the same representation as an
+ * array of its two parts, so the operand is assembled that way.
+ */
+#include <string.h>
+#ifndef CMPLX
+static double _Complex mt_cmplx_d(double re, double im)
+{ double a[2]; double _Complex z; a[0] = re; a[1] = im; memcpy(&z, a, sizeof z); return z; }
+#define CMPLX(re, im) mt_cmplx_d((re), (im))
+#endif
+#ifndef CMPLXF
+static float _Complex mt_cmplx_f(float re, float im)
+{ float a[2]; float _Complex z; a[0] = re; a[1] = im; memcpy(&z, a, sizeof z); return z; }
+#define CMPLXF(re, im) mt_cmplx_f((re), (im))
+#endif
+#ifndef CMPLXL
+static long double _Complex mt_cmplx_l(long double re, long double im)
+{ long double a[2]; long double _Complex z; a[0] = re; a[1] = im; memcpy(&z, a, sizeof z); return z; }
+#define CMPLXL(re, im) mt_cmplx_l((re), (im))
+#endif
+
 #pragma STDC FENV_ACCESS ON
 #pragma STDC FP_CONTRACT OFF
 
