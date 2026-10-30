@@ -5,6 +5,7 @@
  * ASSERTION XSH.connect.015
  */
 #include "pc.h"
+#include "pcnet.h"
 #include <arpa/inet.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -79,7 +80,7 @@ void a4(struct sockaddr_in *a, unsigned port)
 	memset(a, 0, sizeof *a);
 	a->sin_family = AF_INET;
 	a->sin_port = htons((in_port_t)port);
-	a->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	a->sin_addr.s_addr = pc_loopback4();
 }
 
 int tsock(void)

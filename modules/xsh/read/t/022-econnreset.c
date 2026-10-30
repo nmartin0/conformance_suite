@@ -6,6 +6,7 @@
  * MUTANT    read.econnreset_as_eio
  */
 #include "pc.h"
+#include "pcnet.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <string.h>
@@ -26,7 +27,7 @@ int main(void)
 	pc_begin("XSH.read.022");
 	memset(&a, 0, sizeof a);
 	a.sin_family = AF_INET;
-	a.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	a.sin_addr.s_addr = pc_loopback4();
 	l = socket(AF_INET, SOCK_STREAM, 0);
 	if (l < 0 || bind(l, (struct sockaddr *)&a, sizeof a) != 0 || listen(l, 1) != 0 ||
 	    getsockname(l, (struct sockaddr *)&a, &al) != 0)

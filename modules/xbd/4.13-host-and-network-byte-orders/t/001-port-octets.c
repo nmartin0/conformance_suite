@@ -8,6 +8,7 @@
  * ASSERTION XBD.4.13-host-and-network-byte-orders.001
  */
 #include "pc.h"
+#include "pcnet.h"
 #include <arpa/inet.h>
 #include <errno.h>
 #include <netinet/in.h>
@@ -46,7 +47,7 @@ int main(void)
 	}
 	memset(&a, 0, sizeof a);
 	a.sin_family = AF_INET;
-	a.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	a.sin_addr.s_addr = pc_loopback4();
 	for (i = 0; i < 100; i++) {
 		port = 41000u + (unsigned)((getpid() * 7 + i * 131) % 20000);
 		a.sin_port = htons((uint16_t)port);

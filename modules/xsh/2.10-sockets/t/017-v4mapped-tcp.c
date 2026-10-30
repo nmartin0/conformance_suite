@@ -51,7 +51,7 @@ int main(void)
 	NEED(c4 != -1, "socket failed: %s", pc_errname(errno));
 	memset(&l4, 0, sizeof l4);
 	l4.sin_family = AF_INET;
-	l4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	l4.sin_addr.s_addr = pc_loopback4();
 	l4.sin_port = htons(p6);
 	pc_check(connect(c4, (struct sockaddr *)&l4, sizeof l4) == 0, "an IPv4 client could not connect to an AF_INET6 listener bound to the mapped address: %s", pc_errname(errno));
 	cl = sizeof c4a;

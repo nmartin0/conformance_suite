@@ -26,7 +26,7 @@ int main(void)
 	NEED(dead != -1 && u != -1, "socket failed: %s", pc_errname(errno));
 	memset(&a, 0, sizeof a);
 	a.sin_family = AF_INET;
-	a.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	a.sin_addr.s_addr = pc_loopback4();
 	NEED(bind(dead, (struct sockaddr *)&a, sizeof a) == 0, "bind failed: %s", pc_errname(errno));
 	NEED(getsockname(dead, (struct sockaddr *)&dst, &l) == 0, "getsockname failed: %s", pc_errname(errno));
 	(void)close(dead);

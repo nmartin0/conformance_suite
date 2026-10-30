@@ -40,7 +40,7 @@ int main(void)
 	NEED(c4 != -1, "socket failed: %s", pc_errname(errno));
 	memset(&a4, 0, sizeof a4);
 	a4.sin_family = AF_INET;
-	a4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	a4.sin_addr.s_addr = pc_loopback4();
 	a4.sin_port = got.sin6_port;
 	pc_test();
 	r = connect(c4, (struct sockaddr *)&a4, sizeof a4);

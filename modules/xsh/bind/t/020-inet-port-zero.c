@@ -5,6 +5,7 @@
  * ASSERTION XSH.bind.020
  */
 #include "pc.h"
+#include "pcnet.h"
 #include <arpa/inet.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -79,7 +80,7 @@ void a4(struct sockaddr_in *a, unsigned port)
 	memset(a, 0, sizeof *a);
 	a->sin_family = AF_INET;
 	a->sin_port = htons((in_port_t)port);
-	a->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	a->sin_addr.s_addr = pc_loopback4();
 }
 
 int tsock(void)
@@ -146,7 +147,7 @@ int main(void)
 	NEED(getsockname(s, (struct sockaddr *)&g, &l) == 0, "getsockname failed: %s", pc_errname(errno));
 	pc_check(g.sin_family == AF_INET, "family is %d, expected AF_INET", (int)g.sin_family);
 	pc_check(ntohs(g.sin_port) != 0, "the chosen port is 0");
-	pc_check(g.sin_addr.s_addr == htonl(INADDR_LOOPBACK), "the address changed from the loopback address");
+	pc_check(g.sin_addr.s_addr == pc_loopback4(), "the address changed from the loopback address");
 	close(s);
 	pc_pass();
 }

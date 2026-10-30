@@ -21,7 +21,7 @@ static int udp4(struct sockaddr_in *a)
 	NEED(s != -1, "socket failed: %s", pc_errname(errno));
 	memset(a, 0, sizeof *a);
 	a->sin_family = AF_INET;
-	a->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	a->sin_addr.s_addr = pc_loopback4();
 	NEED(bind(s, (struct sockaddr *)a, sizeof *a) == 0, "bind failed: %s", pc_errname(errno));
 	NEED(getsockname(s, (struct sockaddr *)a, &l) == 0, "getsockname failed: %s", pc_errname(errno));
 	return s;
@@ -50,7 +50,7 @@ int main(void)
 
 	memset(&dst4, 0, sizeof dst4);
 	dst4.sin_family = AF_INET;
-	dst4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	dst4.sin_addr.s_addr = pc_loopback4();
 	dst4.sin_port = htons(p6);
 	pc_check(sendto(s4, "hi", 2, 0, (struct sockaddr *)&dst4, sizeof dst4) == 2, "sendto() from the AF_INET socket failed: %s", pc_errname(errno));
 	NEED(wait_fd(r6, POLLIN, 5000) > 0, "the datagram did not reach the AF_INET6 socket");

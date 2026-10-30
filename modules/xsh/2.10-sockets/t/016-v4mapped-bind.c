@@ -24,7 +24,7 @@ int main(void)
 	NEED(s4 != -1, "socket failed: %s", pc_errname(errno));
 	memset(&a4, 0, sizeof a4);
 	a4.sin_family = AF_INET;
-	a4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	a4.sin_addr.s_addr = pc_loopback4();
 	if (bind(s4, (struct sockaddr *)&a4, sizeof a4) != 0)
 		pc_notinuse("the node has no IPv4 loopback address (bind: %s)", pc_errname(errno));
 	(void)close(s4);

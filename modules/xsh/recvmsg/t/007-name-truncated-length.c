@@ -5,6 +5,7 @@
  * ASSERTION XSH.recvmsg.007
  */
 #include "pc.h"
+#include "pcnet.h"
 #include <arpa/inet.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -138,7 +139,7 @@ static int inet_sock(int type, struct sockaddr_in *a)
 	NEED(s != -1, "socket(AF_INET) failed: %s", pc_errname(errno));
 	memset(a, 0, sizeof *a);
 	a->sin_family = AF_INET;
-	a->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	a->sin_addr.s_addr = pc_loopback4();
 	NEED(bind(s, (struct sockaddr *)a, sizeof *a) == 0, "bind failed: %s", pc_errname(errno));
 	NEED(getsockname(s, (struct sockaddr *)a, &l) == 0, "getsockname failed: %s", pc_errname(errno));
 	return s;
