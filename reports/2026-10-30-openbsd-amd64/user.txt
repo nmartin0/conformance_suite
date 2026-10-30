@@ -1,0 +1,241 @@
+# posixcheck 0.1.0
+
+# tree unknown
+
+# sysname OpenBSD
+
+# nodename obsd.localdomain
+
+# release 8.0
+
+# version GENERIC#82
+
+# machine amd64
+
+# target openbsd
+
+# posix_version 200809
+
+# sh /bin/sh
+
+# cc cc
+
+# ccflags -Werror=implicit-function-declaration
+
+# euid 1000
+
+# profile none
+
+# started 2026-10-30T07:35:20Z
+
+# claim BASE - yes base
+
+# claim ADV _POSIX_ADVISORY_INFO no macro=-1 sysconf=- compile=no
+
+# claim CD _POSIX2_C_DEV no macro=-1 sysconf=- compile=no
+
+# claim CPT _POSIX_CPUTIME yes macro=200809 sysconf=- compile=yes
+
+# claim CRYPT _XOPEN_CRYPT yes macro=1 sysconf=- compile=yes
+
+# claim DC _POSIX_DEVICE_CONTROL no macro=undefined sysconf=- compile=no
+
+# claim FR _POSIX2_FORT_RUN no macro=-1 sysconf=- compile=no
+
+# claim FSC _POSIX_FSYNC yes macro=200112 sysconf=- compile=yes
+
+# claim IP6 _POSIX_IPV6 yes macro=0 sysconf=200112 compile=yes
+
+# claim ML _POSIX_MEMLOCK yes macro=200112 sysconf=- compile=yes
+
+# claim MLR _POSIX_MEMLOCK_RANGE yes macro=200112 sysconf=- compile=yes
+
+# claim MSG _POSIX_MESSAGE_PASSING no macro=-1 sysconf=- compile=no
+
+# claim PIO _POSIX_PRIORITIZED_IO no macro=-1 sysconf=- compile=no
+
+# claim PS _POSIX_PRIORITY_SCHEDULING no macro=-1 sysconf=- compile=no
+
+# claim RPI _POSIX_THREAD_ROBUST_PRIO_INHERIT no macro=-1 sysconf=- compile=no
+
+# claim RPP _POSIX_THREAD_ROBUST_PRIO_PROTECT no macro=-1 sysconf=- compile=no
+
+# claim RS _POSIX_RAW_SOCKETS yes macro=200112 sysconf=- compile=yes
+
+# claim SD _POSIX2_SW_DEV yes macro=200112 sysconf=- compile=yes
+
+# claim SHM _POSIX_SHARED_MEMORY_OBJECTS yes macro=200809 sysconf=- compile=yes
+
+# claim SIO _POSIX_SYNCHRONIZED_IO no macro=-1 sysconf=- compile=no
+
+# claim SPN _POSIX_SPAWN yes macro=200112 sysconf=- compile=yes
+
+# claim SS _POSIX_SPORADIC_SERVER no macro=-1 sysconf=- compile=no
+
+# claim TCT _POSIX_THREAD_CPUTIME yes macro=200809 sysconf=- compile=yes
+
+# claim TPI _POSIX_THREAD_PRIO_INHERIT no macro=-1 sysconf=- compile=no
+
+# claim TPP _POSIX_THREAD_PRIO_PROTECT no macro=-1 sysconf=- compile=no
+
+# claim TPS _POSIX_THREAD_PRIORITY_SCHEDULING no macro=-1 sysconf=- compile=no
+
+# claim TSA _POSIX_THREAD_ATTR_STACKADDR yes macro=200112 sysconf=- compile=yes
+
+# claim TSH _POSIX_THREAD_PROCESS_SHARED no macro=-1 sysconf=- compile=no
+
+# claim TSP _POSIX_THREAD_SPORADIC_SERVER no macro=-1 sysconf=- compile=no
+
+# claim TSS _POSIX_THREAD_ATTR_STACKSIZE yes macro=200112 sysconf=- compile=yes
+
+# claim TYM _POSIX_TYPED_MEMORY_OBJECTS no macro=-1 sysconf=- compile=no
+
+# claim UP _POSIX2_UPE yes macro=200112 sysconf=- compile=yes
+
+# claim UU _XOPEN_UUCP no macro=-1 sysconf=- compile=no
+
+# claim XSI _XOPEN_UNIX no macro=-1 sysconf=- compile=no
+
+PASS	CONV.devnodes.001	45	
+
+PASS	CONV.devnodes.002	287	
+
+PASS	CONV.devnodes.003	42	
+
+PASS	CONV.devnodes.004	45	
+
+INSPECT	CONV.devnodes.005	57	disputed (see the assertion's note): cannot open /dev/fd/1: errno 13
+
+INSPECT	CONV.devnodes.006	64	disputed (see the assertion's note): /dev/stdin is not the file open as descriptor 0
+
+UNSUPPORTED	CONV.devnodes.007	0	option XSI not claimed
+
+PASS	CONV.etcdb.001	49	
+
+PASS	CONV.etcdb.002	53	
+
+PASS	CONV.etcdb.003	53	
+
+PASS	CONV.etcdb.004	52	
+
+PASS	CONV.etcdb.005	95	
+
+PASS	CONV.etcdb.006	46	
+
+PASS	CONV.etcdb.007	57	
+
+PASS	CONV.etcdb.008	54	
+
+PASS	CONV.etcdb.009	50	
+
+PASS	CONV.etcdb.010	56	
+
+PASS	CONV.etcdb.011	52	
+
+PASS	CONV.etcdb.012	375	
+
+INSPECT	CONV.etcdb.013	52	disputed (see the assertion's note): protocol number '258' of 'divert' (line 152) is not a number up to 255
+
+PASS	CONV.etcdb.014	55	
+
+NOTINUSE	CONV.etcdb.015	44	/etc/resolv.conf cannot be read: no such file database on this system
+
+PASS	CONV.layout.001	81	
+
+PASS	CONV.layout.002	44	
+
+PASS	CONV.layout.003	43	
+
+PASS	CONV.layout.004	42	
+
+PASS	CONV.layout.005	43	
+
+PASS	CONV.layout.006	42	
+
+PASS	CONV.layout.007	50	
+
+PASS	CONV.layout.008	94	
+
+PASS	CONV.layout.009	42	
+
+PASS	CONV.layout.010	47	
+
+PASS	CONV.toolchain.001	3520	
+
+PASS	CONV.toolchain.002	2623	
+
+PASS	CONV.toolchain.003	3540	
+
+PASS	CONV.toolchain.004	2404	
+
+PASS	CONV.toolchain.005	3611	
+
+PASS	CONV.toolchain.006	4482	
+
+PASS	CONV.toolchain.007	4774	
+
+INSPECT	CONV.toolchain.008	5098	disputed (see the assertion's note): an archive placed before the object that needs it satisfied the reference
+
+PASS	CONV.toolchain.009	3525	
+
+PASS	CONV.toolchain.010	1640	
+
+PASS	CONV.toolchain.011	1379	
+
+PASS	CONV.toolchain.012	6052	
+
+PASS	CONV.toolchain.013	4732	
+
+PASS	CONV.toolchain.014	2846	
+
+PASS	CONV.toolchain.015	2969	
+
+PASS	CONV.toolchain.016	4007	
+
+PASS	CONV.toolchain.017	5299	
+
+PASS	CONV.toolchain.018	3156	
+
+PASS	CONV.toolchain.019	2212	
+
+PASS	CONV.toolchain.020	3326	
+
+PASS	CONV.toolchain.021	6477	
+
+PASS	CONV.tzif.001	196	
+
+PASS	CONV.tzif.002	189	
+
+PASS	CONV.tzif.003	374	
+
+PASS	CONV.tzif.004	213	
+
+PASS	CONV.tzif.005	75	
+
+PASS	CONV.utf8.001	1641	
+
+PASS	CONV.utf8.002	158	
+
+PASS	CONV.utf8.003	152	
+
+PASS	CONV.utf8.004	169	
+
+PASS	CONV.utf8.005	145	
+
+PASS	CONV.utf8.006	151	
+
+NOTINUSE	CONV.utf8.007	44	wide characters are not documented as Unicode code points (__STDC_ISO_10646__ is not defined)
+
+NOTINUSE	CONV.utf8.008	44	wide characters are not documented as Unicode code points (__STDC_ISO_10646__ is not defined)
+
+INSPECT	CONV.xdg.001	44	disputed (see the assertion's note): XDG_RUNTIME_DIR '/tmp/run/user/0' does not name an existing file
+
+UNRESOLVED	CONV.xdg.002	50	setup: XDG_RUNTIME_DIR is not an existing absolute directory
+
+PASS	CONV.xdg.003	49	
+
+PASS	CONV.xdg.004	52	
+
+# finished 2026-10-30T07:37:54Z
+
+# SUMMARY total 70 PASS 60 FAIL 0 INSPECT 5 UNRESOLVED 1 NOTINUSE 3 UNSUPPORTED 1 UNINITIATED 0

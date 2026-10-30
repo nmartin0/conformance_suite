@@ -1,0 +1,71 @@
+PASS        CONV.devnodes.001 
+PASS        CONV.devnodes.002 
+PASS        CONV.devnodes.003 
+PASS        CONV.devnodes.004 
+PASS        CONV.devnodes.005 
+PASS        CONV.devnodes.006 
+PASS        CONV.devnodes.007 
+PASS        CONV.etcdb.001 
+PASS        CONV.etcdb.002 
+PASS        CONV.etcdb.003 
+PASS        CONV.etcdb.004 
+PASS        CONV.etcdb.005 
+PASS        CONV.etcdb.006 
+PASS        CONV.etcdb.007 
+PASS        CONV.etcdb.008 
+PASS        CONV.etcdb.009 
+PASS        CONV.etcdb.010 
+PASS        CONV.etcdb.011 
+PASS        CONV.etcdb.012 
+INSPECT     CONV.etcdb.013 disputed (see the assertion's note): protocol number '262' of 'mptcp' (line 68) is not a number up to 255
+PASS        CONV.etcdb.014 
+PASS        CONV.etcdb.015 
+PASS        CONV.layout.001 
+PASS        CONV.layout.002 
+PASS        CONV.layout.003 
+PASS        CONV.layout.004 
+PASS        CONV.layout.005 
+PASS        CONV.layout.006 
+PASS        CONV.layout.007 
+PASS        CONV.layout.008 
+PASS        CONV.layout.009 
+PASS        CONV.layout.010 
+PASS        CONV.toolchain.001 
+PASS        CONV.toolchain.002 
+PASS        CONV.toolchain.003 
+PASS        CONV.toolchain.004 
+PASS        CONV.toolchain.005 
+PASS        CONV.toolchain.006 
+PASS        CONV.toolchain.007 
+PASS        CONV.toolchain.008 
+PASS        CONV.toolchain.009 
+PASS        CONV.toolchain.010 
+PASS        CONV.toolchain.011 
+PASS        CONV.toolchain.012 
+PASS        CONV.toolchain.013 
+PASS        CONV.toolchain.014 
+PASS        CONV.toolchain.015 
+PASS        CONV.toolchain.016 
+PASS        CONV.toolchain.017 
+PASS        CONV.toolchain.018 
+PASS        CONV.toolchain.019 
+PASS        CONV.toolchain.020 
+PASS        CONV.toolchain.021 
+PASS        CONV.tzif.001 
+PASS        CONV.tzif.002 
+PASS        CONV.tzif.003 
+PASS        CONV.tzif.004 
+PASS        CONV.tzif.005 
+PASS        CONV.utf8.001 
+PASS        CONV.utf8.002 
+PASS        CONV.utf8.003 
+FAIL        CONV.utf8.004 F4 90 80 80 (above U+10FFFF) is decoded
+PASS        CONV.utf8.005 
+PASS        CONV.utf8.006 
+PASS        CONV.utf8.007 
+FAIL        CONV.utf8.008 wcrtomb(110000) returned 4 instead of failing
+NOTINUSE    CONV.xdg.001 XDG_RUNTIME_DIR is not set in the environment the suite was started from
+NOTINUSE    CONV.xdg.002 XDG_RUNTIME_DIR is not set in the environment the suite was started from
+PASS        CONV.xdg.003 
+PASS        CONV.xdg.004 
+SUMMARY total 70 PASS 65 FAIL 2 INSPECT 1 UNRESOLVED 0 NOTINUSE 2 UNSUPPORTED 0 UNINITIATED 0

@@ -1,0 +1,241 @@
+# posixcheck 0.1.0
+
+# tree unknown
+
+# sysname NetBSD
+
+# nodename netbsd
+
+# release 11.0
+
+# version NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+
+# machine amd64
+
+# target netbsd
+
+# posix_version 200112
+
+# sh /bin/sh
+
+# cc c17
+
+# ccflags -Werror=implicit-function-declaration
+
+# euid 0
+
+# profile none
+
+# started 2026-10-30T07:19:38Z
+
+# claim BASE - yes base
+
+# claim ADV _POSIX_ADVISORY_INFO no macro=undefined sysconf=- compile=no
+
+# claim CD _POSIX2_C_DEV no macro=undefined sysconf=- compile=no
+
+# claim CPT _POSIX_CPUTIME yes macro=200112 sysconf=- compile=yes
+
+# claim CRYPT _XOPEN_CRYPT no macro=undefined sysconf=- compile=no
+
+# claim DC _POSIX_DEVICE_CONTROL no macro=undefined sysconf=- compile=no
+
+# claim FR _POSIX2_FORT_RUN no macro=undefined sysconf=- compile=no
+
+# claim FSC _POSIX_FSYNC yes macro=1 sysconf=- compile=yes
+
+# claim IP6 _POSIX_IPV6 no macro=0 sysconf=no-name compile=yes
+
+# claim ML _POSIX_MEMLOCK yes macro=1 sysconf=- compile=yes
+
+# claim MLR _POSIX_MEMLOCK_RANGE yes macro=1 sysconf=- compile=yes
+
+# claim MSG _POSIX_MESSAGE_PASSING yes macro=200112 sysconf=- compile=yes
+
+# claim PIO _POSIX_PRIORITIZED_IO no macro=-1 sysconf=- compile=no
+
+# claim PS _POSIX_PRIORITY_SCHEDULING yes macro=200112 sysconf=- compile=yes
+
+# claim RPI _POSIX_THREAD_ROBUST_PRIO_INHERIT no macro=undefined sysconf=- compile=no
+
+# claim RPP _POSIX_THREAD_ROBUST_PRIO_PROTECT no macro=undefined sysconf=- compile=no
+
+# claim RS _POSIX_RAW_SOCKETS yes macro=200112 sysconf=- compile=yes
+
+# claim SD _POSIX2_SW_DEV no macro=undefined sysconf=- compile=no
+
+# claim SHM _POSIX_SHARED_MEMORY_OBJECTS no macro=0 sysconf=0 compile=yes
+
+# claim SIO _POSIX_SYNCHRONIZED_IO yes macro=1 sysconf=- compile=yes
+
+# claim SPN _POSIX_SPAWN yes macro=200809 sysconf=- compile=yes
+
+# claim SS _POSIX_SPORADIC_SERVER no macro=undefined sysconf=- compile=no
+
+# claim TCT _POSIX_THREAD_CPUTIME yes macro=200112 sysconf=- compile=yes
+
+# claim TPI _POSIX_THREAD_PRIO_INHERIT no macro=undefined sysconf=- compile=no
+
+# claim TPP _POSIX_THREAD_PRIO_PROTECT yes macro=200112 sysconf=- compile=yes
+
+# claim TPS _POSIX_THREAD_PRIORITY_SCHEDULING no macro=undefined sysconf=- compile=no
+
+# claim TSA _POSIX_THREAD_ATTR_STACKADDR yes macro=200112 sysconf=- compile=yes
+
+# claim TSH _POSIX_THREAD_PROCESS_SHARED no macro=undefined sysconf=- compile=no
+
+# claim TSP _POSIX_THREAD_SPORADIC_SERVER no macro=undefined sysconf=- compile=no
+
+# claim TSS _POSIX_THREAD_ATTR_STACKSIZE yes macro=200112 sysconf=- compile=yes
+
+# claim TYM _POSIX_TYPED_MEMORY_OBJECTS no macro=undefined sysconf=- compile=no
+
+# claim UP _POSIX2_UPE no macro=undefined sysconf=- compile=no
+
+# claim UU _XOPEN_UUCP no macro=undefined sysconf=- compile=no
+
+# claim XSI _XOPEN_UNIX no macro=undefined sysconf=- compile=no
+
+PASS	CONV.devnodes.001	58	
+
+PASS	CONV.devnodes.002	245	
+
+PASS	CONV.devnodes.003	38	
+
+PASS	CONV.devnodes.004	47	
+
+INSPECT	CONV.devnodes.005	40	disputed (see the assertion's note): cannot open /dev/fd/1: errno 13
+
+INSPECT	CONV.devnodes.006	37	disputed (see the assertion's note): /dev/stdin is not the file open as descriptor 0
+
+UNSUPPORTED	CONV.devnodes.007	0	option XSI not claimed
+
+PASS	CONV.etcdb.001	45	
+
+INSPECT	CONV.etcdb.002	44	disputed (see the assertion's note): uid 0 is used by both 'root' and 'toor'
+
+PASS	CONV.etcdb.003	61	
+
+PASS	CONV.etcdb.004	86	
+
+PASS	CONV.etcdb.005	71	
+
+PASS	CONV.etcdb.006	52	
+
+INSPECT	CONV.etcdb.007	42	disputed (see the assertion's note): shell /rescue/sh of uid-0 account 'toor' is not listed in the shells file
+
+PASS	CONV.etcdb.008	46	
+
+PASS	CONV.etcdb.009	51	
+
+PASS	CONV.etcdb.010	58	
+
+PASS	CONV.etcdb.011	118	
+
+PASS	CONV.etcdb.012	2289	
+
+PASS	CONV.etcdb.013	116	
+
+PASS	CONV.etcdb.014	85	
+
+NOTINUSE	CONV.etcdb.015	48	/etc/resolv.conf cannot be read: no such file database on this system
+
+PASS	CONV.layout.001	38	
+
+INSPECT	CONV.layout.002	78	disputed (see the assertion's note): /usr/local does not exist (or is a dangling link)
+
+PASS	CONV.layout.003	39	
+
+PASS	CONV.layout.004	37	
+
+PASS	CONV.layout.005	39	
+
+PASS	CONV.layout.006	45	
+
+PASS	CONV.layout.007	36	
+
+PASS	CONV.layout.008	107	
+
+PASS	CONV.layout.009	57	
+
+PASS	CONV.layout.010	42	
+
+PASS	CONV.toolchain.001	3241	
+
+PASS	CONV.toolchain.002	3004	
+
+PASS	CONV.toolchain.003	3801	
+
+PASS	CONV.toolchain.004	2914	
+
+PASS	CONV.toolchain.005	3613	
+
+PASS	CONV.toolchain.006	4151	
+
+PASS	CONV.toolchain.007	5008	
+
+PASS	CONV.toolchain.008	6922	
+
+PASS	CONV.toolchain.009	4708	
+
+PASS	CONV.toolchain.010	2335	
+
+PASS	CONV.toolchain.011	1377	
+
+PASS	CONV.toolchain.012	5958	
+
+PASS	CONV.toolchain.013	6961	
+
+PASS	CONV.toolchain.014	4227	
+
+PASS	CONV.toolchain.015	3662	
+
+PASS	CONV.toolchain.016	3793	
+
+PASS	CONV.toolchain.017	4987	
+
+PASS	CONV.toolchain.018	3675	
+
+PASS	CONV.toolchain.019	3154	
+
+PASS	CONV.toolchain.020	4375	
+
+PASS	CONV.toolchain.021	8094	
+
+PASS	CONV.tzif.001	402	
+
+PASS	CONV.tzif.002	114	
+
+PASS	CONV.tzif.003	256	
+
+PASS	CONV.tzif.004	139	
+
+FAIL	CONV.tzif.005	55	TZ=America/New_York at -2717650801: abbreviation 'EST', the zone file says 'LMT'
+
+PASS	CONV.utf8.001	1135	
+
+PASS	CONV.utf8.002	149	
+
+PASS	CONV.utf8.003	156	
+
+PASS	CONV.utf8.004	151	
+
+PASS	CONV.utf8.005	140	
+
+PASS	CONV.utf8.006	142	
+
+NOTINUSE	CONV.utf8.007	37	wide characters are not documented as Unicode code points (__STDC_ISO_10646__ is not defined)
+
+NOTINUSE	CONV.utf8.008	38	wide characters are not documented as Unicode code points (__STDC_ISO_10646__ is not defined)
+
+NOTINUSE	CONV.xdg.001	39	XDG_RUNTIME_DIR is not set in the environment the suite was started from
+
+NOTINUSE	CONV.xdg.002	37	XDG_RUNTIME_DIR is not set in the environment the suite was started from
+
+PASS	CONV.xdg.003	53	
+
+PASS	CONV.xdg.004	41	
+
+# finished 2026-10-30T07:22:51Z
+
+# SUMMARY total 70 PASS 58 FAIL 1 INSPECT 5 UNRESOLVED 0 NOTINUSE 5 UNSUPPORTED 1 UNINITIATED 0
