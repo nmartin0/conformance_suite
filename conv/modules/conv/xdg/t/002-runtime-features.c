@@ -5,6 +5,11 @@
  * ASSERTION CONV.xdg.002
  * MUTANT link.noop
  */
+/*
+ * symlink() and fchmod() are also declared by the older XSI feature level, which some
+ * systems still need to see them; the check is about the directory, not the headers.
+ */
+#define _XOPEN_SOURCE 700
 #include <sys/mman.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
