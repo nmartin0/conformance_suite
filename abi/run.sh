@@ -77,6 +77,16 @@ while [ "$i" -le "$n" ]; do
 	i=$((i + 1))
 done
 
+# A system that cannot build or run programs for ARCH has nothing to check:
+# say so and stop, instead of letting the driver abort on its own compiler probe.
+printf 'int main(void) { return 0; }\n' >"$tmp/probe.c"
+if ! "$tmp/cc" -o "$tmp/probe" "$tmp/probe.c" >"$tmp/probe.err" 2>&1 || ! "$tmp/probe" >/dev/null 2>&1; then
+	printf 'NOTINUSE    ABI.%s (every module): this system cannot build and run %s programs with %s %s\n' \
+	    "$arch" "$arch" "$base_cc" "$archflag"
+	printf 'SUMMARY total 0 PASS 0 FAIL 0 INSPECT 0 UNRESOLVED 0 NOTINUSE 0 UNSUPPORTED 0 UNINITIATED 0\n'
+	exit 0
+fi
+
 "$root/posixcheck.sh" --cc "$tmp/cc" --root "$abi_dir/modules" "$@"
 rc=$?
 exit "$rc"
