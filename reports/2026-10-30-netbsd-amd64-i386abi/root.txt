@@ -1,0 +1,253 @@
+# posixcheck 0.1.0
+
+# tree unknown
+
+# sysname NetBSD
+
+# nodename netbsd
+
+# release 11.0
+
+# version NetBSD 11.0 (GENERIC) #0: Thu Jul 30 15:23:12 UTC 2026  mkrepro@mkrepro.NetBSD.org:/usr/src/sys/arch/amd64/compile/GENERIC
+
+# machine i386
+
+# target netbsd
+
+# posix_version 200112
+
+# sh /bin/sh
+
+# cc /tmp/w/t/abi-run.cOtzsY/cc
+
+# ccflags -Werror=implicit-function-declaration
+
+# euid 0
+
+# profile none
+
+# started 2026-10-30T07:16:22Z
+
+# claim BASE - yes base
+
+# claim ADV _POSIX_ADVISORY_INFO no macro=undefined sysconf=- compile=no
+
+# claim CD _POSIX2_C_DEV no macro=undefined sysconf=- compile=no
+
+# claim CPT _POSIX_CPUTIME yes macro=200112 sysconf=- compile=yes
+
+# claim CRYPT _XOPEN_CRYPT no macro=undefined sysconf=- compile=no
+
+# claim DC _POSIX_DEVICE_CONTROL no macro=undefined sysconf=- compile=no
+
+# claim FR _POSIX2_FORT_RUN no macro=undefined sysconf=- compile=no
+
+# claim FSC _POSIX_FSYNC yes macro=1 sysconf=- compile=yes
+
+# claim IP6 _POSIX_IPV6 no macro=0 sysconf=no-name compile=yes
+
+# claim ML _POSIX_MEMLOCK yes macro=1 sysconf=- compile=yes
+
+# claim MLR _POSIX_MEMLOCK_RANGE yes macro=1 sysconf=- compile=yes
+
+# claim MSG _POSIX_MESSAGE_PASSING yes macro=200112 sysconf=- compile=yes
+
+# claim PIO _POSIX_PRIORITIZED_IO no macro=-1 sysconf=- compile=no
+
+# claim PS _POSIX_PRIORITY_SCHEDULING yes macro=200112 sysconf=- compile=yes
+
+# claim RPI _POSIX_THREAD_ROBUST_PRIO_INHERIT no macro=undefined sysconf=- compile=no
+
+# claim RPP _POSIX_THREAD_ROBUST_PRIO_PROTECT no macro=undefined sysconf=- compile=no
+
+# claim RS _POSIX_RAW_SOCKETS yes macro=200112 sysconf=- compile=yes
+
+# claim SD _POSIX2_SW_DEV no macro=undefined sysconf=- compile=no
+
+# claim SHM _POSIX_SHARED_MEMORY_OBJECTS no macro=0 sysconf=0 compile=yes
+
+# claim SIO _POSIX_SYNCHRONIZED_IO yes macro=1 sysconf=- compile=yes
+
+# claim SPN _POSIX_SPAWN yes macro=200809 sysconf=- compile=yes
+
+# claim SS _POSIX_SPORADIC_SERVER no macro=undefined sysconf=- compile=no
+
+# claim TCT _POSIX_THREAD_CPUTIME yes macro=200112 sysconf=- compile=yes
+
+# claim TPI _POSIX_THREAD_PRIO_INHERIT no macro=undefined sysconf=- compile=no
+
+# claim TPP _POSIX_THREAD_PRIO_PROTECT yes macro=200112 sysconf=- compile=yes
+
+# claim TPS _POSIX_THREAD_PRIORITY_SCHEDULING no macro=undefined sysconf=- compile=no
+
+# claim TSA _POSIX_THREAD_ATTR_STACKADDR yes macro=200112 sysconf=- compile=yes
+
+# claim TSH _POSIX_THREAD_PROCESS_SHARED no macro=undefined sysconf=- compile=no
+
+# claim TSP _POSIX_THREAD_SPORADIC_SERVER no macro=undefined sysconf=- compile=no
+
+# claim TSS _POSIX_THREAD_ATTR_STACKSIZE yes macro=200112 sysconf=- compile=yes
+
+# claim TYM _POSIX_TYPED_MEMORY_OBJECTS no macro=undefined sysconf=- compile=no
+
+# claim UP _POSIX2_UPE no macro=undefined sysconf=- compile=no
+
+# claim UU _XOPEN_UUCP no macro=undefined sysconf=- compile=no
+
+# claim XSI _XOPEN_UNIX no macro=undefined sysconf=- compile=no
+
+PASS	ABI.i386.calling.001	40	
+
+PASS	ABI.i386.calling.002	41	
+
+PASS	ABI.i386.calling.003	40	
+
+PASS	ABI.i386.calling.004	45	
+
+PASS	ABI.i386.calling.005	44	
+
+PASS	ABI.i386.calling.006	66	
+
+PASS	ABI.i386.calling.007	49	
+
+PASS	ABI.i386.calling.008	44	
+
+PASS	ABI.i386.calling.009	40	
+
+PASS	ABI.i386.calling.010	45	
+
+PASS	ABI.i386.calling.011	40	
+
+PASS	ABI.i386.calling.012	47	
+
+PASS	ABI.i386.calling.013	42	
+
+PASS	ABI.i386.calling.014	42	
+
+PASS	ABI.i386.calling.015	45	
+
+PASS	ABI.i386.calling.016	42	
+
+PASS	ABI.i386.calling.017	42	
+
+PASS	ABI.i386.calling.018	43	
+
+PASS	ABI.i386.calling.019	76	
+
+PASS	ABI.i386.calling.020	44	
+
+PASS	ABI.i386.calling.021	44	
+
+PASS	ABI.i386.calling.022	41	
+
+PASS	ABI.i386.calling.023	43	
+
+PASS	ABI.i386.calling.024	43	
+
+PASS	ABI.i386.calling.025	43	
+
+PASS	ABI.i386.calling.026	43	
+
+PASS	ABI.i386.calling.027	49	
+
+PASS	ABI.i386.entry.001	40	
+
+PASS	ABI.i386.entry.002	55	
+
+PASS	ABI.i386.entry.003	44	
+
+PASS	ABI.i386.entry.004	40	
+
+FAIL	ABI.i386.entry.005	39	AT_GID is 4294258688, getgid() says 0
+
+PASS	ABI.i386.entry.006	62	
+
+PASS	ABI.i386.entry.007	41	
+
+PASS	ABI.i386.entry.008	42	
+
+PASS	ABI.i386.entry.009	39	
+
+PASS	ABI.i386.entry.010	49	
+
+PASS	ABI.i386.entry.011	64	
+
+PASS	ABI.i386.entry.012	44	
+
+UNTESTED	ABI.i386.entry.013	0	untestable: The text says the content of EBP at process entry is unspecified and asks the user code to set the frame pointer to zero to mark the deepest frame. That places a duty on the program's own start-up code, not a promise by the system, so there is no system behaviour to assert; whatever EBP holds can be seen but no value is right or wrong. A walk of the saved frame pointers is not a check either, since compiled code need not keep a frame pointer.
+
+PASS	ABI.i386.entry.014	40	
+
+PASS	ABI.i386.entry.015	44	
+
+INSPECT	ABI.i386.signals.001	50	disputed (see the assertion's note): the signal handler: ESP + 4 was not a multiple of 16 at entry (low bits seen: 0x8, last ESP 0xfff82dc4)
+
+INSPECT	ABI.i386.signals.002	148	disputed (see the assertion's note): the signal handler: ESP + 4 was not a multiple of 16 at entry (low bits seen: 0x8, last ESP 0xfffccc74)
+
+PASS	ABI.i386.signals.003	162	
+
+PASS	ABI.i386.signals.004	64	
+
+PASS	ABI.i386.signals.005	643	
+
+PASS	ABI.i386.signals.006	98	
+
+PASS	ABI.i386.signals.007	216	
+
+PASS	ABI.i386.threads.001	47	
+
+PASS	ABI.i386.threads.002	47	
+
+PASS	ABI.i386.threads.003	46	
+
+PASS	ABI.i386.threads.004	52	
+
+PASS	ABI.i386.threads.005	68	
+
+PASS	ABI.i386.threads.006	49	
+
+PASS	ABI.i386.threads.007	58	
+
+PASS	ABI.i386.tls.001	49	
+
+PASS	ABI.i386.tls.002	59	
+
+PASS	ABI.i386.tls.003	54	
+
+PASS	ABI.i386.tls.004	48	
+
+PASS	ABI.i386.types.001	44	
+
+PASS	ABI.i386.types.002	42	
+
+PASS	ABI.i386.types.003	59	
+
+PASS	ABI.i386.types.004	45	
+
+PASS	ABI.i386.types.005	40	
+
+PASS	ABI.i386.types.006	39	
+
+PASS	ABI.i386.types.007	41	
+
+FAIL	ABI.i386.types.008	0	does not compile: static assertion failed: "the alignment of max_align_t must be 16"
+
+PASS	ABI.i386.types.009	44	
+
+PASS	ABI.i386.types.010	39	
+
+PASS	ABI.i386.types.011	40	
+
+PASS	ABI.i386.types.012	40	
+
+PASS	ABI.i386.types.013	40	
+
+PASS	ABI.i386.types.014	41	
+
+PASS	ABI.i386.types.015	41	
+
+PASS	ABI.i386.types.016	43	
+
+# finished 2026-10-30T07:18:42Z
+
+# SUMMARY total 76 PASS 71 FAIL 2 INSPECT 2 UNRESOLVED 0 NOTINUSE 0 UNSUPPORTED 0 UNINITIATED 0
