@@ -8,4 +8,7 @@ since      1988
 says       With a set made by sigemptyset() and sigaddset(SIGUSR2),
            sigismember() returns exactly 1 for SIGUSR2 and exactly 0 for
            SIGUSR1 and SIGRTMIN; on a full set it returns 1 for SIGUSR1.
+note       Where <signal.h> lacks SIGRTMIN (reported by XBD.signal.h.006),
+           that one non-member is skipped with a note, so that the sets'
+           own tests are not blocked by a build failure here.
 test       t/001-one-or-zero.c

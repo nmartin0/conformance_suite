@@ -15,6 +15,6 @@ printf 'a\n\n\n\nb\n' >in
 printf 'a\n\nb\n' >want
 pc_test
 MORE=-s; export MORE
-more in </dev/null >out 2>err || pc_fail "more with MORE=-s: nonzero status"
+more in </dev/null >out 2>err || pc_fail "more with MORE=-s: nonzero status: $(sed 1q err)"
 cmp want out >/dev/null 2>&1 || pc_fail "MORE=-s did not squeeze: $(cat out)"
 pc_pass

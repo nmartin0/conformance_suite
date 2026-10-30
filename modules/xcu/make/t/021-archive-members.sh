@@ -21,7 +21,7 @@ f.o:
 	printf 'x' > f.o
 EOM
 pc_test
-make -s lib.a >o 2>err </dev/null || pc_fail "make lib.a: nonzero status"
+make -s lib.a >o 2>err </dev/null || pc_fail "make lib.a: nonzero status: $(sed 1q err)"
 [ "$(sed -n 1p o)" = 'M lib.a f.o' ] || pc_fail "\$@ and \$% gave '$(sed -n 1p o)'"
 [ "$(ar -t lib.a </dev/null)" = f.o ] || pc_fail "the archive does not list f.o"
 pc_pass

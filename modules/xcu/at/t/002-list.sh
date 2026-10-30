@@ -47,9 +47,9 @@ nlist() {
 		n=$((n + 1))
 	done <"$d/l"
 }
-submit -t 203512091200 || pc_unresolved "setup: at could not submit a job (status $srcode) [stderr: $(tr '\n' ' ' <"$d/se" | head -c 160); stdout: $(tr '\n' ' ' <"$d/so" | head -c 80)]"
+submit -t 203512091200 || pc_unresolved "setup: at could not submit a job (status $srcode) [stderr: $(tr '\n' ' ' <"$d/se" | dd bs=160 count=1 2>/dev/null); stdout: $(tr '\n' ' ' <"$d/so" | dd bs=80 count=1 2>/dev/null)]"
 a=$jid
-submit -t 203512101300 || pc_unresolved "setup: at could not submit a second job (status $srcode) [stderr: $(tr '\n' ' ' <"$d/se" | head -c 160); stdout: $(tr '\n' ' ' <"$d/so" | head -c 80)]"
+submit -t 203512101300 || pc_unresolved "setup: at could not submit a second job (status $srcode) [stderr: $(tr '\n' ' ' <"$d/se" | dd bs=160 count=1 2>/dev/null); stdout: $(tr '\n' ' ' <"$d/so" | dd bs=80 count=1 2>/dev/null)]"
 b=$jid
 pc_test
 at -l >"$d/l" 2>/dev/null </dev/null || pc_fail "at -l failed"

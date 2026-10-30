@@ -13,6 +13,19 @@
  */
 #include "pcth.h"
 
+#include <unistd.h>
+#ifdef __STDC_NO_THREADS__
+int main(void)
+{
+	pc_begin("XSH.2.9-threads.005");
+#ifdef _POSIX_SUBPROFILE
+	pc_notinuse("<threads.h> is not provided (a subprofile implementation may define __STDC_NO_THREADS__)");
+#else
+	pc_test();
+	pc_fail("__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined");
+#endif
+}
+#else
 #include <threads.h>
 
 #define NT 4
@@ -133,3 +146,4 @@ int main(void)
 	pc_check(readers_saw_writer == 0, "pthread_rwlock_t: a reader held the lock while a writer was inside");
 	pc_pass();
 }
+#endif

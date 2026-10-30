@@ -5,9 +5,10 @@
 . "$PC_CORE/pc.sh"
 pc_begin XCU.du.008
 mkdir bigdir d || pc_fail "cannot create directories"
+pcl=000000000000000000000000000000000000000000000000000000000000000
 i=0
 while [ "$i" -lt 9375 ]; do
-	printf '%063d\n' "$i"
+	echo "$pcl"
 	i=$((i + 1))
 done >bigdir/big || pc_fail "cannot create bigdir/big"
 ln -s bigdir lbig || pc_fail "cannot create operand link"

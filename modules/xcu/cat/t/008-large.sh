@@ -19,7 +19,7 @@ slurp() {
 
 i=0
 while [ "$i" -lt 3000 ]; do
-	printf 'line %05d of the big file\n' "$i"
+	echo "line $i of the big file"
 	i=$((i + 1))
 done >big || pc_fail "cannot create big"
 pc_test

@@ -9,6 +9,7 @@
 #include "pc.h"
 #include <errno.h>
 #include <pthread.h>
+#include <signal.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -54,6 +55,30 @@ static void sleep_ms(long ms)
 		;
 }
 
+
+/* A stall must give a verdict, not a driver timeout: where it stalled says which. */
+static volatile int stage;	/* 1 set-up, 2 cancel requested: the thread must end, 3 later steps */
+
+static void on_stall(int sig)
+{
+	(void)sig;
+	if (stage == 2)
+		pc_fail("the thread blocked in %s was not canceled within 20 s of the request", "read() in an init_routine");
+	pc_unresolved("the test stalled for 20 s at step %d (not the cancellation)", (int)stage);
+}
+
+static void arm(int st)
+{
+	struct sigaction sa;
+
+	stage = st;
+	sa.sa_handler = on_stall;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	(void)sigaction(SIGALRM, &sa, NULL);
+	(void)alarm(20);
+}
+
 static pthread_once_t once = PTHREAD_ONCE_INIT;
 static int p[2], entered, second;
 
@@ -88,6 +113,7 @@ int main(void)
 	pc_begin("XSH.pthread_once.003");
 	pc_check(pipe(p) == 0, "pipe failed: %s", pc_errname(errno));
 	pc_test();
+	arm(1);
 	r = pthread_create(&t, NULL, start, NULL);
 	if (r != 0)
 		pc_unresolved("pthread_create failed: %s", pc_errname(r));
@@ -95,10 +121,13 @@ int main(void)
 	sleep_ms(100);
 	if (pthread_cancel(t) != 0)
 		pc_unresolved("pthread_cancel failed");
+	arm(2);
 	if (pthread_join(t, &v) != 0 || v != PTHREAD_CANCELED)
 		pc_unresolved("the thread in init_routine did not end canceled");
+	arm(3);
 	r = pthread_once(&once, second_init);
 	pc_check(r == 0, "pthread_once after the canceled init_routine returned %s", pc_errname(r));
+	(void)alarm(0);
 	pc_check(peek(&second) == 1, "pthread_once after the canceled init_routine did not call its init_routine");
 	pc_pass();
 }

@@ -49,5 +49,8 @@ mailx -n -f in.mbox </dev/null >o1 2>err || pc_fail "mailx: nonzero status"
 [ -s o1 ] || pc_fail "no opening message was written by default"
 MAILRC=$(pwd)/rc2; export MAILRC
 mailx -n -f in.mbox </dev/null >o2 2>err || pc_fail "mailx (quiet): nonzero status"
-[ -s o2 ] && pc_fail "with quiet set something was still written: $(cat o2)"
+# a line giving the name and state of the mailbox is not the version banner
+# the variable names; it may stay (Q-216)
+grep -v 'in\.mbox' o2 >o2b
+[ -s o2b ] && pc_fail "with quiet set something was still written: $(cat o2)"
 pc_pass

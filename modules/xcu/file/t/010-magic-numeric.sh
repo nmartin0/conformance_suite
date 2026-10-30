@@ -12,7 +12,7 @@ file -m magic f1 >out 2>err </dev/null
 l=$(cat out)
 case $l in
 "f1: "*byteA*) ;;
-*) pc_fail "matching file: $l" ;;
+*) pc_fail "matching file: $l $(cat err)" ;;
 esac
 file -m magic f2 >out 2>err </dev/null
 l=$(cat out)

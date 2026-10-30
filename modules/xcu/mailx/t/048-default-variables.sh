@@ -44,7 +44,9 @@ has() { sect "$1" | grep -F -e "$2" >/dev/null; }
 mkcmd() { printf 'set noprompt\n'; for l in "$@"; do printf '%s\n' "$l"; done; }
 mkcmd 'echo @@a@@' 'set' >cmds
 pc_test
-mailx -n -N -f in.mbox <cmds >out 2>err || pc_fail "mailx: nonzero status"
+# no -N here: whether -N also unsets the header variable is not stated, and
+# the header summary it would suppress comes before the first marker anyway
+mailx -n -f in.mbox <cmds >out 2>err || pc_fail "mailx: nonzero status"
 for v in header save asksub; do
 	sect a | grep -w "$v" >/dev/null || pc_fail "the default-set variable $v is not listed by set: $(sect a)"
 done

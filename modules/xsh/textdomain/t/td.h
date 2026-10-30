@@ -1,5 +1,6 @@
 /*
- * td.h - shared includes for the text domain tests.
+ * td.h - shared includes for the text domain tests. A test that needs
+ * <iconv.h> and td_codesets() defines TD_ICONV before including this file.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  */
 #ifndef TD_H
@@ -7,7 +8,9 @@
 
 #include "pc.h"
 #include <errno.h>
+#ifdef TD_ICONV
 #include <iconv.h>
+#endif
 #include <langinfo.h>
 #include <libintl.h>
 #include <limits.h>
@@ -27,6 +30,7 @@ static inline const char *td_cwd(void)
 	return cwd;
 }
 
+#ifdef TD_ICONV
 /*
  * Code set names that bind_textdomain_codeset() may be given: the first
  * one that iconv_open() accepts as a target. Returns how many of the
@@ -53,5 +57,6 @@ static inline int td_codesets(const char **out)
 	}
 	return n;
 }
+#endif
 
 #endif

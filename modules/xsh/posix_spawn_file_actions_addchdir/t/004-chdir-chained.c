@@ -57,7 +57,7 @@ static void say(const char *fmt, ...)
  * FD_CLOEXEC, access mode); read (reads from the descriptor given); write;
  * cwd (device and serial number of "."); sig (each argument a signal:
  * blocked, and the action i, d or h); grp (process group and process ID);
- * sched (policy and priority); hold (reports, waits for end of file on the
+ * hold (reports, waits for end of file on the
  * descriptor given); after (waits for one byte on the descriptor given,
  * then runs the mode that follows).
  */
@@ -110,12 +110,6 @@ static void image(const char *mode, int n, char **a)
 		}
 	} else if (strcmp(mode, "grp") == 0) {
 		say("[G:%ld:%ld]", (long)getpgrp(), (long)getpid());
-	} else if (strcmp(mode, "sched") == 0) {
-		struct sched_param sp;
-
-		memset(&sp, 0, sizeof sp);
-		(void)sched_getparam(0, &sp);
-		say("[S:%d:%d]", sched_getscheduler(0), sp.sched_priority);
 	} else if (strcmp(mode, "hold") == 0 && n >= 1) {
 		char b[16];
 

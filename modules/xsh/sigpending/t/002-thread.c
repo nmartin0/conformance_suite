@@ -165,7 +165,7 @@ static void *other(void *arg)
 int main(void)
 {
 	sigset_t both = set_of(SIGUSR1, SIGUSR2, 0), p;
-	struct timespec zero = { 0, 0 }, ts = { 0, 10000000 };
+	struct timespec ts = { 0, 10000000 };
 
 	pc_begin("XSH.sigpending.002");
 	pc_check(pthread_sigmask(SIG_BLOCK, &both, NULL) == 0, "pthread_sigmask failed");
@@ -182,6 +182,8 @@ int main(void)
 	pc_check(sigismember(&p, SIGUSR2) == 1, "the process-directed signal is not in this thread's set");
 	pc_check(t2_has_thread, "the signal sent to the thread is not in its own set");
 	pc_check(t2_has_proc, "the process-directed signal is not in the other thread's set");
-	(void)sigtimedwait(&both, NULL, &zero);
+	/* Discard what is still pending (an ignored signal's pending instance is discarded). */
+	(void)signal(SIGUSR1, SIG_IGN);
+	(void)signal(SIGUSR2, SIG_IGN);
 	pc_pass();
 }

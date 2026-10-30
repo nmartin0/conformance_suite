@@ -14,7 +14,10 @@ pc_test
 } 2>shellerr
 [ "$rc" -eq 0 ] || pc_fail "jobs exited $rc"
 IFS= read -r line <out
-case $line in
+lines=$(printf '%s\n' "$line" | tr -s ' ')
+# a state padded to a column (more than one blank before the command) is
+# accepted (Q-215)
+case $lines in
 "["[0-9]*"] + Done(3) "*) ;;
 *)
 	if [ -z "$line" ]; then

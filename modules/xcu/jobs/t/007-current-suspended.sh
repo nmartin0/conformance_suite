@@ -7,6 +7,10 @@ pc_begin XCU.jobs.007
 p= q=
 trap 'kill -s KILL "$p" "$q" 2>/dev/null' EXIT
 set -m || pc_fail "set -m is not accepted"
+case $- in
+*m*) ;;
+*) pc_unresolved "job control could not be turned on (the shell has no controlling terminal?)" ;;
+esac
 pc_test
 sleep 101 &
 p=$!

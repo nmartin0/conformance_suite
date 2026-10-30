@@ -14,6 +14,6 @@ mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 printf '.POSIX:\nall:\n\t@echo "[$(Y)] [$(Z)] [$(X)]"\n' >makefile || pc_unresolved "setup: cannot write the makefile"
 pc_test
-make X=a Y='$(X)' Z::='$(X)' X=b >o 2>err </dev/null || pc_fail "make: nonzero status"
+make X=a Y='$(X)' Z::='$(X)' X=b >o 2>err </dev/null || pc_fail "make: nonzero status: $(sed 1q err)"
 grep -Fx '[b] [a] [b]' o >/dev/null || pc_fail "macro operands: $(cat o)"
 pc_pass

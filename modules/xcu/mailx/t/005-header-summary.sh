@@ -72,7 +72,7 @@ has f carol && pc_fail "headers shows the deleted message"
 has f alice || pc_fail "headers lost message 1"
 has f dave || pc_fail "headers lost message 3"
 # -H writes only the summary
-mailx -n -H -f in.mbox </dev/null >hout 2>err || pc_fail "mailx -H: nonzero status"
+mailx -n -H -f in.mbox </dev/null >hout 2>err || pc_fail "mailx -H: nonzero status: $(sed 1q err)"
 for n in alice carol dave; do
 	grep "$n" hout >/dev/null || pc_fail "-H: no line for $n"
 done

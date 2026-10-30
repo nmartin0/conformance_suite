@@ -20,7 +20,7 @@ exchk() {
 	printf '%b' "$4" >ec$n
 	ex -s fc$n <sc$n >oc$n 2>rc$n
 	r=$?
-	[ "$r" -eq 0 ] || pc_fail "$1: exit status $r: $(head -c 200 rc$n)"
+	[ "$r" -eq 0 ] || pc_fail "$1: exit status $r: $(dd bs=200 count=1 <rc$n 2>/dev/null)"
 	cmp -s fc$n ec$n || pc_fail "$1: the file holds '$(tr '\n' '|' <fc$n)', wanted '$(tr '\n' '|' <ec$n)'"
 }
 # exout LABEL INITIAL SCRIPT EXPECTED-OUTPUT : the script is followed by q!
@@ -31,7 +31,7 @@ exout() {
 	printf '%b' "$4" >eo$n
 	ex -s fo$n <so$n >oo$n 2>ro$n
 	r=$?
-	[ "$r" -eq 0 ] || pc_fail "$1: exit status $r: $(head -c 200 ro$n)"
+	[ "$r" -eq 0 ] || pc_fail "$1: exit status $r: $(dd bs=200 count=1 <ro$n 2>/dev/null)"
 	cmp -s oo$n eo$n || pc_fail "$1: the output is '$(tr '\n' '|' <oo$n)', wanted '$(tr '\n' '|' <eo$n)'"
 }
 # excl LABEL INITIAL SCRIPT LINE : the line number of the current line after the script
@@ -41,7 +41,7 @@ excl() {
 	printf 'set noap\n%s\n.=\nq!\n' "$3" >sl$n
 	ex -s fl$n <sl$n >ol$n 2>rl$n
 	r=$?
-	[ "$r" -eq 0 ] || pc_fail "$1: exit status $r: $(head -c 200 rl$n)"
+	[ "$r" -eq 0 ] || pc_fail "$1: exit status $r: $(dd bs=200 count=1 <rl$n 2>/dev/null)"
 	got=$(tail -n 1 ol$n)
 	[ "$got" = "$4" ] || pc_fail "$1: the current line is '$got', wanted '$4'"
 }

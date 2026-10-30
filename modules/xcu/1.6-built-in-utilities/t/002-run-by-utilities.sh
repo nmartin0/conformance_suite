@@ -12,13 +12,13 @@ trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 pc_test
 t1() {
 	lab=$1; exp=$2; shift 2
-	"$@" >out 2>err </dev/null || pc_fail "$lab: failed: $(head -c 200 err)"
+	"$@" >out 2>err </dev/null || pc_fail "$lab: failed: $(dd bs=200 count=1 <err 2>/dev/null)"
 	[ "$(cat out)" = "$exp" ] || pc_fail "$lab: printed '$(cat out)', wanted '$exp'"
 }
 all() {
 	v=$1; exp=$2; shift 2
 	t1 "env $*" "$exp" env "$@" "$v"
-	printf '%s\n' "$v" | xargs "$@" >out 2>err || pc_fail "xargs $*: failed: $(head -c 200 err)"
+	printf '%s\n' "$v" | xargs "$@" >out 2>err || pc_fail "xargs $*: failed: $(dd bs=200 count=1 <err 2>/dev/null)"
 	[ "$(cat out)" = "$exp" ] || pc_fail "xargs $*: printed '$(cat out)', wanted '$exp'"
 	t1 "find $*" "$exp" find . -prune -exec "$@" "$v" ';'
 	for w in nohup nice time; do

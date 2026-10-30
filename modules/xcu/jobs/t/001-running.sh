@@ -17,7 +17,10 @@ rc=$?
 	IFS= read -r l1
 	IFS= read -r l2
 } <out
-case $l1 in
+l1s=$(printf '%s\n' "$l1" | tr -s ' ')
+# a state padded to a column (more than one blank before the command) is
+# accepted (Q-215)
+case $l1s in
 "["[0-9]*"] + Running sleep 101"*) ;;
 *) pc_fail "jobs wrote '$l1', wanted a line [n] + Running sleep 101" ;;
 esac

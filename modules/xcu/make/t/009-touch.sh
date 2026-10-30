@@ -24,7 +24,7 @@ touch -t 200001010000 target1 || pc_unresolved "setup: touch failed"
 touch -t 200101010000 src || pc_unresolved "setup: touch failed"
 touch -t 200101010000 ref || pc_unresolved "setup: touch failed"
 pc_test
-make -t target1 >o 2>err </dev/null || pc_fail "make -t: nonzero status"
+make -t target1 >o 2>err </dev/null || pc_fail "make -t: nonzero status: $(sed 1q err)"
 [ "$(cat target1)" = orig ] || pc_fail "-t ran the commands"
 new=$(find target1 -newer ref -print)
 [ -n "$new" ] || pc_fail "-t did not update the modification time"

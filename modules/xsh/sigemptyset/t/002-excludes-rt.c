@@ -123,6 +123,9 @@ static const char *const table_name[] = {
 int main(void)
 {
 	pc_begin("XSH.sigemptyset.002");
+#if !defined(SIGRTMIN) || !defined(SIGRTMAX)
+	pc_unresolved("<signal.h> does not define SIGRTMIN and SIGRTMAX");
+#else
 	{
 		sigset_t s;
 		int i;
@@ -133,5 +136,6 @@ int main(void)
 		for (i = SIGRTMIN; i <= SIGRTMAX; i++)
 			pc_check(sigismember(&s, i) == 0, "SIGRTMIN+%d is still in the emptied set", i - SIGRTMIN);
 	}
+#endif
 	pc_pass();
 }

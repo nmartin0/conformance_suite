@@ -20,6 +20,7 @@ says       In a directory with S_ISVTX set that a process owns and can
            0755 directory owned by another user), can unlink() a file,
            rename() a file within the directory, and rmdir() the empty
            directory.
+note       Gated on XSI: section 4.5 is not shaded but the bit it governs is XSI (Q-214).
 needs      root
 test       t/001-dir-owner.c
 
@@ -31,5 +32,6 @@ says       In a directory with S_ISVTX set, owned by one user and writable
            by all, a process with appropriate privileges can unlink() and
            rename() files and rmdir() a directory that belong to another
            user.
+note       Gated on XSI: section 4.5 is not shaded but the bit it governs is XSI (Q-214).
 needs      root
 test       t/002-privileged.c

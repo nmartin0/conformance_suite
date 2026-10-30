@@ -23,7 +23,7 @@ r:
 	+@echo r-ran
 EOM
 pc_test
-make -t p q r >o 2>err </dev/null || pc_fail "make -t: nonzero status"
+make -t p q r >o 2>err </dev/null || pc_fail "make -t: nonzero status: $(sed 1q err)"
 [ -e p ] && pc_fail "-t touched the phony target"
 [ -e q ] || pc_fail "-t did not touch the ordinary target"
 grep -e p-ran -e q-ran o >/dev/null && pc_fail "-t ran a command without a + prefix"

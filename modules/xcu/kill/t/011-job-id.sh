@@ -10,6 +10,7 @@ set -m || pc_fail "set -m is not accepted"
 pc_test
 sleep 100 &
 p=$!
+sleep 1
 kill '%%' 2>/dev/null || pc_fail "kill %% failed"
 wait "$p"
 st=$?

@@ -13,7 +13,6 @@
 
 #include "pc.h"
 #include <errno.h>
-#include <iconv.h>
 #include <langinfo.h>
 #include <libintl.h>
 #include <limits.h>

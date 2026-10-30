@@ -18,7 +18,7 @@ got=$(sed -n '$p' f1 f2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "ab${NL}rc=0" ] || pc_fail "\$ did not mean the last line of the last file"
 got=$(sed 1q f1 f2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "abc${NL}rc=0" ] || pc_fail "q did not end processing after line 1"
-got=$(sed -n '1{p;q}' f1 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+got=$(sed -n '1{p;q;}' f1 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "abc${NL}rc=0" ] || pc_fail "p;q in braces failed"
 got=$(sed '1{a\
 Q

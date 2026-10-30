@@ -17,10 +17,10 @@ pc_pty_need
 # ish INPUT [ENV=VAL...]: run an interactive shell on a terminal with INPUT typed; output in pty.out
 ish() {
 	ish_in=$1; shift
-	"$PC_PTY" -t 25 -d 400 -i "$ish_in" -o pty.out -- env HISTFILE="$PWD/pc.hist" ENV= PS1='PCP> ' "$@" \
+	"$PC_PTY" -c -r -t 25 -d 400 -i "$ish_in" -o pty.out -- env HISTFILE="$PWD/pc.hist" ENV= PS1='PCP> ' "$@" \
 	    "${PC_SH:-sh}" -c 'stty erase "^H" kill "^U" werase "^W" intr "^C" eof "^D" susp "^Z" 2>/dev/null; exec "$0" -i' "${PC_SH:-sh}"
 	ish_rc=$?
-	[ "$ish_rc" -ne 125 ] || pc_unresolved "cannot set up a pseudo-terminal"
+	[ "$ish_rc" -ne 125 ] || pc_unresolved "cannot set up a pseudo-terminal (or it did not become the controlling terminal)"
 	[ "$ish_rc" -ne 124 ] || pc_fail "the interactive shell did not finish"
 }
 # chk N TEXT: TEXT is a whole line of the output exactly N times

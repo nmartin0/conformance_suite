@@ -7,14 +7,18 @@ pc_begin XCU.wait.006
 p= q=
 trap 'kill -s KILL "$p" "$q" 2>/dev/null' EXIT
 pc_test
+# The page does not say how long a new background process takes before it acts
+# on a signal, so each one gets a moment to start its command first.
 sleep 100 &
 p=$!
+sleep 1
 kill -s KILL "$p"
 wait "$p"
 st1=$?
 p=
 sleep 100 &
 q=$!
+sleep 1
 kill -s TERM "$q"
 wait "$q"
 st2=$?

@@ -5,9 +5,10 @@
 . "$PC_CORE/pc.sh"
 pc_begin XCU.du.005
 mkdir d || pc_fail "cannot create d"
+pcl=000000000000000000000000000000000000000000000000000000000000000
 i=0
 while [ "$i" -lt 1600 ]; do
-	printf '%063d\n' "$i"
+	echo "$pcl"
 	i=$((i + 1))
 done >d/f || pc_fail "cannot create d/f"
 pc_test

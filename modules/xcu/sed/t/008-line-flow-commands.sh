@@ -26,6 +26,6 @@ got=$(sed -n 'N;N;P;D' in5 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "a${NL}b${NL}rc=0" ] || pc_fail "D did not restart with the rest of the pattern space and without reading"
 got=$(sed '$!N;$!D' in4 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "3${NL}4${NL}rc=0" ] || pc_fail "the last-two-lines idiom with D failed"
-got=$(sed -n -e '$!{h;d}' -e 'x;G;p' in4 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+got=$(sed -n -e '$!{h;d;}' -e 'x;G;p' in4 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "3${NL}4${NL}rc=0" ] || pc_fail "braces with ! and d failed"
 pc_pass

@@ -16,7 +16,7 @@ printf 'f1a\nf1b\n' >f1
 printf 'f2a\n' >f2
 printf 'sa\nsb\nsc\n' >sin
 pc_test
-more <sin >o1 2>err || pc_fail "more from standard input: nonzero status"
+more <sin >o1 2>err || pc_fail "more from standard input: nonzero status: $(sed 1q err)"
 cmp sin o1 >/dev/null 2>&1 || pc_fail "standard input was not copied"
 more f1 f2 </dev/null >o2 2>err || pc_fail "more f1 f2: nonzero status"
 printf 'f1a\nf1b\nf2a\n' >e2

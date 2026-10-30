@@ -133,7 +133,12 @@ int main(void)
 		pc_test();
 		a = sigismember(&s, SIGUSR2);
 		b = sigismember(&s, SIGUSR1);
+#ifdef SIGRTMIN
 		c = sigismember(&s, SIGRTMIN);
+#else
+		c = 0;
+		pc_note("<signal.h> does not define SIGRTMIN; the real-time non-member is not checked here");
+#endif
 		d = sigismember(&f, SIGUSR1);
 		(void)c;
 		pc_check(a == 1, "sigismember() of a member gave %d, expected 1", a);

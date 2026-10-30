@@ -12,12 +12,16 @@
 assertion  XCU.jobs.001
 anchor     utilities/jobs.html#STDOUT
 anchor     utilities/jobs.html#DESCRIPTION
-class      conditional
+class      disputed
 when       UP
 since      1992
 says       jobs lists a running background job as one line made of [number],
            one space, + (the only job is the current job), one space,
            Running, one space, and the command.
+note       disputed (Q-215): the format has one blank between the state and
+           the command, while the historical layout pads the state to a
+           column; one or more blanks there are accepted here, and the rest
+           of the assertion is judged as usual.
 test       t/001-running.sh
 
 assertion  XCU.jobs.002
@@ -44,31 +48,43 @@ test       t/003-l.sh
 
 assertion  XCU.jobs.004
 anchor     utilities/jobs.html#STDOUT
-class      conditional
+class      disputed
 when       UP
 since      1992
 says       A background job that has ended with status zero is reported once
            as Done (with the same line layout) and is then removed from
            the list.
+note       disputed (Q-215): the format has one blank between the state and
+           the command, while the historical layout pads the state to a
+           column; one or more blanks there are accepted here, and the rest
+           of the assertion is judged as usual.
 test       t/004-done.sh
 
 assertion  XCU.jobs.005
 anchor     utilities/jobs.html#STDOUT
-class      conditional
+class      disputed
 when       UP
 since      1992
 says       A background job that has ended with a non-zero status n is
            reported as Done(n).
+note       disputed (Q-215): the format has one blank between the state and
+           the command, while the historical layout pads the state to a
+           column; one or more blanks there are accepted here, and the rest
+           of the assertion is judged as usual.
 test       t/005-done-code.sh
 
 assertion  XCU.jobs.006
 anchor     utilities/jobs.html#STDOUT
-class      conditional
+class      disputed
 when       UP
 since      1992
 says       A background job stopped by SIGTSTP is reported with the state
            Stopped (or Suspended, with or without the signal name in
            parentheses).
+note       disputed (Q-215): the format has one blank between the state and
+           the command, while the historical layout pads the state to a
+           column; one or more blanks there are accepted here, and the rest
+           of the assertion is judged as usual.
 test       t/006-stopped.sh
 
 assertion  XCU.jobs.007

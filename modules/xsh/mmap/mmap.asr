@@ -157,7 +157,9 @@ says       MAP_SHARED mappings of a file open for reading and writing
            PROT_READ|PROT_WRITE; PROT_READ mappings show the file, and a
            store through the PROT_WRITE one reaches the file.
 note       A PROT_WRITE mapping may also allow reads; the test does not
-           read it.
+           read it. The test calls msync(MS_SYNC) before it reads the file
+           with read(): without it the text promises no consistency between
+           a mapping and read() (see the msync() rationale).
 test       t/014-required-prot.c
 
 assertion  XSH.mmap.015

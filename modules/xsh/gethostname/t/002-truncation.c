@@ -1,5 +1,5 @@
 /*
- * gethostname() with a buffer one short of the name writes no more than namelen bytes, and they are a prefix of the name.
+ * gethostname() with a buffer one short of the name writes no more than namelen bytes, and they are a prefix of the name (or of the name with a null byte last).
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.gethostname.002
@@ -28,7 +28,12 @@ int main(void)
 	rc = gethostname(buf, n);
 	for (i = n; i < n + 16; i++)
 		pc_check((unsigned char)buf[i] == 0xA5, "byte %lu, past namelen, was written", (unsigned long)i);
-	/* The returned name is truncated, so its first namelen bytes are there whatever the return value. */
-	pc_check(memcmp(buf, full, n) == 0, "the %lu bytes written (return value %d) are not a prefix of the name", (unsigned long)n, rc);
+	/*
+	 * The returned name is truncated and may or may not be null-terminated: of
+	 * the namelen bytes, the first namelen-1 are the name's, and the last is
+	 * the next character of the name or the terminating null byte.
+	 */
+	pc_check(memcmp(buf, full, n - 1) == 0, "the first %lu bytes written (return value %d) are not a prefix of the name", (unsigned long)(n - 1), rc);
+	pc_check(buf[n - 1] == full[n - 1] || buf[n - 1] == '\0', "the last byte written (%d) is neither the next character of the name nor a null byte", (unsigned char)buf[n - 1]);
 	pc_pass();
 }

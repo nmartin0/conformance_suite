@@ -194,6 +194,8 @@ int main(void)
 		p = mmap(NULL, (size_t)pg, PROT_WRITE, MAP_SHARED, fd, (off_t)(2 * pg));
 		pc_check(p != MAP_FAILED, "mmap(PROT_WRITE) failed: %s", pc_errname(errno));
 		p[2] = '#';
+		/* Without msync() the text promises no consistency between a mapping and read(). */
+		NEED(msync(p, (size_t)pg, MS_SYNC) == 0, "msync failed: %s", pc_errname(errno));
 		NEED(munmap(p, (size_t)pg) == 0, "munmap failed: %s", pc_errname(errno));
 		NEED(get_bytes(fd, &b, 1, 2 * pg + 2) == 1, "cannot read the file");
 		pc_check(b == '#', "a store through the PROT_WRITE mapping did not reach the file (%#x)", b);

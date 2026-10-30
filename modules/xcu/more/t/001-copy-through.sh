@@ -18,7 +18,7 @@ while [ $i -le 120 ]; do
 	i=$((i + 1))
 done >in
 pc_test
-more in </dev/null >out 2>err || pc_fail "more: nonzero status"
+more in </dev/null >out 2>err || pc_fail "more: nonzero status: $(sed 1q err)"
 cmp in out >/dev/null 2>&1 || pc_fail "output differs from the input"
 more -c -e -i -u -n 3 in </dev/null >out2 2>err || pc_fail "more with options: nonzero status"
 cmp in out2 >/dev/null 2>&1 || pc_fail "options changed the copy"

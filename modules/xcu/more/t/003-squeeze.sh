@@ -14,8 +14,8 @@ trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 printf 'a\n\n\n\nb\n\nc\n\n\nd\n' >in
 printf 'a\n\nb\n\nc\n\nd\n' >want
 pc_test
-more -s in </dev/null >out 2>err || pc_fail "more -s: nonzero status"
+more -s in </dev/null >out 2>err || pc_fail "more -s: nonzero status: $(sed 1q err)"
 cmp want out >/dev/null 2>&1 || pc_fail "-s output wrong: $(cat out)"
-more in </dev/null >plain 2>err || pc_fail "more: nonzero status"
+more in </dev/null >plain 2>err || pc_fail "more: nonzero status: $(sed 1q err)"
 cmp in plain >/dev/null 2>&1 || pc_fail "without -s the empty lines were not kept"
 pc_pass

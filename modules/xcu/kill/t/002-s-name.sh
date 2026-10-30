@@ -13,6 +13,7 @@ sleep 100 &
 q=$!
 sleep 100 &
 r=$!
+sleep 1
 kill -s term "$p" 2>/dev/null || pc_fail "kill -s term failed"
 kill -s KILL "$q" 2>/dev/null || pc_fail "kill -s KILL failed"
 kill -s Usr1 "$r" 2>/dev/null || pc_fail "kill -s Usr1 failed"
@@ -32,6 +33,7 @@ sleep 100 &
 q=$!
 sleep 100 &
 r=$!
+sleep 1
 env kill -s term "$p" 2>/dev/null || pc_fail "env kill -s term failed"
 env kill -s KILL "$q" 2>/dev/null || pc_fail "env kill -s KILL failed"
 env kill -s Usr1 "$r" 2>/dev/null || pc_fail "env kill -s Usr1 failed"

@@ -43,10 +43,11 @@ pc_pty_term() {
 
 # pc_vi_run INPUT [VI-ARGS...]: run vi on the terminal typing the lines of
 # INPUT (one line per step, ESC written as \033 by printf); the status of vi
-# is left in pc_pty_rc. PCT must be set (pc_pty_term).
+# is left in pc_pty_rc. PCT must be set (pc_pty_term). The first line is typed
+# only after vi has drawn its screen and been quiet for a moment.
 pc_vi_run() {
 	pc_vi_in=$1; shift
-	"$PC_PTY" -t 15 -d 400 -i "$pc_vi_in" -o pty.out -- env "TERM=$PCT" \
+	"$PC_PTY" -r -t 15 -d 400 -i "$pc_vi_in" -o pty.out -- env "TERM=$PCT" \
 	    "${PC_SH:-sh}" -c 'stty rows 24 cols 80; exec vi "$@"' vi "$@"
 	pc_pty_rc=$?
 	[ "$pc_pty_rc" -ne 125 ] || pc_unresolved "cannot set up a pseudo-terminal (or, with -c, it did not become the controlling terminal)"

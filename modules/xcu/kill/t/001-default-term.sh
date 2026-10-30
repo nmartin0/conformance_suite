@@ -9,6 +9,7 @@ trap 'kill -s KILL "$p" 2>/dev/null' EXIT
 pc_test
 sleep 100 &
 p=$!
+sleep 1
 kill "$p" >out 2>/dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "kill exited $rc"
@@ -22,6 +23,7 @@ n=$(kill -l "$st")
 # an intrinsic that never reaches the utility)
 sleep 100 &
 p=$!
+sleep 1
 env kill "$p" >out 2>/dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "env kill exited $rc"

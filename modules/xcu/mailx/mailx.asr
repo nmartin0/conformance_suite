@@ -477,11 +477,15 @@ test       t/044-showto.sh
 
 assertion  XCU.mailx.045
 anchor     utilities/mailx.html#Internal Variables in mailx
-class      conditional
+class      disputed
 when       UP
 since      1992
 says       On entering Receive Mode mailx writes an opening message unless quiet
            is set.
+note       disputed (Q-216): quiet is said to refrain from writing the opening
+           message and version, which does not say whether a line that names
+           the mailbox and counts its messages is part of it; that line is
+           accepted here, and any other output with quiet set is not.
 test       t/045-quiet.sh
 
 assertion  XCU.mailx.046

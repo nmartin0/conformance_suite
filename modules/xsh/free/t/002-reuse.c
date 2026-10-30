@@ -16,6 +16,7 @@ int main(void)
 
 	pc_begin("XSH.free.002");
 	/* A cap makes a leaking free() show; the cap is best effort. */
+#ifdef RLIMIT_AS
 	if (getrlimit(RLIMIT_AS, &rl) == 0) {
 		rlim_t cap = (rlim_t)1 << 30;
 
@@ -24,6 +25,9 @@ int main(void)
 			(void)setrlimit(RLIMIT_AS, &rl);
 		}
 	}
+#else
+	(void)rl;
+#endif
 	pc_test();
 	for (i = 0; i < 4096; i++) {
 		char *p = malloc(1048576);

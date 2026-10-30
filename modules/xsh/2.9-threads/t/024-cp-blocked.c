@@ -21,6 +21,19 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <sys/wait.h>
+#include <unistd.h>
+#ifdef __STDC_NO_THREADS__
+int main(void)
+{
+	pc_begin("XSH.2.9-threads.024");
+#ifdef _POSIX_SUBPROFILE
+	pc_notinuse("<threads.h> is not provided (a subprofile implementation may define __STDC_NO_THREADS__)");
+#else
+	pc_test();
+	pc_fail("__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined");
+#endif
+}
+#else
 #include <threads.h>
 
 static volatile long sink;
@@ -191,3 +204,4 @@ int main(void)
 	pc_check(n == 0, "a thread blocked in a cancellation point was not canceled by a request in: %s", bad);
 	pc_pass();
 }
+#endif

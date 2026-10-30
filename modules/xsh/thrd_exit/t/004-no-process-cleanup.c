@@ -18,7 +18,12 @@
 int main(void)
 {
 	pc_begin("XSH.thrd_exit.004");
-	pc_notinuse("<threads.h> is not provided");
+#ifdef _POSIX_SUBPROFILE
+	pc_notinuse("<threads.h> is not provided (a subprofile implementation may define __STDC_NO_THREADS__)");
+#else
+	pc_test();
+	pc_fail("__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined");
+#endif
 }
 #else
 #include <threads.h>

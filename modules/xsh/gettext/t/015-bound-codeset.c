@@ -5,6 +5,7 @@
  * ASSERTION XSH.gettext.015
  */
 #include "gt.h"
+#include <iconv.h>
 
 int main(void)
 {

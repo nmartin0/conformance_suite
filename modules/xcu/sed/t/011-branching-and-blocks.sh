@@ -23,8 +23,8 @@ got=$(sed -n '/x/!p' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "a${NL}b${NL}rc=0" ] || pc_fail "! gave the wrong lines"
 got=$(sed -n '/x/ !p' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "a${NL}b${NL}rc=0" ] || pc_fail "a blank before ! was not accepted"
-got=$(sed -n '2,3{s/./Y/;p}' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+got=$(sed -n '2,3{s/./Y/;p;}' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "Y${NL}Y${NL}rc=0" ] || pc_fail "a braced group on a range gave the wrong result"
-got=$(sed -n '1,2!{p}' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+got=$(sed -n '1,2!{p;}' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "b${NL}rc=0" ] || pc_fail "! applied to a braced group gave the wrong result"
 pc_pass

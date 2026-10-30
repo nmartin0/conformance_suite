@@ -21,6 +21,7 @@ got=$(cat out; echo x)
 [ "$got" = "KILL${nl}x" ] || pc_fail "kill -l $st wrote something other than KILL and a newline"
 sleep 100 &
 q=$!
+sleep 1
 kill -s TERM "$q" || pc_fail "kill failed"
 wait "$q"
 st=$?

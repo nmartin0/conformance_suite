@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.textdomain.009
  */
+#define TD_ICONV 1
 #include "td.h"
 
 int main(void)

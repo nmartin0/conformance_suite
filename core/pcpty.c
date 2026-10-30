@@ -3,11 +3,16 @@
  *
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
- * usage: pcpty [-c] [-t SECS] [-i INPUT] [-d MS] -o OUTPUT -- CMD [ARG...]
+ * usage: pcpty [-c] [-r] [-t SECS] [-i INPUT] [-d MS] -o OUTPUT -- CMD [ARG...]
  *
- *   -c        give status 125 unless opening the subsidiary side made it
- *             the controlling terminal (how one is acquired is
+ *   -c        give status 125 unless the subsidiary side is the controlling
+ *             terminal of the command (opening it makes it one on some
+ *             systems; on others an ioctl request does, which is used when
+ *             the system header defines it; how one is acquired is
  *             implementation-defined)
+ *   -r        hold the first typed line back until the command has written
+ *             something and then been quiet for 300 ms (at most 5 s), so
+ *             that a program that is still starting up does not lose it
  *   -t SECS   kill the command's session after SECS seconds (default 20)
  *   -i INPUT  file whose bytes are typed at the terminal, one line at a
  *             time with -d milliseconds between lines (default 200), the
@@ -24,6 +29,7 @@
 #define _POSIX_C_SOURCE 202405L
 #define _XOPEN_SOURCE 800
 #include <sys/types.h>
+#include <sys/ioctl.h>
 #include <sys/wait.h>
 
 #include <errno.h>
@@ -52,13 +58,16 @@ int main(int argc, char **argv)
 	char *input = NULL;
 	size_t inlen = 0, inpos = 0;
 	int c, m, s, of, status = 0, done = 0, timed_out = 0, need_ctty = 0;
+	int want_ready = 0, seen_out = 0;
+	long last_out = 0;
 	char *sname;
 	pid_t pid;
 	long start, nextin;
 
-	while ((c = getopt(argc, argv, "ct:i:d:o:")) != -1) {
+	while ((c = getopt(argc, argv, "crt:i:d:o:")) != -1) {
 		switch (c) {
 		case 'c': need_ctty = 1; break;
+		case 'r': want_ready = 1; break;
 		case 't': secs = atol(optarg); break;
 		case 'i': inp = optarg; break;
 		case 'd': delay = atol(optarg); break;
@@ -102,6 +111,10 @@ int main(int argc, char **argv)
 		s = open(sname, O_RDWR);	/* becomes the controlling terminal */
 		if (s < 0)
 			_exit(125);
+#ifdef TIOCSCTTY
+		if (tcgetpgrp(s) != getpgrp())
+			(void)ioctl(s, TIOCSCTTY, 0);
+#endif
 		if (need_ctty && tcgetpgrp(s) != getpgrp())
 			_exit(125);
 		if (dup2(s, 0) < 0 || dup2(s, 1) < 0 || dup2(s, 2) < 0)
@@ -125,7 +138,10 @@ int main(int argc, char **argv)
 			kill(pid, SIGKILL);
 			break;
 		}
-		if (inpos < inlen && t >= nextin) {
+		if (want_ready && ((seen_out && t - last_out >= 300) ||
+		    t - start >= 5000))
+			want_ready = 0;
+		if (inpos < inlen && t >= nextin && !want_ready) {
 			size_t e = inpos;
 
 			while (e < inlen && input[e] != '\n')
@@ -142,8 +158,11 @@ int main(int argc, char **argv)
 		if (w > 0 && (pf.revents & POLLIN)) {
 			ssize_t n = read(m, buf, sizeof buf);
 
-			if (n > 0)
+			if (n > 0) {
 				(void)!write(of, buf, (size_t)n);
+				seen_out = 1;
+				last_out = now_ms();
+			}
 		}
 		if (waitpid(pid, &status, WNOHANG) == pid) {
 			/* drain what is left */

@@ -20,7 +20,7 @@ awk 'BEGIN {
 [ "$(wc -c <in | tr -d ' ')" = 6144 ] || pc_unresolved "input has an unexpected size"
 pc_test
 for c in "cat in" "sort in" "sed -n p in" "awk '{ print }' in" "cut -c 1-2047 in" "head -n 3 in" "tail -n 3 in" "uniq in" "grep -v zzz in" "tee tee.out <in" "paste in" "cat <in"; do
-	eval "$c" >out 2>err </dev/null || pc_fail "'$c' failed on long lines: $(head -c 100 err)"
+	eval "$c" >out 2>err </dev/null || pc_fail "'$c' failed on long lines: $(dd bs=100 count=1 <err 2>/dev/null)"
 	cmp -s in out || pc_fail "'$c' changed the long lines"
 done
 n=$(wc -l <in | tr -d ' ')

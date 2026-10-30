@@ -558,8 +558,9 @@ static void copy_self_tagged(const char *path, mode_t mode, const char *t4)
 			pc_unresolved("short read of %s", self);
 	}
 	(void)close(in);
-	memcpy(pat, "PCSPAWN-", 8);
-	memcpy(pat + 8, "TAG:ZZZZ", 8);
+	/* The tag as this program holds it (a use that keeps the array in the executable). */
+	for (i = 0; i < 16; i++)
+		pat[i] = tag[i];
 	for (i = 0; i + 16 <= len; i++)
 		if (memcmp(b + i, pat, 16) == 0) {
 			memcpy(b + i + 12, t4, 4);

@@ -50,8 +50,8 @@ nlist() {
 pc_test
 submit -t 203512091200
 rc=$?
-[ "$rc" -ne 1 ] || pc_unresolved "at refused the job (status $srcode): the user may not be allowed to use it [stderr: $(tr '\n' ' ' <"$d/se" | head -c 160); stdout: $(tr '\n' ' ' <"$d/so" | head -c 80)]"
-[ "$rc" -eq 0 ] || pc_fail "standard error has no line 'job ID at DATE' [stderr: $(tr '\n' ' ' <"$d/se" | head -c 160); stdout: $(tr '\n' ' ' <"$d/so" | head -c 80)]"
+[ "$rc" -ne 1 ] || pc_unresolved "at refused the job (status $srcode): the user may not be allowed to use it [stderr: $(tr '\n' ' ' <"$d/se" | dd bs=160 count=1 2>/dev/null); stdout: $(tr '\n' ' ' <"$d/so" | dd bs=80 count=1 2>/dev/null)]"
+[ "$rc" -eq 0 ] || pc_fail "standard error has no line 'job ID at DATE' [stderr: $(tr '\n' ' ' <"$d/se" | dd bs=160 count=1 2>/dev/null); stdout: $(tr '\n' ' ' <"$d/so" | dd bs=80 count=1 2>/dev/null)]"
 case $jid in
 '' | *[!A-Za-z0-9.]*) pc_fail "the job ID '$jid' has characters other than letters, digits and periods" ;;
 esac

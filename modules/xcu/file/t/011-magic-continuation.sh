@@ -13,7 +13,7 @@ file -m magic f1 >out 2>err </dev/null
 l=$(cat out)
 case $l in
 *first*third*) ;;
-*) pc_fail "ABC: $l" ;;
+*) pc_fail "ABC: $l $(cat err)" ;;
 esac
 file -m magic f2 >out 2>err </dev/null
 l=$(cat out)

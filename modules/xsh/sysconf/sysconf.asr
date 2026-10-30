@@ -172,6 +172,8 @@ when       XSI
 since      2001
 says       sysconf(_SC_PAGE_SIZE) and sysconf(_SC_PAGESIZE) return the same
            value, at least 1.
+note       Gated on XSI because <limits.h> shades {PAGE_SIZE} XSI while the
+           sysconf() table does not shade _SC_PAGE_SIZE (Q-213).
 test       t/012-page-size.c
 
 assertion  XSH.sysconf.013

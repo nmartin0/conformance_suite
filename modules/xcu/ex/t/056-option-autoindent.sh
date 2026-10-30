@@ -14,7 +14,7 @@ pc_pty_need
 pc_pty_term
 exrun() { # exrun INPUT ex-args...
 	in=$1; shift
-	"$PC_PTY" -t 25 -d 300 -i "$in" -o pty.out -- env "TERM=$PCT" "${PC_SH:-sh}" -c 'stty rows 24 cols 80; exec ex "$@"' ex "$@"
+	"$PC_PTY" -r -t 25 -d 300 -i "$in" -o pty.out -- env "TERM=$PCT" "${PC_SH:-sh}" -c 'stty rows 24 cols 80; exec ex "$@"' ex "$@"
 	rc=$?
 	[ "$rc" -ne 125 ] || pc_unresolved "cannot set up a pseudo-terminal"
 	[ "$rc" -ne 124 ] || pc_fail "ex did not finish"

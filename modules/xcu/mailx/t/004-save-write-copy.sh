@@ -47,7 +47,8 @@ s 2 saved.mbox
 w 3 written.txt
 c 1 copied.mbox
 s 1 saved.mbox
-s 3
+t 3
+s
 EOC
 pc_test
 mailx -n -N -f in.mbox <cmds >out 2>err || pc_fail "mailx: nonzero status"

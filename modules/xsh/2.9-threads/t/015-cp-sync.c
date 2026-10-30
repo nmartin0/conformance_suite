@@ -12,6 +12,19 @@
  * cancellation point) and, where timed, a limit 30 s ahead.
  */
 #include "pccp.h"
+#include <unistd.h>
+#ifdef __STDC_NO_THREADS__
+int main(void)
+{
+	pc_begin("XSH.2.9-threads.015");
+#ifdef _POSIX_SUBPROFILE
+	pc_notinuse("<threads.h> is not provided (a subprofile implementation may define __STDC_NO_THREADS__)");
+#else
+	pc_test();
+	pc_fail("__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined");
+#endif
+}
+#else
 #include <threads.h>
 
 static volatile long sink;
@@ -116,3 +129,4 @@ int main(void)
 	pc_check(n == 0, "with a cancellation request pending and cancelability enabled the thread was not canceled in: %s", bad);
 	pc_pass();
 }
+#endif

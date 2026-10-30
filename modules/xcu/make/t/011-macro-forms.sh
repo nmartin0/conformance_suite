@@ -32,7 +32,7 @@ all:
 	echo "B=$(B) C=$(C) D=$(D) E=$(E) F=$(F) G=$(G) H=$(H) I=$(I) J=[$(J)]"
 EOM
 pc_test
-make -s >o 2>err </dev/null || pc_fail "make: nonzero status"
+make -s >o 2>err </dev/null || pc_fail "make: nonzero status: $(sed 1q err)"
 want='B=2 C=1 D=1 E=shellvalue F=first G=one two H=a 2 I=a b J=[]'
 [ "$(cat o)" = "$want" ] || pc_fail "macro values are '$(cat o)', expected '$want'"
 pc_pass

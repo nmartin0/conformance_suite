@@ -52,8 +52,8 @@ chk() { # chk "expected date" ARGS...
 	shift
 	submit "$@"
 	rc=$?
-	[ "$rc" -ne 1 ] || pc_unresolved "at refused 'at $*' (status $srcode) [stderr: $(tr '\n' ' ' <"$d/se" | head -c 160); stdout: $(tr '\n' ' ' <"$d/so" | head -c 80)]"
-	[ "$rc" -eq 0 ] || pc_fail "at $*: no job line on standard error [stderr: $(tr '\n' ' ' <"$d/se" | head -c 160); stdout: $(tr '\n' ' ' <"$d/so" | head -c 80)]"
+	[ "$rc" -ne 1 ] || pc_unresolved "at refused 'at $*' (status $srcode) [stderr: $(tr '\n' ' ' <"$d/se" | dd bs=160 count=1 2>/dev/null); stdout: $(tr '\n' ' ' <"$d/so" | dd bs=80 count=1 2>/dev/null)]"
+	[ "$rc" -eq 0 ] || pc_fail "at $*: no job line on standard error [stderr: $(tr '\n' ' ' <"$d/se" | dd bs=160 count=1 2>/dev/null); stdout: $(tr '\n' ' ' <"$d/so" | dd bs=80 count=1 2>/dev/null)]"
 	[ "$jdate" = "$exp" ] || pc_fail "at $* scheduled '$jdate', expected '$exp'"
 }
 pc_test

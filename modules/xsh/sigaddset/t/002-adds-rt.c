@@ -124,6 +124,9 @@ static const char *const table_name[] = {
 int main(void)
 {
 	pc_begin("XSH.sigaddset.002");
+#if !defined(SIGRTMIN) || !defined(SIGRTMAX)
+	pc_unresolved("<signal.h> does not define SIGRTMIN and SIGRTMAX");
+#else
 	{
 		sigset_t s;
 
@@ -133,5 +136,6 @@ int main(void)
 		pc_check(sigismember(&s, SIGRTMIN) == 1 && sigismember(&s, SIGRTMAX) == 1, "a realtime signal was not added");
 		pc_check(SIGRTMIN + 1 >= SIGRTMAX || sigismember(&s, SIGRTMIN + 1) == 0, "SIGRTMIN+1 is in the set too");
 	}
+#endif
 	pc_pass();
 }

@@ -164,10 +164,14 @@ static int make_mutex(pthread_mutex_t *m, int type, int robust, int pshared)
 	NEED(pthread_mutexattr_init(&a) == 0, "pthread_mutexattr_init failed");
 	if (type != -1)
 		NEED(pthread_mutexattr_settype(&a, type) == 0, "pthread_mutexattr_settype(%d) failed", type);
-	if (robust)
-		NEED(pthread_mutexattr_setrobust(&a, PTHREAD_MUTEX_ROBUST) == 0, "pthread_mutexattr_setrobust failed");
-	if (pshared)
+	(void)robust;	/* this test never asks for a robust mutex */
+	if (pshared) {
+#if defined(_POSIX_THREAD_PROCESS_SHARED) && _POSIX_THREAD_PROCESS_SHARED >= 0
 		NEED(pthread_mutexattr_setpshared(&a, PTHREAD_PROCESS_SHARED) == 0, "pthread_mutexattr_setpshared failed");
+#else
+		pc_unsupported("_POSIX_THREAD_PROCESS_SHARED is not defined");
+#endif
+	}
 	r = pthread_mutex_init(m, &a);
 	(void)pthread_mutexattr_destroy(&a);
 	return r;
