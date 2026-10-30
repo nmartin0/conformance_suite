@@ -537,10 +537,65 @@ pc_ctx() {
 	    pc_abort "cannot create $ctx_results"
 }
 
+# What the terminal shows for one result: the code, the ID and the test's
+# name; for anything but PASS, the test's path and the note under it,
+# indented so a wrapped note never reads as another result. run.log keeps
+# its one-line form.
+pc_show() {
+	pc_sw=
+	if [ -n "${a_test:-}" ]; then
+		pc_sw=${a_test##*/}
+		pc_sw=${pc_sw%.*}
+		pc_sw=${pc_sw#"${pc_sw%%[!0-9]*}"}
+		pc_sw=${pc_sw#-}
+		pc_sp=$mdir/$a_test
+	else
+		pc_sp=${pc_asr:-}
+	fi
+	pc_sp=${pc_sp#"$pc_root/"}
+	if [ -n "$pc_sw" ]; then
+		printf '%-11s %s [%s]\n' "$1" "$2" "$pc_sw"
+	else
+		printf '%-11s %s\n' "$1" "$2"
+	fi
+	[ "$1" = PASS ] && [ -z "$3" ] && return 0
+	[ "$1" != PASS ] && [ -n "$pc_sp" ] && printf '%12s%s\n' '' "$pc_sp"
+	[ -n "$3" ] && pc_wrap "$3"
+	return 0
+}
+
+# Print $1 indented by 12 columns. On a terminal, break it between words
+# to fit ${COLUMNS:-80}; elsewhere, keep it on one line.
+pc_wrap() {
+	if [ ! -t 1 ]; then
+		printf '%12s%s\n' '' "$1"
+		return 0
+	fi
+	pc_ww=${COLUMNS:-80}
+	case $pc_ww in '' | *[!0-9]*) pc_ww=80 ;; esac
+	[ "$pc_ww" -ge 40 ] || pc_ww=40
+	pc_ww=$((pc_ww - 13))
+	pc_wl=
+	set -f
+	for pc_wt in $1; do
+		if [ -z "$pc_wl" ]; then
+			pc_wl=$pc_wt
+		elif [ $((${#pc_wl} + 1 + ${#pc_wt})) -le "$pc_ww" ]; then
+			pc_wl="$pc_wl $pc_wt"
+		else
+			printf '%12s%s\n' '' "$pc_wl"
+			pc_wl=$pc_wt
+		fi
+	done
+	set +f
+	[ -n "$pc_wl" ] && printf '%12s%s\n' '' "$pc_wl"
+	return 0
+}
+
 pc_log() {
 	printf '%s\t%s\t%s\t%s\n' "$1" "$2" "$3" "$4" >>"$ctx_log"
 	printf '%s\n' "$1" >"$ctx_state/$2"
-	printf '%-11s %s %s\n' "$1" "$2" "$4"
+	pc_show "$1" "$2" "$4"
 	if [ "$ctx_selftest" = yes ] && [ "$1" != "${a_expect:-}" ]; then
 		printf '%s expected %s, got %s: %s\n' "$2" "${a_expect:-?}" \
 		    "$1" "$4" >>"$ctx_results/mismatch"
