@@ -46,12 +46,14 @@ assertion  XSH.ungetwc.006
 anchor     functions/ungetwc.html#DESCRIPTION
 anchor     functions/ungetwc.html#RATIONALE
 class      required
-says       On a seekable input stream reading "abc", after fgetwc() and a
-           successful ungetwc(L'Z'), a successful fflush(f) discards the pushed-
-           back character: the next fgetwc() returns the character that follows
-           the one read first, L'b'.
-note       After fflush() the stream is positioned where the application's last
-           read left it (after 'a'), so L'b' follows.
+says       On a stream reading a 1 MiB file that begins "abc", after fgetwc()
+           of L'a', a successful ungetwc(L'Z') and growing the file by 10
+           bytes through a separate open(), a successful fflush(f) discards
+           the pushed-back character: the next fgetwc() does not return L'Z'.
+note       The file is grown through a new open file description after the
+           read, so however much the stream buffered it is not at end of
+           file, and the fflush() page requires the discard as well
+           (Q-29, Q-47). Which character comes next is open (Q-30).
 test       t/006-fflush-discards.c
 
 assertion  XSH.ungetwc.007

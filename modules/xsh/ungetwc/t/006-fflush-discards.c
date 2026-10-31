@@ -35,6 +35,20 @@ static FILE *open_as(const char *path, const char *mode)
 	return f;
 }
 
+/*
+ * Grows the file by 10 bytes through a new open file description, which is
+ * not a handle on the stream's (XSH 2.5.1): however much the stream has
+ * buffered, its descriptor is then not at end of file on either reading of
+ * "not already at EOF" (Q-29), so fflush() must discard the pushback by its
+ * own page as well as by this one (Q-47).
+ */
+static void grow(const char *path)
+{
+	int g = open(path, O_WRONLY | O_APPEND);
+
+	NEED(g >= 0 && write(g, "0123456789", 10) == 10 && close(g) == 0, "growing the file failed: %s", pc_errname(errno));
+}
+
 int main(void)
 {
 	pc_begin("XSH.ungetwc.006");
@@ -42,14 +56,24 @@ int main(void)
 		FILE *f;
 		wint_t c;
 
-		pc_make_file("f", "abc");
+		{
+			/* 1 MiB beginning "abc", grown after the read (see grow()) */
+			static char big[1 << 20];
+			int fd = open("f", O_WRONLY | O_CREAT | O_EXCL, 0644);
+
+			memset(big, 'x', sizeof big);
+			memcpy(big, "abc", 3);
+			pc_check(fd >= 0 && write(fd, big, sizeof big) == (ssize_t)sizeof big && close(fd) == 0, "making f failed");
+		}
 		pc_test();
 		f = open_as("f", "r");
 		NEED(fgetwc(f) == L'a', "fgetwc() did not read L'a'");
 		NEED(ungetwc(L'Z', f) == L'Z', "ungetwc() failed");
+		grow("f");
 		NEED(fflush(f) == 0, "fflush() failed: %s", pc_errname(errno));
 		c = fgetwc(f);
-		pc_check(c == L'b', "after fflush() the read returned %#lx, expected L'b' (the pushed-back character must be discarded)", (unsigned long)c);
+		/* Which character comes next is not settled (Q-30); only the discarded one is wrong. */
+		pc_check(c != L'Z', "after fflush() the read returned the discarded L'Z' (the pushed-back character must be discarded)");
 	}
 	pc_pass();
 }
