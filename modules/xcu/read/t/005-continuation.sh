@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.read.005
+# MUTANT    read.no_continuation
+# MUTANT    read.r_continues
+# MUTANT    read.continuation_keeps_newline
 . "$PC_CORE/pc.sh"
 pc_begin XCU.read.005
 printf 'abc\\\ndef\n' >in || pc_fail "cannot write the input"

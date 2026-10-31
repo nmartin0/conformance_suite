@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.read.002
+# MUTANT    read.keep_trailing_ws
+# MUTANT    read.keep_leading_ws
 . "$PC_CORE/pc.sh"
 pc_begin XCU.read.002
 printf '  lead  mid trail  \n' >in || pc_fail "cannot write the input"

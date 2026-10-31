@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.read.003
+# MUTANT    read.stale_vars
+# MUTANT    read.unset_extra
 . "$PC_CORE/pc.sh"
 pc_begin XCU.read.003
 printf 'x y\n' >in || pc_fail "cannot write the input"

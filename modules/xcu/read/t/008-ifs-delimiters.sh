@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.read.008
+# MUTANT    read.nonblank_ifs_collapse
+# MUTANT    read.ifs_ignored
+# MUTANT    read.last_var_one_field
 . "$PC_CORE/pc.sh"
 pc_begin XCU.read.008
 printf 'x::z:w\n' >in || pc_fail "cannot write the input"

@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.read.010
+# MUTANT    read.d_null_newline
+# MUTANT    read.d_null_status1
 . "$PC_CORE/pc.sh"
 pc_begin XCU.read.010
 printf 'ab\000cd' >in || pc_fail "cannot write the input"
