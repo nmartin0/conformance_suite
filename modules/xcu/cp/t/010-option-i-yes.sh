@@ -8,6 +8,8 @@
 # MUTANT    cp.i_prompt_stdout
 # MUTANT    cp.i_yes_ignored
 # MUTANT    cp.i_yes_status1
+# VARIANT    cp.prompt_nl
+# VARIANT    cp.prompt_quoted
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.010
 nl='

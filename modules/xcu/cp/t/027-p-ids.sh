@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.027
+# MUTANT    cp.p_ignored
+# MUTANT    cp.p_owner_lost
+# MUTANT    cp.p_group_lost
+# MUTANT    cp.p_suid_lost
+# MUTANT    cp.p_sgid_lost
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.027
 printf 'x\n' >src || pc_unresolved "cannot create src"

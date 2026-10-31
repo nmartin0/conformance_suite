@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.023
+# MUTANT    cp.dirfile_clobbers
+# MUTANT    cp.dirfile_status0
+# MUTANT    cp.dirfile_truncates
+# MUTANT    cp.no_diag
+# MUTANT    cp.diag_stdout
+# VARIANT    cp.status2
+# VARIANT    cp.status255
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.023
 nl='
@@ -24,6 +31,7 @@ pc_test
 cp -R d f >out 2>err </dev/null
 rc=$?
 [ "$rc" -ne 0 ] || pc_fail "cp -R exited 0 for a directory onto a regular file"
+[ -s err ] || pc_fail "no diagnostic"
 [ -f f ] || pc_fail "f is no longer a regular file"
 slurp f
 [ "$data" = "orig${nl}" ] || pc_fail "f was modified"

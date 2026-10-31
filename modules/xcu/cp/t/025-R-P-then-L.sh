@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.025
+# MUTANT    cp.R_status1
+# MUTANT    cp.sym_first_wins
+# MUTANT    cp.sym_P_wins
+# MUTANT    cp.sym_multi_error
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.025
 mkdir src || pc_unresolved "cannot create src"

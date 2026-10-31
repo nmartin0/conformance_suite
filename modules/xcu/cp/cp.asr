@@ -160,23 +160,26 @@ test       t/020-error-continue.sh
 
 assertion  XCU.cp.021
 anchor     utilities/cp.html#DESCRIPTION
+anchor     utilities/V3_chap01.html#1.4
 class      required
 says       With several sources, a target that is not a directory is an
-           error and the target is not modified.
+           error, diagnosed, and the target is not modified.
 test       t/021-target-not-dir.sh
 
 assertion  XCU.cp.022
 anchor     utilities/cp.html#DESCRIPTION
+anchor     utilities/V3_chap01.html#1.4
 class      required
 says       With -R and more than two operands, a target that does not
-           exist is an error.
+           exist is a diagnosed error.
 test       t/022-R-many-missing.sh
 
 assertion  XCU.cp.023
 anchor     utilities/cp.html#DESCRIPTION
+anchor     utilities/V3_chap01.html#1.4
 class      required
 says       With -R, copying a directory onto an existing non-directory is
-           an error that leaves the file alone.
+           a diagnosed error that leaves the file alone.
 test       t/023-R-dir-onto-file.sh
 
 assertion  XCU.cp.024

@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.020
+# MUTANT    cp.err_abort
+# MUTANT    cp.err_skips_next
+# MUTANT    cp.err_status_last
+# MUTANT    cp.status0
+# MUTANT    cp.no_diag
+# MUTANT    cp.diag_stdout
+# VARIANT    cp.status2
+# VARIANT    cp.status255
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.020
 nl='

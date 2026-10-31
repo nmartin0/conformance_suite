@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.028
+# MUTANT    cp.dir_aborts
+# MUTANT    cp.dir_copies_dir
+# MUTANT    cp.dir_mkdir_empty
+# MUTANT    cp.status0
+# MUTANT    cp.no_diag
+# MUTANT    cp.diag_stdout
+# VARIANT    cp.status2
+# VARIANT    cp.status255
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.028
 mkdir d tgt || pc_unresolved "cannot create directories"

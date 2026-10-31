@@ -4,6 +4,7 @@
 # ASSERTION XCU.cp.018
 # MUTANT    cp.same_trunc
 # MUTANT    cp.same_removes
+# VARIANT    cp.same_diag
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.018
 nl='

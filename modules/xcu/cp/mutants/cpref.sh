@@ -38,6 +38,8 @@ pc_cpi() (
 		no_prompt) ;;
 		prompt_no_name) printf 'cp: overwrite the file? ' >&2 ;;
 		prompt_stdout) printf 'cp: overwrite %s? ' "$dst" ;;
+		prompt_nl) printf 'Replace the existing file: %s\nAnswer yes or no\n' "$dst" >&2 ;;
+		prompt_quoted) printf 'cp: replace "%s" (y/n) ' "$dst" >&2 ;;
 		*) printf 'cp: overwrite %s? ' "$dst" >&2 ;;
 		esac
 		read -r pc_r

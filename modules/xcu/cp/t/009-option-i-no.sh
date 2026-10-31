@@ -8,6 +8,8 @@
 # MUTANT    cp.i_neg_overwrites
 # MUTANT    cp.i_neg_status1
 # MUTANT    cp.i_neg_removes
+# VARIANT    cp.prompt_nl
+# VARIANT    cp.prompt_quoted
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.009
 nl='
