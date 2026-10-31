@@ -33,7 +33,7 @@ int main(void)
 		names[i][3] = '\0';
 		alt[i] = names[i];
 	}
-	len = tl_start(text, sizeof text);
+	len = tl_start_plain(text, sizeof text);
 	len = tl_formats(text, sizeof text, len);
 	len = tl_list(text, sizeof text, len, "alt_digits", alt, NALT);
 	len = tl_end(text, sizeof text, len);

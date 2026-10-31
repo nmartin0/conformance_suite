@@ -24,7 +24,7 @@ int main(void)
 	ld_need();
 	pcc_init();
 	ld_charmap("cmap", LD_HDR, '\\', "", "", 0);
-	len = tl_start(text, sizeof text);
+	len = tl_start_plain(text, sizeof text);
 	len = tl_one(text, sizeof text, len, "d_t_fmt", "D%d.%m.%y T%H:%M:%S");
 	len = tl_one(text, sizeof text, len, "d_fmt", "d=%d|%m|%y");
 	len = tl_one(text, sizeof text, len, "t_fmt", "t=%H\t%M;%S");

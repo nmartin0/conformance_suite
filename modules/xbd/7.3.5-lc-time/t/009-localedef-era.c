@@ -29,7 +29,7 @@ int main(void)
 	ld_need();
 	pcc_init();
 	ld_charmap("cmap", LD_HDR, '\\', "", "", 0);
-	len = tl_start(text, sizeof text);
+	len = tl_start_plain(text, sizeof text);
 	len = tl_formats(text, sizeof text, len);
 	len = tl_list(text, sizeof text, len, "era", era, 1);
 	len = tl_one(text, sizeof text, len, "era_d_fmt", "E%d|%m");

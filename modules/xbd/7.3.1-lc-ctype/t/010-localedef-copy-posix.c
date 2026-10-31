@@ -18,10 +18,9 @@ int main(void)
 	pc_begin("XBD.7.3.1-lc-ctype.010");
 	ld_need();
 	pcc_init();
-	ld_ok("copyall", NULL, LD_CP_ALL, loc, sizeof loc);
+	ld_ok_copy("copyall", NULL, LD_COPY_ALL, loc, sizeof loc);
 	pc_check(setlocale(LC_ALL, "POSIX") != NULL, "setlocale(LC_ALL, \"POSIX\") failed");
 	pcb_sig(pcb_a, sizeof pcb_a, 0);
-	pc_test();
 	ld_load(loc);
 	pcb_sig(pcb_b, sizeof pcb_b, 0);
 	d = pcb_diff(pcb_a, pcb_b);

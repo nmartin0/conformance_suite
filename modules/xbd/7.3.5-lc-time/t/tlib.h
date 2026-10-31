@@ -77,6 +77,22 @@ static size_t tl_start(char *out, size_t n)
 	return len;
 }
 
+/*
+ * Like tl_start() without the alternative month names (ab_alt_mon, alt_mon),
+ * for the tests that do not look at them: whether localedef reads those two
+ * keywords is not what such a test is about.
+ */
+static size_t tl_start_plain(char *out, size_t n)
+{
+	size_t len = (size_t)snprintf(out, n, "LC_TIME\n");
+
+	len = tl_list(out, n, len, "abday", tl_abday, 7);
+	len = tl_list(out, n, len, "day", tl_day, 7);
+	len = tl_list(out, n, len, "abmon", tl_abmon, 12);
+	len = tl_list(out, n, len, "mon", tl_mon, 12);
+	return len;
+}
+
 /* The default formats, then the end of the category. */
 static size_t tl_formats(char *out, size_t n, size_t len)
 {
