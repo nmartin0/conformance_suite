@@ -56,11 +56,13 @@ test       t/006-skip-chars.sh
 assertion  XCU.uniq.007
 anchor     utilities/uniq.html#OPERANDS
 anchor     utilities/uniq.html#OUTPUT FILES
+anchor     utilities/V3_chap01.html#1.4
 class      required
 since      1992
 says       uniq reads input_file (standard input for no operand or -) and,
            when output_file is given, writes the result there and writes
-           nothing to standard output.
+           nothing to standard output; an input_file or output_file that
+           cannot be used gives a diagnostic and a nonzero status.
 test       t/007-file-operands.sh
 
 assertion  XCU.uniq.008
