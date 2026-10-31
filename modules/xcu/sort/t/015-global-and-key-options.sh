@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sort.015
+# MUTANT    sort.global_not_applied
+# MUTANT    sort.key_mod_adds_global
+# MUTANT    sort.global_first_key_only
+# MUTANT    sort.global_r_last_key_only
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sort.015
 # rd FILE: the content of FILE in rd_v, read by the shell alone (no other

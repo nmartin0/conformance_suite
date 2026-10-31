@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sort.012
+# MUTANT    sort.o_ignored
+# MUTANT    sort.o_both
+# MUTANT    sort.o_early
+# MUTANT    sort.o_append
+# MUTANT    sort.o_status1
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sort.012
 LC_ALL=POSIX
