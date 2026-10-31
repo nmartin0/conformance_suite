@@ -14,7 +14,9 @@ printf 'aaa\n' >f
 printf 'Q\ns/a/b/\nwq\n' >in
 pc_test
 pc_vi_run in f
-[ "$pc_pty_rc" -eq 0 ] || pc_fail "vi exited with status $pc_pty_rc"
+# The new line typed after Q reaches ex as a command to move to the next line,
+# which fails on the last line, so the exit status of vi is not tested: it may
+# report that an error occurred.
 printf 'baa\n' >want
 cmp -s f want || pc_fail "the file is: $(tr '\n' '|' <f)"
 pc_pass
