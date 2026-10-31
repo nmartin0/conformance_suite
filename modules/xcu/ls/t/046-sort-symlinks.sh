@@ -18,10 +18,13 @@ order() {
 	got=$(ls "$@" 2>err </dev/null | tr '\n' ' ')
 	[ "$got" = "$w " ] || pc_fail "ls $*: '$got', expected '$w'"
 }
-order 'big mid lnk' -S big mid lnk
+# Without -d, -F or -l, whether a symbolic link named as an operand is
+# followed is not stated (those three options say they do not follow it), so
+# -d is given where the link itself is wanted.
+order 'big mid lnk' -dS big mid lnk
 order 'big lnk mid' -HS big mid lnk
 order 'big lnk mid' -LS big mid lnk
-order 'l1 t2 t1' -t t1 t2 l1
+order 'l1 t2 t1' -dt t1 t2 l1
 order 't2 l1 t1' -Ht t1 t2 l1
 order 't2 l1 t1' -Lt t1 t2 l1
 got=$(ls -S 2>err </dev/null | sed -n '1,3p' | tr '\n' ' ')
