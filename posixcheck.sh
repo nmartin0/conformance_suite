@@ -24,6 +24,12 @@
 #                     with --mutant only if the variant is a header alone)
 #   --cache DIR       CI only: reuse compiled helpers, tests and libraries
 #                     kept in DIR by earlier runs (ci/mutate.sh)
+#   --show CODES      print only these results on the terminal, a comma-
+#                     separated list such as fail,inspect (default: all);
+#                     run.log and the SUMMARY line still cover every one
+#   --failures FILE   also write every FAIL and INSPECT, in the same form
+#                     as the terminal, to FILE, ending with the SUMMARY
+#                     line (FILE is emptied first unless --resume)
 #
 # Needs only this shell, a C compiler and mkdir. Prints one line per
 # assertion and a final SUMMARY line on standard output (redirect it to
@@ -91,6 +97,9 @@ pc_mutant=
 pc_variant=
 pc_cache=
 pc_args=
+pc_show_codes=
+pc_showset=
+pc_failfile=
 
 pc_need_arg() {
 	[ "$1" -ge 2 ] || pc_die "option $2 needs an argument"
@@ -111,6 +120,8 @@ while [ $# -gt 0 ]; do
 	--mutant) pc_need_arg $# "$1"; pc_mutant=$2; shift 2 ;;
 	--variant) pc_need_arg $# "$1"; pc_variant=$2; shift 2 ;;
 	--cache) pc_need_arg $# "$1"; pc_cache=$2; shift 2 ;;
+	--show) pc_need_arg $# "$1"; pc_show_codes="$pc_show_codes,$2"; shift 2 ;;
+	--failures) pc_need_arg $# "$1"; pc_failfile=$2; shift 2 ;;
 	-h | --help)
 		while IFS= read -r pc_l; do
 			case $pc_l in
@@ -129,6 +140,20 @@ done
 # A loop over "$@" with no arguments trips "set -u" in some older shells
 # (posh), though POSIX.1-2024 exempts @ from -u; shifting avoids it.
 while [ $# -gt 0 ]; do pc_args="$pc_args $1"; shift; done
+
+# --show: the result codes printed on the terminal, as " CODE CODE ".
+if [ -n "$pc_show_codes" ]; then
+	pc_l=$(printf '%s\n' "$pc_show_codes" | tr 'a-z,' 'A-Z ')
+	for pc_c in $pc_l; do
+		case $pc_c in
+		PASS | FAIL | INSPECT | UNRESOLVED | NOTINUSE | UNSUPPORTED | UNINITIATED | UNTESTED)
+			pc_showset="$pc_showset $pc_c" ;;
+		*) pc_die "--show: unknown result code $pc_c" ;;
+		esac
+	done
+	[ -n "$pc_showset" ] || pc_die "--show needs at least one result code"
+	pc_showset="$pc_showset "
+fi
 
 # No --results: work in a private directory that is removed at the end.
 if [ -z "$pc_results" ]; then
@@ -156,6 +181,14 @@ fi
 pc_abs "$pc_results"; pc_results=$pc_absv
 pc_abs "$pc_modroot"; pc_modroot=$pc_absv
 if [ -n "$pc_profile" ]; then pc_abs "$pc_profile"; pc_profile=$pc_absv; fi
+if [ -n "$pc_failfile" ]; then
+	pc_abs "$pc_failfile"; pc_failfile=$pc_absv
+	if [ "$pc_resume" != yes ]; then
+		: >"$pc_failfile" 2>/dev/null || pc_die "--failures: cannot write $pc_failfile"
+	elif ! : >>"$pc_failfile" 2>/dev/null; then
+		pc_die "--failures: cannot write $pc_failfile"
+	fi
+fi
 if [ -n "$pc_cache" ]; then
 	pc_abs "$pc_cache"; pc_cache=$pc_absv
 	mkdir -p "$pc_cache" || pc_die "cannot create $pc_cache"
@@ -542,6 +575,18 @@ pc_ctx() {
 # indented so a wrapped note never reads as another result. run.log keeps
 # its one-line form.
 pc_show() {
+	if [ -n "$pc_failfile" ] && [ "$ctx_selftest" != yes ]; then
+		case $1 in
+		FAIL | INSPECT) pc_block "$@" >>"$pc_failfile" ;;
+		esac
+	fi
+	case ${pc_showset:-" $1 "} in
+	*" $1 "*) pc_block "$@" ;;
+	esac
+	return 0
+}
+
+pc_block() {
 	pc_sw=
 	if [ -n "${a_test:-}" ]; then
 		pc_sw=${a_test##*/}
@@ -1115,6 +1160,7 @@ pc_sum=$(awk -F'\t' '
 	}' "$ctx_log")
 printf '# %s\n' "$pc_sum" >>"$ctx_log"
 printf '%s\n' "$pc_sum"
+[ -n "$pc_failfile" ] && printf '%s\n' "$pc_sum" >>"$pc_failfile"
 if [ "$pc_ephemeral" = yes ]; then
 	# FAIL count is the 7th word of the summary line.
 	set -- $pc_sum

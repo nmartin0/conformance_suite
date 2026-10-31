@@ -23,6 +23,8 @@ Copy this directory to the system under test and run:
     ./posixcheck.sh xsh/open xcu/true   # chosen modules
     ./posixcheck.sh --only XSH.open.003 # one assertion
     ./posixcheck.sh --results DIR       # keep every file of the run in DIR
+    ./posixcheck.sh --show fail,inspect # print only these results
+    ./posixcheck.sh --failures fails.txt # also write FAIL and INSPECT to a file
     ./posixcheck.sh --help
 
 It needs only the system's own `sh`, a C compiler (`c17`, else `cc`) and
@@ -30,8 +32,11 @@ It needs only the system's own `sh`, a C compiler (`c17`, else `cc`) and
 still runs as an ordinary user: the assertions that need root are then
 skipped and reported as skipped.
 
-It prints one result line per assertion and a final `SUMMARY` line on
-standard output; redirect that to keep it. Diagnostics go to standard
+It prints one result per assertion and a final `SUMMARY` line on standard
+output; redirect that to keep it. Each result shows the code, the ID and the
+test's name; anything but PASS adds the test's path and an indented note.
+`--show` limits the terminal to the listed codes, and `--failures FILE`
+writes every FAIL and INSPECT, in the same form, to FILE as well. Diagnostics go to standard
 error. By default the run is ephemeral: it works in a private temporary
 directory that is removed when the run ends or is interrupted, so it leaves
 no build artifacts or remnants and can be repeated. The exit status is 1 if
