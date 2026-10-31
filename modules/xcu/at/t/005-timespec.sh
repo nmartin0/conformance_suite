@@ -52,10 +52,30 @@ chk() { # chk "expected date" ARGS...
 	shift
 	submit "$@"
 	rc=$?
-	[ "$rc" -ne 1 ] || pc_unresolved "at refused 'at $*' (status $srcode) [stderr: $(tr '\n' ' ' <"$d/se" | dd bs=160 count=1 2>/dev/null); stdout: $(tr '\n' ' ' <"$d/so" | dd bs=80 count=1 2>/dev/null)]"
+	[ "$rc" -ne 1 ] || pc_fail "at refused 'at $*' (status $srcode) [stderr: $(tr '\n' ' ' <"$d/se" | dd bs=160 count=1 2>/dev/null); stdout: $(tr '\n' ' ' <"$d/so" | dd bs=80 count=1 2>/dev/null)]"
 	[ "$rc" -eq 0 ] || pc_fail "at $*: no job line on standard error [stderr: $(tr '\n' ' ' <"$d/se" | dd bs=160 count=1 2>/dev/null); stdout: $(tr '\n' ' ' <"$d/so" | dd bs=80 count=1 2>/dev/null)]"
 	[ "$jdate" = "$exp" ] || pc_fail "at $* scheduled '$jdate', expected '$exp'"
 }
+# at must accept jobs from this user (at.allow and at.deny may forbid it):
+# a job given with -t is the probe, so that a refused timespec is a failure.
+ids() { at -l 2>/dev/null </dev/null | awk '{ print $1 }'; }
+before=$(ids)
+submit -t 203512091200
+prc=$?
+[ "$prc" -ne 1 ] || pc_unresolved "setup: at did not take a job given with -t (status $srcode): it may be missing or the user not allowed to use it [stderr:$(tr '\n' ' ' <"$d/se" | dd bs=160 count=1 2>/dev/null)]"
+if [ "$prc" -eq 2 ]; then
+	# no job line to take the ID from: remove the jobs that are new
+	for j in $(ids); do
+		case "
+$before
+" in
+		*"
+$j
+"*) ;;
+		*) jobs="$jobs $j" ;;
+		esac
+	done
+fi
 pc_test
 chk "Sun Dec 9 12:00:00 2035" noon Dec 9, 2035
 chk "Mon Dec 10 00:00:00 2035" midnight Dec 10, 2035
