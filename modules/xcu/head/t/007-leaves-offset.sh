@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.head.007
+# MUTANT    head.offset_consume_all
+# MUTANT    head.offset_plus1
 . "$PC_CORE/pc.sh"
 pc_begin XCU.head.007
 LC_ALL=POSIX
