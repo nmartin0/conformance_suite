@@ -134,8 +134,9 @@ anchor     functions/V2_chap02.html#2.9.4
 class      conditional
 when       TPS+PS
 since      2001
-says       An attributes object asking for explicit scheduling with the creator's
-           own policy and a priority one above that policy's maximum does not
+says       An attributes object asking for explicit scheduling with SCHED_FIFO
+           or SCHED_RR (the creator's own policy when it is one of them) and
+           a priority one above that policy's maximum does not
            give a thread with a priority outside the range of its policy:
            pthread_create() fails, or the thread it creates has a priority in
            the range.
