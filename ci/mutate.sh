@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
-# usage: ci/mutate.sh [--sh SHELL] [--cc CC] [--profile FILE]
+# usage: ci/mutate.sh [--sh SHELL] [--sut-sh SH ...] [--cc CC] [--profile FILE]
 #                     [--faults-only | --variants-only]
 #                     [--cache] [-j N] [--tries N] [--root DIR]
 #                     [ID-pattern ...]
@@ -62,6 +62,20 @@
 # and a fault is planted on a header-only variant when one makes the test
 # buildable (the verdict line says "under" which).
 # Several patterns select the union.
+#
+# --sut-sh SH  the shell the tests run under (the driver's --sut-sh), given
+# to every driver run: baseline, fault and variant alike. Without it the
+# driver's default shell is used. It may be given more than once, for the
+# modules whose behaviour depends on the shell (read, trap, set, ...); then
+# each assertion is run under every listed shell, with its own baseline, and
+# the results are combined per fault or variant: CAUGHT if caught under at
+# least one shell whose baseline PASSes and under none of them missed;
+# MISSED (or REJECTED and the like) if that is the verdict on any shell,
+# since an anomaly on one shell is a fault of the test; UNCHECKED only if no
+# listed shell could judge it (no baseline PASSes). The line ends with
+# "[sut-sh SH]" naming the shell the reported verdict came from. A shell
+# on which the baseline fails (for example for lack of an option) thus
+# defers to another. --sh is the shell that runs posixcheck.sh itself.
 
 set -u
 here=$(cd "$(dirname "$0")/.." && pwd)
@@ -74,9 +88,14 @@ cache=no
 jobs=1
 tries=5
 modroot=
+suts=
+nsuts=0
+cursut=
 while [ $# -gt 0 ]; do
 	case $1 in
 	--sh) sh=$2; shift 2 ;;
+	--sut-sh) suts="$suts
+$2"; nsuts=$((nsuts + 1)); shift 2 ;;
 	--cc) cc=$2; shift 2 ;;
 	--profile) profile=$2; shift 2 ;;
 	--faults-only) do_variants=no; shift ;;
@@ -138,6 +157,7 @@ run() { # results-dir id [--mutant|--variant name]
 	# ${1+"$@"}: posh treats an empty "$@" as unset under set -u
 	if [ -n "$cc" ]; then set -- ${1+"$@"} --cc "$cc"; fi
 	if [ -n "$profile" ]; then set -- ${1+"$@"} --profile "$profile"; fi
+	if [ -n "$cursut" ]; then set -- ${1+"$@"} --sut-sh "$cursut"; fi
 	if [ "$cache" = yes ]; then set -- ${1+"$@"} --cache "$work/cache"; fi
 	"$sh" "$here/posixcheck.sh" --no-selftest --root "$modroot" --results "$run_r" --only "$run_id" \
 	    ${1+"$@"} >/dev/null 2>&1 </dev/null
@@ -321,7 +341,52 @@ pair_checked() { # i kind name
 	rm -f "$work/res/$1.first"
 }
 
-do_group() { # group-number id
+do_group() { # group-number id: under each listed shell (or the default), then combined
+	dg_g=$1 dg_id=$2
+	if [ "$nsuts" -le 1 ]; then
+		cursut=$suts
+		cursut=${cursut#?}
+		do_group_sh "$dg_g" "$dg_id"
+		return 0
+	fi
+	dg_k=0
+	dg_ifs=$IFS
+	IFS='
+'
+	set -f
+	for dg_s in $suts; do
+		[ -n "$dg_s" ] || continue
+		dg_k=$((dg_k + 1))
+		cursut=$dg_s
+		IFS=$dg_ifs
+		do_group_sh "$dg_g" "$dg_id"
+		while read -r dg_i dg_rest; do
+			mv "$work/res/$dg_i" "$work/res/$dg_i.s$dg_k"
+		done <"$work/grp/$dg_g"
+		IFS='
+'
+	done
+	set +f
+	IFS=$dg_ifs
+	# Combine: the most serious category any shell gave, else a caught or
+	# tolerated one, else unchecked.
+	while read -r dg_i dg_rest; do
+		for dg_c in F X R D Y E C T UM UV; do
+			dg_k=0
+			for dg_s in $suts; do
+				[ -n "$dg_s" ] || continue
+				dg_k=$((dg_k + 1))
+				[ "$(cat_of "$work/res/$dg_i.s$dg_k")" = "$dg_c" ] || continue
+				IFS='	' read -r dg_cat dg_line <"$work/res/$dg_i.s$dg_k"
+				printf '%s\t%s [sut-sh %s]\n' "$dg_cat" "$dg_line" "$dg_s" >"$work/res/$dg_i"
+				break 2
+			done
+		done
+		rm -f "$work/res/$dg_i".s*
+	done <"$work/grp/$dg_g"
+}
+
+do_group_sh() { # group-number id, under $cursut
 	g=$1 id=$2
 	run "$work/base.$g" "$id"
 	base=$(code_of "$work/base.$g" "$id")
