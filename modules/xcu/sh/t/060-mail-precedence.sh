@@ -37,7 +37,13 @@ rm -f m1 m2
 ish pc.inb "MAIL=$PWD/m9" "MAILPATH=$PWD/m2%MPMSG" MAILCHECK=0
 ob=$(tr -d '\r' <pty.out)
 printf '%s\n' "$oa" | grep -F MPMSG >/dev/null || pc_fail "no MAILPATH message: $oa"
-la=$(printf '%s' "$oa" | wc -c)
-lb=$(printf '%s' "$ob" | wc -c)
-[ "$la" -eq "$lb" ] || pc_fail "the MAIL file was watched although MAILPATH is set ($la bytes against $lb)"
+# What the user is told, without the lines that show a typed command: a
+# line typed before the shell reads it can be echoed twice (by the terminal
+# and again by the shell), so those lines depend on timing.
+told() {
+	printf '%s\n' "$1" | grep -v -F -e 'echo x >m1' -e 'echo y >m2' -e 'echo z' -e 'exit'
+}
+ta=$(told "$oa")
+tb=$(told "$ob")
+[ "$ta" = "$tb" ] || pc_fail "the MAIL file was watched although MAILPATH is set: told '$ta' against '$tb'"
 pc_pass
