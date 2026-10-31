@@ -17,7 +17,18 @@ isint() {
 mine=$(ps -o nice= -p $$ 2>/dev/null)
 mine=$(echo $mine)
 isint "$mine" || pc_unresolved "setup: ps -o nice= -p gave '$mine'"
-[ "$mine" -le 10 ] || pc_unresolved "setup: the caller's nice value $mine is too near the highest to raise it by one"
+# The nice values run from 0 to 2*NZERO-1 (the value ps shows may also be
+# counted from NZERO, so the top may be NZERO-1): the increment cannot be seen
+# when the caller already sits at a top.
+nz=$(getconf NZERO 2>/dev/null </dev/null)
+case $nz in
+''|*[!0-9]*) ;;
+*)
+	if [ "$mine" -eq $((2 * nz - 1)) ] || [ "$mine" -eq $((nz - 1)) ]; then
+		pc_unresolved "setup: the caller's nice value $mine is at the highest, so it cannot be raised by one"
+	fi
+	;;
+esac
 pc_test
 nice -n 1 "${PC_SH:-sh}" -c 'ps -o nice= -p $$' </dev/null >out 2>/dev/null
 rc=$?
