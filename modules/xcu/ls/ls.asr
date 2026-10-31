@@ -338,7 +338,7 @@ assertion  XCU.ls.042
 anchor     utilities/ls.html#STDOUT
 class      required
 since      1992
-says       "ls -l /dev/null" writes a line for a character special file: the
+says       "ls -lH /dev/null" writes a line for a character special file: the
            mode starts with c, the link count is a number, the owner and
            group follow, and the line ends with the pathname as given.
 test       t/042-char-special.sh
