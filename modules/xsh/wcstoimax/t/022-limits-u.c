@@ -6,7 +6,29 @@
  */
 #define IC_UMAX
 #include "ic.h"
+#include <stdarg.h>
+#include <stdio.h>
 #include <string.h>
+
+/* The decimal text of a value, widened digit by digit (no dependence on swprintf()). */
+static void wnum(wchar_t *w, const char *fmt, ...)
+{
+	char t[64];
+	size_t i;
+	va_list ap;
+
+	va_start(ap, fmt);
+	(void)vsnprintf(t, sizeof t, fmt, ap);
+	va_end(ap);
+	for (i = 0; t[i] != '\0'; i++) {
+		wint_t c = btowc((unsigned char)t[i]);
+
+		if (c == WEOF)
+			pc_unresolved("btowc failed for a digit");
+		w[i] = (wchar_t)c;
+	}
+	w[i] = L'\0';
+}
 
 /* Adds one to the magnitude of the decimal number in s (a leading minus is kept). */
 static void inc_dec(wchar_t *s)
@@ -35,7 +57,7 @@ int main(void)
 	wchar_t smax[IC_N][64], sover[IC_N][64];
 	pc_begin("XSH.wcstoimax.022");
 	for (j = 0; j < IC_N; j++) {
-		pc_check(swprintf(smax[j], 64, L"%ju", (uintmax_t)ic_fns[j].max) > 0, "swprintf failed");
+		wnum(smax[j], "%ju", (uintmax_t)ic_fns[j].max);
 		wcscpy(sover[j], smax[j]);
 		inc_dec(sover[j]);
 	}

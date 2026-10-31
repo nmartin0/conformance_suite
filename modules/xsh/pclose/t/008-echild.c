@@ -58,6 +58,9 @@ int main(void)
 
 	pc_begin("XSH.pclose.008");
 	guard(20);
+	/* A SIGCHLD disposition of ignore, inherited from the caller, would let the child be reaped unseen. */
+	if (signal(SIGCHLD, SIG_DFL) == SIG_ERR)
+		pc_unresolved("cannot set the SIGCHLD disposition: %s", pc_errname(errno));
 	f = start("exit 5", "r");
 	w = waitpid(-1, &st, 0);	/* the only child is the command's shell */
 	if (w == -1)
