@@ -93,3 +93,57 @@ class      disputed
 says       A PASS of a disputed assertion stays PASS.
 test       t/018-disputed-pass.c
 expect     PASS
+
+assertion  ST.c.019
+says       pc_file_equals on a missing file in the test phase is FAIL.
+test       t/019-file-missing-test.c
+expect     FAIL
+
+assertion  ST.c.020
+says       pc_file_equals on a missing file in the setup phase is UNRESOLVED.
+test       t/020-file-missing-setup.c
+expect     UNRESOLVED
+
+assertion  ST.c.021
+says       pc_file_size on a missing file in the test phase is FAIL.
+test       t/021-size-missing-test.c
+expect     FAIL
+
+assertion  ST.c.022
+says       pc_file_size on a missing file in the setup phase is UNRESOLVED.
+test       t/022-size-missing-setup.c
+expect     UNRESOLVED
+
+assertion  ST.c.023
+says       pc_file_mode on a missing file in the test phase is FAIL.
+test       t/023-mode-missing-test.c
+expect     FAIL
+
+assertion  ST.c.024
+says       pc_file_mode on a missing file in the setup phase is UNRESOLVED.
+test       t/024-mode-missing-setup.c
+expect     UNRESOLVED
+
+assertion  ST.c.025
+says       pc_file_equals on a file that cannot be read (a directory) in the
+           test phase is FAIL.
+test       t/025-equals-unreadable-test.c
+expect     FAIL
+
+assertion  ST.c.026
+says       pc_file_equals on a file that cannot be read (a directory) in the
+           setup phase is UNRESOLVED.
+test       t/026-equals-unreadable-setup.c
+expect     UNRESOLVED
+
+assertion  ST.c.027
+says       The observation helpers give the right answers on a present file
+           in the test phase, including for different contents.
+test       t/027-observe-present-test.c
+expect     PASS
+
+assertion  ST.c.028
+says       A present file whose contents differ is answered 0 by
+           pc_file_equals, not turned into a failed observation.
+test       t/028-equals-mismatch-is-not-failure.c
+expect     PASS

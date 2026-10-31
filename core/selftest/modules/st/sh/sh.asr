@@ -22,3 +22,18 @@ assertion  ST.sh.005
 says       A function shadowing printf cannot corrupt the helper's output.
 test       t/005-shadow-printf.sh
 expect     PASS
+
+assertion  ST.sh.006
+says       pc_need_file on a missing file in the test phase is FAIL.
+test       t/006-need-file-test.sh
+expect     FAIL
+
+assertion  ST.sh.007
+says       pc_need_file on a missing file in the setup phase is UNRESOLVED.
+test       t/007-need-file-setup.sh
+expect     UNRESOLVED
+
+assertion  ST.sh.008
+says       pc_need_file on files that exist is silent.
+test       t/008-need-file-present.sh
+expect     PASS

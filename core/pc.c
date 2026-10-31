@@ -296,6 +296,26 @@ _Noreturn static void pc_setup_broke(const char *what, const char *path)
 	pc_unresolved("helper %s(%s) failed: %s", what, path, pc_errname(e));
 }
 
+/*
+ * An observation helper (file_size, file_mode, file_equals) could not look at
+ * the file. In the setup phase the file is the harness's own, so the problem
+ * is UNRESOLVED. In the test phase the file is the thing being observed: if
+ * the interface under test (or a planted fault) removed it, never made it or
+ * made it unreadable, the observation failed, so the result is FAIL. A
+ * shortage of the helper's own resources (no descriptor, no memory) says
+ * nothing about the file and stays UNRESOLVED in both phases.
+ */
+_Noreturn static void pc_observe_broke(const char *what, const char *path)
+{
+	int e = errno;
+
+	if (pc_phase == PC_TEST && e != EMFILE && e != ENFILE &&
+	    e != ENOMEM && e != EINTR)
+		pc_fail("the file %s cannot be observed (%s: %s)", path, what,
+		    pc_errname(e));
+	pc_unresolved("helper %s(%s) failed: %s", what, path, pc_errname(e));
+}
+
 void pc_make_file(const char *path, const char *contents)
 {
 	int fd;
@@ -359,7 +379,7 @@ long pc_file_size(const char *path)
 	struct stat st;
 	pc_internal_enter();
 	if (lstat(path, &st) != 0)
-		pc_setup_broke("file_size", path);
+		pc_observe_broke("file_size", path);
 	pc_internal_leave();
 	return (long)st.st_size;
 }
@@ -369,7 +389,7 @@ unsigned pc_file_mode(const char *path)
 	struct stat st;
 	pc_internal_enter();
 	if (lstat(path, &st) != 0)
-		pc_setup_broke("file_mode", path);
+		pc_observe_broke("file_mode", path);
 	pc_internal_leave();
 	return (unsigned)(st.st_mode & 07777);
 }
@@ -383,13 +403,13 @@ int pc_file_equals(const char *path, const char *s)
 	pc_internal_enter();
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-		pc_setup_broke("file_equals", path);
+		pc_observe_broke("file_equals", path);
 	for (;;) {
 		ssize_t r = read(fd, buf, sizeof buf);
 		if (r < 0) {
 			if (errno == EINTR)
 				continue;
-			pc_setup_broke("file_equals/read", path);
+			pc_observe_broke("file_equals/read", path);
 		}
 		if (r == 0)
 			break;
