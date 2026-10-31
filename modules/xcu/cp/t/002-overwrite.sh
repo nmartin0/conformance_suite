@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.002
+# MUTANT    cp.ok_status1
+# MUTANT    cp.no_truncate
+# MUTANT    cp.appends_to_existing
+# MUTANT    cp.keeps_existing
+# MUTANT    cp.empty_copy
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.002
 nl='

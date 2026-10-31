@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.007
+# MUTANT    cp.ok_status1
+# MUTANT    cp.symlink_as_link
+# MUTANT    cp.symlink_text
+# MUTANT    cp.symlink_error
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.007
 nl='

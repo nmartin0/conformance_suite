@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.001
+# MUTANT    cp.ok_status1
+# MUTANT    cp.stdout_noise
+# MUTANT    cp.adds_newline
+# MUTANT    cp.empty_copy
+# MUTANT    cp.last_byte_lost
+# MUTANT    cp.source_removed
+# MUTANT    cp.source_altered
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.001
 nl='

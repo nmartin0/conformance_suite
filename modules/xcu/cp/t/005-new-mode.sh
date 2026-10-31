@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.005
+# MUTANT    cp.ok_status1
+# MUTANT    cp.mode_ignores_umask
+# MUTANT    cp.mode_not_source
+# MUTANT    cp.mode_fixed_644
+# MUTANT    cp.mode_exec_lost
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.005
 modeof() {

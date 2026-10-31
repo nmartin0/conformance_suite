@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.003
+# MUTANT    cp.ok_status1
+# MUTANT    cp.into_first_only
+# MUTANT    cp.into_drops_last
+# MUTANT    cp.into_slash_fails
+# MUTANT    cp.into_name_altered
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.003
 nl='

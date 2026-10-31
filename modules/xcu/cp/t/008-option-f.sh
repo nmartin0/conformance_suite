@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.008
+# MUTANT    cp.f_ignored
+# MUTANT    cp.f_noop
+# MUTANT    cp.f_keeps_old
 #
 # As a privileged user the destination can be opened anyway, so the test
 # only distinguishes a faulty -f when run unprivileged; the verdict for
