@@ -48,11 +48,11 @@ work is done and what the first round taught.
 
 ## What the first round found (cut, head, read, rename, sort)
 
-About 270 faults and 22 variants over 5 modules and 89 assertions. Findings:
+About 300 faults and 25 variants over 5 modules (the rename count includes faults that already existed). Findings:
 
 - Tests were too lax in several places (a missing diagnostic on standard
   error, a header not checked, a large count or binary data not exercised);
-  about 25 tests were strengthened, each against the text.
+  about 30 tests were strengthened, each against the text.
 - A helper that turns "the expected file is missing" into UNRESOLVED hides
   faults that delete or fail to create it. Tests now check existence first.
   Other modules probably have the same pattern; a sweep is queued.

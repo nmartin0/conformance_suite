@@ -275,9 +275,9 @@ To start from a bundle alone: `git clone posixcheck-NNNN.bundle posixcheck`.
 ## Update: first runs, triage and the hardening pilot (October 2026)
 
 - Full runs (root and ordinary user) on Linux, FreeBSD and an illumos
-  distribution; results in `reports/`, triage in `reports/triage/`. Roughly
-  two hundred test bugs were found and fixed across the three systems; the
-  rest are the systems' deviations or standard ambiguities.
+  distribution; results in `reports/`, triage in `reports/triage/`. Several
+  hundred test bugs were found and fixed across the systems; the rest are
+  the systems' deviations or standard ambiguities.
 - Driver: `--show CODES` and `--failures FILE`; the test runner is built with
   the extended feature macro and takes `setgroups()` from the helper.
 - Hardening pilot done for `xcu/cut`, `head`, `read`, `sort` and `xsh/rename`
