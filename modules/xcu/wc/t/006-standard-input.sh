@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.wc.006
+# MUTANT    wc.stdin_name_dash
+# MUTANT    wc.stdin_trailing_blank
+# MUTANT    wc.stdin_zero
+# MUTANT    wc.stdin_head
+# MUTANT    wc.status1
+# VARIANT   wc.padded
 . "$PC_CORE/pc.sh"
 pc_begin XCU.wc.006
 LC_ALL=POSIX
@@ -9,6 +15,7 @@ export LC_ALL
 NL='
 '
 printf 'one two\nthree\n\nfour five six\n' >f || pc_fail "cannot create input"
+awk 'BEGIN { for (i = 0; i < 400000; i++) print "a b" }' >big || pc_fail "cannot create input"
 pc_test
 wc <f >out 2>/dev/null
 rc=$?
@@ -26,4 +33,7 @@ while IFS= read -r line; do n=$((n + 1)); done <out
 out=$(wc -l <f 2>/dev/null)
 set -- $out
 [ $# -eq 1 ] && [ "$1" = 4 ] || pc_fail "wc -l <f is not the single number 4"
+out=$(wc <big 2>/dev/null)
+set -- $out
+[ $# -eq 3 ] && [ "$1" = 400000 ] && [ "$2" = 800000 ] && [ "$3" = 1600000 ] || pc_fail "wc <big is not '400000 800000 1600000'"
 pc_pass

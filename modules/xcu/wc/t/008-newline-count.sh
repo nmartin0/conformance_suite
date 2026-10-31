@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.wc.008
+# MUTANT    wc.l_partial
+# MUTANT    wc.l_skip_empty
+# MUTANT    wc.l_empty1
+# MUTANT    wc.l_cr
+# MUTANT    wc.l_off
+# VARIANT   wc.padded
 . "$PC_CORE/pc.sh"
 pc_begin XCU.wc.008
 LC_ALL=POSIX
@@ -12,6 +18,7 @@ printf 'a\nb' >f1 || pc_fail "cannot create input"
 printf 'abc' >f2 || pc_fail "cannot create input"
 printf '\n\n\n' >f3 || pc_fail "cannot create input"
 : >f4 || pc_fail "cannot create input"
+printf 'a\rb\r\n' >f5 || pc_fail "cannot create input"
 pc_test
 out=$(wc -l f1 2>/dev/null </dev/null)
 set -- $out
@@ -25,4 +32,7 @@ set -- $out
 out=$(wc f4 2>/dev/null </dev/null)
 set -- $out
 [ "$1 $2 $3 $4" = "0 0 0 f4" ] || pc_fail "an empty file does not give 0 0 0"
+out=$(wc -l f5 2>/dev/null </dev/null)
+set -- $out
+[ "$1" = 1 ] || pc_fail "a carriage return was counted as a newline"
 pc_pass

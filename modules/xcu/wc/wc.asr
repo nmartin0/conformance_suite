@@ -65,7 +65,8 @@ anchor     utilities/wc.html#DESCRIPTION
 class      required
 since      1992
 says       A word is a non-empty run of characters bounded by white space
-           (spaces, tabs, newlines) or the ends of the file.
+           (spaces, tabs, newlines, and the other white-space characters of
+           the POSIX locale) or the ends of the file.
 test       t/007-word-boundaries.sh
 
 assertion  XCU.wc.008

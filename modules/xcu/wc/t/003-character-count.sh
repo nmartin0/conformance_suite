@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.wc.003
+# MUTANT    wc.m_ignored
+# MUTANT    wc.m_adds_c
+# MUTANT    wc.m_as_lines
+# MUTANT    wc.m_as_words
+# MUTANT    wc.name_missing
+# MUTANT    wc.l_off
+# MUTANT    wc.status1
+# VARIANT   wc.padded
 . "$PC_CORE/pc.sh"
 pc_begin XCU.wc.003
 LC_ALL=POSIX

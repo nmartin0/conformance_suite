@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.wc.010
+# MUTANT    wc.m_bytes
+# MUTANT    wc.ignores_lang
+# MUTANT    wc.ignores_lc_all
+# MUTANT    wc.ignores_lc_ctype
+# MUTANT    wc.lang_over_ctype
+# MUTANT    wc.lc_all_lowest
+# MUTANT    wc.null_lc_all_overrides
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcloc.sh"
 pc_begin XCU.wc.010

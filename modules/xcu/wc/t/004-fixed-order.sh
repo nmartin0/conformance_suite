@@ -2,6 +2,17 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.wc.004
+# MUTANT    wc.order_args
+# MUTANT    wc.opt_last_wins
+# MUTANT    wc.swap_lw
+# MUTANT    wc.drop_l_combo
+# MUTANT    wc.opt_extra_l
+# MUTANT    wc.opt_extra_w
+# MUTANT    wc.opt_extra_c
+# MUTANT    wc.l_ignored
+# MUTANT    wc.w_ignored
+# MUTANT    wc.c_ignored
+# VARIANT   wc.padded
 . "$PC_CORE/pc.sh"
 pc_begin XCU.wc.004
 LC_ALL=POSIX
