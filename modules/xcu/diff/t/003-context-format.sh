@@ -75,8 +75,9 @@ want="***************${NL}*** 2,6 ****${NL}  b${NL}  c${NL}! d${NL}  e${NL}  f${
 [ "$(body "$out")" = "$want" ] || pc_fail "-C 2 did not give two lines of context"
 diff -c f1 f2 >/dev/null 2>&1 </dev/null
 [ $? -eq 1 ] || pc_fail "-c with differences did not give status 1"
-out=$(diff -c f1 f1 2>/dev/null </dev/null; printf 'rc=%s' "$?")
-[ "$out" = "rc=0" ] || pc_fail "-c with identical files wrote output or gave a status other than 0"
+# the text does not say whether the file names are written when nothing differs
+diff -c f1 f1 >/dev/null 2>&1 </dev/null
+[ $? -eq 0 ] || pc_fail "-c with identical files gave a status other than 0"
 mkf g1 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
 mkf g2 1 X 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 Y 20
 out=$(cnorm "$(diff -C 1 g1 g2 2>/dev/null </dev/null)")

@@ -17,6 +17,9 @@ r=$(echo $r)
 [ "$r" = "01 01" ] || pc_fail "obase 99 printed '$r', wanted '01 01'"
 printf 'scale=99\n1/3\n' | bc 2>/dev/null | tr -d '\\\n' >got.third || pc_fail "bc failed with scale 99"
 echo >>got.third
+# a leading zero before the radix point of a value below one is unspecified
+sed 's/^0\././' got.third >got.third2 || pc_unresolved "cannot normalise the output"
+mv got.third2 got.third
 cmp -s got.third third || pc_fail "scale 99 gave '$(cat got.third)'"
 r=$(printf 'a[2047]=5\na[2047]\n' | bc 2>/dev/null) || pc_fail "bc failed with array index 2047"
 [ "$r" = 5 ] || pc_fail "array element 2047 gave '$r'"

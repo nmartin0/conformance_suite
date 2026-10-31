@@ -27,7 +27,16 @@ b() { printf '%b\n' "$1" | bc 2>/dev/null; }
 [ "$(b 'obase')" = "10" ] || pc_fail "the initial obase was not 10"
 [ "$(b 'scale=1\nobase=16\n1.5')" = "1.8" ] || pc_fail "1.5 in base 16 not 1.8"
 [ "$(b 'obase=25\n1024')" = " 01 15 24" ] || pc_fail "1024 in base 25 not  01 15 24"
-[ "$(b 'obase=125\n1024')" = " 008 024" ] || pc_fail "1024 in base 125 not  008 024"
+# a base above the limit is not required to work
+bm=$(getconf BC_BASE_MAX 2>/dev/null)
+case $bm in
+'' | *[!0-9]*) ;;
+*)
+	if [ "$bm" -ge 125 ]; then
+		[ "$(b 'obase=125\n1024')" = " 008 024" ] || pc_fail "1024 in base 125 not  008 024"
+	fi
+	;;
+esac
 [ "$(b 'obase=2\n255')" = "11111111" ] || pc_fail "255 in base 2 wrong"
 [ "$(b 'obase=16\n4095')" = "FFF" ] || pc_fail "4095 in base 16 wrong"
 pc_pass
