@@ -1,0 +1,26 @@
+# ci/mutate.sh --sut-sh fixture: known answers (not part of the suite)
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XCU.pcfs.001
+anchor     utilities/read.html#DESCRIPTION
+class      required
+says       Fixture: caught under both shells.
+test       t/001-both.sh
+
+assertion  XCU.pcfs.002
+anchor     utilities/read.html#DESCRIPTION
+class      required
+says       Fixture: the baseline is UNRESOLVED under shell a; caught under b.
+test       t/002-only-b.sh
+
+assertion  XCU.pcfs.003
+anchor     utilities/read.html#DESCRIPTION
+class      required
+says       Fixture: caught under shell a, passes with the fault under b.
+test       t/003-miss-b.sh
+
+assertion  XCU.pcfs.004
+anchor     utilities/read.html#DESCRIPTION
+class      required
+says       Fixture: the baseline is UNRESOLVED under both shells.
+test       t/004-nowhere.sh

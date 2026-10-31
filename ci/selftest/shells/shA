@@ -1,0 +1,5 @@
+#!/bin/sh
+# Fixture shell A for the --sut-sh check: sh, but tells the tests which it is.
+PC_FX_WHICH=a
+export PC_FX_WHICH
+exec sh "$@"
