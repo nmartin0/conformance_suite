@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.rename.019
+ * MUTANT    rename.fail_creates_new
  * MUTANT    rename.enoent_as_enotdir
  * MUTANT    rename.missing_ok
  * MUTANT    rename.empty_ok

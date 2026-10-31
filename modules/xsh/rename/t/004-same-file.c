@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.rename.004
+ * MUTANT    rename.same_file_removes_new
+ * MUTANT    rename.same_file_fails
  * MUTANT    rename.same_file_removes
  */
 #include "pc.h"

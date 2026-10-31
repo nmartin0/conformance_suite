@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.rename.005
+ * MUTANT    rename.symlink_recreated
  * MUTANT    rename.follows_old
  */
 #include "pc.h"

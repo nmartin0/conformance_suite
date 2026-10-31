@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.rename.015
+ * MUTANT    rename.times_new_kept
+ * MUTANT    rename.times_old_kept
  * MUTANT    rename.times_kept
  * VARIANT   rename.coarse_times
  */

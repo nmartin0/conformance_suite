@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.rename.036
  * MUTANT    rename.eloop_as_enoent
+ * READING   rename.old_loop_enoent
  */
 #include "pc.h"
 #include <errno.h>

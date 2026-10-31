@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.rename.025
+ * MUTANT    rename.eacces_ok
  * MUTANT    rename.eacces_as_eperm
  */
 #include "pc.h"

@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.rename.013
+ * MUTANT    rename.slash_ignored_file
+ * MUTANT    rename.slash_ignored_missing
  * MUTANT    rename.slash_ignored
  * MUTANT    rename.slash_old_ignored
  */
@@ -200,7 +202,7 @@ int main(void)
 		pc_expect_err(rename("f", "nf/"), ENOTDIR, "rename(\"f\", \"nf/\")");
 		pc_expect_err(rename("f", "g/"), ENOTDIR, "rename(\"f\", \"g/\")");
 		pc_expect_err(rename("f/", "x"), ENOTDIR, "rename(\"f/\", \"x\")");
-		pc_check(pc_file_equals("f", "f") && pc_file_equals("g", "g") && !exists("nf") && !exists("x"), "a failed rename() changed a name");
+		pc_check(exists("f") && exists("g") && pc_file_equals("f", "f") && pc_file_equals("g", "g") && !exists("nf") && !exists("x"), "a failed rename() changed a name");
 		(void)r;
 	}
 	pc_pass();

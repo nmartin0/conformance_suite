@@ -209,7 +209,7 @@ int main(void)
 		st = lst("d2/g");
 		pc_check(same_file(&st, &ref), "d2/g is not d1/f");
 		pc_check(!exists("d1/f"), "d1/f still exists");
-		pc_check(pc_file_equals("f", "decoy f") && pc_file_equals("g", "decoy g"),
+		pc_check(exists("f") && exists("g") && pc_file_equals("f", "decoy f") && pc_file_equals("g", "decoy g"),
 			 "renameat() touched the working directory");
 	}
 	pc_pass();

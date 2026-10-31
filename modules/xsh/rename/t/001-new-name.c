@@ -207,7 +207,7 @@ int main(void)
 		st = lst("g");
 		pc_check(same_file(&st, &ref), "g is not the renamed file");
 		pc_check(st.st_nlink == 1, "st_nlink %lu after the rename", (unsigned long)st.st_nlink);
-		pc_check(pc_file_equals("g", "contents"), "g lost the contents");
+		pc_check(exists("g") && pc_file_equals("g", "contents"), "g lost the contents");
 	}
 	pc_pass();
 }

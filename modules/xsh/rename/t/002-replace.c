@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.rename.002
+ * MUTANT    rename.copies
  * MUTANT    rename.noop
  * MUTANT    rename.keeps_new
  */
@@ -203,7 +204,7 @@ int main(void)
 		pc_check(!exists("f"), "the old name still exists");
 		st = lst("g");
 		pc_check(same_file(&st, &ref), "g is not the renamed file");
-		pc_check(pc_file_equals("g", "new contents"), "g does not have the renamed file's contents");
+		pc_check(exists("g") && pc_file_equals("g", "new contents"), "g does not have the renamed file's contents");
 	}
 	pc_pass();
 }

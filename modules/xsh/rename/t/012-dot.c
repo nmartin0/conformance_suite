@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.rename.012
+ * MUTANT    rename.dotdot_resolved
+ * MUTANT    rename.einval_ok
  * MUTANT    rename.einval_as_enoent
  * MUTANT    rename.dot_resolved
  */

@@ -218,7 +218,7 @@ int main(void)
 		default:
 			pc_fail("rename() onto another user's file in a sticky directory failed with the wrong error");
 		}
-		pc_check(pc_file_equals("t/f", "kept"), "the other user's file was replaced");
+		pc_check(exists("t/f") && pc_file_equals("t/f", "kept"), "the other user's file was replaced");
 	}
 	pc_pass();
 }

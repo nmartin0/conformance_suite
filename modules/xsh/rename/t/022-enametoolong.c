@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.rename.022
+ * MUTANT    rename.long_ok
  * MUTANT    rename.long_as_enoent
  */
 #include "pc.h"
