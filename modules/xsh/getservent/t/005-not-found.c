@@ -5,6 +5,8 @@
  * ASSERTION XSH.getservent.005
  */
 #include "dbcommon.h"
+#include <arpa/inet.h>
+#include <stdint.h>
 
 int main(void)
 {

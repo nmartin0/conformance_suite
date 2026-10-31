@@ -85,7 +85,12 @@ int main(void)
 		sigemptyset(&sa.sa_mask);
 		res[0] = -1;
 		res[1] = 0;
+#ifdef SIGXFSZ	/* XSI: without it there is no signal to ignore */
 		if (sigaction(SIGXFSZ, &sa, NULL) == 0) {
+#else
+		(void)sa;
+		{
+#endif
 			rl.rlim_cur = 1048576;
 			if (setrlimit(RLIMIT_FSIZE, &rl) == 0)
 				res[0] = posix_fallocate(fd, 0, 2097152);

@@ -30,7 +30,9 @@ int main(void)
 	off = (off_t)1 << 32;
 	off += 5;
 	pc_require_space();
+#ifdef SIGXFSZ
 	(void)signal(SIGXFSZ, SIG_IGN);	/* a lowered file size limit gives EFBIG, not a signal */
+#endif
 	fd = open("f", O_RDWR | O_CREAT, 0600);
 	pc_check(fd >= 0, "cannot create f");
 	if (lseek(fd, off, SEEK_SET) != off)

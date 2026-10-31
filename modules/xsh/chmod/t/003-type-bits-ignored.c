@@ -201,12 +201,21 @@ int main(void)
 	pc_begin("XSH.chmod.003");
 	{
 		struct stat st;
+		mode_t dirtype;
 		int r;
 
+		/*
+		 * The S_IF* names are XSI, so the directory type bits are taken
+		 * from the st_mode of a real directory instead.
+		 */
 		pc_make_file("f", "x");
+		pc_make_dir("d");
+		st = lst("d");
+		dirtype = st.st_mode & ~(mode_t)07777;
+		pc_check(S_ISDIR(st.st_mode) && dirtype != 0, "a directory's st_mode %#o carries no type bits", (unsigned)st.st_mode);
 		pc_test();
-		r = chmod("f", S_IFDIR | 0640);
-		pc_check(r == 0, "chmod(f, S_IFDIR | 0640) returned %d (%s)", r, pc_errname(errno));
+		r = chmod("f", dirtype | 0640);
+		pc_check(r == 0, "chmod(f, <directory type bits> | 0640) returned %d (%s)", r, pc_errname(errno));
 		st = lst("f");
 		pc_check(S_ISREG(st.st_mode) && (st.st_mode & 07777) == 0640, "st_mode %#o after the call", (unsigned)st.st_mode);
 	}

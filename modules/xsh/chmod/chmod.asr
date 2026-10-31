@@ -23,7 +23,8 @@ assertion  XSH.chmod.003
 anchor     functions/chmod.html#DESCRIPTION
 class      required
 since      2008
-says       chmod("f", S_IFDIR | 0640) of a regular file succeeds; f stays a
+says       chmod("f", m | 0640), where m is the file-type bits of a directory's
+           st_mode, of a regular file succeeds; f stays a
            regular file with permission bits 0640.
 test       t/003-type-bits-ignored.c
 

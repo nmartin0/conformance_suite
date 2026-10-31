@@ -84,7 +84,9 @@ static int child(void)
 	int i, e;
 
 	sigemptyset(&s);
+#ifdef SIGXFSZ	/* XSI: without it there is no signal to block */
 	sigaddset(&s, SIGXFSZ);
+#endif
 	if (sigprocmask(SIG_BLOCK, &s, NULL) != 0 || getrlimit(RLIMIT_FSIZE, &rl) != 0)
 		return 99;
 	if (rl.rlim_max != RLIM_INFINITY && rl.rlim_max < 100)
@@ -105,7 +107,7 @@ static int child(void)
 		return e == 0 ? 1 : 2;
 	if (ferror(f))
 		return 3;
-#if defined(_XOPEN_UNIX) && _XOPEN_UNIX != -1
+#if defined(_XOPEN_UNIX) && _XOPEN_UNIX != -1 && defined(SIGXFSZ)
 	if (sigpending(&s) != 0 || !sigismember(&s, SIGXFSZ))
 		return 4;
 #endif

@@ -24,7 +24,9 @@ static int child(int fd)
 	struct rlimit rl;
 	char buf[100];
 
+#ifdef SIGXFSZ	/* XSI: without it there is no signal to ignore */
 	(void)signal(SIGXFSZ, SIG_IGN);
+#endif
 	if (getrlimit(RLIMIT_FSIZE, &rl) != 0)
 		return 90;
 	rl.rlim_cur = 4096;
