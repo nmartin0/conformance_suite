@@ -461,7 +461,9 @@ int main(void)
 	go();
 	rep_get(&r, 30000);
 	settle(&r);
-	PUT(m, "\032" "z");
+	PUT(m, "\032");
+	msleep(300);	/* the flush the character causes is over before the next byte arrives */
+	PUT(m, "z");
 	rep_get(&r, 30000);
 	end_session();
 	settle(&r);
