@@ -1,4 +1,4 @@
-# id NAME for the real user, run with privilege.
+# id NAME for the real user.
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.id.007

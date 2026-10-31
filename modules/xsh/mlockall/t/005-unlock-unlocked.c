@@ -251,9 +251,14 @@ static inline void lock_or_skip(int r)
 
 int main(void)
 {
+	int r, e;
+
 	pc_begin("XSH.mlockall.005");
 
 	pc_test();
-	pc_check(munlockall() == 0, "munlockall failed: %s", pc_errname(errno));
+	errno = 0;
+	r = munlockall();
+	e = errno;
+	pc_check(r == 0, "munlockall returned %d (errno %s)", r, pc_errname(e));
 	pc_pass();
 }
