@@ -19,11 +19,18 @@ NL='
 '
 printf '%s\n' 1 2 3 4 5 6 7 8 9 10 11 12 >f12 || pc_fail "cannot create input"
 # A line far longer than any line-length limit (the text says the length is not restricted).
-l=x
+# Built in pieces, so no single command-line argument is very large.
+c=xxxxxxxxxxxxxxxx
 i=0
-while [ $i -lt 17 ]; do l=$l$l; i=$((i + 1)); done
-printf '%s\nsecond\nthird\n' "$l" >big || pc_fail "cannot create input"
-printf '%s\nsecond\n' "$l" >bigexp || pc_fail "cannot create input"
+while [ $i -lt 6 ]; do c=$c$c; i=$((i + 1)); done
+: >big; : >bigexp
+i=0
+while [ $i -lt 128 ]; do
+	printf '%s' "$c" >>big && printf '%s' "$c" >>bigexp || pc_fail "cannot create input"
+	i=$((i + 1))
+done
+printf '\nsecond\nthird\n' >>big || pc_fail "cannot create input"
+printf '\nsecond\n' >>bigexp || pc_fail "cannot create input"
 pc_test
 got=$(head -n 3 f12 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "1${NL}2${NL}3${NL}rc=0" ] || pc_fail "-n 3 did not write exactly three lines"

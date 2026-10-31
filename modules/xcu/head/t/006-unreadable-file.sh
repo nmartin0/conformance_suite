@@ -7,6 +7,7 @@
 # MUTANT    head.err_stops
 # MUTANT    head.err_status_last
 # MUTANT    head.err_status_first
+# MUTANT    head.err_no_diag
 # VARIANT   head.err_status2
 # VARIANT   head.err_verbose
 # VARIANT   head.err_header
@@ -40,5 +41,7 @@ esac
 got=$(head nosuchfile 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 rc=${got##*rc=}
 case $rc in 0 | *[!0-9]*) pc_fail "status is not nonzero for a single unreadable operand" ;; esac
+head nosuchfile >/dev/null 2>err </dev/null
+[ -s err ] || pc_fail "no diagnostic on standard error for an unreadable operand"
 [ "${got%rc=*}" = "" ] || pc_fail "output was written for a single unreadable operand"
 pc_pass
