@@ -10,7 +10,8 @@ pc_top=$(pwd) || pc_unresolved "cannot find the working directory"
 pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
-ids() { grep '^msgid "[^"]' "$1" | sed 's/^msgid "//; s/"$//' | tr '\n' ' '; }
+# the directive and its string are separated by one or more blanks
+ids() { sed -n 's/^msgid[[:blank:]][[:blank:]]*"\([^"].*\)"[[:blank:]]*$/\1/p' "$1" | tr '\n' ' '; }
 cat >t.c <<'EOC'
 void f(void)
 {
@@ -20,6 +21,6 @@ void f(void)
 EOC
 pc_test
 xgettext -n t.c </dev/null >o 2>e || pc_fail "xgettext -n: nonzero status"
-awk '/^msgid /{ if ($0 == "msgid \"alpha\"" && ref) ok = 1; ref = 0 } /^#:/{ ref = 1 } END { exit !ok }' messages.po || pc_fail "no #: comment line before the msgid"
+awk '/^msgid[ \t]/{ if ($0 ~ /^msgid[ \t]+"alpha"[ \t]*$/ && ref) ok = 1; ref = 0 } /^#:/{ ref = 1 } END { exit !ok }' messages.po || pc_fail "no #: comment line before the msgid"
 grep '^#:.*t\.c:4' messages.po >/dev/null || pc_fail "no t.c:4 reference: $(grep '^#:' messages.po)"
 pc_pass
