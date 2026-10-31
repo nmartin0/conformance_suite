@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.003
+# MUTANT    ls.A_ignored
+# MUTANT    ls.A_is_a
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.003
 nl='
