@@ -3,6 +3,11 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.strtol.005
+ * MUTANT    strtol.ws_none
+ * MUTANT    strtol.ws_only_space
+ * MUTANT    strtol.ws_no_vt_ff
+ * MUTANT    strtol.ws_no_cr
+ * MUTANT    strtol.ws_one_only
  */
 #define IC_L
 #include "ic.h"
