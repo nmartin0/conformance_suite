@@ -11,8 +11,9 @@
  * fault active, a small driver runs the format one directive at a time:
  * white space and ordinary characters are matched here, each conversion is
  * handed to the C library's own vsscanf()/vfscanf() with "%n" appended,
- * and the faults bend one step of that. glibc compiles calls in strict
- * modes to __isoc99_* names, so those are interposed as well.
+ * and the faults bend one step of that. A header may bind these names to
+ * other symbols; the driver finds them (modules/xsh/fscanf/probe.c) and
+ * passes them as PC_SYM_<name>_<k>, and those are interposed as well.
  */
 #define _GNU_SOURCE 1
 #include <ctype.h>
@@ -58,14 +59,48 @@ static const char *mutant_of(const char *prefix)
 typedef int (*vs_fn)(const char *, const char *, va_list);
 typedef int (*vf_fn)(FILE *, const char *, va_list);
 
+static const char *const vs_names[] = {
+#ifdef PC_SYM_vsscanf_1
+	PC_SYM_vsscanf_1,
+#endif
+#ifdef PC_SYM_vsscanf_2
+	PC_SYM_vsscanf_2,
+#endif
+#ifdef PC_SYM_vsscanf_3
+	PC_SYM_vsscanf_3,
+#endif
+	"vsscanf",
+	NULL
+};
+static const char *const vf_names[] = {
+#ifdef PC_SYM_vfscanf_1
+	PC_SYM_vfscanf_1,
+#endif
+#ifdef PC_SYM_vfscanf_2
+	PC_SYM_vfscanf_2,
+#endif
+#ifdef PC_SYM_vfscanf_3
+	PC_SYM_vfscanf_3,
+#endif
+	"vfscanf",
+	NULL
+};
+
+static void *next_of(const char *const *nm)
+{
+	void *f = NULL;
+
+	for (; *nm != NULL && f == NULL; nm++)
+		f = dlsym(RTLD_NEXT, *nm);
+	return f;
+}
+
 static vs_fn real_vs(void)
 {
 	static vs_fn f;
 
 	if (f == NULL)
-		f = (vs_fn)dlsym(RTLD_NEXT, "__isoc99_vsscanf");
-	if (f == NULL)
-		f = (vs_fn)dlsym(RTLD_NEXT, "vsscanf");
+		f = (vs_fn)next_of(vs_names);
 	return f;
 }
 
@@ -74,9 +109,7 @@ static vf_fn real_vf(void)
 	static vf_fn f;
 
 	if (f == NULL)
-		f = (vf_fn)dlsym(RTLD_NEXT, "__isoc99_vfscanf");
-	if (f == NULL)
-		f = (vf_fn)dlsym(RTLD_NEXT, "vfscanf");
+		f = (vf_fn)next_of(vf_names);
 	return f;
 }
 
@@ -734,9 +767,9 @@ static int scan(FILE *f, const char *s, const char *fmt, va_list ap)
 }
 
 /*
- * The entry points get their symbol names from asm labels: under
- * _GNU_SOURCE, glibc's <stdio.h> renames sscanf() and the others to
- * __isoc23_* itself, so a plain definition would land on that name.
+ * The entry points get their symbol names from asm labels: a header may
+ * rename sscanf() and the others itself, so a plain definition would land
+ * on the wrong name.
  */
 #define ENTRY_S(fn, sym) \
 int fn(const char *restrict s, const char *restrict fmt, ...) __asm__(sym); \
@@ -773,11 +806,32 @@ int fn(const char *restrict fmt, ...) \
 }
 
 ENTRY_S(pc_sscanf, "sscanf")
-ENTRY_S(pc_sscanf99, "__isoc99_sscanf")
-ENTRY_S(pc_sscanf23, "__isoc23_sscanf")
+#ifdef PC_SYM_sscanf_1
+ENTRY_S(pc_sscanf_1, PC_SYM_sscanf_1)
+#endif
+#ifdef PC_SYM_sscanf_2
+ENTRY_S(pc_sscanf_2, PC_SYM_sscanf_2)
+#endif
+#ifdef PC_SYM_sscanf_3
+ENTRY_S(pc_sscanf_3, PC_SYM_sscanf_3)
+#endif
 ENTRY_F(pc_fscanf, "fscanf")
-ENTRY_F(pc_fscanf99, "__isoc99_fscanf")
-ENTRY_F(pc_fscanf23, "__isoc23_fscanf")
+#ifdef PC_SYM_fscanf_1
+ENTRY_F(pc_fscanf_1, PC_SYM_fscanf_1)
+#endif
+#ifdef PC_SYM_fscanf_2
+ENTRY_F(pc_fscanf_2, PC_SYM_fscanf_2)
+#endif
+#ifdef PC_SYM_fscanf_3
+ENTRY_F(pc_fscanf_3, PC_SYM_fscanf_3)
+#endif
 ENTRY_IN(pc_scanf, "scanf")
-ENTRY_IN(pc_scanf99, "__isoc99_scanf")
-ENTRY_IN(pc_scanf23, "__isoc23_scanf")
+#ifdef PC_SYM_scanf_1
+ENTRY_IN(pc_scanf_1, PC_SYM_scanf_1)
+#endif
+#ifdef PC_SYM_scanf_2
+ENTRY_IN(pc_scanf_2, PC_SYM_scanf_2)
+#endif
+#ifdef PC_SYM_scanf_3
+ENTRY_IN(pc_scanf_3, PC_SYM_scanf_3)
+#endif
