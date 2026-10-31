@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.023
+# MUTANT   find.opt_H_ignored
+# MUTANT   find.opt_L_ignored
+# MUTANT   find.opt_H_as_L
+# MUTANT   find.opt_L_as_H
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.023
 same_set() {

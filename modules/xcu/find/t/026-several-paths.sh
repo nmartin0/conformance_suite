@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.026
+# MUTANT   find.paths_first_only
+# MUTANT   find.paths_last_only
+# VARIANT  find.order_reverse
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.026
 same_set() {
@@ -19,8 +22,8 @@ printf 'd\n' >t/sub/d.c || pc_fail "cannot create t/sub/d.c"
 ln -s a.txt t/l || pc_fail "cannot create symbolic link"
 mkfifo t/p || pc_fail "cannot create FIFO"
 pc_test
-got=$(find t/empty t/sub -type f 2>err </dev/null)
+got=$(find t/empty t/sub t/a.txt -type f 2>err </dev/null)
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "two paths: find exited with status $rc"
-same_set "$got" "t/sub/c.txt t/sub/d.c" || pc_fail "two paths: found '$got'"
+same_set "$got" "t/sub/c.txt t/sub/d.c t/a.txt" || pc_fail "two paths: found '$got'"
 pc_pass

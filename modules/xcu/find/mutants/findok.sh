@@ -15,14 +15,15 @@ prompt_pathfirst) pcf_l=$(for a; do :; done; printf %s "$a"); printf '%s: %s (y/
 *) printf '< %s ... > ? ' "$*" >&2 ;;
 esac
 ans=
-IFS= read -r ans || ans=
+case $mode in
+reply_onechar) ans=$(dd bs=1 count=1 2>/dev/null) ;;
+*) IFS= read -r ans || ans= ;;
+esac
 ok=
 case $mode in
 reply_lower) case $ans in y*) ok=1 ;; esac ;;
 reply_exact) [ "$ans" = y ] && ok=1 ;;
-reply_char)
-	# only the first character of the line is taken as the reply
-	case $ans in [yY]*) ok=1 ;; esac ;;
+reply_onechar) case $ans in [yY]*) ok=1 ;; esac ;;
 inverted) case $ans in [yY]*) ;; *) ok=1 ;; esac ;;
 always) ok=1 ;;
 *) case $ans in [yY]*) ok=1 ;; esac ;;

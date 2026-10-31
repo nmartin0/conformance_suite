@@ -9,6 +9,7 @@
 # MUTANT   find.all_skip_symlinks
 # MUTANT   find.all_skip_fifo
 # MUTANT   find.all_skip_empty_dir
+# VARIANT  find.order_reverse
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.001
 same_set() {

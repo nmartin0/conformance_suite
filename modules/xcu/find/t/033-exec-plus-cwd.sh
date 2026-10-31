@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.033
+# MUTANT   find.plus_cwd
+# VARIANT  find.plus_single
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.033
 mkdir -p d/sub || pc_unresolved "cannot create d/sub"

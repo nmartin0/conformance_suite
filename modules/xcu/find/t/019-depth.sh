@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.019
+# MUTANT   find.depth_ignored
+# MUTANT   find.depth_root_only
+# MUTANT   find.depth_always
+# VARIANT  find.order_reverse
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.019
 mkdir t t/sub t/empty || pc_fail "cannot create directories"

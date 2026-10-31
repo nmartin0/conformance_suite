@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.017
+# MUTANT   find.print0_newline
+# MUTANT   find.print0_both
+# MUTANT   find.print0_double
+# MUTANT   find.print0_sep
+# MUTANT   find.print0_nothing
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.017
 nl='

@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.025
+# MUTANT   find.err_no_diag
+# MUTANT   find.err_skipped
+# MUTANT   find.err_stops
+# MUTANT   find.status_always0
+# MUTANT   find.stderr_to_stdout
+# VARIANT  find.status2
+# VARIANT  find.status255
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.025
 same_set() {

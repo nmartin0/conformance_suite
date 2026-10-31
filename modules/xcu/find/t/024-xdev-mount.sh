@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.024
+# MUTANT   find.xdev_false
+# MUTANT   find.xdev_prunes_all
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.024
 same_set() {

@@ -40,6 +40,24 @@ pc_findmut() {
 		rm -f pc-mutbin/tok.$$ pc-mutbin/tok2.$$
 		;;
 	esac
+	# ---- implicit -print faults look at the whole expression first
+	pcf_pr= pcf_ex= pcf_or=
+	for pcf_x in "$@"; do
+		case $pcf_x in
+		-print | -print0) pcf_pr=1 ;;
+		-exec | -ok) pcf_ex=1 ;;
+		-o) pcf_or=1 ;;
+		esac
+	done
+	case $M in
+	depth_prune_acts)
+		pcf_d= pcf_p=
+		for pcf_x in "$@"; do
+			[ "$pcf_x" = -depth ] && pcf_d=1
+			[ "$pcf_x" = -prune ] && pcf_p=1
+		done
+		[ -n "$pcf_d" ] && [ -n "$pcf_p" ] && M=depth_ignored ;;
+	esac
 	# ---- argument rewriting
 	hasdepth=
 	phase=0 inexec= execkind= prev= drop= skip= stopped= seenpath= firstopt=
@@ -66,6 +84,7 @@ pc_findmut() {
 		if [ "$phase" = 1 ]; then
 			[ -n "$stopped" ] && drop=1
 			case $M in
+			err_skipped) [ -e "$a" ] || [ -L "$a" ] || drop=1 ;;
 			err_stops) [ -e "$a" ] || [ -L "$a" ] || stopped=1 ;;
 			paths_first_only) [ -n "$seenpath" ] && drop=1 ;;
 			paths_last_only)
@@ -97,6 +116,7 @@ pc_findmut() {
 				-H | -L)
 					if [ -n "$firstopt" ]; then drop=1; else firstopt=$a; fi ;;
 				esac ;;
+			newer_link_own) case $a in -H | -L) a=-P ;; esac ;;
 			opt_H_as_L) [ "$a" = -H ] && a=-L ;;
 			opt_L_as_H) [ "$a" = -L ] && a=-H ;;
 			esac
@@ -112,6 +132,16 @@ pc_findmut() {
 				esac
 			fi
 			case $M in
+			depth_if_evaluated)
+				case $prev in
+				-a | -o | '(') [ "$a" = -depth ] && drop=1 ;;
+				esac ;;
+			newer_link_own) ;;
+			newer_dangling_old)
+				if [ "$prev" = -newer ] && [ -L "$a" ] && [ ! -e "$a" ]; then
+					[ -f "$PCF_DIR/ref0" ] || TZ=UTC0 touch -t 197001020000 "$PCF_DIR/ref0"
+					a=$PCF_DIR/ref0
+				fi ;;
 			depth_root_only) [ "$a" = -depth ] && { drop=1; hasdepth=1; } ;;
 			# ---- 003 -name
 			name_whole_path) [ "$a" = -name ] && a=-path ;;
@@ -444,6 +474,11 @@ pc_findmut() {
 		fi
 		[ -n "$term" ] && inexec=
 	done
+	case $M in
+	depth_always) set -- "$@" -depth ;;
+	implicit_print_with_exec) [ -n "$pcf_ex" ] && [ -z "$pcf_pr" ] && set -- "$@" -print ;;
+	implicit_print_ungrouped) [ -z "$pcf_ex$pcf_pr" ] && [ -n "$pcf_or" ] && set -- "$@" -print ;;
+	esac
 	pc_findrun "$@"
 }
 
@@ -524,6 +559,13 @@ pc_findrun() {
 	print0_sep)
 		tr '\000' '\n' <"$out" | { first=1; while IFS= read -r l; do [ -z "$first" ] && printf '\000'; printf '%s' "$l"; first=; done; } ;;
 	print0_nothing) : ;;
+	implicit_print_missing) [ -n "$pcf_ex$pcf_pr" ] && cat "$out" ;;
+	dangling_dropped)
+		while IFS= read -r l; do if [ -L "$l" ] && [ ! -e "$l" ]; then :; else printf '%s\n' "$l"; fi; done <"$out" ;;
+	dangling_error)
+		while IFS= read -r l; do
+			if [ -L "$l" ] && [ ! -e "$l" ]; then echo "find: $l: dangling" >&2; rc=1; else printf '%s\n' "$l"; fi
+		done <"$out" ;;
 	order_reverse) awk -v depth="${hasdepth:+1}" -f "$PCF_DIR/findorder.awk" "$out" ;;
 	*) cat "$out" ;;
 	esac
