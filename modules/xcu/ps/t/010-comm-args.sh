@@ -7,7 +7,9 @@ pc_begin XCU.ps.010
 LC_ALL=C; export LC_ALL
 bg=
 trap '[ -n "$bg" ] && { kill "$bg" 2>/dev/null; wait "$bg" 2>/dev/null; }' EXIT
-sleep 301 </dev/null >/dev/null 2>&1 &
+# env runs sleep as a separate program: a shell may run sleep itself, and then
+# the background child is a copy of the shell, not sleep
+env sleep 301 </dev/null >/dev/null 2>&1 &
 bg=$!
 pc_test
 # The child may not have started sleep yet; look again for a few seconds.
