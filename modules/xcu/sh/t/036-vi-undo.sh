@@ -28,12 +28,15 @@ chk() {
 	n=$(printf '%s\n' "$o" | grep -c -x -F -e "$2")
 	[ "$n" -eq "$1" ] || pc_fail "the line '$2' appeared $n times, wanted $1: $o"
 }
-printf 'set -o vi\necho abc\03305lxxu\necho one\03305lxxU\nexit\n' >pc.in || pc_unresolved "write"
+# Whether the text typed into a new line counts among the changes that U
+# undoes is not stated, but U never undoes the copy of a command line to the
+# edit line; so U is tried on a line recalled with k.
+printf 'set -o vi\necho abc\03305lxxu\necho one\n\033k05lxxU\nexit\n' >pc.in || pc_unresolved "write"
 pc_test
 ish pc.in
 o=$(tr -d '\r' <pty.out)
 chk 1 'bc'
-chk 1 'one'
+chk 2 'one'
 chk 0 'c'
 chk 0 'e'
 pc_pass

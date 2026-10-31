@@ -29,6 +29,10 @@ chk() {
 	[ "$n" -eq "$1" ] || pc_fail "the line '$2' appeared $n times, wanted $1: $o"
 }
 printf 'PCMV=expd\nsleep 1; echo m >>pc.mail\necho\nexit\n' >pc.in || pc_unresolved "write"
+# The message after % is the one for a change of modification time; for a
+# file that is created the message is not stated, so the file exists, with
+# an old time, before the shell starts.
+: >pc.mail && touch -t 200001010000 pc.mail || pc_unresolved "cannot create the mail file"
 mp="$PWD/pc.mail%tok-\$PCMV"
 pc_test
 ish pc.in "MAILPATH=$mp" MAILCHECK=0

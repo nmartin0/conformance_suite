@@ -28,7 +28,9 @@ chk() {
 	n=$(printf '%s\n' "$o" | grep -c -x -F -e "$2")
 	[ "$n" -eq "$1" ] || pc_fail "the line '$2' appeared $n times, wanted $1: $o"
 }
-printf 'set -o vi\necho vt$((1+1))est\033v\n\033\n\033\n:wq\n' >pc.in || pc_unresolved "write"
+# the helper never ends the input, so the session ends with exit once the
+# edited command has run
+printf 'set -o vi\necho vt$((1+1))est\033v\n\033\n\033\n:wq\nexit\n' >pc.in || pc_unresolved "write"
 pc_test
 ish pc.in
 o=$(tr -d '\r' <pty.out)
