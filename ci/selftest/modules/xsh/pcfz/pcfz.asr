@@ -1,0 +1,8 @@
+# ci/mutate.sh fixture: a header that redirects a name to another symbol
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+
+assertion  XSH.pcfz.001
+anchor     functions/getpid.html#DESCRIPTION
+class      required
+says       Fixture: pcfz_pid() returns a positive number (its header binds it to getppid).
+test       t/001-redirect.c

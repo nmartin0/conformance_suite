@@ -887,6 +887,70 @@ pc_decide() {
 
 # ---------- mutants (CI only) ----------
 
+# A header may redirect a plain function name to another symbol, so the
+# object a test builds references that symbol, not the name. A fault or
+# variant library must define the symbols the tests really reference, so
+# it is told them. modules/xsh/<function>/probe.c holds one
+# "#ifdef PC_PROBE_<name>" block for each interposed function, which calls
+# it once (no local arrays: the call must be the only new reference). The
+# file is compiled under every flag set the tests use, once with no block
+# and once with each, and the undefined symbols (nm -u) the block adds are
+# the ones the headers bind <name> to. Where there is no nm the compiler's
+# assembly output is searched for words that contain <name>. Each symbol
+# other than <name> becomes a string macro PC_SYM_<name>_1, _2, ... for
+# the library source (up to three). With no probe, or no redirection, none is set.
+pc_symflags=
+pc_symbols() { # module-directory
+	pc_symflags=
+	[ -f "$1/probe.c" ] || return 0
+	pc_pd=$ctx_build/probe
+	mkdir -p "$pc_pd" || pc_abort "cannot create probe dir"
+	for pc_pn in $(sed -n 's/^#ifdef PC_PROBE_\([A-Za-z0-9_]*\).*$/\1/p' "$1/probe.c"); do
+		pc_pseen=" $pc_pn "
+		pc_pk=0
+		for pc_pf in "" "-D_POSIX_C_SOURCE=202405L" "-D_XOPEN_SOURCE=800"; do
+			pc_pnm=no
+			if command -v nm >/dev/null 2>&1; then
+				# shellcheck disable=SC2086
+				if "$pc_cc" $pc_pf $pc_ccstrict -c -o "$pc_pd/b.o" "$1/probe.c" \
+				    >"$pc_pd/p.txt" 2>&1 </dev/null &&
+				    nm -P -u "$pc_pd/b.o" >"$pc_pd/b.txt" 2>/dev/null; then
+					pc_pnm=yes
+				fi
+			fi
+			# shellcheck disable=SC2086
+			"$pc_cc" $pc_pf $pc_ccstrict -c -DPC_PROBE_$pc_pn -o "$pc_pd/p.o" "$1/probe.c" \
+			    >"$pc_pd/p.txt" 2>&1 </dev/null || continue
+			if [ "$pc_pnm" = yes ] && nm -P -u "$pc_pd/p.o" >"$pc_pd/n.txt" 2>/dev/null; then
+				sed 's/[[:space:]].*$//' "$pc_pd/n.txt" >"$pc_pd/t.txt"
+				sed 's/[[:space:]].*$//' "$pc_pd/b.txt" >"$pc_pd/b1.txt"
+			else
+				# shellcheck disable=SC2086
+				"$pc_cc" $pc_pf $pc_ccstrict -S -DPC_PROBE_$pc_pn -o - "$1/probe.c" \
+				    2>/dev/null </dev/null | tr -c 'A-Za-z0-9_' '\n' | grep "$pc_pn" >"$pc_pd/t.txt"
+				: >"$pc_pd/b1.txt"
+			fi
+			# Where C names carry a leading '_' in the object, so does the
+			# plain name here: drop one from every symbol.
+			if grep -x "_$pc_pn" "$pc_pd/t.txt" >/dev/null 2>&1; then
+				sed 's/^_//' "$pc_pd/t.txt" >"$pc_pd/u.txt"
+				cat "$pc_pd/u.txt" >"$pc_pd/t.txt"
+			fi
+			while read -r pc_ps; do
+				case $pc_ps in '' | pc_probe*) continue ;; esac
+				grep -x "$pc_ps" "$pc_pd/b1.txt" >/dev/null 2>&1 && continue
+				case $pc_pseen in *" $pc_ps "*) continue ;; esac
+				[ "$pc_pk" -lt 3 ] || continue # the sources take three
+				pc_pseen="$pc_pseen$pc_ps "
+				pc_pk=$((pc_pk + 1))
+				pc_symflags="$pc_symflags -DPC_SYM_${pc_pn}_$pc_pk=\"$pc_ps\""
+			done <"$pc_pd/t.txt"
+		done
+	done
+	rm -rf "$pc_pd"
+	return 0
+}
+
 # C: modules/xsh/<function>/mutants/*.c builds one preload library that
 # implements every "<function>.<fault>" mutant.
 pc_mutant_c() {
@@ -897,10 +961,12 @@ pc_mutant_c() {
 	if [ ! -f "$pc_so" ]; then
 		set -- "$pc_mdir"/*.c
 		[ -f "$1" ] || pc_abort "no mutant sources in $pc_mdir"
-		pc_sk=$(pc_cache_key "mutant library: $pc_cc -shared -fPIC ${PC_MUTANT_LDFLAGS--ldl}" "$@")
+		pc_symbols "$pc_modroot/xsh/$pc_func"
+		pc_sk=$(pc_cache_key "mutant library: $pc_cc -shared -fPIC ${PC_MUTANT_LDFLAGS--ldl} $pc_symflags" "$@" \
+		    "$pc_modroot/xsh/$pc_func"/probe.c)
 		if ! pc_cache_get "$pc_sk" "$pc_so"; then
 			# shellcheck disable=SC2086
-			"$pc_cc" -shared -fPIC -o "$pc_so" "$@" ${PC_MUTANT_LDFLAGS--ldl} \
+			"$pc_cc" -shared -fPIC $pc_symflags -o "$pc_so" "$@" ${PC_MUTANT_LDFLAGS--ldl} \
 			    >"$ctx_out/mutant-$pc_func.build.txt" 2>&1 </dev/null ||
 			    pc_abort "cannot build mutant library for $pc_func"
 			pc_cache_put "$pc_sk" "$pc_so"
@@ -920,11 +986,12 @@ pc_variant_c() {
 	pc_so=$ctx_build/variants/$pc_func.so
 	mkdir -p "$ctx_build/variants" || pc_abort "cannot create variant dir"
 	if [ ! -f "$pc_so" ]; then
-		pc_sk=$(pc_cache_key "variant library: $pc_cc -shared -fPIC ${PC_MUTANT_LDFLAGS--ldl}" "$@" \
-		    "$pc_vdir"/*.h "$pc_vdir"/*.inc "$pc_root"/core/*.h)
+		pc_symbols "$pc_modroot/xsh/$pc_func"
+		pc_sk=$(pc_cache_key "variant library: $pc_cc -shared -fPIC ${PC_MUTANT_LDFLAGS--ldl} $pc_symflags" "$@" \
+		    "$pc_vdir"/*.h "$pc_vdir"/*.inc "$pc_root"/core/*.h "$pc_modroot/xsh/$pc_func"/probe.c)
 		if ! pc_cache_get "$pc_sk" "$pc_so"; then
 			# shellcheck disable=SC2086
-			"$pc_cc" -shared -fPIC -I "$pc_root/core" -o "$pc_so" "$@" ${PC_MUTANT_LDFLAGS--ldl} \
+			"$pc_cc" -shared -fPIC $pc_symflags -I "$pc_root/core" -o "$pc_so" "$@" ${PC_MUTANT_LDFLAGS--ldl} \
 			    >"$ctx_out/variant-$pc_func.build.txt" 2>&1 </dev/null ||
 			    pc_abort "cannot build variant library for $pc_func"
 			pc_cache_put "$pc_sk" "$pc_so"
