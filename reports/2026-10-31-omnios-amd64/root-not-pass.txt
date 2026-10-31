@@ -1,0 +1,2371 @@
+# posixcheck 0.1.0
+# tree unknown
+# sysname SunOS
+# nodename omnios
+# release 5.11
+# version omnios-r151058-516f7694c9
+# machine i86pc
+# target sunos
+# posix_version 200112
+# xopen_version 800
+# sh /usr/xpg4/bin/sh
+# cc gcc
+# ccflags none
+# euid 0
+# profile none
+# started 2026-10-31T05:17:01Z
+# claim BASE - yes base
+# claim ADV _POSIX_ADVISORY_INFO yes macro=200112 sysconf=- compile=yes
+# claim CD _POSIX2_C_DEV yes macro=200112 sysconf=- compile=yes
+# claim CPT _POSIX_CPUTIME no macro=undefined sysconf=- compile=no
+# claim CRYPT _XOPEN_CRYPT no macro=undefined sysconf=- compile=no
+# claim DC _POSIX_DEVICE_CONTROL no macro=undefined sysconf=- compile=no
+# claim FR _POSIX2_FORT_RUN yes macro=200112 sysconf=- compile=yes
+# claim FSC _POSIX_FSYNC yes macro=200112 sysconf=- compile=yes
+# claim IP6 _POSIX_IPV6 yes macro=200112 sysconf=- compile=yes
+# claim ML _POSIX_MEMLOCK yes macro=200112 sysconf=- compile=yes
+# claim MLR _POSIX_MEMLOCK_RANGE yes macro=200112 sysconf=- compile=yes
+# claim MSG _POSIX_MESSAGE_PASSING yes macro=200112 sysconf=- compile=yes
+# claim PIO _POSIX_PRIORITIZED_IO no macro=undefined sysconf=- compile=no
+# claim PS _POSIX_PRIORITY_SCHEDULING yes macro=200112 sysconf=- compile=yes
+# claim RPI _POSIX_THREAD_ROBUST_PRIO_INHERIT no macro=undefined sysconf=- compile=no
+# claim RPP _POSIX_THREAD_ROBUST_PRIO_PROTECT no macro=undefined sysconf=- compile=no
+# claim RS _POSIX_RAW_SOCKETS yes macro=200112 sysconf=- compile=yes
+# claim SD _POSIX2_SW_DEV yes macro=200112 sysconf=- compile=yes
+# claim SHM _POSIX_SHARED_MEMORY_OBJECTS yes macro=200112 sysconf=- compile=yes
+# claim SIO _POSIX_SYNCHRONIZED_IO yes macro=200112 sysconf=- compile=yes
+# claim SPN _POSIX_SPAWN yes macro=200112 sysconf=- compile=yes
+# claim SS _POSIX_SPORADIC_SERVER no macro=undefined sysconf=- compile=no
+# claim TCT _POSIX_THREAD_CPUTIME no macro=undefined sysconf=- compile=no
+# claim TPI _POSIX_THREAD_PRIO_INHERIT yes macro=200112 sysconf=- compile=yes
+# claim TPP _POSIX_THREAD_PRIO_PROTECT yes macro=200112 sysconf=- compile=yes
+# claim TPS _POSIX_THREAD_PRIORITY_SCHEDULING yes macro=200112 sysconf=- compile=yes
+# claim TSA _POSIX_THREAD_ATTR_STACKADDR yes macro=200112 sysconf=- compile=yes
+# claim TSH _POSIX_THREAD_PROCESS_SHARED yes macro=200112 sysconf=- compile=yes
+# claim TSP _POSIX_THREAD_SPORADIC_SERVER no macro=undefined sysconf=- compile=no
+# claim TSS _POSIX_THREAD_ATTR_STACKSIZE yes macro=200112 sysconf=- compile=yes
+# claim TYM _POSIX_TYPED_MEMORY_OBJECTS no macro=undefined sysconf=- compile=no
+# claim UP _POSIX2_UPE yes macro=200112 sysconf=- compile=yes
+# claim UU _XOPEN_UUCP no macro=undefined sysconf=- compile=no
+# claim XSI _XOPEN_UNIX yes macro=0 sysconf=1 compile=yes
+UNTESTED	XBD.1-introduction.001	0	untestable: Terminology, scope, references and notation; the only requirement
+FAIL	XBD.10.2-output-devices-and-terminal-types.001	2081	byte \007 is shown by od -t a as 'be', expected bel
+UNTESTED	XBD.10.2-output-devices-and-terminal-types.002	0	untestable: The sentences are about documentation and about which terminal types and features an implementation chooses to support; no test can know what the documentation promises or which type lacks which feature.
+UNRESOLVED	XBD.11.1-interface-characteristics.014	1319	cannot set the terminal mode the test needs
+UNRESOLVED	XBD.11.1-interface-characteristics.016	1392	cannot set the terminal mode the test needs
+FAIL	XBD.11.1-interface-characteristics.035	2263	the bytes read after the special character: 0 (the character itself must be discarded)
+FAIL	XBD.11.1-interface-characteristics.036	2267	the bytes read after the special character: 0 (the character itself must be discarded)
+FAIL	XBD.11.1-interface-characteristics.037	2207	the bytes read after the special character: 0 (the character itself must be discarded)
+UNRESOLVED	XBD.11.1-interface-characteristics.045	1394	cannot put the terminal in the mode the test needs: EINVAL
+FAIL	XBD.11.2-terminal-parameters.009	3382	output after an ordinary byte with IXANY: got [], expected [78 ]
+FAIL	XBD.11.2-terminal-parameters.023	1409	a line holding the former special bytes: got [61 63 15 64 04 65 1e 0a ], expected [61 62 08 63 15 64 04 65 1e 0a ]
+FAIL	XBD.12.2-utility-syntax-guidelines.010	1286	tail -n 1 - gave 'STDIN-1
+FAIL	XBD.2-conformance.001	1690	not found with PATH from getconf PATH: lp realpath
+FAIL	XBD.2-conformance.002	1486	utilities of a supported option not found: POSIX2_C_DEV:c17 POSIX2_UPE:talk
+FAIL	XBD.2-conformance.003	1347	c17 was not found on an XSI system
+FAIL	XBD.2-conformance.005	1217	_POSIX_MEMLOCK is not 202405L
+NOTINUSE	XBD.2-conformance.006	1401	_XOPEN_REALTIME_THREADS is not defined or is -1
+UNSUPPORTED	XBD.2-conformance.007	0	option SS|TSP not claimed
+UNRESOLVED	XBD.2-conformance.008	1330	the c17 utility was not found
+FAIL	XBD.4.1-case-insensitive-comparisons.001	1937	grep -i '\(a\)\1' did not select 'aA' (status 1)
+FAIL	XBD.4.1-case-insensitive-comparisons.002	2010	find -iname '[[:lower:]]ulu' found 0 names, expected 1
+FAIL	XBD.4.1-case-insensitive-comparisons.003	1490	s/abc/X/i on 'AbC' gave '"s/abc/X/i": 1: bad flag in substitute command: 'i'', expected 'X'
+UNTESTED	XBD.4.11-file-system-cache.003	0	untestable: What has reached storage can be seen only after the system stops and restarts without a clean shutdown, which a test running on the system cannot arrange; the return values of the calls are tested in XSH.fsync.
+UNINITIATED	XBD.4.12-file-times-update.001	0	build failed (out/XBD.4.12-file-times-update.001.build.txt)
+UNINITIATED	XBD.4.12-file-times-update.002	0	build failed (out/XBD.4.12-file-times-update.002.build.txt)
+UNINITIATED	XBD.4.12-file-times-update.003	0	build failed (out/XBD.4.12-file-times-update.003.build.txt)
+UNTESTED	XBD.4.12-file-times-update.004	0	untestable: A test cannot make a read-only file system (mounting is not POSIX) and cannot rely on one being present; the read-only errors of the function pages are tested where a read-only descriptor or file exists.
+UNINITIATED	XBD.4.13-host-and-network-byte-orders.001	0	build failed (out/XBD.4.13-host-and-network-byte-orders.001.build.txt)
+UNINITIATED	XBD.4.16-pathname-resolution.001	0	build failed (out/XBD.4.16-pathname-resolution.001.build.txt)
+UNINITIATED	XBD.4.16-pathname-resolution.011	0	build failed (out/XBD.4.16-pathname-resolution.011.build.txt)
+UNINITIATED	XBD.4.16-pathname-resolution.013	0	build failed (out/XBD.4.16-pathname-resolution.013.build.txt)
+UNINITIATED	XBD.4.2-concurrent-execution.002	0	build failed (out/XBD.4.2-concurrent-execution.002.build.txt)
+UNTESTED	XBD.4.6-extended-security-controls.001	0	untestable: What the controls are, and how to turn one on, is implementation-defined; a test cannot enable an unknown mechanism, and the interface tests of every other module already run with whatever controls the system has in force.
+FAIL	XBD.5-file-format-notation.005	1740	printf '%#.0o|' '0' wrote '|', expected '0|'
+FAIL	XBD.5-file-format-notation.006	1537	printf '%05.3d|' '7' wrote '00007|', expected '  007|'
+FAIL	XBD.5-file-format-notation.007	1662	printf '%#06x|' '255' wrote '0x0000ff|', expected '0x00ff|'
+FAIL	XBD.5-file-format-notation.008	1538	printf '%#x|' '0' wrote '0x0|', expected '0|'
+FAIL	XBD.5-file-format-notation.013	1375	awk printf "%a", 0 wrote '%a', expected 0x0 and a zero exponent in lowercase
+UNRESOLVED	XBD.6.4-charmap-description.001	1488	localedef refused the test source hexc.src (status 4)
+UNRESOLVED	XBD.6.4-charmap-description.002	1465	localedef refused the test source nota.src (status 4)
+UNRESOLVED	XBD.6.4-charmap-description.003	1354	localedef refused the test source range.src (status 4)
+UNRESOLVED	XBD.6.4-charmap-description.004	1335	localedef refused the test source twon.src (status 4)
+UNRESOLVED	XBD.6.4-charmap-description.005	1468	localedef refused the test source escc.src (status 4)
+UNRESOLVED	XBD.6.4-charmap-description.006	1313	localedef refused the test source mb2.src (status 4)
+UNRESOLVED	XBD.6.4-charmap-description.007	1514	localedef refused the test source width.src (status 4)
+UNRESOLVED	XBD.6.4-charmap-description.008	1345	localedef refused the test source escn.src (status 4)
+UNRESOLVED	XBD.7.1-locale-general.001	1375	localedef refused the test source pathloc.src (status 4)
+UNRESOLVED	XBD.7.1-locale-general.002	1322	localedef refused the test source pathloc.src (status 4)
+UNRESOLVED	XBD.7.2-posix-locale.002	1470	the locale localedef created cannot be selected through LC_ALL
+FAIL	XBD.7.3.1-lc-ctype.005	3375	locale C.UTF-8: iswdigit(0x660) is 1, expected 0
+UNRESOLVED	XBD.7.3.1-lc-ctype.006	1409	localedef refused the test source added.src (status 4)
+UNRESOLVED	XBD.7.3.1-lc-ctype.007	1415	localedef refused the test source class.src (status 4)
+UNRESOLVED	XBD.7.3.1-lc-ctype.008	1608	localedef refused the test source m1.src (status 4)
+UNRESOLVED	XBD.7.3.1-lc-ctype.009	1332	localedef refused the test source ell.src (status 4)
+UNRESOLVED	XBD.7.3.1-lc-ctype.010	1434	localedef refused the test source copyall.src (status 4)
+UNRESOLVED	XBD.7.3.2-lc-collate.004	1286	localedef refused the test source undef.src (status 4)
+UNRESOLVED	XBD.7.3.2-lc-collate.005	1259	localedef refused the test source fwd.src (status 4)
+UNRESOLVED	XBD.7.3.2-lc-collate.006	1393	localedef refused the test source elem.src (status 4)
+UNRESOLVED	XBD.7.3.2-lc-collate.007	1339	localedef refused the test source ign.src (status 4)
+UNRESOLVED	XBD.7.3.2-lc-collate.008	1422	localedef refused the test source (status 4)
+UNRESOLVED	XBD.7.3.2-lc-collate.009	1287	localedef refused the test source pos.src (status 4)
+UNRESOLVED	XBD.7.3.2-lc-collate.010	1473	localedef refused the test source ell.src (status 4)
+UNRESOLVED	XBD.7.3.2-lc-collate.011	1566	localedef refused the test source (status 4)
+UNRESOLVED	XBD.7.3.2-lc-collate.012	1280	localedef refused the test source (status 4)
+UNRESOLVED	XBD.7.3.2-lc-collate.013	1603	localedef refused the test source o2m.src (status 4)
+UNRESOLVED	XBD.7.3.3-lc-monetary.001	1435	localedef refused the test source mon.src (status 4)
+UNRESOLVED	XBD.7.3.3-lc-monetary.002	1364	localedef refused the test source monun.src (status 4)
+UNRESOLVED	XBD.7.3.3-lc-monetary.003	1354	localedef refused the test source monfmt.src (status 4)
+UNRESOLVED	XBD.7.3.3-lc-monetary.004	1502	localedef refused the test source crb.src (status 4)
+UNRESOLVED	XBD.7.3.3-lc-monetary.005	1577	localedef refused the test source okpos.src (status 4)
+UNRESOLVED	XBD.7.3.4-lc-numeric.001	1410	localedef refused the test source num.src (status 4)
+UNRESOLVED	XBD.7.3.4-lc-numeric.002	1384	localedef refused the test source numf.src (status 4)
+UNRESOLVED	XBD.7.3.4-lc-numeric.003	1312	localedef refused the test source numr.src (status 4)
+UNRESOLVED	XBD.7.3.4-lc-numeric.004	1331	localedef refused the test source numl.src (status 4)
+UNRESOLVED	XBD.7.3.5-lc-time.001	1524	localedef refused the test source names.src (status 4)
+UNRESOLVED	XBD.7.3.5-lc-time.002	1320	localedef refused the test source fmts.src (status 4)
+UNRESOLVED	XBD.7.3.5-lc-time.003	1342	localedef refused the test source altd.src (status 4)
+UNRESOLVED	XBD.7.3.5-lc-time.004	1287	localedef refused the test source no12.src (status 4)
+UNRESOLVED	XBD.7.3.5-lc-time.005	1476	localedef refused the test source dateloc.src (status 4)
+UNRESOLVED	XBD.7.3.5-lc-time.006	1522	localedef refused the test source strp.src (status 4)
+UNINITIATED	XBD.7.3.5-lc-time.007	0	build failed (out/XBD.7.3.5-lc-time.007.build.txt)
+UNRESOLVED	XBD.7.3.5-lc-time.008	1395	localedef refused the test source noampm.src (status 4)
+UNRESOLVED	XBD.7.3.5-lc-time.009	1352	localedef refused the test source era.src (status 4)
+UNRESOLVED	XBD.7.3.6-lc-messages.001	1345	localedef refused the test source msg.src (status 4)
+UNRESOLVED	XBD.7.4-locale-grammar.001	1425	localedef refused the test source glob.src (status 4)
+UNRESOLVED	XBD.7.4-locale-grammar.002	1369	localedef refused the test source cont.src (status 4)
+UNRESOLVED	XBD.7.4-locale-grammar.003	1575	localedef refused the test source forms.src (status 4)
+UNRESOLVED	XBD.7.4-locale-grammar.004	1282	localedef refused the test source good.src (status 4)
+UNRESOLVED	XBD.7.4-locale-grammar.005	1305	localedef refused the test source ord1.src (status 4)
+UNRESOLVED	XBD.7.4-locale-grammar.006	1498	localedef refused the test source copyq.src (status 4)
+UNRESOLVED	XBD.8.2-internationalization-variables.001	1650	localedef refused the test source xloc.src (status 4)
+UNRESOLVED	XBD.8.2-internationalization-variables.002	1538	localedef refused the test source xloc.src (status 4)
+UNRESOLVED	XBD.8.2-internationalization-variables.003	1439	localedef refused the test source xloc.src (status 4)
+UNRESOLVED	XBD.8.2-internationalization-variables.004	1456	localedef refused the test source xloc.src (status 4)
+UNRESOLVED	XBD.8.2-internationalization-variables.006	1295	localedef refused the test source xloc.src (status 4)
+FAIL	XBD.9.3-bre.002	1275	case 7: "\(.\)\1\{0,1\}b" on "xaab" should match, got 1
+FAIL	XBD.9.3-bre.008	1194	regcomp("[--/]") returned 10
+INSPECT	XBD.9.4-ere.003	1186	disputed (see the assertion's note): case 0: regcomp("a)") returned 8
+FAIL	XBD.9.5-grammar.003	1274	regcomp("a\{0\}", flags 0x0) returned 14
+FAIL	XBD.complex.h.004	0	does not compile: see out/XBD.complex.h.004.build.txt
+NOTINUSE	XBD.complex.h.006	1293	the implementation does not claim the IEC 60559 complex option
+FAIL	XBD.complex.h.007	0	does not compile: see out/XBD.complex.h.007.build.txt
+UNRESOLVED	XBD.dirent.h.001	1418	a constant is missing (the header check reports it): DT_BLK DT_CHR DT_DIR DT_FIFO DT_LNK DT_REG DT_SOCK DT_UNKNOWN
+UNRESOLVED	XBD.dirent.h.002	1362	a DT_ constant is missing (the header check reports it)
+FAIL	XBD.dirent.h.004	0	does not compile: see out/XBD.dirent.h.004.build.txt
+FAIL	XBD.dirent.h.006	0	does not compile: see out/XBD.dirent.h.006.build.txt
+FAIL	XBD.dirent.h.007	0	does not compile: see out/XBD.dirent.h.007.build.txt
+FAIL	XBD.dirent.h.008	0	does not compile: see out/XBD.dirent.h.008.build.txt
+FAIL	XBD.dlfcn.h.002	0	does not compile: see out/XBD.dlfcn.h.002.build.txt
+FAIL	XBD.dlfcn.h.004	0	does not compile: see out/XBD.dlfcn.h.004.build.txt
+FAIL	XBD.fcntl.h.006	1191	<fcntl.h> does not define F_OFD_GETLK
+FAIL	XBD.fcntl.h.007	1294	<fcntl.h> does not define O_TTY_INIT
+FAIL	XBD.fcntl.h.008	1315	<fcntl.h> does not define F_GETOWN_EX and F_SETOWN_EX
+UNRESOLVED	XBD.fcntl.h.011	1165	a constant is missing (the header check reports it): O_CLOEXEC O_CREAT O_DIRECTORY O_EXCL O_NOCTTY O_NOFOLLOW O_TRUNC O_TTY_INIT
+UNRESOLVED	XBD.fcntl.h.015	1331	an AT_ constant is missing (the header check reports it)
+FAIL	XBD.fcntl.h.024	0	does not compile: see out/XBD.fcntl.h.024.build.txt
+NOTINUSE	XBD.fenv.h.004	1239	the implementation does not claim IEC 60559 floating point
+UNRESOLVED	XBD.ftw.h.002	1297	a constant is missing (the header check reports it): FTW_PHYS FTW_MOUNT FTW_XDEV FTW_DEPTH FTW_CHDIR
+FAIL	XBD.inttypes.h.004	1307	SCNd8 read a wide text as a different value (-1 items)
+FAIL	XBD.langinfo.h.003	0	does not compile: see out/XBD.langinfo.h.003.build.txt
+UNRESOLVED	XBD.langinfo.h.004	1198	a langinfo item constant is missing (XBD.langinfo.h.001 and .003 report it)
+UNSUPPORTED	XBD.limits.h.003	0	option SS|TSP not claimed
+FAIL	XBD.limits.h.010	0	does not compile: see out/XBD.limits.h.010.build.txt
+FAIL	XBD.limits.h.011	0	does not compile: see out/XBD.limits.h.011.build.txt
+FAIL	XBD.limits.h.014	0	does not compile: see out/XBD.limits.h.014.build.txt
+NOTINUSE	XBD.math.h.007	1237	the implementation does not claim IEC 60559 floating point
+NOTINUSE	XBD.math.h.012	1261	none of the FP_FAST_FMA macros is defined
+FAIL	XBD.math.h.014	0	does not compile: see out/XBD.math.h.014.build.txt
+FAIL	XBD.math.h.015	0	does not compile: see out/XBD.math.h.015.build.txt
+FAIL	XBD.netdb.h.002	1323	<netdb.h> does not define NI_NUMERICSCOPE
+FAIL	XBD.netinet_in.h.007	1350	the headers do not define IPV6_V6ONLY
+FAIL	XBD.netinet_in.h.008	0	does not compile: see out/XBD.netinet_in.h.008.build.txt
+FAIL	XBD.netinet_in.h.009	0	does not compile: see out/XBD.netinet_in.h.009.build.txt
+FAIL	XBD.netinet_in.h.014	0	does not compile: see out/XBD.netinet_in.h.014.build.txt
+FAIL	XBD.poll.h.007	0	does not compile: see out/XBD.poll.h.007.build.txt
+FAIL	XBD.poll.h.008	0	does not compile: see out/XBD.poll.h.008.build.txt
+FAIL	XBD.poll.h.009	0	does not compile: see out/XBD.poll.h.009.build.txt
+UNRESOLVED	XBD.pthread.h.012	1327	PTHREAD_NULL is missing (the header check reports it)
+UNSUPPORTED	XBD.pthread.h.019	0	option TCT not claimed
+FAIL	XBD.regex.h.002	1230	<regex.h> does not define REG_MINIMAL
+UNSUPPORTED	XBD.sched.h.002	0	option SS|TSP not claimed
+UNSUPPORTED	XBD.sched.h.004	0	option SS|TSP not claimed
+UNSUPPORTED	XBD.sched.h.007	0	option SS|TSP not claimed
+FAIL	XBD.signal.h.007	1244	<unistd.h> does not define _SC_NSIG
+FAIL	XBD.signal.h.008	1211	<signal.h> does not define SIG2STR_MAX
+FAIL	XBD.signal.h.027	0	does not compile: see out/XBD.signal.h.027.build.txt
+FAIL	XBD.signal.h.028	0	does not compile: see out/XBD.signal.h.028.build.txt
+FAIL	XBD.stdint.h.002	0	does not compile: see out/XBD.stdint.h.002.build.txt
+FAIL	XBD.stdint.h.003	0	does not compile: see out/XBD.stdint.h.003.build.txt
+FAIL	XBD.stdint.h.004	0	does not compile: see out/XBD.stdint.h.004.build.txt
+FAIL	XBD.stdint.h.009	0	does not compile: see out/XBD.stdint.h.009.build.txt
+FAIL	XBD.stdio.h.012	0	does not compile: see out/XBD.stdio.h.012.build.txt
+FAIL	XBD.stdlib.h.003	0	does not compile: see out/XBD.stdlib.h.003.build.txt
+FAIL	XBD.stdlib.h.011	1306	setstate() is not declared as char *setstate(char *)
+UNSUPPORTED	XBD.stdlib.h.012	0	option XSI+CRYPT not claimed
+UNSUPPORTED	XBD.sys_mman.h.008	0	option TYM not claimed
+UNSUPPORTED	XBD.sys_mman.h.010	0	option TYM not claimed
+FAIL	XBD.sys_mman.h.011	1402	<sys/mman.h> does not define O_RDONLY
+UNSUPPORTED	XBD.sys_mman.h.012	0	option TYM not claimed
+FAIL	XBD.sys_mman.h.013	1217	<sys/mman.h> does not define O_CREAT
+UNSUPPORTED	XBD.sys_mman.h.019	0	option TYM not claimed
+UNRESOLVED	XBD.sys_shm.h.003	1353	SHM_FAILED is missing (the header check reports it)
+UNSUPPORTED	XBD.sys_stat.h.008	0	option TYM not claimed
+UNRESOLVED	XBD.sys_stat.h.009	1261	UTIME_NOW or UTIME_OMIT is missing (the header check reports it)
+FAIL	XBD.sys_stat.h.010	0	does not compile: see out/XBD.sys_stat.h.010.build.txt
+FAIL	XBD.sys_stat.h.014	1307	struct stat member st_atim is not of type struct timespec
+FAIL	XBD.sys_stat.h.019	0	does not compile: see out/XBD.sys_stat.h.019.build.txt
+FAIL	XBD.sys_stat.h.020	0	does not compile: see out/XBD.sys_stat.h.020.build.txt
+FAIL	XBD.sys_stat.h.021	0	does not compile: see out/XBD.sys_stat.h.021.build.txt
+FAIL	XBD.sys_types.h.007	0	does not compile: see out/XBD.sys_types.h.007.build.txt
+FAIL	XBD.sys_types.h.011	0	does not compile: see out/XBD.sys_types.h.011.build.txt
+FAIL	XBD.termios.h.015	0	does not compile: see out/XBD.termios.h.015.build.txt
+FAIL	XBD.termios.h.017	0	does not compile: see out/XBD.termios.h.017.build.txt
+FAIL	XBD.tgmath.h.001	1286	<tgmath.h> does not make the <complex.h> macros available
+FAIL	XBD.tgmath.h.004	0	does not compile: see out/XBD.tgmath.h.004.build.txt
+NOTINUSE	XBD.tgmath.h.005	1338	the implementation does not claim the IEC 60559 complex option or has no imaginary types
+UNSUPPORTED	XBD.time.h.016	0	option CPT not claimed
+FAIL	XBD.unistd.h.001	1247	<unistd.h> does not define POSIX_CLOSE_RESTART
+FAIL	XBD.unistd.h.002	1229	<unistd.h> does not define SEEK_HOLE and SEEK_DATA as macros
+FAIL	XBD.unistd.h.004	0	does not compile: see out/XBD.unistd.h.004.build.txt
+FAIL	XBD.unistd.h.006	0	does not compile: see out/XBD.unistd.h.006.build.txt
+FAIL	XBD.unistd.h.007	0	does not compile: see out/XBD.unistd.h.007.build.txt
+FAIL	XBD.unistd.h.008	0	does not compile: see out/XBD.unistd.h.008.build.txt
+FAIL	XBD.unistd.h.010	0	does not compile: see out/XBD.unistd.h.010.build.txt
+FAIL	XBD.unistd.h.014	0	does not compile: see out/XBD.unistd.h.014.build.txt
+FAIL	XBD.unistd.h.019	0	does not compile: see out/XBD.unistd.h.019.build.txt
+FAIL	XBD.unistd.h.021	1238	<unistd.h> does not define O_CLOEXEC
+FAIL	XBD.unistd.h.024	0	does not compile: see out/XBD.unistd.h.024.build.txt
+FAIL	XBD.unistd.h.025	0	does not compile: see out/XBD.unistd.h.025.build.txt
+FAIL	XBD.unistd.h.026	0	does not compile: see out/XBD.unistd.h.026.build.txt
+UNSUPPORTED	XBD.unistd.h.030	0	option XSI+CRYPT not claimed
+FAIL	XCU.1.2-utility-limits.005	1721	scale 99 gave '0.333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333'
+FAIL	XCU.1.2-utility-limits.006	1554	pathchk rejected a path of 239 bytes
+UNTESTED	XCU.1.3-grammar-conventions.001	0	untestable: The notation is a means of presentation; the syntax it describes is
+FAIL	XCU.1.4-utility-defaults.014	4523	process 12404 did not keep ignoring SIGTERM and SIGHUP
+FAIL	XCU.1.4-utility-defaults.015	4586	sort f2 after SIGTERM: the status 142 names 'ALRM'
+FAIL	XCU.1.4-utility-defaults.020	1514	od nonexist: exit status 0
+UNRESOLVED	XCU.1.5-large-files.002	120058	timed out after 120s
+FAIL	XCU.2.5-parameters.014	1472	standard output was [4
+FAIL	XCU.2.5-parameters.017	1772	standard output was [A
+FAIL	XCU.2.5-parameters.020	1407	the prompt <> is not in the error output: 
+FAIL	XCU.2.5-parameters.021	1454	fewer than three numbered prompts in: 
+FAIL	XCU.2.5-parameters.022	1549	no expanded continuation prompt in: 
+FAIL	XCU.2.5-parameters.023	1655	no default continuation prompt in: 
+FAIL	XCU.2.6-word-expansions.009	1439	standard output was [pcg*
+FAIL	XCU.2.6-word-expansions.035	1571	standard output was [5 ok 5
+FAIL	XCU.2.7-redirection.006	1563	standard output was [created
+FAIL	XCU.2.8-exit-status-and-errors.002	1420	standard output was [notreached
+FAIL	XCU.2.8-exit-status-and-errors.003	1530	standard output was [notreached]
+UNRESOLVED	XCU.admin.001	1355	setup: get is not available
+UNRESOLVED	XCU.admin.002	1325	setup: get is not available
+UNRESOLVED	XCU.admin.003	1332	setup: prs is not available
+UNRESOLVED	XCU.admin.004	1567	setup: prs is not available
+UNRESOLVED	XCU.admin.005	1366	setup: prs is not available
+UNRESOLVED	XCU.admin.006	1339	setup: prs is not available
+UNRESOLVED	XCU.admin.007	1360	setup: admin could not create s.f
+UNRESOLVED	XCU.admin.008	1375	setup: get is not available
+NOTINUSE	XCU.admin.009	1389	get is not available
+NOTINUSE	XCU.admin.010	1381	get is not available
+NOTINUSE	XCU.admin.011	1410	get is not available
+NOTINUSE	XCU.admin.012	1295	get is not available
+FAIL	XCU.ar.002	1375	ar -t a sub/f2 listed 'f2', expected the operand as given
+FAIL	XCU.ar.008	1420	listing has 9 fields: rw-r-----     0/     0      5 Mar  4 15:07 2002 f1
+FAIL	XCU.at.002	1662	listing line 'user = root	2080904400.a	Mon Dec 10 13:00:00 2035' has more than one tab
+FAIL	XCU.at.003	1801	job 2080904400.a disappeared when job 2080814400.a was removed
+FAIL	XCU.at.004	1615	the job 2080814400.a of at -f with a good file is not listed
+FAIL	XCU.at.007	1710	the job 2080814400.a submitted without -q is not in queue a
+FAIL	XCU.at.008	1414	at -r of an unknown job exited with status 0
+UNTESTED	XCU.at.009	0	untestable: Running a job needs the scheduler daemon and a wait for the job's
+FAIL	XCU.awk.005	1531	with RS null a newline was not a field separator under FS=:
+FAIL	XCU.awk.008	1837	in operator wrong
+FAIL	XCU.awk.009	1604	subscripts or length of an array wrong
+FAIL	XCU.awk.010	1916	an exit with no expression in END changed the status
+FAIL	XCU.awk.012	1433	length of an array wrong
+FAIL	XCU.awk.013	1868	rand returned the same value every time
+FAIL	XCU.awk.014	1828	getline did not return 1 and then 0 at end of input
+FAIL	XCU.awk.015	1679	return with no value wrong
+FAIL	XCU.awk.017	1446	a string constant was compared as a number
+FAIL	XCU.awk.018	1436	awk went on after a missing file operand
+FAIL	XCU.awk.019	1395	nextfile did not skip the rest of each file
+FAIL	XCU.awk.027	1555	decimal forms: 0 1 0 1
+FAIL	XCU.awk.034	1646	-vx=1 : 
+UNRESOLVED	XCU.awk.036	1677	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.awk.037	1747	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.awk.038	1704	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.awk.039	1487	localedef refused the test locale source pcloc2.src (status 4)
+FAIL	XCU.basename.003	1408	basename '///' wrote '//
+UNTESTED	XCU.batch.002	0	untestable: The moment of the run and the mail depend on scheduling decisions
+FAIL	XCU.bc.003	3008	1024 in base 125 not  008 024
+FAIL	XCU.bg.002	1460	bg exited '', wanted 0
+FAIL	XCU.bg.003	1471	bg for a running job exited '1', wanted 0
+FAIL	XCU.c17.001	1510	c17 p.c: exit status 127
+FAIL	XCU.c17.002	1396	c17 -c a.c b.c: exit status 127
+FAIL	XCU.c17.003	1472	-D: nonzero status
+FAIL	XCU.c17.004	1541	c17 -E: exit status 127
+FAIL	XCU.c17.005	1494	-I inc1 -I inc2: nonzero status
+UNRESOLVED	XCU.c17.006	1518	setup: c17 -c failed
+FAIL	XCU.c17.007	1420	c17 -O 0: exit status 127
+FAIL	XCU.c17.008	1362	the good source was not compiled after the error
+UNRESOLVED	XCU.c17.009	1547	setup: c17 -E failed
+FAIL	XCU.c17.010	1531	m3.c: nonzero status
+FAIL	XCU.c17.011	1383	-l m: nonzero status
+FAIL	XCU.c17.012	1432	linking two 31-byte names: nonzero status
+FAIL	XCU.c17.013	1604	the language-level check failed to compile: exit status 127
+FAIL	XCU.c17.014	1500	c17 a.c -D PCV=3 -o pa failed
+FAIL	XCU.c17.015	1630	linking with -l pthread failed
+UNRESOLVED	XCU.c17.016	1555	setup: c17 -c failed
+FAIL	XCU.c17.017	1515	c17 -G -c failed
+FAIL	XCU.c17.018	1489	the default environment does not compile the size program
+FAIL	XCU.c17.019	1586	a translation unit with 4095 external identifiers was rejected
+FAIL	XCU.cd.010	1446	cd ./dup looked in CDPATH
+FAIL	XCU.cflow.001	1514	cflow: nonzero status
+FAIL	XCU.cflow.002	1358	cflow: nonzero status
+FAIL	XCU.cflow.003	1340	cflow -r: nonzero status
+FAIL	XCU.cflow.004	1389	cflow: nonzero status
+FAIL	XCU.cflow.005	1357	cflow: nonzero status
+FAIL	XCU.cflow.006	1430	cflow: nonzero status
+UNRESOLVED	XCU.cflow.008	1450	setup: c17 is not available
+UNRESOLVED	XCU.comm.006	1670	localedef refused the test locale source pcloc.src (status 4)
+FAIL	XCU.command.002	1514	an assignment before command : stayed in the shell
+FAIL	XCU.command.006	1390	command -v for an alias wrote ''echo six'', without the name
+FAIL	XCU.command.012	1315	the operand of command was substituted as an alias
+FAIL	XCU.compress.003	1479	compress -g: exit status 1
+FAIL	XCU.compress.004	1384	compress -g of a one-byte file: exit status 1, expected 2
+FAIL	XCU.compress.005	1474	compress -g -b 1: exit status 1
+FAIL	XCU.compress.007	1486	compress -g -m lzw: exit status 1
+FAIL	XCU.compress.008	1437	unsupported algorithm: exit status 1, expected greater than 2
+UNRESOLVED	XCU.compress.010	1558	setup: compress -g -c failed
+UNRESOLVED	XCU.cp.029	1701	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.cp.030	1872	localedef refused the test locale source pcloc_y.src (status 4)
+UNRESOLVED	XCU.cp.031	1779	localedef refused the test locale source pcloc.src (status 4)
+UNTESTED	XCU.crontab.007	0	untestable: A job runs only when its time comes, under the scheduler daemon;
+UNRESOLVED	XCU.csplit.009	1570	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.csplit.010	1608	localedef refused the test locale source pcloc.src (status 4)
+FAIL	XCU.ctags.005	1399	no -x line for alpha: ADD                 2 t.c              #define ADD(a, b) ((a) + (b))
+UNRESOLVED	XCU.cut.013	1634	localedef refused the test locale source pcloc2.src (status 4)
+FAIL	XCU.cxref.001	1377	cxref: nonzero status
+FAIL	XCU.cxref.002	1406	cxref: nonzero status
+FAIL	XCU.cxref.003	1458	cxref: nonzero status
+FAIL	XCU.cxref.004	1528	cxref: nonzero status
+FAIL	XCU.cxref.005	1385	cxref: nonzero status
+FAIL	XCU.cxref.006	1431	cxref -w 51: nonzero status
+FAIL	XCU.cxref.007	1403	cxref: nonzero status
+UNTESTED	XCU.date.009	0	untestable: Setting the system clock changes the state of the machine under
+UNRESOLVED	XCU.date.010	1726	localedef refused the test locale source pcloc.src (status 4)
+FAIL	XCU.dd.016	1295	ibs=512: no line '1 truncated record'
+FAIL	XCU.dd.020	1393	dd iflags=fullblock exited with status 2
+UNTESTED	XCU.dd.024	0	untestable: A read error on the input cannot be produced portably from
+UNTESTED	XCU.dd.025	0	untestable: Delivering a signal at a chosen point of a copy is not portably
+UNRESOLVED	XCU.delta.001	1441	setup: admin could not create s.f
+UNRESOLVED	XCU.delta.002	1315	setup: admin could not create s.f
+UNRESOLVED	XCU.delta.003	1298	setup: admin could not create s.f
+UNRESOLVED	XCU.delta.004	1328	setup: admin could not create s.f
+UNRESOLVED	XCU.delta.005	1344	setup: admin could not create s.f
+UNRESOLVED	XCU.delta.006	1334	setup: admin could not create s.f
+NOTINUSE	XCU.delta.007	1334	get is not available
+NOTINUSE	XCU.delta.008	1327	get is not available
+NOTINUSE	XCU.delta.009	1296	get is not available
+NOTINUSE	XCU.delta.010	1347	get is not available
+FAIL	XCU.diff.003	1702	-c with identical files wrote output or gave a status other than 0
+FAIL	XCU.diff.004	1432	the first -u header line is not '--- f1<tab>2020-01-02 03:04:05[.frac] +0000'
+FAIL	XCU.dot.007	1607	status 0, expected 1 to 125
+FAIL	XCU.du.009	1445	du exited 0 although an operand does not exist
+FAIL	XCU.echo.007	1503	echo ab\c cd wrote something other than what was wanted
+FAIL	XCU.ed.013	1596	q after a real a wrote '', expected ?
+FAIL	XCU.ed.015	1535	l output was: a\tb$
+FAIL	XCU.ed.019	1570	separators gave 'one two three four five two two three four five three ? ', expected 'one two three four five two two three four five three one two four four one one two three five four two three four one two two three four '
+FAIL	XCU.eval.007	1482	status 0, expected 1 to 125
+FAIL	XCU.ex.002	1448	the printed lines differs: two|five|one|two|three|four|two|three|two|three|four|one|two|three|four|five|three|two|three|
+FAIL	XCU.ex.006	1549	the printed lines differs: a3!|a1!|a2!|
+FAIL	XCU.ex.008	1523	the numbered lines differs:      2  two|     2  two|     1  one|     2  two|5|     3  three|     4  four|
+FAIL	XCU.ex.019	1459	with nowrapscan the search printed 'Address search hit BOTTOM without matching pattern'
+FAIL	XCU.ex.020	2507	print: the current line is '4', wanted '4'
+FAIL	XCU.ex.021	1535	insert into an empty buffer: exit status 1: 
+FAIL	XCU.ex.022	1617	null backward search: exit status 1: 
+FAIL	XCU.ex.026	2171	two vertical lines give two implied commands: the output is 'a|b|c|d|', wanted 'a|b|c|'
+FAIL	XCU.ex.029	1765	count after two addresses: the file holds 'c|d|e|', wanted 'a|d|e|'
+FAIL	XCU.ex.030	1459	one address and a count: the file holds 'a b|c|d|e|', wanted 'a b c|d|e|'
+FAIL	XCU.ex.031	1621	move to just before the range: exit status 1: 
+FAIL	XCU.ex.032	1604	the unnamed buffer gets a copy: the file holds 'a|b|c|d|e|', wanted 'a|b|c|d|e|b|'
+FAIL	XCU.ex.033	1763	delimiter inside a bracket expression: the output is 'a%|%c|', wanted 'a%|%c|'
+FAIL	XCU.ex.036	1490	empty command repeats: the file holds 'ba|a|', wanted 'ba|ba|'
+FAIL	XCU.ex.038	1570	a yank is not a change: exit status 1: 
+FAIL	XCU.ex.039	1414	type omitted: the output is 'l05|l06|l07|', wanted 'l05|l06|l07|'
+FAIL	XCU.ex.040	1816	escaped blank: exit status 1
+FAIL	XCU.ex.041	1762	an empty buffer did not give an empty file
+FAIL	XCU.ex.042	1924	carriage return newline pairs: the file holds 'a|p|q|b|', wanted 'a|p|q|b|'
+FAIL	XCU.ex.043	4070	the output of the program after w ! is 'out|x'
+FAIL	XCU.ex.044	2016	carriage return newline pairs: the file holds 'a|p|q|c|d|e|', wanted 'a|p|q|c|d|e|'
+FAIL	XCU.ex.045	1594	delete: the output is '', wanted 'c|'
+FAIL	XCU.ex.046	1762	odd paragraphs: the error was not reported by the exit status
+FAIL	XCU.ex.047	1402	g toggled by repetition: the file holds 'bb|bb|', wanted 'bb|ba|'
+FAIL	XCU.ex.049	1719	taglength: exit status 1
+FAIL	XCU.ex.051	1510	a blank line in the sourced file produced output: d|
+FAIL	XCU.ex.052	1573	e of a new file: exit status 1
+FAIL	XCU.ex.053	1446	control characters were written as 'x^Ay^[z$'
+FAIL	XCU.ex.057	3949	HOME .exrc with blank lines: the first line is '	a', wanted '  a'
+FAIL	XCU.ex.060	1703	a second -c was not run after the first: 'a'
+FAIL	XCU.ex.062	1466	insert at line zero: exit status 1: 
+FAIL	XCU.exec.011	1484	interactive shell exited after the failed exec (out='')
+UNRESOLVED	XCU.expr.010	1701	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.expr.011	1781	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.expr.012	1803	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.false.005	1640	localedef refused the test locale source pcloc.src (status 4)
+FAIL	XCU.fc.021	1503	fc -s wrote to standard error: fc -l 2>fcerr1 >/dev/null
+FAIL	XCU.fc.023	1455	the command edited through the default editor was run 0 times, wanted once
+FAIL	XCU.fg.002	1533	fg did not write the command line
+FAIL	XCU.find.028	1633	find -H -L d: nonzero status: find: cannot follow symbolic link d/dang: No such file or directory
+FAIL	XCU.find.032	1428	find -newer dangling: nonzero status: find: cannot access dang
+UNRESOLVED	XCU.find.034	1795	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.find.035	1755	localedef refused the test locale source pcloc_y.src (status 4)
+UNRESOLVED	XCU.find.036	1769	localedef refused the test locale source pcloc.src (status 4)
+FAIL	XCU.fold.005	1359	a carriage return did not reset the count
+UNRESOLVED	XCU.fuser.001	8512	fuser exited with status 127 and listed nothing (it may need privileges)
+UNRESOLVED	XCU.fuser.002	8515	fuser exited with status 127 and listed nothing (it may need privileges)
+UNRESOLVED	XCU.fuser.003	8503	fuser exited with status 127 and listed nothing (it may need privileges)
+UNRESOLVED	XCU.fuser.004	8459	fuser exited with status 127 and listed nothing (it may need privileges)
+UNRESOLVED	XCU.fuser.005	8378	fuser exited with status 127 and listed nothing (it may need privileges)
+UNTESTED	XCU.fuser.008	0	untestable: Needs a mount point or a mounted block device under the test's
+UNRESOLVED	XCU.gencat.001	1292	setup: c17 is not available
+UNRESOLVED	XCU.gencat.002	1449	setup: c17 is not available
+UNRESOLVED	XCU.gencat.003	1277	setup: c17 is not available
+UNRESOLVED	XCU.gencat.004	1271	setup: c17 is not available
+UNRESOLVED	XCU.gencat.005	1275	setup: c17 is not available
+UNRESOLVED	XCU.get.001	1323	setup: admin could not create s.f
+UNRESOLVED	XCU.get.002	1319	setup: admin could not create s.f
+UNRESOLVED	XCU.get.003	1419	setup: admin could not create s.f
+UNRESOLVED	XCU.get.004	1409	setup: admin could not create s.f
+UNRESOLVED	XCU.get.005	1361	setup: admin could not create s.f
+UNRESOLVED	XCU.get.006	1341	setup: admin could not create s.f
+UNRESOLVED	XCU.get.007	1423	setup: admin could not create s.f
+UNRESOLVED	XCU.get.008	1367	setup: admin could not create s.f
+UNRESOLVED	XCU.get.009	1424	setup: admin failed for s.a
+NOTINUSE	XCU.get.010	1395	get is not available
+NOTINUSE	XCU.get.011	1380	get is not available
+NOTINUSE	XCU.get.012	1420	get is not available
+NOTINUSE	XCU.get.013	1328	get is not available
+FAIL	XCU.getconf.007	1452	shell: getconf _POSIX_PATH_MAX wrote '255', wanted 256
+FAIL	XCU.gettext.002	1531	-E: nonzero status
+FAIL	XCU.grep.001	1396	a null pattern did not select every line
+FAIL	XCU.grep.003	1404	an empty line in a -f file did not match every line
+FAIL	XCU.grep.004	1510	-v with a null pattern selected a line
+UNRESOLVED	XCU.grep.009	1924	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.grep.010	1831	localedef refused the test locale source pcloc.src (status 4)
+FAIL	XCU.iconv.003	1456	iconv with - failed
+UNTESTED	XCU.iconv.006	0	untestable: A charmap file must name every portable character and give an
+UNTESTED	XCU.ipcrm.003	0	untestable: No POSIX utility creates one of these facilities to remove, and
+UNTESTED	XCU.ipcs.006	0	untestable: No POSIX utility can create a message queue, shared memory segment
+INSPECT	XCU.jobs.001	1469	disputed (see the assertion's note): jobs wrote '[1] +  Running                 <command unknown>', wanted a line [n] + Running sleep 101
+FAIL	XCU.jobs.003	1596	fifth field is '<command', wanted the command
+INSPECT	XCU.jobs.004	2469	disputed (see the assertion's note): jobs wrote '[1] +  Done                    <command unknown>', wanted a line [n] + Done true
+INSPECT	XCU.jobs.006	2589	disputed (see the assertion's note): jobs wrote '[1] + Stopped                  <command unknown>', wanted a line [n] + Stopped sleep 101
+FAIL	XCU.jobs.007	2558	the suspended job is not marked as the current job
+FAIL	XCU.jobs.008	1484	jobs %?102 exited 1
+UNRESOLVED	XCU.join.011	1716	localedef refused the test locale source pcloc.src (status 4)
+FAIL	XCU.kill.005	1377	ABRT is not in the list
+UNRESOLVED	XCU.lex.001	1377	setup: c17 is not available
+UNRESOLVED	XCU.lex.002	1397	setup: c17 is not available
+UNRESOLVED	XCU.lex.003	1490	setup: c17 is not available
+UNRESOLVED	XCU.lex.004	1428	setup: c17 is not available
+UNRESOLVED	XCU.lex.005	1415	setup: c17 is not available
+UNRESOLVED	XCU.lex.006	1358	setup: c17 is not available
+UNRESOLVED	XCU.lex.007	1456	setup: c17 is not available
+UNRESOLVED	XCU.lex.008	1392	setup: c17 is not available
+UNRESOLVED	XCU.lex.009	1470	setup: c17 is not available
+FAIL	XCU.ln.008	1394	ln -L exited with status 2
+UNRESOLVED	XCU.ln.009	1652	ln -P exited with status 2 (the file system may not allow links to symbolic links)
+FAIL	XCU.ln.010	1427	ln -P -L exited with status 2
+FAIL	XCU.ln.011	1396	ln -s -L exited with status 2
+FAIL	XCU.locale.002	1463	set variable written as 'LC_TIME="C"'
+FAIL	XCU.locale.003	1415	overridden LC_TIME written as 'LC_TIME=C'
+FAIL	XCU.locale.005	1434	locale -m exited with status 2
+FAIL	XCU.localedef.001	1459	localedef exited with status 4
+FAIL	XCU.localedef.002	1398	localedef exited with status 4
+UNTESTED	XCU.localedef.005	0	untestable: The effect is visible only through the use of the created locale by
+UNTESTED	XCU.logger.006	0	untestable: The logging facility and the place the messages end up are
+UNTESTED	XCU.lp.002	0	untestable: Printing needs an output device, which the page leaves
+FAIL	XCU.ls.005	1405	ls -m did not wrap as expected
+FAIL	XCU.ls.018	3142	total is 16 in 512-byte units but 16 with -k
+FAIL	XCU.ls.029	1395	ls -lH: lrwxrwxrwx   1 root     root           1 Oct 31 06:28 d/lk -> f
+FAIL	XCU.ls.031	1457	ls -F: output is wrong
+FAIL	XCU.ls.041	2153	mode 2745 is written as -rwxr-Lr-x, expected -rwxr-Sr-x
+FAIL	XCU.ls.042	1373	the mode 'lrwxrwxrwx' does not start with c
+FAIL	XCU.ls.043	1789	ls -lp writes 's3 -> ex*' for s3, expected 's3 -> ex' with or without the indicator ''
+FAIL	XCU.ls.046	1594	ls -HS big mid lnk: 'big mid lnk ', expected 'big lnk mid'
+FAIL	XCU.ls.048	1691	ls -a -A: '.|..|.h|a|b|c|', expected neither dot nor dot-dot
+UNRESOLVED	XCU.ls.053	1802	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.ls.054	2032	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.ls.055	1653	localedef refused the test locale source pcloc_t.src (status 4)
+FAIL	XCU.m4.006	1493	output differs: 14|3|1|-5|16|3|1|0|0|1|2|7|5|-1|0|20|31|8|FF|00000101|1|0|1|1|4
+FAIL	XCU.m4.011	1493	mkstemp did not create 'mkstemp(pcmXXXXXX)'
+FAIL	XCU.m4.016	1611	output was 'a[mkstemp(/var/pc/r/res-root/tmp/pc.jEaaDM/pcw.19690/nodir/xXXXXXX)]b
+FAIL	XCU.mailx.005	2925	-H: no line for carol
+FAIL	XCU.mailx.006	1834	the first next did not write message 1: Message  2:
+UNTESTED	XCU.mailx.014	0	untestable: Delivery needs a mail transfer agent and recipients, the system
+FAIL	XCU.mailx.015	2633	a single quote inside double quotes was not literal: a  b
+FAIL	XCU.mailx.020	1715	p :r showed message 2, which was not read
+FAIL	XCU.mailx.022	1601	the first empty line did not write message 1: Message  2:
+FAIL	XCU.mailx.024	1475	the default prompt "? " was not written before the first command
+FAIL	XCU.mailx.026	1925	! did not call SHELL with -c, -- and the command: 2
+FAIL	XCU.mailx.033	1980	with a null LISTER, folders did not list pcbox1: 
+FAIL	XCU.mailx.035	1800	the pager was never run for a message longer than crt
+FAIL	XCU.mailx.041	1458	mailx -f -- file: nonzero status
+INSPECT	XCU.mailx.045	1490	disputed (see the assertion's note): no opening message was written by default
+FAIL	XCU.make.011	1563	make: nonzero status: make: Fatal error in reader: makefile, line 4: Macro assignment on dependency line
+FAIL	XCU.make.014	1682	an up-to-date target was rebuilt through the suffix rule
+FAIL	XCU.make.019	1542	CURDIR is '', expected '/var/pc/r/res-root/tmp/pc.KcairP/pcw.21131' or '/var/pc/r/res-root/tmp/pc.KcairP/pcw.21131'
+FAIL	XCU.make.022	1605	internal macro values differ: caret=f1 f2 plus=
+FAIL	XCU.make.024	1418	a phony target did not run although a file of that name exists
+FAIL	XCU.make.025	1433	make with a missing -include file: nonzero status
+FAIL	XCU.make.027	2069	a .PHONY target was removed after SIGTERM
+FAIL	XCU.make.036	1604	the environment CURDIR changed the macro or was not reset: macro=/nonexistent-pcdir env=/nonexistent-pcdir
+FAIL	XCU.make.037	1839	SHELL on the command line: env=[/usr/xpg4/bin/sh] mac=[/usr/xpg4/bin/sh]
+FAIL	XCU.make.040	1512	make lib.a(m.o): nonzero status: make: Fatal error: Don't know how to make target `lib.a(m.o)'
+FAIL	XCU.make.041	3004	targets overlapped under .NOTPARALLEL: start a
+FAIL	XCU.make.043	1700	make -fmakefile: nonzero status
+FAIL	XCU.make.044	1586	macro operands: [b] [] [b]
+FAIL	XCU.make.045	1591	make: nonzero status
+FAIL	XCU.make.050	1374	make: nonzero status
+FAIL	XCU.make.051	1871	-t touched the phony target
+UNTESTED	XCU.man.004	0	untestable: It needs a terminal on standard output, which a script run by the
+UNTESTED	XCU.mesg.002	0	untestable: It needs a terminal device that the test may change, and a script run
+UNTESTED	XCU.more.006	0	untestable: A terminal device and a person (or a terminal driver) are needed
+FAIL	XCU.msgfmt.002	1360	msgfmt -S: nonzero status
+FAIL	XCU.msgfmt.003	1360	msgfmt -S -o out: nonzero status
+FAIL	XCU.msgfmt.005	1502	a consistent entry was diagnosed
+FAIL	XCU.msgfmt.006	1627	the fuzzy entry was included without -f
+FAIL	XCU.mv.010	1373	mv exited 0 for a target with a trailing slash
+UNRESOLVED	XCU.mv.015	1794	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.mv.016	1765	localedef refused the test locale source pcloc_y.src (status 4)
+UNRESOLVED	XCU.mv.017	1904	localedef refused the test locale source pcloc.src (status 4)
+UNINITIATED	XCU.newgrp.001	1589	exited 7 without reporting a result
+UNINITIATED	XCU.newgrp.002	1705	exited 0 without reporting a result
+UNINITIATED	XCU.newgrp.003	1709	exited 0 without reporting a result
+UNTESTED	XCU.newgrp.004	0	untestable: The outcome depends on the group database and its passwords, which
+UNRESOLVED	XCU.nice.003	1388	setup: the caller's nice value 20 is too near the highest to raise it by one
+FAIL	XCU.nl.002	1364	the empty line was not written as an empty line
+UNRESOLVED	XCU.nl.009	1903	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.nl.010	1706	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.nm.001	1368	setup: c17 is not available
+UNRESOLVED	XCU.nm.002	1506	setup: c17 is not available
+UNRESOLVED	XCU.nm.003	1314	setup: c17 is not available
+UNRESOLVED	XCU.nm.004	1502	setup: c17 is not available
+UNRESOLVED	XCU.nm.005	1320	setup: c17 is not available
+UNRESOLVED	XCU.nm.006	1352	setup: c17 is not available
+UNRESOLVED	XCU.nm.007	1671	setup: c17 is not available
+UNRESOLVED	XCU.nm.008	1558	setup: c17 is not available
+UNRESOLVED	XCU.nm.009	1345	setup: c17 is not available
+NOTINUSE	XCU.nm.011	1492	c17 is not available
+NOTINUSE	XCU.nm.012	1362	c17 is not available
+FAIL	XCU.od.004	1479	vertical tab is not \v
+FAIL	XCU.od.005	1494	-j beyond the end of the input gave status 0
+FAIL	XCU.od.008	1407	status 0 for a file that cannot be read
+UNRESOLVED	XCU.paste.009	1695	localedef refused the test locale source pcloc2.src (status 4)
+FAIL	XCU.patch.005	1679	-b -o with an existing outfile did not create outfile.orig
+FAIL	XCU.pathchk.002	1394	pathchk exited with status 1 for a component of 255 bytes
+FAIL	XCU.pathchk.004	1483	pathchk -p exited with status 1 for 14 bytes
+FAIL	XCU.pathchk.007	1387	pathchk -P exited 0 for a component starting with a hyphen
+FAIL	XCU.pax.011	1586	a -v line has fewer than nine fields
+FAIL	XCU.pax.023	1768	with -l -L, dest2/src/s (serial number '147299') is not a hard link to the file src/s refers to ('147291')
+FAIL	XCU.pax.025	2619	-s with S: nonzero status
+FAIL	XCU.pax.027	1850	-p a still restored the archived access time: -rw-r--r--   1 root     root           2 Sep  9  2001 f1
+FAIL	XCU.pax.035	2526	the x block does not start with the record '17 comment=hello': '30 mtime=10415198'
+FAIL	XCU.pax.037	1678	a g record only: gname shown is 'root', expected 'aaa'
+FAIL	XCU.pax.040	1825	%D for a file that is not a device: '[0,0', expected '[ ]'
+FAIL	XCU.pax.041	2115	pax -rw -u with an older source: nonzero status
+FAIL	XCU.pax.043	5710	with linkdata no typeflag 1 member was found
+FAIL	XCU.pax.044	1697	the archive holds no path record with the 304-character pathname
+NOTINUSE	XCU.pax.045	1469	the file system keeps no sub-second modification times
+FAIL	XCU.pr.001	1667	the first page is not a 5-line header, 56 lines and a 5-line trailer
+FAIL	XCU.pr.003	1482	-h did not replace the file name in the header
+FAIL	XCU.pr.013	1366	with TZ=PCA0 the header line was [Jun 15 10:30 2021  f Page 1], not [Jun 15 10:30 2021 f Page 1]
+FAIL	XCU.printf.005	1949	printf %d 010 did not write what was wanted, or did not exit zero
+FAIL	XCU.printf.014	1666	printf exited zero for the non-numeric argument abc
+UNRESOLVED	XCU.printf.015	1688	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.prs.001	1449	setup: admin could not create s.f
+UNRESOLVED	XCU.prs.002	1326	setup: admin could not create s.f
+UNRESOLVED	XCU.prs.003	1370	setup: admin could not create s.f
+UNRESOLVED	XCU.prs.004	1523	setup: admin could not create s.f
+UNRESOLVED	XCU.prs.005	1373	setup: admin could not create s.f
+UNRESOLVED	XCU.prs.006	1316	setup: admin failed for s.a
+NOTINUSE	XCU.prs.007	1481	get is not available
+FAIL	XCU.ps.010	5570	comm is '/usr/xpg4/bin/sh', expected sleep
+FAIL	XCU.ps.011	1460	time '00:01' is not [dd-]hh:mm:ss
+UNTESTED	XCU.ps.012	0	untestable: A script cannot give the test a controlling terminal of its own,
+FAIL	XCU.pwd.003	1357	exec pwd -L wrote '/var/pc/r/res-root/tmp/pc.PtaaBU/real', expected '/var/pc/r/res-root/tmp/pc.PtaaBU/lnk'
+FAIL	XCU.read.010	1282	read -d '' exited 1
+FAIL	XCU.read.013	1312	exit 1 for a read-only variable, wanted more than 1
+FAIL	XCU.readlink.004	1306	no diagnostic for a regular file
+FAIL	XCU.readonly.004	1824	read returned 1, expected more than 1
+FAIL	XCU.realpath.001	1349	realpath exited with status 127
+FAIL	XCU.realpath.002	1407	realpath -e exited with status 127
+FAIL	XCU.realpath.004	1376	realpath -E real/new exited with status 127
+FAIL	XCU.realpath.006	1405	realpath -e -E exited with status 127
+UNTESTED	XCU.renice.006	0	untestable: Both change the nice value of processes the test does not own, in
+# resumed 2026-10-31T06:47:38Z
+UNRESOLVED	XCU.rmdel.001	1461	setup: admin could not create s.f
+UNRESOLVED	XCU.rmdel.002	1392	setup: admin could not create s.f
+UNRESOLVED	XCU.rmdel.003	1392	setup: admin could not create s.f
+UNRESOLVED	XCU.rmdel.004	1330	setup: admin could not create s.f
+UNRESOLVED	XCU.rmdel.005	1468	setup: admin could not create s.f
+UNRESOLVED	XCU.sact.001	1483	setup: admin could not create s.f
+UNRESOLVED	XCU.sact.002	1314	setup: admin could not create s.f
+UNRESOLVED	XCU.sact.003	1470	setup: admin failed for s.a
+FAIL	XCU.sed.002	1426	a newline was not put between two -e pieces (got: rc=1)
+FAIL	XCU.sed.006	1411	flag i did not match case-insensitively
+FAIL	XCU.sed.010	1473	a gave the wrong result (got: 1
+FAIL	XCU.sed.012	1580	l did not give a\tb\\c\001d$ (got: a\tb\c\001d$
+UNRESOLVED	XCU.sed.022	1801	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.sed.023	1678	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.sed.024	1632	localedef refused the test locale source pcloc2.src (status 4)
+FAIL	XCU.set.005	1518	got '1,line,u,u', expected 1,line,3,u
+UNINITIATED	XCU.sh-environment.005	1350	exited 1 without reporting a result
+UNRESOLVED	XCU.sh-environment.007	60047	timed out after 60s
+FAIL	XCU.sh-errors.002	1513	readonly PCR=1; unset PCR: status 0, expected 1 to 125
+FAIL	XCU.sh-errors.003	1403	readonly PCR=1; command export PCR=2: got '', expected after and a non-zero status
+FAIL	XCU.sh-errors.010	1533	echo (: the interactive shell did not go on (out='')
+FAIL	XCU.sh-jobs.002	3771	no line '[1] 1437' in the output: PCP> sleep 30 &
+FAIL	XCU.sh-signals.003	2540	wait returned 1, expected above 128
+FAIL	XCU.sh-simple-commands.005	1633	true: status 0, expected 1 to 125
+UNINITIATED	XCU.sh-simple-commands.009	1358	exited 1 without reporting a result
+FAIL	XCU.sh.036	3830	the line 'one' appeared 1 times, wanted 2: PCP> set -o vi
+FAIL	XCU.sh.043	3272	the history does not list the commented line: PCP> set -o vi
+FAIL	XCU.sh.047	3391	the line 'viaalias' appeared 0 times, wanted 1: PCP> set -o vi
+FAIL	XCU.sh.052	4439	the line 'i1' appeared 1 times, wanted 3: PCP> set -o vi
+FAIL	XCU.sh.058	3573	the earlier session's command is not in the history: PCP> fc -l -n -50
+FAIL	XCU.sh.059	3429	the line 'persist1' appeared 0 times, wanted 1: PCP> set -o vi
+FAIL	XCU.sh.063	3252	no message for the file with a percent sign in its name: PCP> sleep 1; echo x >>m%x
+FAIL	XCU.shift.004	1469	shift x: the shell neither exited with an error nor reported a non-zero status (out='rc=0')
+FAIL	XCU.sort.010	1529	-C on unordered input gave status 2, not 1
+UNRESOLVED	XCU.sort.017	1772	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.sort.018	1601	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.sort.019	1969	localedef refused the test locale source pcloc.src (status 4)
+UNRESOLVED	XCU.sort.020	1769	localedef refused the test locale source pcloc_t.src (status 4)
+FAIL	XCU.strings.003	1425	-t o did not give '4 defgh' and '15 klmn'
+UNRESOLVED	XCU.strip.001	1467	setup: c17 is not available
+UNRESOLVED	XCU.strip.002	1396	setup: c17 is not available
+UNRESOLVED	XCU.strip.004	1296	setup: c17 is not available
+UNTESTED	XCU.stty.001	0	untestable: A pseudo-terminal has no line speed or modem lines to observe, and
+FAIL	XCU.stty.004	1862	settings were not restored from the -g string (4c4|< eucw 1:0:0:0, scrw 1:0:0:0|---|> eucw ?, scrw ?|)
+FAIL	XCU.stty.008	2412	nl did not disable icrnl
+FAIL	XCU.stty.009	1743	size after rows 31 cols 97 was ''
+FAIL	XCU.stty.011	4080	after stty cr0 the output lacks cr0
+FAIL	XCU.stty.012	2063	raw left erase enabled
+UNTESTED	XCU.tabs.001	0	untestable: The sequence is unspecified; only the equivalences between
+FAIL	XCU.tabs.004	1525	1,10,20,30 and '1 10 +10 +10' differ
+UNRESOLVED	XCU.tail.007	120053	timed out after 120s
+UNTESTED	XCU.talk.002	0	untestable: It is a screen program that needs a terminal on each side and a
+FAIL	XCU.test.005	1392	test a < b gave status 2, wanted 0
+FAIL	XCU.test.008	2776	exec [ -x rw ] gave status 0, wanted 1
+UNRESOLVED	XCU.test.015	1839	localedef refused the test locale source pcloc.src (status 4)
+FAIL	XCU.timeout.003	8614	timeout -s KILL exited 265, wanted 124
+FAIL	XCU.times.001	1666	lines do not have the form NmN.NNs NmN.NNs: user	0m0.96s
+UNTESTED	XCU.tput.001	0	untestable: The sequences depend on the terminal type and are unspecified;
+FAIL	XCU.tput.004	2743	the output for two operands is not the two outputs in order
+UNRESOLVED	XCU.tr.009	1796	localedef refused the test locale source pcloc.src (status 4)
+FAIL	XCU.trap.010	1562	no USR1 line from trap -p USR1
+INSPECT	XCU.trap.011	1764	disputed (see the assertion's note): no line from trap -p USR2 for a condition in its default state
+FAIL	XCU.trap.012	1461	no line for USR1
+FAIL	XCU.trap.015	1522	caught trap in subshell: got 'hit
+FAIL	XCU.trap.017	1915	USR1, ignored on entry, is not in the listing
+UNRESOLVED	XCU.true.004	1915	localedef refused the test locale source pcloc.src (status 4)
+FAIL	XCU.tsort.004	1528	-w with no cycle did not give the order and status 0
+FAIL	XCU.ulimit.004	1792	setting the soft limit failed (exit 287)
+FAIL	XCU.ulimit.005	1457	ulimit -f 0 failed (exit 287)
+FAIL	XCU.ulimit.006	1426	setup: unexpected output ''
+FAIL	XCU.unalias.005	1334	no diagnostic on standard error
+FAIL	XCU.unalias.006	1441	unalias did not remove the alias inside the subshell
+UNRESOLVED	XCU.uncompress.007	1449	setup: compress -g failed
+UNRESOLVED	XCU.unget.001	1612	setup: admin could not create s.f
+UNRESOLVED	XCU.unget.002	1429	setup: admin could not create s.f
+UNRESOLVED	XCU.unget.003	1457	setup: admin could not create s.f
+NOTINUSE	XCU.unget.004	1403	get is not available
+NOTINUSE	XCU.unget.005	1464	get is not available
+FAIL	XCU.unlink.001	1401	unlink exited with status 127
+FAIL	XCU.unlink.003	1511	unlink exited with status 127
+UNTESTED	XCU.uucp.001	0	untestable: A transfer needs a configured remote system and a communications
+FAIL	XCU.uudecode.011	1482	-o -: standard output is wrong
+UNTESTED	XCU.uustat.001	0	untestable: Meaningful output needs queued requests, which can only be made
+UNSUPPORTED	XCU.uux.001	0	option UU not claimed
+UNTESTED	XCU.uux.002	0	untestable: Remote execution needs a configured remote system and a
+UNRESOLVED	XCU.val.001	1470	setup: admin could not create s.f
+UNRESOLVED	XCU.val.002	1645	setup: admin could not create s.f
+UNRESOLVED	XCU.val.003	1456	setup: admin could not create s.f
+UNRESOLVED	XCU.val.004	1426	setup: admin could not create s.f
+UNRESOLVED	XCU.val.005	1458	setup: admin could not create s.f
+UNRESOLVED	XCU.val.006	1397	setup: admin could not create s.f
+NOTINUSE	XCU.val.007	1353	get is not available
+UNTESTED	XCU.vi.001	0	untestable: The screen contents depend on the terminal type and are not defined
+FAIL	XCU.vi.009	2787	vi -R exited with status 1
+FAIL	XCU.vi.016	4162	the file is:   L01|  L02|  L03|  F04|  L05|  L06|  G07|  B08|  L09|  D10|  L11|  C12|  L13|  L14|  L15|  L16|  L17|  L18|  L19|  L20|
+FAIL	XCU.vi.018	3700	the file is:   L01|  M02|  N03|  L04|  Q05|  P06|  L07|  L08|  L09|  L10|  L11|  L12|  L13|  L14|  L15|  L16|  L17|  L18|  L19|  L20|
+FAIL	XCU.vi.029	3667	vi exited with status 2
+FAIL	XCU.vi.036	3651	vi exited with status 1
+FAIL	XCU.vi.047	4310	the file is:     a|    foo||    b|    c|X|    d|  X|
+FAIL	XCU.vi.056	2989	vi exited with status 1
+FAIL	XCU.vi.062	3353	the file is: x|x|x|
+UNRESOLVED	XCU.wc.010	1584	localedef refused the test locale source pcloc2.src (status 4)
+FAIL	XCU.what.001	1652	what: exit status 127
+FAIL	XCU.what.002	1462	what -s: nonzero status
+FAIL	XCU.what.003	1334	a file without a match: exit status 127, expected 1
+FAIL	XCU.what.004	1393	what with matches in two files: exit status 127
+UNRESOLVED	XCU.what.005	1485	setup: admin could not create s.f
+UNTESTED	XCU.who.004	0	untestable: The contents of the user database are not under the control of a
+UNTESTED	XCU.write.002	0	untestable: It needs another login with a terminal that the test may write to,
+FAIL	XCU.xargs.004	1384	without -r and without input the utility ran '', expected exactly one run
+FAIL	XCU.xargs.006	1564	adjacent null bytes gave '[a][b]', expected '[a][][b]'
+UNTESTED	XCU.xargs.015	0	untestable: The answer is read from the controlling terminal, which a script
+FAIL	XCU.xgettext.001	1591	extracted msgids: 
+FAIL	XCU.xgettext.003	1533	no #: comment line before the msgid
+FAIL	XCU.xgettext.004	1523	-K tr: nonzero status
+FAIL	XCU.xgettext.005	1534	-a extracted: 
+FAIL	XCU.xgettext.006	1656	-j produced: 
+FAIL	XCU.xgettext.007	1477	xgettext -x: nonzero status
+FAIL	XCU.xgettext.008	1720	standard input produced: 
+UNRESOLVED	XCU.yacc.001	1396	setup: c17 is not available
+UNRESOLVED	XCU.yacc.002	1398	setup: c17 is not available
+UNRESOLVED	XCU.yacc.003	1389	setup: c17 is not available
+UNRESOLVED	XCU.yacc.004	1450	setup: c17 is not available
+UNRESOLVED	XCU.yacc.005	1412	setup: c17 is not available
+UNRESOLVED	XCU.yacc.006	1443	setup: c17 is not available
+UNRESOLVED	XCU.yacc.007	1501	setup: c17 is not available
+UNRESOLVED	XCU.yacc.008	1319	setup: c17 is not available
+UNRESOLVED	XCU.yacc.009	1344	setup: c17 is not available
+UNRESOLVED	XCU.yacc.010	1476	setup: c17 is not available
+UNRESOLVED	XCU.yacc.011	1552	setup: c17 is not available
+UNRESOLVED	XCU.yacc.013	1291	setup: c17 is not available
+UNRESOLVED	XCU.yacc.014	1468	setup: c17 is not available
+UNRESOLVED	XCU.yacc.015	1332	setup: c17 is not available
+UNRESOLVED	XCU.yacc.016	1361	setup: c17 is not available
+UNRESOLVED	XCU.yacc.017	1476	setup: c17 is not available
+UNRESOLVED	XCU.yacc.018	1396	setup: c17 is not available
+UNRESOLVED	XCU.yacc.019	1402	setup: c17 is not available
+UNRESOLVED	XCU.yacc.020	1448	setup: c17 is not available
+UNRESOLVED	XCU.zcat.005	1471	setup: compress -g failed
+UNINITIATED	XSH.2.10-sockets.001	0	build failed (out/XSH.2.10-sockets.001.build.txt)
+UNINITIATED	XSH.2.10-sockets.002	0	build failed (out/XSH.2.10-sockets.002.build.txt)
+UNINITIATED	XSH.2.10-sockets.003	0	build failed (out/XSH.2.10-sockets.003.build.txt)
+UNINITIATED	XSH.2.10-sockets.004	0	build failed (out/XSH.2.10-sockets.004.build.txt)
+UNINITIATED	XSH.2.10-sockets.005	0	build failed (out/XSH.2.10-sockets.005.build.txt)
+UNINITIATED	XSH.2.10-sockets.006	0	build failed (out/XSH.2.10-sockets.006.build.txt)
+UNINITIATED	XSH.2.10-sockets.007	0	build failed (out/XSH.2.10-sockets.007.build.txt)
+UNINITIATED	XSH.2.10-sockets.008	0	build failed (out/XSH.2.10-sockets.008.build.txt)
+UNINITIATED	XSH.2.10-sockets.009	0	build failed (out/XSH.2.10-sockets.009.build.txt)
+UNINITIATED	XSH.2.10-sockets.010	0	build failed (out/XSH.2.10-sockets.010.build.txt)
+UNINITIATED	XSH.2.10-sockets.011	0	build failed (out/XSH.2.10-sockets.011.build.txt)
+UNINITIATED	XSH.2.10-sockets.012	0	build failed (out/XSH.2.10-sockets.012.build.txt)
+UNINITIATED	XSH.2.10-sockets.013	0	build failed (out/XSH.2.10-sockets.013.build.txt)
+UNINITIATED	XSH.2.10-sockets.014	0	build failed (out/XSH.2.10-sockets.014.build.txt)
+UNINITIATED	XSH.2.10-sockets.015	0	build failed (out/XSH.2.10-sockets.015.build.txt)
+UNINITIATED	XSH.2.10-sockets.016	0	build failed (out/XSH.2.10-sockets.016.build.txt)
+UNINITIATED	XSH.2.10-sockets.017	0	build failed (out/XSH.2.10-sockets.017.build.txt)
+UNINITIATED	XSH.2.10-sockets.018	0	build failed (out/XSH.2.10-sockets.018.build.txt)
+UNINITIATED	XSH.2.10-sockets.019	0	build failed (out/XSH.2.10-sockets.019.build.txt)
+UNINITIATED	XSH.2.10-sockets.020	0	build failed (out/XSH.2.10-sockets.020.build.txt)
+UNINITIATED	XSH.2.10-sockets.021	0	build failed (out/XSH.2.10-sockets.021.build.txt)
+UNINITIATED	XSH.2.10-sockets.022	0	build failed (out/XSH.2.10-sockets.022.build.txt)
+FAIL	XSH.2.11-data-types.002	0	does not compile: see out/XSH.2.11-data-types.002.build.txt
+INSPECT	XSH.2.11-data-types.004	1226	disputed (see the assertion's note): the largest id_t, 2147483647, is below the largest uid_t, 4294967295
+FAIL	XSH.2.2-compilation-environment.004	0	does not compile: see out/XSH.2.2-compilation-environment.004.build.txt
+FAIL	XSH.2.2-compilation-environment.006	0	does not compile: see out/XSH.2.2-compilation-environment.006.build.txt
+NOTINUSE	XSH.2.3-error-numbers.004	1489	{LINK_MAX} is indeterminate for the file
+FAIL	XSH.2.4.3-signal-actions.019	1394	si_uid is 1, expected 0
+FAIL	XSH.2.4.3-signal-actions.021	1264	reading a whole page past the file's end did not raise SIGBUS
+FAIL	XSH.fwide.002	1325	fwide(f, 5) on a new stream returned 0, expected a positive value
+FAIL	XSH.fwide.003	1258	fwide(f, -5) on a new stream returned 0, expected a negative value
+UNRESOLVED	XSH.fwide.005	1491	fwide(b, 1) did not return a positive value
+FAIL	XSH.fgetwc.007	1440	the stream's error indicator is not set
+UNINITIATED	XSH.fgetwc.012	0	build failed (out/XSH.fgetwc.012.build.txt)
+UNINITIATED	XSH.fputwc.004	0	build failed (out/XSH.fputwc.004.build.txt)
+UNRESOLVED	XSH.2.5.2-stream-orientation.005	2559	fwide(f, 1) did not make the stream wide-oriented
+UNRESOLVED	XSH.2.5.2-stream-orientation.006	4448	fwide(f, 1) did not make the stream wide-oriented
+UNRESOLVED	XSH.2.5.2-stream-orientation.007	0	blocked by XSH.2.5.2-stream-orientation.006 (UNRESOLVED)
+INSPECT	XSH.2.7-xsi-ipc.001	1464	disputed (see the assertion's note): message queue identifier 0 is not positive
+UNSUPPORTED	XSH.clock_getres.008	0	option CPT not claimed
+UNSUPPORTED	XSH.clock_getres.009	0	option CPT not claimed
+UNSUPPORTED	XSH.clock_getres.010	0	option TCT not claimed
+UNSUPPORTED	XSH.clock_getres.011	0	option TCT not claimed
+UNINITIATED	XSH.msync.005	0	build failed (out/XSH.msync.005.build.txt)
+INSPECT	XSH.msync.007	1422	disputed (see the assertion's note): msync(flags 0): returned 0, expected -1 with EINVAL
+INSPECT	XSH.msync.008	1317	disputed (see the assertion's note): msync(MS_INVALIDATE): returned 0, expected -1 with EINVAL
+FAIL	XSH.2.8-realtime.005	1348	in the child the page is locked or msync failed (status 256)
+UNSUPPORTED	XSH.2.9-threads.009	0	option TSP not claimed
+UNINITIATED	XSH.2.9-threads.012	0	build failed (out/XSH.2.9-threads.012.build.txt)
+UNINITIATED	XSH.2.9-threads.013	0	build failed (out/XSH.2.9-threads.013.build.txt)
+UNINITIATED	XSH.2.9-threads.014	0	build failed (out/XSH.2.9-threads.014.build.txt)
+UNINITIATED	XSH.2.9-threads.024	0	build failed (out/XSH.2.9-threads.024.build.txt)
+UNINITIATED	XSH.2.9-threads.025	0	build failed (out/XSH.2.9-threads.025.build.txt)
+FAIL	XSH.2.9-threads.029	2369	the file is 20230144 bytes long, expected 24576000 (blocks overwrote each other)
+FAIL	XSH.2.9-threads.030	7145	the threads read 97985 records between them, expected 60000
+UNINITIATED	XSH.2.9-threads.032	0	build failed (out/XSH.2.9-threads.032.build.txt)
+FAIL	XSH.2.9-threads.035	1359	rwlock: unlock through the second mapping returned EPERM
+UNINITIATED	XSH.CMPLX.001	0	build failed (out/XSH.CMPLX.001.build.txt)
+UNINITIATED	XSH.CMPLX.002	0	build failed (out/XSH.CMPLX.002.build.txt)
+UNINITIATED	XSH.CMPLX.003	0	build failed (out/XSH.CMPLX.003.build.txt)
+UNINITIATED	XSH.CMPLX.004	0	build failed (out/XSH.CMPLX.004.build.txt)
+INSPECT	XSH._Exit.019	4524	disputed (see the assertion's note): the file holds 0 bytes, not 65536
+UNINITIATED	XSH.accept.001	0	build failed (out/XSH.accept.001.build.txt)
+UNINITIATED	XSH.accept.002	0	build failed (out/XSH.accept.002.build.txt)
+UNINITIATED	XSH.accept.003	0	build failed (out/XSH.accept.003.build.txt)
+UNINITIATED	XSH.accept.004	0	build failed (out/XSH.accept.004.build.txt)
+UNINITIATED	XSH.accept.005	0	build failed (out/XSH.accept.005.build.txt)
+UNINITIATED	XSH.accept.006	0	build failed (out/XSH.accept.006.build.txt)
+UNINITIATED	XSH.accept.007	0	build failed (out/XSH.accept.007.build.txt)
+UNINITIATED	XSH.accept.008	0	build failed (out/XSH.accept.008.build.txt)
+UNINITIATED	XSH.accept.009	0	build failed (out/XSH.accept.009.build.txt)
+UNINITIATED	XSH.accept.010	0	build failed (out/XSH.accept.010.build.txt)
+UNINITIATED	XSH.accept.011	0	build failed (out/XSH.accept.011.build.txt)
+UNINITIATED	XSH.accept.012	0	build failed (out/XSH.accept.012.build.txt)
+UNINITIATED	XSH.accept.013	0	build failed (out/XSH.accept.013.build.txt)
+UNINITIATED	XSH.accept.014	0	build failed (out/XSH.accept.014.build.txt)
+UNINITIATED	XSH.accept.015	0	build failed (out/XSH.accept.015.build.txt)
+UNINITIATED	XSH.accept.016	0	build failed (out/XSH.accept.016.build.txt)
+UNINITIATED	XSH.accept.017	0	build failed (out/XSH.accept.017.build.txt)
+UNINITIATED	XSH.accept.018	0	build failed (out/XSH.accept.018.build.txt)
+UNINITIATED	XSH.accept.019	0	build failed (out/XSH.accept.019.build.txt)
+UNINITIATED	XSH.accept.020	0	build failed (out/XSH.accept.020.build.txt)
+UNINITIATED	XSH.accept.021	0	build failed (out/XSH.accept.021.build.txt)
+UNINITIATED	XSH.accept.022	0	build failed (out/XSH.accept.022.build.txt)
+UNINITIATED	XSH.access.005	0	build failed (out/XSH.access.005.build.txt)
+UNINITIATED	XSH.access.008	0	build failed (out/XSH.access.008.build.txt)
+UNINITIATED	XSH.access.009	0	build failed (out/XSH.access.009.build.txt)
+UNINITIATED	XSH.access.014	0	build failed (out/XSH.access.014.build.txt)
+UNINITIATED	XSH.access.015	0	build failed (out/XSH.access.015.build.txt)
+UNINITIATED	XSH.access.017	0	build failed (out/XSH.access.017.build.txt)
+UNINITIATED	XSH.access.018	0	build failed (out/XSH.access.018.build.txt)
+UNINITIATED	XSH.access.020	0	build failed (out/XSH.access.020.build.txt)
+NOTINUSE	XSH.acos.002	1307	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.acos.003	1442	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.acos.004	1461	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.acos.006	1488	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.acosh.002	1488	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.acosh.003	1291	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.acosh.004	1421	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.acosh.005	1387	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.acosh.007	1536	IEC 60559 floating-point is not supported
+UNSUPPORTED	XSH.aio_read.007	0	option PIO not claimed
+FAIL	XSH.aio_suspend.003	1424	aio_suspend returned -1 (EAGAIN) with a completed request
+UNINITIATED	XSH.alphasort.001	0	build failed (out/XSH.alphasort.001.build.txt)
+UNINITIATED	XSH.alphasort.002	0	build failed (out/XSH.alphasort.002.build.txt)
+UNINITIATED	XSH.alphasort.003	0	build failed (out/XSH.alphasort.003.build.txt)
+UNINITIATED	XSH.alphasort.004	0	build failed (out/XSH.alphasort.004.build.txt)
+UNINITIATED	XSH.alphasort.005	0	build failed (out/XSH.alphasort.005.build.txt)
+UNINITIATED	XSH.alphasort.006	0	build failed (out/XSH.alphasort.006.build.txt)
+UNINITIATED	XSH.alphasort.007	0	build failed (out/XSH.alphasort.007.build.txt)
+UNINITIATED	XSH.alphasort.008	0	build failed (out/XSH.alphasort.008.build.txt)
+UNINITIATED	XSH.alphasort.009	0	build failed (out/XSH.alphasort.009.build.txt)
+UNINITIATED	XSH.alphasort.010	0	build failed (out/XSH.alphasort.010.build.txt)
+NOTINUSE	XSH.asin.002	1343	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.asin.003	1394	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.asin.004	1400	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.asin.006	1527	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.asin.007	1289	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.asinh.002	1190	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.asinh.003	1493	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.asinh.004	1620	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atan.002	1186	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atan.003	1359	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atan.004	1409	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atan.005	1423	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atan2.002	1421	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atan2.007	1388	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atan2.008	1373	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atan2.009	1206	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atan2.010	1607	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atan2.011	1226	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atan2.012	1255	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atan2.013	1585	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atan2.014	1857	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atanh.002	1315	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atanh.003	1461	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atanh.006	1290	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atanh.007	1269	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.atanh.008	1451	IEC 60559 floating-point is not supported
+FAIL	XSH.atomic_fetch_add.004	1252	atomic_uint_fast16_t: max + 1 gave old ffff, new 10000 (want max, 0)
+FAIL	XSH.atomic_fetch_add.005	1315	atomic_int_fast16_t: max + 1 gave old 7fff, new 8000 (want max, min)
+INSPECT	XSH.atomic_fetch_add.006	1238	disputed (see the assertion's note): shr: adding 3 moved the pointer by 3 bytes, not 3 objects (6 bytes)
+UNINITIATED	XSH.bind.001	0	build failed (out/XSH.bind.001.build.txt)
+UNINITIATED	XSH.bind.002	0	build failed (out/XSH.bind.002.build.txt)
+UNINITIATED	XSH.bind.003	0	build failed (out/XSH.bind.003.build.txt)
+UNINITIATED	XSH.bind.004	0	build failed (out/XSH.bind.004.build.txt)
+UNINITIATED	XSH.bind.005	0	build failed (out/XSH.bind.005.build.txt)
+UNINITIATED	XSH.bind.006	0	build failed (out/XSH.bind.006.build.txt)
+UNINITIATED	XSH.bind.007	0	build failed (out/XSH.bind.007.build.txt)
+UNINITIATED	XSH.bind.008	0	build failed (out/XSH.bind.008.build.txt)
+UNINITIATED	XSH.bind.009	0	build failed (out/XSH.bind.009.build.txt)
+UNINITIATED	XSH.bind.010	0	build failed (out/XSH.bind.010.build.txt)
+UNINITIATED	XSH.bind.011	0	build failed (out/XSH.bind.011.build.txt)
+UNINITIATED	XSH.bind.012	0	build failed (out/XSH.bind.012.build.txt)
+UNINITIATED	XSH.bind.013	0	build failed (out/XSH.bind.013.build.txt)
+UNINITIATED	XSH.bind.014	0	build failed (out/XSH.bind.014.build.txt)
+UNINITIATED	XSH.bind.015	0	build failed (out/XSH.bind.015.build.txt)
+UNINITIATED	XSH.bind.016	0	build failed (out/XSH.bind.016.build.txt)
+UNINITIATED	XSH.bind.017	0	build failed (out/XSH.bind.017.build.txt)
+UNINITIATED	XSH.bind.018	0	build failed (out/XSH.bind.018.build.txt)
+UNINITIATED	XSH.bind.019	0	build failed (out/XSH.bind.019.build.txt)
+UNINITIATED	XSH.bind.020	0	build failed (out/XSH.bind.020.build.txt)
+UNINITIATED	XSH.bind.021	0	build failed (out/XSH.bind.021.build.txt)
+UNINITIATED	XSH.bind.022	0	build failed (out/XSH.bind.022.build.txt)
+UNINITIATED	XSH.bind.023	0	build failed (out/XSH.bind.023.build.txt)
+NOTINUSE	XSH.cabs.001	1251	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cabs.002	1302	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cabs.003	1254	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cabs.004	1309	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.001	1276	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.002	1316	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.003	1348	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.004	1258	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.005	1273	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.006	1309	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.007	1255	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.008	1297	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.009	1369	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.010	1370	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.011	1353	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.012	1505	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.013	1396	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.014	1287	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.015	1352	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacos.016	1451	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.001	1613	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.002	1389	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.003	1273	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.004	1338	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.005	1383	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.006	1238	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.007	1426	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.008	1553	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.009	1414	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.010	1297	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.011	1407	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.012	1355	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.013	1352	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.014	1303	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.015	1328	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cacosh.016	1310	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.carg.001	1422	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.carg.002	1323	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.carg.003	1380	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casin.001	1412	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casin.002	1483	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casin.003	1372	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casin.004	1501	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casin.005	1430	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casin.006	1394	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casin.007	1308	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casin.008	1388	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casin.009	1358	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casin.010	1514	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casin.011	1299	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casin.012	1310	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casinh.001	1334	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casinh.002	1372	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casinh.003	1319	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casinh.004	1523	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casinh.005	1330	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casinh.006	1305	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casinh.007	1305	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casinh.008	1426	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casinh.009	1481	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casinh.010	1343	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casinh.011	1319	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.casinh.012	1416	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.001	1328	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.002	1293	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.003	1365	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.004	1220	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.005	1455	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.006	1236	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.007	1423	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.008	1313	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.009	1431	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.010	1385	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.011	1512	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.012	1324	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.013	1449	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.014	1383	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catan.015	1225	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.001	1325	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.002	1412	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.003	1310	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.004	1309	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.005	1320	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.006	1295	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.007	1187	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.008	1213	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.009	1370	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.010	1309	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.011	1534	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.012	1197	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.013	1526	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.014	1450	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.catanh.015	1620	the IEC 60559 Complex Floating-Point option is not claimed
+FAIL	XSH.catopen.008	1517	NLSPATH="pc-no-dir/%N:": catopen failed: ENOENT
+FAIL	XSH.catopen.010	1250	errno 0, expected ENOENT
+NOTINUSE	XSH.cbrt.002	1308	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.cbrt.003	1296	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.ccos.001	1237	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccos.002	1260	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccos.003	1473	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccos.004	1333	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccos.005	1259	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccos.006	1336	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccos.007	1361	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccos.008	1353	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccos.009	1366	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccos.010	1318	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccos.011	1593	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccos.012	1402	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccos.013	1294	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccosh.001	1412	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccosh.002	1279	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccosh.003	1193	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccosh.004	1274	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccosh.005	1383	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccosh.006	1557	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccosh.007	1430	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccosh.008	1449	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccosh.009	1511	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccosh.010	1459	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccosh.011	1560	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccosh.012	1299	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ccosh.013	1445	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ceil.003	1226	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.ceil.004	1326	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.ceil.005	1288	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.ceil.006	1359	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.ceil.007	1410	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.001	1420	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.002	1378	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.003	1302	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.004	1382	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.005	1465	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.006	1350	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.007	1283	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.008	1352	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.009	1417	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.010	1359	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.011	1319	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.012	1423	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.013	1459	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.cexp.014	1488	the IEC 60559 Complex Floating-Point option is not claimed
+UNINITIATED	XSH.chmod.005	0	build failed (out/XSH.chmod.005.build.txt)
+UNINITIATED	XSH.chmod.008	0	build failed (out/XSH.chmod.008.build.txt)
+UNINITIATED	XSH.chmod.009	0	build failed (out/XSH.chmod.009.build.txt)
+UNINITIATED	XSH.chmod.010	0	build failed (out/XSH.chmod.010.build.txt)
+UNINITIATED	XSH.chmod.011	0	build failed (out/XSH.chmod.011.build.txt)
+UNINITIATED	XSH.chmod.015	0	build failed (out/XSH.chmod.015.build.txt)
+UNINITIATED	XSH.chmod.016	0	build failed (out/XSH.chmod.016.build.txt)
+UNINITIATED	XSH.chmod.018	0	build failed (out/XSH.chmod.018.build.txt)
+UNINITIATED	XSH.chmod.019	0	build failed (out/XSH.chmod.019.build.txt)
+UNINITIATED	XSH.chown.004	0	build failed (out/XSH.chown.004.build.txt)
+INSPECT	XSH.chown.008	1648	disputed (see the assertion's note): chown(-1, -1) of another user's file succeeded
+UNINITIATED	XSH.chown.010	0	build failed (out/XSH.chown.010.build.txt)
+UNINITIATED	XSH.chown.011	0	build failed (out/XSH.chown.011.build.txt)
+UNINITIATED	XSH.chown.012	0	build failed (out/XSH.chown.012.build.txt)
+UNINITIATED	XSH.chown.013	0	build failed (out/XSH.chown.013.build.txt)
+UNINITIATED	XSH.chown.017	0	build failed (out/XSH.chown.017.build.txt)
+UNINITIATED	XSH.chown.018	0	build failed (out/XSH.chown.018.build.txt)
+UNINITIATED	XSH.chown.020	0	build failed (out/XSH.chown.020.build.txt)
+UNINITIATED	XSH.chown.021	0	build failed (out/XSH.chown.021.build.txt)
+UNSUPPORTED	XSH.clock_getcpuclockid.001	0	option CPT not claimed
+UNSUPPORTED	XSH.clock_getcpuclockid.002	0	option CPT not claimed
+UNSUPPORTED	XSH.clock_getcpuclockid.003	0	option CPT not claimed
+UNSUPPORTED	XSH.clock_getcpuclockid.004	0	option CPT+TCT not claimed
+UNSUPPORTED	XSH.clock_nanosleep.008	0	option TCT not claimed
+NOTINUSE	XSH.clog.001	1472	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.clog.002	1353	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.clog.003	1268	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.clog.004	1392	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.clog.005	1323	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.clog.006	1228	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.clog.007	1248	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.clog.008	1253	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.clog.009	1200	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.clog.010	1380	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.clog.011	1315	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.clog.012	1365	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.clog.013	1395	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.clog.014	1405	the IEC 60559 Complex Floating-Point option is not claimed
+UNRESOLVED	XSH.close.007	0	blocked by XBD.fcntl.h.006 (FAIL)
+UNINITIATED	XSH.close.008	0	build failed (out/XSH.close.008.build.txt)
+UNRESOLVED	XSH.close.009	0	blocked by XBD.unistd.h.001 (FAIL)
+UNRESOLVED	XSH.close.010	0	blocked by XBD.unistd.h.001 (FAIL)
+UNINITIATED	XSH.close.011	0	build failed (out/XSH.close.011.build.txt)
+UNINITIATED	XSH.closedir.001	0	build failed (out/XSH.closedir.001.build.txt)
+UNRESOLVED	XSH.confstr.006	1461	<unistd.h> does not define _CS_V8_ENV
+UNINITIATED	XSH.connect.001	0	build failed (out/XSH.connect.001.build.txt)
+UNINITIATED	XSH.connect.002	0	build failed (out/XSH.connect.002.build.txt)
+UNINITIATED	XSH.connect.003	0	build failed (out/XSH.connect.003.build.txt)
+UNINITIATED	XSH.connect.004	0	build failed (out/XSH.connect.004.build.txt)
+UNINITIATED	XSH.connect.005	0	build failed (out/XSH.connect.005.build.txt)
+UNINITIATED	XSH.connect.006	0	build failed (out/XSH.connect.006.build.txt)
+UNINITIATED	XSH.connect.007	0	build failed (out/XSH.connect.007.build.txt)
+UNINITIATED	XSH.connect.008	0	build failed (out/XSH.connect.008.build.txt)
+UNINITIATED	XSH.connect.009	0	build failed (out/XSH.connect.009.build.txt)
+UNINITIATED	XSH.connect.010	0	build failed (out/XSH.connect.010.build.txt)
+UNINITIATED	XSH.connect.011	0	build failed (out/XSH.connect.011.build.txt)
+UNINITIATED	XSH.connect.012	0	build failed (out/XSH.connect.012.build.txt)
+UNINITIATED	XSH.connect.013	0	build failed (out/XSH.connect.013.build.txt)
+UNINITIATED	XSH.connect.014	0	build failed (out/XSH.connect.014.build.txt)
+UNINITIATED	XSH.connect.015	0	build failed (out/XSH.connect.015.build.txt)
+UNINITIATED	XSH.connect.016	0	build failed (out/XSH.connect.016.build.txt)
+UNINITIATED	XSH.connect.017	0	build failed (out/XSH.connect.017.build.txt)
+UNINITIATED	XSH.connect.018	0	build failed (out/XSH.connect.018.build.txt)
+UNINITIATED	XSH.connect.019	0	build failed (out/XSH.connect.019.build.txt)
+UNINITIATED	XSH.connect.020	0	build failed (out/XSH.connect.020.build.txt)
+UNINITIATED	XSH.connect.021	0	build failed (out/XSH.connect.021.build.txt)
+UNINITIATED	XSH.connect.022	0	build failed (out/XSH.connect.022.build.txt)
+NOTINUSE	XSH.copysign.002	1483	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.copysign.003	1386	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.copysign.004	1170	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.copysign.005	1286	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.cos.002	1447	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.cos.003	1340	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.cos.004	1341	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.cos.005	1472	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.cosh.002	1218	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.cosh.003	1491	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.cosh.004	1273	IEC 60559 floating-point is not supported
+FAIL	XSH.cosh.005	1514	cosh(big) [float]: exception FE_OVERFLOW was not raised
+UNTESTED	XSH.cpow.001	0	untestable: The page states no special values and no accuracy, and allows
+UNINITIATED	XSH.creat.019	0	build failed (out/XSH.creat.019.build.txt)
+UNINITIATED	XSH.creat.020	0	build failed (out/XSH.creat.020.build.txt)
+UNSUPPORTED	XSH.crypt.001	0	option XSI+CRYPT not claimed
+UNSUPPORTED	XSH.crypt.002	0	option XSI+CRYPT not claimed
+NOTINUSE	XSH.csin.001	1370	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csin.002	1224	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csin.003	1325	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csin.004	1360	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csin.005	1554	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csin.006	1363	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csin.007	1476	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csin.008	1339	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csin.009	1410	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csin.010	1523	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csin.011	1458	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csin.012	1575	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csin.013	1379	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csinh.001	1389	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csinh.002	1280	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csinh.003	1348	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csinh.004	1250	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csinh.005	1294	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csinh.006	1339	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csinh.007	1384	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csinh.008	1454	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csinh.009	1482	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csinh.010	1383	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csinh.011	1437	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csinh.012	1238	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csinh.013	1213	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csqrt.001	1497	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csqrt.002	1256	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csqrt.003	1366	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csqrt.004	1407	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csqrt.005	1380	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.csqrt.006	1373	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctan.001	1250	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctan.002	1303	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctan.003	1260	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctan.004	1263	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctan.005	1255	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctan.006	1542	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctan.007	1545	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctan.008	1437	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctan.009	1464	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctan.010	1436	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctan.011	1268	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctan.012	1509	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctanh.001	1499	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctanh.002	1281	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctanh.003	1333	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctanh.004	1498	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctanh.005	1297	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctanh.006	1467	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctanh.007	1474	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctanh.008	1393	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctanh.009	1346	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctanh.010	1454	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctanh.011	1461	the IEC 60559 Complex Floating-Point option is not claimed
+NOTINUSE	XSH.ctanh.012	1227	the IEC 60559 Complex Floating-Point option is not claimed
+UNINITIATED	XSH.dirfd.001	0	build failed (out/XSH.dirfd.001.build.txt)
+UNINITIATED	XSH.dirfd.002	0	build failed (out/XSH.dirfd.002.build.txt)
+UNINITIATED	XSH.dladdr.001	0	build failed (out/XSH.dladdr.001.build.txt)
+UNINITIATED	XSH.dladdr.002	0	build failed (out/XSH.dladdr.002.build.txt)
+UNINITIATED	XSH.dladdr.003	0	build failed (out/XSH.dladdr.003.build.txt)
+UNINITIATED	XSH.dladdr.004	0	build failed (out/XSH.dladdr.004.build.txt)
+UNINITIATED	XSH.dlclose.002	0	build failed (out/XSH.dlclose.002.build.txt)
+UNINITIATED	XSH.dlopen.004	0	build failed (out/XSH.dlopen.004.build.txt)
+UNINITIATED	XSH.dlsym.003	0	build failed (out/XSH.dlsym.003.build.txt)
+UNSUPPORTED	XSH.encrypt.001	0	option XSI+CRYPT not claimed
+UNSUPPORTED	XSH.encrypt.002	0	option XSI+CRYPT not claimed
+NOTINUSE	XSH.erf.002	1330	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.erf.003	1315	IEC 60559 floating-point is not supported
+# resumed 2026-10-31T08:18:42Z
+NOTINUSE	XSH.erfc.002	1410	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.erfc.003	1294	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.erfc.004	1340	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.erfc.005	1208	IEC 60559 floating-point is not supported
+FAIL	XSH.exec.010	1590	the new image reports: FD_CLOFORK is no longer set
+UNINITIATED	XSH.exec.013	0	build failed (out/XSH.exec.013.build.txt)
+UNSUPPORTED	XSH.exec.027	0	option CPT not claimed
+UNSUPPORTED	XSH.exec.028	0	option TCT not claimed
+UNINITIATED	XSH.exec.032	0	build failed (out/XSH.exec.032.build.txt)
+UNRESOLVED	XSH.exec.056	0	blocked by XBD.fcntl.h.006 (FAIL)
+NOTINUSE	XSH.exp.002	1378	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.exp.003	1237	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.exp.004	1504	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.exp2.002	1552	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.exp2.003	1447	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.exp2.004	1580	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.expm1.002	1377	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.expm1.003	1293	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.expm1.004	1454	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.expm1.006	1230	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.fabs.002	1382	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fabs.003	1279	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fabs.004	1327	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fabs.005	1297	the IEC 60559 Floating-Point option is not claimed
+UNINITIATED	XSH.fchmod.003	0	build failed (out/XSH.fchmod.003.build.txt)
+UNINITIATED	XSH.fchown.005	0	build failed (out/XSH.fchown.005.build.txt)
+UNINITIATED	XSH.fclose.001	0	build failed (out/XSH.fclose.001.build.txt)
+UNINITIATED	XSH.fclose.002	0	build failed (out/XSH.fclose.002.build.txt)
+UNINITIATED	XSH.fclose.003	0	build failed (out/XSH.fclose.003.build.txt)
+UNINITIATED	XSH.fclose.004	0	build failed (out/XSH.fclose.004.build.txt)
+UNINITIATED	XSH.fclose.005	0	build failed (out/XSH.fclose.005.build.txt)
+UNINITIATED	XSH.fclose.006	0	build failed (out/XSH.fclose.006.build.txt)
+UNINITIATED	XSH.fclose.007	0	build failed (out/XSH.fclose.007.build.txt)
+UNINITIATED	XSH.fclose.008	0	build failed (out/XSH.fclose.008.build.txt)
+UNINITIATED	XSH.fclose.009	0	build failed (out/XSH.fclose.009.build.txt)
+UNINITIATED	XSH.fclose.010	0	build failed (out/XSH.fclose.010.build.txt)
+UNINITIATED	XSH.fclose.011	0	build failed (out/XSH.fclose.011.build.txt)
+UNINITIATED	XSH.fclose.012	0	build failed (out/XSH.fclose.012.build.txt)
+UNINITIATED	XSH.fclose.013	0	build failed (out/XSH.fclose.013.build.txt)
+UNINITIATED	XSH.fcntl.012	0	build failed (out/XSH.fcntl.012.build.txt)
+UNINITIATED	XSH.fcntl.013	0	build failed (out/XSH.fcntl.013.build.txt)
+UNRESOLVED	XSH.fcntl.016	0	blocked by XBD.fcntl.h.008 (FAIL)
+FAIL	XSH.fcntl.026	1422	byte 10 is not locked
+UNRESOLVED	XSH.fcntl.037	0	blocked by XBD.fcntl.h.006 (FAIL)
+UNRESOLVED	XSH.fcntl.038	0	blocked by XBD.fcntl.h.006 (FAIL)
+UNRESOLVED	XSH.fcntl.039	0	blocked by XBD.fcntl.h.006 (FAIL)
+UNRESOLVED	XSH.fcntl.040	0	blocked by XBD.fcntl.h.006 (FAIL)
+UNRESOLVED	XSH.fcntl.041	0	blocked by XBD.fcntl.h.006 (FAIL)
+UNRESOLVED	XSH.fcntl.042	0	blocked by XBD.fcntl.h.006 (FAIL)
+UNRESOLVED	XSH.fcntl.043	0	blocked by XBD.fcntl.h.006 (FAIL)
+NOTINUSE	XSH.fdim.003	1282	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fdim.005	1401	the IEC 60559 Floating-Point option is not claimed
+FAIL	XSH.fdopen.005	1411	"re": FD_CLOEXEC is clear
+NOTINUSE	XSH.fdopen.009	1296	{STREAM_MAX} follows RLIMIT_NOFILE; the descriptor case is XSH.fopen.031
+INSPECT	XSH.fdopen.013	1562	disputed (see the assertion's note): "a": ftell() is 6, expected 2
+NOTINUSE	XSH.fegetround.001	1335	rounding direction macros are defined
+UNINITIATED	XSH.fflush.001	0	build failed (out/XSH.fflush.001.build.txt)
+UNINITIATED	XSH.fflush.002	0	build failed (out/XSH.fflush.002.build.txt)
+UNINITIATED	XSH.fflush.003	0	build failed (out/XSH.fflush.003.build.txt)
+UNINITIATED	XSH.fflush.004	0	build failed (out/XSH.fflush.004.build.txt)
+UNINITIATED	XSH.fflush.005	0	build failed (out/XSH.fflush.005.build.txt)
+UNINITIATED	XSH.fflush.006	0	build failed (out/XSH.fflush.006.build.txt)
+UNINITIATED	XSH.fflush.007	0	build failed (out/XSH.fflush.007.build.txt)
+UNINITIATED	XSH.fflush.008	0	build failed (out/XSH.fflush.008.build.txt)
+UNINITIATED	XSH.fflush.009	0	build failed (out/XSH.fflush.009.build.txt)
+UNINITIATED	XSH.fflush.010	0	build failed (out/XSH.fflush.010.build.txt)
+UNINITIATED	XSH.fflush.011	0	build failed (out/XSH.fflush.011.build.txt)
+UNINITIATED	XSH.fflush.012	0	build failed (out/XSH.fflush.012.build.txt)
+UNINITIATED	XSH.fflush.013	0	build failed (out/XSH.fflush.013.build.txt)
+UNINITIATED	XSH.fflush.014	0	build failed (out/XSH.fflush.014.build.txt)
+UNINITIATED	XSH.fflush.015	0	build failed (out/XSH.fflush.015.build.txt)
+UNINITIATED	XSH.fflush.016	0	build failed (out/XSH.fflush.016.build.txt)
+UNINITIATED	XSH.ffs.001	0	build failed (out/XSH.ffs.001.build.txt)
+UNINITIATED	XSH.ffs.002	0	build failed (out/XSH.ffs.002.build.txt)
+UNINITIATED	XSH.ffs.003	0	build failed (out/XSH.ffs.003.build.txt)
+UNINITIATED	XSH.ffs.004	0	build failed (out/XSH.ffs.004.build.txt)
+FAIL	XSH.fgetc.005	1373	the stream's error indicator is not set
+UNINITIATED	XSH.fgetc.008	0	build failed (out/XSH.fgetc.008.build.txt)
+UNINITIATED	XSH.fgetpos.003	0	build failed (out/XSH.fgetpos.003.build.txt)
+FAIL	XSH.fgets.006	1471	fgets() returned s although the read after "ab" could not be done without waiting
+UNINITIATED	XSH.fgets.007	0	build failed (out/XSH.fgets.007.build.txt)
+FAIL	XSH.fgetws.007	1329	the stream's error indicator is not set
+FAIL	XSH.fgetws.009	4674	fgetws() on input with the invalid byte 0xff returned fffffc7fffdffb30, expected a null pointer
+UNINITIATED	XSH.fgetws.010	0	build failed (out/XSH.fgetws.010.build.txt)
+FAIL	XSH.fileno.003	1276	fileno() of an fmemopen() stream set errno to 0, expected EBADF
+NOTINUSE	XSH.floor.003	1318	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.floor.004	1416	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.floor.005	1248	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.floor.006	1250	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.floor.007	1234	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fma.004	1329	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fma.005	1267	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fma.007	1535	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fmax.002	1371	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fmax.003	1381	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fmax.004	1511	the IEC 60559 Floating-Point option is not claimed
+UNRESOLVED	XSH.fmemopen.003	1241	the read at 3 gave 97, expected 'd'
+FAIL	XSH.fmemopen.014	1372	a read at 5, past the end position 3, gave 97
+FAIL	XSH.fmemopen.021	1349	"w": the buffer holds "abc\000", expected "abcd"
+NOTINUSE	XSH.fmemopen.024	1322	{STREAM_MAX} follows RLIMIT_NOFILE
+NOTINUSE	XSH.fmin.002	1440	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fmin.003	1468	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fmin.004	1320	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fmod.002	1327	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fmod.003	1300	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fmod.004	1432	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fmod.005	1325	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fmod.006	1381	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fmod.007	1380	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.fmod.008	1278	the IEC 60559 Floating-Point option is not claimed
+FAIL	XSH.fmtmsg.006	1403	the 3000-byte text was not written in full
+FAIL	XSH.fnmatch.009	1401	fnmatch("[[:alpha:]]", "a", 0) returned 1, expected 0
+FAIL	XSH.fnmatch.010	1512	fnmatch("[[.a.]b]", "a", 0) returned 1, expected 0
+FAIL	XSH.fnmatch.021	1374	fnmatch("[[:lower:]]", "A", 0x8) returned 1, expected 0
+FAIL	XSH.fnmatch.022	1444	fnmatch("[[:lower:]]", "A", 0x8) returned 1, expected 0
+UNINITIATED	XSH.fopen.016	0	build failed (out/XSH.fopen.016.build.txt)
+UNINITIATED	XSH.fopen.017	0	build failed (out/XSH.fopen.017.build.txt)
+NOTINUSE	XSH.fopen.032	1389	{STREAM_MAX} follows RLIMIT_NOFILE; the descriptor case is XSH.fopen.031
+NOTINUSE	XSH.fopen.034	1344	the non-portable name could be created
+UNSUPPORTED	XSH.fork.015	0	option CPT not claimed
+UNINITIATED	XSH.fork.018	0	build failed (out/XSH.fork.018.build.txt)
+UNSUPPORTED	XSH.fork.022	0	option TCT not claimed
+UNRESOLVED	XSH.fpathconf.007	1370	no controlling terminal: open("/dev/tty") failed with ENXIO
+FAIL	XSH.fprintf.038	1486	killed by signal 11 during the test
+UNINITIATED	XSH.fprintf.053	0	build failed (out/XSH.fprintf.053.build.txt)
+UNINITIATED	XSH.fprintf.054	0	build failed (out/XSH.fprintf.054.build.txt)
+UNINITIATED	XSH.fprintf.055	0	build failed (out/XSH.fprintf.055.build.txt)
+UNINITIATED	XSH.fprintf.056	0	build failed (out/XSH.fprintf.056.build.txt)
+INSPECT	XSH.fprintf.058	1295	disputed (see the assertion's note): %a of an infinity gave "infinity", %f gave "inf"
+UNINITIATED	XSH.fputc.005	0	build failed (out/XSH.fputc.005.build.txt)
+UNINITIATED	XSH.fputs.003	0	build failed (out/XSH.fputs.003.build.txt)
+UNINITIATED	XSH.fputws.007	0	build failed (out/XSH.fputws.007.build.txt)
+UNINITIATED	XSH.fread.008	0	build failed (out/XSH.fread.008.build.txt)
+UNTESTED	XSH.free.004	0	untestable: free() returns void; the absence of a value cannot be observed.
+UNRESOLVED	XSH.freopen.003	1506	setup: fgetc() on a stream not open for reading did not set the error indicator
+UNRESOLVED	XSH.freopen.012	1571	setup: fwide(g, 1) did not make the stream wide-oriented
+NOTINUSE	XSH.frexp.004	1353	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.frexp.005	1439	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.frexp.006	1518	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.frexp.007	1812	the IEC 60559 Floating-Point option is not claimed
+FAIL	XSH.fscanf.015	1493	sscanf("0xg", "%x%n") returned 1, expected 0
+FAIL	XSH.fscanf.037	1455	sscanf() returned 0, expected 3
+FAIL	XSH.fscanf.038	1644	sscanf() returned 0, expected 2
+FAIL	XSH.fscanf.043	1323	sscanf("1", "%*d%d") returned -1, expected 0 (the %*d conversion completed)
+UNINITIATED	XSH.fscanf.049	0	build failed (out/XSH.fscanf.049.build.txt)
+UNINITIATED	XSH.fseek.006	0	build failed (out/XSH.fseek.006.build.txt)
+NOTINUSE	XSH.fseek.015	1453	long holds every off_t value
+INSPECT	XSH.fseek.016	1315	disputed (see the assertion's note): fseeko() beyond the largest off_t failed with EINVAL, expected EOVERFLOW
+UNINITIATED	XSH.fsetpos.005	0	build failed (out/XSH.fsetpos.005.build.txt)
+UNINITIATED	XSH.fstat.004	0	build failed (out/XSH.fstat.004.build.txt)
+UNINITIATED	XSH.fstat.007	0	build failed (out/XSH.fstat.007.build.txt)
+UNINITIATED	XSH.fstatat.006	0	build failed (out/XSH.fstatat.006.build.txt)
+UNINITIATED	XSH.fstatat.008	0	build failed (out/XSH.fstatat.008.build.txt)
+UNINITIATED	XSH.fstatat.009	0	build failed (out/XSH.fstatat.009.build.txt)
+UNINITIATED	XSH.fstatat.010	0	build failed (out/XSH.fstatat.010.build.txt)
+UNINITIATED	XSH.fstatat.011	0	build failed (out/XSH.fstatat.011.build.txt)
+UNINITIATED	XSH.fstatat.012	0	build failed (out/XSH.fstatat.012.build.txt)
+UNINITIATED	XSH.fstatat.013	0	build failed (out/XSH.fstatat.013.build.txt)
+UNINITIATED	XSH.fstatat.014	0	build failed (out/XSH.fstatat.014.build.txt)
+UNINITIATED	XSH.fstatat.015	0	build failed (out/XSH.fstatat.015.build.txt)
+UNINITIATED	XSH.fstatat.016	0	build failed (out/XSH.fstatat.016.build.txt)
+UNINITIATED	XSH.fstatat.017	0	build failed (out/XSH.fstatat.017.build.txt)
+UNINITIATED	XSH.fstatat.021	0	build failed (out/XSH.fstatat.021.build.txt)
+UNINITIATED	XSH.fstatat.022	0	build failed (out/XSH.fstatat.022.build.txt)
+UNINITIATED	XSH.fstatat.023	0	build failed (out/XSH.fstatat.023.build.txt)
+UNINITIATED	XSH.fstatat.024	0	build failed (out/XSH.fstatat.024.build.txt)
+UNINITIATED	XSH.fstatat.025	0	build failed (out/XSH.fstatat.025.build.txt)
+UNINITIATED	XSH.fstatat.026	0	build failed (out/XSH.fstatat.026.build.txt)
+UNINITIATED	XSH.ftell.005	0	build failed (out/XSH.ftell.005.build.txt)
+NOTINUSE	XSH.ftell.007	1568	long holds every off_t value
+UNINITIATED	XSH.ftruncate.001	0	build failed (out/XSH.ftruncate.001.build.txt)
+UNINITIATED	XSH.ftruncate.002	0	build failed (out/XSH.ftruncate.002.build.txt)
+UNINITIATED	XSH.ftruncate.003	0	build failed (out/XSH.ftruncate.003.build.txt)
+UNINITIATED	XSH.ftruncate.004	0	build failed (out/XSH.ftruncate.004.build.txt)
+UNINITIATED	XSH.ftruncate.005	0	build failed (out/XSH.ftruncate.005.build.txt)
+UNINITIATED	XSH.ftruncate.006	0	build failed (out/XSH.ftruncate.006.build.txt)
+UNINITIATED	XSH.ftruncate.007	0	build failed (out/XSH.ftruncate.007.build.txt)
+UNINITIATED	XSH.ftruncate.008	0	build failed (out/XSH.ftruncate.008.build.txt)
+UNINITIATED	XSH.ftruncate.009	0	build failed (out/XSH.ftruncate.009.build.txt)
+UNINITIATED	XSH.ftruncate.010	0	build failed (out/XSH.ftruncate.010.build.txt)
+UNINITIATED	XSH.ftruncate.011	0	build failed (out/XSH.ftruncate.011.build.txt)
+UNINITIATED	XSH.futimens.001	0	build failed (out/XSH.futimens.001.build.txt)
+UNINITIATED	XSH.futimens.002	0	build failed (out/XSH.futimens.002.build.txt)
+UNINITIATED	XSH.futimens.003	0	build failed (out/XSH.futimens.003.build.txt)
+UNINITIATED	XSH.futimens.004	0	build failed (out/XSH.futimens.004.build.txt)
+UNINITIATED	XSH.futimens.005	0	build failed (out/XSH.futimens.005.build.txt)
+UNINITIATED	XSH.futimens.006	0	build failed (out/XSH.futimens.006.build.txt)
+UNINITIATED	XSH.futimens.007	0	build failed (out/XSH.futimens.007.build.txt)
+UNINITIATED	XSH.futimens.008	0	build failed (out/XSH.futimens.008.build.txt)
+UNINITIATED	XSH.futimens.009	0	build failed (out/XSH.futimens.009.build.txt)
+UNINITIATED	XSH.futimens.010	0	build failed (out/XSH.futimens.010.build.txt)
+UNINITIATED	XSH.futimens.011	0	build failed (out/XSH.futimens.011.build.txt)
+UNINITIATED	XSH.futimens.012	0	build failed (out/XSH.futimens.012.build.txt)
+UNINITIATED	XSH.futimens.013	0	build failed (out/XSH.futimens.013.build.txt)
+UNINITIATED	XSH.futimens.014	0	build failed (out/XSH.futimens.014.build.txt)
+UNINITIATED	XSH.futimens.015	0	build failed (out/XSH.futimens.015.build.txt)
+UNINITIATED	XSH.futimens.016	0	build failed (out/XSH.futimens.016.build.txt)
+UNINITIATED	XSH.futimens.017	0	build failed (out/XSH.futimens.017.build.txt)
+UNINITIATED	XSH.futimens.018	0	build failed (out/XSH.futimens.018.build.txt)
+UNINITIATED	XSH.futimens.019	0	build failed (out/XSH.futimens.019.build.txt)
+UNINITIATED	XSH.futimens.020	0	build failed (out/XSH.futimens.020.build.txt)
+UNINITIATED	XSH.futimens.021	0	build failed (out/XSH.futimens.021.build.txt)
+UNINITIATED	XSH.futimens.022	0	build failed (out/XSH.futimens.022.build.txt)
+UNINITIATED	XSH.futimens.023	0	build failed (out/XSH.futimens.023.build.txt)
+UNINITIATED	XSH.futimens.024	0	build failed (out/XSH.futimens.024.build.txt)
+UNINITIATED	XSH.futimens.025	0	build failed (out/XSH.futimens.025.build.txt)
+UNINITIATED	XSH.futimens.026	0	build failed (out/XSH.futimens.026.build.txt)
+FAIL	XSH.fwprintf.001	1324	the string form produced "??", expected "abc42%"
+FAIL	XSH.fwprintf.002	1451	the string form produced "?]", expected "[hey]"
+FAIL	XSH.fwprintf.003	1388	the string form produced "?]", expected "[hey]"
+FAIL	XSH.fwprintf.004	1420	the string form produced "?", expected "ab"
+FAIL	XSH.fwprintf.005	1307	the string form produced "??", expected "[   ab]"
+FAIL	XSH.fwprintf.006	1477	the string form produced "?", expected "abc"
+FAIL	XSH.fwprintf.007	1618	the string form produced "?", expected "b a"
+FAIL	XSH.fwprintf.009	1490	the string form produced "?", expected "1.50"
+FAIL	XSH.fwprintf.012	1412	the array holds "?" then 0x23, expected "ab5" and a null
+FAIL	XSH.fwprintf.013	1326	swprintf() returned 6 for output longer than n, expected a negative value
+FAIL	XSH.fwprintf.014	1282	swprintf() with n 0: errno is 0, expected EOVERFLOW
+FAIL	XSH.fwprintf.015	1339	the array holds "?", expected "abc"
+FAIL	XSH.fwprintf.019	2388	swprintf(%s) of the bytes c3 a9 returned 1, expected 1 element holding the character
+FAIL	XSH.fwprintf.020	2419	swprintf("[%3ls]") returned 5, expected 5 elements: two spaces before the character
+FAIL	XSH.fwprintf.021	1267	the string form produced "?", expected "-42"
+FAIL	XSH.fwprintf.022	1695	the string form produced "?", expected "[x]"
+UNINITIATED	XSH.fwrite.007	0	build failed (out/XSH.fwrite.007.build.txt)
+FAIL	XSH.fwscanf.017	1601	string form: %mls returned 0, expected 1 and an allocated "hello"
+FAIL	XSH.fwscanf.018	2676	swscanf(%ls%n) returned 1 with n = 1, expected 1 and 2 wide characters
+UNINITIATED	XSH.fwscanf.023	0	build failed (out/XSH.fwscanf.023.build.txt)
+UNINITIATED	XSH.gai_strerror.001	0	build failed (out/XSH.gai_strerror.001.build.txt)
+UNINITIATED	XSH.gai_strerror.002	0	build failed (out/XSH.gai_strerror.002.build.txt)
+UNINITIATED	XSH.getaddrinfo.001	0	build failed (out/XSH.getaddrinfo.001.build.txt)
+UNINITIATED	XSH.getaddrinfo.002	0	build failed (out/XSH.getaddrinfo.002.build.txt)
+UNINITIATED	XSH.getaddrinfo.003	0	build failed (out/XSH.getaddrinfo.003.build.txt)
+UNINITIATED	XSH.getaddrinfo.004	0	build failed (out/XSH.getaddrinfo.004.build.txt)
+UNINITIATED	XSH.getaddrinfo.005	0	build failed (out/XSH.getaddrinfo.005.build.txt)
+UNINITIATED	XSH.getaddrinfo.006	0	build failed (out/XSH.getaddrinfo.006.build.txt)
+UNINITIATED	XSH.getaddrinfo.007	0	build failed (out/XSH.getaddrinfo.007.build.txt)
+UNINITIATED	XSH.getaddrinfo.008	0	build failed (out/XSH.getaddrinfo.008.build.txt)
+UNINITIATED	XSH.getaddrinfo.009	0	build failed (out/XSH.getaddrinfo.009.build.txt)
+UNINITIATED	XSH.getaddrinfo.010	0	build failed (out/XSH.getaddrinfo.010.build.txt)
+UNINITIATED	XSH.getaddrinfo.011	0	build failed (out/XSH.getaddrinfo.011.build.txt)
+UNINITIATED	XSH.getaddrinfo.012	0	build failed (out/XSH.getaddrinfo.012.build.txt)
+UNINITIATED	XSH.getaddrinfo.013	0	build failed (out/XSH.getaddrinfo.013.build.txt)
+UNINITIATED	XSH.getaddrinfo.014	0	build failed (out/XSH.getaddrinfo.014.build.txt)
+UNINITIATED	XSH.getaddrinfo.015	0	build failed (out/XSH.getaddrinfo.015.build.txt)
+UNINITIATED	XSH.getaddrinfo.016	0	build failed (out/XSH.getaddrinfo.016.build.txt)
+UNINITIATED	XSH.getaddrinfo.017	0	build failed (out/XSH.getaddrinfo.017.build.txt)
+UNINITIATED	XSH.getaddrinfo.018	0	build failed (out/XSH.getaddrinfo.018.build.txt)
+UNINITIATED	XSH.getaddrinfo.019	0	build failed (out/XSH.getaddrinfo.019.build.txt)
+UNINITIATED	XSH.getaddrinfo.020	0	build failed (out/XSH.getaddrinfo.020.build.txt)
+UNINITIATED	XSH.getaddrinfo.021	0	build failed (out/XSH.getaddrinfo.021.build.txt)
+UNINITIATED	XSH.getaddrinfo.022	0	build failed (out/XSH.getaddrinfo.022.build.txt)
+UNINITIATED	XSH.getaddrinfo.023	0	build failed (out/XSH.getaddrinfo.023.build.txt)
+UNINITIATED	XSH.getaddrinfo.024	0	build failed (out/XSH.getaddrinfo.024.build.txt)
+UNINITIATED	XSH.getaddrinfo.025	0	build failed (out/XSH.getaddrinfo.025.build.txt)
+UNINITIATED	XSH.getaddrinfo.026	0	build failed (out/XSH.getaddrinfo.026.build.txt)
+UNINITIATED	XSH.getaddrinfo.027	0	build failed (out/XSH.getaddrinfo.027.build.txt)
+UNINITIATED	XSH.getaddrinfo.028	0	build failed (out/XSH.getaddrinfo.028.build.txt)
+UNINITIATED	XSH.getaddrinfo.029	0	build failed (out/XSH.getaddrinfo.029.build.txt)
+UNINITIATED	XSH.getaddrinfo.030	0	build failed (out/XSH.getaddrinfo.030.build.txt)
+UNINITIATED	XSH.getaddrinfo.031	0	build failed (out/XSH.getaddrinfo.031.build.txt)
+UNINITIATED	XSH.getaddrinfo.032	0	build failed (out/XSH.getaddrinfo.032.build.txt)
+UNINITIATED	XSH.getaddrinfo.033	0	build failed (out/XSH.getaddrinfo.033.build.txt)
+FAIL	XSH.getdate.006	1375	getdate("02/31/20") returned a pointer
+FAIL	XSH.getdate.007	1461	11/27/86: the time of day 00:00:00 is not the current one
+FAIL	XSH.getdate.009	1474	getdate("01/02/69") failed with getdate_err 8
+FAIL	XSH.getdate.011	1478	getdate("10%11") failed with getdate_err 8
+FAIL	XSH.getdate.012	1374	getdate("04:05:06 PM") failed with getdate_err 8
+FAIL	XSH.getdate.013	1366	century 19, year 05: tm_year is 105, expected 5
+FAIL	XSH.getdate.014	1656	getdate("Saturday") failed with getdate_err 8
+FAIL	XSH.getdate.015	1697	getdate("October") failed with getdate_err 8
+FAIL	XSH.getdate.016	1692	getdate("12:30") failed with getdate_err 8
+FAIL	XSH.getdate.017	1599	getdate("  Nov 27, 1986") failed with getdate_err 7
+FAIL	XSH.getdate.018	1369	getdate("10:11:12") failed with getdate_err 8
+FAIL	XSH.getdate.019	1416	getdate("10:30 UTC") failed with getdate_err 8
+UNINITIATED	XSH.getdelim.001	0	build failed (out/XSH.getdelim.001.build.txt)
+UNINITIATED	XSH.getdelim.002	0	build failed (out/XSH.getdelim.002.build.txt)
+UNINITIATED	XSH.getdelim.003	0	build failed (out/XSH.getdelim.003.build.txt)
+UNINITIATED	XSH.getdelim.004	0	build failed (out/XSH.getdelim.004.build.txt)
+UNINITIATED	XSH.getdelim.005	0	build failed (out/XSH.getdelim.005.build.txt)
+UNINITIATED	XSH.getdelim.006	0	build failed (out/XSH.getdelim.006.build.txt)
+UNINITIATED	XSH.getdelim.007	0	build failed (out/XSH.getdelim.007.build.txt)
+UNINITIATED	XSH.getdelim.008	0	build failed (out/XSH.getdelim.008.build.txt)
+UNINITIATED	XSH.getdelim.009	0	build failed (out/XSH.getdelim.009.build.txt)
+UNINITIATED	XSH.getdelim.010	0	build failed (out/XSH.getdelim.010.build.txt)
+UNINITIATED	XSH.getdelim.011	0	build failed (out/XSH.getdelim.011.build.txt)
+UNINITIATED	XSH.getdelim.012	0	build failed (out/XSH.getdelim.012.build.txt)
+UNINITIATED	XSH.getentropy.001	0	build failed (out/XSH.getentropy.001.build.txt)
+UNINITIATED	XSH.getentropy.002	0	build failed (out/XSH.getentropy.002.build.txt)
+UNINITIATED	XSH.getentropy.003	0	build failed (out/XSH.getentropy.003.build.txt)
+FAIL	XSH.getgrgid.002	2010	errno changed to 0 by a lookup that found nothing
+FAIL	XSH.getgrnam.002	1621	errno changed to 0 by a lookup that found nothing
+UNINITIATED	XSH.gethostent.001	0	build failed (out/XSH.gethostent.001.build.txt)
+UNINITIATED	XSH.gethostent.002	0	build failed (out/XSH.gethostent.002.build.txt)
+UNINITIATED	XSH.gethostent.003	0	build failed (out/XSH.gethostent.003.build.txt)
+UNINITIATED	XSH.gethostent.004	0	build failed (out/XSH.gethostent.004.build.txt)
+UNINITIATED	XSH.gethostent.005	0	build failed (out/XSH.gethostent.005.build.txt)
+UNRESOLVED	XSH.getlogin.004	1623	getlogin() found no login name here
+UNRESOLVED	XSH.getlogin.005	1581	getlogin_r() found no login name here
+UNINITIATED	XSH.getnameinfo.001	0	build failed (out/XSH.getnameinfo.001.build.txt)
+UNINITIATED	XSH.getnameinfo.002	0	build failed (out/XSH.getnameinfo.002.build.txt)
+UNINITIATED	XSH.getnameinfo.003	0	build failed (out/XSH.getnameinfo.003.build.txt)
+UNINITIATED	XSH.getnameinfo.004	0	build failed (out/XSH.getnameinfo.004.build.txt)
+UNINITIATED	XSH.getnameinfo.005	0	build failed (out/XSH.getnameinfo.005.build.txt)
+UNINITIATED	XSH.getnameinfo.006	0	build failed (out/XSH.getnameinfo.006.build.txt)
+UNINITIATED	XSH.getnameinfo.007	0	build failed (out/XSH.getnameinfo.007.build.txt)
+UNINITIATED	XSH.getnameinfo.008	0	build failed (out/XSH.getnameinfo.008.build.txt)
+UNINITIATED	XSH.getnameinfo.009	0	build failed (out/XSH.getnameinfo.009.build.txt)
+UNINITIATED	XSH.getnameinfo.010	0	build failed (out/XSH.getnameinfo.010.build.txt)
+UNINITIATED	XSH.getnameinfo.011	0	build failed (out/XSH.getnameinfo.011.build.txt)
+UNINITIATED	XSH.getnameinfo.012	0	build failed (out/XSH.getnameinfo.012.build.txt)
+UNINITIATED	XSH.getnameinfo.013	0	build failed (out/XSH.getnameinfo.013.build.txt)
+UNINITIATED	XSH.getnameinfo.014	0	build failed (out/XSH.getnameinfo.014.build.txt)
+UNINITIATED	XSH.getnetent.001	0	build failed (out/XSH.getnetent.001.build.txt)
+UNINITIATED	XSH.getnetent.002	0	build failed (out/XSH.getnetent.002.build.txt)
+UNINITIATED	XSH.getnetent.003	0	build failed (out/XSH.getnetent.003.build.txt)
+UNINITIATED	XSH.getnetent.004	0	build failed (out/XSH.getnetent.004.build.txt)
+UNINITIATED	XSH.getnetent.005	0	build failed (out/XSH.getnetent.005.build.txt)
+UNINITIATED	XSH.getnetent.006	0	build failed (out/XSH.getnetent.006.build.txt)
+UNINITIATED	XSH.getnetent.007	0	build failed (out/XSH.getnetent.007.build.txt)
+UNINITIATED	XSH.getnetent.008	0	build failed (out/XSH.getnetent.008.build.txt)
+FAIL	XSH.getopt.006	1466	optstring "+:a:", arguments "-a...": got "?(a) !", expected ":(a) !"
+FAIL	XSH.getopt.007	1341	missing argument, '+' and leading colon: unexpected output on standard error: prog: option requires an argument -- a 
+FAIL	XSH.getopt.008	1468	optstring "+ab", arguments "-+...": got "+ |2 rest=", expected "?(+) !"
+UNINITIATED	XSH.getpeername.001	0	build failed (out/XSH.getpeername.001.build.txt)
+UNINITIATED	XSH.getpeername.002	0	build failed (out/XSH.getpeername.002.build.txt)
+UNINITIATED	XSH.getpeername.003	0	build failed (out/XSH.getpeername.003.build.txt)
+UNINITIATED	XSH.getpeername.004	0	build failed (out/XSH.getpeername.004.build.txt)
+UNINITIATED	XSH.getpeername.005	0	build failed (out/XSH.getpeername.005.build.txt)
+UNINITIATED	XSH.getpeername.006	0	build failed (out/XSH.getpeername.006.build.txt)
+UNINITIATED	XSH.getpeername.007	0	build failed (out/XSH.getpeername.007.build.txt)
+UNINITIATED	XSH.getpeername.008	0	build failed (out/XSH.getpeername.008.build.txt)
+UNINITIATED	XSH.getprotoent.001	0	build failed (out/XSH.getprotoent.001.build.txt)
+UNINITIATED	XSH.getprotoent.002	0	build failed (out/XSH.getprotoent.002.build.txt)
+UNINITIATED	XSH.getprotoent.003	0	build failed (out/XSH.getprotoent.003.build.txt)
+UNINITIATED	XSH.getprotoent.004	0	build failed (out/XSH.getprotoent.004.build.txt)
+UNINITIATED	XSH.getprotoent.005	0	build failed (out/XSH.getprotoent.005.build.txt)
+UNINITIATED	XSH.getprotoent.006	0	build failed (out/XSH.getprotoent.006.build.txt)
+UNINITIATED	XSH.getprotoent.007	0	build failed (out/XSH.getprotoent.007.build.txt)
+UNINITIATED	XSH.getprotoent.008	0	build failed (out/XSH.getprotoent.008.build.txt)
+FAIL	XSH.getpwnam.002	1518	errno changed to 0 by a lookup that found nothing
+FAIL	XSH.getpwuid.002	1637	errno changed to 0 by a lookup that found nothing
+UNINITIATED	XSH.getresgid.001	0	build failed (out/XSH.getresgid.001.build.txt)
+UNINITIATED	XSH.getresgid.002	0	build failed (out/XSH.getresgid.002.build.txt)
+UNINITIATED	XSH.getresuid.001	0	build failed (out/XSH.getresuid.001.build.txt)
+UNINITIATED	XSH.getresuid.002	0	build failed (out/XSH.getresuid.002.build.txt)
+FAIL	XSH.getrlimit.014	1552	ftruncate() to 1001 bytes returned 0, expected -1
+UNINITIATED	XSH.getservent.001	0	build failed (out/XSH.getservent.001.build.txt)
+UNINITIATED	XSH.getservent.002	0	build failed (out/XSH.getservent.002.build.txt)
+UNINITIATED	XSH.getservent.003	0	build failed (out/XSH.getservent.003.build.txt)
+UNINITIATED	XSH.getservent.004	0	build failed (out/XSH.getservent.004.build.txt)
+UNINITIATED	XSH.getservent.005	0	build failed (out/XSH.getservent.005.build.txt)
+UNINITIATED	XSH.getservent.006	0	build failed (out/XSH.getservent.006.build.txt)
+UNINITIATED	XSH.getservent.007	0	build failed (out/XSH.getservent.007.build.txt)
+UNINITIATED	XSH.getservent.008	0	build failed (out/XSH.getservent.008.build.txt)
+UNINITIATED	XSH.getsockname.001	0	build failed (out/XSH.getsockname.001.build.txt)
+UNINITIATED	XSH.getsockname.002	0	build failed (out/XSH.getsockname.002.build.txt)
+UNINITIATED	XSH.getsockname.003	0	build failed (out/XSH.getsockname.003.build.txt)
+UNINITIATED	XSH.getsockname.004	0	build failed (out/XSH.getsockname.004.build.txt)
+UNINITIATED	XSH.getsockname.005	0	build failed (out/XSH.getsockname.005.build.txt)
+UNINITIATED	XSH.getsockname.006	0	build failed (out/XSH.getsockname.006.build.txt)
+UNINITIATED	XSH.getsockopt.001	0	build failed (out/XSH.getsockopt.001.build.txt)
+UNINITIATED	XSH.getsockopt.002	0	build failed (out/XSH.getsockopt.002.build.txt)
+UNINITIATED	XSH.getsockopt.003	0	build failed (out/XSH.getsockopt.003.build.txt)
+UNINITIATED	XSH.getsockopt.004	0	build failed (out/XSH.getsockopt.004.build.txt)
+UNINITIATED	XSH.getsockopt.005	0	build failed (out/XSH.getsockopt.005.build.txt)
+UNINITIATED	XSH.getsockopt.006	0	build failed (out/XSH.getsockopt.006.build.txt)
+UNINITIATED	XSH.getsockopt.007	0	build failed (out/XSH.getsockopt.007.build.txt)
+UNINITIATED	XSH.getsockopt.008	0	build failed (out/XSH.getsockopt.008.build.txt)
+UNINITIATED	XSH.getsockopt.009	0	build failed (out/XSH.getsockopt.009.build.txt)
+UNINITIATED	XSH.getsockopt.010	0	build failed (out/XSH.getsockopt.010.build.txt)
+UNINITIATED	XSH.getsockopt.011	0	build failed (out/XSH.getsockopt.011.build.txt)
+UNINITIATED	XSH.getsockopt.012	0	build failed (out/XSH.getsockopt.012.build.txt)
+UNINITIATED	XSH.getsockopt.013	0	build failed (out/XSH.getsockopt.013.build.txt)
+UNINITIATED	XSH.getsockopt.014	0	build failed (out/XSH.getsockopt.014.build.txt)
+UNINITIATED	XSH.getsockopt.015	0	build failed (out/XSH.getsockopt.015.build.txt)
+UNINITIATED	XSH.getsockopt.016	0	build failed (out/XSH.getsockopt.016.build.txt)
+UNINITIATED	XSH.getsockopt.017	0	build failed (out/XSH.getsockopt.017.build.txt)
+UNINITIATED	XSH.getsockopt.018	0	build failed (out/XSH.getsockopt.018.build.txt)
+UNINITIATED	XSH.gettext.004	0	build failed (out/XSH.gettext.004.build.txt)
+UNINITIATED	XSH.gettext.005	0	build failed (out/XSH.gettext.005.build.txt)
+UNRESOLVED	XSH.gettext.008	2895	the only locale found has a name that may stand for the POSIX locale
+UNRESOLVED	XSH.gettext.009	2678	the only locale found has a name that may stand for the POSIX locale
+UNINITIATED	XSH.gettext.010	0	build failed (out/XSH.gettext.010.build.txt)
+UNRESOLVED	XSH.gettext.011	2469	the only locale found has a name that may stand for the POSIX locale
+UNRESOLVED	XSH.gettext.012	3149	the only locale found has a name that may stand for the POSIX locale
+UNRESOLVED	XSH.gettext.013	3079	the only locale found has a name that may stand for the POSIX locale
+UNRESOLVED	XSH.gettext.014	2430	the only locale found has a name that may stand for the POSIX locale
+UNRESOLVED	XSH.gettext.015	2271	the only locale found has a name that may stand for the POSIX locale
+UNRESOLVED	XSH.getutxent.001	1449	entry 0 has a type (10) outside the eight the header defines
+FAIL	XSH.glob.006	1642	name 0 is "no?x", expected "no\?x"
+FAIL	XSH.glob.016	1533	glob("a[b/c]d") returned -3, expected 0
+FAIL	XSH.glob.029	1433	glob(GLOB_ERR) with a null errfunc did not return GLOB_ABORTED
+UNINITIATED	XSH.gmtime.003	0	build failed (out/XSH.gmtime.003.build.txt)
+FAIL	XSH.grantpt.003	1510	grantpt() of a regular file returned -1, errno ENOTTY
+UNINITIATED	XSH.hcreate.001	0	build failed (out/XSH.hcreate.001.build.txt)
+UNINITIATED	XSH.hcreate.002	0	build failed (out/XSH.hcreate.002.build.txt)
+UNINITIATED	XSH.hcreate.003	0	build failed (out/XSH.hcreate.003.build.txt)
+UNINITIATED	XSH.hcreate.004	0	build failed (out/XSH.hcreate.004.build.txt)
+NOTINUSE	XSH.hypot.003	1299	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.hypot.004	1341	IEC 60559 floating-point is not supported
+UNRESOLVED	XSH.iconv.006	1394	none of the probed code set names could be opened (names are implementation-defined)
+UNRESOLVED	XSH.iconv.007	1293	none of the probed code set names could be opened (names are implementation-defined)
+UNRESOLVED	XSH.iconv.008	1413	none of the probed code set names could be opened (names are implementation-defined)
+UNRESOLVED	XSH.iconv.009	1549	none of the probed code set names could be opened (names are implementation-defined)
+INSPECT	XSH.iconv_open.002	1415	disputed (see the assertion's note): iconv_open("UTF-8//IGNORE", "US-ASCII") failed (EINVAL) although "UTF-8" to "US-ASCII" opens
+UNINITIATED	XSH.if_freenameindex.001	0	build failed (out/XSH.if_freenameindex.001.build.txt)
+UNINITIATED	XSH.if_freenameindex.002	0	build failed (out/XSH.if_freenameindex.002.build.txt)
+UNINITIATED	XSH.if_indextoname.001	0	build failed (out/XSH.if_indextoname.001.build.txt)
+UNINITIATED	XSH.if_indextoname.002	0	build failed (out/XSH.if_indextoname.002.build.txt)
+UNINITIATED	XSH.if_nameindex.001	0	build failed (out/XSH.if_nameindex.001.build.txt)
+UNINITIATED	XSH.if_nametoindex.001	0	build failed (out/XSH.if_nametoindex.001.build.txt)
+UNINITIATED	XSH.if_nametoindex.002	0	build failed (out/XSH.if_nametoindex.002.build.txt)
+UNINITIATED	XSH.if_nametoindex.003	0	build failed (out/XSH.if_nametoindex.003.build.txt)
+NOTINUSE	XSH.ilogb.007	1450	the IEC 60559 Floating-Point option is not claimed
+UNINITIATED	XSH.in6addr_any.001	0	build failed (out/XSH.in6addr_any.001.build.txt)
+UNINITIATED	XSH.in6addr_any.002	0	build failed (out/XSH.in6addr_any.002.build.txt)
+FAIL	XSH.inet_ntop.010	1299	size 15 gave a pointer, errno 0; expected NULL and ENOSPC
+UNINITIATED	XSH.isatty.003	0	build failed (out/XSH.isatty.003.build.txt)
+NOTINUSE	XSH.j0.002	1377	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.j0.003	1477	IEC 60559 floating-point is not supported
+UNRESOLVED	XSH.kill.005	0	skipped: needs kill_uid, which this system or run does not provide
+UNRESOLVED	XSH.kill.012	0	skipped: needs kill_uid, which this system or run does not provide
+NOTINUSE	XSH.ldexp.003	1389	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.ldexp.004	1429	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.ldexp.005	1396	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.ldexp.006	1510	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.ldexp.007	1431	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.lgamma.002	1451	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.lgamma.003	1613	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.lgamma.004	1428	IEC 60559 floating-point is not supported
+UNINITIATED	XSH.unlink.004	0	build failed (out/XSH.unlink.004.build.txt)
+UNINITIATED	XSH.unlink.006	0	build failed (out/XSH.unlink.006.build.txt)
+UNINITIATED	XSH.unlink.007	0	build failed (out/XSH.unlink.007.build.txt)
+UNINITIATED	XSH.unlink.008	0	build failed (out/XSH.unlink.008.build.txt)
+UNINITIATED	XSH.unlink.009	0	build failed (out/XSH.unlink.009.build.txt)
+UNINITIATED	XSH.unlink.010	0	build failed (out/XSH.unlink.010.build.txt)
+UNINITIATED	XSH.unlink.011	0	build failed (out/XSH.unlink.011.build.txt)
+UNINITIATED	XSH.unlink.015	0	build failed (out/XSH.unlink.015.build.txt)
+UNINITIATED	XSH.unlink.016	0	build failed (out/XSH.unlink.016.build.txt)
+UNINITIATED	XSH.unlink.019	0	build failed (out/XSH.unlink.019.build.txt)
+UNINITIATED	XSH.unlink.021	0	build failed (out/XSH.unlink.021.build.txt)
+UNINITIATED	XSH.unlink.022	0	build failed (out/XSH.unlink.022.build.txt)
+UNINITIATED	XSH.link.003	0	build failed (out/XSH.link.003.build.txt)
+UNINITIATED	XSH.link.004	0	build failed (out/XSH.link.004.build.txt)
+UNINITIATED	XSH.link.005	0	build failed (out/XSH.link.005.build.txt)
+UNINITIATED	XSH.link.006	0	build failed (out/XSH.link.006.build.txt)
+UNINITIATED	XSH.link.007	0	build failed (out/XSH.link.007.build.txt)
+FAIL	XSH.link.011	1867	link("f", "new/"): returned 0, errno 0, expected ENOENT or ENOTDIR
+UNINITIATED	XSH.link.015	0	build failed (out/XSH.link.015.build.txt)
+UNINITIATED	XSH.link.016	0	build failed (out/XSH.link.016.build.txt)
+UNINITIATED	XSH.link.018	0	build failed (out/XSH.link.018.build.txt)
+UNINITIATED	XSH.link.021	0	build failed (out/XSH.link.021.build.txt)
+UNINITIATED	XSH.link.022	0	build failed (out/XSH.link.022.build.txt)
+UNINITIATED	XSH.link.023	0	build failed (out/XSH.link.023.build.txt)
+UNINITIATED	XSH.listen.001	0	build failed (out/XSH.listen.001.build.txt)
+UNINITIATED	XSH.listen.002	0	build failed (out/XSH.listen.002.build.txt)
+UNINITIATED	XSH.listen.003	0	build failed (out/XSH.listen.003.build.txt)
+UNINITIATED	XSH.listen.004	0	build failed (out/XSH.listen.004.build.txt)
+UNINITIATED	XSH.listen.005	0	build failed (out/XSH.listen.005.build.txt)
+UNINITIATED	XSH.listen.006	0	build failed (out/XSH.listen.006.build.txt)
+UNINITIATED	XSH.listen.007	0	build failed (out/XSH.listen.007.build.txt)
+UNINITIATED	XSH.listen.008	0	build failed (out/XSH.listen.008.build.txt)
+NOTINUSE	XSH.llrint.002	1309	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.llrint.004	1836	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.llrint.005	1479	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.llrint.006	1470	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.llrint.007	1515	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.llround.004	2135	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.llround.005	2244	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.llround.006	1592	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.llround.007	1397	the IEC 60559 Floating-Point option is not claimed
+FAIL	XSH.localeconv.001	1320	POSIX locale: grouping is not empty
+FAIL	XSH.localeconv.002	1591	POSIX locale: mon_grouping is not empty
+FAIL	XSH.localeconv.004	2567	thread-local POSIX object: grouping is not empty
+FAIL	XSH.localeconv.006	3510	only LC_NUMERIC changed: mon_grouping is not empty
+FAIL	XSH.localtime.005	2016	TZ=PCS5PCD,M3.2.0/-1,M11.1.0/26: localtime(1615694399): gave 2021-03-14 03:59:59 (yday 72), whose XBD 4.19 value is 1615694399, expected 1615676399
+FAIL	XSH.localtime.006	1559	TZ=PCS5PCD,0/0,J365/25: localtime(1609477200): gave 2021-01-01 00:00:00 (yday 0), whose XBD 4.19 value is 1609459200, expected 1609462800
+UNINITIATED	XSH.localtime.012	0	build failed (out/XSH.localtime.012.build.txt)
+NOTINUSE	XSH.log.002	1522	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log.003	2120	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log.004	2089	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log.007	1778	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log10.002	1511	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log10.003	1560	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log10.004	1530	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log10.007	1489	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log1p.002	1579	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log1p.003	1647	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log1p.006	1581	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log1p.007	1845	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log2.002	1703	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log2.003	1552	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log2.004	2943	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.log2.007	1858	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.logb.005	1749	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.logb.006	1684	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.logb.007	1493	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.logb.008	2016	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.lrint.002	1630	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.lrint.004	1519	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.lrint.005	1723	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.lrint.006	1866	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.lrint.007	1708	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.lround.004	1351	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.lround.005	1493	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.lround.006	1374	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.lround.007	1639	the IEC 60559 Floating-Point option is not claimed
+UNINITIATED	XSH.lseek.009	0	build failed (out/XSH.lseek.009.build.txt)
+INSPECT	XSH.lseek.011	1403	disputed (see the assertion's note): lseek(fd, <largest off_t>, SEEK_CUR) from offset 1: errno EINVAL, expected EOVERFLOW
+UNRESOLVED	XSH.lseek.012	0	blocked by XBD.unistd.h.002 (FAIL)
+UNRESOLVED	XSH.lseek.013	0	blocked by XBD.unistd.h.002 (FAIL)
+UNRESOLVED	XSH.lseek.014	0	blocked by XBD.unistd.h.002 (FAIL)
+# resumed 2026-10-31T09:50:03Z
+UNINITIATED	XSH.memmem.001	0	build failed (out/XSH.memmem.001.build.txt)
+UNINITIATED	XSH.memmem.002	0	build failed (out/XSH.memmem.002.build.txt)
+UNINITIATED	XSH.memmem.003	0	build failed (out/XSH.memmem.003.build.txt)
+UNINITIATED	XSH.memmem.004	0	build failed (out/XSH.memmem.004.build.txt)
+UNINITIATED	XSH.memmem.005	0	build failed (out/XSH.memmem.005.build.txt)
+UNINITIATED	XSH.memmem.006	0	build failed (out/XSH.memmem.006.build.txt)
+UNINITIATED	XSH.memmem.007	0	build failed (out/XSH.memmem.007.build.txt)
+FAIL	XSH.mkdir.003	1621	st_mode bits 0777, expected 01777 (S_ISGID aside)
+UNINITIATED	XSH.mkdir.005	0	build failed (out/XSH.mkdir.005.build.txt)
+UNINITIATED	XSH.mkdir.006	0	build failed (out/XSH.mkdir.006.build.txt)
+UNINITIATED	XSH.mkdir.007	0	build failed (out/XSH.mkdir.007.build.txt)
+UNINITIATED	XSH.mkdir.008	0	build failed (out/XSH.mkdir.008.build.txt)
+UNINITIATED	XSH.mkdir.014	0	build failed (out/XSH.mkdir.014.build.txt)
+UNINITIATED	XSH.mkdir.015	0	build failed (out/XSH.mkdir.015.build.txt)
+UNINITIATED	XSH.mkdir.017	0	build failed (out/XSH.mkdir.017.build.txt)
+UNINITIATED	XSH.mkdir.018	0	build failed (out/XSH.mkdir.018.build.txt)
+FAIL	XSH.mkdtemp.005	1414	mkdtemp("") set errno 0, expected EINVAL
+FAIL	XSH.mkdtemp.012	1473	mkstemp("") set errno 0, expected EINVAL
+FAIL	XSH.mkdtemp.015	1624	mkostemp() of a template without six X did not fail with EINVAL
+UNINITIATED	XSH.mkfifo.003	0	build failed (out/XSH.mkfifo.003.build.txt)
+UNINITIATED	XSH.mkfifo.004	0	build failed (out/XSH.mkfifo.004.build.txt)
+UNINITIATED	XSH.mkfifo.005	0	build failed (out/XSH.mkfifo.005.build.txt)
+UNINITIATED	XSH.mkfifo.006	0	build failed (out/XSH.mkfifo.006.build.txt)
+UNINITIATED	XSH.mkfifo.013	0	build failed (out/XSH.mkfifo.013.build.txt)
+UNINITIATED	XSH.mkfifo.014	0	build failed (out/XSH.mkfifo.014.build.txt)
+UNINITIATED	XSH.mkfifo.015	0	build failed (out/XSH.mkfifo.015.build.txt)
+UNINITIATED	XSH.mkfifo.016	0	build failed (out/XSH.mkfifo.016.build.txt)
+UNINITIATED	XSH.mknod.003	0	build failed (out/XSH.mknod.003.build.txt)
+UNINITIATED	XSH.mknod.004	0	build failed (out/XSH.mknod.004.build.txt)
+UNINITIATED	XSH.mknod.005	0	build failed (out/XSH.mknod.005.build.txt)
+UNINITIATED	XSH.mknod.006	0	build failed (out/XSH.mknod.006.build.txt)
+UNINITIATED	XSH.mknod.013	0	build failed (out/XSH.mknod.013.build.txt)
+UNINITIATED	XSH.mknod.014	0	build failed (out/XSH.mknod.014.build.txt)
+UNINITIATED	XSH.mknod.015	0	build failed (out/XSH.mknod.015.build.txt)
+UNINITIATED	XSH.mknod.016	0	build failed (out/XSH.mknod.016.build.txt)
+FAIL	XSH.mktime.009	1406	mktime(tm_year INT_MAX, tm_mon 12, tm_mday 1) returned -67768040609600400, expected -1
+FAIL	XSH.mlock.004	1455	the failed munlock() unlocked the first page
+FAIL	XSH.mmap.011	1406	mmap(PROT_READ, MAP_SHARED) of a pipe's read end failed with ENOSYS, not ENODEV or ENXIO
+FAIL	XSH.mmap.017	1503	byte 2051, stored past the end through the mapping, reads 0x7a after the file grew
+NOTINUSE	XSH.modf.002	1341	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.modf.003	1497	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.modf.004	1346	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.modf.005	1373	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.mq_close.004	1422	opening a queue takes no file descriptor here
+FAIL	XSH.mq_notify.009	1472	mq_notify(NULL) when not registered: result -1, errno EBUSY
+NOTINUSE	XSH.nan.004	2294	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.nearbyint.002	1446	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.nearbyint.004	1415	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.nearbyint.005	1374	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.nearbyint.006	1386	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.nearbyint.007	1545	the IEC 60559 Floating-Point option is not claimed
+FAIL	XSH.newlocale.005	2286	newlocale() with a missing locale set errno to EINVAL, expected ENOENT
+NOTINUSE	XSH.nextafter.003	1537	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.nextafter.004	1599	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.nextafter.006	1416	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.nextafter.007	1462	the IEC 60559 Floating-Point option is not claimed
+UNINITIATED	XSH.nftw.014	0	build failed (out/XSH.nftw.014.build.txt)
+FAIL	XSH.nftw.022	1591	nftw() succeeded without search permission
+UNINITIATED	XSH.nl_langinfo.006	0	build failed (out/XSH.nl_langinfo.006.build.txt)
+UNINITIATED	XSH.nl_langinfo.007	0	build failed (out/XSH.nl_langinfo.007.build.txt)
+UNINITIATED	XSH.open.032	0	build failed (out/XSH.open.032.build.txt)
+UNINITIATED	XSH.open.033	0	build failed (out/XSH.open.033.build.txt)
+UNINITIATED	XSH.open.034	0	build failed (out/XSH.open.034.build.txt)
+UNINITIATED	XSH.open.035	0	build failed (out/XSH.open.035.build.txt)
+UNINITIATED	XSH.open.036	0	build failed (out/XSH.open.036.build.txt)
+UNINITIATED	XSH.open.037	0	build failed (out/XSH.open.037.build.txt)
+FAIL	XSH.open.039	1394	open("d", O_RDONLY|O_CREAT) on a directory: returned 4, expected -1 with EISDIR
+UNINITIATED	XSH.open.041	0	build failed (out/XSH.open.041.build.txt)
+UNINITIATED	XSH.open.042	0	build failed (out/XSH.open.042.build.txt)
+UNRESOLVED	XSH.open.050	0	blocked by XBD.fcntl.h.007 (FAIL)
+NOTINUSE	XSH.open_memstream.011	2186	{STREAM_MAX} follows RLIMIT_NOFILE
+UNINITIATED	XSH.opendir.002	0	build failed (out/XSH.opendir.002.build.txt)
+UNINITIATED	XSH.opendir.004	0	build failed (out/XSH.opendir.004.build.txt)
+UNINITIATED	XSH.opendir.005	0	build failed (out/XSH.opendir.005.build.txt)
+UNINITIATED	XSH.opendir.006	0	build failed (out/XSH.opendir.006.build.txt)
+UNINITIATED	XSH.opendir.012	0	build failed (out/XSH.opendir.012.build.txt)
+UNRESOLVED	XSH.pclose.008	1402	waitpid(-1) failed: ECHILD
+FAIL	XSH.perror.007	1316	the error indicator of stderr is not set after a failed write
+UNINITIATED	XSH.perror.008	0	build failed (out/XSH.perror.008.build.txt)
+UNINITIATED	XSH.pipe.005	0	build failed (out/XSH.pipe.005.build.txt)
+UNINITIATED	XSH.poll.001	0	build failed (out/XSH.poll.001.build.txt)
+UNINITIATED	XSH.poll.002	0	build failed (out/XSH.poll.002.build.txt)
+UNINITIATED	XSH.poll.003	0	build failed (out/XSH.poll.003.build.txt)
+UNINITIATED	XSH.poll.004	0	build failed (out/XSH.poll.004.build.txt)
+UNINITIATED	XSH.poll.005	0	build failed (out/XSH.poll.005.build.txt)
+UNINITIATED	XSH.poll.006	0	build failed (out/XSH.poll.006.build.txt)
+UNINITIATED	XSH.poll.007	0	build failed (out/XSH.poll.007.build.txt)
+UNINITIATED	XSH.poll.008	0	build failed (out/XSH.poll.008.build.txt)
+UNINITIATED	XSH.poll.009	0	build failed (out/XSH.poll.009.build.txt)
+UNINITIATED	XSH.poll.010	0	build failed (out/XSH.poll.010.build.txt)
+UNINITIATED	XSH.poll.011	0	build failed (out/XSH.poll.011.build.txt)
+UNINITIATED	XSH.poll.012	0	build failed (out/XSH.poll.012.build.txt)
+UNINITIATED	XSH.poll.013	0	build failed (out/XSH.poll.013.build.txt)
+UNINITIATED	XSH.poll.014	0	build failed (out/XSH.poll.014.build.txt)
+UNINITIATED	XSH.poll.015	0	build failed (out/XSH.poll.015.build.txt)
+UNINITIATED	XSH.poll.016	0	build failed (out/XSH.poll.016.build.txt)
+UNINITIATED	XSH.poll.017	0	build failed (out/XSH.poll.017.build.txt)
+UNINITIATED	XSH.poll.018	0	build failed (out/XSH.poll.018.build.txt)
+UNINITIATED	XSH.poll.019	0	build failed (out/XSH.poll.019.build.txt)
+UNINITIATED	XSH.poll.020	0	build failed (out/XSH.poll.020.build.txt)
+UNINITIATED	XSH.poll.021	0	build failed (out/XSH.poll.021.build.txt)
+UNINITIATED	XSH.poll.022	0	build failed (out/XSH.poll.022.build.txt)
+UNINITIATED	XSH.poll.023	0	build failed (out/XSH.poll.023.build.txt)
+UNINITIATED	XSH.poll.024	0	build failed (out/XSH.poll.024.build.txt)
+UNINITIATED	XSH.poll.025	0	build failed (out/XSH.poll.025.build.txt)
+UNINITIATED	XSH.poll.026	0	build failed (out/XSH.poll.026.build.txt)
+UNINITIATED	XSH.poll.027	0	build failed (out/XSH.poll.027.build.txt)
+UNINITIATED	XSH.poll.028	0	build failed (out/XSH.poll.028.build.txt)
+UNINITIATED	XSH.poll.029	0	build failed (out/XSH.poll.029.build.txt)
+UNINITIATED	XSH.poll.030	0	build failed (out/XSH.poll.030.build.txt)
+UNINITIATED	XSH.poll.031	0	build failed (out/XSH.poll.031.build.txt)
+FAIL	XSH.popen.008	1655	FD_CLOEXEC is clear on the descriptor under a "re" stream
+NOTINUSE	XSH.popen.014	1328	{STREAM_MAX} follows RLIMIT_NOFILE; running out of descriptors is another case
+FAIL	XSH.popen.015	1435	popen("-pcdash") yielded nothing
+UNSUPPORTED	XSH.posix_devctl.001	0	option DC not claimed
+FAIL	XSH.posix_fallocate.001	1616	posix_fallocate() returned EINVAL
+FAIL	XSH.posix_fallocate.002	1333	posix_fallocate() returned EINVAL
+FAIL	XSH.posix_fallocate.003	1520	posix_fallocate() returned EINVAL
+FAIL	XSH.posix_fallocate.010	1368	posix_fallocate() beyond the file size limit returned EINVAL
+UNINITIATED	XSH.posix_getdents.001	0	build failed (out/XSH.posix_getdents.001.build.txt)
+UNINITIATED	XSH.posix_getdents.002	0	build failed (out/XSH.posix_getdents.002.build.txt)
+UNINITIATED	XSH.posix_getdents.003	0	build failed (out/XSH.posix_getdents.003.build.txt)
+UNINITIATED	XSH.posix_getdents.004	0	build failed (out/XSH.posix_getdents.004.build.txt)
+UNINITIATED	XSH.posix_getdents.005	0	build failed (out/XSH.posix_getdents.005.build.txt)
+UNINITIATED	XSH.posix_getdents.006	0	build failed (out/XSH.posix_getdents.006.build.txt)
+UNINITIATED	XSH.posix_getdents.007	0	build failed (out/XSH.posix_getdents.007.build.txt)
+UNSUPPORTED	XSH.posix_mem_offset.001	0	option TYM not claimed
+FAIL	XSH.posix_spawn.014	1507	the commands ran: the file was handed to sh
+FAIL	XSH.posix_spawn.027	1414	the new image reports: descriptor 4 is closed, expected open (status 0)
+UNRESOLVED	XSH.posix_spawn.053	1285	posix_spawnattr_setschedpolicy failed (EINVAL)
+FAIL	XSH.posix_spawn_file_actions_addclose.013	1438	addopen(OPEN_MAX) returned 0, expected EBADF
+FAIL	XSH.posix_spawn_file_actions_adddup2.004	2438	the descriptor is not open without FD_CLOEXEC in the child (report "[4:c]")
+FAIL	XSH.posix_spawn_file_actions_adddup2.007	1504	adddup2(OPEN_MAX, fd) returned 0, expected EBADF
+UNSUPPORTED	XSH.posix_typed_mem_get_info.001	0	option TYM not claimed
+UNSUPPORTED	XSH.posix_typed_mem_open.001	0	option TYM not claimed
+NOTINUSE	XSH.pow.002	1430	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.pow.003	1262	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.pow.004	1305	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.pow.005	1608	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.pow.006	1321	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.pow.007	1445	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.pow.008	1396	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.pow.009	1640	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.pow.010	1416	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.pow.014	1696	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.pow.015	1377	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.pow.016	1517	IEC 60559 floating-point is not supported
+UNINITIATED	XSH.psiginfo.001	0	build failed (out/XSH.psiginfo.001.build.txt)
+UNRESOLVED	XSH.psiginfo.002	0	blocked by XSH.psiginfo.001 (UNINITIATED)
+UNRESOLVED	XSH.psiginfo.003	0	blocked by XSH.psiginfo.001 (UNINITIATED)
+UNRESOLVED	XSH.psiginfo.004	0	blocked by XSH.psiginfo.001 (UNINITIATED)
+UNRESOLVED	XSH.psiginfo.005	0	blocked by XSH.psiginfo.001 (UNINITIATED)
+UNRESOLVED	XSH.psiginfo.006	0	blocked by XSH.psiginfo.001 (UNINITIATED)
+UNINITIATED	XSH.psiginfo.007	0	build failed (out/XSH.psiginfo.007.build.txt)
+FAIL	XSH.pthread_cancel.003	1559	pthread_cancel() of a terminated, unjoined thread returned ESRCH
+UNSUPPORTED	XSH.pthread_condattr_getclock.003	0	option CPT not claimed
+UNSUPPORTED	XSH.pthread_condattr_getclock.004	0	option TCT not claimed
+FAIL	XSH.pthread_create.009	1444	FE_DIVBYZERO, raised in the creator, is clear in the new thread
+UNSUPPORTED	XSH.pthread_create.010	0	option TCT not claimed
+NOTINUSE	XSH.pthread_create.012	1613	sysconf(_SC_THREAD_THREADS_MAX) reports no limit
+UNINITIATED	XSH.pthread_equal.003	0	build failed (out/XSH.pthread_equal.003.build.txt)
+UNSUPPORTED	XSH.pthread_getcpuclockid.001	0	option TCT not claimed
+UNSUPPORTED	XSH.pthread_getcpuclockid.002	0	option TCT not claimed
+FAIL	XSH.pthread_key_create.005	1532	129 keys were created, more than {PTHREAD_KEYS_MAX} (128)
+FAIL	XSH.pthread_kill.004	1646	pthread_kill() of a terminated, unjoined thread returned ESRCH
+FAIL	XSH.pthread_mutex_getprioceiling.001	1376	after pthread_mutex_setprioceiling() another thread's trylock returned EPERM, expected 0 (unlocked)
+FAIL	XSH.pthread_mutex_getprioceiling.002	1533	pthread_mutex_getprioceiling() of a PTHREAD_PRIO_NONE mutex returned 0, expected EINVAL
+FAIL	XSH.ptsname.008	1423	ptsname() of a /dev/null failed with errno ENXIO
+UNINITIATED	XSH.puts.003	0	build failed (out/XSH.puts.003.build.txt)
+UNINITIATED	XSH.pwrite.010	0	build failed (out/XSH.pwrite.010.build.txt)
+UNINITIATED	XSH.read.003	0	build failed (out/XSH.read.003.build.txt)
+UNINITIATED	XSH.read.014	0	build failed (out/XSH.read.014.build.txt)
+UNINITIATED	XSH.read.018	0	build failed (out/XSH.read.018.build.txt)
+UNINITIATED	XSH.read.019	0	build failed (out/XSH.read.019.build.txt)
+UNINITIATED	XSH.read.021	0	build failed (out/XSH.read.021.build.txt)
+UNINITIATED	XSH.read.022	0	build failed (out/XSH.read.022.build.txt)
+UNINITIATED	XSH.read.023	0	build failed (out/XSH.read.023.build.txt)
+UNINITIATED	XSH.readdir.005	0	build failed (out/XSH.readdir.005.build.txt)
+UNINITIATED	XSH.readlink.012	0	build failed (out/XSH.readlink.012.build.txt)
+UNINITIATED	XSH.readlink.013	0	build failed (out/XSH.readlink.013.build.txt)
+UNINITIATED	XSH.readlink.014	0	build failed (out/XSH.readlink.014.build.txt)
+UNINITIATED	XSH.readlink.015	0	build failed (out/XSH.readlink.015.build.txt)
+UNINITIATED	XSH.readlink.016	0	build failed (out/XSH.readlink.016.build.txt)
+UNINITIATED	XSH.readlink.017	0	build failed (out/XSH.readlink.017.build.txt)
+UNINITIATED	XSH.readlink.018	0	build failed (out/XSH.readlink.018.build.txt)
+UNINITIATED	XSH.readlink.019	0	build failed (out/XSH.readlink.019.build.txt)
+UNINITIATED	XSH.readv.006	0	build failed (out/XSH.readv.006.build.txt)
+FAIL	XSH.realloc.004	2172	realloc(p, 0) returned null with errno 0, expected EINVAL
+FAIL	XSH.realloc.007	1479	null result with errno 0, expected EINVAL
+UNINITIATED	XSH.recv.001	0	build failed (out/XSH.recv.001.build.txt)
+UNINITIATED	XSH.recv.002	0	build failed (out/XSH.recv.002.build.txt)
+UNINITIATED	XSH.recv.003	0	build failed (out/XSH.recv.003.build.txt)
+UNINITIATED	XSH.recv.004	0	build failed (out/XSH.recv.004.build.txt)
+UNINITIATED	XSH.recv.005	0	build failed (out/XSH.recv.005.build.txt)
+UNINITIATED	XSH.recv.006	0	build failed (out/XSH.recv.006.build.txt)
+UNINITIATED	XSH.recv.007	0	build failed (out/XSH.recv.007.build.txt)
+UNINITIATED	XSH.recv.008	0	build failed (out/XSH.recv.008.build.txt)
+UNINITIATED	XSH.recv.009	0	build failed (out/XSH.recv.009.build.txt)
+UNINITIATED	XSH.recv.010	0	build failed (out/XSH.recv.010.build.txt)
+UNINITIATED	XSH.recv.011	0	build failed (out/XSH.recv.011.build.txt)
+UNINITIATED	XSH.recv.012	0	build failed (out/XSH.recv.012.build.txt)
+UNINITIATED	XSH.recv.013	0	build failed (out/XSH.recv.013.build.txt)
+UNINITIATED	XSH.recv.014	0	build failed (out/XSH.recv.014.build.txt)
+UNINITIATED	XSH.recv.015	0	build failed (out/XSH.recv.015.build.txt)
+UNINITIATED	XSH.recv.016	0	build failed (out/XSH.recv.016.build.txt)
+UNINITIATED	XSH.recv.017	0	build failed (out/XSH.recv.017.build.txt)
+UNINITIATED	XSH.recv.018	0	build failed (out/XSH.recv.018.build.txt)
+UNINITIATED	XSH.recvfrom.001	0	build failed (out/XSH.recvfrom.001.build.txt)
+UNINITIATED	XSH.recvfrom.002	0	build failed (out/XSH.recvfrom.002.build.txt)
+UNINITIATED	XSH.recvfrom.003	0	build failed (out/XSH.recvfrom.003.build.txt)
+UNINITIATED	XSH.recvfrom.004	0	build failed (out/XSH.recvfrom.004.build.txt)
+UNINITIATED	XSH.recvfrom.005	0	build failed (out/XSH.recvfrom.005.build.txt)
+UNINITIATED	XSH.recvfrom.006	0	build failed (out/XSH.recvfrom.006.build.txt)
+UNINITIATED	XSH.recvfrom.007	0	build failed (out/XSH.recvfrom.007.build.txt)
+UNINITIATED	XSH.recvfrom.008	0	build failed (out/XSH.recvfrom.008.build.txt)
+UNINITIATED	XSH.recvfrom.009	0	build failed (out/XSH.recvfrom.009.build.txt)
+UNINITIATED	XSH.recvfrom.010	0	build failed (out/XSH.recvfrom.010.build.txt)
+UNINITIATED	XSH.recvfrom.011	0	build failed (out/XSH.recvfrom.011.build.txt)
+UNINITIATED	XSH.recvfrom.012	0	build failed (out/XSH.recvfrom.012.build.txt)
+UNINITIATED	XSH.recvfrom.013	0	build failed (out/XSH.recvfrom.013.build.txt)
+UNINITIATED	XSH.recvfrom.014	0	build failed (out/XSH.recvfrom.014.build.txt)
+UNINITIATED	XSH.recvfrom.015	0	build failed (out/XSH.recvfrom.015.build.txt)
+UNINITIATED	XSH.recvfrom.016	0	build failed (out/XSH.recvfrom.016.build.txt)
+UNINITIATED	XSH.recvmsg.001	0	build failed (out/XSH.recvmsg.001.build.txt)
+UNINITIATED	XSH.recvmsg.002	0	build failed (out/XSH.recvmsg.002.build.txt)
+UNINITIATED	XSH.recvmsg.003	0	build failed (out/XSH.recvmsg.003.build.txt)
+UNINITIATED	XSH.recvmsg.004	0	build failed (out/XSH.recvmsg.004.build.txt)
+UNINITIATED	XSH.recvmsg.005	0	build failed (out/XSH.recvmsg.005.build.txt)
+UNINITIATED	XSH.recvmsg.006	0	build failed (out/XSH.recvmsg.006.build.txt)
+UNINITIATED	XSH.recvmsg.007	0	build failed (out/XSH.recvmsg.007.build.txt)
+UNINITIATED	XSH.recvmsg.008	0	build failed (out/XSH.recvmsg.008.build.txt)
+UNINITIATED	XSH.recvmsg.009	0	build failed (out/XSH.recvmsg.009.build.txt)
+UNINITIATED	XSH.recvmsg.010	0	build failed (out/XSH.recvmsg.010.build.txt)
+UNINITIATED	XSH.recvmsg.011	0	build failed (out/XSH.recvmsg.011.build.txt)
+UNINITIATED	XSH.recvmsg.012	0	build failed (out/XSH.recvmsg.012.build.txt)
+UNINITIATED	XSH.recvmsg.013	0	build failed (out/XSH.recvmsg.013.build.txt)
+UNINITIATED	XSH.recvmsg.014	0	build failed (out/XSH.recvmsg.014.build.txt)
+UNINITIATED	XSH.recvmsg.015	0	build failed (out/XSH.recvmsg.015.build.txt)
+UNINITIATED	XSH.recvmsg.016	0	build failed (out/XSH.recvmsg.016.build.txt)
+UNINITIATED	XSH.recvmsg.017	0	build failed (out/XSH.recvmsg.017.build.txt)
+UNINITIATED	XSH.recvmsg.018	0	build failed (out/XSH.recvmsg.018.build.txt)
+UNINITIATED	XSH.recvmsg.019	0	build failed (out/XSH.recvmsg.019.build.txt)
+UNINITIATED	XSH.recvmsg.020	0	build failed (out/XSH.recvmsg.020.build.txt)
+UNINITIATED	XSH.recvmsg.021	0	build failed (out/XSH.recvmsg.021.build.txt)
+UNINITIATED	XSH.recvmsg.022	0	build failed (out/XSH.recvmsg.022.build.txt)
+UNINITIATED	XSH.recvmsg.023	0	build failed (out/XSH.recvmsg.023.build.txt)
+UNINITIATED	XSH.recvmsg.024	0	build failed (out/XSH.recvmsg.024.build.txt)
+UNINITIATED	XSH.recvmsg.025	0	build failed (out/XSH.recvmsg.025.build.txt)
+UNINITIATED	XSH.recvmsg.026	0	build failed (out/XSH.recvmsg.026.build.txt)
+UNINITIATED	XSH.recvmsg.027	0	build failed (out/XSH.recvmsg.027.build.txt)
+UNINITIATED	XSH.recvmsg.028	0	build failed (out/XSH.recvmsg.028.build.txt)
+UNINITIATED	XSH.recvmsg.029	0	build failed (out/XSH.recvmsg.029.build.txt)
+FAIL	XSH.regcomp.014	1445	regcomp("[--@]") returned 10
+FAIL	XSH.regcomp.017	1559	case 5: "\(a\(b\)*\)*\2" on "abab" should not match, got 0 [0,4]
+FAIL	XSH.regcomp.027	1823	case 6: "\(a\)\1" on "aA" should match, got 1
+FAIL	XSH.regcomp.033	1397	case 1: regcomp(".*?c") returned 12
+UNINITIATED	XSH.regcomp.034	0	build failed (out/XSH.regcomp.034.build.txt)
+NOTINUSE	XSH.remainder.003	1513	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.remainder.004	1428	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.remainder.005	1460	the IEC 60559 Floating-Point option is not claimed
+UNINITIATED	XSH.remove.016	0	build failed (out/XSH.remove.016.build.txt)
+FAIL	XSH.remquo.002	1592	remquol(9, 4, &q) stored 0, which has the wrong sign
+NOTINUSE	XSH.remquo.003	1591	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.remquo.004	1767	the IEC 60559 Floating-Point option is not claimed
+FAIL	XSH.rename.013	1537	rename("f", "nf/"): returned 0, expected -1 with ENOTDIR
+FAIL	XSH.rename.014	1724	rename(d, "nd/") succeeded
+UNINITIATED	XSH.rename.015	0	build failed (out/XSH.rename.015.build.txt)
+UNINITIATED	XSH.rename.016	0	build failed (out/XSH.rename.016.build.txt)
+UNINITIATED	XSH.rename.017	0	build failed (out/XSH.rename.017.build.txt)
+UNINITIATED	XSH.rename.018	0	build failed (out/XSH.rename.018.build.txt)
+UNINITIATED	XSH.rename.023	0	build failed (out/XSH.rename.023.build.txt)
+UNINITIATED	XSH.rename.024	0	build failed (out/XSH.rename.024.build.txt)
+UNINITIATED	XSH.rename.026	0	build failed (out/XSH.rename.026.build.txt)
+UNINITIATED	XSH.rename.027	0	build failed (out/XSH.rename.027.build.txt)
+UNINITIATED	XSH.rename.034	0	build failed (out/XSH.rename.034.build.txt)
+NOTINUSE	XSH.rint.002	1537	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.rint.003	1932	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.rint.004	1406	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.rint.005	1520	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.rint.006	1570	the IEC 60559 Floating-Point option is not claimed
+UNINITIATED	XSH.rmdir.005	0	build failed (out/XSH.rmdir.005.build.txt)
+UNINITIATED	XSH.rmdir.006	0	build failed (out/XSH.rmdir.006.build.txt)
+NOTINUSE	XSH.round.003	1540	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.round.004	1774	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.round.005	1606	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.round.006	1380	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.scalbn.003	1390	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.scalbn.004	1389	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.scalbn.005	1710	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.scalbn.006	1406	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.scalbn.007	1449	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.scalbn.008	1295	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.scalbn.012	1535	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.scalbn.013	1398	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.scalbn.014	1548	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.scalbn.015	1376	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.scalbn.016	1574	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.scalbn.017	1575	the IEC 60559 Floating-Point option is not claimed
+UNSUPPORTED	XSH.sched_get_priority_max.006	0	option SS|TSP not claimed
+UNINITIATED	XSH.select.004	0	build failed (out/XSH.select.004.build.txt)
+UNINITIATED	XSH.select.020	0	build failed (out/XSH.select.020.build.txt)
+UNINITIATED	XSH.select.021	0	build failed (out/XSH.select.021.build.txt)
+NOTINUSE	XSH.sem_close.003	1542	sem_open() returned the same handle twice: closing one closes both
+# resumed 2026-10-31T11:21:52Z
+UNINITIATED	XSH.send.001	0	build failed (out/XSH.send.001.build.txt)
+UNINITIATED	XSH.send.002	0	build failed (out/XSH.send.002.build.txt)
+UNINITIATED	XSH.send.003	0	build failed (out/XSH.send.003.build.txt)
+UNINITIATED	XSH.send.004	0	build failed (out/XSH.send.004.build.txt)
+UNINITIATED	XSH.send.005	0	build failed (out/XSH.send.005.build.txt)
+UNINITIATED	XSH.send.006	0	build failed (out/XSH.send.006.build.txt)
+UNINITIATED	XSH.send.007	0	build failed (out/XSH.send.007.build.txt)
+UNINITIATED	XSH.send.008	0	build failed (out/XSH.send.008.build.txt)
+UNINITIATED	XSH.send.009	0	build failed (out/XSH.send.009.build.txt)
+UNINITIATED	XSH.send.010	0	build failed (out/XSH.send.010.build.txt)
+UNINITIATED	XSH.send.011	0	build failed (out/XSH.send.011.build.txt)
+UNINITIATED	XSH.send.012	0	build failed (out/XSH.send.012.build.txt)
+UNINITIATED	XSH.send.013	0	build failed (out/XSH.send.013.build.txt)
+UNINITIATED	XSH.sendmsg.001	0	build failed (out/XSH.sendmsg.001.build.txt)
+UNINITIATED	XSH.sendmsg.002	0	build failed (out/XSH.sendmsg.002.build.txt)
+UNINITIATED	XSH.sendmsg.003	0	build failed (out/XSH.sendmsg.003.build.txt)
+UNINITIATED	XSH.sendmsg.004	0	build failed (out/XSH.sendmsg.004.build.txt)
+UNINITIATED	XSH.sendmsg.005	0	build failed (out/XSH.sendmsg.005.build.txt)
+UNINITIATED	XSH.sendmsg.006	0	build failed (out/XSH.sendmsg.006.build.txt)
+UNINITIATED	XSH.sendmsg.007	0	build failed (out/XSH.sendmsg.007.build.txt)
+UNINITIATED	XSH.sendmsg.008	0	build failed (out/XSH.sendmsg.008.build.txt)
+UNINITIATED	XSH.sendmsg.009	0	build failed (out/XSH.sendmsg.009.build.txt)
+UNINITIATED	XSH.sendmsg.010	0	build failed (out/XSH.sendmsg.010.build.txt)
+UNINITIATED	XSH.sendmsg.011	0	build failed (out/XSH.sendmsg.011.build.txt)
+UNINITIATED	XSH.sendmsg.012	0	build failed (out/XSH.sendmsg.012.build.txt)
+UNINITIATED	XSH.sendmsg.013	0	build failed (out/XSH.sendmsg.013.build.txt)
+UNINITIATED	XSH.sendmsg.014	0	build failed (out/XSH.sendmsg.014.build.txt)
+UNINITIATED	XSH.sendmsg.015	0	build failed (out/XSH.sendmsg.015.build.txt)
+UNINITIATED	XSH.sendmsg.016	0	build failed (out/XSH.sendmsg.016.build.txt)
+UNINITIATED	XSH.sendmsg.017	0	build failed (out/XSH.sendmsg.017.build.txt)
+UNINITIATED	XSH.sendmsg.018	0	build failed (out/XSH.sendmsg.018.build.txt)
+UNINITIATED	XSH.sendmsg.019	0	build failed (out/XSH.sendmsg.019.build.txt)
+UNINITIATED	XSH.sendmsg.020	0	build failed (out/XSH.sendmsg.020.build.txt)
+UNINITIATED	XSH.sendmsg.021	0	build failed (out/XSH.sendmsg.021.build.txt)
+UNINITIATED	XSH.sendmsg.022	0	build failed (out/XSH.sendmsg.022.build.txt)
+UNINITIATED	XSH.sendmsg.023	0	build failed (out/XSH.sendmsg.023.build.txt)
+UNINITIATED	XSH.sendmsg.024	0	build failed (out/XSH.sendmsg.024.build.txt)
+UNINITIATED	XSH.sendto.001	0	build failed (out/XSH.sendto.001.build.txt)
+UNINITIATED	XSH.sendto.002	0	build failed (out/XSH.sendto.002.build.txt)
+UNINITIATED	XSH.sendto.003	0	build failed (out/XSH.sendto.003.build.txt)
+UNINITIATED	XSH.sendto.004	0	build failed (out/XSH.sendto.004.build.txt)
+UNINITIATED	XSH.sendto.005	0	build failed (out/XSH.sendto.005.build.txt)
+UNINITIATED	XSH.sendto.006	0	build failed (out/XSH.sendto.006.build.txt)
+UNINITIATED	XSH.sendto.007	0	build failed (out/XSH.sendto.007.build.txt)
+UNINITIATED	XSH.sendto.008	0	build failed (out/XSH.sendto.008.build.txt)
+UNINITIATED	XSH.sendto.009	0	build failed (out/XSH.sendto.009.build.txt)
+UNINITIATED	XSH.sendto.010	0	build failed (out/XSH.sendto.010.build.txt)
+UNINITIATED	XSH.sendto.011	0	build failed (out/XSH.sendto.011.build.txt)
+UNINITIATED	XSH.sendto.012	0	build failed (out/XSH.sendto.012.build.txt)
+UNINITIATED	XSH.sendto.013	0	build failed (out/XSH.sendto.013.build.txt)
+UNINITIATED	XSH.sendto.014	0	build failed (out/XSH.sendto.014.build.txt)
+UNINITIATED	XSH.sendto.015	0	build failed (out/XSH.sendto.015.build.txt)
+UNINITIATED	XSH.sendto.016	0	build failed (out/XSH.sendto.016.build.txt)
+UNINITIATED	XSH.sendto.017	0	build failed (out/XSH.sendto.017.build.txt)
+FAIL	XSH.setegid.004	1471	setegid(<effective ID, neither real nor saved>) without privileges returned 0, expected -1
+FAIL	XSH.seteuid.004	1448	seteuid(<effective ID, neither real nor saved>) without privileges returned 0, expected -1
+UNSUPPORTED	XSH.setkey.001	0	option XSI+CRYPT not claimed
+UNSUPPORTED	XSH.setkey.002	0	option XSI+CRYPT not claimed
+UNINITIATED	XSH.setresgid.001	0	build failed (out/XSH.setresgid.001.build.txt)
+UNINITIATED	XSH.setresgid.002	0	build failed (out/XSH.setresgid.002.build.txt)
+UNINITIATED	XSH.setresgid.003	0	build failed (out/XSH.setresgid.003.build.txt)
+UNINITIATED	XSH.setresgid.004	0	build failed (out/XSH.setresgid.004.build.txt)
+UNINITIATED	XSH.setresgid.005	0	build failed (out/XSH.setresgid.005.build.txt)
+UNINITIATED	XSH.setresgid.006	0	build failed (out/XSH.setresgid.006.build.txt)
+UNINITIATED	XSH.setresuid.001	0	build failed (out/XSH.setresuid.001.build.txt)
+UNINITIATED	XSH.setresuid.002	0	build failed (out/XSH.setresuid.002.build.txt)
+UNINITIATED	XSH.setresuid.003	0	build failed (out/XSH.setresuid.003.build.txt)
+UNINITIATED	XSH.setresuid.004	0	build failed (out/XSH.setresuid.004.build.txt)
+UNINITIATED	XSH.setresuid.005	0	build failed (out/XSH.setresuid.005.build.txt)
+UNINITIATED	XSH.setsockopt.001	0	build failed (out/XSH.setsockopt.001.build.txt)
+UNINITIATED	XSH.setsockopt.002	0	build failed (out/XSH.setsockopt.002.build.txt)
+UNINITIATED	XSH.setsockopt.003	0	build failed (out/XSH.setsockopt.003.build.txt)
+UNINITIATED	XSH.setsockopt.004	0	build failed (out/XSH.setsockopt.004.build.txt)
+UNINITIATED	XSH.setsockopt.005	0	build failed (out/XSH.setsockopt.005.build.txt)
+UNINITIATED	XSH.setsockopt.006	0	build failed (out/XSH.setsockopt.006.build.txt)
+UNINITIATED	XSH.setsockopt.007	0	build failed (out/XSH.setsockopt.007.build.txt)
+UNINITIATED	XSH.setsockopt.008	0	build failed (out/XSH.setsockopt.008.build.txt)
+UNINITIATED	XSH.setsockopt.009	0	build failed (out/XSH.setsockopt.009.build.txt)
+UNINITIATED	XSH.setsockopt.010	0	build failed (out/XSH.setsockopt.010.build.txt)
+UNINITIATED	XSH.setsockopt.011	0	build failed (out/XSH.setsockopt.011.build.txt)
+UNINITIATED	XSH.setsockopt.012	0	build failed (out/XSH.setsockopt.012.build.txt)
+UNINITIATED	XSH.setsockopt.013	0	build failed (out/XSH.setsockopt.013.build.txt)
+UNINITIATED	XSH.setsockopt.014	0	build failed (out/XSH.setsockopt.014.build.txt)
+UNINITIATED	XSH.setsockopt.015	0	build failed (out/XSH.setsockopt.015.build.txt)
+UNINITIATED	XSH.setsockopt.016	0	build failed (out/XSH.setsockopt.016.build.txt)
+UNINITIATED	XSH.setsockopt.017	0	build failed (out/XSH.setsockopt.017.build.txt)
+UNINITIATED	XSH.setsockopt.018	0	build failed (out/XSH.setsockopt.018.build.txt)
+UNINITIATED	XSH.setsockopt.019	0	build failed (out/XSH.setsockopt.019.build.txt)
+UNINITIATED	XSH.setsockopt.020	0	build failed (out/XSH.setsockopt.020.build.txt)
+UNINITIATED	XSH.setsockopt.021	0	build failed (out/XSH.setsockopt.021.build.txt)
+UNINITIATED	XSH.setsockopt.022	0	build failed (out/XSH.setsockopt.022.build.txt)
+UNTESTED	XSH.setsockopt.023	0	untestable: the behaviour of setsockopt() for SO_ACCEPTCONN, SO_ERROR and
+UNINITIATED	XSH.shmat.001	0	build failed (out/XSH.shmat.001.build.txt)
+UNINITIATED	XSH.shmat.002	0	build failed (out/XSH.shmat.002.build.txt)
+UNINITIATED	XSH.shmat.003	0	build failed (out/XSH.shmat.003.build.txt)
+UNINITIATED	XSH.shmat.004	0	build failed (out/XSH.shmat.004.build.txt)
+UNINITIATED	XSH.shmat.005	0	build failed (out/XSH.shmat.005.build.txt)
+UNINITIATED	XSH.shmat.006	0	build failed (out/XSH.shmat.006.build.txt)
+UNINITIATED	XSH.shmat.007	0	build failed (out/XSH.shmat.007.build.txt)
+UNINITIATED	XSH.shmat.008	0	build failed (out/XSH.shmat.008.build.txt)
+UNINITIATED	XSH.shmctl.001	0	build failed (out/XSH.shmctl.001.build.txt)
+UNINITIATED	XSH.shmctl.002	0	build failed (out/XSH.shmctl.002.build.txt)
+UNINITIATED	XSH.shmctl.003	0	build failed (out/XSH.shmctl.003.build.txt)
+UNINITIATED	XSH.shmctl.004	0	build failed (out/XSH.shmctl.004.build.txt)
+UNINITIATED	XSH.shmctl.005	0	build failed (out/XSH.shmctl.005.build.txt)
+UNINITIATED	XSH.shmctl.006	0	build failed (out/XSH.shmctl.006.build.txt)
+UNINITIATED	XSH.shmctl.007	0	build failed (out/XSH.shmctl.007.build.txt)
+UNINITIATED	XSH.shmctl.008	0	build failed (out/XSH.shmctl.008.build.txt)
+UNINITIATED	XSH.shmdt.001	0	build failed (out/XSH.shmdt.001.build.txt)
+UNINITIATED	XSH.shmdt.002	0	build failed (out/XSH.shmdt.002.build.txt)
+UNINITIATED	XSH.shmdt.003	0	build failed (out/XSH.shmdt.003.build.txt)
+UNINITIATED	XSH.shmget.001	0	build failed (out/XSH.shmget.001.build.txt)
+UNINITIATED	XSH.shmget.002	0	build failed (out/XSH.shmget.002.build.txt)
+UNINITIATED	XSH.shmget.003	0	build failed (out/XSH.shmget.003.build.txt)
+UNINITIATED	XSH.shmget.004	0	build failed (out/XSH.shmget.004.build.txt)
+UNINITIATED	XSH.shmget.005	0	build failed (out/XSH.shmget.005.build.txt)
+UNINITIATED	XSH.shmget.006	0	build failed (out/XSH.shmget.006.build.txt)
+UNINITIATED	XSH.shmget.007	0	build failed (out/XSH.shmget.007.build.txt)
+UNINITIATED	XSH.shutdown.001	0	build failed (out/XSH.shutdown.001.build.txt)
+UNINITIATED	XSH.shutdown.002	0	build failed (out/XSH.shutdown.002.build.txt)
+UNINITIATED	XSH.shutdown.003	0	build failed (out/XSH.shutdown.003.build.txt)
+UNINITIATED	XSH.shutdown.004	0	build failed (out/XSH.shutdown.004.build.txt)
+UNINITIATED	XSH.shutdown.005	0	build failed (out/XSH.shutdown.005.build.txt)
+UNINITIATED	XSH.shutdown.006	0	build failed (out/XSH.shutdown.006.build.txt)
+UNINITIATED	XSH.shutdown.007	0	build failed (out/XSH.shutdown.007.build.txt)
+UNINITIATED	XSH.shutdown.008	0	build failed (out/XSH.shutdown.008.build.txt)
+UNINITIATED	XSH.shutdown.009	0	build failed (out/XSH.shutdown.009.build.txt)
+UNINITIATED	XSH.shutdown.010	0	build failed (out/XSH.shutdown.010.build.txt)
+UNINITIATED	XSH.sig2str.001	0	build failed (out/XSH.sig2str.001.build.txt)
+UNINITIATED	XSH.sig2str.002	0	build failed (out/XSH.sig2str.002.build.txt)
+UNINITIATED	XSH.sig2str.003	0	build failed (out/XSH.sig2str.003.build.txt)
+UNINITIATED	XSH.sig2str.004	0	build failed (out/XSH.sig2str.004.build.txt)
+UNINITIATED	XSH.sig2str.005	0	build failed (out/XSH.sig2str.005.build.txt)
+UNINITIATED	XSH.sig2str.006	0	build failed (out/XSH.sig2str.006.build.txt)
+NOTINUSE	XSH.signbit.003	1538	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.signbit.004	1549	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.sin.002	1473	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.sin.003	1538	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.sin.004	1545	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.sin.005	1742	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.sin.006	1440	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.sinh.002	1446	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.sinh.003	1404	IEC 60559 floating-point is not supported
+FAIL	XSH.sinh.004	1366	sinh(big) [float]: exception FE_OVERFLOW was not raised
+NOTINUSE	XSH.sinh.005	1310	IEC 60559 floating-point is not supported
+UNINITIATED	XSH.sockatmark.001	0	build failed (out/XSH.sockatmark.001.build.txt)
+UNINITIATED	XSH.sockatmark.002	0	build failed (out/XSH.sockatmark.002.build.txt)
+UNINITIATED	XSH.sockatmark.003	0	build failed (out/XSH.sockatmark.003.build.txt)
+UNINITIATED	XSH.sockatmark.004	0	build failed (out/XSH.sockatmark.004.build.txt)
+UNINITIATED	XSH.sockatmark.005	0	build failed (out/XSH.sockatmark.005.build.txt)
+UNINITIATED	XSH.socket.001	0	build failed (out/XSH.socket.001.build.txt)
+UNINITIATED	XSH.socket.002	0	build failed (out/XSH.socket.002.build.txt)
+UNINITIATED	XSH.socket.003	0	build failed (out/XSH.socket.003.build.txt)
+UNINITIATED	XSH.socket.004	0	build failed (out/XSH.socket.004.build.txt)
+UNINITIATED	XSH.socket.005	0	build failed (out/XSH.socket.005.build.txt)
+UNINITIATED	XSH.socket.006	0	build failed (out/XSH.socket.006.build.txt)
+UNINITIATED	XSH.socket.007	0	build failed (out/XSH.socket.007.build.txt)
+UNINITIATED	XSH.socket.008	0	build failed (out/XSH.socket.008.build.txt)
+UNINITIATED	XSH.socket.009	0	build failed (out/XSH.socket.009.build.txt)
+UNINITIATED	XSH.socket.010	0	build failed (out/XSH.socket.010.build.txt)
+UNINITIATED	XSH.socket.011	0	build failed (out/XSH.socket.011.build.txt)
+UNINITIATED	XSH.socket.012	0	build failed (out/XSH.socket.012.build.txt)
+UNINITIATED	XSH.socket.013	0	build failed (out/XSH.socket.013.build.txt)
+UNINITIATED	XSH.socket.014	0	build failed (out/XSH.socket.014.build.txt)
+UNINITIATED	XSH.socket.015	0	build failed (out/XSH.socket.015.build.txt)
+UNINITIATED	XSH.socket.016	0	build failed (out/XSH.socket.016.build.txt)
+UNINITIATED	XSH.socketpair.001	0	build failed (out/XSH.socketpair.001.build.txt)
+UNINITIATED	XSH.socketpair.002	0	build failed (out/XSH.socketpair.002.build.txt)
+UNINITIATED	XSH.socketpair.003	0	build failed (out/XSH.socketpair.003.build.txt)
+UNINITIATED	XSH.socketpair.004	0	build failed (out/XSH.socketpair.004.build.txt)
+UNINITIATED	XSH.socketpair.005	0	build failed (out/XSH.socketpair.005.build.txt)
+UNINITIATED	XSH.socketpair.006	0	build failed (out/XSH.socketpair.006.build.txt)
+UNINITIATED	XSH.socketpair.007	0	build failed (out/XSH.socketpair.007.build.txt)
+UNINITIATED	XSH.socketpair.008	0	build failed (out/XSH.socketpair.008.build.txt)
+UNINITIATED	XSH.socketpair.009	0	build failed (out/XSH.socketpair.009.build.txt)
+UNINITIATED	XSH.socketpair.010	0	build failed (out/XSH.socketpair.010.build.txt)
+UNINITIATED	XSH.socketpair.011	0	build failed (out/XSH.socketpair.011.build.txt)
+UNINITIATED	XSH.socketpair.012	0	build failed (out/XSH.socketpair.012.build.txt)
+NOTINUSE	XSH.sqrt.002	1515	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.sqrt.003	1602	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.sqrt.004	1488	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.sqrt.005	1641	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.sqrt.007	1436	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.sqrt.008	1392	IEC 60559 floating-point is not supported
+UNINITIATED	XSH.strerror.006	0	build failed (out/XSH.strerror.006.build.txt)
+FAIL	XSH.strfmon.004	1383	strfmon("%.0n", -123.0) gave "(123)", which has no '-'
+FAIL	XSH.strfmon.005	1658	strfmon("%+.0n", 123) returned 3, expected -1
+FAIL	XSH.strfmon.006	2747	both signs are empty but strfmon("%+.0n", 123) returned 3, errno 0
+FAIL	XSH.strfmon.010	1449	strfmon("%=*#5.0n", -123.0) gave "(**123)", expected the '-' before "**123"
+FAIL	XSH.strfmon.011	1389	"%#5.0n" gave "  123" for 123.0 and "(  123)" for -123.0, of different lengths
+FAIL	XSH.strfmon.013	2697	POSIX global locale: strfmon_l("%.0n", -123.0) gave "(123)"
+FAIL	XSH.strftime.007	1377	strftime("%+4Y") for 1970-01-02 12:00:00 (wday 5, yday 1) gave "Fri Jan  2 12:00:00 UTC 19704Y" (return 30), expected "1970"
+FAIL	XSH.strftime.014	1305	strftime() with maxsize 10 for 10 bytes set errno to 0, expected ERANGE
+UNINITIATED	XSH.strlcpy.001	0	build failed (out/XSH.strlcpy.001.build.txt)
+UNINITIATED	XSH.strlcpy.002	0	build failed (out/XSH.strlcpy.002.build.txt)
+UNINITIATED	XSH.strlcpy.003	0	build failed (out/XSH.strlcpy.003.build.txt)
+UNINITIATED	XSH.strlcpy.004	0	build failed (out/XSH.strlcpy.004.build.txt)
+UNINITIATED	XSH.strlcpy.005	0	build failed (out/XSH.strlcpy.005.build.txt)
+UNINITIATED	XSH.strlcpy.006	0	build failed (out/XSH.strlcpy.006.build.txt)
+UNINITIATED	XSH.strlcpy.007	0	build failed (out/XSH.strlcpy.007.build.txt)
+UNINITIATED	XSH.strlcpy.008	0	build failed (out/XSH.strlcpy.008.build.txt)
+UNINITIATED	XSH.strlcpy.009	0	build failed (out/XSH.strlcpy.009.build.txt)
+UNINITIATED	XSH.strlcpy.010	0	build failed (out/XSH.strlcpy.010.build.txt)
+UNINITIATED	XSH.strlcpy.011	0	build failed (out/XSH.strlcpy.011.build.txt)
+UNINITIATED	XSH.strlcpy.012	0	build failed (out/XSH.strlcpy.012.build.txt)
+UNINITIATED	XSH.strlcpy.013	0	build failed (out/XSH.strlcpy.013.build.txt)
+UNINITIATED	XSH.strlcpy.014	0	build failed (out/XSH.strlcpy.014.build.txt)
+UNINITIATED	XSH.strlcpy.015	0	build failed (out/XSH.strlcpy.015.build.txt)
+UNINITIATED	XSH.strlcpy.016	0	build failed (out/XSH.strlcpy.016.build.txt)
+FAIL	XSH.strptime.003	1499	strptime("0,", "%d,") did not return a null pointer
+FAIL	XSH.strptime.005	1355	strptime("AM 12", "%p %I"): tm_hour is 12, expected 0
+FAIL	XSH.strptime.007	1242	strptime("0070,", "%Y,") returned a null pointer
+FAIL	XSH.strptime.008	1266	strptime("24 20", "%y %C"): tm_year is 100, expected 124
+FAIL	XSH.strptime.009	1307	strptime("12345-06-07", "%F") returned a null pointer
+FAIL	XSH.strptime.010	1369	strptime("Thu Feb 29 13:45:59", "%c") did not return a null pointer
+FAIL	XSH.strptime.012	1341	strptime("", "a") did not return a null pointer
+FAIL	XSH.strptime.013	1346	strptime("1,", "%u,") returned a null pointer
+FAIL	XSH.strptime.014	1475	strptime("01,", "%V,") returned a null pointer
+FAIL	XSH.strptime.015	1355	strptime("abc", "%s") did not return a null pointer
+FAIL	XSH.strptime.017	1374	strptime("2024", "%2Y") returned a null pointer
+FAIL	XSH.strptime.018	1278	strptime("3,", "%Ow,") returned a null pointer
+FAIL	XSH.strptime.019	1316	strptime("", "%a") did not return a null pointer
+UNRESOLVED	XSH.strsignal.001	0	blocked by XSH.psiginfo.001 (UNINITIATED)
+UNRESOLVED	XSH.strsignal.002	0	blocked by XSH.psiginfo.001 (UNINITIATED)
+UNINITIATED	XSH.strsignal.003	0	build failed (out/XSH.strsignal.003.build.txt)
+UNINITIATED	XSH.symlink.006	0	build failed (out/XSH.symlink.006.build.txt)
+UNINITIATED	XSH.symlink.007	0	build failed (out/XSH.symlink.007.build.txt)
+UNINITIATED	XSH.symlink.008	0	build failed (out/XSH.symlink.008.build.txt)
+UNINITIATED	XSH.symlink.009	0	build failed (out/XSH.symlink.009.build.txt)
+UNINITIATED	XSH.symlink.017	0	build failed (out/XSH.symlink.017.build.txt)
+UNINITIATED	XSH.symlink.018	0	build failed (out/XSH.symlink.018.build.txt)
+UNINITIATED	XSH.symlink.019	0	build failed (out/XSH.symlink.019.build.txt)
+UNINITIATED	XSH.symlink.020	0	build failed (out/XSH.symlink.020.build.txt)
+UNINITIATED	XSH.symlink.022	0	build failed (out/XSH.symlink.022.build.txt)
+UNINITIATED	XSH.sysconf.003	0	build failed (out/XSH.sysconf.003.build.txt)
+FAIL	XSH.sysconf.005	1574	sysconf(_SC_VERSION) returned 200112, expected 202405
+FAIL	XSH.sysconf.007	1640	sysconf(_SC_ADVISORY_INFO) returned 200112, expected -1 or 202405
+FAIL	XSH.sysconf.009	1522	sysconf(_SC_STREAM_MAX) returned 65536, and 65535 after the RLIMIT_STACK and RLIMIT_NOFILE soft limits changed
+UNRESOLVED	XSH.sysconf.015	1555	<unistd.h> lacks _SC_NSIG or <limits.h> lacks NSIG_MAX
+FAIL	XSH.system.006	1447	system("-pcdash") gave exit status 2, expected 31
+NOTINUSE	XSH.tan.002	1576	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.tan.003	1387	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.tan.004	1580	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.tan.005	1714	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.tanh.002	1442	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.tanh.003	1509	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.tanh.004	1495	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.tanh.005	1667	IEC 60559 floating-point is not supported
+UNRESOLVED	XSH.tcdrain.002	16871	tcflow(TCOON) failed: E?62
+FAIL	XSH.tcdrain.005	1342	tcdrain() of a pipe read end returned -1, errno EINVAL
+FAIL	XSH.tcdrain.007	1649	tcdrain() returned -1 (errno EINVAL) with SIGTTOU ignored
+FAIL	XSH.tcflow.007	1690	tcflow() of a pipe read end returned -1, errno EINVAL
+FAIL	XSH.tcflow.009	1824	tcflow() returned -1 (errno EINVAL) with SIGTTOU ignored
+FAIL	XSH.tcflush.008	1658	tcflush() of a pipe read end returned -1, errno EINVAL
+FAIL	XSH.tcflush.010	1314	tcflush() returned -1 (errno EINVAL) with SIGTTOU ignored
+FAIL	XSH.tcgetattr.003	1391	tcgetattr() of a pipe read end returned -1, errno EINVAL
+FAIL	XSH.tcgetpgrp.002	1723	tcgetpgrp() of the pipe read end returned -1, errno EINVAL
+FAIL	XSH.tcgetsid.004	1366	tcgetsid() of a pipe read end did not fail with ENOTTY (errno EINVAL)
+UNINITIATED	XSH.tcgetwinsize.001	0	build failed (out/XSH.tcgetwinsize.001.build.txt)
+UNINITIATED	XSH.tcgetwinsize.002	0	build failed (out/XSH.tcgetwinsize.002.build.txt)
+UNINITIATED	XSH.tcgetwinsize.003	0	build failed (out/XSH.tcgetwinsize.003.build.txt)
+UNINITIATED	XSH.tcgetwinsize.004	0	build failed (out/XSH.tcgetwinsize.004.build.txt)
+UNINITIATED	XSH.tcgetwinsize.005	0	build failed (out/XSH.tcgetwinsize.005.build.txt)
+FAIL	XSH.tcsendbreak.004	1430	tcsendbreak() of a pipe read end returned -1, errno EINVAL
+FAIL	XSH.tcsendbreak.006	1450	tcsendbreak() returned -1 (errno EINVAL) with SIGTTOU ignored
+UNRESOLVED	XSH.tcsetattr.004	16784	tcgetattr failed: E?62
+FAIL	XSH.tcsetattr.008	1783	tcsetattr() of a pipe read end returned -1, errno EINVAL
+UNRESOLVED	XSH.tcsetattr.012	1468	tcgetattr failed
+FAIL	XSH.tcsetpgrp.002	2012	tcsetpgrp() of the pipe read end returned -1, errno EINVAL
+UNINITIATED	XSH.tcsetwinsize.001	0	build failed (out/XSH.tcsetwinsize.001.build.txt)
+UNINITIATED	XSH.tcsetwinsize.002	0	build failed (out/XSH.tcsetwinsize.002.build.txt)
+UNINITIATED	XSH.tcsetwinsize.003	0	build failed (out/XSH.tcsetwinsize.003.build.txt)
+UNINITIATED	XSH.tcsetwinsize.004	0	build failed (out/XSH.tcsetwinsize.004.build.txt)
+UNINITIATED	XSH.tcsetwinsize.005	0	build failed (out/XSH.tcsetwinsize.005.build.txt)
+UNINITIATED	XSH.tcsetwinsize.006	0	build failed (out/XSH.tcsetwinsize.006.build.txt)
+UNINITIATED	XSH.tcsetwinsize.007	0	build failed (out/XSH.tcsetwinsize.007.build.txt)
+UNINITIATED	XSH.tcsetwinsize.008	0	build failed (out/XSH.tcsetwinsize.008.build.txt)
+NOTINUSE	XSH.tgamma.002	1508	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.tgamma.003	1869	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.tgamma.004	1485	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.tgamma.005	1514	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.tgamma.006	1535	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.tgamma.007	1469	IEC 60559 floating-point is not supported
+NOTINUSE	XSH.tgamma.009	1502	IEC 60559 floating-point is not supported
+UNSUPPORTED	XSH.timer_create.010	0	option CPT not claimed
+UNSUPPORTED	XSH.timer_create.011	0	option TCT not claimed
+FAIL	XSH.timer_getoverrun.001	1690	a disarmed timer reports time left
+NOTINUSE	XSH.trunc.003	1599	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.trunc.004	1440	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.trunc.005	1866	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.trunc.006	1447	the IEC 60559 Floating-Point option is not claimed
+NOTINUSE	XSH.trunc.007	1430	the IEC 60559 Floating-Point option is not claimed
+UNINITIATED	XSH.truncate.001	0	build failed (out/XSH.truncate.001.build.txt)
+UNINITIATED	XSH.truncate.002	0	build failed (out/XSH.truncate.002.build.txt)
+UNINITIATED	XSH.truncate.003	0	build failed (out/XSH.truncate.003.build.txt)
+UNINITIATED	XSH.truncate.004	0	build failed (out/XSH.truncate.004.build.txt)
+UNINITIATED	XSH.truncate.005	0	build failed (out/XSH.truncate.005.build.txt)
+UNINITIATED	XSH.truncate.006	0	build failed (out/XSH.truncate.006.build.txt)
+UNINITIATED	XSH.truncate.007	0	build failed (out/XSH.truncate.007.build.txt)
+UNINITIATED	XSH.truncate.008	0	build failed (out/XSH.truncate.008.build.txt)
+UNINITIATED	XSH.truncate.009	0	build failed (out/XSH.truncate.009.build.txt)
+UNINITIATED	XSH.truncate.010	0	build failed (out/XSH.truncate.010.build.txt)
+UNINITIATED	XSH.truncate.011	0	build failed (out/XSH.truncate.011.build.txt)
+UNINITIATED	XSH.truncate.012	0	build failed (out/XSH.truncate.012.build.txt)
+FAIL	XSH.ttyname.003	1476	ttyname_r() with namesize 11 (exactly enough) returned ERANGE
+UNINITIATED	XSH.umask.001	0	build failed (out/XSH.umask.001.build.txt)
+UNINITIATED	XSH.umask.002	0	build failed (out/XSH.umask.002.build.txt)
+UNINITIATED	XSH.umask.003	0	build failed (out/XSH.umask.003.build.txt)
+UNINITIATED	XSH.umask.004	0	build failed (out/XSH.umask.004.build.txt)
+UNINITIATED	XSH.umask.005	0	build failed (out/XSH.umask.005.build.txt)
+FAIL	XSH.ungetc.008	1601	ungetc(0x1ff) returned 0x1ff, expected 0xff
+FAIL	XSH.unlockpt.002	1525	unlockpt() of a regular file returned -1, errno ENOTTY
+UNINITIATED	XSH.vfprintf.008	0	build failed (out/XSH.vfprintf.008.build.txt)
+FAIL	XSH.vfwprintf.001	1493	the string form produced "???", expected "w|n|c|l|12"
+FAIL	XSH.vfwprintf.002	1556	the string form produced "?", expected "b a"
+FAIL	XSH.vfwprintf.003	1485	the array holds "?" then 0x23, expected "ab5" and a null
+FAIL	XSH.vfwprintf.004	1387	vswprintf() returned 6 for output longer than n, expected a negative value
+FAIL	XSH.vfwprintf.007	2321	vswprintf(%s) of the bytes c3 a9 returned 1, expected 1 element holding the character
+INSPECT	XSH.waitid.018	1541	disputed (see the assertion's note): waitid() without any of WEXITED, WSTOPPED, WCONTINUED returned 0, expected -1
+FAIL	XSH.wcsftime.004	1592	the empty result was not terminated
+FAIL	XSH.wcsftime.006	1560	wcsftime("%010F") returned 3, expected 10
+FAIL	XSH.wcsrtombs.005	1740	wcsrtombs() left *src at the wrong place; expected just past the last converted character
+UNRESOLVED	XSH.wcstoimax.009	1349	cannot increment a number string
+UNRESOLVED	XSH.wcstoimax.022	1761	cannot increment a number string
+UNRESOLVED	XSH.wcstol.009	1361	cannot increment a number string
+UNRESOLVED	XSH.wcstoul.009	1910	cannot increment a number string
+FAIL	XSH.wordexp.003	1911	${PCW_E-d}: we_wordc is 1, expected 0
+INSPECT	XSH.wordexp.008	2076	disputed (see the assertion's note): wordexp("a|b") failed but we_wordc is 99
+INSPECT	XSH.wordexp.009	1569	disputed (see the assertion's note): wordexp("(a)") failed but we_wordc is 99
+FAIL	XSH.wordexp.011	1430	wordexp(""abc") returned 0, expected 7 or 7
+FAIL	XSH.wordexp.012	1459	wordexp("$(echo x)") returned 0, expected 5 or 5
+FAIL	XSH.wordexp.014	1499	$PCW_E: we_wordc is 1, expected 0
+FAIL	XSH.wordexp.016	1740	append of an unterminated quote returned 0
+FAIL	XSH.wordexp.017	1659	offset 2, no words: we_wordc is 1, expected 0
+FAIL	XSH.write.008	1700	SIGXFSZ was not generated
+UNRESOLVED	XSH.write.012	1427	the pipe had room for {PIPE_BUF} bytes after 10 were read
+UNINITIATED	XSH.write.016	0	build failed (out/XSH.write.016.build.txt)
+UNINITIATED	XSH.write.017	0	build failed (out/XSH.write.017.build.txt)
+UNINITIATED	XSH.write.018	0	build failed (out/XSH.write.018.build.txt)
+UNINITIATED	XSH.write.020	0	build failed (out/XSH.write.020.build.txt)
+UNINITIATED	XSH.write.026	0	build failed (out/XSH.write.026.build.txt)
+UNINITIATED	XSH.write.027	0	build failed (out/XSH.write.027.build.txt)
+UNINITIATED	XSH.writev.008	0	build failed (out/XSH.writev.008.build.txt)
+NOTINUSE	XSH.y0.002	1409	IEC 60559 floating-point is not supported
+FAIL	XSH.y0.004	1519	yn(-1, 0.0) returned -inf, expected +HUGE_VAL
+NOTINUSE	XSH.y0.005	1517	IEC 60559 floating-point is not supported
+# finished 2026-10-31T12:34:13Z
+# SUMMARY total 8866 PASS 6551 FAIL 566 INSPECT 21 UNRESOLVED 279 NOTINUSE 482 UNSUPPORTED 48 UNINITIATED 879
