@@ -20,17 +20,25 @@ exrun() { # exrun INPUT ex-args...
 	[ "$rc" -ne 124 ] || pc_fail "ex did not finish"
 }
 
+# prompted LOG: how many of the commands 2d, w and q appear on the terminal
+# right after a colon; the echo of a typed command follows its prompt, and
+# colons elsewhere (messages, terminal control sequences) are not counted
+esc=$(printf '\033')
+prompted() {
+	tr '\r' '\n' <"$1" | sed -e "s/${esc}\[[0-9;?<=>]*[@-~]//g" -e "s/${esc}[=>]//g" |
+	    grep -c -e ':2d' -e ':w' -e ':q'
+}
 printf 'a\nb\nc\n' >f
 printf '2d\nw\nq\n' >in1
 printf 'set noprompt\n2d\nw\nq\n' >in2
 pc_test
 exrun in1 f
-n1=$(tr -cd ':' <pty.out | wc -c | tr -d ' ')
-[ "$n1" -ge 3 ] || pc_fail "the default prompt was written $n1 times for three commands"
+n1=$(prompted pty.out)
+[ "$n1" -ge 3 ] || pc_fail "the default prompt came before $n1 of the three commands"
 printf 'a\nb\nc\n' >f
 exrun in2 f
-n2=$(tr -cd ':' <pty.out | wc -c | tr -d ' ')
-[ "$n2" -le 1 ] || pc_fail "with noprompt the prompt was written $n2 times"
+n2=$(prompted pty.out)
+[ "$n2" -eq 0 ] || pc_fail "with noprompt the prompt still came before $n2 of the commands after set noprompt"
 printf 'a\nc\n' >exp
 cmp -s f exp || pc_fail "the file is '$(tr '\n' '|' <f)'"
 pc_pass
