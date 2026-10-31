@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.read.006
+# MUTANT    read.partial_exit0
+# MUTANT    read.partial_discarded
+# MUTANT    read.empty_exit0
+# MUTANT    read.eof_leaves_var
+# MUTANT    read.eof_status2
 . "$PC_CORE/pc.sh"
 pc_begin XCU.read.006
 printf abc >in1 || pc_fail "cannot write the input"

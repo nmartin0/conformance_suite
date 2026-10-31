@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.read.013
+# MUTANT    read.readonly_status1
+# MUTANT    read.readonly_status0
+# VARIANT   read.readonly_status2
+# VARIANT   read.readonly_status255
 . "$PC_CORE/pc.sh"
 pc_begin XCU.read.013
 printf 'new\n' >in || pc_fail "cannot write the input"

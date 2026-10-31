@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.read.004
+# MUTANT    read.r_ignored
+# MUTANT    read.backslash_literal
+# MUTANT    read.backslash_splits
+# MUTANT    read.r_strips_backslash
+# MUTANT    read.double_backslash_kept
 . "$PC_CORE/pc.sh"
 pc_begin XCU.read.004
 printf 'a\\ b c\n' >in1 || pc_fail "cannot write the input"

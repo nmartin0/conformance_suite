@@ -113,6 +113,7 @@ class      required
 since      1992
 says       Run in a subshell, read does not change the variables of the
            shell that started it.
+nomutant   the fault is a read whose assignments reach the parent shell, which needs a shell that runs a subshell in the same process; a function cannot cross that boundary
 test       t/012-subshell.sh
 
 assertion  XCU.read.013

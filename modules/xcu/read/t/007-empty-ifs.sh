@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.read.007
+# MUTANT    read.empty_ifs_splits
+# MUTANT    read.empty_ifs_trims
+# MUTANT    read.empty_ifs_rest_unchanged
 . "$PC_CORE/pc.sh"
 pc_begin XCU.read.007
 printf '  x y  \n' >in || pc_fail "cannot write the input"

@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.read.001
+# MUTANT    read.status1
+# MUTANT    read.last_var_one_field
+# MUTANT    read.no_split
+# MUTANT    read.reverse_vars
 . "$PC_CORE/pc.sh"
 pc_begin XCU.read.001
 printf 'one   two  three \n' >in || pc_fail "cannot write the input"
