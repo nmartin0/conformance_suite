@@ -17,9 +17,11 @@ pc_test
 IFS= read -r line <out
 lines=$(printf '%s\n' "$line" | tr -s ' ')
 # a state padded to a column (more than one blank before the command) is
-# accepted (Q-215)
+# accepted (Q-215). Whether a job that has already ended is still the
+# current job (+) is not stated, so a <space> in that field is accepted too.
 case $lines in
 "["[0-9]*"] + Done true"*) ;;
+"["[0-9]*"] Done true"*) ;;
 *)
 	if [ -z "$line" ]; then
 		case $(cat shellerr) in
