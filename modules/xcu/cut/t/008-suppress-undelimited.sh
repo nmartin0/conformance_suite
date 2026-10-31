@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cut.008
+# MUTANT    cut.suppress_ignored
+# MUTANT    cut.suppress_always
+# MUTANT    cut.suppress_inverse
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cut.008
 LC_ALL=POSIX

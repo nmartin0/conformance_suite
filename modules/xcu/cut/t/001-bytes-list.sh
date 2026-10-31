@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cut.001
+# MUTANT    cut.b_single_off
+# MUTANT    cut.b_range_excl
+# MUTANT    cut.b_head_excl
+# MUTANT    cut.b_open_off
+# MUTANT    cut.b_list_first
+# MUTANT    cut.no_newline
+# MUTANT    cut.b_status1
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cut.001
 LC_ALL=POSIX

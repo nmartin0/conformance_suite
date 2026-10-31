@@ -1,0 +1,4 @@
+# cut -b -high leaves out the high byte
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+. "${PC_MUTANT_FILE%/*}/cutref.sh"
+cut() { pc_cutref head_excl b "$@"; }
