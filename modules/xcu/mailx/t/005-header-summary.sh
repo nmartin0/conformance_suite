@@ -41,8 +41,12 @@ EOM
 cp in.mbox orig.mbox || pc_unresolved "setup: cannot copy the mailbox"
 sect() { awk -v m="@@$1@@" 'index($0, "@@") > 0 { on = (index($0, m) > 0); next } on' out; }
 has() { sect "$1" | grep -F -e "$2" >/dev/null; }
+# a page of the summary holds as many lines as the screen variable says
+# (with no terminal its size is not fixed), so it is set to a page that
+# holds every message, here and in a start-up file for -H
 cat >cmds <<'EOC'
 set noprompt
+set screen=20
 echo @@a@@
 from *
 echo @@b@@
@@ -56,6 +60,7 @@ from *
 echo @@f@@
 h
 EOC
+printf 'set screen=20\n' >rc.screen || pc_unresolved "setup: cannot write a start-up file"
 pc_test
 mailx -n -N -f in.mbox <cmds >out 2>err || pc_fail "mailx: nonzero status"
 for n in alice carol dave; do
@@ -72,7 +77,7 @@ has f carol && pc_fail "headers shows the deleted message"
 has f alice || pc_fail "headers lost message 1"
 has f dave || pc_fail "headers lost message 3"
 # -H writes only the summary
-mailx -n -H -f in.mbox </dev/null >hout 2>err || pc_fail "mailx -H: nonzero status: $(sed 1q err)"
+MAILRC=$(pwd)/rc.screen mailx -n -H -f in.mbox </dev/null >hout 2>err || pc_fail "mailx -H: nonzero status: $(sed 1q err)"
 for n in alice carol dave; do
 	grep "$n" hout >/dev/null || pc_fail "-H: no line for $n"
 done
