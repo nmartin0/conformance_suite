@@ -5,17 +5,24 @@
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ulimit.005
 h0=$(ulimit -H -f 2>/dev/null) || pc_fail "ulimit -H -f failed"
-[ "$h0" != 0 ] || pc_unresolved "the hard file size limit is already 0, so setting both cannot be told from setting the soft limit"
+# A small but not zero limit: a shell may keep the output of a command
+# substitution in a temporary file, which a limit of 0 would make it unable to write.
+n=100
+case $h0 in
+unlimited) ;;
+''|*[!0-9]*) pc_unresolved "the hard file size limit '$h0' is not a number" ;;
+*) [ "$h0" -gt "$n" ] || pc_unresolved "the hard file size limit $h0 is too low for this test" ;;
+esac
 pc_test
-out=$( ulimit -f 0 2>/dev/null && ulimit -S -f && ulimit -H -f )
+out=$( ulimit -f $n 2>/dev/null && ulimit -S -f && ulimit -H -f )
 rc=$?
-[ "$rc" -eq 0 ] || pc_fail "ulimit -f 0 failed (exit $rc)"
+[ "$rc" -eq 0 ] || pc_fail "ulimit -f $n failed (exit $rc)"
 {
 	IFS= read -r soft
 	IFS= read -r hard
 } <<PCX
 $out
 PCX
-[ "$soft" = 0 ] || pc_fail "the soft limit is '$soft', wanted 0"
-[ "$hard" = 0 ] || pc_fail "the hard limit is '$hard', wanted 0"
+[ "$soft" = "$n" ] || pc_fail "the soft limit is '$soft', wanted $n"
+[ "$hard" = "$n" ] || pc_fail "the hard limit is '$hard', wanted $n"
 pc_pass
