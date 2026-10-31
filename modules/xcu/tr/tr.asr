@@ -84,6 +84,16 @@ says       In string2, [x*n] stands for n copies of x (octal if n has a
            string1.
 test       t/008-repeat-count.sh
 
+assertion  XCU.tr.010
+anchor     utilities/tr.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+since      1992
+says       If tr cannot write its output (here, standard output is closed)
+           it writes a diagnostic message to standard error and exits with a
+           status greater than zero.
+test       t/010-write-error.sh
+
 # Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
 # localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
 # NOTINUSE without it.
