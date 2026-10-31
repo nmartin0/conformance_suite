@@ -64,6 +64,25 @@ About 300 faults and 25 variants over 5 modules (the rename count includes fault
 - `ci/mutate.sh` cannot choose the shell under test; a `--sut-sh` option is
   queued so one module can be checked under several shells.
 
+## Batch 1 (wc, uniq, tail, tr) and the tools it needed
+
+About 350 more faults and 40 variants over four utilities, all caught or
+tolerated where they could be judged on the development machine. Besides
+strengthened tests, the round produced two new assertions (`tail` -f ignored
+for a pipe on standard input; `tr` write error) and wider wording for a few
+(`uniq` 007, `wc` 007 and 008). Each was checked by an independent reading
+from the text alone, which agreed. Tooling that came out of it:
+
+- fault libraries take the symbol names a program really references from a
+  build-time probe (no library names in the repository);
+- `ci/mutate.sh --sut-sh PATH` (repeatable) judges a fault under each listed
+  shell;
+- the file-reading helpers give FAIL, not UNRESOLVED, when the file is
+  missing in the test phase.
+
+Faults that cannot be judged here are those needing a made locale (`wc`,
+`tr`, `cut`, `sort`) or `tail -r`; run them where the baseline passes.
+
 ## Held and queued
 
 - `strtol` is hardened (56 faults, all caught). Its fault library, and those

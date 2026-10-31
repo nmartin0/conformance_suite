@@ -63,7 +63,8 @@
 # buildable (the verdict line says "under" which).
 # Several patterns select the union.
 #
-# --sut-sh SH  the shell the tests run under (the driver's --sut-sh), given
+# --sut-sh SH  the shell the tests run under (the driver's --sut-sh; give its
+# full path), given
 # to every driver run: baseline, fault and variant alike. Without it the
 # driver's default shell is used. It may be given more than once, for the
 # modules whose behaviour depends on the shell (read, trap, set, ...); then
