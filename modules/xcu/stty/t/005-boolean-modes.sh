@@ -4,8 +4,10 @@
 # ASSERTION XCU.stty.005
 #
 # Input, output (base) and local modes: each X sets the mode (token X in
-# -a) and each -X clears it (token -X). Control modes may fail on some
-# lines (unspecified), so those are checked only when the operand is accepted.
+# -a) and each -X clears it (token -X). Control modes describe hardware a
+# line may not have: the operand may fail, or succeed without changing the
+# setting (tcsetattr() succeeds when it can make any of the changes), so the
+# token is checked only when the operand changed the settings (stty -g).
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcpty.sh"
 pc_begin XCU.stty.005
@@ -19,7 +21,11 @@ for m in ignbrk brkint ignpar parmrk inpck istrip inlcr igncr icrnl ixon ixany i
 done
 for m in parenb parodd hupcl cstopb cread clocal; do
 	for sign in "" -; do
-		if stty "$sign$m" 2>/dev/null; then echo "$m $sign 0" >>crc.out; stty -a | tr ';' ' ' >c.$m.$sign.out
+		g0=$(stty -g)
+		if stty "$sign$m" 2>/dev/null; then
+			if [ "$(stty -g)" = "$g0" ]; then echo "$m $sign same" >>crc.out
+			else echo "$m $sign 0" >>crc.out; fi
+			stty -a | tr ';' ' ' >c.$m.$sign.out
 		else echo "$m $sign 1" >>crc.out; fi
 	done
 done
@@ -36,5 +42,10 @@ done
 for m in parenb parodd hupcl cstopb cread clocal; do
 	if grep "^$m  0$" crc.out >/dev/null; then has "c.$m..out" "$m" || pc_fail "after stty $m the -a output lacks $m"; fi
 	if grep "^$m - 0$" crc.out >/dev/null; then has "c.$m.-.out" "-$m" || pc_fail "after stty -$m the -a output lacks -$m"; fi
+	for sign in "" -; do
+		if grep "^$m $sign same$" crc.out >/dev/null; then
+			has "c.$m.$sign.out" "$m" || has "c.$m.$sign.out" "-$m" || pc_fail "after stty $sign$m the -a output shows neither $m nor -$m"
+		fi
+	done
 done
 pc_pass
