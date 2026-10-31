@@ -48,6 +48,19 @@ variant that no conforming system could show is a bug in the variant.
   when the variant changes what the headers define, a header
   `variants/<prefix>.<name>.h`, included before the test (the test is then
   built apart). Either or both.
+- A header may bind a function's name to another symbol, so a library
+  that defines the plain name is never reached. Put `probe.c` in the
+  module directory (`modules/xsh/<prefix>/probe.c`): one
+  `#ifdef PC_PROBE_<name>` block per interposed function, each a single
+  call through the headers, with no local arrays. The driver compiles it
+  under the flag sets the tests use, reads the symbols the object
+  references beyond a call-free baseline (`nm -P -u`; without `nm`, words
+  of the compiler's assembly containing the name), and builds the fault
+  and variant libraries with `-DPC_SYM_<name>_<k>="symbol"` (k = 1 to 3)
+  for each one other than the plain name. The source defines its entry
+  points under the plain name and under each of those macros that is set
+  (asm labels), and names no library. See `modules/xsh/strtol`; the
+  fixture is `ci/selftest/modules/xsh/pcfz`.
 - Unlike a fault, a variant applies in every phase (setup too) and every
   process, as the system's own behaviour would.
 - Next to each variant, a comment says which passage allows it, in our

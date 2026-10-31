@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.strtol.011
+ * MUTANT    strtol.null_endptr_crash
+ * MUTANT    strtol.null_endptr_zero
  */
 #define IC_L
 #include "ic.h"

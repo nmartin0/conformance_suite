@@ -3,6 +3,10 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.strtol.002
+ * MUTANT    strtol.upper_letters_rejected
+ * MUTANT    strtol.hex_prefix_rejected
+ * MUTANT    strtol.upper_x_rejected
+ * MUTANT    strtol.z_rejected
  */
 #define IC_L
 #include "ic.h"

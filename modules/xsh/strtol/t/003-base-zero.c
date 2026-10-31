@@ -3,6 +3,11 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.strtol.003
+ * MUTANT    strtol.base0_octal_as_decimal
+ * MUTANT    strtol.base0_no_hex
+ * MUTANT    strtol.base0_0x_consumed
+ * MUTANT    strtol.base0_octal_accepts_89
+ * MUTANT    strtol.end_at_start
  */
 #define IC_L
 #include "ic.h"

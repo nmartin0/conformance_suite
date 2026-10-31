@@ -7,11 +7,11 @@
  * A preload library; faults are named "strerror.<fault>" and apply only
  * while PC_PHASE is "test" (as set by pc.c in this process or a parent).
  *
- * The test program calls strerror_r() under either of two symbols: the
- * plain name, or __xpg_strerror_r where the C library's header renames
- * the POSIX form (glibc). Both are defined here with the POSIX meaning,
- * under assembler names so that the header's own declaration of the
- * plain name does not clash.
+ * The test program calls strerror_r() under the plain name or under
+ * the symbol a header binds the POSIX form to; the driver finds that
+ * (modules/xsh/strerror/probe.c) and passes it as PC_SYM_strerror_r_<k>.
+ * All are defined here with the POSIX meaning, under assembler names so
+ * that the header's own declaration of the plain name does not clash.
  */
 #define _GNU_SOURCE 1
 #include <dlfcn.h>
@@ -85,6 +85,34 @@ static const char *mutant_of(const char *prefix)
 
 static char *(*real_strerror)(int);
 static char *(*real_strerror_l)(int, locale_t);
+/*
+ * The POSIX form of strerror_r() is reached under the name a header binds
+ * it to; the driver finds that (modules/xsh/strerror/probe.c) and passes it
+ * as PC_SYM_strerror_r_<k>.
+ */
+static const char *const r_names[] = {
+#ifdef PC_SYM_strerror_r_1
+	PC_SYM_strerror_r_1,
+#endif
+#ifdef PC_SYM_strerror_r_2
+	PC_SYM_strerror_r_2,
+#endif
+#ifdef PC_SYM_strerror_r_3
+	PC_SYM_strerror_r_3,
+#endif
+	"strerror_r",
+	NULL
+};
+
+static void *next_of(const char *const *nm)
+{
+	void *f = NULL;
+
+	for (; *nm != NULL && f == NULL; nm++)
+		f = dlsym(RTLD_NEXT, *nm);
+	return f;
+}
+
 static int (*real_xpg)(int, char *, size_t);
 static void (*real_perror)(const char *);
 
@@ -93,9 +121,7 @@ static void init(void)
 	if (real_strerror == NULL) {
 		real_strerror = (char *(*)(int))dlsym(RTLD_NEXT, "strerror");
 		real_strerror_l = (char *(*)(int, locale_t))dlsym(RTLD_NEXT, "strerror_l");
-		real_xpg = (int (*)(int, char *, size_t))dlsym(RTLD_NEXT, "__xpg_strerror_r");
-		if (real_xpg == NULL)
-			real_xpg = (int (*)(int, char *, size_t))dlsym(RTLD_NEXT, "strerror_r");
+		real_xpg = (int (*)(int, char *, size_t))next_of(r_names);
 		real_perror = (void (*)(const char *))dlsym(RTLD_NEXT, "perror");
 	}
 }
@@ -236,17 +262,42 @@ static int faulty_r(int e, char *buf, size_t len)
 }
 
 int pcm_strerror_r(int e, char *buf, size_t len) __asm__("strerror_r");
-int pcm_xpg_strerror_r(int e, char *buf, size_t len) __asm__("__xpg_strerror_r");
+#ifdef PC_SYM_strerror_r_1
+int pcm_strerror_r_1(int e, char *buf, size_t len) __asm__(PC_SYM_strerror_r_1);
+#endif
+#ifdef PC_SYM_strerror_r_2
+int pcm_strerror_r_2(int e, char *buf, size_t len) __asm__(PC_SYM_strerror_r_2);
+#endif
+#ifdef PC_SYM_strerror_r_3
+int pcm_strerror_r_3(int e, char *buf, size_t len) __asm__(PC_SYM_strerror_r_3);
+#endif
+
 
 int pcm_strerror_r(int e, char *buf, size_t len)
 {
 	return faulty_r(e, buf, len);
 }
 
-int pcm_xpg_strerror_r(int e, char *buf, size_t len)
+#ifdef PC_SYM_strerror_r_1
+int pcm_strerror_r_1(int e, char *buf, size_t len)
 {
 	return faulty_r(e, buf, len);
 }
+#endif
+
+#ifdef PC_SYM_strerror_r_2
+int pcm_strerror_r_2(int e, char *buf, size_t len)
+{
+	return faulty_r(e, buf, len);
+}
+#endif
+
+#ifdef PC_SYM_strerror_r_3
+int pcm_strerror_r_3(int e, char *buf, size_t len)
+{
+	return faulty_r(e, buf, len);
+}
+#endif
 
 void perror(const char *s)
 {

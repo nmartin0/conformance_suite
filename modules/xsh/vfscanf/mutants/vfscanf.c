@@ -6,10 +6,10 @@
  *
  * A preload library; faults are named "vfscanf.<fault>" and apply only
  * while PC_PHASE is "test" (as set by pc.c in this process or a parent).
- * glibc compiles calls in strict modes to __isoc99_* names, so those are
- * interposed as well; the entry points take their symbol names from asm
- * labels because under _GNU_SOURCE glibc's <stdio.h> renames the plain
- * names itself.
+ * A header may bind these names to other symbols; the driver finds them
+ * (modules/xsh/vfscanf/probe.c) and passes them as PC_SYM_<name>_<k>, and
+ * those are interposed as well. The entry points take their symbol names
+ * from asm labels because a header may rename the plain names itself.
  */
 #define _GNU_SOURCE 1
 #include <ctype.h>
@@ -50,14 +50,48 @@ static const char *mutant_of(const char *prefix)
 typedef int (*vs_fn)(const char *, const char *, va_list);
 typedef int (*vf_fn)(FILE *, const char *, va_list);
 
+static const char *const vs_names[] = {
+#ifdef PC_SYM_vsscanf_1
+	PC_SYM_vsscanf_1,
+#endif
+#ifdef PC_SYM_vsscanf_2
+	PC_SYM_vsscanf_2,
+#endif
+#ifdef PC_SYM_vsscanf_3
+	PC_SYM_vsscanf_3,
+#endif
+	"vsscanf",
+	NULL
+};
+static const char *const vf_names[] = {
+#ifdef PC_SYM_vfscanf_1
+	PC_SYM_vfscanf_1,
+#endif
+#ifdef PC_SYM_vfscanf_2
+	PC_SYM_vfscanf_2,
+#endif
+#ifdef PC_SYM_vfscanf_3
+	PC_SYM_vfscanf_3,
+#endif
+	"vfscanf",
+	NULL
+};
+
+static void *next_of(const char *const *nm)
+{
+	void *f = NULL;
+
+	for (; *nm != NULL && f == NULL; nm++)
+		f = dlsym(RTLD_NEXT, *nm);
+	return f;
+}
+
 static vs_fn real_vs(void)
 {
 	static vs_fn f;
 
 	if (f == NULL)
-		f = (vs_fn)dlsym(RTLD_NEXT, "__isoc99_vsscanf");
-	if (f == NULL)
-		f = (vs_fn)dlsym(RTLD_NEXT, "vsscanf");
+		f = (vs_fn)next_of(vs_names);
 	return f;
 }
 
@@ -66,9 +100,7 @@ static vf_fn real_vf(void)
 	static vf_fn f;
 
 	if (f == NULL)
-		f = (vf_fn)dlsym(RTLD_NEXT, "__isoc99_vfscanf");
-	if (f == NULL)
-		f = (vf_fn)dlsym(RTLD_NEXT, "vfscanf");
+		f = (vf_fn)next_of(vf_names);
 	return f;
 }
 
@@ -182,11 +214,32 @@ int fn(const char *restrict fmt, va_list ap) \
 }
 
 ENTRY_S(pc_vsscanf, "vsscanf")
-ENTRY_S(pc_vsscanf99, "__isoc99_vsscanf")
-ENTRY_S(pc_vsscanf23, "__isoc23_vsscanf")
+#ifdef PC_SYM_vsscanf_1
+ENTRY_S(pc_vsscanf_1, PC_SYM_vsscanf_1)
+#endif
+#ifdef PC_SYM_vsscanf_2
+ENTRY_S(pc_vsscanf_2, PC_SYM_vsscanf_2)
+#endif
+#ifdef PC_SYM_vsscanf_3
+ENTRY_S(pc_vsscanf_3, PC_SYM_vsscanf_3)
+#endif
 ENTRY_F(pc_vfscanf, "vfscanf")
-ENTRY_F(pc_vfscanf99, "__isoc99_vfscanf")
-ENTRY_F(pc_vfscanf23, "__isoc23_vfscanf")
+#ifdef PC_SYM_vfscanf_1
+ENTRY_F(pc_vfscanf_1, PC_SYM_vfscanf_1)
+#endif
+#ifdef PC_SYM_vfscanf_2
+ENTRY_F(pc_vfscanf_2, PC_SYM_vfscanf_2)
+#endif
+#ifdef PC_SYM_vfscanf_3
+ENTRY_F(pc_vfscanf_3, PC_SYM_vfscanf_3)
+#endif
 ENTRY_IN(pc_vscanf, "vscanf")
-ENTRY_IN(pc_vscanf99, "__isoc99_vscanf")
-ENTRY_IN(pc_vscanf23, "__isoc23_vscanf")
+#ifdef PC_SYM_vscanf_1
+ENTRY_IN(pc_vscanf_1, PC_SYM_vscanf_1)
+#endif
+#ifdef PC_SYM_vscanf_2
+ENTRY_IN(pc_vscanf_2, PC_SYM_vscanf_2)
+#endif
+#ifdef PC_SYM_vscanf_3
+ENTRY_IN(pc_vscanf_3, PC_SYM_vscanf_3)
+#endif

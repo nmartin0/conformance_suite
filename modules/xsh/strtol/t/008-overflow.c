@@ -3,6 +3,14 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.strtol.008
+ * MUTANT    strtol.overflow_no_erange
+ * MUTANT    strtol.overflow_wraps
+ * MUTANT    strtol.overflow_neg_max
+ * MUTANT    strtol.overflow_pos_min
+ * MUTANT    strtol.overflow_einval
+ * MUTANT    strtol.overflow_zero
+ * MUTANT    strtol.overflow_stops_consuming
+ * MUTANT    strtol.overflow_end_at_start
  */
 #define IC_L
 #include "ic.h"

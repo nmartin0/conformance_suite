@@ -3,6 +3,9 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.strtol.006
+ * MUTANT    strtol.end_after_junk
+ * MUTANT    strtol.underscore_skipped
+ * MUTANT    strtol.end_unset_on_success
  */
 #define IC_L
 #include "ic.h"

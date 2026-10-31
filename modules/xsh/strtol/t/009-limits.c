@@ -3,6 +3,9 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.strtol.009
+ * MUTANT    strtol.max_flagged
+ * MUTANT    strtol.min_symmetric
+ * MUTANT    strtol.limit_plus_one
  */
 #define IC_L
 #include "ic.h"
