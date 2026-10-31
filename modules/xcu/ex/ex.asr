@@ -504,8 +504,9 @@ anchor     utilities/ex.html#EXTENDED DESCRIPTION/Edit Options in ex
 class      conditional
 when       UP
 since      1992
-says       With autowrite set a modified buffer is written before e, n, ! and
-           similar commands; appending ! to the command name prevents the write.
+says       With autowrite set a modified buffer is written before n, ! and the
+           other commands the option affects; appending ! to the command name
+           prevents the write.
 timeout    30
 test       t/048-option-autowrite.sh
 

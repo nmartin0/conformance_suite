@@ -13,7 +13,7 @@ mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 printf 'one\ntwo\nthree\nfour\nfive\n' >f || pc_unresolved "setup: cannot write f"
 cat >s.ex <<'EOS'
-2,3!sort -r
+2,3!sort
 w
 q
 EOS
@@ -28,6 +28,7 @@ ex -s f <s.ex >out 2>err
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "ex: exit status $rc"
 cmp f exp >/dev/null 2>&1 || pc_fail "the filtered file differs: $(tr '\n' '|' <f)"
+printf 'one\ntwo\nthree\nfour\nfive\n' >f || pc_fail "cannot rewrite f"
 ex -s f <s2.ex >out 2>err
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "ex: exit status $rc"

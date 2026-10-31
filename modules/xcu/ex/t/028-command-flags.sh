@@ -55,9 +55,11 @@ exfail() {
 	[ "$r" -ne 0 ] || pc_fail "$1: the error was not reported by the exit status"
 }
 pc_test
-exout 'p flag after delete' 'a\nb\nc\nd\ne\n' '2d p' 'c
+# a letter after "d" and a blank names a buffer, so the p and l flags follow
+# the command name directly (dp, dl are read as d with the flag)
+exout 'p flag after delete' 'a\nb\nc\nd\ne\n' '2dp' 'c
 '
-exout 'l flag after delete' 'a\nb\nc\nd\ne\n' '2d l' 'c$
+exout 'l flag after delete' 'a\nb\nc\nd\ne\n' '2dl' 'c$
 '
 exout 'plus adjusts before writing' 'a\nb\nc\nd\ne\n' '2d + p' 'd
 '

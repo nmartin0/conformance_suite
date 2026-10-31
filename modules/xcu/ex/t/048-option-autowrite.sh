@@ -65,12 +65,14 @@ run() {
 	r=$?
 }
 printf 'two\nthree\nfour\nfive\n' >exp
-run edit 'set autowrite
+# edit is not among the commands affected by autowrite (next, rewind, tag,
+# suspend, ! are), so next is the one used here
+run next 'set autowrite
 1d
-e g
+n g
 q'
-[ "$r" -eq 0 ] || pc_fail "autowrite with e: exit status $r"
-cmp -s f exp || pc_fail "autowrite did not write the buffer before e: $(tr '\n' '|' <f)"
+[ "$r" -eq 0 ] || pc_fail "autowrite with n: exit status $r"
+cmp -s f exp || pc_fail "autowrite did not write the buffer before n: $(tr '\n' '|' <f)"
 run shell 'set autowrite
 1d
 !true
@@ -78,8 +80,8 @@ q!'
 cmp -s f exp || pc_fail "autowrite did not write the buffer before !: $(tr '\n' '|' <f)"
 run bang 'set autowrite
 1d
-e! g
+n! g
 q'
 five >orig
-cmp -s f orig || pc_fail "e! wrote the buffer although it discards it: $(tr '\n' '|' <f)"
+cmp -s f orig || pc_fail "n! wrote the buffer although the ! prevents the write: $(tr '\n' '|' <f)"
 pc_pass

@@ -89,7 +89,9 @@ run none 'set tags=tagsfile
 tag nosuch
 q'
 [ "$r" -ne 0 ] || pc_fail "an unknown tag was accepted"
-run order 'set tags=tagsnone tagsfile
+# set takes blank-separated arguments, so the blank inside the tags value is
+# escaped with a backslash
+run order 'set tags=tagsnone\ tagsfile
 tag tg
 s/$/!/
 w
