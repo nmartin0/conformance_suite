@@ -11,7 +11,7 @@ NL='
 mkn() { _n=$1; _f=$2; : >"$_f" || pc_unresolved "cannot create input"; _i=1; while [ "$_i" -le "$_n" ]; do printf 'L%s\n' "$_i"; _i=$((_i+1)); done >"$_f"; }
 rng() { _a=$1; _b=$2; rng_out=; while [ "$_a" -le "$_b" ]; do rng_out=$rng_out"L$_a$NL"; _a=$((_a+1)); done; }
 mkn 100 f
-touch -t 202001020304 f || pc_unresolved "cannot set the modification time"
+TZ=UTC0 touch -t 202001020304 f || pc_unresolved "cannot set the modification time"
 hd() { printf '\n\n%s Page %s\n\n\n' "$1" "$2"; }
 pc_test
 got=$(TZ=UTC0 pr f 2>/dev/null </dev/null; printf 'x')
