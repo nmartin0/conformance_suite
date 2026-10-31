@@ -466,8 +466,9 @@ class      required
 since      1992
 says       "pax -w -x pax -o linkdata f1 h" with h a hard link to f1 gives an
            archive in which the typeflag 1 member h has the size 6 and is
-           followed by a data block and then the end of the archive, where
-           without linkdata h has size 0 and the end follows its header.
+           followed by a data block and then the end of the archive; without
+           linkdata a typeflag 1 member h, if one is written, has size 0 or 6
+           and the end of the archive follows its header or its data block.
 test       t/043-linkdata.sh
 
 assertion  XCU.pax.044
