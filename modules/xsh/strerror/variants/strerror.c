@@ -20,6 +20,34 @@
 
 static char *(*real_strerror)(int);
 static char *(*real_strerror_l)(int, locale_t);
+/*
+ * The POSIX form of strerror_r() is reached under the name a header binds
+ * it to; the driver finds that (modules/xsh/strerror/probe.c) and passes it
+ * as PC_SYM_strerror_r_<k>.
+ */
+static const char *const r_names[] = {
+#ifdef PC_SYM_strerror_r_1
+	PC_SYM_strerror_r_1,
+#endif
+#ifdef PC_SYM_strerror_r_2
+	PC_SYM_strerror_r_2,
+#endif
+#ifdef PC_SYM_strerror_r_3
+	PC_SYM_strerror_r_3,
+#endif
+	"strerror_r",
+	NULL
+};
+
+static void *next_of(const char *const *nm)
+{
+	void *f = NULL;
+
+	for (; *nm != NULL && f == NULL; nm++)
+		f = dlsym(RTLD_NEXT, *nm);
+	return f;
+}
+
 static int (*real_xpg)(int, char *, size_t);
 
 static void init(void)
@@ -27,9 +55,7 @@ static void init(void)
 	if (real_strerror == NULL) {
 		real_strerror = (char *(*)(int))dlsym(RTLD_NEXT, "strerror");
 		real_strerror_l = (char *(*)(int, locale_t))dlsym(RTLD_NEXT, "strerror_l");
-		real_xpg = (int (*)(int, char *, size_t))dlsym(RTLD_NEXT, "__xpg_strerror_r");
-		if (real_xpg == NULL)
-			real_xpg = (int (*)(int, char *, size_t))dlsym(RTLD_NEXT, "strerror_r");
+		real_xpg = (int (*)(int, char *, size_t))next_of(r_names);
 	}
 }
 
@@ -169,14 +195,39 @@ static int var_r(int e, char *buf, size_t len)
 }
 
 int pcv_strerror_r(int e, char *buf, size_t len) __asm__("strerror_r");
-int pcv_xpg_strerror_r(int e, char *buf, size_t len) __asm__("__xpg_strerror_r");
+#ifdef PC_SYM_strerror_r_1
+int pcv_strerror_r_1(int e, char *buf, size_t len) __asm__(PC_SYM_strerror_r_1);
+#endif
+#ifdef PC_SYM_strerror_r_2
+int pcv_strerror_r_2(int e, char *buf, size_t len) __asm__(PC_SYM_strerror_r_2);
+#endif
+#ifdef PC_SYM_strerror_r_3
+int pcv_strerror_r_3(int e, char *buf, size_t len) __asm__(PC_SYM_strerror_r_3);
+#endif
+
 
 int pcv_strerror_r(int e, char *buf, size_t len)
 {
 	return var_r(e, buf, len);
 }
 
-int pcv_xpg_strerror_r(int e, char *buf, size_t len)
+#ifdef PC_SYM_strerror_r_1
+int pcv_strerror_r_1(int e, char *buf, size_t len)
 {
 	return var_r(e, buf, len);
 }
+#endif
+
+#ifdef PC_SYM_strerror_r_2
+int pcv_strerror_r_2(int e, char *buf, size_t len)
+{
+	return var_r(e, buf, len);
+}
+#endif
+
+#ifdef PC_SYM_strerror_r_3
+int pcv_strerror_r_3(int e, char *buf, size_t len)
+{
+	return var_r(e, buf, len);
+}
+#endif
