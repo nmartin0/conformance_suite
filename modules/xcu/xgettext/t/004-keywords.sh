@@ -11,7 +11,8 @@ pc_top=$(pwd) || pc_unresolved "cannot find the working directory"
 pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
-ids() { grep '^msgid "[^"]' "$1" | sed 's/^msgid "//; s/"$//' | tr '\n' ' '; }
+# the directive and its string are separated by one or more blanks
+ids() { sed -n 's/^msgid[[:blank:]][[:blank:]]*"\([^"].*\)"[[:blank:]]*$/\1/p' "$1" | tr '\n' ' '; }
 cat >t.c <<'EOC'
 void f(void)
 {
@@ -30,7 +31,7 @@ xgettext -K dt:2 t.c </dev/null >o 2>e || pc_fail "-K dt:2: nonzero status"
 rm -f messages.po
 xgettext -K pl:1,2 t.c </dev/null >o 2>e || pc_fail "-K pl:1,2: nonzero status"
 [ "$(ids messages.po)" = 'gt sing ' ] || pc_fail "-K pl:1,2 extracted: $(ids messages.po)"
-grep -x 'msgid_plural "plur"' messages.po >/dev/null || pc_fail "-K pl:1,2 wrote no msgid_plural"
+grep -E '^msgid_plural[[:blank:]]+"plur"[[:blank:]]*$' messages.po >/dev/null || pc_fail "-K pl:1,2 wrote no msgid_plural"
 rm -f messages.po
 xgettext -K '' -K tr t.c </dev/null >o 2>e || pc_fail "-K '' -K tr: nonzero status"
 [ "$(ids messages.po)" = 'first ' ] || pc_fail "an empty -K did not disable the defaults: $(ids messages.po)"

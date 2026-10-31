@@ -14,7 +14,8 @@ printf 'foo1\nbar\nfoo3\n' >f
 printf ':3\n/foo\nAa\033:1\n?foo\nAb\033:wq\n' >in
 pc_test
 pc_vi_run in f
-[ "$pc_pty_rc" -eq 0 ] || pc_fail "vi exited with status $pc_pty_rc"
+# The script has searches that fail, so the exit status of vi is not tested:
+# it may report that an error occurred.
 printf 'foo1b\nbar\nfoo3a\n' >want
 cmp -s f want || pc_fail "the file is: $(tr '\n' '|' <f)"
 pc_pass

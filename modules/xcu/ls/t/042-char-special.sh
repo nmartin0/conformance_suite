@@ -1,4 +1,4 @@
-# ls -l of a character special file
+# ls -l of a character special file (a symbolic link operand is evaluated with -H)
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.042
@@ -7,9 +7,9 @@ pc_begin XCU.ls.042
 LC_ALL=POSIX; export LC_ALL
 [ -c /dev/null ] || pc_unresolved "/dev/null is not a character special file here"
 pc_test
-ls -l /dev/null >out 2>err </dev/null
+ls -lH /dev/null >out 2>err </dev/null
 rc=$?
-[ "$rc" -eq 0 ] || pc_fail "ls -l /dev/null exited with status $rc"
+[ "$rc" -eq 0 ] || pc_fail "ls -lH /dev/null exited with status $rc"
 [ "$(sed -n '$=' out)" = 1 ] || pc_fail "expected one line for the one operand: $(cat out)"
 set -- $(cat out)
 [ "$#" -ge 7 ] || pc_fail "fewer than 7 fields in the line: $(cat out)"

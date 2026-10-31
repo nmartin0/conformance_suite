@@ -13,7 +13,8 @@ pc_top=$(pwd) || pc_unresolved "cannot find the working directory"
 pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
-ids() { grep '^msgid "[^"]' "$1" | sed 's/^msgid "//; s/"$//' | tr '\n' ' '; }
+# the directive and its string are separated by one or more blanks
+ids() { sed -n 's/^msgid[[:blank:]][[:blank:]]*"\([^"].*\)"[[:blank:]]*$/\1/p' "$1" | tr '\n' ' '; }
 cat >t.c <<'EOC'
 #include <libintl.h>
 void f(int n)
@@ -29,10 +30,10 @@ pc_test
 xgettext t.c </dev/null >o 2>e || pc_fail "xgettext: nonzero status"
 [ -s messages.po ] || pc_fail "messages.po was not written"
 [ "$(ids messages.po)" = 'alpha one file beta ' ] || pc_fail "extracted msgids: $(ids messages.po)"
-grep -x 'msgid_plural "many files"' messages.po >/dev/null || pc_fail "no msgid_plural for the ngettext call"
-grep -F 'msgstr[0] ""' messages.po >/dev/null || pc_fail "no empty msgstr[0] for the plural entry"
-grep -x 'msgstr ""' messages.po >/dev/null || pc_fail "no empty msgstr for a singular entry"
-grep -A1 -x 'msgid "one file"' messages.po | grep -x 'msgid_plural "many files"' >/dev/null || pc_fail "msgid_plural does not directly follow its msgid"
+grep -E '^msgid_plural[[:blank:]]+"many files"[[:blank:]]*$' messages.po >/dev/null || pc_fail "no msgid_plural for the ngettext call"
+grep -E '^msgstr\[0\][[:blank:]]+""[[:blank:]]*$' messages.po >/dev/null || pc_fail "no empty msgstr[0] for the plural entry"
+grep -E '^msgstr[[:blank:]]+""[[:blank:]]*$' messages.po >/dev/null || pc_fail "no empty msgstr for a singular entry"
+grep -A1 -E '^msgid[[:blank:]]+"one file"[[:blank:]]*$' messages.po | grep -E '^msgid_plural[[:blank:]]+"many files"[[:blank:]]*$' >/dev/null || pc_fail "msgid_plural does not directly follow its msgid"
 if command -v msgfmt >/dev/null 2>&1; then
 	msgfmt -o x.mo messages.po </dev/null >o 2>e || pc_fail "msgfmt rejects the xgettext output"
 fi

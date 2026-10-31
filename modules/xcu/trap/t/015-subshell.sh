@@ -20,13 +20,20 @@ pcrun() {
 printf '%s\n' 'kill -s USR1 $PPID' >pc.k2 || pc_unresolved "write"
 printf '%s\n' 'kill -s USR2 $PPID' >pc.k3 || pc_unresolved "write"
 pc_test
-pcscript 'trap "echo hit" USR1' '(${PC_SH:-sh} ./pc.k2; echo sub-end)' 'echo "st=$?"'
+# The signal goes to the parent of the shell that runs pc.k2. When the
+# subshell is a process of its own that parent is the subshell. A shell is
+# not required to make one (the page does not say so), and then the parent is
+# the main shell and the trap that runs there says nothing about the subshell.
+pcscript 'trap "v=1; echo hit" USR1' '(${PC_SH:-sh} ./pc.k2; echo sub-end)' 'echo "st=$? v=$v"'
 pcrun
 case $out in
-"st="[1-9]*) ;;
+"st="[1-9]*" v=") ;;
+*"v=1") pc_unresolved "the signal reached the main shell: the subshell is not a process of its own here" ;;
 *) pc_fail "caught trap in subshell: got '$out', expected the subshell to be ended by the signal" ;;
 esac
-[ "${out#st=}" -gt 128 ] || pc_fail "subshell status ${out#st=}, expected above 128"
+st=${out#st=}
+st=${st%% *}
+[ "$st" -gt 128 ] || pc_fail "subshell status $st, expected above 128"
 pcscript 'trap "" USR2' '(${PC_SH:-sh} ./pc.k3; echo sub-end)'
 pcrun
 [ "$out" = sub-end ] || pc_fail "ignored signal in subshell: got '$out', expected sub-end"

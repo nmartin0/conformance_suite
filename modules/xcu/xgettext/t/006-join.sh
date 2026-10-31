@@ -11,7 +11,8 @@ pc_top=$(pwd) || pc_unresolved "cannot find the working directory"
 pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
-ids() { grep '^msgid "[^"]' "$1" | sed 's/^msgid "//; s/"$//' | tr '\n' ' '; }
+# the directive and its string are separated by one or more blanks
+ids() { sed -n 's/^msgid[[:blank:]][[:blank:]]*"\([^"].*\)"[[:blank:]]*$/\1/p' "$1" | tr '\n' ' '; }
 cat >t1.c <<'EOC'
 void f(void) { gettext("alpha"); gettext("beta"); }
 EOC

@@ -12,7 +12,8 @@ printf 'a\nb\n' >f
 { printf 'dd\n'; printf ':w\n'; printf ':q!\n'; } >in
 pc_test
 pc_vi_run in -R f
-[ "$pc_pty_rc" -eq 0 ] || pc_fail "vi -R exited with status $pc_pty_rc"
+# The script has a command that fails (:w on a file opened read-only), so
+# the exit status of vi is not tested: it may report that an error occurred.
 printf 'a\nb\n' >want
 cmp -s f want || pc_fail "vi -R let the file be overwritten: $(tr '\n' '|' <f)"
 pc_pass

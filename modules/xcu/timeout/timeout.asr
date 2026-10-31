@@ -32,7 +32,8 @@ class      required
 since      2024
 says       timeout -s signal_name sends that signal instead of SIGTERM,
            names being accepted in lower case and without SIG; the exit
-           status is 124.
+           status is 124 (with KILL, also a termination by that signal, as
+           timeout may be in the group that receives it).
 test       t/003-s-signal.sh
 
 assertion  XCU.timeout.004
