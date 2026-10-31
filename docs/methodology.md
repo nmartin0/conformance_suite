@@ -76,3 +76,35 @@ FLAKY, which has no verdict and fails the check until the test is fixed.
 - A test that really needs root declares `needs root`; without privilege the driver skips it and reports it as skipped. All other tests give the same verdict as root and as an ordinary user: a test of a permission error drops privilege in a child when it runs as root.
 - A test decides PASS or FAIL against the standard alone and never depends on which system it runs on.
 - Tests keep to their private working directory; the driver removes its own directory when the run ends, so repeated runs leave nothing behind.
+
+## Working practice
+
+How work on the suite is carried out, whoever does it.
+
+- **Plan before editing.** For anything beyond a one-line fix, write what
+  will change and what "done" means (which results must change, which must
+  not) before touching files. Read first; change second.
+- **Small commits.** One concern per commit, each leaving the self-tests
+  passing, so any commit can be reverted alone.
+- **Evidence in the commit message.** State what was run and what changed
+  in the results (counts before and after, tests that moved), and any
+  alternative that was considered and rejected.
+- **Edits to a test are reviewed harder than edits to a driver.** A change
+  that loosens an assertion, removes a check, or turns a FAIL into a
+  weaker result needs the standard's text cited in the message and a
+  second reading by someone who has not seen the reasoning. Never change
+  an assertion because a run produced an unwelcome result; change it only
+  when the text says the assertion was wrong.
+- **Ask at decision points.** When the text is ambiguous, put one specific
+  question with a recommendation and the alternatives; do not guess and do
+  not leave it silent. Record the answer in `standard-issues.md`.
+- **Keep state in files.** Plans, open decisions and run state live in the
+  repository or the run directory, not in a conversation, so a long task
+  can stop and resume. A background step must be resumable.
+- **Bound every loop.** A retry, a wait or a polling step has a count or a
+  time limit and says what it does when the limit is reached.
+- **Read-only workers.** Research and triage that read the standard run
+  apart from the tree and report in files outside it; they do not edit it.
+- **Check the work last.** Before calling a change finished: run the
+  self-tests under more than one shell, run the mutation gate for touched
+  modules, and compare a full run before and after for unintended moves.
