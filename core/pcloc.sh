@@ -29,13 +29,15 @@
 #   LC_CTYPE    byte 0xe1 is a lowercase letter and 0xc1 an uppercase letter
 #               (its toupper mapping), besides the portable characters
 #   LC_NUMERIC  radix character <comma>, thousands separator <period>
+#   LC_MONETARY symbols, signs and positions of its own (Qq, XYZ, ...)
 #   LC_TIME     weekday and month names of the form ua, uaday, ma, mona, ...
 #               ante and post for the meridiem; %c is "%Y.%m.%d %H:%M:%S"
 #   LC_MESSAGES yesexpr ^([xX]|[[:upper:]]!), noexpr ^([nN]); the variant
 #               locale PCLOCY (pcloc_make y) has the yesexpr ^([xX]|[[.ch.]])
 # The locale PCLOCMB (pcloc_make_mb) has a two-byte code set (mb_cur_max 2):
-# the bytes 0xe1 0xe2 are one lowercase letter; its other categories are
-# those of the POSIX locale.
+# the bytes 0xe1 0xe2 are one lowercase letter; its other categories are as
+# in PCLOC, without the collating element (the tests that use it look at
+# LC_CTYPE only and make the other categories the POSIX locale's).
 
 pcloc_nl='
 '
@@ -296,9 +298,7 @@ pcloc__time() {
 	pcloc__tl abday u '' a b c d e f g
 	pcloc__tl day u day a b c d e f g
 	pcloc__tl abmon m '' a b c d e f g h i j k l
-	pcloc__tl ab_alt_mon n '' a b c d e f g h i j k l
 	pcloc__tl mon mon '' a b c d e f g h i j k l
-	pcloc__tl alt_mon non '' a b c d e f g h i j k l
 	pcloc__kv d_t_fmt '%Y.%m.%d %H:%M:%S'
 	pcloc__kv d_fmt '%d.%m.%y'
 	pcloc__kv t_fmt '%H:%M:%S'
@@ -310,11 +310,25 @@ pcloc__time() {
 	printf 'END LC_TIME\n'
 }
 
+# pcloc__monetary : an LC_MONETARY category of its own (no copy of another
+# locale), with every keyword the page lists
+pcloc__monetary() {
+	printf 'LC_MONETARY\n'
+	printf 'int_curr_symbol "<X><Y><Z><space>"\ncurrency_symbol "<Q><q>"\n'
+	printf 'mon_decimal_point "<comma>"\nmon_thousands_sep "<period>"\nmon_grouping 3;2\n'
+	printf 'positive_sign "<P>"\nnegative_sign "<N>"\nint_frac_digits 3\nfrac_digits 1\n'
+	printf 'p_cs_precedes 1\np_sep_by_space 2\nn_cs_precedes 0\nn_sep_by_space 1\n'
+	printf 'p_sign_posn 3\nn_sign_posn 4\n'
+	printf 'int_p_cs_precedes 0\nint_p_sep_by_space 1\nint_n_cs_precedes 1\nint_n_sep_by_space 2\n'
+	printf 'int_p_sign_posn 2\nint_n_sign_posn 1\n'
+	printf 'END LC_MONETARY\n'
+}
+
 # pcloc__rest VARIANT : the other categories; the variant y has a yesexpr that
 # names the collating element ch, so it is a valid expression only where
 # LC_COLLATE is the locale's own
 pcloc__rest() {
-	printf 'LC_MONETARY\ncopy "POSIX"\nEND LC_MONETARY\n'
+	pcloc__monetary
 	printf 'LC_NUMERIC\ndecimal_point "<comma>"\nthousands_sep "<period>"\ngrouping 3;3\nEND LC_NUMERIC\n'
 	pcloc__time
 	printf 'LC_MESSAGES\n'
@@ -339,7 +353,14 @@ pcloc__localedef() {
 		if [ "$4" = mb ]; then pc_notinuse "localedef does not support the multibyte code set of the test (status 2)"; fi
 		pc_unresolved "localedef refused the test locale: limits or code set (status 2)"
 		;;
-	*) pc_unresolved "localedef refused the test locale source $2 (status $pcloc_rc)" ;;
+	*)
+		pcloc_k=0
+		while [ "$pcloc_k" -lt 4 ] && IFS= read -r pcloc_l; do
+			pc_note "localedef said: $pcloc_l"
+			pcloc_k=$((pcloc_k + 1))
+		done <pcloc.err
+		pc_unresolved "localedef refused the test locale source $2 (status $pcloc_rc)"
+		;;
 	esac
 	[ -e "$3" ] || pc_unresolved "localedef reported success but nothing exists at $3"
 	pcloc__verify "$3" "$4"
@@ -421,11 +442,8 @@ pcloc_make_mb() {
 '
 	{
 		pcloc__ctype mb
-		printf 'LC_COLLATE\ncopy "POSIX"\nEND LC_COLLATE\n'
-		printf 'LC_MONETARY\ncopy "POSIX"\nEND LC_MONETARY\n'
-		printf 'LC_NUMERIC\ncopy "POSIX"\nEND LC_NUMERIC\n'
-		printf 'LC_TIME\ncopy "POSIX"\nEND LC_TIME\n'
-		printf 'LC_MESSAGES\ncopy "POSIX"\nEND LC_MESSAGES\n'
+		printf 'LC_COLLATE\norder_start forward\n<NUL>\nUNDEFINED\norder_end\nEND LC_COLLATE\n'
+		pcloc__rest ""
 	} >pcloc2.src || pc_unresolved "setup: cannot write the locale source"
 	PCLOCMB=$PWD/pcloc2.loc
 	pcloc__localedef pcloc2.map pcloc2.src "$PCLOCMB" mb
