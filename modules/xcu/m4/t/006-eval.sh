@@ -18,5 +18,7 @@ EOM
 printf '14|3|1|-5|16|3|1|0|0|1|2|7|5|-1|0|20|31|8|ff|00000101|1|0|1|1|4\n' >exp
 pc_test
 m4 in >out 2>err </dev/null || pc_fail "m4: nonzero status"
-cmp out exp >/dev/null 2>&1 || pc_fail "output differs: $(cat out)"
+# the case of digits above 9 in a radix result is not stated: fold it
+tr '[:upper:]' '[:lower:]' <out >outl
+cmp outl exp >/dev/null 2>&1 || pc_fail "output differs: $(cat out)"
 pc_pass
