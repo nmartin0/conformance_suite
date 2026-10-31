@@ -11,7 +11,9 @@ pc_pty_term
 HOME=$PWD; export HOME
 unset EXINIT
 printf 'a1\na2\na3\na4\na5\na6\n' >f
-printf 'dddddd\n"1pu.u.\n:wq\n' >in
+# the newline that ends a typed line moves the cursor down, so k brings it
+# back to the line the puts are meant to follow
+printf 'dddddd\nk"1pu.u.\n:wq\n' >in
 pc_test
 pc_vi_run in f
 [ "$pc_pty_rc" -eq 0 ] || pc_fail "vi exited with status $pc_pty_rc"

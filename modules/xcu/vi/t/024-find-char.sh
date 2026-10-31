@@ -11,7 +11,9 @@ pc_pty_term
 HOME=$PWD; export HOME
 unset EXINIT
 printf 'a,b,c,d,e\na,b,c,d,e\na,b,c,d,e\na,b,c,d,e\na,b,c,d,e\na,b,c,d,e\na,b,c,d,e\n' >f
-printf 'f,x\n2f,x\n$F,x\n2t,x\n$2T,x\nf,;x\nf,;,x\n:wq\n' >in
+# each typed line ends in a newline, which moves down a line keeping the
+# column, so a command meant to start at the first column begins with 0
+printf 'f,x\n02f,x\n$F,x\n02t,x\n$2T,x\n0f,;x\n0f,;,x\n:wq\n' >in
 pc_test
 pc_vi_run in f
 [ "$pc_pty_rc" -eq 0 ] || pc_fail "vi exited with status $pc_pty_rc"
