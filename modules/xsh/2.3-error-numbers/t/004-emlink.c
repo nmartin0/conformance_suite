@@ -50,7 +50,7 @@ int main(void)
 	if (saved == 0)
 		pc_fail("link() still succeeded with %ld links (limit %ld)", i - 1, lim);
 	if (stat("base", &st) != 0)
-		pc_unresolved("stat failed");
+		pc_fail("the file base cannot be examined after the links were made");
 	if (saved != EMLINK && (long)st.st_nlink < lim)
 		pc_unresolved("link() failed with %s before the limit (count %ld, limit %ld)",
 		    pc_errname(saved), (long)st.st_nlink, lim);
