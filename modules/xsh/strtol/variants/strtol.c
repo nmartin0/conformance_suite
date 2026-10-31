@@ -80,8 +80,25 @@ T id(const char *restrict s, char **restrict e, int b) \
 	return r; \
 }
 
-/* defined under their symbol names: a header may redirect the plain names */
+/* defined under their symbol names: a header may redirect the plain names;
+ * the driver passes the others as PC_SYM_<name>_<k> */
 VWRAP(f_strtol, "strtol", "strtol", long, unsigned long)
+#ifdef PC_SYM_strtol_1
+VWRAP(f_strtol_1, PC_SYM_strtol_1, "strtol", long, unsigned long)
+#endif
+#ifdef PC_SYM_strtol_2
+VWRAP(f_strtol_2, PC_SYM_strtol_2, "strtol", long, unsigned long)
+#endif
+#ifdef PC_SYM_strtol_3
+VWRAP(f_strtol_3, PC_SYM_strtol_3, "strtol", long, unsigned long)
+#endif
 VWRAP(f_strtoll, "strtoll", "strtoll", long long, unsigned long long)
-VWRAP(f_isoc23_strtol, "__isoc23_strtol", "strtol", long, unsigned long)
-VWRAP(f_isoc23_strtoll, "__isoc23_strtoll", "strtoll", long long, unsigned long long)
+#ifdef PC_SYM_strtoll_1
+VWRAP(f_strtoll_1, PC_SYM_strtoll_1, "strtoll", long long, unsigned long long)
+#endif
+#ifdef PC_SYM_strtoll_2
+VWRAP(f_strtoll_2, PC_SYM_strtoll_2, "strtoll", long long, unsigned long long)
+#endif
+#ifdef PC_SYM_strtoll_3
+VWRAP(f_strtoll_3, PC_SYM_strtoll_3, "strtoll", long long, unsigned long long)
+#endif

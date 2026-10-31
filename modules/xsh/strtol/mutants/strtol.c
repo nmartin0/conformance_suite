@@ -245,7 +245,8 @@ static long long conv(const char *s, char **e, int base, long long mx, long long
 
 /*
  * Defined under their symbol names with asm labels, since a header may
- * already redirect the plain names to others.
+ * already redirect the plain names to others; the driver finds those
+ * (modules/xsh/strtol/probe.c) and passes them as PC_SYM_<name>_<k>.
  */
 #define PTYPE(T) T (*)(const char *restrict, char **restrict, int)
 #define WRAP(id, sym, symfb, T, MX, MN) \
@@ -262,7 +263,22 @@ T id(const char *restrict s, char **restrict e, int b) \
 }
 
 WRAP(f_strtol, "strtol", "strtol", long, LONG_MAX, LONG_MIN)
+#ifdef PC_SYM_strtol_1
+WRAP(f_strtol_1, PC_SYM_strtol_1, "strtol", long, LONG_MAX, LONG_MIN)
+#endif
+#ifdef PC_SYM_strtol_2
+WRAP(f_strtol_2, PC_SYM_strtol_2, "strtol", long, LONG_MAX, LONG_MIN)
+#endif
+#ifdef PC_SYM_strtol_3
+WRAP(f_strtol_3, PC_SYM_strtol_3, "strtol", long, LONG_MAX, LONG_MIN)
+#endif
 WRAP(f_strtoll, "strtoll", "strtoll", long long, LLONG_MAX, LLONG_MIN)
-/* names a library may bind the same functions to */
-WRAP(f_isoc23_strtol, "__isoc23_strtol", "strtol", long, LONG_MAX, LONG_MIN)
-WRAP(f_isoc23_strtoll, "__isoc23_strtoll", "strtoll", long long, LLONG_MAX, LLONG_MIN)
+#ifdef PC_SYM_strtoll_1
+WRAP(f_strtoll_1, PC_SYM_strtoll_1, "strtoll", long long, LLONG_MAX, LLONG_MIN)
+#endif
+#ifdef PC_SYM_strtoll_2
+WRAP(f_strtoll_2, PC_SYM_strtoll_2, "strtoll", long long, LLONG_MAX, LLONG_MIN)
+#endif
+#ifdef PC_SYM_strtoll_3
+WRAP(f_strtoll_3, PC_SYM_strtoll_3, "strtoll", long long, LLONG_MAX, LLONG_MIN)
+#endif
