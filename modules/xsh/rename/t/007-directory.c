@@ -203,7 +203,7 @@ int main(void)
 		pc_check(rename("d", "p/e") == 0, "rename() of a directory failed: %s", pc_errname(errno));
 		st = lst("p/e");
 		pc_check(S_ISDIR(st.st_mode) && same_file(&st, &ref), "p/e is not the renamed directory");
-		pc_check(pc_file_equals("p/e/f", "inside"), "the directory's file did not move with it");
+		pc_check(exists("p/e/f") && pc_file_equals("p/e/f", "inside"), "the directory's file did not move with it");
 		pc_check(!exists("d"), "the old directory name still exists");
 	}
 	pc_pass();

@@ -168,6 +168,59 @@ int rename(const char *old, const char *new)
 			new = b2;
 		}
 	}
+	if (IS("same_file_fails") && stat(old, &so) == 0 && stat(new, &sn) == 0 &&
+	    so.st_dev == sn.st_dev && so.st_ino == sn.st_ino)
+		return fail(EEXIST);
+	if (IS("same_file_removes_new") && strcmp(old, new) != 0 && stat(old, &so) == 0 &&
+	    stat(new, &sn) == 0 && so.st_dev == sn.st_dev && so.st_ino == sn.st_ino)
+		return unlink(new);
+	if (IS("symlink_recreated") && lstat(old, &so) == 0 && S_ISLNK(so.st_mode) &&
+	    (n = readlink(old, target, sizeof target - 1)) > 0) {
+		/* a new link with the same target, the old one removed */
+		target[n] = '\0';
+		(void)unlink(new);
+		if (symlink(target, new) != 0)
+			return -1;
+		return unlink(old);
+	}
+	if (IS("type_mismatch_ok") && lstat(old, &so) == 0 && lstat(new, &sn) == 0) {
+		if (!S_ISDIR(so.st_mode) && S_ISDIR(sn.st_mode))
+			(void)rmdir(new);
+		else if (S_ISDIR(so.st_mode) && !S_ISDIR(sn.st_mode))
+			(void)unlink(new);
+	}
+	if (IS("slash_ignored_missing") && has_slash_end(new) &&
+	    lstat(unslash(new, b2, sizeof b2), &sn) != 0)
+		new = unslash(new, b2, sizeof b2);
+	if (IS("slash_ignored_file") && has_slash_end(new) &&
+	    lstat(unslash(new, b2, sizeof b2), &sn) == 0)
+		new = unslash(new, b2, sizeof b2);
+	if (IS("dotdot_resolved")) {
+		/* "x/.." taken as the parent of x, renamed as such */
+		size_t lo = strlen(old);
+		if (lo >= 4 && strcmp(old + lo - 3, "/..") == 0 && lo < sizeof b1) {
+			char *sl;
+			memcpy(b1, old, lo - 3);
+			b1[lo - 3] = '\0';
+			sl = strrchr(b1, '/');
+			if (sl != NULL) {
+				*sl = '\0';
+				old = b1;
+			}
+		}
+	}
+	if (IS("times_old_kept") || IS("times_new_kept")) {
+		const char *a = dir_of(old, d1, sizeof d1), *b = dir_of(new, d2, sizeof d2);
+		struct stat ba, bb;
+		if (stat(a, &ba) == 0 && stat(b, &bb) == 0) {
+			r = real_rename(old, new);
+			if (IS("times_old_kept"))
+				keep_mtime(a, &ba);
+			else
+				keep_mtime(b, &bb);
+			return r;
+		}
+	}
 	if (IS("sticky_refuses_owner")) {
 		struct stat d;
 		if (stat(dir_of(old, d1, sizeof d1), &d) == 0 && (d.st_mode & S_ISVTX) && d.st_uid != geteuid())
@@ -208,6 +261,28 @@ int rename(const char *old, const char *new)
 		struct stat d;
 		if (stat(dir_of(old, d1, sizeof d1), &d) == 0 && (d.st_mode & S_ISVTX))
 			return 0;	/* pretends the sticky bit did not apply */
+	}
+	if (r == -1 && IS("einval_ok") && errno == EINVAL)
+		return 0;
+	if (r == -1 && IS("eacces_ok") && errno == EACCES)
+		return 0;
+	if (r == -1 && IS("long_ok") && errno == ENAMETOOLONG)
+		return 0;
+	if (r == -1 && IS("fail_removes_old")) {
+		int e = errno;
+		(void)remove(old);
+		errno = e;
+	}
+	if (r == -1 && IS("fail_removes_new")) {
+		int e = errno;
+		(void)remove(new);
+		errno = e;
+	}
+	if (r == -1 && IS("fail_creates_new") && lstat(new, &sn) != 0) {
+		int e = errno, fd = open(new, O_WRONLY | O_CREAT, 0644);
+		if (fd >= 0)
+			(void)close(fd);
+		errno = e;
 	}
 	if (r == 0 && IS("returns_one"))
 		return 1;

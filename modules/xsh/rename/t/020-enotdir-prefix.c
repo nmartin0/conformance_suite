@@ -4,6 +4,7 @@
  *
  * ASSERTION XSH.rename.020
  * MUTANT    rename.enotdir_as_enoent
+ * READING   rename.old_prefix_enoent
  */
 #include "pc.h"
 #include <errno.h>

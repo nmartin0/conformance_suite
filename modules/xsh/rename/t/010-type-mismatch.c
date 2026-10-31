@@ -3,6 +3,9 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.rename.010
+ * MUTANT    rename.fail_removes_new
+ * MUTANT    rename.fail_removes_old
+ * MUTANT    rename.type_mismatch_ok
  * MUTANT    rename.eisdir_as_enotdir
  * MUTANT    rename.enotdir_as_eisdir
  */
@@ -200,7 +203,7 @@ int main(void)
 		pc_test();
 		pc_expect_err(rename("f", "d"), EISDIR, "rename(\"f\", \"d\")");
 		pc_expect_err(rename("d", "g"), ENOTDIR, "rename(\"d\", \"g\")");
-		pc_check(pc_file_equals("f", "f") && pc_file_equals("g", "g") && exists("d"), "a failed rename() changed a name");
+		pc_check(exists("f") && exists("g") && pc_file_equals("f", "f") && pc_file_equals("g", "g") && exists("d"), "a failed rename() changed a name");
 		(void)r;
 	}
 	pc_pass();

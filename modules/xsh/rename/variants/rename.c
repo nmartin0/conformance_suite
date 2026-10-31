@@ -118,6 +118,17 @@ static int result(const char *v, int r, int oldfd, const char *old, int newfd, c
 	 */
 	if (r == -1 && IS("notempty_eexist") && e == ENOTEMPTY)
 		return fail(EEXIST);
+	/*
+	 * "old_prefix_enoent" and "old_loop_enoent" (READINGs of the disputed
+	 * XSH.rename.020 and .036): old's resolution fails on a prefix that
+	 * is a regular file, or on a loop, so old also names no existing
+	 * file, and XSH 2.3 lets either applicable error be reported; this
+	 * system reports ENOENT.
+	 */
+	if (r == -1 && IS("old_prefix_enoent") && e == ENOTDIR)
+		return fail(ENOENT);
+	if (r == -1 && IS("old_loop_enoent") && e == ELOOP)
+		return fail(ENOENT);
 	errno = e;
 	return r;
 }

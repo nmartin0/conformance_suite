@@ -3,6 +3,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.rename.009
+ * MUTANT    rename.fail_removes_old
  * MUTANT    rename.nonempty_ok
  * MUTANT    rename.nonempty_einval
  * VARIANT   rename.notempty_eexist
@@ -201,7 +202,7 @@ int main(void)
 		pc_test();
 		r = rename("d", "e");
 		pc_check(r == -1 && (errno == EEXIST || errno == ENOTEMPTY), "rename(\"d\", \"e\"): returned %d, errno %s, expected EEXIST or ENOTEMPTY", r, pc_errname(errno));
-		pc_check(exists("d") && pc_file_equals("e/f", "kept"), "a failed rename() changed a directory");
+		pc_check(exists("d") && exists("e/f") && pc_file_equals("e/f", "kept"), "a failed rename() changed a directory");
 		(void)r;
 	}
 	pc_pass();
