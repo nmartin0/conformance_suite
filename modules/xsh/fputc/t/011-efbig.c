@@ -43,7 +43,16 @@ static int limit_fsize(int sigxfsz_block)
 	} else
 		(void)signal(SIGXFSZ, SIG_IGN);
 #else
+	/*
+	 * The header need not name the signal outside XSI, but the system may
+	 * still send it: with every signal blocked it stays pending.
+	 */
+	sigset_t all;
+
 	(void)sigxfsz_block;
+	sigfillset(&all);
+	if (sigprocmask(SIG_BLOCK, &all, NULL) != 0)
+		return 98;
 #endif
 	if (getrlimit(RLIMIT_FSIZE, &rl) != 0 || (rl.rlim_max != RLIM_INFINITY && rl.rlim_max < 4096))
 		return 98;

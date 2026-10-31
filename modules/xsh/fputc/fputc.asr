@@ -118,6 +118,9 @@ says       In a child whose soft RLIMIT_FSIZE is 4096 bytes (SIGXFSZ
            and the error indicator set.
 note       Austin Group defect 1669 (Issue 8) removed the XSI shading from
            this error. As for XSH.fputc.006 where _IONBF is refused.
+           Where <signal.h> does not define SIGXFSZ (it is XSI-shaded)
+           every signal is blocked instead of SIGXFSZ being ignored, since
+           the system may still generate it.
 test       t/011-efbig.c
 
 assertion  XSH.fputc.012

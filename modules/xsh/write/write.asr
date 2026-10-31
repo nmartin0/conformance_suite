@@ -57,6 +57,9 @@ says       A write() that would pass the process's file size limit
            (RLIMIT_FSIZE) writes only the bytes that fit and returns
            their number.
 note       The file size limit was part of the XSI option until Issue 8.
+           SIGXFSZ is ignored; where <signal.h> does not define it (it is
+           XSI-shaded) every signal is blocked instead, since the system
+           may still generate it.
 test       t/006-fsize-partial.c
 
 assertion  XSH.write.007
@@ -66,7 +69,9 @@ since      2024
 says       A write() with no room left under the file size limit fails
            with EFBIG (SIGXFSZ ignored).
 note       SIGXFSZ is ignored so that, on XSI systems, the signal does
-           not end the test.
+           not end the test; where <signal.h> does not define SIGXFSZ
+           (it is XSI-shaded) every signal is blocked instead, since the
+           system may still generate it.
 test       t/007-fsize-efbig.c
 
 assertion  XSH.write.008

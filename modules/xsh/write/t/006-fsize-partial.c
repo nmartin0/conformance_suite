@@ -60,7 +60,18 @@ static struct outcome limited_write(const char *path, int flags, rlim_t limit,
 		if (sigaction(SIGXFSZ, &sa, NULL) != 0)
 			_exit(2);
 #else
+		/*
+		 * Outside XSI the header need not name the signal, but the
+		 * system may still send it: blocked, it stays pending.
+		 */
 		(void)sa;
+		{
+			sigset_t all;
+
+			sigfillset(&all);
+			if (sigprocmask(SIG_BLOCK, &all, NULL) != 0)
+				_exit(2);
+		}
 #endif
 		rl.rlim_cur = limit;
 		if (setrlimit(RLIMIT_FSIZE, &rl) != 0)
