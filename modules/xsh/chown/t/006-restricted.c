@@ -288,7 +288,7 @@ int main(void)
 			other = foreign_gid(0);
 			prepare_own(foreign_gid(other), 0644);	/* a group not its own: a partial change shows */
 		} else {
-			other = 1;
+			other = foreign_gid(0);
 			pc_make_dir("c");
 			pc_check(chmod("c", 0777) == 0, "chmod failed");
 		}
