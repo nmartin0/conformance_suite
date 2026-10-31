@@ -66,13 +66,13 @@ About 300 faults and 25 variants over 5 modules (the rename count includes fault
 
 ## Held and queued
 
-- `strtol` is hardened (56 faults, all caught) but not merged: its fault
-  library names symbols that one C library uses for redirection, and nothing
-  in the repository may name a library. The same is true of the existing
-  `fscanf`, `vfscanf` and `strerror` fault libraries. The remedy is a build
-  step that compiles a probe against the same headers, reads the symbol names
-  it references, and passes them to the fault library as macros, with a
-  fixture in `ci/selftest-mutate.sh`.
+- `strtol` is hardened (56 faults, all caught). Its fault library, and those
+  of `fscanf`, `vfscanf` and `strerror`, used to name symbols that one C
+  library uses for redirection. They now take the names from the build
+  step in `posixcheck.sh` (`pc_symbols`) that compiles `probe.c` against
+  the same headers, as `PC_SYM_<name>_<k>` macros (docs/variants.md); the
+  fixture is in `ci/selftest-mutate.sh`. Other modules' libraries are not
+  converted yet.
 - One dedicated assertion in XBD 8.2 for "a pathname in a locale variable
   selects the localedef output", so the many tests that only use such a
   locale can stay UNRESOLVED when it is unsupported.
