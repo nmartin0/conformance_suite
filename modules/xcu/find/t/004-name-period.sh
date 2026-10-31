@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.004
+# MUTANT   find.period_star
+# MUTANT   find.period_qmark
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.004
 same_set() {

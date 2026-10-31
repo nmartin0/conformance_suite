@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.001
+# MUTANT   find.all_skip_root
+# MUTANT   find.all_skip_hidden
+# MUTANT   find.all_dup
+# MUTANT   find.all_no_descend
+# MUTANT   find.all_skip_symlinks
+# MUTANT   find.all_skip_fifo
+# MUTANT   find.all_skip_empty_dir
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.001
 same_set() {

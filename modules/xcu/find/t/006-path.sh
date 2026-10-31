@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.006
+# MUTANT   find.path_as_name
+# MUTANT   find.path_substring
+# MUTANT   find.path_literal
+# MUTANT   find.path_star_stops
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.006
 same_set() {

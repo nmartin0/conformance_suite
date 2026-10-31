@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.012
+# MUTANT   find.user_name_nomatch
+# MUTANT   find.user_number_nomatch
+# MUTANT   find.user_any
+# MUTANT   find.user_inverted
+# MUTANT   find.group_name_nomatch
+# MUTANT   find.group_number_nomatch
+# MUTANT   find.group_any
+# MUTANT   find.group_inverted
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.012
 same_set() {
@@ -22,6 +30,8 @@ me=$(id -un) || pc_fail "cannot determine the user name"
 uid=$(id -u) || pc_fail "cannot determine the user ID"
 set -- $(ls -ldn t/a.txt) || pc_fail "cannot list t/a.txt"
 gid=$4
+set -- $(ls -ld t/a.txt)
+gname=$4
 pc_test
 got=$(find t -type f -user "$me" 2>err </dev/null)
 rc=$?
@@ -39,6 +49,13 @@ got=$(find t -type f -group "$gid" 2>err </dev/null)
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "-group number: find exited with status $rc"
 same_set "$got" "t/a.txt t/B.TXT t/sub/c.txt t/sub/d.c t/.hid" || pc_fail "-group number: found '$got'"
+case $gname in
+''|*[!0-9]*)
+	got=$(find t -type f -group "$gname" 2>err </dev/null)
+	rc=$?
+	[ "$rc" -eq 0 ] || pc_fail "-group name: find exited with status $rc"
+	same_set "$got" "t/a.txt t/B.TXT t/sub/c.txt t/sub/d.c t/.hid" || pc_fail "-group name: found '$got'" ;;
+esac
 got=$(find t -type f -group 4242424 2>err </dev/null)
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "-group other: find exited with status $rc"

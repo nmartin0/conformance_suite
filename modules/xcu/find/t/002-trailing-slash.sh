@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.002
+# MUTANT   find.slash_stripped
+# MUTANT   find.slash_collapsed
+# MUTANT   find.slash_doubled
+# MUTANT   find.root_no_slash
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.002
 same_set() {
@@ -23,4 +27,8 @@ got=$(find t/ 2>err </dev/null)
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "find t/: find exited with status $rc"
 same_set "$got" "t/ t/a.txt t/B.TXT t/sub t/sub/c.txt t/sub/d.c t/empty t/.hid t/l t/p" || pc_fail "find t/: found '$got'"
+got=$(find t// 2>err </dev/null)
+rc=$?
+[ "$rc" -eq 0 ] || pc_fail "find t//: find exited with status $rc"
+same_set "$got" "t// t//a.txt t//B.TXT t//sub t//sub/c.txt t//sub/d.c t//empty t//.hid t//l t//p" || pc_fail "find t//: found '$got'"
 pc_pass
