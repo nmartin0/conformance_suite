@@ -13,8 +13,10 @@
  *   -u USER   run as USER (requires root)
  *   -e N=V    add N=V to the test's environment
  *
- * The test runs in its own process group, in a fresh private directory
- * (removed afterwards), with standard input from /dev/null, umask 022 and
+ * The test runs in its own process group, without a controlling terminal
+ * (in a session that a helper child of ours leads), in a fresh private
+ * directory (removed afterwards), with standard input from /dev/null,
+ * umask 022 and
  * a clean environment: PATH from confstr(_CS_PATH), HOME and TMPDIR set to
  * the private directory, LC_ALL=POSIX, every PC_* variable from our own
  * environment, plus any -e additions.
@@ -229,7 +231,8 @@ int main(int argc, char **argv)
 	int nenv = 0, i, c, status, cleanup_ok;
 	struct sigaction sa;
 	struct passwd *pw = NULL;
-	pid_t pid;
+	pid_t pid, gpid = -1;
+	int pfd[2], helper_ok;
 	long t0, ms;
 	char line[256];
 
@@ -295,12 +298,49 @@ int main(int argc, char **argv)
 	if (sigaction(SIGALRM, &sa, NULL) != 0)
 		die("sigaction failed");
 
+	if (pipe(pfd) != 0)
+		die("pipe failed");
 	t0 = now_ms();
 	pid = fork();
 	if (pid < 0)
 		die("fork failed");
 	if (pid == 0) {
+		/*
+		 * The helper: it leads a new session with no controlling
+		 * terminal and runs the test in a child of its own. Were the
+		 * test left on the terminal the driver was started from, it
+		 * would be in a background process group of that terminal, and
+		 * an interactive shell started there stops itself. The test is
+		 * in a process group of its own whose parent is in another
+		 * group of the same session, as before: it is neither a session
+		 * leader nor in an orphaned process group. The helper sends the
+		 * test's process ID and then its wait status over the pipe.
+		 */
+		pid_t g;
+		int st;
+		long v;
+
+		(void)close(pfd[0]);
+		(void)setsid();
+		g = fork();
+		if (g < 0)
+			_exit(125);
+		if (g > 0) {
+			(void)setpgid(g, g);	/* close the race with the test */
+			v = (long)g;
+			if (write(pfd[1], &v, sizeof v) != (ssize_t)sizeof v)
+				_exit(125);
+			while (waitpid(g, &st, 0) == -1)
+				if (errno != EINTR)
+					_exit(125);
+			if (write(pfd[1], &st, sizeof st) != (ssize_t)sizeof st)
+				_exit(125);
+			_exit(0);
+		}
+	}
+	if (pid == 0) {
 		int fd;
+		(void)close(pfd[1]);
 		(void)setpgid(0, 0);
 		sa.sa_handler = SIG_DFL;
 		(void)sigaction(SIGALRM, &sa, NULL);
@@ -354,7 +394,12 @@ int main(int argc, char **argv)
 		    strerror(errno));
 		_exit(127);
 	}
-	(void)setpgid(pid, pid);	/* close the race with the child */
+	(void)close(pfd[1]);
+	{
+		long v;
+		if (read(pfd[0], &v, sizeof v) == (ssize_t)sizeof v && v > 1)
+			gpid = (pid_t)v;
+	}
 	alarm((unsigned)timeout);
 
 	for (;;) {
@@ -362,8 +407,11 @@ int main(int argc, char **argv)
 		if (r == pid)
 			break;
 		if (r == -1 && errno == EINTR) {
-			if (timed_out)
+			if (timed_out) {
+				if (gpid > 1)
+					(void)kill(-gpid, SIGKILL);
 				(void)kill(-pid, SIGKILL);
+			}
 			continue;
 		}
 		die("waitpid failed");
@@ -371,9 +419,24 @@ int main(int argc, char **argv)
 	alarm(0);
 	ms = now_ms() - t0;
 	/* Anything the test left running in its group goes too. */
+	if (gpid > 1)
+		(void)kill(-gpid, SIGKILL);
 	(void)kill(-pid, SIGKILL);
+	/* The test's own status, which the helper sends when it ends. */
+	helper_ok = 1;
+	if (!timed_out) {
+		int st;
+		if (gpid > 1 && WIFEXITED(status) && WEXITSTATUS(status) == 0 &&
+		    read(pfd[0], &st, sizeof st) == (ssize_t)sizeof st)
+			status = st;
+		else
+			helper_ok = 0;
+	}
+	(void)close(pfd[0]);
 
-	if (timed_out)
+	if (!helper_ok)
+		(void)snprintf(line, sizeof line, "ERROR the helper that runs the test failed");
+	else if (timed_out)
 		(void)snprintf(line, sizeof line, "TIMEOUT %ld", ms);
 	else if (WIFEXITED(status))
 		(void)snprintf(line, sizeof line, "EXIT %d %ld",
