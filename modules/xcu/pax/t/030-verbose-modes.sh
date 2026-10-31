@@ -34,8 +34,10 @@ pax -rw -v f1 f2 dest >o 2>e </dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "pax -rw -v: exit status $rc"
 [ -s o ] && pc_fail "pax -rw -v wrote to standard output: $(cat o)"
-grep -x f1 e >/dev/null || pc_fail "pax -rw -v did not write the line f1 to standard error (stderr: $(tr '\n' '|' <e | cut -c1-200))"
-grep -x f2 e >/dev/null || pc_fail "pax -rw -v did not write the line f2 to standard error (stderr: $(tr '\n' '|' <e | cut -c1-200))"
+# in copy mode the page does not say whether the pathname processed is the
+# source (f1) or the one created in the destination (dest/f1); take either
+grep -x -e f1 -e dest/f1 e >/dev/null || pc_fail "pax -rw -v did not write the line f1 or dest/f1 to standard error (stderr: $(tr '\n' '|' <e | cut -c1-200))"
+grep -x -e f2 -e dest/f2 e >/dev/null || pc_fail "pax -rw -v did not write the line f2 or dest/f2 to standard error (stderr: $(tr '\n' '|' <e | cut -c1-200))"
 pax -w -v -s ',f,g,' f1 f2 >a.s 2>e </dev/null || pc_fail "pax -w -v -s: nonzero status"
 grep -x g1 e >/dev/null || pc_fail "pax -w -v -s ',f,g,' did not write the substituted name g1"
 grep -x f1 e >/dev/null && pc_fail "pax -w -v -s wrote the original name f1 instead of the substituted one"

@@ -304,8 +304,9 @@ anchor     utilities/pax.html#OPTIONS/-v
 class      required
 since      1992
 says       "-v" in read mode and in copy mode writes each member or file name
-           as one line to standard error and nothing to standard output; with
-           -s the name written is the substituted one (in write mode too).
+           as one line to standard error and nothing to standard output (in
+           copy mode the source or the destination pathname); with -s the
+           name written is the substituted one (in write mode too).
 test       t/030-verbose-modes.sh
 
 assertion  XCU.pax.031
