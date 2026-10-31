@@ -200,6 +200,9 @@ static int child(void)
 	sigemptyset(&s);
 #ifdef SIGXFSZ	/* XSI: without it there is no signal to block */
 	sigaddset(&s, SIGXFSZ);
+#else
+	/* Outside XSI the name may be hidden but the signal still sent: block all. */
+	sigfillset(&s);
 #endif
 	if (sigprocmask(SIG_BLOCK, &s, NULL) != 0 || getrlimit(RLIMIT_FSIZE, &rl) != 0)
 		return 99;

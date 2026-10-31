@@ -312,6 +312,14 @@ int main(void)
 
 #ifdef SIGXFSZ
 			(void)signal(SIGXFSZ, SIG_IGN);
+#else
+			{
+				/* Outside XSI the name may be hidden but the signal still sent: block all. */
+				sigset_t all;
+
+				sigfillset(&all);
+				(void)sigprocmask(SIG_BLOCK, &all, NULL);
+			}
 #endif
 			if (getrlimit(RLIMIT_FSIZE, &rl) != 0 || (rl.rlim_max != RLIM_INFINITY && rl.rlim_max < 4096))
 				_exit(98);

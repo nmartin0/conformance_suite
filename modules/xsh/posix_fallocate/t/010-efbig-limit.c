@@ -90,6 +90,11 @@ int main(void)
 #else
 		(void)sa;
 		{
+			/* Outside XSI the name may be hidden but the signal still sent: block all. */
+			sigset_t all;
+
+			sigfillset(&all);
+			(void)sigprocmask(SIG_BLOCK, &all, NULL);
 #endif
 			rl.rlim_cur = 1048576;
 			if (setrlimit(RLIMIT_FSIZE, &rl) == 0)

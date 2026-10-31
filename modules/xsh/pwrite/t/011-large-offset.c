@@ -34,6 +34,14 @@ int main(void)
 	pc_require_space();
 #ifdef SIGXFSZ
 	(void)signal(SIGXFSZ, SIG_IGN);	/* a lowered file size limit gives EFBIG, not a signal */
+#else
+	{
+		/* Outside XSI the name may be hidden but the signal still sent: block all. */
+		sigset_t all;
+
+		sigfillset(&all);
+		(void)sigprocmask(SIG_BLOCK, &all, NULL);
+	}
 #endif
 	fd = open("f", O_RDWR | O_CREAT, 0600);
 	pc_check(fd >= 0, "cannot create f");

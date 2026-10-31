@@ -25,6 +25,14 @@ static int child(int fd)
 
 #ifdef SIGXFSZ	/* XSI: without it there is no signal to ignore */
 	(void)signal(SIGXFSZ, SIG_IGN);
+#else
+	{
+		/* Outside XSI the name may be hidden but the signal still sent: block all. */
+		sigset_t all;
+
+		sigfillset(&all);
+		(void)sigprocmask(SIG_BLOCK, &all, NULL);
+	}
 #endif
 	if (getrlimit(RLIMIT_FSIZE, &rl) != 0)
 		return 90;
