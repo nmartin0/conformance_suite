@@ -23,7 +23,9 @@ ln f1 h || pc_unresolved "setup: ln failed"
 mkdir d && chmod 755 d || pc_unresolved "setup: mkdir failed"
 ln -s f1 s || pc_unresolved "setup: ln -s failed"
 mkfifo p || pc_unresolved "setup: mkfifo failed"
-printf 'm\n' >m && chmod 6777 m || pc_unresolved "setup: cannot make m with mode 6777"
+# a new file may take its directory's group: give m the effective group,
+# so that its owner may set the set-group-ID bit without privilege
+printf 'm\n' >m && chgrp "$(id -g)" m && chmod 6777 m|| pc_unresolved "setup: cannot make m with mode 6777"
 [ "$(ls -l m | cut -c1-10)" = '-rwsrwsrwx' ] || pc_unresolved "setup: the set-id bits of m could not be set"
 set -- $(ls -ln f1)
 uid=$3; gid=$4

@@ -6,6 +6,9 @@
 pc_begin XCU.ls.041
 LC_ALL=POSIX; export LC_ALL
 : >f || pc_unresolved "cannot create f"
+# A new file may take the group of its directory; give it the effective
+# group, so that its owner may set the set-group-ID bit without privilege.
+chgrp "$(id -g)" f || pc_unresolved "cannot give f the effective group"
 chmod 2755 f || pc_unresolved "chmod 2755 failed"
 m=$(ls -l f | cut -c1-10)
 case $m in

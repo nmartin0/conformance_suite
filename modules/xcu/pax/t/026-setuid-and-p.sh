@@ -16,7 +16,10 @@ mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'umask 022; cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 umask 022
 printf 'x\n' >f1 || pc_unresolved "setup: cannot write f1"
-chmod 6755 f1 || pc_unresolved "setup: chmod 6755 failed"
+# a new file may take its directory's group: give it the effective group,
+# so that its owner may set the set-group-ID bit without privilege
+chgrp "$(id -g)" f1 || pc_unresolved "setup: cannot give f1 the effective group"
+chmod 6755 f1|| pc_unresolved "setup: chmod 6755 failed"
 m=$(ls -l f1 | cut -c1-10)
 [ "$m" = '-rwsr-sr-x' ] || pc_unresolved "setup: the set-id bits could not be set (mode $m)"
 pax -w f1 >a 2>/dev/null </dev/null || pc_unresolved "setup: pax -w failed"
