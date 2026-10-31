@@ -60,6 +60,13 @@ static int big_sig(void)
 int main(void)
 {
 	pc_begin("XSH.kill.007");
+	{
+		/* The number must not be a signal here; if it is, sysconf() is at fault (XSH.sysconf.015), not kill(). */
+		struct sigaction old;
+
+		if (sigaction(big_sig(), NULL, &old) == 0)
+			pc_unresolved("signal %d, from sysconf(_SC_NSIG), is a supported signal here", big_sig());
+	}
 	pc_test();
 	pc_expect_err(kill(getpid(), -1), EINVAL, "kill(self, -1)");
 	pc_expect_err(kill(getpid(), big_sig()), EINVAL, "kill(self, <a number above every valid one>)");

@@ -63,6 +63,13 @@ int main(void)
 	int r;
 
 	pc_begin("XSH.raise.003");
+	{
+		/* The number must not be a signal here; if it is, sysconf() is at fault (XSH.sysconf.015), not raise(). */
+		struct sigaction old;
+
+		if (sigaction(big_sig(), NULL, &old) == 0)
+			pc_unresolved("signal %d, from sysconf(_SC_NSIG), is a supported signal here", big_sig());
+	}
 	pc_test();
 	errno = 0;
 	r = raise(big_sig());
