@@ -367,7 +367,7 @@ static void ld_load(const char *loc)
 	if (setenv("LC_ALL", loc, 1) != 0)
 		pc_unresolved("setenv failed");
 	if (setlocale(LC_ALL, "") == NULL)
-		pc_unresolved("the locale localedef created cannot be selected through LC_ALL");
+		pc_fail("the locale localedef created, named by pathname in LC_ALL, cannot be selected");
 }
 
 #endif

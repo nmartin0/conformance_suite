@@ -37,8 +37,8 @@ int main(int argc, char **argv)
 	return 0;
 }
 EOC
-command -v c17 >/dev/null 2>&1 || pc_unresolved "setup: c17 is not available"
-c17 -o getmsg getmsg.c </dev/null >cc.out 2>&1 || pc_unresolved "setup: cannot build the catalog reader"
+command -v "${PC_CC:-c17}" >/dev/null 2>&1 || pc_unresolved "setup: no C compiler is available"
+"${PC_CC:-c17}" -o getmsg getmsg.c </dev/null >cc.out 2>&1 || pc_unresolved "setup: cannot build the catalog reader"
 cat >d.msg <<'EOM'
 1 default
 EOM
