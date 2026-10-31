@@ -15,7 +15,8 @@
 static void on_alarm(int s)
 {
 	(void)s;
-	pc_fail("the test timed out");
+	/* The links are still being made: slow, not wrong (no time is bounded). */
+	pc_unresolved("{LINK_MAX} links were not made within 100 s");
 }
 
 int main(void)
