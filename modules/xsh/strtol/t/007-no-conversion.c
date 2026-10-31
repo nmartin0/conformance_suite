@@ -3,6 +3,15 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.strtol.007
+ * MUTANT    strtol.nc_end_after_ws
+ * MUTANT    strtol.nc_end_after_sign
+ * MUTANT    strtol.nc_end_end
+ * MUTANT    strtol.nc_end_unset
+ * MUTANT    strtol.nc_nonzero
+ * MUTANT    strtol.nc_errno_erange
+ * MUTANT    strtol.nc_errno_edom
+ * MUTANT    strtol.space_after_sign
+ * VARIANT   strtol.nc_einval
  */
 #define IC_L
 #include "ic.h"

@@ -3,6 +3,12 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.strtol.012
+ * MUTANT    strtol.base37_accepted
+ * MUTANT    strtol.base1_accepted
+ * MUTANT    strtol.negbase_accepted
+ * MUTANT    strtol.bad_base_erange
+ * MUTANT    strtol.bad_base_no_errno
+ * READING   strtol.base37_means_37
  */
 #define IC_L
 #include "ic.h"

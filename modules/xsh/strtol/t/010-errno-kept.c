@@ -3,6 +3,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.strtol.010
+ * MUTANT    strtol.errno_cleared
+ * MUTANT    strtol.errno_einval_success
  */
 #define IC_L
 #include "ic.h"
