@@ -79,6 +79,8 @@ void pc_require_space(void);
  * With `multibyte` non-zero only locales whose MB_CUR_MAX exceeds 1 count.
  */
 const char *pc_find_locale(const char *codeset, int multibyte);
+/* The same, but the nth (counting from 0) locale that qualifies, for a caller that rejects some. */
+const char *pc_find_locale_nth(const char *codeset, int multibyte, int nth);
 
 /*
  * Low level: write one RESULT line without exiting. Only the driver's
