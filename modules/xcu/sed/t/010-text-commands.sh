@@ -2,6 +2,17 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.010
+# MUTANT    sed.a_as_i
+# MUTANT    sed.i_as_a
+# MUTANT    sed.c_range_every_line
+# MUTANT    sed.c_no_text
+# MUTANT    sed.r_ignored
+# MUTANT    sed.r_missing_error
+# MUTANT    sed.queued_order_reversed
+# MUTANT    sed.a_text_first_line_only
+# MUTANT    sed.eq_twice
+# MUTANT    sed.w_ignored
+# MUTANT    sed.w_not_truncated
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sed.010
 LC_ALL=POSIX
@@ -46,4 +57,8 @@ rm -f out
 sed -n '2,3w out' in4 >/dev/null 2>&1 </dev/null
 got=$(cat out 2>/dev/null; printf 'rc=%s' "$?")
 [ "$got" = "2${NL}3${NL}rc=0" ] || pc_fail "w did not write the selected lines to the file"
+printf 'old\n' >out3 || pc_fail "cannot create a file"
+sed -n '2,3w out3' in4 >/dev/null 2>&1 </dev/null
+got=$(cat out3 2>/dev/null; printf 'rc=%s' "$?")
+[ "$got" = "2${NL}3${NL}rc=0" ] || pc_fail "w did not replace the contents of an existing file"
 pc_pass

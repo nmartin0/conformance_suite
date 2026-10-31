@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.013
+# MUTANT    sed.empty_re_error
+# MUTANT    sed.empty_re_matches_all
+# MUTANT    sed.files_only_first
+# MUTANT    sed.files_separate
+# MUTANT    sed.q_ignored
+# MUTANT    sed.q_silent
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sed.013
 LC_ALL=POSIX

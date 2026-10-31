@@ -3,7 +3,7 @@
 pcm_wnames() {
 	for pcm_a
 	do
-		printf '%s\n' "$pcm_a" | command sed -n -E 's/^.*(^|[[:blank:]\/])w[[:blank:]]+([^[:blank:]]+)$/\2/p'
+		printf '%s\n' "$pcm_a" | command sed -n -E 's/^.*(^|[^[:alpha:]])w[[:blank:]]+([^[:blank:]]+)$/\2/p'
 	done
 }
 sed() {

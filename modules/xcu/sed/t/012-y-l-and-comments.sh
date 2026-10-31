@@ -2,6 +2,19 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.012
+# MUTANT    sed.y_nonslash_unsupported
+# MUTANT    sed.y_delim_escape_unsupported
+# MUTANT    sed.y_newline_escape_unsupported
+# MUTANT    sed.y_backslash_escape_unsupported
+# MUTANT    sed.y_noop
+# MUTANT    sed.l_no_dollar
+# MUTANT    sed.l_octal_two_digits
+# MUTANT    sed.l_tab_as_octal
+# MUTANT    sed.l_backslash_single
+# MUTANT    sed.l_bs_as_octal
+# MUTANT    sed.comment_swallows_script
+# MUTANT    sed.n_comment_not_special
+# MUTANT    sed.n_comment_anywhere
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sed.012
 LC_ALL=POSIX
