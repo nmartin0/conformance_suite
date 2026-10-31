@@ -14,5 +14,9 @@ for name in USR1 usr1; do
 done
 timeout -s KILL 1 sleep 30 </dev/null >/dev/null 2>&1
 rc=$?
-[ "$rc" -eq 124 ] || pc_fail "timeout -s KILL exited $rc, wanted 124"
+# When the signal goes to the process group of timeout, which is one of the
+# two methods the page allows, timeout is killed with its child.
+if [ "$rc" -ne 124 ] && [ "$rc" -le 128 ]; then
+	pc_fail "timeout -s KILL exited $rc, wanted 124 or a termination by the signal"
+fi
 pc_pass
