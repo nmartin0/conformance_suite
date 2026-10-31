@@ -98,10 +98,21 @@ assertion  XBD.unistd.h.008
 anchor     basedefs/unistd.h.html#DESCRIPTION/_POSIX_CHOWN_RESTRICTED
 class      required
 since      2001
-says       _POSIX_CHOWN_RESTRICTED, _POSIX_NO_TRUNC, _POSIX_VDISABLE,
-           _XOPEN_ENH_I18N and _XOPEN_SHM are defined with a value other than -1,
-           usable in #if.
+says       _POSIX_CHOWN_RESTRICTED, _POSIX_NO_TRUNC and _POSIX_VDISABLE are
+           defined with a value other than -1, usable in #if.
+note       _XOPEN_ENH_I18N and _XOPEN_SHM sit inside the XSI-shaded part of
+           the option list; they are XBD.unistd.h.032.
 test       t/008-option-values-not-minus-one.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.unistd.h.032
+anchor     basedefs/unistd.h.html#DESCRIPTION/_XOPEN_ENH_I18N
+class      conditional
+when       XSI
+since      2001
+says       On an XSI system _XOPEN_ENH_I18N and _XOPEN_SHM are defined with a
+           value other than -1, usable in #if.
+test       t/032-xsi-groups-not-minus-one.c
 nomutant   compile-time check of header content; needs the Tier 0 header mutants
 
 assertion  XBD.unistd.h.009
