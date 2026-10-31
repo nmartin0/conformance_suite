@@ -40,22 +40,26 @@ verified; this file is the plan. Update both when a step finishes.
 
 - Round of stdio, process and file modules (about 15 modules; 1880 assertions, 2807 mutants, 1451 variants in all); deviations O.34 to O.53, SI-73 to SI-88 and Q-62 to Q-74 recorded.
 
-## Status (lean mode, nothing executed yet)
+## Status
 
-Every function page, every header (Tier 0 plus semantic modules under
-`modules/xbd`) and every utility page (`modules/xcu`, including the shell
-command language chapter 2) now has a module, all reviewed blind. About
-970 modules in all. Nothing has been run against any C library or shell:
-the modules are written from the standard alone and have no mutants or
-variants yet.
+Every function page, every header and every utility page has a module
+(about 1,026 modules, 8,890 assertions), all reviewed blind. The suite has been
+run, as root and as an ordinary user, on Linux, FreeBSD and an illumos
+distribution (NetBSD and OpenBSD with an earlier version of it). Each run was
+triaged against the standard's text alone and the test bugs it exposed were
+fixed (reports in `reports/` and `reports/triage/`). Hardening (planted
+faults and conforming variants, `docs/hardening.md`) has begun: five pilot
+modules are done and 6,373 assertions are still without it.
 
 ## Next
 
-1. **First runs on real systems**, starting with the user's own OS: expect
-   test defects (hand-written expected strings, timing) as well as findings;
-   triage each failure against the standard before touching a test.
-2. **Hardening**: mutants and variants for the lean-mode modules, once the
-   suite is stable; header mutants for Tier 0.
+1. **First runs on real systems** (mostly done; see Status). Remaining: re-run
+   NetBSD and OpenBSD and the illumos distribution with the current suite,
+   and the user's own OS. Triage each failure against the standard before
+   touching a test.
+2. **Hardening** (begun; `docs/hardening.md`): faults and variants for the
+   remaining modules, the neutral symbol discovery for fault libraries, a
+   `--sut-sh` option for `ci/mutate.sh`, and header mutants for Tier 0.
 3. **Untested residue**: terminal-dependent utilities beyond the pty tests
    already written for stty, tabs, tput and vi (talk, write, vi screen
    contents, -r/-t/-w), job control beyond one assertion, the ex/vi command sets

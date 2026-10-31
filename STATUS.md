@@ -271,3 +271,21 @@ To start from a bundle alone: `git clone posixcheck-NNNN.bundle posixcheck`.
 - fork.003 used to leave its child blocked forever when a check failed; it now releases and reaps the child first, waits at most about 10 s, and the child ends by itself.
 - Deferred by decision: the empirical gate (ci/mutate.sh on a host C library) was NOT completed for this round. One full pass on glibc ran before the last edits (2807 mutants: 2610 caught, 3 missed, 194 unchecked; 1451 variants: 0 rejected; 2 FLAKY unnamed in the log). The 3 misses were fixed (effect checks restored from UNRESOLVED to pc_check) and re-run singly. After that nothing was run: no further driver or mutate runs. Host C libraries are not conformant and are not the yardstick.
 - Edited after the last execution: fork.003 (rewritten; run once, PASS, and its mutant FAIL, before the run was stopped); dup.012, dup.015 and pipe.010 (compile-checked only; they need names the strict build does not declare, so they have never run here).
+
+## Update: first runs, triage and the hardening pilot (October 2026)
+
+- Full runs (root and ordinary user) on Linux, FreeBSD and an illumos
+  distribution; results in `reports/`, triage in `reports/triage/`. Roughly
+  two hundred test bugs were found and fixed across the three systems; the
+  rest are the systems' deviations or standard ambiguities.
+- Driver: `--show CODES` and `--failures FILE`; the test runner is built with
+  the extended feature macro and takes `setgroups()` from the helper.
+- Hardening pilot done for `xcu/cut`, `head`, `read`, `sort` and `xsh/rename`
+  (`docs/hardening.md`); `xsh/strtol` is held until the fault libraries stop
+  naming library-specific symbols.
+- Open: the decisions on standard ambiguities (disputed marks), the XBD 8.2
+  pathname-locale assertion, the sweep for helpers that turn a missing file
+  into UNRESOLVED, and re-running NetBSD, OpenBSD and illumos with the
+  current suite.
+- `CLAUDE.md` and `docs/methodology.md` ("Working practice") describe how
+  work is carried out.
