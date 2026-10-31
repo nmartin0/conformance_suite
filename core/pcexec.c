@@ -28,8 +28,9 @@
  *     ERROR <message>         pcexec could not run the test
  * followed by "CLEANUP ok" or "CLEANUP failed".
  *
- * pcexec is a harness tool, not a test, so it is compiled without strict
- * feature-test macros: it needs setgroups(), which POSIX does not define.
+ * pcexec is built with the XSI feature macro, like the probe. The one call
+ * it needs that POSIX does not define, setgroups(), is in pcgroups.c, built
+ * apart without feature macros and linked in.
  */
 #include <sys/types.h>
 #include <sys/resource.h>
@@ -48,6 +49,9 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+
+/* core/pcgroups.c: setgroups(), which POSIX does not define. */
+int pc_set_one_group(long g);
 
 extern char **environ;
 
@@ -381,7 +385,7 @@ int main(int argc, char **argv)
 		if (limitspec)
 			apply_limits(limitspec);
 		if (pw) {
-			if (setgroups(1, &pw->pw_gid) != 0 ||
+			if (pc_set_one_group((long)pw->pw_gid) == -1 ||
 			    setgid(pw->pw_gid) != 0 ||
 			    setuid(pw->pw_uid) != 0) {
 				fprintf(stderr, "pcexec: cannot become %s\n",

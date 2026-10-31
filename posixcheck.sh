@@ -333,13 +333,6 @@ fi
 # ---------- helpers ----------
 
 pc_bin=$pc_results/build/core
-pc_k=$(pc_cache_key "pcexec: $pc_cc" "$pc_root"/core/*.c "$pc_root"/core/*.h)
-if ! pc_cache_get "$pc_k" "$pc_bin/pcexec"; then
-	"$pc_cc" -o "$pc_bin/pcexec" "$pc_root/core/pcexec.c" \
-	    >"$pc_trustdir/pcexec.txt" 2>&1 </dev/null ||
-	    pc_abort "cannot build pcexec (see $pc_trustdir/pcexec.txt)"
-	pc_cache_put "$pc_k" "$pc_bin/pcexec"
-fi
 pc_k=$(pc_cache_key "probe: $pc_cc -D_XOPEN_SOURCE=800" "$pc_root"/core/*.c "$pc_root"/core/*.h)
 if ! pc_cache_get "$pc_k" "$pc_bin/probe"; then
 	"$pc_cc" -D_XOPEN_SOURCE=800 -I "$pc_root/core" -o "$pc_bin/probe" \
@@ -371,6 +364,13 @@ if ! pc_cache_get "$pc_k" "$pc_bin/pcgroups.o"; then
 		    pc_abort "cannot build pcgroups.o (see $pc_trustdir/pcgroups.txt)"
 	fi
 	pc_cache_put "$pc_k" "$pc_bin/pcgroups.o"
+fi
+pc_k=$(pc_cache_key "pcexec: $pc_cc -D_XOPEN_SOURCE=800" "$pc_root"/core/*.c "$pc_root"/core/*.h)
+if ! pc_cache_get "$pc_k" "$pc_bin/pcexec"; then
+	"$pc_cc" -D_XOPEN_SOURCE=800 -o "$pc_bin/pcexec" "$pc_root/core/pcexec.c" "$pc_bin/pcgroups.o" \
+	    >"$pc_trustdir/pcexec.txt" 2>&1 </dev/null ||
+	    pc_abort "cannot build pcexec (see $pc_trustdir/pcexec.txt)"
+	pc_cache_put "$pc_k" "$pc_bin/pcexec"
 fi
 # pcpty runs a command on a private pseudo-terminal for the terminal
 # utilities; if it cannot be built those tests report UNRESOLVED.

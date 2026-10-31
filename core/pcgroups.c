@@ -18,6 +18,7 @@
 #endif
 
 int pc_drop_groups(void);
+int pc_set_one_group(long g);
 
 /* Leave only group 65534 as a supplementary group: 0 on success, -1 if not done. */
 int pc_drop_groups(void)
@@ -28,5 +29,21 @@ int pc_drop_groups(void)
 	return setgroups(1, &g) == 0 ? 0 : -1;
 #else
 	return -1;
+#endif
+}
+
+/*
+ * Make g the only supplementary group (pcexec, before it changes user):
+ * 0 on success, -1 on failure, -2 where the system has no setgroups().
+ */
+int pc_set_one_group(long g)
+{
+#ifndef PC_NO_SETGROUPS
+	gid_t one = (gid_t)g;
+
+	return setgroups(1, &one) == 0 ? 0 : -1;
+#else
+	(void)g;
+	return -2;
 #endif
 }
