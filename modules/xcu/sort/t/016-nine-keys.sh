@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sort.016
+# MUTANT    sort.only_eight_keys
+# MUTANT    sort.ninth_rejected
+# MUTANT    sort.keys_reversed
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sort.016
 # rd FILE: the content of FILE in rd_v, read by the shell alone (no other
@@ -23,6 +26,11 @@ rd out
 [ "$rd_v" = "a a a a a a a a y
 a a a a a a a a z
 " ] || pc_fail "the ninth key was not significant: $rd_v"
+sort -k1,1 -k2,2 -k3,3 -k4,4 -k5,5 -k6,6 -k7,7 -k8,8 -k9,9r in1 >out 2>err </dev/null || pc_fail "sort with a reversed ninth key: nonzero status: $(cat err)"
+rd out
+[ "$rd_v" = "a a a a a a a a z
+a a a a a a a a y
+" ] || pc_fail "the ninth key was not compared in reverse: $rd_v"
 sort -k2,2 -k1,1 in2 >out 2>err </dev/null || pc_fail "sort -k2,2 -k1,1: nonzero status"
 rd out
 [ "$rd_v" = "b a

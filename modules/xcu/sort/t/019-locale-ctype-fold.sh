@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sort.019
+# MUTANT    sort.ignores_lc_ctype
+# MUTANT    sort.lang_over_lc_ctype
+# MUTANT    sort.lc_all_lowest_ctype
+# MUTANT    sort.ignores_lang
+# MUTANT    sort.ignores_lc_all
+# MUTANT    sort.null_lc_all_overrides
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcloc.sh"
 pc_begin XCU.sort.019
