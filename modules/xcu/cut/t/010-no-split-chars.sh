@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cut.010
+# MUTANT    cut.n_reject
+# MUTANT    cut.n_drop
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cut.010
 LC_ALL=POSIX

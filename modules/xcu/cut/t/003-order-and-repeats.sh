@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cut.003
+# MUTANT    cut.list_order
+# MUTANT    cut.dup
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cut.003
 LC_ALL=POSIX

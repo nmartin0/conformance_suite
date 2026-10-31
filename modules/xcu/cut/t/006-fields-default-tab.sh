@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cut.006
+# MUTANT    cut.default_space
+# MUTANT    cut.outsep_space
+# MUTANT    cut.f_status1
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cut.006
 LC_ALL=POSIX

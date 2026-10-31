@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cut.007
+# MUTANT    cut.delim_ignored
+# MUTANT    cut.outsep_tab
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cut.007
 LC_ALL=POSIX

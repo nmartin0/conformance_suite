@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cut.011
+# MUTANT    cut.reverse_files
+# MUTANT    cut.only_first_file
+# MUTANT    cut.dash_literal
+# MUTANT    cut.dash_skipped
+# MUTANT    cut.no_operand_error
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cut.011
 LC_ALL=POSIX

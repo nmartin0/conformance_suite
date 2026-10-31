@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cut.005
+# MUTANT    cut.beyond_error
+# MUTANT    cut.beyond_pad
+# MUTANT    cut.beyond_skipempty
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cut.005
 LC_ALL=POSIX
