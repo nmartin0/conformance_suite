@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.011
+# MUTANT    cp.R_status1
+# MUTANT    cp.R_no_empty_dirs
+# MUTANT    cp.R_no_dotfiles
+# MUTANT    cp.R_shallow
+# MUTANT    cp.R_new_nested
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.011
 nl='

@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.016
+# MUTANT    cp.R_status1
+# MUTANT    cp.H_as_L
+# MUTANT    cp.H_as_P
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.016
 mkdir real || pc_fail "cannot create real"

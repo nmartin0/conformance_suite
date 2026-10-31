@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.018
+# MUTANT    cp.same_trunc
+# MUTANT    cp.same_removes
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.018
 nl='

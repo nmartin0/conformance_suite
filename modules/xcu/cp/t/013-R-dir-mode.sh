@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.013
+# MUTANT    cp.R_status1
+# MUTANT    cp.R_dir_mode_default
+# MUTANT    cp.R_dir_left_rwx
+# MUTANT    cp.R_dir_ignores_umask
+# MUTANT    cp.R_ro_skips_contents
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.013
 modeof() {
@@ -13,12 +18,12 @@ modeof() {
 trap 'chmod -R u+rwx src dst 2>/dev/null' EXIT
 mkdir src || pc_fail "cannot create src"
 printf 'x\n' >src/f || pc_fail "cannot create src/f"
-chmod 500 src || pc_fail "cannot chmod src"
+chmod 570 src || pc_fail "cannot chmod src"
 pc_test
 (umask 022; cp -R src dst) >out 2>err </dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "cp -R exited with status $rc"
 [ -f dst/f ] || pc_fail "dst/f was not copied"
 modeof dst || pc_fail "cannot list dst"
-[ "$mo" = "dr-x------" ] || pc_fail "dst has mode $mo, expected dr-x------"
+[ "$mo" = "dr-xr-x---" ] || pc_fail "dst has mode $mo, expected dr-xr-x---"
 pc_pass

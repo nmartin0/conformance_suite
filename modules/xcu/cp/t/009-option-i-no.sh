@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.009
+# MUTANT    cp.i_no_prompt
+# MUTANT    cp.i_prompt_no_name
+# MUTANT    cp.i_prompt_stdout
+# MUTANT    cp.i_neg_overwrites
+# MUTANT    cp.i_neg_status1
+# MUTANT    cp.i_neg_removes
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.009
 nl='

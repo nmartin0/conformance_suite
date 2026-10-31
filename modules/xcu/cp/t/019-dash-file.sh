@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.019
+# MUTANT    cp.ok_status1
+# MUTANT    cp.dash_src_stdin
+# MUTANT    cp.dash_dst_stdout
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.019
 nl='

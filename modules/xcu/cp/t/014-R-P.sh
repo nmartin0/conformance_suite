@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.014
+# MUTANT    cp.R_status1
+# MUTANT    cp.P_follows
+# MUTANT    cp.P_target_wrong
+# MUTANT    cp.P_link_dropped
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.014
 mkdir src || pc_fail "cannot create src"

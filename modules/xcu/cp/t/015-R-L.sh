@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.015
+# MUTANT    cp.R_status1
+# MUTANT    cp.L_as_link
+# MUTANT    cp.L_empty
+# MUTANT    cp.L_dropped
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.015
 nl='
