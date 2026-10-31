@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.006
+# MUTANT    sed.i_flag_ignored
+# MUTANT    sed.i_as_g
+# MUTANT    sed.icase_always
+# MUTANT    sed.i_rejected
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sed.006
 LC_ALL=POSIX

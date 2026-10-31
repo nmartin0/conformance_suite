@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.009
+# MUTANT    sed.G_no_newline
+# MUTANT    sed.H_no_newline
+# MUTANT    sed.h_appends
+# MUTANT    sed.g_appends
+# MUTANT    sed.x_copies
+# MUTANT    sed.hold_nonempty_start
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sed.009
 LC_ALL=POSIX

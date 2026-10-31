@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.004
+# MUTANT    sed.amp_literal
+# MUTANT    sed.backslash_amp_special
+# MUTANT    sed.backref_swapped
+# MUTANT    sed.unmatched_group_literal
+# MUTANT    sed.repl_newline_dropped
+# MUTANT    sed.s_delim_slash_only
+# MUTANT    sed.delim_escape_unsupported
+# MUTANT    sed.bs_not_collapsed
+# MUTANT    sed.bracket_delim_ends_re
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sed.004
 LC_ALL=POSIX

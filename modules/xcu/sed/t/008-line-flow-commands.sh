@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.008
+# MUTANT    sed.d_only_empties
+# MUTANT    sed.n_no_print
+# MUTANT    sed.N_as_n
+# MUTANT    sed.N_space_joined
+# MUTANT    sed.P_whole
+# MUTANT    sed.D_as_d
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sed.008
 LC_ALL=POSIX
