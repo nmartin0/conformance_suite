@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.head.001
+# MUTANT    head.default9
+# MUTANT    head.default11
+# MUTANT    head.default_all
+# MUTANT    head.default_bytes
+# MUTANT    head.short_status1
+# MUTANT    head.short_nothing
+# MUTANT    head.header_single
 . "$PC_CORE/pc.sh"
 pc_begin XCU.head.001
 LC_ALL=POSIX
