@@ -13,9 +13,9 @@ class      conditional
 when       XSI
 says       After setutxent(), getutxent() returns entries one after another and
            finally a null pointer.
-note       Read-only. An absent, empty or hidden database gives NOTINUSE. An
-           entry whose type is none of the eight defined values gives UNRESOLVED
-           (the page does not forbid other values).
+note       Read-only. An absent, empty or hidden database gives NOTINUSE. The
+           type of an entry is not judged (the page does not forbid values
+           beyond the eight it lists).
 test       t/001-iterate.c
 
 assertion  XSH.getutxent.002

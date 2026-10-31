@@ -42,7 +42,7 @@ int main(void)
 	ld_need();
 	pcc_init();
 	ld_charmap("cmap", LD_HDR, '\\', "", "", 0);
-	len = tl_start(text, sizeof text);
+	len = tl_start_plain(text, sizeof text);
 	len = tl_formats(text, sizeof text, len);
 	len = tl_end(text, sizeof text, len);
 	(void)snprintf(text + len, sizeof text - len, "%s", REST);

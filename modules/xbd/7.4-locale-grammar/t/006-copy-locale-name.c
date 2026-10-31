@@ -20,12 +20,11 @@ int main(void)
 	pc_begin("XBD.7.4-locale-grammar.006");
 	ld_need();
 	pcc_init();
-	ld_ok("copyq", NULL, LD_CP_ALL, lq, sizeof lq);
-	ld_ok("copyb", NULL, BARE("LC_CTYPE") BARE("LC_COLLATE") BARE("LC_MONETARY") BARE("LC_NUMERIC") BARE("LC_TIME") BARE("LC_MESSAGES"), lb,
+	ld_ok_copy("copyq", NULL, LD_COPY_ALL, lq, sizeof lq);
+	ld_ok_copy("copyb", NULL, BARE("LC_CTYPE") BARE("LC_COLLATE") BARE("LC_MONETARY") BARE("LC_NUMERIC") BARE("LC_TIME") BARE("LC_MESSAGES"), lb,
 	    sizeof lb);
 	pc_check(setlocale(LC_ALL, "POSIX") != NULL, "setlocale(LC_ALL, \"POSIX\") failed");
 	pcb_sig(pcb_a, sizeof pcb_a, 0);
-	pc_test();
 	ld_load(lq);
 	pcb_sig(pcb_b, sizeof pcb_b, 0);
 	d = pcb_diff(pcb_a, pcb_b);

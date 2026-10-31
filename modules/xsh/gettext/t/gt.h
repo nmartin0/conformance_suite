@@ -113,19 +113,24 @@ static inline void gt_make_mo_cafe(const char *dir, const char *loc, const char 
 static inline void gt_pick_locale(char *name, size_t sz, char *codeset, size_t csz)
 {
 	const char *f, *ln;
+	int k, any = 0;
 
-	f = pc_find_locale("UTF-8", 0);
-	if (f == NULL)
+	for (k = 0; (f = pc_find_locale_nth("UTF-8", 0, k)) != NULL; k++) {
+		any = 1;
+		if (setlocale(LC_ALL, f) == NULL)
+			continue;
+		ln = setlocale(LC_MESSAGES, NULL);
+		if (ln == NULL || strlen(ln) >= sz || ln[0] == '\0' || strchr(ln, '/') != NULL ||
+		    strcmp(ln, "C") == 0 || strcmp(ln, "POSIX") == 0 || strncmp(ln, "C.", 2) == 0 ||
+		    strncmp(ln, "POSIX", 5) == 0)
+			continue;
+		(void)snprintf(name, sz, "%s", ln);
+		(void)snprintf(codeset, csz, "%s", nl_langinfo(CODESET));
+		return;
+	}
+	if (!any)
 		pc_unresolved("no installed locale with a UTF-8 code set");
-	if (setlocale(LC_ALL, f) == NULL)
-		pc_unresolved("setlocale to the found locale failed");
-	ln = setlocale(LC_MESSAGES, NULL);
-	if (ln == NULL || strlen(ln) >= sz || ln[0] == '\0' || strchr(ln, '/') != NULL ||
-	    strcmp(ln, "C") == 0 || strcmp(ln, "POSIX") == 0 || strncmp(ln, "C.", 2) == 0 ||
-	    strncmp(ln, "POSIX", 5) == 0)
-		pc_unresolved("the only locale found has a name that may stand for the POSIX locale");
-	(void)snprintf(name, sz, "%s", ln);
-	(void)snprintf(codeset, csz, "%s", nl_langinfo(CODESET));
+	pc_unresolved("the only locales found have names that may stand for the POSIX locale");
 }
 
 #endif

@@ -1,5 +1,7 @@
 /*
- * Reading the user accounting database from the start ends, and every entry has a defined type.
+ * Reading the user accounting database from the start ends with a null pointer.
+ * (An entry of a type the header does not list is not judged: the page does
+ * not forbid further types.)
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.getutxent.001
@@ -9,7 +11,7 @@
 int main(void)
 {
 	struct utmpx e[UTX_MAX];
-	long n, kept, i;
+	long n, kept;
 
 	pc_begin("XSH.getutxent.001");
 	pc_test();
@@ -17,8 +19,6 @@ int main(void)
 	endutxent();
 	if (n == 0)
 		pc_notinuse("the user accounting database is absent, empty or hidden");
-	for (i = 0; i < kept; i++)
-		if (!utx_known_type(e[i].ut_type))
-			pc_unresolved("entry %ld has a type (%d) outside the eight the header defines", i, (int)e[i].ut_type);
+	(void)kept;
 	pc_pass();
 }

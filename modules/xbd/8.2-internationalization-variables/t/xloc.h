@@ -33,7 +33,7 @@ static void xl_make(void)
 		if ((unsigned char)pcc_all[i] == 0xe1)
 			pc_notinuse("a portable character is encoded at byte 0xe1");
 	ld_charmap("xcmap", LD_HDR, '\\', "<x-low1> \\xe1\n", "", 0);
-	tlen = tl_start(tm_, sizeof tm_);
+	tlen = tl_start_plain(tm_, sizeof tm_);
 	tlen = tl_formats(tm_, sizeof tm_, tlen);
 	(void)tl_end(tm_, sizeof tm_, tlen);
 	(void)snprintf(text, sizeof text,

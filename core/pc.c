@@ -427,7 +427,7 @@ void pc_require_space(void)
 
 /* ---------- locale discovery ---------- */
 
-const char *pc_find_locale(const char *codeset, int multibyte)
+const char *pc_find_locale_nth(const char *codeset, int multibyte, int nth)
 {
 	static char found[256];
 	char line[256];
@@ -451,6 +451,8 @@ const char *pc_find_locale(const char *codeset, int multibyte)
 			continue;
 		if (strcmp(nl_langinfo(CODESET), codeset) == 0 &&
 		    (!multibyte || MB_CUR_MAX > 1)) {
+			if (nth-- > 0)
+				continue;
 			(void)snprintf(found, sizeof found, "%s", line);
 			ok = 1;
 		}
@@ -459,4 +461,9 @@ const char *pc_find_locale(const char *codeset, int multibyte)
 	(void)setlocale(LC_ALL, "C");
 	pc_internal_leave();
 	return ok ? found : NULL;
+}
+
+const char *pc_find_locale(const char *codeset, int multibyte)
+{
+	return pc_find_locale_nth(codeset, multibyte, 0);
 }
