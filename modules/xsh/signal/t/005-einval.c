@@ -146,6 +146,13 @@ int main(void)
 
 	pc_begin("XSH.signal.005");
 	c[1].sig = big_sig();
+	{
+		/* The number must not be a signal here; if it is, sysconf() is at fault (XSH.sysconf.015), not signal(). */
+		struct sigaction old;
+
+		if (sigaction(c[1].sig, NULL, &old) == 0)
+			pc_unresolved("signal %d, from sysconf(_SC_NSIG), is a supported signal here", c[1].sig);
+	}
 	pc_test();
 	for (i = 0; i < sizeof c / sizeof c[0]; i++) {
 		void (*r)(int);
