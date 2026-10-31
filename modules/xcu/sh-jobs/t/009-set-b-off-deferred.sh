@@ -35,6 +35,6 @@ o=$(tr -d '\r' <pty.out)
 ld=$(printf '%s\n' "$o" | grep -n 'Done' | head -n 1 | cut -d: -f1)
 lm=$(printf '%s\n' "$o" | grep -n -x -F FGMID | head -n 1 | cut -d: -f1)
 [ -n "$ld" ] || pc_fail "no completion message: $o"
-[ -n "$lm" ] || pc_unresolved "the foreground command printed nothing"
+[ -n "$lm" ] || pc_fail "the foreground command printed nothing: $o"
 [ "$ld" -gt "$lm" ] || pc_fail "the message was written before the foreground command ended (line $ld, FGMID at $lm)"
 pc_pass

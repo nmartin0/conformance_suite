@@ -55,6 +55,12 @@ const char *pc_errname(int e);
 /*
  * Setup helpers. They run with mutants disabled, and any failure inside
  * them is UNRESOLVED, whichever phase the test is in.
+ *
+ * Observation helpers (pc_file_size, pc_file_mode, pc_file_equals) are
+ * phase-aware: if the file cannot be opened, examined or read, the result is
+ * UNRESOLVED in the setup phase and FAIL in the test phase (a missing
+ * observable is a failed observation), except that running out of
+ * descriptors or memory is UNRESOLVED in both.
  */
 void pc_make_file(const char *path, const char *contents);
 void pc_make_dir(const char *path);

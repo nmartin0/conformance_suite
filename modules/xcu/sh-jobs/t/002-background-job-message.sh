@@ -26,6 +26,6 @@ printf '%s\n' 'sleep 30 &' 'echo P$!P' 'kill %1' 'wait' 'exit' >pc.in || pc_unre
 pc_test
 ish pc.in
 want=$(tr -d '\r' <pty.out | sed -n 's/^P\([0-9][0-9]*\)P$/\1/p' | head -n 1)
-[ -n "$want" ] || pc_unresolved "could not read the process id from the output"
+[ -n "$want" ] || pc_fail "the shell did not print the process id of the background job: $(tr -d '\r' <pty.out)"
 tr -d '\r' <pty.out | grep -q "^\[1\] $want\$" || pc_fail "no line '[1] $want' in the output: $(tr -d '\r' <pty.out)"
 pc_pass

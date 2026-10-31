@@ -34,7 +34,7 @@ exec 3>in
 printf '$a\nadded\n.\n!: >ready\n' >&3
 i=0
 while [ ! -f ready ] && [ "$i" -lt 20 ]; do sleep 1; i=$((i+1)); done
-[ -f ready ] || pc_unresolved "ed did not run a command"
+[ -f ready ] || pc_fail "ed did not run the shell command it was given (no file ready after 20 s)"
 kill -HUP "$pid" 2>/dev/null
 i=0
 while kill -0 "$pid" 2>/dev/null && [ "$i" -lt 20 ]; do

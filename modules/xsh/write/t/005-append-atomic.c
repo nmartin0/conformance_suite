@@ -49,8 +49,10 @@ int main(void)
 	pc_check(size == 10000, "the file has %ld bytes, expected 10000: appends were lost", size);
 	buf = malloc(10000);
 	fd = open("f", O_RDONLY);
-	if (buf == NULL || fd < 0 || read(fd, buf, 10000) != 10000)
-		pc_unresolved("cannot read the file back");
+	if (buf == NULL)
+		pc_unresolved("cannot allocate the read buffer");
+	if (fd < 0 || read(fd, buf, 10000) != 10000)
+		pc_fail("cannot read the 10000 bytes of the file back");
 	memset(seen, 0, sizeof seen);
 	for (i = 0; i < 1000; i++) {
 		char *r = buf + i * 10;

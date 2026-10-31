@@ -35,6 +35,6 @@ o=$(tr -d '\r' <pty.out)
 lt=$(printf '%s\n' "$o" | grep -n 'PCTOK' | head -n 1 | cut -d: -f1)
 lb=$(printf '%s\n' "$o" | grep -n -x -F BEFORE | head -n 1 | cut -d: -f1)
 [ -n "$lt" ] || pc_fail "no mail message at all: $o"
-[ -n "$lb" ] || pc_unresolved "the line BEFORE was not seen"
+[ -n "$lb" ] || pc_fail "the line BEFORE was not printed: $o"
 [ "$lt" -gt "$lb" ] || pc_fail "the message came before the interval had passed (line $lt, BEFORE at $lb)"
 pc_pass

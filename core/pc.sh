@@ -77,4 +77,16 @@ pc_check() {
 	"$@" || pc_fail "$pc__msg"
 }
 
+# pc_need_file <path> [what]: the file must exist and be readable. A file
+# that is missing is a failed observation in the test phase (FAIL) and a
+# setup problem in the setup phase (UNRESOLVED), as pc_fail already decides.
+# Use it, or pc_fail, where a test looks at something the utility under test
+# was to produce; never pc_unresolved, whose result hides a missing output.
+pc_need_file() {
+	if command [ -e "$1" ] && command [ -r "$1" ]; then
+		return 0
+	fi
+	pc_fail "${2:-the file} $1 is missing or unreadable"
+}
+
 pc_note() { command printf 'note: %s\n' "$*" >&2; }

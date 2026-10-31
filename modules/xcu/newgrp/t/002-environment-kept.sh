@@ -24,7 +24,7 @@ rc=$?
 v=$(sed -n 's/^v=//p' out)
 p=$(sed -n 's/^d=//p' out)
 m=$(sed -n 's/^m=//p' out)
-[ -n "$m" ] || pc_unresolved "the new shell did not report the mask"
+[ -n "$m" ] || pc_fail "the new shell did not report the mask (output: $(tr '\n' ' ' <out))"
 m=${m#"${m%%[!0]*}"}
 [ "$v" = kept_value ] || pc_fail "the exported variable has the value '$v' in the new shell"
 [ "$p" = "$want_pwd" ] || pc_fail "the working directory is '$p' in the new shell, expected '$want_pwd'"
