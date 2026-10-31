@@ -31,7 +31,8 @@ class      required
 since      1992
 says       strings -t d, -t o and -t x write each string preceded by its byte
            offset from the start of the file, in decimal, octal or
-           (lowercase) hexadecimal, and one space.
+           (lowercase) hexadecimal, and one or more blanks (a decimal offset
+           may be padded with blanks and an octal one with leading zeros).
 test       t/003-offsets.sh
 
 assertion  XCU.strings.004
