@@ -31,13 +31,44 @@
  */
 
 /*
- * The error indicator alone is cleared behind the C library's back: both
- * reference C libraries keep it in the first word of the FILE object
- * (glibc's _IO_ERR_SEEN, musl's F_ERR, both 0x20).
+ * The error indicator alone is cleared: the stream goes on reporting
+ * end-of-file, which a small table that feof() and clearerr() consult
+ * keeps for it.
  */
+static FILE *eof_kept[4];
+
+int feof(FILE *f)
+{
+	REAL(feof);
+	int i;
+
+	for (i = 0; i < 4; i++)
+		if (eof_kept[i] == f)
+			return 1;
+	return real_feof(f);
+}
+
+void clearerr(FILE *f)
+{
+	REAL(clearerr);
+	int i;
+
+	for (i = 0; i < 4; i++)
+		if (eof_kept[i] == f)
+			eof_kept[i] = NULL;
+	real_clearerr(f);
+}
+
 static void clear_error_only(FILE *f)
 {
-	*(unsigned *)(void *)f &= ~0x20u;
+	int i, at_eof = feof(f);
+
+	clearerr(f);
+	for (i = 0; at_eof && i < 4; i++)
+		if (eof_kept[i] == NULL) {
+			eof_kept[i] = f;
+			break;
+		}
 }
 
 void rewind(FILE *f)

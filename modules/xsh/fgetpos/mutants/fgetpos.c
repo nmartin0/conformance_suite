@@ -48,30 +48,7 @@ static const char *mutant_of(const char *prefix)
 #define REAL(fn) static __typeof__(fn) *real_##fn; \
 	if (real_##fn == NULL) real_##fn = (__typeof__(fn) *)dlsym(RTLD_NEXT, #fn)
 
-/*
- * A stream's indicators, set or cleared behind the C library's back to
- * plant a fault. Both reference C libraries keep them in the first word of
- * the FILE object, with the same bits: glibc's _flags (_IO_EOF_SEEN 0x10,
- * _IO_ERR_SEEN 0x20) and musl's flags (F_EOF 16, F_ERR 32).
- */
-#define PC_EOF 0x10u
-#define PC_ERR 0x20u
 
-static void set_bits(FILE *f, unsigned b)
-{
-	*(unsigned *)(void *)f |= b;
-}
-
-static void clear_bits(FILE *f, unsigned b)
-{
-	*(unsigned *)(void *)f &= ~b;
-}
-
-/* The bits of b that are set on f. */
-static unsigned get_bits(FILE *f, unsigned b)
-{
-	return *(unsigned *)(void *)f & b;
-}
 
 /*
  * Both reference C libraries, on the LP64 systems the suite is tried on,

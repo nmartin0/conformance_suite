@@ -49,28 +49,91 @@ static const char *mutant_of(const char *prefix)
 	if (real_##fn == NULL) real_##fn = (__typeof__(fn) *)dlsym(RTLD_NEXT, #fn)
 
 /*
- * A stream's indicators, set or cleared behind the C library's back to
- * plant a fault. Both reference C libraries keep them in the first word of
- * the FILE object, with the same bits: glibc's _flags (_IO_EOF_SEEN 0x10,
- * _IO_ERR_SEEN 0x20) and musl's flags (F_EOF 16, F_ERR 32).
+ * A stream's indicators as the program sees them. The library's own are
+ * left alone; a fault is planted by keeping an indicator the library does
+ * not report, or by hiding one it does, in a small table that feof(),
+ * ferror() and clearerr() consult. clearerr() forgets a stream's entry.
  */
-#define PC_EOF 0x10u
-#define PC_ERR 0x20u
+#define PC_EOF 1u
+#define PC_ERR 2u
 
-static void set_bits(FILE *f, unsigned b)
+static struct { FILE *f; unsigned kept, hidden; } ovl[16];
+
+static int ovl_find(FILE *f, int make)
 {
-	*(unsigned *)(void *)f |= b;
+	int i;
+
+	for (i = 0; i < 16; i++)
+		if (ovl[i].f == f)
+			return i;
+	if (make)
+		for (i = 0; i < 16; i++)
+			if (ovl[i].f == NULL) {
+				ovl[i].f = f;
+				return i;
+			}
+	return -1;
 }
 
-static void clear_bits(FILE *f, unsigned b)
+static unsigned ovl_apply(FILE *f, unsigned seen)
 {
-	*(unsigned *)(void *)f &= ~b;
+	int i = ovl_find(f, 0);
+
+	return i < 0 ? seen : (seen | ovl[i].kept) & ~ovl[i].hidden;
 }
 
-/* The bits of b that are set on f. */
+static void ovl_forget(FILE *f)
+{
+	int i = ovl_find(f, 0);
+
+	if (i >= 0)
+		ovl[i].f = NULL, ovl[i].kept = ovl[i].hidden = 0;
+}
+
+int feof(FILE *f)
+{
+	REAL(feof);
+
+	return (ovl_apply(f, real_feof(f) ? PC_EOF : 0) & PC_EOF) != 0;
+}
+
+int ferror(FILE *f)
+{
+	REAL(ferror);
+
+	return (ovl_apply(f, real_ferror(f) ? PC_ERR : 0) & PC_ERR) != 0;
+}
+
+/* The bits of b that f reports. */
 static unsigned get_bits(FILE *f, unsigned b)
 {
-	return *(unsigned *)(void *)f & b;
+	return ((feof(f) ? PC_EOF : 0) | (ferror(f) ? PC_ERR : 0)) & b;
+}
+
+/* f reports the indicators in b, whatever the library says. */
+static void set_bits(FILE *f, unsigned b)
+{
+	int i = ovl_find(f, 1);
+
+	if (i >= 0)
+		ovl[i].kept |= b, ovl[i].hidden &= ~b;
+}
+
+/* f does not report the indicators in b, whatever the library says. */
+static void clear_bits(FILE *f, unsigned b)
+{
+	int i = ovl_find(f, 1);
+
+	if (i >= 0)
+		ovl[i].hidden |= b, ovl[i].kept &= ~b;
+}
+
+void clearerr(FILE *f)
+{
+	REAL(clearerr);
+
+	ovl_forget(f);
+	real_clearerr(f);
 }
 
 /* keeps_pushback: the last byte pushed back on a stream, in any phase. */
