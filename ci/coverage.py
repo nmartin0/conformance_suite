@@ -6,6 +6,7 @@
 # usage:
 #   ci/coverage.py --standard DIR                 report every module
 #   ci/coverage.py --standard DIR --total         also size the whole standard
+#                                                 and list pages with no module
 #   ci/coverage.py --standard DIR --show MODULE   print a page's units, with
 #                                                 their text, to the terminal
 #   ci/coverage.py --standard DIR --stub MODULE   print .cov lines for units
@@ -41,6 +42,17 @@
 # Text after " #" on a line is a comment.
 # Units with no line are "unaccounted". Exit status 1 when a .cov line names
 # a unit that is not on the page (the text changed) or an unknown assertion.
+#
+# Pages: every reference page (a file of functions/, utilities/ or basedefs/
+# with a manual section) must have a module, or be an alias, or be on the
+# short-term known-missing list; otherwise the run fails, naming the page.
+#   ci/aliases.list        "PAGE TARGET": PAGE has the same text as TARGET
+#                          (the standard prints one page under several
+#                          names); TARGET has a module. Checked: the texts
+#                          must still be identical.
+#   ci/known-missing.list  pages whose module is being written; whoever
+#                          adds the module deletes the line (a line for a
+#                          page that has a module fails the run).
 
 import argparse
 import hashlib
@@ -259,6 +271,67 @@ def units_of(path, section=None, xcu=False):
     return out
 
 
+def page_text(path):
+    """The text of a reference page from its first manual section on,
+    spacing normalised (the navigation above it differs between aliases);
+    None for a file that is not a reference page."""
+    t = path.read_text(encoding="latin-1")
+    i = t.find('<h4 class="mansect">')
+    return None if i < 0 else re.sub(r"\s+", " ", t[i:])
+
+
+def read_pairs(path):
+    """{first word: rest} of a list file; '#' starts a comment."""
+    out = {}
+    if path.is_file():
+        for line in path.read_text().splitlines():
+            line = line.split("#", 1)[0].split(None, 1)
+            if line:
+                out[line[0]] = line[1].strip() if len(line) > 1 else ""
+    return out
+
+
+def check_pages(std, mods, aliases, known):
+    """(problems, unmoduled): problems are printed lines; unmoduled is the
+    sorted reference pages with no module, as (page, why) pairs."""
+    have = {m.fields["page"] for m in mods.values()}
+    pages = {}
+    for d in ("functions", "utilities", "basedefs"):
+        for p in sorted((std / d).glob("*.html")):
+            if p.name.startswith("V") or p.name in ("contents.html",
+                                                    "toc.html"):
+                continue
+            if page_text(p) is not None:
+                pages[f"{d}/{p.name}"] = p
+    problems, unmoduled = [], []
+    for name, p in pages.items():
+        if name in have:
+            if name in aliases or name in known:
+                problems.append(f"coverage: {name} has a module but is "
+                                f"listed as an alias or as known missing")
+            continue
+        if name in aliases:
+            t = aliases[name]
+            if t not in have:
+                problems.append(f"coverage: alias {name}: target {t} has "
+                                f"no module")
+            elif page_text(pages[t]) != page_text(p):
+                problems.append(f"coverage: alias {name}: text differs "
+                                f"from {t}; it needs its own module")
+            unmoduled.append((name, "alias of " + t))
+        elif name in known:
+            unmoduled.append((name, "known missing"))
+        else:
+            problems.append(f"coverage: page {name} has no module (and is "
+                            f"not an alias in ci/aliases.list)")
+            unmoduled.append((name, "NO MODULE"))
+    for name in list(aliases) + list(known):
+        if name not in pages:
+            problems.append(f"coverage: {name} (alias or known-missing "
+                            f"list) is not a reference page")
+    return problems, sorted(unmoduled)
+
+
 def read_cov(path):
     entries = {}
     if not path.is_file():
@@ -289,6 +362,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--standard", type=Path, required=True)
     ap.add_argument("--modules", type=Path, default=root / "modules")
+    ap.add_argument("--aliases", type=Path, default=root / "ci/aliases.list")
+    ap.add_argument("--known-missing", type=Path,
+                    default=root / "ci/known-missing.list")
     ap.add_argument("--show")
     ap.add_argument("--stub")
     ap.add_argument("--total", action="store_true")
@@ -364,7 +440,19 @@ def main():
           f"{totals['partial']:>5} {totals['classified']:>6} "
           f"{totals['todo']:>4} {totals['unacc']:>6}")
 
+    pp, unmoduled = check_pages(a.standard, mods, read_pairs(a.aliases),
+                                read_pairs(a.known_missing))
+    for line in pp:
+        print(line)
+    problems += len(pp)
+
     if a.total:
+        print("\npages with no module:")
+        for name, why in unmoduled:
+            if not why.startswith("alias"):
+                print(f"  {name:<40} {why}")
+        print(f"  ({sum(w.startswith('alias') for _, w in unmoduled)} more "
+              f"are aliases of a page with a module: ci/aliases.list)")
         n = Counter()
         for vol, d in (("XSH", "functions"), ("XCU", "utilities"),
                        ("XBD", "basedefs")):
