@@ -2,6 +2,16 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.grep.004
+# MUTANT    grep.i_ignored
+# MUTANT    grep.v_ignored
+# MUTANT    grep.x_ignored
+# MUTANT    grep.x_start
+# MUTANT    grep.x_end
+# MUTANT    grep.x_alt_anchor
+# MUTANT    grep.x_lost_with_i
+# MUTANT    grep.i_lost_with_v
+# MUTANT    grep.v_lost_with_x
+# MUTANT    grep.v_null_dropped
 . "$PC_CORE/pc.sh"
 pc_begin XCU.grep.004
 LC_ALL=POSIX

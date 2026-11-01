@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.grep.007
+# MUTANT    grep.prefix_missing
+# MUTANT    grep.prefix_dash
+# MUTANT    grep.prefix_space
+# MUTANT    grep.prefix_basename
+# MUTANT    grep.prefix_single
+# MUTANT    grep.n_before_file
+# MUTANT    grep.n_no_reset
+# MUTANT    grep.stdin_extra
+# MUTANT    grep.c_zero_silent
 . "$PC_CORE/pc.sh"
 pc_begin XCU.grep.007
 LC_ALL=POSIX
