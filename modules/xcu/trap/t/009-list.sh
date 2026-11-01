@@ -3,6 +3,16 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.trap.009
+# MUTANT    trap.list_has_default
+# MUTANT    trap.list_omits_ignored
+# MUTANT    trap.list_omits_actions
+# MUTANT    trap.list_no_dashdash
+# MUTANT    trap.list_stderr
+# MUTANT    trap.list_unquoted
+# MUTANT    trap.list_first_only
+# VARIANT   trap.list_dquote
+# VARIANT   trap.list_reversed
+# VARIANT   trap.list_sigprefix
 . "$PC_CORE/pc.sh"
 pc_begin XCU.trap.009
 nl='
