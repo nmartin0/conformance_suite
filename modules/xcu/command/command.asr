@@ -127,3 +127,18 @@ since      1992
 says       The command_name operand is not recognized as a reserved word:
            command if looks for a utility named if.
 test       t/013-no-reserved.sh
+
+assertion  XCU.command.014
+anchor     utilities/command.html#DESCRIPTION
+anchor     utilities/V3_chap02.html#2.9.1.1
+class      required
+since      2024
+says       command is a declaration utility when its first argument is one:
+           in command export name=word the word is expanded as in an
+           assignment, so a tilde after the equals sign or after an unquoted
+           colon is expanded, and the result of a parameter expansion is
+           neither split into fields nor used as a pathname pattern.
+note       Added by hardening, because the page states this requirement and
+           the module had no assertion for it. The test needs a shell that
+           implements it, which the 2024 text requires.
+test       t/014-declaration-utility.sh
