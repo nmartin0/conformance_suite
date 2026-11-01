@@ -14,6 +14,7 @@
 # VARIANT   ls.lF_form1
 # VARIANT   ls.lF_form3
 # VARIANT   ls.lp_slash
+# VARIANT   ls.acl_flag
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.043
 LC_ALL=POSIX; export LC_ALL

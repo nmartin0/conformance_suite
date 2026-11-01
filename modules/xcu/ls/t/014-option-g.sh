@@ -6,6 +6,8 @@
 # MUTANT    ls.g_drops_both
 # MUTANT    ls.g_is_o
 # MUTANT    ls.g_short
+# VARIANT   ls.acl_flag
+# VARIANT   ls.names_numeric
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.014
 LC_ALL=POSIX; export LC_ALL
@@ -14,10 +16,12 @@ mkdir d || pc_fail "cannot create d"
 # Give the file a group that is not the owner's, where the privilege allows
 # it, so that the owner and group fields differ; failure is ignored.
 chgrp "$(( $(id -g) + 54321 ))" d/f 2>/dev/null
-set -- $(ls -l d/f) || pc_fail "ls -l failed"
-[ "$#" -eq 9 ] || pc_unresolved "setup: unexpected number of fields in ls -l"
-lgrp=$4
 pc_test
+# the reference comes from the same ls, in the test phase
+set -- $(ls -l d/f) || pc_fail "ls -l failed"
+[ "$#" -ge 9 ] || pc_fail "only $# fields in the long format line, nine are required"
+[ "$#" -eq 9 ] || pc_unresolved "unexpected number of fields in ls -l"
+lgrp=$4
 ls -g d/f >out 2>err </dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "ls -g exited with status $rc"

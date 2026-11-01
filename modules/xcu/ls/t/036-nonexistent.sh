@@ -9,6 +9,8 @@
 # MUTANT    ls.err_stdout_only
 # VARIANT   ls.err_status2
 # VARIANT   ls.err_verbose
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.036
 nl='

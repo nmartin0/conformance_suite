@@ -6,6 +6,8 @@
 # MUTANT    ls.n_group_name
 # MUTANT    ls.n_owner_name
 # MUTANT    ls.n_short
+# VARIANT   ls.acl_flag
+# VARIANT   ls.names_numeric
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.013
 LC_ALL=POSIX; export LC_ALL

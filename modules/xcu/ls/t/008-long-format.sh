@@ -13,6 +13,7 @@
 # VARIANT   ls.acl_flag
 # VARIANT   ls.dot_A
 # VARIANT   ls.dot_a
+# VARIANT   ls.names_numeric
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.008
 LC_ALL=POSIX; export LC_ALL

@@ -10,6 +10,8 @@
 # MUTANT    ls.d_seconds
 # MUTANT    ls.d_window_short
 # MUTANT    ls.d_window_long
+# VARIANT   ls.acl_flag
+# VARIANT   ls.names_numeric
 #
 # The year of a future file rests on touch -t accepting a date in 2037,
 # which the touch page requires.

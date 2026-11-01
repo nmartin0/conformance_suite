@@ -8,6 +8,8 @@
 # MUTANT    ls.op_no_blank
 # MUTANT    ls.op_no_header
 # MUTANT    ls.op_leading_blank
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.023
 nl='
@@ -24,6 +26,11 @@ slurp() {
 }
 
 LC_ALL=POSIX; export LC_ALL
+# A listing may also hold dot and dot-dot (DESCRIPTION): they are dropped.
+nodot() {
+	grep -v -F -x -e . -e .. "$1" >"$1.nd"
+	slurp "$1.nd"
+}
 mkdir d1 d2 || pc_fail "cannot create directories"
 : >f1 || pc_fail "cannot create f1"
 : >f2 || pc_fail "cannot create f2"
@@ -33,9 +40,9 @@ pc_test
 ls f2 d2 f1 d1 >out 2>err </dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "ls exited with status $rc"
-slurp out
+nodot out
 [ "$data" = "f1${nl}f2${nl}${nl}d1:${nl}x${nl}${nl}d2:${nl}y${nl}" ] || pc_fail "output is wrong"
 ls d2 d1 >out 2>err </dev/null
-slurp out
+nodot out
 [ "$data" = "d1:${nl}x${nl}${nl}d2:${nl}y${nl}" ] || pc_fail "output for two directories is wrong"
 pc_pass

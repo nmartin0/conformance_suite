@@ -7,6 +7,8 @@
 # MUTANT    ls.asgiven_strips_dot
 # MUTANT    ls.asgiven_basename
 # MUTANT    ls.named_dot_dropped
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.037
 nl='

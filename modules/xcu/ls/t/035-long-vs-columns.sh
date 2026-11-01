@@ -8,6 +8,10 @@
 # MUTANT    ls.long_C_not_enabled
 # MUTANT    ls.long_x_not_enabled
 # MUTANT    ls.long_m_not_enabled
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
+# VARIANT   ls.acl_flag
+# VARIANT   ls.names_numeric
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.035
 nl='

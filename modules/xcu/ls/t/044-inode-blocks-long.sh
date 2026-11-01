@@ -9,6 +9,10 @@
 # MUTANT    ls.no_total_s1
 # MUTANT    ls.blk_after_name_1
 # VARIANT   ls.s_units
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
+# VARIANT   ls.acl_flag
+# VARIANT   ls.names_numeric
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.044
 LC_ALL=POSIX; export LC_ALL
@@ -21,9 +25,11 @@ ino=$(ls -i d/f | awk '{ print $1 }')
 blk=$(ls -s d/f | awk '{ print $1 }')
 case $ino in ''|*[!0-9]*) pc_fail "ls -i gave '$ino'" ;; esac
 case $blk in ''|*[!0-9]*) pc_fail "ls -s gave '$blk'" ;; esac
-ls -i -s -l d >out 2>err </dev/null
+ls -i -s -l d >out0 2>err </dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "ls -i -s -l exited with status $rc"
+# a listing may also hold dot and dot-dot (DESCRIPTION)
+awk '$NF != "." && $NF != ".."' out0 >out
 [ "$(sed -n '$=' out)" = 2 ] || pc_fail "expected the total line and one line: $(cat out)"
 case $(sed -n 1p out) in
 "total "[0-9]*) ;;
@@ -36,7 +42,9 @@ set -- $(sed -n 2p out)
 m10=${3%"${3#??????????}"}
 [ "$m10" = '-rw-r-----' ] || pc_fail "the third field '$3' is not the mode string"
 [ "${11}" = f ] || pc_fail "the last field is '${11}', expected f"
-ls -i -s -1 d >out 2>err </dev/null || pc_fail "ls -i -s -1 failed"
+ls -i -s -1 d >out0 2>err </dev/null || pc_fail "ls -i -s -1 failed"
+# a listing may also hold dot and dot-dot (DESCRIPTION)
+awk '$NF != "." && $NF != ".."' out0 >out
 # -s also puts the status line "total N" before the list of a directory
 case $(sed -n 1p out) in
 "total "[0-9]*) ;;

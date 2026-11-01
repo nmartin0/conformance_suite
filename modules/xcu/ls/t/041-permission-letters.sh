@@ -19,6 +19,7 @@
 # MUTANT    ls.sgid_S_as_minus
 # MUTANT    ls.sgid_S_as_s
 # MUTANT    ls.sgid_s_as_S
+# VARIANT   ls.acl_flag
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.041
 LC_ALL=POSIX; export LC_ALL

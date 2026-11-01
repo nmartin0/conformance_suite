@@ -5,6 +5,8 @@
 # MUTANT    ls.u_ignored
 # MUTANT    ls.u_is_c
 # MUTANT    ls.u_l_mtime
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.027
 nl='
@@ -21,6 +23,11 @@ slurp() {
 }
 
 LC_ALL=POSIX; export LC_ALL
+# A listing may also hold dot and dot-dot (DESCRIPTION): they are dropped.
+nodot() {
+	grep -v -F -x -e . -e .. "$1" >"$1.nd"
+	slurp "$1.nd"
+}
 mkdir d || pc_fail "cannot create d"
 touch -m -t 200101010101 d/p || pc_fail "cannot set time"
 touch -m -t 200201010101 d/q || pc_fail "cannot set time"
@@ -34,12 +41,12 @@ sleep 2
 touch -a -t 200301010101 d/r || pc_fail "cannot set time"
 pc_test
 ls -t d >out 2>err </dev/null
-slurp out
+nodot out
 [ "$data" = "r${nl}q${nl}p${nl}" ] || pc_fail "ls -t (modification time) output is wrong"
 ls -tu d >out 2>err </dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "ls -tu exited with status $rc"
-slurp out
+nodot out
 [ "$data" = "p${nl}q${nl}r${nl}" ] || pc_fail "ls -tu output is wrong"
 l=$(ls -lu d/p) || pc_fail "ls -lu failed"
 set -- $l

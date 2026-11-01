@@ -9,6 +9,8 @@
 # MUTANT    ls.ok_stderr_l
 # MUTANT    ls.ok_stderr_s
 # MUTANT    ls.ok_stderr_i
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.049
 LC_ALL=POSIX; export LC_ALL

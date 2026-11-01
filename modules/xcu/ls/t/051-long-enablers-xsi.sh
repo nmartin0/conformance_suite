@@ -8,6 +8,10 @@
 # MUTANT    ls.disable_o_missing
 # MUTANT    ls.one_disables_g
 # MUTANT    ls.one_disables_o
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
+# VARIANT   ls.acl_flag
+# VARIANT   ls.names_numeric
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.051
 LC_ALL=POSIX; export LC_ALL
