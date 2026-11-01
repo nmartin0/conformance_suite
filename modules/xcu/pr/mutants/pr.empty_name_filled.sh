@@ -4,7 +4,7 @@
 mkdir -p pc-mutbin
 printf '#!/bin/sh\nREAL="%s"\n' "$(command -v pr)" >pc-mutbin/pr
 cat >>pc-mutbin/pr <<'PC_EOF'
-"$REAL" "$@" | sed 's/^\(.*[0-9][0-9][0-9][0-9]\)  Page \([0-9][0-9]*\)$/\1 stdin Page \2/'
+"$REAL" "$@" | sed 's/ \{2,\}Page \([0-9][0-9]*\)$/ stdin Page \1/'
 PC_EOF
 chmod +x pc-mutbin/pr
 PATH=$PWD/pc-mutbin:$PATH
