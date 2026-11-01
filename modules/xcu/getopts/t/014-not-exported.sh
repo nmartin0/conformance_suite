@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.getopts.014
+# MUTANT    getopts.export_optind
+# MUTANT    getopts.export_optarg
+# VARIANT   getopts.reimpl
 . "$PC_CORE/pc.sh"
 pc_begin XCU.getopts.014
 PCMARK=1; export PCMARK

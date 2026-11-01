@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.getopts.012
+# MUTANT    getopts.param_ignored
+# MUTANT    getopts.param_end_minus1
+# VARIANT   getopts.reimpl
+# VARIANT   getopts.optind_opaque
 . "$PC_CORE/pc.sh"
 pc_begin XCU.getopts.012
 pc_test
@@ -20,4 +24,11 @@ ind=$OPTIND
 [ "$rc3" -eq 1 ] || pc_fail "third call exited $rc3, wanted 1"
 [ "$ind" = 3 ] || pc_fail "OPTIND is '$ind', wanted 3"
 [ "$1" = -Q ] || pc_fail "positional parameters were changed"
+# the list may end right after the last option: OPTIND is one beyond it
+OPTIND=1
+getopts a pcopt -a
+getopts a pcopt -a
+rc=$?
+[ "$rc" -eq 1 ] || pc_fail "end of a one-word list exited $rc"
+[ "$OPTIND" = 2 ] || pc_fail "OPTIND is '$OPTIND' after a one-word list, wanted 2"
 pc_pass

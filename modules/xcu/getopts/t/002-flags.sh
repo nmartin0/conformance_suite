@@ -2,6 +2,19 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.getopts.002
+# MUTANT    getopts.flag_status1
+# MUTANT    getopts.end_status0
+# MUTANT    getopts.end_status2
+# MUTANT    getopts.end_name_kept
+# MUTANT    getopts.end_name_empty
+# MUTANT    getopts.end_optind_minus1
+# MUTANT    getopts.end_optind_plus1
+# MUTANT    getopts.end_noperand_clamp
+# MUTANT    getopts.flag_name_empty
+# MUTANT    getopts.positional_ignored
+# MUTANT    getopts.restart_each_call
+# VARIANT   getopts.reimpl
+# VARIANT   getopts.optind_opaque
 . "$PC_CORE/pc.sh"
 pc_begin XCU.getopts.002
 pc_test
@@ -21,4 +34,24 @@ ind=$OPTIND
 [ "$rc3" -eq 1 ] || pc_fail "third call exited $rc3, wanted 1"
 [ "$v3" = '?' ] || pc_fail "name is '$v3' at the end of options, wanted ?"
 [ "$ind" = 3 ] || pc_fail "OPTIND is '$ind' at the end of options, wanted 3"
+# no operand: OPTIND is one beyond the last word
+OPTIND=1
+set -- -a
+getopts a pcopt
+getopts a pcopt
+rc=$?
+v=$pcopt
+ind=$OPTIND
+[ "$rc" -eq 1 ] && [ "$v" = '?' ] || pc_fail "no operand: exit $rc, name '$v'"
+[ "$ind" = 2 ] || pc_fail "OPTIND is '$ind' with no operand after -a, wanted 2"
+# an empty list of parameters
+OPTIND=1
+set --
+pcopt=x
+getopts a pcopt
+rc=$?
+v=$pcopt
+ind=$OPTIND
+[ "$rc" -eq 1 ] && [ "$v" = '?' ] || pc_fail "empty list: exit $rc, name '$v'"
+[ "$ind" = 1 ] || pc_fail "OPTIND is '$ind' for an empty list, wanted 1"
 pc_pass
