@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.003
+# MUTANT    sed.files_separate
+# MUTANT    sed.range_end_exclusive
+# MUTANT    sed.range_re_end_same_line
+# MUTANT    sed.ctxaddr_unsupported
+# MUTANT    sed.slash_escape_unsupported
+# MUTANT    sed.lineno_off_by_one
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sed.003
 LC_ALL=POSIX

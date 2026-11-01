@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.021
+# MUTANT    sed.r_early
+# MUTANT    sed.r_ignored
 # The contents of the file named by r are those at the time the output is
 # written, not at the time the r command ran, so lines a w command wrote to
 # that file in the same cycle are included.

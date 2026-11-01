@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.022
+# MUTANT    sed.ignores_lc_collate
+# MUTANT    sed.lang_over_lc_collate
+# MUTANT    sed.lc_all_lowest_collate
+# MUTANT    sed.ignores_lang
+# MUTANT    sed.ignores_lc_all
+# MUTANT    sed.null_lc_all_overrides
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcloc.sh"
 pc_begin XCU.sed.022

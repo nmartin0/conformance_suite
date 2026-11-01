@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.005
+# MUTANT    sed.n_flag_all_from_nth
+# MUTANT    sed.n_flag_ignored
+# MUTANT    sed.g_flag_ignored
+# MUTANT    sed.p_flag_ignored
+# MUTANT    sed.p_flag_unconditional
+# MUTANT    sed.w_flag_unconditional
+# MUTANT    sed.w_file_lazy
+# MUTANT    sed.w_not_truncated
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sed.005
 LC_ALL=POSIX
@@ -26,4 +34,8 @@ rm -f out
 echo x | sed 's/y/z/w out' >/dev/null 2>&1
 [ -f out ] || pc_fail "the w file was not created before processing"
 [ ! -s out ] || pc_fail "the w file received a line with no replacement"
+printf 'old\n' >out2 || pc_fail "cannot create a file"
+sed -n 's/a/Y/w out2' in >/dev/null 2>&1 </dev/null
+got=$(cat out2 2>/dev/null; printf 'rc=%s' "$?")
+[ "$got" = "Yaa${NL}Yxa${NL}rc=0" ] || pc_fail "the w flag did not replace the contents of an existing file"
 pc_pass

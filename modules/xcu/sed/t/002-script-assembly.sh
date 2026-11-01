@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.002
+# MUTANT    sed.e_order_reversed
+# MUTANT    sed.e_joined_semicolon
+# MUTANT    sed.f_ignored
+# MUTANT    sed.leading_semicolon_rejected
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sed.002
 LC_ALL=POSIX

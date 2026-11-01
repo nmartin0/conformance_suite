@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.019
+# MUTANT    sed.l_no_fold
+# MUTANT    sed.l_fold_no_backslash
+# MUTANT    sed.l_fold_drops_char
+# MUTANT    sed.l_no_dollar
+# VARIANT   sed.l_fold_20
+# VARIANT   sed.l_fold_1000
 # The l command folds a long line, marking each fold with a backslash and a
 # newline, and ends the output with a dollar sign.
 . "$PC_CORE/pc.sh"
