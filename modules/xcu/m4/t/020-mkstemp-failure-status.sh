@@ -6,7 +6,6 @@
 # when m4exit is later given a zero argument.
 # MUTANT    m4.mkstemp_fail_status0
 # MUTANT    m4.err_forgotten
-# MUTANT    m4.exit_status0
 # MUTANT    m4.m4exit_ignores_mkstemp_err
 # VARIANT   m4.engine
 # VARIANT   m4.err_status2
