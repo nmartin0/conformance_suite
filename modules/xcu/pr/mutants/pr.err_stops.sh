@@ -10,6 +10,7 @@ while [ $n -gt 0 ]
 do
 	a=$1; shift; n=$((n-1))
 	case $a in
+	-l|-h|-o|-w) set -- "$@" "$a" "$1"; shift; n=$((n-1)) ;;
 	-r) quiet=1; set -- "$@" "$a" ;;
 	-*) set -- "$@" "$a" ;;
 	*) if [ $stop = 1 ]; then :
