@@ -79,7 +79,8 @@ anchor     utilities/kill.html#OPTIONS
 class      conditional
 when       XSI
 since      1992
-says       kill -signal_name works like -s signal_name.
+says       kill -signal_name works like -s signal_name, so the name is
+           taken without the SIG prefix and in any letter case.
 test       t/008-dash-name.sh
 
 assertion  XCU.kill.009
@@ -88,7 +89,8 @@ class      conditional
 when       XSI
 since      1992
 says       kill -signal_number sends the signal for the numbers 0, 1, 2, 3,
-           6, 9, 14 and 15 as listed by the page (checked with 0, 9 and 15).
+           6, 9, 14 and 15 as listed by the page (checked with 0, 9, 14
+           and 15).
 test       t/009-dash-number.sh
 
 assertion  XCU.kill.010
@@ -109,3 +111,34 @@ since      1992
 says       With job control enabled, a job ID operand (%%) names the current
            background job and kill signals it.
 test       t/011-job-id.sh
+
+assertion  XCU.kill.012
+anchor     utilities/kill.html#DESCRIPTION
+anchor     utilities/kill.html#EXIT STATUS
+class      required
+since      1992
+says       kill with several pid operands sends the signal for each of
+           them and exits zero when every operand named a process.
+test       t/012-several-pids.sh
+
+assertion  XCU.kill.013
+anchor     utilities/kill.html#OPERANDS
+class      conditional
+when       UP
+since      1992
+says       kill with the pid operand 0 signals the processes in the
+           caller's own process group. The test builds a group of its own
+           with job control and signals only after showing, with ps, that
+           the group holds nothing it did not start.
+test       t/013-pid-zero.sh
+
+assertion  XCU.kill.014
+anchor     utilities/kill.html#OPERANDS
+class      conditional
+when       UP
+since      1992
+says       kill with a negative pid operand, written after --, signals the
+           processes of the group whose ID is its absolute value; the
+           operand is not taken as an option. Checked on a group of the
+           test's own, shown with ps to hold only what the test started.
+test       t/014-negative-pid.sh
