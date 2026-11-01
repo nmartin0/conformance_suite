@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.008
+# VARIANT   compress.unsupp_status_big
+# MUTANT    compress.unsupp_status1
+# MUTANT    compress.unsupp_status2
+# MUTANT    compress.unsupp_status0
+# MUTANT    compress.unsupp_removes_input
+# MUTANT    compress.unsupp_modifies_input
+# MUTANT    compress.unsupp_fallback
 # "compress -m" with an algorithm name that is certainly unsupported exits
 # with a status greater than 2 and leaves the file unchanged and in place.
 . "$PC_CORE/pc.sh"

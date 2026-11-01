@@ -2,6 +2,16 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.003
+# VARIANT   compress.gz_header_fields
+# MUTANT    compress.gzc_g
+# MUTANT    compress.gzc_mgzip
+# MUTANT    compress.gzc_mdeflate
+# MUTANT    compress.gzs_g
+# MUTANT    compress.gzs_mgzip
+# MUTANT    compress.gzs_mdeflate
+# MUTANT    compress.gz_method
+# MUTANT    compress.gz_magic
+# MUTANT    compress.d_file_corrupt
 # With -g, with -m gzip and with -m deflate the output file is f.gz and
 # starts with the gzip signature bytes 1f 8b and method byte 08; "compress
 # -d f.gz" restores the original bytes.

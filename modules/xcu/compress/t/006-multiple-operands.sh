@@ -2,9 +2,16 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.006
+# VARIANT   compress.lzw_other_format
+# MUTANT    compress.only_first_c
+# MUTANT    compress.only_first_d
+# MUTANT    compress.second_kept
+# MUTANT    compress.swap_outputs
+# MUTANT    compress.d_c_reversed
+# MUTANT    compress.d_c_removes_input
 # "compress f1 f2" creates f1.Z and f2.Z and removes f1 and f2; "compress -d
 # -c f1.Z f2.Z" writes the two decompressed files one after the other to
-# standard output.
+# standard output and leaves f1.Z and f2.Z in place.
 . "$PC_CORE/pc.sh"
 pc_begin XCU.compress.006
 LC_ALL=C; export LC_ALL
@@ -26,4 +33,5 @@ compress -d -c f1.Z f2.Z </dev/null >both 2>err
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "compress -d -c: exit status $rc"
 cmp -s both exp || pc_fail "output is not the two decompressed files in order"
+[ -f f1.Z ] && [ -f f2.Z ] || pc_fail "-d -c removed an input file"
 pc_pass

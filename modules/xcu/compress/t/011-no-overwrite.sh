@@ -2,9 +2,21 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.011
+# VARIANT   compress.lzw_other_format
+# VARIANT   compress.refuse_status_big
+# MUTANT    compress.overwrite_silently
+# MUTANT    compress.overwrite_exit1
+# MUTANT    compress.overwrite_exit0
+# MUTANT    compress.refuse_no_diag
+# MUTANT    compress.force_ignored
+# MUTANT    compress.force_garbage
+# MUTANT    compress.refuse_removes_input
+# MUTANT    compress.refuse_truncates_old
+# MUTANT    compress.refuse_old_appended
 # With f.Z already present, standard input not a terminal and no -f,
-# "compress f" exits nonzero and leaves the existing f.Z unchanged; with -f
-# the output file is replaced by valid compressed data.
+# "compress f" writes a diagnostic to standard error, exits nonzero and
+# leaves the existing f.Z unchanged; with -f the output file is replaced by
+# valid compressed data.
 . "$PC_CORE/pc.sh"
 pc_begin XCU.compress.011
 LC_ALL=C; export LC_ALL
@@ -19,6 +31,7 @@ pc_test
 compress f </dev/null >out 2>err
 rc=$?
 [ "$rc" -ne 0 ] || pc_fail "overwriting f.Z without -f gave status 0"
+[ -s err ] || pc_fail "no diagnostic on standard error for the refused overwrite"
 [ "$(cat f.Z)" = keep ] || pc_fail "the existing f.Z was overwritten"
 [ -f f ] || pc_fail "the input file is gone"
 compress -f f </dev/null >out 2>err
