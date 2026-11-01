@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.uudecode.010
+# MUTANT    uudecode.file_stdout_also
+# MUTANT    uudecode.file_stdout_nl
+# MUTANT    uudecode.file_stdout_diag
 # When the output is a named file, nothing is written to standard output.
 . "$PC_CORE/pc.sh"
 pc_begin XCU.uudecode.010

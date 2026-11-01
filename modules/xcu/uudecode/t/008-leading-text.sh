@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.uudecode.008
+# MUTANT    uudecode.lead_strict
+# MUTANT    uudecode.lead_one
+# MUTANT    uudecode.lead_output
+# MUTANT    uudecode.status1
+# MUTANT    uudecode.drop_last
 # Text lines before the begin line are skipped and the data after it is
 # decoded.
 . "$PC_CORE/pc.sh"
@@ -11,11 +16,12 @@ pc_top=$(pwd) || pc_unresolved "cannot find the working directory"
 pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
-printf 'Some mail text\n\nmore text\nbegin 644 j.out\n#0V%%T\n`\nend\nafter\n' >in || pc_unresolved "setup: cannot write input"
+printf 'Some mail text\n\nmore text\nbegin 644 j.out\n#0V%%T\n`\nend\n' >in || pc_unresolved "setup: cannot write input"
+printf Cat >exp || pc_unresolved "setup: cannot write expectation"
 pc_test
 uudecode in >stdout 2>err
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "exit status $rc"
 [ -f j.out ] || pc_fail "j.out was not created"
-[ "$(cat j.out)" = Cat ] || pc_fail "decoded content is wrong"
+cmp -s exp j.out 2>/dev/null || pc_fail "decoded content is wrong"
 pc_pass

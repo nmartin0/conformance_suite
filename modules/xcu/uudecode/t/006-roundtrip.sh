@@ -2,6 +2,19 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.uudecode.006
+# MUTANT    uudecode.r_empty_nonempty
+# MUTANT    uudecode.r_empty_nofile
+# MUTANT    uudecode.r_pad3
+# MUTANT    uudecode.r_nul_stop
+# MUTANT    uudecode.r_cr_strip
+# MUTANT    uudecode.r_hibit
+# MUTANT    uudecode.r_ge45_drop
+# MUTANT    uudecode.r_cap45
+# MUTANT    uudecode.r_uu_tail1
+# MUTANT    uudecode.r_uu_tail2
+# MUTANT    uudecode.r_b64_tail1
+# MUTANT    uudecode.r_b64_tail2
+# MUTANT    uudecode.status1
 # For inputs of 0, 1, 2, 3, 44, 45, 46 and 100 bytes holding non-text bytes,
 # uuencode piped to uudecode (both algorithms) gives back exactly the
 # original bytes.
