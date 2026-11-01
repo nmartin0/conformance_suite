@@ -12,7 +12,6 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <stdio.h>
-#include <stdio_ext.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -152,12 +151,67 @@ int ungetc(int c, FILE *f)
 	return r;
 }
 
+/*
+ * Output the stream has buffered but not yet written, found by comparing
+ * the stream's position with the descriptor's offset. A fault that
+ * "drops" it lets the real call write it and then puts the file back as
+ * it was: the bytes it overwrote restored, any growth cut off.
+ */
+struct undo {
+	int fd;
+	off_t at, size;
+	char *saved;
+	size_t n;
+};
+
+static void undo_begin(FILE *f, struct undo *u)
+{
+	REAL(ftello);
+	struct stat st;
+	int e = errno, fd = fileno(f);
+	off_t s = real_ftello(f), d = fd >= 0 ? lseek(fd, 0, SEEK_CUR) : -1;
+
+	u->fd = -1;
+	u->saved = NULL;
+	u->n = 0;
+	if (s != -1 && d != -1 && s > d && fstat(fd, &st) == 0 && S_ISREG(st.st_mode)) {
+		u->at = d;
+		u->size = st.st_size;
+		if (d < st.st_size) {
+			u->n = (size_t)(st.st_size - d < s - d ? st.st_size - d : s - d);
+			u->saved = malloc(u->n);
+			if (u->saved == NULL || pread(fd, u->saved, u->n, d) != (ssize_t)u->n) {
+				free(u->saved);
+				u->saved = NULL;
+				u->n = 0;
+			}
+		}
+		u->fd = dup(fd);
+	}
+	errno = e;
+}
+
+static void undo_end(struct undo *u)
+{
+	int e = errno;
+
+	if (u->fd >= 0) {
+		if (u->saved != NULL)
+			(void)pwrite(u->fd, u->saved, u->n, u->at);
+		(void)ftruncate(u->fd, u->size);
+		(void)close(u->fd);
+	}
+	free(u->saved);
+	errno = e;
+}
+
 int fsetpos(FILE *f, const fpos_t *pos)
 {
 	REAL(fsetpos);
 	REAL(ungetc);
 	const char *m = mutant_of("fsetpos.");
 	struct stat st0;
+	struct undo u;
 	unsigned bits;
 	int e = errno, r, have = 0;
 
@@ -166,21 +220,20 @@ int fsetpos(FILE *f, const fpos_t *pos)
 	if (IS("noop"))
 		return 0;	/* reports success without moving */
 	if (IS("off_by_one")) {
-		fpos_t p = *pos;
-		long long off;
-
-		/* both reference C libraries keep the offset in the first 8 bytes (LP64: glibc __pos, musl __lldata) */
-		memcpy(&off, &p, sizeof off);
-		off++;
-		memcpy(&p, &off, sizeof off);
-		return real_fsetpos(f, &p);
+		r = real_fsetpos(f, pos);
+		if (r == 0)
+			r = fseeko(f, 1, SEEK_CUR);	/* one byte past the position asked for */
+		return r;
 	}
-	if (IS("drops_pending"))
-		__fpurge(f);	/* buffered output thrown away instead of written */
 	if (IS("old_times") && fileno(f) >= 0)
 		have = fstat(fileno(f), &st0) == 0;
 	bits = get_bits(f, PC_EOF);
+	u.fd = -1;
+	u.saved = NULL;
+	if (IS("drops_pending"))
+		undo_begin(f, &u);	/* buffered output thrown away instead of written */
 	r = real_fsetpos(f, pos);
+	undo_end(&u);
 	if (r == 0 && IS("keeps_eof") && bits)
 		set_bits(f, PC_EOF);
 	if (r == 0 && IS("keeps_pushback") && pushed_f == f) {

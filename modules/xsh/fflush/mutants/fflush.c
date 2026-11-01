@@ -47,15 +47,29 @@ static const char *mutant_of(const char *prefix)
 
 #include <signal.h>
 #include <stdio.h>
-#include <stdio_ext.h>
 #include <time.h>
+
+/*
+ * Buffered data, found by comparing the stream's position with the
+ * descriptor's offset: output not yet written leaves the descriptor behind
+ * the stream, input read ahead leaves it in front.
+ */
+static long long ahead(FILE *f)
+{
+	REAL(ftello);
+	int e = errno, fd = fileno(f);
+	off_t s = real_ftello(f), d = fd >= 0 ? lseek(fd, 0, SEEK_CUR) : -1;
+
+	errno = e;
+	return s == -1 || d == -1 ? 0 : (long long)(d - s);
+}
 
 /* A stream whose last operation was input (or that can only read). */
 static int input_only(FILE *f)
 {
 	int fl = fcntl(fileno(f), F_GETFL);
 
-	return fl != -1 && ((fl & O_ACCMODE) == O_RDONLY || __freading(f));
+	return fl != -1 && ((fl & O_ACCMODE) == O_RDONLY || ahead(f) > 0);
 }
 
 int fflush(FILE *f)

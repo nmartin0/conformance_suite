@@ -47,24 +47,91 @@ static const char *mutant_of(const char *prefix)
 
 #include <signal.h>
 #include <stdio.h>
-#include <stdio_ext.h>
 #include <time.h>
+
+/*
+ * Buffered data, found by comparing the stream's position with the
+ * descriptor's offset: output not yet written leaves the descriptor behind
+ * the stream, input read ahead leaves it in front.
+ */
+static long long ahead(FILE *f)
+{
+	REAL(ftello);
+	int e = errno, fd = fileno(f);
+	off_t s = real_ftello(f), d = fd >= 0 ? lseek(fd, 0, SEEK_CUR) : -1;
+
+	errno = e;
+	return s == -1 || d == -1 ? 0 : (long long)(d - s);
+}
+
+/*
+ * Output the stream has buffered but not yet written, found by comparing
+ * the stream's position with the descriptor's offset. A fault that
+ * "drops" it lets the real call write it and then puts the file back as
+ * it was: the bytes it overwrote restored, any growth cut off.
+ */
+struct undo {
+	int fd;
+	off_t at, size;
+	char *saved;
+	size_t n;
+};
+
+static void undo_begin(FILE *f, struct undo *u)
+{
+	REAL(ftello);
+	struct stat st;
+	int e = errno, fd = fileno(f);
+	off_t s = real_ftello(f), d = fd >= 0 ? lseek(fd, 0, SEEK_CUR) : -1;
+
+	u->fd = -1;
+	u->saved = NULL;
+	u->n = 0;
+	if (s != -1 && d != -1 && s > d && fstat(fd, &st) == 0 && S_ISREG(st.st_mode)) {
+		u->at = d;
+		u->size = st.st_size;
+		if (d < st.st_size) {
+			u->n = (size_t)(st.st_size - d < s - d ? st.st_size - d : s - d);
+			u->saved = malloc(u->n);
+			if (u->saved == NULL || pread(fd, u->saved, u->n, d) != (ssize_t)u->n) {
+				free(u->saved);
+				u->saved = NULL;
+				u->n = 0;
+			}
+		}
+		u->fd = dup(fd);
+	}
+	errno = e;
+}
+
+static void undo_end(struct undo *u)
+{
+	int e = errno;
+
+	if (u->fd >= 0) {
+		if (u->saved != NULL)
+			(void)pwrite(u->fd, u->saved, u->n, u->at);
+		(void)ftruncate(u->fd, u->size);
+		(void)close(u->fd);
+	}
+	free(u->saved);
+	errno = e;
+}
 
 int fclose(FILE *f)
 {
 	REAL(fclose);
 	const char *m = mutant_of("fclose.");
 	struct stat st;
+	struct undo u;
 	int r, e, fd = fileno(f), keep = -1, fl;
 
 	if (m == NULL)
 		return real_fclose(f);
 	fl = fcntl(fd, F_GETFL);
-	if (IS("no_flush"))
-		__fpurge(f);	/* buffered output is dropped */
-	if (IS("stale_offset") && __fwriting(f) && __fpending(f) > 0)
+	if (IS("stale_offset") && ahead(f) < 0)
 		(void)lseek(fd, 0, SEEK_SET);	/* writes where the stream started, as if no other handle had moved */
-	if (IS("no_input_sync") && fl != -1 && ((fl & O_ACCMODE) == O_RDONLY || __freading(f))) {
+	if (IS("no_input_sync") && fl != -1 && ((fl & O_ACCMODE) == O_RDONLY || ahead(f) > 0)) {
 		off_t at = lseek(fd, 0, SEEK_CUR);
 		int d = dup(fd);
 		r = real_fclose(f);
@@ -88,7 +155,12 @@ int fclose(FILE *f)
 	}
 	if (IS("leaks_fd") || IS("leaks_on_error"))
 		keep = dup(fd);
+	u.fd = -1;
+	u.saved = NULL;
+	if (IS("no_flush"))
+		undo_begin(f, &u);	/* buffered output is dropped */
 	r = real_fclose(f);
+	undo_end(&u);
 	e = errno;
 	if (keep >= 0) {
 		if (IS("leaks_fd") || r == EOF)

@@ -12,7 +12,6 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <stdio.h>
-#include <stdio_ext.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -152,11 +151,66 @@ static const char *edit(const char *mode, const char *drop, char add, char *buf,
 	return buf;
 }
 
+/*
+ * Output the stream has buffered but not yet written, found by comparing
+ * the stream's position with the descriptor's offset. A fault that
+ * "drops" it lets the real call write it and then puts the file back as
+ * it was: the bytes it overwrote restored, any growth cut off.
+ */
+struct undo {
+	int fd;
+	off_t at, size;
+	char *saved;
+	size_t n;
+};
+
+static void undo_begin(FILE *f, struct undo *u)
+{
+	REAL(ftello);
+	struct stat st;
+	int e = errno, fd = fileno(f);
+	off_t s = real_ftello(f), d = fd >= 0 ? lseek(fd, 0, SEEK_CUR) : -1;
+
+	u->fd = -1;
+	u->saved = NULL;
+	u->n = 0;
+	if (s != -1 && d != -1 && s > d && fstat(fd, &st) == 0 && S_ISREG(st.st_mode)) {
+		u->at = d;
+		u->size = st.st_size;
+		if (d < st.st_size) {
+			u->n = (size_t)(st.st_size - d < s - d ? st.st_size - d : s - d);
+			u->saved = malloc(u->n);
+			if (u->saved == NULL || pread(fd, u->saved, u->n, d) != (ssize_t)u->n) {
+				free(u->saved);
+				u->saved = NULL;
+				u->n = 0;
+			}
+		}
+		u->fd = dup(fd);
+	}
+	errno = e;
+}
+
+static void undo_end(struct undo *u)
+{
+	int e = errno;
+
+	if (u->fd >= 0) {
+		if (u->saved != NULL)
+			(void)pwrite(u->fd, u->saved, u->n, u->at);
+		(void)ftruncate(u->fd, u->size);
+		(void)close(u->fd);
+	}
+	free(u->saved);
+	errno = e;
+}
+
 FILE *freopen(const char *restrict path, const char *restrict mode, FILE *restrict f)
 {
 	REAL(freopen);
 	const char *m = mutant_of("freopen.");
 	char mb[16];
+	struct undo u;
 	FILE *r;
 	int e, fd, t;
 	unsigned bits;
@@ -176,8 +230,6 @@ FILE *freopen(const char *restrict path, const char *restrict mode, FILE *restri
 			(void)fseeko(r, at, SEEK_SET);	/* the old position carried over */
 		return r;
 	}
-	if (IS("drops_pending"))
-		__fpurge(f);	/* buffered output thrown away instead of flushed */
 	if (IS("keeps_flags") || (IS("null_keeps_flags") && path == NULL)) {
 		bits = get_bits(f, PC_EOF | PC_ERR);
 		r = real_freopen(path, mode, f);
@@ -252,7 +304,12 @@ FILE *freopen(const char *restrict path, const char *restrict mode, FILE *restri
 			(void)fwide(r, o);
 		return r;
 	}
+	u.fd = -1;
+	u.saved = NULL;
+	if (IS("drops_pending"))
+		undo_begin(f, &u);	/* buffered output thrown away instead of flushed */
 	r = real_freopen(path, mode, f);
+	undo_end(&u);
 	if (r != NULL && IS("cloexec_always"))
 		(void)fcntl(fileno(r), F_SETFD, FD_CLOEXEC);
 	if (r == NULL && IS("wrong_errno"))

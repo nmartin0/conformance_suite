@@ -76,6 +76,7 @@ says       On a stream from fmemopen(buf, 64, "w") set _IOFBF with a BUFSIZ
            buffered (not yet in buf; UNRESOLVED if not),
            fseek(f, 0, SEEK_SET) returns 0 and buf then begins "abc".
 note       Austin Group defect 1225 (Issue 8).
+nomutant   no fault can be planted: a memory stream has no descriptor, and its unwritten output cannot be discarded through a standard interface
 test       t/007-memory-stream.c
 
 assertion  XSH.fseek.008

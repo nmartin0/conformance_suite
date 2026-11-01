@@ -51,23 +51,24 @@ static const char *mutant_of(const char *prefix)
 
 
 /*
- * Both reference C libraries, on the LP64 systems the suite is tried on,
- * keep the offset in the first 8 bytes of an fpos_t (glibc's 64-bit
- * __pos, musl's __lldata), which these faults rely on.
+ * A position value for another place in the stream, made only with
+ * standard calls: the stream is moved there, its position taken, and
+ * the stream put back where it was. Returns 0 on success.
  */
-static void put_offset(fpos_t *pos, long long off)
+static int pos_moved(FILE *f, fpos_t *out, off_t to, int whence)
 {
-	memcpy(pos, &off, sizeof off);
+	REAL(fgetpos);
+	REAL(fsetpos);
+	fpos_t orig;
+	int e = errno, ok;
+
+	if (real_fgetpos(f, &orig) != 0)
+		return -1;
+	ok = fseeko(f, to, whence) == 0 && real_fgetpos(f, out) == 0;
+	(void)real_fsetpos(f, &orig);
+	errno = e;
+	return ok ? 0 : -1;
 }
-
-static long long get_offset(const fpos_t *pos)
-{
-	long long off;
-
-	memcpy(&off, pos, sizeof off);
-	return off;
-}
-
 int fgetpos(FILE *restrict f, fpos_t *restrict pos)
 {
 	REAL(fgetpos);
@@ -92,16 +93,21 @@ int fgetpos(FILE *restrict f, fpos_t *restrict pos)
 		off_t at = lseek(fd, 0, SEEK_CUR);	/* the descriptor's offset, not the stream's */
 
 		if (at != -1)
-			put_offset(pos, at);
+			(void)pos_moved(f, pos, at, SEEK_SET);
 	}
 	if (r == 0 && IS("off_by_one"))
-		put_offset(pos, get_offset(pos) + 1);
+		(void)pos_moved(f, pos, 1, SEEK_CUR);
 	if (r == 0 && IS("clears_errno"))
 		errno = 0;
 	else if (r == 0)
 		errno = e;
 	if (r != 0 && IS("espipe_zero") && errno == ESPIPE) {
-		put_offset(pos, 0);
+		FILE *z = tmpfile();	/* a position value for the start of a stream */
+
+		if (z != NULL) {
+			(void)real_fgetpos(z, pos);
+			(void)fclose(z);
+		}
 		errno = e;
 		return 0;
 	}

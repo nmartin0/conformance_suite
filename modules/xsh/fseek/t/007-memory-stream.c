@@ -3,7 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fseek.007
- * MUTANT    fseek.drops_pending
  * VARIANT   setvbuf.tiny_default
  * VARIANT   setvbuf.own_unused
  * VARIANT   setvbuf.scribbles

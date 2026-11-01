@@ -47,10 +47,78 @@ static const char *mutant_of(const char *prefix)
 
 #include <stdio.h>
 #include <stdint.h>
-#include <stdio_ext.h>
 #include <sys/types.h>
 
 static FILE *eof_f;
+
+/*
+ * Buffered data, found by comparing the stream's position with the
+ * descriptor's offset: output not yet written leaves the descriptor behind
+ * the stream, input read ahead leaves it in front.
+ */
+static long long ahead(FILE *f)
+{
+	REAL(ftello);
+	int e = errno, fd = fileno(f);
+	off_t s = real_ftello(f), d = fd >= 0 ? lseek(fd, 0, SEEK_CUR) : -1;
+
+	errno = e;
+	return s == -1 || d == -1 ? 0 : (long long)(d - s);
+}
+
+/*
+ * Output the stream has buffered but not yet written, found by comparing
+ * the stream's position with the descriptor's offset. A fault that
+ * "drops" it lets the real call write it and then puts the file back as
+ * it was: the bytes it overwrote restored, any growth cut off.
+ */
+struct undo {
+	int fd;
+	off_t at, size;
+	char *saved;
+	size_t n;
+};
+
+static void undo_begin(FILE *f, struct undo *u)
+{
+	REAL(ftello);
+	struct stat st;
+	int e = errno, fd = fileno(f);
+	off_t s = real_ftello(f), d = fd >= 0 ? lseek(fd, 0, SEEK_CUR) : -1;
+
+	u->fd = -1;
+	u->saved = NULL;
+	u->n = 0;
+	if (s != -1 && d != -1 && s > d && fstat(fd, &st) == 0 && S_ISREG(st.st_mode)) {
+		u->at = d;
+		u->size = st.st_size;
+		if (d < st.st_size) {
+			u->n = (size_t)(st.st_size - d < s - d ? st.st_size - d : s - d);
+			u->saved = malloc(u->n);
+			if (u->saved == NULL || pread(fd, u->saved, u->n, d) != (ssize_t)u->n) {
+				free(u->saved);
+				u->saved = NULL;
+				u->n = 0;
+			}
+		}
+		u->fd = dup(fd);
+	}
+	errno = e;
+}
+
+static void undo_end(struct undo *u)
+{
+	int e = errno;
+
+	if (u->fd >= 0) {
+		if (u->saved != NULL)
+			(void)pwrite(u->fd, u->saved, u->n, u->at);
+		(void)ftruncate(u->fd, u->size);
+		(void)close(u->fd);
+	}
+	free(u->saved);
+	errno = e;
+}
 
 /* One fault applied to a seek; does the real one through real_fseeko(). */
 static int seek(FILE *f, off_t off, int whence, int narrow)
@@ -59,13 +127,14 @@ static int seek(FILE *f, off_t off, int whence, int narrow)
 	const char *m = mutant_of("fseek.");
 	struct stat before;
 	off_t fdpos = -1;
+	struct undo u;
 	int was_eof = feof(f), r, have = 0;
 
 	if (m == NULL)
 		return real_fseeko(f, off, whence);
 	if (narrow && IS("fseeko_narrow"))
 		off = (off_t)(int)off;
-	if (IS("elides") && whence == SEEK_SET && __fpending(f) == 0 && !__freading(f))
+	if (IS("elides") && whence == SEEK_SET && ahead(f) == 0)
 		return 0;	/* nothing buffered: assumes the position is already right and skips the seek */
 	if (IS("whence_set_only"))
 		whence = SEEK_SET;
@@ -75,8 +144,6 @@ static int seek(FILE *f, off_t off, int whence, int narrow)
 	}
 	if (IS("end_off_by_one") && whence == SEEK_END)
 		off -= 1;
-	if (IS("drops_pending"))
-		__fpurge(f);	/* buffered output is thrown away, not written */
 	if (IS("bad_whence_ok") && whence != SEEK_SET && whence != SEEK_CUR && whence != SEEK_END)
 		return 0;
 	if (IS("negative_ok") && whence == SEEK_CUR && ftello(f) + off < 0)
@@ -105,7 +172,12 @@ static int seek(FILE *f, off_t off, int whence, int narrow)
 		fdpos = lseek(fileno(f), 0, SEEK_CUR);
 	if ((IS("old_times") || IS("gap_filled")) && fileno(f) >= 0)
 		have = fstat(fileno(f), &before) == 0;
+	u.fd = -1;
+	u.saved = NULL;
+	if (IS("drops_pending"))
+		undo_begin(f, &u);	/* buffered output is thrown away, not written */
 	r = real_fseeko(f, off, whence);
+	undo_end(&u);
 	if (r == 0 && IS("keeps_eof") && was_eof)
 		eof_f = f;
 	if (r == 0 && fdpos != -1)

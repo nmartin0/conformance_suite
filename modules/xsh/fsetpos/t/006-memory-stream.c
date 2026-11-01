@@ -3,7 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fsetpos.006
- * MUTANT    fsetpos.drops_pending
  * VARIANT   setvbuf.own_unused
  * VARIANT   setvbuf.scribbles
  */

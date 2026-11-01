@@ -46,8 +46,22 @@ static const char *mutant_of(const char *prefix)
 	if (real_##fn == NULL) real_##fn = (__typeof__(fn) *)dlsym(RTLD_NEXT, #fn)
 
 #include <stdio.h>
-#include <stdio_ext.h>
 #include <sys/types.h>
+
+/*
+ * Buffered data, found by comparing the stream's position with the
+ * descriptor's offset: output not yet written leaves the descriptor behind
+ * the stream, input read ahead leaves it in front.
+ */
+static long long ahead(FILE *f)
+{
+	REAL(ftello);
+	int e = errno, fd = fileno(f);
+	off_t s = real_ftello(f), d = fd >= 0 ? lseek(fd, 0, SEEK_CUR) : -1;
+
+	errno = e;
+	return s == -1 || d == -1 ? 0 : (long long)(d - s);
+}
 
 static off_t tell(FILE *f, int narrow)
 {
@@ -69,7 +83,7 @@ static off_t tell(FILE *f, int narrow)
 		return r;
 	}
 	r = real_ftello(f);
-	if (r >= 0 && IS("off_by_one") && __freading(f))
+	if (r >= 0 && IS("off_by_one") && ahead(f) > 0)
 		r++;
 	if (r >= 0 && narrow && IS("ftello_narrow"))
 		r = (off_t)(int)r;

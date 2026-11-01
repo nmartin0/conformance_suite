@@ -72,6 +72,7 @@ says       On a stream from fmemopen(buf, 64, "w") given a BUFSIZ array of the
            &p0) returns 0 and buf then begins "abc".
 note       Austin Group defect 1225 (Issue 8) aligned the CX rules with
            fseek().
+nomutant   no fault can be planted: a memory stream has no descriptor, and its unwritten output cannot be discarded through a standard interface
 test       t/006-memory-stream.c
 
 assertion  XSH.fsetpos.007
