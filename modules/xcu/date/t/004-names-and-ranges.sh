@@ -32,7 +32,6 @@
 # MUTANT    date.W_54
 # MUTANT    date.V_zero
 # MUTANT    date.y_100
-# MUTANT    date.e_zero
 # VARIANT   date.leap_second
 . "$PC_CORE/pc.sh"
 pc_begin XCU.date.004

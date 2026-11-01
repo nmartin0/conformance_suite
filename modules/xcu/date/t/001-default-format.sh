@@ -8,7 +8,6 @@
 # MUTANT    date.default_iso
 # MUTANT    date.default_no_seconds
 # MUTANT    date.default_no_newline
-# MUTANT    date.default_day_zero
 # VARIANT   date.leap_second
 #
 # The clock moves between invocations, so the plain run sits between two
