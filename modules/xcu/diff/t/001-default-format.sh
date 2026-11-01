@@ -2,6 +2,22 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.diff.001
+# MUTANT    diff.def_add_off
+# MUTANT    diff.def_c_as_a
+# MUTANT    diff.def_dash_range
+# MUTANT    diff.def_del_off
+# MUTANT    diff.def_marks_swapped
+# MUTANT    diff.def_no_new
+# MUTANT    diff.def_no_old
+# MUTANT    diff.def_no_prefix
+# MUTANT    diff.def_no_sep
+# MUTANT    diff.def_no_space
+# MUTANT    diff.def_order_rev
+# MUTANT    diff.def_range1_end_off
+# MUTANT    diff.def_range2_end_off
+# MUTANT    diff.def_single_dup
+# MUTANT    diff.swap_operands
+# MUTANT    diff.no_final_nl
 . "$PC_CORE/pc.sh"
 pc_begin XCU.diff.001
 LC_ALL=POSIX

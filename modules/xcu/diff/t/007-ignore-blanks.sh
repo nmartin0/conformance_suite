@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.diff.007
+# MUTANT    diff.b_blank_eq_none
+# MUTANT    diff.b_ignored
+# MUTANT    diff.b_lead_ignored
+# MUTANT    diff.b_runs_unequal
+# MUTANT    diff.b_tab_ne_space
+# MUTANT    diff.b_trail_kept
 . "$PC_CORE/pc.sh"
 pc_begin XCU.diff.007
 LC_ALL=POSIX

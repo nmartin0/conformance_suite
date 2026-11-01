@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.diff.010
+# MUTANT    diff.d_hdr_noopts
+# MUTANT    diff.d_hdr_word
+# MUTANT    diff.d_hdr_opts_fixed
+# MUTANT    diff.d_hdr_one_name
+# MUTANT    diff.o_abs
+# MUTANT    diff.o_base
+# MUTANT    diff.o_sub_missing
+# VARIANT   diff.d_hdr_names
+# VARIANT   diff.d_common_subdirs
 . "$PC_CORE/pc.sh"
 pc_begin XCU.diff.010
 LC_ALL=POSIX

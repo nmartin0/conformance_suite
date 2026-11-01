@@ -2,6 +2,30 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.diff.003
+# MUTANT    diff.c_bang_minus
+# MUTANT    diff.c_bang_missing
+# MUTANT    diff.c_ctx_long
+# MUTANT    diff.c_ctx_one_space
+# MUTANT    diff.c_ctx_short
+# MUTANT    diff.c_default_two
+# MUTANT    diff.c_hdr_names_same
+# MUTANT    diff.c_hdr_no_time
+# MUTANT    diff.c_hdr_swapped
+# MUTANT    diff.c_hunks_merged
+# MUTANT    diff.c_mark_nospace
+# MUTANT    diff.c_no_first
+# MUTANT    diff.c_no_header
+# MUTANT    diff.c_no_second
+# MUTANT    diff.c_range1_end_off
+# MUTANT    diff.c_range1_stars
+# MUTANT    diff.c_range2_dashes
+# MUTANT    diff.c_range2_end_off
+# MUTANT    diff.c_sep_short
+# MUTANT    diff.c_time_date_pad
+# MUTANT    diff.c_time_now
+# MUTANT    diff.c_time_swap
+# MUTANT    diff.same_header
+# VARIANT   diff.c_blanks
 . "$PC_CORE/pc.sh"
 pc_begin XCU.diff.003
 LC_ALL=POSIX
@@ -75,9 +99,9 @@ want="***************${NL}*** 2,6 ****${NL}  b${NL}  c${NL}! d${NL}  e${NL}  f${
 [ "$(body "$out")" = "$want" ] || pc_fail "-C 2 did not give two lines of context"
 diff -c f1 f2 >/dev/null 2>&1 </dev/null
 [ $? -eq 1 ] || pc_fail "-c with differences did not give status 1"
-# the text does not say whether the file names are written when nothing differs
-diff -c f1 f1 >/dev/null 2>&1 </dev/null
-[ $? -eq 0 ] || pc_fail "-c with identical files gave a status other than 0"
+# no output at all is written when the files are identical
+got=$(diff -c f1 f1 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "rc=0" ] || pc_fail "-c with identical files wrote output or gave a status other than 0"
 mkf g1 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
 mkf g2 1 X 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 Y 20
 out=$(cnorm "$(diff -C 1 g1 g2 2>/dev/null </dev/null)")
