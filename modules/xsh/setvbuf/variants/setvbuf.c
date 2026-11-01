@@ -18,13 +18,9 @@
 #include "pcvariant.h"
 
 /*
- * Some C libraries keep the first 8 bytes of an array given to setvbuf() for pushback and ignore a smaller array; others use all of it. SLACK is added so that the usable buffer has the size meant here on both.
+ * A library may keep the first 8 bytes of an array given to setvbuf() for its own use and ignore a smaller array; another may use all of it. SLACK is added so that the usable buffer is at least the size meant here on either.
  */
-#ifdef __GLIBC__
-#define SLACK 0
-#else
 #define SLACK 8
-#endif
 
 /* The usable size of a tiny default buffer. */
 #define TINY 2

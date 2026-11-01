@@ -10,7 +10,6 @@
 #define _GNU_SOURCE 1
 #include <errno.h>
 #include <stdio.h>
-#include <stdio_ext.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -178,6 +177,20 @@ int fseeko(FILE *f, off_t off, int whence)
 }
 
 /*
+ * Input read ahead by the stream: the descriptor's offset is in front of
+ * the stream's position.
+ */
+static int read_ahead(FILE *f)
+{
+	REAL(ftello);
+	int e = errno, fd = fd_of(f);
+	off_t s = real_ftello(f), d = fd >= 0 ? lseek(fd, 0, SEEK_CUR) : -1;
+
+	errno = e;
+	return s != -1 && d != -1 && d > s;
+}
+
+/*
  * "fflush_q29": fflush() of a stream open for reading does nothing when
  * the descriptor's offset is already at the end of the file. fflush() sets
  * the offset (and discards pushback) only "if the file is not already at
@@ -192,7 +205,7 @@ int fflush(FILE *f)
 	struct stat st;
 	int fd;
 
-	if (IS("fflush_q29") && f != NULL && __freading(f) && (fd = fd_of(f)) >= 0 && fstat(fd, &st) == 0 &&
+	if (IS("fflush_q29") && f != NULL && read_ahead(f) && (fd = fd_of(f)) >= 0 && fstat(fd, &st) == 0 &&
 	    S_ISREG(st.st_mode) && lseek(fd, 0, SEEK_CUR) >= st.st_size) {
 		pb_discard(f);
 		return 0;

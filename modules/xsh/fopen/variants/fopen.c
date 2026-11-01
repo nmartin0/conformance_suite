@@ -14,7 +14,6 @@
 #include <fcntl.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include <stdio_ext.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -56,11 +55,7 @@ static FILE *rebuffer(FILE *f, const char *mode)
 	if (f == NULL || !regular(fileno(f), &st))
 		return f;
 	if (IS("tiny_buffer")) {
-#ifdef __GLIBC__
-		size_t n = TINY;
-#else
-		size_t n = TINY + 8;	/* some libraries keep 8 bytes of a caller's buffer for pushback */
-#endif
+		size_t n = TINY + 8;	/* a library may keep 8 bytes of a caller's buffer for its own use */
 		if ((b = malloc(n)) != NULL)
 			(void)setvbuf(f, b, _IOFBF, n);
 	}
@@ -77,7 +72,7 @@ static int input_at_end(FILE *f)
 	struct stat st;
 	off_t at;
 
-	if (f == NULL || !__freading(f) || !regular(fileno(f), &st))
+	if (f == NULL || fileno(f) < 0 || (fcntl(fileno(f), F_GETFL) & O_ACCMODE) == O_WRONLY || !regular(fileno(f), &st))
 		return 0;
 	at = lseek(fileno(f), 0, SEEK_CUR);
 	return at != -1 && at == st.st_size;
