@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.printf.015
+# MUTANT    printf.loc_ignores_numeric
+# MUTANT    printf.loc_ignores_lc_all
+# MUTANT    printf.loc_ignores_lang
+# MUTANT    printf.loc_lc_all_lowest
+# MUTANT    printf.loc_lang_over_numeric
+# MUTANT    printf.loc_null_lc_all_overrides
+# MUTANT    printf.loc_always_posix
+# VARIANT   printf.nofloat
+# VARIANT   printf.locale_radix
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcloc.sh"
 pc_begin XCU.printf.015

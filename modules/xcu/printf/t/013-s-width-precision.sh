@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.printf.013
+# MUTANT    printf.w_ignored
+# MUTANT    printf.w_minus_ignored
+# MUTANT    printf.w_left_always
+# MUTANT    printf.w_cuts
+# MUTANT    printf.p_ignored
+# MUTANT    printf.p_plus1
+# MUTANT    printf.p_zero_all
+# VARIANT   printf.nofloat
 . "$PC_CORE/pc.sh"
 pc_begin XCU.printf.013
 nl='

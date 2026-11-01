@@ -2,6 +2,16 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.printf.002
+# MUTANT    printf.esc_bsl_kept
+# MUTANT    printf.esc_a_wrong
+# MUTANT    printf.esc_b_wrong
+# MUTANT    printf.esc_f_nl
+# MUTANT    printf.esc_n_cr
+# MUTANT    printf.esc_r_nl
+# MUTANT    printf.esc_t_space
+# MUTANT    printf.esc_v_wrong
+# MUTANT    printf.esc_double_pass
+# VARIANT   printf.nofloat
 . "$PC_CORE/pc.sh"
 pc_begin XCU.printf.002
 nl='

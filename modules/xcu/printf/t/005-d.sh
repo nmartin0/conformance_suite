@@ -2,6 +2,17 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.printf.005
+# MUTANT    printf.d_hex_unsupported
+# MUTANT    printf.d_hexX_unsupported
+# MUTANT    printf.d_octal_decimal
+# MUTANT    printf.d_quote_zero
+# MUTANT    printf.d_quote_is_quote
+# MUTANT    printf.d_dquote_unsupported
+# MUTANT    printf.d_plus_error
+# MUTANT    printf.d_minus_dropped
+# MUTANT    printf.d_i_unsupported
+# MUTANT    printf.d_blank
+# VARIANT   printf.nofloat
 . "$PC_CORE/pc.sh"
 pc_begin XCU.printf.005
 nl='
