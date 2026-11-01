@@ -69,7 +69,7 @@ rc=$?
 [ "$rc" -ne 0 ] || pc_fail "an operand that cannot be opened gave status 0"
 [ -s err ] || pc_fail "no diagnostic for an operand that cannot be opened"
 [ "$(tr '\n' ' ' <out)" = 'one two ' ] || pc_fail "the other operands were not processed ('$(tr '\n' ' ' <out)')"
-m4 f1 f2 >out 2>err </dev/null || pc_fail "two operands: nonzero status"
+m4 f1 f2 >out 2>err <sin || pc_fail "two operands: nonzero status"
 [ "$(tr '\n' ' ' <out)" = 'one two ' ] || pc_fail "without -s the output was '$(tr '\n' ' ' <out)'"
 m4 -s f1 f2 >out 2>err </dev/null || pc_fail "-s: nonzero status"
 grep '#line' out >/dev/null || pc_fail "-s wrote no #line directive"
