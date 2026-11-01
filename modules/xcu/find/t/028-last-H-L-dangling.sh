@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.028
+# MUTANT   find.opt_first_wins
+# MUTANT   find.dangling_dropped
+# MUTANT   find.dangling_error
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.028
 mkdir d || pc_unresolved "cannot create d"

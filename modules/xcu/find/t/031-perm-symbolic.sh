@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.031
+# MUTANT   find.perm_symbolic_ignored
+# MUTANT   find.perm_exact_atleast
+# MUTANT   find.perm_atleast_exact
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.031
 mkdir d || pc_unresolved "cannot create d"

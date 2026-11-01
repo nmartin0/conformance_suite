@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.030
+# MUTANT   find.depth_if_evaluated
+# MUTANT   find.depth_prune_acts
+# MUTANT   find.prune_ignored
+# VARIANT  find.order_reverse
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.030
 mkdir -p d/sub || pc_unresolved "cannot create d/sub"
