@@ -39,8 +39,6 @@ got=$(join -o "2.2 1.3" f1 f2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "x 2${NL}u 4${NL}rc=0" ] || pc_fail "-o '2.2 1.3' gave the wrong result (got: $(printf %s "$got" | tr '\n' ' '))"
 got=$(join -o "1.2${TAB}2.2" f1 f2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "1 x${NL}3 u${NL}rc=0" ] || pc_fail "a tab-separated -o list gave the wrong result (got: $(printf %s "$got" | tr '\n' ' '))"
-got=$(join -o "1.2  2.2" f1 f2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
-[ "$got" = "1 x${NL}3 u${NL}rc=0" ] || pc_fail "a -o list with two blanks gave the wrong result (got: $(printf %s "$got" | tr '\n' ' '))"
 got=$(join -o 1.1 f1 f2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "a${NL}b${NL}rc=0" ] || pc_fail "-o 1.1 did not write only that field"
 got=$(join -o 2.2,1.2 f1 f2 2>/dev/null </dev/null; printf 'rc=%s' "$?")

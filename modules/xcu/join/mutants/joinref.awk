@@ -125,7 +125,7 @@ function replace(v, absent, fl, last) {
 function parse_list(   s, n, i, parts, j, t, u) {
 	s = OL
 	if (M == "o_comma_only") n = split(s, parts, ",")
-	else if (M == "o_space_only") { gsub(/,/, " ", s); n = split(s, parts, " ") }
+	else if (M == "o_space_only") { gsub(/,/, " ", s); n = split(s, parts, "[ ]+") }
 	else { gsub(/,/, " ", s); gsub(/\t/, " ", s); n = split(s, parts, " ") }
 	NI = 0
 	for (i = 1; i <= n; i++) {
@@ -160,6 +160,7 @@ function emit_pair(l1, has1, l2, has2, key, kind,    i, v, fl, absent, itm) {
 			absent = LASTABSENT
 			if (IT[i] == "0") absent = 0
 			fl = (IT[i] == "0") ? 0 : substr(IT[i], 1, 1) + 0
+			if (M == "o_absent_dropped" && absent) continue
 			add(replace(v, absent, fl, i == NI))
 		}
 	} else if (kind == "pair") {
