@@ -2,6 +2,16 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cd.004
+# MUTANT    cd.hyphen_silent
+# MUTANT    cd.hyphen_nonl
+# MUTANT    cd.hyphen_old
+# MUTANT    cd.hyphen_stderr
+# MUTANT    cd.hyphen_noop
+# MUTANT    cd.hyphen_literal
+# MUTANT    cd.hyphen_pwd_stale
+# MUTANT    cd.hyphen_status1
+# VARIANT   cd.oldpwd_exported
+# VARIANT   cd.oldpwd_unexported
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cd.004
 unset CDPATH

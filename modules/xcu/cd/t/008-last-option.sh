@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cd.008
+# MUTANT    cd.first_option_wins
+# MUTANT    cd.P_wins
+# MUTANT    cd.L_wins
+# MUTANT    cd.two_options_refused
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cd.008
 unset CDPATH

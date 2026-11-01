@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cd.005
+# MUTANT    cd.home_ignored
+# MUTANT    cd.home_root
+# MUTANT    cd.home_prints
+# MUTANT    cd.home_status1
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cd.005
 unset CDPATH
