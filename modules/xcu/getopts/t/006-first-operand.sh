@@ -18,7 +18,9 @@ rc1=$?
 getopts ab pcopt
 rc2=$?
 ind=$OPTIND
+v2=$pcopt
 [ "$rc1" -eq 0 ] || pc_fail "first call exited $rc1"
 [ "$rc2" -eq 1 ] || pc_fail "call at the operand exited $rc2, wanted 1"
+[ "$v2" = '?' ] || pc_fail "name is '$v2' at the operand, wanted ?"
 [ "$ind" = 2 ] || pc_fail "OPTIND is '$ind', wanted 2"
 pc_pass

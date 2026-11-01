@@ -33,4 +33,24 @@ rc=$?
 [ "$rc" -eq 0 ] && [ "$pcopt" = c ] || pc_fail "attached argument: exit $rc, name '$pcopt'"
 [ "${OPTARG-unset}" = val ] || pc_fail "OPTARG is '${OPTARG-unset}' for -cval, wanted val"
 [ "$OPTIND" = 2 ] || pc_fail "OPTIND is '$OPTIND' after -cval, wanted 2"
+# the argument is the whole next word, spaces and all, and parsing goes on after it
+OPTIND=1
+set -- -c 'x y' -a z
+getopts c:a pcopt
+rc=$?
+[ "$rc" -eq 0 ] && [ "$pcopt" = c ] || pc_fail "spaced argument: exit $rc, name '$pcopt'"
+[ "${OPTARG-unset}" = 'x y' ] || pc_fail "OPTARG is '${OPTARG-unset}', wanted x y"
+[ "$OPTIND" = 3 ] || pc_fail "OPTIND is '$OPTIND' after -c 'x y', wanted 3"
+getopts c:a pcopt
+rc=$?
+[ "$rc" -eq 0 ] && [ "$pcopt" = a ] || pc_fail "option after the argument: exit $rc, name '$pcopt'"
+# a separate empty word is an explicit null option-argument
+OPTIND=1
+set -- -c '' x
+getopts c: pcopt
+rc=$?
+[ "$rc" -eq 0 ] && [ "$pcopt" = c ] || pc_fail "empty argument: exit $rc, name '$pcopt'"
+[ "${OPTARG+set}" = set ] || pc_fail "OPTARG is unset for an empty option-argument"
+[ -z "$OPTARG" ] || pc_fail "OPTARG is '$OPTARG', wanted empty"
+[ "$OPTIND" = 3 ] || pc_fail "OPTIND is '$OPTIND' after -c '', wanted 3"
 pc_pass

@@ -34,4 +34,24 @@ ind=$OPTIND
 [ "$rc3" -eq 1 ] || pc_fail "third call exited $rc3, wanted 1"
 [ "$v3" = '?' ] || pc_fail "name is '$v3' at the end of options, wanted ?"
 [ "$ind" = 3 ] || pc_fail "OPTIND is '$ind' at the end of options, wanted 3"
+# no operand: OPTIND is one beyond the last word
+OPTIND=1
+set -- -a
+getopts a pcopt
+getopts a pcopt
+rc=$?
+v=$pcopt
+ind=$OPTIND
+[ "$rc" -eq 1 ] && [ "$v" = '?' ] || pc_fail "no operand: exit $rc, name '$v'"
+[ "$ind" = 2 ] || pc_fail "OPTIND is '$ind' with no operand after -a, wanted 2"
+# an empty list of parameters
+OPTIND=1
+set --
+pcopt=x
+getopts a pcopt
+rc=$?
+v=$pcopt
+ind=$OPTIND
+[ "$rc" -eq 1 ] && [ "$v" = '?' ] || pc_fail "empty list: exit $rc, name '$v'"
+[ "$ind" = 1 ] || pc_fail "OPTIND is '$ind' for an empty list, wanted 1"
 pc_pass

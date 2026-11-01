@@ -20,10 +20,11 @@ pc_begin XCU.getopts.009
 pc_test
 set -- -c
 OPTARG=stale
-getopts c: pcopt 2>err
+getopts c: pcopt 2>err >out
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "exit $rc, wanted 0"
 [ "$pcopt" = '?' ] || pc_fail "name is '$pcopt', wanted ?"
 [ "${OPTARG+set}" != set ] || pc_fail "OPTARG is set to '$OPTARG'"
+[ ! -s out ] || pc_fail "something was written to standard output"
 [ -s err ] || pc_fail "no diagnostic on standard error"
 pc_pass

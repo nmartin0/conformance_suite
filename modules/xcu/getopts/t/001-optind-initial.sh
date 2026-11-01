@@ -3,7 +3,7 @@
 #
 # ASSERTION XCU.getopts.001
 # MUTANT    getopts.optind_zero
-# MUTANT    getopts.optind_unset
+# MUTANT    getopts.optind_two
 # VARIANT   getopts.reimpl
 . "$PC_CORE/pc.sh"
 pc_begin XCU.getopts.001

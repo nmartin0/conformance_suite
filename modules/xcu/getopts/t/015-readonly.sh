@@ -14,4 +14,10 @@ pc_test
 ( readonly pcro; set -- -a; getopts ab pcro ) 2>/dev/null
 rc=$?
 [ "$rc" -gt 1 ] || pc_fail "exit $rc for a read-only name variable, wanted more than 1"
+( readonly OPTARG; set -- -c val; getopts c: pcopt ) 2>/dev/null
+rc=$?
+[ "$rc" -gt 1 ] || pc_fail "exit $rc for a read-only OPTARG, wanted more than 1"
+( readonly OPTIND; set -- -a; getopts ab pcopt ) 2>/dev/null
+rc=$?
+[ "$rc" -gt 1 ] || pc_fail "exit $rc for a read-only OPTIND, wanted more than 1"
 pc_pass

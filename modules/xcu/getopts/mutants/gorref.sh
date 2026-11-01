@@ -30,7 +30,7 @@ pcm_is() { [ "$pcm_fault" = "$1" ]; }
 pcm_assign() { eval "$1=\$2"; }
 
 # can the variable be given a value (is it not read-only)?
-pcm_can() { (eval "$1=") 2>/dev/null; }
+pcm_can() { (eval "$1=\${$1-}") 2>/dev/null; }
 
 # the diagnostic: pcm_diag KIND CHAR (KIND u: unknown option, m: missing argument)
 pcm_diag() {
@@ -357,7 +357,7 @@ pcm_g() {
 pcm_install() {
 	case $pcm_fault in
 	optind_zero) OPTIND=0; return 0 ;;
-	optind_unset) unset OPTIND; return 0 ;;
+	optind_two) OPTIND=2; return 0 ;;
 	esac
 	shopt -s expand_aliases 2>/dev/null
 	alias getopts='pcm_g "$#" "$@"'
