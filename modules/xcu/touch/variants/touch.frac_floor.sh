@@ -1,0 +1,31 @@
+# touch (conforming variant) -d keeps whole seconds only: the fraction is dropped
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# Allowed by the text: timestamps need only have one-second resolution and are set to the greatest supported value not above the requested one (XBD 4.12, file timestamps).
+# A conforming standalone touch, first on PATH; it runs the real one and alters one thing.
+mkdir -p pc-mutbin
+printf '#!/bin/sh\nREAL="%s"\n' "$(command -v touch)" >pc-mutbin/touch
+cat >>pc-mutbin/touch <<'PC_EOF'
+A= M= C= R= T= D=
+while getopts acmr:t:d: o
+do
+	case $o in
+	a) A=-a ;; m) M=-m ;; c) C=-c ;; r) R=$OPTARG ;; t) T=$OPTARG ;; d) D=$OPTARG ;;
+	*) echo "touch: bad option" >&2; exit 2 ;;
+	esac
+done
+shift $((OPTIND - 1))
+new=
+for f
+do
+	[ -e "$f" ] || [ -h "$f" ] || new="$new $f"
+done
+run() {
+	"$REAL" $A $M $C ${R:+-r} ${R:+"$R"} ${T:+-t} ${T:+"$T"} ${D:+-d} ${D:+"$D"} -- "$@"
+}
+[ -n "$D" ] && D=$(printf '%s' "$D" | sed 's/[.,][0-9]*\(Z*\)$/\1/')
+run "$@"
+rc=$?
+exit $rc
+PC_EOF
+chmod +x pc-mutbin/touch
+PATH=$PWD/pc-mutbin:$PATH
