@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.001
+# MUTANT    awk.f_ignored
+# MUTANT    awk.v_ignored
+# MUTANT    awk.v_no_escape
+# MUTANT    awk.v_after_begin
+# MUTANT    awk.f_first_only
+# MUTANT    awk.f_last_only
+# MUTANT    awk.f_reversed
+# MUTANT    awk.f_dash_not_stdin
+# VARIANT    awk.f_as_v_after
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.001
 LC_ALL=POSIX
@@ -26,6 +35,9 @@ got=$(awk -f p1 in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "a:b:c${NL}d:e:f${NL}rc=0" ] || pc_fail "-f program file failed"
 got=$(awk -f p1 -f p2 in 2>/dev/null </dev/null)
 [ "$got" = "a:b:c${NL}d:e:f${NL}2" ] || pc_fail "two -f files were not concatenated into one program"
+printf 'BEGIN { print "one" }\n' >p3 && printf 'BEGIN { print "two" }\n' >p4 || pc_fail "cannot create program"
+got=$(awk -f p3 -f p4 2>/dev/null </dev/null)
+[ "$got" = "one${NL}two" ] || pc_fail "the -f files were not concatenated in the order given"
 got=$(awk -f - in 2>/dev/null <p1)
 [ "$got" = "a:b:c${NL}d:e:f" ] || pc_fail "-f - did not read the program from standard input"
 got=$(awk -F: -v OFS=- '{ $1 = $1; print }' in 2>/dev/null </dev/null)

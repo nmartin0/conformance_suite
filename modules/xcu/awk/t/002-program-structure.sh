@@ -2,6 +2,16 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.002
+# MUTANT    awk.begin_reversed
+# MUTANT    awk.end_reversed
+# MUTANT    awk.patterns_reversed
+# MUTANT    awk.end_skipped
+# MUTANT    awk.begin_skipped
+# MUTANT    awk.noaction_nothing
+# MUTANT    awk.nopattern_never
+# MUTANT    awk.first_match_only
+# MUTANT    awk.begin_reads_input
+# MUTANT    awk.input_ignored
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.002
 LC_ALL=POSIX
@@ -27,6 +37,8 @@ $1 > 1 { print "gt1" }' in 2>/dev/null </dev/null)
 [ "$got" = "two${NL}gt1${NL}gt1" ] || pc_fail "patterns were not applied in program order for each record"
 got=$(awk 'BEGIN { print "only", NR }' 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "only 0${NL}rc=0" ] || pc_fail "a BEGIN-only program gave the wrong result"
+got=$(awk 'BEGIN { print "only" }' pc-no-such-file 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "only${NL}rc=0" ] || pc_fail "a BEGIN-only program tried to read its file operand"
 got=$(awk 'END { print NR }' in 2>/dev/null </dev/null)
 [ "$got" = "3" ] || pc_fail "an END-only program did not read the input first"
 got=$(awk 'BEGIN { x = 1 } END { print x, NR }' in 2>/dev/null </dev/null)
