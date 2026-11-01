@@ -80,7 +80,7 @@ pcm_get() {
 	pcm_g=${pcm_g%x}
 	pcm_g=${pcm_g%"$pcm_nl"}
 	pcm_rest=${pcm_g#*=}
-	eval "set -- $pcm_rest"
+	command eval "set -- $pcm_rest"
 	pcm_gv=$1
 	return 0
 }
@@ -141,9 +141,9 @@ pcm_def() {
 	if command alias "$pcm_n" >/dev/null 2>&1; then pcm_have=1; fi
 	if [ $pcm_have = 1 ] && pcm_okname "$pcm_n"; then
 		pcm_get "$pcm_n"
-		eval "pcm_prev_$pcm_n=\$pcm_gv"
+		command eval "pcm_prev_$pcm_n=\$pcm_gv"
 		pcm_ol=$(command alias "$pcm_n")
-		eval "pcm_oldl_$pcm_n=\$pcm_ol"
+		command eval "pcm_oldl_$pcm_n=\$pcm_ol"
 		pcm_redefs="$pcm_redefs $pcm_n"
 	fi
 	if [ "${PCM_FAULT-}" = sub_leaks ]; then command printf '%s\n' "$1" >>"$pcm_store"; fi
@@ -173,12 +173,12 @@ pcm_def() {
 	redefine_exit1) if [ $pcm_have = 1 ]; then command alias "$pcm_n=$pcm_v"; return 1; fi ;;
 	redefine_subst_old)
 		if [ $pcm_have = 1 ] && pcm_okname "$pcm_n"; then
-			eval "pcm_shown_$pcm_n=\$pcm_v"
+			command eval "pcm_shown_$pcm_n=\$pcm_v"
 			return 0
 		fi ;;
 	redefine_shows_old)
 		if [ $pcm_have = 1 ] && pcm_okname "$pcm_n"; then
-			eval "pcm_shown_$pcm_n=\$pcm_gv"
+			command eval "pcm_shown_$pcm_n=\$pcm_gv"
 		fi ;;
 	esac
 	command alias "$pcm_n=$pcm_v"
@@ -216,7 +216,7 @@ pcm_show() { # name index total
 	pcm_sv=$pcm_gv
 	pcm_has= pcm_sh= pcm_ol=
 	if pcm_okname "$pcm_sn"; then
-		eval "pcm_has=\${pcm_shown_$pcm_sn+x} pcm_sh=\${pcm_shown_$pcm_sn-} pcm_ol=\${pcm_oldl_$pcm_sn-}"
+		command eval "pcm_has=\${pcm_shown_$pcm_sn+x} pcm_sh=\${pcm_shown_$pcm_sn-} pcm_ol=\${pcm_oldl_$pcm_sn-}"
 	fi
 	case ${PCM_FAULT-} in
 	quote_double) pcm_emit "$pcm_sn" "$pcm_sv" dq; return 0 ;;
@@ -305,7 +305,7 @@ PCM_EOF
 	list_old_kept)
 		command alias
 		for pcm_rn in $pcm_redefs; do
-			eval "pcm_ol=\${pcm_oldl_$pcm_rn-}"
+			command eval "pcm_ol=\${pcm_oldl_$pcm_rn-}"
 			if [ -n "$pcm_ol" ]; then command printf '%s\n' "$pcm_ol"; fi
 		done
 		return 0 ;;
