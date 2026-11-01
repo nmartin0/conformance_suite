@@ -5,6 +5,12 @@
 # When an operand has a directory part ("sub/g"), "ar -t", "-tv",
 # "-pv", "-dv", "-rv" and "-xv" show the name as the operand was
 # written, not as the stored last component.
+# MUTANT    ar.rv_basename
+# MUTANT    ar.t_basename
+# MUTANT    ar.tv_basename
+# MUTANT    ar.pv_basename
+# MUTANT    ar.xv_basename
+# MUTANT    ar.dv_basename
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.019
 LC_ALL=C; export LC_ALL

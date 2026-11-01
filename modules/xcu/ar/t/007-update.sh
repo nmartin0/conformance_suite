@@ -6,6 +6,11 @@
 # the archived member is not replaced, and one that is at least as
 # new (including one exactly as new) is replaced; a file not yet
 # in the archive is still added.
+# MUTANT    ar.u_ignored
+# MUTANT    ar.u_never
+# MUTANT    ar.u_strict
+# MUTANT    ar.u_reverse
+# MUTANT    ar.u_skips_new
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.007
 LC_ALL=C; export LC_ALL

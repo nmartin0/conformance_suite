@@ -1,0 +1,16 @@
+# ar -xv writes its lines but extracts nothing
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+# A broken standalone ar, first on PATH; it runs the real one and alters one thing.
+mkdir -p pc-mutbin
+printf '#!/bin/sh\nREAL="%s"\n' "$(command -v ar)" >pc-mutbin/ar
+cat >>pc-mutbin/ar <<'PC_EOF'
+case $1 in -xv)
+	case $2 in /*) a=$2 ;; *) a=$PWD/$2 ;; esac
+	opt=$1; shift 2
+	mkdir -p pc-mut.d; cd pc-mut.d || exit 1
+	exec "$REAL" "$opt" "$a" "$@" ;;
+esac
+exec "$REAL" "$@"
+PC_EOF
+chmod +x pc-mutbin/ar
+PATH=$PWD/pc-mutbin:$PATH

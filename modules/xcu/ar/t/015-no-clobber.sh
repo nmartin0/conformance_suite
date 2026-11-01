@@ -5,6 +5,14 @@
 # "ar -x -C a f1" (also written "-xC") leaves an existing f1 with
 # its old contents but still extracts a file that does not exist;
 # without -C an existing file is replaced.
+# MUTANT    ar.C_ignored
+# MUTANT    ar.C_separate_ignored
+# MUTANT    ar.C_grouped_ignored
+# MUTANT    ar.C_removes
+# MUTANT    ar.C_extracts_nothing
+# MUTANT    ar.noC_never_replaces
+# MUTANT    ar.C_all_nothing_without_operand
+# VARIANT   ar.c_skip_status
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.015
 LC_ALL=C; export LC_ALL

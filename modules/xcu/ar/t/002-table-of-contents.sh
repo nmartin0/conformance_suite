@@ -4,6 +4,17 @@
 # ASSERTION XCU.ar.002
 # "ar -t a" prints the member names one per line in archive order;
 # with operands only those members are listed.
+# MUTANT    ar.t_reverse
+# MUTANT    ar.t_sorted
+# MUTANT    ar.t_operands_ignored
+# MUTANT    ar.t_no_final_newline
+# MUTANT    ar.t_status1
+# MUTANT    ar.t_first_operand_only
+# MUTANT    ar.t_extra_blank
+# MUTANT    ar.t_to_stderr
+# MUTANT    ar.t_first_only
+# MUTANT    ar.t_drops_last
+# VARIANT   ar.operand_reverse
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.002
 LC_ALL=C; export LC_ALL

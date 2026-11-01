@@ -4,6 +4,16 @@
 # ASSERTION XCU.ar.018
 # A long member name is not truncated: the archive lists the full
 # name and the member extracts under it.
+# MUTANT    ar.trunc15
+# MUTANT    ar.trunc16
+# MUTANT    ar.trunc31
+# MUTANT    ar.trunc32
+# MUTANT    ar.trunc64
+# MUTANT    ar.trunc100
+# MUTANT    ar.trunc200
+# MUTANT    ar.trunc254
+# MUTANT    ar.x_trunc16
+# MUTANT    ar.t_trunc16
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.018
 LC_ALL=C; export LC_ALL

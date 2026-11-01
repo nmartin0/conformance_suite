@@ -4,6 +4,20 @@
 # ASSERTION XCU.ar.013
 # "ar -r -a f1 a n" puts new member n after f1; -b puts it before
 # the named member; -i behaves as -b.
+# MUTANT    ar.ra_as_b
+# MUTANT    ar.rb_as_a
+# MUTANT    ar.ri_as_a
+# MUTANT    ar.ra_ignored
+# MUTANT    ar.rb_ignored
+# MUTANT    ar.ri_ignored
+# MUTANT    ar.ra_off_by_one
+# MUTANT    ar.rb_off_by_one
+# MUTANT    ar.ra_to_front
+# MUTANT    ar.rb_to_end
+# MUTANT    ar.ri_to_end
+# MUTANT    ar.rpos_status1
+# MUTANT    ar.rpos_first_operand_only
+# VARIANT   ar.operand_reverse
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.013
 LC_ALL=C; export LC_ALL

@@ -7,6 +7,24 @@
 # blank line, the name in angle brackets and another blank line
 # (the name is the operand if operands are given, else the member
 # name).
+# MUTANT    ar.p_reverse
+# MUTANT    ar.p_first_only
+# MUTANT    ar.p_operands_ignored
+# MUTANT    ar.p_first_operand_only
+# MUTANT    ar.pv_no_leading_blank
+# MUTANT    ar.pv_no_trailing_blank
+# MUTANT    ar.pv_no_brackets
+# MUTANT    ar.pv_colon
+# MUTANT    ar.pv_two_blank
+# MUTANT    ar.pv_no_newline
+# MUTANT    ar.pv_skip_empty
+# MUTANT    ar.p_pad_odd
+# MUTANT    ar.p_truncate4096
+# MUTANT    ar.p_strip_newline
+# MUTANT    ar.p_status1
+# MUTANT    ar.p_to_stderr
+# MUTANT    ar.pv_header_stderr
+# VARIANT   ar.operand_reverse
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.003
 LC_ALL=C; export LC_ALL

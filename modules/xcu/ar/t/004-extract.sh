@@ -7,6 +7,16 @@
 # members; the archive file is unchanged; the extracted file's
 # modification time is the time of extraction, not the old time of
 # the original.
+# MUTANT    ar.x_operand_all
+# MUTANT    ar.x_none_without_operand
+# MUTANT    ar.x_first_only
+# MUTANT    ar.x_first_operand_only
+# MUTANT    ar.x_old_time_operand
+# MUTANT    ar.x_old_time_all
+# MUTANT    ar.x_future_time
+# MUTANT    ar.x_changes_archive
+# MUTANT    ar.x_truncates
+# MUTANT    ar.x_status1
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.004
 LC_ALL=C; export LC_ALL

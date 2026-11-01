@@ -4,6 +4,11 @@
 # ASSERTION XCU.ar.016
 # "ar -s a" on an existing archive exits 0 and the members are
 # unchanged and still listed in order.
+# MUTANT    ar.s_status1
+# MUTANT    ar.s_empties
+# MUTANT    ar.s_reorders
+# MUTANT    ar.s_removes_archive
+# MUTANT    ar.s_corrupts_content
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.016
 LC_ALL=C; export LC_ALL

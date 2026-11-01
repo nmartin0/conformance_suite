@@ -5,6 +5,12 @@
 # "ar -r a f1" creating a new archive exits 0, writes a diagnostic
 # to standard error and the archive then lists f1; with -c ("ar
 # -rc") nothing is written to standard error.
+# MUTANT    ar.create_nodiag
+# MUTANT    ar.diag_stdout
+# MUTANT    ar.c_diag
+# MUTANT    ar.create_status
+# MUTANT    ar.c_status
+# MUTANT    ar.create_empty
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.001
 LC_ALL=C; export LC_ALL

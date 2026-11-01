@@ -4,6 +4,19 @@
 # ASSERTION XCU.ar.005
 # "ar -d a f2" removes f2 and keeps the others in their order; with
 # -v it writes "d - f2" to standard output.
+# MUTANT    ar.d_not_deleted
+# MUTANT    ar.d_all
+# MUTANT    ar.d_prefix
+# MUTANT    ar.d_order_scrambled
+# MUTANT    ar.dv_no_output
+# MUTANT    ar.dv_no_dash
+# MUTANT    ar.dv_colon
+# MUTANT    ar.dv_letter
+# MUTANT    ar.dv_stderr
+# MUTANT    ar.dv_no_newline
+# MUTANT    ar.d_status1
+# MUTANT    ar.d_first_operand_only
+# VARIANT   ar.operand_reverse
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.005
 LC_ALL=C; export LC_ALL

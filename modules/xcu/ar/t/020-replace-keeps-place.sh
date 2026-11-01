@@ -5,6 +5,11 @@
 # With "ar -r -a posname" or "-b" or "-i", a file that replaces an
 # existing member keeps that member's place and takes the new
 # contents; only files that are new are positioned.
+# MUTANT    ar.ra_moves_replaced
+# MUTANT    ar.rb_moves_replaced
+# MUTANT    ar.ri_moves_replaced
+# MUTANT    ar.rpos_replaced_dup
+# MUTANT    ar.rpos_replaced_ignored
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.020
 LC_ALL=C; export LC_ALL

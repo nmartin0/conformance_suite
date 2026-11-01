@@ -6,6 +6,20 @@
 # takes the new contents; a file not yet in the archive is appended
 # at the end; with -v standard output has "r - NAME" for a replaced
 # file and "a - NAME" for an added one.
+# MUTANT    ar.r_replaced_to_end
+# MUTANT    ar.r_replace_ignored
+# MUTANT    ar.r_new_to_front
+# MUTANT    ar.rv_labels_swapped
+# MUTANT    ar.rv_all_a
+# MUTANT    ar.rv_all_r
+# MUTANT    ar.rv_no_dash
+# MUTANT    ar.rv_stderr
+# MUTANT    ar.rv_no_output
+# MUTANT    ar.rv_no_newline
+# MUTANT    ar.r_status1
+# MUTANT    ar.r_appends_dup
+# MUTANT    ar.r_first_operand_only
+# VARIANT   ar.operand_reverse
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.006
 LC_ALL=C; export LC_ALL

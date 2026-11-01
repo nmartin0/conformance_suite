@@ -5,6 +5,14 @@
 # "ar -ts a" lists the members as "ar -t a" does, "ar -ps a" writes
 # their contents as "ar -p a" does, and "ar -xs a" extracts them as
 # "ar -x a" does.
+# MUTANT    ar.ts_silent
+# MUTANT    ar.ps_silent
+# MUTANT    ar.xs_silent
+# MUTANT    ar.ts_status1
+# MUTANT    ar.ts_reverse
+# MUTANT    ar.ps_reverse
+# MUTANT    ar.xs_first_only
+# MUTANT    ar.t_s_separate_silent
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.021
 LC_ALL=C; export LC_ALL

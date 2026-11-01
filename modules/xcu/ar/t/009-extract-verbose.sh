@@ -3,6 +3,17 @@
 #
 # ASSERTION XCU.ar.009
 # "ar -xv a f1" writes "x - f1" to standard output.
+# MUTANT    ar.xv_no_output
+# MUTANT    ar.xv_no_dash
+# MUTANT    ar.xv_letter
+# MUTANT    ar.xv_stderr
+# MUTANT    ar.xv_no_newline
+# MUTANT    ar.xv_trailing_space
+# MUTANT    ar.xv_no_extract
+# MUTANT    ar.xv_operand_all
+# MUTANT    ar.xv_status1
+# MUTANT    ar.xv_names_all
+# VARIANT   ar.operand_reverse
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.009
 LC_ALL=C; export LC_ALL

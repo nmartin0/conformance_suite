@@ -5,6 +5,12 @@
 # An archive made only of printable text files (also after -d, -m
 # and -q, and with a long member name) consists only of
 # printable characters, <newline> and <tab>.
+# MUTANT    ar.bin_nul
+# MUTANT    ar.bin_ctrl
+# MUTANT    ar.bin_del
+# MUTANT    ar.bin_high
+# MUTANT    ar.bin_cr
+# MUTANT    ar.bin_ff
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.017
 LC_ALL=C; export LC_ALL

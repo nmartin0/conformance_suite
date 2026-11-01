@@ -5,6 +5,11 @@
 # A file added as sub/f3 is stored under the name f3: "ar -t a"
 # lists f3, and a later "ar -d a other/f3" (same last component)
 # removes it.
+# MUTANT    ar.store_full_path
+# MUTANT    ar.r_slash_appends
+# MUTANT    ar.d_match_full
+# MUTANT    ar.p_match_full
+# MUTANT    ar.x_match_full
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.010
 LC_ALL=C; export LC_ALL

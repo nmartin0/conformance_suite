@@ -8,6 +8,32 @@
 # file's modification time when it was archived (shown in the zone TZ
 # selects), and the name; without operands every member is listed
 # in archive order.
+# MUTANT    ar.tv_size_plus1
+# MUTANT    ar.tv_size_kilo
+# MUTANT    ar.tv_mode_wrong
+# MUTANT    ar.tv_ids_swapped
+# MUTANT    ar.tv_uid_twice
+# MUTANT    ar.tv_month_lower
+# MUTANT    ar.tv_month_full
+# MUTANT    ar.tv_month_next
+# MUTANT    ar.tv_day_next
+# MUTANT    ar.tv_hour_next
+# MUTANT    ar.tv_min_next
+# MUTANT    ar.tv_hour_min_swapped
+# MUTANT    ar.tv_year_next
+# MUTANT    ar.tv_12hour
+# MUTANT    ar.tv_year_before_time
+# MUTANT    ar.tv_no_ids
+# MUTANT    ar.tv_no_name
+# MUTANT    ar.tv_name_first
+# MUTANT    ar.tv_time_now
+# MUTANT    ar.tv_ignores_tz
+# MUTANT    ar.tv_status1
+# MUTANT    ar.tv_operand_ignored
+# MUTANT    ar.tv_reverse
+# MUTANT    ar.tv_stderr
+# VARIANT   ar.tv_unpadded
+# VARIANT   ar.tv_mode_flag
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.008
 LC_ALL=C; export LC_ALL

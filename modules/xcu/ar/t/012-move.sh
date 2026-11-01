@@ -5,6 +5,21 @@
 # "ar -m a f1" moves f1 to the end; "ar -m -a f3 a f1" places it
 # after f3, and "ar -m -b f2 a f3" places f3 before f2, other
 # members keeping their order.
+# MUTANT    ar.m_nothing
+# MUTANT    ar.m_to_front
+# MUTANT    ar.m_a_ignored
+# MUTANT    ar.m_b_ignored
+# MUTANT    ar.m_i_ignored
+# MUTANT    ar.m_a_as_b
+# MUTANT    ar.m_b_as_a
+# MUTANT    ar.m_i_as_a
+# MUTANT    ar.m_a_off_by_one
+# MUTANT    ar.m_b_off_by_one
+# MUTANT    ar.m_drops_member
+# MUTANT    ar.m_first_operand_only
+# MUTANT    ar.m_status1
+# MUTANT    ar.m_others_reversed
+# VARIANT   ar.operand_reverse
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.012
 LC_ALL=C; export LC_ALL

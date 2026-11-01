@@ -4,6 +4,15 @@
 # ASSERTION XCU.ar.014
 # "ar -q a f2" appends f2 after the existing members; "ar -qc" on
 # a missing archive creates it.
+# MUTANT    ar.q_nothing
+# MUTANT    ar.q_to_front
+# MUTANT    ar.q_truncates
+# MUTANT    ar.q_no_create
+# MUTANT    ar.q_first_operand_only
+# MUTANT    ar.q_status1
+# MUTANT    ar.qc_diag
+# MUTANT    ar.q_content_empty
+# VARIANT   ar.operand_reverse
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.014
 LC_ALL=C; export LC_ALL
