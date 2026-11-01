@@ -521,7 +521,7 @@ pc_odref() (
 			cat "$t.2" >"$t"
 		fi ;;
 	pad_none)
-		if [ -n "$allint" ] && [ -n "$tlist" ]; then
+		if [ -n "$allint" ]; then
 			awk -v A="$A" '{ for (i = (A == "n" ? 1 : ($0 ~ /^[^ \t]/ ? 2 : 1)); i <= NF; i++) { s = $i; while (length(s) > 1 && substr(s, 1, 1) == "0") s = substr(s, 2); $i = s } ; if (NF) print; else print }' "$t" >"$t.2"
 			cat "$t.2" >"$t"
 		fi ;;
