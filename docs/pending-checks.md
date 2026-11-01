@@ -24,7 +24,7 @@ UNCHECKED and needs another system. Record each outcome in
 
 | Assertions | Needs a system where |
 |---|---|
-| awk 036-039, mv 015-017, rm 016-018, printf 015, expr 010-012, nl 009-010, join 011, date 010, and the earlier locale-dependent modules (cut, sort, wc, tr, find, sed, cp, ls) | a locale made by the locale compiler can be selected |
+| awk 036-039, grep 009-010, mv 015-017, rm 016-018, printf 015, expr 010-012, nl 009-010, join 011, date 010, and the earlier locale-dependent modules (cut, sort, wc, tr, find, sed, cp, ls) | a locale made by the locale compiler can be selected |
 | awk 040-042, mv 005, nl 002, xargs 016, touch 016 | the utility meets the requirement the test states (the faults were checked by hand against a conforming model) |
 | od 011 | od accepts the XSI offset operand |
 | set 020, kill 011/013/014 | the user portability utilities option is claimed (kill also needs job control) |
