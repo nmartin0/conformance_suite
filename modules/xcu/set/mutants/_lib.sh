@@ -9,14 +9,15 @@
 #   PCM_PRE   text placed before the script
 #   PCM_SED   sed program applied to the script text
 #   PCM_OSED  sed program applied to the script's standard output
+#   PCM_ESED  sed program applied to the script's standard error
 #   PCM_RC    every non-zero exit status becomes this number
 #   PCM_RCZ   exit status zero becomes this number
 #   PCM_ERR   hide: standard error is discarded; out: it joins standard output
 # A fault or variant file sources this one as
 #   . "${PC_MUTANT_FILE%/*/*}/mutants/_lib.sh"
 PCM_REAL=$PC_SH
-: "${PCM_PRE=}" "${PCM_SED=}" "${PCM_OSED=}" "${PCM_RC=}" "${PCM_RCZ=}" "${PCM_ERR=}"
-export PCM_REAL PCM_PRE PCM_SED PCM_OSED PCM_RC PCM_RCZ PCM_ERR
+: "${PCM_PRE=}" "${PCM_SED=}" "${PCM_OSED=}" "${PCM_ESED=}" "${PCM_RC=}" "${PCM_RCZ=}" "${PCM_ERR=}"
+export PCM_REAL PCM_PRE PCM_SED PCM_OSED PCM_ESED PCM_RC PCM_RCZ PCM_ERR
 cat >pcm_w.sh <<'PCM_EOF'
 pcm_f=$1
 shift
@@ -31,7 +32,7 @@ if [ -n "$PCM_OSED" ]; then sed -e "$PCM_OSED" "$pcm_x.o"; else cat "$pcm_x.o"; 
 case $PCM_ERR in
 hide) ;;
 out) cat "$pcm_x.e" ;;
-*) cat "$pcm_x.e" >&2 ;;
+*) if [ -n "$PCM_ESED" ]; then sed -e "$PCM_ESED" "$pcm_x.e" >&2; else cat "$pcm_x.e" >&2; fi ;;
 esac
 rm -f "$pcm_x" "$pcm_x.o" "$pcm_x.e"
 if [ "$pcm_rc" -ne 0 ]; then

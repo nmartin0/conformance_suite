@@ -9,6 +9,7 @@
 # MUTANT    set.x_stdout
 # MUTANT    set.x_before_expansion
 # MUTANT    set.x_first_only
+# VARIANT   set.x_off_untraced
 . "$PC_CORE/pc.sh"
 pc_begin XCU.set.015
 nl='

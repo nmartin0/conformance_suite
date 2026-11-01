@@ -13,6 +13,7 @@
 # MUTANT    set.o_xtrace_ignored
 # MUTANT    set.plus_o_xtrace_ignored
 # MUTANT    set.o_errexit_is_noexec
+# VARIANT   set.x_off_untraced
 . "$PC_CORE/pc.sh"
 pc_begin XCU.set.017
 nl='
