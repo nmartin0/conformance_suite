@@ -13,7 +13,6 @@
 # MUTANT    pr.i_char_ignored
 # MUTANT    pr.i_gap_ignored
 # MUTANT    pr.i_all_spaces
-# MUTANT    pr.i_min2
 # MUTANT    pr.i_once
 . "$PC_CORE/pc.sh"
 pc_begin XCU.pr.009
@@ -34,7 +33,6 @@ printf 'aXb\n' >t7 || pc_unresolved "cannot create input"
 printf 'a%sb\n' "$S7" >s1 || pc_unresolved "cannot create input"
 printf 'a   b\n' >s2 || pc_unresolved "cannot create input"
 printf 'a b\n' >s3 || pc_unresolved "cannot create input"
-printf '1234567 b\n' >s4 || pc_unresolved "cannot create input"
 printf 'a%sb%sc\n' "$S7" "$S7" >s5 || pc_unresolved "cannot create input"
 pc_test
 got=$(pr -t -e t1 2>/dev/null </dev/null; printf x)
@@ -63,8 +61,6 @@ got=$(pr -t -i s3 2>/dev/null </dev/null; printf x)
 [ "$got" = "a b${NL}x" ] || pc_fail "-i changed a space that reaches no tab column"
 got=$(pr -t -i s2 2>/dev/null </dev/null; printf x)
 [ "$got" = "a   b${NL}x" ] || pc_fail "-i changed spaces that reach no tab column"
-got=$(pr -t -i s4 2>/dev/null </dev/null; printf x)
-[ "$got" = "1234567${TAB}b${NL}x" ] || pc_fail "-i did not replace a single space reaching column 9"
 got=$(pr -t -i s5 2>/dev/null </dev/null; printf x)
 [ "$got" = "a${TAB}b${TAB}c${NL}x" ] || pc_fail "-i did not replace spaces reaching columns 9 and 17"
 pc_pass

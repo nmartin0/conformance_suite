@@ -120,3 +120,9 @@ anchor     utilities/pr.html#OPTIONS/-i
 class      required
 says       A gap of zero given to -e or -i is the same as no gap: tab stops every eight columns.
 test       t/014-zero-gap.sh
+
+assertion  XCU.pr.015
+anchor     utilities/pr.html#OPTIONS/-i
+class      required
+says       -i replaces even a single space by a tab when that space reaches a tab column.
+test       t/015-single-space-tab.sh
