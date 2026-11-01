@@ -27,7 +27,9 @@ class      required
 since      1992
 says       od -t o1, x1, u1 and d1 write each byte as an octal, hexadecimal,
            unsigned decimal or signed decimal number; o2, x2, u2, x4 and x8
-           write two, four or eight bytes as one number.
+           write two, four or eight bytes as one number (d and o likewise
+           for four and eight); input that ends inside an item is extended
+           with null bytes to fill it.
 test       t/002-integer-types.sh
 
 assertion  XCU.od.003
@@ -56,7 +58,10 @@ anchor     utilities/od.html#OPTIONS/-j
 anchor     utilities/od.html#OPTIONS/-N
 class      required
 says       od -j skips that many bytes (decimal, or octal with a leading 0 or
-           hexadecimal with 0x) and fails if the input is shorter; od -N
+           hexadecimal with 0x or 0X; a suffix b, k or m multiplies by 512,
+           1024 or 1048576, except that after a hexadecimal number b is a
+           digit) over the concatenated input and, if the input is shorter,
+           writes a diagnostic to standard error and exits nonzero; od -N
            formats at most that many bytes, a shorter input being no error.
 test       t/005-skip-and-count.sh
 

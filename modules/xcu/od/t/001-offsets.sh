@@ -2,6 +2,25 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.od.001
+# MUTANT    od.Ad_oct
+# MUTANT    od.Ao_dec
+# MUTANT    od.Ax_dec
+# MUTANT    od.An_dec
+# MUTANT    od.off_final_missing
+# MUTANT    od.off_final_blank
+# MUTANT    od.off_final_plus1
+# MUTANT    od.off_all_plus1
+# MUTANT    od.off_lead_blank
+# MUTANT    od.off_glued
+# MUTANT    od.off_zero
+# VARIANT   od.off_plain
+# VARIANT   od.off_wide
+# VARIANT   od.gap3
+# VARIANT   od.trail_blank
+# VARIANT   od.an_empty
+# VARIANT   od.block8
+# VARIANT   od.block32
+# VARIANT   od.hex_upper
 . "$PC_CORE/pc.sh"
 pc_begin XCU.od.001
 LC_ALL=POSIX
@@ -9,8 +28,7 @@ export LC_ALL
 NL='
 '
 B=" $(printf '\t')"
-f40=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-printf '%s' "$f40" >f40 || pc_fail "cannot create input"
+awk 'BEGIN { for (i = 0; i < 300; i++) printf "a" }' >f40 || pc_fail "cannot create input"
 check_base() {
 	base=$1
 	od -A "$base" -v -t x1 f40 >out 2>/dev/null </dev/null || return 1
@@ -18,8 +36,11 @@ check_base() {
 	n=0
 	last=
 	while IFS= read -r line; do
+		# the offset starts at the first character of the line
+		case $line in
+		[$B]*) return 8 ;;
+		esac
 		set -- $line
-		[ $# -ge 1 ] || return 2
 		off=$1
 		shift
 		case $base in
@@ -38,7 +59,7 @@ check_base() {
 		last=$line
 		lastcount=$#
 	done <out
-	[ "$exp" -eq 40 ] || return 4
+	[ "$exp" -eq 300 ] || return 4
 	[ "$n" -ge 2 ] || return 5
 	[ "$lastcount" -eq 0 ] || return 6
 	case $last in
