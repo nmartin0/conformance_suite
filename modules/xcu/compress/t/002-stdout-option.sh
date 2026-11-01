@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.002
+# MUTANT    compress.c_removes_input
+# MUTANT    compress.c_creates_file
+# MUTANT    compress.c_modifies_input
+# MUTANT    compress.c_to_stderr
+# MUTANT    compress.c_nothing
+# MUTANT    compress.status1_c
+# MUTANT    compress.d_stdout_extra
 # "compress -c f" writes the compressed data to standard output, leaves f
 # unchanged and creates no f.Z; "compress -d -c" of that output read from
 # standard input gives back the original bytes.

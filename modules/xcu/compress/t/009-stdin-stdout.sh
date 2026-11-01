@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.009
+# MUTANT    compress.dash_literal
+# MUTANT    compress.dash_empty
+# MUTANT    compress.noarg_empty
+# MUTANT    compress.noarg_stderr
+# MUTANT    compress.noarg_d_extra
+# MUTANT    compress.dash_d_extra
+# MUTANT    compress.dash_d_fail
 # With no file operand, and with the operand -, compress reads standard
 # input and writes standard output; "compress -d" of the result restores the
 # original bytes.

@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.007
+# MUTANT    compress.first_wins
+# MUTANT    compress.g_always_wins
+# MUTANT    compress.m_always_wins
+# MUTANT    compress.multiple_error
 # With "-g -m lzw" the output suffix is .Z; with "-m lzw -g" it is .gz; with
 # two -m options the last one decides; none of these is an error.
 . "$PC_CORE/pc.sh"

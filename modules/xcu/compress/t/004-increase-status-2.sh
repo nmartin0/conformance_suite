@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.004
+# MUTANT    compress.incr_status1
+# MUTANT    compress.incr_status0
+# MUTANT    compress.incr_status3
+# MUTANT    compress.incr_removes_input
+# MUTANT    compress.incr_modifies_input
+# MUTANT    compress.force_ignored
+# MUTANT    compress.force_no_output
+# MUTANT    compress.force_status2
 # "compress -g f" on a one-byte file, whose gzip form is longer than the
 # input, exits with status 2 and leaves f in place and unchanged; with -f
 # the file is compressed (status 0, f.gz exists).

@@ -57,8 +57,9 @@ anchor     utilities/compress.html#OPTIONS
 class      conditional
 when       XSI
 since      1992
-says       "-b 12" with lzw, and "-b 1" and "-b 9" with -g, are accepted and
-           the compressed file decompresses to the original bytes.
+says       "-b 9", "-b 12" and "-b 16" with lzw, and "-b 1", "-b 6" and "-b 9"
+           with -g, are accepted and the compressed file decompresses to
+           the original bytes.
 test       t/005-level-and-bits.sh
 
 assertion  XCU.compress.006
@@ -69,7 +70,8 @@ when       XSI
 since      1992
 says       "compress f1 f2" creates f1.Z and f2.Z and removes f1 and f2;
            "compress -d -c f1.Z f2.Z" writes the two decompressed files one
-           after the other to standard output.
+           after the other to standard output and leaves f1.Z and f2.Z in
+           place.
 test       t/006-multiple-operands.sh
 
 assertion  XCU.compress.007
@@ -118,9 +120,9 @@ class      conditional
 when       XSI
 since      1992
 says       With f.Z already present, standard input not a terminal and no
-           -f, "compress f" exits nonzero and leaves the existing f.Z
-           unchanged; with -f the output file is replaced by valid
-           compressed data.
+           -f, "compress f" writes a diagnostic to standard error, exits
+           nonzero and leaves the existing f.Z unchanged; with -f the output
+           file is replaced by valid compressed data.
 test       t/011-no-overwrite.sh
 
 assertion  XCU.compress.012
@@ -129,9 +131,10 @@ anchor     utilities/compress.html#STDERR
 class      conditional
 when       XSI
 since      1992
-says       With -v compress writes something to standard error for a file it
-           compresses, and nothing to standard output; without -v it writes
-           nothing to standard error.
+says       With -v compress writes a message containing a figure (the
+           percentage reduction) to standard error for a file it compresses,
+           and nothing to standard output; without -v it writes nothing to
+           standard error.
 test       t/012-verbose.sh
 
 assertion  XCU.compress.013
@@ -140,8 +143,9 @@ class      conditional
 when       XSI
 since      2024
 says       After "compress f" on a file with mode 640 and an old
-           modification time, f.Z has mode 640 and a modification time no
-           later than that old time.
+           modification time, f.Z has mode 640 and that same modification
+           time; after "compress -d f.Z" the restored f again has mode 640
+           and that same modification time.
 test       t/013-metadata.sh
 
 assertion  XCU.compress.014
@@ -149,7 +153,8 @@ anchor     utilities/compress.html#CONSEQUENCES OF ERRORS
 class      conditional
 when       XSI
 since      1992
-says       "compress -d g.Z" on a file that is not compressed data either
-           succeeds or fails, and if it fails (nonzero status) g.Z is
-           unchanged and still present.
+says       When compress exits with a nonzero status on an input file, that
+           file is still present and unchanged: "compress -d" of a file that
+           is not compressed data or of a truncated gzip file (either may
+           succeed), and "compress -f f" when f.Z is a directory.
 test       t/014-error-keeps-input.sh

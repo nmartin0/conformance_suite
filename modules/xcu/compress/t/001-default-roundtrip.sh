@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.001
+# MUTANT    compress.keep_input
+# MUTANT    compress.suffix_lz
+# MUTANT    compress.d_keeps_input
+# MUTANT    compress.status1_c
+# MUTANT    compress.status1_d
+# MUTANT    compress.d_file_corrupt
 # "compress f" replaces f with f.Z (the lzw suffix) and exits 0; "compress
 # -d f.Z" then restores f with the original bytes and removes f.Z.
 . "$PC_CORE/pc.sh"

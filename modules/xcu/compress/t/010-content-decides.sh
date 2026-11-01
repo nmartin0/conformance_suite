@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.010
+# MUTANT    compress.d_needs_suffix
+# MUTANT    compress.lzw_unrecognized
+# MUTANT    compress.gzip_unrecognized
+# MUTANT    compress.lzw_corrupt
+# MUTANT    compress.gzip_corrupt
 # "compress -d -c" on a file with an unrelated name (no suffix) decompresses
 # both lzw data and gzip data correctly.
 . "$PC_CORE/pc.sh"
