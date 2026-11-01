@@ -2,6 +2,18 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.od.009
+# MUTANT    od.dflt_x2
+# MUTANT    od.dflt_o1
+# MUTANT    od.dflt_o4
+# MUTANT    od.dflt_o8
+# MUTANT    od.dflt_u2
+# MUTANT    od.dflt_c
+# MUTANT    od.dflt_none
+# VARIANT   od.gap3
+# VARIANT   od.trail_blank
+# VARIANT   od.an_empty
+# VARIANT   od.pad_none
+# VARIANT   od.endian_swap
 . "$PC_CORE/pc.sh"
 pc_begin XCU.od.009
 LC_ALL=POSIX

@@ -2,6 +2,23 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.od.002
+# MUTANT    od.sz8_to_4
+# MUTANT    od.sz4_to_2
+# MUTANT    od.sz2_to_1
+# MUTANT    od.o_as_x
+# MUTANT    od.x_as_o
+# MUTANT    od.x_as_u
+# MUTANT    od.o_as_u
+# MUTANT    od.u_as_d
+# MUTANT    od.d_as_u
+# MUTANT    od.partial_dropped
+# MUTANT    od.partial_ff
+# VARIANT   od.endian_swap
+# VARIANT   od.gap3
+# VARIANT   od.hex_upper
+# VARIANT   od.pad_none
+# VARIANT   od.an_empty
+# VARIANT   od.trail_blank
 . "$PC_CORE/pc.sh"
 pc_begin XCU.od.002
 LC_ALL=POSIX
@@ -22,6 +39,11 @@ printf 'abcdef' >f1 || pc_fail "cannot create input"
 printf 'aabbcc' >f2 || pc_fail "cannot create input"
 printf 'aaaabbbb' >f4 || pc_fail "cannot create input"
 printf 'aaaaaaaa' >f8 || pc_fail "cannot create input"
+# bytes with the high bit set tell signed from unsigned numbers
+printf '\377\377\377\377\377\377\377\377' >ff || pc_fail "cannot create input"
+printf '\200\200' >hi2 || pc_fail "cannot create input"
+# a length that is not a multiple of the item size
+printf 'aaa' >f3 || pc_fail "cannot create input"
 pc_test
 got=$(od -A n -v -t o1 f1 2>/dev/null </dev/null)
 set -- $got
@@ -59,4 +81,44 @@ got=$(od -A n -v -t x8 f8 2>/dev/null </dev/null)
 set -- $got
 norm "$@"
 [ "$normout" = "6161616161616161" ] || pc_fail "-t x8 is wrong"
+got=$(od -A n -v -t u1 ff 2>/dev/null </dev/null)
+set -- $got
+[ "$*" = "255 255 255 255 255 255 255 255" ] || pc_fail "-t u1 of 0xff bytes is not 255"
+got=$(od -A n -v -t d1 ff 2>/dev/null </dev/null)
+set -- $got
+[ "$*" = "-1 -1 -1 -1 -1 -1 -1 -1" ] || pc_fail "-t d1 of 0xff bytes is not -1"
+got=$(od -A n -v -t d2 ff 2>/dev/null </dev/null)
+set -- $got
+[ "$*" = "-1 -1 -1 -1" ] || pc_fail "-t d2 of 0xffff is not -1"
+got=$(od -A n -v -t u2 ff 2>/dev/null </dev/null)
+set -- $got
+[ "$*" = "65535 65535 65535 65535" ] || pc_fail "-t u2 of 0xffff is not 65535"
+got=$(od -A n -v -t u2 hi2 2>/dev/null </dev/null)
+set -- $got
+[ "$*" = "32896" ] || pc_fail "-t u2 of 0x8080 is not 32896"
+got=$(od -A n -v -t d2 hi2 2>/dev/null </dev/null)
+set -- $got
+[ "$*" = "-32640" ] || pc_fail "-t d2 of 0x8080 is not -32640"
+got=$(od -A n -v -t d4 ff 2>/dev/null </dev/null)
+set -- $got
+[ "$*" = "-1 -1" ] || pc_fail "-t d4 of 0xffffffff is not -1"
+got=$(od -A n -v -t u4 ff 2>/dev/null </dev/null)
+set -- $got
+[ "$*" = "4294967295 4294967295" ] || pc_fail "-t u4 of 0xffffffff is not 4294967295"
+got=$(od -A n -v -t d8 ff 2>/dev/null </dev/null)
+set -- $got
+[ "$*" = "-1" ] || pc_fail "-t d8 of eight 0xff bytes is not -1"
+got=$(od -A n -v -t o8 f8 2>/dev/null </dev/null)
+set -- $got
+norm "$@"
+[ "$normout" = "605413026054130260541" ] || pc_fail "-t o8 is wrong"
+# input that stops inside an item is extended with null bytes: three bytes
+# are two two-byte items, the second being 0x61 and a null in either order
+got=$(od -A n -v -t x2 f3 2>/dev/null </dev/null)
+set -- $got
+norm "$@"
+case $normout in
+"6161 61" | "6161 6100") ;;
+*) pc_fail "a final partial item is not the remaining byte extended with null bytes" ;;
+esac
 pc_pass
