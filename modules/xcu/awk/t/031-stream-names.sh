@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.031
+# MUTANT    awk.names_trimmed
+# MUTANT    awk.redirect_reopens
+# MUTANT    awk.pipe_reopened
 # Output files and pipes with textually identical names are one stream, and
 # names that differ even by a blank are different ones.
 . "$PC_CORE/pc.sh"

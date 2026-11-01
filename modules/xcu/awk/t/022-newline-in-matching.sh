@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.022
+# MUTANT    awk.ere_newline_unmatchable
+# MUTANT    awk.dot_excludes_newline
 # With a record separator other than newline a record can hold a newline
 # that an ERE matches; with the default separator no expression matches the
 # separator; against an ordinary string any character, newline included, can

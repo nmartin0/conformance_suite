@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.032
+# MUTANT    awk.uninit_var_zero_only
+# MUTANT    awk.uninit_elem_zero_only
+# MUTANT    awk.fn_arg_zero
+# MUTANT    awk.past_end_no_extend
 # An unset variable or array element is 0 as a number and
 # the empty string as a string;
 # assigning past the end creates empty fields.

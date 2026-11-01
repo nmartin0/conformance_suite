@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.025
+# MUTANT    awk.incr_longest_wrong
+# MUTANT    awk.div_after_name_is_ere
+# MUTANT    awk.rejects_div_assign
+# MUTANT    awk.rejects_ere_after_print
+# MUTANT    awk.else_binds_outer
 # A slash where division could appear is division (also /=), elsewhere it
 # starts an ERE; the longest token is taken, so x+++y is x++ + y; an else
 # goes with the nearest if.

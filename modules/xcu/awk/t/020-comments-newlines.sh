@@ -2,6 +2,18 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.020
+# MUTANT    awk.rejects_nl_after_comma
+# MUTANT    awk.rejects_nl_after_brace
+# MUTANT    awk.rejects_nl_after_and
+# MUTANT    awk.rejects_nl_after_or
+# MUTANT    awk.rejects_nl_after_do
+# MUTANT    awk.rejects_nl_after_else
+# MUTANT    awk.rejects_nl_after_if_paren
+# MUTANT    awk.rejects_nl_after_for_paren
+# MUTANT    awk.rejects_nl_after_while_paren
+# MUTANT    awk.rejects_backslash_newline
+# MUTANT    awk.comment_swallows_next_line
+# MUTANT    awk.comment_not_skipped
 # A comment runs to the end of the line and has no effect, a backslash-newline
 # has no effect, and a newline may follow a comma, an open brace, && and ||, do,
 # else and the closing parenthesis of if, for and while.

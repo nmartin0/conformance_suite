@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.026
+# MUTANT    awk.post_inc_returns_new
+# MUTANT    awk.pre_inc_returns_old
+# MUTANT    awk.post_dec_returns_new
+# MUTANT    awk.pre_dec_returns_old
+# MUTANT    awk.post_inc_noop
 # Post-increment and post-decrement give the old numeric value, pre-increment
 # and pre-decrement the new one, on numbers, uninitialized variables and
 # strings (converted to numbers).

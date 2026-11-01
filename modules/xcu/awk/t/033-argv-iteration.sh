@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.033
+# MUTANT    awk.argv_changes_ignored
+# MUTANT    awk.argv_delete_noop
+# MUTANT    awk.argc_not_bumped
+# MUTANT    awk.argv_assign_as_file
 # Elements of ARGV are processed as operands after BEGIN: a null element is
 # skipped, standard input is read when no file was given, an element added in
 # BEGIN is read, an assignment operand is applied when reached, and a deleted

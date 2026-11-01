@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.021
+# MUTANT    awk.string_escapes_unprocessed
+# MUTANT    awk.octal_two_digits
+# MUTANT    awk.bracket_escape_unprocessed
+# MUTANT    awk.ere_dot_escape_any
+# MUTANT    awk.ere_plus_escape_quantifier
 # A string constant takes the escapes \a \b \f \n \r \t \v \" \\ and
 # octal \ddd with the longest one to three digits; in a regular expression the
 # escapes work also inside brackets, \/ is a slash and a backslash before a

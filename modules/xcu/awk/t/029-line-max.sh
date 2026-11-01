@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.029
+# MUTANT    awk.output_truncated
+# MUTANT    awk.input_truncated
 # Records of up to {LINE_MAX} bytes are supported whether the record
 # separator is a newline or another character, and print and printf can
 # write {LINE_MAX} bytes.

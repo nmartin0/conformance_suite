@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.034
+# MUTANT    awk.F_attached_rejected
+# MUTANT    awk.F_separate_rejected
+# MUTANT    awk.v_attached_rejected
+# MUTANT    awk.v_separate_rejected
+# MUTANT    awk.f_attached_rejected
+# MUTANT    awk.dd_rejected
+# MUTANT    awk.v_second_ignored
 # -F and -v take their argument attached or separate, repeated -v works, -f
 # can be attached, and -- ends the options before the program.
 . "$PC_CORE/pc.sh"
