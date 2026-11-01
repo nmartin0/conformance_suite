@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mv.010
+# MUTANT    mv.slash_stripped
+# MUTANT    mv.slash_status0
+# MUTANT    mv.slash_moves_error
+# MUTANT    mv.slash_silent
+# VARIANT   mv.status2
+# VARIANT   mv.status255
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mv.010
 printf 'x\n' >a || pc_fail "cannot create a"
@@ -9,6 +15,7 @@ pc_test
 mv a b/ >out 2>err </dev/null
 rc=$?
 [ "$rc" -ne 0 ] || pc_fail "mv exited 0 for a target with a trailing slash"
+[ -s err ] || pc_fail "no diagnostic"
 [ -f a ] || pc_fail "the source was moved"
 [ ! -e b ] || pc_fail "b was created"
 pc_pass

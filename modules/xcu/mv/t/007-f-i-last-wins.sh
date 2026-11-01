@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mv.007
+# MUTANT    mv.f_i_first_wins
+# MUTANT    mv.f_i_any_i
+# MUTANT    mv.f_i_any_f
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mv.007
 nl='

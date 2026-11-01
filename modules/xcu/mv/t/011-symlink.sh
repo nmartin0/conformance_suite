@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mv.011
+# MUTANT    mv.link_followed
+# MUTANT    mv.link_referent_moved
+# MUTANT    mv.link_target_absolute
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mv.011
 printf 'x\n' >f || pc_fail "cannot create f"

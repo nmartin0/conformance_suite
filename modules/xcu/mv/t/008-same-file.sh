@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mv.008
+# MUTANT    mv.same_entry_rm
+# MUTANT    mv.same_link_rm_dst
+# MUTANT    mv.same_truncates
+# VARIANT   mv.same_diag
+# VARIANT   mv.same_removes_src
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mv.008
 nl='
