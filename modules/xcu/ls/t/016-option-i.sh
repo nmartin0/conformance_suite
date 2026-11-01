@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.016
+# MUTANT    ls.i_ignored
+# MUTANT    ls.i_constant
+# MUTANT    ls.i_per_name
+# MUTANT    ls.i_after_name
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.016
 LC_ALL=POSIX; export LC_ALL

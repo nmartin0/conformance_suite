@@ -2,11 +2,18 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.014
+# MUTANT    ls.g_is_l
+# MUTANT    ls.g_drops_both
+# MUTANT    ls.g_is_o
+# MUTANT    ls.g_short
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.014
 LC_ALL=POSIX; export LC_ALL
 mkdir d || pc_fail "cannot create d"
 : >d/f || pc_fail "cannot create d/f"
+# Give the file a group that is not the owner's, where the privilege allows
+# it, so that the owner and group fields differ; failure is ignored.
+chgrp "$(( $(id -g) + 54321 ))" d/f 2>/dev/null
 set -- $(ls -l d/f) || pc_fail "ls -l failed"
 [ "$#" -eq 9 ] || pc_unresolved "setup: unexpected number of fields in ls -l"
 lgrp=$4

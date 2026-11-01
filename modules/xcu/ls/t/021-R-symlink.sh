@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.021
+# MUTANT    ls.R_follows_links
+# MUTANT    ls.R_L_ignored
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.021
 nl='

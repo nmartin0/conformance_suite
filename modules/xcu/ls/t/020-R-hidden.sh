@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.020
+# MUTANT    ls.R_descends_hidden
+# MUTANT    ls.R_A_hidden_not_entered
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.020
 nl='

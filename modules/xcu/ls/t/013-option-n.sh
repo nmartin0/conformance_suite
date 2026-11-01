@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.013
+# MUTANT    ls.n_names
+# MUTANT    ls.n_group_name
+# MUTANT    ls.n_owner_name
+# MUTANT    ls.n_short
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.013
 LC_ALL=POSIX; export LC_ALL
@@ -13,6 +17,7 @@ ls -n d/f >out 2>err </dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "ls -n exited with status $rc"
 set -- $(cat out)
+[ "$#" -ge 9 ] || pc_fail "only $# fields in the long format line, nine are required: $(cat out)"
 [ "$#" -eq 9 ] || pc_unresolved "unexpected number of fields ($#)"
 [ "$3" = "$uid" ] || pc_fail "owner field is '$3', expected $uid"
 case $4 in
