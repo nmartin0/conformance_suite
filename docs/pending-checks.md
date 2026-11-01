@@ -31,6 +31,7 @@ UNCHECKED and needs another system. Record each outcome in
 | patch 015, 016 | patch makes no outfile.orig with `-b -o`, and applies several `-o` patches in sequence, as the tests state (faults checked by hand against a conforming model) |
 | pr 001-003, 012-016 | pr writes the header date in the form the text requires (001-003, 012, 013, 016), accepts a zero gap with `-e` and `-i` (014), and `-i` replaces a single space (015); faults were checked by hand with a local wrapper |
 | ar 007, 008, 015, 019, 020, 021 | ar supports the options and behaviours these tests state, such as `-C` (faults checked by hand against a conforming wrapper) |
+| m4 019, 020 | m4wrap runs in the order the text states (019) and the exit status after a failed temporary-file creation is nonzero (020); faults checked by hand |
 | nm 008, 012 | nm supports the `-x`, `-o` and `-f` options the tests use |
 | set 020, kill 011/013/014 | the user portability utilities option is claimed (kill also needs job control) |
 | set 018 | the shell under test supports pipefail |
