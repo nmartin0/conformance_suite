@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.join.011
+# MUTANT    join.ignores_lc_collate
+# MUTANT    join.ignores_lc_all
+# MUTANT    join.ignores_lang
+# MUTANT    join.null_lc_all_overrides
+# MUTANT    join.lang_over_collate
+# MUTANT    join.lc_all_lowest
+# MUTANT    join.bytewise
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcloc.sh"
 pc_begin XCU.join.011

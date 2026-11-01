@@ -88,9 +88,12 @@ test       t/009-standard-input.sh
 
 assertion  XCU.join.010
 anchor     utilities/join.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
 class      required
 since      1992
-says       When file1 or file2 cannot be read, the status is nonzero.
+says       When file1 or file2 cannot be read, join writes a diagnostic to
+           standard error, writes nothing to standard output (when no
+           unpairable lines were asked for), and the status is nonzero.
 test       t/010-unreadable-file.sh
 
 # Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
