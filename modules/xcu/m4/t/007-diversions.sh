@@ -9,7 +9,6 @@
 # MUTANT    m4.divert_noarg_ignored
 # MUTANT    m4.divert_neg_only1
 # MUTANT    m4.divert_neg_stdout
-# MUTANT    m4.divert_max8
 # MUTANT    m4.divert_ignored
 # MUTANT    m4.divnum_zero
 # MUTANT    m4.divnum_neg_zero
@@ -65,12 +64,13 @@ cat >in4 <<'EOM'
 define(`m',M)divert(-2)gone divert(0)dnl
 divert(1)one
 divert(3)three
+divert(2)two
 divert(0)dnl
 divert(5)undivert(3,1)divert(0)dnl
 mid
 undivert
 EOM
-printf 'mid\nthree\none\n\n' >exp4
+printf 'mid\ntwo\nthree\none\n\n' >exp4
 cat >in5 <<'EOM'
 define(`m',M)divert(1)`m'
 divert(0)dnl

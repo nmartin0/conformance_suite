@@ -395,17 +395,17 @@ function evapply(op, a, b,   r) {
 	return r + 0
 }
 function setprec() {
-	P["||"] = 1; P["&&"] = 2; P["|"] = 3; P["^"] = 4; P["&"] = 5
-	P["=="] = 6; P["!="] = 6; P["<"] = 7; P["<="] = 7; P[">"] = 7; P[">="] = 7
-	P["<<"] = 8; P[">>"] = 8; P["+"] = 9; P["-"] = 9; P["*"] = 10; P["/"] = 10; P["%"] = 10
-	if (F == "eval_flat_muldiv_add") { P["*"] = 9; P["/"] = 9; P["%"] = 9 }
-	if (F == "eval_shift_above_add") { P["<<"] = 9.5; P[">>"] = 9.5 }
-	if (F == "eval_eq_with_rel") { P["=="] = 7; P["!="] = 7 }
-	if (F == "eval_or_with_xor") { P["|"] = 4 }
-	if (F == "eval_xor_above_and") { P["^"] = 5; P["&"] = 4 }
-	if (F == "eval_andand_with_oror") { P["&&"] = 1 }
-	if (F == "eval_and_above_eq") { P["&"] = 6.5 }
-	if (F == "eval_and_with_or") { P["&"] = 3 }
+	P["||"] = 10; P["&&"] = 20; P["|"] = 30; P["^"] = 40; P["&"] = 50
+	P["=="] = 60; P["!="] = 60; P["<"] = 70; P["<="] = 70; P[">"] = 70; P[">="] = 70
+	P["<<"] = 80; P[">>"] = 80; P["+"] = 90; P["-"] = 90; P["*"] = 100; P["/"] = 100; P["%"] = 100
+	if (F == "eval_flat_muldiv_add") { P["*"] = 90; P["/"] = 90; P["%"] = 90 }
+	if (F == "eval_shift_above_add") { P["<<"] = 95; P[">>"] = 95 }
+	if (F == "eval_eq_with_rel") { P["=="] = 70; P["!="] = 70 }
+	if (F == "eval_or_with_xor") { P["|"] = 40 }
+	if (F == "eval_xor_above_and") { P["^"] = 50; P["&"] = 40 }
+	if (F == "eval_andand_with_oror") { P["&&"] = 10 }
+	if (F == "eval_and_above_eq") { P["&"] = 65 }
+	if (F == "eval_and_with_or") { P["&"] = 30 }
 }
 function digitchar(d) { return substr(V == "eval_upper" ? "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" : "0123456789abcdefghijklmnopqrstuvwxyz", d + 1, 1) }
 function fmtnum(v, radix, width,   neg, s, d) {

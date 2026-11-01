@@ -60,9 +60,9 @@ trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 cat >in <<'EOM'
 define(`m',M)dnl
 ifelse(a,a,yes,no)|ifelse(a,b,yes,no)|ifelse(a,b,c)|ifelse(a,b,c,d,e,f,g)|incr(4)|decr(4)|len(hello)|index(hello,ll)|index(hello,z)|substr(hello,1,3)|substr(hello,3)|substr(hello,9)|translit(hello,el,ip)|translit(hello,el)|shift(a,b,c)
-ifelse(a,b,c,d,e)|ifelse(a,b,c,d,d,x)|ifelse(a,b,c,a,a,y,z)|ifelse(`a ',a,yes,no)|ifelse(,,e)|ifelse(1,01,yes,no)|incr(9)|incr(-5)|decr(0)|decr(100)|len()|len(`ab cd')|index(hello,lo)|index(hello,h)|index(hello,o)|index(abab,b)|substr(hello,0,2)|substr(hello,1,0)|substr(hello,5)|translit(hello,lo,01)|translit(hello,lo,x)|shift(a)|shift(a,b)|shift(a,`m',`m')
+ifelse(a,b,c,d,e)|ifelse(a,b,c,d,d,x)|ifelse(a,b,c,a,a,y,z)|ifelse(`a ',a,yes,no)|ifelse(,,e)|ifelse(1,01,yes,no)|ifelse(A,a,yes,no)|incr(9)|incr(-5)|decr(0)|decr(100)|len()|len(`ab cd')|index(hello,lo)|index(hello,h)|index(hello,o)|index(abab,b)|substr(hello,0,2)|substr(hello,1,0)|substr(hello,5)|translit(hello,lo,01)|translit(hello,lo,x)|shift(a)|shift(a,b)|shift(a,`m',`m')
 EOM
-printf 'yes|no||g|5|3|5|2|-1|ell|lo||hippo|ho|b,c\nd|x|y|no|e|no|10|-4|-1|99|0|5|3|0|4|1|he|||he001|hexx||b|m,m\n' >exp
+printf 'yes|no||g|5|3|5|2|-1|ell|lo||hippo|ho|b,c\nd|x|y|no|e|no|no|10|-4|-1|99|0|5|3|0|4|1|he|||he001|hexx||b|m,m\n' >exp
 pc_test
 m4 in >out 2>err </dev/null || pc_fail "m4: nonzero status"
 cmp out exp >/dev/null 2>&1 || pc_fail "output differs: $(cat out)"

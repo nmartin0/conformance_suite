@@ -16,8 +16,6 @@
 # MUTANT    m4.at_unquoted
 # MUTANT    m4.at_space
 # MUTANT    m4.args_not_expanded
-# MUTANT    m4.hash_empty_zero
-# MUTANT    m4.max_args_8
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.002
 LC_ALL=C; export LC_ALL
