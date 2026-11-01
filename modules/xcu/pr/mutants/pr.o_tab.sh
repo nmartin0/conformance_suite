@@ -6,6 +6,7 @@ printf '#!/bin/sh\nREAL="%s"\n' "$(command -v pr)" >pc-mutbin/pr
 cat >>pc-mutbin/pr <<'PC_EOF'
 prev= v=0
 for a; do [ "$prev" = -o ] && v=$a; prev=$a; done
+[ "$v" != 0 ] || exec "$REAL" "$@"
 T=$(printf '\t')
 "$REAL" "$@" | sed "s/^ \{$v\}/$T/"
 PC_EOF

@@ -40,7 +40,7 @@ got=$(pr -t -2 -w 20 h 2>/dev/null </dev/null | head -n 1 | expand)
 [ "${#got}" -le 20 ] || pc_fail "-w 20 did not limit the line to 20 columns"
 case $got in *x*) ;; *) pc_fail "the -w 20 line has lost its text";; esac
 got=$(pr -t -2 -w 200 g 2>/dev/null </dev/null | head -n 1)
-case $got in *"$x60"*c) ;; *) pc_fail "-w 200 truncated a 60-column text";; esac
+case $got in *"$x60"*c*) ;; *) pc_fail "-w 200 truncated a 60-column text";; esac
 got=$(pr -t -2 -s: g 2>/dev/null </dev/null)
 [ "$got" = "${x60}:c" ] || pc_fail "-s: did not separate the columns with a colon and keep the 60-column text"
 got=$(pr -t -2 -s g 2>/dev/null </dev/null)

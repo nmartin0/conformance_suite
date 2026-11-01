@@ -4,9 +4,9 @@
 mkdir -p pc-mutbin
 printf '#!/bin/sh\nREAL="%s"\n' "$(command -v pr)" >pc-mutbin/pr
 cat >>pc-mutbin/pr <<'PC_EOF'
-case " $* " in *" -t "*" -m "*) ;; *) exec "$REAL" "$@" ;; esac
-files=
-for a; do case $a in f[0-9]) files="$files $a" ;; esac; done
+hm=0 ht=0 files=
+for a; do case $a in -m) hm=1 ;; -t) ht=1 ;; f[0-9]) files="$files $a" ;; esac; done
+[ $hm = 1 ] && [ $ht = 1 ] || exec "$REAL" "$@"
 exec paste -d '\0' $files
 PC_EOF
 chmod +x pc-mutbin/pr
