@@ -3,6 +3,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.set.019
+# MUTANT    set.badopt_accepted
+# MUTANT    set.badopt_status0
+# MUTANT    set.badopt_exit0
+# VARIANT   set.badopt_continues
+# VARIANT   set.badopt_status1
+# VARIANT   set.badopt_status125
 . "$PC_CORE/pc.sh"
 pc_begin XCU.set.019
 nl='
@@ -31,7 +37,7 @@ pcerr() {
 	fi
 }
 pc_test
-for arg in -Z '-o nosuchoption_pc'; do
+for arg in -Z +Z '-o nosuchoption_pc' '+o nosuchoption_pc'; do
 	pcscript "set $arg" 'echo "rc=$?"'
 	pcrun
 	pcerr "set $arg"

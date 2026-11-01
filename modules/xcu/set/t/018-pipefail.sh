@@ -3,6 +3,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.set.018
+# MUTANT    set.pipefail_ignored
+# MUTANT    set.plus_o_pipefail_ignored
+# MUTANT    set.pipefail_default_on
+# MUTANT    set.pipefail_leftmost
+# MUTANT    set.pipefail_status1
+# MUTANT    set.pipefail_not_for_e
 . "$PC_CORE/pc.sh"
 pc_begin XCU.set.018
 nl='
@@ -17,8 +23,11 @@ pcrun() {
 	out=$(${PC_SH:-sh} pc.s 2>pc.err </dev/null)
 	rc=$?
 }
-pcscript 'set -o pipefail' 'false | true' 'echo "a=$?"' '(exit 3) | (exit 0) | (exit 2) | true' 'echo "b=$?"' 'true | true' 'echo "c=$?"' 'set +o pipefail' 'false | true' 'echo "d=$?"' 
+pcscript 'false | true' 'echo "z=$?"' 'set -o pipefail' 'false | true' 'echo "a=$?"' '(exit 3) | (exit 0) | (exit 2) | true' 'echo "b=$?"' 'true | true' 'echo "c=$?"' 'set +o pipefail' 'false | true' 'echo "d=$?"'
 pc_test
 pcrun
-[ "$out" = "a=1${nl}b=2${nl}c=0${nl}d=0" ] || pc_fail "got '$out'"
+[ "$out" = "z=0${nl}a=1${nl}b=2${nl}c=0${nl}d=0" ] || pc_fail "got '$out'"
+pcscript 'set -e' 'set -o pipefail' '(exit 6) | true' 'echo after'
+pcrun
+[ -z "$out" ] && [ "$rc" -eq 6 ] || pc_fail "with -e, a pipeline that fails by pipefail: status $rc out '$out', expected status 6 and no output"
 pc_pass
