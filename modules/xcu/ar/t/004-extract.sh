@@ -43,6 +43,15 @@ touch post || pc_unresolved "touch failed"
 [ -e f2 ] && [ "$(find f2 -newer ref -print)" = f2 ] || pc_fail "f2 extracted by name does not carry the extraction time"
 [ -z "$(find f2 -newer post -print)" ] || pc_fail "f2 carries a time later than the extraction"
 cmp -s a a.keep || pc_fail "the archive was changed by extracting one member"
+# Several operands: each of them is extracted and no other member.
+rm -f f2
+ar -x a f3 f4 >out 2>err </dev/null || pc_fail "ar -x a f3 f4: nonzero status"
+for f in f3 f4; do
+	[ -f "$f" ] || pc_fail "ar -x a f3 f4 did not extract $f"
+	cmp -s "$f" "$f.keep" || pc_fail "$f has the wrong contents after ar -x a f3 f4"
+done
+[ -e f1 ] || [ -e f2 ] && pc_fail "ar -x a f3 f4 extracted other members"
+rm -f f3 f4
 ar -x a >out 2>err </dev/null || pc_fail "ar -x a: nonzero status"
 touch post2 || pc_unresolved "touch failed"
 for f in f1 f2 f3 f4; do
