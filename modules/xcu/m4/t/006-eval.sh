@@ -35,6 +35,8 @@
 # MUTANT    m4.eval_width_trunc
 # MUTANT    m4.eval_width_space
 # MUTANT    m4.eval_blank_radix_error
+# VARIANT   m4.engine
+# VARIANT   m4.eval_upper
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.006
 LC_ALL=C; export LC_ALL

@@ -9,6 +9,7 @@
 # MUTANT    m4.divs_reverse
 # MUTANT    m4.no_flush_divs
 # MUTANT    m4.divert_ignored
+# VARIANT   m4.engine
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.015
 LC_ALL=C; export LC_ALL

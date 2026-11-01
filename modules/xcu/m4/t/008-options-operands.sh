@@ -30,6 +30,9 @@
 # MUTANT    m4.operand_status0
 # MUTANT    m4.operand_no_diag
 # MUTANT    m4.operand_aborts
+# VARIANT   m4.engine
+# VARIANT   m4.err_status2
+# VARIANT   m4.sync_nofile
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.008
 LC_ALL=C; export LC_ALL

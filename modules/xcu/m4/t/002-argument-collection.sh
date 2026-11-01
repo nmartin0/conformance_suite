@@ -16,6 +16,7 @@
 # MUTANT    m4.at_unquoted
 # MUTANT    m4.at_space
 # MUTANT    m4.args_not_expanded
+# VARIANT   m4.engine
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.002
 LC_ALL=C; export LC_ALL

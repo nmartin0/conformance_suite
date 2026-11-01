@@ -8,6 +8,8 @@
 # MUTANT    m4.err_forgotten
 # MUTANT    m4.exit_status0
 # MUTANT    m4.m4exit_ignores_mkstemp_err
+# VARIANT   m4.engine
+# VARIANT   m4.err_status2
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.020
 LC_ALL=C; export LC_ALL

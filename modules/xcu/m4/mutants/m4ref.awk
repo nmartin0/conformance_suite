@@ -33,7 +33,7 @@ function flushdivs(   i) {
 function finish(code) {
 	if (F == "m4exit_discards") { OBUF = "" }
 	if (F == "divs_first") { tmp = OBUF; OBUF = ""; flushdivs(); OBUF = OBUF tmp }
-	else if (F != "no_flush_divs" && V != "exit_no_flush") flushdivs()
+	else if (F != "no_flush_divs") flushdivs()
 	if (F == "exit_status0") code = 0
 	if (ERRS && code == 0 && F != "err_forgotten") code = errstat()
 	if (F == "ok_status1" && code == 0) code = 1
@@ -707,7 +707,8 @@ function builtin(b, fr, hasp,   a1, a2, a3, a4, i, n, s, j, k, t, nm, m, e, rx, 
 		return
 	}
 	if (b == "syscmd") {
-		flushout(); fflush()
+		if (V != "syscmd_noflush") flushout()
+		fflush()
 		if (F == "syscmd_noop") return
 		if (F == "syscmd_exec_direct") {
 			rc = system("exec " (a1 ~ /[|;&<>$]/ ? "false" : a1))
@@ -832,18 +833,18 @@ function readfile(path,   s, ln, r) {
 	close(path)
 	return s
 }
-function mkstemp(tmpl,   n, base, pre, i, name, ok, chars, cs, tries) {
+function mkfail(tmpl, why) {
+	if (F != "mkstemp_fail_no_diag") warn("mkstemp: " why)
+	else ERRS = 1
+	MKERR = 1
+	if (F == "mkstemp_fail_status0") ERRS = 0
+	if (F == "mkstemp_fail_text") lit(tmpl)
+	if (F == "mkstemp_fail_abort") finish(errstat())
+}
+function mkstemp(tmpl,   n, pre, i, name, ok, chars, cs, tries) {
 	n = length(tmpl)
 	ok = (substr(tmpl, n - 5) == "XXXXXX")
-	if (F == "mkstemp_fail_silent_ok" && !ok) { }
-	if (!ok) {
-		if (F != "mkstemp_fail_no_diag") warn("mkstemp: bad template")
-		MKERR = 1
-		if (F == "mkstemp_fail_status0") ERRS = 0
-		if (F == "mkstemp_fail_text") lit(tmpl)
-		if (F == "mkstemp_fail_abort") finish(errstat())
-		return
-	}
+	if (!ok) { mkfail(tmpl, "bad template"); return }
 	pre = substr(tmpl, 1, n - 6)
 	chars = (V == "mkstemp_digits") ? "0123456789" : "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	cs = length(chars)
@@ -858,15 +859,11 @@ function mkstemp(tmpl,   n, base, pre, i, name, ok, chars, cs, tries) {
 			if (F == "mkstemp_prefix_dropped") { name = substr(name, length(pre) + 1) }
 			if (F == "mkstemp_short") name = substr(name, 1, length(name) - 1)
 			if (F == "mkstemp_nl") name = name "\n"
-			if (F == "mkstemp_diag_only") { }
 			lit(name)
 			return
 		}
 	}
-	warn("mkstemp: cannot create")
-	MKERR = 1
-	if (F == "mkstemp_fail_status0") ERRS = 0
-	if (F == "mkstemp_fail_text") lit(tmpl)
+	mkfail(tmpl, "cannot create")
 }
 
 # ---- driver ----

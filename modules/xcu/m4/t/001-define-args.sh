@@ -22,6 +22,7 @@
 # MUTANT    m4.name_no_underscore
 # MUTANT    m4.name_no_digit
 # MUTANT    m4.name_shortest
+# VARIANT   m4.engine
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.001
 LC_ALL=C; export LC_ALL

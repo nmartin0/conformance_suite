@@ -24,6 +24,9 @@
 # MUTANT    m4.errprint_both
 # MUTANT    m4.errprint_nothing
 # MUTANT    m4.errprint_trunc
+# VARIANT   m4.engine
+# VARIANT   m4.syscmd_captured
+# VARIANT   m4.syscmd_noflush
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.010
 LC_ALL=C; export LC_ALL

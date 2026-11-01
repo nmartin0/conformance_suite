@@ -5,6 +5,7 @@
 # Text given to m4wrap more than once is processed in the order of the calls.
 # MUTANT    m4.m4wrap_reverse
 # MUTANT    m4.m4wrap_ignored
+# VARIANT   m4.engine
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.019
 LC_ALL=C; export LC_ALL

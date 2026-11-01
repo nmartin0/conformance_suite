@@ -11,6 +11,7 @@
 # MUTANT    m4.changecom_btrunc4
 # MUTANT    m4.changecom_etrunc3
 # MUTANT    m4.changecom_etrunc4
+# VARIANT   m4.engine
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.014
 LC_ALL=C; export LC_ALL

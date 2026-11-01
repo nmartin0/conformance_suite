@@ -20,6 +20,7 @@
 # MUTANT    m4.dnl_noop
 # MUTANT    m4.dnl_keeps_newline
 # MUTANT    m4.dnl_word_only
+# VARIANT   m4.engine
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.003
 LC_ALL=C; export LC_ALL

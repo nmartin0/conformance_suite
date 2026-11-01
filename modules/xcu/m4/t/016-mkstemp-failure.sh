@@ -8,6 +8,7 @@
 # MUTANT    m4.mkstemp_fail_text
 # MUTANT    m4.mkstemp_fail_abort
 # MUTANT    m4.nodiag_all
+# VARIANT   m4.engine
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.016
 LC_ALL=C; export LC_ALL

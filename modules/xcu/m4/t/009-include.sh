@@ -15,6 +15,9 @@
 # MUTANT    m4.sinclude_never
 # MUTANT    m4.sinclude_errors
 # MUTANT    m4.nodiag_all
+# VARIANT   m4.engine
+# VARIANT   m4.err_status2
+# VARIANT   m4.include_abort
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.009
 LC_ALL=C; export LC_ALL

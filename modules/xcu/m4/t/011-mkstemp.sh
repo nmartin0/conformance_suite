@@ -11,6 +11,8 @@
 # MUTANT    m4.mkstemp_prefix_dropped
 # MUTANT    m4.mkstemp_short
 # MUTANT    m4.mkstemp_nl
+# VARIANT   m4.engine
+# VARIANT   m4.mkstemp_digits
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.011
 LC_ALL=C; export LC_ALL

@@ -26,6 +26,7 @@
 # MUTANT    m4.m4wrap_returns_text
 # MUTANT    m4.no_flush_divs
 # MUTANT    m4.divs_reverse
+# VARIANT   m4.engine
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.007
 LC_ALL=C; export LC_ALL

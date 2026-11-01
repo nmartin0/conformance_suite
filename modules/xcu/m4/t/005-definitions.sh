@@ -23,6 +23,8 @@
 # MUTANT    m4.ifdef_always_second
 # MUTANT    m4.defn_unquoted
 # MUTANT    m4.defn_name
+# VARIANT   m4.engine
+# VARIANT   m4.define_replaces_stack
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.005
 LC_ALL=C; export LC_ALL

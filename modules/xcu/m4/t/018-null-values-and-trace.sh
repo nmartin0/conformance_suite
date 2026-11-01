@@ -22,6 +22,8 @@
 # MUTANT    m4.dumpdef_stdout
 # MUTANT    m4.dumpdef_nothing
 # MUTANT    m4.dumpdef_name_only
+# VARIANT   m4.engine
+# VARIANT   m4.trace_format
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.018
 LC_ALL=C; export LC_ALL
@@ -30,7 +32,7 @@ pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 cat >in <<'EOM'
-A[define(`q',`1')pushdef(`q',`2')popdef(`q')undefine(`q')ifdef(`q',`x')ifelse(`a',`b',`c')divert(0)undivert`'m4wrap(`')sinclude(`/nonexistent.pc')errprint(`')traceon(`define')traceoff(`define')undivert(1)popdef(`never')pushdef(`q2',`')syscmd(`:')changequote`'changecom`']B
+A[define(`q',`1')pushdef(`q',`2')popdef(`q')undefine(`q')ifdef(`q',`x')ifelse(`a',`b',`c')divert(0)undivert`'m4wrap(`dnl')sinclude(`/nonexistent.pc')errprint(`pcnull')traceon(`define')traceoff(`define')undivert(1)popdef(`never')pushdef(`q2',`')syscmd(`:')changequote`'changecom`']B
 EOM
 cat >in2 <<'EOM'
 define(`foo',`x')traceon(`foo')foo

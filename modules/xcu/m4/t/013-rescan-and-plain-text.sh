@@ -10,6 +10,7 @@
 # MUTANT    m4.name_no_digit
 # MUTANT    m4.name_shortest
 # MUTANT    m4.name_digit_start
+# VARIANT   m4.engine
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.013
 LC_ALL=C; export LC_ALL
@@ -19,10 +20,10 @@ mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 cat >in <<'EOM'
 define(`f',`g(')define(`g',`[$1]')f`'x)
-define(`ab',`Z')abc ab_ xab (ab) ab
+define(`ab',`Z')abc ab_ xab (ab) ab ab1 1ab
 define(`xa',`XA')define(`h',`x')h()a
 EOM
-printf '[x]\nabc ab_ xab (Z) Z\nXA\n' >exp
+printf '[x]\nabc ab_ xab (Z) Z ab1 1Z\nXA\n' >exp
 pc_test
 m4 in >out 2>err </dev/null || pc_fail "m4 failed"
 cmp -s out exp || pc_fail "output was '$(cat out)', expected '$(cat exp)'"

@@ -50,6 +50,7 @@
 # MUTANT    m4.shift_space
 # MUTANT    m4.shift_drop2
 # MUTANT    m4.shift_keep_first
+# VARIANT   m4.engine
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.004
 LC_ALL=C; export LC_ALL

@@ -9,6 +9,9 @@
 # MUTANT    m4.syscmd_stderr_out
 # MUTANT    m4.syscmd_stderr_dropped
 # MUTANT    m4.syscmd_noop
+# VARIANT   m4.engine
+# VARIANT   m4.syscmd_captured
+# VARIANT   m4.syscmd_noflush
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.017
 LC_ALL=C; export LC_ALL
