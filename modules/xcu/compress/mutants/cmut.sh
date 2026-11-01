@@ -148,7 +148,7 @@ pc_cm() (
 	gzip_unrecognized) [ -n "$fd" ] && for o in $ops; do [ "$(magic "$o")" = 1f8b ] && fail "$o: not in compressed format"; done ;;
 	# existing output
 	overwrite_silently) [ -n "$exists" ] && ff=1 ;;
-	overwrite_nonzero) [ -n "$exists" ] && [ -z "$ff" ] && ff=1 ow=1 ;;
+	overwrite_exit1) [ -n "$exists" ] && [ -z "$ff" ] && ff=1 ow=1 ;;
 	force_ignored) ff= ;;
 	esac
 
