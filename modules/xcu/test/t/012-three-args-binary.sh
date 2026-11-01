@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.test.012
+# MUTANT    test.neg_wins_bin
+# MUTANT    test.neg_loses_bin
+# MUTANT    test.fn_neg_wins_bin
+# MUTANT    test.te_neg_wins_bin
+# MUTANT    test.br_neg_wins_bin
 . "$PC_CORE/pc.sh"
 pc_begin XCU.test.012
 # chk WANT ARGS...: the expression ARGS must give status WANT (0 or 1)

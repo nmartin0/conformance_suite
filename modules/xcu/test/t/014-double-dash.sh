@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.test.014
+# MUTANT    test.dd_leading_dropped
+# VARIANT   test.argv0_single
+# MUTANT    test.dd_all_dropped
+# MUTANT    test.fn_dd_leading_dropped
+# MUTANT    test.te_dd_leading_dropped
+# MUTANT    test.br_dd_leading_dropped
 . "$PC_CORE/pc.sh"
 pc_begin XCU.test.014
 # chk WANT ARGS...: the expression ARGS must give status WANT (0 or 1)

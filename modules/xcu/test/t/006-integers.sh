@@ -2,6 +2,18 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.test.006
+# MUTANT    test.int_lexical
+# MUTANT    test.int_abs
+# MUTANT    test.int_ge_as_gt
+# MUTANT    test.int_le_as_lt
+# MUTANT    test.int_gt_as_ge
+# MUTANT    test.int_lt_as_le
+# MUTANT    test.int_ne_eq_swap
+# MUTANT    test.int_gt_lt_swap
+# MUTANT    test.int_mod256
+# MUTANT    test.fn_int_ge_as_gt
+# MUTANT    test.te_int_ge_as_gt
+# MUTANT    test.br_int_ge_as_gt
 . "$PC_CORE/pc.sh"
 pc_begin XCU.test.006
 # chk WANT ARGS...: the expression ARGS must give status WANT (0 or 1)
@@ -46,4 +58,8 @@ chk 0 -9 -gt -10
 chk 0 -5 -eq -5
 chk 1 -5 -eq 5
 chk 0 0 -eq 0
+chk 1 256 -eq 0
+chk 0 256 -ne 0
+chk 0 300 -gt 44
+chk 0 1000 -gt 999
 pc_pass

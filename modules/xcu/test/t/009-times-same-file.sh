@@ -2,6 +2,25 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.test.009
+# MUTANT    test.nt_ot_swap
+# MUTANT    test.nt_missing_false
+# MUTANT    test.ot_missing_false
+# MUTANT    test.nt_missing_first_true
+# MUTANT    test.ot_missing_second_true
+# MUTANT    test.nt_equal_true
+# MUTANT    test.ot_equal_true
+# MUTANT    test.nt_ctime
+# MUTANT    test.nt_atime
+# MUTANT    test.ot_ctime
+# MUTANT    test.ot_atime
+# MUTANT    test.ef_names
+# MUTANT    test.ef_nofollow
+# MUTANT    test.ef_size
+# MUTANT    test.ef_missing_true
+# MUTANT    test.ef_hardlink_false
+# MUTANT    test.fn_nt_ot_swap
+# MUTANT    test.te_nt_ot_swap
+# MUTANT    test.br_nt_ot_swap
 . "$PC_CORE/pc.sh"
 pc_begin XCU.test.009
 # chk WANT ARGS...: the expression ARGS must give status WANT (0 or 1)
@@ -23,13 +42,19 @@ chk() {
 	rc=$?
 	[ "$rc" -eq "$want" ] || pc_fail "exec [ $* ] gave status $rc, wanted $want"
 }
-: >old || pc_unresolved "setup: cannot create a file"
 : >new || pc_unresolved "setup: cannot create a file"
-touch -t 200001010000 old || pc_unresolved "setup: touch -t failed"
 touch -t 200101010000 new || pc_unresolved "setup: touch -t failed"
 ln new hard || pc_unresolved "setup: cannot make a hard link"
 ln -s new soft || pc_unresolved "setup: cannot make a symbolic link"
 : >other || pc_unresolved "setup: cannot create a file"
+# old is made last, so that its status change time is later than that of
+# new, and its access time is set later too: only the modification times
+# put old before new.
+sleep 1
+: >old || pc_unresolved "setup: cannot create a file"
+touch -t 200001010000 old || pc_unresolved "setup: touch -t failed"
+touch -a -t 203001010000 old || pc_unresolved "setup: touch -a -t failed"
+touch -a -t 200201010000 new || pc_unresolved "setup: touch -a -t failed"
 pc_test
 chk 0 new -nt old
 chk 1 old -nt new
