@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.csplit.010
+# MUTANT    csplit.ctype_ignores_lc_all
+# MUTANT    csplit.ctype_ignores_lang
+# MUTANT    csplit.ctype_ignores_var
+# MUTANT    csplit.ctype_null_lc_all_overrides
+# MUTANT    csplit.ctype_lang_over_var
+# MUTANT    csplit.ctype_lc_all_lowest
+# MUTANT    csplit.ctype_posix_only
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcloc.sh"
 pc_begin XCU.csplit.010
