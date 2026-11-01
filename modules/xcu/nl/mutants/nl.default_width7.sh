@@ -1,0 +1,5 @@
+# the default number width is 7
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+PC_NLREF_DIR=${PC_MUTANT_FILE%/*}
+. "$PC_NLREF_DIR/nlref.sh"
+nl() { pc_nlref default_width7 "$@"; }

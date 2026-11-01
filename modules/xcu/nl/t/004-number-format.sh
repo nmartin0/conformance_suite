@@ -2,6 +2,16 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.nl.004
+# MUTANT    nl.n_ln_right
+# MUTANT    nl.n_rn_zero
+# MUTANT    nl.n_rz_space
+# MUTANT    nl.n_ignored
+# MUTANT    nl.w_ignored
+# MUTANT    nl.w_plus1
+# MUTANT    nl.w_minus1
+# MUTANT    nl.w_ln_ignored
+# MUTANT    nl.w_rz_ignored
+# MUTANT    nl.ln_fixed_pad
 . "$PC_CORE/pc.sh"
 pc_begin XCU.nl.004
 LC_ALL=POSIX
@@ -35,4 +45,13 @@ got=$(numbered : out; printf x)
 nl -n ln -w 2 -s : in >out 2>/dev/null </dev/null
 got=$(numbered : out; printf x)
 [ "$got" = "1 :a${NL}2 :b${NL}x" ] || pc_fail "-n ln -w 2 is wrong"
+nl -n ln -v 9 -s : in >out 2>/dev/null </dev/null
+got=$(numbered : out; printf x)
+[ "$got" = "9     :a${NL}10    :b${NL}x" ] || pc_fail "-n ln with a one-digit then a two-digit number is wrong"
+nl -n rn -v 9 -s : in >out 2>/dev/null </dev/null
+got=$(numbered : out; printf x)
+[ "$got" = "     9:a${NL}    10:b${NL}x" ] || pc_fail "-n rn with a one-digit then a two-digit number is wrong"
+nl -n rz -v 9 -s : in >out 2>/dev/null </dev/null
+got=$(numbered : out; printf x)
+[ "$got" = "000009:a${NL}000010:b${NL}x" ] || pc_fail "-n rz with a one-digit then a two-digit number is wrong"
 pc_pass

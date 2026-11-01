@@ -106,3 +106,32 @@ says       A character class in a nl regular expression is the class of the
            treated as XBD 8.2 says.
 timeout    120
 test       t/010-locale-ctype-class.sh
+
+# Added in the hardening pass: the text states these requirements and no
+# assertion covered them.
+
+assertion  XCU.nl.011
+anchor     utilities/nl.html#OPTIONS
+anchor     utilities/nl.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
+class      required
+since      1992
+says       An option that needs an argument but is given none is reported
+           with a diagnostic on standard error and a status greater than
+           zero; a file operand that cannot be read gives a status greater
+           than zero.
+note       The diagnostic for an option lacking its argument is required by
+           the utility conventions in XCU 1.4 (utility syntax guidelines);
+           for an unreadable file only the status is required here.
+test       t/011-option-errors.sh
+
+assertion  XCU.nl.012
+anchor     utilities/nl.html#OPTIONS/-h
+anchor     utilities/nl.html#OPTIONS/-f
+anchor     utilities/nl.html#DESCRIPTION
+class      required
+since      1992
+says       nl -h and -f take the same types as -b (a, t, n, pstring) for the
+           lines of the header and of the footer; the defaults are n for
+           both, and the three options act independently of one another.
+test       t/012-header-footer-style.sh
