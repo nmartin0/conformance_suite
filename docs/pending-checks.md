@@ -34,6 +34,8 @@ UNCHECKED and needs another system. Record each outcome in
 | test 005, 009, 015 | `test` supports `<` and `>` (005); 009, 015 per the reports |
 | trap 011, 012 | a shell whose `trap -p` output the baseline accepts |
 
+uudecode (all assertions): this machine has no uudecode, so the faults were judged against a temporary stand-in for the utility. They need a system with the real utility, to confirm the baselines pass and the verdicts hold.
+
 `tail -r` (the earlier tail module) also waits on a system where its baseline passes.
 
 ## Notes
