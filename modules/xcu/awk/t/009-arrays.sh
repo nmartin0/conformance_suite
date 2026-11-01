@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.009
+# MUTANT    awk.in_creates_element
+# MUTANT    awk.ref_no_create
+# MUTANT    awk.delete_elem_clears_all
+# MUTANT    awk.delete_elem_noop
+# MUTANT    awk.delete_all_noop
+# MUTANT    awk.split_zero_based
+# MUTANT    awk.split_keeps_old
+# MUTANT    awk.split_elems_strings
+# MUTANT    awk.subsep_ignored
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.009
 LC_ALL=POSIX

@@ -2,6 +2,18 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.010
+# MUTANT    awk.break_as_continue
+# MUTANT    awk.continue_as_break
+# MUTANT    awk.next_ignored
+# MUTANT    awk.exit_skips_end
+# MUTANT    awk.exit_is_noop
+# MUTANT    awk.end_exit_continues
+# MUTANT    awk.do_while_as_while
+# MUTANT    awk.const_zero_string_false
+# MUTANT    awk.fields_always_strings
+# MUTANT    awk.lt_as_le
+# MUTANT    awk.exit_status_lost
+# MUTANT    awk.exit_status_plus1
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.010
 LC_ALL=POSIX

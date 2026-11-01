@@ -2,6 +2,25 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.011
+# MUTANT    awk.ors_ignored
+# MUTANT    awk.ofs_ignored
+# MUTANT    awk.redirect_reopens
+# MUTANT    awk.append_truncates
+# MUTANT    awk.trunc_appends
+# MUTANT    awk.pipe_to_stdout
+# MUTANT    awk.printf_minus_ignored
+# MUTANT    awk.printf_zero_ignored
+# MUTANT    awk.printf_width_ignored
+# MUTANT    awk.printf_precision_ignored
+# MUTANT    awk.printf_star_ignored
+# MUTANT    awk.printf_X_lowercase
+# MUTANT    awk.printf_o_as_d
+# MUTANT    awk.printf_pct_dropped
+# MUTANT    awk.printf_e_as_f
+# MUTANT    awk.printf_g_as_f
+# MUTANT    awk.printf_c_whole_string
+# MUTANT    awk.printf_c_number_digits
+# MUTANT    awk.tab_escape_literal
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.011
 LC_ALL=POSIX
