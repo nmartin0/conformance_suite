@@ -3,6 +3,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.trap.003
+# MUTANT    trap.reset_noop
+# MUTANT    trap.reset_ignores
+# MUTANT    trap.reset_first_only
+# MUTANT    trap.num_reset_noop
+# MUTANT    trap.num_reset_first_only
+# MUTANT    trap.num_as_action
 . "$PC_CORE/pc.sh"
 pc_begin XCU.trap.003
 nl='
@@ -28,4 +34,18 @@ pcrun
 pcscript 'trap "echo bye" EXIT' 'trap 0' 'echo run'
 pcrun
 [ "$out" = run ] || pc_fail "after trap 0, output '$out'"
+# several conditions are all reset
+pcscript 'trap "echo a" USR1' 'trap "echo b" USR2' 'trap - USR1 USR2' 'kill -s USR2 $$' 'echo notrun'
+pcrun
+[ -z "$out" ] && [ "$rc" -gt 128 ] || pc_fail "after trap - USR1 USR2, USR2 still caught (status $rc out '$out')"
+pcscript 'trap "echo a" USR1' 'trap "echo b" USR2' 'trap - USR1 USR2' 'kill -s USR1 $$' 'echo notrun'
+pcrun
+[ -z "$out" ] && [ "$rc" -gt 128 ] || pc_fail "after trap - USR1 USR2, USR1 still caught (status $rc out '$out')"
+# a first operand that is a number: it and every operand after it are conditions to reset
+pcscript 'trap "echo bye" EXIT' 'trap "echo b" USR1' 'trap 0 USR1' 'kill -s USR1 $$' 'echo notrun'
+pcrun
+[ -z "$out" ] && [ "$rc" -gt 128 ] || pc_fail "after trap 0 USR1, USR1 still caught or EXIT kept (status $rc out '$out')"
+pcscript 'trap "echo bye" EXIT' 'trap "echo b" USR1' 'trap 0 USR1' 'echo run'
+pcrun
+[ "$out" = run ] || pc_fail "after trap 0 USR1, EXIT action still ran: '$out'"
 pc_pass

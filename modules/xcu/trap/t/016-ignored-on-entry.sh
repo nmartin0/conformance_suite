@@ -3,6 +3,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.trap.016
+# MUTANT    trap.entry_trappable
+# MUTANT    trap.entry_resettable
+# VARIANT   trap.ignored_entry_diag
 . "$PC_CORE/pc.sh"
 pc_begin XCU.trap.016
 nl='
@@ -22,4 +25,9 @@ pcscript 'trap "" USR1' 'exec ${PC_SH:-sh} ./pc.k4'
 pc_test
 pcrun
 [ "$out" = alive ] || pc_fail "got '$out', expected only alive"
+# nor can it be reset: trying is not an error that ends the shell, the signal stays ignored
+printf '%s\n' 'trap - USR1' 'kill -s USR1 $$' 'echo alive' >pc.k4b || pc_unresolved "write"
+pcscript 'trap "" USR1' 'exec ${PC_SH:-sh} ./pc.k4b'
+pcrun
+[ "$out" = alive ] || pc_fail "after trap - on a signal ignored on entry: got '$out', expected only alive"
 pc_pass

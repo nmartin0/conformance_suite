@@ -3,6 +3,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.trap.011
+# MUTANT    trap.p_default_ignores
+# MUTANT    trap.p_default_catches
+# MUTANT    trap.p_default_wrong_condition
+# VARIANT   trap.p_conform
 . "$PC_CORE/pc.sh"
 pc_begin XCU.trap.011
 nl='

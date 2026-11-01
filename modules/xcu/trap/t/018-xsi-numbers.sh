@@ -3,6 +3,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.trap.018
+# MUTANT    trap.num15_wrong
+# MUTANT    trap.num14_wrong
+# MUTANT    trap.num6_wrong
+# MUTANT    trap.num_unsupported
+# MUTANT    trap.num_cond_reset_noop
 . "$PC_CORE/pc.sh"
 pc_begin XCU.trap.018
 nl='
@@ -24,4 +29,10 @@ pcrun
 pcscript 'trap "echo got" TERM' 'trap - 15' 'kill -s TERM $$' 'echo notrun'
 pcrun
 [ -z "$out" ] && [ "$rc" -gt 128 ] || pc_fail "trap - 15 did not reset TERM (status $rc out '$out')"
+pcscript 'trap "echo got" 14' 'kill -s ALRM $$' 'echo end'
+pcrun
+[ "$out" = "got${nl}end" ] || pc_fail "trap on 14: got '$out'"
+pcscript 'trap "echo got" 6' 'kill -s ABRT $$' 'echo end'
+pcrun
+[ "$out" = "got${nl}end" ] || pc_fail "trap on 6: got '$out'"
 pc_pass

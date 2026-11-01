@@ -3,6 +3,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.trap.008
+# MUTANT    trap.runs_now
+# MUTANT    trap.aborts_foreground
 . "$PC_CORE/pc.sh"
 pc_begin XCU.trap.008
 nl='
@@ -17,8 +19,11 @@ pcrun() {
 	out=$(${PC_SH:-sh} pc.s 2>pc.err </dev/null)
 	rc=$?
 }
-printf '%s\n' 'kill -s USR1 $PPID' 'echo child-end' >pc.k || pc_unresolved "write"
-pcscript 'trap "echo trapped" USR1' '${PC_SH:-sh} ./pc.k' 'echo end' 
+# The child sends the signal, then stays a second before it ends, so that a
+# shell that ran the trap at once would show it. pcfg runs the child; it is
+# one line so that CI faults can replace it.
+printf '%s\n' 'kill -s USR1 $PPID' 'sleep 1' 'echo child-end' >pc.k || pc_unresolved "write"
+pcscript 'pcfg() { ${PC_SH:-sh} "$@"; }' 'trap "echo trapped" USR1' 'pcfg ./pc.k' 'echo end' 
 pc_test
 pcrun
 case $out in

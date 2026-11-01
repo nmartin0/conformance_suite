@@ -3,6 +3,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.trap.015
+# MUTANT    trap.subshell_keeps_traps
+# MUTANT    trap.subshell_resets_ignored
 . "$PC_CORE/pc.sh"
 pc_begin XCU.trap.015
 nl='
@@ -24,7 +26,9 @@ pc_test
 # subshell is a process of its own that parent is the subshell. A shell is
 # not required to make one (the page does not say so), and then the parent is
 # the main shell and the trap that runs there says nothing about the subshell.
-pcscript 'trap "v=1; echo hit" USR1' '(${PC_SH:-sh} ./pc.k2; echo sub-end)' 'echo "st=$? v=$v"'
+# pcsub runs its arguments in a subshell; it is one line so that CI faults
+# can replace it.
+pcscript 'pcsub() { ( "$@"; ); }' 'pcb2() { ${PC_SH:-sh} ./pc.k2; echo sub-end; }' 'trap "v=1; echo hit" USR1' 'pcsub pcb2' 'echo "st=$? v=$v"'
 pcrun
 case $out in
 "st="[1-9]*" v=") ;;
@@ -34,7 +38,7 @@ esac
 st=${out#st=}
 st=${st%% *}
 [ "$st" -gt 128 ] || pc_fail "subshell status $st, expected above 128"
-pcscript 'trap "" USR2' '(${PC_SH:-sh} ./pc.k3; echo sub-end)'
+pcscript 'pcsub() { ( "$@"; ); }' 'pcb3() { ${PC_SH:-sh} ./pc.k3; echo sub-end; }' 'trap "" USR2' 'pcsub pcb3'
 pcrun
 [ "$out" = sub-end ] || pc_fail "ignored signal in subshell: got '$out', expected sub-end"
 pc_pass

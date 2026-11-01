@@ -3,6 +3,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.trap.014
+# MUTANT    trap.exit_cwd_reset
+# MUTANT    trap.exit_vars_stale
+# MUTANT    trap.exit_function_lost
+# MUTANT    trap.exit_umask_reset
+# VARIANT   trap.exit_action_subshell
 . "$PC_CORE/pc.sh"
 pc_begin XCU.trap.014
 nl='
@@ -19,8 +24,10 @@ pcrun() {
 }
 mkdir pc.sub || pc_unresolved "mkdir"
 d=$(cd pc.sub && pwd -P) || pc_unresolved "cd"
-pcscript 'pcx=5' 'trap "echo \$pcx; pwd -P" EXIT' 'pcx=6' 'cd pc.sub' 
+# the mask the script sets last, as this shell prints it
+um=$(${PC_SH:-sh} -c 'umask 027; umask') || pc_unresolved "umask"
+pcscript 'pcx=5' 'trap "echo \$pcx; pwd -P; pcf; umask" EXIT' 'pcx=6' 'cd pc.sub' 'pcf() { echo fn; }' 'umask 027'
 pc_test
 pcrun
-[ "$out" = "6${nl}$d" ] || pc_fail "got '$out', expected 6 and $d"
+[ "$out" = "6${nl}$d${nl}fn${nl}$um" ] || pc_fail "got '$out', expected the last variable value, directory, function and mask"
 pc_pass

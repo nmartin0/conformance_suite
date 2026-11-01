@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.trap.002
+# MUTANT    trap.exit_name_dropped
+# MUTANT    trap.zero_dropped
+# MUTANT    trap.exit_twice
+# MUTANT    trap.exit_cmd_skips
+# VARIANT   trap.exit_action_subshell
 . "$PC_CORE/pc.sh"
 pc_begin XCU.trap.002
 nl='
@@ -22,4 +27,8 @@ for cond in EXIT 0; do
 	pcrun
 	[ "$out" = "run${nl}bye" ] || pc_fail "$cond: got '$out'"
 done
+# the shell also exits by way of the exit utility: the trap runs then too
+pcscript "trap 'echo bye' EXIT" 'echo run' 'exit 3'
+pcrun
+[ "$out" = "run${nl}bye" ] || pc_fail "after exit: got '$out'"
 pc_pass
