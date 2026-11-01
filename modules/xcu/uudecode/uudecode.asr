@@ -38,7 +38,8 @@ anchor     utilities/uuencode.html#STDOUT
 class      required
 since      2001
 says       Data in the begin-base64 format ending in the "====" line decodes
-           to the original bytes.
+           to the original bytes: with no padding, with one or two padding
+           characters, and over more than one line.
 test       t/004-base64-input.sh
 
 assertion  XCU.uudecode.005
@@ -78,9 +79,11 @@ test       t/008-leading-text.sh
 
 assertion  XCU.uudecode.009
 anchor     utilities/uudecode.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#CONSEQUENCES OF ERRORS
 class      required
 since      1992
-says       A nonexistent input file gives a nonzero exit status.
+says       A nonexistent input file gives a nonzero exit status and a
+           diagnostic message on standard error.
 test       t/009-missing-input.sh
 
 assertion  XCU.uudecode.010
@@ -100,3 +103,44 @@ since      2024
 says       A name of -, whether given by the data or by -o, sends the decoded
            bytes to standard output and creates no file of that name.
 test       t/011-dash-cookie.sh
+
+assertion  XCU.uudecode.012
+anchor     utilities/uuencode.html#STDOUT
+anchor     utilities/uudecode.html#DESCRIPTION
+class      required
+since      2001
+says       In historical-format data, a zero 6-bit value (and the line that
+           ends the data) may be written as a space or as a backtick; both
+           spellings decode to the same bytes.
+test       t/012-zero-spellings.sh
+
+assertion  XCU.uudecode.013
+anchor     utilities/uuencode.html#STDOUT
+anchor     utilities/uudecode.html#DESCRIPTION
+class      required
+since      2001
+says       In begin-base64 data, line breaks and characters not in the
+           Base64 alphabet are ignored when decoding, so a group of four
+           characters may be split over lines or hold a blank.
+test       t/013-base64-ignored.sh
+
+assertion  XCU.uudecode.014
+anchor     utilities/uudecode.html#DESCRIPTION
+anchor     utilities/uudecode.html#EXIT STATUS
+class      required
+since      1992
+says       If the output pathname names an existing file on which the user
+           has no write permission, uudecode ends with an error (nonzero
+           status and a diagnostic on standard error) and leaves the file
+           as it was.
+test       t/014-unwritable-existing.sh
+
+assertion  XCU.uudecode.015
+anchor     utilities/uudecode.html#DESCRIPTION
+class      required
+since      1992
+says       If the output pathname names an existing file the user can write
+           but whose permission bits cannot be set, the file is overwritten
+           and uudecode does not treat the failure to set the mode as an
+           error.
+test       t/015-mode-not-settable.sh

@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.uudecode.002
+# MUTANT    uudecode.o_ignored
+# MUTANT    uudecode.o_both
+# MUTANT    uudecode.o_stdout
+# MUTANT    uudecode.status1
+# MUTANT    uudecode.drop_last
+# MUTANT    uudecode.append_nl
+# MUTANT    uudecode.no_create
 # With -o outfile the decoded bytes go to outfile and no file with the name
 # from the data is created.
 . "$PC_CORE/pc.sh"
@@ -12,11 +19,12 @@ pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 printf 'begin 644 out.bin\n#0V%%T\n`\nend\n' >in || pc_unresolved "setup: cannot write input"
+printf Cat >exp || pc_unresolved "setup: cannot write expectation"
 pc_test
 uudecode -o other.bin in >stdout 2>err
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "exit status $rc"
 [ -f other.bin ] || pc_fail "the -o file was not created"
-[ "$(cat other.bin)" = Cat ] || pc_fail "decoded content is wrong"
+cmp -s exp other.bin 2>/dev/null || pc_fail "decoded content is wrong"
 [ -e out.bin ] && pc_fail "the name from the data was used as well"
 pc_pass
