@@ -1,7 +1,7 @@
 # XCU csplit
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
-# The -k option is not tested with an error: an implementation may find the
+# The files that -k leaves after an error are not examined: an implementation may find the
 # error before it has made any file, so nothing could be required to remain.
 # A first line matching a first expression is avoided, since the resulting
 # empty file is unspecified.
@@ -75,6 +75,23 @@ class      required
 since      1992
 says       A file operand of - means standard input.
 test       t/008-standard-input.sh
+
+assertion  XCU.csplit.011
+anchor     utilities/csplit.html#OPTIONS/-f
+class      required
+says       csplit -f with a prefix that would give a file name longer than
+           {NAME_MAX} bytes exits nonzero with a diagnostic and creates no
+           file.
+test       t/011-long-prefix.sh
+
+assertion  XCU.csplit.012
+anchor     utilities/csplit.html#OPTIONS/-k
+anchor     utilities/csplit.html#EXIT STATUS
+class      required
+says       csplit -k is accepted and a run without an error gives the same
+           files and size lines as without it; with an error it still
+           exits nonzero with a diagnostic.
+test       t/012-keep.sh
 
 # Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
 # localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
