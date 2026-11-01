@@ -7,7 +7,7 @@
 pc_cm() (
 	M=$1
 	shift
-	fd= fc= ff= fv= alg= nb= first= viag= lastm= ren=
+	fd= fc= ff= fv= alg= nb= first= viag= lastm= ren= back= skiprun= ow=
 	nm=0 ng=0
 	OPTIND=1
 	while getopts fcdvb:gm: o; do
@@ -109,12 +109,12 @@ pc_cm() (
 	m_always_wins) [ "$nm" -gt 0 ] && alg=$lastm ;;
 	multiple_error) [ $((ng + nm)) -gt 1 ] && fail "more than one algorithm option given" ;;
 	# gzip output
-	gzc_g) [ -n "$comp" ] && [ -n "$viag" ] && alg=lzw ren=.Z:.gz ;;
-	gzc_mgzip) [ -n "$comp" ] && [ -z "$viag" ] && [ "$alg" = gzip ] && alg=lzw ren=.Z:.gz ;;
-	gzc_mdeflate) [ -n "$comp" ] && [ "$alg" = deflate ] && alg=lzw ren=.Z:.gz ;;
-	gzs_g) [ -n "$comp" ] && [ -n "$viag" ] && ren=.gz:.Z ;;
-	gzs_mgzip) [ -n "$comp" ] && [ -z "$viag" ] && [ "$alg" = gzip ] && ren=.gz:.Z ;;
-	gzs_mdeflate) [ -n "$comp" ] && [ "$alg" = deflate ] && ren=.gz:.Z ;;
+	gzc_g) [ -n "$comp" ] && [ -z "$fc" ] && [ -n "$viag" ] && alg=lzw ren=.Z:.gz ;;
+	gzc_mgzip) [ -n "$comp" ] && [ -z "$fc" ] && [ -z "$viag" ] && [ "$alg" = gzip ] && alg=lzw ren=.Z:.gz ;;
+	gzc_mdeflate) [ -n "$comp" ] && [ -z "$fc" ] && [ "$alg" = deflate ] && alg=lzw ren=.Z:.gz ;;
+	gzs_g) [ -n "$comp" ] && [ -z "$fc" ] && [ -n "$viag" ] && ren=.gz:.Z ;;
+	gzs_mgzip) [ -n "$comp" ] && [ -z "$fc" ] && [ -z "$viag" ] && [ "$alg" = gzip ] && ren=.gz:.Z ;;
+	gzs_mdeflate) [ -n "$comp" ] && [ -z "$fc" ] && [ "$alg" = deflate ] && ren=.gz:.Z ;;
 	# -b
 	b_lzw_rejected) [ -n "$nb" ] && islzw && fail "bad value for -b" ;;
 	b_lzw_9_rejected) [ "$nb" = 9 ] && islzw && fail "bad value for -b" ;;
@@ -146,6 +146,49 @@ pc_cm() (
 		;;
 	lzw_unrecognized) [ -n "$fd" ] && for o in $ops; do [ "$(magic "$o")" = 1f9d ] && fail "$o: not in compressed format"; done ;;
 	gzip_unrecognized) [ -n "$fd" ] && for o in $ops; do [ "$(magic "$o")" = 1f8b ] && fail "$o: not in compressed format"; done ;;
+	# permitted choices (variants)
+	d_garbage_accepted)
+		# data that is not in any compressed format is passed through
+		if [ -n "$fd" ] && [ -z "$fc" ]; then
+			new=
+			for o in $ops; do
+				case $(magic "$o") in
+				1f9d | 1f8b) new="$new $o" ;;
+				*) cp "$o" "$(outname "$o")" && rm -f "$o" ;;
+				esac
+			done
+			ops=${new# }
+			[ -z "$ops" ] && skiprun=1
+		fi
+		;;
+	lzw_other_format)
+		# the default algorithm keeps deflate-form data under the suffix .Z
+		if [ -n "$comp" ] && islzw; then
+			alg=gzip nb=
+			if [ -z "$fc" ]; then
+				ren=.gz:.Z
+				for o in $ops; do
+					[ -d "$o.Z" ] && fail "$o.Z: is a directory"
+					if [ -e "$o.Z" ]; then
+						[ -n "$ff" ] || fail "$o.Z already exists; not overwritten"
+						rm -f "$o.Z"
+					fi
+				done
+			fi
+		elif [ -n "$fd" ] && [ -z "$fc" ]; then
+			new= back=
+			for o in $ops; do
+				case $o in
+				*.Z)
+					mv "$o" "${o%.Z}.gz"
+					new="$new ${o%.Z}.gz" back="$back ${o%.Z}"
+					;;
+				*) new="$new $o" ;;
+				esac
+			done
+			ops=$new
+		fi
+		;;
 	# existing output
 	overwrite_silently) [ -n "$exists" ] && ff=1 ;;
 	overwrite_exit1) [ -n "$exists" ] && [ -z "$ff" ] && ff=1 ow=1 ;;
@@ -180,10 +223,22 @@ pc_cm() (
 		;;
 	quiet_noisy)
 		run
-		[ -z "$fv" ] && echo "compress: 1 file compressed" >&2
+		qrc=$?
+		if [ -z "$fv" ]; then echo "compress: 1 file compressed" >&2; fi
+		(exit "$qrc")
 		;;
 	refuse_no_diag) if [ -n "$exists" ] && [ -z "$ff" ]; then run 2>/dev/null; else run; fi ;;
-	*) run ;;
+	v_text)
+		if [ -n "$fv" ]; then
+			run 2>/dev/null
+			vrc=$?
+			printf '  %s  --  37.5 percent saved\n\n' "$firstop" >&2
+			(exit "$vrc")
+		else
+			run
+		fi
+		;;
+	*) if [ -n "$skiprun" ]; then :; else run; fi ;;
 	esac
 	rc=$?
 
@@ -253,6 +308,20 @@ pc_cm() (
 	refuse_truncates_old) [ -n "$exists" ] && [ -z "$ff" ] && for o in $ops; do : >"$(outname "$o")"; done ;;
 	refuse_old_appended) [ -n "$exists" ] && [ -z "$ff" ] && for o in $ops; do app "$(outname "$o")"; done ;;
 	force_garbage) [ -n "$exists" ] && [ -n "$ff" ] && [ "$rc" -eq 0 ] && for o in $ops; do printf x >"$(outname "$o")"; done ;;
+	# permitted choices (variants)
+	unsupp_status_big) [ -n "$unsupp" ] && [ "$rc" -gt 2 ] && rc=100 ;;
+	refuse_status_big) [ -n "$exists" ] && [ -z "$ff" ] && [ "$rc" -ne 0 ] && rc=77 ;;
+	gz_header_fields)
+		# modification time, extra flags and operating system fields set
+		if [ -n "$comp" ] && [ -z "$fc" ] && isgz; then
+			for o in $ops; do printf '\001\002\003\004\002\003' | dd of="$o.gz" bs=1 seek=4 conv=notrunc 2>/dev/null; done
+		fi
+		;;
+	lzw_other_format)
+		if [ "$rc" -ne 0 ]; then
+			for b in $back; do mv "$b.gz" "$b.Z" 2>/dev/null; done
+		fi
+		;;
 	# metadata
 	c_mode_600) [ -n "$comp" ] && [ -z "$fc" ] && for o in $ops; do chmod 600 "$(outname "$o")"; done ;;
 	c_mode_644) [ -n "$comp" ] && [ -z "$fc" ] && for o in $ops; do chmod 644 "$(outname "$o")"; done ;;
@@ -265,6 +334,8 @@ pc_cm() (
 	d_mtime_epoch) [ -n "$fd" ] && [ -z "$fc" ] && for o in $ops; do touch -t 197001020000 "$(outname "$o")"; done ;;
 	# errors
 	err_removes_input) [ "$rc" -ne 0 ] && for o in $ops; do rm -f "$o"; done ;;
+	err_c_removes_input) [ -n "$comp" ] && [ "$rc" -ne 0 ] && for o in $ops; do rm -f "$o"; done ;;
+	err_gz_removes_input) [ -n "$fd" ] && [ "$rc" -ne 0 ] && for o in $ops; do case $o in *.gz) rm -f "$o" ;; esac; done ;;
 	err_modifies_input) [ "$rc" -ne 0 ] && for o in $ops; do [ -f "$o" ] && app "$o"; done ;;
 	err_truncates_input) [ "$rc" -ne 0 ] && for o in $ops; do [ -f "$o" ] && : >"$o"; done ;;
 	esac

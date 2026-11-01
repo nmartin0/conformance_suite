@@ -2,6 +2,7 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.009
+# VARIANT   compress.lzw_other_format
 # MUTANT    compress.dash_literal
 # MUTANT    compress.dash_empty
 # MUTANT    compress.noarg_empty

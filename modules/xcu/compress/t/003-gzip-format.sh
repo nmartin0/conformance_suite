@@ -2,6 +2,7 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.003
+# VARIANT   compress.gz_header_fields
 # MUTANT    compress.gzc_g
 # MUTANT    compress.gzc_mgzip
 # MUTANT    compress.gzc_mdeflate

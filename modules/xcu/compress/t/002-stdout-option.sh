@@ -2,6 +2,7 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.002
+# VARIANT   compress.lzw_other_format
 # MUTANT    compress.c_removes_input
 # MUTANT    compress.c_creates_file
 # MUTANT    compress.c_modifies_input

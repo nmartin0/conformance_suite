@@ -2,6 +2,7 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.013
+# VARIANT   compress.lzw_other_format
 # MUTANT    compress.c_mode_600
 # MUTANT    compress.c_mode_644
 # MUTANT    compress.c_mtime_now

@@ -2,9 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.014
+# VARIANT   compress.d_garbage_accepted
+# VARIANT   compress.lzw_other_format
 # MUTANT    compress.err_removes_input
 # MUTANT    compress.err_modifies_input
 # MUTANT    compress.err_truncates_input
+# MUTANT    compress.err_c_removes_input
+# MUTANT    compress.err_gz_removes_input
 # When compress fails on an input file (nonzero status), the input file is
 # still present and unchanged: "compress -d" of a file that is not
 # compressed data or of a truncated gzip file (either may succeed), and

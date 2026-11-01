@@ -2,6 +2,7 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.008
+# VARIANT   compress.unsupp_status_big
 # MUTANT    compress.unsupp_status1
 # MUTANT    compress.unsupp_status2
 # MUTANT    compress.unsupp_status0

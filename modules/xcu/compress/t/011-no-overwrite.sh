@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.011
+# VARIANT   compress.lzw_other_format
+# VARIANT   compress.refuse_status_big
 # MUTANT    compress.overwrite_silently
 # MUTANT    compress.overwrite_exit1
 # MUTANT    compress.overwrite_exit0

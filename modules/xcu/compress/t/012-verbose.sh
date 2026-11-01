@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.compress.012
+# VARIANT   compress.v_text
+# VARIANT   compress.lzw_other_format
 # MUTANT    compress.v_silent
 # MUTANT    compress.v_stdout
 # MUTANT    compress.v_both
