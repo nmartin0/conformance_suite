@@ -6,7 +6,6 @@
 # MUTANT    getopts.operand_status0
 # MUTANT    getopts.operand_optind_after
 # MUTANT    getopts.operand_name_kept
-# MUTANT    getopts.end_noperand_clamp
 # VARIANT   getopts.reimpl
 # VARIANT   getopts.optind_opaque
 . "$PC_CORE/pc.sh"

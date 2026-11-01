@@ -62,8 +62,9 @@ pcm_diag() {
 # remember where this call left the parse (index and characters used)
 pcm_save() {
 	pcm_memind=$pcm_ind
-	pcm_mempos=$pcm_pos
+	pcm_mempos=0
 	if [ -n "$pcm_rest" ]; then
+		pcm_mempos=$pcm_pos
 		OPTIND=$((pcm_ind + 10000 * pcm_pos))
 	elif pcm_is optind_opaque; then
 		OPTIND=$((pcm_ind + 1 + 100000000))
