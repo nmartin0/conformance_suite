@@ -84,7 +84,7 @@ listed() {
 		[ -n "$fp" ] && [ "$1" = "$fp" ] && ff=yes
 	done <out
 }
-pc_test
+# wait until the other process is that user's sleep (setup phase: ps is the real one)
 if [ -n "$fp" ]; then
 	i=0
 	while :; do
@@ -95,6 +95,7 @@ if [ -n "$fp" ]; then
 		sleep 1
 	done
 fi
+pc_test
 listed -e
 [ "$fa" = yes ] || pc_fail "ps -e did not list $$"
 [ -z "$fp" ] || [ "$ff" = yes ] || pc_fail "ps -e did not list $fp, a process of another user"

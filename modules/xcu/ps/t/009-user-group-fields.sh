@@ -69,11 +69,7 @@ realdiff() {
 	val "$2" "$fp"
 	[ "$g" != "$nm" ] && [ "$g" != "$num" ] || pc_fail "$2 of $fp is '$g', the real one, not the effective one"
 }
-pc_test
-chk user -un -u
-chk ruser -urn -ur
-chk group -gn -g
-chk rgroup -grn -gr
+# wait until the other process is that user's sleep (setup phase: ps is the real one)
 if [ -n "$fp" ]; then
 	i=0
 	while :; do
@@ -84,6 +80,11 @@ if [ -n "$fp" ]; then
 		sleep 1
 	done
 fi
+pc_test
+chk user -un -u
+chk ruser -urn -ur
+chk group -gn -g
+chk rgroup -grn -gr
 if [ -n "$fp" ]; then
 	realdiff ruser user -urn -ur
 	realdiff rgroup group -grn -gr

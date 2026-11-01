@@ -48,9 +48,8 @@ look() {
 		[ -n "$fp" ] && [ "$1" = "$fp" ] && ff=yes
 	done <out
 }
-pc_test
+# wait until the other process is that user's sleep (setup phase: ps is the real one)
 if [ -n "$fp" ]; then
-	# wait until the other user's process has become that user's sleep
 	i=0
 	while :; do
 		c=$(ps -o comm= -p "$fp" 2>/dev/null </dev/null)
@@ -60,6 +59,7 @@ if [ -n "$fp" ]; then
 		sleep 1
 	done
 fi
+pc_test
 look -p "$bg" -U "$ru"
 [ "$fb" = yes ] || pc_fail "the child $bg was not listed"
 [ "$fa" = yes ] || pc_fail "the shell $$ (real user $ru) was not listed: criteria were not ORed"
