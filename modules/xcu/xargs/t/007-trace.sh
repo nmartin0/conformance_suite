@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.xargs.007
+# MUTANT    xargs.t_stdout
+# MUTANT    xargs.t_no_trace
+# MUTANT    xargs.t_after
+# MUTANT    xargs.t_missing_initial
+# MUTANT    xargs.t_once
+# MUTANT    xargs.t_no_utility
+# MUTANT    xargs.t_dryrun
+# VARIANT   xargs.trace_tab
 . "$PC_CORE/pc.sh"
 pc_begin XCU.xargs.007
 LC_ALL=C; export LC_ALL
@@ -26,4 +34,19 @@ while IFS= read -r l; do
 	[ "$*" = "echo b" ] && fb=yes
 done <err
 [ "$fa" = yes ] && [ "$fb" = yes ] || pc_fail "-t -n 1 did not trace both command lines"
+# the line is written just before the invocation: it precedes what the utility writes to standard error
+printf 'a\n' | xargs -t "${PC_SH:-sh}" -c 'echo ran-it >&2' >out 2>err || pc_fail "xargs -t with a utility writing to standard error failed"
+seen=no ord=ok
+while IFS= read -r l; do
+	if [ "$l" = ran-it ]; then
+		[ "$seen" = yes ] || ord=bad
+	else
+		set -- $l
+		case " $* " in
+		*" -c "*) seen=yes ;;
+		esac
+	fi
+done <err
+[ "$seen" = yes ] || pc_fail "standard error did not hold the traced command line of the utility"
+[ "$ord" = ok ] || pc_fail "the traced line was written after the utility ran"
 pc_pass

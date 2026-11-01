@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.xargs.002
+# MUTANT    xargs.sep_nl_only
+# MUTANT    xargs.sep_blank_only
+# MUTANT    xargs.empty_arg_on_run
+# MUTANT    xargs.dq_ignored
+# MUTANT    xargs.sq_ignored
+# MUTANT    xargs.dq_ends_at_sq
+# MUTANT    xargs.bs_ignored
+# MUTANT    xargs.bs_keep
 . "$PC_CORE/pc.sh"
 pc_begin XCU.xargs.002
 LC_ALL=C; export LC_ALL

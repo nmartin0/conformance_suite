@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.xargs.004
+# MUTANT    xargs.noinput_norun
+# MUTANT    xargs.runs_twice
+# MUTANT    xargs.r_ignored
+# MUTANT    xargs.r_never
+# MUTANT    xargs.r_blank_runs
 . "$PC_CORE/pc.sh"
 pc_begin XCU.xargs.004
 LC_ALL=C; export LC_ALL

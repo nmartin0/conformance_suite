@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.xargs.011
+# MUTANT    xargs.l_ignored
+# MUTANT    xargs.l_plus1
+# MUTANT    xargs.l_empty_counts
+# MUTANT    xargs.l_no_continue
+# MUTANT    xargs.l_last_dropped
+# MUTANT    xargs.l_words
 . "$PC_CORE/pc.sh"
 pc_begin XCU.xargs.011
 LC_ALL=C; export LC_ALL
@@ -12,6 +18,10 @@ printf 'a b\nc\n\nd e f\n' | xargs -L 2 echo >out 2>/dev/null || pc_fail "xargs 
 v=$(cat out; printf x)
 v=${v%x}
 [ "$v" = "a b c${nl}d e f$nl" ] || pc_fail "-L 2 wrote '$v', expected 'a b c' and 'd e f'"
+printf 'a\n\nb\nc\n' | xargs -L 2 echo >out 2>/dev/null || pc_fail "xargs -L 2 with an empty line inside a group failed"
+v=$(cat out; printf x)
+v=${v%x}
+[ "$v" = "a b${nl}c$nl" ] || pc_fail "-L 2 with an empty line inside a group wrote '$v', expected 'a b' and 'c'"
 printf 'a \nb\nc\n' | xargs -L 1 echo >out 2>/dev/null || pc_fail "xargs -L 1 with a continued line failed"
 n=0
 while IFS= read -r l; do
