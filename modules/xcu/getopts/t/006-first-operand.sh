@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.getopts.006
+# MUTANT    getopts.operand_continue
+# MUTANT    getopts.operand_status0
+# MUTANT    getopts.operand_optind_after
+# MUTANT    getopts.operand_name_kept
+# MUTANT    getopts.end_noperand_clamp
+# VARIANT   getopts.reimpl
+# VARIANT   getopts.optind_opaque
 . "$PC_CORE/pc.sh"
 pc_begin XCU.getopts.006
 pc_test

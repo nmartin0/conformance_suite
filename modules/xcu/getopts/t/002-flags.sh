@@ -2,6 +2,19 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.getopts.002
+# MUTANT    getopts.flag_status1
+# MUTANT    getopts.end_status0
+# MUTANT    getopts.end_status2
+# MUTANT    getopts.end_name_kept
+# MUTANT    getopts.end_name_empty
+# MUTANT    getopts.end_optind_minus1
+# MUTANT    getopts.end_optind_plus1
+# MUTANT    getopts.end_noperand_clamp
+# MUTANT    getopts.flag_name_empty
+# MUTANT    getopts.positional_ignored
+# MUTANT    getopts.restart_each_call
+# VARIANT   getopts.reimpl
+# VARIANT   getopts.optind_opaque
 . "$PC_CORE/pc.sh"
 pc_begin XCU.getopts.002
 pc_test

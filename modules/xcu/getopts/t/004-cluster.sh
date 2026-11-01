@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.getopts.004
+# MUTANT    getopts.cluster_skip_rest
+# MUTANT    getopts.cluster_reverse
+# MUTANT    getopts.cluster_whole
+# MUTANT    getopts.cluster_attached_arg_ignored
+# MUTANT    getopts.end_optind_minus1
+# MUTANT    getopts.end_optind_plus1
+# VARIANT   getopts.reimpl
+# VARIANT   getopts.optind_opaque
 . "$PC_CORE/pc.sh"
 pc_begin XCU.getopts.004
 pc_test

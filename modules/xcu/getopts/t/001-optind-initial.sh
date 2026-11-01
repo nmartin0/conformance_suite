@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.getopts.001
+# MUTANT    getopts.optind_zero
+# MUTANT    getopts.optind_unset
+# VARIANT   getopts.reimpl
 . "$PC_CORE/pc.sh"
 pc_begin XCU.getopts.001
 pc_test

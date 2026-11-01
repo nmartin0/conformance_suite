@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.getopts.015
+# MUTANT    getopts.readonly_status1
+# MUTANT    getopts.readonly_status0
+# MUTANT    getopts.readonly_optarg_status0
+# MUTANT    getopts.readonly_optind_status0
+# VARIANT   getopts.reimpl
+# VARIANT   getopts.status255
 . "$PC_CORE/pc.sh"
 pc_begin XCU.getopts.015
 pc_test

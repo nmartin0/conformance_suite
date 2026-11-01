@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.getopts.008
+# MUTANT    getopts.ucolon_name_colon
+# MUTANT    getopts.ucolon_optarg_unset
+# MUTANT    getopts.ucolon_optarg_q
+# MUTANT    getopts.ucolon_diag
+# MUTANT    getopts.ucolon_status1
+# VARIANT   getopts.reimpl
+# VARIANT   getopts.optind_opaque
 . "$PC_CORE/pc.sh"
 pc_begin XCU.getopts.008
 pc_test

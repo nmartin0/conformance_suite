@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.getopts.005
+# MUTANT    getopts.ddash_status0
+# MUTANT    getopts.ddash_continue
+# MUTANT    getopts.ddash_optind_at
+# MUTANT    getopts.ddash_optind_plus1
+# MUTANT    getopts.ddash_name_kept
+# MUTANT    getopts.ddash_arg_missing
+# VARIANT   getopts.reimpl
+# VARIANT   getopts.optind_opaque
 . "$PC_CORE/pc.sh"
 pc_begin XCU.getopts.005
 pc_test

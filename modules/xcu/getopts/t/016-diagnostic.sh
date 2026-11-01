@@ -2,6 +2,16 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.getopts.016
+# MUTANT    getopts.diag_no_prog
+# MUTANT    getopts.diag_prog_getopts
+# MUTANT    getopts.diag_unknown_no_opt
+# MUTANT    getopts.diag_missing_no_prog
+# MUTANT    getopts.diag_missing_no_opt
+# MUTANT    getopts.diag_stdout
+# MUTANT    getopts.diag_both
+# VARIANT   getopts.reimpl
+# VARIANT   getopts.diag_fullpath
+# VARIANT   getopts.diag_usage
 . "$PC_CORE/pc.sh"
 pc_begin XCU.getopts.016
 base=${0##*/}
