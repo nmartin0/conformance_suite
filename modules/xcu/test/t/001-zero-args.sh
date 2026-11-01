@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.test.001
+# MUTANT    test.zero_true
+# VARIANT   test.argv0_single
+# MUTANT    test.zero_status2
+# MUTANT    test.fn_zero_true
+# MUTANT    test.te_zero_true
+# MUTANT    test.br_zero_true
 . "$PC_CORE/pc.sh"
 pc_begin XCU.test.001
 # chk WANT ARGS...: the expression ARGS must give status WANT (0 or 1)

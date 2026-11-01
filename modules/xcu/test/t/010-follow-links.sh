@@ -2,6 +2,16 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.test.010
+# MUTANT    test.f_nofollow
+# MUTANT    test.s_nofollow
+# MUTANT    test.d_nofollow
+# MUTANT    test.e_nofollow
+# MUTANT    test.f_link_true
+# MUTANT    test.d_link_true
+# MUTANT    test.L_dangling_false
+# MUTANT    test.fn_f_nofollow
+# MUTANT    test.te_f_nofollow
+# MUTANT    test.br_f_nofollow
 . "$PC_CORE/pc.sh"
 pc_begin XCU.test.010
 # chk WANT ARGS...: the expression ARGS must give status WANT (0 or 1)
@@ -42,4 +52,6 @@ chk 1 -d lbad
 chk 0 -L lfile
 chk 0 -L ldir
 chk 0 -h ldir
+chk 0 -L lbad
+chk 0 -h lbad
 pc_pass

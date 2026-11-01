@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.test.002
+# MUTANT    test.one_empty_true
+# MUTANT    test.one_op_false
+# MUTANT    test.one_dash_false
+# MUTANT    test.one_bang_false
+# MUTANT    test.one_blank_false
+# MUTANT    test.fn_one_empty_true
+# MUTANT    test.te_one_empty_true
+# MUTANT    test.br_one_empty_true
 . "$PC_CORE/pc.sh"
 pc_begin XCU.test.002
 # chk WANT ARGS...: the expression ARGS must give status WANT (0 or 1)

@@ -68,8 +68,10 @@ class      required
 since      1992
 says       -e is true for an existing file of any kind, -f for a regular
            file, -d for a directory, -L and -h for a symbolic link
-           (including one whose target is missing) and -p for a FIFO; each
-           is false for a path that does not exist or is another kind.
+           (including one whose target is missing), -p for a FIFO, -u for
+           a file with its set-user-ID flag and -g for one with its
+           set-group-ID flag; each is false for a path that does not
+           exist or is another kind.
 test       t/007-file-types.sh
 
 assertion  XCU.test.008
@@ -78,7 +80,9 @@ class      required
 since      1992
 says       -s is true for a file with data and false for an empty one;
            -r, -w and -x are true for a file the user can read, write,
-           and run (or search, for a directory).
+           and run (or search, for a directory); each is false when the
+           permission is not granted, which a process without privilege
+           shows (a privileged one is granted access whatever the mode).
 test       t/008-size-access.sh
 
 assertion  XCU.test.009
@@ -134,6 +138,14 @@ since      1992
 says       The argument -- is not treated as the end of options: test --
            is true (one non-empty argument) and test -z -- is false.
 test       t/014-double-dash.sh
+
+assertion  XCU.test.016
+anchor     utilities/test.html#STDOUT
+class      required
+since      1992
+says       Standard output is not used: test writes nothing to it, whether
+           the result is true or false.
+test       t/016-no-stdout.sh
 
 # Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
 # localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
