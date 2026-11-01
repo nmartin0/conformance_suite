@@ -18,6 +18,8 @@
 # given back to alias; the value must be exactly as it was.
 . "$PC_CORE/pc.sh"
 pc_begin XCU.alias.003
+# use TEXT: run TEXT through the shell, so that its aliases are looked up
+use() { eval "$@"; }
 nl='
 '
 tab=$(printf '\t')
@@ -63,6 +65,6 @@ for v in "$v1" "$v2" "$v3"; do
 	got=$(value_of "again$k")
 	[ "$got" = "1|$v" ] || pc_fail "after reinput value $k is '$got'"
 done
-got1=$(eval pcal31)
+got1=$(use pcal31)
 [ "$got1" = "$exp1" ] || pc_fail "reinput alias runs as '$got1', wanted '$exp1'"
 pc_pass

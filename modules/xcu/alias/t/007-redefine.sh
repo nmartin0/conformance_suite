@@ -14,6 +14,8 @@
 # VARIANT   alias.list_predefined
 . "$PC_CORE/pc.sh"
 pc_begin XCU.alias.007
+# use TEXT: run TEXT through the shell, so that its aliases are looked up
+use() { eval "$@"; }
 nl='
 '
 # value_of_line TEXT: "count|first word" of the text after the first equals sign
@@ -26,7 +28,7 @@ alias pcal7='echo one'
 alias pcal7='echo two'
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "redefining an alias exited $rc"
-eval pcal7 >o1 2>/dev/null
+use pcal7 >o1 2>/dev/null
 got=$(cat o1)
 [ "$got" = two ] || pc_fail "substituted '$got', wanted two"
 alias pcal7 >o2 2>/dev/null
@@ -50,7 +52,7 @@ done <lst
 # from a long value to a short one
 alias pcal7b='echo a rather long value, longer than the next one'
 alias pcal7b=true
-eval pcal7b >o3 2>/dev/null
+use pcal7b >o3 2>/dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "short redefinition does not run true: $rc"
 alias pcal7b >o4 2>/dev/null

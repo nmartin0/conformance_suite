@@ -16,13 +16,15 @@
 # written, so the lines may come in either order.
 . "$PC_CORE/pc.sh"
 pc_begin XCU.alias.013
+# use TEXT: run TEXT through the shell, so that its aliases are looked up
+use() { eval "$@"; }
 pc_test
 alias pcm1='echo m1' pcm2='echo m2' pcm4='echo m4'
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "alias with three definitions exited $rc"
-eval pcm1 >g1 2>/dev/null
-eval pcm2 >g2 2>/dev/null
-eval pcm4 >g4 2>/dev/null
+use pcm1 >g1 2>/dev/null
+use pcm2 >g2 2>/dev/null
+use pcm4 >g4 2>/dev/null
 for k in 1 2 4; do
 	got=$(cat "g$k")
 	[ "$got" = "m$k" ] || pc_fail "alias number $k gives '$got'"
@@ -44,7 +46,7 @@ done <out
 alias pcm3='echo m3' pcm1 >out2 2>/dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "alias with a definition and a name exited $rc"
-eval pcm3 >g3 2>/dev/null
+use pcm3 >g3 2>/dev/null
 got=$(cat g3)
 [ "$got" = m3 ] || pc_fail "definition given with a name gives '$got'"
 pc_need_file out2 "the output"

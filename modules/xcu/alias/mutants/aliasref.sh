@@ -2,7 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # A fault or variant file sets PCM_FAULT and sources this file. Shell
-# functions shadow alias (and eval, for faults about substitution); the real
+# functions shadow alias (and use, the tests' own way of running text through
+# the shell, for faults about substitution); the real
 # utilities are reached with "command". With a name that no case below
 # knows, everything behaves as the real utility does.
 pcm_nl='
@@ -153,7 +154,7 @@ pcm_def() {
 	define_first_word) pcm_v=${pcm_v%%[ $pcm_tab]*} ;;
 	define_drop_last) pcm_v=${pcm_v%?} ;;
 	define_wrong_name) pcm_n=${pcm_n%?} ;;
-	define_split_last_eq) pcm_n=${1%=*}; pcm_v=${1##*=} ;;
+	define_value_after_last_eq) pcm_v=${1##*=} ;;
 	define_empty_ignored) if [ -z "$pcm_v" ]; then return 0; fi ;;
 	trailing_blank_trimmed)
 		while :; do
@@ -360,11 +361,11 @@ alias() {
 	return $pcm_st
 }
 
-eval() {
+use() {
 	case ${PCM_FAULT-} in
 	sub_leaks) pcm_sync ;;
 	sub_no_inherit) if pcm_insub; then command unalias -a; fi ;;
-	define_once) command eval "$@"; pcm_er=$?; command unalias -a; return $pcm_er ;;
+	define_once) eval "$@"; pcm_er=$?; command unalias -a; return $pcm_er ;;
 	quoted_bs)
 		case $1 in
 		'\'*) pcm_ew=${1#?}; shift; set -- "$pcm_ew" "$@" ;;
@@ -390,7 +391,7 @@ eval() {
 		*"'"*) pcm_del "'" "$1"; shift; set -- "$pcm_dres" "$@" ;;
 		esac ;;
 	esac
-	command eval "$@"
+	eval "$@"
 }
 
 case ${PCM_FAULT-} in

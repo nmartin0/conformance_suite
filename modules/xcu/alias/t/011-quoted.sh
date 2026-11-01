@@ -14,13 +14,15 @@
 # whole or in part, keeps the alias away.
 . "$PC_CORE/pc.sh"
 pc_begin XCU.alias.011
+# use TEXT: run TEXT through the shell, so that its aliases are looked up
+use() { eval "$@"; }
 pcq11() { echo real; }
 pc_test
 alias pcq11='echo aliased'
-got=$(eval pcq11 2>/dev/null)
+got=$(use pcq11 2>/dev/null)
 [ "$got" = aliased ] || pc_fail "unquoted word not substituted: '$got'"
 for w in '\pcq11' "'pcq11'" '"pcq11"' 'pc\q11' 'p"cq"11' "pcq1'1'"; do
-	got=$(eval "$w" 2>/dev/null)
+	got=$(use "$w" 2>/dev/null)
 	[ "$got" != aliased ] || pc_fail "the quoted word $w was substituted"
 	[ "$got" = real ] || pc_fail "the quoted word $w ran '$got', wanted the function"
 done
