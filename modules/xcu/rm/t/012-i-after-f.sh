@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.rm.012
+# MUTANT    rm.i_after_f_ignored
+# MUTANT    rm.i_no_prompt
+# MUTANT    rm.i_prompt_no_name
+# MUTANT    rm.i_prompt_stdout
+# MUTANT    rm.i_neg_removes
+# VARIANT   rm.prompt_nl
+# VARIANT   rm.prompt_quoted
+# VARIANT   rm.prompt_abs
+# VARIANT   rm.ref
 . "$PC_CORE/pc.sh"
 pc_begin XCU.rm.012
 printf x >victim || pc_fail "cannot create victim"

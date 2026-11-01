@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.rm.015
+# MUTANT    rm.pathbased
+# MUTANT    rm.depth_limit
+# VARIANT   rm.reverse_order
+# VARIANT   rm.ref
 . "$PC_CORE/pc.sh"
 pc_begin XCU.rm.015
 base=$(pwd -P) || pc_fail "cannot determine the directory"

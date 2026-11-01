@@ -115,6 +115,17 @@ says       rm -r removes a hierarchy deeper than a path name could be
            written in one piece.
 test       t/015-deep.sh
 
+assertion  XCU.rm.019
+anchor     utilities/rm.html#DESCRIPTION
+anchor     utilities/rm.html#OPTIONS
+anchor     utilities/rm.html#EXIT STATUS
+class      required
+says       When the removal of a file fails (here the directory holding it
+           does not permit it), rm writes a diagnostic to standard error,
+           exits non-zero and goes on to the remaining operands; -f does not
+           hide this, since it covers only operands that do not exist.
+test       t/019-remove-fails.sh
+
 # Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
 # localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report
 # NOTINUSE without it.

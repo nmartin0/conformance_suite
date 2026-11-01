@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.rm.009
+# MUTANT    rm.i_no_prompt
+# MUTANT    rm.i_prompt_no_name
+# MUTANT    rm.i_prompt_stdout
+# MUTANT    rm.i_neg_removes
+# MUTANT    rm.i_neg_status1
+# VARIANT   rm.prompt_nl
+# VARIANT   rm.prompt_quoted
+# VARIANT   rm.prompt_abs
+# VARIANT   rm.ref
 . "$PC_CORE/pc.sh"
 pc_begin XCU.rm.009
 nl='
