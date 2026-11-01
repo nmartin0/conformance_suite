@@ -2,6 +2,18 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.013
+# MUTANT    awk.int_rounds
+# MUTANT    awk.int_floor
+# MUTANT    awk.int_ignored
+# MUTANT    awk.sqrt_truncated
+# MUTANT    awk.exp_pow10
+# MUTANT    awk.log_base10
+# MUTANT    awk.sin_cos_swapped
+# MUTANT    awk.atan2_swapped
+# MUTANT    awk.srand_returns_new
+# MUTANT    awk.srand_returns_zero
+# MUTANT    awk.rand_out_of_range
+# MUTANT    awk.rand_constant
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.013
 LC_ALL=POSIX

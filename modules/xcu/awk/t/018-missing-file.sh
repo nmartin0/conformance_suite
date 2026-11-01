@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.018
+# MUTANT    awk.err_no_diag
+# MUTANT    awk.err_to_stdout
+# MUTANT    awk.err_status0
+# MUTANT    awk.err_continues
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.018
 LC_ALL=POSIX

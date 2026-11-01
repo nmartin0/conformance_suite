@@ -14,7 +14,7 @@ hook_arg() { add "$1"; }
 hook_opt() { add "$1"; }
 hook_dd() { add --; }
 run() { exec "$REAL" "$@"; }
-hook_prog() { p=$(printf '%s\n' "$1" | sed -E 's/([A-Za-z0-9_]) ?< ?([0-9A-Za-z])/\1 <= \2/g')
+hook_prog() { p=$(printf '%s\n' "$1" | sed -E 's/([A-Za-z0-9_"\)]) ?< ?([0-9A-Za-z"\(])/\1 <= \2/g')
 	add "$p"; }
 acc= nf=0
 while [ $# -gt 0 ]; do

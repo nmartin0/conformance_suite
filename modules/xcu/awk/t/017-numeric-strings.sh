@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.017
+# MUTANT    awk.fields_always_strings
+# MUTANT    awk.const_digits_numeric
+# MUTANT    awk.argv_string
+# MUTANT    awk.environ_string
+# MUTANT    awk.v_not_numeric_string
+# MUTANT    awk.getline_value_string
+# MUTANT    awk.numstring_copy_string
+# MUTANT    awk.split_elems_strings
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.017
 LC_ALL=POSIX

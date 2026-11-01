@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.014
+# MUTANT    awk.system_status_zero
+# MUTANT    awk.system_status_shifted
+# MUTANT    awk.close_noop
+# MUTANT    awk.close_fails
+# MUTANT    awk.getline_nr_unchanged
+# MUTANT    awk.getline_var_sets_record
+# MUTANT    awk.getline_file_counts_nr
+# MUTANT    awk.getline_missing_zero
+# MUTANT    awk.cmd_getline_nf_one
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.014
 LC_ALL=POSIX
