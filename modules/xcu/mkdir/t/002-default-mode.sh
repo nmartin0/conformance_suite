@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mkdir.002
+# MUTANT    mkdir.default_777
+# MUTANT    mkdir.default_755
+# MUTANT    mkdir.default_666
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mkdir.002
 modeof() {

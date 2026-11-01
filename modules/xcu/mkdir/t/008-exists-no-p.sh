@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mkdir.008
+# MUTANT    mkdir.exists_ok
+# MUTANT    mkdir.exists_diag_ok
+# MUTANT    mkdir.no_diag
+# VARIANT   mkdir.status2
+# VARIANT   mkdir.status255
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mkdir.008
 mkdir d || pc_fail "cannot create d"

@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mkdir.006
+# MUTANT    mkdir.p_mid_plain
+# MUTANT    mkdir.p_mid_777
+# MUTANT    mkdir.p_mid_700
+# MUTANT    mkdir.p_mid_no_w
+# MUTANT    mkdir.p_mid_no_x
+# MUTANT    mkdir.p_last_mid_mode
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mkdir.006
 modeof() {

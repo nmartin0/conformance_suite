@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mkdir.001
+# MUTANT    mkdir.stdout_noise
+# MUTANT    mkdir.reverse_order
+# MUTANT    mkdir.skip_last
+# MUTANT    mkdir.ok_status1
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mkdir.001
 pc_test

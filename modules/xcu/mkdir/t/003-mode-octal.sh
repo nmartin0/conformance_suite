@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mkdir.003
+# MUTANT    mkdir.m_ignored
+# MUTANT    mkdir.m_masked
+# MUTANT    mkdir.m_drop_other
+# VARIANT   mkdir.m_tight
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mkdir.003
 modeof() {
