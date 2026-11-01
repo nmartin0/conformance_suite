@@ -1,9 +1,10 @@
 # copied directories get the default directory mode
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
-. "${PC_MUTANT_FILE%/*}/cpref.sh"
-cp() (
-	pc_cp_parse "$@"
-	command cp "$@"; rc=$?
-	if [ -n "$pc_R" ] && [ -d "$pc_dest" ]; then chmod 755 "$pc_dest"; fi
-	exit "$rc"
-)
+# A broken standalone cp, first on PATH; it runs the real one and alters one thing.
+mkdir -p pc-mutbin
+printf '#!/bin/sh\nREAL="%s"\n' "$(command -v cp)" >pc-mutbin/cp
+cat >>pc-mutbin/cp <<'PC_EOF'
+"$REAL" "$@"; rc=$?; for last; do :; done; chmod 755 "$last"; exit "$rc"
+PC_EOF
+chmod +x pc-mutbin/cp
+PATH=$PWD/pc-mutbin:$PATH
