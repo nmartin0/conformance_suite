@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.016
+# MUTANT    sed.group_rejected
+# MUTANT    sed.dashdash_rejected
+# MUTANT    sed.group_n_dropped
+# MUTANT    sed.group_E_dropped
+# MUTANT    sed.second_e_ignored
 # Options can be grouped (-ne, -nE), -e takes its script attached or separate,
 # and -- ends the options before a script operand.
 . "$PC_CORE/pc.sh"

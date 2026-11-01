@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.018
+# MUTANT    sed.w_files_limit_nine
+# MUTANT    sed.w_multi_blank_rejected
+# MUTANT    sed.r_multi_blank_rejected
+# MUTANT    sed.sflag_w_multi_blank_rejected
 # The r and w commands and the w flag of s take a file name separated by
 # one or more blanks, and a script can use at least ten different w files.
 . "$PC_CORE/pc.sh"

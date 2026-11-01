@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.sed.020
+# MUTANT    sed.ctxaddr_unsupported
+# MUTANT    sed.slash_escape_unsupported
+# MUTANT    sed.delim_escape_ends_re
 # In an address \cREc an escaped c is a literal c that does not end the RE
 # (also for the slash delimiter).
 . "$PC_CORE/pc.sh"

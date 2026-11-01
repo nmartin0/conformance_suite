@@ -7,6 +7,7 @@
 # MUTANT    sed.no_final_newline
 # MUTANT    sed.stdin_ignored
 # MUTANT    sed.stdout_to_stderr
+# VARIANT   sed.warns
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sed.001
 LC_ALL=POSIX

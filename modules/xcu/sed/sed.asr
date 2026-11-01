@@ -114,15 +114,15 @@ assertion  XCU.sed.015
 anchor     utilities/sed.html#EXIT STATUS
 class      required
 since      1992
-says       sed exits above zero for a script it cannot use or a file it cannot read, and with 0 on success.
+says       sed exits above zero and writes a diagnostic to standard error for a script it cannot use or a file it cannot read, goes on with the remaining files after an unreadable one, and exits with 0 on success.
 test       t/015-errors.sh
 
 assertion  XCU.sed.016
 anchor     utilities/sed.html#OPTIONS
 class      required
 since      2024
-says       Options can be grouped (-ne, -nE), -e takes its script attached or
-           separate, and -- ends the options before a script operand.
+says       Options can be grouped (-ne, -nE), -e takes its script as a separate
+           argument, and -- ends the options before a script operand.
 test       t/016-option-syntax.sh
 
 assertion  XCU.sed.017
@@ -166,6 +166,14 @@ says       The contents of the file named by r are taken when the output is
            written and not when the r command ran, so lines that a w command
            wrote to that file in the same cycle are included.
 test       t/021-r-file-time.sh
+
+assertion  XCU.sed.025
+anchor     utilities/sed.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       Labels of b, t and : that differ within their first 8 bytes are
+           different labels.
+test       t/025-label-length.sh
 
 # Locale, time zone and message variables (h2a). A locale other than the POSIX locale is made with
 # localedef (core/pcloc.sh); making locales is optional (POSIX2_LOCALEDEF), so those tests report

@@ -15,6 +15,8 @@
 # MUTANT    sed.comment_swallows_script
 # MUTANT    sed.n_comment_not_special
 # MUTANT    sed.n_comment_anywhere
+# VARIANT   sed.l_fold_20
+# VARIANT   sed.l_fold_1000
 . "$PC_CORE/pc.sh"
 pc_begin XCU.sed.012
 LC_ALL=POSIX
