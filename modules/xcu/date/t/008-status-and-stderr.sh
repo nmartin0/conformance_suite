@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.date.008
+# MUTANT    date.status1
+# MUTANT    date.stderr_noise
+# MUTANT    date.year_short
+# MUTANT    date.year_five
+# MUTANT    date.year_century
+# MUTANT    date.out_to_stderr
+# MUTANT    date.out_none
 . "$PC_CORE/pc.sh"
 pc_begin XCU.date.008
 LC_ALL=C; export LC_ALL

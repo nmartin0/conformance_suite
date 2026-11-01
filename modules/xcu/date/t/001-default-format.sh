@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.date.001
+# MUTANT    date.default_no_zone
+# MUTANT    date.default_no_weekday
+# MUTANT    date.default_zone_last
+# MUTANT    date.default_iso
+# MUTANT    date.default_no_seconds
+# MUTANT    date.default_no_newline
+# MUTANT    date.default_day_zero
+# VARIANT   date.leap_second
 #
 # The clock moves between invocations, so the plain run sits between two
 # runs with the explicit format and is only judged when those agree.
@@ -12,11 +20,12 @@ TZ=UTC0; export TZ
 pc_test
 n=0
 while [ "$n" -lt 5 ]; do
-	a=$(date "+%a %b %e %H:%M:%S %Z %Y")
-	b=$(date)
-	c=$(date "+%a %b %e %H:%M:%S %Z %Y")
+	# the x keeps the final newline: the plain run must end its line too
+	a=$(date "+%a %b %e %H:%M:%S %Z %Y"; printf x)
+	b=$(date; printf x)
+	c=$(date "+%a %b %e %H:%M:%S %Z %Y"; printf x)
 	if [ "$a" = "$c" ]; then
-		[ -n "$a" ] || pc_fail "date with the explicit format wrote nothing"
+		[ "$a" != x ] || pc_fail "date with the explicit format wrote nothing"
 		[ "$b" = "$a" ] || pc_fail "default output '$b' differs from '$a'"
 		pc_pass
 	fi

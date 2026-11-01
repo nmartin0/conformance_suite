@@ -2,6 +2,38 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.date.004
+# MUTANT    date.a_full
+# MUTANT    date.A_abbr
+# MUTANT    date.b_full
+# MUTANT    date.B_abbr
+# MUTANT    date.a_upper
+# MUTANT    date.A_lower
+# MUTANT    date.b_upper
+# MUTANT    date.B_lower
+# MUTANT    date.a_shift
+# MUTANT    date.A_shift
+# MUTANT    date.b_shift
+# MUTANT    date.B_shift
+# MUTANT    date.p_lower
+# MUTANT    date.p_swapped
+# MUTANT    date.w_shift
+# MUTANT    date.u_plus1
+# MUTANT    date.I_off
+# MUTANT    date.H_24
+# MUTANT    date.I_zero
+# MUTANT    date.M_60
+# MUTANT    date.S_61
+# MUTANT    date.d_zero
+# MUTANT    date.m_13
+# MUTANT    date.j_zero
+# MUTANT    date.w_7
+# MUTANT    date.u_zero
+# MUTANT    date.U_54
+# MUTANT    date.W_54
+# MUTANT    date.V_zero
+# MUTANT    date.y_100
+# MUTANT    date.e_zero
+# VARIANT   date.leap_second
 . "$PC_CORE/pc.sh"
 pc_begin XCU.date.004
 LC_ALL=C; export LC_ALL

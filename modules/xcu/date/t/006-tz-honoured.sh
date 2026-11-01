@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.date.006
+# MUTANT    date.tz_ignored
+# MUTANT    date.tz_sign_flipped
+# MUTANT    date.tz_name_utc
+# MUTANT    date.tz_name_dropped
+# MUTANT    date.tz_z_zero
+# MUTANT    date.tz_z_colon
+# MUTANT    date.tz_z_unsigned
+# MUTANT    date.tz_hour_utc
 . "$PC_CORE/pc.sh"
 pc_begin XCU.date.006
 LC_ALL=C; export LC_ALL

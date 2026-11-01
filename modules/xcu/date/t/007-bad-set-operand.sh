@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.date.007
+# MUTANT    date.set_accepts
+# MUTANT    date.set_diag_status0
+# VARIANT   date.set_status2
+# VARIANT   date.set_silent
 . "$PC_CORE/pc.sh"
 pc_begin XCU.date.007
 LC_ALL=C; export LC_ALL

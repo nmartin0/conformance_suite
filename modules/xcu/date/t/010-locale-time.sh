@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.date.010
+# MUTANT    date.ignore_locale
+# MUTANT    date.ignore_lc_all
+# MUTANT    date.ignore_lang
+# MUTANT    date.ignore_lc_time
+# MUTANT    date.null_lc_all_overrides
+# MUTANT    date.lang_beats_lc_time
+# MUTANT    date.lc_time_beats_lc_all
+# MUTANT    date.names_posix
+# MUTANT    date.c_posix
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcloc.sh"
 pc_begin XCU.date.010

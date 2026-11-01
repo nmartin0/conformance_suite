@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.date.011
+# MUTANT    date.tz011_ignored
+# MUTANT    date.tz011_sign_flipped
+# MUTANT    date.tz011_east_ignored
+# MUTANT    date.tz011_west_ignored
 . "$PC_CORE/pc.sh"
 pc_begin XCU.date.011
 LC_ALL=POSIX

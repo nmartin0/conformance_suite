@@ -2,6 +2,19 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.date.003
+# MUTANT    date.D_year4
+# MUTANT    date.T_no_seconds
+# MUTANT    date.R_seconds
+# MUTANT    date.F_slash
+# MUTANT    date.h_full
+# MUTANT    date.C_wrong
+# MUTANT    date.r_24h
+# MUTANT    date.r_no_meridiem
+# MUTANT    date.x_year4
+# MUTANT    date.X_no_seconds
+# MUTANT    date.c_zone
+# MUTANT    date.c_no_seconds
+# VARIANT   date.leap_second
 . "$PC_CORE/pc.sh"
 pc_begin XCU.date.003
 LC_ALL=C; export LC_ALL

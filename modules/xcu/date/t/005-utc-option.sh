@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.date.005
+# MUTANT    date.utu_ignored
+# MUTANT    date.utu_name
+# MUTANT    date.utu_plus1h
+# MUTANT    date.utu_name_only
+# VARIANT   date.utc_gmt
 . "$PC_CORE/pc.sh"
 pc_begin XCU.date.005
 LC_ALL=C; export LC_ALL
