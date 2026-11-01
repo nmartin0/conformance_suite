@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ps.003
+# MUTANT    ps.text_ignored
+# MUTANT    ps.hdr_kept
+# MUTANT    ps.partial_null_hidden
+# MUTANT    ps.multi_reversed
+# MUTANT    ps.multi_first
+# MUTANT    ps.multi_last
+# MUTANT    ps.exit1
+# VARIANT   ps.padded
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ps.003
 LC_ALL=C; export LC_ALL
@@ -26,4 +34,17 @@ ps -o pid -o ppid -p "$$" >out 2>err </dev/null || pc_fail "ps -o pid -o ppid fa
 read -r l <out
 set -- $l
 [ "$*" = "PID PPID" ] || pc_fail "headings for two -o options are '$l'"
+# one null heading and one not: a heading line is written
+ps -o pid= -o ppid -p "$$" >out 2>err </dev/null || pc_fail "ps -o pid= -o ppid failed"
+n=0
+while IFS= read -r l; do
+	n=$((n + 1))
+	set -- $l
+	if [ "$n" -eq 1 ]; then
+		[ "$*" = "PPID" ] || pc_fail "heading line is '$l', expected only PPID"
+	else
+		[ "$*" = "$$ $PPID" ] || pc_fail "data line is '$l', expected '$$ $PPID'"
+	fi
+done <out
+[ "$n" -eq 2 ] || pc_fail "one null heading: ps wrote $n lines, expected 2"
 pc_pass

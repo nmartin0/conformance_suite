@@ -2,6 +2,26 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ps.002
+# MUTANT    ps.hdr_pid
+# MUTANT    ps.hdr_ppid
+# MUTANT    ps.hdr_pgid
+# MUTANT    ps.hdr_user
+# MUTANT    ps.hdr_ruser
+# MUTANT    ps.hdr_group
+# MUTANT    ps.hdr_rgroup
+# MUTANT    ps.hdr_nice
+# MUTANT    ps.hdr_vsz
+# MUTANT    ps.hdr_etime
+# MUTANT    ps.hdr_time
+# MUTANT    ps.hdr_tty
+# MUTANT    ps.hdr_pcpu
+# MUTANT    ps.hdr_comm
+# MUTANT    ps.hdr_args
+# MUTANT    ps.hdr_lower
+# MUTANT    ps.o_blank_first
+# MUTANT    ps.o_comma_first
+# MUTANT    ps.names_reversed
+# VARIANT   ps.padded
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ps.002
 LC_ALL=C; export LC_ALL

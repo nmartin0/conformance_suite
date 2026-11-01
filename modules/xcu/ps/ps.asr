@@ -32,6 +32,9 @@ class      required
 says       name=text replaces the heading; when every heading is null no
            heading line is written; several -o options act as one list in the
            order given; the fields come in the order listed.
+           Widened in the hardening round, from the same passage on all-null
+           headings: when only some headings are null the heading line is still
+           written.
 test       t/003-header-text-and-order.sh
 
 assertion  XCU.ps.004
@@ -56,6 +59,10 @@ class      required
 says       Several selection options select the inclusive OR of their
            criteria: -p of a child together with -U of the real user ID lists
            the shell that runs the test as well as the child.
+           Widened in the hardening round, from the same inclusive-OR passage:
+           the options may come in either order; where the suite has privilege,
+           -p of a process of another user with -U of the invoker's real user
+           ID lists that process and the invoker's.
 test       t/006-selection-or.sh
 
 assertion  XCU.ps.007
@@ -64,6 +71,11 @@ class      required
 says       -A lists every process, including the shell that runs the test and
            its child; -U with the real user ID and -G with the real group ID
            list the shell that runs the test.
+           Widened in the hardening round, from the OPTIONS passages for -A,
+           -U and -G: where the suite has privilege and a process of another
+           user (65534) exists, -A lists it; -U and -G with the invoker's IDs
+           do not; with 65534 they list it and not the shell; lists separated by
+           commas or blanks select every one named; -U accepts a login name.
 test       t/007-select-all-user-group.sh
 
 assertion  XCU.ps.008
@@ -75,6 +87,11 @@ says       -e lists the shell that runs the test, -u with the effective user
            ID lists it, -f gives the headings UID PID PPID C STIME TTY TIME CMD
            in that order, and -l gives F S UID PID PPID C PRI NI ADDR SZ WCHAN
            TTY TIME CMD in that order.
+           Widened in the hardening round: where a process of another user
+           exists, -e lists it and -u of the invoker's ID does not; -u of a
+           list selects every user named and accepts a login name; -f writes
+           the login name under UID and -l the numeric ID (STDOUT description
+           of UID).
 test       t/008-xsi-options.sh
 
 assertion  XCU.ps.009
@@ -83,6 +100,9 @@ class      required
 says       The user, ruser, group and rgroup fields of the shell running the
            test show the textual name or else the decimal ID of the effective
            user, real user, effective group and real group.
+           Widened in the hardening round: where the suite has privilege, for a
+           process whose effective user and group differ from its real ones the
+           real fields show the invoker's and the effective fields do not.
 test       t/009-user-group-fields.sh
 
 assertion  XCU.ps.010
@@ -116,6 +136,8 @@ class      required
 since      1992
 says       On a terminal, ps -a lists a process associated with that
            terminal that is not a session leader.
+           Widened in the hardening round, from "all processes associated with
+           terminals": a process that has no terminal is not listed.
 test       t/013-a-terminal.sh
 
 assertion  XCU.ps.014
@@ -125,6 +147,9 @@ since      1992
 says       With no selection option, run on a terminal, ps lists processes
            with the invoker's effective user ID and controlling terminal,
            including the invoking shell and its background children.
+           Widened in the hardening round, from the default-selection sentence:
+           a process without that terminal, or of another effective user, is
+           not listed.
 test       t/014-default-selection-terminal.sh
 
 assertion  XCU.ps.015
@@ -135,3 +160,14 @@ since      1992
 says       In the default listing, a process that has exited and has not been
            waited for by its parent is marked defunct.
 test       t/015-defunct.sh
+
+assertion  XCU.ps.016
+anchor     utilities/ps.html#OPTIONS
+anchor     utilities/ps.html#STDOUT
+anchor     utilities/ps.html#APPLICATION_USAGE
+class      required
+says       The text after the equals sign of an -o name is the whole rest of
+           the argument as the heading, so it may contain blanks: a heading
+           "Process ID" or "User Name" is written as given. (Added in the
+           hardening round; the page's own usage note shows such headings.)
+test       t/016-header-text-blank.sh

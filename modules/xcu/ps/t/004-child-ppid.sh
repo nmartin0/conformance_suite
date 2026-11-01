@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ps.004
+# MUTANT    ps.ppid_pid
+# MUTANT    ps.ppid_zero
+# MUTANT    ps.p_parent
+# MUTANT    ps.pid_off
+# MUTANT    ps.p_ignored
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ps.004
 LC_ALL=C; export LC_ALL
