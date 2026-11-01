@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.013
+# MUTANT   find.nouser_as_nogroup
+# MUTANT   find.nogroup_as_nouser
+# MUTANT   find.nouser_always
+# MUTANT   find.nouser_never
+# MUTANT   find.nogroup_always
+# MUTANT   find.nogroup_never
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.013
 same_set() {
@@ -18,11 +24,16 @@ printf 'd\n' >t/sub/d.c || pc_fail "cannot create t/sub/d.c"
 : >t/.hid || pc_fail "cannot create t/.hid"
 ln -s a.txt t/l || pc_fail "cannot create symbolic link"
 mkfifo t/p || pc_fail "cannot create FIFO"
-chown 4242424:4242425 t/a.txt || pc_fail "cannot chown t/a.txt"
+me=$(id -u) || pc_unresolved "cannot determine the user ID"
+set -- $(ls -ldn t/B.TXT)
+mygid=$4
+chown "4242424:$mygid" t/a.txt || pc_fail "cannot chown t/a.txt"
+chown "$me:4242425" t/B.TXT || pc_fail "cannot chown t/B.TXT"
 set -- $(ls -ld t/a.txt)
 case $3 in
 ''|*[!0-9]*) pc_unresolved "setup: user 4242424 exists ($3)" ;;
 esac
+set -- $(ls -ld t/B.TXT)
 case $4 in
 ''|*[!0-9]*) pc_unresolved "setup: group 4242425 exists ($4)" ;;
 esac
@@ -34,5 +45,5 @@ same_set "$got" "t/a.txt" || pc_fail "-nouser: found '$got'"
 got=$(find t -nogroup 2>err </dev/null)
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "-nogroup: find exited with status $rc"
-same_set "$got" "t/a.txt" || pc_fail "-nogroup: found '$got'"
+same_set "$got" "t/B.TXT" || pc_fail "-nogroup: found '$got'"
 pc_pass

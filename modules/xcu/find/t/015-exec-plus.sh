@@ -2,6 +2,16 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.015
+# MUTANT   find.plus_false
+# MUTANT   find.plus_fail_ignored
+# MUTANT   find.plus_skips
+# MUTANT   find.plus_drops_last
+# MUTANT   find.plus_reversed
+# MUTANT   find.plus_dup_last
+# MUTANT   find.status_always0
+# VARIANT  find.status2
+# VARIANT  find.status255
+# VARIANT  find.plus_single
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.015
 same_set() {
@@ -26,4 +36,15 @@ same_set "$got" "t/a.txt t/B.TXT t/sub/c.txt t/sub/d.c t/.hid" || pc_fail "the p
 find t -type f -exec false {} + >out 2>err </dev/null
 rc=$?
 [ "$rc" -ne 0 ] || pc_fail "find exited 0 although the utility failed"
+# the primary is true: what follows it in the expression is evaluated
+got=$(find t -type f -exec true {} + -print 2>err </dev/null)
+rc=$?
+[ "$rc" -eq 0 ] || pc_fail "-exec + then -print: find exited with status $rc"
+same_set "$got" "t/a.txt t/B.TXT t/sub/c.txt t/sub/d.c t/.hid" || pc_fail "-exec + then -print: found '$got'"
+# the pathnames reach the utility in the order they were evaluated, which -print before it shows
+: >plus.out
+find t -type f -print -exec sh -c 'printf "%s\n" "$@" >>plus.out' sh {} + >out 2>err </dev/null
+rc=$?
+[ "$rc" -eq 0 ] || pc_fail "-exec + with a script: find exited with status $rc"
+cmp out plus.out >/dev/null 2>&1 || pc_fail "the pathnames passed to the utility are not in the order they were evaluated: $(cat plus.out)"
 pc_pass

@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.034
+# MUTANT   find.loc_ignored
+# MUTANT   find.loc_messages_ignored
+# MUTANT   find.loc_lang_ignored
+# MUTANT   find.loc_all_ignored
+# MUTANT   find.loc_all_null_wins
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcloc.sh"
 pc_begin XCU.find.034

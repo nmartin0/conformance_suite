@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.032
+# MUTANT   find.newer_link_own
+# MUTANT   find.newer_dangling_old
+# MUTANT   find.opt_H_ignored
+# MUTANT   find.opt_L_ignored
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.032
 printf 't\n' >target || pc_unresolved "cannot create target"

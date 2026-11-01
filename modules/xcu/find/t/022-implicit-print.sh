@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.022
+# MUTANT   find.implicit_print_missing
+# MUTANT   find.implicit_print_with_exec
+# MUTANT   find.implicit_print_ungrouped
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.022
 same_set() {
@@ -31,4 +34,8 @@ got=$(find t -name a.txt -exec true {} \; -print 2>err </dev/null)
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "-exec and -print: find exited with status $rc"
 same_set "$got" "t/a.txt" || pc_fail "-exec and -print: found '$got'"
+got=$(find t -name a.txt -o -name d.c 2>err </dev/null)
+rc=$?
+[ "$rc" -eq 0 ] || pc_fail "implicit print after -o: find exited with status $rc"
+same_set "$got" "t/a.txt t/sub/d.c" || pc_fail "implicit print after -o: found '$got'"
 pc_pass

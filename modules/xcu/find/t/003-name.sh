@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.003
+# MUTANT   find.name_whole_path
+# MUTANT   find.name_case_blind
+# MUTANT   find.name_prefix
+# MUTANT   find.name_slash_path
+# MUTANT   find.name_no_glob
+# MUTANT   find.name_not_dirs
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.003
 same_set() {
@@ -18,6 +24,7 @@ printf 'd\n' >t/sub/d.c || pc_fail "cannot create t/sub/d.c"
 : >t/.hid || pc_fail "cannot create t/.hid"
 ln -s a.txt t/l || pc_fail "cannot create symbolic link"
 mkfifo t/p || pc_fail "cannot create FIFO"
+printf 'e\n' >t/a.txt.bak || pc_fail "cannot create t/a.txt.bak"
 pc_test
 got=$(find t -name '*.txt' 2>err </dev/null)
 rc=$?

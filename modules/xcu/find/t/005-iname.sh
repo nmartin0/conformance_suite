@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.005
+# MUTANT   find.iname_as_name
+# MUTANT   find.iname_lower
+# MUTANT   find.iname_upper
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.005
 same_set() {

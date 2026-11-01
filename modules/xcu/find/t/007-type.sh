@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.007
+# MUTANT   find.type_d_as_f
+# MUTANT   find.type_f_as_d
+# MUTANT   find.type_l_as_f
+# MUTANT   find.type_p_as_f
+# MUTANT   find.type_f_also_l
+# MUTANT   find.type_f_also_d
+# MUTANT   find.type_f_also_p
+# MUTANT   find.type_d_also_l
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.007
 same_set() {

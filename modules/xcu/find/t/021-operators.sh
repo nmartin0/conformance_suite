@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.021
+# MUTANT   find.not_ignored
+# MUTANT   find.paren_ignored
+# MUTANT   find.or_as_and
+# MUTANT   find.and_as_or
+# MUTANT   find.prec_or_tighter
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.021
 same_set() {
@@ -35,4 +40,16 @@ got=$(find t -type f -a -name a.txt 2>err </dev/null)
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "-a: find exited with status $rc"
 same_set "$got" "t/a.txt" || pc_fail "-a: found '$got'"
+got=$(find t \( -name a.txt -o -name sub \) -type d 2>err </dev/null)
+rc=$?
+[ "$rc" -eq 0 ] || pc_fail "( -o ) -type d: find exited with status $rc"
+same_set "$got" "t/sub" || pc_fail "( -o ) -type d: found '$got'"
+got=$(find t -type f -name '*.txt' -o -name sub 2>err </dev/null)
+rc=$?
+[ "$rc" -eq 0 ] || pc_fail "precedence with a directory: find exited with status $rc"
+same_set "$got" "t/a.txt t/sub/c.txt t/sub" || pc_fail "precedence with a directory: found '$got'"
+got=$(find t -type d -a ! -name sub -a ! -name empty 2>err </dev/null)
+rc=$?
+[ "$rc" -eq 0 ] || pc_fail "-a with !: find exited with status $rc"
+same_set "$got" "t" || pc_fail "-a with !: found '$got'"
 pc_pass

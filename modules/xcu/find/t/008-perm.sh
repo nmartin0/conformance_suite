@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.008
+# MUTANT   find.perm_exact_atleast
+# MUTANT   find.perm_atleast_exact
+# MUTANT   find.perm_atleast_any
+# MUTANT   find.perm_symbolic_ignored
+# MUTANT   find.perm_octal_ignored
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.008
 same_set() {
@@ -42,4 +47,12 @@ got=$(find t -type f -perm -u=rw 2>err </dev/null)
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "-perm -u=rw: find exited with status $rc"
 same_set "$got" "t/a.txt t/B.TXT t/sub/c.txt t/sub/d.c t/.hid" || pc_fail "-perm -u=rw: found '$got'"
+got=$(find t -type f -perm -g=rw 2>err </dev/null)
+rc=$?
+[ "$rc" -eq 0 ] || pc_fail "-perm -g=rw: find exited with status $rc"
+same_set "$got" "" || pc_fail "-perm -g=rw: found '$got'"
+got=$(find t -type f -perm -060 2>err </dev/null)
+rc=$?
+[ "$rc" -eq 0 ] || pc_fail "-perm -060: find exited with status $rc"
+same_set "$got" "" || pc_fail "-perm -060: found '$got'"
 pc_pass

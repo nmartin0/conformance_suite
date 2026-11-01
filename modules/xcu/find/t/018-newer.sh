@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.018
+# MUTANT   find.newer_ctime
+# MUTANT   find.newer_atime
+# MUTANT   find.newer_not
+# MUTANT   find.newer_or_equal
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.018
 # same_set GOT WANT: the words of GOT are exactly the words of WANT, each
@@ -30,6 +34,8 @@ mkdir n || pc_fail "cannot create n"
 touch -t 200501010101 n/ref || pc_fail "cannot create n/ref"
 touch -t 200101010101 n/o || pc_fail "cannot create n/o"
 touch -t 201001010101 n/w n/x || pc_fail "cannot create n/w"
+touch -t 200101010101 n/oa || pc_fail "cannot create n/oa"
+touch -a n/oa || pc_fail "cannot set the access time of n/oa"
 pc_test
 got=$(find n -type f -newer n/ref 2>err </dev/null)
 rc=$?

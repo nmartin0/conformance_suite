@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.027
+# MUTANT   find.mount_false
+# MUTANT   find.mount_prunes_all
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.027
 same_set() {

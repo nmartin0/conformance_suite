@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.014
+# MUTANT   find.exec_semi_true
+# MUTANT   find.exec_semi_false
+# MUTANT   find.exec_semi_batch
+# MUTANT   find.exec_arg_dot
+# MUTANT   find.exec_twice
+# MUTANT   find.exec_skips
+# MUTANT   find.exec_status_inverted
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.014
 same_set() {

@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.029
+# MUTANT   find.noshort_and
+# MUTANT   find.noshort_or
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.029
 printf 'x\n' >f || pc_unresolved "cannot create f"

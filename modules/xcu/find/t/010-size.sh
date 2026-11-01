@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.find.010
+# MUTANT   find.size_floor
+# MUTANT   find.size_c_blocks
+# MUTANT   find.size_k
+# MUTANT   find.size_c_off1
+# MUTANT   find.size_plus_ge
+# MUTANT   find.size_minus_le
+# MUTANT   find.size_plus_floor
 . "$PC_CORE/pc.sh"
 pc_begin XCU.find.010
 same_set() {
