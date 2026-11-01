@@ -5,7 +5,6 @@
  *
  * ASSERTION XSH.pthread_create.004
  * MUTANT    pthread_create.main_status_lost
- * MUTANT    pthread_create.main_skips_atexit
  * VARIANT   pthread_create.runs_late
  */
 #include "pc.h"

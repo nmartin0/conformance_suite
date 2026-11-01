@@ -241,32 +241,25 @@ int pthread_create(pthread_t *restrict t, const pthread_attr_t *restrict attr,
 	return 0;
 }
 
-/* ---------- return from main() ---------- */
+/* ---------- the end of the process ---------- */
 
-static int (*user_main)(int, char **, char **);
-
-static int main_wrapper(int argc, char **argv, char **envp)
+/*
+ * main_status_lost: a handler registered before the program's own runs
+ * last; while other threads live it ends the process with status 0.
+ */
+static void last_handler(void)
 {
-	int s = user_main(argc, argv, envp), others;
 	const char *m = mutant_of("pthread_create.");
+	int others;
 
 	(void)pthread_mutex_lock(&lk);
 	others = live;
 	(void)pthread_mutex_unlock(&lk);
 	if (others > 0 && IS("main_status_lost"))
-		exit(0);	/* the status of main() is lost while threads run */
-	if (others > 0 && IS("main_skips_atexit"))
-		_exit(s);	/* the process ends without exit()'s cleanup */
-	return s;
+		_exit(0);	/* the status of main() is lost while threads run */
 }
 
-typedef int (*start_main_fn)(int (*)(int, char **, char **), int, char **, void *, void *, void *, void *);
-
-int __libc_start_main(int (*mainp)(int, char **, char **), int argc, char **argv,
-		      void *a, void *b, void *c, void *d)
+__attribute__((constructor)) static void register_last(void)
 {
-	start_main_fn real = (start_main_fn)dlsym(RTLD_NEXT, "__libc_start_main");
-
-	user_main = mainp;
-	return real(main_wrapper, argc, argv, a, b, c, d);
+	(void)atexit(last_handler);
 }
