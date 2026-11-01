@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.036
+# MUTANT    ls.err_no_diag
+# MUTANT    ls.err_status0
+# MUTANT    ls.err_stdout_too
+# MUTANT    ls.err_stops
+# MUTANT    ls.err_stdout_only
+# VARIANT   ls.err_status2
+# VARIANT   ls.err_verbose
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.036
 nl='
@@ -30,4 +39,13 @@ case $data in
 *seenfile*) ;;
 *) pc_fail "the existing operand was not listed" ;;
 esac
+# the diagnostic goes to standard error and nothing else to standard output
+# than the listing of d (with or without its header)
+while IFS= read -r l; do
+	case $l in
+	seenfile|'d:'|'') ;;
+	'.'|'..') ;;
+	*) pc_fail "unexpected line on standard output: $l" ;;
+	esac
+done <out
 pc_pass

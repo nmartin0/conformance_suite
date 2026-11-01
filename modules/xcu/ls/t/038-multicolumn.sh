@@ -2,6 +2,19 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.038
+# MUTANT    ls.cols_across_for_C
+# MUTANT    ls.cols_down_for_x
+# MUTANT    ls.cols_ignore_width
+# MUTANT    ls.cols_overflow
+# MUTANT    ls.cols_truncate
+# MUTANT    ls.cols_ragged
+# MUTANT    ls.cols_drops_last
+# MUTANT    ls.cols_dup_first
+# VARIANT   ls.cols_tab
+# VARIANT   ls.cols_fewer
+# VARIANT   ls.cols_wide_gap
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.038
 LC_ALL=POSIX; export LC_ALL
@@ -16,10 +29,10 @@ for o in -C -x; do
 	[ "$rc" -eq 0 ] || pc_fail "ls $o exited with status $rc"
 	expand <raw >out
 	if [ "$o" = -C ]; then
-		got=$(awk '{ for (i = 1; i <= NF; i++) t[NR, i] = $i; if (NF > mx) mx = NF } END { for (j = 1; j <= mx; j++) for (r = 1; r <= NR; r++) if ((r, j) in t) print t[r, j] }' out)
+		got=$(awk '{ for (i = 1; i <= NF; i++) if ($i != "." && $i != "..") t[NR, i] = $i; if (NF > mx) mx = NF } END { for (j = 1; j <= mx; j++) for (r = 1; r <= NR; r++) if ((r, j) in t) print t[r, j] }' out)
 		how="down the columns"
 	else
-		got=$(awk '{ for (i = 1; i <= NF; i++) print $i }' out)
+		got=$(awk '{ for (i = 1; i <= NF; i++) if ($i != "." && $i != "..") print $i }' out)
 		how="across the rows"
 	fi
 	[ "$got" = "$want" ] || pc_fail "ls $o: reading $how gives '$(echo $got)', expected the collating order"

@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.034
+# MUTANT    ls.q_ignored
+# MUTANT    ls.q_newline_only
+# MUTANT    ls.q_control_only
+# MUTANT    ls.q_other_char
+# MUTANT    ls.q_deletes
+# MUTANT    ls.q_replaces_printable
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.034
 nl='

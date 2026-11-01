@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.048
+# MUTANT    ls.lastwins_Aa
+# MUTANT    ls.lastwins_Fp
+# MUTANT    ls.lastwins_m1
+# MUTANT    ls.lastwins_Cx
+# MUTANT    ls.union_Fp
+# MUTANT    ls.a_no_dots
+# MUTANT    ls.exclusive_error
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.048
 LC_ALL=POSIX; export LC_ALL
@@ -11,10 +20,13 @@ for n in 01 02 03 04 05 06 07 08 09 10 11 12; do : >"w$n" || pc_unresolved "cann
 mkdir w && mv w[0-9]* w/ || pc_unresolved "cannot fill w"
 pc_test
 # lines <options...>: the output of ls on d as one string
-lines() { ls "$@" d 2>err </dev/null | tr '\n' '|'; }
-got=$(lines -A -a)
+lines_all() { ls "$@" d 2>err </dev/null | tr '\n' '|'; }
+# a listing may also hold dot and dot-dot (DESCRIPTION): for the others they
+# are dropped, also from the start of a comma list
+lines() { ls "$@" d 2>err </dev/null | grep -v -F -x -e . -e .. -e ./ -e ../ | tr '\n' '|' | sed 's/^\(\.\{1,2\}, \)\{1,2\}//'; }
+got=$(lines_all -A -a)
 [ "$got" = '.|..|.h|a|b|c|' ] || pc_fail "ls -A -a: '$got', expected dot and dot-dot too"
-got=$(lines -a -A)
+got=$(lines_all -a -A)
 [ "$got" = '.h|a|b|c|' ] || pc_fail "ls -a -A: '$got', expected neither dot nor dot-dot"
 # the dot file is only for the two checks above: without -A or -a a name that
 # begins with a period is written only on an implementation-defined condition

@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.017
+# MUTANT    ls.s_ignored
+# MUTANT    ls.s_no_total
+# MUTANT    ls.s_no_count
+# MUTANT    ls.s_after_name
+# MUTANT    ls.s_total_last
+# VARIANT   ls.s_units
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.017
 LC_ALL=POSIX; export LC_ALL
@@ -23,6 +31,9 @@ esac
 sed -n '2,$p' out >rest || pc_fail "cannot post-process the output"
 seen=
 while read -r num name; do
+	case $name in
+	.|..) continue ;;
+	esac
 	case $num in
 	''|*[!0-9]*) pc_fail "block count '$num' is not a number" ;;
 	esac

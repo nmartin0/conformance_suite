@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.050
+# MUTANT    ls.enable_n_blocked
+# MUTANT    ls.disable_n_missing
+# MUTANT    ls.one_disables_n
+# MUTANT    ls.one_disables_l
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
+# VARIANT   ls.acl_flag
+# VARIANT   ls.names_numeric
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.050
 LC_ALL=POSIX; export LC_ALL

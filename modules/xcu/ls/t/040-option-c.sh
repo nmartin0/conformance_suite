@@ -2,6 +2,17 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.040
+# MUTANT    ls.c_ignored
+# MUTANT    ls.c_sort_ignored
+# MUTANT    ls.c_l_ignored
+# MUTANT    ls.c_S_not_last
+# MUTANT    ls.S_c_by_time
+# MUTANT    ls.c_before_S_loses_time
+# MUTANT    ls.l_always_ctime
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
+# VARIANT   ls.acl_flag
+# VARIANT   ls.names_numeric
 # Three files with three different orders: by modification time a1 c1 b1, by
 # status change time c1 b1 a1 (created in that order, 2 s apart), by size
 # b1 a1 c1.
@@ -18,7 +29,7 @@ pc_test
 # order <expected> <options...>
 order() {
 	w=$1; shift
-	got=$(ls "$@" d 2>err </dev/null | tr '\n' ' ')
+	got=$(ls "$@" d 2>err </dev/null | grep -v -F -x -e . -e .. | tr '\n' ' ')
 	[ "$got" = "$w " ] || pc_fail "ls $*: '$got', expected '$w'"
 }
 order 'a1 c1 b1' -t

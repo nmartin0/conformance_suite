@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.022
+# MUTANT    ls.d_ignored
+# MUTANT    ls.d_noarg_lists
+# MUTANT    ls.d_noarg_empty
+# MUTANT    ls.d_noarg_parent
+# MUTANT    ls.d_adds_slash
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.022
 nl='

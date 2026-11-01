@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.039
+# MUTANT    ls.f_no_a
+# MUTANT    ls.f_r_applied
+# MUTANT    ls.f_t_applied
+# MUTANT    ls.f_S_applied
+# VARIANT   ls.f_reversed
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.039
 LC_ALL=POSIX; export LC_ALL

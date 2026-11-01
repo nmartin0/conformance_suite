@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.037
+# MUTANT    ls.noop_empty
+# MUTANT    ls.noop_parent
+# MUTANT    ls.asgiven_strips_dot
+# MUTANT    ls.asgiven_basename
+# MUTANT    ls.named_dot_dropped
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.037
 nl='

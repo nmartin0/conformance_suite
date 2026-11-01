@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.018
+# MUTANT    ls.k_ignored
+# MUTANT    ls.k_total_unchanged
+# MUTANT    ls.k_s_unchanged
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.018
 LC_ALL=POSIX; export LC_ALL
@@ -28,4 +31,9 @@ case $t512$t1024 in
 ''|*[!0-9]*) pc_fail "totals '$t512' and '$t1024' are not numbers" ;;
 esac
 [ "$t1024" -eq $(((t512 + 1) / 2)) ] || pc_fail "total is $t512 in 512-byte units but $t1024 with -k"
+# the block count of the one file and the total of its directory are the same
+# amount of blocks, in the same unit
+tk=$(ls -lk d | sed -n 1p)
+tk=${tk#total }
+[ "$1" -eq "$tk" ] || pc_fail "ls -ks writes $1 blocks for the only file, but the total with -k is $tk"
 pc_pass

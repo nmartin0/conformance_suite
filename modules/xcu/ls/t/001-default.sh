@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.001
+# MUTANT    ls.default_reverse
+# MUTANT    ls.default_foldsort
+# MUTANT    ls.default_columns
+# MUTANT    ls.one_after_C_ignored
+# MUTANT    ls.ok_status1
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.001
 nl='

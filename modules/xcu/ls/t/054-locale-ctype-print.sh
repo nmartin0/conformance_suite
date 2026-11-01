@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.054
+# MUTANT    ls.ctype_ignores_lc_ctype
+# MUTANT    ls.ctype_ignores_lang
+# MUTANT    ls.ctype_ignores_lc_all
+# MUTANT    ls.ctype_lang_over_lc_ctype
+# MUTANT    ls.ctype_lc_all_lowest
+# MUTANT    ls.ctype_null_lc_all_overrides
+# MUTANT    ls.ctype_q_masks_high
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcloc.sh"
 pc_begin XCU.ls.054

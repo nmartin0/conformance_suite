@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.011
+# MUTANT    ls.sticky_t_as_x
+# MUTANT    ls.sticky_T_as_minus
+# MUTANT    ls.sticky_T_as_t
+# MUTANT    ls.sticky_t_as_T
+# VARIANT   ls.acl_flag
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.011
 modeof() {

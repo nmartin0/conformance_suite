@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.033
+# MUTANT    ls.f_ignored
+# MUTANT    ls.f_no_hidden
+# MUTANT    ls.f_drops_last
+# MUTANT    ls.f_dups
+# VARIANT   ls.f_reversed
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.033
 same_set() {

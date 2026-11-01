@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.052
+# MUTANT    ls.R_total_before_header
+# MUTANT    ls.R_sub_no_total
+# MUTANT    ls.R_no_blank
+# MUTANT    ls.R_header_no_colon
+# VARIANT   ls.R_omit_first_header
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
+# VARIANT   ls.acl_flag
+# VARIANT   ls.names_numeric
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.052
 LC_ALL=POSIX; export LC_ALL

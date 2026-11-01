@@ -2,6 +2,19 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.043
+# MUTANT    ls.lF_neither
+# MUTANT    ls.lF_exec_slash
+# MUTANT    ls.lF_dir_star
+# MUTANT    ls.lF_at_wrong_place
+# MUTANT    ls.lF_missing_mark
+# MUTANT    ls.lF_broken_error
+# MUTANT    ls.lp_broken_error
+# MUTANT    ls.lp_at
+# MUTANT    ls.lp_star
+# VARIANT   ls.lF_form1
+# VARIANT   ls.lF_form3
+# VARIANT   ls.lp_slash
+# VARIANT   ls.acl_flag
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.043
 LC_ALL=POSIX; export LC_ALL

@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.032
+# MUTANT    ls.H_l_nofollow
+# MUTANT    ls.L_l_nofollow
+# MUTANT    ls.H_dir_ignored
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
+# VARIANT   ls.acl_flag
+# VARIANT   ls.names_numeric
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.032
 LC_ALL=POSIX; export LC_ALL
@@ -17,9 +24,19 @@ case $l1 in
 "total "*) ;;
 *) pc_fail "first line '$l1' is not a total line, so the directory was not listed" ;;
 esac
-l2=$(sed -n 2p out)
+# a listing may also hold dot and dot-dot (DESCRIPTION)
+grep -v -e ' \.$' -e ' \.\.$' out >out.nd
+l2=$(sed -n 2p out.nd)
 case $l2 in
 -*" x") ;;
 *) pc_fail "second line '$l2' does not describe x" ;;
+esac
+ls -L -l d/sl >out 2>err </dev/null
+rc=$?
+[ "$rc" -eq 0 ] || pc_fail "ls -L -l exited with status $rc: $(cat err)"
+l1=$(sed -n 1p out)
+case $l1 in
+"total "*) ;;
+*) pc_fail "with -L: first line '$l1' is not a total line, so the directory was not listed" ;;
 esac
 pc_pass

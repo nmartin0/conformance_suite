@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.024
+# MUTANT    ls.r_ignored
+# MUTANT    ls.r_fold
+# VARIANT   ls.dot_A
+# VARIANT   ls.dot_a
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.024
 nl='
@@ -18,6 +22,11 @@ slurp() {
 }
 
 LC_ALL=POSIX; export LC_ALL
+# A listing may also hold dot and dot-dot (DESCRIPTION): they are dropped.
+nodot() {
+	grep -v -F -x -e . -e .. "$1" >"$1.nd"
+	slurp "$1.nd"
+}
 mkdir d || pc_fail "cannot create d"
 for n in b a C; do
 	: >"d/$n" || pc_fail "cannot create d/$n"
@@ -26,6 +35,6 @@ pc_test
 ls -r d >out 2>err </dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "ls -r exited with status $rc"
-slurp out
+nodot out
 [ "$data" = "b${nl}a${nl}C${nl}" ] || pc_fail "ls -r output is wrong"
 pc_pass
