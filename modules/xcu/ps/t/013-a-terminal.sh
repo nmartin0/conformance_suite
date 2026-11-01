@@ -5,7 +5,7 @@
 # MUTANT    ps.a_empty
 # MUTANT    ps.a_all
 # MUTANT    ps.exit1
-# VARIANT   ps.a_no_leaders
+# VARIANT   ps.a_with_leaders
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcpty.sh"
 pc_begin XCU.ps.013
