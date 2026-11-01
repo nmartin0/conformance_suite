@@ -2,8 +2,21 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.expr.006
+# MUTANT    expr.match_unanchored
+# MUTANT    expr.match_len_plus1
+# MUTANT    expr.match_fail_null
+# MUTANT    expr.match_fail_status0
+# MUTANT    expr.match_group_ignored
+# MUTANT    expr.match_group_last
+# MUTANT    expr.match_group_whole
+# MUTANT    expr.match_group_fail_zero
+# MUTANT    expr.match_ere
+# MUTANT    expr.match_empty_error
+# MUTANT    expr.colon_low_prec
 . "$PC_CORE/pc.sh"
 pc_begin XCU.expr.006
+LC_ALL=POSIX
+export LC_ALL
 nl='
 '
 # ex WANT STATUS ARGS...: expr ARGS must write WANT (without its newline)
@@ -47,4 +60,17 @@ ex ab 0 abc : '\(a.\)c'
 ex a 0 abc : '\(a\)\(b\)'
 ex '' 1 abc : '\(x\)'
 ex 123 0 abc123 : '[a-z]*\([0-9]*\)'
+# : binds tighter than the arithmetic operators
+ex 6 0 3 + abc : abc
+# the length of a variable, and the last segment of a path name, as the page shows them
+ex 3 0 Xabc : '.*' - 1
+ex file 0 /usr/abc/file : '.*/\(.*\)' '|' /usr/abc/file
+ex file 0 file : '.*/\(.*\)' '|' file
+# a group that matched the empty string gives the null string
+ex '' 1 abc : 'a\(x*\)'
+# the pattern is a basic regular expression: these characters are ordinary
+ex 3 0 'a+b' : 'a+b'
+ex 3 0 'a|b' : 'a|b'
+# an operand that looks like an integer is still a string to match
+ex 2 0 123 : 12
 pc_pass

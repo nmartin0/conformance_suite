@@ -2,8 +2,26 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.expr.002
+# MUTANT    expr.lt_as_le
+# MUTANT    expr.le_as_lt
+# MUTANT    expr.gt_as_ge
+# MUTANT    expr.ge_as_gt
+# MUTANT    expr.eq_as_ne
+# MUTANT    expr.ne_as_eq
+# MUTANT    expr.lt_as_gt
+# MUTANT    expr.le_as_ge
+# MUTANT    expr.cmp_string_only
+# MUTANT    expr.cmp_fold_case
+# MUTANT    expr.cmp_first_char
+# MUTANT    expr.cmp_mixed_zero
+# MUTANT    expr.cmp_strings_equal
+# MUTANT    expr.cmp_str_reversed
+# MUTANT    expr.cmp_true_left
+# MUTANT    expr.cmp_false_empty
 . "$PC_CORE/pc.sh"
 pc_begin XCU.expr.002
+LC_ALL=POSIX
+export LC_ALL
 nl='
 '
 # ex WANT STATUS ARGS...: expr ARGS must write WANT (without its newline)
@@ -39,6 +57,7 @@ ex 0 1 3 '<=' 2
 ex 1 0 3 '>' 2
 ex 0 1 2 '>' 3
 ex 1 0 3 '>=' 3
+ex 0 1 3 '>' 3
 ex 0 1 3 '>=' 4
 ex 1 0 2 = 2
 ex 0 1 2 = 3
@@ -55,4 +74,10 @@ ex 1 0 A '<' a
 ex 1 0 abc '!=' abd
 ex 0 1 abc '!=' abc
 ex 1 0 ab '<' abc
+# a string and an integer are compared as strings
+ex 1 0 10 '<' abc
+ex 0 1 abc '<' 10
+# an operand of only digits is an integer whatever its leading zeros
+ex 1 0 007 = 7
+ex 0 1 007 '!=' 7
 pc_pass

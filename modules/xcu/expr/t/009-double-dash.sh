@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.expr.009
+# MUTANT    expr.dd_invalid
+# MUTANT    expr.dd_eats_next
 . "$PC_CORE/pc.sh"
 pc_begin XCU.expr.009
 nl='

@@ -36,20 +36,24 @@ test       t/003-and-or.sh
 
 assertion  XCU.expr.004
 anchor     utilities/expr.html#EXIT STATUS
+anchor     utilities/expr.html#STDERR
+anchor     utilities/V3_chap01.html#1.4/STDERR
 class      required
 since      1992
 says       The exit status is zero when the result is neither null nor
            zero, and one when it is null or zero; the result is still
-           written.
+           written. Neither case writes anything to standard error.
 test       t/004-exit-status.sh
 
 assertion  XCU.expr.005
 anchor     utilities/expr.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4/CONSEQUENCES OF ERRORS
 class      required
 since      1992
 says       An invalid expression (an operator without its operand, or two
            operands with nothing between) exits with status two; division
-           by zero exits greater than one.
+           by zero exits greater than one. Each of these errors is reported
+           by a diagnostic on standard error.
 note       Division by zero is an error but the page does not say which
            of the two error classes it is, so any status of two or more is
            accepted.
