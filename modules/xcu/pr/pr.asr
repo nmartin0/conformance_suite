@@ -56,7 +56,7 @@ anchor     utilities/pr.html#OPTIONS/-m
 anchor     utilities/pr.html#STDOUT
 class      required
 since      1992
-says       -m writes one line from each file side by side, supports at least three files here, and leaves the header name field empty.
+says       -m writes one line from each file side by side, supports at least nine files, and leaves the header name field empty.
 test       t/007-merge.sh
 
 assertion  XCU.pr.008
@@ -113,3 +113,22 @@ says       The time in the page header of pr is the modification time of the
            file written in the zone that TZ names.
 timeout    60
 test       t/013-timezone-header.sh
+
+assertion  XCU.pr.014
+anchor     utilities/pr.html#OPTIONS/-e
+anchor     utilities/pr.html#OPTIONS/-i
+class      required
+says       A gap of zero given to -e or -i is the same as no gap: tab stops every eight columns.
+test       t/014-zero-gap.sh
+
+assertion  XCU.pr.015
+anchor     utilities/pr.html#OPTIONS/-i
+class      required
+says       -i replaces even a single space by a tab when that space reaches a tab column.
+test       t/015-single-space-tab.sh
+
+assertion  XCU.pr.016
+anchor     utilities/pr.html#STDOUT
+class      required
+says       The date in the page header of a pr -m listing, or of a page read from standard input, is the current time, not a modification time.
+test       t/016-current-time-header.sh

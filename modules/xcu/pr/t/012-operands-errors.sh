@@ -2,6 +2,19 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.pr.012
+# MUTANT    pr.stdin_not_read
+# MUTANT    pr.dash_is_file
+# MUTANT    pr.files_first_only
+# MUTANT    pr.files_last_only
+# MUTANT    pr.file2_header_wrong
+# MUTANT    pr.err_status0
+# MUTANT    pr.err_no_diag
+# MUTANT    pr.err_stdout
+# MUTANT    pr.err_stops
+# MUTANT    pr.err_status_last
+# MUTANT    pr.r_ignored
+# VARIANT   pr.err_status2
+# VARIANT   pr.err_status255
 . "$PC_CORE/pc.sh"
 pc_begin XCU.pr.012
 LC_ALL=POSIX
@@ -25,6 +38,11 @@ pr -t nonexistent-file </dev/null >/dev/null 2>pr.err
 rc=$?
 [ "$rc" -gt 0 ] || pc_fail "a missing file gave status 0"
 [ -s pr.err ] || pc_fail "a missing file gave no diagnostic"
+got=$(pr -t f1 nonexistent-file f2 2>pr.err3 </dev/null)
+rc=$?
+[ "$got" = "a${NL}b" ] || pc_fail "a missing file between two others stopped the output"
+[ "$rc" -gt 0 ] || pc_fail "a missing file between two others gave status 0"
+[ -s pr.err3 ] || pc_fail "a missing file between two others gave no diagnostic"
 got=$(pr -t -r nonexistent-file f1 2>pr.err2 </dev/null)
 [ "$got" = a ] || pc_fail "-r did not keep the other file's output"
 [ ! -s pr.err2 ] || pc_fail "-r did not suppress the diagnostic"

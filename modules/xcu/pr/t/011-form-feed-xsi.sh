@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.pr.011
+# MUTANT    pr.f_ignored
+# MUTANT    pr.f_every_line
+# VARIANT   pr.ff_no_final
 . "$PC_CORE/pc.sh"
 pc_begin XCU.pr.011
 LC_ALL=POSIX
@@ -16,4 +19,10 @@ pc_test
 got=$(pr -f f 2>/dev/null </dev/null; printf x)
 case $got in *"$FF"*) ;; *) pc_fail "-f output contains no form-feed";; esac
 case $got in *"L1$NL"*"L56$NL"*"Page 2"*"L57$NL"*) ;; *) pc_fail "-f output lacks the headers and lines of both pages";; esac
+n=$(printf '%s' "$got" | tr -cd '\f' | wc -c)
+[ "$n" -ge 1 ] && [ "$n" -le 2 ] || pc_fail "-f output has $n form-feeds for two pages"
+between=${got#*"L56$NL"}
+between=${between%%"Page 2"*}
+n=$(printf '%s' "$between" | tr -cd '\n' | wc -c)
+[ "$n" -le 2 ] || pc_fail "-f output still has the newlines of a trailer between the pages"
 pc_pass
