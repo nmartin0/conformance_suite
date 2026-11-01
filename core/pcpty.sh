@@ -35,7 +35,7 @@ pc_pty_run() {
 
 pc_pty_term() {
 	PCT=
-	for pc_t in vt100 xterm ansi linux dumb; do
+	for pc_t in vt100 xterm ansi dumb; do
 		if command tput -T "$pc_t" clear >/dev/null 2>&1 </dev/null; then PCT=$pc_t; break; fi
 	done
 	[ -n "$PCT" ] || pc_unresolved "no known terminal type"

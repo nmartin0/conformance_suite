@@ -333,9 +333,12 @@ fi
 # ---------- helpers ----------
 
 pc_bin=$pc_results/build/core
-pc_k=$(pc_cache_key "probe: $pc_cc -D_XOPEN_SOURCE=800" "$pc_root"/core/*.c "$pc_root"/core/*.h)
+pc_target=$("$pc_cc" -dumpmachine 2>/dev/null </dev/null | tr -cd 'A-Za-z0-9._-')
+pc_targetflag=
+[ -z "$pc_target" ] || pc_targetflag="-DPC_TARGET=\"$pc_target\""
+pc_k=$(pc_cache_key "probe: $pc_cc -D_XOPEN_SOURCE=800 $pc_target" "$pc_root"/core/*.c "$pc_root"/core/*.h)
 if ! pc_cache_get "$pc_k" "$pc_bin/probe"; then
-	"$pc_cc" -D_XOPEN_SOURCE=800 -I "$pc_root/core" -o "$pc_bin/probe" \
+	"$pc_cc" -D_XOPEN_SOURCE=800 $pc_targetflag -I "$pc_root/core" -o "$pc_bin/probe" \
 	    "$pc_root/core/probe.c" >"$pc_trustdir/probe.txt" 2>&1 </dev/null ||
 	    pc_abort "cannot build probe (see $pc_trustdir/probe.txt)"
 	pc_cache_put "$pc_k" "$pc_bin/probe"

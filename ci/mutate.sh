@@ -9,7 +9,7 @@
 #                     [--cache] [-j N] [--tries N] [--root DIR]
 #                     [ID-pattern ...]
 #
-# Runs off-system on a Linux or BSD machine with LD_PRELOAD. For each test
+# Runs off-system, on a machine where LD_PRELOAD plants the faults. For each test
 # that declares MUTANT lines (ci/lint.py --list-mutants):
 #   1. run the test normally (the baseline)
 #   2. run it once per mutant, with the planted fault active

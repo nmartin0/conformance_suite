@@ -67,15 +67,14 @@ every other project it learns from. They are not optional.
     variant cites the passage that allows it.
 12. The suite judges whatever implementation it runs on; a run describes
     that environment and nothing else. run.log records the system's name
-    and the system the compiler built for, so a reader can tell, for
-    example, a native FreeBSD build from a Linux build run through
-    FreeBSD's Linux compatibility layer. No test or driver code branches
-    on the name of an operating system; where a facility outside POSIX
-    helps a test set up (setgroups()), its presence is found by building,
-    not by name. (The CI libraries that plant faults and variants through
-    LD_PRELOAD still name a C library's alternate symbols, such as
-    glibc's open64; they decide no verdict, and go when planting moves to
-    compile time.)
+    and the system the compiler built for, so a reader can tell a native
+    build from one run through a compatibility layer. No test, driver or
+    CI code names a C library or an operating system, or branches on one;
+    where a facility outside POSIX helps a test set up (setgroups()), its
+    presence is found by building, not by name. The CI libraries that plant
+    faults and variants through LD_PRELOAD use standard interfaces only; a
+    fault that would need a library's internals is not planted, and its
+    assertion carries `nomutant` with the reason.
 
 ## Checking
 

@@ -28,7 +28,7 @@ do not depend on anyone's reading are the empirical ones.
 4. **Empirical gate.** `ci/mutate.sh` on every reference library: every
    fault CAUGHT, no variant REJECTED, nothing FLAKY. Then the reference
    runs, compared with the predictions; matches are reviewed as well as
-   mismatches. A Linux result never changes an expectation.
+   mismatches. A result on a reference system never changes an expectation.
 5. **Adversarial review.** A reviewer given only the standard and the code
    (not the builder's reasoning or reports) tries to show that some test
    asks for more than the text, accepts less, or that a variant models a

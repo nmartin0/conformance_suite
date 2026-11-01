@@ -87,29 +87,13 @@ static int sysinfo(void)
 	printf("sysname %s\nnodename %s\nrelease %s\nversion %s\n"
 	    "machine %s\n", u.sysname, u.nodename, u.release, u.version,
 	    u.machine);
-	/* The system the compiler builds for, from its predefined macros: a
-	 * record for whoever reads the results (a Linux build run through
-	 * another system's compatibility layer says "linux"). Nothing depends
-	 * on it. */
-	printf("target %s\n",
-#if defined(__linux__)
-	    "linux"
-#elif defined(__FreeBSD__)
-	    "freebsd"
-#elif defined(__NetBSD__)
-	    "netbsd"
-#elif defined(__OpenBSD__)
-	    "openbsd"
-#elif defined(__DragonFly__)
-	    "dragonfly"
-#elif defined(__APPLE__) && defined(__MACH__)
-	    "darwin"
-#elif defined(__sun) && defined(__SVR4)
-	    "sunos"
-#else
-	    "other"
+	/* The system the compiler builds for, as the compiler names it
+	 * (posixcheck.sh passes it in): a record for whoever reads the
+	 * results, so that a build can be told from a run through a
+	 * compatibility layer. Nothing depends on it. */
+#ifdef PC_TARGET
+	printf("target %s\n", PC_TARGET);
 #endif
-	    );
 #ifdef _POSIX_VERSION
 	printf("posix_version %ld\n", (long)_POSIX_VERSION);
 #endif

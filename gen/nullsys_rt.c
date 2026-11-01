@@ -33,7 +33,7 @@
 #include <unistd.h>
 
 #ifndef RTLD_NEXT
-#error "this system's <dlfcn.h> has no RTLD_NEXT (try -D_GNU_SOURCE)"
+#error "this system's <dlfcn.h> has no RTLD_NEXT (a feature macro that exposes it may be needed)"
 #endif
 
 extern char **environ;

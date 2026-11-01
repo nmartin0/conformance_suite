@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
-# usage: ci/selftest-mutate.sh [mutate.sh options, such as --cc musl-gcc, --cache, -j 2]
+# usage: ci/selftest-mutate.sh [mutate.sh options, such as --cc cc2, --cache, -j 2]
 #
 # ci/selftest/modules is a tree of fixture modules (not part of the suite)
 # whose faults and variants each force one outcome: CAUGHT, MISSED,
