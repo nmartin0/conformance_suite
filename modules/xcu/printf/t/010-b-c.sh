@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.printf.010
+# MUTANT    printf.c_ignored
+# MUTANT    printf.c_literal
+# MUTANT    printf.c_arg_only
+# MUTANT    printf.c_pass_only
+# MUTANT    printf.c_keeps_format
+# MUTANT    printf.c_keeps_later_args
+# MUTANT    printf.c_status1
+# VARIANT   printf.nofloat
 . "$PC_CORE/pc.sh"
 pc_begin XCU.printf.010
 nl='
@@ -33,4 +41,5 @@ pf "a" '%b\n' 'a\c'
 pf "" '%b' '\c'
 pf "a,b," '%b,' a b
 pf "a,b" '%b,%b,' a 'b\c'
+pf "a,b" '%b,' a 'b\c' c
 pc_pass

@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.printf.008
+# MUTANT    printf.c_all
+# MUTANT    printf.c_last
+# MUTANT    printf.c_second
+# MUTANT    printf.c_none
+# MUTANT    printf.c_empty_space
+# VARIANT   printf.nofloat
+# VARIANT   printf.c_empty_null
 . "$PC_CORE/pc.sh"
 pc_begin XCU.printf.008
 nl='
@@ -29,4 +36,16 @@ pf "xy" '%c%c' xa yb
 pf "A" '%c' A
 pf "1" '%c' 123
 pf "[a]" '[%c]' ab
+# An empty argument writes nothing or a null byte; the text allows both.
+for e in sh exec; do
+	if [ $e = sh ]; then
+		got=$(printf '[%c]' '' 2>/dev/null | od -An -v -tx1 | tr -d ' \n')
+	else
+		got=$( (exec printf '[%c]' '') 2>/dev/null | od -An -v -tx1 | tr -d ' \n')
+	fi
+	case $got in
+	5b5d | 5b005d) ;;
+	*) pc_fail "$e printf: %c of an empty argument wrote neither nothing nor a null byte (bytes: $got)" ;;
+	esac
+done
 pc_pass
