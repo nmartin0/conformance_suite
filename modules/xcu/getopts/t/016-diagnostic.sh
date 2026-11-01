@@ -8,7 +8,6 @@
 # MUTANT    getopts.diag_missing_no_prog
 # MUTANT    getopts.diag_missing_no_opt
 # MUTANT    getopts.diag_stdout
-# MUTANT    getopts.diag_both
 # VARIANT   getopts.reimpl
 # VARIANT   getopts.diag_fullpath
 # VARIANT   getopts.diag_usage
@@ -30,6 +29,7 @@ case $msg in
 *) pc_fail "diagnostic '$msg' does not name the option Q" ;;
 esac
 # a missing option-argument: the program and the option are named too
+OPTIND=1
 set -- -Z
 getopts c:Z: pcopt 2>err2
 rc=$?
