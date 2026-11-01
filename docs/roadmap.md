@@ -42,34 +42,120 @@ verified; this file is the plan. Update both when a step finishes.
 
 ## Status
 
-Every function page, every header and every utility page has a module
-(about 1,026 modules, 8,890 assertions), all reviewed blind. The suite has been
-run, as root and as an ordinary user, on Linux, FreeBSD and an illumos
-distribution (NetBSD and OpenBSD with an earlier version of it). Each run was
-triaged against the standard's text alone and the test bugs it exposed were
-fixed (reports in `reports/` and `reports/triage/`). Hardening (planted
-faults and conforming variants, `docs/hardening.md`) has begun: five pilot
-modules are done and 6,373 assertions are still without it.
+Every function page and every utility page has a module (1,026 modules,
+8,925 assertions), all reviewed blind. Twenty-one header pages and the sccs
+page have none (see Next, 1). The suite has been run, as root and as an
+ordinary user, on Linux, FreeBSD and an illumos distribution (NetBSD and
+OpenBSD with an earlier version of it). Each run was triaged against the
+standard's text alone and the test bugs it exposed were fixed (reports in
+`reports/` and `reports/triage/`). Planted faults (`docs/hardening.md`) have
+been written for 3,277 assertions; the rule that every assertion needs one
+is being retired (Next, 2).
+
+The coverage ledger (`ci/coverage.py`, 36,076 units on pages with modules):
+58% covered by assertions, 5% partly covered, 31% set aside as not
+testable or not a requirement on the implementation, 6% `todo`, 0.4% not
+yet classified. A random sample of the set-aside units suggests about one
+in ten is testable after all.
 
 ## Next
 
-1. **First runs on real systems** (mostly done; see Status). Remaining: re-run
-   NetBSD and OpenBSD and the illumos distribution with the current suite,
-   and the user's own OS. Triage each failure against the standard before
-   touching a test.
-2. **Hardening** (begun; `docs/hardening.md`): faults and variants for the
-   remaining modules, the neutral symbol discovery for fault libraries, a
-   `--sut-sh` option for `ci/mutate.sh`, and header mutants for Tier 0.
-3. **Untested residue**: terminal-dependent utilities beyond the pty tests
-   already written for stty, tabs, tput and vi (talk, write, vi screen
-   contents, -r/-t/-w), job control beyond one assertion, the ex/vi command sets
-   (many `todo` units in the `.cov` files), history/mail/vi-mode parts of
-   `sh`.
-4. **Cleanup**: simplify the older option and root handling in the first
-   231 modules; write the remaining entries of `standard-issues-report.md`
-   (Q-75 onward, SI-89 to SI-96).
-5. **Python port** (deferred), and the controller that copies the tree to a
-   VM or test machine over ssh, runs it and copies results back.
+### 1. Missing tests (first: nothing adds more power)
+
+- `ci/coverage.py`: fail on a standard page that has no module; today a
+  page with no module is never counted as unaccounted.
+- Modules for the 21 header pages without one (ctype.h, devctl.h,
+  endian.h, fmtmsg.h, grp.h, iconv.h, libgen.h, libintl.h, monetary.h,
+  ndbm.h, netinet_tcp.h, pwd.h, search.h, stdatomic.h, string.h, strings.h,
+  sys_time.h, sys_times.h, sys_uio.h, syslog.h, threads.h) and for sccs.
+- Classify the 130 unclassified units (mostly the ctype and strcasecmp
+  families).
+- Write tests for the 2,175 `todo` units, largest first (vi, ex, file, sh,
+  bc). Cover before hardening.
+- Re-audit the set-aside units (none, untestable, impl, optional),
+  starting with "may fail" errors (if the call fails for that cause, the
+  error must be the one listed), implementation-defined values (checkable
+  for range and consistency) and "untestable: needs privilege" (the suite
+  runs as root).
+
+### 2. Verifying the suite itself
+
+Two questions, kept apart. Whether a test checks exactly what its
+assertion says can be decided mechanically; whether the assertion is what
+the standard requires can only be cross-checked (independent readings,
+real systems, the standards committee).
+
+- Checks that ran: every test logs each check it reaches; a test that
+  ends without reaching its checks is reported as a test failure, not a
+  pass. (Change to `core/pc.c` and `core/pc.sh`.)
+- Validated or not: each assertion gets a status. VALIDATED when the blind
+  second reading agrees and its verdict on at least two independent
+  systems either matches or every disagreement is a triaged, documented
+  deviation of that system; otherwise UNVALIDATED. Uses the run data
+  already collected. (The `derived` field and verdict of the earlier
+  design.)
+- Allowed and forbidden outcomes as data: each check declares the results
+  it accepts; a self-test feeds it every accepted result (must PASS) and
+  one result from each forbidden class (must FAIL). Exact per check, and no
+  faulty implementations to build. Pilot on three modules (one function,
+  one utility, one shell section) and time it before converting the rest.
+- Sentence to check traceability: every requirement sentence an assertion
+  covers maps to at least one check and every check to a sentence;
+  enforced by the lint.
+- Planted faults become a spot-check: retire the lint rule that every
+  assertion declares a MUTANT; keep `ci/mutate.sh` for sampled audits, and
+  read the reason column (a fault "caught" by a crash proves nothing).
+  Faults that cannot be judged on the development machine are collected in
+  `ci/pending.list` (`docs/pending-checks.md`).
+- A different second reader (another model, or a person) for disputed and
+  ambiguous assertions; truly ambiguous text goes to the standards
+  committee.
+- Cheap robustness runs: repeated runs to find flaky tests; the C tests
+  built with the strictest warnings and with memory-error detectors; every
+  shell test under several shells; a run in a stripped environment (env -i,
+  odd umask, time zone and locale).
+- Before the next hardening or verification batch: the final full run of
+  the current tree and the blind reading of the assertions added in
+  hardening batches 3 and 4, both skipped for bundle 0052.
+
+### 3. Reference systems
+
+Real systems are independent readings of the standard: where they agree
+against a test, the test is re-read; the text decides. Majority never does.
+
+- Re-run NetBSD, OpenBSD and the illumos distribution with the current
+  suite.
+- New systems, in order of value: PureDarwin (ready-made x86_64 images,
+  pending a check of where they are hosted), QNX (free non-commercial
+  licence, QEMU x86_64 images, needs an account), Oracle Solaris 11.4 CBE
+  (free for non-production use), macOS on real Apple hardware (licence
+  forbids other hardware).
+- The user's own BSD fork, the eventual target for full conformance.
+- Triage each failure against the standard before touching a test.
+
+### 4. Untested residue
+
+Terminal-dependent utilities beyond the pty tests already written for
+stty, tabs, tput and vi (talk, write, vi screen contents, -r/-t/-w), job
+control beyond one assertion, the ex/vi command sets, history/mail/vi-mode
+parts of `sh`.
+
+### 5. Cleanup
+
+Simplify the older option and root handling in the first 231 modules;
+write the remaining entries of `standard-issues-report.md` (Q-75 onward,
+SI-89 to SI-96).
+
+### 6. Python port (deferred), and the controller that copies the tree to a
+VM or test machine over ssh, runs it and copies results back.
+
+### Not now
+
+- A full formal model of POSIX checked against recorded traces. Worth it
+  only for the file-system calls, where the standard allows many outcomes,
+  and only after the items above.
+- A fully conforming reference system built to check the suite against.
+  Several real systems plus the text do that job.
 
 ## Standard issues
 
