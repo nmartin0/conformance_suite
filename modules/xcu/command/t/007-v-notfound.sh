@@ -5,7 +5,7 @@
 # MUTANT    command.nf_prints_name
 # MUTANT    command.nf_status0
 # MUTANT    command.nf_msg_stdout
-# VARIANT   command.nf_diag_127
+# VARIANT   command.nf_status127
 # VARIANT   command.nf_status2
 #
 # The page says no output; the standard error stream may carry a

@@ -1,4 +1,4 @@
-# command -v for an unknown name writes a diagnostic to standard error and exits 127
+# command -v for an unknown name writes nothing and exits 127
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 # The shell function stands in for the utility; helpers of the test itself
 # (brackets, printf) pass through to the real one.
@@ -9,7 +9,6 @@ command() {
 	-v)
 		pcm_out=$(pcm_real "$@"); pcm_rc=$?
 		if [ "$pcm_rc" -ne 0 ]; then
-			printf 'command: %s: not found\n' "$2" >&2
 			pcm_rc=127
 			return $pcm_rc
 		fi

@@ -7,7 +7,7 @@
 # MUTANT    command.alias_silent
 # MUTANT    command.alias_status1
 # MUTANT    command.alias_no_newline
-# VARIANT   command.alias_dashdash
+# VARIANT   command.alias_optend
 # VARIANT   command.alias_dquote
 #
 # The page does not fix the line's format, only that it is a command line
