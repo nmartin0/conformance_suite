@@ -2,6 +2,17 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.pr.001
+# MUTANT    pr.page_len65
+# MUTANT    pr.page_len67
+# MUTANT    pr.trailer4
+# MUTANT    pr.header4a
+# MUTANT    pr.header4b
+# MUTANT    pr.date_now
+# MUTANT    pr.page_stuck
+# MUTANT    pr.page_zero
+# MUTANT    pr.name_blank
+# MUTANT    pr.last_trailer0
+# MUTANT    pr.last_trailer4
 . "$PC_CORE/pc.sh"
 pc_begin XCU.pr.001
 LC_ALL=POSIX
