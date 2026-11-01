@@ -2,12 +2,19 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.kill.001
+# MUTANT    kill.default_usr1
+# MUTANT    kill.default_kill
+# MUTANT    kill.default_drops
+# MUTANT    kill.send_stdout
+# MUTANT    kill.send_status1
+# MUTANT    kill.exec_drops
+# MUTANT    kill.exec_exit1
 . "$PC_CORE/pc.sh"
 pc_begin XCU.kill.001
 p=
-trap 'kill -s KILL "$p" 2>/dev/null' EXIT
+trap 'command kill -s KILL "$p" 2>/dev/null' EXIT
 pc_test
-sleep 100 &
+sleep 30 &
 p=$!
 sleep 1
 kill "$p" >out 2>/dev/null
@@ -17,11 +24,11 @@ rc=$?
 wait "$p"
 st=$?
 [ "$st" -gt 128 ] || pc_fail "the process did not end by a signal (status $st)"
-n=$(kill -l "$st")
+n=$(command kill -l "$st")
 [ "$n" = TERM ] || pc_fail "the process ended by '$n', wanted TERM"
 # the same through a direct exec of the utility (a shell's own kill may be
 # an intrinsic that never reaches the utility)
-sleep 100 &
+sleep 30 &
 p=$!
 sleep 1
 env kill "$p" >out 2>/dev/null
@@ -31,6 +38,6 @@ rc=$?
 wait "$p"
 st=$?
 [ "$st" -gt 128 ] || pc_fail "after env kill the process did not end by a signal (status $st)"
-n=$(kill -l "$st")
+n=$(command kill -l "$st")
 [ "$n" = TERM ] || pc_fail "after env kill the process ended by '$n', wanted TERM"
 pc_pass
