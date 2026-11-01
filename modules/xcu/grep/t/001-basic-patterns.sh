@@ -28,4 +28,6 @@ got=$(grep 'p\{2\}' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "apple${NL}rc=0" ] || pc_fail "interval expression in a BRE did not select exactly apple"
 got=$(grep '' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "apple${NL}banana${NL}cherry${NL}rc=0" ] || pc_fail "a null pattern did not select every line"
+got=$(grep an <in 2>/dev/null; printf 'rc=%s' "$?")
+[ "$got" = "banana${NL}rc=0" ] || pc_fail "with no file operand the standard input was not searched"
 pc_pass

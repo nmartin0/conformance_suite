@@ -27,4 +27,12 @@ got=$(grep -c a f1 f2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "f1:2${NL}f2:1${NL}rc=0" ] || pc_fail "-c did not give f1:2 and f2:1"
 got=$(grep a f1 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "a${NL}a${NL}rc=0" ] || pc_fail "a single file operand produced a prefix"
+got=$(grep -c zzz f1 f2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "f1:0${NL}f2:0${NL}rc=1" ] || pc_fail "-c did not give a zero count for each file"
+mkdir d && printf 'a\n' >d/g1 && printf 'a\n' >d/g2 || pc_fail "cannot create input"
+got=$(grep a d/g1 d/g2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "d/g1:a${NL}d/g2:a${NL}rc=0" ] || pc_fail "the prefix was not the file operand as given"
+printf 'other\na\n' >sin || pc_fail "cannot create input"
+got=$(grep a f2 <sin 2>/dev/null; printf 'rc=%s' "$?")
+[ "$got" = "a${NL}rc=0" ] || pc_fail "the standard input was searched although a file operand was given"
 pc_pass

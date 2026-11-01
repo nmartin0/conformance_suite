@@ -24,4 +24,8 @@ got=$(grep -F "a.c${NL}def" in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "a.c${NL}def${NL}rc=0" ] || pc_fail "-F with two newline-separated strings gave the wrong lines"
 got=$(grep -E 'a|d' in 2>/dev/null </dev/null | while IFS= read -r l; do printf '[%s]' "$l"; done)
 [ "$got" = "[abc][abbc][a.c][def]" ] || pc_fail "-E 'a|d' gave the wrong lines"
+got=$(grep -E '' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "abc${NL}abbc${NL}a.c${NL}def${NL}rc=0" ] || pc_fail "a null extended expression did not select every line"
+got=$(grep -F '' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "abc${NL}abbc${NL}a.c${NL}def${NL}rc=0" ] || pc_fail "a null fixed string did not select every line"
 pc_pass

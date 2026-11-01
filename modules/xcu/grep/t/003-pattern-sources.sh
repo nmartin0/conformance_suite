@@ -35,4 +35,6 @@ got=$(grep -e "three${NL}one" in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "one${NL}three${NL}rc=0" ] || pc_fail "a newline-separated -e list was not split"
 got=$(grep -e -x in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "rc=1" ] || pc_fail "-e did not take a pattern starting with a hyphen-minus"
+got=$(grep -e "one${NL}${NL}four" in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "one${NL}two${NL}three${NL}four${NL}rc=0" ] || pc_fail "a null pattern inside a newline-separated -e list did not match every line"
 pc_pass

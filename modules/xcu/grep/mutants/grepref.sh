@@ -8,7 +8,7 @@ NL='
 '
 mode=B c= l= q= i= n= s= v= x=
 nsrc=0 nesrc=0
-tmp=${TMPDIR:-/tmp}/pcg.$$
+tmp=/tmp/pcg.$$
 trap 'rm -f "$tmp" "$tmp.p" "$tmp.o"' EXIT
 
 diag() { echo "grep: $*" >&2; }

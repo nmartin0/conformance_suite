@@ -32,4 +32,14 @@ got=$(grep -ix 'HELLO' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "Hello${NL}HELLO${NL}rc=0" ] || pc_fail "-i with -x gave the wrong lines"
 got=$(grep -v '' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "rc=1" ] || pc_fail "-v with a null pattern selected a line"
+printf 'ab\nabc\nbc\nxab\n' >in2 || pc_fail "cannot create input"
+got=$(grep -x ab in2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "ab${NL}rc=0" ] || pc_fail "-x selected a line that only starts or ends with the pattern"
+got=$(grep -Ex 'ab|bc' in2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "ab${NL}bc${NL}rc=0" ] || pc_fail "-x with alternatives did not require the whole line"
+got=$(grep -vx ab in2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "abc${NL}bc${NL}xab${NL}rc=0" ] || pc_fail "-v with -x gave the wrong lines"
+printf 'Ab\nb\n' >in3 || pc_fail "cannot create input"
+got=$(grep -iv ab in3 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "b${NL}rc=0" ] || pc_fail "-i with -v gave the wrong lines"
 pc_pass
