@@ -25,7 +25,7 @@ anchor     utilities/pr.html#OPTIONS
 anchor     utilities/pr.html#STDOUT
 class      required
 since      1992
-says       -h replaces the name in the header, +page begins at that page, and pages from standard input have an empty name field.
+says       -h replaces the name in the header, +page begins at that page, and pages from standard input have an empty name field and the current time as date.
 test       t/003-header-page.sh
 
 assertion  XCU.pr.004
@@ -56,7 +56,7 @@ anchor     utilities/pr.html#OPTIONS/-m
 anchor     utilities/pr.html#STDOUT
 class      required
 since      1992
-says       -m writes one line from each file side by side, supports at least three files here, and leaves the header name field empty.
+says       -m writes one line from each file side by side, supports at least nine files, leaves the header name field empty and dates the header with the current time.
 test       t/007-merge.sh
 
 assertion  XCU.pr.008
@@ -113,3 +113,10 @@ says       The time in the page header of pr is the modification time of the
            file written in the zone that TZ names.
 timeout    60
 test       t/013-timezone-header.sh
+
+assertion  XCU.pr.014
+anchor     utilities/pr.html#OPTIONS/-e
+anchor     utilities/pr.html#OPTIONS/-i
+class      required
+says       A gap of zero given to -e or -i is the same as no gap: tab stops every eight columns.
+test       t/014-zero-gap.sh

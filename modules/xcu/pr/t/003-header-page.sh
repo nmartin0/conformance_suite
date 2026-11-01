@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.pr.003
+# MUTANT    pr.h_ignored
+# MUTANT    pr.h_empty
+# MUTANT    pr.h_first_page_only
+# MUTANT    pr.plus_ignored
+# MUTANT    pr.plus_next
+# MUTANT    pr.plus_prev
+# MUTANT    pr.plus_renumber
+# MUTANT    pr.empty_name_filled
+# MUTANT    pr.empty_date_fixed
 . "$PC_CORE/pc.sh"
 pc_begin XCU.pr.003
 LC_ALL=POSIX
@@ -15,9 +24,17 @@ TZ=UTC0 touch -t 202001020304 f || pc_unresolved "cannot set the modification ti
 pc_test
 got=$(TZ=UTC0 pr -l 15 -h 'My Title' f 2>/dev/null </dev/null; printf x)
 case $got in "$NL${NL}Jan  2 03:04 2020 My Title Page 1$NL$NL$NL"*) ;; *) pc_fail "-h did not replace the file name in the header";; esac
+got=$(TZ=UTC0 pr -l 15 -h 'My Title' f 2>/dev/null </dev/null)
+l=$(printf '%s\n' "$got" | sed -n 18p)
+[ "$l" = "Jan  2 03:04 2020 My Title Page 2" ] || pc_fail "-h did not replace the file name in the header of the second page"
 got=$(TZ=UTC0 pr -l 15 +2 f 2>/dev/null </dev/null; printf x)
 case $got in "$NL${NL}Jan  2 03:04 2020 f Page 2$NL$NL${NL}L6$NL"*) ;; *) pc_fail "+2 did not begin the output at page 2";; esac
 case $got in *L5$NL*) pc_fail "+2 output still has lines of page 1";; esac
 got=$(TZ=UTC0 pr -l 15 <f 2>/dev/null; printf x)
 case $got in "$NL$NL"*"  Page 1$NL$NL${NL}L1$NL"*) ;; *) pc_fail "a page from standard input does not have an empty file field";; esac
+d1=$(TZ=UTC0 date "+%b %e %H:%M %Y")
+got=$(TZ=UTC0 pr -l 15 <f 2>/dev/null)
+d2=$(TZ=UTC0 date "+%b %e %H:%M %Y")
+l=$(printf '%s\n' "$got" | sed -n 3p)
+[ "$l" = "$d1  Page 1" ] || [ "$l" = "$d2  Page 1" ] || pc_fail "the date of a page from standard input is not the current time"
 pc_pass

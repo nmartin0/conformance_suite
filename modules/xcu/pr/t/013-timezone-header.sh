@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.pr.013
+# MUTANT    pr.tz_ignored
+# MUTANT    pr.tz_flipped
 . "$PC_CORE/pc.sh"
 pc_begin XCU.pr.013
 LC_ALL=POSIX
