@@ -2,6 +2,7 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.037
+# MUTANT    awk.ctype_locale_ignored
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcloc.sh"
 pc_begin XCU.awk.037

@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.017
+# MUTANT    awk.fields_always_strings
+# MUTANT    awk.const_digits_numeric
+# MUTANT    awk.argv_string
+# MUTANT    awk.environ_string
+# MUTANT    awk.v_not_numeric_string
+# MUTANT    awk.getline_value_string
+# MUTANT    awk.numstring_copy_string
+# MUTANT    awk.split_elems_strings
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.017
 LC_ALL=POSIX
@@ -15,7 +23,7 @@ e() { awk "BEGIN { $1 }" 2>/dev/null </dev/null; }
 [ "$(echo abc | awk '{ print ($1 == 0) }' 2>/dev/null)" = "0" ] || pc_fail "a non-numeric field equalled 0"
 [ "$(echo '1e2 100' | awk '{ print ($1 == $2) }' 2>/dev/null)" = "1" ] || pc_fail "1e2 and 100 were not equal as numeric strings"
 [ "$(awk -v x=10.0 'BEGIN { print (x == 10) }' 2>/dev/null </dev/null)" = "1" ] || pc_fail "a -v value was not a numeric string"
-[ "$(awk 'BEGIN { print (ARGV[1] == 5.0) }' 5 2>/dev/null </dev/null)" = "1" ] || pc_fail "an ARGV element was not a numeric string"
+[ "$(awk 'BEGIN { print (ARGV[1] == 5) }' 5.0 2>/dev/null </dev/null)" = "1" ] || pc_fail "an ARGV element was not a numeric string"
 [ "$(echo 3.0 | awk 'BEGIN { getline v; print (v == 3) }' 2>/dev/null)" = "1" ] || pc_fail "a getline value was not a numeric string"
 [ "$(N=7.0 awk 'BEGIN { print (ENVIRON["N"] == 7) }' 2>/dev/null </dev/null)" = "1" ] || pc_fail "an ENVIRON value was not a numeric string"
 [ "$(echo 5.0 | awk '{ y = $1; print (y == 5) }' 2>/dev/null)" = "1" ] || pc_fail "a copy of a numeric string was not a numeric string"

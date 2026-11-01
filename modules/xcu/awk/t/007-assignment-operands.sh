@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.007
+# MUTANT    awk.assign_at_start
+# MUTANT    awk.assign_dropped_after_last
+# MUTANT    awk.assign_no_escape
+# MUTANT    awk.assign_not_numeric_string
+# MUTANT    awk.assign_ignored
+# MUTANT    awk.assign_underscore_is_file
+# MUTANT    awk.assign_second_dropped
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.007
 LC_ALL=POSIX

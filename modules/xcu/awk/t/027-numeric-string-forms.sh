@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.027
+# MUTANT    awk.fields_always_strings
+# MUTANT    awk.fields_only_integers
+# MUTANT    awk.fields_no_sign
+# MUTANT    awk.fields_no_radix_exp
+# MUTANT    awk.fields_no_blanks
 # Field text counts as a number when it reads as a decimal number with an
 # optional sign, optional blanks around it, a period or an exponent, and as a
 # string otherwise.

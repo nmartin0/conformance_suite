@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.016
+# MUTANT    awk.match_inverted
+# MUTANT    awk.not_pattern_ignored
+# MUTANT    awk.range_end_exclusive
+# MUTANT    awk.range_start_exclusive
+# MUTANT    awk.range_no_repeat
+# MUTANT    awk.ere_string_escape_once
+# MUTANT    awk.rejects_bracket_class
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.016
 LC_ALL=POSIX

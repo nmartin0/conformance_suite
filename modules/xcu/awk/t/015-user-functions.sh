@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.015
+# MUTANT    awk.locals_global
+# MUTANT    awk.return_value_dropped
+# MUTANT    awk.return_no_value_zero
+# MUTANT    awk.missing_arg_zero
+# MUTANT    awk.rejects_late_definition
+# MUTANT    awk.rejects_newline_before_brace
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.015
 LC_ALL=POSIX

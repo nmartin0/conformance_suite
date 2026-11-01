@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.030
+# MUTANT    awk.path_not_searched
+# MUTANT    awk.env_cleared
+# MUTANT    awk.system_path_lost
+# MUTANT    awk.getline_path_lost
+# MUTANT    awk.print_pipe_path_lost
+# MUTANT    awk.system_env_lost
+# MUTANT    awk.getline_env_lost
 # Commands run by system, by output pipes and by command input use the PATH
 # and the environment that awk started with.
 . "$PC_CORE/pc.sh"

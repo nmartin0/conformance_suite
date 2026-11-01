@@ -2,6 +2,28 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.008
+# MUTANT    awk.pow_as_mul
+# MUTANT    awk.pow_left_assoc
+# MUTANT    awk.unary_minus_binds_tight
+# MUTANT    awk.logical_not_ignored
+# MUTANT    awk.post_inc_returns_new
+# MUTANT    awk.pre_inc_returns_old
+# MUTANT    awk.post_dec_returns_new
+# MUTANT    awk.pre_dec_returns_old
+# MUTANT    awk.post_inc_noop
+# MUTANT    awk.add_assign_as_assign
+# MUTANT    awk.sub_assign_as_add
+# MUTANT    awk.mul_assign_as_add
+# MUTANT    awk.div_assign_as_mul
+# MUTANT    awk.mod_assign_as_div
+# MUTANT    awk.pow_assign_as_mul
+# MUTANT    awk.cond_arms_swapped
+# MUTANT    awk.and_or_swapped
+# MUTANT    awk.no_short_circuit
+# MUTANT    awk.const_digits_numeric
+# MUTANT    awk.fields_always_strings
+# MUTANT    awk.match_inverted
+# MUTANT    awk.in_creates_element
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.008
 LC_ALL=POSIX
@@ -14,8 +36,8 @@ e() { awk "BEGIN { $1 }" 2>/dev/null </dev/null; }
 [ "$(e 'print -7%3, 1/4')" = "-1 0.25" ] || pc_fail "modulus of a negative or division wrong"
 [ "$(e 'print 1+2 " " 3, 1 " " 2+3')" = "3 3 1 5" ] || pc_fail "concatenation precedence wrong"
 [ "$(e 'print !0, !1, !"", !"a"')" = "1 0 1 0" ] || pc_fail "logical not wrong"
-[ "$(e 'x=5; a=x++; b=x; c=++x; d=x--; print a, b, c, d, x')" = "5 6 7 7 6" ] || pc_fail "increment or decrement wrong"
-[ "$(e 'x=10; x+=5; x-=3; x*=2; x/=4; x%=4; x^=2; print x')" = "4" ] || pc_fail "assignment operators wrong"
+[ "$(e 'x=5; a=x++; b=x; c=++x; d=x--; f=--x; print a, b, c, d, f, x')" = "5 6 7 7 5 5" ] || pc_fail "increment or decrement wrong"
+[ "$(e 'x=11; x+=5; x-=3; x*=2; x/=4; x%=4; x^=2; print x')" = "6.25" ] || pc_fail "assignment operators wrong"
 [ "$(e 'print (1?"a":"b"), (0?"a":"b"), (""?"t":"f")')" = "a b f" ] || pc_fail "conditional expression wrong"
 [ "$(e 'print (1&&0), (1||0), (0||0), ("a"&&"b")')" = "0 1 0 1" ] || pc_fail "&& or || wrong"
 [ "$(e 'x=0; 0 && x++; 1 || x++; print x')" = "0" ] || pc_fail "&& or || did not short-circuit"

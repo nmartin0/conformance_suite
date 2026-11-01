@@ -2,6 +2,23 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.006
+# MUTANT    awk.ofs_ignored
+# MUTANT    awk.ors_ignored
+# MUTANT    awk.ofmt_as_convfmt
+# MUTANT    awk.convfmt_as_ofmt
+# MUTANT    awk.fnr_is_nr
+# MUTANT    awk.nr_is_fnr
+# MUTANT    awk.filename_empty
+# MUTANT    awk.argc_unusable
+# MUTANT    awk.argv_changes_ignored
+# MUTANT    awk.rstart_unset
+# MUTANT    awk.rlength_unset
+# MUTANT    awk.match_rstart_zero_based
+# MUTANT    awk.match_nomatch_rlength_zero
+# MUTANT    awk.environ_empty
+# MUTANT    awk.subsep_ignored
+# MUTANT    awk.convfmt_ignored
+# MUTANT    awk.ofmt_ignored
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.006
 LC_ALL=POSIX

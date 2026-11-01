@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.004
+# MUTANT    awk.fs_first_char
+# MUTANT    awk.fs_single_is_ere
+# MUTANT    awk.fs_regex_literal
+# MUTANT    awk.fs_blank_literal
+# MUTANT    awk.fs_change_immediate
+# MUTANT    awk.fs_prog_ignored
+# MUTANT    awk.default_fs_keeps_edges
+# MUTANT    awk.fs_default_blank_only
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.004
 LC_ALL=POSIX
@@ -31,4 +39,6 @@ got=$(printf ' a  b \n' | awk '{ print NF, "[" $1 "]" }' 2>/dev/null)
 [ "$got" = "2 [a]" ] || pc_fail "leading and trailing blanks produced fields with FS of a blank"
 got=$(printf 'a b\n' | awk -F' ' '{ print $2 }' 2>/dev/null)
 [ "$got" = "b" ] || pc_fail "-F ' ' did not behave as the default separator"
+got=$(printf ' a  b\n' | awk -F' ' '{ print NF, $2 }' 2>/dev/null)
+[ "$got" = "2 b" ] || pc_fail "-F ' ' did not skip leading blanks and split at runs of blanks"
 pc_pass

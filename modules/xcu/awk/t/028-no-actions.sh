@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.028
+# MUTANT    awk.empty_prog_reads_input
+# MUTANT    awk.rejects_empty_program
+# MUTANT    awk.rejects_function_only_program
 # A valid program that has no pattern and no action does not read its file
 # operands and exits with status 0.
 . "$PC_CORE/pc.sh"

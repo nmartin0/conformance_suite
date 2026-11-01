@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.024
+# MUTANT    awk.rejects_keyword_prefix_names
+# MUTANT    awk.rejects_builtin_blank_paren
+# MUTANT    awk.rejects_underscore_names
 # A word is made of underscores, digits and letters, so names that begin
 # with a keyword or built-in function name are ordinary names; a built-in
 # function name may be followed by a blank before its parenthesis, and a

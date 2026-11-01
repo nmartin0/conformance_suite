@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.019
+# MUTANT    awk.nextfile_as_next
+# MUTANT    awk.fflush_returns_1
+# MUTANT    awk.fflush_noop
+# MUTANT    awk.dash_operand_renamed
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.019
 LC_ALL=POSIX
@@ -19,6 +23,21 @@ got=$(awk 'BEGIN { print "x"; r = fflush(); print r }' 2>/dev/null </dev/null)
 got=$(awk 'BEGIN { print "x" > "ff"; r = fflush("ff"); print r; close("ff") }' 2>/dev/null </dev/null)
 [ "$got" = "0" ] || pc_fail "fflush of a named file did not return 0"
 [ "$(cat ff 2>/dev/null)" = "x" ] || pc_fail "the file named to fflush was not written"
+# While awk is still running with the file open, fflush must have written
+# the data: awk waits for a gate file that is made only after the check.
+rm -f ff2 gate
+awk 'BEGIN { print "y" > "ff2"; fflush("ff2"); while ((getline l < "gate") < 0) ; close("ff2") }' >/dev/null 2>&1 </dev/null &
+pcpid=$!
+pci=0
+while [ ! -s ff2 ] && [ "$pci" -lt 10 ]; do
+	sleep 1
+	pci=$((pci + 1))
+done
+pcseen=no
+[ -s ff2 ] && pcseen=yes
+: >gate
+wait "$pcpid"
+[ "$pcseen" = yes ] || pc_fail "fflush of a named file did not write the data while the file was still open"
 got=$(printf 'z\n' | awk '{ print FILENAME }' 2>/dev/null)
 [ "$got" = "-" ] || pc_fail "FILENAME was not - for standard input"
 got=$(printf 'z\n' | awk '{ print FILENAME ":" $0 }' - 2>/dev/null)

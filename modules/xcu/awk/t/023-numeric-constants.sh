@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.023
+# MUTANT    awk.octal_constant
+# MUTANT    awk.rejects_trailing_period
+# MUTANT    awk.rejects_leading_period
+# MUTANT    awk.exponent_ignored
 # Numeric constants take the forms of decimal floating constants with a
 # period (1. .5 1e3 1E-2) or plain decimal digits, which are decimal even
 # with a leading zero.

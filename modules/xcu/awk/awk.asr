@@ -44,7 +44,7 @@ anchor     utilities/awk.html#EXTENDED DESCRIPTION
 anchor     utilities/awk.html#DESCRIPTION
 class      required
 since      1992
-says       RS of one character ends records there; a null RS separates records at blank lines and makes newline a field separator.
+says       RS of one character ends records there; a null RS separates records at blank lines, without empty records at either end.
 test       t/005-record-separator.sh
 
 assertion  XCU.awk.006
@@ -101,7 +101,7 @@ assertion  XCU.awk.013
 anchor     utilities/awk.html#EXTENDED DESCRIPTION
 class      required
 since      1992
-says       int, sqrt, exp, log, sin, cos and atan2 return the specified values; srand sets a repeatable seed and returns the previous one, and rand returns values in [0,1).
+says       int, sqrt, exp, log, sin, cos and atan2 return the specified values; srand returns the previous seed, and rand returns values in [0,1) that are not all alike.
 test       t/013-math-functions.sh
 
 assertion  XCU.awk.014
@@ -266,10 +266,9 @@ assertion  XCU.awk.032
 anchor     utilities/awk.html#EXTENDED DESCRIPTION
 class      required
 since      1992
-says       An unset variable, array element, missing function argument or missing
-           field is 0 as a number and empty as a string; referring to a missing
-           field creates nothing, but assigning past the last field creates empty
-           fields in between.
+says       An unset variable, array element or missing function argument is 0 as a
+           number and empty as a string; assigning past the last field extends NF
+           and the record.
 test       t/032-uninitialized.sh
 
 assertion  XCU.awk.033
@@ -343,3 +342,31 @@ says       awk counts characters, not bytes, of the code set of the locale
            as XBD 8.2 says.
 timeout    120
 test       t/039-locale-ctype-multibyte.sh
+
+# Split out of 005, 013 and 032 so that each requirement can be judged on its own.
+
+assertion  XCU.awk.040
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       With a null RS a newline is a field separator in addition to whatever
+           FS names, whatever the value of FS.
+test       t/040-null-rs-newline-field-separator.sh
+
+assertion  XCU.awk.041
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       Calling srand again with the same seed value repeats the sequence of
+           numbers rand returns.
+test       t/041-srand-repeats.sh
+
+assertion  XCU.awk.042
+anchor     utilities/awk.html#EXTENDED DESCRIPTION
+class      required
+since      1992
+says       A reference to a field after the last one has the uninitialized value
+           (0 as a number, empty as a string), does not create the field and
+           leaves NF unchanged, and the fields created between by an assignment
+           past the last one have the uninitialized value too.
+test       t/042-missing-field.sh

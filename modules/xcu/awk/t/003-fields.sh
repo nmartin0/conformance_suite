@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.003
+# MUTANT    awk.default_fs_keeps_edges
+# MUTANT    awk.ofs_ignored
+# MUTANT    awk.ofs_default_empty
+# MUTANT    awk.field_read_creates
+# MUTANT    awk.field_assign_no_rebuild
+# MUTANT    awk.record_assign_no_resplit
+# MUTANT    awk.past_end_no_extend
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.003
 LC_ALL=POSIX
