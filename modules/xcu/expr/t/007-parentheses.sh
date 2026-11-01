@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.expr.007
+# MUTANT    expr.paren_ignored
+# MUTANT    expr.paren_depth1
+# MUTANT    expr.paren_single_empty
+# MUTANT    expr.paren_string_invalid
 . "$PC_CORE/pc.sh"
 pc_begin XCU.expr.007
 nl='
@@ -36,4 +40,6 @@ ex 7 0 '(' '(' 1 + 1 ')' '*' 3 ')' + 1
 ex 14 0 2 + 3 '*' 4
 ex 3 0 '(' 3 ')'
 ex 1 0 '(' 1 + 1 ')' = 2
+ex abc 0 '(' abc ')'
+ex 3 0 '(' '(' '(' 1 + 2 ')' ')' ')'
 pc_pass

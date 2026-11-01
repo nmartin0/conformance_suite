@@ -2,6 +2,20 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.expr.003
+# MUTANT    expr.and_expr2
+# MUTANT    expr.and_as_or
+# MUTANT    expr.and_zero_true
+# MUTANT    expr.and_one
+# MUTANT    expr.and_ignores_second
+# MUTANT    expr.and_ignores_first
+# MUTANT    expr.or_one
+# MUTANT    expr.or_expr2
+# MUTANT    expr.or_zero_taken
+# MUTANT    expr.or_null_taken
+# MUTANT    expr.or_null_result
+# MUTANT    expr.or_and_flat
+# MUTANT    expr.or_binds_tighter
+# MUTANT    expr.and_over_arith
 . "$PC_CORE/pc.sh"
 pc_begin XCU.expr.003
 nl='
@@ -45,4 +59,8 @@ ex 0 1 0 '|' 0
 ex 0 1 0 '|' ''
 ex 7 0 0 '|' 3 + 4
 ex 2 0 1 + 1 '&' 3
+# & binds tighter than |, and arithmetic tighter than &
+ex 1 0 1 '|' 0 '&' 0
+ex 5 0 0 '&' 1 '|' 5
+ex 0 1 0 '&' 1 + 1
 pc_pass

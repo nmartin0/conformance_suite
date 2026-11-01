@@ -2,6 +2,20 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.expr.001
+# MUTANT    expr.add_sub
+# MUTANT    expr.sub_add
+# MUTANT    expr.mul_add
+# MUTANT    expr.div_mod
+# MUTANT    expr.mod_div
+# MUTANT    expr.div_round
+# MUTANT    expr.prec_flat
+# MUTANT    expr.prec_inverted
+# MUTANT    expr.assoc_right
+# MUTANT    expr.octal_leading
+# MUTANT    expr.result_abs
+# MUTANT    expr.no_newline
+# MUTANT    expr.double_newline
+# MUTANT    expr.out_stderr
 . "$PC_CORE/pc.sh"
 pc_begin XCU.expr.001
 nl='
@@ -42,4 +56,7 @@ ex 2 0 2 '*' 3 % 4
 ex 18 0 20 / 3 '*' 3
 ex 14 0 2 '*' 4 + 6
 ex 100 0 99 + 1
+# digits with a leading zero are still decimal
+ex 11 0 010 + 1
+ex 8 0 007 + 1
 pc_pass

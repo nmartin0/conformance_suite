@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.expr.008
+# MUTANT    expr.single_string_empty
+# MUTANT    expr.single_string_zero
+# MUTANT    expr.single_word
+# MUTANT    expr.single_trim
+# MUTANT    expr.single_echo
+# MUTANT    expr.neg_invalid
+# MUTANT    expr.neg_dropped
+# MUTANT    expr.result_abs
 . "$PC_CORE/pc.sh"
 pc_begin XCU.expr.008
 nl='
@@ -36,4 +44,7 @@ ex 42 0 42
 ex -2 0 3 + -5
 ex 8 0 3 - -5
 ex -15 0 3 '*' -5
+# blanks and backslashes in a single string operand are kept as they are
+ex ' a  b ' 0 ' a  b '
+ex 'a\tb' 0 'a\tb'
 pc_pass
