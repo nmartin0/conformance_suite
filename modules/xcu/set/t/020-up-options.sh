@@ -3,6 +3,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.set.020
+# MUTANT    set.up_m_rejected
+# MUTANT    set.up_plus_m_rejected
+# MUTANT    set.up_b_rejected
+# MUTANT    set.up_plus_b_rejected
+# MUTANT    set.up_monitor_rejected
+# MUTANT    set.up_notify_rejected
+# MUTANT    set.up_ignoreeof_rejected
+# MUTANT    set.up_nolog_rejected
 . "$PC_CORE/pc.sh"
 pc_begin XCU.set.020
 nl='

@@ -3,12 +3,40 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.set.001
+# MUTANT    set.append
+# MUTANT    set.droplast
+# MUTANT    set.dropfirst
+# MUTANT    set.reverse
+# MUTANT    set.keepold
+# MUTANT    set.dropempty
+# MUTANT    set.max9
+# MUTANT    set.hash_stale
 . "$PC_CORE/pc.sh"
 pc_begin XCU.set.001
-pc_test
+nl='
+'
+# pcrun: run pc.s in a fresh shell; out = its standard output, rc = its
+# exit status, its standard error is left in pc.err.
+pcrun() {
+	out=$(${PC_SH:-sh} pc.s 2>pc.err </dev/null)
+	rc=$?
+}
+cat >pc.s <<'PCEOF' || pc_unresolved "cannot write pc.s"
 set a b c
-[ "$#" -eq 3 ] && [ "$1" = a ] && [ "$2" = b ] && [ "$3" = c ] || pc_fail "set a b c: \$#=$# params '$*'"
+echo "$# $1 $2 $3"
 set x
-[ "$#" -eq 1 ] && [ "$1" = x ] || pc_fail "set x: \$#=$# params '$*'"
-[ -z "${2+set}" ] && [ -z "${3+set}" ] || pc_fail "old parameters 2 and 3 still set"
+echo "$# $1 ${2+S} ${3+S}"
+set "a b" '' "c d"
+echo "$#|$1|$2|$3"
+set -- p q r s t u v w x y z A B
+echo "$# ${10} ${13}"
+pcx='1 2 3'
+set $pcx
+echo "$# $3"
+PCEOF
+pc_test
+pcrun
+want="3 a b c${nl}1 x  ${nl}3|a b||c d${nl}13 y B${nl}3 3"
+[ "$out" = "$want" ] || pc_fail "got '$out'"
+[ "$rc" -eq 0 ] || pc_fail "status $rc"
 pc_pass
