@@ -2,6 +2,19 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.patch.009
+# MUTANT    patch.i_ignored
+# MUTANT    patch.rej_not_written
+# MUTANT    patch.rej_wrong_name
+# MUTANT    patch.rej_empty
+# MUTANT    patch.r_ignored
+# MUTANT    patch.reject_status0
+# MUTANT    patch.reject_status2
+# MUTANT    patch.reject_not_context
+# MUTANT    patch.reject_all_or_nothing
+# MUTANT    patch.reject_forced
+# MUTANT    patch.reject_has_applied_hunk
+# MUTANT    patch.reject_always_created
+# VARIANT   patch.rej_no_file_header
 . "$PC_CORE/pc.sh"
 pc_begin XCU.patch.009
 LC_ALL=POSIX
@@ -61,4 +74,23 @@ rm -f t.txt.rej
 patch -i pchg t.txt >/dev/null 2>&1 </dev/null
 [ $? -eq 0 ] || pc_fail "a good patch did not give status 0"
 [ ! -e t.txt.rej ] || pc_fail "a reject file was written for a good patch"
+# a rejected hunk is the only one in the reject file: the hunk that was applied is not
+n=1
+: >big.txt
+while [ $n -le 12 ]; do printf 'l%s\n' $n >>big.txt || pc_unresolved "cannot create input"; n=$((n + 1)); done
+printf '1c1\n< l1\n---\n> GOODNEW\n12c12\n< Q\n---\n> BADNEW\n' >pmix || pc_unresolved "cannot create patch"
+rm -f big.txt.rej
+patch -i pmix big.txt >/dev/null 2>&1 </dev/null
+[ $? -eq 1 ] || pc_fail "one good and one bad hunk in a longer file: status not 1"
+case $(cat big.txt) in
+GOODNEW*) ;;
+*) pc_fail "the good hunk was not applied in a longer file" ;;
+esac
+case $(cat big.txt.rej 2>/dev/null) in
+*BADNEW*) ;;
+*) pc_fail "the reject file does not show the rejected hunk" ;;
+esac
+case $(cat big.txt.rej 2>/dev/null) in
+*GOODNEW*) pc_fail "the reject file shows the hunk that was applied" ;;
+esac
 pc_pass

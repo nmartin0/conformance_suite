@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.patch.014
+# MUTANT    patch.status1
+# MUTANT    patch.status2
+# MUTANT    patch.pf_missing_status1
+# MUTANT    patch.pf_missing_status0
+# MUTANT    patch.pf_missing_no_diag
+# MUTANT    patch.nofile_status0
+# MUTANT    patch.nofile_no_diag
+# VARIANT   patch.nofile_status1
 . "$PC_CORE/pc.sh"
 pc_begin XCU.patch.014
 LC_ALL=POSIX
@@ -21,14 +29,17 @@ printf '3c3\n< c\n---\n> X\n' >pchg || pc_unresolved "cannot create patch"
 [ ! -e nosuchfile ] || pc_unresolved "nosuchfile exists"
 pc_test
 base
-patch -i nosuchfile t.txt >/dev/null 2>&1 </dev/null
+rm -f err1
+patch -i nosuchfile t.txt >/dev/null 2>err1 </dev/null
 rc=$?
 [ "$rc" -gt 1 ] || pc_fail "a missing patch file gave status $rc, not above 1"
 want5 t.txt a b c d e || pc_fail "the file was changed although the patch file is missing"
-rm -f nosuchfile.rej
-patch -i pchg nosuchfile >/dev/null 2>&1 </dev/null
+[ -s err1 ] || pc_fail "a missing patch file: nothing was written to standard error"
+rm -f nosuchfile.rej err2
+patch -i pchg nosuchfile >/dev/null 2>err2 </dev/null
 rc=$?
 [ "$rc" -ne 0 ] || pc_fail "a missing file to patch gave status 0"
+[ -s err2 ] || pc_fail "a missing file to patch: nothing was written to standard error"
 patch -i pchg t.txt >/dev/null 2>&1 </dev/null
 [ $? -eq 0 ] || pc_fail "a good patch did not give status 0"
 pc_pass

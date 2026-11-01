@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.patch.004
+# MUTANT    patch.i_ignored
+# MUTANT    patch.stdin_not_read
+# MUTANT    patch.status1
+# MUTANT    patch.last_newline_dropped
+# MUTANT    patch.e_rejected
+# MUTANT    patch.ed_delete_dropped
+# MUTANT    patch.ed_add_off_by_one
+# MUTANT    patch.ed_change_as_add
 . "$PC_CORE/pc.sh"
 pc_begin XCU.patch.004
 LC_ALL=POSIX

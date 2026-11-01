@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.patch.011
+# MUTANT    patch.l_ignored
+# MUTANT    patch.l_always
+# MUTANT    patch.l_tabs_not_blank
+# MUTANT    patch.l_case_blind
+# MUTANT    patch.status1
+# MUTANT    patch.i_ignored
 . "$PC_CORE/pc.sh"
 pc_begin XCU.patch.011
 LC_ALL=POSIX
@@ -31,4 +37,11 @@ patch -i pb t.txt >/dev/null 2>&1 </dev/null
 want5 t.txt a 'x  y' c || pc_fail "without -l, the file was changed"
 patch -l -i pb t2.txt >/dev/null 2>&1 </dev/null
 want5 t2.txt a Z c || pc_fail "-l: a tab and a blank did not match one blank in the patch"
+# other characters are still matched exactly under -l
+printf 'a\nx  y\nc\n' >t.txt || pc_unresolved "cannot create input"
+printf '2c2\n< X y\n---\n> Z\n' >pcase || pc_unresolved "cannot create patch"
+rm -f t.txt.rej
+patch -l -i pcase t.txt >/dev/null 2>&1 </dev/null
+[ $? -eq 1 ] || pc_fail "-l: a line differing in a character other than blanks did not give a reject"
+want5 t.txt a 'x  y' c || pc_fail "-l: a line differing in a letter was matched and the file was changed"
 pc_pass

@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.patch.010
+# MUTANT    patch.default_ignores
+# MUTANT    patch.default_status0
+# MUTANT    patch.default_rej_not_written
+# MUTANT    patch.N_reverses
+# MUTANT    patch.N_never_applies
+# MUTANT    patch.N_rejected
+# VARIANT   patch.assume_R_yes
 . "$PC_CORE/pc.sh"
 pc_begin XCU.patch.010
 LC_ALL=POSIX
@@ -24,9 +31,11 @@ patch -i pchg t.txt >/dev/null 2>&1 </dev/null
 [ $? -eq 0 ] || pc_unresolved "the first application of the patch failed"
 rm -f t.txt.rej
 patch -i pchg t.txt >/dev/null 2>&1 </dev/null
+rc=$?
 # the page lets patch ask whether to assume -R here; a "yes" would restore the original
 if want5 t.txt a b X d e; then
 	[ -s t.txt.rej ] || pc_fail "by default an already-applied patch was not rejected"
+	[ "$rc" -eq 1 ] || pc_fail "by default an already-applied patch was rejected with status $rc, not 1"
 else
 	want5 t.txt a b c d e || pc_fail "applying a patch twice left the file in a state that is neither patched nor original"
 fi

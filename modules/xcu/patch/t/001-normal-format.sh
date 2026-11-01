@@ -2,6 +2,17 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.patch.001
+# MUTANT    patch.i_ignored
+# MUTANT    patch.stdin_not_read
+# MUTANT    patch.status1
+# MUTANT    patch.last_newline_dropped
+# MUTANT    patch.n_rejected
+# MUTANT    patch.norm_detect_fails
+# MUTANT    patch.norm_change_as_add
+# MUTANT    patch.norm_add_dropped
+# MUTANT    patch.norm_delete_dropped
+# MUTANT    patch.norm_add_off_by_one
+# MUTANT    patch.norm_range_first_only
 . "$PC_CORE/pc.sh"
 pc_begin XCU.patch.001
 LC_ALL=POSIX

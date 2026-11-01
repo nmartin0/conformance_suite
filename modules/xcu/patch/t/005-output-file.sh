@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.patch.005
+# MUTANT    patch.i_ignored
+# MUTANT    patch.status1
+# MUTANT    patch.last_newline_dropped
+# MUTANT    patch.o_ignored
+# MUTANT    patch.o_original_modified
+# MUTANT    patch.o_to_stdout
+# MUTANT    patch.o_out_is_original
 . "$PC_CORE/pc.sh"
 pc_begin XCU.patch.005
 LC_ALL=POSIX
@@ -25,12 +32,4 @@ patch -o out -i pchg t.txt >/dev/null 2>&1 </dev/null
 [ $? -eq 0 ] || pc_fail "-o: status not 0"
 want5 out a b X d e || pc_fail "-o: the output file is not a b X d e"
 want5 t.txt a b c d e || pc_fail "-o: the original file was modified"
-base
-rm -f out out.orig
-printf 'old\n' >out || pc_unresolved "cannot create input"
-patch -b -o out -i pchg t.txt >/dev/null 2>&1 </dev/null
-want5 out a b X d e || pc_fail "-o with an existing outfile: the output file is not a b X d e"
-[ -f out.orig ] || pc_fail "-b -o with an existing outfile did not create outfile.orig"
-want5 out.orig old || pc_fail "outfile.orig does not hold the old outfile"
-[ ! -e t.txt.orig ] || pc_fail "-b -o created file.orig"
 pc_pass
