@@ -2,10 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ar.003
-# "ar -p a" writes the contents of all members in archive order; "ar -p a
-# f2" writes only f2; with -v each member is preceded by a blank line, the
-# name in angle brackets and another blank line (the name is the operand if
-# operands are given, else the member name).
+# "ar -p a" writes the contents of all members in archive order;
+# "ar -p a f2" writes only f2; with -v each member is preceded by a
+# blank line, the name in angle brackets and another blank line
+# (the name is the operand if operands are given, else the member
+# name).
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.003
 LC_ALL=C; export LC_ALL
@@ -13,13 +14,16 @@ pc_top=$(pwd) || pc_unresolved "cannot find the working directory"
 pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
+# Members are added one at a time so that the order does not depend on how
+# several new operands are ordered.
+pc_mk() { pc_a=$1; shift; for pc_f; do ar -rc "$pc_a" "$pc_f" </dev/null >/dev/null 2>&1 || return 1; done; }
 # Archive order differs from name order; members of odd length, with no
 # final newline, empty and larger than a buffer are included.
 printf 'three\n' >f3; printf 'one\n' >f1; printf 'two\n' >f2
 printf 'odd' >f4; : >f5
 i=0; while [ "$i" -lt 1500 ]; do printf 'line %s of the large member\n' "$i"; i=$((i+1)); done >f6
 printf '\nstarts with a newline' >f7
-ar -rc a f3 f1 f2 f4 f5 f6 f7 </dev/null >/dev/null 2>&1 || pc_unresolved "setup: cannot build the archive"
+pc_mk a f3 f1 f2 f4 f5 f6 f7 || pc_unresolved "setup: cannot build the archive"
 cat f3 f1 f2 f4 f5 f6 f7 >all.exp
 printf '\n<f2>\n\n' >v2.exp; cat f2 >>v2.exp
 : >vall.exp

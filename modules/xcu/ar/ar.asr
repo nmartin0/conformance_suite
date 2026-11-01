@@ -25,8 +25,7 @@ class      conditional
 when       SD
 since      1992
 says       "ar -t a" prints the member names one per line in archive order;
-           with one operand only that member is listed, printed as the
-           operand was given.
+           with operands only those members are listed.
 test       t/002-table-of-contents.sh
 
 assertion  XCU.ar.003
@@ -83,7 +82,8 @@ when       SD
 since      1992
 says       With -r -u a file whose modification time is older than that of
            the archived member is not replaced, and one that is at least as
-           new is replaced.
+           new (including one exactly as new) is replaced; a file not yet
+           in the archive is still added.
 test       t/007-update.sh
 
 assertion  XCU.ar.008
@@ -95,7 +95,9 @@ since      1992
 says       "ar -tv a f1" in the POSIX locale and with TZ=UTC prints one line
            with the nine-character mode, owner id/group id, the size in
            bytes, the abbreviated month, day, hour:minute and year of the
-           file's modification time when it was archived, and the name.
+           file's modification time when it was archived (shown in the zone TZ
+           selects), and the name; without operands every member is listed
+           in archive order.
 test       t/008-verbose-listing.sh
 
 assertion  XCU.ar.009
@@ -122,9 +124,9 @@ anchor     utilities/ar.html#EXIT STATUS
 class      conditional
 when       SD
 since      1992
-says       "ar -t" on an archive that does not exist, and "ar -r" naming a
-           file that does not exist, each exit with a status greater than
-           zero.
+says       "ar -t", "ar -p" and "ar -x" on an archive that does not exist,
+           and "ar -r" naming a file that does not exist (alone or with
+           an existing one), each exit with a status greater than zero.
 test       t/011-errors.sh
 
 assertion  XCU.ar.012
@@ -153,7 +155,8 @@ anchor     utilities/ar.html#OPTIONS/-q
 class      conditional
 when       SD+XSI
 since      1992
-says       "ar -q a f2" appends f2 after the existing members.
+says       "ar -q a f2" appends f2 after the existing members; "ar -qc" on
+           a missing archive creates it.
 test       t/014-quick-append.sh
 
 assertion  XCU.ar.015
@@ -161,8 +164,9 @@ anchor     utilities/ar.html#OPTIONS/-C
 class      conditional
 when       SD+XSI
 since      1992
-says       "ar -x -C a f1" leaves an existing f1 with its old contents;
-           without -C it is replaced.
+says       "ar -x -C a f1" (also written "-xC") leaves an existing f1 with
+           its old contents but still extracts a file that does not exist;
+           without -C an existing file is replaced.
 test       t/015-no-clobber.sh
 
 assertion  XCU.ar.016
@@ -179,7 +183,8 @@ anchor     utilities/ar.html#DESCRIPTION
 class      conditional
 when       SD+XSI
 since      1992
-says       An archive made only of printable text files consists only of
+says       An archive made only of printable text files (also after -d, -m
+           and -q, and with a long member name) consists only of
            printable characters, <newline> and <tab>.
 test       t/017-printable-archive.sh
 
@@ -191,3 +196,36 @@ since      1992
 says       A long member name is not truncated: the archive lists the full
            name and the member extracts under it.
 test       t/018-long-name.sh
+
+assertion  XCU.ar.019
+anchor     utilities/ar.html#STDOUT
+class      conditional
+when       SD
+since      1992
+says       When an operand has a directory part ("sub/g"), "ar -t", "-tv",
+           "-pv", "-dv", "-rv" and "-xv" show the name as the operand was
+           written, not as the stored last component.
+test       t/019-operand-as-given.sh
+
+assertion  XCU.ar.020
+anchor     utilities/ar.html#OPTIONS/-r
+anchor     utilities/ar.html#OPTIONS/-a
+anchor     utilities/ar.html#OPTIONS/-b
+class      conditional
+when       SD+XSI
+since      1992
+says       With "ar -r -a posname" or "-b" or "-i", a file that replaces an
+           existing member keeps that member's place and takes the new
+           contents; only files that are new are positioned.
+test       t/020-replace-keeps-place.sh
+
+assertion  XCU.ar.021
+anchor     utilities/ar.html#OPTIONS/-s
+anchor     utilities/ar.html#SYNOPSIS
+class      conditional
+when       SD+XSI
+since      1992
+says       "ar -ts a" lists the members as "ar -t a" does, "ar -ps a" writes
+           their contents as "ar -p a" does, and "ar -xs a" extracts them as
+           "ar -x a" does.
+test       t/021-symbol-option-with-others.sh

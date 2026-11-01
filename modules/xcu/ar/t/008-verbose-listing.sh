@@ -2,10 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ar.008
-# "ar -tv a f1" in the POSIX locale and with TZ=UTC prints one line with the
-# nine-character mode, owner id/group id, the size in bytes, the abbreviated
-# month, day, hour:minute and year of the file's modification time when it
-# was archived, and the name.
+# "ar -tv a f1" in the POSIX locale and with TZ=UTC prints one line
+# with the nine-character mode, owner id/group id, the size in
+# bytes, the abbreviated month, day, hour:minute and year of the
+# file's modification time when it was archived (shown in the zone TZ
+# selects), and the name; without operands every member is listed
+# in archive order.
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.008
 LC_ALL=C; export LC_ALL
@@ -66,4 +68,9 @@ TZ=UTC ar -tv b >out 2>err </dev/null || pc_fail "ar -tv b: nonzero status"
 set -- $(sed -n 1p out); [ "$8" = f2 ] || pc_fail "first line of ar -tv b names '$8', expected f2"
 set -- $(sed -n 2p out); [ "$8" = f1 ] || pc_fail "second line of ar -tv b names '$8', expected f1"
 [ "$3" = 5 ] || pc_fail "size on the second line is '$3'"
+# With an operand only that member is listed.
+TZ=UTC ar -tv b f1 >out 2>err </dev/null || pc_fail "ar -tv b f1: nonzero status"
+[ -f out ] || pc_fail "no output file"
+[ "$(wc -l <out)" -eq 1 ] || pc_fail "ar -tv b f1 did not write exactly one line"
+set -- $(cat out); [ "$8" = f1 ] || pc_fail "ar -tv b f1 names '$8'"
 pc_pass

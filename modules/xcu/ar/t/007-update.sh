@@ -2,9 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ar.007
-# With -r -u a file whose modification time is older than that of the
-# archived member is not replaced, and one that is at least as new is
-# replaced.
+# With -r -u a file whose modification time is older than that of
+# the archived member is not replaced, and one that is at least as
+# new (including one exactly as new) is replaced; a file not yet
+# in the archive is still added.
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.007
 LC_ALL=C; export LC_ALL

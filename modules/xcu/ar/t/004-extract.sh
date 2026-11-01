@@ -2,10 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ar.004
-# "ar -x a f2" recreates f2 with its contents and leaves other members
-# unextracted; "ar -x a" with no operand extracts all members; the archive
-# file is unchanged; the extracted file's modification time is the time of
-# extraction, not the old time of the original.
+# "ar -x a f2" recreates f2 with its contents and leaves other
+# members unextracted; "ar -x a" with no operand extracts all
+# members; the archive file is unchanged; the extracted file's
+# modification time is the time of extraction, not the old time of
+# the original.
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.004
 LC_ALL=C; export LC_ALL
@@ -13,10 +14,13 @@ pc_top=$(pwd) || pc_unresolved "cannot find the working directory"
 pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
+# Members are added one at a time so that the order does not depend on how
+# several new operands are ordered.
+pc_mk() { pc_a=$1; shift; for pc_f; do ar -rc "$pc_a" "$pc_f" </dev/null >/dev/null 2>&1 || return 1; done; }
 printf 'one\n' >f1; printf 'two\n' >f2; printf 'three\n' >f3; printf 'odd' >f4
 touch -t 200001010000 f1 f2 f3 f4 || pc_unresolved "setup: touch failed"
 touch -t 200001020000 ref || pc_unresolved "setup: touch failed"
-ar -rc a f3 f1 f2 f4 </dev/null >/dev/null 2>&1 || pc_unresolved "setup: cannot build the archive"
+pc_mk a f3 f1 f2 f4 || pc_unresolved "setup: cannot build the archive"
 cat a >a.keep || pc_unresolved "setup: cannot copy the archive"
 for f in f1 f2 f3 f4; do cp "$f" "$f.keep" || pc_unresolved "setup: cp failed"; done
 rm -f f1 f2 f3 f4

@@ -2,9 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ar.001
-# "ar -r a f1" creating a new archive exits 0, writes a diagnostic to
-# standard error and the archive then lists f1; with -c ("ar -rc") nothing
-# is written to standard error.
+# "ar -r a f1" creating a new archive exits 0, writes a diagnostic
+# to standard error and the archive then lists f1; with -c ("ar
+# -rc") nothing is written to standard error.
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.001
 LC_ALL=C; export LC_ALL

@@ -2,8 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ar.011
-# "ar -t" on an archive that does not exist, and "ar -r" naming a file that
-# does not exist, each exit with a status greater than zero.
+# "ar -t", "ar -p" and "ar -x" on an archive that does not exist,
+# and "ar -r" naming a file that does not exist (alone or with
+# an existing one), each exit with a status greater than zero.
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.011
 LC_ALL=C; export LC_ALL
