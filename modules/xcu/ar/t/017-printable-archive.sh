@@ -4,13 +4,12 @@
 # ASSERTION XCU.ar.017
 # An archive made only of printable text files (also after -d, -m
 # and -q, and with a long member name) consists only of
-# printable characters, <newline> and <tab>.
+# characters of the print and space classes and <backspace>
+# (the definition of a printable file).
 # MUTANT    ar.bin_nul
 # MUTANT    ar.bin_ctrl
 # MUTANT    ar.bin_del
 # MUTANT    ar.bin_high
-# MUTANT    ar.bin_cr
-# MUTANT    ar.bin_ff
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.017
 LC_ALL=C; export LC_ALL
@@ -28,15 +27,15 @@ printf 'long\n' >"$long" 2>/dev/null || pc_notinuse "the file system does not al
 pc_mk a f1 f2 f3 f4 f5 "$long" || pc_unresolved "setup: cannot build the archive"
 [ -s a ] || pc_unresolved "setup: the archive is empty"
 pc_test
-n=$(tr -d '[:print:]\n\t' <a | wc -c)
+n=$(tr -d '[:print:][:space:]\b' <a | wc -c)
 [ "$n" -eq 0 ] || pc_fail "the archive contains $n characters that are not printable"
 ar -d a f2 </dev/null >/dev/null 2>&1 || pc_fail "ar -d: nonzero status"
-n=$(tr -d '[:print:]\n\t' <a | wc -c)
+n=$(tr -d '[:print:][:space:]\b' <a | wc -c)
 [ "$n" -eq 0 ] || pc_fail "the archive contains $n characters that are not printable after a deletion"
 ar -m a f1 </dev/null >/dev/null 2>&1 || pc_fail "ar -m: nonzero status"
-n=$(tr -d '[:print:]\n\t' <a | wc -c)
+n=$(tr -d '[:print:][:space:]\b' <a | wc -c)
 [ "$n" -eq 0 ] || pc_fail "the archive contains $n characters that are not printable after a move"
 ar -q a f2 </dev/null >/dev/null 2>&1 || pc_fail "ar -q: nonzero status"
-n=$(tr -d '[:print:]\n\t' <a | wc -c)
+n=$(tr -d '[:print:][:space:]\b' <a | wc -c)
 [ "$n" -eq 0 ] || pc_fail "the archive contains $n characters that are not printable after an append"
 pc_pass

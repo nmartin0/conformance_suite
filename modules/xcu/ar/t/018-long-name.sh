@@ -37,10 +37,10 @@ done
 for name in $all; do
 	printf 'content of %s\n' "${#name}" >"$name" 2>/dev/null || pc_notinuse "the file system does not allow a name of ${#name} bytes"
 done
-for name in $all; do
-	ar -rc a "$name" </dev/null >/dev/null 2>&1 || pc_unresolved "setup: cannot build the archive"
-done
 pc_test
+for name in $all; do
+	ar -rc a "$name" >out 2>err </dev/null || pc_fail "ar -rc of a ${#name}-byte name: nonzero status"
+done
 ar -t a >out 2>err </dev/null || pc_fail "ar -t: nonzero status"
 for name in $all; do printf '%s\n' "$name"; done >exp
 cmp out exp >/dev/null 2>&1 || pc_fail "the listing does not show the full names: $(cat out)"

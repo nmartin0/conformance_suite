@@ -185,7 +185,8 @@ when       SD+XSI
 since      1992
 says       An archive made only of printable text files (also after -d, -m
            and -q, and with a long member name) consists only of
-           printable characters, <newline> and <tab>.
+           characters of the print and space classes and <backspace>
+           (the definition of a printable file).
 test       t/017-printable-archive.sh
 
 assertion  XCU.ar.018
