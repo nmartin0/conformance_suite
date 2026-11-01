@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ln.007
+# MUTANT    ln.exists_overwrite
+# MUTANT    ln.f_ignored
+# MUTANT    ln.f_removes_only
+# MUTANT    ln.err_silent
+# MUTANT    ln.err_status0
+# MUTANT    ln.ok_status1
+# VARIANT   ln.status2
+# VARIANT   ln.status255
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ln.007
 linkof() {
@@ -14,11 +22,14 @@ pc_test
 ln -s y lnk >out 2>err </dev/null
 rc=$?
 [ "$rc" -ne 0 ] || pc_fail "ln -s exited 0 although lnk exists"
+[ -s err ] || pc_fail "no diagnostic"
 linkof lnk || pc_fail "cannot list lnk"
 [ "$lk" = x ] || pc_fail "lnk was changed to '$lk'"
 ln -s -f y lnk >out 2>err </dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "ln -s -f exited with status $rc"
+[ ! -s out ] || pc_fail "ln -s -f wrote to standard output"
+[ -h lnk ] || pc_fail "lnk is not a symbolic link"
 linkof lnk || pc_fail "cannot list lnk"
 [ "$lk" = y ] || pc_fail "lnk contains '$lk', expected y"
 pc_pass
