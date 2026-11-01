@@ -143,6 +143,7 @@ pc_uuref() (
 	-) dest=./- ;;
 	esac
 	[ "$M" = no_create ] && exit 0
+	[ "$M" = ro_nodiag ] && exec 2>/dev/null
 	if [ -e "$dest" ]; then
 		case $M in
 		ow_refuse) echo "uudecode: $dest: file exists" >&2; exit 1 ;;
