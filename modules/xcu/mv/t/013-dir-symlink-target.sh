@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mv.013
+# MUTANT    mv.dirlink_as_file
+# MUTANT    mv.dirlink_error
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mv.013
 mkdir d || pc_fail "cannot create d"

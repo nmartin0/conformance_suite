@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mv.012
+# MUTANT    mv.error_aborts
+# MUTANT    mv.error_skips_next
+# MUTANT    mv.error_status_last
+# MUTANT    mv.error_status0
+# MUTANT    mv.error_nodiag
+# VARIANT   mv.status2
+# VARIANT   mv.status255
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mv.012
 printf 'A\n' >a || pc_fail "cannot create a"

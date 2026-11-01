@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mv.001
+# MUTANT    mv.copy_keeps_src
+# MUTANT    mv.stdout_note
+# MUTANT    mv.empty_target
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mv.001
 nl='

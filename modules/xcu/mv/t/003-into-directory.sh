@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mv.003
+# MUTANT    mv.into_first_only
+# MUTANT    mv.into_last_only
+# MUTANT    mv.into_wrong_name
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mv.003
 nl='

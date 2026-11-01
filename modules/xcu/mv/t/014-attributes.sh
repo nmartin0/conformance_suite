@@ -1,7 +1,10 @@
-# mv keeps the modification time and permission bits of the file it moves.
+# mv keeps the modification time, access time and permission bits of the file it moves.
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mv.014
+# MUTANT    mv.mtime_now
+# MUTANT    mv.atime_now
+# MUTANT    mv.mode_644
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mv.014
 modeof() {
@@ -13,6 +16,13 @@ modeof() {
 printf 'x\n' >a || pc_fail "cannot create a"
 chmod 640 a || pc_fail "cannot chmod a"
 touch -t 200101020304 a ref || pc_fail "cannot set times"
+touch -a -t 200203040506 a || pc_fail "cannot set the access time"
+atimeof() {
+	at=$(ls -ldu "$1" 2>/dev/null) || return 1
+	at=${at%" $1"}
+}
+atimeof a || pc_fail "cannot list a"
+at0=$at
 pc_test
 mv a b >out 2>err </dev/null
 rc=$?
@@ -21,4 +31,6 @@ modeof b || pc_fail "cannot list b"
 [ "$mo" = "-rw-r-----" ] || pc_fail "mode is $mo, expected -rw-r-----"
 [ ! b -nt ref ] || pc_fail "b is newer than the original time"
 [ ! ref -nt b ] || pc_fail "b is older than the original time"
+atimeof b || pc_fail "cannot list b"
+[ "$at" = "$at0" ] || pc_fail "access time changed: '$at', was '$at0'"
 pc_pass
