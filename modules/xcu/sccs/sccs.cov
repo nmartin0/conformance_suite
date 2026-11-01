@@ -1,0 +1,89 @@
+# sccs.cov - every requirement unit on utilities/sccs.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Sections listed as "None.", "Not used." or "Default." take their meaning
+# from XCU 1.4 Utility Description Defaults. STDIN, INPUT FILES, STDOUT,
+# STDERR and OUTPUT FILES defer to the command that sccs runs.
+
+DESCRIPTION:fb7ec3be         none  descriptive: sccs is a front end
+DESCRIPTION:ae29d9fc         untestable  set-user-ID operation needs an installation of sccs with that mode and a second account to change to; a test cannot arrange either
+DESCRIPTION:7d6e0a33         XCU.sccs.001
+DESCRIPTION:3d55d2ed         XCU.sccs.001
+DESCRIPTION:a3a1ac7c         XCU.sccs.001 XCU.sccs.008
+OPTIONS:53789751             XCU.sccs.024
+OPTIONS:75ff3d74             none  introduces the syntax line
+OPTIONS:9f752c1b             none  part of the syntax line
+OPTIONS:99d4a8f3             none  part of the syntax line
+OPTIONS:294e7669             XCU.sccs.025
+OPTIONS:44b94098             none  the other utilities are judged by their own pages
+OPTIONS:cc786d0d             XCU.sccs.002 XCU.sccs.003 XCU.sccs.007
+OPTIONS:18b84f11             XCU.sccs.002
+OPTIONS:7f5d7780             XCU.sccs.001
+OPTIONS:0cf69ed4             XCU.sccs.004
+OPTIONS:8f0ffcd2             none  cross-reference
+OPTIONS:7df89c26             XCU.sccs.003
+OPTIONS:4610f6b5             XCU.sccs.001
+OPTIONS:6c476440             XCU.sccs.003
+OPTIONS:ceb751e6             XCU.sccs.003
+OPTIONS:6b9450da             untestable  the difference between the real and the effective user ID shows only when sccs runs set-user-ID, which a test cannot arrange; XCU.sccs.007 checks that -r is accepted
+OPTIONS:c7f77dbd             untestable  concerns running set-user-ID; see the unit on -r
+OPTIONS:cc615c02             untestable  concerns running set-user-ID; see the unit on -r
+OPERANDS:51b44f3c            none  introduces the operand list
+OPERANDS:5d508238            XCU.sccs.001 XCU.sccs.009
+OPERANDS:fab4f853            XCU.sccs.001 XCU.sccs.018
+OPERANDS:16af24a4            XCU.sccs.001
+STDIN:c7840e68               none  defers to the command run
+INPUT_FILES:c7840e68         none  defers to the command run
+ENVIRONMENT_VARIABLES:e7ea9d1c  none  introduces the variable list
+ENVIRONMENT_VARIABLES:221d4f1a  untestable  the page gives sccs no effect from the locale beyond the command it runs, and a made locale is needed to see one; no result can be required
+ENVIRONMENT_VARIABLES:8aece102  none  cross-reference to the precedence rules
+ENVIRONMENT_VARIABLES:b96c5038  untestable  the page gives sccs no effect from the locale beyond the command it runs, and a made locale is needed to see one; no result can be required
+ENVIRONMENT_VARIABLES:8586e6ac  untestable  the page gives sccs no effect from the locale beyond the command it runs, and a made locale is needed to see one; no result can be required
+ENVIRONMENT_VARIABLES:fb479014  untestable  the wording and layout of diagnostic messages are unspecified, so no locale-dependent result can be required
+ENVIRONMENT_VARIABLES:b55e60b5  impl  the format of message catalogs and the messages looked up in them are implementation-defined
+ENVIRONMENT_VARIABLES:9a1fc880  XCU.sccs.005
+ENVIRONMENT_VARIABLES:6158fca1  partial XCU.sccs.005 XCU.sccs.006  # the user-name form
+ENVIRONMENT_VARIABLES:5dbf7d9f  untestable  needs an account whose initial working directory holds src or source; the home directory of an account cannot be set up by a test
+ENVIRONMENT_VARIABLES:ecfbcfab  XCU.sccs.006
+ENVIRONMENT_VARIABLES:7f97f2aa  none  other effects belong to the command run
+ASYNCHRONOUS_EVENTS:d92f27bd  none  default
+STDOUT:c7840e68              XCU.sccs.001
+STDERR:c7840e68              XCU.sccs.001
+OUTPUT_FILES:c7840e68        XCU.sccs.001
+EXTENDED_DESCRIPTION:73b13dec  none  introduces the list; each pseudo-utility has its own unit
+EXTENDED_DESCRIPTION:fadfcb2d  none  explains where the options come from
+EXTENDED_DESCRIPTION:846494fa  XCU.sccs.013
+EXTENDED_DESCRIPTION:8c888621  none  statement of intent, no behaviour
+EXTENDED_DESCRIPTION:64e0b228  XCU.sccs.016
+EXTENDED_DESCRIPTION:5c9a4d19  untestable  the text calls the ignored SIDs branches without saying which SIDs; see the standard issue on info -b
+EXTENDED_DESCRIPTION:c8a7a056  XCU.sccs.008
+EXTENDED_DESCRIPTION:cfe890fd  XCU.sccs.008
+EXTENDED_DESCRIPTION:2807c9d4  XCU.sccs.008
+EXTENDED_DESCRIPTION:79e05007  app
+EXTENDED_DESCRIPTION:6fea2d7a  XCU.sccs.017
+EXTENDED_DESCRIPTION:4e603eb1  XCU.sccs.017
+EXTENDED_DESCRIPTION:5a192365  partial XCU.sccs.018  # only -y and -k are exercised
+EXTENDED_DESCRIPTION:2dda747b  XCU.sccs.019
+EXTENDED_DESCRIPTION:301852b0  none  statement of use
+EXTENDED_DESCRIPTION:e81599c9  partial XCU.sccs.019  # option passing is not exercised
+EXTENDED_DESCRIPTION:bcff31fb  XCU.sccs.020
+EXTENDED_DESCRIPTION:f2896201  partial XCU.sccs.020  # only -C is exercised
+EXTENDED_DESCRIPTION:b40cde99  XCU.sccs.020
+EXTENDED_DESCRIPTION:3dc04a19  XCU.sccs.009
+EXTENDED_DESCRIPTION:af4d0326  XCU.sccs.021
+EXTENDED_DESCRIPTION:7a140bfe  none  statement of use
+EXTENDED_DESCRIPTION:68fc745a  app
+EXTENDED_DESCRIPTION:658fcd47  none  advice to the user
+EXTENDED_DESCRIPTION:d30b5c7e  XCU.sccs.010
+EXTENDED_DESCRIPTION:a3f47689  XCU.sccs.011
+EXTENDED_DESCRIPTION:84a9f140  XCU.sccs.012
+EXTENDED_DESCRIPTION:2ce3a209  XCU.sccs.012
+EXTENDED_DESCRIPTION:6d695806  XCU.sccs.022
+EXTENDED_DESCRIPTION:98a4ff20  XCU.sccs.014
+EXTENDED_DESCRIPTION:8545e79c  partial XCU.sccs.014  # -b is not exercised for tell
+EXTENDED_DESCRIPTION:f29b4953  XCU.sccs.015
+EXTENDED_DESCRIPTION:50b80bc9  none  advice to the user
+EXIT_STATUS:db823381         XCU.sccs.001 XCU.sccs.023
+EXIT_STATUS:8b075da2         XCU.sccs.001 XCU.sccs.023
+EXIT_STATUS:9d252ff7         XCU.sccs.023
+CONSEQUENCES_OF_ERRORS:d92f27bd  none  default

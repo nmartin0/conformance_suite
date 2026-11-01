@@ -39,6 +39,7 @@ UNCHECKED and needs another system. Record each outcome in
 | cd 012, 013 | `--sut-sh` is a shell for which `cd ''` and `cd nosuch/..` fail |
 | test 005, 009, 015 | `test` supports `<` and `>` (005); 009, 015 per the reports |
 | trap 011, 012 | a shell whose `trap -p` output the baseline accepts |
+| sccs 001-025 | the SCCS utilities (sccs, admin, get, delta, prs, rmdel) are installed (XSI); none of the tests could be run, nor their faults planted, on the development machine; 011 is disputed |
 
 compress (all assertions) and uudecode (all assertions): this machine has neither utility, so the faults were judged against a temporary stand-in. They need a system with the real utility, to confirm the baselines pass and the verdicts hold.
 
