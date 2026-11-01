@@ -133,3 +133,11 @@ says       -p writes the command line and a prompt to standard error and runs
            the command only on an affirmative answer read from /dev/tty.
 reason     The answer is read from the controlling terminal, which a script
            run by the harness has no way to supply.
+
+assertion  XCU.xargs.016
+anchor     utilities/xargs.html#OPTIONS
+class      required
+says       The command line length counted for -s must be strictly less than
+           SIZE: a line whose length equals SIZE is not allowed, so one
+           argument fewer is used.
+test       t/015-size-boundary.sh

@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.xargs.006
+# MUTANT    xargs.zero_ws
+# MUTANT    xargs.zero_nl
+# MUTANT    xargs.zero_quotes
+# MUTANT    xargs.zero_collapse
+# MUTANT    xargs.zero_trailing_garbage
+# VARIANT   xargs.zero_trailing_used
 . "$PC_CORE/pc.sh"
 pc_begin XCU.xargs.006
 LC_ALL=C; export LC_ALL
@@ -20,4 +26,12 @@ printf 'a\000\000b\000' | xargs -0 printf '[%s]' >out 2>/dev/null || pc_fail "xa
 v=$(cat out; printf x)
 v=${v%x}
 [ "$v" = "[a][][b]" ] || pc_fail "adjacent null bytes gave '$v', expected '[a][][b]'"
+# input that does not end with a null byte: the trailing bytes may be ignored or used as the last argument
+printf 'a\000b' | xargs -0 printf '[%s]' >out 2>/dev/null
+v=$(cat out; printf x)
+v=${v%x}
+case $v in
+'[a]' | '[a][b]') ;;
+*) pc_fail "input a, null, b gave '$v', expected [a] (b ignored) or [a][b]" ;;
+esac
 pc_pass

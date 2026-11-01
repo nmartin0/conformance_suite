@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.xargs.001
+# MUTANT    xargs.init_after
+# MUTANT    xargs.init_dropped
+# MUTANT    xargs.default_printf
+# MUTANT    xargs.nopath_search
+# MUTANT    xargs.status1_ok
+# MUTANT    xargs.noise_stdout
 . "$PC_CORE/pc.sh"
 pc_begin XCU.xargs.001
 LC_ALL=C; export LC_ALL
