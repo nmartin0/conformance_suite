@@ -44,7 +44,7 @@ anchor     utilities/patch.html#OPTIONS/-o
 anchor     utilities/patch.html#OPTIONS/-b
 class      required
 since      1992
-says       -o writes the patched file to the named file and leaves the original; with -b and an existing outfile, outfile.orig is made and file.orig is not.
+says       -o writes the patched file to the named file and leaves the original.
 test       t/005-output-file.sh
 
 assertion  XCU.patch.006
@@ -120,3 +120,18 @@ class      required
 since      1992
 says       patch exits above 1 when the patch file cannot be read, nonzero when the file to patch does not exist, and 0 on success.
 test       t/014-errors.sh
+
+assertion  XCU.patch.015
+anchor     utilities/patch.html#OPTIONS/-b
+anchor     utilities/patch.html#OPTIONS/-o
+class      required
+since      1992
+says       With -b and -o, file.orig is not created, and outfile.orig is created when outfile already exists.
+test       t/015-backup-with-output.sh
+
+assertion  XCU.patch.016
+anchor     utilities/patch.html#OPTIONS/-o
+class      required
+since      1992
+says       With -o, several patches for one file are applied one after another, each to the version the previous one left, and the versions are written to outfile one after the other.
+test       t/016-output-several.sh
