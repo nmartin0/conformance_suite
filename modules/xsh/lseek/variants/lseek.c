@@ -63,9 +63,3 @@ off_t lseek(int fd, off_t off, int whence)
 	return real_lseek(fd, off, whence);
 }
 
-#ifdef __GLIBC__
-off_t lseek64(int fd, off_t off, int whence)
-{
-	return lseek(fd, off, whence);
-}
-#endif

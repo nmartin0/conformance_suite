@@ -9,16 +9,13 @@
  * SS_DISABLE and MINSIGSTKSZ here are the C library's own values.
  */
 /*
- * The tests' feature macros, not _GNU_SOURCE: with it, glibc makes
+ * The tests' feature macros, not _GNU_SOURCE: with it, a library may make
  * MINSIGSTKSZ a run-time value that differs from the one the tests see.
  */
 #define _XOPEN_SOURCE 800
 #include <errno.h>
 #include <signal.h>
 #include <dlfcn.h>
-#ifndef RTLD_NEXT
-#define RTLD_NEXT ((void *)-1L)	/* glibc and musl, outside _GNU_SOURCE */
-#endif
 #include "pcvariant.h"
 
 #define V_SS_DISABLE 4		/* sigaltstack.disable_4.h */

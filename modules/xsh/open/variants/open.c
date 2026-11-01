@@ -251,19 +251,6 @@ int fcntl(int fd, int cmd, ...)
 	return fcntl_common(real_fcntl, fd, cmd, arg);
 }
 
-#ifdef __GLIBC__
-int fcntl64(int fd, int cmd, ...)
-{
-	va_list ap;
-	void *arg;
-	REAL(fcntl64);
-
-	va_start(ap, cmd);
-	arg = va_arg(ap, void *);
-	va_end(ap);
-	return fcntl_common(real_fcntl64, fd, cmd, arg);
-}
-#endif
 
 long pathconf(const char *path, int name)
 {

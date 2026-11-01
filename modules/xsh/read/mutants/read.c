@@ -206,9 +206,3 @@ ssize_t pread(int fd, void *buf, size_t n, off_t off)
 	return r;
 }
 
-#ifdef __GLIBC__
-ssize_t pread64(int fd, void *buf, size_t n, off_t off)
-{
-	return pread(fd, buf, n, off);
-}
-#endif

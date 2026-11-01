@@ -5,7 +5,7 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * A preload library; see core/pcvariant.h. Each variant says why the
- * standard allows it. glibc's execl(), execle(), execlp() and execv() reach
+ * standard allows it. a library may build execl(), execle(), execlp() and execv() on
  * execve() internally, past any preload, so every member of the family is
  * wrapped; with no variant of ours active each wrapper calls the C
  * library's own function.

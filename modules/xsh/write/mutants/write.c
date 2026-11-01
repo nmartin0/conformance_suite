@@ -268,9 +268,3 @@ ssize_t pwrite(int fd, const void *buf, size_t n, off_t off)
 	return r;
 }
 
-#ifdef __GLIBC__
-ssize_t pwrite64(int fd, const void *buf, size_t n, off_t off)
-{
-	return pwrite(fd, buf, n, off);
-}
-#endif

@@ -391,19 +391,6 @@ int fcntl(int fd, int cmd, ...)
 	return r;
 }
 
-#ifdef __GLIBC__
-/* glibc may route calls through fcntl64; vary it the same way. */
-int fcntl64(int fd, int cmd, ...)
-{
-	va_list ap;
-	int r;
-
-	va_start(ap, cmd);
-	r = dispatch(fd, cmd, ap);
-	va_end(ap);
-	return r;
-}
-#endif
 
 /*
  * "open_max_indet": sysconf(_SC_OPEN_MAX) reports no definite limit (-1,

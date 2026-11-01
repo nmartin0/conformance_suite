@@ -11,9 +11,11 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 typedef int (*dup_fn)(int);
@@ -41,15 +43,53 @@ static void cannot_plant(const char *m)
 	fprintf(stderr, "pcmutant: cannot plant dup.%s here\n", m);
 }
 
-/* A new open file description for the same file (Linux /proc). */
+/*
+ * The path each descriptor was opened with (made absolute), noted as
+ * open() returns, so that a new open file description for the same file
+ * can be had with a second open().
+ */
+#define NPATH 256
+static char *opened[NPATH];
+
+int open(const char *path, int flags, ...)
+{
+	static int (*real)(const char *, int, ...);
+	va_list ap;
+	mode_t mode = 0;
+	char cwd[4096], full[8192];
+	int fd;
+
+	if (real == NULL)
+		real = (int (*)(const char *, int, ...))dlsym(RTLD_NEXT, "open");
+	if (flags & O_CREAT) {
+		va_start(ap, flags);
+		mode = va_arg(ap, mode_t);
+		va_end(ap);
+	}
+	fd = real(path, flags, mode);
+	if (fd >= 0 && fd < NPATH) {
+		int e = errno;
+
+		free(opened[fd]);
+		opened[fd] = NULL;
+		if (path[0] == '/')
+			opened[fd] = strdup(path);
+		else if (getcwd(cwd, sizeof cwd) != NULL &&
+		    (size_t)snprintf(full, sizeof full, "%s/%s", cwd, path) < sizeof full)
+			opened[fd] = strdup(full);
+		errno = e;
+	}
+	return fd;
+}
+
+/* A new open file description for the same file; -1 if the path is not known. */
 static int reopen(int fd)
 {
-	char path[64];
 	int fl = fcntl(fd, F_GETFL);
-	snprintf(path, sizeof path, "/proc/self/fd/%d", fd);
-	if (fl == -1)
+
+	if (fl == -1 || fd >= NPATH || opened[fd] == NULL)
 		return -1;
-	return open(path, fl & (O_ACCMODE | O_APPEND));
+	return open(opened[fd], fl & (O_ACCMODE | O_APPEND));
 }
 
 static void copy_cloexec(int from, int to)

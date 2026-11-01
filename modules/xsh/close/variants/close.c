@@ -71,13 +71,6 @@ static void settle_aio(const char *v, int fd)
 	if (!any)
 		return;
 	if (IS("aio_cancel")) {
-#ifndef __GLIBC__
-		/*
-		 * aio_cancel() never returns here (the same fault as close(), deviation O.30), so the variant rests on the code under suspicion.
-		 */
-		fprintf(stderr, "pcmutant: cannot plant close.aio_cancel here "
-		    "(this aio_cancel() is the failing code, O.30)\n");
-#endif
 		(void)aio_cancel(fd, NULL);
 	}
 	for (i = 0; i < NCB; i++) {

@@ -78,55 +78,6 @@ int fstatat(int fd, const char *restrict path, struct stat *restrict st, int fla
 	return r;
 }
 
-#if defined(__GLIBC__)
-/* glibc may route the calls above to their 64-bit names. */
-static void coarse64(struct stat64 *st)
-{
-	st->st_atim.tv_nsec = 0;
-	st->st_mtim.tv_nsec = 0;
-	st->st_ctim.tv_nsec = 0;
-}
-
-int stat64(const char *restrict path, struct stat64 *restrict st)
-{
-	REAL(stat64);
-	int r = real_stat64(path, st);
-
-	if (r == 0 && coarse_on())
-		coarse64(st);
-	return r;
-}
-
-int lstat64(const char *restrict path, struct stat64 *restrict st)
-{
-	REAL(lstat64);
-	int r = real_lstat64(path, st);
-
-	if (r == 0 && coarse_on())
-		coarse64(st);
-	return r;
-}
-
-int fstat64(int fd, struct stat64 *st)
-{
-	REAL(fstat64);
-	int r = real_fstat64(fd, st);
-
-	if (r == 0 && coarse_on())
-		coarse64(st);
-	return r;
-}
-
-int fstatat64(int fd, const char *restrict path, struct stat64 *restrict st, int flag)
-{
-	REAL(fstatat64);
-	int r = real_fstatat64(fd, path, st, flag);
-
-	if (r == 0 && coarse_on())
-		coarse64(st);
-	return r;
-}
-#endif
 
 /*
  * "at_alt": AT_FDCWD is -2 and AT_SYMLINK_NOFOLLOW is 0x4000 (the header

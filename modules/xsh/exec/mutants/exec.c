@@ -4,8 +4,8 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * A preload library; faults are named "exec.<fault>" and apply only while
- * PC_PHASE is "test". glibc's execv(), execl() and execvp() call execve()
- * internally, past any preload, so every member of the family is wrapped
+ * PC_PHASE is "test". a library may have execv(), execl() and execvp() call
+ * execve() internally, past any preload, so every member of the family is wrapped
  * here. With no fault planted each wrapper calls the C library's own
  * function; with one planted, they are built on the real execve() (and
  * execvp() does its own PATH search), so that the fault can sit anywhere.

@@ -357,16 +357,3 @@ int fcntl(int fd, int cmd, ...)
 	return r;
 }
 
-#ifdef __GLIBC__
-/* glibc may route calls through fcntl64; fault it the same way. */
-int fcntl64(int fd, int cmd, ...)
-{
-	va_list ap;
-	int r;
-
-	va_start(ap, cmd);
-	r = dispatch(fd, cmd, ap);
-	va_end(ap);
-	return r;
-}
-#endif
