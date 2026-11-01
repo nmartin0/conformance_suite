@@ -67,9 +67,9 @@ expect_error() {
 
 expect_error "no match after two pieces" -s in10 3 6 '/nomatchatall/'
 expect_error "no match for a skip" in10 '%nomatchatall%'
-expect_error "line number past the end" -s in10 3 20
-expect_error "the line after the last" -s in10 3 11
-expect_error "line number behind the current line" -s in10 5 3
+expect_error "line number past the end" -s in10 3 6 20
+expect_error "the line after the last" -s in10 3 6 11
+expect_error "line number behind the current line" -s in10 3 6 5
 expect_error "repeat of a regular expression that runs out" -s f3 '/^s/' '{5}'
 expect_error "repeat of a line number that runs out" -s in10 3 '{9}'
 expect_error "input file that does not exist" -s nosuchfile 3
