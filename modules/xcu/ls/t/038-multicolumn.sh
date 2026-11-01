@@ -2,6 +2,17 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.038
+# MUTANT    ls.cols_across_for_C
+# MUTANT    ls.cols_down_for_x
+# MUTANT    ls.cols_ignore_width
+# MUTANT    ls.cols_overflow
+# MUTANT    ls.cols_truncate
+# MUTANT    ls.cols_ragged
+# MUTANT    ls.cols_drops_last
+# MUTANT    ls.cols_dup_first
+# VARIANT   ls.cols_tab
+# VARIANT   ls.cols_fewer
+# VARIANT   ls.cols_wide_gap
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.038
 LC_ALL=POSIX; export LC_ALL

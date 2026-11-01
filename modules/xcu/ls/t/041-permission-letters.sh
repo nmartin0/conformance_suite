@@ -2,6 +2,23 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.041
+# MUTANT    ls.perm_never_2
+# MUTANT    ls.perm_never_3
+# MUTANT    ls.perm_never_4
+# MUTANT    ls.perm_never_5
+# MUTANT    ls.perm_never_6
+# MUTANT    ls.perm_never_7
+# MUTANT    ls.perm_never_8
+# MUTANT    ls.perm_never_9
+# MUTANT    ls.perm_never_10
+# MUTANT    ls.perm_group_other_swapped
+# MUTANT    ls.perm_owner_group_swapped
+# MUTANT    ls.perm_w_x_swapped
+# MUTANT    ls.perm_r_w_swapped
+# MUTANT    ls.sgid_s_as_x
+# MUTANT    ls.sgid_S_as_minus
+# MUTANT    ls.sgid_S_as_s
+# MUTANT    ls.sgid_s_as_S
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.041
 LC_ALL=POSIX; export LC_ALL

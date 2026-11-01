@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.035
+# MUTANT    ls.long_C_not_disabled
+# MUTANT    ls.long_x_not_disabled
+# MUTANT    ls.long_m_not_disabled
+# MUTANT    ls.long_C_not_enabled
+# MUTANT    ls.long_x_not_enabled
+# MUTANT    ls.long_m_not_enabled
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.035
 nl='
