@@ -2,7 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.nm.009
-# An object file with no symbolic information is not an error: nm exits 0.
+# An object file with no symbolic information is not an error: nm exits 0
+# (with or without -P).
+# MUTANT    nm.nosym_status1
+# MUTANT    nm.status1
+# VARIANT   nm.nosym_stdout
+# VARIANT   nm.nosym_stderr
+# VARIANT   nm.padded
 . "$PC_CORE/pc.sh"
 pc_begin XCU.nm.009
 LC_ALL=C; export LC_ALL
@@ -18,4 +24,7 @@ pc_test
 nm e.o >o 2>err </dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "nm of an object with no symbols: exit status $rc"
+nm -P e.o >o2 2>err </dev/null
+rc=$?
+[ "$rc" -eq 0 ] || pc_fail "nm -P of an object with no symbols: exit status $rc"
 pc_pass
