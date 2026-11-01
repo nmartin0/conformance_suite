@@ -11,6 +11,7 @@
 # MUTANT    awk.split_keeps_old
 # MUTANT    awk.split_elems_strings
 # MUTANT    awk.subsep_ignored
+# VARIANT    awk.subsep_other
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.009
 LC_ALL=POSIX

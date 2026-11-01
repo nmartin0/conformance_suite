@@ -14,6 +14,7 @@
 # MUTANT    awk.srand_returns_zero
 # MUTANT    awk.rand_out_of_range
 # MUTANT    awk.rand_constant
+# VARIANT    awk.srand_initial_seed
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.013
 LC_ALL=POSIX

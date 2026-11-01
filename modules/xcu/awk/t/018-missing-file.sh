@@ -6,6 +6,7 @@
 # MUTANT    awk.err_to_stdout
 # MUTANT    awk.err_status0
 # MUTANT    awk.err_continues
+# VARIANT    awk.error_status_5
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.018
 LC_ALL=POSIX

@@ -14,7 +14,7 @@ hook_arg() { add "$1"; }
 hook_opt() { add "$1"; }
 hook_dd() { add --; }
 run() { exec "$REAL" "$@"; }
-hook_prog() { p=$(printf '%s\n' "$1" | sed -E 's/\$5 = "x";/$5 = "x"; NF = 2;/')
+hook_prog() { p=$(printf '%s\n' "$1" | sed -E 's/\$([0-9]+) = ("[^"]*");/pcn = NF; $\1 = \2; NF = pcn;/g')
 	add "$p"; }
 acc= nf=0
 while [ $# -gt 0 ]; do

@@ -4,6 +4,7 @@
 # ASSERTION XCU.awk.041
 # MUTANT    awk.srand_noop
 # MUTANT    awk.srand_seed_mixed
+# VARIANT    awk.srand_initial_seed
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.041
 LC_ALL=POSIX
