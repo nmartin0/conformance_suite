@@ -3,10 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.open_memstream.001
- * MUTANT    open_memstream.size_counts_nul
- * MUTANT    open_memstream.no_nul
- * MUTANT    open_memstream.pos_stuck
- * VARIANT   open_memstream.unbuffered
  */
 #include "pc.h"
 #include <errno.h>

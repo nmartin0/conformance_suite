@@ -3,8 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.open_memstream.003
- * MUTANT    open_memstream.fixed_cap
- * VARIANT   open_memstream.unbuffered
  */
 #include "pc.h"
 #include <errno.h>

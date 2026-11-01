@@ -8,6 +8,7 @@ since      1988
 says       signal(SIGUSR1, h1) after signal(SIGUSR1, SIG_IGN) returns SIG_IGN;
            then signal(SIGUSR1, h2) returns h1, and signal(SIGUSR1,
            SIG_DFL) returns h2.
+nomutant   no fault can be planted: a library may bind a call of signal() to another symbol chosen by the feature macros, which no standard interface names
 test       t/001-returns-previous.c
 
 assertion  XSH.signal.002
@@ -17,6 +18,7 @@ since      1988
 says       A child that sets SIGUSR1 to SIG_IGN with signal() and sends it to
            itself carries on (it reports so on a pipe); after setting SIG_DFL
            and sending it again it is terminated by SIGUSR1.
+nomutant   no fault can be planted: a library may bind a call of signal() to another symbol chosen by the feature macros, which no standard interface names
 test       t/002-dfl-ign.c
 
 assertion  XSH.signal.003
@@ -26,6 +28,7 @@ since      1988
 says       A handler installed with signal() for SIGUSR1 is called with
            SIGUSR1 as its argument when the signal is sent, and the program
            goes on after the kill() call.
+nomutant   no fault can be planted: a library may bind a call of signal() to another symbol chosen by the feature macros, which no standard interface names
 test       t/003-handler-called.c
 
 assertion  XSH.signal.004
@@ -41,6 +44,7 @@ note       Judged by behaviour: after signal() the oact that sigaction()
            returns is unspecified, and "prevent ... from occurring" need
            not show in the signal mask. A held-off signal that is never
            delivered is noted, not failed.
+nomutant   no fault can be planted: a library may bind a call of signal() to another symbol chosen by the feature macros, which no standard interface names
 test       t/004-reset-or-block.c
 
 assertion  XSH.signal.005
@@ -49,6 +53,7 @@ class      required
 since      1988
 says       signal() returns SIG_ERR with errno EINVAL for signal numbers -1 and
            100000, for catching SIGKILL and for ignoring SIGSTOP.
+nomutant   no fault can be planted: a library may bind a call of signal() to another symbol chosen by the feature macros, which no standard interface names
 test       t/005-einval.c
 
 assertion  XSH.signal.006
@@ -57,4 +62,5 @@ class      required
 since      2008
 says       With errno set to EINTR, a successful signal(SIGUSR1, SIG_IGN) leaves
            errno EINTR.
+nomutant   no fault can be planted: a library may bind a call of signal() to another symbol chosen by the feature macros, which no standard interface names
 test       t/006-errno-kept.c

@@ -3,7 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.signal.004
- * MUTANT    signal.neither_reset_nor_block
  * VARIANT   signal.block_all
  */
 #include "pc.h"

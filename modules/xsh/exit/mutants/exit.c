@@ -4,11 +4,9 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * A preload library; faults are named "exit.<fault>" and apply only while
- * PC_PHASE is "test". While a fault is planted, functions registered with
- * atexit() (glibc routes it through __cxa_atexit()) or at_quick_exit()
- * are recorded here instead of in the C library, and exit() runs them
- * itself, so the order, the flushing and the rest can be got wrong on
- * purpose.
+ * PC_PHASE is "test". Only faults that need no access to the handlers
+ * registered with atexit() are planted here: the registration functions
+ * may be linked into the program and bound before any preload.
  */
 #define _GNU_SOURCE 1
 #include <dlfcn.h>
@@ -18,8 +16,6 @@
 #include <unistd.h>
 
 typedef void (*exit_fn)(int);
-typedef int (*cxa_fn)(void (*)(void *), void *, void *);
-typedef int (*atexit_fn)(void (*)(void));
 
 static const char *mutant(void)
 {
@@ -33,102 +29,10 @@ static const char *mutant(void)
 
 #define IS(name) (m != NULL && strcmp(m, name) == 0)
 
-static struct { void (*f)(void *); void *arg; } list[64], quick[64];
-static int n, nq;
-static int running;	/* exit() is calling the handlers */
-
-static void call_plain(void *f)
-{
-	((void (*)(void))f)();
-}
-
-int __cxa_atexit(void (*f)(void *), void *arg, void *dso)
-{
-	static cxa_fn real;
-	const char *m = mutant();
-
-	if (real == NULL)
-		real = (cxa_fn)dlsym(RTLD_NEXT, "__cxa_atexit");
-	if (m == NULL || n >= 64)
-		return real ? real(f, arg, dso) : -1;
-	list[n].f = f;
-	list[n].arg = arg;
-	n++;
-	return 0;
-}
-
-int atexit(void (*f)(void))
-{
-	static atexit_fn real;
-	const char *m = mutant();
-
-	if (real == NULL)
-		real = (atexit_fn)dlsym(RTLD_NEXT, "atexit");
-	if (m == NULL || n >= 64)
-		return real ? real(f) : __cxa_atexit(call_plain, (void *)f, NULL);
-	list[n].f = call_plain;
-	list[n].arg = (void *)f;
-	n++;
-	return 0;
-}
-
-/* glibc's at_quick_exit() lives in the program and calls this one. */
-int __cxa_at_quick_exit(void (*f)(void *), void *dso)
-{
-	static int (*real)(void (*)(void *), void *);
-	const char *m = mutant();
-
-	if (real == NULL)
-		real = (int (*)(void (*)(void *), void *))dlsym(RTLD_NEXT, "__cxa_at_quick_exit");
-	if (m == NULL || nq >= 64)
-		return real ? real(f, dso) : -1;
-	quick[nq].f = f;
-	quick[nq].arg = NULL;
-	nq++;
-	return 0;
-}
-
-int at_quick_exit(void (*f)(void))
-{
-	static atexit_fn real;
-	const char *m = mutant();
-
-	if (real == NULL)
-		real = (atexit_fn)dlsym(RTLD_NEXT, "at_quick_exit");
-	if (m == NULL || nq >= 64)
-		return real ? real(f) : __cxa_at_quick_exit((void (*)(void *))f, NULL);
-	quick[nq].f = call_plain;
-	quick[nq].arg = (void *)f;
-	nq++;
-	return 0;
-}
-
-/* For continues_after_exit: a handler's _exit() goes on with exit(). */
-void _exit(int status)
-{
-	static exit_fn real;
-	const char *m = mutant();
-
-	if (real == NULL)
-		real = (exit_fn)dlsym(RTLD_NEXT, "_exit");
-	if (running && IS("continues_after_exit")) {
-		running = 0;
-		while (n > 0) {
-			n--;
-			list[n].f(list[n].arg);
-		}
-		(void)fflush(NULL);
-	}
-	real(status);
-	for (;;)
-		;
-}
-
 void exit(int status)
 {
 	static exit_fn real;
 	const char *m = mutant();
-	int i;
 
 	if (real == NULL)
 		real = (exit_fn)dlsym(RTLD_NEXT, "exit");
@@ -140,47 +44,6 @@ void exit(int status)
 		status ^= 1;
 	if (IS("no_atexit"))
 		_exit(status);
-	if (IS("flush_first"))
-		(void)fflush(NULL);
-	if (IS("calls_quick"))
-		for (i = nq - 1; i >= 0; i--)
-			quick[i].f(quick[i].arg);
-	if (IS("forward_order")) {
-		for (i = 0; i < n; i++)
-			list[i].f(list[i].arg);
-	} else if (IS("late_registration_skipped")) {
-		int top = n;
-		for (i = top - 1; i >= 0; i--)
-			list[i].f(list[i].arg);	/* ignores what is added meanwhile */
-	} else if (IS("once_each")) {
-		for (i = n - 1; i >= 0; i--) {
-			int j, seen = 0;
-			for (j = i + 1; j < n; j++)
-				if (list[j].f == list[i].f && list[j].arg == list[i].arg)
-					seen = 1;
-			if (!seen)
-				list[i].f(list[i].arg);
-		}
-	} else if (IS("late_registration_last")) {
-		int top = n;
-		for (i = top - 1; i >= 0; i--)
-			list[i].f(list[i].arg);
-		for (i = top; i < n; i++)
-			list[i].f(list[i].arg);	/* those added meanwhile, last */
-	} else {
-		running = 1;
-		while (n > 0) {
-			n--;
-			list[n].f(list[n].arg);	/* handlers may register more */
-		}
-	}
-	running = 0;
-	if (IS("no_flush"))
-		_Exit(status);
-	if (IS("flush_no_sync")) {
-		(void)fflush(NULL);	/* output only: input offsets are left */
-		_Exit(status);
-	}
 	real(status);
 	_exit(status);	/* not reached */
 }

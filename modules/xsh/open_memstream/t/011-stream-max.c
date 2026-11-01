@@ -3,7 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.open_memstream.011
- * MUTANT    open_memstream.no_limit
  */
 #include "pc.h"
 #include <errno.h>

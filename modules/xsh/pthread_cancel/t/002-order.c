@@ -4,7 +4,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.pthread_cancel.002
- * MUTANT    pthread_cancel.no_cleanup
  * MUTANT    pthread_cancel.no_destructors
  */
 #include "pc.h"

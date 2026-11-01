@@ -7,9 +7,9 @@
  * A preload library; faults are named "pthread_cancel.<fault>" and apply
  * only while PC_PHASE is "test" (as set by pc.c in this process). Threads
  * are tracked through pthread_create() so a fault can tell a thread that
- * has finished. The cleanup-handler fault reaches the handler list
- * through the C library's own registration functions, which the
- * <pthread.h> macros call (cleanup.c).
+ * has finished. No fault is planted in the cleanup handlers: the
+ * <pthread.h> macros that push them cannot be followed through a standard
+ * interface.
  */
 #define _GNU_SOURCE 1
 #include <dlfcn.h>
@@ -205,10 +205,4 @@ int pthread_key_create(pthread_key_t *k, void (*d)(void *))
 	if (IS("no_destructors"))
 		d = NULL;
 	return real_pthread_key_create(k, d);
-}
-
-/* The active fault of this library, for cleanup.c (which cannot include <pthread.h>). */
-const char *pthread_cancel_fault(void)
-{
-	return mutant_of("pthread_cancel.");
 }

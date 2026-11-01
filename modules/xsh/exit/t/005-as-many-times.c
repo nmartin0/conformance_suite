@@ -3,7 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.exit.005
- * MUTANT    exit.once_each
  * MUTANT    exit.no_atexit
  * VARIANT   wait.status_encoding
  */

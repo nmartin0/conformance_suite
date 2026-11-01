@@ -3,9 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.exit.007
- * MUTANT    exit.continues_after_exit
- * MUTANT    exit.forward_order
- * MUTANT    exit.flush_first
  * VARIANT   wait.status_encoding
  * VARIANT   exit.write_through
  */

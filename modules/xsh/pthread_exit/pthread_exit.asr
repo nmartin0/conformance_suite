@@ -23,6 +23,7 @@ since      2001
 says       Cleanup handlers pushed and not yet popped (three, nested) run
            at pthread_exit() last pushed first; one already popped
            without being executed does not run.
+nomutant   no fault can be planted in the cleanup handlers: pthread_cleanup_push() and pthread_cleanup_pop() may be macros, and no standard interface follows what they register
 test       t/002-cleanup-lifo.c
 
 assertion  XSH.pthread_exit.003

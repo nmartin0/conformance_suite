@@ -6,7 +6,6 @@
  *
  * ASSERTION XSH.pthread_cancel.001
  * MUTANT    pthread_cancel.noop
- * MUTANT    pthread_cancel.no_cleanup
  */
 #include "pc.h"
 #include <errno.h>

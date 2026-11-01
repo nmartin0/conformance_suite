@@ -3,9 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.open_memstream.004
- * MUTANT    open_memstream.seek_truncates
- * MUTANT    open_memstream.size_is_len
- * VARIANT   open_memstream.unbuffered
  */
 #include "pc.h"
 #include <errno.h>

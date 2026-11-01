@@ -3,8 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fmemopen.001
- * MUTANT    fmemopen.read_skip
- * MUTANT    fmemopen.eof_early
  * VARIANT   setvbuf.tiny_default
  * VARIANT   fmemopen.unbuffered
  */

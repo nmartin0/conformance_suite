@@ -43,6 +43,7 @@ note       b is called after a because a had already been called when b
            rule, which the exception does not touch. Whether atexit()
            succeeds once exit() has been called is unspecified (atexit()
            page); if it fails, the test is UNRESOLVED.
+nomutant   no fault can be planted in what exit() does around the registered handlers: atexit() may be bound at link time, past any preload, and no standard interface reaches the handler list
 test       t/004-registered-during-exit.c
 
 assertion  XSH.exit.005
@@ -62,6 +63,7 @@ says       exit() does not call functions registered with
            at_quick_exit(), while it does call those registered with
            atexit().
 note       at_quick_exit() is new in Issue 8.
+nomutant   no fault can be planted in what exit() does around the registered handlers: atexit() may be bound at link time, past any preload, and no standard interface reaches the handler list
 test       t/006-no-quick-exit-handlers.c
 
 assertion  XSH.exit.007
@@ -76,6 +78,7 @@ note       Stream buffering is implementation-defined (XSH 2.5): if the
            data reached the file before exit(), the flush check is void
            and only the handler and status checks apply (variant
            exit.write_through).
+nomutant   no fault can be planted in what exit() does around the registered handlers: atexit() may be bound at link time, past any preload, and no standard interface reaches the handler list
 test       t/007-handler-not-returning.c
 
 assertion  XSH.exit.008
@@ -86,6 +89,7 @@ says       exit() flushes open streams with unwritten buffered data:
            text written with fputs() to a fully buffered file stream,
            and to standard output redirected to a file, reaches the
            file without fflush().
+nomutant   no fault can be planted in what exit() does around the registered handlers: atexit() may be bound at link time, past any preload, and no standard interface reaches the handler list
 test       t/008-flushes.c
 
 assertion  XSH.exit.009
@@ -99,6 +103,7 @@ says       exit() flushes streams after calling the atexit() functions:
 note       Stream buffering is implementation-defined (XSH 2.5): a stream
            that wrote "S" at once gives UNRESOLVED (variant
            exit.write_through).
+nomutant   no fault can be planted in what exit() does around the registered handlers: atexit() may be bound at link time, past any preload, and no standard interface reaches the handler list
 test       t/009-flush-after-handlers.c
 
 assertion  XSH.exit.010
@@ -115,6 +120,7 @@ note       The offset rule came with Issue 8 (Austin Group defect 610);
            as the file description (SI-12). Read-ahead is checked in setup on a separate open, so that the
            test does not itself switch the active handle (XSH 2.5.1).
            See research 6.1 for the fclose() and fflush() path.
+nomutant   no fault can be planted in what exit() does around the registered handlers: atexit() may be bound at link time, past any preload, and no standard interface reaches the handler list
 test       t/010-offset-synced.c
 
 assertion  XSH.exit.011

@@ -3,8 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.signal.002
- * MUTANT    signal.ign_as_dfl
- * MUTANT    signal.dfl_ignored
  * VARIANT   signal.block_all
  */
 #include "pc.h"

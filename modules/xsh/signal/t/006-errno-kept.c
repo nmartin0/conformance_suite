@@ -3,7 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.signal.006
- * MUTANT    signal.errno_clobbered
  * VARIANT   signal.block_all
  */
 #include "pc.h"

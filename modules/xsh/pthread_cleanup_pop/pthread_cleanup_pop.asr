@@ -15,6 +15,7 @@ says       After pushing handlers with arguments 11, 22, 33, the calls
 note       On a system whose pthread_cleanup_pop() is a macro that calls
            the handler inline, the faults in what it runs cannot be
            planted; the test is then reviewed by hand.
+nomutant   no fault can be planted in the cleanup handlers: pthread_cleanup_push() and pthread_cleanup_pop() may be macros, and no standard interface follows what they register
 test       t/001-pop.c
 
 assertion  XSH.pthread_cleanup_pop.002
@@ -26,6 +27,7 @@ says       A thread that pushed handlers 1 and 2, popped 2 with
            pthread_cleanup_pop(0), pushed 3 and 4 and called
            pthread_exit() runs them as 4, 3, 1, and pthread_join() gives
            the value passed to pthread_exit().
+nomutant   no fault can be planted in the cleanup handlers: pthread_cleanup_push() and pthread_cleanup_pop() may be macros, and no standard interface follows what they register
 test       t/002-exit.c
 
 assertion  XSH.pthread_cleanup_pop.003
@@ -42,4 +44,5 @@ note       The objects are volatile: the macros may use setjmp(), after
            which ISO C leaves non-volatile automatic objects modified
            later indeterminate; 2.9.5.3 promises only that the storage
            remains valid.
+nomutant   no fault can be planted in the cleanup handlers: pthread_cleanup_push() and pthread_cleanup_pop() may be macros, and no standard interface follows what they register
 test       t/003-cancel.c

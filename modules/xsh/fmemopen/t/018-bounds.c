@@ -3,9 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fmemopen.018
- * MUTANT    fmemopen.overrun
- * MUTANT    fmemopen.nul_overrun
- * MUTANT    fmemopen.end_unbounded
  * VARIANT   setvbuf.tiny_default
  * VARIANT   fmemopen.unbuffered
  */

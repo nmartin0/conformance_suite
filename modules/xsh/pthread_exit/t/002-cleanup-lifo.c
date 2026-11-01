@@ -3,8 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.pthread_exit.002
- * MUTANT    pthread_exit.skip_cleanup
- * MUTANT    pthread_exit.innermost_only
  * VARIANT   pthread_create.runs_late
  */
 #include "pc.h"

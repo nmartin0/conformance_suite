@@ -6,7 +6,6 @@
  * ASSERTION XSH.pthread_exit.004
  * MUTANT    pthread_exit.unlocks_mutexes
  * MUTANT    pthread_exit.closes_fds
- * MUTANT    pthread_exit.runs_atexit
  * VARIANT   pthread_create.runs_late
  */
 #include "pc.h"

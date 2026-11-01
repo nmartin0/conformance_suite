@@ -3,9 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.open_memstream.014
- * MUTANT    open_memstream.wide_byte
- * VARIANT   open_memstream.unbuffered
- * READING   open_memstream.wunoriented
  */
 #include "pc.h"
 #include <errno.h>

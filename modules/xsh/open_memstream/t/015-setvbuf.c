@@ -3,7 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.open_memstream.015
- * MUTANT    open_memstream.setvbuf_loses
  */
 #include "pc.h"
 #include <errno.h>

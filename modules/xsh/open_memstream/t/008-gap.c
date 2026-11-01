@@ -3,8 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.open_memstream.008
- * MUTANT    open_memstream.gap_garbage
- * VARIANT   open_memstream.unbuffered
  */
 #include "pc.h"
 #include <errno.h>

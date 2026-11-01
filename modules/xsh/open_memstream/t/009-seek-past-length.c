@@ -3,11 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.open_memstream.009
- * MUTANT    open_memstream.extends_garbage
- * MUTANT    open_memstream.seek_past_fails
- * VARIANT   open_memstream.unbuffered
- * VARIANT   open_memstream.seek_extends
- * VARIANT   open_memstream.seek_keeps
  */
 #include "pc.h"
 #include <errno.h>

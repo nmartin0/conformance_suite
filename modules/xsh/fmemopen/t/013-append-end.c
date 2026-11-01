@@ -3,8 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fmemopen.013
- * MUTANT    fmemopen.a_end_max
- * MUTANT    fmemopen.seek_end_max
  * VARIANT   setvbuf.tiny_default
  * VARIANT   fmemopen.unbuffered
  */

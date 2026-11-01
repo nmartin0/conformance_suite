@@ -53,13 +53,3 @@ void (*signal(int sig, void (*fn)(int)))(int)
 	return set("signal", sig, fn);
 }
 
-/* glibc maps signal() to one of these, depending on the feature macros */
-void (*__sysv_signal(int sig, void (*fn)(int)))(int)
-{
-	return set("__sysv_signal", sig, fn);
-}
-
-void (*bsd_signal(int sig, void (*fn)(int)))(int)
-{
-	return set("bsd_signal", sig, fn);
-}

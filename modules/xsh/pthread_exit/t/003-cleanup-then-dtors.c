@@ -4,7 +4,6 @@
  *
  * ASSERTION XSH.pthread_exit.003
  * MUTANT    pthread_exit.dtors_first
- * MUTANT    pthread_exit.skip_cleanup
  * MUTANT    pthread_exit.skip_dtors
  * VARIANT   pthread_create.runs_late
  * VARIANT   pthread_key_create.dtors_reversed

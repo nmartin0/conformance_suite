@@ -5,12 +5,9 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * A preload library; faults are named "pthread_exit.<fault>" and apply
- * only while PC_PHASE is "test". To reach the cleanup handlers, it
- * follows the C library's push and pop entry points (glibc's
- * __pthread_register_cancel and musl's _pthread_cleanup_push, which the
- * pthread_cleanup_push() and pthread_cleanup_pop() macros call); it
- * also follows key creation, mutex locks, pipes and atexit()
- * registrations, and counts live threads.
+ * only while PC_PHASE is "test". It follows key creation, mutex locks and
+ * pipes, and counts live threads. Cleanup handlers are pushed by macros
+ * that a standard interface cannot follow, so no fault is planted in them.
  */
 #define _GNU_SOURCE 1
 #include <dlfcn.h>
@@ -70,83 +67,6 @@ __attribute__((constructor)) static void phase_from_env(void)
 		strcpy(phase, p);
 }
 
-/* ---------- cleanup handler records ---------- */
-
-static __thread void *bufs[64];
-static __thread int nbufs;
-
-#ifdef __GLIBC__
-/* glibc: the macros register an unwind buffer whose first pad word links to the previous one. */
-void __pthread_register_cancel(__pthread_unwind_buf_t *buf)
-{
-	static void (*real)(__pthread_unwind_buf_t *);
-
-	if (real == NULL)
-		real = (void (*)(__pthread_unwind_buf_t *))dlsym(RTLD_NEXT, "__pthread_register_cancel");
-	real(buf);
-	if (nbufs < 64)
-		bufs[nbufs++] = buf;
-}
-
-void __pthread_unregister_cancel(__pthread_unwind_buf_t *buf)
-{
-	static void (*real)(__pthread_unwind_buf_t *);
-
-	if (real == NULL)
-		real = (void (*)(__pthread_unwind_buf_t *))dlsym(RTLD_NEXT, "__pthread_unregister_cancel");
-	if (nbufs > 0 && bufs[nbufs - 1] == buf)
-		nbufs--;
-	real(buf);
-}
-
-static void drop_handlers(void)
-{
-	while (nbufs > 0)
-		__pthread_unregister_cancel(bufs[nbufs - 1]);
-}
-
-static void keep_innermost(void)
-{
-	if (nbufs > 1)
-		((__pthread_unwind_buf_t *)bufs[nbufs - 1])->__pad[0] = ((__pthread_unwind_buf_t *)bufs[0])->__pad[0];
-}
-#else
-/* musl: the macros link a struct __ptcb through __next. */
-void _pthread_cleanup_push(struct __ptcb *cb, void (*f)(void *), void *x)
-{
-	static void (*real)(struct __ptcb *, void (*)(void *), void *);
-
-	if (real == NULL)
-		real = (void (*)(struct __ptcb *, void (*)(void *), void *))dlsym(RTLD_NEXT, "_pthread_cleanup_push");
-	real(cb, f, x);
-	if (nbufs < 64)
-		bufs[nbufs++] = cb;
-}
-
-void _pthread_cleanup_pop(struct __ptcb *cb, int run)
-{
-	static void (*real)(struct __ptcb *, int);
-
-	if (real == NULL)
-		real = (void (*)(struct __ptcb *, int))dlsym(RTLD_NEXT, "_pthread_cleanup_pop");
-	if (nbufs > 0 && bufs[nbufs - 1] == cb)
-		nbufs--;
-	real(cb, run);
-}
-
-static void drop_handlers(void)
-{
-	while (nbufs > 0)
-		_pthread_cleanup_pop(bufs[nbufs - 1], 0);
-}
-
-static void keep_innermost(void)
-{
-	if (nbufs > 1)
-		((struct __ptcb *)bufs[nbufs - 1])->__next = ((struct __ptcb *)bufs[0])->__next;
-}
-#endif
-
 /* ---------- keys ---------- */
 
 static pthread_key_t keys[256];
@@ -205,36 +125,6 @@ int pipe(int fd[2])
 		fds[nfds++] = fd[1];
 	}
 	return r;
-}
-
-/* ---------- atexit() registrations made after pc_begin() ---------- */
-
-static void (*exit_fns[32])(void *);
-static void *exit_args[32];
-static int nexit;
-
-static void note_exit_fn(void (*fn)(void *), void *arg)
-{
-	if (phase[0] != '\0' && nexit < 32) {
-		exit_fns[nexit] = fn;
-		exit_args[nexit++] = arg;
-	}
-}
-
-int __cxa_atexit(void (*fn)(void *), void *arg, void *dso)
-{
-	REAL(__cxa_atexit);
-
-	note_exit_fn(fn, arg);
-	return real___cxa_atexit(fn, arg, dso);
-}
-
-int atexit(void (*fn)(void))
-{
-	REAL(atexit);
-
-	note_exit_fn((void (*)(void *))fn, NULL);
-	return real_atexit(fn);
 }
 
 /* ---------- live threads ---------- */
@@ -306,10 +196,6 @@ void pthread_exit(void *v)
 		first = v;
 		have_first = 1;
 	}
-	if (IS("skip_cleanup"))
-		drop_handlers();
-	if (IS("innermost_only"))
-		keep_innermost();
 	if (IS("dtors_first"))
 		for (i = 0; i < nkeys; i++) {
 			void *val = pthread_getspecific(keys[i]);
@@ -327,9 +213,6 @@ void pthread_exit(void *v)
 	if (IS("closes_fds"))
 		while (nfds > 0)
 			(void)close(fds[--nfds]);
-	if (IS("runs_atexit"))
-		for (i = nexit - 1; i >= 0; i--)
-			exit_fns[i](exit_args[i]);
 	(void)pthread_mutex_lock(&lk);
 	left = --live;
 	(void)pthread_mutex_unlock(&lk);

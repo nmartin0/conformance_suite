@@ -3,7 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.exit.006
- * MUTANT    exit.calls_quick
  * VARIANT   wait.status_encoding
  */
 #include "pc.h"

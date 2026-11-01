@@ -8,6 +8,7 @@ since      2008
 says       fmemopen(buf, 6, "r") on a buffer holding "foobar" returns a stream
            whose reads give 'f', 'o', 'o', 'b', 'a', 'r' and then EOF, with
            the end-of-file indicator set and the error indicator clear.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/001-read.c
 
 assertion  XSH.fmemopen.002
@@ -17,6 +18,7 @@ since      2008
 says       On a stream from fmemopen(buf, 6, "r") with buf holding 'a', 0,
            'b', 0, 0, 'c', fread() of up to 16 bytes returns 6 bytes equal to
            the buffer, and the next read gives EOF: null bytes end nothing.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/002-null-bytes-read.c
 
 assertion  XSH.fmemopen.003
@@ -30,6 +32,7 @@ says       On a stream from fmemopen(buf, 6, "r") over "abcdef", a read, an
            fseek(f, 2, SEEK_SET) and fclose() leave all 6 bytes unchanged.
 note       Austin Group defect 1144 added the rule that a read-only stream
            does not modify a caller's buffer.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/003-read-only-unchanged.c
 
 assertion  XSH.fmemopen.004
@@ -41,6 +44,7 @@ says       fmemopen(buf, 4, "w") on a buffer holding "abc" returns a stream
 note       The truncation is part of opening, so it is checked as soon as
            fmemopen() returns. Modes with 'b' are implementation-defined and
            are not used.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/004-w-truncates.c
 
 assertion  XSH.fmemopen.005
@@ -48,6 +52,7 @@ anchor     functions/fmemopen.html#DESCRIPTION
 class      required
 says       fmemopen(buf, 4, "w+") on a buffer holding "abc" returns a stream
            and buf[0] is then a null byte, before any other operation.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/005-wplus-truncates.c
 
 assertion  XSH.fmemopen.006
@@ -63,6 +68,7 @@ note       The null byte is written only when max_size is not zero, and
            is outside the stream's buffer (XSH 2.5 keeps operations within
            it). A size of zero may be unsupported (EINVAL, variant
            fmemopen.size0_einval).
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/006-size-zero-untouched.c
 
 assertion  XSH.fmemopen.007
@@ -76,6 +82,7 @@ says       fmemopen(NULL, 10, "w+") returns a stream at position 0; after
 note       A null pointer with ENOMEM (allocation failed, a may-fail
            error) is UNRESOLVED. Nine bytes leave room for the null byte
            (a buffer filled exactly is XSH.fmemopen.021).
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/007-null-buf.c
 
 assertion  XSH.fmemopen.008
@@ -86,6 +93,7 @@ says       fmemopen(NULL, 8, "a+") returns a stream whose position is 0 and
            0); after fputs("ab") and rewind(), reads give "ab" and then EOF.
 note       The allocated buffer's contents are not looked at for a null
            byte. A null pointer with ENOMEM is UNRESOLVED.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/008-null-buf-append.c
 
 assertion  XSH.fmemopen.009
@@ -95,6 +103,7 @@ since      2008
 says       On buffers of 6 bytes holding "abc", 0, "ef", ftell() right after
            fmemopen() is 0 for "r", "w", "r+" and "w+", and 3 (the first
            null byte) for "a" and "a+".
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/009-initial-position.c
 
 assertion  XSH.fmemopen.010
@@ -106,6 +115,7 @@ says       On buffers of 6 bytes holding "abcdef" (no null byte), ftell()
 note       The position the page puts just past the last byte is taken as
            max_size: the end position is max_size in this case and no
            seek may go beyond it.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/010-append-no-null.c
 
 assertion  XSH.fmemopen.011
@@ -114,6 +124,7 @@ class      required
 says       On buffers of 6 bytes holding "ab", 0, "def", fseek(f, 0, SEEK_END)
            leaves ftell() at 6 for "r" and "r+"; on the "r+" stream, after
            fputs("XY") at 0 and after fputc('Q') at 4, it is still 6.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/011-read-end.c
 
 assertion  XSH.fmemopen.012
@@ -121,6 +132,7 @@ anchor     functions/fmemopen.html#DESCRIPTION
 class      required
 says       On buffers of 6 bytes holding "abcdef", fseek(f, 0, SEEK_END)
            right after fmemopen() leaves ftell() at 0 for "w" and "w+".
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/012-write-end.c
 
 assertion  XSH.fmemopen.013
@@ -129,6 +141,7 @@ class      required
 says       On buffers of 6 bytes holding "abc", 0, "ef", fseek(f, 0, SEEK_END)
            leaves ftell() at 3 and fseek(f, -1, SEEK_END) at 2, for "a" and
            for "a+".
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/013-append-end.c
 
 assertion  XSH.fmemopen.014
@@ -138,6 +151,7 @@ says       On a stream from fmemopen(buf, 10, "w+") after fputs("abc") and
            rewind(), fread() of up to 10 bytes returns the 3 bytes "abc" and
            sets the end-of-file indicator; after fseek(f, 5, SEEK_SET),
            fgetc() returns EOF.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/014-read-stops-at-end.c
 
 assertion  XSH.fmemopen.015
@@ -147,6 +161,7 @@ says       With "r+" on "abcdef" (size 6), fseek(f, 2, SEEK_SET) and
            fputs("XY") leave ftell() at 4 and, after fflush(), the buffer
            "abXYef". With "w+" (size 8), fputs("abcdef"), fseek(f, 1,
            SEEK_SET), fputs("Z") and rewind() make reads give "aZcdef".
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/015-write-at-position.c
 
 assertion  XSH.fmemopen.016
@@ -156,6 +171,7 @@ says       On 8-byte buffers holding "ab" and null bytes: with "a+", after a
            read of 'a', fseek(f, 0, SEEK_SET) and fputs("XY"), and with "a",
            after fseek(f, 0, SEEK_SET) and fputs("Q"), fflush() leaves the
            buffers starting "abXY" and "abQ".
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/016-append-writes-at-end.c
 
 assertion  XSH.fmemopen.017
@@ -164,6 +180,7 @@ class      required
 says       On a stream from fmemopen(buf, 10, "w+"): after fputs("abc"),
            fseek(f, 0, SEEK_END) gives position 3; after fputs("Q") at 0 it
            still gives 3; after fputs("Z") at 5 it gives 6.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/017-end-follows-writes.c
 
 assertion  XSH.fmemopen.018
@@ -179,6 +196,7 @@ note       How many bytes a write that does not fit puts in, and its
            errors, are not judged (what the buffer holds when it is filled
            exactly is XSH.fmemopen.021). setvbuf() refusing _IONBF is
            UNRESOLVED.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/018-bounds.c
 
 assertion  XSH.fmemopen.019
@@ -189,6 +207,7 @@ says       On an 8-byte buffer of 'x' opened "w", fputs("abc") and fflush()
            and fflush() a null byte at index 5; on an 8-byte buffer holding
            "ab", 0, then 'x', opened "a", fputs("Q") and fflush() leave "abQ"
            and a null byte at index 3.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/019-null-after-write.c
 
 assertion  XSH.fmemopen.020
@@ -199,6 +218,7 @@ says       With "w+" on an 8-byte buffer of 'x', fputs("abcdef"), fseek(f, 1,
            with "r+" on "abcdef" (size 6), fputs("XY") and fflush() leave
            index 2 holding 'c', and rewind() and reads give "XYcdef".
 note       Only a write that moves the end position adds a null byte.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/020-no-null-inside.c
 
 assertion  XSH.fmemopen.021
@@ -213,6 +233,7 @@ says       With max_size 4 inside an 8-byte array of 'x', fputs("abcd") on a
 note       The null byte goes at the new end position only if it fits;
            here it does not (the page's APPLICATION USAGE says the same).
            If fflush() fails, the assertion is UNRESOLVED.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/021-full-no-null.c
 
 assertion  XSH.fmemopen.022
@@ -228,6 +249,7 @@ note       Positions past the end position but within max_size are allowed
            as for files (fseek()). The errno is fseek()'s (XSH.fseek.014,
            Q-35); where a failed seek leaves the position is not stated
            (variant fseek.mem_fail_clamps).
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/022-seek-bounds.c
 
 assertion  XSH.fmemopen.023
@@ -243,6 +265,7 @@ note       Q-201: 2.5.2 gives a stream no orientation after it is associated
            open_memstream() says outright that its stream is byte-oriented
            where fmemopen() says nothing; the test takes the 2.5.2 rule. A
            FAIL is logged as INSPECT.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/023-orientation.c
 
 assertion  XSH.fmemopen.024
@@ -254,4 +277,5 @@ says       With {STREAM_MAX} from sysconf() bounded and {STREAM_MAX} streams
            returns a null pointer with errno EMFILE.
 note       An indeterminate {STREAM_MAX} is NOTINUSE, as in
            XSH.fopen.032.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/024-stream-max.c

@@ -9,6 +9,7 @@ says       open_memstream(&b, &n) returns a stream whose ftell() is 0; after
            fputs("hello") ftell() is 5, and after fflush() n is 5 and b
            holds "hello" followed by a null byte; after fclose() the same
            holds.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/001-write.c
 
 assertion  XSH.open_memstream.002
@@ -21,6 +22,7 @@ says       With n preset to 12345, open_memstream(&b, &n) followed by
            n to 0.
 note       The contents of the buffer are not judged when nothing was
            written.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/002-initial-length.c
 
 assertion  XSH.open_memstream.003
@@ -30,6 +32,7 @@ class      required
 since      2008
 says       After 1000 fputs() calls of 100 bytes each and fclose(), n is
            100000, b holds the bytes written and b[100000] is a null byte.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/003-grows.c
 
 assertion  XSH.open_memstream.004
@@ -41,6 +44,7 @@ says       After fputs("hello world"), fseek(f, 0, SEEK_SET), fputs("J") and
            byte.
 note       n is the smaller of the length (11) and the position (1); the
            write replaces one byte and leaves the rest.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/004-overwrite.c
 
 assertion  XSH.open_memstream.005
@@ -51,6 +55,7 @@ says       After fputs("hello") and fflush(), fseek(f, 2, SEEK_SET) and
            to 4.
 note       After a successful fflush() n is the smaller of the length and
            the position, whether or not the flush had data to move.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/005-size-after-seek.c
 
 assertion  XSH.open_memstream.006
@@ -59,6 +64,7 @@ class      required
 since      2008
 says       After fputs("xyz") with no fflush(), fclose() leaves n at 3 and b
            holding "xyz" followed by a null byte.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/006-close-updates.c
 
 assertion  XSH.open_memstream.007
@@ -71,6 +77,7 @@ says       As in the page's example: fprintf() of "hello my world",
            leave n at 14 and b holding "good-bye world".
 note       At fclose() the position is 14 again, so n is 14 although the
            last write ended at 8.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/007-close-after-seek.c
 
 assertion  XSH.open_memstream.008
@@ -81,6 +88,7 @@ says       After fputs("ab"), fseek(f, 5, SEEK_SET), fputs("c") and
            null byte.
 note       Whether or not the seek extends the buffer, the gap reads as
            null bytes once data is written after it.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/008-gap.c
 
 assertion  XSH.open_memstream.009
@@ -90,6 +98,7 @@ says       After fputs("ab"), fseek(f, 5, SEEK_SET) succeeds and fflush()
            sets n to 2 or to 5; when it is 5, b[2] to b[4] are null bytes.
 note       Whether a seek past the length extends the buffer is
            implementation-defined: 2 if it does not, 5 if it does.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/009-seek-past-length.c
 
 assertion  XSH.open_memstream.010
@@ -100,6 +109,7 @@ says       After fputs("hello") and fseek(f, 2, SEEK_SET), fseek(f, 0,
            size an fflush() would set).
 note       The base of SEEK_END is implementation-defined between these
            two (variant open_memstream.seek_end_flush_size).
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/010-seek-end.c
 
 assertion  XSH.open_memstream.011
@@ -111,6 +121,7 @@ says       With {STREAM_MAX} from sysconf() bounded and {STREAM_MAX} streams
            returns a null pointer with errno EMFILE.
 note       An indeterminate {STREAM_MAX} is NOTINUSE, as in
            XSH.fopen.032.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/011-stream-max.c
 
 assertion  XSH.open_memstream.012
@@ -122,9 +133,10 @@ says       fwide(f, 0) right after open_memstream() returns a negative value
 note       disputed (Q-64): the page makes the stream byte-oriented, but
            XSH 2.5 says a memory stream's orientation is determined in
            exactly the same way as a file stream's, which starts with
-           none. Under that reading fwide() returns 0 here (READING
-           open_memstream.unoriented); a FAIL is logged as INSPECT. Both
+           none. Under that reading fwide() returns 0 here; a FAIL
+           is logged as INSPECT. Both
            readings agree that a wide-oriented stream is wrong.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/012-byte-oriented.c
 
 assertion  XSH.open_memstream.013
@@ -136,6 +148,7 @@ says       open_wmemstream(&b, &n) returns a stream; after fputws(L"hello")
            character; after fclose() the same holds.
 note       n counts wide characters, not bytes. Only characters of the
            portable character set are written, in the POSIX locale.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/013-wide-write.c
 
 assertion  XSH.open_memstream.014
@@ -144,9 +157,9 @@ anchor     functions/V2_chap02.html#2.5
 class      disputed
 says       fwide(f, 0) right after open_wmemstream() returns a positive value
            (the stream is wide-oriented from the start).
-note       disputed (Q-64): the same conflict as XSH.open_memstream.012
-           (READING open_memstream.wunoriented); a FAIL is logged as
-           INSPECT.
+note       disputed (Q-64): the same conflict as XSH.open_memstream.012;
+           a FAIL is logged as INSPECT.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/014-wide-oriented.c
 
 assertion  XSH.open_memstream.015
@@ -161,4 +174,5 @@ says       On a new stream from open_memstream(), after setvbuf() with a
 note       XSH 2.5 has a memory stream's output pass through a buffer
            given to setvbuf(); setvbuf() may be used on any stream before
            its first operation. A setvbuf() that fails is UNRESOLVED.
+nomutant   no fault can be planted: a memory stream with chosen faults cannot be built through a standard interface
 test       t/015-setvbuf.c

@@ -3,8 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fmemopen.023
- * MUTANT    fmemopen.byte_oriented
- * MUTANT    fmemopen.wide_after_read
  * VARIANT   setvbuf.tiny_default
  * VARIANT   fmemopen.unbuffered
  */

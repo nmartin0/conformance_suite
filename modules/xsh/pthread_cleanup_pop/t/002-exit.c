@@ -5,7 +5,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.pthread_cleanup_pop.002
- * MUTANT    pthread_cleanup_pop.no_cleanup
  */
 #include "pc.h"
 #include <errno.h>

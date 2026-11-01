@@ -3,10 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.open_memstream.010
- * MUTANT    open_memstream.seek_end_zero
- * MUTANT    open_memstream.seek_end_cap
- * VARIANT   open_memstream.unbuffered
- * VARIANT   open_memstream.seek_end_flush_size
  */
 #include "pc.h"
 #include <errno.h>

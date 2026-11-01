@@ -3,8 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fmemopen.006
- * MUTANT    fmemopen.zero_nul
- * MUTANT    fmemopen.zero_wrong_errno
  * VARIANT   fmemopen.size0_einval
  * VARIANT   fmemopen.unbuffered
  */

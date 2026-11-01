@@ -3,8 +3,6 @@
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.fmemopen.022
- * MUTANT    fmemopen.seek_unbounded
- * MUTANT    fmemopen.seek_past_end_fails
  * VARIANT   setvbuf.tiny_default
  * VARIANT   fmemopen.unbuffered
  * VARIANT   fseek.mem_fail_clamps
