@@ -28,6 +28,7 @@ UNCHECKED and needs another system. Record each outcome in
 | awk 040-042, mv 005, nl 002, xargs 016, touch 016 | the utility meets the requirement the test states (the faults were checked by hand against a conforming model) |
 | od 011 | od accepts the XSI offset operand |
 | ps 015, 016 | ps marks defunct processes in the default listing (015) and accepts blanks in heading text (016) |
+| patch 015, 016 | patch makes no outfile.orig with `-b -o`, and applies several `-o` patches in sequence, as the tests state (faults checked by hand against a conforming model) |
 | nm 008, 012 | nm supports the `-x`, `-o` and `-f` options the tests use |
 | set 020, kill 011/013/014 | the user portability utilities option is claimed (kill also needs job control) |
 | set 018 | the shell under test supports pipefail |
