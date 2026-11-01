@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mkdir.005
+# MUTANT    mkdir.p_ignored
+# MUTANT    mkdir.p_first_only
+# MUTANT    mkdir.p_one_level
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mkdir.005
 pc_test

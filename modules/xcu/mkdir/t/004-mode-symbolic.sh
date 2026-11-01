@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.mkdir.004
+# MUTANT    mkdir.m_ignored
+# MUTANT    mkdir.m_sym_from_umask
 . "$PC_CORE/pc.sh"
 pc_begin XCU.mkdir.004
 modeof() {
@@ -26,4 +28,10 @@ modeof d3 || pc_fail "cannot list d3"
 mkdir -m go-w d4 >out 2>err </dev/null
 modeof d4 || pc_fail "cannot list d4"
 [ "$mo" = "drwxr-xr-x" ] || pc_fail "-m go-w: mode is $mo"
+mkdir -m g+w d5 >out 2>err </dev/null
+modeof d5 || pc_fail "cannot list d5"
+[ "$mo" = "drwxrwxrwx" ] || pc_fail "-m g+w: mode is $mo"
+mkdir -m a=r d6 >out 2>err </dev/null
+modeof d6 || pc_fail "cannot list d6"
+[ "$mo" = "dr--r--r--" ] || pc_fail "-m a=r: mode is $mo"
 pc_pass
