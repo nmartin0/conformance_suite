@@ -129,7 +129,7 @@ esac
 # an empty unaffected line is written as an empty line or as a single space
 printf 'a\n\nb\nc\n' >m1
 printf 'a\n\nb\nX\n' >m2
-out=$(diff -U 2 m1 m2 2>/dev/null </dev/null)
+out=$(diff -U 3 m1 m2 2>/dev/null </dev/null)
 b=$(body "$out")
 case $b in
 "@@ -1,4 +1,4 @@${NL} a${NL}${NL} b${NL}-c${NL}+X" | "@@ -1,4 +1,4 @@${NL} a${NL} ${NL} b${NL}-c${NL}+X") ;;

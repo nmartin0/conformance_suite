@@ -24,8 +24,12 @@ rc=$?
 [ "$rc" -eq 1 ] || pc_fail "diff -b d1 d2: exit status $rc, expected 1"
 grep '^diff -b ' out >/dev/null || pc_fail "no header line beginning 'diff -b ': $(cat out)"
 l=$(grep '^diff -b ' out | head -1)
-case $l in
-*dif*dif*) ;;
+set -f
+set -- $l
+set +f
+[ $# -eq 4 ] || pc_fail "the header line is not 'diff -b name1 name2': '$l'"
+case "$3 $4" in
+*dif*" "*dif) ;;
 *) pc_fail "the header line does not name the two files: '$l'" ;;
 esac
 diff -r d1 d2 >out 2>err </dev/null

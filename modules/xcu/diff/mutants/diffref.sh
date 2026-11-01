@@ -325,7 +325,7 @@ pc_diffpost() {
 		fi
 		cat "$T.o" >>"$T.p" ;;
 	d_order_rev)
-		awk '/^(Only in |diff |Common subdirectories)/{g++} {b[g]=b[g] $0 "\n"} END{for(i=g;i>=1;i--) printf "%s", b[i]}' "$T.o" >"$T.p" ;;
+		awk 'BEGIN{g=0} /^(Only in |diff |Common subdirectories)/{g++} {b[g]=b[g] $0 "\n"} END{if(g==0) printf "%s", b[0]; for(i=g;i>=1;i--) printf "%s", b[i]}' "$T.o" >"$T.p" ;;
 	d_hdr_names) sed 's|^\(diff.*\) [^ ]*/\([^ /]*\) [^ ]*/\([^ /]*\)$|\1 \2 \3|' "$T.o" >"$T.p" ;;
 	# ---- permitted choices in the unified format ----
 	u_frac_none) sed '1,2s/\.[0-9][0-9]* / /' "$T.o" >"$T.p" ;;
@@ -334,7 +334,7 @@ pc_diffpost() {
 	u_empty_space) awk 'NR>2 && $0==""{print " ";next} {print}' "$T.o" >"$T.p" ;;
 	# ---- permitted choice in the context format: wider blanks ----
 	c_blanks)
-		awk 'NR<=2{ p=substr($0,1,3); r=substr($0,5); sp=index(r," "); print p "  " substr(r,1,sp-1) "   " substr(r,sp+1); next }
+		awk 'NR<=2{ p=substr($0,1,3); r=substr($0,5); sp=match(r,/[ \t]/); print p "  " substr(r,1,sp-1) "   " substr(r,sp+1); next }
 			/^\*\*\* [0-9,]+ \*\*\*\*$/{print "***  " $2 "  ****";next}
 			/^--- [0-9,]+ ----$/{print "---  " $2 "  ----";next}
 			{print}' "$T.o" >"$T.p" ;;
