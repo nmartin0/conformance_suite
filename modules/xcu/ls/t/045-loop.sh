@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.045
+# MUTANT    ls.loop_endless
+# MUTANT    ls.loop_no_diag
+# MUTANT    ls.loop_diag_stdout
+# MUTANT    ls.loop_hang
+# VARIANT   ls.loop_terminates
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.045
 LC_ALL=POSIX; export LC_ALL

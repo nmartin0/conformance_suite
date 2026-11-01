@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.049
+# MUTANT    ls.ok_status1
+# MUTANT    ls.ok_stderr_note
+# MUTANT    ls.ok_status1_R
+# MUTANT    ls.ok_status1_m
+# MUTANT    ls.ok_stderr_l
+# MUTANT    ls.ok_stderr_s
+# MUTANT    ls.ok_stderr_i
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.049
 LC_ALL=POSIX; export LC_ALL

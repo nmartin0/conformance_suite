@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.048
+# MUTANT    ls.lastwins_Aa
+# MUTANT    ls.lastwins_Fp
+# MUTANT    ls.lastwins_m1
+# MUTANT    ls.lastwins_Cx
+# MUTANT    ls.union_Fp
+# MUTANT    ls.a_no_dots
+# MUTANT    ls.exclusive_error
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.048
 LC_ALL=POSIX; export LC_ALL

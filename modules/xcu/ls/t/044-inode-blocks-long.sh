@@ -2,17 +2,25 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.044
+# MUTANT    ls.ino_blk_swapped
+# MUTANT    ls.ino_after_mode
+# MUTANT    ls.ino_dropped_long
+# MUTANT    ls.blk_dropped_long
+# MUTANT    ls.no_total_s1
+# MUTANT    ls.blk_after_name_1
+# VARIANT   ls.s_units
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.044
 LC_ALL=POSIX; export LC_ALL
 mkdir d || pc_unresolved "cannot create d"
 printf 'abcde' >d/f || pc_unresolved "cannot create d/f"
 chmod 640 d/f || pc_unresolved "chmod failed"
+pc_test
+# the reference values come from the same ls, in the test phase
 ino=$(ls -i d/f | awk '{ print $1 }')
 blk=$(ls -s d/f | awk '{ print $1 }')
-case $ino in ''|*[!0-9]*) pc_unresolved "ls -i gave '$ino'" ;; esac
-case $blk in ''|*[!0-9]*) pc_unresolved "ls -s gave '$blk'" ;; esac
-pc_test
+case $ino in ''|*[!0-9]*) pc_fail "ls -i gave '$ino'" ;; esac
+case $blk in ''|*[!0-9]*) pc_fail "ls -s gave '$blk'" ;; esac
 ls -i -s -l d >out 2>err </dev/null
 rc=$?
 [ "$rc" -eq 0 ] || pc_fail "ls -i -s -l exited with status $rc"

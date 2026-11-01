@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ls.046
+# MUTANT    ls.sortS_deref
+# MUTANT    ls.sortS_H_ignored
+# MUTANT    ls.sortS_L_ignored
+# MUTANT    ls.sortt_deref
+# MUTANT    ls.sortt_H_ignored
+# MUTANT    ls.sortt_L_ignored
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ls.046
 LC_ALL=POSIX; export LC_ALL
