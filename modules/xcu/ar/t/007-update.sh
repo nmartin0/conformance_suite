@@ -20,8 +20,24 @@ touch -t 200101010000 f1 || pc_unresolved "setup: touch failed"
 pc_test
 ar -ru a f1 >out 2>err </dev/null || pc_fail "ar -ru with an older file: nonzero status"
 [ "$(ar -p a f1 </dev/null)" = one ] || pc_fail "an older file replaced the archived member"
+# A file as new as the archived member is replaced.
+printf 'equal\n' >f1
+touch -t 200201010000 f1 || pc_unresolved "touch failed"
+ar -ru a f1 >out 2>err </dev/null || pc_fail "ar -ru with an equally old file: nonzero status"
+[ "$(ar -p a f1 </dev/null)" = equal ] || pc_fail "a file as new as the archived member did not replace it"
 printf 'newer\n' >f1
 touch -t 200301010000 f1 || pc_unresolved "touch failed"
 ar -ru a f1 >out 2>err </dev/null || pc_fail "ar -ru with a newer file: nonzero status"
 [ "$(ar -p a f1 </dev/null)" = newer ] || pc_fail "a newer file did not replace the archived member"
+# The comparison is with the time of the archived member, which is now 2003.
+printf 'older again\n' >f1
+touch -t 200201010000 f1 || pc_unresolved "touch failed"
+ar -ru a f1 >out 2>err </dev/null || pc_fail "ar -ru with an older file: nonzero status"
+[ "$(ar -p a f1 </dev/null)" = newer ] || pc_fail "a file older than the replacing one replaced the member"
+# -u only restricts replacement: a file not yet in the archive is added.
+printf 'new member\n' >f2
+touch -t 200001010000 f2 || pc_unresolved "touch failed"
+ar -ru a f2 >out 2>err </dev/null || pc_fail "ar -ru adding an old file: nonzero status"
+[ "$(ar -t a </dev/null | tr '\n' ' ')" = 'f1 f2 ' ] || pc_fail "ar -ru did not add a file that is not in the archive"
+[ "$(ar -p a f2 </dev/null)" = 'new member' ] || pc_fail "the added member has the wrong contents"
 pc_pass

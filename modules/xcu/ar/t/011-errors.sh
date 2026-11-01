@@ -12,11 +12,21 @@ pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
 printf 'one\n' >f1
+ar -rc good f1 </dev/null >/dev/null 2>&1 || pc_unresolved "setup: cannot build the archive"
 pc_test
 ar -t nonexistent.a >out 2>err </dev/null
 rc=$?
 [ "$rc" -ne 0 ] || pc_fail "ar -t of a nonexistent archive gave status 0"
+ar -p nonexistent.a >out 2>err </dev/null
+rc=$?
+[ "$rc" -ne 0 ] || pc_fail "ar -p of a nonexistent archive gave status 0"
+ar -x nonexistent.a >out 2>err </dev/null
+rc=$?
+[ "$rc" -ne 0 ] || pc_fail "ar -x of a nonexistent archive gave status 0"
 ar -rc b nonexistent.file >out 2>err </dev/null
 rc=$?
 [ "$rc" -ne 0 ] || pc_fail "ar -r of a nonexistent file gave status 0"
+ar -rc good f1 nonexistent.file >out 2>err </dev/null
+rc=$?
+[ "$rc" -ne 0 ] || pc_fail "ar -r of an existing and a nonexistent file gave status 0"
 pc_pass
