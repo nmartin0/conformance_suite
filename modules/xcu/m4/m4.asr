@@ -70,7 +70,7 @@ since      1992
 says       Diverted text is held and written at the end in buffer order;
            divert(-1) discards; divnum gives the current stream; undivert
            writes a buffer at once and empties it; m4wrap text is processed
-           at end of input in call order.
+           at end of input.
 test       t/007-diversions.sh
 
 assertion  XCU.m4.008
@@ -150,8 +150,8 @@ assertion  XCU.m4.016
 anchor     utilities/m4.html#EXTENDED DESCRIPTION
 class      required
 since      2024
-says       When mkstemp cannot create its file m4 writes a diagnostic, goes on,
-           the defining text is empty and the final exit status is non-zero.
+says       When mkstemp cannot create its file m4 writes a diagnostic, goes on
+           and the defining text is empty.
 test       t/016-mkstemp-failure.sh
 
 assertion  XCU.m4.017
@@ -169,3 +169,20 @@ since      2024
 says       Built-in macros with no stated value expand to nothing, and traceon
            writes its trace to standard error and not standard output.
 test       t/018-null-values-and-trace.sh
+
+assertion  XCU.m4.019
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+class      required
+since      2024
+says       Text given to m4wrap more than once is processed in the order of
+           the calls.
+test       t/019-m4wrap-order.sh
+
+assertion  XCU.m4.020
+anchor     utilities/m4.html#EXTENDED DESCRIPTION
+anchor     utilities/m4.html#EXIT STATUS
+class      required
+since      2024
+says       When mkstemp cannot create its file the final exit status is
+           non-zero, also when m4exit is later given a zero argument.
+test       t/020-mkstemp-failure-status.sh

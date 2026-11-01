@@ -27,13 +27,18 @@ function emit(s) {
 	else DV[CUR] = DV[CUR] s
 }
 function flushdivs(   i) {
+	if (F == "divs_reverse") { for (i = 9; i >= 1; i--) if (DV[i] != "") { outp(DV[i]); DV[i] = "" }; return }
 	for (i = 1; i <= 9; i++) if (DV[i] != "") { outp(DV[i]); DV[i] = "" }
 }
 function finish(code) {
 	if (F == "m4exit_discards") { OBUF = "" }
-	if (F != "no_flush_divs" && V != "exit_no_flush") flushdivs()
+	if (F == "divs_first") { tmp = OBUF; OBUF = ""; flushdivs(); OBUF = OBUF tmp }
+	else if (F != "no_flush_divs" && V != "exit_no_flush") flushdivs()
 	if (F == "exit_status0") code = 0
 	if (ERRS && code == 0 && F != "err_forgotten") code = errstat()
+	if (F == "ok_status1" && code == 0) code = 1
+	if (F == "final_nl_dropped") sub(/\n$/, "", OBUF)
+	if (F == "final_nl_added") OBUF = OBUF "\n"
 	flushout()
 	exit code
 }
@@ -143,6 +148,7 @@ function collect(fr,   depth, cur, k, c) {
 			continue
 		}
 		c = TV
+		if (c == "\001") continue
 		if (c == "(") { depth++; cur = cur c; continue }
 		if (c == ")") {
 			if (depth == 0) break
@@ -225,7 +231,9 @@ function expandname(nm,   top, fr, hasp, res, i, c, d, n, L, text, isb, cnt) {
 		res = res c; i++
 	}
 	FR = fr - 1
-	if (F == "no_rescan") lit(res); else ret(res)
+	if (F == "no_rescan") lit(res)
+	else if (F == "rescan_isolated") ret(res "\001")
+	else ret(res)
 	return 1
 }
 function joinargs(fr, cnt, quoted,   j, s, sep, a) {
@@ -396,8 +404,8 @@ function setprec() {
 	if (F == "eval_or_with_xor") { P["|"] = 4 }
 	if (F == "eval_xor_above_and") { P["^"] = 5; P["&"] = 4 }
 	if (F == "eval_andand_with_oror") { P["&&"] = 1 }
-	if (F == "eval_and_below_eq") { P["&"] = 5.5 }
-	if (F == "eval_bitand_below_xor_or") { P["&"] = 3 }
+	if (F == "eval_and_above_eq") { P["&"] = 6.5 }
+	if (F == "eval_and_with_or") { P["&"] = 3 }
 }
 function digitchar(d) { return substr(V == "eval_upper" ? "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" : "0123456789abcdefghijklmnopqrstuvwxyz", d + 1, 1) }
 function fmtnum(v, radix, width,   neg, s, d) {
@@ -613,6 +621,7 @@ function builtin(b, fr, hasp,   a1, a2, a3, a4, i, n, s, j, k, t, nm, m, e, rx, 
 		if (F == "divert_ignored") return
 		CUR = k < 0 ? -1 : k
 		if (k > 9) CUR = -1
+		if (F == "divert_returns_num") lit(k "")
 		return
 	}
 	if (b == "divnum") {
@@ -685,6 +694,7 @@ function builtin(b, fr, hasp,   a1, a2, a3, a4, i, n, s, j, k, t, nm, m, e, rx, 
 			if (b == "sinclude" && F != "sinclude_errors" && F != "sinclude_diag") return
 			if (b == "include" && F == "include_silent_ok") return
 			if (F != "include_no_diag" || b == "sinclude") warn("cannot open " a1)
+			INCERR = 1
 			if (F == "include_status0" || (F == "sinclude_errors" && b == "sinclude" && 0)) ERRS = 0
 			if (F == "sinclude_errors" && b == "sinclude") ERRS = 1
 			if (V == "include_abort" && b == "include") finish(errstat())
@@ -865,7 +875,7 @@ function run(   t) {
 		tok()
 		if (TT == "Q" || TT == "C") { emit(TV); continue }
 		if (TT == "N") { if (!expandname(TV)) emit(TV); continue }
-		emit(TV)
+		if (TV != "\001") emit(TV)
 	}
 }
 function processfile(path,   s) {
@@ -903,9 +913,11 @@ BEGIN {
 	if (F == "dnl_needs_parens") { }
 	# options, in the order given
 	nf = 0
+	if (F == "s_always") SYNC = 1
 	while ((getline ln < OPS) > 0) {
 		k = substr(ln, 1, 1); v = substr(ln, 3)
 		if (k == "S") { SYNC = (F != "s_ignored"); continue }
+		if (k == "T") { continue }
 		if (k == "F") { FILES[++nf] = v; continue }
 		if (k == "D") { OPL[++no] = "D" v; continue }
 		if (k == "U") { OPL[++no] = "U" v; continue }
@@ -919,7 +931,7 @@ BEGIN {
 	} else {
 		for (i = 1; i <= no; i++) applyop(OPL[i])
 	}
-	if (nf == 0) FILES[++nf] = "-"
+	if (nf == 0 && F != "noargs_empty") FILES[++nf] = "-"
 	if (F == "files_reversed") {
 		for (i = 1; i <= nf / 2; i++) { t = FILES[i]; FILES[i] = FILES[nf - i + 1]; FILES[nf - i + 1] = t }
 	}
@@ -932,6 +944,9 @@ BEGIN {
 		if (F == "dash_literal" && FILES[fi] == "-") { warn("cannot open -"); continue }
 		processfile(FILES[fi])
 	}
+	if (F == "m4wrap_reverse") {
+		while (NW > 0) { IN = WRAP[NW]; NW--; run() }
+	}
 	while (WI < NW) {
 		WI++
 		IN = WRAP[WI]
@@ -943,6 +958,7 @@ function applyop(op,   k, v, p, nm, val) {
 	k = substr(op, 1, 1); v = substr(op, 2)
 	if (k == "U") {
 		if (F == "U_ignored") return
+		if (F == "U_first_only" && UDONE++ > 0) return
 		if (F == "U_not_builtin" && ISBI[v, SP[v]]) return
 		SP[v] = 0; return
 	}

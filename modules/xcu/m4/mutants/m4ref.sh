@@ -17,7 +17,7 @@ pc_m4ref() (
 	while [ $# -gt 0 ]; do
 		if [ $pc_opts = 1 ]; then
 			case $1 in
-			--) pc_opts=0; shift; continue ;;
+			--) pc_opts=0; shift; [ "$pc_f" = dashdash_as_file ] && echo "F --" >>"$pc_ops"; continue ;;
 			-s) echo "S x" >>"$pc_ops"; shift; continue ;;
 			-D) echo "D $2" >>"$pc_ops"; shift 2; continue ;;
 			-U) echo "U $2" >>"$pc_ops"; shift 2; continue ;;
