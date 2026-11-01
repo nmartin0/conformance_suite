@@ -1,0 +1,62 @@
+# XBD <search.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of <search.h> beyond the names the Tier 0 header check
+# covers: the types and declarations the page gives, checked at build time.
+# The header mutants for these arrive with the Tier 0 generator, so each
+# says why it has no mutant yet.
+
+assertion  XBD.search.h.001
+anchor     basedefs/search.h.html#DESCRIPTION/ENTRY
+class      conditional
+when       XSI
+says       <search.h> defines the type ENTRY as a structure with a member key
+           of type char * and a member data of type void *.
+test       t/001-entry-members.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.search.h.002
+anchor     basedefs/search.h.html#DESCRIPTION/ACTION
+anchor     basedefs/search.h.html#DESCRIPTION/VISIT
+class      conditional
+when       XSI
+says       <search.h> defines ACTION and VISIT as enumerated types whose
+           constants FIND and ENTER, and preorder, postorder, endorder and
+           leaf, are integer constant expressions with different values
+           within each type.
+note       The page writes the two enumerations in C; their constants must be
+           told apart by hsearch() and twalk(). The test does not assume the
+           numbering (Q-165 for the general question).
+test       t/002-action-visit.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.search.h.003
+anchor     basedefs/search.h.html#DESCRIPTION/size_t
+class      conditional
+when       XSI
+says       <search.h> alone defines size_t as an unsigned integer type.
+note       The page defers to <sys/types.h>.
+test       t/003-types-size.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.search.h.004
+anchor     basedefs/search.h.html#DESCRIPTION/posix_tnode
+class      conditional
+when       XSI
+says       <search.h> defines posix_tnode as an alias for void, so a pointer
+           to it is a void *.
+test       t/004-posix-tnode.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.search.h.005
+anchor     basedefs/search.h.html#DESCRIPTION/hcreate
+anchor     basedefs/search.h.html#DESCRIPTION/tsearch
+class      conditional
+when       XSI
+says       <search.h> declares hcreate(), hdestroy(), hsearch(), insque(),
+           lfind(), lsearch(), remque(), tdelete(), tfind(), tsearch() and
+           twalk() with the prototypes the page gives (a function without a
+           prototype, or with other parameter or result types, does not
+           match).
+test       t/005-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
