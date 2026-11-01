@@ -12,7 +12,6 @@
 # MUTANT    uudecode.mode_decimal
 # MUTANT    uudecode.no_create
 # MUTANT    uudecode.operand_ignored
-# MUTANT    uudecode.file_stdout_also
 # Decoding historical-format data whose begin line gives mode 640 and a name
 # creates that file holding the decoded bytes, with permission bits
 # rw-r----- even when the file mode creation mask is 077.

@@ -84,7 +84,7 @@ pc_uuref() (
 	r_empty_nonempty) [ "$sz" -eq 0 ] && printf '\000' >"$t/out" ;;
 	r_pad3) pad_to3 ;;
 	r_nul_stop)
-		n0=$(od -An -v -tx1 "$t/dec" | awk '{ for (i = 1; i <= NF; i++) { if ($i == "00") { print c; exit } c++ } }')
+		n0=$(od -An -v -tx1 "$t/dec" | awk '{ for (i = 1; i <= NF; i++) { if ($i == "00") { print c + 0; exit } c++ } }')
 		[ -n "$n0" ] && cut_to "$n0"
 		;;
 	r_cr_strip) tr -d '\r' <"$t/dec" >"$t/out" ;;
