@@ -38,7 +38,7 @@ c17 -c x.c </dev/null >/dev/null 2>&1 || pc_unresolved "setup: c17 -c failed"
 pc_test
 nm -P x.o >o1 2>err </dev/null || pc_fail "nm -P: nonzero status"
 nm -f -P x.o >o2 2>err </dev/null || pc_fail "nm -f -P: nonzero status: $(cat err)"
-awk '$1 ~ /pcfunc$/ { f = 1 } END { exit !f }' o1 || pc_unresolved "pcfunc is not in the default output"
+[ -s o2 ] || pc_fail "nm -f -P wrote nothing"
 for s in pclocal pcstat pcundef pcglobal pcbss pcfunc; do
 	awk -v s="$s" '$1 ~ (s "$") { f = 1 } END { exit !f }' o1 || pc_unresolved "$s is not in the default output"
 done

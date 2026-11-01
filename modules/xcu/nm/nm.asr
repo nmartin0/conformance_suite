@@ -7,6 +7,7 @@
 
 assertion  XCU.nm.001
 anchor     utilities/nm.html#STDOUT
+anchor     utilities/nm.html#STDERR
 class      conditional
 when       SD
 since      1992
@@ -14,7 +15,8 @@ says       "nm -P x.o" prints lines of name, type letter, value and size
            separated by blanks; a global function is type T, an initialised
            global is D, an uninitialised global is B or C-style common (any
            letter accepted for it is not tested), an unresolved reference is
-           U.
+           U. Names are written in full, the value and size are hexadecimal
+           digits, and standard error stays empty when nm succeeds.
 test       t/001-portable-format.sh
 
 assertion  XCU.nm.002
@@ -22,7 +24,8 @@ anchor     utilities/nm.html#OPTIONS/-u
 class      conditional
 when       SD
 since      1992
-says       "nm -u x.o" lists the undefined symbol and not the defined ones.
+says       "nm -u x.o" lists the undefined symbols (function and data) and
+           not the defined ones.
 test       t/002-undefined-only.sh
 
 assertion  XCU.nm.003
@@ -30,8 +33,8 @@ anchor     utilities/nm.html#OPTIONS/-g
 class      conditional
 when       SD
 since      1992
-says       "nm -g x.o" lists global symbols and not a static (local)
-           variable.
+says       "nm -g x.o" lists global symbols (functions, data, uninitialised)
+           and not a static (local) variable or function.
 test       t/003-global-only.sh
 
 assertion  XCU.nm.004
@@ -40,9 +43,10 @@ anchor     utilities/nm.html#OPTIONS/-A
 class      conditional
 when       SD
 since      1992
-says       With -A -P each line starts with the file operand followed by a
-           colon and a blank; for a library the member name follows the
-           library in square brackets.
+says       With -A -P each line starts with the file operand (or its full
+           pathname) followed by a colon and a blank; for a library the
+           member that holds the symbol follows the library in square
+           brackets. No identifying lines are written with -A.
 test       t/004-file-name-prefix.sh
 
 assertion  XCU.nm.005
@@ -50,9 +54,11 @@ anchor     utilities/nm.html#STDOUT
 class      conditional
 when       SD
 since      1992
-says       Without -A, "nm -P x.o y.o" prints "x.o:" and "y.o:" lines before
-           each file's symbols, and "nm -P libx.a" for a library prints
-           "libx.a[x.o]:"; a single non-library file has no such line.
+says       Without -A, "nm -P x.o y.o z.o" prints "x.o:", "y.o:" and "z.o:"
+           lines before each file's symbols, and "nm -P libx.a" for a library
+           prints "libx.a[x.o]:" before the symbols of that member (also for
+           a library of one member); a single non-library file has no such
+           line.
 test       t/005-headers.sh
 
 assertion  XCU.nm.006
@@ -63,7 +69,7 @@ when       SD
 since      1992
 says       By default the output is sorted by symbol name (POSIX locale);
            with -v the defined symbols appear in nondecreasing order of
-           value.
+           value (compared as numbers).
 test       t/006-sort-by-value.sh
 
 assertion  XCU.nm.007
@@ -74,7 +80,9 @@ when       SD
 since      1992
 says       With -P, the value and size fields are made of decimal digits for
            -t d, octal digits for -t o and hexadecimal digits for -t x (and
-           -P alone is as -t x).
+           -P alone is as -t x): the same numbers in the three bases, as
+           plain digits with no prefix, padding or capital letters, also for
+           a size above 32 bits; -tx (argument attached) is as -t x.
 test       t/007-numeric-base.sh
 
 assertion  XCU.nm.008
@@ -84,7 +92,7 @@ class      conditional
 when       SD+XSI
 since      1992
 says       "nm -x x.o" prints the same as "nm -t x x.o" and "nm -o x.o" the
-           same as "nm -t o x.o".
+           same as "nm -t o x.o"; the same with -P.
 test       t/008-xsi-options.sh
 
 assertion  XCU.nm.009
@@ -93,16 +101,18 @@ class      conditional
 when       SD
 since      1992
 says       An object file with no symbolic information is not an error: nm
-           exits 0.
+           exits 0 (with or without -P).
 test       t/009-no-symbols.sh
 
 assertion  XCU.nm.010
 anchor     utilities/nm.html#EXIT STATUS
+anchor     utilities/V3_chap01.html#1.4
 class      conditional
 when       SD
 since      1992
-says       "nm" on a file that does not exist exits with a status greater
-           than zero.
+says       "nm" on a file that does not exist writes a diagnostic to
+           standard error and exits with a status greater than zero; the
+           other operands are still processed (in either order).
 test       t/010-missing-file.sh
 
 assertion  XCU.nm.011
@@ -110,8 +120,9 @@ anchor     utilities/nm.html#OPTIONS/-e
 class      conditional
 when       SD+XSI
 since      1992
-says       "nm -e" lists both an external symbol and a static symbol of
-           the object file.
+says       "nm -e" lists both the external symbols (data, uninitialised,
+           functions) and the static symbols (data and functions) of the
+           object file.
 test       t/011-e-external-static.sh
 
 assertion  XCU.nm.012
@@ -120,5 +131,5 @@ class      conditional
 when       SD+XSI
 since      1992
 says       "nm -f" lists at least every symbol name that the default output
-           lists.
+           lists (defined, static and undefined ones), in the same format.
 test       t/012-f-full.sh
