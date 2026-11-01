@@ -8,7 +8,7 @@ anchor     utilities/touch.html#DESCRIPTION
 class      required
 says       touch creates a missing file as an empty regular file with mode
            rw-rw-rw- reduced by the creation mask, and leaves the contents
-           of an existing file alone.
+           and the mode of an existing file alone.
 test       t/001-create.sh
 
 assertion  XCU.touch.002
@@ -49,7 +49,9 @@ anchor     utilities/touch.html#OPTIONS
 class      required
 says       touch -t sets both times to the given time, interpreting it in
            the TZ time zone, in the forms CCYYMMDDhhmm, YYMMDDhhmm and
-           with .SS seconds.
+           MMDDhhmm (the current year), with .SS seconds (60 meaning one
+           second after 59), and sets a missing file's times when it
+           creates it.
 test       t/007-option-t.sh
 
 assertion  XCU.touch.008
@@ -94,5 +96,28 @@ test       t/012-error-continue.sh
 assertion  XCU.touch.013
 anchor     utilities/touch.html#OPTIONS
 class      required
-says       touch -t accepts a time up to the start of 2038.
+says       touch -t accepts any time up to and including the start of
+           2038 (UTC) and sets it exactly.
 test       t/013-late-time.sh
+
+assertion  XCU.touch.014
+anchor     utilities/touch.html#OPTIONS
+class      required
+says       When a time is given with -t, -d or -r, -m limits the change to
+           the modification time and -a to the access time.
+test       t/014-am-with-time.sh
+
+assertion  XCU.touch.015
+anchor     utilities/touch.html#DESCRIPTION
+class      required
+says       A symbolic link operand makes touch set the times of the file
+           the link refers to; the link stays a link.
+test       t/015-symlink.sh
+
+assertion  XCU.touch.016
+anchor     utilities/touch.html#OPTIONS
+class      required
+since      2024
+says       touch -d takes seconds of 60 as -t does, giving the time one
+           second after 59.
+test       t/016-d-seconds-60.sh
