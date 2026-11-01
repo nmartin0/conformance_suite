@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.rm.007
+# MUTANT    rm.d_empty_refused
+# MUTANT    rm.d_file_refused
+# MUTANT    rm.d_nonempty_removed
+# MUTANT    rm.d_nonempty_status0
+# MUTANT    rm.d_nonempty_no_diag
+# MUTANT    rm.d_status1
+# VARIANT   rm.status2
+# VARIANT   rm.status255
+# VARIANT   rm.ref
 . "$PC_CORE/pc.sh"
 pc_begin XCU.rm.007
 mkdir e n || pc_fail "cannot create directories"
@@ -16,5 +25,6 @@ rc=$?
 rm -d n >out 2>err </dev/null
 rc=$?
 [ "$rc" -ne 0 ] || pc_fail "rm -d exited 0 for a directory that is not empty"
+[ -s err ] || pc_fail "no diagnostic for a directory that is not empty"
 [ -f n/f ] || pc_fail "n/f was removed"
 pc_pass

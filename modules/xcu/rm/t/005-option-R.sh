@@ -2,9 +2,17 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.rm.005
+# MUTANT    rm.R_ignored
+# MUTANT    rm.R_no_dotfiles
+# MUTANT    rm.R_no_empty_dirs
+# MUTANT    rm.R_shallow
+# MUTANT    rm.R_status1
+# MUTANT    rm.R_leaves_top
+# VARIANT   rm.reverse_order
+# VARIANT   rm.ref
 . "$PC_CORE/pc.sh"
 pc_begin XCU.rm.005
-mkdir -p t/a/b || pc_fail "cannot create tree"
+mkdir -p t/a/b t/e t/a/e2 || pc_fail "cannot create tree"
 printf x >t/f || pc_fail "cannot create t/f"
 printf x >t/a/g || pc_fail "cannot create t/a/g"
 printf x >t/.h || pc_fail "cannot create t/.h"

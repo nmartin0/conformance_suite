@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.rm.001
+# MUTANT    rm.noop
+# MUTANT    rm.only_first
+# MUTANT    rm.extra_removed
+# MUTANT    rm.v_always
+# MUTANT    rm.status1_ok
 . "$PC_CORE/pc.sh"
 pc_begin XCU.rm.001
 printf a >a || pc_fail "cannot create a"

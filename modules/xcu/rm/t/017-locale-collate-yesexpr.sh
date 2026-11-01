@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.rm.017
+# MUTANT    rm.ignores_collate
+# MUTANT    rm.lang_over_collate
+# MUTANT    rm.lc_all_lowest_collate
+# MUTANT    rm.ignores_lc_all
+# MUTANT    rm.ignores_lang
+# MUTANT    rm.null_lc_all_overrides
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcloc.sh"
 pc_begin XCU.rm.017

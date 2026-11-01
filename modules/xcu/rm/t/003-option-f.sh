@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.rm.003
+# MUTANT    rm.f_diag
+# MUTANT    rm.f_status1
+# MUTANT    rm.f_aborts
+# MUTANT    rm.f_noargs_status1
+# MUTANT    rm.f_noargs_diag
+# VARIANT   rm.ref
 . "$PC_CORE/pc.sh"
 pc_begin XCU.rm.003
 printf a >a || pc_fail "cannot create a"
