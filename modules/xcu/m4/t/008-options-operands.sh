@@ -5,6 +5,34 @@
 # -D defines to the value or to null, -U undefines (including built-ins),
 # their order matters, options may follow operands, files are processed in
 # order with - meaning standard input, and -s produces #line directives.
+# MUTANT    m4.D_ignored
+# MUTANT    m4.D_noeq_undefined
+# MUTANT    m4.D_noeq_one
+# MUTANT    m4.D_split_last
+# MUTANT    m4.D_empty_value_undefined
+# MUTANT    m4.D_value_ignored
+# MUTANT    m4.U_ignored
+# MUTANT    m4.U_not_builtin
+# MUTANT    m4.U_first_only
+# MUTANT    m4.U_before_D
+# MUTANT    m4.D_before_U
+# MUTANT    m4.s_ignored
+# MUTANT    m4.s_always
+# MUTANT    m4.files_reversed
+# MUTANT    m4.only_first_file
+# MUTANT    m4.only_last_file
+# MUTANT    m4.stdin_also
+# MUTANT    m4.dash_skipped
+# MUTANT    m4.dash_literal
+# MUTANT    m4.dashdash_as_file
+# MUTANT    m4.noargs_empty
+# MUTANT    m4.options_stop_at_operand
+# MUTANT    m4.operand_status0
+# MUTANT    m4.operand_no_diag
+# MUTANT    m4.operand_aborts
+# VARIANT   m4.engine
+# VARIANT   m4.err_status2
+# VARIANT   m4.sync_nofile
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.008
 LC_ALL=C; export LC_ALL
@@ -19,16 +47,33 @@ printf 'from stdin\n' >sin
 pc_test
 m4 -D x=1 -D y in >out 2>err </dev/null || pc_fail "-D: nonzero status"
 [ "$(cat out)" = '1||z' ] || pc_fail "-D x=1 -D y gave '$(cat out)'"
+m4 -D x=a=b -D y= in >out 2>err </dev/null || pc_fail "-D with = in the value: nonzero status"
+[ "$(cat out)" = 'a=b||z' ] || pc_fail "-D x=a=b -D y= gave '$(cat out)'"
 m4 -Dx=1 -Ux in >out 2>err </dev/null || pc_fail "-U: nonzero status"
 [ "$(cat out)" = 'x|y|z' ] || pc_fail "-Dx=1 -Ux gave '$(cat out)'"
 m4 -Ux -Dx=2 in >out 2>err </dev/null || pc_fail "-U then -D: nonzero status"
 [ "$(cat out)" = '2|y|z' ] || pc_fail "-Ux -Dx=2 gave '$(cat out)'"
+m4 -Dx=1 -Dy=2 -Ux -Uy in >out 2>err </dev/null || pc_fail "two -U: nonzero status"
+[ "$(cat out)" = 'x|y|z' ] || pc_fail "-Dx=1 -Dy=2 -Ux -Uy gave '$(cat out)'"
 m4 -U define in2 >out 2>err </dev/null || pc_fail "-U define: nonzero status"
 [ "$(cat out)" = 'define(a,b)' ] || pc_fail "-U define left it defined: '$(cat out)'"
 m4 f1 - f2 >out 2>err <sin || pc_fail "file operands: nonzero status"
 [ "$(tr '\n' ' ' <out)" = 'one from stdin two ' ] || pc_fail "operands gave '$(tr '\n' ' ' <out)'"
 m4 f1 -Dx=1 in f2 >out 2>err </dev/null || pc_fail "interspersed option: nonzero status"
 [ "$(tr '\n' ' ' <out)" = 'one 1|y|z two ' ] || pc_fail "interspersed -D gave '$(tr '\n' ' ' <out)'"
+m4 -- f1 >out 2>err </dev/null || pc_fail "-- before an operand: nonzero status"
+[ "$(cat out)" = one ] || pc_fail "-- f1 gave '$(cat out)'"
+m4 >out 2>err <sin || pc_fail "no operand: nonzero status"
+[ "$(cat out)" = 'from stdin' ] || pc_fail "no operand: standard input was not read ('$(cat out)')"
+m4 -D x=1 >out 2>err <in || pc_fail "option and no operand: nonzero status"
+[ "$(cat out)" = '1|y|z' ] || pc_fail "-D x=1 with standard input gave '$(cat out)'"
+m4 f1 nonexistent.pc f2 >out 2>err </dev/null
+rc=$?
+[ "$rc" -ne 0 ] || pc_fail "an operand that cannot be opened gave status 0"
+[ -s err ] || pc_fail "no diagnostic for an operand that cannot be opened"
+[ "$(tr '\n' ' ' <out)" = 'one two ' ] || pc_fail "the other operands were not processed ('$(tr '\n' ' ' <out)')"
+m4 f1 f2 >out 2>err <sin || pc_fail "two operands: nonzero status"
+[ "$(tr '\n' ' ' <out)" = 'one two ' ] || pc_fail "without -s the output was '$(tr '\n' ' ' <out)'"
 m4 -s f1 f2 >out 2>err </dev/null || pc_fail "-s: nonzero status"
 grep '#line' out >/dev/null || pc_fail "-s wrote no #line directive"
 grep -x one out >/dev/null && grep -x two out >/dev/null || pc_fail "-s lost the input text"

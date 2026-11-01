@@ -4,6 +4,14 @@
 # ASSERTION XCU.m4.017
 # The result of syscmd is not scanned for macros and m4 does not redirect the
 # command's output.
+# MUTANT    m4.syscmd_rescanned
+# MUTANT    m4.syscmd_stdout_err
+# MUTANT    m4.syscmd_stderr_out
+# MUTANT    m4.syscmd_stderr_dropped
+# MUTANT    m4.syscmd_noop
+# VARIANT   m4.engine
+# VARIANT   m4.syscmd_captured
+# VARIANT   m4.syscmd_noflush
 . "$PC_CORE/pc.sh"
 pc_begin XCU.m4.017
 LC_ALL=C; export LC_ALL
