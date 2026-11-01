@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.010
+# MUTANT    cp.ok_status1
+# MUTANT    cp.i_no_prompt
+# MUTANT    cp.i_prompt_no_name
+# MUTANT    cp.i_prompt_stdout
+# MUTANT    cp.i_yes_ignored
+# MUTANT    cp.i_yes_status1
+# VARIANT    cp.prompt_nl
+# VARIANT    cp.prompt_quoted
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.010
 nl='

@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.006
+# MUTANT    cp.ok_status1
+# MUTANT    cp.p_ignored
+# MUTANT    cp.p_time_now
+# MUTANT    cp.p_time_old
+# MUTANT    cp.p_mode_masked
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.006
 modeof() {

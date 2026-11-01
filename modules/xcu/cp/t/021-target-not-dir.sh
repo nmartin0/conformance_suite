@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cp.021
+# MUTANT    cp.multi_t_overwrites
+# MUTANT    cp.multi_t_modifies
+# MUTANT    cp.multi_t_status0
+# MUTANT    cp.multi_t_missing_ok
+# MUTANT    cp.no_diag
+# MUTANT    cp.diag_stdout
+# VARIANT    cp.status2
+# VARIANT    cp.status255
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cp.021
 nl='
@@ -24,9 +32,11 @@ pc_test
 cp a b c >out 2>err </dev/null
 rc=$?
 [ "$rc" -ne 0 ] || pc_fail "cp exited 0 for a regular file target with two sources"
+[ -s err ] || pc_fail "no diagnostic for a regular file target with two sources"
 slurp c
 [ "$data" = "orig${nl}" ] || pc_fail "target was modified"
 cp a b newtarget >out 2>err </dev/null
 rc=$?
 [ "$rc" -ne 0 ] || pc_fail "cp exited 0 for a missing target with two sources"
+[ -s err ] || pc_fail "no diagnostic for a missing target with two sources"
 pc_pass
