@@ -2,6 +2,12 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.grep.010
+# MUTANT    grep.ignores_lc_all
+# MUTANT    grep.ignores_lang
+# MUTANT    grep.ignores_lc_ctype
+# MUTANT    grep.null_lc_all_overrides
+# MUTANT    grep.lang_over_ctype
+# MUTANT    grep.lc_all_lowest_ctype
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcloc.sh"
 pc_begin XCU.grep.010

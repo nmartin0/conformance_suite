@@ -2,6 +2,19 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.grep.006
+# MUTANT    grep.l_repeat
+# MUTANT    grep.l_all
+# MUTANT    grep.l_lines
+# MUTANT    grep.l_first_only
+# MUTANT    grep.l_colon
+# MUTANT    grep.l_nonl
+# MUTANT    grep.l_stdin_dash
+# MUTANT    grep.l_stdin_short
+# MUTANT    grep.l_stdin_bare
+# MUTANT    grep.l_status1
+# MUTANT    grep.q_prints
+# MUTANT    grep.q_match_status1
+# MUTANT    grep.q_nomatch_status0
 . "$PC_CORE/pc.sh"
 pc_begin XCU.grep.006
 LC_ALL=POSIX

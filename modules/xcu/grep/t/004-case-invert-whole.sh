@@ -2,6 +2,16 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.grep.004
+# MUTANT    grep.i_ignored
+# MUTANT    grep.v_ignored
+# MUTANT    grep.x_ignored
+# MUTANT    grep.x_start
+# MUTANT    grep.x_end
+# MUTANT    grep.x_alt_anchor
+# MUTANT    grep.x_lost_with_i
+# MUTANT    grep.i_lost_with_v
+# MUTANT    grep.v_lost_with_x
+# MUTANT    grep.v_null_dropped
 . "$PC_CORE/pc.sh"
 pc_begin XCU.grep.004
 LC_ALL=POSIX
@@ -22,4 +32,14 @@ got=$(grep -ix 'HELLO' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "Hello${NL}HELLO${NL}rc=0" ] || pc_fail "-i with -x gave the wrong lines"
 got=$(grep -v '' in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "rc=1" ] || pc_fail "-v with a null pattern selected a line"
+printf 'ab\nabc\nbc\nxab\n' >in2 || pc_fail "cannot create input"
+got=$(grep -x ab in2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "ab${NL}rc=0" ] || pc_fail "-x selected a line that only starts or ends with the pattern"
+got=$(grep -Ex 'ab|bc' in2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "ab${NL}bc${NL}rc=0" ] || pc_fail "-x with alternatives did not require the whole line"
+got=$(grep -vx ab in2 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "abc${NL}bc${NL}xab${NL}rc=0" ] || pc_fail "-v with -x gave the wrong lines"
+printf 'Ab\nb\n' >in3 || pc_fail "cannot create input"
+got=$(grep -iv ab in3 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "b${NL}rc=0" ] || pc_fail "-i with -v gave the wrong lines"
 pc_pass

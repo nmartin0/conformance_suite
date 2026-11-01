@@ -2,6 +2,17 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.grep.003
+# MUTANT    grep.e_first_only
+# MUTANT    grep.e_last_only
+# MUTANT    grep.f_ignored_with_e
+# MUTANT    grep.list_first
+# MUTANT    grep.list_last
+# MUTANT    grep.f_first_line
+# MUTANT    grep.f_last_line
+# MUTANT    grep.null_dropped_list
+# MUTANT    grep.null_dropped_file
+# MUTANT    grep.e_dash
+# MUTANT    grep.operand_always_pattern
 . "$PC_CORE/pc.sh"
 pc_begin XCU.grep.003
 LC_ALL=POSIX
@@ -24,4 +35,6 @@ got=$(grep -e "three${NL}one" in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "one${NL}three${NL}rc=0" ] || pc_fail "a newline-separated -e list was not split"
 got=$(grep -e -x in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
 [ "$got" = "rc=1" ] || pc_fail "-e did not take a pattern starting with a hyphen-minus"
+got=$(grep -e "one${NL}${NL}four" in 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "one${NL}two${NL}three${NL}four${NL}rc=0" ] || pc_fail "a null pattern inside a newline-separated -e list did not match every line"
 pc_pass
