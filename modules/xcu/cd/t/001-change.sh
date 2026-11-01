@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cd.001
+# MUTANT    cd.no_change
+# MUTANT    cd.rel_ignored
+# MUTANT    cd.abs_ignored
+# MUTANT    cd.status1
+# MUTANT    cd.stdout_pwd
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cd.001
 unset CDPATH

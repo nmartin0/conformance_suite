@@ -2,6 +2,9 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cd.002
+# MUTANT    cd.pwd_stale
+# MUTANT    cd.pwd_relative
+# MUTANT    cd.pwd_dotdot_kept
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cd.002
 unset CDPATH

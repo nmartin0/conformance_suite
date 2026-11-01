@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cd.003
+# MUTANT    cd.oldpwd_unset
+# MUTANT    cd.oldpwd_new
+# MUTANT    cd.oldpwd_frozen
+# VARIANT   cd.oldpwd_exported
+# VARIANT   cd.oldpwd_unexported
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cd.003
 unset CDPATH

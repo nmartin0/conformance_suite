@@ -95,7 +95,8 @@ since      1992
 says       A relative operand not starting with dot or dot-dot is looked up
            in the directories of CDPATH in order; when one is found the
            shell goes there and the new directory is written to standard
-           output.
+           output. A match that is not a directory is passed over, and
+           the directories are tried one after the other from the first.
 test       t/009-cdpath.sh
 
 assertion  XCU.cd.010
@@ -107,7 +108,8 @@ since      1992
 says       An empty CDPATH entry stands for the current directory and is
            tried in its position in the list; when that entry is the one
            used nothing is written, and an operand starting with ./ or
-           ../ is not looked up in CDPATH at all.
+           ../, or that is dot or dot-dot alone, is not looked up in
+           CDPATH at all.
 test       t/010-cdpath-order.sh
 
 assertion  XCU.cd.011
@@ -119,7 +121,7 @@ since      1992
 says       cd to a directory that does not exist or to a file that is not a
            directory exits greater than zero with a diagnostic on
            standard error, and the working directory and PWD stay as
-           they were.
+           they were. This holds for a regular file as for a missing name.
 test       t/011-error.sh
 
 assertion  XCU.cd.012
@@ -128,7 +130,8 @@ anchor     utilities/cd.html#CONSEQUENCES OF ERRORS
 class      required
 since      1992
 says       An empty directory operand makes cd write a diagnostic and exit
-           greater than zero without changing the directory.
+           greater than zero without changing the directory, also when
+           CDPATH is set.
 test       t/012-empty-operand.sh
 
 assertion  XCU.cd.013
@@ -137,5 +140,6 @@ class      required
 since      1992
 says       In a logical cd a dot-dot component whose preceding component is
            not a directory (missing, or a regular file) is an error: cd
-           exits greater than zero and does not change the directory.
+           exits greater than zero with a diagnostic on standard error
+           and does not change the directory.
 test       t/013-dotdot-error.sh

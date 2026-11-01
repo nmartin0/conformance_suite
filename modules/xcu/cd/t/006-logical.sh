@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.cd.006
+# MUTANT    cd.default_physical
+# MUTANT    cd.L_as_P
+# MUTANT    cd.dotdot_physical
+# MUTANT    cd.pwd_physical
 . "$PC_CORE/pc.sh"
 pc_begin XCU.cd.006
 unset CDPATH
