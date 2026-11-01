@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ps.005
+# MUTANT    ps.p_first_only
+# MUTANT    ps.p_last_only
+# MUTANT    ps.p_comma_first
+# MUTANT    ps.p_blank_first
+# MUTANT    ps.p_comma_rejects
+# MUTANT    ps.p_blank_rejects
+# MUTANT    ps.p_ignored
+# VARIANT   ps.reversed_lines
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ps.005
 LC_ALL=C; export LC_ALL

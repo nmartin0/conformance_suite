@@ -2,6 +2,10 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ps.013
+# MUTANT    ps.a_empty
+# MUTANT    ps.a_all
+# MUTANT    ps.exit1
+# VARIANT   ps.a_no_leaders
 . "$PC_CORE/pc.sh"
 . "$PC_CORE/pcpty.sh"
 pc_begin XCU.ps.013
@@ -10,7 +14,11 @@ pc_pty_need
 pc_top=$(pwd) || pc_unresolved "cannot find the working directory"
 pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
-trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
+out=
+trap '[ -n "$out" ] && { kill "$out" 2>/dev/null; wait "$out" 2>/dev/null; }; cd "$pc_top" && rm -rf "$pc_wd"' EXIT
+# a process with no controlling terminal and no terminal open: -a must not list it
+sleep 61 </dev/null >/dev/null 2>&1 &
+out=$!
 cat >inner.sh <<'IN'
 sleep 60 </dev/null >/dev/null 2>&1 &
 b=$!
@@ -28,6 +36,11 @@ pc_pty_run -c -i typed inner.sh
 b=$(cat bg.pid 2>/dev/null)
 [ -n "$b" ] || pc_unresolved "the background process was not started"
 found=
-while read -r p; do [ "$p" = "$b" ] && found=1; done <ps.out
+other=
+while read -r p; do
+	[ "$p" = "$b" ] && found=1
+	[ "$p" = "$out" ] && other=1
+done <ps.out
 [ -n "$found" ] || pc_fail "ps -a did not list process $b, which is attached to the terminal"
+[ -z "$other" ] || pc_fail "ps -a listed process $out, which has no terminal"
 pc_pass

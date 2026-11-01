@@ -2,6 +2,17 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ps.011
+# MUTANT    ps.etime_nopad
+# MUTANT    ps.etime_seconds
+# MUTANT    ps.time_nopad
+# MUTANT    ps.time_short
+# MUTANT    ps.time_frac
+# MUTANT    ps.nice_float
+# MUTANT    ps.nice_word
+# MUTANT    ps.vsz_unit
+# MUTANT    ps.vsz_float
+# MUTANT    ps.pcpu_text
+# VARIANT   ps.dash_values
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ps.011
 LC_ALL=C; export LC_ALL

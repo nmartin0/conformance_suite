@@ -2,6 +2,14 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ps.010
+# MUTANT    ps.comm_args
+# MUTANT    ps.comm_path
+# MUTANT    ps.comm_short
+# MUTANT    ps.comm_empty
+# MUTANT    ps.args_empty
+# MUTANT    ps.args_wrong
+# VARIANT   ps.args_truncated
+# VARIANT   ps.padded
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ps.010
 LC_ALL=C; export LC_ALL
