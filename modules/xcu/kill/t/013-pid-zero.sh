@@ -40,8 +40,9 @@ for form in "kill" "env kill"; do
 		$form -s TERM 0 >out 2>/dev/null
 		echo $? >rc
 		wait "$k"
+		a=$?
 		wait "$k"
-		echo $? >st
+		echo "$a $?" >st
 	) &
 	L=$!
 	i=0
@@ -72,7 +73,14 @@ for form in "kill" "env kill"; do
 		[ "$rcv" -eq 0 ] || pc_fail "$form -s TERM 0 exited $rcv"
 	fi
 	[ -s st ] || pc_fail "the sleep in the group was not reported ended after $form -s TERM 0"
-	read -r sst <st
+	# the first wait may have been cut short by the trapped signal; the
+	# second then gives the sleep's own status, unless the first already did
+	read -r sa sb <st
+	case $sb in
+	0) sst=0 ;;
+	[1-9]*) if [ "$sb" -gt 128 ] && [ "$sb" -lt 256 ]; then sst=$sb; else sst=$sa; fi ;;
+	*) sst=$sa ;;
+	esac
 	[ "$sst" -gt 128 ] || pc_fail "the sleep in the group was not ended by a signal after $form -s TERM 0 (status $sst)"
 	n=$(command kill -l "$sst")
 	[ "$n" = TERM ] || pc_fail "the sleep in the group ended by '$n' after $form -s TERM 0, wanted TERM"
