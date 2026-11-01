@@ -4,7 +4,7 @@
 mkdir -p pc-mutbin
 printf '#!/bin/sh\nREAL="%s"\n' "$(command -v cmp)" >pc-mutbin/cmp
 cat >>pc-mutbin/cmp <<'PC_EOF'
-T=${TMPDIR:-/tmp}/pcmutcmp.$$
+T=/tmp/pcmutcmp.$$
 trap 'rm -f "$T".o "$T".e "$T".a "$T".b "$T".p' EXIT
 eofl() { l=$(cat "$T.e"); case $l in "cmp: EOF on "*) w=${l#cmp: EOF on }; w=${w%% *}; tail=${l#"cmp: EOF on $w"}; return 0 ;; esac; return 1; }
 opts=

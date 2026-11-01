@@ -4,7 +4,7 @@
 mkdir -p pc-mutbin
 printf '#!/bin/sh\nREAL="%s"\n' "$(command -v cmp)" >pc-mutbin/cmp
 cat >>pc-mutbin/cmp <<'PC_EOF'
-T=${TMPDIR:-/tmp}/pcmutcmp.$$
+T=/tmp/pcmutcmp.$$
 trap 'rm -f "$T".o "$T".e "$T".a "$T".b "$T".p' EXIT
 dl() { l=$(cat "$T.o"); case $l in *" differ: char "*", line "*) pre=${l%% differ: char *}; rest=${l#"$pre differ: char "}; b=${rest%%,*}; ln=${rest##*line }; return 0 ;; esac; return 1; }
 last=$("$REAL" -l "$@" 2>/dev/null | tail -n 1)
