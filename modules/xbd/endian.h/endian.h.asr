@@ -1,0 +1,55 @@
+# XBD <endian.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.endian.h.001
+anchor     basedefs/endian.h.html#DESCRIPTION/BYTE_ORDER
+class      required
+says       BYTE_ORDER, LITTLE_ENDIAN and BIG_ENDIAN are defined, usable in #if,
+           and BYTE_ORDER is equal to one of the *_ENDIAN macros.
+note       Only LITTLE_ENDIAN, BIG_ENDIAN and, if defined, PDP_ENDIAN are known
+           to the test; a BYTE_ORDER matching none of them is UNRESOLVED, since
+           another *_ENDIAN macro is allowed and cannot be listed.
+test       t/001-macros-defined.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.endian.h.002
+anchor     basedefs/endian.h.html#DESCRIPTION/BIG_ENDIAN
+class      required
+says       BIG_ENDIAN and LITTLE_ENDIAN have distinct values.
+test       t/002-distinct.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.endian.h.003
+anchor     basedefs/endian.h.html#DESCRIPTION/LITTLE_ENDIAN
+class      required
+says       When BYTE_ORDER equals LITTLE_ENDIAN the 16, 32 and 64-bit integer
+           types of the host store the least significant byte first; when it
+           equals BIG_ENDIAN they store the most significant byte first.
+note       Checked on uint16_t, uint32_t and uint64_t in memory.
+test       t/003-host-order.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.endian.h.004
+anchor     basedefs/endian.h.html#DESCRIPTION/uint16_t
+class      required
+says       <endian.h> defines the types uint16_t, uint32_t, uint64_t.
+test       t/004-types-stdint.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.endian.h.005
+anchor     basedefs/endian.h.html#DESCRIPTION/be16toh
+class      required
+says       For each of be16toh, be32toh, be64toh, htobe16, htobe32, htobe64,
+           htole16, htole32, htole64, le16toh, le32toh, le64toh, <endian.h>
+           provides a function with the prototype the page gives or a macro that
+           accepts an argument of the page's type.
+note       The page allows a function, a macro or both; a name that is a macro is
+           only called, a name that is not is checked as a function. What the
+           conversions compute is judged on their own page.
+test       t/005-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

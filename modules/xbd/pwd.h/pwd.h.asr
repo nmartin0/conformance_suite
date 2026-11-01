@@ -1,0 +1,59 @@
+# XBD <pwd.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.pwd.h.001
+anchor     basedefs/pwd.h.html#DESCRIPTION/passwd
+class      required
+says       <pwd.h> defines struct passwd as a complete type with at least the
+           members pw_name (char *), pw_uid (uid_t), pw_gid (gid_t), pw_dir (char
+           *), pw_shell (char *).
+test       t/001-struct-passwd.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.pwd.h.002
+anchor     basedefs/pwd.h.html#DESCRIPTION/gid_t
+class      required
+says       <pwd.h> defines the types gid_t, uid_t, size_t.
+test       t/002-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.pwd.h.003
+anchor     basedefs/pwd.h.html#DESCRIPTION/getpwnam
+class      required
+says       <pwd.h> declares getpwnam(), getpwnam_r(), getpwuid(), getpwuid_r()
+           with the prototypes the page gives.
+test       t/003-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.pwd.h.004
+anchor     basedefs/pwd.h.html#DESCRIPTION/endpwent
+class      conditional
+when       XSI
+says       <pwd.h> declares endpwent(), getpwent(), setpwent() with the
+           prototypes the page gives.
+test       t/004-functions-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.pwd.h.005
+anchor     basedefs/pwd.h.html#DESCRIPTION/pw_uid
+class      required
+says       A password entry returned by getpwuid() for this process's user ID has
+           pw_uid equal to the ID asked for and a non-null pw_name.
+note       If the process's user ID has no entry the result is UNRESOLVED. The
+           name is not required to be non-empty here.
+test       t/005-entry-content.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.pwd.h.006
+anchor     basedefs/pwd.h.html#DESCRIPTION/pw_dir
+class      required
+says       In that same entry pw_dir and pw_shell are not null pointers.
+note       An empty string is accepted for either; only a null pointer, which is
+           not a string naming a directory or a program, fails.
+test       t/006-entry-strings.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

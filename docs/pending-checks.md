@@ -39,6 +39,7 @@ UNCHECKED and needs another system. Record each outcome in
 | cd 012, 013 | `--sut-sh` is a shell for which `cd ''` and `cd nosuch/..` fail |
 | test 005, 009, 015 | `test` supports `<` and `>` (005); 009, 015 per the reports |
 | trap 011, 012 | a shell whose `trap -p` output the baseline accepts |
+| devctl.h 001, 002 (header module `xbd/devctl.h`) | the device-control option (DC) is claimed and `<devctl.h>` exists, so the tests build and the headers can be mutated; here the option is not claimed (the tests were run by hand against a header written for the check) |
 
 compress (all assertions) and uudecode (all assertions): this machine has neither utility, so the faults were judged against a temporary stand-in. They need a system with the real utility, to confirm the baselines pass and the verdicts hold.
 

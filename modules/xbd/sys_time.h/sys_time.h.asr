@@ -1,0 +1,45 @@
+# XBD <sys/time.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.sys_time.h.001
+anchor     basedefs/sys_time.h.html#DESCRIPTION/timeval
+class      required
+says       <sys/time.h> defines the type fd_set as a complete type and struct
+           timeval as a complete type with at least the members tv_sec (time_t),
+           tv_usec (suseconds_t).
+note       The members are those of struct timeval as <sys/select.h> describes
+           it.
+test       t/001-struct-timeval.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_time.h.002
+anchor     basedefs/sys_time.h.html#DESCRIPTION/time_t
+class      required
+says       <sys/time.h> defines the types time_t, suseconds_t.
+test       t/002-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_time.h.003
+anchor     basedefs/sys_time.h.html#DESCRIPTION/FD_SETSIZE
+class      required
+says       <sys/time.h> alone provides FD_ZERO, FD_SET, FD_CLR, FD_ISSET and
+           FD_SETSIZE (positive, usable in #if); a set emptied by FD_ZERO holds
+           nothing, FD_SET adds only the descriptor given, FD_CLR removes only
+           that one, with the first, middle and last descriptors (0,
+           FD_SETSIZE/2, FD_SETSIZE-1) usable.
+note       The macros are used as <sys/select.h> describes them.
+test       t/003-fd-macros.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_time.h.004
+anchor     basedefs/sys_time.h.html#DESCRIPTION/select
+class      required
+says       <sys/time.h> declares select() and utimes() with the prototypes the
+           page gives.
+test       t/004-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
