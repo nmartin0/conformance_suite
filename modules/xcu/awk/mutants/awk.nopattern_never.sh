@@ -12,19 +12,20 @@ hook_f() { add -f; add "$1"; }
 hook_prog() { add "$1"; }
 hook_arg() { add "$1"; }
 hook_opt() { add "$1"; }
+hook_dd() { add --; }
 run() { exec "$REAL" "$@"; }
 hook_prog() { p=$(printf '%s\n' "$1" | sed -E 's/^\{/0 {/')
 	add "$p"; }
 acc= nf=0
 while [ $# -gt 0 ]; do
 	case $1 in
-	--) add --; shift; break ;;
-	-F) hook_F "$2"; shift 2 ;;
-	-F?*) hook_F "${1#-F}"; shift ;;
-	-v) hook_v "$2"; shift 2 ;;
-	-v?*) hook_v "${1#-v}"; shift ;;
-	-f) nf=$((nf + 1)); hook_f "$2"; shift 2 ;;
-	-f?*) nf=$((nf + 1)); hook_f "${1#-f}"; shift ;;
+	--) hook_dd; shift; break ;;
+	-F) att=0; hook_F "$2"; shift 2 ;;
+	-F?*) att=1; hook_F "${1#-F}"; shift ;;
+	-v) att=0; hook_v "$2"; shift 2 ;;
+	-v?*) att=1; hook_v "${1#-v}"; shift ;;
+	-f) att=0; nf=$((nf + 1)); hook_f "$2"; shift 2 ;;
+	-f?*) att=1; nf=$((nf + 1)); hook_f "${1#-f}"; shift ;;
 	-?*) hook_opt "$1"; shift ;;
 	*) break ;;
 	esac

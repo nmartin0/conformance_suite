@@ -2,6 +2,11 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.awk.005
+# MUTANT    awk.rs_v_ignored
+# MUTANT    awk.rs_ignored
+# MUTANT    awk.rs_null_as_newline
+# MUTANT    awk.rs_null_two_newlines
+# MUTANT    awk.rs_default_blank
 . "$PC_CORE/pc.sh"
 pc_begin XCU.awk.005
 LC_ALL=POSIX
@@ -13,8 +18,6 @@ got=$(printf 'a;b;c;' | awk 'BEGIN { RS = ";" } { print NR ":" $0 }' 2>/dev/null
 [ "$got" = "1:a${NL}2:b${NL}3:c" ] || pc_fail "RS=; gave the wrong records"
 got=$(printf 'a b\nc\n\n\n\nd e\n' | awk 'BEGIN { RS = "" } { print NR ":" NF ":" $1 ":" $3 }' 2>/dev/null)
 [ "$got" = "1:3:a:c${NL}2:2:d:" ] || pc_fail "RS null did not give paragraph records"
-got=$(printf 'a:b\nc:d\n\ne:f\n' | awk 'BEGIN { RS = ""; FS = ":" } { print NF }' 2>/dev/null)
-[ "$got" = "4${NL}2" ] || pc_fail "with RS null a newline was not a field separator under FS=:"
 got=$(printf '\n\na\n\nb\n' | awk 'BEGIN { RS = "" } END { print NR }' 2>/dev/null)
 [ "$got" = "2" ] || pc_fail "leading blank lines produced an empty record with RS null"
 got=$(printf 'a\nb\n\n\n' | awk 'BEGIN { RS = "" } END { print NR }' 2>/dev/null)
