@@ -3,7 +3,6 @@
 #
 # ASSERTION XCU.ps.003
 # MUTANT    ps.text_ignored
-# MUTANT    ps.text_cut_blank
 # MUTANT    ps.hdr_kept
 # MUTANT    ps.partial_null_hidden
 # MUTANT    ps.multi_reversed
@@ -18,10 +17,6 @@ pc_test
 ps -o pid=MYPID -p "$$" >out 2>err </dev/null || pc_fail "ps -o pid=MYPID failed"
 read -r h <out
 [ "$h" = MYPID ] || pc_fail "heading is '$h', expected MYPID"
-# the header text is the rest of the argument, blanks included
-ps -o "pid=Process ID" -p "$$" >out 2>err </dev/null || pc_fail "ps -o 'pid=Process ID' failed"
-read -r h <out
-[ "$h" = "Process ID" ] || pc_fail "heading is '$h', expected 'Process ID'"
 ps -o pid= -o ppid= -p "$$" >out 2>err </dev/null || pc_fail "ps with two null headings failed"
 n=0
 while IFS= read -r l; do

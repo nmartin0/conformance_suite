@@ -135,3 +135,14 @@ since      1992
 says       In the default listing, a process that has exited and has not been
            waited for by its parent is marked defunct.
 test       t/015-defunct.sh
+
+assertion  XCU.ps.016
+anchor     utilities/ps.html#OPTIONS
+anchor     utilities/ps.html#STDOUT
+anchor     utilities/ps.html#APPLICATION_USAGE
+class      required
+says       The text after the equals sign of an -o name is the whole rest of
+           the argument as the heading, so it may contain blanks: a heading
+           "Process ID" or "User Name" is written as given. (Added in the
+           hardening round; the page's own usage note shows such headings.)
+test       t/016-header-text-blank.sh
