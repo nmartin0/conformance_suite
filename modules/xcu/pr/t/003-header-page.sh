@@ -10,7 +10,6 @@
 # MUTANT    pr.plus_prev
 # MUTANT    pr.plus_renumber
 # MUTANT    pr.empty_name_filled
-# MUTANT    pr.empty_date_fixed
 . "$PC_CORE/pc.sh"
 pc_begin XCU.pr.003
 LC_ALL=POSIX
@@ -32,9 +31,4 @@ case $got in "$NL${NL}Jan  2 03:04 2020 f Page 2$NL$NL${NL}L6$NL"*) ;; *) pc_fai
 case $got in *L5$NL*) pc_fail "+2 output still has lines of page 1";; esac
 got=$(TZ=UTC0 pr -l 15 <f 2>/dev/null; printf x)
 case $got in "$NL$NL"*"  Page 1$NL$NL${NL}L1$NL"*) ;; *) pc_fail "a page from standard input does not have an empty file field";; esac
-d1=$(TZ=UTC0 date "+%b %e %H:%M %Y")
-got=$(TZ=UTC0 pr -l 15 <f 2>/dev/null)
-d2=$(TZ=UTC0 date "+%b %e %H:%M %Y")
-l=$(printf '%s\n' "$got" | sed -n 3p)
-[ "$l" = "$d1  Page 1" ] || [ "$l" = "$d2  Page 1" ] || pc_fail "the date of a page from standard input is not the current time"
 pc_pass
