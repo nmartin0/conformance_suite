@@ -2,6 +2,29 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.diff.004
+# MUTANT    diff.u_add_before_del
+# MUTANT    diff.u_ctx_long
+# MUTANT    diff.u_ctx_nospace
+# MUTANT    diff.u_ctx_short
+# MUTANT    diff.u_default_two
+# MUTANT    diff.u_hdr_date_slash
+# MUTANT    diff.u_hdr_notab
+# MUTANT    diff.u_hdr_nozone
+# MUTANT    diff.u_hdr_stars
+# MUTANT    diff.u_hdr_swapped_names
+# MUTANT    diff.u_hdr_time_missing
+# MUTANT    diff.u_hdr_zone_colon
+# MUTANT    diff.u_marks_swapped
+# MUTANT    diff.u_no_header
+# MUTANT    diff.u_no_join
+# MUTANT    diff.u_range_end_not_count
+# MUTANT    diff.u_start_off
+# MUTANT    diff.u_stdin_name
+# MUTANT    diff.same_header
+# VARIANT   diff.u_frac_none
+# VARIANT   diff.u_frac_one
+# VARIANT   diff.u_empty_blank
+# VARIANT   diff.u_empty_space
 . "$PC_CORE/pc.sh"
 pc_begin XCU.diff.004
 LC_ALL=POSIX
@@ -89,4 +112,27 @@ want="@@ -1,5 +1,5 @@${NL} 1${NL}-2${NL}+X${NL} 3${NL}-4${NL}+Y${NL} 5"
 [ "$(body "$out")" = "$want" ] || pc_fail "changes two lines apart were not joined into one hunk"
 diff -u f1 f2 >/dev/null 2>&1 </dev/null
 [ $? -eq 1 ] || pc_fail "-u with differences did not give status 1"
+# no output at all is written when the files are identical
+got=$(diff -u f1 f1 2>/dev/null </dev/null; printf 'rc=%s' "$?")
+[ "$got" = "rc=0" ] || pc_fail "-u with identical files wrote output or gave a status other than 0"
+# standard input is named by the single character - in the header lines
+out=$(diff -u - f2 2>/dev/null <f1)
+case $out in
+"--- -${tab}"*) ;;
+*) pc_fail "the first -u header line for standard input does not start '--- -<tab>'" ;;
+esac
+out=$(diff -u f1 - 2>/dev/null <f2)
+case $out in
+*"${NL}+++ -${tab}"*) ;;
+*) pc_fail "the second -u header line for standard input does not start '+++ -<tab>'" ;;
+esac
+# an empty unaffected line is written as an empty line or as a single space
+printf 'a\n\nb\nc\n' >m1
+printf 'a\n\nb\nX\n' >m2
+out=$(diff -U 3 m1 m2 2>/dev/null </dev/null)
+b=$(body "$out")
+case $b in
+"@@ -1,4 +1,4 @@${NL} a${NL}${NL} b${NL}-c${NL}+X" | "@@ -1,4 +1,4 @@${NL} a${NL} ${NL} b${NL}-c${NL}+X") ;;
+*) pc_fail "a hunk with an empty unaffected line is wrong" ;;
+esac
 pc_pass

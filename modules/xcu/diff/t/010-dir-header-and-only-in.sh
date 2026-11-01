@@ -2,6 +2,15 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.diff.010
+# MUTANT    diff.d_hdr_noopts
+# MUTANT    diff.d_hdr_word
+# MUTANT    diff.d_hdr_opts_fixed
+# MUTANT    diff.d_hdr_one_name
+# MUTANT    diff.o_abs
+# MUTANT    diff.o_base
+# MUTANT    diff.o_sub_missing
+# VARIANT   diff.d_hdr_names
+# VARIANT   diff.d_common_subdirs
 . "$PC_CORE/pc.sh"
 pc_begin XCU.diff.010
 LC_ALL=POSIX
@@ -15,8 +24,12 @@ rc=$?
 [ "$rc" -eq 1 ] || pc_fail "diff -b d1 d2: exit status $rc, expected 1"
 grep '^diff -b ' out >/dev/null || pc_fail "no header line beginning 'diff -b ': $(cat out)"
 l=$(grep '^diff -b ' out | head -1)
-case $l in
-*dif*dif*) ;;
+set -f
+set -- $l
+set +f
+[ $# -eq 4 ] || pc_fail "the header line is not 'diff -b name1 name2': '$l'"
+case "$3 $4" in
+*dif*" "*dif) ;;
 *) pc_fail "the header line does not name the two files: '$l'" ;;
 esac
 diff -r d1 d2 >out 2>err </dev/null

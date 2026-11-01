@@ -2,6 +2,17 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.diff.002
+# MUTANT    diff.status_diff0
+# MUTANT    diff.status_diff2
+# MUTANT    diff.status_err1
+# MUTANT    diff.status_err0
+# MUTANT    diff.same_rc1
+# MUTANT    diff.same_blank
+# MUTANT    diff.err_silent
+# MUTANT    diff.err_stdout
+# MUTANT    diff.empty_err
+# VARIANT   diff.status3
+# VARIANT   diff.status255
 . "$PC_CORE/pc.sh"
 pc_begin XCU.diff.002
 LC_ALL=POSIX

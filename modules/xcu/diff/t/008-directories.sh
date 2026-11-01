@@ -2,6 +2,18 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.diff.008
+# MUTANT    diff.d_no_only
+# MUTANT    diff.d_only_dir_wrong
+# MUTANT    diff.d_only_slash
+# MUTANT    diff.d_no_recurse
+# MUTANT    diff.d_always_r
+# MUTANT    diff.d_same_reported
+# MUTANT    diff.d_file_dir_ignored
+# MUTANT    diff.d_body_dropped
+# MUTANT    diff.o_sub_missing
+# MUTANT    diff.swap_operands
+# VARIANT   diff.d_common_subdirs
+# VARIANT   diff.d_order_rev
 . "$PC_CORE/pc.sh"
 pc_begin XCU.diff.008
 LC_ALL=POSIX

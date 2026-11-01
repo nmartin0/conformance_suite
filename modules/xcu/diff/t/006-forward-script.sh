@@ -2,6 +2,13 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.diff.006
+# MUTANT    diff.f_c_as_a
+# MUTANT    diff.f_cmd_last
+# MUTANT    diff.f_comma_range
+# MUTANT    diff.f_no_dot
+# MUTANT    diff.f_num_off
+# MUTANT    diff.f_order_rev
+# MUTANT    diff.f_text_dropped
 . "$PC_CORE/pc.sh"
 pc_begin XCU.diff.006
 LC_ALL=POSIX

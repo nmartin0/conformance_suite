@@ -2,6 +2,8 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.diff.011
+# MUTANT    diff.c_tz_ignored
+# MUTANT    diff.c_time_now
 . "$PC_CORE/pc.sh"
 pc_begin XCU.diff.011
 LC_ALL=POSIX
