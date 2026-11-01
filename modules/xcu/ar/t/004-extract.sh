@@ -2,10 +2,21 @@
 # Copyright (c) 2026 Nicholas Martin. All rights reserved.
 #
 # ASSERTION XCU.ar.004
-# "ar -x a f2" recreates f2 with its contents and leaves other members
-# unextracted; "ar -x a" with no operand extracts all members; the archive
-# file is unchanged; the extracted file's modification time is the time of
-# extraction, not the old time of the original.
+# "ar -x a f2" recreates f2 with its contents and leaves other
+# members unextracted; "ar -x a" with no operand extracts all
+# members; the archive file is unchanged; the extracted file's
+# modification time is the time of extraction, not the old time of
+# the original.
+# MUTANT    ar.x_operand_all
+# MUTANT    ar.x_none_without_operand
+# MUTANT    ar.x_first_only
+# MUTANT    ar.x_first_operand_only
+# MUTANT    ar.x_old_time_operand
+# MUTANT    ar.x_old_time_all
+# MUTANT    ar.x_future_time
+# MUTANT    ar.x_changes_archive
+# MUTANT    ar.x_truncates
+# MUTANT    ar.x_status1
 . "$PC_CORE/pc.sh"
 pc_begin XCU.ar.004
 LC_ALL=C; export LC_ALL
@@ -13,20 +24,41 @@ pc_top=$(pwd) || pc_unresolved "cannot find the working directory"
 pc_wd=pcw.$$
 mkdir "$pc_wd" && cd "$pc_wd" || pc_unresolved "cannot make a work directory"
 trap 'cd "$pc_top" && rm -rf "$pc_wd"' EXIT
-printf 'one\n' >f1; printf 'two\n' >f2; printf 'three\n' >f3
-touch -t 200001010000 f1 f2 f3 || pc_unresolved "setup: touch failed"
+# Members are added one at a time so that the order does not depend on how
+# several new operands are ordered.
+pc_mk() { pc_a=$1; shift; for pc_f; do ar -rc "$pc_a" "$pc_f" </dev/null >/dev/null 2>&1 || return 1; done; }
+printf 'one\n' >f1; printf 'two\n' >f2; printf 'three\n' >f3; printf 'odd' >f4
+touch -t 200001010000 f1 f2 f3 f4 || pc_unresolved "setup: touch failed"
 touch -t 200001020000 ref || pc_unresolved "setup: touch failed"
-ar -rc a f1 f2 f3 </dev/null >/dev/null 2>&1 || pc_unresolved "setup: cannot build the archive"
+pc_mk a f3 f1 f2 f4 || pc_unresolved "setup: cannot build the archive"
 cat a >a.keep || pc_unresolved "setup: cannot copy the archive"
-rm -f f1 f2 f3
+for f in f1 f2 f3 f4; do cp "$f" "$f.keep" || pc_unresolved "setup: cp failed"; done
+rm -f f1 f2 f3 f4
 pc_test
 ar -x a f2 >out 2>err </dev/null || pc_fail "ar -x a f2: nonzero status"
 [ -f f2 ] || pc_fail "f2 was not extracted"
-[ "$(cat f2)" = two ] || pc_fail "f2 has the wrong contents"
-[ -e f1 ] || [ -e f3 ] && pc_fail "ar -x a f2 extracted other members"
+cmp -s f2 f2.keep || pc_fail "f2 has the wrong contents"
+[ -e f1 ] || [ -e f3 ] || [ -e f4 ] && pc_fail "ar -x a f2 extracted other members"
+touch post || pc_unresolved "touch failed"
+[ -e f2 ] && [ "$(find f2 -newer ref -print)" = f2 ] || pc_fail "f2 extracted by name does not carry the extraction time"
+[ -z "$(find f2 -newer post -print)" ] || pc_fail "f2 carries a time later than the extraction"
+cmp -s a a.keep || pc_fail "the archive was changed by extracting one member"
+# Several operands: each of them is extracted and no other member.
+rm -f f2
+ar -x a f3 f4 >out 2>err </dev/null || pc_fail "ar -x a f3 f4: nonzero status"
+for f in f3 f4; do
+	[ -f "$f" ] || pc_fail "ar -x a f3 f4 did not extract $f"
+	cmp -s "$f" "$f.keep" || pc_fail "$f has the wrong contents after ar -x a f3 f4"
+done
+[ -e f1 ] || [ -e f2 ] && pc_fail "ar -x a f3 f4 extracted other members"
+rm -f f3 f4
 ar -x a >out 2>err </dev/null || pc_fail "ar -x a: nonzero status"
-[ "$(cat f1)" = one ] && [ "$(cat f3)" = three ] || pc_fail "ar -x a did not extract all members"
+touch post2 || pc_unresolved "touch failed"
+for f in f1 f2 f3 f4; do
+	[ -f "$f" ] || pc_fail "ar -x a did not extract $f"
+	cmp -s "$f" "$f.keep" || pc_fail "$f has the wrong contents after ar -x a"
+	[ "$(find "$f" -newer ref -print)" = "$f" ] || pc_fail "$f does not carry the extraction time"
+done
+[ -z "$(find f1 f2 f3 f4 -newer post2 -print)" ] || pc_fail "an extracted file carries a time later than the extraction"
 cmp -s a a.keep || pc_fail "the archive was changed by extraction"
-new=$(find f1 f2 f3 -newer ref -print)
-[ "$(printf '%s\n' "$new" | wc -l)" -eq 3 ] || pc_fail "an extracted file does not carry the extraction time"
 pc_pass
