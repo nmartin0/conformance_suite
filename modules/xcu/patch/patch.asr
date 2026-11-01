@@ -111,7 +111,7 @@ anchor     utilities/patch.html#DESCRIPTION
 anchor     utilities/patch.html#EXTENDED DESCRIPTION
 class      required
 since      1992
-says       A patch file with patches for several files patches each, named by headers or Index: lines.
+says       A patch file with patches for several files patches each, named by headers or Index: lines; leading blanks shared by every line of a patch are removed first.
 test       t/013-several-patches.sh
 
 assertion  XCU.patch.014
