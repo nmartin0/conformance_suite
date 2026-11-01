@@ -25,7 +25,7 @@ assertion  XBD.sys_mman.h.002
 anchor     basedefs/sys_mman.h.html#DESCRIPTION/MAP_SHARED
 class      required
 since      1988
-says       MAP_SHARED, MAP_PRIVATE, MAP_FIXED and MAP_ANONYMOUS are
+says       MAP_SHARED, MAP_PRIVATE, MAP_FIXED and MAP_ANON are
            nonzero and share no bits.
 note       From flags being the bitwise-inclusive OR of these options
            (mmap page) (Q-165).
@@ -36,7 +36,7 @@ assertion  XBD.sys_mman.h.003
 anchor     basedefs/sys_mman.h.html#DESCRIPTION/MAP_ANON
 class      required
 since      2024
-says       MAP_ANON has the same value as MAP_ANONYMOUS.
+says       MAP_ANON has the same value as MAP_ANON.
 test       t/003-map-anon.c
 nomutant   header content check; needs the Tier 0 header mutants
 

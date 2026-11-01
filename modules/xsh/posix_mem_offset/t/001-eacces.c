@@ -208,7 +208,7 @@ int main(void)
 
 	if (pg <= 0)
 		pc_unresolved("sysconf(_SC_PAGESIZE) gave %ld", pg);
-	p = mmap(NULL, (size_t)pg, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	p = mmap(NULL, (size_t)pg, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
 	NEED(p != MAP_FAILED, "mmap failed: %s", pc_errname(errno));
 	NEED(munmap(p, (size_t)pg) == 0, "munmap failed: %s", pc_errname(errno));
 	pc_test();

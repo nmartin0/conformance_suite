@@ -167,7 +167,7 @@ static const char *how(int r)
 /* An anonymous MAP_SHARED mapping of n pages, read-write, each byte 'x' (setup). */
 static unsigned char *anon_pages(long n)
 {
-	void *p = mmap(NULL, (size_t)(n * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	void *p = mmap(NULL, (size_t)(n * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
 
 	if (p == MAP_FAILED)
 		pc_unresolved("anonymous mmap of %ld pages failed: %s", n, pc_errname(errno));
@@ -186,7 +186,7 @@ int main(void)
 		len = SIZE_MAX - (SIZE_MAX % (size_t)pg) - (size_t)pg;	/* more than any address space can hold */
 		pc_test();
 		errno = 0;
-		p = mmap(NULL, len, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+		p = mmap(NULL, len, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
 		pc_check(p == MAP_FAILED, "mmap(len %zu) returned %p", len, p);
 		pc_expect_err(-1, ENOMEM, "mmap() of nearly SIZE_MAX bytes");
 	}

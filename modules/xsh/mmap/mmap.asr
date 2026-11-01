@@ -58,7 +58,7 @@ assertion  XSH.mmap.005
 anchor     functions/mmap.html#DESCRIPTION
 class      required
 since      2024
-says       mmap() with MAP_ANONYMOUS, and with its synonym MAP_ANON, fildes
+says       mmap() with MAP_ANON, and with its synonym MAP_ANON, fildes
            -1 and off 0, maps new memory of len bytes (len two pages and
            one byte here) that is all zero and takes stores, for
            MAP_SHARED and for MAP_PRIVATE.
@@ -79,7 +79,7 @@ anchor     functions/mmap.html#DESCRIPTION
 anchor     functions/mmap.html#ERRORS/EINVAL
 class      required
 says       mmap() with len 0 returns MAP_FAILED with errno EINVAL, for a
-           file and for MAP_ANONYMOUS.
+           file and for MAP_ANON.
 note       Added to the 2001 edition by Technical Corrigendum 2, so no
            edition year is given.
 test       t/007-len-zero.c
@@ -96,7 +96,7 @@ assertion  XSH.mmap.009
 anchor     functions/mmap.html#ERRORS/EBADF
 class      required
 since      2001
-says       mmap() without MAP_ANONYMOUS of a descriptor that is not open
+says       mmap() without MAP_ANON of a descriptor that is not open
            returns MAP_FAILED with errno EBADF.
 test       t/009-ebadf.c
 

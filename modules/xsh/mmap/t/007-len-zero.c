@@ -166,7 +166,7 @@ static const char *how(int r)
 /* An anonymous MAP_SHARED mapping of n pages, read-write, each byte 'x' (setup). */
 static unsigned char *anon_pages(long n)
 {
-	void *p = mmap(NULL, (size_t)(n * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	void *p = mmap(NULL, (size_t)(n * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
 
 	if (p == MAP_FAILED)
 		pc_unresolved("anonymous mmap of %ld pages failed: %s", n, pc_errname(errno));
@@ -189,9 +189,9 @@ int main(void)
 		pc_check(p == MAP_FAILED, "mmap(len 0) of a file returned %p, not MAP_FAILED", p);
 		pc_expect_err(-1, EINVAL, "mmap(len 0) of a file");
 		errno = 0;
-		p = mmap(NULL, 0, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-		pc_check(p == MAP_FAILED, "mmap(len 0, MAP_ANONYMOUS) returned %p, not MAP_FAILED", p);
-		pc_expect_err(-1, EINVAL, "mmap(len 0, MAP_ANONYMOUS)");
+		p = mmap(NULL, 0, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
+		pc_check(p == MAP_FAILED, "mmap(len 0, MAP_ANON) returned %p, not MAP_FAILED", p);
+		pc_expect_err(-1, EINVAL, "mmap(len 0, MAP_ANON)");
 	}
 	pc_pass();
 }

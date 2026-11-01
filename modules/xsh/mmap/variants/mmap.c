@@ -51,7 +51,7 @@ void *mmap(void *addr, size_t len, int prot, int flags, int fd, off_t off)
 		errno = EINVAL;
 		return MAP_FAILED;
 	}
-	if (IS("pipe_enxio") && !(flags & MAP_ANONYMOUS)) {
+	if (IS("pipe_enxio") && !(flags & MAP_ANON)) {
 		struct stat st;
 
 		if (fstat(fd, &st) == 0 && S_ISFIFO(st.st_mode)) {

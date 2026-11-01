@@ -167,7 +167,7 @@ static const char *how(int r)
 /* An anonymous MAP_SHARED mapping of n pages, read-write, each byte 'x' (setup). */
 static unsigned char *anon_pages(long n)
 {
-	void *p = mmap(NULL, (size_t)(n * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	void *p = mmap(NULL, (size_t)(n * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
 
 	if (p == MAP_FAILED)
 		pc_unresolved("anonymous mmap of %ld pages failed: %s", n, pc_errname(errno));
@@ -185,8 +185,8 @@ int main(void)
 		get_page_size();
 		fd = make_data_file("f", 2 * pg);
 		pc_test();
-		p = mmap(NULL, (size_t)(pg + 1), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-		pc_check(p != MAP_FAILED, "mmap(len one page + 1, MAP_ANONYMOUS) failed: %s", pc_errname(errno));
+		p = mmap(NULL, (size_t)(pg + 1), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
+		pc_check(p != MAP_FAILED, "mmap(len one page + 1, MAP_ANON) failed: %s", pc_errname(errno));
 		r = touch(p + 2 * pg - 1, 0, 0);
 		pc_check(r == 0, "loading the last byte of the partial page of an anonymous mapping: %s", how(r));
 		r = touch(p + 2 * pg - 1, 1, 'w');

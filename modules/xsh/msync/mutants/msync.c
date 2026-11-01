@@ -47,7 +47,7 @@ void *mmap(void *addr, size_t len, int prot, int flags, int fd, off_t off)
 	char *p = real_mmap(addr, len, prot, flags, fd, off);
 	struct stat st;
 
-	if (m != NULL && p != MAP_FAILED && !(flags & MAP_ANONYMOUS) && nrecs < 32 && fstat(fd, &st) == 0) {
+	if (m != NULL && p != MAP_FAILED && !(flags & MAP_ANON) && nrecs < 32 && fstat(fd, &st) == 0) {
 		recs[nrecs].addr = p;
 		recs[nrecs].len = len;
 		recs[nrecs].dupfd = dup(fd);

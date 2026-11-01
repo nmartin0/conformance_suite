@@ -1,5 +1,5 @@
 /*
- * MAP_SHARED, MAP_PRIVATE, MAP_FIXED and MAP_ANONYMOUS are nonzero and
+ * MAP_SHARED, MAP_PRIVATE, MAP_FIXED and MAP_ANON are nonzero and
  * share no bits.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
@@ -11,8 +11,8 @@
 int main(void)
 {
 	pc_begin("XBD.sys_mman.h.002");
-#if !defined(MAP_SHARED) || !defined(MAP_PRIVATE) || !defined(MAP_FIXED) || !defined(MAP_ANONYMOUS)
-	pc_unresolved("a constant is missing (the header check reports it): MAP_SHARED MAP_PRIVATE MAP_FIXED MAP_ANONYMOUS");
+#if !defined(MAP_SHARED) || !defined(MAP_PRIVATE) || !defined(MAP_FIXED) || !defined(MAP_ANON)
+	pc_unresolved("a constant is missing (the header check reports it): MAP_SHARED MAP_PRIVATE MAP_FIXED MAP_ANON");
 #else
 	{
 	struct { const char *n; long long v; } e[5];
@@ -21,7 +21,7 @@ int main(void)
 	e[n].n = "MAP_SHARED"; e[n++].v = (long long)(MAP_SHARED);
 	e[n].n = "MAP_PRIVATE"; e[n++].v = (long long)(MAP_PRIVATE);
 	e[n].n = "MAP_FIXED"; e[n++].v = (long long)(MAP_FIXED);
-	e[n].n = "MAP_ANONYMOUS"; e[n++].v = (long long)(MAP_ANONYMOUS);
+	e[n].n = "MAP_ANON"; e[n++].v = (long long)(MAP_ANON);
 	if (n < 2)
 		pc_unresolved("fewer than 2 of the constants are defined");
 	pc_test();

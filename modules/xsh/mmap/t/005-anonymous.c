@@ -1,5 +1,5 @@
 /*
- * MAP_ANONYMOUS and MAP_ANON (fildes -1, off 0) map new zeroed memory.
+ * MAP_ANON and MAP_ANON (fildes -1, off 0) map new zeroed memory.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.mmap.005
@@ -169,7 +169,7 @@ static const char *how(int r)
 /* An anonymous MAP_SHARED mapping of n pages, read-write, each byte 'x' (setup). */
 static unsigned char *anon_pages(long n)
 {
-	void *p = mmap(NULL, (size_t)(n * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	void *p = mmap(NULL, (size_t)(n * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
 
 	if (p == MAP_FAILED)
 		pc_unresolved("anonymous mmap of %ld pages failed: %s", n, pc_errname(errno));
@@ -206,9 +206,9 @@ int main(void)
 		get_page_size();
 		len = 2 * pg + 1;
 		pc_test();
-		(void)try_anon(MAP_SHARED | MAP_ANONYMOUS, "MAP_SHARED|MAP_ANONYMOUS", len);
 		(void)try_anon(MAP_SHARED | MAP_ANON, "MAP_SHARED|MAP_ANON", len);
-		(void)try_anon(MAP_PRIVATE | MAP_ANONYMOUS, "MAP_PRIVATE|MAP_ANONYMOUS", len);
+		(void)try_anon(MAP_SHARED | MAP_ANON, "MAP_SHARED|MAP_ANON", len);
+		(void)try_anon(MAP_PRIVATE | MAP_ANON, "MAP_PRIVATE|MAP_ANON", len);
 		(void)try_anon(MAP_PRIVATE | MAP_ANON, "MAP_PRIVATE|MAP_ANON", len);
 	}
 	pc_pass();

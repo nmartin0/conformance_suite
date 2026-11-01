@@ -242,7 +242,7 @@ static void on_segv(int sig, siginfo_t *si, void *uc)
 int main(void)
 {
 	pc_begin("XSH.2.4.3-signal-actions.015");
-	page = mmap(NULL, 4096, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	page = mmap(NULL, 4096, PROT_READ, MAP_PRIVATE | MAP_ANON, -1, 0);
 	pc_check(page != MAP_FAILED, "mmap failed");
 	{
 		struct sigaction sa;

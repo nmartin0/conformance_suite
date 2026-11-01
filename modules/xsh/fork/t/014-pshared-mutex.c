@@ -38,7 +38,7 @@ int main(void)
 
 	pc_begin("XSH.fork.014");
 	{
-		/* File-backed, so as not to depend on MAP_ANONYMOUS (Issue 8). */
+		/* File-backed, so as not to depend on MAP_ANON (Issue 8). */
 		int fd;
 		pc_make_file("m", "");
 		fd = open("m", O_RDWR);

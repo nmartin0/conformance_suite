@@ -167,7 +167,7 @@ static const char *how(int r)
 /* An anonymous MAP_SHARED mapping of n pages, read-write, each byte 'x' (setup). */
 static unsigned char *anon_pages(long n)
 {
-	void *p = mmap(NULL, (size_t)(n * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	void *p = mmap(NULL, (size_t)(n * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
 
 	if (p == MAP_FAILED)
 		pc_unresolved("anonymous mmap of %ld pages failed: %s", n, pc_errname(errno));
@@ -185,8 +185,8 @@ int main(void)
 
 		get_page_size();
 		pc_test();
-		p = mmap(NULL, (size_t)pg, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-		pc_check(p != MAP_FAILED, "mmap(MAP_SHARED|MAP_ANONYMOUS) failed: %s", pc_errname(errno));
+		p = mmap(NULL, (size_t)pg, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
+		pc_check(p != MAP_FAILED, "mmap(MAP_SHARED|MAP_ANON) failed: %s", pc_errname(errno));
 		p[1] = 'p';
 		kid = fork();
 		NEED(kid != -1, "fork failed: %s", pc_errname(errno));

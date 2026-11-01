@@ -43,7 +43,7 @@ void *mmap(void *addr, size_t len, int prot, int flags, int fd, off_t off)
 	const char *m = mutant();
 	char *p = real_mmap(addr, len, prot, flags, fd, off);
 
-	if (IS("private_writeback") && p != MAP_FAILED && (flags & MAP_PRIVATE) && !(flags & MAP_ANONYMOUS) &&
+	if (IS("private_writeback") && p != MAP_FAILED && (flags & MAP_PRIVATE) && !(flags & MAP_ANON) &&
 	    nrecs < 32) {
 		recs[nrecs].addr = p;
 		recs[nrecs].len = len;

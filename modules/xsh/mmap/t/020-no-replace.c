@@ -168,7 +168,7 @@ static const char *how(int r)
 /* An anonymous MAP_SHARED mapping of n pages, read-write, each byte 'x' (setup). */
 static unsigned char *anon_pages(long n)
 {
-	void *p = mmap(NULL, (size_t)(n * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	void *p = mmap(NULL, (size_t)(n * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
 
 	if (p == MAP_FAILED)
 		pc_unresolved("anonymous mmap of %ld pages failed: %s", n, pc_errname(errno));
@@ -187,7 +187,7 @@ int main(void)
 		get_page_size();
 		a = anon_pages(2);
 		pc_test();
-		p = mmap(a, (size_t)(2 * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+		p = mmap(a, (size_t)(2 * pg), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
 		pc_check(p != MAP_FAILED, "mmap(addr of an existing mapping, no MAP_FIXED) failed: %s", pc_errname(errno));
 		pc_check(p != NULL, "the mapping was placed at address 0");
 		lo = (uintptr_t)a;
@@ -197,7 +197,7 @@ int main(void)
 		pc_check(phi <= lo || plo >= hi, "the new mapping %p overlaps the existing one at %p", (void *)p, (void *)a);
 		for (i = 0; i < 2 * pg; i++)
 			pc_check(a[i] == 'x', "byte %ld of the existing mapping changed to %#x", i, a[i]);
-		p = mmap(NULL, (size_t)pg, PROT_READ, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+		p = mmap(NULL, (size_t)pg, PROT_READ, MAP_SHARED | MAP_ANON, -1, 0);
 		pc_check(p != MAP_FAILED && p != NULL, "mmap(addr 0) failed or returned address 0");
 	}
 	pc_pass();

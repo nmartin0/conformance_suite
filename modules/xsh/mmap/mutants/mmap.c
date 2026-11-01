@@ -57,7 +57,7 @@ void *mmap(void *addr, size_t len, int prot, int flags, int fd, off_t off)
 	REAL(mmap);
 	REAL(mprotect);
 	const char *m = mutant();
-	int anon = (flags & MAP_ANONYMOUS) != 0;
+	int anon = (flags & MAP_ANON) != 0;
 	char *p;
 
 	if (m == NULL)

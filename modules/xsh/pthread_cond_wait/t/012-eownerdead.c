@@ -208,7 +208,7 @@ int main(void)
 	int st, k;
 
 	pc_begin("XSH.pthread_cond_wait.012");
-	sh = mmap(NULL, sizeof *sh, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+	sh = mmap(NULL, sizeof *sh, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
 	NEED(sh != MAP_FAILED, "mmap failed");
 	NEED(pthread_mutexattr_init(&a) == 0 && pthread_mutexattr_setpshared(&a, PTHREAD_PROCESS_SHARED) == 0 &&
 	     pthread_mutexattr_setrobust(&a, PTHREAD_MUTEX_ROBUST) == 0 && pthread_mutex_init(&sh->m, &a) == 0,

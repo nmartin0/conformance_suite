@@ -39,7 +39,7 @@ void *mmap(void *addr, size_t len, int prot, int flags, int fd, off_t off)
 	const char *m = mutant();
 	char *p = real_mmap(addr, len, prot, flags, fd, off);
 
-	if (IS("private_eacces") && p != MAP_FAILED && (flags & MAP_PRIVATE) && !(flags & MAP_ANONYMOUS) &&
+	if (IS("private_eacces") && p != MAP_FAILED && (flags & MAP_PRIVATE) && !(flags & MAP_ANON) &&
 	    (fcntl(fd, F_GETFL) & O_ACCMODE) == O_RDONLY && nro < 32)
 		ro_private[nro++] = p;
 	return p;

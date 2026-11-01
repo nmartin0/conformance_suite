@@ -21,8 +21,8 @@ static wchar_t *guard_page(void)
 	char *p;
 
 	pc_check(ps > 0, "sysconf(_SC_PAGESIZE) failed");
-#ifdef MAP_ANONYMOUS
-	p = mmap(NULL, (size_t)ps * 2, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+#ifdef MAP_ANON
+	p = mmap(NULL, (size_t)ps * 2, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
 #else
 	{
 		int fd = open("pages", O_RDWR | O_CREAT | O_TRUNC, 0600);

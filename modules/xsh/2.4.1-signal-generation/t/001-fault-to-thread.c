@@ -252,7 +252,7 @@ int main(void)
 	pc_begin("XSH.2.4.1-signal-generation.001");
 	if (ATOMIC_INT_LOCK_FREE != 2)
 		pc_unresolved("atomic_int is not always lock-free, so a signal handler may not use it (XSH 2.4.3)");
-	page = mmap(NULL, 4096, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	page = mmap(NULL, 4096, PROT_READ, MAP_PRIVATE | MAP_ANON, -1, 0);
 	pc_check(page != MAP_FAILED, "mmap failed");
 	catch_sig(SIGSEGV, on_fault);
 	catch_sig(SIGBUS, on_fault);
