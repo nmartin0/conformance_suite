@@ -1,0 +1,17 @@
+# XBD <libgen.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of <libgen.h> beyond the names the Tier 0 header check
+# covers: the types and declarations the page gives, checked at build time.
+# The header mutants for these arrive with the Tier 0 generator, so each
+# says why it has no mutant yet.
+
+assertion  XBD.libgen.h.001
+anchor     basedefs/libgen.h.html#DESCRIPTION/basename
+anchor     basedefs/libgen.h.html#DESCRIPTION/dirname
+class      required
+says       <libgen.h> declares basename() and dirname() with the prototypes
+           the page gives (a function without a prototype, or with other
+           parameter or result types, does not match).
+test       t/001-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
