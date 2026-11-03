@@ -1,0 +1,43 @@
+# XBD <sys/uio.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.sys_uio.h.001
+anchor     basedefs/sys_uio.h.html#DESCRIPTION/iovec
+class      required
+says       <sys/uio.h> defines struct iovec as a complete type with at least the
+           members iov_base (void *), iov_len (size_t).
+test       t/001-struct-iovec.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_uio.h.002
+anchor     basedefs/sys_uio.h.html#DESCRIPTION/ssize_t
+class      required
+says       <sys/uio.h> defines the types ssize_t, size_t.
+test       t/002-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_uio.h.003
+anchor     basedefs/sys_uio.h.html#DESCRIPTION/readv
+class      required
+says       <sys/uio.h> declares readv() and writev() with the prototypes the page
+           gives.
+test       t/003-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.sys_uio.h.004
+anchor     basedefs/sys_uio.h.html#DESCRIPTION/iovec
+class      required
+says       An array of struct iovec elements, each set through iov_base and
+           iov_len, is accepted by writev() to gather separate regions into one
+           stream in order and by readv() to scatter a stream over separate
+           regions in order.
+note       Run on a pipe with short transfers continued, so only the order and
+           the use of the two members are judged; the behaviour of the two calls
+           is judged on their own pages.
+test       t/004-scatter-gather.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

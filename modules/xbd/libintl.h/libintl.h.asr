@@ -1,0 +1,39 @@
+# XBD <libintl.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of <libintl.h> beyond the names the Tier 0 header check
+# covers: the types and declarations the page gives, checked at build time.
+# The header mutants for these arrive with the Tier 0 generator, so each
+# says why it has no mutant yet.
+
+assertion  XBD.libintl.h.001
+anchor     basedefs/libintl.h.html#DESCRIPTION/TEXTDOMAINMAX
+class      required
+says       If <libintl.h> defines the macro TEXTDOMAINMAX, its value equals
+           that of {TEXTDOMAIN_MAX} in <limits.h>.
+note       The page spells the macro TEXTDOMAINMAX and the limit
+           TEXTDOMAIN_MAX. The test reads the
+           macro as written; with it undefined, or with no {TEXTDOMAIN_MAX}
+           to compare, the result is NOTINUSE.
+test       t/001-textdomainmax.c
+nomutant   NOTINUSE where the macro is absent, which the text allows; a header mutant needs the Tier 0 generator
+
+assertion  XBD.libintl.h.002
+anchor     basedefs/libintl.h.html#DESCRIPTION/locale_t
+class      required
+says       <libintl.h> alone defines the type locale_t.
+test       t/002-types-locale.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.libintl.h.003
+anchor     basedefs/libintl.h.html#DESCRIPTION/gettext
+anchor     basedefs/libintl.h.html#DESCRIPTION/ngettext
+class      required
+says       <libintl.h> declares bindtextdomain(), bind_textdomain_codeset(),
+           dcgettext(), dcgettext_l(), dcngettext(), dcngettext_l(),
+           dgettext(), dgettext_l(), dngettext(), dngettext_l(), gettext(),
+           gettext_l(), ngettext(), ngettext_l() and textdomain() with the
+           prototypes the page gives (a function without a prototype, or with
+           other parameter or result types, does not match).
+test       t/003-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

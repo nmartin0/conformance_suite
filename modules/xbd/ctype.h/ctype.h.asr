@@ -1,0 +1,29 @@
+# XBD <ctype.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic content of <ctype.h> beyond the names the Tier 0 header check
+# covers: the types and declarations the page gives, checked at build time.
+# The header mutants for these arrive with the Tier 0 generator, so each
+# says why it has no mutant yet.
+
+assertion  XBD.ctype.h.001
+anchor     basedefs/ctype.h.html#DESCRIPTION/locale_t
+class      required
+says       <ctype.h> alone defines the type locale_t.
+test       t/001-types-locale.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.ctype.h.002
+anchor     basedefs/ctype.h.html#DESCRIPTION/isalnum
+anchor     basedefs/ctype.h.html#DESCRIPTION/tolower
+class      required
+says       <ctype.h> declares isalnum(), isalpha(), isblank(), iscntrl(),
+           isdigit(), isgraph(), islower(), isprint(), ispunct(), isspace(),
+           isupper(), isxdigit(), tolower(), toupper() and their _l forms
+           (taking a locale_t last) with the prototypes the page gives (a
+           function without a prototype, or with other parameter or result
+           types, does not match).
+note       A name that is also a macro is still declared as a function: the
+           test takes each function's address through a parenthesised name.
+test       t/002-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
