@@ -330,6 +330,54 @@ if [ "$pc_cccached" = no ] && [ -n "$pc_cache" ]; then
 	pc_cache_put "$pc_cckey" "$pc_trustdir/ccstrict"
 fi
 
+# What this compiler cannot build. A test that needs a language feature the
+# compiler lacks says nothing about the system under test; it is reported
+# apart (UNINITIATED, "toolchain: ..."), not as a failure of the system.
+pc_cc_feat() { # NAME 'C source'
+	printf '%s\n' "$2" >"$pc_trustdir/feat.c"
+	if "$pc_cc" -D_POSIX_C_SOURCE=202405L $pc_ccstrict -c \
+	    -o "$pc_trustdir/feat.o" "$pc_trustdir/feat.c" \
+	    >/dev/null 2>&1 </dev/null; then
+		eval "pc_cf_$1=yes"
+	else
+		eval "pc_cf_$1=no"
+	fi
+}
+pc_cc_feat complex 'int main(void) { double _Complex z = 0; (void)z; return 0; }'
+pc_cc_feat atomic 'int main(void) { _Atomic int x = 0; return x; }'
+pc_cc_feat threads '#include <threads.h>
+int main(void) { thrd_t t; (void)t; return 0; }'
+pc_cc_feat generic 'int main(void) { int i = 0; return _Generic(i, int: 0, default: 1); }'
+pc_cc_feat tls '_Thread_local int x; int main(void) { return x; }'
+pc_cc_feat static_assert '_Static_assert(1, "x"); int main(void) { return 0; }'
+pc_cc_feat alignas '_Alignas(16) char c; int main(void) { return c; }'
+pc_ccid=
+for pc_o in --version -v -V; do
+	pc_ccid=$("$pc_cc" $pc_o 2>&1 </dev/null | head -n 1 | tr '\t' ' ' | cut -c 1-200)
+	[ -n "$pc_ccid" ] && break
+done
+[ -n "$pc_ccid" ] || pc_ccid=unknown
+pc_ccfeat="complex=$pc_cf_complex atomic=$pc_cf_atomic threads=$pc_cf_threads generic=$pc_cf_generic tls=$pc_cf_tls static_assert=$pc_cf_static_assert alignas=$pc_cf_alignas"
+
+# pc_toolgap FILE: print the first missing feature FILE asks for, if any.
+pc_toolgap() {
+	[ "$pc_cf_complex" = no ] && grep -Eq '_Complex|complex\.h' "$1" &&
+	    { echo complex; return 0; }
+	[ "$pc_cf_atomic" = no ] && grep -Eq '_Atomic|stdatomic\.h' "$1" &&
+	    { echo atomic; return 0; }
+	[ "$pc_cf_threads" = no ] && grep -Eq 'threads\.h' "$1" &&
+	    { echo threads.h; return 0; }
+	[ "$pc_cf_generic" = no ] && grep -Eq '_Generic' "$1" &&
+	    { echo _Generic; return 0; }
+	[ "$pc_cf_tls" = no ] && grep -Eq '_Thread_local|thread_local' "$1" &&
+	    { echo _Thread_local; return 0; }
+	[ "$pc_cf_static_assert" = no ] && grep -Eq '_Static_assert|static_assert' "$1" &&
+	    { echo _Static_assert; return 0; }
+	[ "$pc_cf_alignas" = no ] && grep -Eq '_Alignas|alignas' "$1" &&
+	    { echo _Alignas; return 0; }
+	return 1
+}
+
 # ---------- helpers ----------
 
 pc_bin=$pc_results/build/core
@@ -769,6 +817,10 @@ pc_assertion() {
 		elif ! "$pc_cc" $pc_flags $pc_ccstrict $pc_vinc -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
 		    "$pc_bin/pc.o" "$pc_bin/pcgroups.o" $pc_mlibs >"$ctx_out/$pc_id.build.txt" 2>&1 \
 		    </dev/null; then
+			if pc_gap=$(pc_toolgap "$pc_src"); then
+				pc_log UNINITIATED "$pc_id" 0 "toolchain: ${pc_cc##*/} lacks $pc_gap (out/$pc_id.build.txt)"
+				return 0
+			fi
 			if [ "$mod_buildfail" = FAIL ]; then
 				# Tier 0 checks: a test that does not compile shows a
 				# missing or wrong declaration, which is the failure.
@@ -1223,6 +1275,12 @@ EOF
 		printf '# sh %s\n' "$pc_sut_sh"
 		printf '# cc %s\n' "$pc_cc"
 		printf '# ccflags %s\n' "${pc_ccstrict:-none}"
+		printf '# cc-id %s\n' "$pc_ccid"
+		printf '# cc-features %s\n' "$pc_ccfeat"
+		"$pc_probe" fsinfo "$pc_results" 2>/dev/null | while read -r pc_k pc_v; do
+			printf '# fs %s %s\n' "$pc_k" "$pc_v"
+		done
+		printf '# fs-df %s\n' "$(df -P "$pc_results" 2>/dev/null | tail -n 1 | tr '\t' ' ')"
 		printf '# euid %s\n' "$pc_euid"
 		printf '# profile %s\n' "${pc_profile:-none}"
 		[ -n "$pc_mutant" ] && printf '# mutant %s\n' "$pc_mutant"
@@ -1245,6 +1303,9 @@ pc_sum=$(awk -F'\t' '
 		printf "\n"
 	}' "$ctx_log")
 printf '# %s\n' "$pc_sum" >>"$ctx_log"
+pc_tg=$(awk -F'\t' '$1 == "UNINITIATED" && $4 ~ /^toolchain:/ { n++ } END { print n + 0 }' "$ctx_log")
+[ "$pc_tg" -eq 0 ] ||
+    printf '# toolchain-limited %s of the UNINITIATED results (compiler lacks a feature; says nothing about the system)\n' "$pc_tg" >>"$ctx_log"
 printf '%s\n' "$pc_sum"
 [ -n "$pc_failfile" ] && printf '%s\n' "$pc_sum" >>"$pc_failfile"
 if [ "$pc_ephemeral" = yes ]; then

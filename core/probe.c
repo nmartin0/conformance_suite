@@ -15,6 +15,8 @@
  *                    "target OS" (what the compiler builds for), a record
  *                    of what a run describes
  *   probe namemax D  pathconf(D, _PC_NAME_MAX), -1 if indeterminate
+ *   probe fsinfo D   pathconf() limits and statvfs() facts of the file
+ *                    system holding D, one "key value" per line
  *   probe cspath     the value of confstr(_CS_PATH)
  *   probe euid       the effective user ID
  *   probe now        current UTC time, ISO 8601
@@ -28,6 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/statvfs.h>
 #include <sys/utsname.h>
 #include <time.h>
 #include <unistd.h>
@@ -103,6 +106,63 @@ static int sysinfo(void)
 	return 0;
 }
 
+static int fsinfo(const char *dir)
+{
+	static const struct { const char *name; int what; } pc[] = {
+#ifdef _PC_NAME_MAX
+		{ "name_max", _PC_NAME_MAX },
+#endif
+#ifdef _PC_PATH_MAX
+		{ "path_max", _PC_PATH_MAX },
+#endif
+#ifdef _PC_LINK_MAX
+		{ "link_max", _PC_LINK_MAX },
+#endif
+#ifdef _PC_PIPE_BUF
+		{ "pipe_buf", _PC_PIPE_BUF },
+#endif
+#ifdef _PC_FILESIZEBITS
+		{ "filesizebits", _PC_FILESIZEBITS },
+#endif
+#ifdef _PC_SYMLINK_MAX
+		{ "symlink_max", _PC_SYMLINK_MAX },
+#endif
+#ifdef _PC_NO_TRUNC
+		{ "no_trunc", _PC_NO_TRUNC },
+#endif
+#ifdef _PC_CHOWN_RESTRICTED
+		{ "chown_restricted", _PC_CHOWN_RESTRICTED },
+#endif
+#ifdef _PC_2_SYMLINKS
+		{ "symlinks", _PC_2_SYMLINKS },
+#endif
+	};
+	struct statvfs sv;
+	size_t i;
+
+	for (i = 0; i < sizeof pc / sizeof pc[0]; i++) {
+		long v;
+
+		errno = 0;
+		v = pathconf(dir, pc[i].what);
+		if (v == -1 && errno != 0)
+			printf("%s error\n", pc[i].name);
+		else
+			printf("%s %ld\n", pc[i].name, v);
+	}
+	if (statvfs(dir, &sv) != 0) {
+		printf("statvfs error\n");
+		return 0;
+	}
+	printf("f_bsize %lu\n", (unsigned long)sv.f_bsize);
+	printf("f_namemax %lu\n", (unsigned long)sv.f_namemax);
+	printf("f_blocks %lu\n", (unsigned long)sv.f_blocks);
+	printf("f_files %lu\n", (unsigned long)sv.f_files);
+	printf("st_rdonly %d\n", (sv.f_flag & ST_RDONLY) != 0);
+	printf("st_nosuid %d\n", (sv.f_flag & ST_NOSUID) != 0);
+	return 0;
+}
+
 static int cspath(void)
 {
 	char buf[4096];
@@ -141,6 +201,8 @@ int main(int argc, char **argv)
 		printf("%ld\n", v);
 		return 0;
 	}
+	if (argc == 3 && strcmp(argv[1], "fsinfo") == 0)
+		return fsinfo(argv[2]);
 	if (argc == 2 && strcmp(argv[1], "cspath") == 0)
 		return cspath();
 	if (argc == 2 && strcmp(argv[1], "euid") == 0)
@@ -153,7 +215,7 @@ int main(int argc, char **argv)
 			left = sleep(left);
 		return 0;
 	}
-	fprintf(stderr, "usage: probe claims|sysinfo|namemax DIR|cspath|euid|now|"
+	fprintf(stderr, "usage: probe claims|sysinfo|namemax DIR|fsinfo DIR|cspath|euid|now|"
 	    "sleep N\n");
 	return 2;
 }
