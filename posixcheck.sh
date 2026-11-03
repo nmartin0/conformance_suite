@@ -359,21 +359,21 @@ done
 [ -n "$pc_ccid" ] || pc_ccid=unknown
 pc_ccfeat="complex=$pc_cf_complex atomic=$pc_cf_atomic threads=$pc_cf_threads generic=$pc_cf_generic tls=$pc_cf_tls static_assert=$pc_cf_static_assert alignas=$pc_cf_alignas"
 
-# pc_toolgap FILE: print the first missing feature FILE asks for, if any.
+# pc_toolgap FILE...: print the first missing feature FILE asks for, if any.
 pc_toolgap() {
-	[ "$pc_cf_complex" = no ] && grep -Eq '_Complex|complex\.h' "$1" &&
+	[ "$pc_cf_complex" = no ] && grep -sEq '_Complex|complex\.h' "$@" &&
 	    { echo complex; return 0; }
-	[ "$pc_cf_atomic" = no ] && grep -Eq '_Atomic|stdatomic\.h' "$1" &&
+	[ "$pc_cf_atomic" = no ] && grep -sEq '_Atomic|stdatomic\.h' "$@" &&
 	    { echo atomic; return 0; }
-	[ "$pc_cf_threads" = no ] && grep -Eq 'threads\.h' "$1" &&
+	[ "$pc_cf_threads" = no ] && grep -sEq 'threads\.h' "$@" &&
 	    { echo threads.h; return 0; }
-	[ "$pc_cf_generic" = no ] && grep -Eq '_Generic' "$1" &&
+	[ "$pc_cf_generic" = no ] && grep -sEq '_Generic' "$@" &&
 	    { echo _Generic; return 0; }
-	[ "$pc_cf_tls" = no ] && grep -Eq '_Thread_local|thread_local' "$1" &&
+	[ "$pc_cf_tls" = no ] && grep -sEq '_Thread_local|thread_local' "$@" &&
 	    { echo _Thread_local; return 0; }
-	[ "$pc_cf_static_assert" = no ] && grep -Eq '_Static_assert|static_assert' "$1" &&
+	[ "$pc_cf_static_assert" = no ] && grep -sEq '_Static_assert|static_assert' "$@" &&
 	    { echo _Static_assert; return 0; }
-	[ "$pc_cf_alignas" = no ] && grep -Eq '_Alignas|alignas' "$1" &&
+	[ "$pc_cf_alignas" = no ] && grep -sEq '_Alignas|alignas' "$@" &&
 	    { echo _Alignas; return 0; }
 	return 1
 }
@@ -817,7 +817,7 @@ pc_assertion() {
 		elif ! "$pc_cc" $pc_flags $pc_ccstrict $pc_vinc -I "$pc_root/core" -o "$pc_exe" "$pc_src" \
 		    "$pc_bin/pc.o" "$pc_bin/pcgroups.o" $pc_mlibs >"$ctx_out/$pc_id.build.txt" 2>&1 \
 		    </dev/null; then
-			if pc_gap=$(pc_toolgap "$pc_src"); then
+			if pc_gap=$(pc_toolgap "$pc_src" "${pc_src%/*}"/*.h); then
 				pc_log UNINITIATED "$pc_id" 0 "toolchain: ${pc_cc##*/} lacks $pc_gap (out/$pc_id.build.txt)"
 				return 0
 			fi
