@@ -1,0 +1,8 @@
+System: PureDarwin 26.5 (Darwin 25.5.0, xnu-12377), x86_64, under QEMU/TCG (IvyBridge)
+Run as: root only (no ordinary-user run yet)
+Compiler: TinyCC 0.9.28rc (mob e23dabed) patched for Mach-O, cross-built; no _Complex, <threads.h>, real _Atomic
+Shell: toybox userland, zsh as /bin/sh candidate (see run header)
+Headers: guest libSystem export table stubs; fallback headers from the zig distribution (provenance in pd-cc/NOTES.md)
+Run: fresh start 2026-11-03T02:24Z, 9 VM cycles with --resume, finished 2026-11-03T19:47Z
+Driver: f20a632b for the first 1568 results, then the head with resume fix, toolchain labelling (05f02db8, 0f0c88ff)
+Log cleaning: the saved root.run.log is the driver's log with NUL runs (torn writes at VM stops), stray console lines removed, repeated assertion lines (modules re-run after a stop) reduced to the last one, and one tab inside a note replaced by a space. 9011 assertions.
