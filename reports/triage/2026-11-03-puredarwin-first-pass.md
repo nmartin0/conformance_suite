@@ -29,9 +29,9 @@ most of those results are utilities that are not installed.
 |---|---|---|
 | 117 | Header or declaration missing, or does not compile | Mostly real: `<endian.h>`, `<libintl.h>`, `<uchar.h>` absent; `locale_t` and `ssize_t` not declared where POSIX.1-2024 requires them (`<ctype.h>`, `<dirent.h>`, `<wchar.h>` etc.); `_l` function families, `strlcat`/`wcslcat`, `ppoll`, `pthread_barrier_*`, `pthread_cond_clockwait`, `sem_timedwait`, `sem_clockwait`, `clock_nanosleep`, `mkostemp`, `ptsname_r`, `struct posix_dent`, `reclen_t`, `clockid_t`, `ESOCKTNOSUPPORT`, `O_CLOFORK`, `F_OFD_GETLK`, `O_TTY_INIT`, `POSIX_CLOSE_RESTART`, `SEEK_HOLE`/`SEEK_DATA` macros, `_POSIX_VERSION` is not 202405L. Check each is absent from the standard's required set for strict mode before filing; Apple hides some behind `_DARWIN_C_SOURCE`. |
 | 83 | `__STDC_NO_THREADS__` defined, no `<threads.h>` | The compiler defines the macro; Apple ships no `<threads.h>` either. The system part is real, the macro part is the compiler. Ask: is the macro check a fair test of the system? Probably not alone. |
-| 26 | Killed by SIGSEGV (14 `isw*` functions, `raise`, `clock_getres` ...) | Suspect. The `isw*` crash is likely my link stubs or Apple's inline `__istype` path, not the system. Reproduce with a small program on the guest before counting it. |
+| 26 | Killed by SIGSEGV (24 `isw*`, `raise`, `clock_getres`) | 24 were a compiler fault and now pass (see Probes). `raise.002` and `clock_getres.003` remain unexplained. |
 | 18 | Math exception flags not raised (`log(0)`, `exp(big)`, `cosh` ...) | Suspect: QEMU TCG or the libm. Reproduce with `fetestexcept` after one call and compare with a host run. |
-| 13 | `*at()` calls through an O_SEARCH descriptor fail | Possibly the ext4 driver or a real gap; unresolved. |
+| 13 | `*at()` calls through an O_SEARCH descriptor fail | Real: permission is checked on every call (see Probes). |
 | 9 | FD_CLOEXEC / FD_CLOFORK not honoured | Real for CLOFORK (not implemented); the `"re"` mode CLOEXEC results (fopen, freopen, fdopen) look real too. |
 | 7 | `tc*()` on `/dev/null` give ENODEV, standard asks for ENOTTY | Real, plausible. |
 | 5 | ENAMETOOLONG not returned | Possibly the ext4 driver. |
@@ -65,28 +65,27 @@ disk). Results were identical on both.
   0 entries (first pass: 5).
 - **ENAMETOOLONG: real.** `stat()` of a 256-byte name gives ENOENT.
 - **`fopen(..., "re")`: real.** FD_CLOEXEC is not set.
-- **O_SEARCH `*at` calls: not reproduced by the simple probe.** Opening a
-  directory with O_SEARCH and calling `mkdirat`, `unlinkat`, `fstatat` works
-  while the directory is searchable. The tests fail after the directory is
-  chmod-ed to 0666 and the call is made by an unprivileged child; that case
-  (permission re-checked at each call, not at open) is still to be probed.
+- **O_SEARCH `*at` calls: real.** `open(dir, O_SEARCH)` succeeds, then after
+  `chmod(dir, 0666)` an unprivileged process calling `mkdirat`, `fstatat` or
+  `unlinkat` through that descriptor gets EACCES. The search permission is
+  checked at each call, not once at open. That covers the 13 results.
 - **Appends: not reproduced.** Two descriptors with O_APPEND gave the right size
   (2000 of 2000). The 9300 of 10000 in XSH.write.005 needs the actual test run
   again, in case it is load or timing.
-- **`isw*` crashes: toolchain suspect.** The 14 crashes are in the first
-  members check. The compiled test crashes every time (exit 139) at the first
-  alphabetic character, but small programs calling `iswalpha` directly, through
-  a pointer, over 0 to 127 and with `WEOF` do not crash, and the same test
-  passes once a direct call to `iswalpha` is added before the pointer call.
-  Variadic formatting (the other suspect) is fine. That points at how the
-  compiler lays out the call or binds the import, not at the system. Until that
-  is understood, do not count the 26 crashes as findings.
+- **`isw*` crashes: a compiler fault, now fixed.** The compiled test's
+  table-of-functions code loads each `isw*` address from a GOT slot that the
+  TinyCC Mach-O writer never bound, so the call went to address 0. Found by
+  reading the binary's bind table on the host (12 slots with no bind entry),
+  reproduced with a 5-line program, fixed in the compiler (see
+  `pd-cc/NOTES.md`), and confirmed on the guest: the 12 `isw*` modules and
+  `raise` were re-run (61 results) and 24 results changed from FAIL to PASS.
+  The saved log carries those re-run lines. `XSH.raise.002` still crashes
+  (a varargs function; cause not found, toolchain suspect).
 
 ## Next
 
-1. Probe the O_SEARCH case with an unprivileged caller and chmod 0666, and
-   find why the `isw*` test crashes (compare the binary's imports and call
-   stubs with the direct-call version).
+1. Find why `raise.002` (and `clock_getres.003`) crash; they may be
+   compiler faults too.
 2. Read the 241 "other" results one by one against the standard.
 3. Re-run with the current driver so the header carries `# cc-features` and
    `# fs` lines.
