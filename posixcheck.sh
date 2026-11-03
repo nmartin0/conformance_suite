@@ -396,6 +396,16 @@ case ${PC_MEM_LIMIT-1G} in
 esac
 pc_probe=$pc_bin/probe
 
+# The cap is a safety net, not a test condition: where the system will not
+# set it (a limit it does not allow), run without it.
+if [ -n "$pc_memcap" ]; then
+	"$pc_pcexec" $pc_memcap -w "$pc_trustdir" \
+	    -o "$pc_trustdir/memcap.status" -t 30 -- "$pc_hello" \
+	    >/dev/null 2>&1
+	read -r pc_k pc_v pc_ms <"$pc_trustdir/memcap.status" || pc_k=
+	[ "$pc_k" = EXIT ] && [ "$pc_v" = 3 ] || pc_memcap=
+fi
+
 "$pc_pcexec" -w "$pc_trustdir" -o "$pc_trustdir/pcexec.status" -t 30 \
     -- "$pc_hello" >/dev/null 2>&1
 read -r pc_k pc_v pc_ms <"$pc_trustdir/pcexec.status" || pc_k=
