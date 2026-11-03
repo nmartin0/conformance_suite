@@ -131,9 +131,8 @@ for m in mods:
         if ids != [a.id]:
             err(tpath.relative_to(args.modules),
                 f"header names {ids or 'no assertion'}, expected [{a.id}]")
-        if not mutants and not a.get("nomutant"):
-            err(tpath.relative_to(args.modules),
-                "declares no MUTANT (or give the assertion a 'nomutant' reason)")
+        # A planted fault per assertion is no longer required (roadmap, Next 2);
+        # the faults that are declared are still checked below.
         for mu in mutants:
             if mu.count(".") != 1 and not (args.modules / "xsh" / mu.rsplit(".", 1)[0]).is_dir() \
                     and not (args.modules / "xcu" / mu.rsplit(".", 1)[0]).is_dir():
