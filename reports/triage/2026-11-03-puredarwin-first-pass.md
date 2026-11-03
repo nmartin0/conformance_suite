@@ -49,12 +49,44 @@ does not allow, but they hide whatever behaviour the tests would have checked,
 which is why UNINITIATED is large. A second compiler with a fuller C17 would
 shrink the `_Complex` part only.
 
+## Probes on the guest (same day)
+
+Small programs in `puredarwin-probes/`, built with the same compiler and flags,
+run on the root file system and on the scratch disk (both are ext4, so the
+file-system results below are the guest's own, not a side effect of the scratch
+disk). Results were identical on both.
+
+- **Floating-point flags: real.** Hardware operations raise them (`1.0/0.0`
+  sets FE_DIVBYZERO, `max*10` sets FE_OVERFLOW and FE_INEXACT, `sqrt(-1)` sets
+  FE_INVALID), so the emulator is not the cause. The library functions
+  `log(0)`, `exp(1000)`, `cosh(1000)` and `logl(0)` raise nothing. That is a
+  system finding for the 18 results.
+- **`rewinddir`: real.** After one full pass, `rewinddir()` then reading gives
+  0 entries (first pass: 5).
+- **ENAMETOOLONG: real.** `stat()` of a 256-byte name gives ENOENT.
+- **`fopen(..., "re")`: real.** FD_CLOEXEC is not set.
+- **O_SEARCH `*at` calls: not reproduced by the simple probe.** Opening a
+  directory with O_SEARCH and calling `mkdirat`, `unlinkat`, `fstatat` works
+  while the directory is searchable. The tests fail after the directory is
+  chmod-ed to 0666 and the call is made by an unprivileged child; that case
+  (permission re-checked at each call, not at open) is still to be probed.
+- **Appends: not reproduced.** Two descriptors with O_APPEND gave the right size
+  (2000 of 2000). The 9300 of 10000 in XSH.write.005 needs the actual test run
+  again, in case it is load or timing.
+- **`isw*` crashes: toolchain suspect.** The 14 crashes are in the first
+  members check. The compiled test crashes every time (exit 139) at the first
+  alphabetic character, but small programs calling `iswalpha` directly, through
+  a pointer, over 0 to 127 and with `WEOF` do not crash, and the same test
+  passes once a direct call to `iswalpha` is added before the pointer call.
+  Variadic formatting (the other suspect) is fine. That points at how the
+  compiler lays out the call or binds the import, not at the system. Until that
+  is understood, do not count the 26 crashes as findings.
+
 ## Next
 
-1. Reproduce on the guest (VM relaunch, a few small programs): `iswalpha`
-   crash, floating-point flags after `log(0.0)`, `fopen(..., "re")` and the
-   O_SEARCH `*at` calls on both the ext4 driver and a tmpfs-like location if
-   any exists.
+1. Probe the O_SEARCH case with an unprivileged caller and chmod 0666, and
+   find why the `isw*` test crashes (compare the binary's imports and call
+   stubs with the direct-call version).
 2. Read the 241 "other" results one by one against the standard.
 3. Re-run with the current driver so the header carries `# cc-features` and
    `# fs` lines.
