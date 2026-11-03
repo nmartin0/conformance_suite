@@ -52,8 +52,8 @@ nomutant   run-time check of header content; needs the Tier 0 header mutants
 assertion  XBD.pwd.h.006
 anchor     basedefs/pwd.h.html#DESCRIPTION/pw_dir
 class      required
-says       In that same entry pw_dir and pw_shell are not null pointers.
-note       An empty string is accepted for either; only a null pointer, which is
-           not a string naming a directory or a program, fails.
+says       In that same entry pw_dir and pw_shell can be read as char pointers.
+note       The page does not say that either member must point to a string, so
+           a null pointer gives UNRESOLVED, not FAIL; an empty string is accepted.
 test       t/006-entry-strings.c
 nomutant   run-time check of header content; needs the Tier 0 header mutants
