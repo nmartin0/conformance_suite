@@ -1,0 +1,268 @@
+# XCU sccs
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# sccs is a front end to the other SCCS utilities, which are all present or
+# all absent together with it (XSI); a missing one makes the test report
+# NOTINUSE. Setup uses admin, get and delta directly, never sccs, so a
+# fault in sccs cannot spoil it. The SCCS file format is unspecified, so
+# nothing reads the files; texts are checked through get, and the layout of
+# lists and diagnostics is never compared literally.
+
+assertion  XCU.sccs.001
+anchor     utilities/sccs.html#DESCRIPTION
+anchor     utilities/sccs.html#OPTIONS
+anchor     utilities/sccs.html#STDOUT
+class      conditional
+when       XSI
+since      1992
+says       With no options sccs prefixes an operand with the SCCS directory and the s. prefix,
+           runs the named utility on it, and passes options through, so sccs get -p gives what
+           get -p gives on SCCS/s.f: the same text, status and standard error, and no g-file.
+note       the description prefixes an operand with the SCCS directory and
+           s. only for the plain-name case here; a name with a directory part
+           is placed as in the -p example (see assertion 003).
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/001-default-directory.sh
+
+assertion  XCU.sccs.002
+anchor     utilities/sccs.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -d path makes path the root for the SCCS files: the pathname is prefixed with it,
+           whether the path is absolute or relative.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/002-d-option.sh
+
+assertion  XCU.sccs.003
+anchor     utilities/sccs.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -p path replaces the SCCS directory name, inserted before the last component:
+           -p y get a/b reads a/y/s.b, and with -d /x it reads /x/a/y/s.b.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/003-p-option.sh
+
+assertion  XCU.sccs.004
+anchor     utilities/sccs.html#OPTIONS
+anchor     utilities/sccs.html#ENVIRONMENT VARIABLES
+class      conditional
+when       XSI
+since      1992
+says       The -d option takes precedence over the PROJECTDIR variable.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/004-d-over-projectdir.sh
+
+assertion  XCU.sccs.005
+anchor     utilities/sccs.html#ENVIRONMENT VARIABLES
+class      conditional
+when       XSI
+since      1992
+says       PROJECTDIR is the default for -d: a value beginning with a slash is an absolute
+           pathname used as the root of the SCCS files.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/005-projectdir-absolute.sh
+
+assertion  XCU.sccs.006
+anchor     utilities/sccs.html#ENVIRONMENT VARIABLES
+class      conditional
+when       XSI
+since      1992
+says       A PROJECTDIR value that does not begin with a slash and names no user with a
+           src or source directory is used as a relative pathname for the root.
+note       the account-name reading of the value cannot be used; the name
+           chosen is one no account is expected to have, so the text's
+           "otherwise" applies.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/006-projectdir-relative.sh
+
+assertion  XCU.sccs.007
+anchor     utilities/sccs.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       -r is accepted before the command, which then runs and gives its usual result.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/007-r-option.sh
+
+assertion  XCU.sccs.008
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       create makes the SCCS file from the file of the same name, passes admin options
+           (-r2 makes the first SID 2.1), and renames the original with a leading comma.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/008-create.sh
+
+assertion  XCU.sccs.009
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       edit is equivalent to get -e: same report, same status, a writable g-file.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/009-edit.sh
+
+assertion  XCU.sccs.010
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       info lists the files being edited, and not those that are not.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/010-info.sh
+
+assertion  XCU.sccs.011
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      disputed
+since      1992
+says       info -b is accepted and lists nothing that plain info does not, with an edit of a
+           trunk SID and of a branch SID present (the page's parenthesis about branches
+           contradicts the usual meaning, so only this is required).
+note       disputed: the text says branches are SIDs with two or fewer
+           components, which would make trunk SIDs the branches; the usual
+           meaning (four components) is the opposite. No reading is chosen:
+           the test only requires -b to be accepted and not to list a file that
+           plain info omits.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/011-info-b.sh
+
+assertion  XCU.sccs.012
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       info -u user lists only files being edited by that user; -U means -u of the
+           current user.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/012-info-u.sh
+
+assertion  XCU.sccs.013
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       check prints nothing and succeeds when nothing is being edited, and gives a
+           nonzero status when something is.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/013-check.sh
+
+assertion  XCU.sccs.014
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       tell writes the names of the files being edited to standard output and takes
+           -u and -U as info does.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/014-tell.sh
+
+assertion  XCU.sccs.015
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       unedit undoes edit: the file is no longer being edited, the changes made since
+           the get are gone, and it can be edited again.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/015-unedit.sh
+
+assertion  XCU.sccs.016
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       clean removes what can be recreated from SCCS files but not a file being edited.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/016-clean.sh
+
+assertion  XCU.sccs.017
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       delget makes a delta and then gets the new version with keywords expanded and
+           not for editing.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/017-delget.sh
+
+assertion  XCU.sccs.018
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       delget passes -y to delta (the comment is recorded) and -k to get (keywords are
+           left unexpanded).
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/018-delget-options.sh
+
+assertion  XCU.sccs.019
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       deledit makes a delta and gets the new version for editing.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/019-deledit.sh
+
+assertion  XCU.sccs.020
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       diffs writes the differences between the file being edited and the SCCS version;
+           -C is passed to diff as -c (context format).
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/020-diffs.sh
+
+assertion  XCU.sccs.021
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       fix -r SID removes the delta but leaves its text as the file in the directory.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/021-fix.sh
+
+assertion  XCU.sccs.022
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       print is equivalent to sccs prs.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/022-print.sh
+
+assertion  XCU.sccs.023
+anchor     utilities/sccs.html#EXIT STATUS
+class      conditional
+when       XSI
+since      1992
+says       sccs exits nonzero when the command it runs fails (here an SCCS file that is
+           not there), and zero when the command succeeds.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/023-error-status.sh
+
+assertion  XCU.sccs.024
+anchor     utilities/sccs.html#OPTIONS
+class      conditional
+when       XSI
+since      1992
+says       The syntax guidelines apply to the options before the command: -- ends them,
+           so sccs -d root -- get -p f runs get on root's SCCS file.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/024-dashes-sccs.sh
+
+assertion  XCU.sccs.025
+anchor     utilities/sccs.html#OPTIONS
+anchor     utilities/sccs.html#EXTENDED DESCRIPTION
+class      conditional
+when       XSI
+since      1992
+says       The pseudo-utilities follow the syntax guidelines: -- after the command ends its
+           options, so sccs edit -- f works like sccs edit f and sccs info -- succeeds.
+nomutant   the SCCS utilities are absent on the machine where this was written, so no fault could be planted and judged; the entry is on ci/pending.list
+test       t/025-dashes-pseudo.sh
+
