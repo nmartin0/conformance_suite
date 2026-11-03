@@ -1,0 +1,17 @@
+# XBD <netinet/tcp.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.netinet_tcp.h.001
+anchor     basedefs/netinet_tcp.h.html#DESCRIPTION/TCP_NODELAY
+class      required
+says       <netinet/tcp.h> defines TCP_NODELAY as an integer constant expression
+           whose value fits an int.
+note       A socket-option name is an int argument. The effect of the option is
+           not judged here (see the .cov line).
+test       t/001-tcp-nodelay.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants

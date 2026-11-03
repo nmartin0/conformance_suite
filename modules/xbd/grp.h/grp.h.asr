@@ -1,0 +1,52 @@
+# XBD <grp.h>
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Semantic checks of the header: values, relations between constants,
+# types and macros used at run time. Presence and type shape of every
+# name are the Tier 0 header check's. The header mutants for these arrive
+# with the Tier 0 generator, so each says why it has no mutant yet.
+
+assertion  XBD.grp.h.001
+anchor     basedefs/grp.h.html#DESCRIPTION/group
+class      required
+says       <grp.h> defines struct group as a complete type with at least the
+           members gr_name (char *), gr_gid (gid_t), gr_mem (char **).
+test       t/001-struct-group.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.grp.h.002
+anchor     basedefs/grp.h.html#DESCRIPTION/gid_t
+class      required
+says       <grp.h> defines the types gid_t, size_t.
+test       t/002-types-base.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.grp.h.003
+anchor     basedefs/grp.h.html#DESCRIPTION/getgrgid
+class      required
+says       <grp.h> declares getgrgid(), getgrgid_r(), getgrnam(), getgrnam_r()
+           with the prototypes the page gives.
+test       t/003-functions.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.grp.h.004
+anchor     basedefs/grp.h.html#DESCRIPTION/endgrent
+class      conditional
+when       XSI
+says       <grp.h> declares endgrent(), getgrent(), setgrent() with the
+           prototypes the page gives.
+test       t/004-functions-xsi.c
+nomutant   compile-time check of header content; needs the Tier 0 header mutants
+
+assertion  XBD.grp.h.005
+anchor     basedefs/grp.h.html#DESCRIPTION/gr_mem
+class      required
+says       A group entry returned by getgrgid() for this process's group ID has
+           gr_gid equal to the ID asked for, a non-null gr_name, and a gr_mem
+           that points to an array of pointers ended by a null pointer.
+note       The entry is looked up by the real group ID, then the effective one;
+           if neither has an entry the result is UNRESOLVED. A name is not
+           required to be non-empty here, and the contents of the member names
+           are not judged.
+test       t/005-entry-content.c
+nomutant   run-time check of header content; needs the Tier 0 header mutants

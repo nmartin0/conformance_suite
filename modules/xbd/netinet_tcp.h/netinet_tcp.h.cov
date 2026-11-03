@@ -1,0 +1,9 @@
+# netinet_tcp.h.cov - every requirement unit on basedefs/netinet_tcp.h.html.
+# Copyright (c) 2026 Nicholas Martin. All rights reserved.
+#
+# Names, types and structure members are the Tier 0 header check's;
+# the semantic content is accounted here.
+
+DESCRIPTION:eeff2160        XBD.netinet_tcp.h.001
+DESCRIPTION:1c9a7bc0        untestable  the effect (small segments held back or not) is visible only in the timing of the network traffic, and the next unit lets the implementation refuse to set or read the option at all
+DESCRIPTION:6b99451b        none  permission: the implementation may refuse setting or retrieving the option, so no outcome of those calls is required
