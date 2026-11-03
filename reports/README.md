@@ -11,6 +11,8 @@ they can be analysed later without repeating the run.
         user.txt        the same as an ordinary user (when it was made)
         not-pass.txt    only the FAIL, INSPECT and UNRESOLVED lines of both runs
         summary.txt     the SUMMARY lines
+        root.run.log    the run.log of each run, as `analysis/analyze.py load`
+        user.run.log    reads it (give ci/save-run.sh the results directories)
 
 `ci/save-run.sh` makes such a directory from the run outputs. The
 cross-system comparison and the triage of each finding (system fault, test
