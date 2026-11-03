@@ -1205,6 +1205,11 @@ fi
 
 pc_ctx "$pc_results" "$pc_modroot" no
 if [ "$pc_resume" = yes ]; then
+	# A module cut off by the interruption still has its busy marker;
+	# left alone it would be skipped as a prerequisite cycle.
+	for pc_b in "$ctx_state"/module.*.busy; do
+		[ -e "$pc_b" ] && rm -f "$pc_b"
+	done
 	printf '# resumed %s\n' "$("$pc_probe" now)" >>"$ctx_log"
 else
 	{
