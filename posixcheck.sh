@@ -348,7 +348,17 @@ pc_cc_feat atomic 'int main(void) { _Atomic int x = 0; return x; }'
 pc_cc_feat threads '#include <threads.h>
 int main(void) { thrd_t t; (void)t; return 0; }'
 pc_cc_feat generic 'int main(void) { int i = 0; return _Generic(i, int: 0, default: 1); }'
-pc_cc_feat tls '_Thread_local int x; int main(void) { return x; }'
+# Thread-local storage can compile and still not run (the code then uses
+# a segment register the system does not set up), so this one is built and run.
+printf '%s\n' '_Thread_local int x = 5; int main(void) { x = 7; return x == 7 ? 0 : 1; }' \
+	>"$pc_trustdir/feat.c"
+if "$pc_cc" -D_POSIX_C_SOURCE=202405L $pc_ccstrict -o "$pc_trustdir/feat.exe" \
+    "$pc_trustdir/feat.c" >/dev/null 2>&1 </dev/null &&
+    "$pc_trustdir/feat.exe" >/dev/null 2>&1 </dev/null; then
+	pc_cf_tls=yes
+else
+	pc_cf_tls=no
+fi
 pc_cc_feat static_assert '_Static_assert(1, "x"); int main(void) { return 0; }'
 pc_cc_feat alignas '_Alignas(16) char c; int main(void) { return c; }'
 pc_ccid=
@@ -803,6 +813,10 @@ pc_assertion() {
 		# A variant may change what the headers define (a constant with
 		# another allowed value): it is a header included first, and the
 		# test is built apart.
+		if [ "$pc_cf_tls" = no ] && grep -sEq '_Thread_local|thread_local' "$pc_src" "${pc_src%/*}"/*.h; then
+			pc_log UNINITIATED "$pc_id" 0 "toolchain: ${pc_cc##*/} lacks _Thread_local (compiles, but the code does not run)"
+			return 0
+		fi
 		pc_vinc=
 		if [ -n "$pc_var" ] && [ -f "$pc_modroot/xsh/${pc_var%.*}/variants/$pc_var.h" ]; then
 			pc_vinc="-include $pc_modroot/xsh/${pc_var%.*}/variants/$pc_var.h"
