@@ -366,3 +366,24 @@ None. Every test that fails here asks for what the cited page requires. Points I
 - adddup2.007 takes {OPEN_MAX} from sysconf; sysconf(_SC_OPEN_MAX) may legitimately change with setrlimit, so if a guest reports a lowered soft limit the test should perhaps read it only once before any change (it does). No change suggested.
 
 Every one of the 55 assertions was judged; nothing was skipped.
+
+## Guest probes confirming readers' verdicts (second round)
+
+Programs `puredarwin-probes/wx.c` and `rn.c`, built with the same compiler and flags, run on the
+guest while the full re-run was going.
+
+- **wordexp: confirmed failing, cause inferred.** Every expansion that does not hit an error path
+  returns 6 with no words (`a b  c`, `'a b'`, `$HOME`, `x*y`, `~`, empty), while the command
+  substitution refusal under WRDE_NOCMD returns its correct code 3. `system("echo ...")` works, so
+  the shell is fine. No file with "word" in its name is in `/usr/libexec`, which fits a missing
+  helper in the minimal image (inference, not observed). All 19 `XSH.wordexp.*` results stand as
+  failures of this system.
+- **rewinddir: confirmed.** On a fresh stream a full read gives 5 entries, `rewinddir()` then a
+  second read gives 0; rewinding before reading gives 5; after reading two entries and rewinding a
+  read gives the remaining 3. `rewinddir()` does not reset the position. `seekdir()` to a saved
+  start position does work (5). Both the root file system and the scratch disk are ext4, so this is
+  the system's own behaviour with that driver.
+- **rename: confirmed.** `rename("e", "d2/.")` returns 0 (expected EINVAL); `rename(file, "nf/")`
+  gives ENOENT (expected ENOTDIR).
+- **Pathname through a non-directory: confirmed.** `stat("f/..")` for a regular file `f` returns 0.
+- **open(dir, O_RDONLY|O_CREAT): confirmed.** Returns a descriptor (4) instead of failing.
