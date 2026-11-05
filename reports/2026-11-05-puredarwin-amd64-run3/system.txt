@@ -1,0 +1,12 @@
+PureDarwin 26.5 (Darwin 25.5.0, x86_64) under QEMU/TCG, run as root, no network.
+Full run with the tree at commit e5cb03e0 or later (driver with toolchain labelling).
+Compiler: patched TinyCC 0.9.28rc with the GOT-bind fix (see pd-cc/NOTES.md);
+features: complex=no threads=no tls=no (235 results labelled "toolchain:").
+Started 2026-11-04T19:30Z; resumed 10 times (VM stopped and relaunched about every
+107 minutes; two container restarts damaged the scratch disk, repaired with fsck);
+finished 2026-11-05T11:31Z. Log cleaned: NULs and console lines removed, no duplicates.
+Compared with the first run (2026-11-03-puredarwin-amd64): same 9011 assertions,
+10 differ: 4 nanosleep (timing, UNRESOLVED->PASS), 3 toolchain-labelled
+(raise.002, abort.005, abort.006), posix_spawn.058/.060 PASS->FAIL, and
+XBD.12.1-utility-argument-syntax.002 PASS->UNRESOLVED (timeout). The two posix_spawn
+changes and the timeout need a repeat run before they are called real.
