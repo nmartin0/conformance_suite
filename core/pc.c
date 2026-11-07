@@ -404,6 +404,21 @@ int pc_file_equals(const char *path, const char *s)
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		pc_observe_broke("file_equals", path);
+	/* Reading a directory with read() is allowed to succeed or fail, so a
+	 * file that is not a regular file cannot be compared by its contents. */
+	{
+		struct stat fst;
+
+		if (fstat(fd, &fst) != 0) {
+			(void)close(fd);
+			pc_observe_broke("file_equals/fstat", path);
+		}
+		if (!S_ISREG(fst.st_mode)) {
+			(void)close(fd);
+			errno = S_ISDIR(fst.st_mode) ? EISDIR : EINVAL;
+			pc_observe_broke("file_equals/notregular", path);
+		}
+	}
 	for (;;) {
 		ssize_t r = read(fd, buf, sizeof buf);
 		if (r < 0) {
