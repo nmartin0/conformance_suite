@@ -43,7 +43,7 @@ hdr() { awk -v t="$1" '$2 == t { print $1 " " $3 " " $4; exit }' scan.out; }
 data() { dd if="$1" bs=1 skip=$(($2 + 512)) count="$3" 2>/dev/null; }
 recok() { data "$@" | awk '{ if ($1 != length($0) + 1 || index($0, "=") == 0) bad = 1 } END { exit bad + 0 }'; }
 pc_test
-pax -w -x pax -o comment:=hello f1 >a1 2>err </dev/null || pc_fail "-o comment:=hello: nonzero status"
+pax -w -x pax -o comment:=hello f1 >a1 2>err </dev/null || pc_fail "-o comment:=hello: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 scan a1
 set -- $(hdr x)
 [ -n "$1" ] || pc_fail "-o comment:=hello wrote no typeflag x block"
@@ -57,15 +57,15 @@ set -- $(hdr 0)
 [ "$2" = f1 ] || pc_fail "the file header after the x block names '$2', expected f1"
 z=$(dd if=a1 bs=1 skip="$endoff" count=1024 2>/dev/null | od -An -v -tx1 | tr -d ' 0\n')
 [ -n "$endoff" ] && [ -z "$z" ] && [ "$(wc -c <a1)" -ge $((endoff + 1024)) ] || pc_fail "the two zero blocks do not follow the last file in the pax archive"
-pax -w -x pax -o 'exthdr.name=%d/XH.%f' -o comment:=hello f1 >a2b 2>err </dev/null || pc_fail "-o exthdr.name with %d: nonzero status"
+pax -w -x pax -o 'exthdr.name=%d/XH.%f' -o comment:=hello f1 >a2b 2>err </dev/null || pc_fail "-o exthdr.name with %d: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 scan a2b
 set -- $(hdr x)
 [ "$2" = './XH.f1' ] || pc_fail "with -o exthdr.name='%d/XH.%f' the x block is named '$2', expected ./XH.f1"
-pax -w -x pax -o 'exthdr.name=XH/%f.%%' -o comment:=hello f1 >a2 2>err </dev/null || pc_fail "-o exthdr.name: nonzero status"
+pax -w -x pax -o 'exthdr.name=XH/%f.%%' -o comment:=hello f1 >a2 2>err </dev/null || pc_fail "-o exthdr.name: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 scan a2
 set -- $(hdr x)
 [ "$2" = 'XH/f1.%' ] || pc_fail "with -o exthdr.name='XH/%f.%%' the x block is named '$2', expected XH/f1.%"
-( unset TMPDIR; pax -w -x pax -o comment=hello f1 >a3 2>err </dev/null ) || pc_fail "-o comment=hello: nonzero status"
+( unset TMPDIR; pax -w -x pax -o comment=hello f1 >a3 2>err </dev/null ) || pc_fail "-o comment=hello: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 scan a3
 set -- $(hdr g)
 [ -n "$1" ] || pc_fail "-o comment=hello wrote no typeflag g block"
@@ -74,28 +74,28 @@ head -n 1 scan.out | grep ' g ' >/dev/null || pc_fail "the typeflag g block is n
 [ "$gs" -ge 17 ] || pc_fail "the typeflag g block has size $gs, too small for the record"
 [ "$(data a3 "$go" 17)" = "17 comment=hello" ] || pc_fail "the g block does not hold the record '17 comment=hello'"
 printf '%s\n' "$gn" | grep -E '^/tmp/GlobalHead\.[0-9]+\.1$' >/dev/null || pc_fail "with TMPDIR unset the g block is named '$gn', expected /tmp/GlobalHead.<pid>.1"
-( unset TMPDIR; pax -w -x pax -o comment=hello f1 >a4 2>err </dev/null ) || pc_fail "-o comment=hello without TMPDIR: nonzero status"
+( unset TMPDIR; pax -w -x pax -o comment=hello f1 >a4 2>err </dev/null ) || pc_fail "-o comment=hello without TMPDIR: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 scan a4
 set -- $(hdr g)
 printf '%s\n' "$2" | grep -E '^/tmp/GlobalHead\.[0-9]+\.1$' >/dev/null || pc_fail "with TMPDIR unset the g block is named '$2', expected /tmp/GlobalHead.<pid>.1"
-TMPDIR=$TD pax -w -x pax -o comment=hello f1 >a5 2>err </dev/null || pc_fail "-o comment=hello with TMPDIR set: nonzero status"
+TMPDIR=$TD pax -w -x pax -o comment=hello f1 >a5 2>err </dev/null || pc_fail "-o comment=hello with TMPDIR set: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 scan a5
 set -- $(hdr g)
 printf '%s\n' "$2" | grep -E "^$TD/GlobalHead\\.[0-9]+\\.1\$" >/dev/null || pc_fail "with TMPDIR=$TD the g block is named '$2'"
-pax -w -x pax -o 'globexthdr.name=GH.%n.%p.%%' -o comment=hello f1 >a6 2>err </dev/null || pc_fail "-o globexthdr.name: nonzero status"
+pax -w -x pax -o 'globexthdr.name=GH.%n.%p.%%' -o comment=hello f1 >a6 2>err </dev/null || pc_fail "-o globexthdr.name: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 scan a6
 set -- $(hdr g)
 printf '%s\n' "$2" | grep -E '^GH\.1\.[0-9]+\.%$' >/dev/null || pc_fail "with -o globexthdr.name='GH.%n.%p.%%' the g block is named '$2'"
-pax -w -x pax -o times f1 >a7 2>err </dev/null || pc_fail "-o times: nonzero status"
+pax -w -x pax -o times f1 >a7 2>err </dev/null || pc_fail "-o times: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 scan a7
 set -- $(hdr x)
 [ -n "$1" ] || pc_fail "-o times wrote no typeflag x block"
 recok a7 "$1" "$3" || pc_fail "a record of the -o times block has a length that does not match its octets"
 data a7 "$1" "$3" | grep -E '^[0-9]+ mtime=1041519845(\.0*)?$' >/dev/null || pc_fail "no mtime record holding 1041519845 seconds since the Epoch"
 data a7 "$1" "$3" | grep -E '^[0-9]+ atime=[0-9]+(\.[0-9]+)?$' >/dev/null || pc_fail "no atime record holding a time in seconds since the Epoch"
-pax -w -x pax -o times -o 'delete=?time' f1 >a8 2>err </dev/null || pc_fail "-o delete: nonzero status"
+pax -w -x pax -o times -o 'delete=?time' f1 >a8 2>err </dev/null || pc_fail "-o delete: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 tr -d '\000' <a8 | grep -E 'atime=|mtime=' >/dev/null && pc_fail "-o delete=?time left an atime or mtime record in the archive"
-pax -w -x pax -o times -o delete=atime f1 >a9 2>err </dev/null || pc_fail "-o delete=atime: nonzero status"
+pax -w -x pax -o times -o delete=atime f1 >a9 2>err </dev/null || pc_fail "-o delete=atime: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 tr -d '\000' <a9 | grep 'atime=' >/dev/null && pc_fail "-o delete=atime left an atime record in the archive"
 tr -d '\000' <a9 | grep 'mtime=' >/dev/null || pc_fail "-o delete=atime removed the mtime record as well"
 pc_pass

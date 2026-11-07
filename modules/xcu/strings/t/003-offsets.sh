@@ -31,9 +31,9 @@ has() {
 	done
 }
 got=$(has d)
-[ "$got" = "[4 defgh][13 klmn]" ] || pc_fail "-t d did not give '4 defgh' and '13 klmn'"
+[ "$got" = "[4 defgh][13 klmn]" ] || pc_fail "-t d did not give (4 defgh)(13 klmn), got $got"
 got=$(has o)
-[ "$got" = "[4 defgh][15 klmn]" ] || pc_fail "-t o did not give '4 defgh' and '15 klmn'"
+[ "$got" = "[4 defgh][15 klmn]" ] || pc_fail "-t o did not give (4 defgh)(15 klmn), got $got"
 got=$(has x)
-[ "$got" = "[4 defgh][d klmn]" ] || pc_fail "-t x did not give '4 defgh' and 'd klmn'"
+[ "$got" = "[4 defgh][d klmn]" ] || pc_fail "-t x did not give (4 defgh)(d klmn), got $got"
 pc_pass

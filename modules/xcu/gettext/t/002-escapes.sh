@@ -16,13 +16,13 @@ mkdir tdd || pc_unresolved "setup: cannot make a directory"
 TEXTDOMAINDIR=$PWD/tdd; export TEXTDOMAINDIR
 unset TEXTDOMAIN LANGUAGE NLSPATH
 pc_test
-gettext -e -d dom 'a\tb\n' >out 2>err </dev/null || pc_fail "-e: nonzero status"
+gettext -e -d dom 'a\tb\n' >out 2>err </dev/null || pc_fail "-e: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 printf 'a\tb\n' >exp
 cmp out exp >/dev/null 2>&1 || pc_fail "-e did not process the escapes: $(od -c out | head -2)"
-gettext -E -d dom 'a\tb\n' >out 2>err </dev/null || pc_fail "-E: nonzero status"
+gettext -E -d dom 'a\tb\n' >out 2>err </dev/null || pc_fail "-E: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 printf '%s' 'a\tb\n' >exp
 cmp out exp >/dev/null 2>&1 || pc_fail "-E altered the escapes: $(od -c out | head -2)"
-gettext -e -d dom 'x\\y\101\"z' >out 2>err </dev/null || pc_fail "-e (more escapes): nonzero status"
+gettext -e -d dom 'x\\y\101\"z' >out 2>err </dev/null || pc_fail "-e (more escapes): nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 printf '%s' 'x\yA"z' >exp
 cmp out exp >/dev/null 2>&1 || pc_fail "-e processed backslash, octal or quote escapes wrongly: $(od -c out | head -2)"
 pc_pass

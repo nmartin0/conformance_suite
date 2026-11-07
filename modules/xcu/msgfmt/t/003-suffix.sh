@@ -17,13 +17,13 @@ msgid "one"
 msgstr "un"
 EOP
 pc_test
-msgfmt -S -o out a.po </dev/null >o 2>e || pc_fail "msgfmt -S -o out: nonzero status"
+msgfmt -S -o out a.po </dev/null >o 2>e || pc_fail "msgfmt -S -o out: nonzero status: $(head -2 e 2>/dev/null | tr "\n" " ")"
 if [ ! -s out.mo ]; then
 	[ -s out ] && pc_unresolved "-S with -o: the page does not say whether -S applies to the -o name"
 	pc_fail "-S -o out wrote neither out.mo nor out"
 fi
 rm -f out out.mo
-msgfmt -S -o named.mo a.po </dev/null >o 2>e || pc_fail "msgfmt -S -o named.mo: nonzero status"
+msgfmt -S -o named.mo a.po </dev/null >o 2>e || pc_fail "msgfmt -S -o named.mo: nonzero status: $(head -2 e 2>/dev/null | tr "\n" " ")"
 [ -s named.mo ] || pc_fail "named.mo was not written"
 [ -e named.mo.mo ] && pc_fail "-S appended a second .mo suffix"
 pc_pass

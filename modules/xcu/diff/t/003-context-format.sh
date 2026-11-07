@@ -87,7 +87,7 @@ cnorm() {
 out=$(cnorm "$(diff -c f1 f2 2>/dev/null </dev/null)")
 case $out in
 "*** f1 Thu Jan  2 03:04:05 2020${NL}--- f2 Thu Mar  4 05:06:07 2021${NL}"*) ;;
-*) pc_fail "the -c header lines are not '*** f1 <date>' and '--- f2 <date>' with the file times" ;;
+*) pc_fail "the -c header lines are not '*** f1 <date>' and '--- f2 <date>' with the file times; got: $(printf "%s" "$out" | head -2 | tr "\n" "|")" ;;
 esac
 want="***************${NL}*** 1,7 ****${NL}  a${NL}  b${NL}  c${NL}! d${NL}  e${NL}  f${NL}  g${NL}--- 1,7 ----${NL}  a${NL}  b${NL}  c${NL}! X${NL}  e${NL}  f${NL}  g"
 [ "$(body "$out")" = "$want" ] || pc_fail "-c did not give three lines of context with ! marks"

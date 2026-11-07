@@ -44,7 +44,7 @@ msgfmt -c -v -o o2.mo cf.po </dev/null >o 2>e
 msgfmt -c -v -o o3.mo ty.po </dev/null >o 2>e
 [ "$?" -ne 0 ] || pc_fail "a c-format conversion type mismatch was not diagnosed"
 msgfmt -c -v -o o4.mo ok.po </dev/null >o 2>e
-[ "$?" -eq 0 ] || pc_fail "a consistent entry was diagnosed"
+[ "$?" -eq 0 ] || pc_fail "a consistent entry was diagnosed: $(head -2 e | tr "\n" " ")"
 msgfmt -c -v -o o5.mo nocf.po </dev/null >o 2>e
-[ "$?" -eq 0 ] || pc_fail "no-c-format did not suppress the conversion check"
+[ "$?" -eq 0 ] || pc_fail "no-c-format did not suppress the conversion check: $(head -2 e | tr "\n" " ")"
 pc_pass

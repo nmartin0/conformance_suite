@@ -1,5 +1,5 @@
 /*
- * A trailing slash on a new name that is not a directory fails.
+ * A trailing slash on a new name that is not an existing directory fails.
  * Copyright (c) 2026 Nicholas Martin. All rights reserved.
  *
  * ASSERTION XSH.rename.014

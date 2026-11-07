@@ -31,8 +31,8 @@ second() {
 	done
 }
 pc_test
-pax -w -x pax f1 h >a0 2>err </dev/null || pc_fail "pax -w -x pax: nonzero status"
-pax -w -x pax -o linkdata f1 h >a1 2>err </dev/null || pc_fail "pax -w -x pax -o linkdata: nonzero status"
+pax -w -x pax f1 h >a0 2>err </dev/null || pc_fail "pax -w -x pax: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
+pax -w -x pax -o linkdata f1 h >a1 2>err </dev/null || pc_fail "pax -w -x pax -o linkdata: nonzero status: $(head -2 err 2>/dev/null | tr "\n" " ")"
 # Without linkdata the page leaves open whether the data of a hard link member
 # is stored, and does not say that a second name is always stored as a link.
 l0=$(second a0)
