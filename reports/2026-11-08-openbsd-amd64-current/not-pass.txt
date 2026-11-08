@@ -1,0 +1,1930 @@
+root FAIL	XBD.10.1-directory-structure-and-files.005	503	text written to /dev/tty did not reach the terminal
+root FAIL	XBD.11.1-interface-characteristics.002	68	after opening the terminal in a process that is not a session leader, tcgetpgrp() returned 100000 (errno 0): the terminal became its controlling terminal
+root UNRESOLVED	XBD.11.1-interface-characteristics.003	45	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XBD.11.1-interface-characteristics.004	56	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XBD.11.1-interface-characteristics.005	54	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XBD.11.1-interface-characteristics.006	44	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XBD.11.1-interface-characteristics.007	54	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XBD.11.1-interface-characteristics.008	83	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XBD.11.1-interface-characteristics.009	83	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XBD.11.1-interface-characteristics.010	65	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root FAIL	XBD.12.1-utility-argument-syntax.002	808	cut -d : -f 2147483647 gave '' (status 1, standard error 'cut: [-bcf] list: 2147483647 too large (allowed 1-2048)'), expected 'nocolon'
+root FAIL	XBD.2-conformance.001	271	not found with PATH from getconf PATH: gettext iconv lp msgfmt newgrp ngettext pathchk tabs
+root FAIL	XBD.4.1-case-insensitive-comparisons.001	1099	grep -i '\(a\)\1' did not select 'aA' (status 1)
+root FAIL	XBD.4.1-case-insensitive-comparisons.002	1155	find -iname '[[:lower:]]ulu' found 0 names, expected 1
+root FAIL	XBD.4.1-case-insensitive-comparisons.003	306	s/abc/X/i on 'AbC' gave 'sed: 1: "s/abc/X/i": bad flag in substitute command: 'i'', expected 'X'
+root UNRESOLVED	XBD.4.4-directory-operations.004	101723	reader 0 reached its time limit before the writer finished (a slow machine)
+root FAIL	XBD.5-file-format-notation.010	605	awk printf "%F|", "1.5" wrote '%F1.5|', expected '1.500000|'
+root FAIL	XBD.7.3.1-lc-ctype.005	152	locale C.UTF-8: iswdigit(0x660) is 1, expected 0
+root INSPECT	XBD.8.1-environment-variable-definition.004	472	disputed (see the assertion's note): readonly PWD accepted, cd succeeded but PWD is not the new directory: 0:/tmp/w/r/res-root/tmp/pc.1FMcss
+root FAIL	XBD.9.3-bre.002	52	case 7: "\(.\)\1\{0,1\}b" on "xaab" should match, got 1
+root FAIL	XBD.9.3-bre.008	51	regcomp("[--/]") returned 11
+root FAIL	XBD.9.5-grammar.003	68	regcomp("a\{0\}", flags 0x0) returned 14
+root FAIL	XBD.aio.h.001	0	does not compile: 'aio.h' file not found
+root FAIL	XBD.aio.h.002	0	does not compile: 'aio.h' file not found
+root FAIL	XBD.aio.h.003	0	does not compile: 'aio.h' file not found
+root FAIL	XBD.aio.h.004	0	does not compile: 'aio.h' file not found
+root FAIL	XBD.aio.h.005	0	does not compile: 'aio.h' file not found
+root FAIL	XBD.aio.h.006	0	does not compile: 'aio.h' file not found
+root FAIL	XBD.aio.h.007	0	does not compile: 'aio.h' file not found
+root FAIL	XBD.aio.h.008	0	does not compile: 'aio.h' file not found
+root FAIL	XBD.aio.h.009	0	does not compile: 'aio.h' file not found
+root FAIL	XBD.complex.h.007	0	does not compile: call to undeclared function 'CMPLX'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+root UNRESOLVED	XBD.dirent.h.001	34	a constant is missing (the header check reports it): DT_BLK DT_CHR DT_DIR DT_FIFO DT_LNK DT_REG DT_SOCK DT_UNKNOWN
+root UNRESOLVED	XBD.dirent.h.002	34	a DT_ constant is missing (the header check reports it)
+root FAIL	XBD.dirent.h.004	0	does not compile: unknown type name 'reclen_t'
+root FAIL	XBD.dirent.h.006	0	does not compile: invalid application of 'sizeof' to an incomplete type 'struct posix_dent'
+root FAIL	XBD.dirent.h.008	0	does not compile: use of undeclared identifier 'posix_getdents'
+root FAIL	XBD.endian.h.004	0	does not compile: unknown type name 'uint16_t'
+root FAIL	XBD.errno.h.001	0	does not compile: "EMULTIHOP is not defined"
+root FAIL	XBD.errno.h.002	0	does not compile: use of undeclared identifier 'EMULTIHOP'
+root FAIL	XBD.fcntl.h.006	48	<fcntl.h> does not define F_OFD_GETLK
+root FAIL	XBD.fcntl.h.007	40	<fcntl.h> does not define O_TTY_INIT
+root FAIL	XBD.fcntl.h.008	45	<fcntl.h> does not define F_GETOWN_EX and F_SETOWN_EX
+root UNRESOLVED	XBD.fcntl.h.011	51	a constant is missing (the header check reports it): O_CLOEXEC O_CREAT O_DIRECTORY O_EXCL O_NOCTTY O_NOFOLLOW O_TRUNC O_TTY_INIT
+root FAIL	XBD.fcntl.h.019	50	<fcntl.h> does not define SEEK_SET
+root FAIL	XBD.fcntl.h.022	46	<fcntl.h> does not define S_IRWXU
+root FAIL	XBD.float.h.001	0	does not compile: "FLT_DECIMAL_DIG, DBL_DECIMAL_DIG, LDBL_DECIMAL_DIG or DECIMAL_DIG is below its minimum"
+root FAIL	XBD.float.h.002	0	does not compile: use of undeclared identifier 'FLT_TRUE_MIN'
+root FAIL	XBD.float.h.004	0	does not compile: use of undeclared identifier 'FLT_DECIMAL_DIG'
+root FAIL	XBD.float.h.005	0	does not compile: use of undeclared identifier 'FLT_TRUE_MIN'
+root FAIL	XBD.iconv.h.001	0	does not compile: 'iconv.h' file not found
+root FAIL	XBD.iconv.h.002	0	does not compile: 'iconv.h' file not found
+root FAIL	XBD.inttypes.h.004	58	SCNuMAX read a wide text as a different value (1 items)
+root FAIL	XBD.langinfo.h.001	0	does not compile: use of undeclared identifier 'ERA'
+root FAIL	XBD.langinfo.h.002	0	does not compile: use of undeclared identifier 'ERA'
+root FAIL	XBD.langinfo.h.003	0	does not compile: use of undeclared identifier 'ALTMON_1'
+root UNRESOLVED	XBD.langinfo.h.004	0	blocked by XBD.langinfo.h.002 (FAIL)
+root FAIL	XBD.libintl.h.001	0	does not compile: 'libintl.h' file not found
+root FAIL	XBD.libintl.h.002	0	does not compile: 'libintl.h' file not found
+root FAIL	XBD.libintl.h.003	0	does not compile: 'libintl.h' file not found
+root FAIL	XBD.limits.h.001	0	does not compile: "_POSIX_AIO_LISTIO_MAX is missing or not the required value"
+root FAIL	XBD.limits.h.014	0	does not compile: "NL_TEXTMAX is below its minimum acceptable value"
+root FAIL	XBD.locale.h.006	0	does not compile: use of undeclared identifier 'getlocalename_l'
+root FAIL	XBD.monetary.h.001	0	does not compile: 'monetary.h' file not found
+root FAIL	XBD.monetary.h.002	0	does not compile: 'monetary.h' file not found
+root FAIL	XBD.monetary.h.003	0	does not compile: 'monetary.h' file not found
+root FAIL	XBD.monetary.h.004	0	does not compile: 'monetary.h' file not found
+root FAIL	XBD.netdb.h.001	50	<netdb.h> does not define AI_V4MAPPED
+root FAIL	XBD.netdb.h.002	35	<netdb.h> does not define NI_NUMERICSCOPE
+root FAIL	XBD.netdb.h.012	38	getnameinfo() is not declared as int getnameinfo(const struct sockaddr *restrict, socklen_t, char *restrict, socklen_t, char *restrict, socklen_t, int)
+root FAIL	XBD.netinet_in.h.008	0	does not compile: use of undeclared identifier 'IN6ADDR_ANY_INIT'
+root UNRESOLVED	XBD.pthread.h.005	36	a constant is missing (the header check reports it): PTHREAD_MUTEX_ROBUST PTHREAD_MUTEX_STALLED
+root UNRESOLVED	XBD.pthread.h.012	34	PTHREAD_NULL is missing (the header check reports it)
+root FAIL	XBD.pthread.h.015	0	does not compile: use of undeclared identifier 'pthread_cond_clockwait'
+root FAIL	XBD.pthread.h.016	0	does not compile: use of undeclared identifier 'pthread_mutex_consistent'; did you mean 'pthread_mutex_init'?
+root FAIL	XBD.regex.h.002	42	<regex.h> does not define REG_MINIMAL
+root FAIL	XBD.semaphore.h.003	0	does not compile: invalid application of 'sizeof' to an incomplete type 'struct timespec'
+root FAIL	XBD.semaphore.h.004	38	<semaphore.h> does not define O_CREAT
+root FAIL	XBD.semaphore.h.005	0	does not compile: use of undeclared identifier 'sem_clockwait'
+root FAIL	XBD.signal.h.002	0	does not compile: use of undeclared identifier 'pthread_t'
+root FAIL	XBD.signal.h.003	0	does not compile: variable has incomplete type 'struct sigevent'
+root FAIL	XBD.signal.h.004	46	<signal.h> does not define SIGEV_NONE, SIGEV_SIGNAL and SIGEV_THREAD as macros
+root FAIL	XBD.signal.h.006	50	<signal.h> does not define SIGRTMIN and SIGRTMAX as macros
+root FAIL	XBD.signal.h.007	46	<unistd.h> does not define _SC_NSIG
+root FAIL	XBD.signal.h.008	49	<signal.h> does not define SIG2STR_MAX
+root FAIL	XBD.signal.h.020	0	does not compile: no member named 'uc_stack' in 'struct sigcontext'
+root FAIL	XBD.signal.h.023	46	<signal.h> does not define every si_code constant: missing one of ILL_ILLOPC ILL_ILLOPN ILL_ILLADR ILL_ILLTRP ILL_PRVOPC ILL_PRVREG ILL_COPROC ILL_BADSTK FPE_INTDIV FPE_INTOVF FPE_FLTDIV FPE_FLTOVF FPE_FLTUND FPE_FLTRES FPE_FLTINV FPE_FLTSUB SEGV_MAPERR SEGV_ACCERR BUS_ADRALN BUS_ADRERR BUS_OBJERR CLD_EXITED CLD_KILLED CLD_DUMPED CLD_TRAPPED CLD_STOPPED CLD_CONTINUED SI_USER SI_QUEUE SI_TIMER SI_ASYNCIO SI_MESGQ
+root FAIL	XBD.signal.h.027	0	does not compile: use of undeclared identifier 'pthread_kill'
+root FAIL	XBD.signal.h.028	0	does not compile: use of undeclared identifier 'sig2str'
+root UNRESOLVED	XBD.spawn.h.001	45	a constant is missing (the header check reports it): POSIX_SPAWN_RESETIDS POSIX_SPAWN_SETPGROUP POSIX_SPAWN_SETSIGDEF POSIX_SPAWN_SETSIGMASK POSIX_SPAWN_SETSID
+root FAIL	XBD.stdio.h.010	0	does not compile: unknown type name 'va_list'; did you mean '__va_list'?
+root FAIL	XBD.stdio.h.012	41	vdprintf() is not declared as int vdprintf(int, const char *restrict, va_list)
+root FAIL	XBD.stdlib.h.004	0	does not compile: use of undeclared identifier 'WNOHANG'
+root FAIL	XBD.stdlib.h.007	0	does not compile: use of undeclared identifier 'qsort_r'; did you mean 'qsort'?
+root FAIL	XBD.stdlib.h.009	0	does not compile: use of undeclared identifier 'at_quick_exit'
+root FAIL	XBD.sys_mman.h.011	35	<sys/mman.h> does not define O_RDONLY
+root FAIL	XBD.sys_mman.h.013	38	<sys/mman.h> does not define O_CREAT
+root UNRESOLVED	XBD.sys_resource.h.003	35	a constant is missing (the header check reports it): RLIMIT_CORE RLIMIT_DATA RLIMIT_FSIZE RLIMIT_NOFILE RLIMIT_STACK RLIMIT_AS
+root FAIL	XBD.sys_resource.h.004	0	does not compile: token is not a valid binary operator in a preprocessor subexpression
+root FAIL	XBD.sys_socket.h.016	292	killed by signal 11 during the test
+root FAIL	XBD.sys_socket.h.018	42	struct msghdr member msg_iovlen is not of type int
+root FAIL	XBD.sys_types.h.007	0	does not compile: use of undeclared identifier 'reclen_t'
+root FAIL	XBD.sys_types.h.009	0	does not compile: unknown type name 'pthread_attr_t'
+root FAIL	XBD.sys_types.h.011	0	does not compile: unknown type name 'reclen_t'
+root UNRESOLVED	XBD.termios.h.004	40	a constant is missing (the header check reports it): BRKINT ICRNL IGNBRK IGNCR IGNPAR INLCR INPCK ISTRIP IXANY IXOFF IXON PARMRK
+root FAIL	XBD.termios.h.015	0	does not compile: invalid application of 'sizeof' to an incomplete type 'struct winsize'
+root FAIL	XBD.termios.h.017	0	does not compile: use of undeclared identifier 'tcgetwinsize'
+root FAIL	XBD.tgmath.h.001	57	<tgmath.h> does not make the <complex.h> macros available
+root FAIL	XBD.tgmath.h.004	0	does not compile: call to undeclared function 'CMPLX'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+root FAIL	XBD.time.h.001	0	does not compile: static assertion failed: CLOCKS_PER_SEC does not have type clock_t
+root FAIL	XBD.time.h.015	0	does not compile: use of undeclared identifier 'clock_nanosleep'
+root FAIL	XBD.unistd.h.001	43	<unistd.h> does not define POSIX_CLOSE_RESTART
+root FAIL	XBD.unistd.h.002	41	<unistd.h> does not define SEEK_HOLE and SEEK_DATA as macros
+root FAIL	XBD.unistd.h.004	0	does not compile: "_POSIX_VERSION is not defined as 202405L"
+root FAIL	XBD.unistd.h.006	0	does not compile: "_POSIX_CPUTIME has a value its description does not allow"
+root FAIL	XBD.unistd.h.007	0	does not compile: "_POSIX_ASYNCHRONOUS_IO is not defined as 202405L"
+root FAIL	XBD.unistd.h.010	0	does not compile: use of undeclared identifier '_SC_DEVICE_CONTROL'
+root FAIL	XBD.unistd.h.018	37	_POSIX_ASYNC_IO is -1 but pathconf(_PC_ASYNC_IO) is 0
+root FAIL	XBD.unistd.h.019	0	does not compile: use of undeclared identifier '_SC_DEVICE_CONTROL'
+root FAIL	XBD.unistd.h.021	36	<unistd.h> does not define O_CLOEXEC
+root FAIL	XBD.unistd.h.024	0	does not compile: use of undeclared identifier 'dup3'
+root FAIL	XBD.unistd.h.026	0	does not compile: use of undeclared identifier 'fexecve'; did you mean 'execve'?
+root FAIL	XBD.wchar.h.006	0	does not compile: unknown type name 'va_list'; did you mean '__va_list'?
+root FAIL	XBD.wchar.h.009	0	does not compile: use of undeclared identifier 'wcpcpy'; did you mean 'wcscpy'?
+root FAIL	XBD.wordexp.h.001	0	does not compile: 'wordexp.h' file not found
+root FAIL	XBD.wordexp.h.002	0	does not compile: 'wordexp.h' file not found
+root FAIL	XBD.wordexp.h.003	0	does not compile: 'wordexp.h' file not found
+root FAIL	XBD.wordexp.h.004	0	does not compile: 'wordexp.h' file not found
+root FAIL	XBD.wordexp.h.005	0	does not compile: 'wordexp.h' file not found
+root FAIL	XCU.1.2-utility-limits.006	270	pathchk rejected a path of 239 bytes
+root FAIL	XCU.1.4-utility-defaults.014	3419	process 58025 did not keep ignoring SIGTERM and SIGHUP
+root FAIL	XCU.1.4-utility-defaults.015	3385	sort f2 after SIGTERM: exit status 2 is not a signal status
+root FAIL	XCU.1.4-utility-defaults.021	237	printf arguments: got 'pcx=/pc/home/q
+root FAIL	XCU.1.6-built-in-utilities.001	1391	no executable file named pathchk in a PATH directory
+root FAIL	XCU.2.2-quoting.012	404	standard output was []
+root FAIL	XCU.2.2-quoting.013	504	standard output was [$\cA
+root FAIL	XCU.2.2-quoting.014	453	standard output was [$\x41\x4a
+root FAIL	XCU.2.2-quoting.015	477	standard output was [$\101
+root FAIL	XCU.2.2-quoting.016	467	standard output was [$$x * ? `y` $(z) a  b\tc]
+root FAIL	XCU.2.2-quoting.017	446	standard output was []
+root FAIL	XCU.2.3-token-recognition.007	384	standard output was []
+root FAIL	XCU.2.3-token-recognition.008	468	standard output was [e]
+root FAIL	XCU.2.5-parameters.022	213	no expanded continuation prompt in: /bin/sh: No controlling tty (open /dev/tty: Device not configured)
+root FAIL	XCU.2.6-word-expansions.009	598	standard output was [pcg*
+root FAIL	XCU.2.6-word-expansions.035	609	standard output was [5 ok 5
+root FAIL	XCU.2.6-word-expansions.038	552	standard output was [3 [a][][b]
+root FAIL	XCU.2.6-word-expansions.043	399	standard output was [2 a b
+root FAIL	XCU.2.8-exit-status-and-errors.004	368	standard output was []
+root FAIL	XCU.alias.005	170	alias for a missing name wrote to standard output
+root FAIL	XCU.alias.006	163	no diagnostic on standard error
+root FAIL	XCU.alias.009	235	a new shell wrote 'ran
+root FAIL	XCU.ar.003	53875	ar -pv a f2 output differs from the specified header and contents
+root FAIL	XCU.ar.005	3346	ar -dv wrote '', expected 'd - f2'
+root FAIL	XCU.ar.006	2086	ar -rv wrote '', expected 'r - f2' and 'a - f4'
+root FAIL	XCU.ar.007	1682	an older file replaced the archived member
+root FAIL	XCU.ar.008	1175	mode field is 'rw-r--r--'
+root FAIL	XCU.ar.019	1274	ar -rv of a new file wrote '', expected 'a - sub/g'
+root FAIL	XCU.at.005	631	at refused 'at noon Dec 9, 2035' (status 1) [stderr: at: garbled time ; stdout: ]
+root FAIL	XCU.at.007	554	the job 2080814400.c submitted without -q is not in queue a
+root FAIL	XCU.awk.019	1740	FILENAME was not - for standard input
+root FAIL	XCU.awk.025	404	slash where an operand may begin as an ERE: 10 00
+root FAIL	XCU.awk.033	255	standard input was not read when the only operand was nulled: :in
+root FAIL	XCU.awk.042	379	a missing field: 0 1 1
+root INSPECT	XCU.bc.006	1011	disputed (see the assertion's note): an array parameter wrong
+root FAIL	XCU.bc.007	861	l(1) not 0
+root FAIL	XCU.bg.002	1271	jobs did not report the resumed job as Running
+root FAIL	XCU.cd.012	190	cd '' exited 0
+root FAIL	XCU.cd.013	186	cd nosuch/.. exited 0
+root FAIL	XCU.chmod.006	674	a-X: f6 has mode -rwxr-xr-x, expected -rw-r--r--
+root UNRESOLVED	XCU.cmp.001	60018	timed out after 60s
+root INSPECT	XCU.cmp.008	611	disputed (see the assertion's note): cmp -l - f output is:      3 144 143
+root FAIL	XCU.command.004	182	command -v ./bin/pccmd wrote './bin/pccmd', not an absolute pathname
+root FAIL	XCU.command.014	168	tilde after a colon gave '/pc/home/a:~/b', wanted /pc/home/a:/pc/home/b
+root FAIL	XCU.cp.013	1248	dst has mode dr-xrwx---, expected dr-xr-x---
+root FAIL	XCU.crontab.002	527	crontab from standard input exited with status 1, but crontab FILE accepted the same entries: crontab: usage error: file name must be specified for replace usage: crontab [-u user] file        crontab [-e | -l | -r] [-u user] 
+root UNRESOLVED	XCU.csplit.001	60019	timed out after 60s
+root FAIL	XCU.csplit.007	578	the line after the last: status 0
+root FAIL	XCU.ctags.005	301	no -x line for alpha: ADD                 2 t.c              #define ADD(a, b) ((a) + (b))
+root FAIL	XCU.dd.005	599	dd bs=100 exited with status 1
+root FAIL	XCU.dd.016	400	ibs=512: no line '1 truncated record'
+root FAIL	XCU.dd.020	2463	dd iflags=fullblock exited with status 1
+root FAIL	XCU.diff.004	726	the first -u header line is not '--- f1<tab>2020-01-02 03:04:05[.frac] +0000'
+root UNRESOLVED	XCU.diff.009	60025	timed out after 60s
+root FAIL	XCU.dot.004	259	empty file gave 3
+root FAIL	XCU.dot.007	209	status 0, expected 1 to 125
+root FAIL	XCU.ed.013	702	q after a real a wrote '', expected ?
+root FAIL	XCU.ed.017	781	H mode wrote no explanation after the ?
+root FAIL	XCU.ed.019	453	separators gave 'one two three four five two two three four five three one two four four one one two three one two three four five four two three four one two two three four ', expected 'one two three four five two two three four five three one two four four one one two three five four two three four one two two three four '
+root FAIL	XCU.ex.001	541	ex: exit status 1
+root FAIL	XCU.ex.002	327	ex: exit status 1
+root FAIL	XCU.ex.003	375	ex: exit status 1
+root FAIL	XCU.ex.004	343	ex: exit status 1
+root FAIL	XCU.ex.005	286	ex: exit status 1
+root FAIL	XCU.ex.006	356	ex: exit status 1
+root FAIL	XCU.ex.007	292	ex: exit status 1
+root FAIL	XCU.ex.008	396	ex: exit status 1
+root FAIL	XCU.ex.009	481	ex: exit status 1
+root FAIL	XCU.ex.010	590	q! gave status 1
+root FAIL	XCU.ex.012	306	ex -c: nonzero status
+root FAIL	XCU.ex.013	397	ex -s: nonzero status
+root FAIL	XCU.ex.014	444	ex: exit status 1
+root FAIL	XCU.ex.015	363	ex: nonzero status
+root FAIL	XCU.ex.016	333	ex f1 f2: nonzero status
+root FAIL	XCU.ex.017	343	ex: exit status 1
+root FAIL	XCU.ex.018	405	ex: exit status 1
+root FAIL	XCU.ex.019	313	a wrapping search failed: status 1
+root FAIL	XCU.ex.020	368	append: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.021	494	line number of an empty buffer: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.022	405	null forward search: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.023	413	offsets: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.024	410	bare number offset: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.025	403	delete between marks: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.026	396	leading colons and blanks: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.027	409	text after a vertical line: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.028	398	p flag after delete: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.029	506	count on delete: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.030	401	one address and a count: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.031	391	move to the top: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.032	388	uppercase appends: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.033	392	g! is v: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.034	408	append in a global command: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.035	401	ampersand is the match: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.036	416	empty command repeats: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.037	406	dot is literal: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.038	413	undo of an undo: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.039	405	type omitted: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.040	467	percent: exit status 1
+root FAIL	XCU.ex.041	755	w! of part of the buffer: exit status 1
+root FAIL	XCU.ex.042	465	read with no file name: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.043	453	shell option: exit status 1
+root FAIL	XCU.ex.044	449	filter lines: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.045	317	delete: exit status 1
+root FAIL	XCU.ex.046	316	list option: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.047	381	g toggled by repetition: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.048	460	autowrite with n: exit status 1
+root FAIL	XCU.ex.049	579	tag with a pattern: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.050	351	execute a buffer on a line: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.051	421	source: exit status 1
+root FAIL	XCU.ex.052	517	e +cmd: exit status 1
+root FAIL	XCU.ex.053	504	ex: exit status 1
+root FAIL	XCU.ex.054	1861	the default prompt came before 2 of the three commands
+root FAIL	XCU.ex.055	3358	no prompt carried the line number 3
+root FAIL	XCU.ex.056	3207	with autoindent the file is 'a|b|TX|Y|c|d|e|'
+root FAIL	XCU.ex.057	1674	EXINIT: the first line is 'a', wanted '   a'
+root FAIL	XCU.ex.058	1759	the > command did not shift the line
+root FAIL	XCU.ex.059	2440	the file is 'a b a'
+root FAIL	XCU.ex.060	368	ex -sR -- f: exit status 1
+root FAIL	XCU.ex.061	624	n then rew: exit status 1
+root FAIL	XCU.ex.062	529	default range is the current line: exit status 1: ex: unknown: unknown terminal type
+root FAIL	XCU.ex.064	2755	the terminal was not in canonical mode while ex read commands
+root FAIL	XCU.exec.005	235	got '' (status 127)
+root FAIL	XCU.exec.009	229	status 0, expected 1 to 125
+root FAIL	XCU.exec.011	644	interactive shell exited after the failed exec (out='')
+root FAIL	XCU.exit.006	236	status 1, expected 6
+root FAIL	XCU.expr.003	537	expr  |  did not write '0' with status 1
+root FAIL	XCU.fc.021	348	fc -l wrote to standard error: /bin/sh: fc: history function called recursively
+root FAIL	XCU.fc.023	371	the command edited through the default editor was run 0 times, wanted once
+root FAIL	XCU.file.002	427	line is: nonexistent: cannot stat 'nonexistent' (No such file or directory)
+root FAIL	XCU.file.006	415	first line is: f: text/plain
+root FAIL	XCU.file.007	395	line is: l: symbolic link to 'f'
+root FAIL	XCU.file.008	560	link to a directory: ld: symbolic link to 'd'
+root FAIL	XCU.file.009	322	file -m exited with status 1
+root FAIL	XCU.file.010	369	matching file:  file: unknown option -- m
+root FAIL	XCU.file.011	345	ABC:  file: unknown option -- m
+root FAIL	XCU.find.009	648	-links : find exited with status 1
+root FAIL	XCU.find.011	656	-mtime 0: found 'tm/mixm', expected 'tm/fresh tm/mixm'
+root FAIL	XCU.find.016	716	after 'Y' the output is: t/a.txt
+root FAIL	XCU.find.032	519	find -newer dangling: nonzero status: find: dang: No such file or directory
+root FAIL	XCU.fold.006	439	the readable file was not folded, or the status was 0
+root FAIL	XCU.gencat.002	1040	messages read back as: [trailing  ] [tab	here] [back\slash] [C] [line one] [] [joined together] [<none>] 
+root FAIL	XCU.gencat.003	1288	merged catalog reads back as: [<none>] [TWO] [<none>] [four] [<none>] 
+root FAIL	XCU.gencat.004	1139	gencat - wrote nothing to standard output
+root FAIL	XCU.getopts.015	390	exit 1 for a read-only name variable, wanted more than 1
+root FAIL	XCU.gettext.001	212	form 1: exit status 127
+root FAIL	XCU.gettext.002	306	-e: nonzero status: /tmp/w/modules/xcu/gettext/t/002-escapes.sh[19]: gettext: not found 
+root FAIL	XCU.gettext.003	205	-s: nonzero status
+root FAIL	XCU.head.003	615	-c 5 did not write exactly five bytes
+root FAIL	XCU.head.004	310	headers are wrong with three files and -c
+root FAIL	XCU.iconv.001	127	iconv -l exited with status 127
+root UNRESOLVED	XCU.iconv.002	108	setup: iconv -l failed
+root UNRESOLVED	XCU.iconv.003	101	setup: iconv -l failed
+root UNRESOLVED	XCU.iconv.004	102	setup: iconv -l failed
+root UNRESOLVED	XCU.iconv.005	127	setup: iconv -l failed
+root FAIL	XCU.id.004	333	unexpected words after the group items: groups=0(wheel), 2(kmem), 3(sys), 4(tty), 5(operator), 20(staff), 31(guest)
+root INSPECT	XCU.jobs.005	1273	disputed (see the assertion's note): jobs wrote '[1] + Done (3)             "${PC_SH:-sh}" -c "exit 3" ', wanted a line [n] + Done(3) ...
+root INSPECT	XCU.jobs.006	1241	disputed (see the assertion's note): jobs wrote '[1] + Running              sleep 101 ', wanted a line [n] + Stopped sleep 101
+root FAIL	XCU.jobs.007	1221	the suspended job is not marked as the current job
+root FAIL	XCU.join.007	644	-e did not replace an empty field
+root FAIL	XCU.kill.005	176	kill -l: name 'Hangup' is not upper case letters and digits
+root FAIL	XCU.kill.014	2517	env kill -s TERM -- -23491 exited 1
+root FAIL	XCU.ln.006	177	ln -f a a exited 0
+root FAIL	XCU.locale.006	212	locale decimal_point failed
+root FAIL	XCU.ls.017	246	first line is not a total line
+root UNRESOLVED	XCU.ls.018	60019	timed out after 60s
+root FAIL	XCU.ls.044	662	the first line of ls -i -s -1 is not a total line: 62695 8 f
+root FAIL	XCU.ls.048	397	ls -a -A: '.|..|.h|a|b|c|', expected neither dot nor dot-dot
+root FAIL	XCU.ls.050	714	ls -l -1 did not write the long format: -1 must not disable it
+root FAIL	XCU.m4.004	357	output differs: yes|no||g|5|3|5|2|-1|ell|lo||hippo|ho|b,c
+root FAIL	XCU.m4.006	304	m4: nonzero status
+root FAIL	XCU.m4.008	734	-U define left it defined: ''
+root FAIL	XCU.m4.010	457	sysval after exit 3 gave '768'
+root FAIL	XCU.m4.012	412	m4exit(3) after an operand that could not be opened gave status 1
+root FAIL	XCU.m4.016	336	output was 'a[', expected 'a[]b
+root FAIL	XCU.mailx.004	1014	save with no file did not write the mbox
+root FAIL	XCU.mailx.005	2210	mailx -H: nonzero status: mailx: unknown option -- H
+root FAIL	XCU.mailx.006	637	the first next did not write message 1: Message 2:
+root FAIL	XCU.mailx.010	387	pipe with no arguments did not give the current message to the cmd command
+root FAIL	XCU.mailx.012	1005	unalias did not remove g1
+root FAIL	XCU.mailx.015	974	backslash-blank did not keep the blanks in one argument:  y
+root FAIL	XCU.mailx.016	565	$HOME in a file name was not expanded
+root FAIL	XCU.mailx.022	587	the first empty line did not write message 1: Message 2:
+root FAIL	XCU.mailx.023	1015	set nopcv_b did not erase pcv_b
+root FAIL	XCU.mailx.024	338	the default prompt "? " was not written before the first command
+root FAIL	XCU.mailx.026	1183	! did not call SHELL with -c, -- and the command: 2
+root FAIL	XCU.mailx.027	570	pg1.out lacks message ONE
+root FAIL	XCU.mailx.032	1019	visual did not run the program named by VISUAL
+root FAIL	XCU.mailx.033	767	with a null LISTER, folders did not list pcbox1: 
+root FAIL	XCU.mailx.035	696	the pager was never run for a message longer than crt
+root FAIL	XCU.mailx.036	524	S 1 3 did not write message 1 to the file alice
+root FAIL	XCU.mailx.038	607	an exclamation mark was not literal without bang: Mail version 8.1.2 01/15/2001.  Type ? for help.
+root FAIL	XCU.mailx.039	794	with allnet, the same login name on another network did not match
+root FAIL	XCU.mailx.043	513	with keep set an emptied mailbox was removed
+root FAIL	XCU.mailx.047	400	start-up file 1: no diagnostic was written to standard error
+root FAIL	XCU.mailx.048	540	the default-set variable header is not listed by set: noprompt	
+root FAIL	XCU.make.008	521	-q did not run the + command
+root FAIL	XCU.make.009	455	make -t: nonzero status: Stop in /tmp/w/r/res-root/tmp/pc.VbD1Za/pcw.70399
+root FAIL	XCU.make.011	449	make: nonzero status: *** Warning in /tmp/w/r/res-root/tmp/pc.tFKSnJ/pcw.83377: "false" returned non-zero status (makefile:13)
+root FAIL	XCU.make.014	605	an up-to-date target was rebuilt through the suffix rule
+root FAIL	XCU.make.018	322	the sub-make did not run (its command was not written)
+root FAIL	XCU.make.019	528	CURDIR is '', expected '/tmp/w/r/res-root/tmp/pc.kHolhp/pcw.70020' or '/tmp/w/r/res-root/tmp/pc.kHolhp/pcw.70020'
+root FAIL	XCU.make.021	812	make lib.a: nonzero status: ar: error: unable to load 'f.o': file too small to be an archive
+root FAIL	XCU.make.022	309	internal macro values differ: caret= plus=
+root FAIL	XCU.make.031	528	t was not made after both prerequisites: a-made
+root FAIL	XCU.make.036	440	the environment CURDIR changed the macro or was not reset: macro=/nonexistent-pcdir env=/nonexistent-pcdir
+root FAIL	XCU.make.038	440	the .sh rule did not make an executable file
+root FAIL	XCU.make.039	385	e1.mk: make x.o failed: make: don't know how to make x.o
+root FAIL	XCU.make.040	314	make lib.a(m.o): nonzero status: make: don't know how to make lib.a(m.o)
+root FAIL	XCU.make.044	349	make: nonzero status: make: don't know how to make Z::=$(X)
+root FAIL	XCU.make.047	306	make all: nonzero status: *** Parse error in /tmp/w/r/res-root/tmp/pc.9Bb4tu/pcw.26764: Could not find gen.mk (makefile:4)
+root FAIL	XCU.make.051	346	make -t: nonzero status: Stop in /tmp/w/r/res-root/tmp/pc.bn3Y7n/pcw.34006
+root FAIL	XCU.more.001	4063	more: nonzero status: more: unknown: unknown terminal type
+root FAIL	XCU.more.002	372	more from standard input: nonzero status: more: unknown: unknown terminal type
+root FAIL	XCU.more.003	342	more -s: nonzero status: more: unknown: unknown terminal type
+root FAIL	XCU.more.004	385	more with MORE=-s: nonzero status: more: unknown: unknown terminal type
+root FAIL	XCU.msgfmt.001	225	msgfmt: exit status 127
+root FAIL	XCU.msgfmt.002	283	msgfmt -S: nonzero status
+root FAIL	XCU.msgfmt.003	291	msgfmt -S -o out: nonzero status: /tmp/w/modules/xcu/msgfmt/t/003-suffix.sh[20]: msgfmt: not found 
+root FAIL	XCU.msgfmt.004	229	-D sub did not find sub/a.po (status 127)
+root FAIL	XCU.msgfmt.005	294	a consistent entry was diagnosed: /tmp/w/modules/xcu/msgfmt/t/005-check.sh[46]: msgfmt: not found 
+root FAIL	XCU.msgfmt.006	195	msgfmt (fuzzy input): nonzero status
+root UNRESOLVED	XCU.newgrp.001	250	newgrp did not create the shell (status 127)
+root UNRESOLVED	XCU.newgrp.002	258	newgrp exited with status 127 before running the commands
+root FAIL	XCU.newgrp.003	293	newgrp 0 exited with status 127 and the shell did not run
+root FAIL	XCU.ngettext.001	219	form 1, n=1: exit status 127
+root FAIL	XCU.ngettext.002	302	-e plural: nonzero status
+root FAIL	XCU.ngettext.003	202	large n: nonzero status
+root UNRESOLVED	XCU.nm.001	129	setup: c17 is not available
+root UNRESOLVED	XCU.nm.002	146	setup: c17 is not available
+root UNRESOLVED	XCU.nm.003	181	setup: c17 is not available
+root UNRESOLVED	XCU.nm.004	179	setup: c17 is not available
+root UNRESOLVED	XCU.nm.005	179	setup: c17 is not available
+root UNRESOLVED	XCU.nm.006	171	setup: c17 is not available
+root UNRESOLVED	XCU.nm.007	173	setup: c17 is not available
+root UNRESOLVED	XCU.nm.009	168	setup: c17 is not available
+root FAIL	XCU.od.002	788	-t d1 of 0xff bytes is not -1
+root FAIL	XCU.od.003	307	byte 128 is not written like byte 0
+root FAIL	XCU.od.004	294	vertical tab is not \v
+root FAIL	XCU.od.005	3336	-j 0x4 -N 0x2 is wrong
+root FAIL	XCU.paste.005	823	-s did not give a lone newline for an empty file
+root FAIL	XCU.paste.008	303	-s did not process the readable file or gave status 0
+root FAIL	XCU.patch.006	787	-R of a normal patch on an unpatched file changed the file (the patch was applied forward)
+root FAIL	XCU.patch.007	884	-b with two patches for one file: t.txt.orig is not the original a b c d e
+root FAIL	XCU.patch.016	341	-o with two patches for one file: the output file is not the two versions one after the other (a b X d e, then a b X Y e)
+root FAIL	XCU.pathchk.001	181	pathchk of a creatable pathname exited with status 127
+root FAIL	XCU.pathchk.002	222	pathchk exited with status 127 for a component of 255 bytes
+root FAIL	XCU.pathchk.004	139	pathchk -p exited with status 127 for 14 bytes
+root FAIL	XCU.pathchk.005	137	pathchk -p exited with status 127 for a pathname of 239 bytes
+root FAIL	XCU.pathchk.006	129	pathchk -p exited with status 127 for a portable name
+root FAIL	XCU.pathchk.007	132	pathchk -P exited with status 127 for a good name
+root FAIL	XCU.pathchk.008	134	the diagnostic does not name the operand: /tmp/w/modules/xcu/pathchk/t/008-diagnostic-names-operand.sh[21]: pathchk: not found
+root FAIL	XCU.pathchk.009	128	pathchk -p -P exited with status 127 for a good name
+root FAIL	XCU.pax.006	471	mode field is '0100640', expected 640
+root FAIL	XCU.pax.008	518	-o times: nonzero status
+root FAIL	XCU.pax.011	382	-v listed 4 lines, expected 3
+root FAIL	XCU.pax.015	312	pax -o listopt: nonzero status
+root FAIL	XCU.pax.018	369	the default archived a symbolic link as type 'l
+root FAIL	XCU.pax.022	2227	end-of-file in an answer gave exit status 0
+root FAIL	XCU.pax.025	1480	-s with S: nonzero status: pax: Invalid replacement string option ,tgt,new,S usage: pax [-0cdjnOvz] [-E limit] [-f archive] [-G group] [-s replstr] 
+root FAIL	XCU.pax.026	943	-p p: the extracted file has mode '-rwsr-sr-x', expected -rwxr-xr-x (no set-id bits)
+root UNRESOLVED	XCU.pax.027	316	setup: pax -w failed
+root FAIL	XCU.pax.029	1936	pax -w -L -H t lists 't t/ld t/ld/x ': the last option, -H, did not decide
+root FAIL	XCU.pax.035	353	-o comment:=hello: nonzero status: pax: Unknown pax format -o option/value pair comment:=hello 
+root FAIL	XCU.pax.036	292	pax -w -x pax -o comment=one -o comment=two: nonzero status
+root UNRESOLVED	XCU.pax.037	272	setup: pax -w with a global gname failed
+root UNRESOLVED	XCU.pax.039	511	setup: pax -w -x pax failed
+root FAIL	XCU.pax.040	445	%M for f1 gives '', expected -rw-r-----
+root FAIL	XCU.pax.041	1484	pax -w -a -u with a newer file: nonzero status
+root UNRESOLVED	XCU.pax.042	347	setup: pax -w with a long path record failed
+root FAIL	XCU.pax.043	356	pax -w -x pax -o linkdata: nonzero status: pax: Invalid options format usage: pax [-0cdjnOvz] [-E limit] [-f archive] [-G group] [-s replstr] 
+root FAIL	XCU.pr.009	1317	-i changed a space that reaches no tab column
+root FAIL	XCU.pr.015	373	-i did not replace a single space reaching column 9
+root FAIL	XCU.printf.012	404	printf %2$s %1$s a b did not write what was wanted, or did not exit zero
+root FAIL	XCU.ps.002	445	heading for tty is 'TTY', expected TT
+root FAIL	XCU.ps.005	195	-p '99721,51279' did not list 51279
+root FAIL	XCU.ps.006	3120	the process 43151 of another user was not listed by -p 43151 -U 0
+root FAIL	XCU.ps.007	1180	ps -G 0 failed
+root FAIL	XCU.ps.011	173	time '0:00.06' is not [dd-]hh:mm:ss
+root FAIL	XCU.ps.016	229	ps -o 'pid=Process ID' failed
+root FAIL	XCU.read.009	220	read -d exited 1
+root FAIL	XCU.read.010	162	read -d '' exited 1
+root FAIL	XCU.read.013	185	exit 1 for a read-only variable, wanted more than 1
+root FAIL	XCU.readlink.004	185	no diagnostic for a regular file
+root FAIL	XCU.readonly.004	629	read returned 1, expected more than 1
+root FAIL	XCU.realpath.002	232	realpath -e exited with status 1
+root FAIL	XCU.realpath.004	232	realpath -E real/new exited with status 1
+root FAIL	XCU.realpath.006	230	realpath -e -E exited with status 1
+root FAIL	XCU.renice.005	165	renice wrote to standard output
+root FAIL	XCU.sed.002	509	a newline was not put between two -e pieces (got: one
+root FAIL	XCU.sed.006	195	flag i did not match case-insensitively
+root FAIL	XCU.sed.010	297	a gave the wrong result (got: 1
+root FAIL	XCU.sed.012	1004	#n not on the first line suppressed output
+root FAIL	XCU.set.005	340	got 'u 1 line u u a new  u', expected 'u 1 line 3 5 a new S u' (stderr: )
+root FAIL	XCU.sh-compound.009	232	fall through from b: got '', expected BC
+root FAIL	XCU.sh-errors.003	225	command set -Z: got '', expected after and a non-zero status
+root FAIL	XCU.sh-signals.001	323	got '', expected survived
+root FAIL	XCU.sh.008	199	status 1, expected 127
+root FAIL	XCU.sh.034	1644	the line 'ABCD' appeared 0 times, wanted 1: PCP> set -o vi
+root FAIL	XCU.sh.047	2186	the line 'viaalias' appeared 0 times, wanted 1: PCP> set -o vi
+root FAIL	XCU.sh.059	2308	the line 'persist1' appeared 0 times, wanted 1: PCP> set -o vi
+root FAIL	XCU.shift.004	204	shift x: the shell neither exited with an error nor reported a non-zero status (out='rc=0')
+root FAIL	XCU.split.006	261	xaa is wrong
+root FAIL	XCU.split.008	1348	status 0 although the suffixes were used up
+root FAIL	XCU.strings.003	442	-t o did not give (4 defgh)(15 klmn), got [ 4 defgh][ 15 klmn]
+root UNRESOLVED	XCU.strip.001	140	setup: c17 is not available
+root UNRESOLVED	XCU.strip.002	132	setup: c17 is not available
+root FAIL	XCU.tabs.002	312	tabs -T vt100 failed (status 127) without a diagnostic
+root UNRESOLVED	XCU.tabs.003	275	tabs -8 is not possible on this terminal type
+root UNRESOLVED	XCU.tabs.004	350	setting explicit tab stops is not possible on this terminal type
+root UNRESOLVED	XCU.tabs.005	262	tabs -8 is not possible on this terminal type
+root FAIL	XCU.test.003	225	test -n = gave status 2, wanted 0
+root FAIL	XCU.timeout.006	323	timeout abc true exited 1, wanted 125
+root UNRESOLVED	XCU.tr.007	60015	timed out after 60s
+root FAIL	XCU.tr.008	655	tr abcde 'a[x*]e': the fill did not stop before the rest of string2
+root FAIL	XCU.tr.010	220	tr exited 0 although it could not write its output
+root FAIL	XCU.trap.009	487	reading the list back gave ''
+root FAIL	XCU.trap.010	225	setup shell failed with 1
+root INSPECT	XCU.trap.011	225	disputed (see the assertion's note): setup shell failed with 1
+root FAIL	XCU.trap.012	222	setup shell failed with 1
+root FAIL	XCU.trap.013	220	trap "echo x": got '', expected a non-zero rc line and after
+root FAIL	XCU.trap.017	307	USR1, ignored on entry, is not in the listing
+root FAIL	XCU.trap.019	243	got 'no'
+root FAIL	XCU.ulimit.003	211	ulimit -v exited 1
+root FAIL	XCU.unalias.005	157	no diagnostic on standard error
+root FAIL	XCU.unexpand.003	376	-t 4 did not convert blanks inside the line
+root FAIL	XCU.uudecode.001	316	mode of the new file is -rw-------, expected -rw-r-----
+root FAIL	XCU.uudecode.003	344	name /dev/stdout: standard output is wrong
+root FAIL	XCU.uudecode.011	321	name '-': standard output is wrong
+root FAIL	XCU.uudecode.013	295	exit status 1
+root FAIL	XCU.uudecode.014	2062	uudecode exited with status 0 on an unwritable output file
+root FAIL	XCU.vi.002	15370	vi did not finish
+root FAIL	XCU.vi.003	1488	the edited file is not as expected: abc|end|new|xyz|
+root FAIL	XCU.vi.004	2258	after x, dd and u the file is: abc|line2|line3|
+root FAIL	XCU.vi.005	1488	the file is: ba|cd|
+root FAIL	XCU.vi.007	1539	ZZ did not write the edited file: 
+root FAIL	XCU.vi.008	15349	vi did not finish
+root FAIL	XCU.vi.010	1503	the file is: Zbcdef|one two|
+root FAIL	XCU.vi.011	15340	vi did not finish
+root FAIL	XCU.vi.012	1980	the file is: Xbeta gamma|
+root FAIL	XCU.vi.013	5650	the file is: acdefgh|abcdefh|bcdefgh|  bcdef|abcdfgh|abcdfgh|abdefgh|abcdegh|ab|bc|
+root FAIL	XCU.vi.015	2539	the file is:   1|  02|  03|  04|  L05|  L06|  L07|  L08|  L09|  L10|  L11|  L12|  L13|  L14|  L15|  L16|  L17|  L18|  L19|  L20|
+root FAIL	XCU.vi.016	2962	the file is:   F01|  L02|  L03|  G04|  B05|  L06|  L07|  L08|  C09|  D10|  L11|  L12|  L13|  L14|  L15|  L16|  L17|  L18|  L19|  L20|
+root FAIL	XCU.vi.017	3979	the file is:   J01|  L02|  L03|  I04|  L05|  L06|  L07|  L08|  H09|  L10|  G11|  L12|  L13|  L14|  L15|  E16|  L17|  L18|  L19|  K20|
+root FAIL	XCU.vi.018	2543	the file is:   L01|  M02|  N03|  L04|  Q05|  P06|  L07|  L08|  L09|  L10|  L11|  L12|  L13|  L14|  L15|  L16|  L17|  L18|  L19|  L20|
+root FAIL	XCU.vi.019	5208	the file is: -cd ef|ab-cd f|abcd ef|ab-cd e|ab-d ef|ab-cd f|b-cd ef|ab-cd ef|ab-cd |
+root FAIL	XCU.vi.021	2274	the file is: aa|b||cc|d||e|f||gg|
+root FAIL	XCU.vi.022	3131	the file is: 1|2|{|b1|2|.SH x|1|2|{|1|d2|
+root FAIL	XCU.vi.023	2779	the file is: a.  Bb!  Cc?  Dd.|Aa.  Bb!  c?  Dd.|Aa.  Bb!  c?  Dd.|Aa.  b!  Cc?  Dd.|
+root FAIL	XCU.vi.024	3859	the file is: ,b,c,d,e|a,bc,d,e|a,b,c,de|a,,c,d,e|a,b,c,,e|a,bc,d,e|ab,c,d,e|
+root FAIL	XCU.vi.025	2659	the file is: abcdef|abcdef|bcdf|abcdef|abcdef|
+root FAIL	XCU.vi.026	2238	the file is: one|two|five|abcdef|
+root FAIL	XCU.vi.027	5570	the file is: fr|Aaoo 1|bar|foo 2def|bazc|foo 3b|qux|end|
+root FAIL	XCU.vi.028	4316	the file is: oo 1f|bar|foo 2|bazgh|foo 3i|qux|end|
+root FAIL	XCU.vi.031	6039	the file is: azzbc|azzzbc|azzbc|xxabc|  zzabc|xxabc|abczz|abczz|abc|x|abc|y|y|w|z|z|abc|
+root FAIL	XCU.vi.032	9001	the file is: a b c d e f|c d e f|c d e f|e f|one |one |e|two three|b,c|,b,c|c|a,bc|a,d|xz|two|abcf|ab|def|ab d|
+root FAIL	XCU.vi.033	3528	the file is: a2|a15|a16|
+root FAIL	XCU.vi.034	7816	the file is: onetwo three|X three|one X|one X|Xne two three|X two three|X|X|Xtwo three|Xe|Xb,c|X,b,c|XXXdef|xycdef|aXc|AbC DeF|
+root FAIL	XCU.vi.035	2661	the file is: bcdef|abcf|a|cdef|
+root FAIL	XCU.vi.036	2706	the file is: aa|bb|cc|cc|cc|dd|ee|dd|ee|xy zw|xxxxyzxyzxyz|
+root FAIL	XCU.vi.037	15367	vi did not finish
+root FAIL	XCU.vi.038	1878	the file is: a5|a3|a2|a1|4|a3|a4|a6|
+root FAIL	XCU.vi.039	4796	the file is: a b c d e f|e f|def|X X|xxabc|abcxx|ABc|XXcd|p q r|s|
+root FAIL	XCU.vi.040	2093	the file is: a5|a3|a4|a6|
+root FAIL	XCU.vi.042	15347	vi did not finish
+root FAIL	XCU.vi.043	15403	vi did not finish
+root FAIL	XCU.vi.044	3091	the file is: a|b|  c|    d|  e|f|  g|    i|
+root FAIL	XCU.vi.045	1544	the file is: k|m|
+root FAIL	XCU.vi.046	3567	the file is: abcfoo X| bar X|foo X|X|fX|xy|
+root FAIL	XCU.vi.047	3180	the file is:     a|    foo||  X|X|    b|      X|    c|    d|
+root FAIL	XCU.vi.048	3944	the file is: start|good morning|xgm y|gm z|hello world|
+root FAIL	XCU.vi.049	2746	the file is: two|three|
+root FAIL	XCU.vi.050	2727	the file is: sh: f: not found %|two %|
+root FAIL	XCU.vi.051	1880	the file is:  |b|sh1|
+root FAIL	XCU.vi.052	1927	file out is: ff|
+root FAIL	XCU.vi.053	2764	the file is: ff|
+root FAIL	XCU.vi.054	3132	the file is: fF|
+root FAIL	XCU.vi.055	2691	the file is: |  bc|a(bc|abcef|
+root FAIL	XCU.vi.056	15378	vi did not finish
+root FAIL	XCU.vi.057	3117	the file is: 01|q02|q03|q04|q05|06|07|q08|09|q10|q11|12|
+root FAIL	XCU.vi.058	1945	the file is: a b|c d|e|f g.|h|
+root FAIL	XCU.vi.059	15352	vi did not finish
+root FAIL	XCU.vi.060	1831	the file is: /b/Ybc|
+root FAIL	XCU.vi.061	1887	the file is: abc||
+root FAIL	XCU.vi.062	15357	vi did not finish
+root FAIL	XCU.vi.064	3566	the file is: zdd|
+root FAIL	XCU.vi.065	1828	the file is: ab|
+root FAIL	XCU.vi.066	1834	the file is: axy|zbcd|
+root FAIL	XCU.xargs.008	490	xargs with a very large -s failed
+root FAIL	XCU.xargs.009	322	with -x the status was 0, expected 1-125
+root FAIL	XCU.xargs.016	431	-s 15 wrote 'aaaa bbbb
+root FAIL	XSH.2.1-use-of-functions.004	47	rand() after the same srand() gave 12211215 and 265265390
+root UNRESOLVED	XSH.2.10-sockets.016	45	setsockopt(IPV6_V6ONLY) failed: EINVAL
+root UNRESOLVED	XSH.2.10-sockets.017	56	setsockopt(IPV6_V6ONLY) failed: EINVAL
+root UNRESOLVED	XSH.2.10-sockets.019	35	setsockopt(IPV6_V6ONLY) failed: EINVAL
+root FAIL	XSH.2.11-data-types.002	0	does not compile: use of undeclared identifier 'reclen_t'
+root INSPECT	XSH.2.11-data-types.004	80	disputed (see the assertion's note): the smallest id_t, 0, is above the smallest pid_t, -2147483648
+root FAIL	XSH.2.2-compilation-environment.002	0	does not compile: 'aio.h' file not found
+root FAIL	XSH.2.2-compilation-environment.003	0	does not compile: 'wordexp.h' file not found
+root FAIL	XSH.2.2-compilation-environment.004	0	does not compile: 'aio.h' file not found
+root UNRESOLVED	XSH.sigtimedwait.001	0	blocked by XSH.sigqueue.001 (UNINITIATED)
+root UNRESOLVED	XSH.2.4.2-realtime-signals.001	0	blocked by XSH.sigtimedwait.005 (UNINITIATED)
+root UNRESOLVED	XSH.2.4.2-realtime-signals.004	0	blocked by XSH.sigqueue.001 (UNINITIATED)
+root UNRESOLVED	XSH.2.4.2-realtime-signals.005	0	blocked by XSH.sigqueue.001 (UNINITIATED)
+root UNRESOLVED	XSH.2.4.3-signal-actions.010	0	blocked by XSH.sigqueue.001 (UNINITIATED)
+root FAIL	XSH.2.4.3-signal-actions.013	222	the main thread kept running after SIGSTOP went to the other thread
+root FAIL	XSH.2.4.3-signal-actions.019	63	si_code is 0, expected CLD_EXITED (1)
+root FAIL	XSH.2.5.2-stream-orientation.006	216	the first character read is 195, not the one character (233) of the encoding in force at orientation
+root UNRESOLVED	XSH.2.5.2-stream-orientation.007	0	blocked by XSH.2.5.2-stream-orientation.006 (FAIL)
+root FAIL	XSH.2.9-threads.005	51	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.2.9-threads.007	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.2.9-threads.014	41	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.2.9-threads.015	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.2.9-threads.024	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.2.9-threads.025	94	the thread was canceled in gmtime_r(), which is not a cancellation point
+root FAIL	XSH.2.9-threads.026	220	after pthread_exit(): the cancelability state seen in the cleanup handler was not DISABLE
+root FAIL	XSH._Exit.014	67	si_status 0, expected 0x1234
+root UNRESOLVED	XSH.access.018	44	<fcntl.h> does not define O_SEARCH
+root UNRESOLVED	XSH.alarm.001	0	blocked by XSH.sigtimedwait.002 (UNINITIATED)
+root UNRESOLVED	XSH.alarm.002	0	blocked by XSH.sigtimedwait.002 (UNINITIATED)
+root UNRESOLVED	XSH.alarm.003	0	blocked by XSH.sigtimedwait.002 (UNINITIATED)
+root UNRESOLVED	XSH.alarm.004	0	blocked by XSH.sigtimedwait.002 (UNINITIATED)
+root INSPECT	XSH.atan2.004	53	disputed (see the assertion's note): atan2(0.0, -1.0) [float] returned 3.14159, expected 3.14159265358979323846264338327950288
+root FAIL	XSH.atexit.003	370	the child reported "0T", expected "0TH" (the function runs once, after the last thread ended)
+root FAIL	XSH.bind.018	46	bind() with a null address gave EFAULT, expected EDESTADDRREQ or EISDIR
+root FAIL	XSH.call_once.001	49	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.call_once.002	60	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.call_once.003	49	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.call_once.004	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.call_once.005	38	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.catgets.003	102	message 1 is "tab here nl\bs", expected "tab here nl\bsA"
+root FAIL	XSH.catgets.004	99	an empty message gave the default string
+root FAIL	XSH.catopen.004	35	errno 0, expected ENOENT
+root UNRESOLVED	XSH.chmod.019	42	<fcntl.h> does not define O_SEARCH
+root FAIL	XSH.chown.004	6051	st_ctim did not move in 3 s of chown() calls
+root INSPECT	XSH.chown.008	44	disputed (see the assertion's note): chown(-1, -1) of another user's file succeeded
+root UNRESOLVED	XSH.chown.021	47	<fcntl.h> does not define O_SEARCH
+root UNRESOLVED	XSH.clock_getcpuclockid.003	52	permission to read the child's CPU-time clock was refused
+root UNRESOLVED	XSH.close.007	0	blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED	XSH.close.009	0	blocked by XBD.unistd.h.001 (FAIL)
+root UNRESOLVED	XSH.close.010	0	blocked by XBD.unistd.h.001 (FAIL)
+root FAIL	XSH.cnd_init.001	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root INSPECT	XSH.cnd_init.002	46	disputed (see the assertion's note): __STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.cnd_init.003	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.cnd_signal.001	37	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.cnd_signal.002	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.cnd_signal.003	50	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.cnd_signal.004	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.cnd_wait.001	36	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.cnd_wait.002	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.cnd_wait.003	64	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.cnd_wait.004	57	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.cnd_wait.005	49	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.cnd_wait.006	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.cnd_wait.007	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.cnd_wait.008	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root UNRESOLVED	XSH.confstr.006	43	<unistd.h> does not define _CS_V8_ENV
+root FAIL	XSH.connect.020	61	connect() with AF_UNSPEC failed: EAFNOSUPPORT
+root FAIL	XSH.cosh.005	46	cosh(big) [double]: exception FE_OVERFLOW was not raised
+root UNRESOLVED	XSH.ctermid.004	50	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root FAIL	XSH.duplocale.001	138	duplocale() returned the handle of the original
+root FAIL	XSH.duplocale.005	106	copy of the global locale: YESEXPR is "^[Yy]"
+root FAIL	XSH.exec.010	80	the new image reports: FD_CLOFORK is no longer set
+root FAIL	XSH.exec.026	702	the new image reports: process times 3, were 30 before exec
+root FAIL	XSH.exec.027	387	the new image reports: process CPU time 53 ms, was 301 ms before exec
+root UNRESOLVED	XSH.exec.056	0	blocked by XBD.fcntl.h.006 (FAIL)
+root FAIL	XSH.exit.011	48	si_code 0, expected CLD_EXITED
+root FAIL	XSH.exit.012	48	si_status 0, expected 0x1234
+root FAIL	XSH.exp.005	37	exp(big) [long double]: exception FE_OVERFLOW was not raised
+root FAIL	XSH.exp2.005	47	exp2(big) [double]: exception FE_OVERFLOW was not raised
+root FAIL	XSH.expm1.005	40	expm1(big) [double]: exception FE_OVERFLOW was not raised
+root UNRESOLVED	XSH.fchmod.007	40	<fcntl.h> does not define O_SEARCH
+root FAIL	XSH.fchown.005	6053	st_ctim did not move in 3 s of fchown() calls
+root FAIL	XSH.fclose.011	66	the offset is 2, expected the stream's position 1
+root FAIL	XSH.fclose.012	55	fclose() set errno 0, expected ENOSPC
+root UNRESOLVED	XSH.fcntl.016	0	blocked by XBD.fcntl.h.008 (FAIL)
+root UNRESOLVED	XSH.fcntl.037	0	blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED	XSH.fcntl.038	0	blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED	XSH.fcntl.039	0	blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED	XSH.fcntl.040	0	blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED	XSH.fcntl.041	0	blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED	XSH.fcntl.042	0	blocked by XBD.fcntl.h.006 (FAIL)
+root UNRESOLVED	XSH.fcntl.043	0	blocked by XBD.fcntl.h.006 (FAIL)
+root FAIL	XSH.fflush.005	95	the descriptor's offset is 2, expected 1
+root FAIL	XSH.fflush.013	44	fflush() set errno 0, expected ENOSPC
+root FAIL	XSH.fgetpos.004	47	fgetpos() with the descriptor closed returned 0
+root FAIL	XSH.fgets.006	49	fgets() returned s although the read after "ab" could not be done without waiting
+root FAIL	XSH.fileno.003	37	fileno() of an fmemopen() stream set errno to 0, expected EBADF
+root FAIL	XSH.fmemopen.008	43	the initial end position is 8, expected 0
+root FAIL	XSH.fmemopen.013	36	"a": fseek(-1, 2) failed: EOVERFLOW
+root FAIL	XSH.fmemopen.021	47	"w": the buffer holds "abc\000", expected "abcd"
+root FAIL	XSH.fnmatch.010	46	fnmatch("[[.a.]b]", "a", 0) returned 1, expected 0
+root FAIL	XSH.fnmatch.021	46	fnmatch("[[:lower:]]", "A", 0x10) returned 1, expected 0
+root FAIL	XSH.fnmatch.022	44	fnmatch("[[:lower:]]", "A", 0x10) returned 1, expected 0
+root FAIL	XSH.fpathconf.005	40	_POSIX_ASYNC_IO is -1 (the option on no file) but pathconf(_PC_ASYNC_IO) on a regular file returned 0
+root UNRESOLVED	XSH.fpathconf.007	41	no controlling terminal: open("/dev/tty") failed with ENXIO
+root FAIL	XSH.fprintf.024	281	killed by signal 6 during the test
+root FAIL	XSH.fprintf.030	50	%.1a of 0x1.0800000001p+0 gave "0x1.0p+0", which is not a nearest value
+root FAIL	XSH.freelocale.002	46	the second object after freeing the first: YESEXPR is "^[Yy]"
+root FAIL	XSH.freopen.011	49	the stream's descriptor is 6 after freopen(); the lowest available was 4
+root FAIL	XSH.fscanf.005	47	sscanf("10 20", "%2$d %1$d") returned 1, expected 2
+root FAIL	XSH.fscanf.013	48	the next fgetc() returned 0x2d, expected 'x' (the byte after the item "-")
+root FAIL	XSH.fscanf.014	49	sscanf("100ergs", "%f%n") returned 1 (stored 100), expected 0
+root FAIL	XSH.fscanf.015	42	sscanf("0xg", "%x%n") returned 1, expected 0
+root FAIL	XSH.fscanf.019	48	sscanf(" \t%7", "%%%d") returned 0 and -1, expected 1 and 7
+root FAIL	XSH.fscanf.028	36	"%a" on "0x1.8p1" returned 1 and 0, expected 1 and 3
+root FAIL	XSH.fscanf.029	36	"%A" on "0x1p1" returned 1 and 0, expected 1 and 2
+root FAIL	XSH.fscanf.030	51	"%f" on "inf" returned 0 and 0
+root FAIL	XSH.fscanf.037	35	sscanf() returned 0, expected 3
+root FAIL	XSH.fscanf.038	47	sscanf() returned 0, expected 2
+root FAIL	XSH.fscanf.043	47	sscanf("1", "%*d%d") returned -1, expected 0 (the %*d conversion completed)
+root INSPECT	XSH.fseek.014	44	disputed (see the assertion's note): fseek() past the end failed with EOVERFLOW, expected EINVAL
+root INSPECT	XSH.fseek.016	45	disputed (see the assertion's note): fseeko() beyond the largest off_t failed with EINVAL, expected EOVERFLOW
+root FAIL	XSH.fstat.006	51	read/write bits 0600, created 0640
+root UNRESOLVED	XSH.fstatat.013	61	<fcntl.h> does not define O_SEARCH
+root FAIL	XSH.ftell.006	59	ftell() with the descriptor closed returned 1
+root FAIL	XSH.ftruncate.007	40	touching the discarded page did not raise SIGBUS (status 0)
+root FAIL	XSH.futimens.012	60	both UTIME_OMIT on a file of another user: check 10 went wrong
+root FAIL	XSH.futimens.021	49	futimens() permissions: check 13 went wrong
+root UNRESOLVED	XSH.futimens.025	49	<fcntl.h> does not define O_SEARCH
+root FAIL	XSH.fwprintf.006	298	killed by signal 6 during the test
+root FAIL	XSH.fwprintf.014	44	swprintf() with n 0: errno is EINVAL, expected EOVERFLOW
+root FAIL	XSH.fwscanf.017	57	string form: %mls returned 0, expected 1 and an allocated "hello"
+root FAIL	XSH.fwscanf.020	45	string form: returned 1 with a = 1 and b = 0, expected 2, 2 and 1
+root FAIL	XSH.getaddrinfo.028	40	a service name with AI_NUMERICSERV gave -8 (service not supported for ai_socktype), expected EAI_NONAME
+root INSPECT	XSH.getcwd.008	66	disputed (see the assertion's note): getcwd() at depth 1438 bytes failed: ENAMETOOLONG
+root UNRESOLVED	XSH.getdelim.008	48	RLIMIT_AS is not defined: no way to limit the memory here
+root FAIL	XSH.getgrgid.005	48	*result is not null after ERANGE
+root FAIL	XSH.getgrgid.006	48	*result is not null after ERANGE (size 1)
+root FAIL	XSH.getgrnam.005	45	*result is not null after ERANGE
+root FAIL	XSH.getgrnam.006	40	*result is not null after ERANGE (size 1)
+root FAIL	XSH.getnameinfo.004	44	a service buffer of 5 bytes for a 5-character text gave -11 (system error)
+root FAIL	XSH.getnameinfo.006	45	node length 0 gave -14 (argument buffer overflow)
+root FAIL	XSH.getnameinfo.008	46	no node and no service gave 0 (no error), expected EAI_NONAME
+root FAIL	XSH.getnameinfo.009	44	an unknown family gave -11 (system error), expected EAI_FAMILY
+root FAIL	XSH.getnameinfo.010	43	a length holding only the family gave 0 (no error), expected EAI_FAMILY
+root FAIL	XSH.getpeername.008	46	getpeername() after SHUT_RDWR gave success, expected EINVAL
+root FAIL	XSH.getsockopt.017	44	the default IPV6_V6ONLY is 1, expected 0
+root FAIL	XSH.glob.006	50	name 0 is "no?x", expected "no\?x"
+root FAIL	XSH.glob.016	59	glob("a[b/c]d") returned -3, expected 0
+root FAIL	XSH.glob.029	62	glob(GLOB_ERR) with a null errfunc did not return GLOB_ABORTED
+root FAIL	XSH.gmtime.005	46	gmtime(largest time_t) set errno to 0, expected EOVERFLOW
+root FAIL	XSH.gmtime.006	38	gmtime_r(largest time_t) set errno to 0, expected EOVERFLOW
+root FAIL	XSH.isgreater.008	51	islessgreater(a[k++], 5) of type double evaluated its first argument 3 times (result 1)
+root UNRESOLVED	XSH.kill.005	0	skipped: needs kill_uid, which this system or run does not provide
+root UNRESOLVED	XSH.kill.012	0	skipped: needs kill_uid, which this system or run does not provide
+root FAIL	XSH.ldexp.002	47	ldexpl: overflow, overflow exception not raised
+root FAIL	XSH.lgamma.005	39	lgamma(0.0) [double]: exception FE_DIVBYZERO was not raised
+root UNRESOLVED	XSH.unlink.021	44	<fcntl.h> does not define O_SEARCH
+root UNRESOLVED	XSH.link.021	37	<fcntl.h> does not define O_SEARCH
+root FAIL	XSH.listen.003	52	listen() on an unbound AF_UNIX socket failed with EINVAL, expected success or EDESTADDRREQ
+root FAIL	XSH.localtime.010	49	localtime(largest time_t) set errno to 0, expected EOVERFLOW
+root FAIL	XSH.localtime.011	48	localtime_r(largest time_t) set errno to 0, expected EOVERFLOW
+root FAIL	XSH.log.005	41	log(0.0) [float]: exception FE_DIVBYZERO was not raised
+root FAIL	XSH.log.006	47	log(-1.0) [long double]: exception FE_INVALID was not raised
+root FAIL	XSH.log10.005	45	log10(0.0) [float]: exception FE_DIVBYZERO was not raised
+root FAIL	XSH.log1p.004	48	log1p(-1.0) [long double]: exception FE_DIVBYZERO was not raised
+root FAIL	XSH.log1p.005	52	log1p(-2.0) [long double]: exception FE_INVALID was not raised
+root FAIL	XSH.log2.005	36	log2(0.0) [double]: exception FE_DIVBYZERO was not raised
+root FAIL	XSH.log2.006	39	log2(-1.0) [long double]: exception FE_INVALID was not raised
+root INSPECT	XSH.lseek.011	47	disputed (see the assertion's note): lseek(fd, <largest off_t>, SEEK_CUR) from offset 1: errno EINVAL, expected EOVERFLOW
+root UNRESOLVED	XSH.lseek.012	0	blocked by XBD.unistd.h.002 (FAIL)
+root UNRESOLVED	XSH.lseek.013	0	blocked by XBD.unistd.h.002 (FAIL)
+root UNRESOLVED	XSH.lseek.014	0	blocked by XBD.unistd.h.002 (FAIL)
+root FAIL	XSH.mblen.004	131	mblen() of a two-byte character with n 2 returned -1, expected 2
+root UNRESOLVED	XSH.mkdir.018	47	<fcntl.h> does not define O_SEARCH
+root UNRESOLVED	XSH.mkfifo.016	46	<fcntl.h> does not define O_SEARCH
+root FAIL	XSH.mktime.009	57	mktime(tm_year INT_MAX, tm_mon 12, tm_mday 1) set errno to 0, expected EOVERFLOW
+root FAIL	XSH.mmap.008	53	mmap(flags 0) returned 0x99bbb32000, not MAP_FAILED
+root FAIL	XSH.mprotect.006	44	mprotect() over three pages whose middle one is unmapped: returned 0, expected -1 with ENOMEM
+root FAIL	XSH.mtx_init.001	52	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_init.002	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_init.003	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_init.004	51	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_lock.001	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_lock.002	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_lock.003	38	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_lock.004	41	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_lock.005	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_lock.006	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_lock.007	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_lock.008	40	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_lock.009	89	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_lock.010	49	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_lock.011	54	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.mtx_lock.012	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.munmap.003	36	munmap of a page with no mapping returned -1 (EINVAL)
+root FAIL	XSH.munmap.005	40	munmap(mapped page, 0): returned 0, expected -1 with EINVAL
+root FAIL	XSH.nan.002	42	nan("1") and strtod("NAN(1)") differ in representation
+root FAIL	XSH.nan.003	46	nan("a b") and strtod("NAN") differ in representation
+root FAIL	XSH.nanosleep.003	364	*rmtp holds 4679 ms, but at most 315 ms of the 5 s passed in the call
+root FAIL	XSH.nanosleep.004	365	the object holds 4679 ms, but at most 313 ms of the 5 s passed in the call
+root FAIL	XSH.newlocale.001	37	C: YESEXPR is "^[Yy]"
+root FAIL	XSH.newlocale.003	135	a category not in the mask: YESEXPR is "^[Yy]", NOEXPR "^[Nn]"
+root UNRESOLVED	XSH.newlocale.005	70	the system accepts the made-up locale name pc_no_such_locale_x7q
+root UNRESOLVED	XSH.newlocale.006	152	the system accepts the made-up locale name pc_no_such_locale_x7q
+root UNRESOLVED	XSH.newlocale.008	48	the system accepts the made-up locale name pc_no_such_locale_x7q
+root FAIL	XSH.nextafter.008	48	nexttoward(1, 1 + LDBL_EPSILON) returned 0.99999999999999988898
+root FAIL	XSH.nl_langinfo.004	43	YESEXPR is "^[Yy]"
+root FAIL	XSH.nl_langinfo.008	42	object for C: YESEXPR is "^[Yy]"
+root FAIL	XSH.nl_langinfo.009	138	object for C, global locale changed: YESEXPR is "^[Yy]"
+root FAIL	XSH.nl_langinfo.011	137	LC_CTYPE set: YESEXPR is "^[Yy]", NOEXPR "^[Nn]"
+root UNRESOLVED	XSH.open.050	0	blocked by XBD.fcntl.h.007 (FAIL)
+root UNRESOLVED	XSH.opendir.012	41	<fcntl.h> does not define O_SEARCH
+root FAIL	XSH.perror.007	47	the error indicator of stderr is not set after a failed write
+root FAIL	XSH.poll.027	49	poll: POLLERR is not set in revents (0x10) for a pipe without a reader
+root FAIL	XSH.poll.028	48	poll: POLLERR is not set in revents (0x10) for a pipe without a reader
+root FAIL	XSH.popen.015	68	popen("-pcdash") yielded nothing
+root FAIL	XSH.posix_spawn.014	97	the commands ran: the file was handed to sh
+root UNRESOLVED	XSH.posix_spawn.043	93	<spawn.h> does not define POSIX_SPAWN_SETSID
+root FAIL	XSH.posix_spawn_file_actions_addclose.013	48	addopen(OPEN_MAX) returned 0, expected EBADF
+root FAIL	XSH.posix_spawn_file_actions_adddup2.007	42	adddup2(OPEN_MAX, fd) returned 0, expected EBADF
+root FAIL	XSH.pow.012	50	pow(2.0, big) [long double]: exception FE_OVERFLOW was not raised
+root FAIL	XSH.psiginfo.005	45	the error indicator of stderr is not set
+root FAIL	XSH.pthread_cancel.005	101	in the cleanup handler the cancelability state was PTHREAD_CANCEL_ENABLE, not PTHREAD_CANCEL_DISABLE
+root FAIL	XSH.pthread_exit.005	392	the atexit() handler did not run (output "W")
+root FAIL	XSH.pthread_exit.006	367	the atexit() handler did not run (output "W")
+root FAIL	XSH.pthread_kill.004	377	pthread_kill() of a terminated, unjoined thread returned ESRCH
+root UNRESOLVED	XSH.pthread_once.003	20167	the test stalled for 20 s at step 3 (not the cancellation)
+root FAIL	XSH.pthread_spin_init.001	48	after init: pthread_spin_trylock() of the held lock returned EDEADLK, expected EBUSY
+root FAIL	XSH.pthread_spin_lock.002	53	pthread_spin_trylock() by the holder returned EDEADLK, expected EBUSY
+root FAIL	XSH.rand.002	54	seed 1: the sequence was not repeated
+root FAIL	XSH.rand.003	50	value 0 differs: 276694062 without srand(), 834097935 after srand(1)
+root UNRESOLVED	XSH.readlink.018	48	<fcntl.h> does not define O_SEARCH
+root FAIL	XSH.readlink.019	48	the link's st_atim is still 1000000000 after readlink()
+root FAIL	XSH.recv.017	43	the first datagram received was 1 byte(s) "c", expected the one from the peer
+root FAIL	XSH.recvmsg.010	44	recvmsg() with msg_iovlen 0: returned 0, expected -1 with EMSGSIZE
+root FAIL	XSH.recvmsg.023	49	MSG_CTRUNC is not set in msg_flags (0x0) although the control data did not fit
+root FAIL	XSH.regcomp.014	41	regcomp("[--@]") returned 11
+root FAIL	XSH.regcomp.017	51	case 5: "\(a\(b\)*\)*\2" on "abab" should not match, got 0 [0,4]
+root FAIL	XSH.regcomp.027	74	case 6: "\(a\)\1" on "aA" should match, got 1
+root FAIL	XSH.regcomp.033	41	case 1: regcomp(".*?c") returned 13
+root FAIL	XSH.rename.012	50	rename("e", "d2/."): errno EISDIR, expected EINVAL
+root FAIL	XSH.rename.013	52	rename("f", "nf/"): errno ENOENT, expected ENOTDIR
+root FAIL	XSH.rename.014	47	rename(d, "nd/") succeeded
+root UNRESOLVED	XSH.rename.027	44	<fcntl.h> does not define O_SEARCH
+root UNRESOLVED	XSH.rewind.003	45	rewind() with output pending on a closed descriptor did not fail
+root FAIL	XSH.rewind.004	47	rewind() with output pending on a closed descriptor left errno 0, expected EBADF
+root FAIL	XSH.rewind.008	41	rewind() beyond the file size limit left errno 0
+root FAIL	XSH.rewind.009	58	rewind() left errno 0, expected EPIPE or ESPIPE
+root FAIL	XSH.rewind.010	72	rewind() left errno 0, expected EAGAIN or ESPIPE
+root FAIL	XSH.scalbn.002	63	scalbnl: overflow, overflow exception not raised
+root FAIL	XSH.scalbn.011	38	scalblnl: overflow, overflow exception not raised
+root FAIL	XSH.select.009	39	select returned 2 (errno -), expected 3
+root FAIL	XSH.select.012	42	select with nfds FD_SETSIZE+1 returned 2, expected -1
+root INSPECT	XSH.sendmsg.003	45	disputed (see the assertion's note): sendmsg() with msg_iovlen 0: returned 0, expected -1 with EMSGSIZE
+root FAIL	XSH.setegid.004	57	setegid(<effective ID, neither real nor saved>) without privileges returned 0, expected -1
+root FAIL	XSH.setegid.005	90	setegid((gid_t)-1) returned 0, expected -1
+root FAIL	XSH.seteuid.004	47	seteuid(<effective ID, neither real nor saved>) without privileges returned 0, expected -1
+root FAIL	XSH.seteuid.005	55	seteuid((uid_t)-1) returned 0, expected -1
+root FAIL	XSH.setgid.004	60	setgid(<effective ID, neither real nor saved>) returned 0, expected -1
+root FAIL	XSH.setgid.005	60	setgid((gid_t)-1) returned 0, expected -1
+root FAIL	XSH.setlocale.001	46	initial locale: YESEXPR is "^[Yy]"
+root FAIL	XSH.setlocale.002	133	setlocale(6, "C"): YESEXPR is "^[Yy]", NOEXPR "^[Nn]"
+root FAIL	XSH.setlocale.004	182	an untouched category: YESEXPR is "^[Yy]", NOEXPR "^[Nn]"
+root FAIL	XSH.setlocale.005	111	after "C": YESEXPR is "^[Yy]", NOEXPR "^[Nn]"
+root UNRESOLVED	XSH.setlocale.006	126	the system accepts the made-up locale name pc_no_such_locale_x7q
+root UNRESOLVED	XSH.setlocale.007	148	the system accepts the made-up locale name pc_no_such_locale_x7q
+root UNRESOLVED	XSH.setlocale.008	128	the system accepts the made-up locale name pc_no_such_locale_x7q
+root FAIL	XSH.setpgid.010	58	setpgid(<grandchild>, <its ID>): returned 0, expected -1 with ESRCH
+root FAIL	XSH.setsockopt.006	45	setting SO_DONTROUTE failed with EOPNOTSUPP
+root FAIL	XSH.setsockopt.019	74	setsockopt on a socket shut down in both directions returned 0
+root FAIL	XSH.setsockopt.021	56	setting IPV6_V6ONLY to 0 failed: EINVAL
+root FAIL	XSH.setuid.004	56	setuid(<effective ID, neither real nor saved>) returned 0, expected -1
+root FAIL	XSH.setuid.005	56	setuid((uid_t)-1) returned 0, expected -1
+root FAIL	XSH.shm_open.002	46	under umask(027), mode 0666 gave read/write permission bits 0600
+root FAIL	XSH.shm_open.008	52	the object's read/write permission bits are now 0600, not 0640
+root INSPECT	XSH.shm_unlink.005	60	disputed (see the assertion's note): shm_unlink() refused to another user failed with EPERM, not EACCES
+root FAIL	XSH.shutdown.008	45	shutdown() on a fresh AF_UNIX socket gave success, expected ENOTCONN
+root UNRESOLVED	XSH.sigaddset.002	44	<signal.h> does not define SIGRTMIN and SIGRTMAX
+root UNRESOLVED	XSH.sigdelset.002	52	<signal.h> does not define SIGRTMIN and SIGRTMAX
+root UNRESOLVED	XSH.sigemptyset.002	45	<signal.h> does not define SIGRTMIN and SIGRTMAX
+root UNRESOLVED	XSH.sigfillset.002	45	<signal.h> does not define SIGRTMIN and SIGRTMAX
+root UNRESOLVED	XSH.sigwait.003	0	blocked by XSH.sigqueue.001 (UNINITIATED)
+root FAIL	XSH.socket.011	45	socket(2147483647, SOCK_STREAM, 0) failed with EPROTONOSUPPORT, expected EAFNOSUPPORT
+root FAIL	XSH.socketpair.009	40	socketpair(2147483647, ...) failed with EPROTONOSUPPORT, expected EAFNOSUPPORT
+root FAIL	XSH.strftime.007	49	strftime("%+4Y") for 1970-01-02 12:00:00 (wday 5, yday 1) gave "Fri Jan  2 12:00:00 UTC 19704Y" (return 30), expected "1970"
+root FAIL	XSH.strftime.014	46	strftime() with maxsize 10 for 10 bytes set errno to 0, expected ERANGE
+root FAIL	XSH.strtod.005	37	strtod("nan(!)") left the end pointer at offset 6
+root UNRESOLVED	XSH.symlink.020	35	<fcntl.h> does not define O_SEARCH
+root FAIL	XSH.sysconf.001	46	sysconf(_SC_RTSIG_MAX) failed with EINVAL: the name is not supported
+root FAIL	XSH.sysconf.002	58	sysconf(_SC_RTSIG_MAX) returned -1 and changed errno to EINVAL: neither "no limit" (errno unchanged) nor a value
+root FAIL	XSH.sysconf.005	43	sysconf(_SC_VERSION) returned 200809, expected 202405
+root FAIL	XSH.sysconf.006	46	sysconf(_SC_ASYNCHRONOUS_IO) returned -1: the option is mandatory
+root FAIL	XSH.sysconf.007	48	sysconf(_SC_BARRIERS) returned 200112, expected 202405
+root FAIL	XSH.sysconf.009	48	sysconf(_SC_STREAM_MAX) returned 128, and 127 after the RLIMIT_STACK and RLIMIT_NOFILE soft limits changed
+root UNRESOLVED	XSH.sysconf.015	34	<unistd.h> lacks _SC_NSIG or <limits.h> lacks NSIG_MAX
+root FAIL	XSH.system.006	68	system("-pcdash") gave exit status 1, expected 31
+root UNRESOLVED	XSH.tcdrain.006	46	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcdrain.007	54	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcdrain.008	52	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcflow.008	55	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcflow.009	45	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcflow.010	57	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcflush.009	46	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcflush.010	56	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcflush.011	55	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcgetattr.004	117	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root FAIL	XSH.tcgetpgrp.002	44	tcgetpgrp() of the pipe read end returned 0, errno 0
+root UNRESOLVED	XSH.tcgetpgrp.003	57	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcgetpgrp.004	54	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcgetpgrp.005	53	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root FAIL	XSH.tcgetpgrp.006	53	tcgetpgrp() returned 100000, errno 0, expected -1 with ENOTTY
+root UNRESOLVED	XSH.tcgetpgrp.007	56	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcgetsid.001	56	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcgetsid.002	53	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcgetsid.003	55	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcgetsid.004	47	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcgetsid.006	54	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root FAIL	XSH.tcsendbreak.001	40	tcsendbreak() returned -1, errno ENOTTY
+root FAIL	XSH.tcsendbreak.002	49	tcsendbreak() returned -1, errno ENOTTY
+root UNRESOLVED	XSH.tcsendbreak.005	45	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcsendbreak.006	45	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcsendbreak.007	46	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcsetattr.011	69	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcsetattr.012	54	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcsetattr.013	57	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root FAIL	XSH.tcsetpgrp.002	47	tcsetpgrp() of the pipe read end returned 0, errno 0
+root UNRESOLVED	XSH.tcsetpgrp.003	75	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcsetpgrp.004	56	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcsetpgrp.005	60	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcsetpgrp.006	46	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcsetpgrp.007	46	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcsetpgrp.009	52	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root UNRESOLVED	XSH.tcsetpgrp.010	46	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+root FAIL	XSH.tgamma.010	48	tgamma(maxexp) [double]: exception FE_OVERFLOW was not raised
+root FAIL	XSH.thrd_create.001	51	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_create.002	63	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_create.003	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_create.004	69	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_create.005	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_create.007	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_current.001	63	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_current.002	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_detach.001	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_detach.002	41	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_equal.001	44	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_equal.002	43	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_exit.001	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_exit.002	54	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_exit.003	38	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_exit.004	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_exit.005	50	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_exit.006	40	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_join.001	38	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_join.002	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_join.003	38	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_join.004	49	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_join.005	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_sleep.001	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_sleep.002	49	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_sleep.003	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_sleep.004	41	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.thrd_yield.001	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.truncate.012	45	truncate("fifo", 0): returned 0, expected -1 with EINVAL
+root FAIL	XSH.tss_create.001	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.tss_create.002	38	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.tss_create.003	50	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.tss_create.004	43	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.tss_create.005	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.tss_delete.001	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.tss_delete.002	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.tss_delete.003	36	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.tss_delete.004	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.tss_get.001	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.tss_get.002	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.tss_get.003	44	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.tss_get.004	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.tss_get.005	36	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+root FAIL	XSH.ungetc.011	39	after fseek(0, SEEK_CUR) the read gave 0x32, expected '1'
+root FAIL	XSH.ungetc.013	50	the file holds "0W23", expected "W123"
+root FAIL	XSH.ungetwc.004	49	after fseek() the read returned 0x5a, expected L'a' (the pushed-back character must be discarded)
+root FAIL	XSH.ungetwc.005	48	after fsetpos() the read returned 0x5a, expected L'a' (the pushed-back character must be discarded)
+root FAIL	XSH.uselocale.001	49	after querying: YESEXPR is "^[Yy]"
+root FAIL	XSH.vfscanf.004	36	vsscanf("10 20", "%2$d %1$d") returned 1, expected 2
+root FAIL	XSH.vfwprintf.001	309	killed by signal 6 during the test
+root FAIL	XSH.vfwscanf.006	50	string form: returned 1 with a = 1 and b = 0, expected 2, 2 and 1
+root FAIL	XSH.wait.019	83	SIGCHLD is still pending after wait() reported the only child
+root FAIL	XSH.waitid.015	41	a terminated child was reported to WSTOPPED (si_pid 6458, si_code 5)
+root FAIL	XSH.wcsftime.006	46	wcsftime("%010F") returned 4, expected 10
+root FAIL	XSH.wcsftime.007	43	wcsftime("%V") produced "53", expected "52"
+root FAIL	XSH.wcstod.002	50	wcstod("0x1p4") returned 0, expected 16
+root FAIL	XSH.wcstod.003	65	wcstod("-0x1p1") returned -0, expected -2
+root FAIL	XSH.wcstod.005	40	wcstod("nan(!)") left the end pointer at offset 6
+root FAIL	XSH.wcstod.007	49	wcstod("0x1p") returned 0, expected 1
+root FAIL	XSH.wcstod.009	52	wcstod("0x1p100000") did not return the huge value
+root FAIL	XSH.wcstod.010	50	wcstod("0x1p-100000") set errno to 0, expected ERANGE
+root FAIL	XSH.wcstoimax.003	39	wcstoimax("0x", base 0) left the end pointer at offset 0
+root FAIL	XSH.wcstoimax.004	36	wcstoimax("0x", base 16) left the end pointer at offset 0
+root FAIL	XSH.wcstoimax.016	49	wcstoumax("0x", base 0) left the end pointer at offset 0
+root FAIL	XSH.wcstoimax.017	60	wcstoumax("0x", base 16) left the end pointer at offset 0
+root FAIL	XSH.wcstol.003	46	wcstol("0x", base 0) left the end pointer at offset 0
+root FAIL	XSH.wcstol.004	42	wcstol("0x", base 16) left the end pointer at offset 0
+root FAIL	XSH.wcstoul.003	42	wcstoul("0x", base 0) left the end pointer at offset 0
+root FAIL	XSH.wcstoul.004	45	wcstoul("0x", base 16) left the end pointer at offset 0
+user FAIL	XBD.10.1-directory-structure-and-files.005	454	text written to /dev/tty did not reach the terminal
+user UNRESOLVED	XBD.10.1-directory-structure-and-files.007	43	/dev/console cannot be opened here (EACCES); it need not be readable
+user UNRESOLVED	XBD.11.1-interface-characteristics.003	56	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XBD.11.1-interface-characteristics.004	53	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XBD.11.1-interface-characteristics.005	44	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XBD.11.1-interface-characteristics.006	67	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XBD.11.1-interface-characteristics.007	50	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XBD.11.1-interface-characteristics.008	53	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XBD.11.1-interface-characteristics.009	58	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XBD.11.1-interface-characteristics.010	57	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user FAIL	XBD.12.1-utility-argument-syntax.002	709	cut -d : -f 2147483647 gave '' (status 1, standard error 'cut: [-bcf] list: 2147483647 too large (allowed 1-2048)'), expected 'nocolon'
+user FAIL	XBD.2-conformance.001	212	not found with PATH from getconf PATH: gettext iconv lp msgfmt newgrp ngettext pathchk tabs
+user FAIL	XBD.4.1-case-insensitive-comparisons.001	1098	grep -i '\(a\)\1' did not select 'aA' (status 1)
+user FAIL	XBD.4.1-case-insensitive-comparisons.002	1383	find -iname '[[:lower:]]ulu' found 0 names, expected 1
+user FAIL	XBD.4.1-case-insensitive-comparisons.003	286	s/abc/X/i on 'AbC' gave 'sed: 1: "s/abc/X/i": bad flag in substitute command: 'i'', expected 'X'
+user UNRESOLVED	XBD.4.4-directory-operations.004	100360	reader 0 reached its time limit before the writer finished (a slow machine)
+user UNRESOLVED	XBD.4.7-file-access-permissions.002	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XBD.4.7-file-access-permissions.003	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XBD.4.7-file-access-permissions.005	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XBD.4.7-file-access-permissions.006	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XBD.5-file-format-notation.010	752	awk printf "%F|", "1.5" wrote '%F1.5|', expected '1.500000|'
+user FAIL	XBD.7.3.1-lc-ctype.005	155	locale C.UTF-8: iswdigit(0x660) is 1, expected 0
+user INSPECT	XBD.8.1-environment-variable-definition.004	288	disputed (see the assertion's note): readonly PWD accepted, cd succeeded but PWD is not the new directory: 0:/tmp/w/r/res-user/tmp/pc.6OfNt6
+user FAIL	XBD.9.3-bre.002	52	case 7: "\(.\)\1\{0,1\}b" on "xaab" should match, got 1
+user FAIL	XBD.9.3-bre.008	57	regcomp("[--/]") returned 11
+user FAIL	XBD.9.5-grammar.003	54	regcomp("a\{0\}", flags 0x0) returned 14
+user FAIL	XBD.aio.h.001	0	does not compile: 'aio.h' file not found
+user FAIL	XBD.aio.h.002	0	does not compile: 'aio.h' file not found
+user FAIL	XBD.aio.h.003	0	does not compile: 'aio.h' file not found
+user FAIL	XBD.aio.h.004	0	does not compile: 'aio.h' file not found
+user FAIL	XBD.aio.h.005	0	does not compile: 'aio.h' file not found
+user FAIL	XBD.aio.h.006	0	does not compile: 'aio.h' file not found
+user FAIL	XBD.aio.h.007	0	does not compile: 'aio.h' file not found
+user FAIL	XBD.aio.h.008	0	does not compile: 'aio.h' file not found
+user FAIL	XBD.aio.h.009	0	does not compile: 'aio.h' file not found
+user FAIL	XBD.complex.h.007	0	does not compile: call to undeclared function 'CMPLX'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+user UNRESOLVED	XBD.dirent.h.001	40	a constant is missing (the header check reports it): DT_BLK DT_CHR DT_DIR DT_FIFO DT_LNK DT_REG DT_SOCK DT_UNKNOWN
+user UNRESOLVED	XBD.dirent.h.002	43	a DT_ constant is missing (the header check reports it)
+user FAIL	XBD.dirent.h.004	0	does not compile: unknown type name 'reclen_t'
+user FAIL	XBD.dirent.h.006	0	does not compile: invalid application of 'sizeof' to an incomplete type 'struct posix_dent'
+user FAIL	XBD.dirent.h.008	0	does not compile: use of undeclared identifier 'posix_getdents'
+user FAIL	XBD.endian.h.004	0	does not compile: unknown type name 'uint16_t'
+user FAIL	XBD.errno.h.001	0	does not compile: "EMULTIHOP is not defined"
+user FAIL	XBD.errno.h.002	0	does not compile: use of undeclared identifier 'EMULTIHOP'
+user FAIL	XBD.fcntl.h.006	61	<fcntl.h> does not define F_OFD_GETLK
+user FAIL	XBD.fcntl.h.007	46	<fcntl.h> does not define O_TTY_INIT
+user FAIL	XBD.fcntl.h.008	34	<fcntl.h> does not define F_GETOWN_EX and F_SETOWN_EX
+user UNRESOLVED	XBD.fcntl.h.011	54	a constant is missing (the header check reports it): O_CLOEXEC O_CREAT O_DIRECTORY O_EXCL O_NOCTTY O_NOFOLLOW O_TRUNC O_TTY_INIT
+user FAIL	XBD.fcntl.h.019	49	<fcntl.h> does not define SEEK_SET
+user FAIL	XBD.fcntl.h.022	43	<fcntl.h> does not define S_IRWXU
+user FAIL	XBD.float.h.001	0	does not compile: "FLT_DECIMAL_DIG, DBL_DECIMAL_DIG, LDBL_DECIMAL_DIG or DECIMAL_DIG is below its minimum"
+user FAIL	XBD.float.h.002	0	does not compile: use of undeclared identifier 'FLT_TRUE_MIN'
+user FAIL	XBD.float.h.004	0	does not compile: use of undeclared identifier 'FLT_DECIMAL_DIG'
+user FAIL	XBD.float.h.005	0	does not compile: use of undeclared identifier 'FLT_TRUE_MIN'
+user FAIL	XBD.iconv.h.001	0	does not compile: 'iconv.h' file not found
+user FAIL	XBD.iconv.h.002	0	does not compile: 'iconv.h' file not found
+user FAIL	XBD.inttypes.h.004	62	SCNuMAX read a wide text as a different value (1 items)
+user FAIL	XBD.langinfo.h.001	0	does not compile: use of undeclared identifier 'ERA'
+user FAIL	XBD.langinfo.h.002	0	does not compile: use of undeclared identifier 'ERA'
+user FAIL	XBD.langinfo.h.003	0	does not compile: use of undeclared identifier 'ALTMON_1'
+user UNRESOLVED	XBD.langinfo.h.004	0	blocked by XBD.langinfo.h.002 (FAIL)
+user FAIL	XBD.libintl.h.001	0	does not compile: 'libintl.h' file not found
+user FAIL	XBD.libintl.h.002	0	does not compile: 'libintl.h' file not found
+user FAIL	XBD.libintl.h.003	0	does not compile: 'libintl.h' file not found
+user FAIL	XBD.limits.h.001	0	does not compile: "_POSIX_AIO_LISTIO_MAX is missing or not the required value"
+user FAIL	XBD.limits.h.014	0	does not compile: "NL_TEXTMAX is below its minimum acceptable value"
+user FAIL	XBD.locale.h.006	0	does not compile: use of undeclared identifier 'getlocalename_l'
+user FAIL	XBD.monetary.h.001	0	does not compile: 'monetary.h' file not found
+user FAIL	XBD.monetary.h.002	0	does not compile: 'monetary.h' file not found
+user FAIL	XBD.monetary.h.003	0	does not compile: 'monetary.h' file not found
+user FAIL	XBD.monetary.h.004	0	does not compile: 'monetary.h' file not found
+user FAIL	XBD.netdb.h.001	47	<netdb.h> does not define AI_V4MAPPED
+user FAIL	XBD.netdb.h.002	42	<netdb.h> does not define NI_NUMERICSCOPE
+user FAIL	XBD.netdb.h.012	34	getnameinfo() is not declared as int getnameinfo(const struct sockaddr *restrict, socklen_t, char *restrict, socklen_t, char *restrict, socklen_t, int)
+user FAIL	XBD.netinet_in.h.008	0	does not compile: use of undeclared identifier 'IN6ADDR_ANY_INIT'
+user UNRESOLVED	XBD.pthread.h.005	44	a constant is missing (the header check reports it): PTHREAD_MUTEX_ROBUST PTHREAD_MUTEX_STALLED
+user UNRESOLVED	XBD.pthread.h.012	45	PTHREAD_NULL is missing (the header check reports it)
+user FAIL	XBD.pthread.h.015	0	does not compile: use of undeclared identifier 'pthread_cond_clockwait'
+user FAIL	XBD.pthread.h.016	0	does not compile: use of undeclared identifier 'pthread_mutex_consistent'; did you mean 'pthread_mutex_init'?
+user FAIL	XBD.regex.h.002	44	<regex.h> does not define REG_MINIMAL
+user FAIL	XBD.semaphore.h.003	0	does not compile: invalid application of 'sizeof' to an incomplete type 'struct timespec'
+user FAIL	XBD.semaphore.h.004	46	<semaphore.h> does not define O_CREAT
+user FAIL	XBD.semaphore.h.005	0	does not compile: use of undeclared identifier 'sem_clockwait'
+user FAIL	XBD.signal.h.002	0	does not compile: use of undeclared identifier 'pthread_t'
+user FAIL	XBD.signal.h.003	0	does not compile: variable has incomplete type 'struct sigevent'
+user FAIL	XBD.signal.h.004	46	<signal.h> does not define SIGEV_NONE, SIGEV_SIGNAL and SIGEV_THREAD as macros
+user FAIL	XBD.signal.h.006	56	<signal.h> does not define SIGRTMIN and SIGRTMAX as macros
+user FAIL	XBD.signal.h.007	39	<unistd.h> does not define _SC_NSIG
+user FAIL	XBD.signal.h.008	35	<signal.h> does not define SIG2STR_MAX
+user FAIL	XBD.signal.h.020	0	does not compile: no member named 'uc_stack' in 'struct sigcontext'
+user FAIL	XBD.signal.h.023	52	<signal.h> does not define every si_code constant: missing one of ILL_ILLOPC ILL_ILLOPN ILL_ILLADR ILL_ILLTRP ILL_PRVOPC ILL_PRVREG ILL_COPROC ILL_BADSTK FPE_INTDIV FPE_INTOVF FPE_FLTDIV FPE_FLTOVF FPE_FLTUND FPE_FLTRES FPE_FLTINV FPE_FLTSUB SEGV_MAPERR SEGV_ACCERR BUS_ADRALN BUS_ADRERR BUS_OBJERR CLD_EXITED CLD_KILLED CLD_DUMPED CLD_TRAPPED CLD_STOPPED CLD_CONTINUED SI_USER SI_QUEUE SI_TIMER SI_ASYNCIO SI_MESGQ
+user FAIL	XBD.signal.h.027	0	does not compile: use of undeclared identifier 'pthread_kill'
+user FAIL	XBD.signal.h.028	0	does not compile: use of undeclared identifier 'sig2str'
+user UNRESOLVED	XBD.spawn.h.001	44	a constant is missing (the header check reports it): POSIX_SPAWN_RESETIDS POSIX_SPAWN_SETPGROUP POSIX_SPAWN_SETSIGDEF POSIX_SPAWN_SETSIGMASK POSIX_SPAWN_SETSID
+user FAIL	XBD.stdio.h.010	0	does not compile: unknown type name 'va_list'; did you mean '__va_list'?
+user FAIL	XBD.stdio.h.012	43	vdprintf() is not declared as int vdprintf(int, const char *restrict, va_list)
+user FAIL	XBD.stdlib.h.004	0	does not compile: use of undeclared identifier 'WNOHANG'
+user FAIL	XBD.stdlib.h.007	0	does not compile: use of undeclared identifier 'qsort_r'; did you mean 'qsort'?
+user FAIL	XBD.stdlib.h.009	0	does not compile: use of undeclared identifier 'at_quick_exit'
+user FAIL	XBD.sys_mman.h.011	42	<sys/mman.h> does not define O_RDONLY
+user FAIL	XBD.sys_mman.h.013	45	<sys/mman.h> does not define O_CREAT
+user UNRESOLVED	XBD.sys_resource.h.003	45	a constant is missing (the header check reports it): RLIMIT_CORE RLIMIT_DATA RLIMIT_FSIZE RLIMIT_NOFILE RLIMIT_STACK RLIMIT_AS
+user FAIL	XBD.sys_resource.h.004	0	does not compile: token is not a valid binary operator in a preprocessor subexpression
+user FAIL	XBD.sys_socket.h.016	231	killed by signal 11 during the test
+user FAIL	XBD.sys_socket.h.018	41	struct msghdr member msg_iovlen is not of type int
+user FAIL	XBD.sys_types.h.007	0	does not compile: use of undeclared identifier 'reclen_t'
+user FAIL	XBD.sys_types.h.009	0	does not compile: unknown type name 'pthread_attr_t'
+user FAIL	XBD.sys_types.h.011	0	does not compile: unknown type name 'reclen_t'
+user UNRESOLVED	XBD.termios.h.004	43	a constant is missing (the header check reports it): BRKINT ICRNL IGNBRK IGNCR IGNPAR INLCR INPCK ISTRIP IXANY IXOFF IXON PARMRK
+user FAIL	XBD.termios.h.015	0	does not compile: invalid application of 'sizeof' to an incomplete type 'struct winsize'
+user FAIL	XBD.termios.h.017	0	does not compile: use of undeclared identifier 'tcgetwinsize'
+user FAIL	XBD.tgmath.h.001	44	<tgmath.h> does not make the <complex.h> macros available
+user FAIL	XBD.tgmath.h.004	0	does not compile: call to undeclared function 'CMPLX'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+user FAIL	XBD.time.h.001	0	does not compile: static assertion failed: CLOCKS_PER_SEC does not have type clock_t
+user FAIL	XBD.time.h.015	0	does not compile: use of undeclared identifier 'clock_nanosleep'
+user FAIL	XBD.unistd.h.001	35	<unistd.h> does not define POSIX_CLOSE_RESTART
+user FAIL	XBD.unistd.h.002	34	<unistd.h> does not define SEEK_HOLE and SEEK_DATA as macros
+user FAIL	XBD.unistd.h.004	0	does not compile: "_POSIX_VERSION is not defined as 202405L"
+user FAIL	XBD.unistd.h.006	0	does not compile: "_POSIX_CPUTIME has a value its description does not allow"
+user FAIL	XBD.unistd.h.007	0	does not compile: "_POSIX_ASYNCHRONOUS_IO is not defined as 202405L"
+user FAIL	XBD.unistd.h.010	0	does not compile: use of undeclared identifier '_SC_DEVICE_CONTROL'
+user FAIL	XBD.unistd.h.018	46	_POSIX_ASYNC_IO is -1 but pathconf(_PC_ASYNC_IO) is 0
+user FAIL	XBD.unistd.h.019	0	does not compile: use of undeclared identifier '_SC_DEVICE_CONTROL'
+user FAIL	XBD.unistd.h.021	42	<unistd.h> does not define O_CLOEXEC
+user FAIL	XBD.unistd.h.024	0	does not compile: use of undeclared identifier 'dup3'
+user FAIL	XBD.unistd.h.026	0	does not compile: use of undeclared identifier 'fexecve'; did you mean 'execve'?
+user FAIL	XBD.wchar.h.006	0	does not compile: unknown type name 'va_list'; did you mean '__va_list'?
+user FAIL	XBD.wchar.h.009	0	does not compile: use of undeclared identifier 'wcpcpy'; did you mean 'wcscpy'?
+user FAIL	XBD.wordexp.h.001	0	does not compile: 'wordexp.h' file not found
+user FAIL	XBD.wordexp.h.002	0	does not compile: 'wordexp.h' file not found
+user FAIL	XBD.wordexp.h.003	0	does not compile: 'wordexp.h' file not found
+user FAIL	XBD.wordexp.h.004	0	does not compile: 'wordexp.h' file not found
+user FAIL	XBD.wordexp.h.005	0	does not compile: 'wordexp.h' file not found
+user FAIL	XCU.1.2-utility-limits.006	330	pathchk rejected a path of 239 bytes
+user FAIL	XCU.1.4-utility-defaults.014	3375	process 53795 did not keep ignoring SIGTERM and SIGHUP
+user FAIL	XCU.1.4-utility-defaults.015	3462	sort f2 after SIGTERM: exit status 2 is not a signal status
+user FAIL	XCU.1.4-utility-defaults.021	613	printf arguments: got 'pcx=/pc/home/q
+user FAIL	XCU.1.6-built-in-utilities.001	1287	no executable file named pathchk in a PATH directory
+user FAIL	XCU.2.2-quoting.012	380	standard output was []
+user FAIL	XCU.2.2-quoting.013	424	standard output was [$\cA
+user FAIL	XCU.2.2-quoting.014	409	standard output was [$\x41\x4a
+user FAIL	XCU.2.2-quoting.015	412	standard output was [$\101
+user FAIL	XCU.2.2-quoting.016	758	standard output was [$$x * ? `y` $(z) a  b\tc]
+user FAIL	XCU.2.2-quoting.017	316	standard output was []
+user FAIL	XCU.2.3-token-recognition.007	375	standard output was []
+user FAIL	XCU.2.3-token-recognition.008	457	standard output was [e]
+user FAIL	XCU.2.5-parameters.022	255	no expanded continuation prompt in: /bin/sh: No controlling tty (open /dev/tty: Device not configured)
+user FAIL	XCU.2.6-word-expansions.009	583	standard output was [pcg*
+user FAIL	XCU.2.6-word-expansions.035	422	standard output was [5 ok 5
+user FAIL	XCU.2.6-word-expansions.038	702	standard output was [3 [a][][b]
+user FAIL	XCU.2.6-word-expansions.043	398	standard output was [2 a b
+user FAIL	XCU.2.8-exit-status-and-errors.004	448	standard output was []
+user FAIL	XCU.alias.005	154	alias for a missing name wrote to standard output
+user FAIL	XCU.alias.006	164	no diagnostic on standard error
+user FAIL	XCU.alias.009	224	a new shell wrote 'ran
+user FAIL	XCU.ar.003	51808	ar -pv a f2 output differs from the specified header and contents
+user FAIL	XCU.ar.005	3114	ar -dv wrote '', expected 'd - f2'
+user FAIL	XCU.ar.006	2536	ar -rv wrote '', expected 'r - f2' and 'a - f4'
+user FAIL	XCU.ar.007	1626	an older file replaced the archived member
+user FAIL	XCU.ar.008	1116	mode field is 'rw-r--r--'
+user FAIL	XCU.ar.019	1312	ar -rv of a new file wrote '', expected 'a - sub/g'
+user FAIL	XCU.at.005	684	at refused 'at noon Dec 9, 2035' (status 1) [stderr: at: garbled time ; stdout: ]
+user FAIL	XCU.at.007	571	the job 2080814400.c submitted without -q is not in queue a
+user FAIL	XCU.awk.019	1543	FILENAME was not - for standard input
+user FAIL	XCU.awk.025	355	slash where an operand may begin as an ERE: 10 00
+user FAIL	XCU.awk.033	274	standard input was not read when the only operand was nulled: :in
+user FAIL	XCU.awk.042	228	a missing field: 0 1 1
+user INSPECT	XCU.bc.006	979	disputed (see the assertion's note): an array parameter wrong
+user FAIL	XCU.bc.007	765	l(1) not 0
+user FAIL	XCU.bg.002	1250	jobs did not report the resumed job as Running
+user FAIL	XCU.cd.012	172	cd '' exited 0
+user FAIL	XCU.cd.013	177	cd nosuch/.. exited 0
+user UNRESOLVED	XCU.chgrp.001	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XCU.chgrp.002	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XCU.chgrp.003	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XCU.chgrp.004	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XCU.chgrp.005	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XCU.chmod.006	647	a-X: f6 has mode -rwxr-xr-x, expected -rw-r--r--
+user UNRESOLVED	XCU.chmod.007	222	setup: cannot chmod f5
+user UNRESOLVED	XCU.chown.001	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XCU.chown.002	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XCU.chown.003	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XCU.chown.004	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XCU.chown.005	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XCU.chown.006	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XCU.cmp.001	60012	timed out after 60s
+user INSPECT	XCU.cmp.008	529	disputed (see the assertion's note): cmp -l - f output is:      3 144 143
+user FAIL	XCU.command.004	157	command -v ./bin/pccmd wrote './bin/pccmd', not an absolute pathname
+user FAIL	XCU.command.014	171	tilde after a colon gave '/pc/home/a:~/b', wanted /pc/home/a:/pc/home/b
+user FAIL	XCU.cp.006	261	cp -p exited with status 1
+user FAIL	XCU.cp.013	463	dst has mode dr-xrwx---, expected dr-xr-x---
+user UNRESOLVED	XCU.cp.027	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XCU.crontab.002	581	crontab from standard input exited with status 1, but crontab FILE accepted the same entries: crontab: usage error: file name must be specified for replace usage: crontab [-u user] file        crontab [-e | -l | -r] [-u user] 
+user UNRESOLVED	XCU.csplit.001	60081	timed out after 60s
+user FAIL	XCU.csplit.007	612	the line after the last: status 0
+user FAIL	XCU.ctags.005	303	no -x line for alpha: ADD                 2 t.c              #define ADD(a, b) ((a) + (b))
+user FAIL	XCU.dd.005	533	dd bs=100 exited with status 1
+user FAIL	XCU.dd.016	422	ibs=512: no line '1 truncated record'
+user FAIL	XCU.dd.020	2403	dd iflags=fullblock exited with status 1
+user FAIL	XCU.diff.004	736	the first -u header line is not '--- f1<tab>2020-01-02 03:04:05[.frac] +0000'
+user UNRESOLVED	XCU.diff.009	60014	timed out after 60s
+user FAIL	XCU.dot.004	328	empty file gave 3
+user FAIL	XCU.dot.007	259	status 0, expected 1 to 125
+user FAIL	XCU.ed.013	670	q after a real a wrote '', expected ?
+user FAIL	XCU.ed.017	827	H mode wrote no explanation after the ?
+user FAIL	XCU.ed.019	488	separators gave 'one two three four five two two three four five three one two four four one one two three one two three four five four two three four one two two three four ', expected 'one two three four five two two three four five three one two four four one one two three five four two three four one two two three four '
+user FAIL	XCU.ex.001	322	ex: exit status 1
+user FAIL	XCU.ex.002	341	ex: exit status 1
+user FAIL	XCU.ex.003	339	ex: exit status 1
+user FAIL	XCU.ex.004	368	ex: exit status 1
+user FAIL	XCU.ex.005	326	ex: exit status 1
+user FAIL	XCU.ex.006	358	ex: exit status 1
+user FAIL	XCU.ex.007	295	ex: exit status 1
+user FAIL	XCU.ex.008	338	ex: exit status 1
+user FAIL	XCU.ex.009	411	ex: exit status 1
+user FAIL	XCU.ex.010	576	q! gave status 1
+user FAIL	XCU.ex.012	272	ex -c: nonzero status
+user FAIL	XCU.ex.013	403	ex -s: nonzero status
+user FAIL	XCU.ex.014	444	ex: exit status 1
+user FAIL	XCU.ex.015	316	ex: nonzero status
+user FAIL	XCU.ex.016	331	ex f1 f2: nonzero status
+user FAIL	XCU.ex.017	392	ex: exit status 1
+user FAIL	XCU.ex.018	368	ex: exit status 1
+user FAIL	XCU.ex.019	305	a wrapping search failed: status 1
+user FAIL	XCU.ex.020	357	append: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.021	458	line number of an empty buffer: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.022	327	null forward search: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.023	439	offsets: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.024	373	bare number offset: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.025	356	delete between marks: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.026	319	leading colons and blanks: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.027	331	text after a vertical line: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.028	318	p flag after delete: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.029	319	count on delete: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.030	427	one address and a count: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.031	429	move to the top: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.032	410	uppercase appends: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.033	390	g! is v: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.034	415	append in a global command: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.035	390	ampersand is the match: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.036	380	empty command repeats: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.037	390	dot is literal: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.038	396	undo of an undo: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.039	721	type omitted: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.040	430	percent: exit status 1
+user FAIL	XCU.ex.041	506	w! of part of the buffer: exit status 1
+user FAIL	XCU.ex.042	399	read with no file name: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.043	436	shell option: exit status 1
+user FAIL	XCU.ex.044	341	filter lines: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.045	345	delete: exit status 1
+user FAIL	XCU.ex.046	405	list option: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.047	394	g toggled by repetition: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.048	384	autowrite with n: exit status 1
+user FAIL	XCU.ex.049	596	tag with a pattern: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.050	380	execute a buffer on a line: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.051	410	source: exit status 1
+user FAIL	XCU.ex.052	446	e +cmd: exit status 1
+user FAIL	XCU.ex.053	414	ex: exit status 1
+user FAIL	XCU.ex.054	1770	the default prompt came before 2 of the three commands
+user FAIL	XCU.ex.055	3045	no prompt carried the line number 3
+user FAIL	XCU.ex.056	3088	with autoindent the file is 'a|b|TX|Y|c|d|e|'
+user FAIL	XCU.ex.057	1707	EXINIT: the first line is 'a', wanted '   a'
+user FAIL	XCU.ex.058	1661	the > command did not shift the line
+user FAIL	XCU.ex.059	2419	the file is 'a b a'
+user FAIL	XCU.ex.060	355	ex -sR -- f: exit status 1
+user FAIL	XCU.ex.061	478	n then rew: exit status 1
+user FAIL	XCU.ex.062	485	default range is the current line: exit status 1: ex: unknown: unknown terminal type
+user FAIL	XCU.ex.064	2777	the terminal was not in canonical mode while ex read commands
+user FAIL	XCU.exec.005	219	got '' (status 127)
+user FAIL	XCU.exec.009	235	status 0, expected 1 to 125
+user FAIL	XCU.exec.011	318	interactive shell exited after the failed exec (out='')
+user FAIL	XCU.exit.006	231	status 1, expected 6
+user FAIL	XCU.expr.003	562	expr  |  did not write '0' with status 1
+user FAIL	XCU.fc.021	240	fc -l wrote to standard error: /bin/sh: fc: history function called recursively
+user FAIL	XCU.fc.023	297	the command edited through the default editor was run 0 times, wanted once
+user FAIL	XCU.file.002	401	line is: nonexistent: cannot stat 'nonexistent' (No such file or directory)
+user FAIL	XCU.file.006	476	first line is: f: text/plain
+user FAIL	XCU.file.007	427	line is: l: symbolic link to 'f'
+user FAIL	XCU.file.008	518	link to a directory: ld: symbolic link to 'd'
+user FAIL	XCU.file.009	297	file -m exited with status 1
+user FAIL	XCU.file.010	324	matching file:  file: unknown option -- m
+user FAIL	XCU.file.011	383	ABC:  file: unknown option -- m
+user FAIL	XCU.find.009	377	-links : find exited with status 1
+user FAIL	XCU.find.011	926	-mtime 2: found '', expected 'tm/d2'
+user UNRESOLVED	XCU.find.013	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XCU.find.016	780	after 'Y' the output is: t/a.txt
+user FAIL	XCU.find.032	406	find -newer dangling: nonzero status: find: dang: No such file or directory
+user FAIL	XCU.fold.006	435	the readable file was not folded, or the status was 0
+user FAIL	XCU.gencat.002	1227	messages read back as: [trailing  ] [tab	here] [back\slash] [C] [line one] [] [joined together] [<none>] 
+user FAIL	XCU.gencat.003	1092	merged catalog reads back as: [<none>] [TWO] [<none>] [four] [<none>] 
+user FAIL	XCU.gencat.004	978	gencat - wrote nothing to standard output
+user FAIL	XCU.getopts.015	154	exit 1 for a read-only name variable, wanted more than 1
+user FAIL	XCU.gettext.001	193	form 1: exit status 127
+user FAIL	XCU.gettext.002	300	-e: nonzero status: /tmp/w/modules/xcu/gettext/t/002-escapes.sh[19]: gettext: not found 
+user FAIL	XCU.gettext.003	198	-s: nonzero status
+user FAIL	XCU.head.003	384	-c 5 did not write exactly five bytes
+user FAIL	XCU.head.004	406	headers are wrong with three files and -c
+user FAIL	XCU.iconv.001	137	iconv -l exited with status 127
+user UNRESOLVED	XCU.iconv.002	134	setup: iconv -l failed
+user UNRESOLVED	XCU.iconv.003	146	setup: iconv -l failed
+user UNRESOLVED	XCU.iconv.004	110	setup: iconv -l failed
+user UNRESOLVED	XCU.iconv.005	114	setup: iconv -l failed
+user INSPECT	XCU.jobs.005	1379	disputed (see the assertion's note): jobs wrote '[1] + Done (3)             "${PC_SH:-sh}" -c "exit 3" ', wanted a line [n] + Done(3) ...
+user INSPECT	XCU.jobs.006	1266	disputed (see the assertion's note): jobs wrote '[1] + Running              sleep 101 ', wanted a line [n] + Stopped sleep 101
+user FAIL	XCU.jobs.007	1209	the suspended job is not marked as the current job
+user FAIL	XCU.join.007	652	-e did not replace an empty field
+user FAIL	XCU.kill.005	160	kill -l: name 'Hangup' is not upper case letters and digits
+user FAIL	XCU.kill.014	2560	env kill -s TERM -- -32690 exited 1
+user FAIL	XCU.ln.006	189	ln -f a a exited 0
+user FAIL	XCU.locale.006	238	locale decimal_point failed
+user FAIL	XCU.ls.017	254	first line is not a total line
+user UNRESOLVED	XCU.ls.018	60014	timed out after 60s
+user FAIL	XCU.ls.044	758	the first line of ls -i -s -1 is not a total line: 76019 8 f
+user FAIL	XCU.ls.048	348	ls -a -A: '.|..|.h|a|b|c|', expected neither dot nor dot-dot
+user FAIL	XCU.ls.050	568	ls -l -1 did not write the long format: -1 must not disable it
+user FAIL	XCU.m4.004	409	output differs: yes|no||g|5|3|5|2|-1|ell|lo||hippo|ho|b,c
+user FAIL	XCU.m4.006	299	m4: nonzero status
+user FAIL	XCU.m4.008	712	-U define left it defined: ''
+user FAIL	XCU.m4.010	483	sysval after exit 3 gave '768'
+user FAIL	XCU.m4.012	416	m4exit(3) after an operand that could not be opened gave status 1
+user FAIL	XCU.m4.016	343	output was 'a[', expected 'a[]b
+user FAIL	XCU.mailx.004	1054	save with no file did not write the mbox
+user FAIL	XCU.mailx.005	1855	mailx -H: nonzero status: mailx: unknown option -- H
+user FAIL	XCU.mailx.006	537	the first next did not write message 1: Message 2:
+user FAIL	XCU.mailx.010	457	pipe with no arguments did not give the current message to the cmd command
+user FAIL	XCU.mailx.012	1052	unalias did not remove g1
+user FAIL	XCU.mailx.015	950	backslash-blank did not keep the blanks in one argument:  y
+user FAIL	XCU.mailx.016	517	$HOME in a file name was not expanded
+user FAIL	XCU.mailx.022	742	the first empty line did not write message 1: Message 2:
+user FAIL	XCU.mailx.023	987	set nopcv_b did not erase pcv_b
+user FAIL	XCU.mailx.024	373	the default prompt "? " was not written before the first command
+user FAIL	XCU.mailx.026	855	! did not call SHELL with -c, -- and the command: 2
+user FAIL	XCU.mailx.027	570	pg1.out lacks message ONE
+user FAIL	XCU.mailx.032	1202	visual did not run the program named by VISUAL
+user FAIL	XCU.mailx.033	1037	with a null LISTER, folders did not list pcbox1: 
+user FAIL	XCU.mailx.035	821	the pager was never run for a message longer than crt
+user FAIL	XCU.mailx.036	460	S 1 3 did not write message 1 to the file alice
+user FAIL	XCU.mailx.038	614	an exclamation mark was not literal without bang: Mail version 8.1.2 01/15/2001.  Type ? for help.
+user FAIL	XCU.mailx.039	935	with allnet, the same login name on another network did not match
+user FAIL	XCU.mailx.043	624	with keep set an emptied mailbox was removed
+user FAIL	XCU.mailx.047	351	start-up file 1: no diagnostic was written to standard error
+user FAIL	XCU.mailx.048	658	the default-set variable header is not listed by set: noprompt	
+user FAIL	XCU.make.008	614	-q did not run the + command
+user FAIL	XCU.make.009	471	make -t: nonzero status: Stop in /tmp/w/r/res-user/tmp/pc.nxzNTK/pcw.95630
+user FAIL	XCU.make.011	425	make: nonzero status: *** Warning in /tmp/w/r/res-user/tmp/pc.CcNfHb/pcw.69685: "false" returned non-zero status (makefile:13)
+user FAIL	XCU.make.014	506	an up-to-date target was rebuilt through the suffix rule
+user FAIL	XCU.make.018	398	the sub-make did not run (its command was not written)
+user FAIL	XCU.make.019	444	CURDIR is '', expected '/tmp/w/r/res-user/tmp/pc.YwNqAz/pcw.46840' or '/tmp/w/r/res-user/tmp/pc.YwNqAz/pcw.46840'
+user FAIL	XCU.make.020	552	.WAIT: exit status 2 (y ran before x finished?)
+user FAIL	XCU.make.021	1097	make lib.a: nonzero status: ar: error: unable to load 'f.o': file too small to be an archive
+user FAIL	XCU.make.022	415	internal macro values differ: caret= plus=
+user FAIL	XCU.make.031	432	t was not made after both prerequisites: a-made
+user FAIL	XCU.make.036	445	the environment CURDIR changed the macro or was not reset: macro=/nonexistent-pcdir env=/nonexistent-pcdir
+user FAIL	XCU.make.038	416	the .sh rule did not make an executable file
+user FAIL	XCU.make.039	383	e1.mk: make x.o failed: make: don't know how to make x.o
+user FAIL	XCU.make.040	326	make lib.a(m.o): nonzero status: make: don't know how to make lib.a(m.o)
+user FAIL	XCU.make.044	350	make: nonzero status: make: don't know how to make Z::=$(X)
+user FAIL	XCU.make.047	301	make all: nonzero status: *** Parse error in /tmp/w/r/res-user/tmp/pc.aAV9p8/pcw.67183: Could not find gen.mk (makefile:4)
+user FAIL	XCU.make.051	362	make -t: nonzero status: Stop in /tmp/w/r/res-user/tmp/pc.ABRJyL/pcw.64756
+user FAIL	XCU.more.001	4026	more: nonzero status: more: unknown: unknown terminal type
+user FAIL	XCU.more.002	303	more from standard input: nonzero status: more: unknown: unknown terminal type
+user FAIL	XCU.more.003	356	more -s: nonzero status: more: unknown: unknown terminal type
+user FAIL	XCU.more.004	362	more with MORE=-s: nonzero status: more: unknown: unknown terminal type
+user FAIL	XCU.msgfmt.001	215	msgfmt: exit status 127
+user FAIL	XCU.msgfmt.002	212	msgfmt -S: nonzero status
+user FAIL	XCU.msgfmt.003	275	msgfmt -S -o out: nonzero status: /tmp/w/modules/xcu/msgfmt/t/003-suffix.sh[20]: msgfmt: not found 
+user FAIL	XCU.msgfmt.004	222	-D sub did not find sub/a.po (status 127)
+user FAIL	XCU.msgfmt.005	371	a consistent entry was diagnosed: /tmp/w/modules/xcu/msgfmt/t/005-check.sh[46]: msgfmt: not found 
+user FAIL	XCU.msgfmt.006	237	msgfmt (fuzzy input): nonzero status
+user UNRESOLVED	XCU.newgrp.001	207	newgrp did not create the shell (status 127)
+user UNRESOLVED	XCU.newgrp.002	238	newgrp exited with status 127 before running the commands
+user FAIL	XCU.newgrp.003	282	newgrp 1000 exited with status 127 and the shell did not run
+user FAIL	XCU.ngettext.001	209	form 1, n=1: exit status 127
+user FAIL	XCU.ngettext.002	228	-e plural: nonzero status
+user FAIL	XCU.ngettext.003	163	large n: nonzero status
+user UNRESOLVED	XCU.nm.001	170	setup: c17 is not available
+user UNRESOLVED	XCU.nm.002	160	setup: c17 is not available
+user UNRESOLVED	XCU.nm.003	160	setup: c17 is not available
+user UNRESOLVED	XCU.nm.004	164	setup: c17 is not available
+user UNRESOLVED	XCU.nm.005	160	setup: c17 is not available
+user UNRESOLVED	XCU.nm.006	219	setup: c17 is not available
+user UNRESOLVED	XCU.nm.007	134	setup: c17 is not available
+user UNRESOLVED	XCU.nm.009	130	setup: c17 is not available
+user FAIL	XCU.od.002	888	-t d1 of 0xff bytes is not -1
+user FAIL	XCU.od.003	372	byte 128 is not written like byte 0
+user FAIL	XCU.od.004	268	vertical tab is not \v
+user FAIL	XCU.od.005	3174	-j 0x4 -N 0x2 is wrong
+user FAIL	XCU.paste.005	443	-s did not give a lone newline for an empty file
+user FAIL	XCU.paste.008	335	-s did not process the readable file or gave status 0
+user FAIL	XCU.patch.006	916	-R of a normal patch on an unpatched file changed the file (the patch was applied forward)
+user FAIL	XCU.patch.007	1096	-b with two patches for one file: t.txt.orig is not the original a b c d e
+user FAIL	XCU.patch.016	340	-o with two patches for one file: the output file is not the two versions one after the other (a b X d e, then a b X Y e)
+user FAIL	XCU.pathchk.001	182	pathchk of a creatable pathname exited with status 127
+user FAIL	XCU.pathchk.002	310	pathchk exited with status 127 for a component of 255 bytes
+user FAIL	XCU.pathchk.004	161	pathchk -p exited with status 127 for 14 bytes
+user FAIL	XCU.pathchk.005	154	pathchk -p exited with status 127 for a pathname of 239 bytes
+user FAIL	XCU.pathchk.006	159	pathchk -p exited with status 127 for a portable name
+user FAIL	XCU.pathchk.007	221	pathchk -P exited with status 127 for a good name
+user FAIL	XCU.pathchk.008	163	the diagnostic does not name the operand: /tmp/w/modules/xcu/pathchk/t/008-diagnostic-names-operand.sh[21]: pathchk: not found
+user FAIL	XCU.pathchk.009	160	pathchk -p -P exited with status 127 for a good name
+user FAIL	XCU.pax.006	470	mode field is '0100640', expected 640
+user FAIL	XCU.pax.008	534	-o times: nonzero status
+user FAIL	XCU.pax.011	400	-v listed 4 lines, expected 3
+user FAIL	XCU.pax.015	276	pax -o listopt: nonzero status
+user FAIL	XCU.pax.018	341	the default archived a symbolic link as type 'l
+user FAIL	XCU.pax.022	2322	end-of-file in an answer gave exit status 0
+user FAIL	XCU.pax.025	1423	-s with S: nonzero status: pax: Invalid replacement string option ,tgt,new,S usage: pax [-0cdjnOvz] [-E limit] [-f archive] [-G group] [-s replstr] 
+user UNRESOLVED	XCU.pax.027	298	setup: pax -w failed
+user FAIL	XCU.pax.029	1692	pax -w -L -H t lists 't t/ld t/ld/x ': the last option, -H, did not decide
+user FAIL	XCU.pax.035	368	-o comment:=hello: nonzero status: pax: Unknown pax format -o option/value pair comment:=hello 
+user FAIL	XCU.pax.036	246	pax -w -x pax -o comment=one -o comment=two: nonzero status
+user UNRESOLVED	XCU.pax.037	224	setup: pax -w with a global gname failed
+user UNRESOLVED	XCU.pax.039	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XCU.pax.040	412	%M for f1 gives '', expected -rw-r-----
+user FAIL	XCU.pax.041	1570	pax -w -a -u with a newer file: nonzero status
+user UNRESOLVED	XCU.pax.042	353	setup: pax -w with a long path record failed
+user FAIL	XCU.pax.043	375	pax -w -x pax -o linkdata: nonzero status: pax: Invalid options format usage: pax [-0cdjnOvz] [-E limit] [-f archive] [-G group] [-s replstr] 
+user FAIL	XCU.pr.009	1353	-i changed a space that reaches no tab column
+user FAIL	XCU.pr.015	242	-i did not replace a single space reaching column 9
+user FAIL	XCU.printf.012	380	printf %2$s %1$s a b did not write what was wanted, or did not exit zero
+user FAIL	XCU.ps.002	558	heading for tty is 'TTY', expected TT
+user FAIL	XCU.ps.005	192	-p '75043,8339' did not list 8339
+user FAIL	XCU.ps.007	367	ps -G 1000 failed
+user FAIL	XCU.ps.011	200	time '0:00.07' is not [dd-]hh:mm:ss
+user FAIL	XCU.ps.016	174	ps -o 'pid=Process ID' failed
+user FAIL	XCU.read.009	223	read -d exited 1
+user FAIL	XCU.read.010	193	read -d '' exited 1
+user FAIL	XCU.read.013	199	exit 1 for a read-only variable, wanted more than 1
+user FAIL	XCU.readlink.004	167	no diagnostic for a regular file
+user FAIL	XCU.readonly.004	579	read returned 1, expected more than 1
+user FAIL	XCU.realpath.002	228	realpath -e exited with status 1
+user FAIL	XCU.realpath.004	226	realpath -E real/new exited with status 1
+user FAIL	XCU.realpath.006	231	realpath -e -E exited with status 1
+user FAIL	XCU.renice.005	214	renice wrote to standard output
+user FAIL	XCU.sed.002	432	a newline was not put between two -e pieces (got: one
+user FAIL	XCU.sed.006	200	flag i did not match case-insensitively
+user FAIL	XCU.sed.010	234	a gave the wrong result (got: 1
+user FAIL	XCU.sed.012	815	#n not on the first line suppressed output
+user FAIL	XCU.set.005	385	got 'u 1 line u u a new  u', expected 'u 1 line 3 5 a new S u' (stderr: )
+user FAIL	XCU.sh-compound.009	204	fall through from b: got '', expected BC
+user FAIL	XCU.sh-errors.003	232	command set -Z: got '', expected after and a non-zero status
+user FAIL	XCU.sh-signals.001	329	got '', expected survived
+user FAIL	XCU.sh.008	195	status 1, expected 127
+user FAIL	XCU.sh.034	1716	the line 'ABCD' appeared 0 times, wanted 1: PCP> set -o vi
+user FAIL	XCU.sh.047	2229	the line 'viaalias' appeared 0 times, wanted 1: PCP> set -o vi
+user FAIL	XCU.sh.059	2276	the line 'persist1' appeared 0 times, wanted 1: PCP> set -o vi
+user FAIL	XCU.shift.004	230	shift x: the shell neither exited with an error nor reported a non-zero status (out='rc=0')
+user FAIL	XCU.split.006	281	xaa is wrong
+user FAIL	XCU.split.008	1119	status 0 although the suffixes were used up
+user FAIL	XCU.strings.003	426	-t o did not give (4 defgh)(15 klmn), got [ 4 defgh][ 15 klmn]
+user UNRESOLVED	XCU.strip.001	166	setup: c17 is not available
+user UNRESOLVED	XCU.strip.002	169	setup: c17 is not available
+user FAIL	XCU.tabs.002	263	tabs -T vt100 failed (status 127) without a diagnostic
+user UNRESOLVED	XCU.tabs.003	192	tabs -8 is not possible on this terminal type
+user UNRESOLVED	XCU.tabs.004	257	setting explicit tab stops is not possible on this terminal type
+user UNRESOLVED	XCU.tabs.005	294	tabs -8 is not possible on this terminal type
+user FAIL	XCU.test.003	255	test -n = gave status 2, wanted 0
+user UNRESOLVED	XCU.test.007	207	setup: cannot set the set-group-ID flag
+user FAIL	XCU.timeout.006	309	timeout abc true exited 1, wanted 125
+user UNRESOLVED	XCU.tr.007	60022	timed out after 60s
+user FAIL	XCU.tr.008	662	tr abcde 'a[x*]e': the fill did not stop before the rest of string2
+user FAIL	XCU.tr.010	235	tr exited 0 although it could not write its output
+user FAIL	XCU.trap.009	480	reading the list back gave ''
+user FAIL	XCU.trap.010	247	setup shell failed with 1
+user INSPECT	XCU.trap.011	233	disputed (see the assertion's note): setup shell failed with 1
+user FAIL	XCU.trap.012	209	setup shell failed with 1
+user FAIL	XCU.trap.013	226	trap "echo x": got '', expected a non-zero rc line and after
+user FAIL	XCU.trap.017	248	USR1, ignored on entry, is not in the listing
+user FAIL	XCU.trap.019	284	got 'no'
+user FAIL	XCU.ulimit.003	156	ulimit -v exited 1
+user FAIL	XCU.unalias.005	136	no diagnostic on standard error
+user FAIL	XCU.unexpand.003	453	-t 4 did not convert blanks inside the line
+user FAIL	XCU.uudecode.001	406	mode of the new file is -rw-------, expected -rw-r-----
+user FAIL	XCU.uudecode.003	375	name /dev/stdout: standard output is wrong
+user FAIL	XCU.uudecode.011	360	name '-': standard output is wrong
+user FAIL	XCU.uudecode.013	292	exit status 1
+user FAIL	XCU.uudecode.014	501	uudecode exited with status 0 on an unwritable output file
+user FAIL	XCU.vi.002	15409	vi did not finish
+user FAIL	XCU.vi.003	1501	the edited file is not as expected: abc|end|new|xyz|
+user FAIL	XCU.vi.004	2384	after x, dd and u the file is: abc|line2|line3|
+user FAIL	XCU.vi.005	1410	the file is: ba|cd|
+user FAIL	XCU.vi.007	1509	ZZ did not write the edited file: 
+user FAIL	XCU.vi.008	15367	vi did not finish
+user FAIL	XCU.vi.010	1470	the file is: Zbcdef|one two|
+user FAIL	XCU.vi.011	15434	vi did not finish
+user FAIL	XCU.vi.012	1913	the file is: Xbeta gamma|
+user FAIL	XCU.vi.013	5254	the file is: acdefgh|abcdefh|bcdefgh|  bcdef|abcdfgh|abcdfgh|abdefgh|abcdegh|ab|bc|
+user FAIL	XCU.vi.015	2575	the file is:   1|  02|  03|  04|  L05|  L06|  L07|  L08|  L09|  L10|  L11|  L12|  L13|  L14|  L15|  L16|  L17|  L18|  L19|  L20|
+user FAIL	XCU.vi.016	2971	the file is:   F01|  L02|  L03|  G04|  B05|  L06|  L07|  L08|  C09|  D10|  L11|  L12|  L13|  L14|  L15|  L16|  L17|  L18|  L19|  L20|
+user FAIL	XCU.vi.017	3965	the file is:   J01|  L02|  L03|  I04|  L05|  L06|  L07|  L08|  H09|  L10|  G11|  L12|  L13|  L14|  L15|  E16|  L17|  L18|  L19|  K20|
+user FAIL	XCU.vi.018	2575	the file is:   L01|  M02|  N03|  L04|  Q05|  P06|  L07|  L08|  L09|  L10|  L11|  L12|  L13|  L14|  L15|  L16|  L17|  L18|  L19|  L20|
+user FAIL	XCU.vi.019	5217	the file is: -cd ef|ab-cd f|abcd ef|ab-cd e|ab-d ef|ab-cd f|b-cd ef|ab-cd ef|ab-cd |
+user FAIL	XCU.vi.021	2315	the file is: aa|b||cc|d||e|f||gg|
+user FAIL	XCU.vi.022	3243	the file is: 1|2|{|b1|2|.SH x|1|2|{|1|d2|
+user FAIL	XCU.vi.023	2682	the file is: a.  Bb!  Cc?  Dd.|Aa.  Bb!  c?  Dd.|Aa.  Bb!  c?  Dd.|Aa.  b!  Cc?  Dd.|
+user FAIL	XCU.vi.024	3835	the file is: ,b,c,d,e|a,bc,d,e|a,b,c,de|a,,c,d,e|a,b,c,,e|a,bc,d,e|ab,c,d,e|
+user FAIL	XCU.vi.025	2651	the file is: abcdef|abcdef|bcdf|abcdef|abcdef|
+user FAIL	XCU.vi.026	2349	the file is: one|two|five|abcdef|
+user FAIL	XCU.vi.027	5741	the file is: fr|Aaoo 1|bar|foo 2def|bazc|foo 3b|qux|end|
+user FAIL	XCU.vi.028	4819	the file is: oo 1f|bar|foo 2|bazgh|foo 3i|qux|end|
+user FAIL	XCU.vi.031	6130	the file is: azzbc|azzzbc|azzbc|xxabc|  zzabc|xxabc|abczz|abczz|abc|x|abc|y|y|w|z|z|abc|
+user FAIL	XCU.vi.032	9010	the file is: a b c d e f|c d e f|c d e f|e f|one |one |e|two three|b,c|,b,c|c|a,bc|a,d|xz|two|abcf|ab|def|ab d|
+user FAIL	XCU.vi.033	3553	the file is: a2|a15|a16|
+user FAIL	XCU.vi.034	7770	the file is: onetwo three|X three|one X|one X|Xne two three|X two three|X|X|Xtwo three|Xe|Xb,c|X,b,c|XXXdef|xycdef|aXc|AbC DeF|
+user FAIL	XCU.vi.035	2669	the file is: bcdef|abcf|a|cdef|
+user FAIL	XCU.vi.036	2746	the file is: aa|bb|cc|cc|cc|dd|ee|dd|ee|xy zw|xxxxyzxyzxyz|
+user FAIL	XCU.vi.037	15460	vi did not finish
+user FAIL	XCU.vi.038	1865	the file is: a5|a3|a2|a1|4|a3|a4|a6|
+user FAIL	XCU.vi.039	4850	the file is: a b c d e f|e f|def|X X|xxabc|abcxx|ABc|XXcd|p q r|s|
+user FAIL	XCU.vi.040	1985	the file is: a5|a3|a4|a6|
+user FAIL	XCU.vi.042	15347	vi did not finish
+user FAIL	XCU.vi.043	15352	vi did not finish
+user FAIL	XCU.vi.044	2960	the file is: a|b|  c|    d|  e|f|  g|    i|
+user FAIL	XCU.vi.045	1564	the file is: k|m|
+user FAIL	XCU.vi.046	3498	the file is: abcfoo X| bar X|foo X|X|fX|xy|
+user FAIL	XCU.vi.047	3166	the file is:     a|    foo||  X|X|    b|      X|    c|    d|
+user FAIL	XCU.vi.048	3953	the file is: start|good morning|xgm y|gm z|hello world|
+user FAIL	XCU.vi.049	2756	the file is: two|three|
+user FAIL	XCU.vi.050	2751	the file is: sh: f: not found %|two %|
+user FAIL	XCU.vi.051	1857	the file is:  |b|sh1|
+user FAIL	XCU.vi.052	1995	file out is: ff|
+user FAIL	XCU.vi.053	2708	the file is: ff|
+user FAIL	XCU.vi.054	3156	the file is: fF|
+user FAIL	XCU.vi.055	3031	the file is: |  bc|a(bc|abcef|
+user FAIL	XCU.vi.056	15317	vi did not finish
+user FAIL	XCU.vi.057	3081	the file is: 01|q02|q03|q04|q05|06|07|q08|09|q10|q11|12|
+user FAIL	XCU.vi.058	1835	the file is: a b|c d|e|f g.|h|
+user FAIL	XCU.vi.059	15335	vi did not finish
+user FAIL	XCU.vi.060	1819	the file is: /b/Ybc|
+user FAIL	XCU.vi.061	1870	the file is: abc||
+user FAIL	XCU.vi.062	15352	vi did not finish
+user FAIL	XCU.vi.064	3548	the file is: zdd|
+user FAIL	XCU.vi.065	1932	the file is: ab|
+user FAIL	XCU.vi.066	1988	the file is: axy|zbcd|
+user FAIL	XCU.xargs.008	508	xargs with a very large -s failed
+user FAIL	XCU.xargs.009	415	with -x the status was 0, expected 1-125
+user FAIL	XCU.xargs.016	419	-s 15 wrote 'aaaa bbbb
+user FAIL	XSH.2.1-use-of-functions.004	45	rand() after the same srand() gave 456623900 and 2144166087
+user UNRESOLVED	XSH.2.10-sockets.014	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.2.10-sockets.016	53	setsockopt(IPV6_V6ONLY) failed: EINVAL
+user UNRESOLVED	XSH.2.10-sockets.017	49	setsockopt(IPV6_V6ONLY) failed: EINVAL
+user UNRESOLVED	XSH.2.10-sockets.019	47	setsockopt(IPV6_V6ONLY) failed: EINVAL
+user FAIL	XSH.2.11-data-types.002	0	does not compile: use of undeclared identifier 'reclen_t'
+user INSPECT	XSH.2.11-data-types.004	36	disputed (see the assertion's note): the smallest id_t, 0, is above the smallest pid_t, -2147483648
+user FAIL	XSH.2.2-compilation-environment.002	0	does not compile: 'aio.h' file not found
+user FAIL	XSH.2.2-compilation-environment.003	0	does not compile: 'wordexp.h' file not found
+user FAIL	XSH.2.2-compilation-environment.004	0	does not compile: 'aio.h' file not found
+user UNRESOLVED	XSH.sigqueue.007	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.sigtimedwait.001	0	blocked by XSH.sigqueue.001 (UNINITIATED)
+user UNRESOLVED	XSH.2.4.2-realtime-signals.001	0	blocked by XSH.sigtimedwait.005 (UNINITIATED)
+user UNRESOLVED	XSH.2.4.2-realtime-signals.004	0	blocked by XSH.sigqueue.001 (UNINITIATED)
+user UNRESOLVED	XSH.2.4.2-realtime-signals.005	0	blocked by XSH.sigqueue.001 (UNINITIATED)
+user UNRESOLVED	XSH.2.4.3-signal-actions.010	0	blocked by XSH.sigqueue.001 (UNINITIATED)
+user FAIL	XSH.2.4.3-signal-actions.013	232	the main thread kept running after SIGSTOP went to the other thread
+user FAIL	XSH.2.4.3-signal-actions.019	74	si_code is 0, expected CLD_EXITED (1)
+user FAIL	XSH.2.5.2-stream-orientation.006	238	the first character read is 195, not the one character (233) of the encoding in force at orientation
+user UNRESOLVED	XSH.2.5.2-stream-orientation.007	0	blocked by XSH.2.5.2-stream-orientation.006 (FAIL)
+user FAIL	XSH.2.9-threads.005	36	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.2.9-threads.007	43	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.2.9-threads.014	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.2.9-threads.015	49	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.2.9-threads.024	52	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.2.9-threads.025	94	the thread was canceled in gmtime_r(), which is not a cancellation point
+user FAIL	XSH.2.9-threads.026	210	after pthread_exit(): the cancelability state seen in the cleanup handler was not DISABLE
+user FAIL	XSH._Exit.014	42	si_status 0, expected 0x1234
+user UNRESOLVED	XSH.access.003	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.access.004	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.access.018	36	<fcntl.h> does not define O_SEARCH
+user UNRESOLVED	XSH.access.019	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.alarm.001	0	blocked by XSH.sigtimedwait.002 (UNINITIATED)
+user UNRESOLVED	XSH.alarm.002	0	blocked by XSH.sigtimedwait.002 (UNINITIATED)
+user UNRESOLVED	XSH.alarm.003	0	blocked by XSH.sigtimedwait.002 (UNINITIATED)
+user UNRESOLVED	XSH.alarm.004	0	blocked by XSH.sigtimedwait.002 (UNINITIATED)
+user INSPECT	XSH.atan2.004	49	disputed (see the assertion's note): atan2(0.0, -1.0) [float] returned 3.14159, expected 3.14159265358979323846264338327950288
+user FAIL	XSH.atexit.003	388	the child reported "0T", expected "0TH" (the function runs once, after the last thread ended)
+user FAIL	XSH.bind.018	45	bind() with a null address gave EFAULT, expected EDESTADDRREQ or EISDIR
+user FAIL	XSH.call_once.001	44	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.call_once.002	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.call_once.003	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.call_once.004	37	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.call_once.005	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.catgets.003	127	message 1 is "tab here nl\bs", expected "tab here nl\bsA"
+user FAIL	XSH.catgets.004	194	an empty message gave the default string
+user FAIL	XSH.catopen.004	41	errno 0, expected ENOENT
+user UNRESOLVED	XSH.chmod.006	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.chmod.007	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.chmod.019	44	<fcntl.h> does not define O_SEARCH
+user UNRESOLVED	XSH.chmod.021	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.chown.001	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.chown.002	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.chown.003	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XSH.chown.004	6042	st_ctim did not move in 3 s of chown() calls
+user UNRESOLVED	XSH.chown.005	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.chown.007	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.chown.008	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.chown.009	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.chown.010	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.chown.011	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.chown.021	46	<fcntl.h> does not define O_SEARCH
+user UNRESOLVED	XSH.clock_getcpuclockid.003	61	permission to read the child's CPU-time clock was refused
+user UNRESOLVED	XSH.close.007	0	blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED	XSH.close.009	0	blocked by XBD.unistd.h.001 (FAIL)
+user UNRESOLVED	XSH.close.010	0	blocked by XBD.unistd.h.001 (FAIL)
+user FAIL	XSH.cnd_init.001	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user INSPECT	XSH.cnd_init.002	47	disputed (see the assertion's note): __STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.cnd_init.003	36	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.cnd_signal.001	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.cnd_signal.002	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.cnd_signal.003	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.cnd_signal.004	44	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.cnd_wait.001	44	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.cnd_wait.002	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.cnd_wait.003	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.cnd_wait.004	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.cnd_wait.005	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.cnd_wait.006	36	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.cnd_wait.007	49	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.cnd_wait.008	44	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user UNRESOLVED	XSH.confstr.006	43	<unistd.h> does not define _CS_V8_ENV
+user FAIL	XSH.connect.020	52	connect() with AF_UNSPEC failed: EAFNOSUPPORT
+user FAIL	XSH.cosh.005	45	cosh(big) [double]: exception FE_OVERFLOW was not raised
+user UNRESOLVED	XSH.ctermid.004	50	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user FAIL	XSH.duplocale.001	146	duplocale() returned the handle of the original
+user FAIL	XSH.duplocale.005	47	copy of the global locale: YESEXPR is "^[Yy]"
+user FAIL	XSH.exec.010	80	the new image reports: FD_CLOFORK is no longer set
+user FAIL	XSH.exec.026	693	the new image reports: process times 2, were 30 before exec
+user FAIL	XSH.exec.027	390	the new image reports: process CPU time 106 ms, was 302 ms before exec
+user UNRESOLVED	XSH.exec.052	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.exec.053	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.exec.056	0	blocked by XBD.fcntl.h.006 (FAIL)
+user FAIL	XSH.exit.011	50	si_code 0, expected CLD_EXITED
+user FAIL	XSH.exit.012	49	si_status 0, expected 0x1234
+user FAIL	XSH.exp.005	46	exp(big) [long double]: exception FE_OVERFLOW was not raised
+user FAIL	XSH.exp2.005	43	exp2(big) [double]: exception FE_OVERFLOW was not raised
+user FAIL	XSH.expm1.005	45	expm1(big) [double]: exception FE_OVERFLOW was not raised
+user UNRESOLVED	XSH.fchmod.005	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.fchmod.007	35	<fcntl.h> does not define O_SEARCH
+user UNRESOLVED	XSH.fchown.001	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.fchown.002	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.fchown.003	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XSH.fchown.005	6043	st_ctim did not move in 3 s of fchown() calls
+user FAIL	XSH.fclose.011	78	the offset is 2, expected the stream's position 1
+user FAIL	XSH.fclose.012	38	fclose() set errno 0, expected ENOSPC
+user UNRESOLVED	XSH.fcntl.016	0	blocked by XBD.fcntl.h.008 (FAIL)
+user UNRESOLVED	XSH.fcntl.037	0	blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED	XSH.fcntl.038	0	blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED	XSH.fcntl.039	0	blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED	XSH.fcntl.040	0	blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED	XSH.fcntl.041	0	blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED	XSH.fcntl.042	0	blocked by XBD.fcntl.h.006 (FAIL)
+user UNRESOLVED	XSH.fcntl.043	0	blocked by XBD.fcntl.h.006 (FAIL)
+user FAIL	XSH.fflush.005	77	the descriptor's offset is 2, expected 1
+user FAIL	XSH.fflush.013	40	fflush() set errno 0, expected ENOSPC
+user FAIL	XSH.fgetpos.004	44	fgetpos() with the descriptor closed returned 0
+user FAIL	XSH.fgets.006	47	fgets() returned s although the read after "ab" could not be done without waiting
+user FAIL	XSH.fileno.003	45	fileno() of an fmemopen() stream set errno to 0, expected EBADF
+user FAIL	XSH.fmemopen.008	48	the initial end position is 8, expected 0
+user FAIL	XSH.fmemopen.013	39	"a": fseek(-1, 2) failed: EOVERFLOW
+user FAIL	XSH.fmemopen.021	45	"w": the buffer holds "abc\000", expected "abcd"
+user FAIL	XSH.fnmatch.010	47	fnmatch("[[.a.]b]", "a", 0) returned 1, expected 0
+user FAIL	XSH.fnmatch.021	47	fnmatch("[[:lower:]]", "A", 0x10) returned 1, expected 0
+user FAIL	XSH.fnmatch.022	46	fnmatch("[[:lower:]]", "A", 0x10) returned 1, expected 0
+user FAIL	XSH.fpathconf.005	54	_POSIX_ASYNC_IO is -1 (the option on no file) but pathconf(_PC_ASYNC_IO) on a regular file returned 0
+user UNRESOLVED	XSH.fpathconf.007	42	no controlling terminal: open("/dev/tty") failed with ENXIO
+user FAIL	XSH.fprintf.024	146	killed by signal 6 during the test
+user FAIL	XSH.fprintf.030	43	%.1a of 0x1.0800000001p+0 gave "0x1.0p+0", which is not a nearest value
+user FAIL	XSH.freelocale.002	44	the second object after freeing the first: YESEXPR is "^[Yy]"
+user FAIL	XSH.freopen.011	37	the stream's descriptor is 6 after freopen(); the lowest available was 4
+user FAIL	XSH.fscanf.005	42	sscanf("10 20", "%2$d %1$d") returned 1, expected 2
+user FAIL	XSH.fscanf.013	44	the next fgetc() returned 0x2d, expected 'x' (the byte after the item "-")
+user FAIL	XSH.fscanf.014	62	sscanf("100ergs", "%f%n") returned 1 (stored 100), expected 0
+user FAIL	XSH.fscanf.015	45	sscanf("0xg", "%x%n") returned 1, expected 0
+user FAIL	XSH.fscanf.019	45	sscanf(" \t%7", "%%%d") returned 0 and -1, expected 1 and 7
+user FAIL	XSH.fscanf.028	44	"%a" on "0x1.8p1" returned 1 and 0, expected 1 and 3
+user FAIL	XSH.fscanf.029	39	"%A" on "0x1p1" returned 1 and 0, expected 1 and 2
+user FAIL	XSH.fscanf.030	45	"%f" on "inf" returned 0 and 0
+user FAIL	XSH.fscanf.037	42	sscanf() returned 0, expected 3
+user FAIL	XSH.fscanf.038	45	sscanf() returned 0, expected 2
+user FAIL	XSH.fscanf.043	46	sscanf("1", "%*d%d") returned -1, expected 0 (the %*d conversion completed)
+user INSPECT	XSH.fseek.014	45	disputed (see the assertion's note): fseek() past the end failed with EOVERFLOW, expected EINVAL
+user INSPECT	XSH.fseek.016	46	disputed (see the assertion's note): fseeko() beyond the largest off_t failed with EINVAL, expected EOVERFLOW
+user FAIL	XSH.fstat.006	51	read/write bits 0600, created 0640
+user UNRESOLVED	XSH.fstatat.013	45	<fcntl.h> does not define O_SEARCH
+user FAIL	XSH.ftell.006	50	ftell() with the descriptor closed returned 1
+user FAIL	XSH.ftruncate.007	52	touching the discarded page did not raise SIGBUS (status 0)
+user FAIL	XSH.futimens.002	51	st_atim 1794092414 is not the current time
+user UNRESOLVED	XSH.futimens.010	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.futimens.011	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.futimens.012	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.futimens.021	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.futimens.025	54	<fcntl.h> does not define O_SEARCH
+user UNRESOLVED	XSH.futimens.026	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XSH.fwprintf.006	255	killed by signal 6 during the test
+user FAIL	XSH.fwprintf.014	42	swprintf() with n 0: errno is EINVAL, expected EOVERFLOW
+user FAIL	XSH.fwscanf.017	45	string form: %mls returned 0, expected 1 and an allocated "hello"
+user FAIL	XSH.fwscanf.020	48	string form: returned 1 with a = 1 and b = 0, expected 2, 2 and 1
+user FAIL	XSH.getaddrinfo.028	45	a service name with AI_NUMERICSERV gave -8 (service not supported for ai_socktype), expected EAI_NONAME
+user INSPECT	XSH.getcwd.008	52	disputed (see the assertion's note): getcwd() at depth 1438 bytes failed: ENAMETOOLONG
+user UNRESOLVED	XSH.getdelim.008	52	RLIMIT_AS is not defined: no way to limit the memory here
+user UNRESOLVED	XSH.getegid.002	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.getenv.005	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.geteuid.001	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.getgid.002	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XSH.getgrgid.005	46	*result is not null after ERANGE
+user FAIL	XSH.getgrgid.006	49	*result is not null after ERANGE (size 1)
+user FAIL	XSH.getgrnam.005	46	*result is not null after ERANGE
+user FAIL	XSH.getgrnam.006	48	*result is not null after ERANGE (size 1)
+user UNRESOLVED	XSH.getgroups.001	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.getgroups.002	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.getgroups.003	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XSH.getnameinfo.004	53	a service buffer of 5 bytes for a 5-character text gave -11 (system error)
+user FAIL	XSH.getnameinfo.006	37	node length 0 gave -14 (argument buffer overflow)
+user FAIL	XSH.getnameinfo.008	44	no node and no service gave 0 (no error), expected EAI_NONAME
+user FAIL	XSH.getnameinfo.009	45	an unknown family gave -11 (system error), expected EAI_FAMILY
+user FAIL	XSH.getnameinfo.010	51	a length holding only the family gave 0 (no error), expected EAI_FAMILY
+user FAIL	XSH.getpeername.008	44	getpeername() after SHUT_RDWR gave success, expected EINVAL
+user FAIL	XSH.getsockopt.017	44	the default IPV6_V6ONLY is 1, expected 0
+user UNRESOLVED	XSH.getuid.001	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XSH.glob.006	65	name 0 is "no?x", expected "no\?x"
+user FAIL	XSH.glob.016	45	glob("a[b/c]d") returned -3, expected 0
+user FAIL	XSH.glob.029	52	glob(GLOB_ERR) with a null errfunc did not return GLOB_ABORTED
+user FAIL	XSH.gmtime.005	46	gmtime(largest time_t) set errno to 0, expected EOVERFLOW
+user FAIL	XSH.gmtime.006	48	gmtime_r(largest time_t) set errno to 0, expected EOVERFLOW
+user FAIL	XSH.isgreater.008	48	islessgreater(a[k++], 5) of type double evaluated its first argument 3 times (result 1)
+user UNRESOLVED	XSH.kill.005	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.kill.009	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.kill.010	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.kill.011	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.kill.012	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.kill.013	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.kill.014	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.kill.016	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.lchown.001	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.lchown.002	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.lchown.003	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XSH.ldexp.002	76	ldexpl: overflow, overflow exception not raised
+user FAIL	XSH.lgamma.005	46	lgamma(0.0) [double]: exception FE_DIVBYZERO was not raised
+user UNRESOLVED	XSH.unlink.021	47	<fcntl.h> does not define O_SEARCH
+user UNRESOLVED	XSH.link.019	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.link.021	37	<fcntl.h> does not define O_SEARCH
+user FAIL	XSH.listen.003	44	listen() on an unbound AF_UNIX socket failed with EINVAL, expected success or EDESTADDRREQ
+user FAIL	XSH.localtime.010	50	localtime(largest time_t) set errno to 0, expected EOVERFLOW
+user FAIL	XSH.localtime.011	50	localtime_r(largest time_t) set errno to 0, expected EOVERFLOW
+user FAIL	XSH.log.005	49	log(0.0) [float]: exception FE_DIVBYZERO was not raised
+user FAIL	XSH.log.006	49	log(-1.0) [long double]: exception FE_INVALID was not raised
+user FAIL	XSH.log10.005	38	log10(0.0) [float]: exception FE_DIVBYZERO was not raised
+user FAIL	XSH.log1p.004	81	log1p(-1.0) [long double]: exception FE_DIVBYZERO was not raised
+user FAIL	XSH.log1p.005	45	log1p(-2.0) [long double]: exception FE_INVALID was not raised
+user FAIL	XSH.log2.005	48	log2(0.0) [double]: exception FE_DIVBYZERO was not raised
+user FAIL	XSH.log2.006	46	log2(-1.0) [long double]: exception FE_INVALID was not raised
+user INSPECT	XSH.lseek.011	51	disputed (see the assertion's note): lseek(fd, <largest off_t>, SEEK_CUR) from offset 1: errno EINVAL, expected EOVERFLOW
+user UNRESOLVED	XSH.lseek.012	0	blocked by XBD.unistd.h.002 (FAIL)
+user UNRESOLVED	XSH.lseek.013	0	blocked by XBD.unistd.h.002 (FAIL)
+user UNRESOLVED	XSH.lseek.014	0	blocked by XBD.unistd.h.002 (FAIL)
+user FAIL	XSH.mblen.004	142	mblen() of a two-byte character with n 2 returned -1, expected 2
+user UNRESOLVED	XSH.mkdir.018	45	<fcntl.h> does not define O_SEARCH
+user UNRESOLVED	XSH.mkfifo.016	51	<fcntl.h> does not define O_SEARCH
+user FAIL	XSH.mktime.009	38	mktime(tm_year INT_MAX, tm_mon 12, tm_mday 1) set errno to 0, expected EOVERFLOW
+user FAIL	XSH.mmap.008	46	mmap(flags 0) returned 0xda4131e9000, not MAP_FAILED
+user FAIL	XSH.mprotect.006	45	mprotect() over three pages whose middle one is unmapped: returned 0, expected -1 with ENOMEM
+user FAIL	XSH.mtx_init.001	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_init.002	39	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_init.003	39	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_init.004	51	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_lock.001	38	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_lock.002	38	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_lock.003	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_lock.004	37	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_lock.005	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_lock.006	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_lock.007	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_lock.008	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_lock.009	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_lock.010	49	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_lock.011	38	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.mtx_lock.012	37	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.munmap.003	36	munmap of a page with no mapping returned -1 (EINVAL)
+user FAIL	XSH.munmap.005	45	munmap(mapped page, 0): returned 0, expected -1 with EINVAL
+user FAIL	XSH.nan.002	47	nan("1") and strtod("NAN(1)") differ in representation
+user FAIL	XSH.nan.003	44	nan("a b") and strtod("NAN") differ in representation
+user FAIL	XSH.nanosleep.003	355	*rmtp holds 4689 ms, but at most 307 ms of the 5 s passed in the call
+user FAIL	XSH.nanosleep.004	350	the object holds 4689 ms, but at most 307 ms of the 5 s passed in the call
+user FAIL	XSH.newlocale.001	43	C: YESEXPR is "^[Yy]"
+user FAIL	XSH.newlocale.003	144	a category not in the mask: YESEXPR is "^[Yy]", NOEXPR "^[Nn]"
+user UNRESOLVED	XSH.newlocale.005	45	the system accepts the made-up locale name pc_no_such_locale_x7q
+user UNRESOLVED	XSH.newlocale.006	114	the system accepts the made-up locale name pc_no_such_locale_x7q
+user UNRESOLVED	XSH.newlocale.008	44	the system accepts the made-up locale name pc_no_such_locale_x7q
+user FAIL	XSH.nextafter.008	45	nexttoward(1, 1 + LDBL_EPSILON) returned 0.99999999999999988898
+user FAIL	XSH.nl_langinfo.004	50	YESEXPR is "^[Yy]"
+user FAIL	XSH.nl_langinfo.008	37	object for C: YESEXPR is "^[Yy]"
+user FAIL	XSH.nl_langinfo.009	139	object for C, global locale changed: YESEXPR is "^[Yy]"
+user FAIL	XSH.nl_langinfo.011	148	LC_CTYPE set: YESEXPR is "^[Yy]", NOEXPR "^[Nn]"
+user UNRESOLVED	XSH.open.050	0	blocked by XBD.fcntl.h.007 (FAIL)
+user UNRESOLVED	XSH.opendir.012	36	<fcntl.h> does not define O_SEARCH
+user FAIL	XSH.perror.007	40	the error indicator of stderr is not set after a failed write
+user FAIL	XSH.poll.027	43	poll: POLLERR is not set in revents (0x10) for a pipe without a reader
+user FAIL	XSH.poll.028	48	poll: POLLERR is not set in revents (0x10) for a pipe without a reader
+user FAIL	XSH.popen.015	90	popen("-pcdash") yielded nothing
+user FAIL	XSH.posix_spawn.014	94	the commands ran: the file was handed to sh
+user UNRESOLVED	XSH.posix_spawn.043	36	<spawn.h> does not define POSIX_SPAWN_SETSID
+user UNRESOLVED	XSH.posix_spawn.045	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.posix_spawn.046	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.posix_spawn.047	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.posix_spawn.048	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.posix_spawn.049	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.posix_spawn.050	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XSH.posix_spawn_file_actions_addclose.013	47	addopen(OPEN_MAX) returned 0, expected EBADF
+user FAIL	XSH.posix_spawn_file_actions_adddup2.007	47	adddup2(OPEN_MAX, fd) returned 0, expected EBADF
+user FAIL	XSH.pow.012	52	pow(2.0, big) [long double]: exception FE_OVERFLOW was not raised
+user FAIL	XSH.psiginfo.005	39	the error indicator of stderr is not set
+user FAIL	XSH.pthread_cancel.005	110	in the cleanup handler the cancelability state was PTHREAD_CANCEL_ENABLE, not PTHREAD_CANCEL_DISABLE
+user FAIL	XSH.pthread_exit.005	390	the atexit() handler did not run (output "W")
+user FAIL	XSH.pthread_exit.006	377	the atexit() handler did not run (output "W")
+user FAIL	XSH.pthread_kill.004	375	pthread_kill() of a terminated, unjoined thread returned ESRCH
+user UNRESOLVED	XSH.pthread_once.003	20169	the test stalled for 20 s at step 3 (not the cancellation)
+user FAIL	XSH.pthread_spin_init.001	50	after init: pthread_spin_trylock() of the held lock returned EDEADLK, expected EBUSY
+user FAIL	XSH.pthread_spin_lock.002	44	pthread_spin_trylock() by the holder returned EDEADLK, expected EBUSY
+user FAIL	XSH.rand.002	57	seed 1: the sequence was not repeated
+user FAIL	XSH.rand.003	53	value 0 differs: 1070808574 without srand(), 613463292 after srand(1)
+user UNRESOLVED	XSH.readlink.018	43	<fcntl.h> does not define O_SEARCH
+user FAIL	XSH.readlink.019	49	the link's st_atim is still 1000000000 after readlink()
+user FAIL	XSH.recv.017	318	the first datagram received was 1 byte(s) "c", expected the one from the peer
+user FAIL	XSH.recvmsg.010	42	recvmsg() with msg_iovlen 0: returned 0, expected -1 with EMSGSIZE
+user FAIL	XSH.recvmsg.023	45	MSG_CTRUNC is not set in msg_flags (0x0) although the control data did not fit
+user FAIL	XSH.regcomp.014	49	regcomp("[--@]") returned 11
+user FAIL	XSH.regcomp.017	50	case 5: "\(a\(b\)*\)*\2" on "abab" should not match, got 0 [0,4]
+user FAIL	XSH.regcomp.027	52	case 6: "\(a\)\1" on "aA" should match, got 1
+user FAIL	XSH.regcomp.033	40	case 1: regcomp(".*?c") returned 13
+user FAIL	XSH.rename.012	54	rename("e", "d2/."): errno EISDIR, expected EINVAL
+user FAIL	XSH.rename.013	61	rename("f", "nf/"): errno ENOENT, expected ENOTDIR
+user FAIL	XSH.rename.014	49	rename(d, "nd/") succeeded
+user UNRESOLVED	XSH.rename.027	38	<fcntl.h> does not define O_SEARCH
+user UNRESOLVED	XSH.rewind.003	37	rewind() with output pending on a closed descriptor did not fail
+user FAIL	XSH.rewind.004	60	rewind() with output pending on a closed descriptor left errno 0, expected EBADF
+user FAIL	XSH.rewind.008	51	rewind() beyond the file size limit left errno 0
+user FAIL	XSH.rewind.009	47	rewind() left errno 0, expected EPIPE or ESPIPE
+user FAIL	XSH.rewind.010	67	rewind() left errno 0, expected EAGAIN or ESPIPE
+user FAIL	XSH.scalbn.002	49	scalbnl: overflow, overflow exception not raised
+user FAIL	XSH.scalbn.011	48	scalblnl: overflow, overflow exception not raised
+user FAIL	XSH.select.009	47	select returned 2 (errno -), expected 3
+user FAIL	XSH.select.012	47	select with nfds FD_SETSIZE+1 returned 2, expected -1
+user INSPECT	XSH.sendmsg.003	50	disputed (see the assertion's note): sendmsg() with msg_iovlen 0: returned 0, expected -1 with EMSGSIZE
+user UNRESOLVED	XSH.setegid.001	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setegid.003	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setegid.004	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setegid.005	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setegid.006	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setegid.007	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.seteuid.001	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.seteuid.003	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.seteuid.004	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.seteuid.005	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.seteuid.006	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.seteuid.007	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setgid.001	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setgid.002	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setgid.004	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setgid.005	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setgid.006	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setgid.007	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XSH.setlocale.001	39	initial locale: YESEXPR is "^[Yy]"
+user FAIL	XSH.setlocale.002	144	setlocale(6, "C"): YESEXPR is "^[Yy]", NOEXPR "^[Nn]"
+user FAIL	XSH.setlocale.004	139	an untouched category: YESEXPR is "^[Yy]", NOEXPR "^[Nn]"
+user FAIL	XSH.setlocale.005	197	after "C": YESEXPR is "^[Yy]", NOEXPR "^[Nn]"
+user UNRESOLVED	XSH.setlocale.006	135	the system accepts the made-up locale name pc_no_such_locale_x7q
+user UNRESOLVED	XSH.setlocale.007	144	the system accepts the made-up locale name pc_no_such_locale_x7q
+user UNRESOLVED	XSH.setlocale.008	142	the system accepts the made-up locale name pc_no_such_locale_x7q
+user FAIL	XSH.setpgid.010	56	setpgid(<grandchild>, <its ID>): returned 0, expected -1 with ESRCH
+user FAIL	XSH.setsockopt.006	37	setting SO_DONTROUTE failed with EOPNOTSUPP
+user FAIL	XSH.setsockopt.019	94	setsockopt on a socket shut down in both directions returned 0
+user FAIL	XSH.setsockopt.021	50	setting IPV6_V6ONLY to 0 failed: EINVAL
+user UNRESOLVED	XSH.setuid.001	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setuid.002	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setuid.004	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setuid.005	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setuid.006	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.setuid.007	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XSH.shm_open.002	50	under umask(027), mode 0666 gave read/write permission bits 0600
+user FAIL	XSH.shm_open.008	52	the object's read/write permission bits are now 0600, not 0640
+user UNRESOLVED	XSH.shm_open.013	0	skipped: needs root privilege, which this run was not granted
+user UNRESOLVED	XSH.shm_unlink.005	0	skipped: needs root privilege, which this run was not granted
+user FAIL	XSH.shutdown.008	54	shutdown() on a fresh AF_UNIX socket gave success, expected ENOTCONN
+user UNRESOLVED	XSH.sigaddset.002	46	<signal.h> does not define SIGRTMIN and SIGRTMAX
+user UNRESOLVED	XSH.sigdelset.002	37	<signal.h> does not define SIGRTMIN and SIGRTMAX
+user UNRESOLVED	XSH.sigemptyset.002	45	<signal.h> does not define SIGRTMIN and SIGRTMAX
+user UNRESOLVED	XSH.sigfillset.002	36	<signal.h> does not define SIGRTMIN and SIGRTMAX
+user UNRESOLVED	XSH.sigwait.003	0	blocked by XSH.sigqueue.001 (UNINITIATED)
+user FAIL	XSH.socket.011	39	socket(2147483647, SOCK_STREAM, 0) failed with EPROTONOSUPPORT, expected EAFNOSUPPORT
+user FAIL	XSH.socketpair.009	46	socketpair(2147483647, ...) failed with EPROTONOSUPPORT, expected EAFNOSUPPORT
+user FAIL	XSH.strftime.007	63	strftime("%+4Y") for 1970-01-02 12:00:00 (wday 5, yday 1) gave "Fri Jan  2 12:00:00 UTC 19704Y" (return 30), expected "1970"
+user FAIL	XSH.strftime.014	40	strftime() with maxsize 10 for 10 bytes set errno to 0, expected ERANGE
+user FAIL	XSH.strtod.005	40	strtod("nan(!)") left the end pointer at offset 6
+user UNRESOLVED	XSH.symlink.020	48	<fcntl.h> does not define O_SEARCH
+user FAIL	XSH.sysconf.001	47	sysconf(_SC_RTSIG_MAX) failed with EINVAL: the name is not supported
+user FAIL	XSH.sysconf.002	50	sysconf(_SC_RTSIG_MAX) returned -1 and changed errno to EINVAL: neither "no limit" (errno unchanged) nor a value
+user FAIL	XSH.sysconf.005	44	sysconf(_SC_VERSION) returned 200809, expected 202405
+user FAIL	XSH.sysconf.006	46	sysconf(_SC_ASYNCHRONOUS_IO) returned -1: the option is mandatory
+user FAIL	XSH.sysconf.007	46	sysconf(_SC_BARRIERS) returned 200112, expected 202405
+user FAIL	XSH.sysconf.009	40	sysconf(_SC_STREAM_MAX) returned 512, and 511 after the RLIMIT_STACK and RLIMIT_NOFILE soft limits changed
+user UNRESOLVED	XSH.sysconf.015	43	<unistd.h> lacks _SC_NSIG or <limits.h> lacks NSIG_MAX
+user FAIL	XSH.system.006	82	system("-pcdash") gave exit status 1, expected 31
+user UNRESOLVED	XSH.tcdrain.006	59	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcdrain.007	56	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcdrain.008	57	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcflow.008	48	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcflow.009	71	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcflow.010	55	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcflush.009	57	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcflush.010	70	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcflush.011	55	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcgetattr.004	58	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user FAIL	XSH.tcgetpgrp.002	46	tcgetpgrp() of the pipe read end returned 0, errno 0
+user UNRESOLVED	XSH.tcgetpgrp.003	58	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcgetpgrp.004	55	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcgetpgrp.005	48	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcgetpgrp.007	91	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcgetsid.001	60	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcgetsid.002	57	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcgetsid.003	61	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcgetsid.004	65	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcgetsid.006	81	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user FAIL	XSH.tcsendbreak.001	50	tcsendbreak() returned -1, errno ENOTTY
+user FAIL	XSH.tcsendbreak.002	51	tcsendbreak() returned -1, errno ENOTTY
+user UNRESOLVED	XSH.tcsendbreak.005	57	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcsendbreak.006	56	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcsendbreak.007	61	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcsetattr.011	58	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcsetattr.012	60	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcsetattr.013	55	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user FAIL	XSH.tcsetpgrp.002	50	tcsetpgrp() of the pipe read end returned 0, errno 0
+user UNRESOLVED	XSH.tcsetpgrp.003	56	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcsetpgrp.004	85	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcsetpgrp.005	57	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcsetpgrp.006	56	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcsetpgrp.007	57	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcsetpgrp.009	54	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user UNRESOLVED	XSH.tcsetpgrp.010	57	opening the subsidiary side did not make it the controlling terminal (acquisition is implementation-defined)
+user FAIL	XSH.tgamma.010	46	tgamma(maxexp) [double]: exception FE_OVERFLOW was not raised
+user FAIL	XSH.thrd_create.001	77	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_create.002	75	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_create.003	39	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_create.004	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_create.005	38	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_create.007	38	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_current.001	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_current.002	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_detach.001	43	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_detach.002	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_equal.001	76	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_equal.002	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_exit.001	44	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_exit.002	55	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_exit.003	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_exit.004	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_exit.005	55	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_exit.006	37	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_join.001	37	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_join.002	37	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_join.003	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_join.004	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_join.005	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_sleep.001	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_sleep.002	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_sleep.003	44	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_sleep.004	51	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.thrd_yield.001	37	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.truncate.012	46	truncate("fifo", 0): returned 0, expected -1 with EINVAL
+user FAIL	XSH.tss_create.001	40	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.tss_create.002	58	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.tss_create.003	45	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.tss_create.004	43	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.tss_create.005	41	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.tss_delete.001	46	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.tss_delete.002	44	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.tss_delete.003	40	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.tss_delete.004	37	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.tss_get.001	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.tss_get.002	47	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.tss_get.003	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.tss_get.004	48	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.tss_get.005	43	__STDC_NO_THREADS__ is defined, but <threads.h> is required unless _POSIX_SUBPROFILE is defined
+user FAIL	XSH.ungetc.011	48	after fseek(0, SEEK_CUR) the read gave 0x32, expected '1'
+user FAIL	XSH.ungetc.013	44	the file holds "0W23", expected "W123"
+user FAIL	XSH.ungetwc.004	49	after fseek() the read returned 0x5a, expected L'a' (the pushed-back character must be discarded)
+user FAIL	XSH.ungetwc.005	50	after fsetpos() the read returned 0x5a, expected L'a' (the pushed-back character must be discarded)
+user FAIL	XSH.uselocale.001	50	after querying: YESEXPR is "^[Yy]"
+user FAIL	XSH.vfscanf.004	46	vsscanf("10 20", "%2$d %1$d") returned 1, expected 2
+user FAIL	XSH.vfwprintf.001	182	killed by signal 6 during the test
+user FAIL	XSH.vfwscanf.006	51	string form: returned 1 with a = 1 and b = 0, expected 2, 2 and 1
+user FAIL	XSH.wait.019	91	SIGCHLD is still pending after wait() reported the only child
+user FAIL	XSH.waitid.015	53	a terminated child was reported to WSTOPPED (si_pid 45087, si_code 5)
+user FAIL	XSH.wcsftime.006	68	wcsftime("%010F") returned 4, expected 10
+user FAIL	XSH.wcsftime.007	53	wcsftime("%V") produced "53", expected "52"
+user FAIL	XSH.wcstod.002	51	wcstod("0x1p4") returned 0, expected 16
+user FAIL	XSH.wcstod.003	54	wcstod("-0x1p1") returned -0, expected -2
+user FAIL	XSH.wcstod.005	52	wcstod("nan(!)") left the end pointer at offset 6
+user FAIL	XSH.wcstod.007	54	wcstod("0x1p") returned 0, expected 1
+user FAIL	XSH.wcstod.009	52	wcstod("0x1p100000") did not return the huge value
+user FAIL	XSH.wcstod.010	56	wcstod("0x1p-100000") set errno to 0, expected ERANGE
+user FAIL	XSH.wcstoimax.003	46	wcstoimax("0x", base 0) left the end pointer at offset 0
+user FAIL	XSH.wcstoimax.004	45	wcstoimax("0x", base 16) left the end pointer at offset 0
+user FAIL	XSH.wcstoimax.016	38	wcstoumax("0x", base 0) left the end pointer at offset 0
+user FAIL	XSH.wcstoimax.017	43	wcstoumax("0x", base 16) left the end pointer at offset 0
+user FAIL	XSH.wcstol.003	50	wcstol("0x", base 0) left the end pointer at offset 0
+user FAIL	XSH.wcstol.004	45	wcstol("0x", base 16) left the end pointer at offset 0
+user FAIL	XSH.wcstoul.003	37	wcstoul("0x", base 0) left the end pointer at offset 0
+user FAIL	XSH.wcstoul.004	36	wcstoul("0x", base 16) left the end pointer at offset 0
